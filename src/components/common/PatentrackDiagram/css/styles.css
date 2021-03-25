@@ -1,0 +1,220 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap");
+
+/* top UI atyles */
+
+label {  cursor: pointer; padding: 2px 4px 2px 4px; }
+label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle; bottom: 2px; }
+
+#topTitle {
+    position: sticky;
+    top: 0;
+    padding: 10px 4px 11px 16px;
+    font-size: 1.0rem;
+    color: #FFFFFF;
+    background-color: #424242;
+    box-shadow: 0 0px 5px 0 #2b2b2b;
+    opacity: 0.85;
+    text-align: left; 
+    vertical-align: middle; 
+    justify-content: flex-start; 
+    align-items: center; 
+    
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+ .topTitle {
+    position: sticky;
+    top: 0;
+    background-color: #111111;
+    padding: 10px 4px 4px 16px;
+    font-size: 1.0rem;
+    color: #FFFFFF;
+    opacity: 0.85;
+    text-align: left; 
+    vertical-align: middle; 
+    justify-content: flex-start; 
+    align-items: center; 
+    
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+
+}
+
+#bottomUIToolbarContainer {
+    width: 100%;
+    height: 32px;
+    position: sticky;
+    bottom: 0;
+}
+
+#bottomUIToolbarExpanded {
+    display: flex;
+    /* justify-content: space-between; */
+    width: 100%;
+    height: 32px;
+    grid-template-columns: repeat(18, max-content) repeat(3, 1fr) repeat(3, max-content);
+    grid-row-gap: 0px;
+    background-color: #424242;
+    box-shadow: 0 0px 5px 0 #2b2b2b;
+    font-size: 12px;
+    color: #FFFFFF;
+    opacity: 0.85;
+    
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+
+}
+#bottomUIToolbarClosed:hover {
+  background-color: rgba(18 ,18 ,18, 1);
+  transform: translateX(-15px);
+}
+#bottomUIToolbarClosed {
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    grid-row-gap: 0px;
+    width: fit-content;
+    height: 32px;
+    background-color: #111111;
+    background-color: rgba(18 ,18 ,18, 0.5);
+    font-size: 14px;
+    color: #FFFFFF;
+    opacity: 0.85;
+    border-radius: 0 50px 50px 0;
+    transform: translateX(-30px);
+    transition: .2s;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */   
+    
+}
+
+.toolbarUIElement { 
+    display: flex; 
+    cursor: pointer; 
+    text-align: center; 
+    vertical-align:  middle; 
+    line-height: 32px; 
+    justify-content: center; 
+    align-items: center; 
+    width: 2rem;
+}
+.toolbarUIElement svg {    position: unset !important;  }
+.toolbarUIGap { 
+  width: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.toolbarUIPopupOn { 
+    display: block; 
+}
+
+.toolbarUIPopupOff{ 
+    display: none; 
+}
+
+.toolbarUIQuantative {
+    text-align: center; 
+    vertical-align: middle; 
+    line-height: 34px;
+    justify-content: flex-start; 
+    align-items: center;
+    min-width: 3.5rem;
+}
+
+.toolbarUIList { 
+    text-align: left; 
+    vertical-align: middle; 
+    line-height: 1.5rem; 
+    justify-content: flex-start; 
+    align-items: center; 
+}
+
+.toolbarUIPopup {
+    display: none;
+    position: absolute;
+    padding: 0.5rem;
+    color: #FFFFFF;
+    font-size: 12px;
+    line-height: 1.5;
+    background-color: #111111;
+    opacity: 0.85;
+    text-align: left; 
+    justify-content: flex-start; 
+    align-items: flex-start;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+ 
+}
+#patentrackDiagramDiv {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#patentrackDiagramDiv svg { 
+    flex: 1;    
+    overflow: initial;
+}
+
+.diagram-container {
+}
+
+#patentrackDiagramDiv .toolbarUIPopup ui,#patentrackDiagramDiv li {  
+    list-style-type: none;  
+    text-indent: -2.4rem;
+}
+/*
+#toobarUIGap0 { grid-area: 1 / 1 / 2 / 2; text-align: center; justify-content: center; align-items: center; }
+#expandOnOff { grid-area: 1 / 2 / 2 / 3; text-align: center; justify-content: center; align-items: center; }
+#toobarUIGap1 { grid-area: 1 / 3 / 2 / 4; text-align: center; justify-content: center; align-items: center; }
+#fastBackward { grid-area: 1 / 4 / 2 / 5; text-align: center; justify-content: center; align-items: center; }
+#fastForward { grid-area: 1 / 5 / 2 / 6; text-align: center; justify-content: center; align-items: center; }
+#toobarUIGap2 { grid-area: 1 / 6 / 2 / 7; text-align: center; justify-content: center; align-items: center; }
+#prevAssignment { grid-area: 1 / 7 / 2 / 8; text-align: center; justify-content: center; align-items: center; }
+#assignmentQuantative { grid-area: 1 / 8 / 2 / 9; text-align: center; justify-content: center; align-items: center; }
+#nextAssignment { grid-area: 1 / 9 / 2 / 10; text-align: center; justify-content: center; align-items: center; }
+#toobarUIGap3 { grid-area: 1 / 10 / 2 / 11; text-align: center; justify-content: center; align-items: center; }
+#prevAssignee { grid-area: 1 / 11 / 2 / 12; text-align: center; justify-content: center; align-items: center; }
+#assigneeQuantative { grid-area: 1 / 12 / 2 / 13; text-align: center; justify-content: center; align-items: center; }
+#nextAssignee { grid-area: 1 / 13 / 2 / 14; text-align: center; justify-content: center; align-items: center; }
+#toobarUIGap4 { grid-area: 1 / 14 / 2 / 15; text-align: center; justify-content: center; align-items: center; }
+#PatentrackMultiCheckbox { grid-area: 1 / 15 / 2 / 16; text-align: center; justify-content: center; align-items: center; }
+#PatentrackLegend { grid-area: 1 / 16 / 2 / 17; text-align: center; justify-content: center; align-items: center; }
+#toobarUIGap5 { grid-area: 1 / 17 / 2 / 18; text-align: center; justify-content: center; align-items: center; }
+#horizontalExtenderA { grid-area: 1 / 18 / 2 / 19; text-align: center; justify-content: center; align-items: center; }
+#horizontalExtenderB { grid-area: 1 / 19 / 2 / 20; text-align: center; justify-content: center; align-items: center; }
+#zoomDiagram { grid-area: 1 / 20 / 2 / 21; text-align: center; justify-content: center; align-items: center; }
+#toobarUIGap6 { grid-area: 1 / 21 / 2 / 22; text-align: center; justify-content: center; align-items: center; }
+#shareDiagram { grid-area: 1 / 22 / 2 / 23; text-align: center; justify-content: center; align-items: center; }
+*/
+
+
+

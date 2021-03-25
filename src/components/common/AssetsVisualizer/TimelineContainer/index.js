@@ -1,0 +1,414 @@
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useHistory } from "react-router-dom";
+import routes from "../../../../routeList"; 
+import moment from 'moment'
+import _debounce from 'lodash/debounce'
+import { useDispatch, useSelector } from 'react-redux'
+import { DataSet } from 'vis-data-71/esnext'
+import { Timeline } from 'vis-timeline/esnext'
+import Paper from '@material-ui/core/Paper'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+
+import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
+import { setSelectedAssetsPatents, getAssetTypeAssignments } from '../../../../actions/patentTrackActions2'
+import PatenTrackApi from '../../../../api/patenTrack2'
+import { convertAssetTypeToTabId, oldConvertTabIdToAssetType, convertTabIdToAssetType, exportGroups } from '../../../../utils/assetTypes'
+import { numberWithCommas, capitalize } from '../../../../utils/numbers'
+
+
+
+
+import useStyles from './styles'
+import { setTimelineSelectedItem, setTimelineSelectedAsset } from '../../../../actions/uiActions'
+
+/**
+ * Default options parameter for the Timeline
+ */
+
+const options = {
+  height: '100%',
+  autoResize: true,
+  stack: true,
+  orientation: 'both',
+  zoomKey: 'ctrlKey',
+  moveable: true,
+  zoomable: true,
+  horizontalScroll: true,
+  verticalScroll: true,
+  zoomFriction: 30,
+  zoomMin: 1000 * 60 * 60 * 24 * 7, // 7 days
+  /* zoomMax: 1000 * 60 * 60 * 24 * 30 * 3, */ // 3months
+  cluster: {
+  //   titleTemplate: 'Cluster containing {count} events.<br/> Zoom in to see the individual events.',
+    showStipes: false,
+    clusterCriteria: (firstItem, secondItem) => {
+      return ( firstItem.rawData.company === secondItem.rawData.company &&  firstItem.rawData.tab_id == secondItem.rawData.tab_id)
+    }
+  },
+  template: function(item, element, data) {
+    if (data.isCluster) {
+      return data.items.length > 0 ? `<span class="cluster-header"><span class="cluster-image cluster-${data.items[0].assetType}"></span><span>${data.items.length} ${data.items[0].companyName.length > 0 ? capitalize(data.items[0].assetType)  : ''} transactions</span></span>` : ``
+    } else { 
+      return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
+    }
+  },
+}
+
+/**
+ * 
+ * @param {*} assetsCustomer 
+ * item data to dsplay for the timeline and for the tooltip
+ */
+
+
+
+
+const TIME_INTERVAL = 2000
+
+const TimelineContainer = ({ data }) => {
+  const classes = useStyles()
+  const dispatch = useDispatch()
+
+  const history = useHistory()
+  const timelineRef = useRef() //timeline Object ref
+  const timelineContainerRef = useRef() //div container ref
+  const items = useRef(new DataSet()) // timeline items dataset
+  const groups = useRef(new DataSet()) // timeline groups dataset
+  
+  const assetTypesSelectAll = useSelector(state => state.patenTrack2.assetTypes.selectAll)
+  const companies = useSelector( state => state.patenTrack2.mainCompaniesList.list )
+  const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
+  const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
+  const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
+  const selectedAssetAssignments = useSelector( state => state.patenTrack2.assetTypeAssignments.selected )
+  
+  const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
+  const assignmentList = useSelector(
+    state => state.patenTrack2.assetTypeAssignments.list,
+  );
+
+  const assetTypesCompaniesSelected = useSelector(
+    state => state.patenTrack2.assetTypeCompanies.selected,
+  );
+  const assetTypesCompaniesSelectAll = useSelector(
+    state => state.patenTrack2.assetTypeCompanies.selectAll,
+  );
+
+  const assetTypesSelected = useSelector(
+    state => state.patenTrack2.assetTypes.selected,
+  );
+
+  const selectedItem = useSelector(state => state.ui.timeline.selectedItem)
+
+  const setSelectedItem = useCallback((item) => {
+    dispatch(setTimelineSelectedItem(item))
+  }, [ dispatch ])
+
+  const setSelectedAsset = useCallback((asset) => {
+    dispatch(setTimelineSelectedAsset(asset))
+  }, [ dispatch ])
+
+  
+
+  const [ timelineRawData, setTimelineRawData ] = useState([])
+  const [ timelineItems, setTimelineItems ] = useState([])
+  const [ timelineGroups, setTimelineRawGroups] = useState([])
+  const [ tooltipItem, setToolTipItem] = useState([])
+  const [ timeInterval, setTimeInterval] = useState(null)
+
+  const [ isLoadingTimelineData, setIsLoadingTimelineData ] = useState(false)
+  const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(false)
+  const search_string = useSelector(state => state.patenTrack2.search_string)
+  const search_rf_id = useSelector(state => state.patenTrack2.search_rf_id)
+
+  //Item for the timeline
+
+  const convertDataToItem = (assetsCustomer) => {
+    
+    const assetType = Number.isInteger(assetsCustomer.tab_id) ? oldConvertTabIdToAssetType(assetsCustomer.tab_id) : 'default'
+    const companyName =  selectedWithName.filter( company => assetsCustomer.company == company.id ? company.name : '')
+    const customerFirstName = assetsCustomer.tab_id == 9 ? assetsCustomer.customerName.split(' ')[0] : assetsCustomer.customerName
+    return ({
+      
+      type: 'point',
+      start: new Date(assetsCustomer.exec_dt),
+      customerName: `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
+      assetType,
+      companyName,
+      rawData: assetsCustomer,
+      group: assetsCustomer.group,
+      className: `asset-type-${assetType}`,
+      collection: [ { id: assetsCustomer.id, totalAssets: assetsCustomer.totalAssets } ],
+      showTooltips: false, 
+      /* title: `
+        <div>
+          <span><strong>Transaction Date:</strong> ${moment(assetsCustomer.exec_dt).format('ll')}</span> 
+          <span><strong>Other Party:</strong> ${assetsCustomer.customerName}</span>
+          <span><strong>Number of Assets:</strong> ${assetsCustomer.totalAssets}</span>
+        </div>
+      `, */
+    })
+  }
+
+  // Custom ToolTip
+  
+  const showTooltip = (itemID, event) => {    
+      setTimeout(() => {
+        PatenTrackApi
+        .getTimelineItemData(itemID)
+        .then( response => {
+          const { data } = response
+          if( data != null) {
+            const executionDate = data.assignor.length > 0 ? data.assignor[0].exec_dt : ''
+            
+            const tootltipTemplate = `<div class='custom_tooltip' style='top:80px;left:${event.layerY}px;'>
+                                        <div>
+                                          ${ executionDate != '' ? moment(executionDate.exec_dt).format('ll') : ''}
+                                        </div>
+                                        <div>
+                                          <h4>Assignors:</h4>
+                                          ${data.assignor.map(or => (
+                                            '<div>'+or.or_name+'</div>'
+                                          )).join('')}
+                                        </div>
+                                        <div>
+                                          <h4>Assignees:</h4>
+                                          ${data.assignee.map(ee => (
+                                            '<div>'+ee.ee_name+'</div>'
+                                          )).join('')}
+                                        </div>
+                                      </div>`
+              resetTooltipContainer()
+            if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
+              timelineContainerRef.current.childNodes[0].insertAdjacentHTML('beforeend',tootltipTemplate)
+            }
+          }
+        })        
+      }, TIME_INTERVAL) 
+  } 
+
+  /**
+   * When select an item from timeline
+   */
+
+  const onSelect = useCallback((properties) => {
+    if (properties.items.length === 0) {
+      setSelectedItem()
+    } else {
+      const item = items.current.get(properties.items[0])
+      setSelectedAsset({ type: 'transaction', id: item.rawData.id })
+      setSelectedItem(item)
+      history.push(routes.review3)
+    }
+  }, [ setSelectedItem, setSelectedAsset ])
+
+  /**
+   * on Itemover for the tooltip data
+   */
+
+  const onItemover = useCallback(({item, event}) => {
+    const overItem = items.current.get(item)
+    if(overItem != null) {
+      showTooltip(overItem.rawData.id, event)
+    }
+  }, [ timelineItems, timeInterval ])
+
+  /**
+   * on onItemout for the remove tooltip
+   */
+
+  const onItemout = () => {
+    resetTooltipContainer()
+    setToolTipItem([])
+    /* clearInterval(timeInterval) */
+  }
+
+  const resetTooltipContainer = () => {
+    const findOldToolTip = document.getElementsByClassName('custom_tooltip')
+    if( findOldToolTip.length > 0 ) {
+      findOldToolTip[0].parentNode.removeChild(findOldToolTip[0])      
+    }
+  }
+
+  
+
+  /**
+   * this call when Timeline rangechange
+   */
+
+  const onRangeChange = useCallback((properties) => {
+    setIsLoadingTimelineData(true)
+  }, [])
+
+  /**
+   * this call when Timeline rangechanged
+   */
+
+  const onRangeChanged = useCallback(_debounce((properties) => {
+    const updatedItems = timelineItems.filter((item) => (item.start >= properties.start && item.start <= properties.end))
+    items.current = new DataSet()
+    items.current.add(updatedItems)
+    timelineRef.current.setItems(items.current)
+    setIsLoadingTimelineData(false)
+  }, 1000), [ timelineItems ])
+
+  useEffect(() => {
+    if (!selectedItem && timelineRef.current) {
+      timelineRef.current.setSelection([])
+    }
+  }, [ selectedItem, timelineRef ])
+
+  useEffect(() => {
+    timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
+  }, [])
+
+  //Timeline list from server
+  useEffect(() => {
+    /**
+     * return empty if no company selected
+     */
+    if( (selectedCompaniesAll === false && selectedCompanies.length == 0 ) && ( search_string == '' || search_string == null ) ) return setTimelineRawData([])
+    /**|| selectedAssetsPatents.length > 0  || selectedAssetAssignments.length > 0 */
+
+    /**
+     * call for the timeline api data
+     */
+    const getTimelineRawDataFunction = async () => {
+      //search
+      if(search_string != '' && search_string != null){
+        if(search_rf_id.length > 0) {
+          const { data } = await PatenTrackApi.getActivitiesTimelineData([], [], [], search_rf_id) // empty array for company, tabs, customers
+        
+          setTimelineRawGroups(data.groups) //groups
+          setTimelineRawData(data.list) //items
+        } else {
+          setTimelineRawGroups([]) //groups
+          setTimelineRawData([]) //items   
+        }        
+      } else {
+        const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+        tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+        customers = assetTypesCompaniesSelectAll === true ? []
+                    : 
+                    assetTypesCompaniesSelected;
+        const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers)
+        
+        setTimelineRawGroups(data.groups) //groups
+        setTimelineRawData(data.list) //items        
+      } 
+    }
+    getTimelineRawDataFunction()
+    
+  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments,  assignmentList, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string ])
+
+  /**
+   * Intial timline items dataset and ref setup
+   */
+  useEffect(() => {
+    items.current = new DataSet()
+    groups.current = new DataSet()
+    timelineRef.current.setOptions(options) 
+    timelineRef.current.on('select', onSelect)
+    /* timelineRef.current.on('itemover', onItemover)
+    timelineRef.current.on('itemout', onItemout) */
+    timelineRef.current.on('rangechanged', onRangeChanged)
+    timelineRef.current.on('rangechange', onRangeChange)    
+    return () => {
+      timelineRef.current.off('select', onSelect)
+      /* timelineRef.current.off('itemover', onItemover) 
+      timelineRef.current.off('itemout', onItemout) */
+      timelineRef.current.off('rangechange', onRangeChange)
+      timelineRef.current.off('rangechanged', onRangeChanged)
+      
+    } 
+  }, [ onRangeChange, onRangeChanged, onSelect, onItemover ])
+
+  /**
+   * Add timeline items to the the dataset and set the start, end, min and max date
+   */
+  useEffect(() => {
+    if (isLoadingTimelineRawData) return null
+    const clusteredItems = timelineRawData.reduce((result, dataItem) => {
+      const itemName = dataItem.tab_id == 9 ? dataItem.customerName.split(' ')[0] : dataItem.customerName
+
+      if (result[`${itemName}_${dataItem.exec_dt}`]) {
+        result[`${itemName}_${dataItem.exec_dt}`].collection.push({ id: dataItem.id, totalAssets: dataItem.totalAssets })
+        result[`${itemName}_${dataItem.exec_dt}`].totalAssets = result[`${itemName}_${dataItem.exec_dt}`].totalAssets + dataItem.totalAssets
+        result[`${itemName}_${dataItem.exec_dt}`].title = `
+        <div>
+          <span><strong>Transaction Date:</strong>${moment(dataItem.exec_dt).format('ll')}</span> 
+          <span><strong>Other Party:</strong> ${dataItem.customerName}</span>
+          <span><strong>Number of Assets:</strong> ${dataItem.totalAssets} assets</span>
+        </div>
+      `
+      } else {
+        result[`${itemName}_${dataItem.exec_dt}`] = convertDataToItem(dataItem)
+      }
+      return result 
+    }, {})
+    const convertedItems = Object.values(clusteredItems).sort((a, b) => (new Date(a.start) > new Date(b.start)))  
+    
+    // const convertedItems = timelineRawData.map(convertDataToItem).sort((a, b) => (new Date(a.start) > new Date(b.start)))
+    setTimelineItems(convertedItems)
+    items.current = new DataSet()
+    groups.current = new DataSet()
+    let start = new moment().subtract(1, 'year')
+    let end = new moment().add(3, 'months')
+
+    if (convertedItems.length > 0) {
+      const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
+      start = convertedItems.length ? new moment(convertedItems[startIndex].start).subtract(1, 'week') : new Date()
+      end = new moment().add(1, 'month')
+      items.current.add(convertedItems.slice(0, startIndex))
+      const groupItemsList = [], groupList = []
+      timelineGroups.map( item => {
+        groupItemsList.push(item.group)
+      })
+      const mainGroup = exportGroups()
+      mainGroup.forEach( row => {
+        let tap = false;
+        row.list.forEach( item => {
+          if(groupItemsList.includes(item) && tap === false) {
+            groupList.push({
+              id: row.id,
+              /* content: row.name, */  
+              content: '',
+              className: row.className
+            })
+            tap = true
+          }
+        })
+      })
+      groups.current.add(groupList)      
+    }
+    
+    timelineRef.current.setItems(items.current)
+    timelineRef.current.setGroups(groups.current)
+    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('2000-01-01')), max: new moment().add(3, 'year')})
+    
+  }, [ timelineRawData, isLoadingTimelineRawData, timelineGroups ])
+
+  /**
+   * return component
+   */
+
+  return (
+      <div className={classes.root}>
+        <div
+          style={{ 
+            filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
+          }}
+          ref={timelineContainerRef}
+          className={classes.timeline}
+        />
+        {
+          isLoadingTimelineData &&
+          <CircularProgress size={15} color={'secondary'} className={classes.timelineProcessingIndicator} />
+        }
+        { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> }
+      </div>
+  )
+}
+
+export default TimelineContainer

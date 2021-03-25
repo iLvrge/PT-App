@@ -1,0 +1,759 @@
+[
+   {
+      "name":"Wagner J Todd"
+   },
+   {
+      "name":"Wagner Engineering Llc (f/k/a Zero Roll Suspension Llc)"
+   },
+   {
+      "name":"Connecticut Innovations Inc"
+   },
+   {
+      "name":"Nc-m Chassis Systems Llc",
+      "right":[
+         [
+            444,
+            540,
+            "2006-10-03",
+            "Security",
+            "Jpmorgan Chase Bank Na"
+         ],
+         [
+            444,
+            780,
+            "2007-01-11",
+            "Security",
+            "Deutsche Bank Ag New York Branch As Collateral Agent"
+         ],
+         [
+            444,
+            540,
+            "2007-01-11",
+            "Security",
+            "Jpmorgan Chase Bank Na"
+         ],
+         [
+            444,
+            540,
+            "2007-01-11",
+            "Release",
+            "Jpmorgan Chase Bank Na"
+         ],
+         [
+            724,
+            780,
+            "2007-01-11",
+            "Security",
+            "The Bank Of New York Trust Company Na"
+         ],
+         [
+            724,
+            780,
+            "2007-01-11",
+            "Security",
+            "The Bank Of New York Trust Company Na"
+         ],
+         [
+            444,
+            900,
+            "2008-11-25",
+            "Release",
+            "The Bank Of New York Mellon Trust Company Na"
+         ],
+         [
+            444,
+            900,
+            "2008-11-25",
+            "Release",
+            "The Bank Of New York Mellon Trust Company Na"
+         ]
+      ]
+   },
+   {
+      "name":"Jpmorgan Chase Bank Na",
+      "left":[
+         [
+            174,
+            420,
+            "2006-10-03",
+            "Security",
+            "Nc-m Chassis Systems Llc"
+         ],
+         [
+            174,
+            420,
+            "2007-01-11",
+            "Security",
+            "Nc-m Chassis Systems Llc"
+         ],
+         [
+            174,
+            420,
+            "2007-01-11",
+            "Release",
+            "Nc-m Chassis Systems Llc"
+         ],
+         [
+            174,
+            1020,
+            "2009-08-19",
+            "Ownership",
+            "Metaldyne Chassis Products Llc"
+         ]
+      ],
+      "right":[
+         [
+            1014,
+            240,
+            "2006-10-03",
+            "Security",
+            "Metaldyne Company Llc"
+         ],
+         [
+            1014,
+            360,
+            "2006-10-03",
+            "Security",
+            "Metaldyne Corp"
+         ],
+         [
+            1014,
+            480,
+            "2006-10-03",
+            "Security",
+            "Metaldyne Machining And Assembly Company Inc"
+         ],
+         [
+            1014,
+            600,
+            "2006-10-03",
+            "Security",
+            "Metaldyne Tubular Products Inc"
+         ],
+         [
+            1014,
+            720,
+            "2006-10-03",
+            "Security",
+            "Metaldyne Sintered Components Llc"
+         ],
+         [
+            1014,
+            600,
+            "2007-01-11",
+            "Release",
+            "Metaldyne Tubular Products Inc"
+         ],
+         [
+            1014,
+            720,
+            "2007-01-11",
+            "Release",
+            "Metaldyne Sintered Components Llc"
+         ]
+      ]
+   },
+   {
+      "name":"Metaldyne Company Llc",
+      "left":[
+         [
+            444,
+            540,
+            "2006-10-03",
+            "Security",
+            "Jpmorgan Chase Bank Na"
+         ],
+         [
+            174,
+            1020,
+            "2009-10-16",
+            "Ownership",
+            "Metaldyne Chassis Products Llc"
+         ]
+      ]
+   },
+   {
+      "name":"Metaldyne Corp",
+      "left":[
+         [
+            444,
+            540,
+            "2006-10-03",
+            "Security",
+            "Jpmorgan Chase Bank Na"
+         ],
+         [
+            174,
+            1020,
+            "2009-10-16",
+            "Ownership",
+            "Metaldyne Chassis Products Llc"
+         ]
+      ]
+   },
+   {
+      "name":"Metaldyne Machining And Assembly Company Inc",
+      "left":[
+         [
+            444,
+            540,
+            "2006-10-03",
+            "Security",
+            "Jpmorgan Chase Bank Na"
+         ],
+         [
+            174,
+            1020,
+            "2009-10-16",
+            "Ownership",
+            "Metaldyne Chassis Products Llc"
+         ]
+      ]
+   },
+   {
+      "name":"Metaldyne Tubular Products Inc",
+      "left":[
+         [
+            444,
+            540,
+            "2006-10-03",
+            "Security",
+            "Jpmorgan Chase Bank Na"
+         ],
+         [
+            444,
+            540,
+            "2007-01-11",
+            "Release",
+            "Jpmorgan Chase Bank Na"
+         ],
+         [
+            174,
+            1020,
+            "2009-10-16",
+            "Ownership",
+            "Metaldyne Chassis Products Llc"
+         ]
+      ]
+   },
+   {
+      "name":"Metaldyne Sintered Components Llc",
+      "left":[
+         [
+            444,
+            540,
+            "2006-10-03",
+            "Security",
+            "Jpmorgan Chase Bank Na"
+         ],
+         [
+            444,
+            540,
+            "2007-01-11",
+            "Release",
+            "Jpmorgan Chase Bank Na"
+         ],
+         [
+            174,
+            1020,
+            "2009-10-16",
+            "Ownership",
+            "Metaldyne Chassis Products Llc"
+         ]
+      ]
+   },
+   {
+      "name":"Deutsche Bank Ag New York Branch As Collateral Agent",
+      "left":[
+         [
+            174,
+            420,
+            "2007-01-11",
+            "Security",
+            "Nc-m Chassis Systems Llc"
+         ],
+         [
+            174,
+            1020,
+            "2009-08-19",
+            "Ownership",
+            "Metaldyne Chassis Products Llc"
+         ]
+      ]
+   },
+   {
+      "name":"The Bank Of New York Trust Company Na",
+      "left":[
+         [
+            174,
+            420,
+            "2007-01-11",
+            "Security",
+            "Nc-m Chassis Systems Llc"
+         ],
+         [
+            174,
+            420,
+            "2007-01-11",
+            "Security",
+            "Nc-m Chassis Systems Llc"
+         ]
+      ]
+   },
+   {
+      "name":"The Bank Of New York Mellon Trust Company Na",
+      "left":[
+         [
+            174,
+            420,
+            "2008-11-25",
+            "Release",
+            "Nc-m Chassis Systems Llc"
+         ],
+         [
+            174,
+            420,
+            "2008-11-25",
+            "Release",
+            "Nc-m Chassis Systems Llc"
+         ]
+      ]
+   },
+   {
+      "name":"Metaldyne Chassis Products Llc",
+      "right":[
+         [
+            444,
+            780,
+            "2009-08-19",
+            "Ownership",
+            "Deutsche Bank Ag New York Branch As Collateral Agent"
+         ],
+         [
+            444,
+            540,
+            "2009-08-19",
+            "Ownership",
+            "Jpmorgan Chase Bank Na"
+         ],
+         [
+            1014,
+            360,
+            "2009-10-16",
+            "Ownership",
+            "Metaldyne Corp"
+         ],
+         [
+            1014,
+            240,
+            "2009-10-16",
+            "Ownership",
+            "Metaldyne Company Llc"
+         ],
+         [
+            1014,
+            720,
+            "2009-10-16",
+            "Ownership",
+            "Metaldyne Sintered Components Llc"
+         ],
+         [
+            1014,
+            600,
+            "2009-10-16",
+            "Ownership",
+            "Metaldyne Tubular Products Inc"
+         ],
+         [
+            1014,
+            480,
+            "2009-10-16",
+            "Ownership",
+            "Metaldyne Machining And Assembly Company Inc"
+         ],
+         [
+            444,
+            1140,
+            "2009-10-16",
+            "Security",
+            "Wilmington Trust Fsb"
+         ],
+         [
+            444,
+            1140,
+            "2009-10-16",
+            "Security",
+            "Wilmington Trust Fsb"
+         ],
+         [
+            444,
+            1140,
+            "2009-12-08",
+            "Release",
+            "Wilmington Trust Fsb"
+         ],
+         [
+            444,
+            1260,
+            "2009-12-08",
+            "Security",
+            "Ge Business Financial Services Inc"
+         ],
+         [
+            444,
+            1140,
+            "2009-12-08",
+            "Release",
+            "Wilmington Trust Fsb"
+         ],
+         [
+            444,
+            1260,
+            "2009-12-09",
+            "Security",
+            "Ge Business Financial Services Inc"
+         ],
+         [
+            444,
+            1380,
+            "2009-12-11",
+            "Security",
+            "Carlyle Strategic Partners Lp"
+         ],
+         [
+            444,
+            1260,
+            "2010-06-15",
+            "Release",
+            "Ge Business Financial Services Inc"
+         ],
+         [
+            444,
+            1380,
+            "2010-11-30",
+            "Release",
+            "Carlyle Strategic Partners Lp"
+         ]
+      ]
+   },
+   {
+      "name":"Wilmington Trust Fsb",
+      "left":[
+         [
+            174,
+            1020,
+            "2009-10-16",
+            "Security",
+            "Metaldyne Chassis Products Llc"
+         ],
+         [
+            174,
+            1020,
+            "2009-10-16",
+            "Security",
+            "Metaldyne Chassis Products Llc"
+         ],
+         [
+            174,
+            1020,
+            "2009-12-08",
+            "Release",
+            "Metaldyne Chassis Products Llc"
+         ],
+         [
+            174,
+            1020,
+            "2009-12-08",
+            "Release",
+            "Metaldyne Chassis Products Llc"
+         ]
+      ],
+      "right":[
+         [
+            1014,
+            840,
+            "2009-10-16",
+            "Security",
+            "Metaldyne Llc"
+         ],
+         [
+            1014,
+            960,
+            "2009-10-16",
+            "Security",
+            "Metaldyne Tubular Components Llc"
+         ],
+         [
+            1014,
+            1080,
+            "2009-10-16",
+            "Security",
+            "Metaldyne Bsm Llc"
+         ],
+         [
+            1014,
+            840,
+            "2009-10-16",
+            "Security",
+            "Metaldyne Llc"
+         ],
+         [
+            1014,
+            960,
+            "2009-10-16",
+            "Security",
+            "Metaldyne Tubular Components Llc"
+         ],
+         [
+            1014,
+            1080,
+            "2009-10-16",
+            "Security",
+            "Metaldyne Bsm Llc"
+         ]
+      ]
+   },
+   {
+      "name":"Metaldyne Llc",
+      "left":[
+         [
+            444,
+            1140,
+            "2009-10-16",
+            "Security",
+            "Wilmington Trust Fsb"
+         ],
+         [
+            444,
+            1140,
+            "2009-10-16",
+            "Security",
+            "Wilmington Trust Fsb"
+         ]
+      ]
+   },
+   {
+      "name":"Metaldyne Tubular Components Llc",
+      "left":[
+         [
+            444,
+            1140,
+            "2009-10-16",
+            "Security",
+            "Wilmington Trust Fsb"
+         ],
+         [
+            444,
+            1140,
+            "2009-10-16",
+            "Security",
+            "Wilmington Trust Fsb"
+         ]
+      ]
+   },
+   {
+      "name":"Metaldyne Bsm Llc",
+      "left":[
+         [
+            444,
+            1140,
+            "2009-10-16",
+            "Security",
+            "Wilmington Trust Fsb"
+         ],
+         [
+            444,
+            1140,
+            "2009-10-16",
+            "Security",
+            "Wilmington Trust Fsb"
+         ]
+      ]
+   },
+   {
+      "name":"Diversified Machine Inc",
+      "right":[
+         [
+            444,
+            1500,
+            "2010-06-15",
+            "Security",
+            "Wells Fargo Capital Finance Llc (f/k/a Wachovia Capital Finance Corporation (new England))"
+         ],
+         [
+            444,
+            1620,
+            "2010-10-28",
+            "Security",
+            "Barclays Bank Plc"
+         ]
+      ]
+   },
+   {
+      "name":"Ge Business Financial Services Inc",
+      "left":[
+         [
+            174,
+            1020,
+            "2009-12-08",
+            "Security",
+            "Metaldyne Chassis Products Llc"
+         ],
+         [
+            174,
+            1020,
+            "2009-12-09",
+            "Security",
+            "Metaldyne Chassis Products Llc"
+         ],
+         [
+            174,
+            1020,
+            "2010-06-15",
+            "Release",
+            "Metaldyne Chassis Products Llc"
+         ]
+      ]
+   },
+   {
+      "name":"Carlyle Strategic Partners Lp",
+      "left":[
+         [
+            174,
+            1020,
+            "2009-12-11",
+            "Security",
+            "Metaldyne Chassis Products Llc"
+         ],
+         [
+            174,
+            1020,
+            "2010-11-30",
+            "Release",
+            "Metaldyne Chassis Products Llc"
+         ]
+      ]
+   },
+   {
+      "name":"Wells Fargo Capital Finance Llc (f/k/a Wachovia Capital Finance Corporation (new England))",
+      "left":[
+         [
+            174,
+            1260,
+            "2010-06-15",
+            "Security",
+            "Diversified Machine Inc"
+         ]
+      ],
+      "right":[
+         [
+            1014,
+            1200,
+            "2010-06-15",
+            "Security",
+            "Dmi Edon Llc"
+         ],
+         [
+            1014,
+            1320,
+            "2010-06-15",
+            "Security",
+            "Diversified Machine Montague Inc"
+         ],
+         [
+            1014,
+            1200,
+            "2011-12-01",
+            "Release",
+            "Dmi Edon Llc"
+         ]
+      ]
+   },
+   {
+      "name":"Dmi Edon Llc",
+      "left":[
+         [
+            444,
+            1500,
+            "2010-06-15",
+            "Security",
+            "Wells Fargo Capital Finance Llc (f/k/a Wachovia Capital Finance Corporation (new England))"
+         ],
+         [
+            444,
+            1620,
+            "2010-10-28",
+            "Security",
+            "Barclays Bank Plc"
+         ],
+         [
+            444,
+            1500,
+            "2011-12-01",
+            "Release",
+            "Wells Fargo Capital Finance Llc (f/k/a Wachovia Capital Finance Corporation (new England))"
+         ],
+         [
+            444,
+            1620,
+            "2011-12-01",
+            "Release",
+            "Barclays Bank Plc"
+         ]
+      ]
+   },
+   {
+      "name":"Diversified Machine Montague Inc",
+      "left":[
+         [
+            444,
+            1500,
+            "2010-06-15",
+            "Security",
+            "Wells Fargo Capital Finance Llc (f/k/a Wachovia Capital Finance Corporation (new England))"
+         ],
+         [
+            444,
+            1620,
+            "2010-10-28",
+            "Security",
+            "Barclays Bank Plc"
+         ]
+      ]
+   },
+   {
+      "name":"Barclays Bank Plc",
+      "left":[
+         [
+            174,
+            1260,
+            "2010-10-28",
+            "Security",
+            "Diversified Machine Inc"
+         ]
+      ],
+      "right":[
+         [
+            1014,
+            1200,
+            "2010-10-28",
+            "Security",
+            "Dmi Edon Llc"
+         ],
+         [
+            1014,
+            1320,
+            "2010-10-28",
+            "Security",
+            "Diversified Machine Montague Inc"
+         ],
+         [
+            1014,
+            1200,
+            "2011-12-01",
+            "Release",
+            "Dmi Edon Llc"
+         ]
+      ]
+   }
+]

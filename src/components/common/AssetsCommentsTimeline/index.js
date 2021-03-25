@@ -1,0 +1,634 @@
+import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import Moment from 'moment'
+import { Paper,
+  Drawer,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  Menu,
+  MenuItem,
+  CircularProgress,
+  Avatar,
+} from '@material-ui/core'
+import InsertDriveFileOutlinedIcon from '@material-ui/icons/InsertDriveFileOutlined';
+import GoogleLogin from 'react-google-login'
+import { Timeline, TimelineEvent } from 'react-event-timeline'
+import PatenTrackApi from '../../../api/patenTrack2'
+import { numberWithCommas, applicationFormat } from "../../../utils/numbers"
+import QuillEditor from '../QuillEditor'
+ 
+import useStyles from './styles'
+import { FaChevronCircleDown } from 'react-icons/fa'
+import {
+  getGoogleAuthToken,
+  getGoogleTemplates,
+  sendMessage,
+  getChannelID,
+  getSlackMessages,
+  getSlackUsersList,  
+} from '../../../actions/patentTrackActions2'
+
+import { setTokenStorage, getTokenStorage, removeTokenStorage } from '../../../utils/tokenStorage'
+
+import { html } from '../../../utils/html_encode_decode'
+
+const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }) => {
+  const classes = useStyles()
+  const dispatch = useDispatch()
+  const inputFile = useRef(null)
+  const timelineRef = useRef(null)
+  const frameRef = useRef( null )
+  const editorContainerRef = useRef(null)
+  const [ isLoadingcomments, setIsLoadingcomments ] = useState(false)
+  const [ commentsData, setCommentsData ] = useState({messages: [], users: []})
+  const [ editData, setEditData ] = useState(null)
+  const companyListLoading = useSelector(state => state.patenTrack2.companyListLoading)
+  const selectedCommentsEntity = useSelector(state => state.patenTrack2.selectedCommentsEntity)
+  const userProfile = useSelector(state => state.patenTrack.profile)
+  const driveFiles = useSelector(state => state.patenTrack2.drive_files)
+  
+  const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
+  const slack_messages = useSelector(state => state.patenTrack2.slack_messages)
+  
+  const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
+  const slack_auth_token = useSelector(state => state.patenTrack2.slack_auth_token)
+  const [ selectUser, setSelectUser] = useState(null)
+  const [ replyId, setReplyId ] = useState(null)
+  const [ file, setFile ] = useState(null)
+  const [ displayButton, setDisplayButton] = useState( true )
+  const [ currentDriveFileItem, setCurrentDriveFileItem ] = useState( null )
+  const [ commentHtml, setCommentHtml ] = useState('')
+  const [ openDocumentModal, setOpenDocumentModal] = useState( false )
+  const [ slackAuthLogin, setSlackAuthLogin ] = useState( true )
+  const [ googleAuthLogin, setGoogleAuthLogin ] = useState( true )
+  const [windowBrowser, setWindowBrowser] = useState(null)
+  
+  const type = useMemo(() => selectedCommentsEntity && selectedCommentsEntity.type, [ selectedCommentsEntity ])
+  
+  useEffect(() => {
+    console.log("AssetsCommentsTimeline -> checkButtons")
+    checkButtons()
+  }, [])
+
+  useEffect(() => {
+    checkButtons()
+  }, [ google_auth_token, slack_auth_token ])
+
+
+  /* useEffect(() => {
+    if( !slackAuthLogin &&  !googleAuthLogin ) {
+      setDisplayButton( false )
+    } else {
+      setDisplayButton( true )
+    }
+  }, [ slackAuthLogin, googleAuthLogin ]) */
+
+  useEffect(() => {
+    setCommentsData(slack_messages)
+    updateHeight(size, timelineRef)
+  }, [ slack_messages, size, timelineRef ])
+
+  useEffect(() => {
+    if(slack_auth_token && slack_auth_token != null ) {
+      const { access_token } = slack_auth_token;
+      if( access_token && access_token != null && (channel_id == '' || channel_id == null) && selectedAssetsPatents.length > 0) {
+        dispatch( getChannelID( selectedAssetsPatents[0], selectedAssetsPatents[1] ) )
+      }
+    }
+  }, [ dispatch, slack_auth_token, selectedAssetsPatents ] )
+
+  useEffect(() => {
+    updateHeight(size, timelineRef)
+  }, [ size, timelineRef ])
+
+  useEffect(() => {
+    if(driveFiles != undefined && Object.keys(driveFiles).length > 0 && driveFiles.files != undefined ) {
+      setOpenDocumentModal( !openDocumentModal )
+    }
+  }, [ driveFiles ])
+
+  const checkButtons = () => {
+    try{
+      const slackToken = getTokenStorage( 'slack_auth_token_info' ), googleToken = getTokenStorage( 'google_auth_token_info' )
+      let slackLoginButton = true, googleLoginButton = true
+      if(slackToken && slackToken!= '') {
+        let token = JSON.parse(slackToken)
+        if(typeof token === 'string') {
+          token = JSON.parse(token)
+        }
+        
+        const {access_token} = token
+        if(access_token && access_token != '') {
+          slackLoginButton =  false 
+        }
+      }
+      
+      if(googleToken && googleToken != '') {
+        const {access_token} = JSON.parse( googleToken )
+        if(access_token) {
+          googleLoginButton =  false 
+        }
+      }
+      setSlackAuthLogin(slackLoginButton)
+      setGoogleAuthLogin(googleLoginButton)
+    } catch ( err ) {
+      console.error( err )
+    }
+  }
+
+  const updateHeight = ( size, timelineRef ) => {
+    if( timelineRef.current != null ) {
+      let calHeight = timelineRef.current.parentNode.clientHeight - 168
+      if(displayButton === false) {
+        calHeight = timelineRef.current.parentNode.clientHeight - 96
+      }
+      timelineRef.current.parentNode.style.height = `${ calHeight }px`
+    }    
+  }
+
+  const responseGoogle = useCallback((response) => {
+    const { code } = response
+    if(code != undefined) {
+      setTokenStorage( 'google_auth_token_info', code )
+      /* setGoogleAuthLogin(false) */
+      dispatch( getGoogleAuthToken( code ) )
+    }
+  }, [ dispatch ])
+
+  const getDriveDocumentList = useCallback(() => {
+    const googleToken = getTokenStorage( 'google_auth_token_info' )
+    if(googleToken && googleToken != '' ) {
+
+      const { access_token } = JSON.parse(googleToken)
+
+      if(access_token) {
+        dispatch( getGoogleTemplates() )
+      } else {
+        alert("Please first login with google account.")
+        setGoogleAuthLogin( true )
+        setDisplayButton( true )
+      }
+    } else {
+      alert("Please first login with google account.")
+      setGoogleAuthLogin( true )
+      setDisplayButton( true )
+    }    
+  }, [ dispatch ])
+
+  /* const handleSubmitComment = useCallback(async () => {
+    const formData = new FormData()
+    formData.append('comment', commentHtml)
+    if (editData) {
+      const { status } = await PatenTrackApi.updateCommentToEntity(editData.comment_id, formData)
+      if (status === 200) {
+        setCommentHtml('')
+        setEditData(null)
+      }
+    } else {
+      const subject = selectedCommentsEntity.id
+      formData.append('subject', subject )
+      const { status } = await PatenTrackApi.setCommentToEntity(selectedCommentsEntity.type, formData)
+      if (status === 200) {
+        setCommentHtml('')
+      }
+    }
+    getAssetCommentsData()
+  }, [ commentHtml, editData, selectedCommentsEntity, getAssetCommentsData ]) */
+
+  const handleSubmitComment = useCallback(async () => {
+    if(selectedAssetsPatents.length > 0) {
+      const formData = new FormData()
+      formData.append('text',  html.encode(commentHtml) )
+      formData.append('asset', selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? selectedAssetsPatents[1] : selectedAssetsPatents[0])
+      formData.append('asset_format', selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? 'us'+selectedAssetsPatents[1] : 'us'+selectedAssetsPatents[0])
+      formData.append('user', selectUser == null ? '' : selectUser)
+      formData.append('reply', replyId == null ? '' : replyId)
+      formData.append('edit',editData == null ? '' : editData)
+      formData.append('file',file == null ? '' : file)
+      formData.append('channel_id', channel_id)
+      const slackToken = getTokenStorage( 'slack_auth_token_info' )
+      if( slackToken  && slackToken != null ) {
+        const { access_token } = JSON.parse(slackToken)
+
+        if( access_token != undefined) {
+          const { data } = await PatenTrackApi.sendMessage(access_token, formData)
+
+          setCommentHtml('')
+  
+          if(data != '' && Object.keys(data).length > 0) {
+            const { status, channel } = data;
+            if(status != '' && status == 'Message sent') {
+              setEditData( null )
+              if(channel_id != channel) {
+                dispatch(setChannel({channel_id}))
+              }
+              dispatch( getSlackMessages( data.channel ) ) 
+            }
+          }
+        } else {
+          alert("Please login first with your Slack Account")
+        }
+      } else {
+        alert("Please login first with your Slack Account")
+      }    
+    }    
+  }, [ dispatch, commentHtml, selectedAssetsPatents, getSlackMessages, channel_id, selectUser, replyId, editData, file ])
+
+  const handleCancelComment = useCallback(() => {
+    setCommentHtml('')
+    setEditData(null)
+  }, [])
+
+  const onEdit = useCallback(async (event, comment) => {
+    event.preventDefault()
+    setEditData( true )
+    setReplyId(comment.ts)
+    const commentText = comment.text
+    setCommentHtml(commentText.replace(/<p><br><\/p>/g, ''))
+  }, [])
+
+  const onDelete = useCallback(async (event, comment) => {
+    event.preventDefault()
+    if(channel_id != '' && channel_id != null ) { 
+      const { access_token } = JSON.parse(getTokenStorage( 'slack_auth_token_info' ))
+      if(access_token != null && access_token != '' && access_token != undefined) {
+        const { status } = await PatenTrackApi.deleteSlackMessage(access_token, channel_id, comment.ts)
+        if (status === 200) {
+          dispatch( getSlackMessages( channel_id ) )
+        }
+      }      
+    }
+  }, [ dispatch, getSlackMessages, channel_id ]) 
+
+  const onUpdateTeamID = async(team) => {
+    console.log('onUpdateTeamID', team)
+    const { status } = await PatenTrackApi.updateSlackTeam(team)
+    if (status === 200) {
+      console.log("Team updated")
+    }
+  }
+
+
+  const onHandleCleanFrame = () => {
+    
+  }
+
+  const onHandleOpenFile = ( item, flag ) => {
+    if(frameRef && frameRef.current != null) {
+      /* console.log("item.webViewLink", frameRef.current.src, item.webViewLink) */
+      if(flag === 0) {
+        frameRef.current.src = item.webViewLink
+      } else {
+        /**
+         * Create copy of this file and show in the iframe
+         */
+        setCurrentDriveFileItem(item)
+      }
+    }
+  }
+
+  const frameOnLoad = () => {
+    if(frameRef && frameRef.current != null) {
+      frameRef.current.style.width = '100%'
+      frameRef.current.style.height = frameRef.current.parentNode.clientHeight+'px'
+    }
+  }
+
+
+  const onHandleSlackLogin = (w,h) => {    
+    const dualScreenLeft = window.screenLeft !==  undefined ? window.screenLeft : window.screenX
+    const dualScreenTop = window.screenTop !==  undefined   ? window.screenTop  : window.screenY
+
+    const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : window.screen.width
+    const height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : window.screen.height
+
+    const systemZoom = width / window.screen.availWidth
+    const left = (width - w) / 2 / systemZoom + dualScreenLeft
+    const top = (height - h) / 2 / systemZoom + dualScreenTop
+
+    const windowOpen = window.open(`https://slack.com/oauth/v2/authorize?user_scope=${process.env.REACT_APP_SLACK_USER_SCOPE}&client_id=${process.env.REACT_APP_SLACK_CLIENTID}&redirect_uri=${process.env.REACT_APP_SLACK_REDIRECT_URL}`, 'Slack Login', `width=${w / systemZoom},height=${h / systemZoom},top=${top},left=${left}`)
+
+    if(windowOpen != null) {
+      checkWindowClosedStatus(windowOpen)
+    } 
+  }
+
+  const checkWindowClosedStatus = (windowRef) => {
+    setTimeout(() => {
+      if(windowRef.closed === true) {
+        checkButtons()
+        checkSlackAuth()
+      } else {
+        checkWindowClosedStatus(windowRef)
+      }
+    }, 500)
+  }
+
+  const checkSlackAuth = useCallback(() => {
+    const slackToken = getTokenStorage( 'slack_auth_token_info' )
+		if(slackToken && slackToken!= '') {
+      const { access_token, team } = JSON.parse( slackToken )
+      if( access_token && access_token != null ) {
+        /**
+         * Set team ID
+         */
+        onUpdateTeamID(team)
+
+        if( selectedAssetsPatents.length > 0 ) {        
+          if( channel_id == '' || channel_id == null ) {
+            dispatch( getChannelID( selectedAssetsPatents[0], selectedAssetsPatents[1] ) ) //get channel for selected asset
+          } else {
+            dispatch( getSlackMessages( channel_id ) ) //getMessages for selected channel
+          }  
+        }
+      }			
+		}
+  }, [ dispatch, selectedAssetsPatents, channel_id ] )
+
+
+  const onHandleFileInputChange = useCallback( event => {
+    if(event.target.files.length > 0) {
+      const file = event.target.files[0]
+      const element = document.createElement('div')
+      element.setAttribute('class', 'editor-attachment') 
+      const editor = editorContainerRef.current.querySelector('.ql-editor')
+      const itemElement = document.createElement('div')
+      itemElement.setAttribute('class', 'item') 
+      if(file.type.indexOf('image') !== -1) {
+        itemElement.innerHTML = `<img src="${URL.createObjectURL(file)}" class="attachment_image"/>`
+      } else {
+        itemElement.innerHTML = `<svg width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fal" data-icon="file" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M369.9 97.9L286 14C277 5 264.8-.1 252.1-.1H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V131.9c0-12.7-5.1-25-14.1-34zm-22.6 22.7c2.1 2.1 3.5 4.6 4.2 7.4H256V32.5c2.8.7 5.3 2.1 7.4 4.2l83.9 83.9zM336 480H48c-8.8 0-16-7.2-16-16V48c0-8.8 7.2-16 16-16h176v104c0 13.3 10.7 24 24 24h104v304c0 8.8-7.2 16-16 16z" class=""></path></svg> ${file.name}`
+      }
+      const anchor = document.createElement('a')
+      anchor.innerHTML = `<svg aria-hidden="true" width="15" focusable="false" data-prefix="far" data-icon="times-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm101.8-262.2L295.6 256l62.2 62.2c4.7 4.7 4.7 12.3 0 17l-22.6 22.6c-4.7 4.7-12.3 4.7-17 0L256 295.6l-62.2 62.2c-4.7 4.7-12.3 4.7-17 0l-22.6-22.6c-4.7-4.7-4.7-12.3 0-17l62.2-62.2-62.2-62.2c-4.7-4.7-4.7-12.3 0-17l22.6-22.6c4.7-4.7 12.3-4.7 17 0l62.2 62.2 62.2-62.2c4.7-4.7 12.3-4.7 17 0l22.6 22.6c4.7 4.7 4.7 12.3 0 17z" class=""></path></svg>`
+      anchor.setAttribute('href','javascript://')
+      anchor.setAttribute('class','remove-attachment')
+      anchor.onclick = function() {
+        editor.parentNode.removeChild(editor.parentNode.querySelector('.editor-attachment'))
+      }
+      itemElement.insertBefore(anchor, itemElement.firstElementChild)
+      element.appendChild(itemElement)
+      if(editor.parentNode.querySelector('.editor-attachment') != null) {
+        editor.parentNode.removeChild(editor.parentNode.querySelector('.editor-attachment'))
+      }      
+      editor.parentNode.insertBefore(element, editor.nextSibling)
+    }
+  }, [ editorContainerRef ])
+  
+  const onHandleFileExplorer = useCallback(() => {
+    
+    if( inputFile.current != null ) {
+      inputFile.current.click()
+      inputFile.current.addEventListener('change', onHandleFileInputChange)
+    }
+  }, [ inputFile ])  
+
+  const onHandleFile = (event) => {
+    setFile(event.target.value)
+  }
+
+  const renderDriveFiles = useMemo(() => {
+    if(openDocumentModal === false) return null
+
+    return (
+      <div className={classes.driveContainer}>
+        <Drawer
+            className={classes.drawer}
+            variant="permanent"
+            anchor={'left'}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+          >
+          <List>
+            {
+              driveFiles.files.map( file => (
+                <ListItem button key={file.id} onClick={() => { onHandleOpenFile(file, 1)}} onMouseOver={() => { onHandleOpenFile(file, 0) }} onMouseLeave={onHandleCleanFrame}>
+                  <ListItemText primary={file.name} />
+                </ListItem>
+              ))
+            }
+          </List>
+        </Drawer>
+        <main className={classes.showFile}>
+          <iframe src='about:blank' ref={frameRef} onLoad={frameOnLoad}></iframe>
+        </main> 
+      </div>
+    )
+  }, [ driveFiles, classes ])
+
+  
+  const onHandleGoogleSignout = () => {
+    removeTokenStorage('google_auth_token_info')
+    setGoogleAuthLogin(true)
+  }
+
+  const onHandleSlackSignout = () => {
+    removeTokenStorage('slack_auth_token_info')
+    setSlackAuthLogin(true)
+  }
+
+  const handleFocus = useCallback((range, source, editor) => {
+    editorContainerRef.current.classList.add('focus')
+  }, [ editorContainerRef ])
+
+  const handleBlur = useCallback((previousRange, source, editor) => {
+    editorContainerRef.current.classList.remove('focus');
+  }, [ editorContainerRef ])
+
+  const renderCommentEditor = useMemo(() => {
+    //if (!selectedCommentsEntity) return null
+    return (
+      <div className={classes.commentEditor} ref={editorContainerRef}> 
+        <QuillEditor
+          value={commentHtml}
+          onChange={setCommentHtml}
+          onSubmit={handleSubmitComment}
+          onCancel={handleCancelComment}
+          onDrive={getDriveDocumentList}
+          onAttachmentFile={onHandleFileExplorer}
+          onSelectUser={setSelectUser}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+        />
+        <input type='file' id='attach_file' ref={inputFile} style={{display: 'none'}} onChange={onHandleFile}/>
+      </div>
+    )
+  }, [ selectedCommentsEntity, commentHtml, handleSubmitComment, handleCancelComment, classes ])
+
+  const ShowUser = ({users, item}) => {
+    if(users.length === 0) return item
+    const checkUser = users.findIndex( user => user.id === item)
+    if(checkUser >= 0) {
+      return users[checkUser].profile.display_name
+    } else {
+      return item
+    }
+  }
+
+
+  const ShowUserAvtar = ({users, item}) => {
+    if(users.length === 0) return <Avatar>{`${item}`}</Avatar>
+    const checkUser = users.findIndex( user => user.id === item)
+    if(checkUser >= 0) {
+      return <Avatar alt={`${users[checkUser].profile.display_name}`} src={users[checkUser].profile.image_24} className={classes.small}/>
+    } else {
+      return <Avatar>{`${item}`}</Avatar>
+    }
+  }
+
+  const ShowButtons = ({indexing, item, comment}) => {
+    const getSlackUser = getTokenStorage( 'slack_auth_token_info' );
+    if(getSlackUser &&  getSlackUser != '') {
+      const {id} = JSON.parse(getSlackUser)
+      const { subtype } = comment
+      if(item === id && (subtype == undefined || (subtype != undefined && subtype != 'group_join'))) {
+        return <>
+          <Button key={`${indexing}-1`} color="primary" onClick={(event) => { onEdit(event, comment) }} size="small" >
+            Edit
+          </Button>
+          <Button key={`${indexing}-2`} color="primary" onClick={(event) => {onDelete(event, comment)}} size="small">
+            Delete
+          </Button>
+        </>
+      } else {
+        return null
+      }
+    } else {
+      return null
+    }
+    
+  }
+
+  const ShowFiles = ({indexing, files}) => {
+    if(!files.hasOwnProperty('files') || files.files.length == 0) return null
+
+    return (
+      <>
+        {
+          files.files.map( (file, index) => (
+          <div key={`${indexing}-${index}`}><a href={file.permalink} target={`_blank`}>{file.name}</a></div>
+          ))
+        }
+      </>
+    )
+  }
+
+  const renderCommentsTimeline = useMemo(() => {
+    return (
+      <div className={classes.commentTimelineSection} ref={timelineRef}>   
+        {
+          type && isLoadingcomments ? (
+            <CircularProgress className={classes.loader} />)
+          :
+            commentsData.messages != undefined && commentsData.messages.length > 0 ? (
+            <Timeline 
+              className={classes.timeline} 
+              lineColor={'rgb(191 191 191)'}>
+              {
+                commentsData.messages.map( comment => (
+                  <TimelineEvent
+                    key={`comment-${comment.ts}`}
+                    contentStyle={{ background: '#303030' }}
+                    bubbleStyle={{ 
+                      background: 'rgb(48 48 48)', 
+                      border: '2px solid #303030',
+                    }}
+                    cardHeaderStyle={{ color: 'white' }}
+                    title={Moment(new Date(comment.ts * 1000)).format('l HH:mm')}
+                    subtitle={<ShowUser users={commentsData.users} item={comment.user} />}
+                    subtitleStyle={{ color: 'white' }}
+                    icon={<ShowUserAvtar users={commentsData.users} item={comment.user} />}
+                  >
+                    <div 
+                      dangerouslySetInnerHTML={{ __html: comment.text }} />
+                    <ShowFiles 
+                      files={comment} 
+                      indexing={`file-comment-${comment.ts}`} />
+                    {/* <ShowButtons 
+                      item={comment.user} 
+                      comment={comment} 
+                      indexing={`button-comment-${comment.ts}`} /> */}
+                  </TimelineEvent>
+                ))
+              }            
+            </Timeline>
+            )
+            : 
+            <div />
+        }
+      </div>
+    )
+  }, [ isLoadingcomments, commentsData, type, userProfile, classes, onDelete, onEdit ])
+
+  if (companyListLoading) return null
+  return (
+    <Paper className={classes.root} square>
+      <div className={classes.content}>
+        {
+          displayButton === true
+          ?
+          <div className={classes.button}>
+            {
+              slackAuthLogin 
+              ? 
+                <Button 
+                  onClick={() => {
+                    onHandleSlackLogin(900, 830)
+                  }
+                  }
+                >
+                  <img 
+                    alt='Sign in with Slack' 
+                    height='40' 
+                    width='172' 
+                    src='https://platform.slack-edge.com/img/sign_in_with_slack.png' 
+                    srcSet='https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x' />
+                </Button>
+              :
+                {/* <Button 
+                  onClick={onHandleSlackSignout} 
+                  className={classes.signout}
+                >
+                  <svg width="18" height="18" viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg"><g fill="none" fillRule="evenodd"><path d="M19.712.133a5.381 5.381 0 0 0-5.376 5.387 5.381 5.381 0 0 0 5.376 5.386h5.376V5.52A5.381 5.381 0 0 0 19.712.133m0 14.365H5.376A5.381 5.381 0 0 0 0 19.884a5.381 5.381 0 0 0 5.376 5.387h14.336a5.381 5.381 0 0 0 5.376-5.387 5.381 5.381 0 0 0-5.376-5.386" fill="#36C5F0"></path><path d="M53.76 19.884a5.381 5.381 0 0 0-5.376-5.386 5.381 5.381 0 0 0-5.376 5.386v5.387h5.376a5.381 5.381 0 0 0 5.376-5.387m-14.336 0V5.52A5.381 5.381 0 0 0 34.048.133a5.381 5.381 0 0 0-5.376 5.387v14.364a5.381 5.381 0 0 0 5.376 5.387 5.381 5.381 0 0 0 5.376-5.387" fill="#2EB67D"></path><path d="M34.048 54a5.381 5.381 0 0 0 5.376-5.387 5.381 5.381 0 0 0-5.376-5.386h-5.376v5.386A5.381 5.381 0 0 0 34.048 54m0-14.365h14.336a5.381 5.381 0 0 0 5.376-5.386 5.381 5.381 0 0 0-5.376-5.387H34.048a5.381 5.381 0 0 0-5.376 5.387 5.381 5.381 0 0 0 5.376 5.386" fill="#ECB22E"></path><path d="M0 34.249a5.381 5.381 0 0 0 5.376 5.386 5.381 5.381 0 0 0 5.376-5.386v-5.387H5.376A5.381 5.381 0 0 0 0 34.25m14.336-.001v14.364A5.381 5.381 0 0 0 19.712 54a5.381 5.381 0 0 0 5.376-5.387V34.25a5.381 5.381 0 0 0-5.376-5.387 5.381 5.381 0 0 0-5.376 5.387" fill="#E01E5A"></path></g></svg> Sign Out
+                </Button> */}
+            }
+
+            {
+              googleAuthLogin
+              ?
+                <GoogleLogin
+                clientId={process.env.REACT_APP_GOOGLE_CLIENTID}
+                buttonText="Login with Google"
+                offline={false}
+                approvalPrompt="force"
+                scope="https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.metadata https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/drive.readonly"
+                responseType="code"
+                onSuccess={responseGoogle}
+                onFailure={responseGoogle}>
+
+                </GoogleLogin>
+              :
+                <Button 
+                  onClick={onHandleGoogleSignout} 
+                  className={classes.signout}
+                >
+                  <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg"><g fill="#000" fillRule="evenodd"><path d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z" fill="#EA4335"></path><path d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z" fill="#4285F4"></path><path d="M3.88 10.78A5.54 5.54 0 0 1 3.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9.008 9.008 0 0 0 0 9c0 1.45.35 2.82.96 4.04l2.92-2.26z" fill="#FBBC05"></path><path d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.97 13.04C2.45 15.98 5.48 18 9 18z" fill="#34A853"></path><path fill="none" d="M0 0h18v18H0z"></path></g></svg> 
+                  Sign Out
+                </Button> 
+            }
+          </div> 
+          :
+          ''
+        }
+        { renderCommentsTimeline }
+        { renderCommentEditor }
+      </div>
+      { renderDriveFiles }
+    </Paper>
+  )
+}
+
+export default AssetsCommentsTimeline

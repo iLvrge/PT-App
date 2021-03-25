@@ -1,0 +1,363 @@
+
+<!DOCTYPE HTML>
+<!-- 
+  This example is used mainly for developers to test performance issues by controlling number of groups, 
+  number of items and their types.
+ -->
+<html>
+
+<head>
+  <title>Timeline | other | Stress Performance example</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <script type="text/javascript" src="//unpkg.com/vis-timeline@latest/standalone/umd/vis-timeline-graph2d.min.js"></script>
+  <link href="//unpkg.com/vis-timeline@latest/styles/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" />
+  <style>
+    .vis-foreground .vis-group, .vis-time-axis .vis-grid.vis-vertical {
+  border:0px !important;
+}
+
+.vis-label.vis-nested-group.vis-group-level-1, .vis-itemset .vis-background,
+.vis-itemset .vis-foreground, .vis-label.vis-nested-group.vis-group-level-1,
+.vis-itemset .vis-background, .vis-itemset
+.vis-foreground {
+  background-color:#222222 !important;
+}
+
+.vis-labelset .vis-label, .vis-timeline {
+  color:#d6d6d6 !important;
+  border-bottom:1px solid #5c5c5c !important;
+}
+
+.vis-timeline {
+  border:1px solid #5c5c5c !important;
+}
+
+.vis-labelset .vis-label{
+	border-right:0px solid #5c5c5c !important;
+}
+
+.vis-time-axis .vis-text, .vis-item {
+  color:#d6d6d6 !important;
+}
+
+.vis-timeline {
+  background-color:#222222 !important;
+}
+.vis-tooltip p {
+  margin: 5px 0 0 0;
+}
+
+.vis-content {
+  top: 0 !important;
+}
+
+.vis-nested-group{
+  min-height: 22%;
+}
+.vis-ltr .vis-label.vis-nested-group.vis-group-level-1 .vis-inner{
+  padding-left: 5px !important;
+}
+.vis-ltr .vis-label.vis-nested-group.vis-group-level-2 .vis-inner{
+  padding-left: 20px !important;
+}
+
+#timeline .vis-panel.vis-center, #timeline .vis-panel.vis-left, #timeline .vis-panel.vis-right, #timeline .vis-panel.vis-top, #timeline .vis-panel.vis-bottom{
+  border:1px #5c5c5c;
+}
+#timeline .vis-panel.vis-top, #timeline .vis-panel.vis-bottom, #timeline .vis-panel.vis-left{
+  border-style: solid;
+}
+#timeline .vis-panel.vis-left{
+  /*border-right: 0;*/
+}
+#timeline .vis-panel.vis-top{
+  border-top: 0;
+}
+#timeline .vis-panel.vis-bottom{
+  border-bottom: 0;
+}
+.vis-item.vis-point.vis-selected{
+  background-color: inherit !important;
+  color: #E60000 !important;
+  font-weight: bold;;
+}
+.tooltip_frame{border: 0px; min-height: 300px; width: 100%;}
+
+div.vis-tooltip{
+  background-color: #222 !important;
+  color:#bdbdbd !important;
+  border-radius: 0px !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  /*box-shadow: 5px 5px 3px -3px rgba(120,120,120,.3) !important;*/
+  padding: 10px 20px;
+  line-height: 1.5rem;
+  border: 2px solid #404040 !important;
+}
+.vis-item.vis-dot.red{color:#E60000 !important;border-color:#E60000 !important;}
+.vis-item.vis-dot.blue{color:#2493f2 !important;border-color:#2493f2 !important;}
+.vis-item.vis-dot.orange{color:#ffaa00 !important;border-color:#ffaa00 !important;}
+.vis-item.vis-dot.green{color:#70A800 !important;border-color:#70A800 !important;}
+.vis-item.vis-dot.white{color: white !important;}
+.vis-item.vis-dot.grey{color: #bdbdbd !important;}
+  </style>
+</head>
+
+<body>
+  <div id="timeline"></div>
+</body>
+
+<script>
+  //document.domain = "patentrack.com";
+ /*var now = moment();
+  var groupCount = 20;
+  var itemCount = 400;*/
+
+  // create a data set with groups
+  //var groups = new vis.DataSet();
+  /*for (var g = 0; g < groupCount; g++) {
+    groups.add({
+      id: g,
+      content: "group " + g
+    });
+  }*/
+
+  
+
+  
+  var startDate = null, endDate = null, DATE_FORMAT = 'YYYY-MM-DD', WAIT_INTERVAL = 5000, timeInterval;
+  function renderData(result) {
+    
+    var items = new vis.DataSet();
+    var now = moment().minutes(0).seconds(0).milliseconds(0);
+    var container = document.getElementById('timeline');
+    /*var options = {
+          zoomMin: 3456e5,       
+          zoomMax: 1000 * 60 * 60 * 24 * 30 * 10 ,
+          zoomFriction: 60,
+          horizontalScroll: true,
+          verticalScroll: true,
+          zoomFriction: 60,
+          zoomKey: 'ctrlKey',
+          orientation: 'both', 
+          tooltip: {
+            followMouse: true,
+            overflowMethod: 'cap'
+          }, 
+          groupHeightMode: "fixed", 
+         
+        };*/
+      var options = {
+        zoomMin: 3456e5,       
+        zoomMax: 1000 * 60 * 60 * 24 * 30 * 36 ,
+        /*timeAxis: {scale: 'month', step: 5},*/
+        zoomFriction: 60,
+        horizontalScroll: true,
+        verticalScroll: true,
+        zoomFriction: 60,
+        zoomKey: 'ctrlKey',
+        orientation: 'both', 
+        tooltip: {
+        followMouse: true,
+        overflowMethod: 'cap'
+        }, 
+        groupHeightMode: "fixed", /**['auto', 'fixed', 'fitItems'] */
+      };
+
+    var timeline;
+    var itemDates = [], itemIncrement = 1, allRFID = [];
+    let newItems = [];
+    if(result.assignment_assignors.length > 0){
+      for(let i = 0; i < result.assignment_assignors.length; i++) {
+        let name = result.assignment_assignors[i].normalize_name;
+  
+        if( name === '' || name === null) {
+          name = result.assignment_assignors[i].raw_name;
+        }
+        /*newData.push({id: i, content: 'item ' + i, start: start + 24*3600*1000 * i}); // much much faster than now.clone add days*/
+        let start = moment(new Date(result.assignment_assignors[i].exec_dt));
+        /*let end = start.clone().add(24, 'hours');
+        let startFormatDate = start.format('MMM DD, YYYY');*/
+        let content = [];
+        /**List of Assignors for particular transactions */
+        /*if(result.assignors.length > 0){
+          for(let j =0; j < result.assignors.length; j++){
+              if( result.assignors[j].rf_id === result.assignment_assignors[i].rf_id ){
+                  let assignorName = result.assignors[j].normalize_name;
+      
+                  if( assignorName === '' || assignorName === null) {
+                  assignorName = result.assignors[j].raw_name;
+                  }
+                  content.push( assignorName );
+              }
+          }
+        }*/
+        
+        itemDates.push(start.valueOf());   
+        allRFID.push(result.assignment_assignors[i].rf_id);
+        itemIncrement++;
+        /**Add items to Group Level 2 */
+        newItems.push({
+          id: itemIncrement,
+          content: name.split(' ')[0] ,
+          start: start,
+          /*title: `<div><b>Date:</b> ${startFormatDate} </p><p><b>Type:</b> ${result.assignment_assignors[i].convey_ty} </p><p><b>Assignor:</b> <br/>${content.join('<div style="height:5px;">&nbsp;</div>')} </div>`,*/
+          type: 'point',
+          className: result.className
+        });
+      }
+    }
+    if(result.assignment_assignee.length > 0) {
+      groupID = "";
+      itemIncrement++;
+      for(let i = 0; i < result.assignment_assignee.length; i++) {
+        allRFID.push(result.assignment_assignee[i].rf_id);
+        let name = result.assignment_assignee[i].normalize_name;
+    
+        if( name === '' || name === null) {
+          name = result.assignment_assignee[i].raw_name;
+        }   
+        let start = moment(new Date(result.assignment_assignee[i].exec_dt));
+        /*let end = start.clone().add(24, 'hours');
+        let startFormatDate = start.format('MMM DD, YYYY');*/
+        let content = [];
+        /*if(result.assignees.length > 0){
+            for(let j =0; j < result.assignees.length; j++){
+            if( result.assignees[j].rf_id === result.assignment_assignee[i].rf_id ){
+                let assigneeName = result.assignees[j].normalize_name;
+    
+                if( assigneeName === '' || assigneeName === null) {
+                assigneeName = result.assignees[j].raw_name;
+                }
+                content.push( assigneeName );
+            }
+            }
+        }*/
+        
+        itemDates.push(start.valueOf());        
+        itemIncrement++;         
+        /**Add items to Group Level 2 */
+        newItems.push({
+          id: itemIncrement,
+          content: name.split(' ')[0] ,
+          start: start,
+          type: 'point',          
+          className: result.className,
+          /*title: `<div><b>Date:</b> ${startFormatDate} </p><p><b>Type:</b> ${result.assignment_assignee[i].convey_ty} </p><p><b>Assignee:</b> <br/>${content.join('<div style="height:5px;">&nbsp;</div>')} </div>`,*/
+        })
+      }  
+    }
+
+    if(itemDates.length > 0) {
+      try{        
+        let min = new Date(Math.min(...itemDates));
+        let max = new Date(Math.max(...itemDates));
+        console.log("MIN", min);
+        min = moment(min).clone();
+        max = moment(max).clone();        
+        
+        if(typeof result.min_date != "undefined" && result.min_date != "" && result.min_date != null ) {
+          min = moment(new Date(result.min_date)).clone();
+        }   
+        console.log("MIN", min);
+        if(result.assignment_assignee.length > 0 || result.assignment_assignors.length > 0) {
+          let recordsMax = ""
+          if(typeof result.min_date != "undefined" && result.max_date != "" && result.max_date != null) {
+            recordsMax = moment(new Date(result.max_date)).clone();
+          }
+          if(recordsMax != "") {
+            options.max = recordsMax;    
+          } else {
+            options.max = max;    
+          } 
+          options.start = max;
+          options.end = min;
+          options.min = min;          
+        }               
+      } catch(e) {
+        console.log(e);
+      }  
+
+      console.log("OPTIONS",options);
+      
+      items.add(newItems);
+      container.innerHTML = '';
+      timeline = new vis.Timeline(container, items, options);   
+      timeline.on("rangechanged", function(properties){
+      if(startDate != moment(properties.start).format(DATE_FORMAT) || endDate != moment(properties.end).format(DATE_FORMAT)) {        
+        if(properties.byUser === true) {
+          
+          let checkScroll = 0;
+          startDate = moment(properties.start).format(DATE_FORMAT);
+          endDate = moment(properties.end).format(DATE_FORMAT);
+          if(itemDates.length > 0) {
+            let min = Math.min(...itemDates);
+            let newStart = new Date(properties.start).getTime();
+
+            let max = Math.max(...itemDates);
+            let newEnd = new Date(properties.end).getTime();
+            //console.log("MIN", min, result.min_date, "NEWSTART", newStart, result.max_date, newStart < min, checkScroll, "MAX", max, "MAXEND", newEnd);
+            if(((checkScroll == 0 && newStart < min) || (checkScroll == 1 && newEnd > max))) {
+              
+              //flag = 1; 
+              //console.log("NEW REQUEST");
+              //alert("NEW REQUEST");
+              
+              //console.log("timeInterval", timeInterval,  startDate, endDate);
+              clearTimeout(timeInterval);
+              timeInterval = setTimeout(() => {
+                abortAllCalls();
+               // props.cancelRequest();
+                if(startDate != null && endDate != null) { 
+                  
+                  //props.setTimeLineLoading( false );
+                  //props.setTimeLine( [] );  
+                  //console.log("REQUESTSEND", startDate, endDate, checkScroll,  getTimelineFilterWithDate);
+                  if(typeof getTimelineFilterWithDate == "function")  {
+                    getTimelineFilterWithDate(0, startDate, endDate, checkScroll);
+                  }         
+                  
+                }
+              }, WAIT_INTERVAL); 
+            }    
+          }
+        }
+      }
+    
+    });
+      
+  }
+}
+
+const controller = new AbortController();
+
+  function getTimelineFilterWithDate ( groupId, startDate, endDate, scroll) {
+    let token = localStorage.getItem('token');
+    (async () => {
+      let response = await fetch(`https://betapp.patentrack.com/timeline/filter/search/${groupId}/${startDate}/${endDate}/${scroll}`, {
+        headers: {
+          'x-access-token': token,
+          'Content-Type': 'application/json'
+        }
+      });
+      let responeData = await response.json();
+      if(typeof responeData.assignment_assignors !="undefined"){
+        renderData(responeData);
+        /*const iframe = document.getElementById("timeline");
+        if(iframe && typeof iframe.contentWindow !== "undefined" && typeof iframe.contentWindow.renderData === "function") {
+          console.log("iframe", iframe.contentWindow.renderData);
+          iframe.contentWindow.renderData(responeData);
+        }     */
+      } else {
+        alert("Internal server error.")
+        return false;
+      }
+    })();    
+  }
+  window.abortAllCalls = () => {
+    controller.abort();
+  }
+
+</script>
+
+</html>

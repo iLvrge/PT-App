@@ -1,0 +1,339 @@
+import { fade, makeStyles } from '@material-ui/core/styles'
+
+const LOGO_WIDTH = 120
+const HEADER_MARGIN = 5
+const HEADER_PADDING = 15
+const LEFT_PANEL_WIDTH = 2 * 100 / 12 // Grid size of 2 out of 12 parts
+
+export default makeStyles(theme => ({
+    root: {
+        zIndex: theme.zIndex.drawer + 6,
+        transition: theme.transitions.create([ 'margin' ], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+        }),
+        position: 'initial',
+        background: '#222222',
+        width: 'initial',
+        border: '1px solid #363636',
+        marginBottom: '5px'
+        //padding: `0px ${HEADER_PADDING}px`,
+       
+    },
+    headerClassAction1: {
+      lineHeight: "1.2em",
+      color: 'rgb(230, 0, 0)',
+      fontSize: '2.0rem',
+      textDecoration: 'none'
+    },
+    headerClassAction2: {
+      lineHeight: "1.2em",
+      color: '#E69800',
+      fontSize: '2.0rem',
+      textDecoration: 'none'
+    },
+    headerClassAction3: {
+      lineHeight: "1.2em",
+      color: '#70A800',
+      fontSize: '2.0rem',
+      textDecoration: 'none'
+    },
+    subHeaderClassAction1: {
+      float: "left",
+      marginTop: "10px",
+      color: "rgba(255, 255, 255, 0.7)"
+    },
+    siteLogoCon: {
+        display: 'flex',
+        alignItems: 'center',
+        
+    },
+    companyLogoCon: {
+        display: 'flex',
+        alignItems: 'center',
+        marginLeft: 50,
+        width: '12%', 
+        justifyContent: 'flex-end', 
+        cursor: 'pointer',
+        '@media (max-width: 70em)': {
+        //paddingLeft: 15
+        },
+    },
+    menuButton: {
+        marginRight: theme.spacing(1),
+        '& svg': {
+            color: 'white'
+        },
+        '& .fa-tasks':{
+            width: 20
+        }
+    },
+    siteLogo: {
+        /* width: LOGO_WIDTH,
+        maxWidth: 'calc(100% - 30px)', */
+        height: '1.7rem',
+        margin: '0px 15px 0 10px'
+    }, 
+
+    userLogo: {
+        display: 'flex',
+        alignItems: 'center',
+        marginLeft: `calc(${LEFT_PANEL_WIDTH}% - ${LOGO_WIDTH + ((HEADER_MARGIN + HEADER_PADDING) / 2)}px)`,
+    },
+    userLogoOfficial: {
+        height: '2.1rem', /*28px */
+        maxWidth: '100%',
+        marginRight: '20px'
+    }, 
+    organizationName: {
+        marginLeft: 5,
+        fontSize: 15,
+    },
+
+    toolbar: {
+        padding: 0,
+        height: 30,
+        minHeight: 30,
+        position: 'relative',
+    },
+    headerIcon: {
+        padding: 4,
+    },
+    signOut: {
+        margin: '0 5px',
+        cursor: 'pointer',
+        '&:hover': {
+        color: 'blue',
+        }
+    },
+
+    headerMenuIcon: {
+        fill: 'currentColor',
+        transition: '.3s',
+        transformOrigin: '50% 50%',
+        transform: 'rotate(0)',
+        filter: 'invert(75%)',
+    },
+    rightPanel: {
+        marginLeft: 'auto',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    breadcrumbs: {
+        display: 'flex',
+        height: '100%',
+        alignItems: 'flex-end',
+        color: '#FFFFFF'
+    },
+    grow: {
+        flexGrow: 1,
+        display: 'flex',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-end',
+        height: '100%',
+        padding: '0 40px 0 0',
+        '& .MuiButton-root':{
+            textTransform: 'initial',
+            fontSize: '1.3rem',
+            minWidth: '85px'
+        },
+        '& .MuiButton-text':{
+            padding: '0 20px'
+        }
+    },
+    rightMenu:{
+        '& .MuiList-root':{
+            paddingLeft: '20px',
+            paddingRight: '20px'
+        },
+        '& .MuiListItem-gutters':{
+            paddingRight: '70px'
+        },
+        '& .MuiListItemIcon-root':{
+            minWidth: '35px'
+        }
+    },
+    childMenu:{
+        marginLeft: '1.5rem'
+    },
+    menu:{
+      '& div': {
+        display: 'inline-block'
+      }
+    },
+    notification:{ 
+        marginRight: '10px'
+    },
+    small: {
+        width: theme.spacing(3),
+        height: theme.spacing(3),
+        marginRight: '10px'
+    },
+    activeButton: {
+        color: '#e60000',
+        textDecoration: 'underline'
+    },
+    search: {
+        position: 'relative',
+        borderRadius: theme.shape.borderRadius,
+        backgroundColor: fade(theme.palette.common.white, 0.15),
+        '&:hover': {
+          backgroundColor: fade(theme.palette.common.white, 0.25),
+        },
+        marginRight: theme.spacing(1),
+        marginLeft: '10px !important',
+        marginTop: '2px',
+        height: '26px',
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
+          marginLeft: '10px',
+          width: 'auto',
+        },
+    },
+    searchIcon: {
+        padding: theme.spacing(0, 2),
+        height: '100%',
+        position: 'absolute',
+        pointerEvents: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    inputRoot: {
+        color: 'inherit',
+    },
+    inputInput: {
+        padding: 0,
+        height: '2em',
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+        transition: theme.transitions.create('width'),
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
+            width: '12ch',
+            '&:focus': {
+              width: '20ch',
+            },
+        },
+    },
+    paper: {
+    },
+    fullscreenChartsModal: {
+        display: 'flex',
+    },
+    right:{
+      position: 'absolute',
+      right: '35px',
+      width: '20px',
+      height: '20px',
+      top: '33px',
+      zIndex: 1
+    },
+    drawer:{
+        '& .MuiDrawer-paper':{
+            top: '42px'
+        }
+    },
+    item:{
+        background: '#222222',
+        padding: '20px', 
+        color: 'rgba(255, 255, 255, 0.7)',
+        border: '1px solid #545454',
+        overflow: 'hidden',
+        display: 'flex',
+        flexWrap: 'wrap',
+        textDecoration: 'none',
+        height: '250px',
+        width: '250px',
+        '& .MuiTypography-body1':{
+            fontSize: '2rem',
+            lineHeight: 1.1,
+            '& span':{
+                display: 'block'
+            } 
+        },
+        '& .MuiTypography-body2':{
+            marginTop: '20px' 
+        },
+        '&.maintain':{
+            '&:hover':{
+                background: '#eaeaea',
+                color: '#222222',
+                border: '1px solid rgb(230, 0, 0)'
+            },
+        },
+        '&.correct':{
+            '&:hover':{
+                background: '#eaeaea',
+                color: '#222222',
+                border: '1px solid rgb(0, 169, 230)'
+            },
+        },
+        '&.progress':{
+            '&:hover':{
+                background: '#eaeaea',
+                color: '#222222',
+                border: '1px solid rgb(255,255,0)'
+            },
+        },
+        '&.bank':{
+            '&:hover':{
+                background: '#eaeaea',
+                color: '#222222',
+                border: '1px solid #E69800'
+            },
+        },
+        '&.acquisition':{
+            '&:hover':{
+                background: '#eaeaea',
+                color: '#222222',
+                border: '1px solid #70A800'
+            },
+        },
+        '&.read':{
+            '&:hover':{
+                background: '#eaeaea',
+                color: '#222222',
+                border: '1px solid rgb(255,255,255)'
+            },
+        },
+        [theme.breakpoints.down('lg')]: {
+            padding: '1vw',
+        },
+        '& .MuiLink-root': {
+            textDecoration: 'none', 
+        } 
+    },
+    boxWidth:{
+        display:'flex',
+        justifyContent: 'flex-end'
+    },
+    gridContainer:{
+        marginBottom: '20px'
+    },
+    bank:{
+        color: '#E69800',
+    },
+    acquisition: {
+        color: '#70A800',
+    },
+    progress: {
+        color: 'rgb(255,255,0)',
+    },
+    correct: {
+        color: 'rgb(0, 169, 230)',
+    },
+    maintain: {
+        color: 'rgb(230, 0, 0)',
+    },
+    read: {
+        color: 'rgb(255,255,255)',
+    },
+    modal: {
+        top: '43px !important',
+        '& .MuiBackdrop-root':{
+            top: '43px !important',
+        }
+    }
+}))

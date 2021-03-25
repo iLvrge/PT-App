@@ -1,17 +1,58 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React, { useMemo } from 'react'
+import ReactDOM from 'react-dom'
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+import { BrowserRouter as Router } from 'react-router-dom'
+import { createMuiTheme } from '@material-ui/core'
+import { Provider } from 'react-redux'
+
+import * as serviceWorker from './serviceWorker'
+import App from './components/App'
+import { ThemeProvider } from '@material-ui/core/styles'
+import CssBaseline from '@material-ui/core/CssBaseline'
+
+import store from './reducers/store/configureStore'
+import './index.css'
+import { SnackbarProvider } from 'notistack'
+
+/* Sentry.init({
+  dsn: "https://b3f7c9d9c8b74a4fa5a9d8f0d97d5b7b@o487723.ingest.sentry.io/5546842",
+  integrations: [
+    new Integrations.BrowserTracing(),
+  ],
+
+  // We recommend adjusting this value in production, or using tracesSampler
+  // for finer control
+  tracesSampleRate: 1.0,
+}); */
+
+const AppWrapper = () => {
+  const theme = useMemo(
+    () =>
+      createMuiTheme({
+        palette: {
+          type: 'dark',
+        },
+      }),
+    [],
+  )
+
+  return (
+    <Provider store={store}>
+      <Router>
+        <ThemeProvider theme={theme}>
+          <SnackbarProvider maxSnack={3}>
+            <CssBaseline />
+            <App />
+          </SnackbarProvider>
+        </ThemeProvider>
+      </Router>
+    </Provider>
+  )
+}
+
+ReactDOM.render(<AppWrapper />, document.getElementById('root'))
+serviceWorker.register()
+//serviceWorker.unregister();

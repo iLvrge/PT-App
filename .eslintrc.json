@@ -1,0 +1,27 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2017
+  },
+  "env": {
+    "es2020": true,
+    "browser": true
+  },
+  "extends": "react-app",
+  "rules": {
+    "semi": ["warn", "never"],
+    "array-bracket-spacing": ["warn", "always"],
+    "object-curly-spacing": ["warn", "always"],
+    "quotes": ["warn", "single"],
+    "eqeqeq": "off",
+    "no-unused-vars": "off",
+    "default-case": "off",
+    "react/no-direct-mutation-state": "off",
+    "react-hooks/exhaustive-deps": "warn",
+    "react/jsx-no-target-blank": "off",
+    "jsx-a11y/anchor-is-valid": "off",
+    "array-callback-return": "off",
+    "no-cond-assign": "off",
+    "no-self-assign": "off",
+    "no-useless-concat": "off"
+  }
+}

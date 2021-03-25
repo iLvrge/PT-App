@@ -1,0 +1,283 @@
+import React, { useState, useCallback, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import SplitPane from "react-split-pane";
+import ConnectionBox from '../../common/ConnectionBox'
+import FamilyItemContainer from '../../common/AssetsVisualizer/FamilyItemContainer'
+import USPTOContainer from '../../common/AssetsVisualizer/USPTOContainer'
+import FamilyContainer from '../../common/AssetsVisualizer/FamilyContainer'
+import LifeSpanContainer from '../../common/AssetsVisualizer/LifeSpanContainer'
+import InventionVisualizer from '../../common/AssetsVisualizer/InventionVisualizer'
+import PdfViewer from '../../common/PdfViewer'
+import {
+  setTimelineSelectedItem,
+  setTimelineSelectedAsset,
+  toggleFamilyItemMode,
+  toggleFamilyMode,
+  toggleUsptoMode,
+} from "../../../actions/uiActions";
+import { IconButton } from "@material-ui/core";
+import ArrowButton from "../ArrowButton";
+import useStyles from "./styles";
+
+const AssetDetailsContainer = ({
+  cls,
+  split,
+  minSize,
+  defaultSize,
+  fn,
+  fnParams,
+  fnVarName,
+  dragStart,
+  dragFinished,
+  bar,
+  chartBar,
+  analyticsBar,
+  primary,
+  parentBarDrag,
+  parentBar,
+  illustrationData,
+}) => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  const chartAnalyticsContainer = useRef(null);
+  const [isDrag, setIsDrag] = useState(false);
+  const [toggleDetailsButtonType, setToggleDetailsButtonType] = useState(true);
+  const [openDetailsBar, setDetailsOpenBar] = useState(bar);
+  const [detailsButtonVisible, setDetailsButtonVisible] = useState(false);
+
+  const [
+    toggleIllustrationButtonType,
+    setToggleIllustrationButtonType,
+  ] = useState(true);
+  const [openIllustrationBar, setIllustrationOpenBar] = useState(true);
+  const [illustrationButtonVisible, setIllustrationButtonVisible] = useState(
+    false,
+  );
+  const [resizeFrame, setResizeFrame] = useState(false);
+
+  const connectionBoxView = useSelector(
+    state => state.patenTrack.connectionBoxView,
+  );
+  const assetIllustration = useSelector(
+    state => state.patenTrack2.assetIllustration,
+  );
+  const selectedAssetsFamily = useSelector(
+    state => state.patenTrack.assetFamily,
+  );
+  const selectedAssetsFamilyItem = useSelector(
+    state => state.patenTrack.familyItem,
+  );
+  
+  const pdfView = useSelector(state => state.patenTrack.pdfView);
+
+  const usptoMode = useSelector(state => state.ui.usptoMode);
+  const familyMode = useSelector(state => state.ui.familyMode);
+  const familyItemMode = useSelector(state => state.ui.familyItemMode);
+  const lifeSpanMode = useSelector(state => state.ui.lifeSpanMode);
+
+  /* useEffect(() => {        
+        if( chartAnalyticsContainer != null && chartAnalyticsContainer.current != null ) {            
+            if( familyItemMode === true && familyMode === true && familyDataRetrieved === true && legalEventDataRetrieved === true) {
+                updateHeight()
+            } 
+        }
+    }, [ familyItemMode, familyMode, familyDataRetrieved,  legalEventDataRetrieved, chartAnalyticsContainer ])
+
+
+    const updateHeight = () => {
+        setTimeout(() => {
+            if( chartAnalyticsContainer.current != null && chartAnalyticsContainer.current.pane1 != null && chartAnalyticsContainer.current.pane2 != null ) {
+                const pane1Container = chartAnalyticsContainer.current.pane1.querySelector('div#timelineCharts')
+                const pane2Container = chartAnalyticsContainer.current.pane2.querySelector('div#familyTimeline')
+                if( pane1Container != null && pane2Container != null ) { 
+                    const pane2ItemSet = pane2Container.querySelector('div.vis-content div.vis-itemset')
+                    const pane1Itemset = pane1Container.querySelector('div.vis-content div.vis-itemset')
+                    if( pane2ItemSet != null && pane1Itemset != null ) {                        
+                        const container2Height = pane2ItemSet.style.height
+                        const container1Height = pane1Itemset.style.height
+                        if(container2Height != '' && container1Height != '' && container2Height != 30 && container1Height != 30 ) {
+                            let constValue = 1 - (parseInt(container1Height) / (parseInt(container1Height) + parseInt(container2Height)))
+               
+                            const calcHeight = 100 * constValue.toFixed('2')
+                            if(calcHeight == 100) {
+                                pane2Container.closest('div.Pane2').style.height = '34.2%'    
+                            } else {
+                                pane2Container.closest('div.Pane2').style.height = calcHeight + '%'
+                            }
+                            changeContainer()
+                        } else { 
+                            updateHeight()
+                        }
+                    } else { 
+                        updateHeight()
+                    } 
+                } else {
+                    updateHeight()
+                }
+            } else {
+                updateHeight() 
+            }          
+        }, 100)
+    } */
+
+  
+
+  const handleDetailsBarOpen = () => {
+    setToggleDetailsButtonType(!toggleDetailsButtonType);
+    parentBar(!bar);
+    if (!bar === false) {
+      parentBarDrag(0);
+    } else {
+      parentBarDrag("30%");
+    }
+  };
+
+  const handleDetailsButton = (event, flag) => {
+    event.preventDefault();
+    setDetailsButtonVisible(flag);
+  };
+
+  const handleIllustrationButton = (event, flag) => {
+    event.preventDefault();
+    setIllustrationButtonVisible(flag);
+  };
+
+  const onCloseUspto = useCallback(() => {
+    dispatch(toggleUsptoMode());
+  }, [dispatch]);
+
+  const onCloseFamilyMode = useCallback(() => {
+    dispatch(toggleFamilyMode());
+  }, [dispatch]);
+
+  const onCloseFamilyItemMode = useCallback(() => {
+    dispatch(toggleFamilyItemMode(false));
+  }, [dispatch]);
+
+  const changeContainer = () => {
+    if (chartAnalyticsContainer.current != null) {
+      const mainRoot = chartAnalyticsContainer.current.pane1.querySelector(
+        "div.timelineRoot",
+      );
+      const timelineChart = chartAnalyticsContainer.current.pane1.querySelector(
+        "div#timelineCharts",
+      );
+      if (mainRoot != undefined && timelineChart != undefined) {
+        let alignItem = "flex-end";
+        if (timelineChart.clientHeight > mainRoot.clientHeight) {
+          alignItem = "flex-start";
+        }
+        mainRoot.style.alignItems = alignItem;
+      }
+    }
+  };
+  
+  return (
+    <div style={{ height: "100%" }} className={classes.root}>
+      {bar === true ? (
+        <SplitPane
+          className={cls}
+          split={split}
+          minSize={minSize}
+          maxSize={-100}
+          defaultSize={defaultSize}
+         /*  onChange={() => changeContainer()} */
+          onDragStarted={() => {
+            dragStart(true);
+            setIsDrag(!isDrag);
+          }}
+          onDragFinished={size => {
+            dragFinished(false);
+            fn(fnVarName, size, fnParams);
+            setIsDrag(!isDrag);
+          }}
+          primary={primary}
+          ref={chartAnalyticsContainer}
+        >
+          <div
+            id={`charts_container`}
+            style={{ height: "100%" }}
+            /* onMouseOver={(event) => handleDetailsButton(event, true)}
+                            onMouseLeave={(event) => handleDetailsButton(event, false)} */
+            className={`${
+              isDrag === true ? classes.notInteractive : classes.isInteractive
+            }`}
+          >
+            <ArrowButton
+              arrowId={`arrow_charts`}
+              handleClick={handleDetailsBarOpen}
+              buttonType={toggleDetailsButtonType}
+              buttonVisible={detailsButtonVisible}
+              arrow={3}
+              cls={classes.btnLeft}
+            />
+            {
+                chartBar == true ?
+                  pdfView === true && !connectionBoxView ? (
+                      <PdfViewer display={"false"} resize={resizeFrame} />
+                  ) :  (
+                      connectionBoxView === true ? (
+                          <PdfViewer
+                          display={"false"}
+                          fullScreen={false}
+                          resize={resizeFrame}
+                          /> 
+                      ) : lifeSpanMode === true ? (
+                          <InventionVisualizer />
+                      ) : familyItemMode === true ? (
+                          <FamilyItemContainer item={selectedAssetsFamilyItem} onClose={onCloseFamilyItemMode} />
+                      ) : (
+                          ""
+                      )
+                  )
+                :
+                '' 
+            }
+          </div>
+          <div
+            className={`${classes.commentContainer} ${
+              isDrag === true ? classes.notInteractive : classes.isInteractive
+            }`}
+            /* onMouseOver={event => handleIllustrationButton(event, true)}
+            onMouseLeave={event => handleIllustrationButton(event, false)} */
+          >
+            {
+                analyticsBar === true ? (
+                    connectionBoxView === true ? (
+                        <ConnectionBox display={"false"} assets={illustrationData} />
+                    ) : openIllustrationBar === true ? (
+                        <>
+                            {                
+                                usptoMode === true ? (
+                                    <USPTOContainer
+                                    asset={assetIllustration} 
+                                    onClose={onCloseUspto} 
+                                    />
+                                ) : 
+                                lifeSpanMode === true ? (
+                                    <LifeSpanContainer />
+                                ) :
+                                familyMode && (
+                                    <FamilyContainer
+                                    family={selectedAssetsFamily}
+                                    onClose={onCloseFamilyMode} />
+                                ) 
+                            }
+                        </>
+                    ) : (
+                        ""
+                    )
+                ) : (
+                    ""
+                )
+            }
+          </div>
+        </SplitPane>
+      ) : (
+        ""
+      )}
+    </div>
+  );
+};
+
+export default AssetDetailsContainer;

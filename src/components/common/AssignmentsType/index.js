@@ -1,0 +1,309 @@
+import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import {  useHistory, useLocation  } from 'react-router-dom'
+import { Paper } from '@material-ui/core'
+import moment from  'moment'
+import clsx from 'clsx'
+import useStyles from './styles' 
+import VirtualizedTable from '../VirtualizedTable'
+import { DEFAULT_CUSTOMERS_LIMIT } from '../../../api/patenTrack2'
+import { numberWithCommas } from '../../../utils/numbers'
+import {
+    getCustomerActivites,
+    setAssetTypes,
+    setAllAssetTypes,
+    setAssetTypesSelect,
+    setSelectedAssetsPatents,
+    setSelectedAssetsTransactions,
+    setAssetsIllustration,
+    setAssetTypeSelectedRow,
+    setAssetTypeCustomerSelectedRow,
+    setMainCompaniesRowSelect,
+    setAssetTypeChildCustomerSelectedRow,
+    setAssetTypeChildCustomerSelected,
+    setChildSelectedAssetsTransactions,
+    setChildSelectedAssetsPatents
+} from '../../../actions/patentTrackActions2'
+
+import {
+    setConnectionBoxView, 
+    setPDFView,
+} from '../../../actions/patenTrackActions'
+
+import {
+    assetsTypesWithKey,
+    convertTabIdToAssetType,
+    otherGroup,
+    financingGroup,
+    licensingGroups,
+    ownershipGroups,
+    employeesGroups
+  } from '../../../utils/assetTypes'
+
+
+import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode } from '../../../actions/uiActions'
+
+import {
+    updateHashLocation
+} from '../../../utils/hashLocation'
+
+import Loader from '../Loader'
+import ChildTable from './ChildTable' 
+
+const AssignmentsType = ({parentBarDrag, parentBar }) => {
+
+    const classes = useStyles()
+    const dispatch = useDispatch()
+    const history = useHistory()
+    const location = useLocation()
+    const [ offset, setOffset ] = useState(0)
+    const [ rowHeight, setRowHeight ] = useState(40)
+    const [ childHeight, setChildHeight ] = useState(500)
+    const [ width, setWidth ] = useState( 800 )
+    const tableRef = useRef()
+    const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
+    const [ selectedAll, setSelectAll ] = useState( false )
+    const [ selectItems, setSelectItems] = useState( [] )
+    const [ selectedRow, setSelectedRow] = useState( [] )
+    const [ childSelected, setCheckedSelected] = useState( 0 )
+    const [ typeData, setTypeData ] = useState( [] )
+    const [ currentSelection, setCurrentSelection] = useState(null)
+    const assetTypes = useSelector(state => state.patenTrack2.assetTypes.list)
+    
+    const assetTypesSelected = useSelector(state => state.patenTrack2.assetTypes.selected)
+    
+    const assetTypesLoading = useSelector(state => state.patenTrack2.assetTypes.loading)
+    const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
+    const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
+    
+    const assetTypeCompaniesList = useSelector(state => state.patenTrack2.assetTypeCompanies.list)
+    const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
+    
+    const tabs = [1,2,6,7,3,4,5,11,12,13,10,8,9,14] 
+
+    const COLUMNS = [        
+        {
+          width: 29,
+          label: '',
+          dataKey: 'tab_id',
+          role: 'checkbox',
+          disableSort: true
+        },
+        {
+            width: 15,
+            label: '',
+            dataKey: 'tab_id',
+            role: 'arrow',
+            disableSort: true
+        },
+        {
+            width: 100,
+            label: 'Activities',
+            dataKey: 'tab_name',            
+        },
+        {
+            width: 80,
+            label: 'Count',
+            dataKey: 'customer_count', 
+            staticIcon: '',
+            format: numberWithCommas           
+        }
+    ]
+/* 
+    useEffect(() => {
+        console.log("assetTypeCompaniesSelected", assetTypeCompaniesSelected)
+        setCheckedSelected(assetTypeCompaniesSelected.length)
+    }, [ assetTypeCompaniesSelected ]) */
+
+    
+
+    useEffect(() => {
+        if(assetTypesSelected.length > 0 && (selectItems.length == 0 || selectItems.length != assetTypesSelected.length) ){
+            setSelectItems(assetTypesSelected)
+        }
+    }, [ assetTypesSelected, selectItems ]) 
+
+    /* useEffect(() => {
+        if(assetTypesSelectedRow.length === 0) {
+            setSelectedRow([])
+        }
+    }, [ assetTypesSelectedRow ]) */
+
+    useEffect(() => {
+        if( selectedCompaniesAll === true || selectedCompanies.length > 0 ) {
+            dispatch(
+                getCustomerActivites(
+                    selectedCategory == '' ? '' : selectedCategory,
+                    selectedCompaniesAll === true ? [] : selectedCompanies
+                )
+            )
+        } else {
+            dispatch( setAssetTypes([]) )
+        }
+    }, [ dispatch, selectedCompaniesAll, selectedCompanies ])
+
+
+    useEffect(() => {
+        const list = [], updateActivities = [...assetsTypesWithKey]
+        tabs.forEach( tab => {
+            
+            const assetType = convertTabIdToAssetType(tab)
+            const findNameIndex = updateActivities.findIndex( activity => activity.type == assetType )
+            let backgroundRowColor = "";
+            if(ownershipGroups().includes(tab)){
+                backgroundRowColor = "#100000"
+            } else if(licensingGroups().includes(tab)){
+                backgroundRowColor = "#171700"
+            } else if(financingGroup().includes(tab)){
+                backgroundRowColor = "#1b1200"
+            } else if(employeesGroups().includes(tab)){
+                backgroundRowColor = "#424141"
+            } else if(otherGroup().includes(tab)){
+                backgroundRowColor = "#491B1B"
+            }
+            let item = {
+                        tab_id: tab, 
+                        customer_count: 0, 
+                        tab_name: findNameIndex >= 0 ? updateActivities[findNameIndex].name : assetType, 
+                        children: [], 
+                        background: backgroundRowColor
+                    }
+            if(assetTypes.length > 0) {
+                const findIndex = assetTypes.findIndex( aTab => aTab.tab_id == tab )
+                if(findIndex >= 0) {                    
+                    item = {...item, ...assetTypes[findIndex]}
+                }
+            }
+            list.push(item)
+        })
+        if(assetTypes.length == 0) {
+            setSelectItems([])
+            setSelectedRow([])
+            dispatch( setAssetTypesSelect([]) )
+        }  
+        setTypeData(list)
+    }, [ assetTypes ])
+
+    const onHandleSelectAll = useCallback((event, row) => {
+        event.preventDefault()
+        const { checked } = event.target;
+        if(checked === false) {
+            setSelectItems([])
+            //setSelectedRow([])
+            dispatch( setAssetTypesSelect([]) )
+            
+        } else if( checked === true ){
+            if(assetTypes.length > 0) {
+                let items = [];
+                assetTypes.forEach( tab => {
+                    if(tab.customer_count > 0) {
+                        items.push(tab.tab_id)
+                    }
+                })
+                setSelectItems(items)
+                dispatch( setAssetTypesSelect(items) )
+            }
+        }
+        setSelectAll(checked)
+        dispatch( setAllAssetTypes( checked ) )
+    }, [ dispatch, assetTypes ])
+
+    const onHandleClickRow = useCallback((e,  row, t) => {
+        e.preventDefault()
+        const { checked } = e.target;
+        let oldSelection = [...selectItems]
+        if(row.customer_count > 0) {
+            if( checked !== undefined) {
+                if( !oldSelection.includes(row.tab_id) ){
+                    oldSelection.push(row.tab_id)                        
+                } else {
+                    oldSelection = oldSelection.filter(
+                        tab => tab !== parseInt( row.tab_id ),
+                    )
+                }                
+                history.push({
+                    hash: updateHashLocation(location, 'activities', oldSelection).join('&')
+                })
+                setSelectItems(oldSelection)
+                setSelectAll(tabs.length == oldSelection.length ? true : false)
+                dispatch( setAllAssetTypes(tabs.length == oldSelection.length ? true : false ) )
+                dispatch( setAssetTypesSelect(oldSelection) ) 
+            } else {                
+                const element = e.target.closest('div.ReactVirtualized__Table__rowColumn')
+                const index = element.getAttribute('aria-colindex')
+                if(index == 2) {
+                    if(currentSelection != row.tab_id) {
+                        setCurrentSelection(row.tab_id)
+                    } else { 
+                        setCurrentSelection(null)
+                    }
+                } /* else {                    
+                    getTimelineData(dispatch, row.tab_id) 
+                } */
+            }
+        }
+    }, [ dispatch, selectItems, currentSelection ]) 
+
+    const getTimelineData = (dispatch, tab_id) => {
+        parentBarDrag(0)
+        parentBar(false)
+        setSelectedRow([tab_id])
+        
+        dispatch(setAssetTypeSelectedRow([tab_id]))
+        dispatch(setAssetsIllustration(null))
+        dispatch(setConnectionBoxView( false ))
+        dispatch(setPDFView( false ))
+        dispatch(toggleUsptoMode( false ))
+        dispatch(toggleFamilyMode( false ))
+        dispatch(toggleFamilyItemMode( false )) 
+        dispatch(setMainCompaniesRowSelect([]))
+        dispatch(setChildSelectedAssetsTransactions([]))
+        dispatch(setAssetTypeChildCustomerSelectedRow([]))
+        dispatch(setAssetTypeCustomerSelectedRow([]))
+        dispatch(setSelectedAssetsTransactions([]))        
+        dispatch(setChildSelectedAssetsPatents([]))       
+        dispatch(setSelectedAssetsPatents([]))
+    }
+
+    if (assetTypesLoading && typeData.length == 0) return <Loader />
+
+    return (
+        <Paper className={classes.root} square id={`assets_type`}>
+            <VirtualizedTable
+            classes={classes}
+            selected={selectItems}
+            rowSelected={selectedRow}
+            selectedIndex={currentSelection}
+            selectedKey={'tab_id'}
+            rows={typeData}
+            rowHeight={rowHeight}
+            headerHeight={rowHeight}
+            columns={COLUMNS}
+            onSelect={onHandleClickRow}
+            onSelectAll={onHandleSelectAll}
+            defaultSelectAll={selectedAll}
+            backgroundRow={true}
+            backgroundRowKey={`background`}
+            disableRow={true}
+            disableRowKey={'customer_count'}
+            responsive={false} 
+            collapsable={true}
+            childHeight={childHeight}
+            childSelect={childSelected}
+            childRows={assetTypeCompaniesList}
+            showIsIndeterminate={true}
+            renderCollapsableComponent={<ChildTable assetType={currentSelection} headerRowDisabled={true} parentBarDrag={parentBarDrag} parentBar={parentBar}/>}
+            width={width}
+            containerStyle={{ 
+                width: '100%',
+                maxWidth: '100%' 
+            }}
+            style={{ 
+                width: '100%'
+            }}/>
+        </Paper> 
+      )
+}
+
+
+export default AssignmentsType;
