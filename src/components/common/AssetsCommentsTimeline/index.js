@@ -111,13 +111,15 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
 
   const checkButtons = () => {
     try{
+      console.log("AssetsCommentsTimeline -> checkButtons")
       const slackToken = getTokenStorage( 'slack_auth_token_info' ), googleToken = getTokenStorage( 'google_auth_token_info' )
       let slackLoginButton = true, googleLoginButton = true
       if(slackToken && slackToken!= '') {
         let token = JSON.parse(slackToken)
-        if(typeof token === 'string') {
+        console.log("AssetsCommentsTimeline -> checkButtons", token, typeof token)
+        /* if(typeof token === 'string') {
           token = JSON.parse(token)
-        }
+        } */
         
         const {access_token} = token
         if(access_token && access_token != '') {
