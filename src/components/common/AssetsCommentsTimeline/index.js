@@ -122,13 +122,13 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
         }
         console.log("AssetsCommentsTimeline -> checkButtons", token, typeof token)
         if(typeof token === 'object') {
-          const { access_token } = token
+          slackLoginButton =  false 
+          /* const { access_token } = token
           console.log("AssetsCommentsTimeline -> checkButtons", access_token)
           if(access_token && access_token != '') {
             slackLoginButton =  false 
-          }
-        }
-        
+          } */
+        }        
       }
       
       if(googleToken && googleToken != '') {
