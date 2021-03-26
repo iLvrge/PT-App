@@ -114,7 +114,8 @@ const NewHeader = () => {
   }
 
   const handleControlModal = useCallback((e, flag) => { 
-    dispatch(setControlModal( flag )) 
+  e.stopPropagation()
+  dispatch(setControlModal( flag )) 
   }, [ dispatch ]) 
 
   
