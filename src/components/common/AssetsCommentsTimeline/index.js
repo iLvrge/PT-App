@@ -117,19 +117,23 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
       if(slackToken && slackToken!= '') {
         let token = JSON.parse(slackToken)
         console.log("AssetsCommentsTimeline -> checkButtons", token, typeof token)
-        /* if(typeof token === 'string') {
+        if(typeof token === 'string') {
           token = JSON.parse(token)
-        } */
-        
-        const {access_token} = token
-        if(access_token && access_token != '') {
-          slackLoginButton =  false 
         }
+        console.log("AssetsCommentsTimeline -> checkButtons", token, typeof token)
+        if(typeof token === 'object') {
+          const { access_token } = token
+          console.log("AssetsCommentsTimeline -> checkButtons", access_token)
+          if(access_token && access_token != '') {
+            slackLoginButton =  false 
+          }
+        }
+        
       }
       
       if(googleToken && googleToken != '') {
-        const {access_token} = JSON.parse( googleToken )
-        if(access_token) {
+        const { access_token } = JSON.parse( googleToken )
+        if( access_token ) {
           googleLoginButton =  false 
         }
       }
