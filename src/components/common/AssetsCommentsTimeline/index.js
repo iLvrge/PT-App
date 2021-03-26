@@ -123,6 +123,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
         console.log("AssetsCommentsTimeline -> checkButtons", token, typeof token)
         if(typeof token === 'object') {
           slackLoginButton =  false 
+          console.log('oject')
           /* const { access_token } = token
           console.log("AssetsCommentsTimeline -> checkButtons", access_token)
           if(access_token && access_token != '') {
@@ -137,7 +138,8 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
           googleLoginButton =  false 
         }
       }
-      setSlackAuthLogin(slackLoginButton)
+      console.log("slackLoginButton", slackLoginButton)
+      //setSlackAuthLogin(slackLoginButton)
       setGoogleAuthLogin(googleLoginButton)
     } catch ( err ) {
       console.error( err )
