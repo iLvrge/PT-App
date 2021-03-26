@@ -11,7 +11,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
-import { setSelectedAssetsPatents, getAssetTypeAssignments } from '../../../../actions/patentTrackActions2'
+import { setSelectedAssetsPatents, getAssetTypeAssignments, getAssetsAllTransactionsEvents } from '../../../../actions/patentTrackActions2'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import { convertAssetTypeToTabId, oldConvertTabIdToAssetType, convertTabIdToAssetType, exportGroups } from '../../../../utils/assetTypes'
 import { numberWithCommas, capitalize } from '../../../../utils/numbers'
@@ -100,6 +100,8 @@ const TimelineContainer = ({ data }) => {
   );
 
   const selectedItem = useSelector(state => state.ui.timeline.selectedItem)
+
+  const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
 
   const setSelectedItem = useCallback((item) => {
     dispatch(setTimelineSelectedItem(item))
@@ -292,10 +294,19 @@ const TimelineContainer = ({ data }) => {
         customers = assetTypesCompaniesSelectAll === true ? []
                     : 
                     assetTypesCompaniesSelected;
+
+                   
         const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers)
         
         setTimelineRawGroups(data.groups) //groups
         setTimelineRawData(data.list) //items        
+
+        dispatch(
+          getAssetsAllTransactionsEvents(
+            selectedCategory == '' ? '' : selectedCategory,  
+            companies, 
+            tabs, 
+            customers, [])) // Get life span according to filters 
       } 
     }
     getTimelineRawDataFunction()

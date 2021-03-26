@@ -26,7 +26,8 @@ import {
   getAssetsTransactionsEvents,
   setChildSelectedAssetsTransactions,
   setChildSelectedAssetsPatents,
-  getAssetTypeAssignmentAssets
+  getAssetTypeAssignmentAssets,
+  setAssetsTransactionsLifeSpan
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -134,6 +135,8 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
     },
   ];
 
+  
+
   useEffect(() => {
     if (currentSelection > 0) {
       const findIndex = assignmentList.findIndex(
@@ -161,7 +164,10 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
 
   useEffect(() => {
     
-    setSelectedRow(selectedAssetsTransactions);
+    //setSelectedRow(selectedAssetsTransactions);
+    if (selectedAssetsTransactions.length == 0) {
+      setSelectedRow([]);
+    }
   }, [selectedAssetsTransactions]);
 
 
@@ -204,6 +210,8 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
             tabs, 
             customers, 
             false));
+        
+        
       } else {
         dispatch(setAssetTypeAssignments({ list: [], total_records: 0 }));
       }
@@ -244,6 +252,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
 
 const onHandleClickRow = useCallback(
   (e, row) => {
+    console.log("onHandleClickRow")
     e.preventDefault();
     const { checked } = e.target;
     let oldSelection = [...selectItems]
@@ -270,6 +279,7 @@ const onHandleClickRow = useCallback(
         dispatch(setAllAssignments(false));
         dispatch(setSelectAssignments(oldSelection));
     } else {
+        console.log("CHECKBOX_SELECTION")
         const element = e.target.closest(
         "div.ReactVirtualized__Table__rowColumn",
         );
@@ -289,7 +299,8 @@ const onHandleClickRow = useCallback(
             dispatch(setAssetsIllustration(null))
             dispatch(setSelectedAssetsTransactions([]))
             dispatch(setSelectedAssetsPatents([]))
-            //  dispatch(toggleLifeSpanMode(false))
+            dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, []))
+            //dispatch(toggleLifeSpanMode(false))
             //dispatch(toggleFamilyItemMode(false))
           }
         }

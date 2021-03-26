@@ -4,8 +4,8 @@ import Tab from '@material-ui/core/Tab'
 import Tabs from '@material-ui/core/Tabs'
 import Paper from '@material-ui/core/Paper'
 
- import { DataSet } from 'vis-data/esnext'
-import { Graph3d } from 'vis-graph3d/esnext' 
+import { DataSet } from 'vis-data/esnext'
+import { Graph3d } from 'vis-graph3d/esnext'
 
 
 
@@ -26,15 +26,14 @@ const InventionVisualizer = () => {
 
     const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
 
-     let options = {
+    let options = {
         height: '400px',
         width: '100%',
-        style: 'dot-color',
+        style: 'bar-color',
         showPerspective: true,
         showGrid: true,
         keepAspectRatio: true,
-        verticalRatio: 1.0,
-        legendLabel: 'distance',
+        verticalRatio: 0.5,
         cameraPosition: {
           horizontal: -0.35,
           vertical: 0.22,
@@ -60,23 +59,29 @@ const InventionVisualizer = () => {
         }
     }
 
+    const custom = (x, y) =>{
+        return (-Math.sin(x/Math.PI) * Math.cos(y/Math.PI) * 10 + 10);
+    }
+
     useEffect(() => {
         const getChartData = async () => {
             if (selectedAssetsTransactionLifeSpan.length === 0) return null
             
             setIsLoadingCharts(true)     
             const items = new DataSet()
+            const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet']
+            var steps = 7;  // number of datapoints will be steps*steps
+            var axisMax = 12;
+            var axisStep = axisMax / steps
 
-            const sqrt = Math.sqrt
-            const pow = Math.pow
-            const random = Math.random
-
-            for (let i = 0; i < 100; i++) {
-                let x = pow(random(), 2)
-                let y = pow(random(), 2)
-                let z = pow(random(), 2)
-                let style = (i%2==0) ? sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2)) : '#00ffff'        
-                items.add({ x:x,y:y,z:z,style:style })
+            for (var x = 0; x <= axisMax; x+=axisStep) {
+                for (var y = 0; y <= axisMax; y+=axisStep) {
+                  var z = custom(x,y);
+                  items.add({x:x, y:y, z:z, style: {
+                    fill: colors[x/axisStep],
+                    stroke: '#999'
+                  }});
+                }
             }
             //TODO height 100% not working well, created allot of isues when we resize pane, 
             if(graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0) {
@@ -90,7 +95,7 @@ const InventionVisualizer = () => {
         getChartData()
     }, [ options, selectedAssetsTransactionLifeSpan, graphContainerRef ])
 
-    if (selectedAssetsTransactionLifeSpan.length === 0) return null 
+    if (selectedAssetsTransactionLifeSpan.length === 0) return null
 
     return (
         <Paper className={classes.root} square>  

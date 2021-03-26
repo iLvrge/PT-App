@@ -138,13 +138,24 @@ export const setAssetsTransactionsLifeSpan = (assetType, companyId, customerId, 
   }
 }
 
+
+export const getAssetsAllTransactionsEvents = (type, companies, tabs, customers, rfIDs) => {
+  console.log("getAssetsAllTransactionsEvents", type, companies, tabs, customers, rfIDs)
+  return async dispatch => {
+    const { data } = await PatenTrackApi.getAllAssetsTransactionsEvents(type, companies, tabs, customers, rfIDs)
+    dispatch(toggleLifeSpanMode(true))
+    dispatch(setAssetsTransactionsLifeSpan(type, companies, tabs, customers, data))
+  }
+}
+
+
 export const getAssetsTransactionsEvents = (assetType, companyId, customerId, transactionId) => {
   return async dispatch => {
     const { data } = await PatenTrackApi.getAssetsTransactionsEvents(assetType, companyId, customerId, transactionId)
     dispatch(toggleLifeSpanMode(true))
     dispatch(setAssetsTransactionsLifeSpan(assetType, companyId, customerId, transactionId, data))
   }
-}
+}   
 
 export const getAssetsByTransactionsEvents = (transactionId) => {
   return async dispatch => {

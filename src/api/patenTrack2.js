@@ -241,6 +241,13 @@ class PatenTrackApi {
       `${base_new_api_url}/events/tabs/${tabId}/companies/${companyId}`,
       getHeader(),
     )
+  }  
+
+  static getAllAssetsTransactionsEvents(type, companies, tabs, customers, rfIDs) {
+    return axios.get(
+      `${base_new_api_url}/events/tabs?type=${type}&companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}`,
+      getHeader(),
+    )
   }
 
   static getAssetsTransactionsEvents(assetsType, companyId, customerId, transactionId) {
