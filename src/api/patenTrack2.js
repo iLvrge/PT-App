@@ -468,6 +468,10 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/slacks/conversations/auth/${code}`, getHeader())
   }
 
+  static getSlackProfile( token, id ) {
+    return axios.get(`${base_new_api_url}/slacks/user/info/${token}/${id}`, getHeader())
+  }  
+
   static updateSlackTeam( team ) {
     return axios.put(`${base_new_api_url}/slacks/team/${team}`, getHeader())
   }

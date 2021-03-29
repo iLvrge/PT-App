@@ -213,10 +213,14 @@ const AssetsTable = ({
   }, [dispatch, channel_id]);
 
   useEffect(() => {
-    if (selectedAssetsPatents.length == 0) {
-      setSelectedRow([]);
+    if (selectedAssetsPatents.length > 0 ) {
+      if(selectedRow.length == 0) {
+        setSelectedRow([selectedAssetsPatents[0] != "" ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString()])
+      }
+    } else if (selectedAssetsPatents.length > 0 && selectedRow.length == 0) {
+      setSelectedRow([])
     }
-  }, [selectedAssetsPatents])
+  }, [selectedAssetsPatents, selectedRow])
 
   useEffect(() => {
     
@@ -230,14 +234,14 @@ const AssetsTable = ({
     if(assetTypeAssignmentAssets.length > 0 && selectedAssetsPatents.length > 0) {
       filter = assetTypeAssignmentAssets.filter( row => row.asset == selectedAssetsPatents[0].toString() || row.asset == selectedAssetsPatents[1].toString() )
     }
-    console.log(filter)
+    
     if(filter.length === 0) {
       resetAll()
     }
   }, [ assetTypeAssignmentAssets ]) 
 
 
-  const callSelectedAssets = ({ grant_doc_num, appno_doc_num, asset }) => {
+  const callSelectedAssets = useCallback(({ grant_doc_num, appno_doc_num, asset }) => {
     /* const selectedItems = [];
     if (grant_doc_num != "") {
       selectedItems.push(grant_doc_num);
@@ -246,8 +250,8 @@ const AssetsTable = ({
       selectedItems.push(appno_doc_num);
     } */
     
-    setSelectedRow([asset]);
-  };
+    setSelectedRow([asset]);    
+  }, [dispatch] );
 
   const handleOnClick = useCallback(
     ({ grant_doc_num, appno_doc_num, asset }) => {
@@ -432,7 +436,7 @@ const resetAll = () => {
         defaultSortField={`asset`}
         defaultSortDirection={`desc`}
         columnTextBoldList={slack_channel_list}
-        responsive={false}
+        responsive={true}
         width={width}
         containerStyle={{
           width: "100%",

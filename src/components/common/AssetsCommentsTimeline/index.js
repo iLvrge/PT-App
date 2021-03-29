@@ -68,7 +68,6 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
   const type = useMemo(() => selectedCommentsEntity && selectedCommentsEntity.type, [ selectedCommentsEntity ])
   
   useEffect(() => {
-    console.log("AssetsCommentsTimeline -> checkButtons")
     checkButtons()
   }, [])
 
@@ -111,21 +110,20 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
 
   const checkButtons = () => {
     try{
-      console.log("AssetsCommentsTimeline -> checkButtons")
+      
       const slackToken = getTokenStorage( 'slack_auth_token_info' ), googleToken = getTokenStorage( 'google_auth_token_info' )
       let slackLoginButton = true, googleLoginButton = true
       if(slackToken && slackToken!= '') {
         let token = JSON.parse(slackToken)
-        console.log("AssetsCommentsTimeline -> checkButtons", token, typeof token)
+        
         if(typeof token === 'string') {
           token = JSON.parse(token)
+          setTokenStorage( 'slack_auth_token_info', token )
         }
-        console.log("AssetsCommentsTimeline -> checkButtons", token, typeof token)
+        
         if(typeof token === 'object') {
-          slackLoginButton =  false 
-          console.log('oject')
-          const { access_token } = token
-          console.log("AssetsCommentsTimeline -> checkButtons", access_token)
+          slackLoginButton =  false           
+          const { access_token } = token          
           if(access_token && access_token != '') {
             slackLoginButton =  false 
           }
@@ -138,7 +136,6 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
           googleLoginButton =  false 
         }
       }
-      console.log("slackLoginButton", slackLoginButton)
       setSlackAuthLogin(slackLoginButton)
       setGoogleAuthLogin(googleLoginButton)
     } catch ( err ) {
@@ -271,7 +268,6 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
   }, [ dispatch, getSlackMessages, channel_id ]) 
 
   const onUpdateTeamID = async(team) => {
-    console.log('onUpdateTeamID', team)
     const { status } = await PatenTrackApi.updateSlackTeam(team)
     if (status === 200) {
       console.log("Team updated")

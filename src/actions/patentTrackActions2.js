@@ -140,7 +140,6 @@ export const setAssetsTransactionsLifeSpan = (assetType, companyId, customerId, 
 
 
 export const getAssetsAllTransactionsEvents = (type, companies, tabs, customers, rfIDs) => {
-  console.log("getAssetsAllTransactionsEvents", type, companies, tabs, customers, rfIDs)
   return async dispatch => {
     const { data } = await PatenTrackApi.getAllAssetsTransactionsEvents(type, companies, tabs, customers, rfIDs)
     dispatch(toggleLifeSpanMode(true))
@@ -536,6 +535,20 @@ export const setSlackAuthToken = ( token ) => {
   }
 }
 
+export const getSlackProfile = ( token, id ) => {
+  return async dispatch => {
+    const { data } = await PatenTrackApi.getSlackProfile( token, id )
+    dispatch(getSlackProfileData(data))
+  }
+}
+   
+export const getSlackProfileData = ( data ) => {
+  return {
+    type: types.SET_SLACK_PROFILE_DATA,
+    data
+  }
+}
+
 export const sendMessage = ( frmData ) => {
   const getSlackToken = localStorage.getItem('slack_auth_token_info')
   const tokenJSON = JSON.parse( getSlackToken )
@@ -632,7 +645,7 @@ export const setMaintainenceFileName = (name) => {
 export const createMaintainenceFeeFile = ( fileName, fileData ) => {
   return async dispatch => {
     const { data } = await PatenTrackApi.createMaintainenceFeeFile( fileName, fileData )
-    console.log("data", data)
+    
   }
 } 
 

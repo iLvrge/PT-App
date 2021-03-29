@@ -5,7 +5,8 @@ export default makeStyles((theme) => ({
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        flex:1
+        flex:1,
+        overflow: 'hidden'
     },
     topBar: {
         padding: 10,

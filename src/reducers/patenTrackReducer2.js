@@ -298,6 +298,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state,
           slack_auth_token:  action.token
         }
+      case types.SET_SLACK_PROFILE_DATA:
+        return {
+          ...state,
+          slack_profile_data:  action.data
+        }
       case types.SET_SLACK_MESSAGES:
         return {
           ...state,

@@ -15,6 +15,7 @@ export default {
     channel_id: '',
     slack_auth_token: null,
     google_auth_token: null,
+    slack_profile_data: null,
     slack_channel_list: [],
     slack_messages: [],
     slack_users: [], 

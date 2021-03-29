@@ -97,6 +97,11 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   const selectedAssetsTransactions = useSelector(
     state => state.patenTrack2.assetTypeAssignments.selected,
   );
+
+  const currentRowSelection = useSelector(
+    state => state.patenTrack2.selectedAssetsTransactions
+  )
+
   const selectedAssetsPatents = useSelector(
     state => state.patenTrack2.selectedAssetsPatents,
   );
@@ -161,14 +166,17 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
         } */
     setCheckedSelected("", selectedAssetsPatents, selectedAssetsPatents.length);
   }, [selectedAssetsPatents]);
-
+/**
+ * Delete select item if item is selected from Asset table
+ * If assignment table is open again then higlight the previous selected item
+ */
   useEffect(() => {
     
     //setSelectedRow(selectedAssetsTransactions);
-    if (selectedAssetsTransactions.length == 0) {
-      setSelectedRow([]);
+    if (currentRowSelection.length != selectedRow.length  ) {
+      setSelectedRow(currentRowSelection); 
     }
-  }, [selectedAssetsTransactions]);
+  }, [currentRowSelection, selectedRow]);   
 
 
   useEffect(() => {
@@ -347,7 +355,7 @@ const onHandleClickRow = useCallback(
         onSelect={onHandleClickRow}
         onSelectAll={onHandleSelectAll}
         defaultSelectAll={selectedAll}
-        responsive={false}
+        responsive={true}
         collapsable={true}
         childHeight={childHeight}
         childSelect={childSelected}

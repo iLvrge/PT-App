@@ -72,7 +72,7 @@ const GlobalLayout = (props) => {
     const authenticated = useSelector(store => store.auth.authenticated)
     
     const search_string = useSelector(state => state.patenTrack2.search_string)
-    console.log("TYPE1", props.type)
+    
     // When we are in search route disable company, activites, parties icons
 
     useEffect(() => {

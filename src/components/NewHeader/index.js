@@ -60,7 +60,7 @@ const NewHeader = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
   let history = useHistory()
-  
+  const slack_profile_data = useSelector( state => state.patenTrack2.slack_profile_data )
   const profile = useSelector(store => (store.patenTrack.profile))
   const user = useSelector(store => (store.patenTrack.profile ? store.patenTrack.profile.user : {}))
   const siteLogo = useSelector(state => (state.patenTrack.siteLogo.site_logo ? state.patenTrack.siteLogo.site_logo.logo_big : '/assets/images/logos/patentrack_logo.png'))
@@ -77,7 +77,7 @@ const NewHeader = () => {
       right: false,
   })
 
-
+  
   const ShowLink = ({data, link}) =>{
     return (
         <>
@@ -114,8 +114,8 @@ const NewHeader = () => {
   }
 
   const handleControlModal = useCallback((e, flag) => { 
-  e.stopPropagation()
-  dispatch(setControlModal( flag )) 
+    e.stopPropagation()
+    dispatch(setControlModal( flag )) 
   }, [ dispatch ]) 
 
   
@@ -197,7 +197,13 @@ const NewHeader = () => {
               />
           </div>
             <NotificationsIcon className={classes.notification}/>
-            <Avatar className={classes.small} alt={`${user ? user.first_name + ' ' + user.last_name : ''}`} src={user && user.logo != '' ? user.logo : user.first_name.toString().substring(0,1).toLocaleUpperCase() } />
+            {
+              slack_profile_data != null
+              ?
+              <Avatar className={classes.small} alt={`${slack_profile_data.real_name != '' ? slack_profile_data.real_name : slack_profile_data.profile.real_name != '' ? slack_profile_data.profile.real_name : slack_profile_data.profile.display_name}`} src={slack_profile_data.profile.image_24 != '' ? slack_profile_data.profile.image_24 : slack_profile_data.real_name.toString().substring(0,1).toLocaleUpperCase() } />
+              :
+              <Avatar className={classes.small} alt={`${user ? user.first_name + ' ' + user.last_name : ''}`} src={user && user.logo != '' ? user.logo : user.first_name.toString().substring(0,1).toLocaleUpperCase() } />
+            }
             <IconButton
                 edge='start'
                 className={classes.menuButton}

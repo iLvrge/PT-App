@@ -133,7 +133,6 @@ const GlobalScreen = ({
     const maintainenceAssetsLoadingMore = useSelector( state => state.patenTrack2.maintainenceAssetsLoadingMore )
     const selectedMaintainencePatents = useSelector( state => state.patenTrack2.selectedMaintainencePatents )
 
-    console.log("TYPE", type)
     const channel_id = useSelector( state => state.patenTrack2.channel_id )   
     const checkContainer = () => {
         setTimeout(() => {
@@ -239,7 +238,6 @@ const GlobalScreen = ({
                 const constantX = 14.1, constantValue = parseFloat(constantX / width).toFixed(4)
                 let calc = (illustrationSize * constantValue) - 1.4
                 if(calc > 14.1) {
-                    console.log({...gap, x: `${parseFloat(calc).toFixed(1)}rem`})
                     setGap({...gap, x: `${parseFloat(calc).toFixed(1)}rem`}) 
                 }
             } else {

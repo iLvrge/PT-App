@@ -63,7 +63,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const history = useHistory()
     const location = useLocation()
     const tableRef = useRef()
-    const [ width, setWidth ] = useState( 200 )
+    const [ width, setWidth ] = useState( 1000 )
     const [ offset, setOffset ] = useState(0)
     const [ rowHeight, setRowHeight ] = useState(40)
     const [ initial, setInitial] = useState(false)
@@ -274,7 +274,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         onSelect={handleClickRow}
         onSelectAll={handleSelectAll}
         defaultSelectAll={selectedCompaniesAll}
-        responsive={false}
+        responsive={true}
         width={width} 
         containerStyle={{ 
             width: '100%',
