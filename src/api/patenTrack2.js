@@ -464,8 +464,8 @@ class PatenTrackApi {
     return axios.post(`${base_new_api_url}/share`, data, getFormUrlHeader())
   }
   
-  static getSlackAuthToken( code ) {
-    return axios.get(`${base_new_api_url}/slacks/conversations/auth/${code}`, getHeader())
+  static getSlackAuthToken( code, redirectURI ) {
+    return axios.get(`${base_new_api_url}/slacks/conversations/auth/${code}?redirect_uri=${redirectURI}`, getHeader())
   }
 
   static getSlackProfile( token, id ) {
