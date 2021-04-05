@@ -26,7 +26,7 @@ const getHeader = () => {
   }
   return {
     headers: {
-      'x-access-token': token,
+      'x-auth-token': token,
     },
   }
 }
@@ -38,7 +38,7 @@ const getFormUrlHeader = () => {
   }
   return {
     headers: {
-      'x-access-token': token,
+      'x-auth-token': token,
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   }
@@ -51,7 +51,7 @@ const getMultiFormUrlHeader = () => {
   }
   return {
     headers: {
-      'x-access-token': token,
+      'x-auth-token': token,
       'Content-Type': 'multipart/form-data',
     },
   }
