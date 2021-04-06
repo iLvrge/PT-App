@@ -44,6 +44,7 @@ import Loader from '../Loader'
 const COLUMNS = [
     {
         width: 29,
+        minWidth: 29,
         label: '',
         dataKey: 'representative_id',
         role: 'checkbox',
@@ -51,6 +52,7 @@ const COLUMNS = [
     },
     {
       width: 171,  
+      minWidth: 171,
       label: 'Companies',
       dataKey: 'original_name',
     }

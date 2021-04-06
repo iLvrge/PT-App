@@ -111,6 +111,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   const COLUMNS = [
     {
       width: 29,
+      minWidth: 29,
       label: "",
       dataKey: "rf_id",
       role: "checkbox",
@@ -118,6 +119,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
     },
     {
       width: 15,
+      minWidth: 15,
       label: "",
       dataKey: "rf_id",
       role: "arrow",
@@ -125,6 +127,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
     },
     {
       width: 100,
+      minWidth: 100,
       label: "Transactions",
       dataKey: "date",
       align: "left",
@@ -132,7 +135,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
     },
     {
       width: 100,
-      label: "Assets",
+      label: "Assets", 
       dataKey: "assets",
       staticIcon: "",
       format: numberWithCommas,

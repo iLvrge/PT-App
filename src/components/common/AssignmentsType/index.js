@@ -84,6 +84,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
     const COLUMNS = [        
         {
           width: 29,
+          minWidth: 29,
           label: '',
           dataKey: 'tab_id',
           role: 'checkbox',
@@ -91,6 +92,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
         },
         {
             width: 15,
+            minWidth: 15,
             label: '',
             dataKey: 'tab_id',
             role: 'arrow',
@@ -98,6 +100,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
         },
         {
             width: 100,
+            minWidth: 100,
             label: 'Activities',
             dataKey: 'tab_name',            
         },
@@ -286,7 +289,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
             backgroundRowKey={`background`}
             disableRow={true}
             disableRowKey={'customer_count'}
-            responsive={false} 
+            responsive={true}
             collapsable={true}
             childHeight={childHeight}
             childSelect={childSelected}

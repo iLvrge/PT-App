@@ -125,6 +125,7 @@ const AssetsTable = ({
   const COLUMNS = [
     {
       width: 29,
+      minWidth: 29,
       label: "",
       dataKey: "asset",
       role: "checkbox",
@@ -132,13 +133,14 @@ const AssetsTable = ({
     },
     {
       width: 15,
+      minWidth: 15,
       label: "",
       dataKey: "asset",
       role: "arrow",
       disableSort: true,
     },
     {
-      width: 100,
+      width: 100,      
       label: "Assets",
       dataKey: "asset",
       staticIcon: "US",

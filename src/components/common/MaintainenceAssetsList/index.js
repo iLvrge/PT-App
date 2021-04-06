@@ -46,12 +46,14 @@ import Loader from "../Loader";
 const COLUMNS = [
   {
     width: 29,
+    minWidth: 29,
     label: "",
     dataKey: "appno_doc_num",
     role: "checkbox",
   },
   {
     width: 80,
+    minWidth: 80,
     label: "Assets",
     dataKey: "grant_doc_num",
     staticIcon: "",
@@ -60,11 +62,13 @@ const COLUMNS = [
   },
   {
     width: 100,
+    minWidth: 100,
     label: "Payment Due",
     dataKey: "payment_due",
   },
   {
     width: 80,
+    minWidth: 80,
     label: "Amount",
     dataKey: "fee_amount",
     staticIcon: "$",
@@ -72,11 +76,13 @@ const COLUMNS = [
   },
   {
     width: 100,
+    minWidth: 100,
     label: "Grace End",
     dataKey: "payment_grace",
   },
   {
     width: 80,
+    minWidth: 80,
     label: "Amount",
     dataKey: "fee_surcharge",
     staticIcon: "$",
