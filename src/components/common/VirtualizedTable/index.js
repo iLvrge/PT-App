@@ -377,11 +377,15 @@ const VirtualizedTable = ({
           filter.filters.includes(row[filter.dataKey]),
       );
     });
-    if (sortDirection === 'DESC') {
-      return filteredRows.sort((a, b) => b[sortBy] - a[sortBy]);
-    } else {
-      return filteredRows.sort((a, b) => a[sortBy] - b[sortBy]);
-    }
+    return filteredRows.sort((a, b) => {
+      if (a[sortBy] < b[sortBy]) {
+        return sortDirection === SortDirection.ASC ? -1 : 1;
+      }
+      if (a[sortBy] > b[sortBy]) {
+        return sortDirection === SortDirection.ASC ? 1 : -1;
+      }
+      return 0;
+    });
   }, [rows, sortBy, sortDirection, filters]);
 
   const rowGetter = useMemo(() => ({ index }) => items[index], [items]);
