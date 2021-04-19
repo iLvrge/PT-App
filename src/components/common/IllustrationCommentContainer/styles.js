@@ -50,5 +50,9 @@ export default makeStyles(theme => ({
         width: '20px',
         height: '20px',
         zIndex: 1
+    },
+    templateFrame:{
+        width: '100%',
+        height: '60vh'
     }
 }))

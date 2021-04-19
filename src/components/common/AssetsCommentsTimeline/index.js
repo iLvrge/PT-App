@@ -7,28 +7,38 @@ import { Paper,
   List,
   ListItem,
   ListItemText,
-  Menu,
-  MenuItem,
   CircularProgress,
   Avatar,
+  Modal,
+  Grid,
+  Typography
 } from '@material-ui/core'
-import InsertDriveFileOutlinedIcon from '@material-ui/icons/InsertDriveFileOutlined';
+import { 
+  Folder as FolderIcon,
+  Close as CloseIcon,
+  InsertDriveFileOutlined as InsertDriveFileOutlinedIcon,
+  InsertDriveFile as InsertDriveFileIcon
+} from '@material-ui/icons'
 import GoogleLogin from 'react-google-login'
 import { Timeline, TimelineEvent } from 'react-event-timeline'
 import PatenTrackApi from '../../../api/patenTrack2'
 import { numberWithCommas, applicationFormat } from "../../../utils/numbers"
+import { controlList } from "../../../utils/controlList"
 import QuillEditor from '../QuillEditor'
  
 import useStyles from './styles'
 import { FaChevronCircleDown } from 'react-icons/fa'
 import {
   getGoogleAuthToken,
-  getGoogleTemplates,
+  getLayoutTemplatesByID,
   sendMessage,
   getChannelID,
-  getSlackMessages,
+  getSlackMessages, 
   getSlackUsersList,  
+  getGoogleProfile,
+  createDriveTemplateFile,
 } from '../../../actions/patentTrackActions2'
+
 
 import { setTokenStorage, getTokenStorage, removeTokenStorage } from '../../../utils/tokenStorage'
 
@@ -37,6 +47,7 @@ import { html } from '../../../utils/html_encode_decode'
 const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
+  const googleLoginRef = useRef(null)
   const inputFile = useRef(null)
   const timelineRef = useRef(null)
   const frameRef = useRef( null )
@@ -47,25 +58,31 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
   const companyListLoading = useSelector(state => state.patenTrack2.companyListLoading)
   const selectedCommentsEntity = useSelector(state => state.patenTrack2.selectedCommentsEntity)
   const userProfile = useSelector(state => state.patenTrack.profile)
-  const driveFiles = useSelector(state => state.patenTrack2.drive_files)
-  
+  const driveFiles = useSelector(state => state.patenTrack2.template_layout_drive_files)
+  const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
   const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
   const slack_messages = useSelector(state => state.patenTrack2.slack_messages)
+  const layout_id = useSelector(state => state.patenTrack2.layout_id)
+  const google_profile = useSelector(state => state.patenTrack2.google_profile)
   
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
   const slack_auth_token = useSelector(state => state.patenTrack2.slack_auth_token)
+  
   const [ selectUser, setSelectUser] = useState(null)
   const [ replyId, setReplyId ] = useState(null)
   const [ file, setFile ] = useState(null)
   const [ displayButton, setDisplayButton] = useState( true )
-  const [ currentDriveFileItem, setCurrentDriveFileItem ] = useState( null )
   const [ commentHtml, setCommentHtml ] = useState('')
   const [ openDocumentModal, setOpenDocumentModal] = useState( false )
   const [ slackAuthLogin, setSlackAuthLogin ] = useState( true )
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState( true )
-  const [windowBrowser, setWindowBrowser] = useState(null)
+  const [ driveModal, setDriveModal ] = useState(false)
+  const [ driveFilesAndFolder, setDriveFilesAndFolder ] = useState( {} )
+  const [ selectedDriveFile, setSelectedDriveFile] = useState(null)
   
   const type = useMemo(() => selectedCommentsEntity && selectedCommentsEntity.type, [ selectedCommentsEntity ])
+
+  
   
   useEffect(() => {
     checkButtons()
@@ -75,19 +92,14 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
     checkButtons()
   }, [ google_auth_token, slack_auth_token ])
 
-
-  /* useEffect(() => {
-    if( !slackAuthLogin &&  !googleAuthLogin ) {
-      setDisplayButton( false )
-    } else {
-      setDisplayButton( true )
-    }
-  }, [ slackAuthLogin, googleAuthLogin ]) */
-
   useEffect(() => {
     setCommentsData(slack_messages)
     updateHeight(size, timelineRef)
   }, [ slack_messages, size, timelineRef ])
+
+  useEffect(() => {
+    console.log( "google_profile", google_profile )
+  }, [ google_profile ])
 
   useEffect(() => {
     if(slack_auth_token && slack_auth_token != null ) {
@@ -103,8 +115,10 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
   }, [ size, timelineRef ])
 
   useEffect(() => {
-    if(driveFiles != undefined && Object.keys(driveFiles).length > 0 && driveFiles.files != undefined ) {
-      setOpenDocumentModal( !openDocumentModal )
+    //console.log("useEffect->driveFiles",driveFiles)
+    if(driveFiles != undefined && driveFiles.length > 0 ) {
+      //console.log("useEffect->driveFiles->Enter")
+      setOpenDocumentModal( true )
     }
   }, [ driveFiles ])
 
@@ -131,10 +145,12 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
       }
       
       if(googleToken && googleToken != '') {
-        const { access_token } = JSON.parse( googleToken )
+        const tokenParse = JSON.parse( googleToken )
+        const { access_token } = tokenParse
         if( access_token ) {
           googleLoginButton =  false 
-        }
+          dispatch(getGoogleProfile(tokenParse))  
+        } 
       }
       setSlackAuthLogin(slackLoginButton)
       setGoogleAuthLogin(googleLoginButton)
@@ -162,6 +178,10 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
     }
   }, [ dispatch ])
 
+  const getLayout = useMemo(() => {
+    return controlList.filter(item => item.category == selectedCategory)
+  }, [selectedCategory, controlList])
+
   const getDriveDocumentList = useCallback(() => {
     const googleToken = getTokenStorage( 'google_auth_token_info' )
     if(googleToken && googleToken != '' ) {
@@ -169,38 +189,47 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
       const { access_token } = JSON.parse(googleToken)
 
       if(access_token) {
-        dispatch( getGoogleTemplates() )
+        /**
+         * Get Layout templates according to selected category
+         */
+        
+        let profileInfo = google_profile;
+        if(profileInfo == null) {
+          const getGoogleProfile = getTokenStorage('google_profile_info')
+          if( getGoogleProfile != '') {
+            profileInfo = JSON.parse(getGoogleProfile)
+          }
+        }
+        let  layoutID = layout_id
+        if(layoutID == 0 && selectedCategory != '') {
+          const item = getLayout
+          if(item.length > 0) {
+            layoutID = item[0].layout_id
+          }
+        }
+        console.log("openTemplateDriveFiles",profileInfo)
+        if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
+          console.log("openTemplateDriveFiles")
+          dispatch( getLayoutTemplatesByID(layoutID, profileInfo.email) )
+        }
       } else {
-        alert("Please first login with google account.")
+        //alert("Please first login with google account.")
+        if(googleLoginRef.current != null) {
+          googleLoginRef.current.querySelector('button').click()
+        }
         setGoogleAuthLogin( true )
         setDisplayButton( true )
       }
     } else {
-      alert("Please first login with google account.")
+      //alert("Please first login with google account.")
+      if(googleLoginRef.current != null) {
+        googleLoginRef.current.querySelector('button').click()
+      }
       setGoogleAuthLogin( true )
       setDisplayButton( true )
     }    
-  }, [ dispatch ])
+  }, [ dispatch, googleLoginRef, layout_id, selectedCategory, google_profile ])
 
-  /* const handleSubmitComment = useCallback(async () => {
-    const formData = new FormData()
-    formData.append('comment', commentHtml)
-    if (editData) {
-      const { status } = await PatenTrackApi.updateCommentToEntity(editData.comment_id, formData)
-      if (status === 200) {
-        setCommentHtml('')
-        setEditData(null)
-      }
-    } else {
-      const subject = selectedCommentsEntity.id
-      formData.append('subject', subject )
-      const { status } = await PatenTrackApi.setCommentToEntity(selectedCommentsEntity.type, formData)
-      if (status === 200) {
-        setCommentHtml('')
-      }
-    }
-    getAssetCommentsData()
-  }, [ commentHtml, editData, selectedCommentsEntity, getAssetCommentsData ]) */
 
   const handleSubmitComment = useCallback(async () => {
     if(selectedAssetsPatents.length > 0) {
@@ -279,16 +308,58 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
     
   }
 
-  const onHandleOpenFile = ( item, flag ) => {
+  const onHandleOpenFile = ( e, item, flag ) => {
     if(frameRef && frameRef.current != null) {
       /* console.log("item.webViewLink", frameRef.current.src, item.webViewLink) */
       if(flag === 0) {
-        frameRef.current.src = item.webViewLink
+        frameRef.current.src = `https://docs.google.com/file/d/${item.container_id}/preview`
       } else {
         /**
-         * Create copy of this file and show in the iframe
+         * Check Token
          */
-        setCurrentDriveFileItem(item)
+        const googleToken = getTokenStorage( 'google_auth_token_info' )
+        let tokenExpired = false
+        if(googleToken && googleToken != '' ) {
+          const tokenParse = JSON.parse(googleToken)
+          const { access_token } = tokenParse
+    
+          if(access_token) {
+            let profileInfo = google_profile
+            if(profileInfo == null) {
+              const getGoogleProfile = getTokenStorage('google_profile_info')
+              if( getGoogleProfile != '') {
+                profileInfo = JSON.parse(getGoogleProfile)
+              }
+            }
+            if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
+              /**
+               * Create copy of this file and show in the iframe
+               * Send request to the server to get the new copy of file and open in TV.
+               */
+              console.log("Create new file")       
+              //setCurrentDriveFileItem(item)
+              const formData = new FormData()
+                formData.append('access_token',  tokenParse.access_token )
+                formData.append('refresh_token', tokenParse.refresh_token)
+                formData.append('user_account', profileInfo.email)
+                formData.append('id', item.container_id)
+                dispatch(createDriveTemplateFile(formData))
+                onHandleCloseDrive(e)
+            } else {
+              tokenExpired = true
+            }
+          } else {
+            tokenExpired = true
+          }
+        } else {
+          tokenExpired = true
+        }
+
+        if( tokenExpired === true ) {
+          alert('Token expired, please login again')
+          localStorage.setItem('google_auth_token_info', '')
+          checkButtons()
+        }       
       }
     }
   }
@@ -389,15 +460,49 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
     }
   }, [ inputFile ])  
 
-  const onHandleFile = (event) => {
-    setFile(event.target.value)
-  }
+const onHandleDriveExplorer = async( event, fileID = undefined ) => {
+  event.preventDefault()  
+  const googleToken = getTokenStorage( 'google_auth_token_info' )
+  if(googleToken != '') {
+    const tokenParse = JSON.parse(googleToken)
+    const { access_token } = tokenParse
+
+    if( access_token ) {
+      /**
+       * Send request to server to get drive files and folder
+       */
+      setDriveModal(true)
+      const { data } = await PatenTrackApi.getGoogleTemplates(tokenParse, fileID)
+      setDriveFilesAndFolder(data.list)
+    }
+  } else {
+    alert('Token Expired, please first login with google account.')
+    checkButtons()
+    getDriveDocumentList()
+  }  
+}
+
+const onHandleFile = (event) => {
+  event.preventDefault()
+  setFile(event.target.value)
+}
+
+const onHandleCloseDrive = (event) => {
+  event.preventDefault()
+  setOpenDocumentModal(false)
+}
+
+const handleDriveModalClose = (event) => {
+  event.preventDefault()
+  setDriveModal(false)
+}
 
   const renderDriveFiles = useMemo(() => {
     if(openDocumentModal === false) return null
 
     return (
       <div className={classes.driveContainer}>
+        <CloseIcon onClick={(e) => onHandleCloseDrive(e)} className={classes.closeButton}/>
         <Drawer
             className={classes.drawer}
             variant="permanent"
@@ -408,9 +513,9 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
           >
           <List>
             {
-              driveFiles.files.map( file => (
-                <ListItem button key={file.id} onClick={() => { onHandleOpenFile(file, 1)}} onMouseOver={() => { onHandleOpenFile(file, 0) }} onMouseLeave={onHandleCleanFrame}>
-                  <ListItemText primary={file.name} />
+              driveFiles.map( file => (
+                <ListItem button key={file.template_id} onClick={(e) => { onHandleOpenFile(e, file, 1)}} onMouseOver={(e) => { onHandleOpenFile(e, file, 0) }} onMouseLeave={onHandleCleanFrame}>
+                  <ListItemText primary={file.container_name} />
                 </ListItem>
               ))
             }
@@ -421,7 +526,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
         </main> 
       </div>
     )
-  }, [ driveFiles, classes ])
+  }, [ driveFiles, classes, openDocumentModal ])
 
   
   const onHandleGoogleSignout = () => {
@@ -442,6 +547,20 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
     editorContainerRef.current.classList.remove('focus');
   }, [ editorContainerRef ])
 
+  const openDriveFolder = (event, itemID, itemName) => {
+    event.preventDefault()
+    console.log("openDriveFolder", itemID)
+    onHandleDriveExplorer(event, itemID)
+  }
+
+  const onHandleSelectFile = (event, itemID) => {
+    event.preventDefault()
+    console.log("onHandleSelectFile", itemID)
+    //setSelectedDriveFile(`https://docs.google.com/document/d/${itemID}/edit`)
+    setCommentHtml( previousContent => previousContent + `https://docs.google.com/document/d/${itemID}/edit`)
+    setDriveModal( false )
+  }
+
   const renderCommentEditor = useMemo(() => {
     //if (!selectedCommentsEntity) return null
     return (
@@ -453,12 +572,14 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
           onCancel={handleCancelComment}
           onDrive={getDriveDocumentList}
           onAttachmentFile={onHandleFileExplorer}
+          onAttachmentDriveFile={onHandleDriveExplorer}
           onSelectUser={setSelectUser}
           onFocus={handleFocus}
-          onBlur={handleBlur}
+          onBlur={handleBlur} 
+          driveFile={selectedDriveFile}     
         />
         <input type='file' id='attach_file' ref={inputFile} style={{display: 'none'}} onChange={onHandleFile}/>
-      </div>
+      </div> 
     )
   }, [ selectedCommentsEntity, commentHtml, handleSubmitComment, handleCancelComment, classes ])
 
@@ -567,6 +688,69 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
     )
   }, [ isLoadingcomments, commentsData, type, userProfile, classes, onDelete, onEdit ])
 
+  const FolderList = ({items}) => {
+    return items.map( item => {
+      if(item.mimeType == 'application/vnd.google-apps.folder'){
+        return (
+            <div key={item.id} className={classes.item} onClick={(event) => openDriveFolder(event, item.id, item.name)}>
+              <Typography variant="body1" component="h2">
+                <FolderIcon /><span>{item.name}</span>
+              </Typography>
+            </div>
+        )
+      } else {
+        return null
+      }
+    })
+  }
+
+  const FilesList = ({items}) => {
+    return items.map( item => {
+      if(item.mimeType != 'application/vnd.google-apps.folder'){
+        return (
+          <div key={item.id} className={classes.item} onClick={(event) => onHandleSelectFile(event, item.id)}>
+            <Typography variant="body1" component="h2">
+              <InsertDriveFileIcon /><span>{item.name}</span>
+            </Typography>
+          </div>
+        )
+      } else {
+        return null
+      }
+    })
+  }
+
+  const body = useMemo(() => {   
+    return (
+      <Grid container className={classes.driveModal}>
+        {
+          driveFilesAndFolder.hasOwnProperty('files') && driveFilesAndFolder.files.length > 0
+          ?
+          <>
+            <Grid item lg={12} md={12} sm={12} xs={12}>
+              <Typography variant="body1" component="h2" className={classes.heading}>
+                Folders
+              </Typography>
+              <Grid item lg={12} md={12} sm={12} xs={12} className={classes.items}>
+                <FolderList items={driveFilesAndFolder.files} />
+              </Grid>              
+            </Grid>
+            <Grid item lg={12} md={12} sm={12} xs={12}>
+              <Typography variant="body1" component="h2" className={classes.heading}>
+                Files
+              </Typography>
+              <Grid item lg={12} md={12} sm={12} xs={12} className={classes.items}>
+                <FilesList items={driveFilesAndFolder.files} />
+              </Grid>
+            </Grid>
+          </> 
+          :
+          ''
+        } 
+      </Grid>
+    )    
+  }, [ driveFilesAndFolder ])
+
   if (companyListLoading) return null
   return (
     <Paper className={classes.root} square>
@@ -594,17 +778,22 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
             {
               googleAuthLogin
               ?
+                <span ref={googleLoginRef}>
                 <GoogleLogin
                 clientId={process.env.REACT_APP_GOOGLE_CLIENTID}
                 buttonText="Login with Google"
-                offline={false}
+                offline={true}
+                accessType="offline"
                 approvalPrompt="force"
                 scope="https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.metadata https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/drive.readonly"
                 responseType="code"
                 onSuccess={responseGoogle}
-                onFailure={responseGoogle}>
-
+                onFailure={responseGoogle}
+                className={classes.googleButton}                
+                >
+                
                 </GoogleLogin>
+                </span>
               :
                 <Button 
                   onClick={onHandleGoogleSignout} 
@@ -622,6 +811,14 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
         { renderCommentEditor }
       </div>
       { renderDriveFiles }
+      <Modal
+        open={driveModal}
+        onClose={(e) => handleDriveModalClose(e)}
+        aria-labelledby="Drive-Files-Modal"
+        aria-describedby=""
+      >
+        {body}
+      </Modal>
     </Paper>
   )
 }

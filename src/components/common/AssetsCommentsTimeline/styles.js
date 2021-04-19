@@ -118,6 +118,10 @@ export default makeStyles(theme => ({
       }
     }
   },
+  googleButton: {
+    position: 'absolute',
+    top: '-9999px'
+  },
   driveContainer: {
     top: 0,
     flex: 1,
@@ -151,5 +155,55 @@ export default makeStyles(theme => ({
       fontSize: '1.5rem',
       marginRight: '5px'
     }    
-  }
+  },
+  closeButton: {
+    position: 'absolute',
+    right: 0 
+  },
+  items: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    height: 300,
+    overflow: 'auto',
+  },
+  heading: {    
+    marginBottom: 15
+  },
+  item: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flex: '1 0 20%',
+    boxSizing: 'border-box',
+    padding: '10px',
+    overflow: 'hidden',
+    height: '40px',
+    border: '1px solid #5c5c5c',
+    position: 'relative',
+    marginRight: 15,
+    marginBottom: 10,
+    cursor: 'pointer',
+    '&:hover':{
+      background: '#2d2d2d'
+    },
+    '& span': {
+      position: 'absolute',
+      left: 35,
+      top: 7,
+      display: 'inline-block',
+      width: '65%',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    }
+  },
+  driveModal: {
+    width: 800,
+    margin: '50px auto',
+    padding: 20,
+    background: '#424242',
+    '&:focus':{
+      outline: 'none'
+    }
+  } 
 }))

@@ -281,16 +281,36 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         selectedMaintainencePatents:  action.list
       }
     case types.SET_GOOGLE_AUTH_TOKEN:
-      /* const { access_token, refresh_token } = action.token */
       localStorage.setItem('google_auth_token_info', JSON.stringify(action.token))
       return {
         ...state,
         google_auth_token:  action.token
       }
+    case types.SET_GOOGLE_PROFILE:
+      localStorage.setItem('google_profile_info', JSON.stringify(action.data))
+      return {
+        ...state,
+        google_profile: action.data
+      }
+    case types.SET_GOOGLE_LAYOUT_TEMPLATE_LIST: 
+      return {
+        ...state,
+        template_drive_files: action.data.list
+      }
+    case types.SET_LAYOUT_TEMPLATE_LIST_BY_ID: 
+      return {
+        ...state,
+        template_layout_drive_files: action.data.list
+      }
+    case types.SET_DRIVE_TEMPLATE_FILE: 
+      return {
+        ...state,
+        new_drive_template_file: action.data
+      } 
     case types.SET_GOOGLE_TEMPLATE_LIST:
       return {
         ...state,
-        drive_files: action.data
+        drive_files: action.data.list
       }
       case types.SET_SLACK_AUTH_TOKEN:
         localStorage.setItem('slack_auth_token_info', JSON.stringify(action.token))
@@ -488,7 +508,8 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         return {
           ...state,
           breadcrumbs: action.item.breadCrumbs,
-          selectedCategory: action.item.category
+          selectedCategory: action.item.category,
+          layout_id: action.item.layout_id,
         }
       }
       case types.SET_SEARCH_STRING:
@@ -512,9 +533,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           familyChartVisiblity: action.visibility
         } 
       case types.SET_RESET_ALL:
+        const google_profile = {...state.google_profile}
         return {
           ...state,
-          ...dashboardIntial
+          ...dashboardIntial,
+          google_profile
         }
       default:  
       return state

@@ -504,15 +504,76 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/documents/auth_token?code=${code}`, getHeader())
   }
 
-
-  static getGoogleTemplates( token ) {
+  static getGoogleProfile( token ) {
+    let url = `${base_new_api_url}/documents/profile?access_token=ACCESS_TOKEN&refresh_token=REFRESH_TOKEN`
+    url = url.replace('ACCESS_TOKEN', token.access_token)
+    if( token.refresh_token != undefined && token.refresh_token != 'undefined' ) {
+      url = url.replace('REFRESH_TOKEN', token.refresh_token)
+    }
+    
+    if(url.indexOf('REFRESH_TOKEN') >= 0) {
+      url.replace('REFRESH_TOKEN', '')
+    }
+    return axios.get(url, getHeader())
+  }
+  
+  static getGoogleTemplates( token, id ) {
     let url = `${base_new_api_url}/documents/drive?access_token=ACCESS_TOKEN&refresh_token=REFRESH_TOKEN`
+    url = url.replace('ACCESS_TOKEN', token.access_token)
+    if( token.refresh_token != undefined && token.refresh_token != 'undefined' ) {
+      url = url.replace('REFRESH_TOKEN', token.refresh_token)
+    }
+    
+    if(url.indexOf('REFRESH_TOKEN') >= 0) {
+      url.replace('REFRESH_TOKEN', '')
+    } 
+    
+    if( id != undefined && id != 'undefined' ) {
+      url += `&id=${id}`
+    }
+    return axios.get(url, getHeader())
+  }
+
+  static getLayoutWithTemplates( token, account ) {
+    let url = `${base_new_api_url}/documents/layout?access_token=ACCESS_TOKEN&refresh_token=REFRESH_TOKEN`
     url = url.replace('ACCESS_TOKEN', token.access_token)
     url = url.replace('REFRESH_TOKEN', token.refresh_token)
     if(url.indexOf('REFRESH_TOKEN') >= 0) {
       url.replace('REFRESH_TOKEN', '')
     } 
+    if( account != undefined && account != 'undefined' ) {
+      url += `&user_account=${account}`
+    }
     return axios.get(url, getHeader())
+  }   
+
+  static getLayoutTemplatesByID( layoutID, account ) {
+    let url = `${base_new_api_url}/documents/layout/${layoutID}/?user_account=${account}`
+    return axios.get(url, getHeader())
+  }  
+
+  static addContainerToLayout( data ) {
+    return axios.post(`${base_new_api_url}/documents/layout`, data, getFormUrlHeader())
+  }
+
+  static deleteTemplateFromLayout( layoutID, containerID, userAccount ) {
+    return axios.delete(`${base_new_api_url}/documents/layout?layout_id=${layoutID}&container_id=${containerID}&user_account=${userAccount}`, getHeader())
+  }
+
+  static getRepoFolder( userAccount ) {
+    return axios.get(`${base_new_api_url}/documents/repo_folder?user_account=${userAccount}`,  getHeader())
+  }
+
+  static addRepoFolder( data ) {
+    return axios.put(`${base_new_api_url}/documents/repo_folder`, data, getFormUrlHeader())
+  }
+
+  static createDriveTemplateFile( data ) {
+    return axios.post(`${base_new_api_url}/documents/create_template_drive`, data, getFormUrlHeader())
+  }
+
+  static downloadXMLFromServer( data ) {
+    return axios.post(`${base_new_api_url}/documents/downloadXML`, data, getFormUrlHeader())
   }
 
   static createMaintainenceFeeFile( data ) {

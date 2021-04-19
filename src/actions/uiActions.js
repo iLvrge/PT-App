@@ -41,6 +41,10 @@ export const setMaintainenceFeeFrameMode = flag  => ({
   flag   
 }) 
 
+export const setDriveTemplateFrameMode = flag  => ({
+  type: types.SET_DRIVE_TEMPLATE_FRAME_MODE,
+  flag   
+})
 
 export const toggleShow3rdParities = flag => ({
   type: types.TOGGLE_SHOW_3RD_PARTIES,

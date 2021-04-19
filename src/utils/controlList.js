@@ -16,6 +16,7 @@ export const controlList = [
         class: 'hex-1',
         breadCrumbs: 'Maintenance > Restore Ownership',
         category: 'restore_ownership',
+        layout_id: 1,
         showSvg: false,
         mainHeadingClass: 'maintain',
         redirect: routeList.restore_ownership
@@ -29,6 +30,7 @@ export const controlList = [
         class: 'hex-2',
         breadCrumbs: 'Maintenance > Clean Encumbrances',
         category: 'clear_encumbrances',
+        layout_id: 2,
         showSvg: false,
         mainHeadingClass: 'maintain', 
         redirect: routeList.clear_encumbrances
@@ -42,6 +44,7 @@ export const controlList = [
         class: 'hex-3',
         breadCrumbs: 'Maintenance > Pay Maint. Fee',
         category: 'pay_maintainence_fee',
+        layout_id: 3,
         showSvg: false,
         mainHeadingClass: 'maintain',
         redirect: routeList.pay_maintainence_fee
@@ -55,6 +58,7 @@ export const controlList = [
         class: 'hex-4',
         breadCrumbs: 'Maintenance > Correct Address',
         category: 'correct_address',
+        layout_id: 4,
         showSvg: false,
         mainHeadingClass: 'maintain',
         redirect: routeList.correct_address
@@ -74,6 +78,7 @@ export const controlList = [
         class: 'hex-6',
         breadCrumbs: 'Ownership > Invent',
         category: 'invent',
+        layout_id: 5,
         showSvg: false,
         mainHeadingClass: 'acquisition',
         redirect: routeList.invent
@@ -87,6 +92,7 @@ export const controlList = [
         class: 'hex-7',
         breadCrumbs: 'Ownership > Acquire Patents',
         category: 'acquire_patents',
+        layout_id: 6,
         showSvg: false,
         mainHeadingClass: 'acquisition',
         redirect: routeList.maintainence
@@ -100,6 +106,7 @@ export const controlList = [
         class: 'hex-8',
         breadCrumbs: 'Ownership > Sell Patents',
         category: 'sell_payments',
+        layout_id: 7,
         showSvg: false,
         mainHeadingClass: 'acquisition',
         redirect: routeList.maintainence
@@ -113,6 +120,7 @@ export const controlList = [
         class: 'hex-9',
         breadCrumbs: 'Ownership > Insights',
         category: 'insights',
+        layout_id: 0,
         showSvg: false,
         mainHeadingClass: 'acquisition',
         redirect: routeList.maintainence
@@ -132,6 +140,7 @@ export const controlList = [
         class: 'hex-11',
         breadCrumbs: 'Licensing > License Out',
         category: 'licenseout',
+        layout_id: 8,
         showSvg: false,
         mainHeadingClass: 'progress',
         redirect: routeList.maintainence
@@ -145,6 +154,7 @@ export const controlList = [
         class: 'hex-12',
         breadCrumbs: 'Licensing > License In',
         category: 'licensein',
+        layout_id: 9,
         showSvg: false,
         mainHeadingClass: 'progress',
         redirect: routeList.maintainence
@@ -158,6 +168,7 @@ export const controlList = [
         class: 'hex-13',
         breadCrumbs: 'Licensing > Income/Expense',
         category: 'income_expense',
+        layout_id: 10,
         showSvg: false,
         mainHeadingClass: 'progress',
         redirect: routeList.maintainence
@@ -171,6 +182,7 @@ export const controlList = [
         class: 'hex-14',
         breadCrumbs: 'Licensing > Survival Reports',
         category: 'reports',
+        layout_id: 0,
         showSvg: false,
         mainHeadingClass: 'progress',
         redirect: routeList.maintainence
@@ -190,6 +202,7 @@ export const controlList = [
         class: 'hex-16',
         breadCrumbs: 'Financing > Secure a Loan',
         category: 'secure_a_loan',
+        layout_id: 12,
         showSvg: false,
         mainHeadingClass: 'bank',
         redirect: routeList.maintainence
@@ -203,6 +216,7 @@ export const controlList = [
         class: 'hex-17',
         breadCrumbs: 'Financing > Reduce Interest Rate',
         category: 'reduce_interest_rate',
+        layout_id: 13,
         showSvg: false,
         mainHeadingClass: 'bank',
         redirect: routeList.maintainence
@@ -216,6 +230,7 @@ export const controlList = [
         class: 'hex-18',
         breadCrumbs: 'Financing > Release Collateral',
         category: 'release_collateral',
+        layout_id: 14,
         showSvg: false,
         mainHeadingClass: 'bank',
         redirect: routeList.maintainence
@@ -229,6 +244,7 @@ export const controlList = [
         class: 'hex-19',
         breadCrumbs: 'Financing > Market Review',
         category: 'market_review',
+        layout_id: 0,
         showSvg: false,
         mainHeadingClass: 'bank',
         redirect: routeList.maintainence
@@ -248,6 +264,7 @@ export const controlList = [
         class: 'hex-21',
         breadCrumbs: 'Legal > Due Diligence',
         category: 'due_dilligence',
+        layout_id: 15,
         showSvg: false,
         mainHeadingClass: 'correct',
         redirect: routeList.duedilligence
@@ -261,6 +278,7 @@ export const controlList = [
         class: 'hex-22',
         breadCrumbs: 'Legal > Litigation',
         category: 'litigation',
+        layout_id: 16,
         showSvg: false,
         mainHeadingClass: 'correct',
         redirect: routeList.duedilligence
@@ -274,6 +292,7 @@ export const controlList = [
         class: 'hex-23',
         breadCrumbs: 'Legal > PTAB',
         category: 'ptab',
+        layout_id: 0,
         showSvg: false,
         mainHeadingClass: 'correct',
         redirect: routeList.duedilligence
@@ -287,6 +306,7 @@ export const controlList = [
         class: 'hex-24',
         breadCrumbs: 'Legal > PAIR',
         category: 'pair',
+        layout_id: 0,
         showSvg: false,
         mainHeadingClass: 'correct',
         redirect: routeList.duedilligence
@@ -306,6 +326,7 @@ export const controlList = [
         class: 'hex-26',
         breadCrumbs: 'Insights > Lawyers',
         category: 'lawyers',
+        layout_id: 0,
         showSvg: false,
         mainHeadingClass: 'read',
         redirect: routeList.insights
@@ -318,6 +339,7 @@ export const controlList = [
         image: `https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/bankers.png`,
         breadCrumbs: 'Insights > Bankers',
         category: 'bankers',
+        layout_id: 0,
         showSvg: false,
         mainHeadingClass: 'read',
         redirect: routeList.insights
@@ -331,6 +353,7 @@ export const controlList = [
         class: 'hex-28',
         breadCrumbs: 'Insights > Competitors',
         category: 'competitors',
+        layout_id: 0,
         showSvg: false,
         mainHeadingClass: 'read',
         redirect: routeList.insights
@@ -344,6 +367,7 @@ export const controlList = [
         class: 'hex-29',
         breadCrumbs: 'Insights > Inventors',
         category: 'inventors',
+        layout_id: 0,
         showSvg: false,
         mainHeadingClass: 'read',
         redirect: routeList.insights

@@ -6,10 +6,11 @@ import FormatBoldIcon from '@material-ui/icons/FormatBold'
 import FormatItalicIcon from '@material-ui/icons/FormatItalic'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import Tooltip from '@material-ui/core/Tooltip'
 import { makeStyles } from '@material-ui/core/styles'
 import useStyles from './styles'
-const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, onDocument, onAttachmentFile, onMaintainenceFeeReview, onMaintainenceFeeFile}) => {
+const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, onDocument, onAttachmentFile, onAttachmentDriveFile, onMaintainenceFeeReview, onMaintainenceFeeFile, onSubmitUSPTO, loadingUSPTO}) => {
   const classes = useStyles()
   const toolBarRef = useRef(null) 
 
@@ -95,18 +96,28 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
         </button>
       </Tooltip>
 
+      <Tooltip title="Google Drive file" arrow classes={classesTooltip}>
+        <button className={'ql-attachButton'} onClick={onAttachmentDriveFile}>
+          <svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google-drive" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-google-drive fa-w-16 fa-2x"><path fill="currentColor" d="M339 314.9L175.4 32h161.2l163.6 282.9H339zm-137.5 23.6L120.9 480h310.5L512 338.5H201.5zM154.1 67.4L0 338.5 80.6 480 237 208.8 154.1 67.4z" class=""></path></svg>
+        </button>
+      </Tooltip>
+
       <Tooltip title="Send message" arrow classes={classesTooltip}>
         <button className={'ql-saveButton'} onClick={onClick}>
           <SendIcon />   
-        </button>
+        </button> 
       </Tooltip>      
+      <Button className={classes.review} onClick={onSubmitUSPTO} disabled={loadingUSPTO}>
+        Submit to USPTO
+      </Button>
+      {loadingUSPTO && <CircularProgress size={24} className={classes.buttonProgress} />}
       <Button className={classes.review} onClick={onMaintainenceFeeReview}>Review Maintainence</Button>
       <Button className={classes.review} onClick={onMaintainenceFeeFile}>Maintainence Fee</Button>
       <Button className={classes.review} onClick={onDocument}>Templates</Button>{/* 
       <button className={classes.review} onClick={onMaintainenceFeeReview}><Typography variant='body2'>Review Maintainence</Typography></button>
       <button className={classes.review} onClick={onMaintainenceFeeFile}><Typography variant='body2'>Maintainence Fee</Typography></button>
       <button className={classes.review} onClick={onDocument}><Typography variant='body2'>Templates</Typography></button> */}
-    </div>
+    </div> 
   )
 }
 

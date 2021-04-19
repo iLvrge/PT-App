@@ -22,9 +22,11 @@ const QuillEditor = ({
   onSubmit = (value) => {},
   onCancel = () => {},
   onDrive = () => {},
+  onAttachmentDriveFile = () => {},
   onAttachmentFile = () => {},
   onFocus = () => {},
-  onBlur = () => {}
+  onBlur = () => {},
+  driveFile = ''
 }) => {
 
   const classes = useStyles()
@@ -32,15 +34,26 @@ const QuillEditor = ({
   const dispatch = useDispatch()
   const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
   const maintainence_fee_file_name = useSelector(state => state.patenTrack2.maintainence_fee_file_name)
+  const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
   const slack_users = useSelector(state => state.patenTrack2.slack_users)
   const [ userListMenu, setUserListMenu ] = useState( null )
+  const [ loadingUSPTO, setLoadingUSPTO ] = useState(false)
 
   const quill = useMemo(() => {
     if (!quillRef.current) return null
        
     return quillRef.current.getEditor()
-    /* eslint-disable-next-line */
   }, [ quillRef.current ]) 
+
+  useEffect(() => {
+    if (!quillRef.current) return null
+    console.log("driveFile", driveFile)
+    if( driveFile != null ) {
+      const editorRef = quillRef.current
+      const selectionIndex = editorRef.getEditorSelection().index
+      editorRef.getEditor().insertText(selectionIndex, driveFile) 
+    }
+  }, [ driveFile, quillRef ])
  
 
   const openUSPTOWindow = (w, h) => {
@@ -96,6 +109,41 @@ const QuillEditor = ({
       alert("Please select assets from the maintainence list")
     }
   }, [ dispatch, selectedMaintainencePatents ])  
+
+  const onHandleSubmitToUSPTO =  useCallback( async () => {      
+    if(assetTypeAssignmentAssetsSelected.length == 0) {
+      alert('Please first select assets from list')
+    } else {
+      /**
+       * Send request to server to create XML file 
+      */
+      setLoadingUSPTO( true )
+      const form = new FormData()
+      form.append('assets', JSON.stringify(assetTypeAssignmentAssetsSelected))
+
+      const {data} = await PatenTrackApi.downloadXMLFromServer(form)
+
+      if( data && data != null && data.indexOf('xml') !== -1) {
+        //downloadfile
+        downloadFile(data)
+        setLoadingUSPTO( false )
+      } else {
+        alert(data)
+        setLoadingUSPTO( false )
+      }
+      
+    }
+  }, [assetTypeAssignmentAssetsSelected])
+
+  const downloadFile = (data) => {
+    const blob = new Blob([data], {type: 'text/plain'})
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.download = 'uspto.xml'
+    link.href = url
+    link.click()
+    window.URL.revokeObjectURL(url)
+  }
 
   const onCloseUserMenu = () => {
     setUserListMenu(null);
@@ -156,14 +204,18 @@ const QuillEditor = ({
           onBlur={onBlur}
         />
         <CustomToolbar 
-        quillEditor={quillRef}
-        quill={quill} 
-        onClick={onSubmit} 
-        onUserClick={onUsersList} 
-        onDocument={onDrive} 
-        onAttachmentFile={onAttachmentFile} 
-        onMaintainenceFeeReview={onHandleReviewMaintainenceFee} 
-        onMaintainenceFeeFile={onMaintainenceFeeFile}/>
+          quillEditor={quillRef}
+          quill={quill} 
+          onClick={onSubmit} 
+          onUserClick={onUsersList} 
+          onDocument={onDrive} 
+          onAttachmentFile={onAttachmentFile} 
+          onAttachmentDriveFile={onAttachmentDriveFile}
+          onMaintainenceFeeReview={onHandleReviewMaintainenceFee} 
+          onMaintainenceFeeFile={onMaintainenceFeeFile}
+          onSubmitUSPTO={onHandleSubmitToUSPTO}
+          loadingUSPTO={loadingUSPTO}
+        />
         {GetMenuComponent}
       </div>
     </div>

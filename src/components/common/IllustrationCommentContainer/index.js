@@ -48,6 +48,8 @@ const IllustrationCommentContainer = ({
     const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
     const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
     const maintainenceFrameMode = useSelector(state => state.ui.maintainenceFrameMode)
+    const driveTemplateFrameMode = useSelector(state => state.ui.driveTemplateFrameMode)
+    const new_drive_template_file = useSelector(state => state.patenTrack2.new_drive_template_file)
     
     const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
     const selectedAssetAssignments = useSelector( state => state.patenTrack2.assetTypeAssignments.selected )
@@ -177,6 +179,11 @@ const IllustrationCommentContainer = ({
                 }
                 
                 {
+                    driveTemplateFrameMode === true && new_drive_template_file!= null && Object.keys(new_drive_template_file).length > 0 && new_drive_template_file.hasOwnProperty('id')
+                    ?
+                        <iframe src={`https://docs.google.com/document/d/${new_drive_template_file.id}/edit`} className={classes.templateFrame}></iframe>
+                    :
+
                     maintainenceFrameMode === true
                     ?
                         <LoadMaintainenceAssets 

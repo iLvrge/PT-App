@@ -60,6 +60,11 @@ const uiReducer = (state = initialState.ui, action) => {
         ...state,
         maintainenceFrameMode: action.flag
       }
+    case types.SET_DRIVE_TEMPLATE_FRAME_MODE:
+      return {
+        ...state,
+        driveTemplateFrameMode: action.flag
+      }
     case types.TOGGLE_SHOW_3RD_PARTIES: {
       return {
         ...state,

@@ -1,7 +1,7 @@
 import * as types from './actionTypes2'
 import PatenTrackApi, { DEFAULT_CUSTOMERS_LIMIT, DEFAULT_TRANSACTIONS_LIMIT, DEFAULT_PATENTS_LIMIT } from '../api/patenTrack2'
 
-import { toggleLifeSpanMode } from './uiActions'
+import { toggleLifeSpanMode, setDriveTemplateFrameMode } from './uiActions'
 
 export const setCompaniesList = data => {
   return {
@@ -493,6 +493,7 @@ export const setSelectedMaintainenceAssetsList = ( list ) => {
 export const getGoogleAuthToken = ( code ) => {
   return async dispatch => {
     const { data } = await PatenTrackApi.getGoogleAuthToken( code )
+    dispatch(getGoogleProfile(data))  
     dispatch(setGoogleAuthToken(data))
   }
 }
@@ -504,20 +505,82 @@ export const setGoogleAuthToken = ( token ) => {
   }
 }
 
-export const getGoogleTemplates = () => {
-  const getGoogleToken = localStorage.getItem('google_auth_token_info')
-  const tokenJSON = JSON.parse( getGoogleToken )
+export const getGoogleProfile = ( token ) => {
   return async dispatch => {
-    const { data } = await PatenTrackApi.getGoogleTemplates( tokenJSON )
-    dispatch(setGoogleTemplateList(data))
+    const { data } = await PatenTrackApi.getGoogleProfile( token )
+    console.log("getGoogleProfile", data)
+    if(data == 'Error while retreiving profile data') {
+      localStorage.setItem('google_auth_token_info', '')
+    } else {
+      dispatch(setGoogleProfile(data))
+    }    
+  }
+}  
+
+export const setGoogleProfile = ( data ) => {
+  return {
+    type: types.SET_GOOGLE_PROFILE, 
+    data
   }
 }
+
+export const getLayoutWithTemplates = (token, account) => {
+  return async dispatch => {
+    const { data } = await PatenTrackApi.getLayoutWithTemplates( token, account )
+    if(data.message != '') {
+      localStorage.setItem('google_auth_token_info', '')
+      alert(data.message)
+    } else {
+      dispatch(setLayoutWithTemplatelist(data))
+    } 
+  }
+}
+
+export const setLayoutWithTemplatelist = (data) => {
+  return {
+    type: types.SET_GOOGLE_LAYOUT_TEMPLATE_LIST,
+    data
+  }
+}
+
+
+export const getLayoutTemplatesByID = (layoutID, userAccount) => {
+  return async dispatch => {
+    const { data } = await PatenTrackApi.getLayoutTemplatesByID( layoutID, userAccount )
+    if(data.message != '') {
+      //localStorage.setItem('google_auth_token_info', '')
+      alert(data.message)
+    } else {
+      dispatch(setLayoutTemplatesByID(data))
+    }
+  }
+}
+
+export const setLayoutTemplatesByID = (data) => {
+  return {
+    type: types.SET_LAYOUT_TEMPLATE_LIST_BY_ID,
+    data
+  } 
+}
+
+
+export const getGoogleTemplates = (token, id) => {
+  return async dispatch => {
+    const { data } = await PatenTrackApi.getGoogleTemplates( token, id )
+    if(data.message != '') {
+      localStorage.setItem('google_auth_token_info', '')
+      alert(data.message)
+    } else {
+      dispatch(setGoogleTemplateList(data))
+    }
+  }
+} 
 
 export const setGoogleTemplateList = (data) => {
   return {
     type: types.SET_GOOGLE_TEMPLATE_LIST,
     data
-  }
+  } 
 }
 
 
@@ -639,6 +702,30 @@ export const setMaintainenceFileName = (name) => {
   return {
     type: types.SET_MAINTAINENCE_FEE_FILE_NAME,
     name
+  }
+}
+
+export const createDriveTemplateFile = ( formData ) => {
+  return async dispatch => {
+    const { data } = await PatenTrackApi.createDriveTemplateFile( formData )
+    
+    if( data != null && typeof data == 'object') {
+      //new template created
+      dispatch(setDriveTemplateFrameMode(true))
+      dispatch(setDriveTemplateFile(data))
+    } else {
+      alert(data)
+      if(data == 'Token expired') {
+        localStorage.setItem('google_auth_token_info', '')
+      }
+    }
+  }
+} 
+
+export const setDriveTemplateFile = (data) => {
+  return {
+    type: types.SET_DRIVE_TEMPLATE_FILE,
+    data
   }
 }
 

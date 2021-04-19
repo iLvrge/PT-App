@@ -23,6 +23,7 @@ export default {
   },
   ui: {
     maintainenceFrameMode: false,
+    driveTemplateFrameMode: false,
     usptoMode: false,
     showThirdParties: true,
     lifeSpanMode: false,

@@ -10,6 +10,7 @@ import CompaniesAdresses from './Tabs/Compaines/Adresses'
 import CompaniesLawFirms from './Tabs/Compaines/LawFirms'
 import Slacks from './Tabs/Slacks'
 import Users from './Tabs/Users'
+import Repository from './Tabs/Repository'
 import Documents from './Tabs/Documents/index'
 import Professionals from './Tabs/Professionals'
 import LawFirms from './Tabs/LawFirms'
@@ -21,6 +22,7 @@ import { ExpandLess, ExpandMore } from '@material-ui/icons'
 
 const TABS = [
   { label: 'Slacks', value: 'slacks', component: Slacks },
+  { label: 'Repository', value: 'repository', component: Repository },
   { label: 'Users', value: 'users', component: Users },
   { label: 'Professionals', value: 'professionals', component: Professionals },
   { label: 'Documents', value: 'documents', component: Documents },

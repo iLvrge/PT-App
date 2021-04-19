@@ -10,8 +10,10 @@
   border-bottom-right-radius: 0;
 }
 .ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button{
-  width: 32px;
-  height: 32px;
+  /* width: 32px;
+  height: 32px; */
+  width: 'auto';
+  height: 'auto';
 }
 .ql-snow .ql-picker, .ql-toolbar, .ql-container, .ql-picker-label, .ql-picker-label svg, .ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button, .ql-snow.ql-toolbar button svg, .ql-snow .ql-toolbar button svg, .ql-snow .ql-stroke, .ql-picker-label{
   color: #fff;

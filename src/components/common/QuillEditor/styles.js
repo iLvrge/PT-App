@@ -25,6 +25,11 @@ export default makeStyles(theme => ({
     '&:first':{
       marginLeft: 5
     }
-  },
-  
+  }, 
+  buttonProgress: {
+    position: 'absolute',
+    bottom: '10px',
+    right: '5vw',
+    color: '#fff' 
+  }
 }))
