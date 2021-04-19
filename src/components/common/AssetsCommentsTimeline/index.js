@@ -183,8 +183,9 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
   }, [selectedCategory, controlList])
 
   const getDriveDocumentList = useCallback(() => {
+    console.log('getDriveDocumentList')
     const googleToken = getTokenStorage( 'google_auth_token_info' )
-    if(googleToken && googleToken != '' ) {
+    if(googleToken && googleToken != '' && googleToken != null ) {
 
       const { access_token } = JSON.parse(googleToken)
 
@@ -463,7 +464,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
 const onHandleDriveExplorer = async( event, fileID = undefined ) => {
   event.preventDefault()  
   const googleToken = getTokenStorage( 'google_auth_token_info' )
-  if(googleToken != '') {
+  if(googleToken != '' && googleToken != null) {
     const tokenParse = JSON.parse(googleToken)
     const { access_token } = tokenParse
 
