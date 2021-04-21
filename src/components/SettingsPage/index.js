@@ -14,11 +14,9 @@ import Repository from './Tabs/Repository'
 import Documents from './Tabs/Documents/index'
 import Professionals from './Tabs/Professionals'
 import LawFirms from './Tabs/LawFirms'
-import Collapse from '@material-ui/core/Collapse'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
-import { ExpandLess, ExpandMore } from '@material-ui/icons'
+import Grid from '@material-ui/core/Grid'
+
+import NavigationIcon from '../../components/NavigationIcon'
 
 const TABS = [
   { label: 'Slacks', value: 'slacks', component: Slacks },
@@ -46,11 +44,12 @@ function SettingsPage() {
   const authenticated = useSelector(store => store.auth.authenticated)
   const history = useHistory()
   const location = useLocation()
-
+  const [ openBar, setOpenBar ] = useState(true)
   const currentTab = useMemo(() => {
     const splittedPathname = location.pathname.split('/')
     return splittedPathname.slice(2).join('/')
   }, [ location ])
+
 
   const initialOpenSubTabs = findTabViaChild(currentTab)
   const [ openSubTabs, setOpenSubTabs ] = useState(initialOpenSubTabs ? [ initialOpenSubTabs ] : [])
@@ -83,57 +82,125 @@ function SettingsPage() {
     return currentTab === tab.value
   }
 
+  const handleSlackLink = () => {
+    history.push('/settings/slacks')  
+  }
+
+  const handleRepositoryLink = () => {
+    history.push('/settings/repository')  
+  }
+
+  const handleUsersLink = () => {
+    history.push('/settings/users')  
+  }
+
+  const handleProfessionalsLink = () => {
+    history.push('/settings/professionals')  
+  }
+
+  const handleDocumentsLink = () => {
+    history.push('/settings/documents')  
+  }
+
+  const handleCompanyNamesLink = () => {
+    history.push('/settings/companies/names')  
+  }
+
+  const handleCompanyAddressLink = () => {
+    history.push('/settings/companies/addresses')  
+  }
+
+  const handleCompanyLawfirmsLink = () => {
+    history.push('/settings/companies/lawFirms')  
+  }
+
+  const handleLawfirmsLink = () => {
+    history.push('/settings/lawFirms')  
+  }
+
+  const topToolBar = [
+    {
+      tooltip: 'Slack',
+      bar: openBar,
+      click: handleSlackLink,
+      t: 31
+    },
+    {
+      tooltip: 'Repository',
+      bar: openBar,
+      click: handleRepositoryLink,
+      t: 32
+    },
+    {
+      tooltip: 'Users',
+      bar: openBar,
+      click: handleUsersLink,
+      t: 33
+    },
+    {
+      tooltip: 'Professionals',
+      bar: openBar,
+      click: handleProfessionalsLink,
+      t: 34
+    },
+    {
+      tooltip: 'Documents',
+      bar: openBar,
+      click: handleDocumentsLink,
+      t: 35
+    },
+    {
+      tooltip: 'Company Names',
+      bar: openBar,
+      click: handleCompanyNamesLink,
+      t: 36
+    },
+    {
+      tooltip: 'Company Address',
+      bar: openBar,
+      click: handleCompanyAddressLink,
+      t: 37
+    },
+    {
+      tooltip: 'Company Lawfirms',
+      bar: openBar,
+      click: handleCompanyLawfirmsLink,
+      t: 38
+    },
+    {
+      tooltip: 'Lawfirms',
+      bar: openBar,
+      click: handleLawfirmsLink,
+      t: 39
+    }
+  ]
+
+  console.log("topToolBar", topToolBar)
+
   return !authenticated ? <Redirect to={'/'} /> : (
     <div className={classes.root}>
       <NewHeader />
-
       <div className={classes.settings}>
-        {/* <div>
-          <List className={classes.list}>
-            {
-              TABS.map((tab) => {
-                const open = openSubTabs.includes(tab.value)
-                const subTabs = !!tab.children
-
-                return (
-                  <Fragment key={tab.value}>
-                    <ListItem button selected={isTabSelected(tab)} onClick={onClickTab(tab)}>
-                      <ListItemText className={classes.listItemText} primary={tab.label} />
-                      {subTabs && (open ? <ExpandLess /> : <ExpandMore />)}
-                    </ListItem>
-                    {subTabs && (
-                      <Collapse in={open} timeout="auto" unmountOnExit>
-                        <List component="div" disablePadding>
-                          {
-                            tab.children.map((tab) => (
-                              <ListItem
-                                key={tab.value}
-                                button
-                                className={classes.nested}
-                                selected={isTabSelected(tab)}
-                                onClick={onClickTab(tab)}>
-
-                                <ListItemText className={classes.listItemText} primary={tab.label} />
-                              </ListItem>
-                            ))
-                          }
-                        </List>
-                      </Collapse>
-                    )}
-
-                  </Fragment>
-                )
-              })
-            }
-          </List>
-        </div> */}
-        <div className={classes.tabPanel}>
-          {
-            FLAT_TABS.map(({ value, component: Component }) => (
-              currentTab === value && (<Component key={value} />)
-            ))
-          }
-        </div>
+        <Grid container className={classes.dashboardWarapper}>
+          <Grid container className={classes.dashboard}>
+            <div className={classes.filterToolbar}> 
+              <div className={classes.flex}>
+                {
+                  topToolBar.map( (item, index) => (
+                    <NavigationIcon key={index} {...item}/>
+                  ))
+                }              
+              </div>
+            </div>
+            <div className={classes.tabPanel}>
+              {
+                FLAT_TABS.map(({ value, component: Component }) => (
+                  currentTab === value && (<Component key={value} />)
+                ))
+              } 
+            </div>
+          </Grid>
+        </Grid>   
       </div>
     </div>
   )

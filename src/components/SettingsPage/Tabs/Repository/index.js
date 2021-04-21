@@ -18,8 +18,8 @@ import {
         Folder as FolderIcon,
         Delete as DeleteIcon 
     } from '@material-ui/icons';
-import TreeItem from '@material-ui/lab/TreeItem';
-
+import TreeItem from '@material-ui/lab/TreeItem'
+import SplitPane from 'react-split-pane'
 import useStyles from './styles'
 
 import { setBreadCrumbs, getLayoutWithTemplates, getGoogleTemplates, getGoogleProfile, setLayoutWithTemplatelist } from  '../../../../actions/patentTrackActions2'
@@ -41,6 +41,8 @@ const Repository = () => {
     const [ googleToken, setGoogleToken ] = useState('')
     const [ breadcrumbItems, setBreadCrumbItems ] = useState([])
     const [repoFolder, setRepoFolder] = useState(null)
+
+    
     
     useEffect(() => {
         dispatch(setBreadCrumbs('Settings > Repository'))
@@ -84,7 +86,7 @@ const Repository = () => {
             getRepoFolder(google_profile.email)
         }
     }, [ dispatch, google_profile ])
-
+    
     const getRepoFolder = async(userAccount) => {
         const {data} = await PatenTrackApi.getRepoFolder(userAccount)
 
@@ -252,10 +254,8 @@ const Repository = () => {
     const renderLayoutData = (data) => {
 		/* if(props.isLoading)
 		  return <Loader/> */
-		return (
-		  <div className={classes.flexColumn}> 
+		return (		  
 			<DataTreeView treeItems={data} />
-		  </div>
 		)
     }
 
@@ -302,58 +302,95 @@ const Repository = () => {
 
     const renderDriveFiles = (data) => { 
         return (
-            <div className={classes.drive}>
-                <List dense={true}>
-                    <DriveFileItem items={data} />
-                </List>    
-            </div>
+            <List dense={true}>
+                <DriveFileItem items={data} />
+            </List>
         )
     }    
   
     return (
-        <Grid container className={classes.dashboard}>
-            <Grid item lg={12} md={12} sm={12} xs={12} className={repoFolder == null ? classes.dropFolder : classes.dropFolder1}>
-                <Droppable
-                types={['folder']} 
-                onDrop={onDrop}
-                onDragEnter={onDragEnter}
-                onDragLeave={onDragLeave}
-                >                   
+        <SplitPane
+            className={classes.splitPane}
+            split="vertical"
+            size={200}
+        >
+            <div className={classes.flexColumn}> 
+                <div className={classes.heading}>
                     <Typography variant="body1" component="h2">
+                        Layouts
+                    </Typography>
+                </div>
+                <div className={classes.drive}  style={{height: '80vh'}}>
+                    {
+                        layoutDriveFiles.length > 0 && renderLayoutData(layoutDriveFiles)
+                    }
+                </div>
+                <div className={classes.drive}  style={{height: '40vh'}}>
+                    <Droppable
+                    types={['folder']} 
+                    onDrop={onDrop}
+                    onDragEnter={onDragEnter}
+                    onDragLeave={onDragLeave}
+                    >                   
+                        <Typography variant="body1" component="h2">
+                            {
+                                repoFolder != null 
+                                ?
+                                    <IconButton aria-label="Repository Folder" style={{padding: 0}} onClick={(e)=> openRepoFolder(repoFolder.container_id)}>
+                                        <FolderIcon /> {repoFolder.container_name}
+                                    </IconButton>
+                                :
+                                    'DROP YOUR REPOSITORY FOLDER HERE.'
+                            } 
+                        </Typography>                                       
+                    </Droppable>
+                </div>
+            </div>
+            <SplitPane
+            className={classes.splitPane}
+            split="vertical"
+            size={300}	
+            >
+                <div className={classes.flexColumn}>
+                    <div className={classes.heading}>
+                        <Typography variant="body1" component="h2">
+                            Templates
+                        </Typography>
+                    </div>
+                    <div className={classes.drive}>
                         {
-                            repoFolder != null 
+                            driveFiles.length > 0 && renderDriveFiles(driveFiles) 
+                        }    
+                    </div>   
+                </div>         
+                <SplitPane
+                    className={classes.splitPane}
+                    split="vertical"	
+                    size={300}
+                >
+                    <div className={classes.flexColumn}>
+                        <div className={classes.heading}>
+                            <Typography variant="body1" component="h2">
+                                Document Repository
+                            </Typography>
+                        </div>
+                        <div className={classes.drive}>
+                                
+                        </div> 
+                    </div>
+                    <div>
+                        {
+                            selected != null 
                             ?
-                                <IconButton aria-label="Repository Folder" style={{padding: 0}} onClick={(e)=> openRepoFolder(repoFolder.container_id)}>
-                                    <FolderIcon /> {repoFolder.container_name}
-                                </IconButton>
+                            <iframe src={`https://docs.google.com/file/d/${selected}/preview`} className={classes.frame}></iframe>
                             :
-                                'DROP YOUR REPOSITORY FOLDER HERE.'
-                        } 
-                    </Typography>                                       
-                </Droppable>                
-            </Grid>
-
-            <Grid item lg={2} md={2} sm={2} xs={2} className={classes.flexColumn}>
-                {
-                    layoutDriveFiles.length > 0 && renderLayoutData(layoutDriveFiles)
-                }
-            </Grid>
-            <Grid item lg={2} md={2} sm={2} xs={2} className={classes.flexColumn}>
-                {
-                    driveFiles.length > 0 && renderDriveFiles(driveFiles) 
-                }
-            </Grid>
-            <Grid item lg={8} md={8} sm={8} xs={8} className={classes.flexColumn}>
-                {
-                    selected != null 
-                    ?
-                    <iframe src={`https://docs.google.com/file/d/${selected}/preview`} className={classes.frame}></iframe>
-                    :
-                    ''
-                }  
-            </Grid> 
-        </Grid>
-    )
+                            ''
+                        }
+                    </div>
+                </SplitPane>
+            </SplitPane>
+        </SplitPane>
+    ) 
 }
 
 export default Repository

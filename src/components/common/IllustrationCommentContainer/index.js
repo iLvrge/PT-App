@@ -2,7 +2,7 @@ import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import SplitPane from 'react-split-pane'
 import { IconButton, Paper, Modal, Table, TableHead, TableBody, TableRow, TableCell, TableContainer, TextField } from '@material-ui/core'
-
+import { Draggable } from 'react-drag-and-drop'
 
 import { Close, Fullscreen } from '@material-ui/icons'
 import IllustrationContainer from '../AssetsVisualizer/IllustrationContainer'
@@ -181,7 +181,11 @@ const IllustrationCommentContainer = ({
                 {
                     driveTemplateFrameMode === true && new_drive_template_file!= null && Object.keys(new_drive_template_file).length > 0 && new_drive_template_file.hasOwnProperty('id')
                     ?
-                        <iframe src={`https://docs.google.com/document/d/${new_drive_template_file.id}/edit`} className={classes.templateFrame}></iframe>
+                        <Draggable type={`template_agreement`} data={`https://docs.google.com/document/d/${new_drive_template_file.id}/edit`}>
+                            <div className={classes.draggableContainer}>
+                                <iframe src={`https://docs.google.com/document/d/${new_drive_template_file.id}/edit`} className={classes.templateFrame}></iframe>
+                            </div>                            
+                        </Draggable>
                     :
 
                     maintainenceFrameMode === true

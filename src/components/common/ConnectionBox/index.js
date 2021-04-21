@@ -13,6 +13,7 @@ import useStyles from './styles'
 import FullWidthSwitcher from '../FullWidthSwitcher'
 import { connect } from 'react-redux'
 import { setConnectionData,  setConnectionBoxView } from '../../../actions/patenTrackActions'
+import PatenTrackApi from '../../../api/patenTrack2';
 
 /*let pdfFile = "";*/
 
@@ -25,11 +26,17 @@ function CommentBox(props) {
   const [ visibility, setVisibility] = useState(false)
 
   useEffect(() => {
-    if(props.assets) {
+    /* if(props.assets) {
       setAssetData(props.assets)
-    }
+    } */
     if(props.connectionBoxData){
-      setBoxData(props.connectionBoxData)
+      (async () => {
+        const { data } = await PatenTrackApi.getConnectionData(props.connectionBoxData.popuptop)
+        const oldAssetsData = props.assets
+        oldAssetsData.popup = data.popup
+        setAssetData(oldAssetsData)
+        setBoxData(data)
+      })();
     }
     if(props.connectionBoxView == 'true') {
       setFullView(classes.fullView)
@@ -51,9 +58,9 @@ function CommentBox(props) {
 
   const RetreieveBoxData = (props) => {
     const info = assetData.popup && assetData.popup.filter(p => {
-      return p.id == props.popup
+      return p.id == props.popup.id
     })
-    const index = assetData.popup && assetData.popup.findIndex(x => x.id === props.popup)
+    const index = assetData.popup && assetData.popup.findIndex(x => x.id === props.popup.id)
     return(
       <div key={props.keyIndex}>
       {
@@ -155,7 +162,6 @@ function CommentBox(props) {
       </div>
     )
   } 
-
   return (
     <Paper className={classes.root} square>
       {/* <span className={classes.close} onClick={closeViewer}><i className={'fal fa-times-circle'}></i></span> */}

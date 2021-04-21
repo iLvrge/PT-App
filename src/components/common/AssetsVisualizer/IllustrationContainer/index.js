@@ -48,7 +48,7 @@ const IllustrationContainer = ({
     }
   }, [ screenHeight ])
 
-  console.log("IllustrationContainer")
+  
   
   useEffect(() => {
     const axiosCancelToken = axios.CancelToken.source()

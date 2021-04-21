@@ -579,6 +579,10 @@ class PatenTrackApi {
   static createMaintainenceFeeFile( data ) {
     return axios.post(`${base_new_api_url}/documents/create_maintainence_file`, data, getFormUrlHeader())
   } 
+
+  static getConnectionData( popup ) {
+    return axios.get(`${base_new_api_url}/connection/${popup}`,  getHeader())
+  }
 }
 
 export default PatenTrackApi

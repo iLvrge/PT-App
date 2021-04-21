@@ -28,7 +28,12 @@ export default makeStyles(theme => ({
     drive: {
         display: 'flex', 
         height: '100vh',
-        overflow: 'auto'
+        overflow: 'auto',
+        '& .MuiTreeItem-label':{
+            height: 40,
+            display: 'flex',
+            alignItems: 'center'
+        }
     },
     dropItem: {
         backgroundColor: 'rgba(255, 255, 255, 0.08)'
@@ -53,5 +58,44 @@ export default makeStyles(theme => ({
         background: '#222222',
         marginBottom: '5px',
         textAlign: 'center'
-    } 
+    },
+    splitPane: {
+        position: 'relative !important',
+        '& .Resizer': {
+            background: `none`,
+            opacity: 1,
+            height: '100%',
+            width: '3px',
+            zIndex: 1,
+            boxSizing: 'border-box',
+            cursor: 'col-resize',
+            backgroundClip: 'padding-box',
+            background:'#000',
+            '&:hover':{
+                background:'#f50057',
+            },
+            '&.horizontal': {
+                height: '3px',
+                width: '100%',
+                cursor: 'row-resize'
+            }
+        },
+        '& .Pane': {
+          maxHeight: '100%',
+          
+        },
+        '& .Pane2': {
+          height: '100%',
+          overflow: 'auto',
+        },
+    },
+    heading: {
+        height: 40,
+        backgroundColor: '#292929',
+        overflow: 'hidden',
+        borderBottom: '1px solid #5c5c5c',
+        display: 'flex',
+        alignItems: 'center',
+        paddingLeft: 25
+    }
 }))

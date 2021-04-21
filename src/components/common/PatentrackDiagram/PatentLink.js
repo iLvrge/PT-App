@@ -307,7 +307,7 @@ export default function PatentLink(props) {
       .on("mouseover", () => {
         let dx = d3.event.offsetX + config.link.tooltip.x,
           dy = d3.event.offsetY + config.link.tooltip.y;
-
+          console.log("hover", data)
         d3.select("#" + parent)
           .append("text")
           .attr("id", "dummy")
@@ -317,7 +317,7 @@ export default function PatentLink(props) {
                   time2String(data.line.date) +
                   '</tspan><tspan dx="-8.2rem" dy="1.1rem">' +
                   "Recorded: " +
-                  time2String(data.popup.recordedDate) +
+                  time2String(data.line.recorded) +
                   "</tspan>",
           )
         let bbox = d3
@@ -356,7 +356,7 @@ export default function PatentLink(props) {
                   time2String(data.line.date) +
                   '</tspan><tspan dx="-8.2rem" dy="1.1rem">' +
                   "Recorded: " +
-                  time2String(data.popup.recordedDate) +
+                  time2String(data.line.recorded) +
                   "</tspan>",
           );
       })

@@ -20,6 +20,7 @@ import {
   InsertDriveFile as InsertDriveFileIcon
 } from '@material-ui/icons'
 import GoogleLogin from 'react-google-login'
+import { Droppable } from 'react-drag-and-drop'
 import { Timeline, TimelineEvent } from 'react-event-timeline'
 import PatenTrackApi from '../../../api/patenTrack2'
 import { numberWithCommas, applicationFormat } from "../../../utils/numbers"
@@ -315,52 +316,57 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
       if(flag === 0) {
         frameRef.current.src = `https://docs.google.com/file/d/${item.container_id}/preview`
       } else {
-        /**
+
+        const askQ = window.confirm("Whether to create a document based on the selected template")
+        //if select OK
+        if( askQ ) {
+          /**
          * Check Token
          */
-        const googleToken = getTokenStorage( 'google_auth_token_info' )
-        let tokenExpired = false
-        if(googleToken && googleToken != '' ) {
-          const tokenParse = JSON.parse(googleToken)
-          const { access_token } = tokenParse
-    
-          if(access_token) {
-            let profileInfo = google_profile
-            if(profileInfo == null) {
-              const getGoogleProfile = getTokenStorage('google_profile_info')
-              if( getGoogleProfile != '') {
-                profileInfo = JSON.parse(getGoogleProfile)
+          const googleToken = getTokenStorage( 'google_auth_token_info' )
+          let tokenExpired = false
+          if(googleToken && googleToken != '' ) {
+            const tokenParse = JSON.parse(googleToken)
+            const { access_token } = tokenParse
+      
+            if(access_token) {
+              let profileInfo = google_profile
+              if(profileInfo == null) {
+                const getGoogleProfile = getTokenStorage('google_profile_info')
+                if( getGoogleProfile != '') {
+                  profileInfo = JSON.parse(getGoogleProfile)
+                }
               }
-            }
-            if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
-              /**
-               * Create copy of this file and show in the iframe
-               * Send request to the server to get the new copy of file and open in TV.
-               */
-              console.log("Create new file")       
-              //setCurrentDriveFileItem(item)
-              const formData = new FormData()
-                formData.append('access_token',  tokenParse.access_token )
-                formData.append('refresh_token', tokenParse.refresh_token)
-                formData.append('user_account', profileInfo.email)
-                formData.append('id', item.container_id)
-                dispatch(createDriveTemplateFile(formData))
-                onHandleCloseDrive(e)
+              if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
+                /**
+                 * Create copy of this file and show in the iframe
+                 * Send request to the server to get the new copy of file and open in TV.
+                 */
+                console.log("Create new file")       
+                //setCurrentDriveFileItem(item)
+                const formData = new FormData()
+                  formData.append('access_token',  tokenParse.access_token )
+                  formData.append('refresh_token', tokenParse.refresh_token)
+                  formData.append('user_account', profileInfo.email)
+                  formData.append('id', item.container_id)
+                  dispatch(createDriveTemplateFile(formData))
+                  onHandleCloseDrive(e)
+              } else {
+                tokenExpired = true
+              }
             } else {
               tokenExpired = true
             }
           } else {
             tokenExpired = true
           }
-        } else {
-          tokenExpired = true
-        }
 
-        if( tokenExpired === true ) {
-          alert('Token expired, please login again')
-          localStorage.setItem('google_auth_token_info', '')
-          checkButtons()
-        }       
+          if( tokenExpired === true ) {
+            alert('Token expired, please login again')
+            localStorage.setItem('google_auth_token_info', '')
+            checkButtons()
+          }
+        }               
       }
     }
   }
@@ -562,24 +568,34 @@ const handleDriveModalClose = (event) => {
     setDriveModal( false )
   }
 
+  const onDrop = (data, event) => {
+    console.log("onDrop", data)
+    setCommentHtml( previousContent => previousContent + ` ${data.template_agreement}`)
+  }
+
   const renderCommentEditor = useMemo(() => {
     //if (!selectedCommentsEntity) return null
     return (
       <div className={classes.commentEditor} ref={editorContainerRef}> 
-        <QuillEditor
-          value={commentHtml}
-          onChange={setCommentHtml}
-          onSubmit={handleSubmitComment}
-          onCancel={handleCancelComment}
-          onDrive={getDriveDocumentList}
-          onAttachmentFile={onHandleFileExplorer}
-          onAttachmentDriveFile={onHandleDriveExplorer}
-          onSelectUser={setSelectUser}
-          onFocus={handleFocus}
-          onBlur={handleBlur} 
-          driveFile={selectedDriveFile}     
-          category={selectedCategory}
-        />
+        <Droppable
+          types={['template_agreement']} 
+          onDrop={onDrop}
+        >
+          <QuillEditor
+            value={commentHtml}
+            onChange={setCommentHtml}
+            onSubmit={handleSubmitComment}
+            onCancel={handleCancelComment}
+            onDrive={getDriveDocumentList}
+            onAttachmentFile={onHandleFileExplorer}
+            onAttachmentDriveFile={onHandleDriveExplorer}
+            onSelectUser={setSelectUser}
+            onFocus={handleFocus}
+            onBlur={handleBlur} 
+            driveFile={selectedDriveFile}     
+            category={selectedCategory}
+          />
+        </Droppable>  
         <input type='file' id='attach_file' ref={inputFile} style={{display: 'none'}} onChange={onHandleFile}/>
       </div> 
     )
@@ -722,7 +738,7 @@ const handleDriveModalClose = (event) => {
     })
   }
 
-  const body = useMemo(() => {   
+  const templateBody = useMemo(() => {   
     return (
       <Grid container className={classes.driveModal}>
         {
@@ -819,7 +835,7 @@ const handleDriveModalClose = (event) => {
         aria-labelledby="Drive-Files-Modal"
         aria-describedby=""
       >
-        {body}
+        {templateBody}
       </Modal>
     </Paper>
   )
