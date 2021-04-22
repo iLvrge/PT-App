@@ -24,6 +24,8 @@ export default {
     drive_files: { files: [], nextPageToken: '' },
     template_drive_files: [], 
     new_drive_template_file: null,
+    template_document_url: 'about:blank',
+    driveButtonActive: false,
     maintainenceAssetsLoadingMore: false,
     maintainenceAssetsList: {list: [], total_records: 0}, 
     mainCompaniesList: {list: [], total_records: 0, row_select: [], selected: [], selectedWithName: [], selectAll: false},

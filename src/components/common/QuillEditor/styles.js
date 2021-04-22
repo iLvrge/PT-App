@@ -26,10 +26,15 @@ export default makeStyles(theme => ({
       marginLeft: 5
     }
   }, 
+  active: {
+    '& .MuiButton-label': {
+      color: '#e60000'
+    }    
+  },
   buttonProgress: {
     position: 'absolute',
     bottom: '10px',
     right: '5vw',
     color: '#fff' 
-  }
+  } 
 }))

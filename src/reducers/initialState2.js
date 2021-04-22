@@ -33,7 +33,8 @@ export default {
       selectedItem: null,
       selectedAsset: null,
     },
-    controlModal: true
+    controlModal: true, 
+    driveButtonActive: false
   },
   assets: {
     records: {

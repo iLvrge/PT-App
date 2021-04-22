@@ -307,6 +307,12 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         ...state,
         new_drive_template_file: action.data
       } 
+    
+    case types.SET_TEMPLATE_DOCUMENT_URL: 
+      return {
+        ...state,
+        template_document_url: action.url
+      }
     case types.SET_GOOGLE_TEMPLATE_LIST:
       return {
         ...state,

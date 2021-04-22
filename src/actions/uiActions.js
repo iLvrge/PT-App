@@ -35,6 +35,12 @@ export const setControlModal = flag  => ({
   flag
 }) 
 
+export const setDriveButtonActive = (flag) => {
+  return {
+    type: types.SET_DRIVE_BUTTON_ACTIVE,
+    flag
+  }
+}
 
 export const setMaintainenceFeeFrameMode = flag  => ({
   type: types.SET_MAINTAINENCE_FEE_FRAME_MODE,

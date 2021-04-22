@@ -37,8 +37,10 @@ const QuillEditor = ({
   const maintainence_fee_file_name = useSelector(state => state.patenTrack2.maintainence_fee_file_name)
   const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
   const slack_users = useSelector(state => state.patenTrack2.slack_users)
+  const driveButtonActive = useSelector(state => state.ui.driveButtonActive)
   const [ userListMenu, setUserListMenu ] = useState( null )
   const [ loadingUSPTO, setLoadingUSPTO ] = useState(false)
+  
 
   const quill = useMemo(() => {
     if (!quillRef.current) return null
@@ -48,7 +50,7 @@ const QuillEditor = ({
 
   useEffect(() => {
     if (!quillRef.current) return null
-    console.log("driveFile", driveFile)
+    
     if( driveFile != null ) {
       const editorRef = quillRef.current
       const selectionIndex = editorRef.getEditorSelection().index
@@ -217,6 +219,7 @@ const QuillEditor = ({
           onSubmitUSPTO={onHandleSubmitToUSPTO}
           loadingUSPTO={loadingUSPTO}
           category={category}
+          driveBtnActive={driveButtonActive}
         />
         {GetMenuComponent}
       </div>

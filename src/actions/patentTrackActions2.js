@@ -533,6 +533,13 @@ export const getLayoutWithTemplates = (token, account) => {
     } else {
       dispatch(setLayoutWithTemplatelist(data))
     } 
+  } 
+}
+
+export const setTemplateDocument = (url) => {
+  return {
+    type: types.SET_TEMPLATE_DOCUMENT_URL,
+    url
   }
 }
 
@@ -551,6 +558,7 @@ export const getLayoutTemplatesByID = (layoutID, userAccount) => {
       //localStorage.setItem('google_auth_token_info', '')
       alert(data.message)
     } else {
+      dispatch(setDriveTemplateFrameMode(true))
       dispatch(setLayoutTemplatesByID(data))
     }
   }

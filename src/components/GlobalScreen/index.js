@@ -12,6 +12,7 @@ import AssetsTable from '../common/AssetsTable'
 import IllustrationCommentContainer from '../common/IllustrationCommentContainer'
 import AssetDetailsContainer from '../common/AssetDetailsContainer'
 import MaintainenceAssetsList from '../common/MaintainenceAssetsList'
+import LayoutTemplates from '../common/LayoutTemplates'
 
 import { resizePane, resizePane2 } from '../../utils/splitpane'
 import { updateResizerBar } from '../../utils/resizeBar'
@@ -121,7 +122,7 @@ const GlobalScreen = ({
     const [ isDragging, setIsDragging] = useState(false)
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false)
 
-    
+    const driveTemplateFrameMode = useSelector(state => state.ui.driveTemplateFrameMode)
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const selectedMainCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
 
@@ -265,13 +266,22 @@ const GlobalScreen = ({
                     ? 
                         <>
                             <ArrowButton arrowId={`arrow_company`} handleClick={handleCompanyBarOpen} buttonType={toggleButtonType} buttonVisible={companyButtonVisible}/>
-                            <MainCompaniesSelector 
-                                selectAll={false} 
-                                defaultSelect={''} 
-                                addUrl={true} 
-                                parentBarDrag={setVisualizerBarSize}
-                                parentBar={setVisualizeOpenBar}                                
-                            /> 
+                            {
+                                driveTemplateFrameMode === true
+                                ?
+                                <LayoutTemplates />
+                                :
+                                <MainCompaniesSelector 
+                                    selectAll={false} 
+                                    defaultSelect={''} 
+                                    addUrl={true} 
+                                    parentBarDrag={setVisualizerBarSize}
+                                    parentBar={setVisualizeOpenBar}                                
+                                />
+                            }
+                            
+                             
+                            
                         </>
                     : 
                     ''

@@ -37,8 +37,14 @@ import {
   getSlackMessages, 
   getSlackUsersList,  
   getGoogleProfile,
-  createDriveTemplateFile,
+  setLayoutTemplatesByID
 } from '../../../actions/patentTrackActions2'
+
+import {
+  setMaintainenceFeeFrameMode,
+  setDriveTemplateFrameMode,
+  setDriveButtonActive
+} from '../../../actions/uiActions'
 
 
 import { setTokenStorage, getTokenStorage, removeTokenStorage } from '../../../utils/tokenStorage'
@@ -59,7 +65,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
   const companyListLoading = useSelector(state => state.patenTrack2.companyListLoading)
   const selectedCommentsEntity = useSelector(state => state.patenTrack2.selectedCommentsEntity)
   const userProfile = useSelector(state => state.patenTrack.profile)
-  const driveFiles = useSelector(state => state.patenTrack2.template_layout_drive_files)
+  const driveButtonActive = useSelector(state => state.ui.driveButtonActive)
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
   const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
   const slack_messages = useSelector(state => state.patenTrack2.slack_messages)
@@ -74,17 +80,20 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
   const [ file, setFile ] = useState(null)
   const [ displayButton, setDisplayButton] = useState( true )
   const [ commentHtml, setCommentHtml ] = useState('')
-  const [ openDocumentModal, setOpenDocumentModal] = useState( false )
+  
   const [ slackAuthLogin, setSlackAuthLogin ] = useState( true )
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState( true )
   const [ driveModal, setDriveModal ] = useState(false)
   const [ driveFilesAndFolder, setDriveFilesAndFolder ] = useState( {} )
   const [ selectedDriveFile, setSelectedDriveFile] = useState(null)
-  
+  const [ activeBtn, setActiveBtn] = useState({display: false})  
   const type = useMemo(() => selectedCommentsEntity && selectedCommentsEntity.type, [ selectedCommentsEntity ])
 
   
-  
+  useEffect(() => {
+    console.log("activeBtn", activeBtn)
+  }, [activeBtn]) 
+
   useEffect(() => {
     checkButtons()
   }, [])
@@ -114,14 +123,6 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
   useEffect(() => {
     updateHeight(size, timelineRef)
   }, [ size, timelineRef ])
-
-  useEffect(() => {
-    //console.log("useEffect->driveFiles",driveFiles)
-    if(driveFiles != undefined && driveFiles.length > 0 ) {
-      //console.log("useEffect->driveFiles->Enter")
-      setOpenDocumentModal( true )
-    }
-  }, [ driveFiles ])
 
   const checkButtons = () => {
     try{
@@ -183,36 +184,44 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
     return controlList.filter(item => item.category == selectedCategory)
   }, [selectedCategory, controlList])
 
-  const getDriveDocumentList = useCallback(() => {
-    console.log('getDriveDocumentList')
-    const googleToken = getTokenStorage( 'google_auth_token_info' )
-    if(googleToken && googleToken != '' && googleToken != null ) {
+  const getDriveDocumentList = (flag) => {
+    if( flag === true ) {      
+      const googleToken = getTokenStorage( 'google_auth_token_info' )
+      if(googleToken && googleToken != '' && googleToken != null ) {
 
-      const { access_token } = JSON.parse(googleToken)
+        const { access_token } = JSON.parse(googleToken)
 
-      if(access_token) {
-        /**
-         * Get Layout templates according to selected category
-         */
-        
-        let profileInfo = google_profile;
-        if(profileInfo == null) {
-          const getGoogleProfile = getTokenStorage('google_profile_info')
-          if( getGoogleProfile != '') {
-            profileInfo = JSON.parse(getGoogleProfile)
+        if(access_token) {
+          /**
+           * Get Layout templates according to selected category
+           */
+          
+          let profileInfo = google_profile;
+          if(profileInfo == null) {
+            const getGoogleProfile = getTokenStorage('google_profile_info')
+            if( getGoogleProfile != '') {
+              profileInfo = JSON.parse(getGoogleProfile)
+            }
           }
-        }
-        let  layoutID = layout_id
-        if(layoutID == 0 && selectedCategory != '') {
-          const item = getLayout
-          if(item.length > 0) {
-            layoutID = item[0].layout_id
+          let  layoutID = layout_id
+          if(layoutID == 0 && selectedCategory != '') {
+            const item = getLayout
+            if(item.length > 0) {
+              layoutID = item[0].layout_id
+            }
           }
-        }
-        console.log("openTemplateDriveFiles",profileInfo)
-        if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
-          console.log("openTemplateDriveFiles")
-          dispatch( getLayoutTemplatesByID(layoutID, profileInfo.email) )
+          console.log("openTemplateDriveFiles",profileInfo)
+          if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
+            dispatch(setDriveButtonActive( true ))
+            dispatch( getLayoutTemplatesByID(layoutID, profileInfo.email) )
+          }
+        } else {
+          //alert("Please first login with google account.")
+          if(googleLoginRef.current != null) {
+            googleLoginRef.current.querySelector('button').click()
+          } 
+          setGoogleAuthLogin( true )
+          setDisplayButton( true )
         }
       } else {
         //alert("Please first login with google account.")
@@ -221,16 +230,14 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
         }
         setGoogleAuthLogin( true )
         setDisplayButton( true )
-      }
-    } else {
-      //alert("Please first login with google account.")
-      if(googleLoginRef.current != null) {
-        googleLoginRef.current.querySelector('button').click()
-      }
-      setGoogleAuthLogin( true )
-      setDisplayButton( true )
-    }    
-  }, [ dispatch, googleLoginRef, layout_id, selectedCategory, google_profile ])
+      }    
+    } else {   
+      dispatch(setDriveButtonActive( false ))
+      dispatch(setDriveTemplateFrameMode( false ))
+      dispatch(setLayoutTemplatesByID({ list: [], message: '' }))
+    }
+    
+  }
 
 
   const handleSubmitComment = useCallback(async () => {
@@ -305,78 +312,6 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
     }
   }
 
-
-  const onHandleCleanFrame = () => {
-    
-  }
-
-  const onHandleOpenFile = ( e, item, flag ) => {
-    if(frameRef && frameRef.current != null) {
-      /* console.log("item.webViewLink", frameRef.current.src, item.webViewLink) */
-      if(flag === 0) {
-        frameRef.current.src = `https://docs.google.com/file/d/${item.container_id}/preview`
-      } else {
-
-        const askQ = window.confirm("Whether to create a document based on the selected template")
-        //if select OK
-        if( askQ ) {
-          /**
-         * Check Token
-         */
-          const googleToken = getTokenStorage( 'google_auth_token_info' )
-          let tokenExpired = false
-          if(googleToken && googleToken != '' ) {
-            const tokenParse = JSON.parse(googleToken)
-            const { access_token } = tokenParse
-      
-            if(access_token) {
-              let profileInfo = google_profile
-              if(profileInfo == null) {
-                const getGoogleProfile = getTokenStorage('google_profile_info')
-                if( getGoogleProfile != '') {
-                  profileInfo = JSON.parse(getGoogleProfile)
-                }
-              }
-              if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
-                /**
-                 * Create copy of this file and show in the iframe
-                 * Send request to the server to get the new copy of file and open in TV.
-                 */
-                console.log("Create new file")       
-                //setCurrentDriveFileItem(item)
-                const formData = new FormData()
-                  formData.append('access_token',  tokenParse.access_token )
-                  formData.append('refresh_token', tokenParse.refresh_token)
-                  formData.append('user_account', profileInfo.email)
-                  formData.append('id', item.container_id)
-                  dispatch(createDriveTemplateFile(formData))
-                  onHandleCloseDrive(e)
-              } else {
-                tokenExpired = true
-              }
-            } else {
-              tokenExpired = true
-            }
-          } else {
-            tokenExpired = true
-          }
-
-          if( tokenExpired === true ) {
-            alert('Token expired, please login again')
-            localStorage.setItem('google_auth_token_info', '')
-            checkButtons()
-          }
-        }               
-      }
-    }
-  }
-
-  const frameOnLoad = () => {
-    if(frameRef && frameRef.current != null) {
-      frameRef.current.style.width = '100%'
-      frameRef.current.style.height = frameRef.current.parentNode.clientHeight+'px'
-    }
-  }
 
 
   const onHandleSlackLogin = (w,h) => {    
@@ -494,46 +429,13 @@ const onHandleFile = (event) => {
   setFile(event.target.value)
 }
 
-const onHandleCloseDrive = (event) => {
-  event.preventDefault()
-  setOpenDocumentModal(false)
-}
+
 
 const handleDriveModalClose = (event) => {
   event.preventDefault()
   setDriveModal(false)
 }
 
-  const renderDriveFiles = useMemo(() => {
-    if(openDocumentModal === false) return null
-
-    return (
-      <div className={classes.driveContainer}>
-        <CloseIcon onClick={(e) => onHandleCloseDrive(e)} className={classes.closeButton}/>
-        <Drawer
-            className={classes.drawer}
-            variant="permanent"
-            anchor={'left'}
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-          >
-          <List>
-            {
-              driveFiles.map( file => (
-                <ListItem button key={file.template_id} onClick={(e) => { onHandleOpenFile(e, file, 1)}} onMouseOver={(e) => { onHandleOpenFile(e, file, 0) }} onMouseLeave={onHandleCleanFrame}>
-                  <ListItemText primary={file.container_name} />
-                </ListItem>
-              ))
-            }
-          </List>
-        </Drawer>
-        <main className={classes.showFile}>
-          <iframe src='about:blank' ref={frameRef} onLoad={frameOnLoad}></iframe>
-        </main> 
-      </div>
-    )
-  }, [ driveFiles, classes, openDocumentModal ])
 
   
   const onHandleGoogleSignout = () => {
@@ -828,7 +730,6 @@ const handleDriveModalClose = (event) => {
         { renderCommentsTimeline }
         { renderCommentEditor }
       </div>
-      { renderDriveFiles }
       <Modal
         open={driveModal}
         onClose={(e) => handleDriveModalClose(e)}

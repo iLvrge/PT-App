@@ -9,14 +9,15 @@ import {
         ListItemAvatar, 
         Avatar,
         Typography,
-        IconButton 
+        Breadcrumbs,
+        Link
     } from '@material-ui/core'
 import TreeView from '@material-ui/lab/TreeView';
 import { 
         ExpandMore as ExpandMoreIcon, 
         ChevronRight as ChevronRightIcon,
         Folder as FolderIcon,
-        Delete as DeleteIcon 
+        Close as CloseIcon
     } from '@material-ui/icons';
 import TreeItem from '@material-ui/lab/TreeItem'
 import SplitPane from 'react-split-pane'
@@ -41,7 +42,7 @@ const Repository = () => {
     const [ googleToken, setGoogleToken ] = useState('')
     const [ breadcrumbItems, setBreadCrumbItems ] = useState([])
     const [repoFolder, setRepoFolder] = useState(null)
-
+    const [ repoDriveFiles, setRepoDriveFiles ] = useState({files: []})
     
     
     useEffect(() => {
@@ -92,6 +93,16 @@ const Repository = () => {
 
         if(data != null) {
             setRepoFolder(data)
+            getRepoDriveFiles(data.container_id)
+        }
+    }
+
+    const getRepoDriveFiles = async(containerID) => {
+        const googleToken = getTokenStorage( 'google_auth_token_info' )
+        const token = JSON.parse(googleToken)   
+        const {data} = await PatenTrackApi.getGoogleTemplates(token, containerID)
+        if(data != null && data.list != null ) {
+            setRepoDriveFiles(data.list)
         }
     }
 
@@ -116,6 +127,9 @@ const Repository = () => {
         event.preventDefault();
         if(id) {
             let items = [...breadcrumbItems]
+            if(items.length == 0) {
+                items.push({id: 'undefined', name: 'Drive'})
+            }
             items.push({id, name})
             setBreadCrumbItems( items )
             dispatch(getGoogleTemplates(googleToken, id))
@@ -125,6 +139,20 @@ const Repository = () => {
     const openRepoFolder = (containerID) => {
         window.open(`https://drive.google.com/drive/u/0/folders/${containerID}`, 'Drive')
     }
+
+    const handleBreadcrumbClick = useCallback((event, item) => {
+        let oldItems = [...breadcrumbItems]
+        if( item.id == 'undefined' ) {
+            oldItems = []
+        } else {
+            const findIndex = oldItems.findIndex( row => row.id === item.id)
+            if(findIndex !== -1 ) {
+                oldItems = oldItems.splice( 0, findIndex + 1)
+            }
+        }        
+        setBreadCrumbItems(oldItems)
+        dispatch(getGoogleTemplates(googleToken, item.id))
+    }, [ dispatch, googleToken, breadcrumbItems ])
 
     const onDrop = useCallback((data, event) =>{
         console.log(data, event, event.target.innerText)
@@ -201,7 +229,7 @@ const Repository = () => {
         return(
             item.container_name 
             ? 
-                <span><DeleteIcon onClick={() => deleteTemplate(item.layout_id, item.container_id)}/> {item.container_name}</span>
+                <span className={classes.relative}><CloseIcon onClick={() => deleteTemplate(item.layout_id, item.container_id)}/><span className={classes.repo_name}>{item.container_name}</span></span>
             :
                 item.layout_name
         )
@@ -271,33 +299,29 @@ const Repository = () => {
         return items.map( item => {
             return (
                 <Draggable type={item.mimeType == 'application/vnd.google-apps.folder' ? 'folder' : 'file'} data={`${item.id}@;${item.name}`} key={item.id}>
-                    <ListItem key={item.id}>
-                        <ListItemAvatar>
-                            {
-                                item.mimeType == 'application/vnd.google-apps.folder'
-                                ?
-                                <Avatar>
-                                    <FolderIcon />
-                                </Avatar>
-                                :
-                                <Avatar alt={item.name} src={item.thumbnailLink} />
-                            }
-                        </ListItemAvatar>
-                        {
-                            item.mimeType == 'application/vnd.google-apps.folder'
-                            ?
-                                <ListItemButton onClick={(e) => openDriveFolder(e, item.id, item.name)}>
-                                    <ListItemText primary={item.name} />
-                                </ListItemButton>  
-                            :
-                                <ListItemButton onClick={(e) => setSelected(item.id)}>
-                                    <ListItemText primary={item.name} />
-                                </ListItemButton>  
-                        }                      
-                    </ListItem>
+                    <Item item={item}/>
                 </Draggable>
             )
         })
+    }
+
+    const Item = ({item}) => {
+        return (
+            <ListItem key={item.id}>
+                <Avatar src={item.iconLink} className={classes.small}/>
+                {
+                    item.mimeType == 'application/vnd.google-apps.folder'
+                    ?
+                        <ListItemButton onClick={(e) => openDriveFolder(e, item.id, item.name)}>
+                            <ListItemText primary={item.name} />
+                        </ListItemButton>  
+                    :
+                        <ListItemButton onClick={(e) => setSelected(item.id)}>
+                            <ListItemText primary={item.name} />
+                        </ListItemButton>  
+                }                      
+            </ListItem>
+        )
     }
 
     const renderDriveFiles = (data) => { 
@@ -306,7 +330,37 @@ const Repository = () => {
                 <DriveFileItem items={data} />
             </List>
         )
-    }    
+    }  
+
+    const RepoDriveFileItem = ({ items }) => {
+        return items.map( item => {
+            return (                
+                <Item key={item.id} item={item}/>
+            )
+        })
+    }
+    
+    const renderRepoDriveFiles = (data) => { 
+        return (
+            <List dense={true}>
+                <RepoDriveFileItem items={data} />
+            </List>
+        )
+    }
+
+    const BreadCrumbs = () => {
+        return (
+            <Breadcrumbs maxItems={2} aria-label="breadcrumb">
+               {
+                   breadcrumbItems.length > 0 && breadcrumbItems.map( crumb => (
+                        <Link key={crumb.id} color="inherit" href="#" onClick={(e) => handleBreadcrumbClick(e, crumb)}>
+                            {crumb.name}
+                        </Link>
+                   ))
+               }
+            </Breadcrumbs>
+        )
+    }
   
     return (
         <SplitPane
@@ -333,15 +387,15 @@ const Repository = () => {
                     onDragLeave={onDragLeave}
                     >                   
                         <Typography variant="body1" component="h2">
-                            {
-                                repoFolder != null 
-                                ?
-                                    <IconButton aria-label="Repository Folder" style={{padding: 0}} onClick={(e)=> openRepoFolder(repoFolder.container_id)}>
-                                        <FolderIcon /> {repoFolder.container_name}
-                                    </IconButton>
-                                :
-                                    'DROP YOUR REPOSITORY FOLDER HERE.'
-                            } 
+                            <div className={classes.relative}>
+                                {
+                                    repoFolder != null 
+                                    ?   
+                                        <><Avatar src={`https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document`} className={classes.small} /><span className={classes.repo_name}>{repoFolder.container_name}</span></>                                    
+                                    :
+                                        <span className={classes.repo_name}>Drop your repository folder here.</span>
+                                } 
+                            </div>
                         </Typography>                                       
                     </Droppable>
                 </div>
@@ -354,7 +408,7 @@ const Repository = () => {
                 <div className={classes.flexColumn}>
                     <div className={classes.heading}>
                         <Typography variant="body1" component="h2">
-                            Templates
+                            Templates <BreadCrumbs/>
                         </Typography>
                     </div>
                     <div className={classes.drive}>
@@ -371,11 +425,13 @@ const Repository = () => {
                     <div className={classes.flexColumn}>
                         <div className={classes.heading}>
                             <Typography variant="body1" component="h2">
-                                Document Repository
+                                Documents
                             </Typography>
                         </div>
                         <div className={classes.drive}>
-                                
+                            {
+                                repoDriveFiles.files.length > 0 && renderRepoDriveFiles(repoDriveFiles.files) 
+                            }
                         </div> 
                     </div>
                     <div>

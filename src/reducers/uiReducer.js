@@ -54,7 +54,12 @@ const uiReducer = (state = initialState.ui, action) => {
         ...state,
         controlModal: action.flag
       }
-    }    
+    }  
+    case types.SET_DRIVE_BUTTON_ACTIVE:  
+      return {
+        ...state,
+        driveButtonActive: action.flag  
+    }  
     case types.SET_MAINTAINENCE_FEE_FRAME_MODE:
       return {
         ...state,

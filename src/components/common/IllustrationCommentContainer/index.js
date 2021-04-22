@@ -50,7 +50,7 @@ const IllustrationCommentContainer = ({
     const maintainenceFrameMode = useSelector(state => state.ui.maintainenceFrameMode)
     const driveTemplateFrameMode = useSelector(state => state.ui.driveTemplateFrameMode)
     const new_drive_template_file = useSelector(state => state.patenTrack2.new_drive_template_file)
-    
+    const template_document_url = useSelector(state => state.patenTrack2.template_document_url)
     const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
     const selectedAssetAssignments = useSelector( state => state.patenTrack2.assetTypeAssignments.selected )
     const selectedAssetAssignmentsAll = useSelector( state => state.patenTrack2.assetTypeAssignments.selectAll)
@@ -58,12 +58,26 @@ const IllustrationCommentContainer = ({
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const assetCompaniesRowSelect = useSelector(state => state.patenTrack2.mainCompaniesList.row_select)
-    const search_string = useSelector(state => state.patenTrack2.search_string)    
+    const search_string = useSelector(state => state.patenTrack2.search_string)   
+    
+    const [ templateURL, settemplateURL] = useState('about:blank')
     
 
     useEffect(() => {
         updateResizerBar(illustrationRef, commentBar, 1)
     }, [ illustrationRef, commentBar ])
+
+    useEffect(() => {
+        if(new_drive_template_file != null && Object.keys(new_drive_template_file).length > 0 && new_drive_template_file.hasOwnProperty('id')) {
+            settemplateURL(`https://docs.google.com/document/d/${new_drive_template_file.id}/edit`)
+        }
+    }, [new_drive_template_file])
+
+    useEffect(() => {
+        if( templateURL != template_document_url ) {
+            settemplateURL(template_document_url)
+        }        
+    }, [ templateURL,  template_document_url ])
 
     const handleCommentButton = (event, flag) => {
         event.preventDefault()
@@ -177,17 +191,24 @@ const IllustrationCommentContainer = ({
                     :
                     ''
                 }
-                
                 {
-                    driveTemplateFrameMode === true && new_drive_template_file!= null && Object.keys(new_drive_template_file).length > 0 && new_drive_template_file.hasOwnProperty('id')
+                    driveTemplateFrameMode === true 
                     ?
-                        <Draggable type={`template_agreement`} data={`https://docs.google.com/document/d/${new_drive_template_file.id}/edit`}>
+                    new_drive_template_file != null && Object.keys(new_drive_template_file).length > 0 && new_drive_template_file.hasOwnProperty('id')
+                        ?
+                        <Draggable type={`template_agreement`} data={templateURL}>
                             <div className={classes.draggableContainer}>
-                                <iframe src={`https://docs.google.com/document/d/${new_drive_template_file.id}/edit`} className={classes.templateFrame}></iframe>
+                                <iframe src={templateURL} className={classes.templateFrame}></iframe>
                             </div>                            
                         </Draggable>
+                        :
+                        <div className={classes.draggableContainer}>
+                            <iframe src={templateURL} className={classes.templateFrame}></iframe>
+                        </div>
                     :
-
+                    ''
+                }
+                {                    
                     maintainenceFrameMode === true
                     ?
                         <LoadMaintainenceAssets 

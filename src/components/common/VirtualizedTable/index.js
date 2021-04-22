@@ -57,6 +57,8 @@ const VirtualizedTable = ({
   defaultSortField,
   defaultSortDirection,
   columnTextBoldList,
+  hover,
+  onMouseOver,
   ...tableProps
 }) => {
   
@@ -297,6 +299,11 @@ const VirtualizedTable = ({
           }}
           component={"div"}
           role={rowData.role}
+          onMouseOver = {
+            event => {
+              hover && onMouseOver(event, rowData, 0)
+            }
+          }
           onClick={event => {
             onSelect(
               event,
@@ -309,7 +316,7 @@ const VirtualizedTable = ({
             if(forceChildWaitCall != undefined && forceChildWaitCall === true) {
               updateNewHeight(2000)
             }            
-          }}
+          }}          
           selected={
             optionalKey != undefined
               ? rowSelected.includes(rowData[optionalKey])
@@ -353,6 +360,8 @@ const VirtualizedTable = ({
     ),
     [
       selected,
+      hover,
+      onMouseOver,
       onSelect,
       rowSelected,
       selectedIndex,
