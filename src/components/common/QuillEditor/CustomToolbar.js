@@ -10,7 +10,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import Tooltip from '@material-ui/core/Tooltip'
 import { makeStyles } from '@material-ui/core/styles'
 import useStyles from './styles'
-const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, onDocument, onAttachmentFile, onAttachmentDriveFile, onMaintainenceFeeReview, onMaintainenceFeeFile, onSubmitUSPTO, loadingUSPTO, category, driveBtnActive}) => {
+const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, onDocument, onAttachmentFile, onAttachmentDriveFile, onMaintainenceFeeReview, onMaintainenceFeeFile, onSubmitUSPTO, loadingUSPTO, category, driveBtnActive, maintainenceMode }) => {
   const classes = useStyles()
   const toolBarRef = useRef(null) 
 
@@ -115,9 +115,7 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
           <SendIcon />   
         </button> 
       </Tooltip>      
-      <Button className={classes.review} onClick={onSubmitUSPTO} disabled={loadingUSPTO}>
-        Submit to USPTO
-      </Button>
+      
       {loadingUSPTO && <CircularProgress size={24} className={classes.buttonProgress} />}
       {
         category == 'pay_maintainence_fee'
@@ -132,7 +130,7 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
           <Button className={`${classes.review} ${btnActive === true ? classes.active : ''}`} onClick={createTemplate}>Create a Document</Button>
         </>
       }      
-      <Button className={`${classes.review} ${btnActive === true ? classes.active : ''}`} onClick={createTemplate}>Create a Document</Button>{/* 
+      {/* 
       <button className={classes.review} onClick={onMaintainenceFeeReview}><Typography variant='body2'>Review Maintainence</Typography></button>
       <button className={classes.review} onClick={onMaintainenceFeeFile}><Typography variant='body2'>Maintainence Fee</Typography></button>
       <button className={classes.review} onClick={onDocument}><Typography variant='body2'>Templates</Typography></button> */}
