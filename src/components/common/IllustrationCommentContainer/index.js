@@ -119,8 +119,8 @@ const IllustrationCommentContainer = ({
     const LoadMaintainenceAssets = ({rows}) => {
         return (
             <TableContainer 
-                component={Paper} s
-                tyle={{height: '100%'}}
+                component={Paper} 
+                style={{height: '100%', padding: '10px'}}
             >
                 <TextField 
                     id='file_name' 

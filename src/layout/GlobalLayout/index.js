@@ -66,12 +66,19 @@ const GlobalLayout = (props) => {
     const [ assignmentButtonVisible, setAssignmentButtonVisible ] = useState(false)
     const [ customerButtonVisible, setCustomerButtonVisible ] = useState(false)
 
+    const [ assetFilesBarSize, setAssetFilesBarSize ] = useState(0)
+    const [ assetFilesBar, setAssetFilesBar ] = useState(false)
+    const [ toggleAssetFileButtonType, setToggleAssetFileButtonType ] = useState(true)
+
+    const [ driveTemplateBarSize, setDriveTemplateBarSize ] = useState(200)
+
     const [ isDrag, setIsDrag ] = useState(false)
     const [ size, setSize] = useState(0)
     const [ illustrationRecord, setIllustrationRecord ] = useState()
     const authenticated = useSelector(store => store.auth.authenticated)
     
     const search_string = useSelector(state => state.patenTrack2.search_string)
+    const driveTemplateFrameMode = useSelector(state => state.ui.driveTemplateFrameMode)
     
     // When we are in search route disable company, activites, parties icons
 
@@ -127,6 +134,10 @@ const GlobalLayout = (props) => {
         setIllustrationBarSize(barSize) 
     }, [ openChartBar, openAnalyticsBar ])
 
+    useEffect(() => {
+        setDriveTemplateBarSize( driveTemplateFrameMode === true ? 200 : 0)
+    }, [ driveTemplateFrameMode ])
+
 
     const handleCompanyBarOpen = (event) => {
         setToggleButtonType( !toggleButtonType )
@@ -175,6 +186,16 @@ const GlobalLayout = (props) => {
             setCustomerBarSize(0)
         } else {
             setCustomerBarSize(120)
+        }
+    }
+
+    const handleAssetFileBarOpen = (event) => {
+        setToggleAssetFileButtonType( !toggleAssetFileButtonType )
+        setAssetFilesBar( !assetFilesBar )
+        if(!assetFilesBar === false) {
+            setAssetFilesBarSize(0)
+        } else {
+            setAssetFilesBarSize(200)
         }
     }
 
@@ -353,8 +374,13 @@ const GlobalLayout = (props) => {
             bar: openCustomerBar,
             click: handleCustomersBarOpen,
             t: 5
+        },
+        {
+            tooltip: 'Documents',
+            bar: assetFilesBar,
+            click: handleAssetFileBarOpen,
+            t: 10
         }
-
     ]
 
     const bottomToolBar = [
@@ -452,7 +478,11 @@ const GlobalLayout = (props) => {
                 setChartBar,
                 openAnalyticsAndCharBar,
                 closeAnalyticsAndCharBar,
-                checkChartAnalytics
+                checkChartAnalytics,
+                assetFilesBarSize,
+                assetFilesBar,
+                driveTemplateBarSize,
+                driveTemplateFrameMode
             }) 
         }
         return child

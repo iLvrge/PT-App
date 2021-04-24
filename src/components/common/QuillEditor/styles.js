@@ -27,6 +27,7 @@ export default makeStyles(theme => ({
     }
   }, 
   active: {
+    border:'1px solid #e60000 !important',
     '& .MuiButton-label': {
       color: '#e60000'
     }    

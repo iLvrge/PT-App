@@ -13,7 +13,7 @@ import IllustrationCommentContainer from '../common/IllustrationCommentContainer
 import AssetDetailsContainer from '../common/AssetDetailsContainer'
 import MaintainenceAssetsList from '../common/MaintainenceAssetsList'
 import LayoutTemplates from '../common/LayoutTemplates'
-
+import FilesTemplates from '../common/FilesTemplates'
 import { resizePane, resizePane2 } from '../../utils/splitpane'
 import { updateResizerBar } from '../../utils/resizeBar'
 
@@ -108,7 +108,11 @@ const GlobalScreen = ({
     setChartBar,
     openAnalyticsAndCharBar,
     closeAnalyticsAndCharBar,
-    checkChartAnalytics
+    checkChartAnalytics,
+    assetFilesBarSize,
+    assetFilesBar,
+    driveTemplateBarSize,
+    driveTemplateFrameMode
 }) => {
     const classes = useStyles() 
     const dispatch = useDispatch()
@@ -118,11 +122,13 @@ const GlobalScreen = ({
     const otherPartyRef = useRef()
     const assignmentRef = useRef()
     const assetRef = useRef()
+    const assetFileRef = useRef()
+    const templateFileRef = useRef()
     const [ gap, setGap ] = useState( { x: '14.1rem', y: '7.5rem'} )
     const [ isDragging, setIsDragging] = useState(false)
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false)
 
-    const driveTemplateFrameMode = useSelector(state => state.ui.driveTemplateFrameMode)
+    
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const selectedMainCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
 
@@ -212,6 +218,13 @@ const GlobalScreen = ({
         updateResizerBar(mainContainerRef, openVisualizerBar)
     }, [ mainContainerRef, openVisualizerBar ])
 
+    useEffect(() => {
+        updateResizerBar(assetFileRef, assetFilesBar)
+    }, [ assetFileRef, assetFilesBar ])
+
+    useEffect(() => {
+        updateResizerBar(templateFileRef, driveTemplateFrameMode)
+    }, [ templateFileRef, driveTemplateFrameMode ])    
 
     const resetAll = (dispatch) => {
         dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
@@ -257,31 +270,20 @@ const GlobalScreen = ({
         >
             <div 
                 className={classes.companyBar}
-                id={`company_container`}
-                /* onMouseOver={(event) => handleCompanyButton(event, true)}
-                onMouseLeave={(event) => handleCompanyButton(event, false)} */
-            >
+                id={`company_container`} >
                 { 
                     openBar === true 
                     ? 
                         <>
                             <ArrowButton arrowId={`arrow_company`} handleClick={handleCompanyBarOpen} buttonType={toggleButtonType} buttonVisible={companyButtonVisible}/>
-                            {
-                                driveTemplateFrameMode === true
-                                ?
-                                <LayoutTemplates />
-                                :
-                                <MainCompaniesSelector 
-                                    selectAll={false} 
-                                    defaultSelect={''} 
-                                    addUrl={true} 
-                                    parentBarDrag={setVisualizerBarSize}
-                                    parentBar={setVisualizeOpenBar}                                
-                                />
-                            }
-                            
-                             
-                            
+                            <MainCompaniesSelector 
+                                selectAll={false} 
+                                defaultSelect={''} 
+                                addUrl={true} 
+                                parentBarDrag={setVisualizerBarSize}
+                                parentBar={setVisualizeOpenBar}                                
+                            /> 
+
                         </>
                     : 
                     ''
@@ -294,10 +296,7 @@ const GlobalScreen = ({
                 onDragFinished={(size) => resizePane('split9', size > 900 ? 900 : size, setTypeBarSize)}
                 ref={assignmentTypeRef}
             >
-                <div id={`activity_container`} style={{ height: '100%'}}
-                    /* onMouseOver={(event) => handleTypeButton(event, true)}
-                    onMouseLeave={(event) => handleTypeButton(event, false)} */
-                >
+                <div id={`activity_container`} style={{ height: '100%'}}>
                     { 
                         openTypeBar === true 
                         ? 
@@ -321,10 +320,7 @@ const GlobalScreen = ({
                     onDragFinished={(size) => resizePane('split7', size > 900 ? 900 : size, setOtherPartyBarSize)}
                     ref={otherPartyRef}
                 >
-                    <div id={`parties_container`}  style={{ height: '100%'}}
-                        /* onMouseOver={(event) => handleOtherPartyButton(event, true)}
-                        onMouseLeave={(event) => handleOtherPartyButton(event, false)} */
-                    >
+                    <div id={`parties_container`}  style={{ height: '100%'}}>
                         { 
                             openOtherPartyBar === true 
                             ? 
@@ -348,10 +344,7 @@ const GlobalScreen = ({
                         onDragFinished={(size) => resizePane('split8', size > 900 ? 900 : size, setAssignmentBarSize)}
                         ref={assignmentRef}
                     >
-                        <div id={`transaction_container`} style={{ height: '100%'}}
-                            /* onMouseOver={(event) => handleAssignmentButton(event, true)}
-                            onMouseLeave={(event) => handleAssignmentButton(event, false)} */
-                        >
+                        <div id={`transaction_container`} style={{ height: '100%'}}>
                             { 
                                 openAssignmentBar === true 
                                 ? 
@@ -370,10 +363,7 @@ const GlobalScreen = ({
                             onDragFinished={(size) => resizePane('split2', size > 900 ? 900 : size, setCustomerBarSize)}
                             ref={assetRef}
                         >
-                            <div id={`assets_container`} style={{ height: '100%'}}
-                                /* onMouseOver={(event) => handleCustomerButton(event, true)}
-                                onMouseLeave={(event) => handleCustomerButton(event, false)} */
-                            >
+                            <div id={`assets_container`} style={{ height: '100%'}}>
                                 { 
                                     openCustomerBar === true 
                                     ? 
@@ -423,71 +413,103 @@ const GlobalScreen = ({
                                 }
                             </div>
                             <SplitPane
-                                className={`${classes.splitPane} ${classes.splitPane2}  ${classes.splitPane3} ${classes.splitPane2OverflowUnset}`}
+                                className={classes.splitPane}
                                 split="vertical"
-                                minSize={10}
-                                size={visualizerBarSize}
-                                onDragStarted={() => {
-                                    setIsDragging(!isDragging)
-                                }}
-                                onDragFinished={(size) => {
-                                    resizePane('split4', size, setVisualizerBarSize)
-                                    setIsDragging(!isDragging)
-                                }}
-                                ref={mainContainerRef}
-                                primary={'second'}
-                                maxSize={-250}
+                                size={assetFilesBarSize}
+                                ref={assetFileRef}
                             >
-                                <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
-                                    <IllustrationCommentContainer 
-                                        cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPane1OverflowUnset, classes.paneHeightZero, { [classes.minimized]: assetsCommentsTimelineMinimized })}
-                                        split={`horizontal`}
-                                        minSize={50}
-                                        defaultSize={commentBarSize}
-                                        fn={resizePane}
-                                        fnParams={setCommentBarSize}
-                                        commentBar={openCommentBar}
-                                        illustrationBar={openIllustrationBar}
-                                        fnVarName={`split5`}
-                                        fn2={resizePane2}
-                                        fn2Params={setSize}
-                                        primary={'second'}
-                                        illustrationRecord={setIllustrationRecord}
-                                        channel_id={channel_id}
-                                        setChannel={setChannelID}
-                                        size={size}
-                                        gap={gap}
-                                        templateButton={false}
-                                        maintainenceButton={false}
-                                        chartsBar={openChartBar}
-                                        chartsBarToggle={handleChartBarOpen}
-                                        checkChartAnalytics={checkChartAnalytics}
-                                        type={type}
-                                    />
-                                </div>
-                                <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
+                                <div id={`assets_files_container`} style={{ height: '100%'}}>
                                     {
-                                        <AssetDetailsContainer 
-                                            cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPaneMainOverflowUnset, { [classes.minimized]: assetsCommentsTimelineMinimized })}
-                                            split={`horizontal`}
-                                            minSize={10}
-                                            defaultSize={illustrationBarSize}
-                                            fn={resizePane}
-                                            fnParams={setIllustrationBarSize}
-                                            fnVarName={`split6`}
-                                            dragStart={setIsDrag}
-                                            dragFinished={setIsDrag}
-                                            bar={openVisualizerBar}
-                                            parentBarDrag={setVisualizerBarSize}
-                                            parentBar={setVisualizeOpenBar}
-                                            primary={'second'}
-                                            illustrationData={illustrationRecord}
-                                            chartBar={openChartBar}
-                                            analyticsBar={openAnalyticsBar}
-                                            type={type}
-                                        />
+                                        assetFilesBar === true
+                                        ?
+                                            <FilesTemplates />
+                                        :
+                                        ''
                                     }
-                                </div>
+                                </div> 
+                                <SplitPane
+                                    className={classes.splitPane}
+                                    split="vertical"
+                                    size={driveTemplateBarSize}
+                                    ref={templateFileRef}
+                                >
+                                    <div id={`layout_templates_container`} style={{ height: '100%'}}>
+                                        {
+                                            driveTemplateFrameMode === true
+                                            ?
+                                                <LayoutTemplates />
+                                            :
+                                            ''
+                                        }
+                                    </div>
+                                    <SplitPane
+                                        className={`${classes.splitPane} ${classes.splitPane2}  ${classes.splitPane3} ${classes.splitPane2OverflowUnset}`}
+                                        split="vertical"
+                                        minSize={10}
+                                        size={visualizerBarSize}
+                                        onDragStarted={() => {
+                                            setIsDragging(!isDragging)
+                                        }}
+                                        onDragFinished={(size) => {
+                                            resizePane('split4', size, setVisualizerBarSize)
+                                            setIsDragging(!isDragging)
+                                        }}
+                                        ref={mainContainerRef}
+                                        primary={'second'}
+                                        maxSize={-250} 
+                                    >
+                                        <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
+                                            <IllustrationCommentContainer 
+                                                cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPane1OverflowUnset, classes.paneHeightZero, { [classes.minimized]: assetsCommentsTimelineMinimized })}
+                                                split={`horizontal`}
+                                                minSize={50}
+                                                defaultSize={commentBarSize}
+                                                fn={resizePane}
+                                                fnParams={setCommentBarSize}
+                                                commentBar={openCommentBar}
+                                                illustrationBar={openIllustrationBar}
+                                                fnVarName={`split5`}
+                                                fn2={resizePane2}
+                                                fn2Params={setSize}
+                                                primary={'second'}
+                                                illustrationRecord={setIllustrationRecord}
+                                                channel_id={channel_id}
+                                                setChannel={setChannelID}
+                                                size={size}
+                                                gap={gap}
+                                                templateButton={false}
+                                                maintainenceButton={false}
+                                                chartsBar={openChartBar}
+                                                chartsBarToggle={handleChartBarOpen}
+                                                checkChartAnalytics={checkChartAnalytics}
+                                                type={type}
+                                            />
+                                        </div>
+                                        <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
+                                            {
+                                                <AssetDetailsContainer 
+                                                    cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPaneMainOverflowUnset, { [classes.minimized]: assetsCommentsTimelineMinimized })}
+                                                    split={`horizontal`}
+                                                    minSize={10}
+                                                    defaultSize={illustrationBarSize}
+                                                    fn={resizePane}
+                                                    fnParams={setIllustrationBarSize}
+                                                    fnVarName={`split6`}
+                                                    dragStart={setIsDrag}
+                                                    dragFinished={setIsDrag}
+                                                    bar={openVisualizerBar}
+                                                    parentBarDrag={setVisualizerBarSize}
+                                                    parentBar={setVisualizeOpenBar}
+                                                    primary={'second'}
+                                                    illustrationData={illustrationRecord}
+                                                    chartBar={openChartBar}
+                                                    analyticsBar={openAnalyticsBar}
+                                                    type={type}
+                                                />
+                                            }
+                                        </div>
+                                    </SplitPane>
+                                </SplitPane>
                             </SplitPane>
                         </SplitPane>
                     </SplitPane>

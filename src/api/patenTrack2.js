@@ -473,7 +473,7 @@ class PatenTrackApi {
   }  
 
   static updateSlackTeam( team ) {
-    return axios.put(`${base_new_api_url}/slacks/team/${team}`, getHeader())
+    return axios.put(`${base_new_api_url}/slacks/team/${team}`, getFormUrlHeader())
   }
 
   static getChannels( ) {
@@ -498,6 +498,10 @@ class PatenTrackApi {
 
   static getChannelID( asset ) {
     return axios.get(`${base_new_api_url}/slacks/asset/${asset}`, getHeader())
+  }
+
+  static getChannelFiles( channelID, code ) {
+    return axios.get(`${base_new_api_url}/slacks/channel/${channelID}/files/${code}`, getHeader())
   }
 
   static getGoogleAuthToken( code ) {

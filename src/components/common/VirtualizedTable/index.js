@@ -7,9 +7,10 @@ import React, {
 } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
-import TableCell from "@material-ui/core/TableCell";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import { TableCell, Avatar } from '@material-ui/core'
 import {
   ArrowKeyStepper,
   AutoSizer,
@@ -132,7 +133,9 @@ const VirtualizedTable = ({
         validationKey,
         optionalKey,
         paddingLeft,
-        textBold
+        textBold,
+        imageURL,
+        imageIcon
       } = columns[columnIndex];
       cellData =
         validation === true
@@ -185,7 +188,15 @@ const VirtualizedTable = ({
             ) : (
               <ExpandMoreIcon className={"arrow"} />
             )
-          ) : format != undefined ? formatCondition != undefined && rowData[formatCondition] != formatDefaultValue ? staticIcon + secondaryFormat(cellData) : (
+          ) : role === 'image'  ? 
+              rowData[imageURL] ? 
+              <span>
+                <Avatar src={rowData[imageURL]} className={classes.small}/><span className={classes.marginLeft}>{cellData}</span>
+              </span> 
+              :  imageIcon != '' && imageIcon != undefined ? <span><FontAwesomeIcon icon={imageIcon}/><span className={classes.marginLeft}>{cellData}</span></span> : (
+                cellData
+              )
+            : format != undefined ? formatCondition != undefined && rowData[formatCondition] != formatDefaultValue ? staticIcon + secondaryFormat(cellData) : (
             staticIcon + format(cellData)
           ) : (
             cellData

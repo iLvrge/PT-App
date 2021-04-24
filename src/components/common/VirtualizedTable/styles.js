@@ -53,6 +53,9 @@ const styles = makeStyles((theme) => ({
   },
   textBold: {
     fontWeight: 900
+  },
+  marginLeft:{
+    marginLeft: 5
   }
 }))
 

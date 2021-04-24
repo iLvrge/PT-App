@@ -51,6 +51,8 @@ import { setTokenStorage, getTokenStorage, removeTokenStorage } from '../../../u
 
 import { html } from '../../../utils/html_encode_decode'
 
+import { capitalizeEachWord } from '../../../utils/numbers'
+
 const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -106,10 +108,6 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
     setCommentsData(slack_messages)
     updateHeight(size, timelineRef)
   }, [ slack_messages, size, timelineRef ])
-
-  useEffect(() => {
-    console.log( "google_profile", google_profile )
-  }, [ google_profile ])
 
   useEffect(() => {
     if(slack_auth_token && slack_auth_token != null ) {
@@ -184,6 +182,14 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
     return controlList.filter(item => item.category == selectedCategory)
   }, [selectedCategory, controlList])
 
+  const openGoogleWindow = useCallback(() => {
+    if(googleLoginRef.current != null) {
+      googleLoginRef.current.querySelector('button').click()
+    } 
+    setGoogleAuthLogin( true )
+    setDisplayButton( true )
+  }, [googleLoginRef])
+  
   const getDriveDocumentList = (flag) => {
     if( flag === true ) {      
       const googleToken = getTokenStorage( 'google_auth_token_info' )
@@ -488,6 +494,7 @@ const handleDriveModalClose = (event) => {
             onChange={setCommentHtml}
             onSubmit={handleSubmitComment}
             onCancel={handleCancelComment}
+            openGoogleWindow={openGoogleWindow}
             onDrive={getDriveDocumentList}
             onAttachmentFile={onHandleFileExplorer}
             onAttachmentDriveFile={onHandleDriveExplorer}
@@ -503,11 +510,11 @@ const handleDriveModalClose = (event) => {
     )
   }, [ selectedCommentsEntity, commentHtml, handleSubmitComment, handleCancelComment, classes ])
 
-  const ShowUser = ({users, item}) => {
+  const ShowUser = ({users, item}) => {    
     if(users.length === 0) return item
-    const checkUser = users.findIndex( user => user.id === item)
-    if(checkUser >= 0) {
-      return users[checkUser].profile.display_name
+    const checkUser = users.findIndex( user => user.id == item)
+    if(checkUser !== -1) {
+      return `${users[checkUser].profile.display_name ? users[checkUser].profile.display_name : users[checkUser].real_name}${users[checkUser].profile.title ? ', '+ capitalizeEachWord(users[checkUser].profile.title) : ''}`
     } else {
       return item
     }
@@ -561,6 +568,36 @@ const handleDriveModalClose = (event) => {
     )
   }
 
+  const TimelineItem = ({users, comment}) => {
+    
+    if(comment.hasOwnProperty('subtype')) return null
+    return (
+      <TimelineEvent
+        key={`comment-${comment.ts}`}
+        contentStyle={{ background: '#303030' }}
+        bubbleStyle={{ 
+          background: 'rgb(48 48 48)', 
+          border: '2px solid #303030',
+        }}
+        cardHeaderStyle={{ color: 'white' }}
+        title={<ShowUser users={users} item={comment.user} />}
+        subtitle={Moment(new Date(comment.ts * 1000)).format('l HH:mm')}
+        subtitleStyle={{ color: 'white' }}
+        icon={<ShowUserAvtar users={users} item={comment.user} />}
+      >
+        <div 
+          dangerouslySetInnerHTML={{ __html: comment.text }} />
+        <ShowFiles 
+          files={comment} 
+          indexing={`file-comment-${comment.ts}`} />
+        {/* <ShowButtons 
+          item={comment.user} 
+          comment={comment} 
+          indexing={`button-comment-${comment.ts}`} /> */}
+      </TimelineEvent>
+    )
+  }
+
   const renderCommentsTimeline = useMemo(() => {
     return (
       <div className={classes.commentTimelineSection} ref={timelineRef}>   
@@ -574,29 +611,7 @@ const handleDriveModalClose = (event) => {
               lineColor={'rgb(191 191 191)'}>
               {
                 commentsData.messages.map( comment => (
-                  <TimelineEvent
-                    key={`comment-${comment.ts}`}
-                    contentStyle={{ background: '#303030' }}
-                    bubbleStyle={{ 
-                      background: 'rgb(48 48 48)', 
-                      border: '2px solid #303030',
-                    }}
-                    cardHeaderStyle={{ color: 'white' }}
-                    title={Moment(new Date(comment.ts * 1000)).format('l HH:mm')}
-                    subtitle={<ShowUser users={commentsData.users} item={comment.user} />}
-                    subtitleStyle={{ color: 'white' }}
-                    icon={<ShowUserAvtar users={commentsData.users} item={comment.user} />}
-                  >
-                    <div 
-                      dangerouslySetInnerHTML={{ __html: comment.text }} />
-                    <ShowFiles 
-                      files={comment} 
-                      indexing={`file-comment-${comment.ts}`} />
-                    {/* <ShowButtons 
-                      item={comment.user} 
-                      comment={comment} 
-                      indexing={`button-comment-${comment.ts}`} /> */}
-                  </TimelineEvent>
+                  <TimelineItem users={commentsData.users} comment={comment}/>                  
                 ))
               }            
             </Timeline>

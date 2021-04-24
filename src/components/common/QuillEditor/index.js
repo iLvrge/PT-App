@@ -22,6 +22,7 @@ const QuillEditor = ({
   onSubmit = (value) => {},
   onCancel = () => {},
   onDrive = () => {},
+  openGoogleWindow = () => {},
   onAttachmentDriveFile = () => {},
   onAttachmentFile = () => {},
   onFocus = () => {},
@@ -36,8 +37,10 @@ const QuillEditor = ({
   const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
   const maintainence_fee_file_name = useSelector(state => state.patenTrack2.maintainence_fee_file_name)
   const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
+  const google_profile = useSelector(state => state.patenTrack2.google_profile)
   const slack_users = useSelector(state => state.patenTrack2.slack_users)
   const driveButtonActive = useSelector(state => state.ui.driveButtonActive)
+  const maintainenceFrameMode = useSelector(state => state.ui.maintainenceFrameMode)
   const [ userListMenu, setUserListMenu ] = useState( null )
   const [ loadingUSPTO, setLoadingUSPTO ] = useState(false)
   
@@ -79,43 +82,60 @@ const QuillEditor = ({
       if(getGoogleToken && getGoogleToken != '') {
         const tokenJSON = JSON.parse( getGoogleToken )
         if( tokenJSON && tokenJSON.access_token != '' && tokenJSON.access_token != undefined) {
-          const formData = new FormData()
-          formData.append('file_name',  maintainence_fee_file_name )
-          formData.append('file_data',  JSON.stringify(selectedMaintainencePatents))
-          formData.append('access_token',  tokenJSON.access_token)
-    
-          const { data } = await PatenTrackApi.createMaintainenceFeeFile( formData )
-          console.log("data", data)
-          if( data != null && data != undefined && data.webViewLink != '') {
-            /**
-             * Open USPTO Maintainence Fee window
-             */
-            openUSPTOWindow(1200, 700)
+          let profileInfo = google_profile;
+          if(profileInfo == null) {
+            const getGoogleProfile = getTokenStorage('google_profile_info')
+            if( getGoogleProfile != '') {
+              profileInfo = JSON.parse(getGoogleProfile)
+            }
           }
+          if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
+            const formData = new FormData()
+            formData.append('file_name',  maintainence_fee_file_name )
+            formData.append('file_data',  JSON.stringify(selectedMaintainencePatents))
+            formData.append('access_token',  tokenJSON.access_token)
+            formData.append('user_account',  profileInfo.email)
+      
+            const { data } = await PatenTrackApi.createMaintainenceFeeFile( formData )
+            console.log("data", data)
+            if( data != null && data != undefined && data.webViewLink != '') {
+              /**
+               * Open USPTO Maintainence Fee window
+               */
+              openUSPTOWindow(1200, 700)
+            }
+          } else {
+            alert("Please first login with google account")
+          }          
         } else {
           alert("Please first login with google account")
         }
       } else {
         alert("Please first login with google account")
+        console.log("Google login popup")
+        openGoogleWindow()
       }
     } else {
       alert("Please first select the assets")
     }
-  }, [ selectedMaintainencePatents, maintainence_fee_file_name  ])
+  }, [ selectedMaintainencePatents, maintainence_fee_file_name, google_profile  ])
 
 
   const onHandleReviewMaintainenceFee = useCallback(() => { 
-    console.log("selectedMaintainencePatents", selectedMaintainencePatents)     
-    if(selectedMaintainencePatents.length > 0) {
-      dispatch(setMaintainenceFeeFrameMode( true ))
+    if( maintainenceFrameMode === false) {
+      if(selectedMaintainencePatents.length > 0) {
+        dispatch(setMaintainenceFeeFrameMode( true ))
+      } else {
+        alert("Please select assets from the maintainence list")
+      }
     } else {
-      alert("Please select assets from the maintainence list")
-    }
-  }, [ dispatch, selectedMaintainencePatents ])  
+      dispatch(setMaintainenceFeeFrameMode( false ))
+    }    
+  }, [ dispatch, selectedMaintainencePatents, maintainenceFrameMode ])  
 
   const onHandleSubmitToUSPTO =  useCallback( async () => {      
     if(assetTypeAssignmentAssetsSelected.length == 0) {
-      alert('Please first select assets from list')
+      alert('Please first select assets from list') 
     } else {
       /**
        * Send request to server to create XML file 
@@ -220,6 +240,7 @@ const QuillEditor = ({
           loadingUSPTO={loadingUSPTO}
           category={category}
           driveBtnActive={driveButtonActive}
+          maintainenceMode={maintainenceFrameMode}
         />
         {GetMenuComponent}
       </div>
