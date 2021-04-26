@@ -18,9 +18,8 @@ import {
     setAssetTypeCustomerSelectedRow,
     setAssetTypeChildCustomerSelectedRow,
     setChildSelectedAssetsPatents,
-    setChildSelectedAssetsTransactions,
-    getChannels
-} from '../../../actions/patentTrackActions2' 
+    setChildSelectedAssetsTransactions
+} from '../../../actions/patentTrackActions2'
 
 import {
     setConnectionBoxView, 
@@ -83,7 +82,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     useEffect(() => {
         const initCompanies = async () => {
             dispatch(fetchParentCompanies( offset ) )
-            dispatch(getChannels())
         } 
         initCompanies()
     }, []) 

@@ -511,13 +511,30 @@ const handleDriveModalClose = (event) => {
   }, [ selectedCommentsEntity, commentHtml, handleSubmitComment, handleCancelComment, classes ])
 
   const ShowUser = ({users, item}) => {    
-    if(users.length === 0) return item
-    const checkUser = users.findIndex( user => user.id == item)
-    if(checkUser !== -1) {
-      return `${users[checkUser].profile.display_name ? users[checkUser].profile.display_name : users[checkUser].real_name}${users[checkUser].profile.title ? ', '+ capitalizeEachWord(users[checkUser].profile.title) : ''}`
-    } else {
-      return item
-    }
+    if(users.length === 0) return item.user
+    const checkUser = users.findIndex( user => user.id == item.user)
+    return (
+      <span>
+        {
+          checkUser !== -1
+          ?
+            users[checkUser].profile.display_name 
+            ? users[checkUser].profile.display_name 
+            : users[checkUser].real_name
+          :
+          item.user
+        }
+        {
+          checkUser !== -1 
+          ? users[checkUser].profile.title 
+            ? 
+            ', '+ capitalizeEachWord(users[checkUser].profile.title) 
+            : ''
+          : ''
+        }
+        <span className={classes.message_time}>{Moment(new Date(item.ts * 1000)).format('l HH:mm')}</span>
+      </span>
+    )
   }
 
 
@@ -580,9 +597,7 @@ const handleDriveModalClose = (event) => {
           border: '2px solid #303030',
         }}
         cardHeaderStyle={{ color: 'white' }}
-        title={<ShowUser users={users} item={comment.user} />}
-        subtitle={Moment(new Date(comment.ts * 1000)).format('l HH:mm')}
-        subtitleStyle={{ color: 'white' }}
+        title={<ShowUser users={users} item={comment} />}
         icon={<ShowUserAvtar users={users} item={comment.user} />}
       >
         <div 

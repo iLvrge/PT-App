@@ -52,7 +52,8 @@ const styles = makeStyles((theme) => ({
     color: 'rgba(255, 255, 255, 0.3)'
   },
   textBold: {
-    fontWeight: 900
+    /*fontWeight: 900*/
+    textDecoration: 'underline'
   },
   marginLeft:{
     marginLeft: 5

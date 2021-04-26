@@ -417,6 +417,7 @@ export const fetchParentCompanies = ( offset = 0 ) => {
   return async dispatch => {
     dispatch(setMainCompaniesLoadingMore(true))
     const { data } = await PatenTrackApi.getParentCompanies(offset)
+    dispatch(getChannels())
     dispatch(setMainCompaniesLoadingMore(false))
     dispatch(setMainCompanies(data, { append: true }))
   }
@@ -643,8 +644,10 @@ export const getSlackMessages = ( channelID ) => {
 }
 
 export const getChannels = () => {
+  console.log("GETCHANNELS")
   return async dispatch => {
     const { data } = await PatenTrackApi.getChannels()
+
     dispatch(setChannelsList(data))
   }
 }

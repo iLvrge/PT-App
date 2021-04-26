@@ -477,7 +477,7 @@ class PatenTrackApi {
   }
 
   static getChannels( ) {
-    return axios.get(`${base_new_api_url}/slacks/channels`, getHeader())
+    return axios.get(`${base_new_api_url}/slacks/channels`, getHeader()) 
   }
 
   static sendMessage( code, data ) {

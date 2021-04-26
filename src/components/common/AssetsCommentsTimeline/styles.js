@@ -205,5 +205,9 @@ export default makeStyles(theme => ({
     '&:focus':{
       outline: 'none'
     }
+  },
+  message_time: {
+    fontSize: '0.65rem',
+    marginLeft: 5
   } 
 }))

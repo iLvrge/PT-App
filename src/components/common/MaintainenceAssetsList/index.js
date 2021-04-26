@@ -37,7 +37,7 @@ import {
   toggleLifeSpanMode,
 } from "../../../actions/uiActions";
 
-import { numberWithCommas } from "../../../utils/numbers";
+import { numberWithCommas, applicationFormat } from "../../../utils/numbers";
 
 import { getTokenStorage } from "../../../utils/tokenStorage";
 
@@ -55,14 +55,19 @@ const COLUMNS = [
     width: 80,
     minWidth: 80,
     label: "Assets",
-    dataKey: "grant_doc_num",
-    staticIcon: "",
+    dataKey: "asset",
+    staticIcon: "US",
     format: numberWithCommas,
+    formatCondition: 'asset_type',
+    formatDefaultValue: 0,
+    secondaryFormat: applicationFormat,
+    align: "left",
     badge: true,
+    textBold: true
   },
   {
-    width: 100,
-    minWidth: 100,
+    width: 90,
+    minWidth: 90,
     label: "Payment Due",
     dataKey: "payment_due",
   },
@@ -139,7 +144,7 @@ const MaintainenceAssetsList = ({
   const selectedAssetsPatents = useSelector(
     state => state.patenTrack2.selectedAssetsPatents,
   );
-
+  const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list) 
   const handleOnClick = useCallback(
     ({ patent, application }) => {
       /*TV, Comment, Family, FamilyItem, getChannelID Legal Events */
@@ -290,7 +295,7 @@ const MaintainenceAssetsList = ({
         classes={classes}
         selected={selectItems}
         rowSelected={selectedRow}
-        selectedKey={"appno_doc_num"}
+        selectedKey={"asset"}
         rows={assets.list}
         rowHeight={rowHeight}
         headerHeight={rowHeight}
@@ -299,8 +304,9 @@ const MaintainenceAssetsList = ({
         onSelectAll={handleSelectAll}
         defaultSelectAll={selectedAll}
         totalRows={assets.total_records}
-        defaultSortField={`appno_doc_num`}
+        defaultSortField={`asset`}
         defaultSortDirection={`desc`}
+        columnTextBoldList={slack_channel_list}
         responsive={false}
         width={width}
         containerStyle={{

@@ -121,6 +121,7 @@ const VirtualizedTable = ({
 
   const cellRenderer = useCallback(
     ({ cellData, columnIndex, rowData }) => {
+      
       const {
         align,
         role,
