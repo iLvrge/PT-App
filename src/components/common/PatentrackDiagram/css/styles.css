@@ -191,6 +191,9 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
     list-style-type: none;  
     text-indent: -2.4rem;
 }
+.wrapText tspan:nth-child(3){ 
+    display: none;
+}
 /*
 #toobarUIGap0 { grid-area: 1 / 1 / 2 / 2; text-align: center; justify-content: center; align-items: center; }
 #expandOnOff { grid-area: 1 / 2 / 2 / 3; text-align: center; justify-content: center; align-items: center; }

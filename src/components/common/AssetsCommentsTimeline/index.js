@@ -628,8 +628,8 @@ const handleDriveModalClose = (event) => {
               className={classes.timeline} 
               lineColor={'rgb(191 191 191)'}>
               {
-                commentsData.messages.map( comment => (
-                  <TimelineItem users={commentsData.users} comment={comment}/>                  
+                commentsData.messages.map( (comment, index) => (
+                  <TimelineItem key={index} users={commentsData.users} comment={comment}/>                  
                 ))
               }            
             </Timeline>

@@ -22,23 +22,25 @@ function wrapText(str, width, lines, node) {
         .attr("x", 0)
         .attr("y", y)
         .attr("dy", text.attr("dy"));
-
+    console.log("WrapText", words)
     while ((word = words.pop())) {
       line.push(word);
       tspan.text(line.join(" "));
-
+      console.log("tspan", line, word)
       if (tspan.node().getComputedTextLength() > width) {
+        
         line.pop();
         tspan.text(line.join(" "));
         line = [word];
-        if (lineCount < lines - 1) {
-          tspan = text
+        tspan = text
             .append("tspan")
             .attr("x", str.attr("dx"))
             .attr("y", y)
             .attr("dy", lineHeight + 1)
             .text(word);
-        }
+        /* if (lineCount < lines - 1) { 
+          
+        } */
 
         lineCount++;
       }
@@ -122,6 +124,8 @@ export default function PatentNode(props) {
       .attr("font-weight", node.fontWeight)
       .attr("fill", node.fontColor)
       .attr("text-rendering", "geometricPrecision")
+      .attr('class', 'wrapText')
+      .attr('title', data.name)
       .text(data.name)
       .call(
         wrapText,
