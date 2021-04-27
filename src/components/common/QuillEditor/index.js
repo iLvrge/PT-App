@@ -90,20 +90,23 @@ const QuillEditor = ({
             }
           }
           if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
-            const formData = new FormData()
-            formData.append('file_name',  maintainence_fee_file_name )
-            formData.append('file_data',  JSON.stringify(selectedMaintainencePatents))
-            formData.append('access_token',  tokenJSON.access_token)
-            formData.append('user_account',  profileInfo.email)
-      
-            const { data } = await PatenTrackApi.createMaintainenceFeeFile( formData )
-            console.log("data", data)
-            if( data != null && data != undefined && data.webViewLink != '') {
-              /**
-               * Open USPTO Maintainence Fee window
-               */
-              openUSPTOWindow(1200, 700)
-            }
+            const promptBox = window.confirm('Create a csv payment file to be loaded to USPTO.')
+            if( promptBox ) {
+              const formData = new FormData()
+              formData.append('file_name',  maintainence_fee_file_name )
+              formData.append('file_data',  JSON.stringify(selectedMaintainencePatents))
+              formData.append('access_token',  tokenJSON.access_token)
+              formData.append('user_account',  profileInfo.email)
+        
+              const { data } = await PatenTrackApi.createMaintainenceFeeFile( formData )
+              console.log("data", data)
+              if( data != null && data != undefined && data.webViewLink != '') {
+                /**
+                 * Open USPTO Maintainence Fee window
+                 */
+                openUSPTOWindow(1200, 700)
+              }
+            }            
           } else {
             alert("Please first login with google account")
           }          

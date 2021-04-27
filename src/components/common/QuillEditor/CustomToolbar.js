@@ -105,7 +105,7 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
       </Tooltip>
 
       <Tooltip title="Google Drive file" arrow classes={classesTooltip}>
-        <button className={'ql-attachButton'} onClick={onAttachmentDriveFile}>
+        <button className={'ql-attachButton ql-attachDriveButton'} onClick={onAttachmentDriveFile}>
           <svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google-drive" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="svg-inline--fa fa-google-drive fa-w-16 fa-2x"><path fill="currentColor" d="M339 314.9L175.4 32h161.2l163.6 282.9H339zm-137.5 23.6L120.9 480h310.5L512 338.5H201.5zM154.1 67.4L0 338.5 80.6 480 237 208.8 154.1 67.4z" ></path></svg>
         </button>
       </Tooltip>

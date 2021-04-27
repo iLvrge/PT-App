@@ -50,7 +50,7 @@ function CommentBox(props) {
 
   const ShowText = ({ classes, data }) => {
     return (
-      <Typography variant="body2">      
+      <Typography variant="body2" className={classes}>      
         {data}
       </Typography>
     )
@@ -62,7 +62,7 @@ function CommentBox(props) {
     })
     const index = assetData.popup && assetData.popup.findIndex(x => x.id === props.popup.id)
     return(
-      <div key={props.keyIndex}>
+      <div key={props.keyIndex} className={classes.rootContainer}>
       {
         info && info != null && info.length > 0 && Object.keys(info[0]).length > 0 
         ?
@@ -70,49 +70,49 @@ function CommentBox(props) {
           <Table className={classes.table}>
             <TableBody>
               <TableRow>
-                <TableCell><ShowText classes={classes} data={info[0].conveyanceText}/></TableCell>
+                <TableCell><ShowText data={info[0].conveyanceText}/></TableCell>
               </TableRow>
               </TableBody>
           </Table>  
           <Table className={classes.table}>
             <TableBody>
               <TableRow>
-                <TableCell>
-                  <ShowText classes={classes} data={`Execution Date`}/>
-                  <ShowText classes={classes} data={info[0].patAssignorEarliestExDate}/>
+                <TableCell className={classes.fixedWidth}>
+                  <ShowText classes={classes.red} data={`Execution Date`}/>
+                  <ShowText data={info[0].patAssignorEarliestExDate}/>
                 </TableCell>
                 <TableCell>
-                  <ShowText classes={classes} data={`Reel/frame`}/>
-                  <ShowText classes={classes} data={info[0].displayId}/>
+                  <ShowText data={`Reel/frame`}/>
+                  <ShowText data={info[0].displayId}/>
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>
-                  <ShowText classes={classes} data={`Assignors`}/>
+                  <ShowText classes={classes.red} data={`Assignors`}/>
                   {
                     info[0].patAssignorName.map( (assignor, index) =>(
-                      <ShowText key={`assignor-${index}`} classes={classes} data={assignor}/>
+                      <ShowText key={`assignor-${index}`} data={assignor}/>
                     ))
                   }
                 </TableCell>
                 <TableCell>
-                  <ShowText classes={classes} data={`Assignee`}/>
+                  <ShowText classes={classes.red} data={`Assignee`}/>
                   {
                     info[0].patAssigneeName.map( (assignor, index) =>(
-                      <ShowText key={`assignee-${index}`} classes={classes} data={assignor}/>
+                      <ShowText key={`assignee-${index}`} data={assignor}/>
                     ))
                   }
-                  <ShowText classes={classes} data={info[0].patAssigneeAddress1[index]}/>
-                  <ShowText classes={classes} data={info[0].patAssigneeCity[index]}/>
-                  <ShowText classes={classes} data={info[0].patAssigneeState[index]}/>
-                  <ShowText classes={classes} data={info[0].patAssigneePostcode[index]}/>
+                  <ShowText data={info[0].patAssigneeAddress1[index]}/>
+                  <ShowText data={info[0].patAssigneeCity[index]}/>
+                  <ShowText data={info[0].patAssigneeState[index]}/>
+                  <ShowText data={info[0].patAssigneePostcode[index]}/>
                 </TableCell>
                 <TableCell>
-                  <ShowText classes={classes} data={`Correspondent`}/>
-                  <ShowText classes={classes} data={info[0].corrName}/>
-                  <ShowText classes={classes} data={info[0].corrAddress1}/>
-                  <ShowText classes={classes} data={info[0].corrAddress2}/>
-                  <ShowText classes={classes} data={info[0].corrAddress3}/>
+                  <ShowText classes={classes.red} data={`Correspondent`}/>
+                  <ShowText data={info[0].corrName}/>
+                  <ShowText data={info[0].corrAddress1}/>
+                  <ShowText data={info[0].corrAddress2}/>
+                  <ShowText data={info[0].corrAddress3}/>
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -122,7 +122,7 @@ function CommentBox(props) {
               <TableRow>
                 <TableCell>
                   <Typography variant="body2"> 
-                    <IconButton onClick={() => setVisibility(!visibility)}>{visibility === false ? <Add /> : <Remove />}</IconButton>  Properties ({info[0].inventionTitle.length})
+                    <IconButton onClick={() => setVisibility(!visibility)}>{visibility === false ? <Add /> : <Remove />}</IconButton>  <span className={classes.red}>Properties ({info[0].inventionTitle.length})</span>
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -133,7 +133,7 @@ function CommentBox(props) {
               <TableRow>
                 {
                   ['Patent', 'Publication', 'Application', 'PCT International registration'].map((col, index) => (
-                    <TableCell key={index}><ShowText classes={classes} data={col}/></TableCell>
+                    <TableCell key={index}><ShowText data={col}/></TableCell>
                   ))
                 }
               </TableRow>
@@ -144,10 +144,10 @@ function CommentBox(props) {
                   return (
                     <>
                       <TableRow key={`invention-${index+2}`}>
-                        <TableCell><ShowText classes={classes} data={info[0].patNum[index]}/></TableCell>
-                        <TableCell><ShowText classes={classes} data={info[0].publNum[index]}/></TableCell>
-                        <TableCell><ShowText classes={classes} data={info[0].applNum[index]}/></TableCell>
-                        <TableCell><ShowText classes={classes} data={info[0].pctNum[index]}/></TableCell>
+                        <TableCell><ShowText data={info[0].patNum[index]}/></TableCell>
+                        <TableCell><ShowText data={info[0].publNum[index]}/></TableCell>
+                        <TableCell><ShowText data={info[0].applNum[index]}/></TableCell>
+                        <TableCell><ShowText data={info[0].pctNum[index]}/></TableCell>
                       </TableRow>
                     </>
                   )

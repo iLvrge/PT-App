@@ -3,7 +3,10 @@ import { makeStyles } from '@material-ui/core'
 export default makeStyles(theme => ({
   textEditor: {
     color: '#000',
-    margin: 0
+    margin: 0,
+    '& .ql-attachDriveButton':{
+      marginRight: 3
+    }
   },
   buttonGroup: {
     width: '100%',

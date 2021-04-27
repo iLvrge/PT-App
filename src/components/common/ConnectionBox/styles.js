@@ -43,4 +43,15 @@ export default makeStyles(theme => ({
     fontSize: '20px',
     cursor: 'pointer',
   },
+  rootContainer:{
+    '& td':{
+      verticalAlign: 'top'
+    }
+  },
+  fixedWidth:{
+    width:180
+  },
+  red: {
+    color: '#e60000'
+  }
 }))

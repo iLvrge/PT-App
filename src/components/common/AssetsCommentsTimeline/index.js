@@ -595,10 +595,13 @@ const handleDriveModalClose = (event) => {
         bubbleStyle={{ 
           background: 'rgb(48 48 48)', 
           border: '2px solid #303030',
+          width: '36px', 
+          height: '36px', 
         }}
         cardHeaderStyle={{ color: 'white' }}
         title={<ShowUser users={users} item={comment} />}
         icon={<ShowUserAvtar users={users} item={comment.user} />}
+        iconStyle={{width: '36px', height: '36px'}}
       >
         <div 
           dangerouslySetInnerHTML={{ __html: comment.text }} />

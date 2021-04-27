@@ -17,8 +17,8 @@ export default makeStyles(theme => ({
     }
   },
   small: {
-    width: theme.spacing(3),
-    height: theme.spacing(3),
+    width: '36px !important', 
+    height: '36px !important',
   },
   loader: {},
   content: {
@@ -51,7 +51,8 @@ export default makeStyles(theme => ({
     fontWeight: 'inherit !important',
     height: 'auto',
     width: '100% !important',
-    margin: '0 !important'
+    margin: '0 !important',
+    padding: '0 !important',
   },
   minimizeButton: {
     position: 'absolute',

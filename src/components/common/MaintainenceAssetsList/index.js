@@ -48,7 +48,7 @@ const COLUMNS = [
     width: 29,
     minWidth: 29,
     label: "",
-    dataKey: "appno_doc_num",
+    dataKey: "asset",
     role: "checkbox",
   },
   {
@@ -145,13 +145,28 @@ const MaintainenceAssetsList = ({
     state => state.patenTrack2.selectedAssetsPatents,
   );
   const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list) 
+
+  useEffect(() => {
+    console.log("Adsad", selectItems)
+  }, [selectItems])
+
+  const callSelectedAssets = useCallback(({ patent, application, asset }) => {
+    /* const selectedItems = [];
+    if (grant_doc_num != "") {
+      selectedItems.push(grant_doc_num);
+    }
+    if (appno_doc_num != "") {
+      selectedItems.push(appno_doc_num);
+    } */
+    
+    setSelectedRow([asset]);    
+  }, [dispatch] );
+
   const handleOnClick = useCallback(
-    ({ patent, application }) => {
+    ({ patent, application, asset }) => {
       /*TV, Comment, Family, FamilyItem, getChannelID Legal Events */
-      if (
-        selectedAssetsPatents[0] != patent ||
-        selectedAssetsPatents[1] != application
-      ) {
+      if(!selectedRow.includes(asset)) {
+        callSelectedAssets({ patent, application, asset });
         dispatch(setConnectionBoxView(false));
         dispatch(setPDFView(false));
         dispatch(toggleUsptoMode(false));
@@ -227,7 +242,7 @@ const MaintainenceAssetsList = ({
             row.fee_code,
             row.fee_amount,
           ]);
-          oldSelection.push(row.appno_doc_num);
+          oldSelection.push(row.asset);
           const todayDate = moment(new Date()).format("YYYY-MM-DD");
           if (
             new Date(todayDate).getTime() >=
@@ -246,21 +261,20 @@ const MaintainenceAssetsList = ({
             asset => asset[1] !== parseInt(row.appno_doc_num),
           );
           oldSelection = oldSelection.filter(
-            asset => asset !== parseInt(row.appno_doc_num),
+            asset => asset !== parseInt(row.asset),
           );
         }
         setSelectItems(prevItems =>
-          prevItems.includes(row.appno_doc_num)
-            ? prevItems.filter(item => item !== row.appno_doc_num)
-            : [...prevItems, row.appno_doc_num],
-        );
+            prevItems.includes(row.asset)
+            ? prevItems.filter(item => item !== row.asset)
+            : [...prevItems, row.asset],
+        ); 
         dispatch(setSelectedMaintainenceAssetsList(updateSelected));
       } else {
-        setSelectedRow([row.grant_doc_num]);
-        setSelectedRow([row.appno_doc_num]);
         handleOnClick({
           patent: row.grant_doc_num,
           application: row.appno_doc_num,
+          asset: row.asset
         });
       }      
     },
@@ -277,7 +291,7 @@ const MaintainenceAssetsList = ({
       } else if (checked === true) {
         if (assets.list.length > 0) {
           let items = [];
-          assets.list.map(asset => items.push(asset.appno_doc_num));
+          assets.list.map(asset => items.push(asset.asset));
           setSelectItems(items);
           dispatch(setSelectedMaintainenceAssetsList(items));
         }

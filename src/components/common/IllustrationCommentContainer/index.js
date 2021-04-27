@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
+import moment from 'moment'
 import SplitPane from 'react-split-pane'
 import { IconButton, Paper, Modal, Table, TableHead, TableBody, TableRow, TableCell, TableContainer, TextField } from '@material-ui/core'
 import { Draggable } from 'react-drag-and-drop'
@@ -117,6 +118,7 @@ const IllustrationCommentContainer = ({
     )
 
     const LoadMaintainenceAssets = ({rows}) => {
+        const name = `${moment(new Date()).format('MM-DD-YYYY')}_Patent_Maintenance_Fee_Bulk_File`
         return (
             <TableContainer 
                 component={Paper} 
@@ -126,7 +128,7 @@ const IllustrationCommentContainer = ({
                     id='file_name' 
                     label='File Name' 
                     placeholder='File Name' 
-                    defaultValue='MaintainenceFee' 
+                    defaultValue={name} 
                     onChange={onChangeFileName}
                 />
                 <Table>
