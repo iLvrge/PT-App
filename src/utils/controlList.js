@@ -23,20 +23,6 @@ export const controlList = [
     },
     {
         type: 'menu',
-        mainHeading: 'Clean Encumbrances',
-        subHeading: 'Get a list of patents that are encumbared with third party rights that are likely removable.',
-        svg: '',
-        image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/clean_encumbrances.png',
-        class: 'hex-2',
-        breadCrumbs: 'Maintenance > Clean Encumbrances',
-        category: 'clear_encumbrances',
-        layout_id: 2,
-        showSvg: false,
-        mainHeadingClass: 'maintain', 
-        redirect: routeList.clear_encumbrances
-    },
-    {
-        type: 'menu',
         mainHeading: 'Pay Maintenance Fee',
         subHeading: 'Get a list of all patents due for payment, discuss with your team whether to maintain each one, and pay directly with the Patent Office.',
         svg: '',
@@ -48,6 +34,20 @@ export const controlList = [
         showSvg: false,
         mainHeadingClass: 'maintain',
         redirect: routeList.pay_maintainence_fee
+    },    
+    {
+        type: 'menu',
+        mainHeading: 'Clean Encumbrances',
+        subHeading: 'Get a list of patents that are encumbared with third party rights that are likely removable.',
+        svg: '',
+        image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/clean_encumbrances.png',
+        class: 'hex-2',
+        breadCrumbs: 'Maintenance > Clean Encumbrances',
+        category: 'clear_encumbrances',
+        layout_id: 2,
+        showSvg: false,
+        mainHeadingClass: 'maintain', 
+        redirect: routeList.clear_encumbrances
     },
     {
         type: 'menu',
