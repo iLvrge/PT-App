@@ -307,7 +307,6 @@ export default function PatentLink(props) {
       .on("mouseover", () => {
         let dx = d3.event.offsetX + config.link.tooltip.x,
           dy = d3.event.offsetY + config.link.tooltip.y;
-          console.log("hover", data)
         d3.select("#" + parent)
           .append("text")
           .attr("id", "dummy")

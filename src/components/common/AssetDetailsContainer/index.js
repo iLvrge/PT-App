@@ -74,7 +74,10 @@ const AssetDetailsContainer = ({
   const familyMode = useSelector(state => state.ui.familyMode);
   const familyItemMode = useSelector(state => state.ui.familyItemMode);
   const lifeSpanMode = useSelector(state => state.ui.lifeSpanMode);
-
+  
+  useEffect(() => {
+    console.log("isDrag", isDrag)
+  }, [ isDrag ])
   /* useEffect(() => {        
         if( chartAnalyticsContainer != null && chartAnalyticsContainer.current != null ) {            
             if( familyItemMode === true && familyMode === true && familyDataRetrieved === true && legalEventDataRetrieved === true) {
@@ -183,13 +186,18 @@ const AssetDetailsContainer = ({
           defaultSize={defaultSize}
          /*  onChange={() => changeContainer()} */
           onDragStarted={() => {
+            console.log("onDragStarted")
             dragStart(true);
-            setIsDrag(!isDrag);
+            setIsDrag(true);
           }}
           onDragFinished={size => {
+            console.log("onDragFinished")
             dragFinished(false);
             fn(fnVarName, size, fnParams);
-            setIsDrag(!isDrag);
+            setIsDrag(false);
+          }}
+          pane1Style={{
+            pointerEvents: isDrag ? 'none' : 'auto',
           }}
           primary={primary}
           ref={chartAnalyticsContainer}
@@ -197,11 +205,6 @@ const AssetDetailsContainer = ({
           <div
             id={`charts_container`}
             style={{ height: "100%" }}
-            /* onMouseOver={(event) => handleDetailsButton(event, true)}
-                            onMouseLeave={(event) => handleDetailsButton(event, false)} */
-            className={`${
-              isDrag === true ? classes.notInteractive : classes.isInteractive
-            }`}
           >
             <ArrowButton
               arrowId={`arrow_charts`}

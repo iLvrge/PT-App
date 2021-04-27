@@ -465,6 +465,7 @@ const GlobalLayout = (props) => {
                 handleChartBarOpen,
                 handleAnalyticsBarOpen,
                 setIsDrag,
+                isDrag,
                 setSize,
                 size,
                 illustrationRecord,

@@ -22,11 +22,9 @@ function wrapText(str, width, lines, node) {
         .attr("x", 0)
         .attr("y", y)
         .attr("dy", text.attr("dy"));
-    console.log("WrapText", words)
     while ((word = words.pop())) {
       line.push(word);
       tspan.text(line.join(" "));
-      console.log("tspan", line, word)
       if (tspan.node().getComputedTextLength() > width) {
         
         line.pop();
@@ -143,7 +141,6 @@ export default function PatentNode(props) {
         .attr("y", node.pdf.y)
         .attr("cursor", "pointer")
         .on("click", () => {
-          console.log("click", d3.event)
           unsetAllActiveLink()
           const targetElement = d3.event.target
           targetElement.setAttribute('href',config.pdfIconActive)
