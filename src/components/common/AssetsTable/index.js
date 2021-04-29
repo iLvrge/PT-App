@@ -28,7 +28,8 @@ import {
   setAssetTypeSelectedRow,
   setAssetTypeCustomerSelectedRow,
   setChildSelectedAssetsTransactions,
-  
+  setDriveTemplateFile,
+  setTemplateDocument
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -46,6 +47,7 @@ import {
   toggleFamilyMode,
   toggleFamilyItemMode,
   toggleLifeSpanMode,
+  setDriveTemplateFrameMode
 } from "../../../actions/uiActions";
 
 import { numberWithCommas, applicationFormat } from "../../../utils/numbers";
@@ -267,6 +269,9 @@ const AssetsTable = ({
         dispatch(setAssetTypeSelectedRow([]));
         dispatch(setAssetTypeCustomerSelectedRow([]));
         dispatch(setChildSelectedAssetsTransactions([]));
+        dispatch(setDriveTemplateFrameMode(false));
+        dispatch(setDriveTemplateFile(null));
+        dispatch(setTemplateDocument(null));
         dispatch(setConnectionBoxView(false));
         dispatch(setPDFView(false));
         dispatch(toggleUsptoMode(false));

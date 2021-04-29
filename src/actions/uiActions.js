@@ -52,6 +52,11 @@ export const setDriveTemplateFrameMode = flag  => ({
   flag   
 })
 
+export const setDriveTemplateMode = flag  => ({
+  type: types.SET_DRIVE_TEMPLATE_MODE,
+  flag   
+})
+
 export const toggleShow3rdParities = flag => ({
   type: types.TOGGLE_SHOW_3RD_PARTIES,
   flag,

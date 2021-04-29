@@ -35,17 +35,17 @@ const FilesTemplates = () => {
     const [currentSelection, setCurrentSelection] = useState(null)
     const [ assetFiles, setAssetFiles ] = useState([])
 
-    const driveFiles = useSelector(state => state.patenTrack2.template_layout_drive_files)
-    const google_profile = useSelector(state => state.patenTrack2.google_profile)
-
     const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
     const channel_id = useSelector(state => state.patenTrack2.channel_id)
 
 
+    useEffect(() => {
+        console.log("currentSelection, selectedRow", currentSelection, selectedRow)
+    }, [ currentSelection, selectedRow ])
 
     useEffect(() => {
         const getAssetsSlackFiles = async() => {
-            if( channel_id != '' && channel_id != null ) {
+            if(selectedAssetsPatents.length > 0 && channel_id != '' && channel_id != null ) {
                 const getSlackToken = getTokenStorage("slack_auth_token_info");
                 if (getSlackToken && getSlackToken != "") {
                     const tokenJSON = JSON.parse( getSlackToken )
@@ -60,6 +60,13 @@ const FilesTemplates = () => {
 
         const getAssetsFiles = async() => {
             console.log("getAssetsFiles", selectedAssetsPatents)
+            if(selectedAssetsPatents.length > 0) {
+                const { data } = await PatenTrackApi.getAssetFiles( selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() )
+                if(data.length > 0) {
+                    let oldFiles = [...assetFiles, ...data]
+                    setAssetFiles(oldFiles)
+                }
+            }
         }
         getAssetsSlackFiles()
         getAssetsFiles()
@@ -83,12 +90,13 @@ const FilesTemplates = () => {
 
     const onHandleClickRow = useCallback((e, item) => {
         console.log("onHandleClickRow", e, item)
-        if(item.external_type == 'gdrive') {
+        if(item.external_type == 'gdrive' || item.external_type == 'usptodrive') {
             dispatch(setDriveTemplateFrameMode(true))
             dispatch(setTemplateDocument(item.url_private))
         } else {
             window.open(item.url_private)
         }
+        setSelectedRow([item.id])
         setCurrentSelection(item.id)
     }, [ dispatch ])    
 

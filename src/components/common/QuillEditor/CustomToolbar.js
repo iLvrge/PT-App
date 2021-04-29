@@ -10,9 +10,13 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import Tooltip from '@material-ui/core/Tooltip'
 import { makeStyles } from '@material-ui/core/styles'
 import useStyles from './styles'
-const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, onDocument, onAttachmentFile, onAttachmentDriveFile, onMaintainenceFeeReview, onMaintainenceFeeFile, onSubmitUSPTO, loadingUSPTO, category, driveBtnActive, maintainenceMode }) => {
+const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, onDocument, onAttachmentFile, onAttachmentDriveFile, onMaintainenceFeeReview, onMaintainenceFeeFile, onSubmitUSPTO, loadingUSPTO, category, driveBtnActive, maintainenceMode, selectedAssets }) => {
   const classes = useStyles()
   const toolBarRef = useRef(null) 
+
+  useEffect(() => {
+    console.log("CATEGORY", category)
+  }, [ category ] )
 
   const useStylesTooltip = makeStyles((theme) => ({
     tooltip: {
@@ -59,11 +63,14 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
   }, [ toolBarRef ])
 
   const createTemplate = () => {
-    setBtnActive(previousItem => {
-      console.log('createTemplate', previousItem, !previousItem)
-      return !previousItem
-    })
-    onDocument(!btnActive)
+    if( selectedAssets.length > 0 ) {
+      setBtnActive(previousItem => {
+        return !previousItem
+      })
+      onDocument(!btnActive)
+    } else {
+      alert("Please select asset from list first.")
+    }    
   }
   
   return (

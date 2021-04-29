@@ -43,6 +43,7 @@ import {
 import {
   setMaintainenceFeeFrameMode,
   setDriveTemplateFrameMode,
+  setDriveTemplateMode,
   setDriveButtonActive
 } from '../../../actions/uiActions'
 
@@ -91,17 +92,12 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
   const [ activeBtn, setActiveBtn] = useState({display: false})  
   const type = useMemo(() => selectedCommentsEntity && selectedCommentsEntity.type, [ selectedCommentsEntity ])
 
-  
-  useEffect(() => {
-    console.log("activeBtn", activeBtn)
-  }, [activeBtn]) 
-
   useEffect(() => {
     checkButtons()
   }, [])
 
   useEffect(() => {
-    checkButtons()
+    checkButtons() 
   }, [ google_auth_token, slack_auth_token ])
 
   useEffect(() => {
@@ -218,8 +214,13 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
           }
           console.log("openTemplateDriveFiles",profileInfo)
           if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
-            dispatch(setDriveButtonActive( true ))
-            dispatch( getLayoutTemplatesByID(layoutID, profileInfo.email) )
+            //dispatch(setDriveButtonActive( true )) // it will set when user click on drive file link
+            dispatch( 
+              setDriveTemplateMode(true) 
+            )
+            dispatch( 
+              getLayoutTemplatesByID(layoutID, profileInfo.email) 
+            )
           }
         } else {
           //alert("Please first login with google account.")
@@ -239,7 +240,8 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
       }    
     } else {   
       dispatch(setDriveButtonActive( false ))
-      dispatch(setDriveTemplateFrameMode( false ))
+      //dispatch(setDriveTemplateFrameMode( false ))
+      dispatch(setDriveTemplateMode(false))
       dispatch(setLayoutTemplatesByID({ list: [], message: '' }))
     }
     
@@ -501,8 +503,7 @@ const handleDriveModalClose = (event) => {
             onSelectUser={setSelectUser}
             onFocus={handleFocus}
             onBlur={handleBlur} 
-            driveFile={selectedDriveFile}     
-            category={selectedCategory}
+            driveFile={selectedDriveFile} 
           />
         </Droppable>  
         <input type='file' id='attach_file' ref={inputFile} style={{display: 'none'}} onChange={onHandleFile}/>
@@ -588,6 +589,13 @@ const handleDriveModalClose = (event) => {
   const TimelineItem = ({users, comment}) => {
     
     if(comment.hasOwnProperty('subtype')) return null
+    let message = comment.text
+    if(message.indexOf('docs.google.com/document') !== -1) {
+      const match = message.match(/<([^\s>]+)(\s|>)+/)
+      if(match != null) {
+        message = match[1]
+      } 
+    }
     return (
       <TimelineEvent
         key={`comment-${comment.ts}`}
@@ -604,7 +612,7 @@ const handleDriveModalClose = (event) => {
         iconStyle={{width: '36px', height: '36px'}}
       >
         <div 
-          dangerouslySetInnerHTML={{ __html: comment.text }} />
+          dangerouslySetInnerHTML={{ __html: message }} />
         <ShowFiles 
           files={comment} 
           indexing={`file-comment-${comment.ts}`} />

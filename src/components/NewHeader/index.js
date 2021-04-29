@@ -103,7 +103,7 @@ const NewHeader = () => {
   }, [ dispatch, profile ])
 
   const hideMenu = useCallback((e, item) => {
-    dispatch(setResetAll(1))    
+    dispatch(setResetAll(1, item))    
     handleControlModal(e, false)
     setTimeout(()=>{
       dispatch(setBreadCrumbsAndCategory(item))

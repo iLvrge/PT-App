@@ -27,8 +27,7 @@ const QuillEditor = ({
   onAttachmentFile = () => {},
   onFocus = () => {},
   onBlur = () => {},
-  driveFile = '',
-  category = ''
+  driveFile = ''
 }) => {
 
   const classes = useStyles()
@@ -37,7 +36,9 @@ const QuillEditor = ({
   const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
   const maintainence_fee_file_name = useSelector(state => state.patenTrack2.maintainence_fee_file_name)
   const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
+  const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
   const google_profile = useSelector(state => state.patenTrack2.google_profile)
+  const category = useSelector(state => state.patenTrack2.selectedCategory)
   const slack_users = useSelector(state => state.patenTrack2.slack_users)
   const driveButtonActive = useSelector(state => state.ui.driveButtonActive)
   const maintainenceFrameMode = useSelector(state => state.ui.maintainenceFrameMode)
@@ -244,7 +245,8 @@ const QuillEditor = ({
           category={category}
           driveBtnActive={driveButtonActive}
           maintainenceMode={maintainenceFrameMode}
-        />
+          selectedAssets={selectedAssetsPatents}
+        /> 
         {GetMenuComponent}
       </div>
     </div>

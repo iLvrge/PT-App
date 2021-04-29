@@ -192,25 +192,12 @@ const IllustrationCommentContainer = ({
                         </IconButton>
                     :
                     ''
-                }
-                {
+                }                
+                {  
                     driveTemplateFrameMode === true 
                     ?
-                    new_drive_template_file != null && Object.keys(new_drive_template_file).length > 0 && new_drive_template_file.hasOwnProperty('id')
-                        ?
-                        <Draggable type={`template_agreement`} data={templateURL}>
-                            <div className={classes.draggableContainer}>
-                                <iframe src={templateURL} className={classes.templateFrame}></iframe>
-                            </div>                            
-                        </Draggable>
-                        :
-                        <div className={classes.draggableContainer}>
-                            <iframe src={templateURL} className={classes.templateFrame}></iframe>
-                        </div>
-                    :
-                    ''
-                }
-                {                    
+                        <iframe src={templateURL} className={classes.templateFrame}></iframe>
+                    :                  
                     maintainenceFrameMode === true
                     ?
                         <LoadMaintainenceAssets 

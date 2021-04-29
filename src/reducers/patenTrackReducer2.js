@@ -539,15 +539,21 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           familyChartVisiblity: action.visibility
         } 
       case types.SET_RESET_ALL:
-        const google_profile = {...state.google_profile}
+        const google_profile = {...state.google_profile},
+              breadcrumbs = {...state.breadCrumbs},
+              selectedCategory = {...state.category},
+              layout_id = {...state.layout_id}
         return {
           ...state,
           ...dashboardIntial,
-          google_profile
+          google_profile,
+          breadcrumbs,
+          selectedCategory,
+          layout_id
         }
       default:  
       return state
-  }
+  } 
 }
  
 export default patenTrackReducer

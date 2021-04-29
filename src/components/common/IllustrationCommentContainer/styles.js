@@ -53,8 +53,7 @@ export default makeStyles(theme => ({
     },
     templateFrame:{
         width: '100%',
-        height: '62vh',
-        marginTop: 15,
+        height: '66vh',
         border: 0
     },
     draggableContainer:{

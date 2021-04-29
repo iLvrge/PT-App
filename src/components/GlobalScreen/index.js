@@ -112,7 +112,8 @@ const GlobalScreen = ({
     assetFilesBarSize,
     assetFilesBar,
     driveTemplateBarSize,
-    driveTemplateFrameMode
+    driveTemplateFrameMode,
+    driveTemplateMode
 }) => {
     const classes = useStyles() 
     const dispatch = useDispatch()
@@ -156,6 +157,10 @@ const GlobalScreen = ({
             }            
         }, 1000)
     }
+
+    useEffect(() => {
+        console.log("GlobalScreen->driveTemplateMode", driveTemplateMode)
+    }, [driveTemplateMode])
 
     useEffect(() => {
         if( type === 0 ) {
@@ -223,8 +228,8 @@ const GlobalScreen = ({
     }, [ assetFileRef, assetFilesBar ])
 
     useEffect(() => {
-        updateResizerBar(templateFileRef, driveTemplateFrameMode)
-    }, [ templateFileRef, driveTemplateFrameMode ])    
+        updateResizerBar(templateFileRef, driveTemplateMode)
+    }, [ templateFileRef, driveTemplateMode ])    
 
     const resetAll = (dispatch) => {
         dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
@@ -435,7 +440,7 @@ const GlobalScreen = ({
                                 >
                                     <div id={`layout_templates_container`} style={{ height: '100%'}}>
                                         {
-                                            driveTemplateFrameMode === true
+                                            driveTemplateMode === true
                                             ?
                                                 <LayoutTemplates />
                                             :

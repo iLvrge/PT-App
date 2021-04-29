@@ -1,7 +1,7 @@
 import * as types from './actionTypes2'
 import PatenTrackApi, { DEFAULT_CUSTOMERS_LIMIT, DEFAULT_TRANSACTIONS_LIMIT, DEFAULT_PATENTS_LIMIT } from '../api/patenTrack2'
 
-import { toggleLifeSpanMode, setDriveTemplateFrameMode } from './uiActions'
+import { toggleLifeSpanMode, setDriveTemplateFrameMode, setDriveTemplateMode } from './uiActions'
 
 export const setCompaniesList = data => {
   return {
@@ -559,7 +559,8 @@ export const getLayoutTemplatesByID = (layoutID, userAccount) => {
       //localStorage.setItem('google_auth_token_info', '')
       alert(data.message)
     } else {
-      dispatch(setDriveTemplateFrameMode(true))
+      //dispatch(setDriveTemplateFrameMode(true))
+      dispatch(setDriveTemplateMode(true))
       dispatch(setLayoutTemplatesByID(data))
     }
   }
@@ -644,7 +645,6 @@ export const getSlackMessages = ( channelID ) => {
 }
 
 export const getChannels = () => {
-  console.log("GETCHANNELS")
   return async dispatch => {
     const { data } = await PatenTrackApi.getChannels()
 
@@ -722,7 +722,7 @@ export const createDriveTemplateFile = ( formData ) => {
     
     if( data != null && typeof data == 'object') {
       //new template created
-      dispatch(setDriveTemplateFrameMode(true))
+      dispatch(setDriveTemplateFrameMode(true)) //open drive frame
       dispatch(setDriveTemplateFile(data))
     } else {
       alert(data)
@@ -1094,10 +1094,13 @@ export const setBreadCrumbsAndCategory = (item) => {
   }
 }
 
-export const setResetAll = (t = 0) => {  
+export const setResetAll = (t = 0, item) => {  
   return async dispatch => {
     dispatch( resetStates() )
     if( t === 1) {
+      if(typeof item != undefined) {
+        dispatch( setBreadCrumbsAndCategory(item) )
+      }
       dispatch( fetchParentCompanies() )
     }
   }

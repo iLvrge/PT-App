@@ -79,6 +79,7 @@ const GlobalLayout = (props) => {
     
     const search_string = useSelector(state => state.patenTrack2.search_string)
     const driveTemplateFrameMode = useSelector(state => state.ui.driveTemplateFrameMode)
+    const driveTemplateMode = useSelector(state => state.ui.driveTemplateMode)
     
     // When we are in search route disable company, activites, parties icons
 
@@ -105,6 +106,8 @@ const GlobalLayout = (props) => {
             dispatch(setBreadCrumbs( 'Search' ))
         }
     }, [ dispatch, props.type ])
+
+    
 
 // get search data from server
     useEffect(() => {
@@ -135,8 +138,8 @@ const GlobalLayout = (props) => {
     }, [ openChartBar, openAnalyticsBar ])
 
     useEffect(() => {
-        setDriveTemplateBarSize( driveTemplateFrameMode === true ? 200 : 0)
-    }, [ driveTemplateFrameMode ])
+        setDriveTemplateBarSize( driveTemplateMode === true ? 200 : 0)
+    }, [ driveTemplateMode ])
 
 
     const handleCompanyBarOpen = (event) => {
@@ -483,7 +486,8 @@ const GlobalLayout = (props) => {
                 assetFilesBarSize,
                 assetFilesBar,
                 driveTemplateBarSize,
-                driveTemplateFrameMode
+                driveTemplateFrameMode,
+                driveTemplateMode
             }) 
         }
         return child

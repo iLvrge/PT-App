@@ -27,7 +27,9 @@ import {
   setChildSelectedAssetsTransactions,
   setChildSelectedAssetsPatents,
   getAssetTypeAssignmentAssets,
-  setAssetsTransactionsLifeSpan
+  setAssetsTransactionsLifeSpan,
+  setDriveTemplateFile,
+  setTemplateDocument
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -39,7 +41,8 @@ import {
   toggleUsptoMode, 
   toggleFamilyMode,
   toggleFamilyItemMode,
-  toggleLifeSpanMode
+  toggleLifeSpanMode,
+  setDriveTemplateFrameMode
 } from "../../../actions/uiActions";
 
 import { updateHashLocation } from "../../../utils/hashLocation";
@@ -305,6 +308,9 @@ const onHandleClickRow = useCallback(
           //toggle to show illustration or timeline
           if(!selectedRow.includes(row.rf_id)){
             getTransactionData(dispatch, row.rf_id, defaultLoad, search_string)
+            dispatch(setDriveTemplateFrameMode(false));
+            dispatch(setDriveTemplateFile(null));
+            dispatch(setTemplateDocument(null));
           } else {
             setSelectedRow([])
             dispatch(setAssetsIllustration(null))

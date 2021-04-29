@@ -24,6 +24,7 @@ export default {
   ui: {
     maintainenceFrameMode: false,
     driveTemplateFrameMode: false,
+    driveTemplateMode: false,
     usptoMode: false,
     showThirdParties: true,
     lifeSpanMode: false,
