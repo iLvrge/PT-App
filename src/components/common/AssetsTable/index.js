@@ -274,7 +274,7 @@ const AssetsTable = ({
         dispatch(setTemplateDocument(null));
         dispatch(setConnectionBoxView(false));
         dispatch(setPDFView(false));
-        dispatch(toggleUsptoMode(false));
+        //dispatch(toggleUsptoMode(false));
         dispatch(toggleLifeSpanMode(false));
         dispatch(toggleFamilyMode(true));
         dispatch(toggleFamilyItemMode(true));
