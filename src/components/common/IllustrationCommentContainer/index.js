@@ -43,7 +43,6 @@ const IllustrationCommentContainer = ({
     const [ openCommentBar, setCommentOpenBar ] = useState(true)
     const [ commentButtonVisible, setCommentButtonVisible ] = useState(false)
     
-    
     const [ isFullscreenOpen, setIsFullscreenOpen ] = useState(false)
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false)
     const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
@@ -63,7 +62,6 @@ const IllustrationCommentContainer = ({
     
     const [ templateURL, settemplateURL] = useState('about:blank')
     
-
     useEffect(() => {
         updateResizerBar(illustrationRef, commentBar, 1)
     }, [ illustrationRef, commentBar ])
@@ -166,15 +164,18 @@ const IllustrationCommentContainer = ({
             minSize={minSize}
             defaultSize={defaultSize}
             onDragFinished={(size) => {
+                console.log("Drag End")
                 fn2(size, fn2Params)
                 fn(fnVarName, size, fnParams)
-                /* onHandleGapSize(size) */
             }}
-            maxSize={-10}
+            maxSize={-10} 
             primary={primary}
             ref={illustrationRef}
+            pane1Style={{
+                pointerEvents: driveTemplateFrameMode === true ? 'none' : 'auto',
+            }}
         >         
-            <>   
+            <div style={{display: 'unset'}}>   
                 {
                     !isFullscreenOpen && 
                         illustrationBar === true && 
@@ -263,7 +264,7 @@ const IllustrationCommentContainer = ({
                         }
                     </Paper>
                 </Modal>
-            </>
+            </div>
 
             <div 
                 className={classes.commentContainer}

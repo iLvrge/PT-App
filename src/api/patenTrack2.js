@@ -508,6 +508,10 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/assets/${assets}/files`, getHeader())
   }
 
+  static getDriveAndAssetFiles( channelID, code, assets ) {
+    return axios.get(`${base_new_api_url}/assets/${assets}/files/${channelID}/slack/${code}`, getHeader())
+  }
+
   static getGoogleAuthToken( code ) {
     return axios.get(`${base_new_api_url}/documents/auth_token?code=${code}`, getHeader())
   }

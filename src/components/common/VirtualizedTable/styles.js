@@ -57,6 +57,12 @@ const styles = makeStyles((theme) => ({
   },
   marginLeft:{
     marginLeft: 5
+  },
+  smallImg:{
+    width: '18.375px',
+    height: '18.375px',
+    position: 'relative',
+    top: 5
   }
 }))
 

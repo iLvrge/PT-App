@@ -59,7 +59,6 @@ const FilesTemplates = () => {
         }
 
         const getAssetsFiles = async() => {
-            console.log("getAssetsFiles", selectedAssetsPatents)
             if(selectedAssetsPatents.length > 0) {
                 const { data } = await PatenTrackApi.getAssetFiles( selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() )
                 if(data.length > 0) {
@@ -74,13 +73,14 @@ const FilesTemplates = () => {
 
     const COLUMNS = [  
         {
-            width: 100,
-            minWidth: 100,
-            label: 'File Name',
+            width: 200,
+            minWidth: 200,
+            label: 'Document',
             dataKey: 'title', 
             role: 'image',
             imageURL: '',
-            imageIcon: faFile    
+            imageIcon: '',
+            extension: true    
         } 
     ]
 
@@ -89,7 +89,6 @@ const FilesTemplates = () => {
     }
 
     const onHandleClickRow = useCallback((e, item) => {
-        console.log("onHandleClickRow", e, item)
         if(item.external_type == 'gdrive' || item.external_type == 'usptodrive') {
             dispatch(setDriveTemplateFrameMode(true))
             dispatch(setTemplateDocument(item.url_private))

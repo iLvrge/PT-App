@@ -126,12 +126,14 @@ export default function PatentNode(props) {
       .attr('title', data.name)
       .on("mouseover", () => {
         let dx = d3.event.offsetX, dy = d3.event.offsetY
+        const fromElement = d3.event.fromElement
+        const getBoundElementRec = fromElement.getBoundingClientRect()
         d3.select("#patentrackDiagramDiv")
           .append("div")	
           .attr("class", "tooltip_title")	
           .html(data.name)
-          .style("left", (d3.event.pageX - 200) + "px")		
-          .style("top", (d3.event.pageY) + "px");	
+          .style("left", (getBoundElementRec.left - 240) + "px")		
+          .style("top", (getBoundElementRec.top - 44) + "px");	
       })
       .on("mouseout", () => {
         d3.selectAll(".tooltip_title").remove();

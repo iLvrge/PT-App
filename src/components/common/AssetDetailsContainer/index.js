@@ -186,12 +186,10 @@ const AssetDetailsContainer = ({
           defaultSize={defaultSize}
          /*  onChange={() => changeContainer()} */
           onDragStarted={() => {
-            console.log("onDragStarted")
             dragStart(true);
             setIsDrag(true);
           }}
           onDragFinished={size => {
-            console.log("onDragFinished")
             dragFinished(false);
             fn(fnVarName, size, fnParams);
             setIsDrag(false);

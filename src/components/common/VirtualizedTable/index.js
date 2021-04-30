@@ -136,8 +136,15 @@ const VirtualizedTable = ({
         paddingLeft,
         textBold,
         imageURL,
-        imageIcon
+        imageIcon,
+        extension
       } = columns[columnIndex];
+      let extensionIcon = ''
+      if(role === 'image' && extension === true ) {
+        const urlLink = rowData['url_private']
+        const urlExplode = urlLink.split(/[#?]/)[0].split('.').pop().trim()
+        extensionIcon = urlExplode == 'pdf' ? 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png' : ''
+      }
       cellData =
         validation === true
           ? validationKey == "empty" && cellData == ""
@@ -190,6 +197,11 @@ const VirtualizedTable = ({
               <ExpandMoreIcon className={"arrow"} />
             )
           ) : role === 'image'  ? 
+              extensionIcon != '' ?
+              <span>
+                <img src={extensionIcon} className={classes.smallImg}/><span className={classes.marginLeft}>{cellData}</span>
+              </span> 
+              :
               rowData[imageURL] ? 
               <span>
                 <Avatar src={rowData[imageURL]} className={classes.small}/><span className={classes.marginLeft}>{cellData}</span>

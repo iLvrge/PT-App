@@ -5,7 +5,7 @@ export default makeStyles(theme => ({
     color: '#000',
     margin: 0,
     '& .ql-attachDriveButton':{
-      marginRight: 3
+      marginRight: 7
     }
   },
   buttonGroup: {
