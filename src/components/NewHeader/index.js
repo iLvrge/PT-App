@@ -63,7 +63,7 @@ const NewHeader = () => {
   const slack_profile_data = useSelector( state => state.patenTrack2.slack_profile_data )
   const profile = useSelector(store => (store.patenTrack.profile))
   const user = useSelector(store => (store.patenTrack.profile ? store.patenTrack.profile.user : {}))
-  const siteLogo = useSelector(state => (state.patenTrack.siteLogo.site_logo ? state.patenTrack.siteLogo.site_logo.logo_big : '/assets/images/logos/patentrack_logo.png'))
+  const siteLogo = useSelector(state => (state.patenTrack.siteLogo.site_logo ? state.patenTrack.siteLogo.site_logo.logo_big : 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/logo/patentrack_new_logo.png'))
   const controlModal = useSelector(state => state.ui.controlModal)
   const breadcrumbs = useSelector(state =>  state.patenTrack2.breadcrumbs )
   const search_string = useSelector(state => state.patenTrack2.search_string)
