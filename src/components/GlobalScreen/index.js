@@ -422,6 +422,15 @@ const GlobalScreen = ({
                                 split="vertical"
                                 size={assetFilesBarSize}
                                 ref={assetFileRef}
+                                onDragStarted={() => {
+                                    setIsDragging(!isDragging)
+                                }}
+                                onDragFinished={(size) => {
+                                    setIsDragging(!isDragging)
+                                }}
+                                pane2Style={{
+                                    pointerEvents: isDragging === true ? 'none' : 'auto',
+                                }}  
                             >
                                 <div id={`assets_files_container`} style={{ height: '100%'}}>
                                     {
@@ -437,6 +446,16 @@ const GlobalScreen = ({
                                     split="vertical"
                                     size={driveTemplateBarSize}
                                     ref={templateFileRef}
+                                    onDragStarted={() => {
+                                        setIsDragging(!isDragging)
+                                    }}
+                                    onDragFinished={(size) => {
+                                        resizePane('split4', size, setVisualizerBarSize)
+                                        setIsDragging(!isDragging)
+                                    }}
+                                    pane2Style={{
+                                        pointerEvents: isDragging === true ? 'none' : 'auto',
+                                    }}  
                                 >
                                     <div id={`layout_templates_container`} style={{ height: '100%'}}>
                                         {
@@ -458,6 +477,12 @@ const GlobalScreen = ({
                                         onDragFinished={(size) => {
                                             resizePane('split4', size, setVisualizerBarSize)
                                             setIsDragging(!isDragging)
+                                        }}
+                                        pane1Style={{
+                                            pointerEvents: isDragging === true ? 'none' : 'auto',
+                                        }}
+                                        pane2Style={{
+                                            pointerEvents: isDragging === true ? 'none' : 'auto',
                                         }}
                                         ref={mainContainerRef}
                                         primary={'second'}
