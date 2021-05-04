@@ -7,6 +7,15 @@ import React, {
 } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
+import {
+  faFileCode,
+  faFile,  
+  faFileImage,
+  faFilePdf,
+  faFileWord,  
+  faFilePowerpoint,
+  faFileExcel,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
@@ -139,11 +148,48 @@ const VirtualizedTable = ({
         imageIcon,
         extension
       } = columns[columnIndex];
-      let extensionIcon = ''
+      let extensionIcon = '', faIcon = ''
       if(role === 'image' && extension === true ) {
         const urlLink = rowData['url_private']
         const urlExplode = urlLink.split(/[#?]/)[0].split('.').pop().trim()
         extensionIcon = urlExplode == 'pdf' ? 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png' : ''
+        if(extensionIcon == '') {
+          const fileType = rowData['filetype'] ? rowData['filetype'] : 'txt'
+          switch(fileType) {
+            case 'xml':
+              faIcon = faFileCode
+              break;
+            case 'svg':
+            case 'png':
+            case 'bmp':
+            case 'jpg':
+            case 'jpeg':
+            case 'gif':
+            case 'webp':
+              faIcon = faFileImage
+              break;
+            case 'pdf':
+              faIcon = faFilePdf
+              break;
+            case 'doc':
+            case 'docx':
+              faIcon = faFileWord
+              break;
+            case 'xls':
+            case 'xlsx':
+              faIcon = faFileExcel
+              break;
+            case 'ppt':
+              faIcon = faFilePowerpoint
+              break;
+            case 'gdoc':
+              extensionIcon ='https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document'
+              break;
+            default:
+              faIcon = faFile
+              break;
+          }
+        }
       }
       cellData =
         validation === true
@@ -201,6 +247,10 @@ const VirtualizedTable = ({
               <span>
                 <img src={extensionIcon} className={classes.smallImg}/><span className={classes.marginLeft}>{cellData}</span>
               </span> 
+              :
+              faIcon != ''
+              ?
+              <span><FontAwesomeIcon icon={faIcon}/><span className={classes.marginLeft}>{cellData}</span></span> 
               :
               rowData[imageURL] ? 
               <span>

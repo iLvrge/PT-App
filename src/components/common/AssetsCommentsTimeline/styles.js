@@ -53,6 +53,9 @@ export default makeStyles(theme => ({
     width: '100% !important',
     margin: '0 !important',
     padding: '0 !important',
+    '& a':{
+      color: '#fff'
+    }
   },
   minimizeButton: {
     position: 'absolute',
@@ -85,13 +88,13 @@ export default makeStyles(theme => ({
   commentTimelineSection: {
     width: '95% !important',
     overflow: 'hidden auto',
-    height: '32.5%',
+    height: '18vh',/*'32.5%', */
     margin: '5px auto !Important',
     display: 'flex',
     '& div':{
       width: '100%'
     },
-    flex: '1 100%',
+    /* flex: '1 100%', */
   },
   emptyEntity: {
     display: 'flex',

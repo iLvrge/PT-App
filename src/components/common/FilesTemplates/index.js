@@ -39,36 +39,30 @@ const FilesTemplates = () => {
     const channel_id = useSelector(state => state.patenTrack2.channel_id)
 
 
-    useEffect(() => {
-        console.log("currentSelection, selectedRow", currentSelection, selectedRow)
-    }, [ currentSelection, selectedRow ])
 
     useEffect(() => {
-        const getAssetsSlackFiles = async() => {
+
+        const getDriveAndAssetFiles = async() => {
             if(selectedAssetsPatents.length > 0 && channel_id != '' && channel_id != null ) {
                 const getSlackToken = getTokenStorage("slack_auth_token_info");
                 if (getSlackToken && getSlackToken != "") {
                     const tokenJSON = JSON.parse( getSlackToken )
     
                     if( Object.keys(tokenJSON).length > 0 && tokenJSON.hasOwnProperty('access_token') ) {
-                        const { data } = await PatenTrackApi.getChannelFiles(channel_id, tokenJSON.access_token )
+                        const { data } = await PatenTrackApi.getDriveAndAssetFiles( channel_id, tokenJSON.access_token, selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() )
                         setAssetFiles(data)
-                    }                
+                    }
+                } else {
+                    const { data } = await PatenTrackApi.getDriveAndAssetFiles( '', '', selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() )
+                    setAssetFiles(data)
                 }
+            } else {
+                const { data } = await PatenTrackApi.getDriveAndAssetFiles( '', '', selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() )
+                setAssetFiles(data)
             }
         }
 
-        const getAssetsFiles = async() => {
-            if(selectedAssetsPatents.length > 0) {
-                const { data } = await PatenTrackApi.getAssetFiles( selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() )
-                if(data.length > 0) {
-                    let oldFiles = [...assetFiles, ...data]
-                    setAssetFiles(oldFiles)
-                }
-            }
-        }
-        getAssetsSlackFiles()
-        getAssetsFiles()
+        getDriveAndAssetFiles()
     }, [ selectedAssetsPatents, channel_id ])
 
     const COLUMNS = [  
