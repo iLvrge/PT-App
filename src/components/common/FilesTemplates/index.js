@@ -53,11 +53,11 @@ const FilesTemplates = () => {
                         setAssetFiles(data)
                     }
                 } else {
-                    const { data } = await PatenTrackApi.getDriveAndAssetFiles( '', '', selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() )
+                    const { data } = await PatenTrackApi.getDriveAndAssetFiles( 'undefined', 'undefined', selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() )
                     setAssetFiles(data)
                 }
             } else {
-                const { data } = await PatenTrackApi.getDriveAndAssetFiles( '', '', selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() )
+                const { data } = await PatenTrackApi.getDriveAndAssetFiles( 'undefined', 'undefined', selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() )
                 setAssetFiles(data)
             }
         }
