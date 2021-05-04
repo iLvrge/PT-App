@@ -42,6 +42,7 @@ const IllustrationCommentContainer = ({
     const [ toggleCommentButtonType , setToggleCommentButtonType ] = useState(true)
     const [ openCommentBar, setCommentOpenBar ] = useState(true)
     const [ commentButtonVisible, setCommentButtonVisible ] = useState(false)
+    const [ isDrag, setIsDrag ] = useState(false)
     
     const [ isFullscreenOpen, setIsFullscreenOpen ] = useState(false)
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false)
@@ -61,6 +62,10 @@ const IllustrationCommentContainer = ({
     const search_string = useSelector(state => state.patenTrack2.search_string)   
     
     const [ templateURL, settemplateURL] = useState('about:blank')
+
+    useEffect(() => {
+        console.log('isDrag->isDrag', isDrag)
+    }, [ isDrag ])
     
     useEffect(() => {
         updateResizerBar(illustrationRef, commentBar, 1)
@@ -163,16 +168,21 @@ const IllustrationCommentContainer = ({
             split={split}
             minSize={minSize}
             defaultSize={defaultSize}
-            onDragFinished={(size) => {
-                console.log("Drag End")
-                fn2(size, fn2Params)
-                fn(fnVarName, size, fnParams)
+            onDragStarted={() => {
+                console.log('!isDrag', !isDrag)
+                setIsDrag(!isDrag)
             }}
+            onDragFinished={(size) => {
+                console.log("Drag End", !isDrag)
+                setIsDrag(!isDrag)
+                fn2(size, fn2Params)
+                fn(fnVarName, size, fnParams)   
+            }} 
             maxSize={-10} 
             primary={primary}
             ref={illustrationRef}
             pane1Style={{
-                pointerEvents: driveTemplateFrameMode === true ? 'none' : 'auto',
+                pointerEvents: isDrag === true ? 'none' : 'auto',
             }}
         >         
             <div style={{display: 'unset'}}>   

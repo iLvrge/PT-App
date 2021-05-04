@@ -172,7 +172,10 @@ export default makeStyles(theme => ({
         justifyContent: 'flex-start'
     },
     notInteractive: {
-        pointerEvents: 'none'
+      pointerEvents: 'none',
+      '& iframe': {
+        pointerEvents: 'none',
+      }
     },      
     isInteractive: {
         pointerEvents: 'auto'

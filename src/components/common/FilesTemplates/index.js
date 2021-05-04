@@ -43,25 +43,26 @@ const FilesTemplates = () => {
     useEffect(() => {
 
         const getDriveAndAssetFiles = async() => {
-            if(selectedAssetsPatents.length > 0 && channel_id != '' && channel_id != null ) {
-                const getSlackToken = getTokenStorage("slack_auth_token_info");
-                if (getSlackToken && getSlackToken != "") {
-                    const tokenJSON = JSON.parse( getSlackToken )
-    
-                    if( Object.keys(tokenJSON).length > 0 && tokenJSON.hasOwnProperty('access_token') ) {
-                        const { data } = await PatenTrackApi.getDriveAndAssetFiles( channel_id, tokenJSON.access_token, selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() )
+            if( selectedAssetsPatents.length > 0 ) {
+                if(channel_id != '' && channel_id != null) {
+                    const getSlackToken = getTokenStorage("slack_auth_token_info");
+                    if (getSlackToken && getSlackToken != "") {
+                        const tokenJSON = JSON.parse( getSlackToken )
+        
+                        if( Object.keys(tokenJSON).length > 0 && tokenJSON.hasOwnProperty('access_token') ) {
+                            const { data } = await PatenTrackApi.getDriveAndAssetFiles( channel_id, tokenJSON.access_token, selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() )
+                            setAssetFiles(data)
+                        }
+                    } else {
+                        const { data } = await PatenTrackApi.getDriveAndAssetFiles( 'undefined', 'undefined', selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() )
                         setAssetFiles(data)
                     }
-                } else {
+                } else if( selectedAssetsPatents.length > 0 ) {
                     const { data } = await PatenTrackApi.getDriveAndAssetFiles( 'undefined', 'undefined', selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() )
                     setAssetFiles(data)
-                }
-            } else {
-                const { data } = await PatenTrackApi.getDriveAndAssetFiles( 'undefined', 'undefined', selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() )
-                setAssetFiles(data)
-            }
+                }                
+            }   
         }
-
         getDriveAndAssetFiles()
     }, [ selectedAssetsPatents, channel_id ])
 
