@@ -32,7 +32,7 @@ import { DEFAULT_CUSTOMERS_LIMIT } from '../../../api/patenTrack2'
 
 import PatenTrackApi from '../../../api/patenTrack2'
 
-
+import { numberWithCommas } from '../../../utils/numbers'
 
 import {
     updateHashLocation
@@ -54,6 +54,30 @@ const COLUMNS = [
       minWidth: 171,
       label: 'Companies',
       dataKey: 'original_name',
+    },
+    {
+      width: 80,  
+      minWidth: 80,
+      label: 'Assets',
+      staticIcon: '',
+      dataKey: 'no_of_assets',
+      format: numberWithCommas,
+    },
+    {
+      width: 120,  
+      minWidth: 120,
+      label: 'Transactions',
+      staticIcon: '',
+      dataKey: 'no_of_transactions',
+      format: numberWithCommas,
+    },
+    {
+      width: 80,  
+      minWidth: 80,
+      label: 'Parties',
+      dataKey: 'no_of_parties',
+      staticIcon: '',
+      format: numberWithCommas,
     }
 ] 
 

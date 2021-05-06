@@ -146,9 +146,6 @@ const MaintainenceAssetsList = ({
   );
   const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list) 
 
-  useEffect(() => {
-    console.log("Adsad", selectItems)
-  }, [selectItems])
 
   const callSelectedAssets = useCallback(({ patent, application, asset }) => {
     /* const selectedItems = [];

@@ -68,15 +68,39 @@ const FilesTemplates = () => {
 
     const COLUMNS = [  
         {
-            width: 200,
-            minWidth: 200,
+            width: 120,
+            minWidth: 120,
             label: 'Document',
             dataKey: 'title', 
             role: 'image',
             imageURL: '',
             imageIcon: '',
             extension: true    
-        } 
+        },
+        {
+            width: 100,
+            minWidth: 100,
+            label: 'Transaction', 
+            dataKey: 'convey_ty'             
+        },
+        {
+            width: 150,
+            minWidth: 150,
+            label: 'Assignee', 
+            dataKey: 'assignee'             
+        },
+        {
+            width: 150,
+            minWidth: 150,
+            label: 'Assignor', 
+            dataKey: 'assignor'             
+        },
+        {
+            width: 60,
+            minWidth: 60,
+            label: 'Parties',
+            dataKey: 'count_parties'
+        }
     ]
 
     const onHandleSelectAll = () => {
