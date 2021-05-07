@@ -28,6 +28,8 @@ import {
   Table,
 } from "react-virtualized";
 import TableRow from "@material-ui/core/TableRow";
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import useStyles from "./styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -69,6 +71,7 @@ const VirtualizedTable = ({
   columnTextBoldList,
   hover,
   onMouseOver,
+  openDropAsset,
   ...tableProps
 }) => {
   
@@ -77,6 +80,8 @@ const VirtualizedTable = ({
   const [sortBy, setSortBy] = useState("");
   const [filters, setFilters] = useState([]);
   const [collapseRowHeight, setCollapseRowHeight] = useState(100);
+  const [dropdownValue, setDropdownValue] = useState('')
+  const [dropdownOpen, setDropdownOpen] = useState(false)
   const rowRef = useRef(null);
   const tableRef = useRef();
   /*useEffect(() => {
@@ -128,6 +133,19 @@ const VirtualizedTable = ({
     });
   }, []);
 
+  const onHandleDropDown = (event, callBack, cellData, rowData) => {
+    //setDropdownValue(event.target.value)
+    callBack(event, cellData, rowData)
+  }
+
+  const handleDropdownClose = () => {
+    setDropdownOpen(false);
+  };
+
+  const handleDropdownOpen = () => {
+    setDropdownOpen(true);
+  };
+
   const cellRenderer = useCallback(
     ({ cellData, columnIndex, rowData }) => {
       
@@ -146,7 +164,9 @@ const VirtualizedTable = ({
         textBold,
         imageURL,
         imageIcon,
-        extension
+        extension,
+        onClick,
+        list
       } = columns[columnIndex];
       let extensionIcon = '', faIcon = ''
       if(role === 'image' && extension === true ) {
@@ -226,7 +246,28 @@ const VirtualizedTable = ({
             paddingLeft: paddingLeft != undefined ? paddingLeft : "inherit",
           }}
         >
-          {role === "checkbox" ? (
+          {
+          
+          role === 'static_dropdown' ?
+          (
+            <Select
+              labelId='dropdown-open-select-label'
+              id='dropdown-open-select'
+              open={ openDropAsset == cellData ? true : false }
+              onClose={handleDropdownClose}
+              onOpen={handleDropdownOpen} 
+              value={dropdownValue}
+              onChange={(event) =>  onHandleDropDown(event, onClick, cellData, rowData) }
+            >
+              {
+                list.map( (c, idx) => (
+                  <MenuItem key={idx} value={c.id}>{c.name}</MenuItem>
+                ))
+              }
+            </Select>
+          )
+          :
+          role === "checkbox" ? (
             <Checkbox
               checked={selected.includes(cellData)}
               disabled={
@@ -275,7 +316,8 @@ const VirtualizedTable = ({
       columns,
       disableRow,
       disableRowKey,
-      columnTextBoldList
+      columnTextBoldList,
+      openDropAsset
     ],
   );
 

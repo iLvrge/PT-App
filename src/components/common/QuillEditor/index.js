@@ -9,7 +9,7 @@ import useStyles from './styles'
 import CustomToolbar from './CustomToolbar'
 import PatenTrackApi from '../../../api/patenTrack2'
 import { setMaintainenceFeeFrameMode } from '../../../actions/uiActions'
-import { getSlackUsersList } from '../../../actions/patentTrackActions2'
+import { getSlackUsersList, setMoveAssets, getMaintainenceAssetsList } from '../../../actions/patentTrackActions2'
 import { setTokenStorage, getTokenStorage } from '../../../utils/tokenStorage'
 import 'react-quill/dist/quill.snow.css'
 import './styles.css'
@@ -42,9 +42,11 @@ const QuillEditor = ({
   const slack_users = useSelector(state => state.patenTrack2.slack_users)
   const driveButtonActive = useSelector(state => state.ui.driveButtonActive)
   const maintainenceFrameMode = useSelector(state => state.ui.maintainenceFrameMode)
+  const move_assets = useSelector(state => state.patenTrack2.move_assets)
+  const selectedMainCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
   const [ userListMenu, setUserListMenu ] = useState( null )
   const [ loadingUSPTO, setLoadingUSPTO ] = useState(false)
-  
+  const [ redo, setRedo ] = useState([])
 
   const quill = useMemo(() => {
     if (!quillRef.current) return null
@@ -125,17 +127,42 @@ const QuillEditor = ({
   }, [ selectedMaintainencePatents, maintainence_fee_file_name, google_profile  ])
 
 
-  const onHandleReviewMaintainenceFee = useCallback(() => { 
+  const onHandleReviewMaintainenceFee = useCallback(async () => { 
     if( maintainenceFrameMode === false) {
       if(selectedMaintainencePatents.length > 0) {
         dispatch(setMaintainenceFeeFrameMode( true ))
+        if( move_assets.length > 0 ) {
+          //move assets to other layout
+          const form = new FormData()
+          form.append('moved_assets', JSON.stringify(move_assets))
+          const { data } = await PatenTrackApi.moveAssetToLayout(form)
+          if( data != null && data.length > 0 ) {
+            setRedo(data)
+            dispatch(setMoveAssets([]))
+            //dispatch( getMaintainenceAssetsList( selectedMainCompanies ))
+          }
+        }        
       } else {
         alert("Please select assets from the maintainence list")
       }
     } else {
-      dispatch(setMaintainenceFeeFrameMode( false ))
+      //cancel
+      dispatch(setMaintainenceFeeFrameMode( false )) 
+      if( redo.length > 0 ) {
+        //redo all activities
+        const assetIDs = []
+        redo.map( row => {
+          assetIDs.push(row.asset_id)
+        })
+        const { data } = await PatenTrackApi.moveAssetRollback(JSON.stringify(assetIDs))
+        if( data ) {
+          // refresh patent list
+          setRedo([])
+          dispatch( getMaintainenceAssetsList( selectedMainCompanies ))
+        }
+      }
     }    
-  }, [ dispatch, selectedMaintainencePatents, maintainenceFrameMode ])  
+  }, [ dispatch, selectedMaintainencePatents, maintainenceFrameMode, move_assets, redo, selectedMainCompanies ])  
 
   const onHandleSubmitToUSPTO =  useCallback( async () => {      
     if(assetTypeAssignmentAssetsSelected.length == 0) {

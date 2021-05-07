@@ -549,7 +549,13 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           google_profile,
           breadcrumbs,
           selectedCategory,
-          layout_id
+          layout_id,
+          ui: {...state.ui, maintainenceFrameMode: false, driveTemplateFrameMode: false, driveTemplateMode: false, usptoMode: false}
+        }
+      case types.SET_MOVE_ASSETS:
+        return {
+          ...state,
+          move_assets: action.items
         }
       default:  
       return state

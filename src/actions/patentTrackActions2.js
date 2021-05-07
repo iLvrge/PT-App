@@ -1111,3 +1111,10 @@ export const resetStates = () => {
     type: types.SET_RESET_ALL
   }
 } 
+
+export const setMoveAssets = (items) => {  
+  return {
+    type: types.SET_MOVE_ASSETS,
+    items
+  }
+} 

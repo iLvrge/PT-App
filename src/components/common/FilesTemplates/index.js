@@ -80,14 +80,8 @@ const FilesTemplates = () => {
         {
             width: 100,
             minWidth: 100,
-            label: 'Transaction', 
+            label: 'Type', 
             dataKey: 'convey_ty'             
-        },
-        {
-            width: 150,
-            minWidth: 150,
-            label: 'Assignee', 
-            dataKey: 'assignee'             
         },
         {
             width: 150,
@@ -95,6 +89,12 @@ const FilesTemplates = () => {
             label: 'Assignor', 
             dataKey: 'assignor'             
         },
+        {
+            width: 150,
+            minWidth: 150,
+            label: 'Assignee', 
+            dataKey: 'assignee'             
+        },        
         {
             width: 60,
             minWidth: 60,

@@ -12,7 +12,7 @@ import moment from "moment";
 import useStyles from "./styles";
 import _orderBy from "lodash/orderBy";
 import VirtualizedTable from "../VirtualizedTable";
-import { DEFAULT_CUSTOMERS_LIMIT } from "../../../api/patenTrack2";
+import PatenTrackApi, { DEFAULT_CUSTOMERS_LIMIT } from "../../../api/patenTrack2";
 
 import {
   setMainCompaniesRowSelect,
@@ -22,6 +22,7 @@ import {
   setChildSelectedAssetsTransactions,
   setChildSelectedAssetsPatents,
   setSlackMessages,
+  setMoveAssets
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -43,77 +44,7 @@ import { getTokenStorage } from "../../../utils/tokenStorage";
 
 import Loader from "../Loader";
 
-const COLUMNS = [
-  {
-    width: 29,
-    minWidth: 29,
-    label: "",
-    dataKey: "asset",
-    role: "checkbox",
-  },
-  {
-    width: 80,
-    minWidth: 80,
-    label: "Assets",
-    dataKey: "asset",
-    staticIcon: "US",
-    format: numberWithCommas,
-    formatCondition: 'asset_type',
-    formatDefaultValue: 0,
-    secondaryFormat: applicationFormat,
-    align: "left",
-    badge: true,
-    textBold: true
-  },
-  {
-    width: 90,
-    minWidth: 90,
-    label: "Payment Due",
-    dataKey: "payment_due",
-  },
-  {
-    width: 80,
-    minWidth: 80,
-    label: "Amount",
-    dataKey: "fee_amount",
-    staticIcon: "$",
-    format: numberWithCommas,
-  },
-  {
-    width: 100,
-    minWidth: 100,
-    label: "Grace End",
-    dataKey: "payment_grace",
-  },
-  {
-    width: 80,
-    minWidth: 80,
-    label: "Amount",
-    dataKey: "fee_surcharge",
-    staticIcon: "$",
-    format: numberWithCommas,
-  },
-  {
-    width: 100,
-    label: "Expiration",
-    dataKey: "remaining_year",
-  },
-  {
-    width: 100,
-    label: "Source",
-    dataKey: "source",
-  },
-  {
-    width: 100,
-    label: "Citations",
-    dataKey: "fwd_citation",
-  },
-  {
-    width: 111,
-    label: "Technology",
-    dataKey: "technology",
-  },
-];
+import  { controlList } from '../../../utils/controlList'
 
 const MaintainenceAssetsList = ({
   assets,
@@ -140,12 +71,164 @@ const MaintainenceAssetsList = ({
   const [selectedAll, setSelectAll] = useState(false);
   const [selectItems, setSelectItems] = useState([]);
   const [selectedRow, setSelectedRow] = useState([]);
+  const [ dropOpenAsset, setDropOpenAsset ] = useState(null)
+  const [ assetsList, setAssetsLists ] = useState({list: [], total_records: 0})
+  
+  const [ redoId, setRedoId] = useState(0)
   const totalRecords = 0;
   const selectedAssetsPatents = useSelector(
     state => state.patenTrack2.selectedAssetsPatents,
   );
+
+  const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
+  const move_assets = useSelector(state => state.patenTrack2.move_assets)
   const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list) 
 
+  useEffect(() => {
+    setAssetsLists(assets)
+  }, [ assets ])
+
+  const dropdownList = [
+    {
+      id: 0,
+      name: 'Remove from this list'
+    },
+    {
+      id: 2,
+      name: 'Move to Sale'
+    },
+    {
+      id: 4,
+      name: 'Move to LicenseOut'
+    }
+  ]
+  
+  const onHandleDropDownlist = useCallback(async(event, asset, row ) => {
+    const currentLayoutIndex = controlList.findIndex(r => r.type == 'menu' && r.category == selectedCategory )
+    const assetSelected = selectItems.includes(asset) ? true : false
+    if(currentLayoutIndex !== -1) {
+      if( assetSelected === false ) {
+        const addData = {
+          asset,
+          move_category: event.target.value,
+          currentLayout: controlList[currentLayoutIndex].layout_id,
+          grant_doc_num: row.grant_doc_num,
+          appno_doc_num: row.appno_doc_num,
+        }
+        const form = new FormData()
+        form.append('moved_assets', JSON.stringify(addData))
+        const { data } = await PatenTrackApi.moveAssetToLayout(form)        
+        if(data.length > 0 ) {
+          setRedoId(data.asset_id)
+          setDropOpenAsset(null)
+          const list = assetsList.list;
+          const filterList = list.filter( row => row.asset != asset )
+          setAssetsLists({list: filterList, total_records: assetsList.total_records - 1})
+        } else {
+          console.log("Error")
+          alert('Error while moving asset')
+        }
+      } else {
+        setDropOpenAsset(null)
+        let oldMoveAssets = [...move_assets]
+        const findIndex = oldMoveAssets.findIndex(row => row.asset == asset)
+        if(findIndex !== -1) {
+          oldMoveAssets.splice(findIndex, 1)
+        }
+        oldMoveAssets.push({
+          asset,
+          move_category: event.target.value,
+          currentLayout: controlList[currentLayoutIndex].layout_id,
+          grant_doc_num: row.grant_doc_num,
+          appno_doc_num: row.appno_doc_num,
+        })
+        dispatch(setMoveAssets(oldMoveAssets))
+      }  
+    }
+  }, [ dispatch, controlList, assetsList, selectItems, move_assets ])
+  
+  const COLUMNS = [
+    {
+      width: 15,
+      minWidth: 15,
+      disableSort: true,
+      label: "",
+      dataKey: "asset",
+      role: "static_dropdown",
+      list: dropdownList,
+      onClick: onHandleDropDownlist
+    },
+    {
+      width: 29,
+      minWidth: 29,
+      disableSort: true,
+      label: "",
+      dataKey: "asset",
+      role: "checkbox",
+    },
+    {
+      width: 80,
+      minWidth: 80,
+      label: "Assets",
+      dataKey: "asset",
+      staticIcon: "US",
+      format: numberWithCommas,
+      formatCondition: 'asset_type',
+      formatDefaultValue: 0,
+      secondaryFormat: applicationFormat,
+      align: "left",
+      badge: true,
+      textBold: true
+    },
+    {
+      width: 90,
+      minWidth: 90,
+      label: "Payment Due",
+      dataKey: "payment_due",
+    },
+    {
+      width: 80,
+      minWidth: 80,
+      label: "Amount",
+      dataKey: "fee_amount",
+      staticIcon: "$",
+      format: numberWithCommas,
+    },
+    {
+      width: 100,
+      minWidth: 100,
+      label: "Grace Ends",
+      dataKey: "payment_grace",
+    },
+    {
+      width: 80,
+      minWidth: 80,
+      label: "Surcharge",
+      dataKey: "fee_surcharge",
+      staticIcon: "$",
+      format: numberWithCommas,
+    },
+    {
+      width: 100,
+      label: "Expiration",
+      dataKey: "remaining_year",
+    },
+    {
+      width: 100,
+      label: "Source",
+      dataKey: "source",
+    },
+    {
+      width: 100,
+      label: "Citations",
+      dataKey: "fwd_citation",
+    },
+    {
+      width: 111,
+      label: "Technology",
+      dataKey: "technology",
+    },
+  ];
 
   const callSelectedAssets = useCallback(({ patent, application, asset }) => {
     /* const selectedItems = [];
@@ -230,8 +313,13 @@ const MaintainenceAssetsList = ({
       const { checked } = e.target;
       let updateSelected = [...selectedMaintainencePatents],
         oldSelection = [...selectItems];
+        
       if (checked !== undefined) {
-        if (checked === true) {
+        if(oldSelection.includes(row.asset)) {
+          updateSelected = selectedMaintainencePatents.filter(
+            asset => asset[1] !== parseInt(row.appno_doc_num),
+          );
+        } else { 
           updateSelected.push([
             row.grant_doc_num,
             row.appno_doc_num,
@@ -239,7 +327,6 @@ const MaintainenceAssetsList = ({
             row.fee_code,
             row.fee_amount,
           ]);
-          oldSelection.push(row.asset);
           const todayDate = moment(new Date()).format("YYYY-MM-DD");
           if (
             new Date(todayDate).getTime() >=
@@ -253,29 +340,43 @@ const MaintainenceAssetsList = ({
               row.fee_surcharge,
             ]);
           }
-        } else {
-          updateSelected = selectedMaintainencePatents.filter(
-            asset => asset[1] !== parseInt(row.appno_doc_num),
-          );
-          oldSelection = oldSelection.filter(
-            asset => asset !== parseInt(row.asset),
-          );
         }
         setSelectItems(prevItems =>
-            prevItems.includes(row.asset)
-            ? prevItems.filter(item => item !== row.asset)
-            : [...prevItems, row.asset],
+          prevItems.includes(row.asset)
+          ? prevItems.filter(item => item !== row.asset)
+          : [...prevItems, row.asset],
         ); 
         dispatch(setSelectedMaintainenceAssetsList(updateSelected));
       } else {
-        handleOnClick({
-          patent: row.grant_doc_num,
-          application: row.appno_doc_num,
-          asset: row.asset
-        });
+        if(typeof e.target.closest == 'function') {
+          const element = e.target.closest('div.ReactVirtualized__Table__rowColumn')
+          if(element != null) {
+            const index = element.getAttribute('aria-colindex')
+            const findElement = element.querySelector('div.MuiSelect-select')
+            if( index == 1 && findElement != null ) {
+              setDropOpenAsset(row.asset)
+            } else {
+              handleOnClick({
+                patent: row.grant_doc_num,
+                application: row.appno_doc_num,
+                asset: row.asset
+              });
+            }
+          } else {
+            if( row.asset == dropOpenAsset ) {
+              setDropOpenAsset(null)
+            } else {
+              handleOnClick({
+                patent: row.grant_doc_num,
+                application: row.appno_doc_num,
+                asset: row.asset
+              });
+            }         
+          }
+        }        
       }      
     },
-    [dispatch, selectedMaintainencePatents, selectItems],
+    [dispatch, selectedMaintainencePatents, selectItems, dropOpenAsset],
   );
 
   const handleSelectAll = useCallback(
@@ -304,17 +405,18 @@ const MaintainenceAssetsList = ({
     <Paper className={classes.root} square id={`maintainence_assets`}>
       <VirtualizedTable
         classes={classes}
+        openDropAsset={dropOpenAsset}
         selected={selectItems}
         rowSelected={selectedRow}
         selectedKey={"asset"}
-        rows={assets.list}
+        rows={assetsList.list}
         rowHeight={rowHeight}
         headerHeight={rowHeight}
         columns={COLUMNS}
         onSelect={handleClickSelectCheckbox}
         onSelectAll={handleSelectAll}
         defaultSelectAll={selectedAll}
-        totalRows={assets.total_records}
+        totalRows={assetsList.total_records}
         defaultSortField={`asset`}
         defaultSortDirection={`desc`}
         columnTextBoldList={slack_channel_list}

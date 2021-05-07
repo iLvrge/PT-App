@@ -595,6 +595,14 @@ class PatenTrackApi {
   static getConnectionData( popup ) {
     return axios.get(`${base_new_api_url}/connection/${popup}`,  getHeader())
   }
+  
+  static moveAssetToLayout( data ) {
+    return axios.post(`${base_new_api_url}/assets/move`,  data, getFormUrlHeader())
+  } 
+
+  static moveAssetRollback( IDs ) {
+    return axios.delete(`${base_new_api_url}/assets/rollback?revert=${IDs}`, getHeader())
+  } 
 }
 
 export default PatenTrackApi

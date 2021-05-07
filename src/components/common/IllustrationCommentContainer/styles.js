@@ -1,6 +1,35 @@
 import { makeStyles } from '@material-ui/core/styles'
 
 export default makeStyles(theme => ({
+    root:{
+        width: '100%',
+        height: '100%',
+        paddingTop: 6,        
+        '& .MuiInputLabel-root':{
+            display: 'inline-flex',
+            paddingLeft: 6,
+            paddingTop: 10
+        },
+        '& .MuiFormControl-root':{
+            width: '90%'
+        },
+        '& .MuiInput-underline:before': {
+            borderBottomColor: '#5c5c5c',
+        },
+        '& .MuiInput-underline:after': {
+            borderBottomColor: '#5c5c5c',
+        },
+        '& .MuiInput-underline:hover': {
+            borderBottomColor: '#5c5c5c',
+        },
+        '& .MuiInputBase-input':{
+            height: 21
+        }
+    },
+    container: {
+        width: '100%',
+        height: '100%'
+    },
     showIcon: {
         /* padding: '10px', */
         fontSize: '1.1rem',

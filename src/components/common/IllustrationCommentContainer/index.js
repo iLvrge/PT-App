@@ -9,6 +9,7 @@ import { Close, Fullscreen } from '@material-ui/icons'
 import IllustrationContainer from '../AssetsVisualizer/IllustrationContainer'
 import TimelineContainer from '../AssetsVisualizer/TimelineContainer'
 import AssetsCommentsTimeline from '../AssetsCommentsTimeline'
+import LoadMaintainenceAssets from './LoadMaintainenceAssets'
 import ArrowButton from '../ArrowButton'
 import { updateResizerBar } from '../../../utils/resizeBar'
 import useStyles from './styles'
@@ -112,55 +113,13 @@ const IllustrationCommentContainer = ({
 
     const onChangeFileName = useCallback((event) => {
         setMaintainenceFileName(event.target.value)
-    }, [ ])
+    }, [ setMaintainenceFileName ])
 
 
     const shouldShowTimeline = useMemo(
         () => (!selectedAssetsPatents.length &&  !assetIllustration),
         [ selectedAssetsPatents, selectedAssetAssignments, assetIllustration ],
     )
-
-    const LoadMaintainenceAssets = ({rows}) => {
-        const name = `${moment(new Date()).format('MM-DD-YYYY')}_Patent_Maintenance_Fee_Bulk_File`
-        return (
-            <TableContainer 
-                component={Paper} 
-                style={{height: '100%', padding: '10px'}}
-            >
-                <TextField 
-                    id='file_name' 
-                    label='File Name' 
-                    placeholder='File Name' 
-                    defaultValue={name} 
-                    onChange={onChangeFileName}
-                />
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            {
-                                ['Patent #', 'Application #', 'Attorney Docket #', 'Fee Code', 'Fee Amount'].map( (col, index) => (
-                                    <TableCell key={index}>{col}</TableCell>
-                                ))
-                            }
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {
-                            rows.map( ( row, rowIndex) => (
-                                <TableRow key={{rowIndex}}>
-                                    {
-                                        row.map( (col, cellIndex) => (
-                                            <TableCell key={rowIndex+cellIndex}>{col}</TableCell>
-                                        ))
-                                    }
-                                </TableRow>
-                            ))
-                        }
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        )  
-    }
 
     return (
         <SplitPane
@@ -203,7 +162,7 @@ const IllustrationCommentContainer = ({
                         </IconButton>
                     :
                     ''
-                }                
+                }                 
                 {  
                     driveTemplateFrameMode === true 
                     ?
@@ -212,7 +171,7 @@ const IllustrationCommentContainer = ({
                     maintainenceFrameMode === true
                     ?
                         <LoadMaintainenceAssets 
-                            rows={selectedMaintainencePatents}/>
+                            rows={selectedMaintainencePatents} onChangeFileName={onChangeFileName}/>
                     :
                     !isFullscreenOpen && 
                         illustrationBar === true && 

@@ -127,10 +127,14 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
       {
         category == 'pay_maintainence_fee'
         ?
-        <>
-          <Button className={classes.review} onClick={onMaintainenceFeeFile}>Pay Maint. Fees</Button>
-          <Button className={`${classes.review} ${maintainenceMode === true ? classes.active : ''}`} onClick={onMaintainenceFeeReview}>Review Preliminary List</Button>          
-        </>
+          maintainenceMode === false
+          ? 
+            <Button className={classes.review} onClick={onMaintainenceFeeReview}>Review Preliminary List</Button>
+          :
+          <>
+            <Button className={classes.review} onClick={onMaintainenceFeeFile}>Pay Maint. Fees</Button>
+            <Button className={classes.review} onClick={onMaintainenceFeeReview}>Cancel</Button>
+          </>
         :
         <>
           <Button className={classes.review} onClick={onSubmitUSPTO} disabled={loadingUSPTO}>Submit to USPTO</Button>
