@@ -30,6 +30,7 @@ import {
 import TableRow from "@material-ui/core/TableRow";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import Typography from '@material-ui/core/Typography';
 import useStyles from "./styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -72,6 +73,7 @@ const VirtualizedTable = ({
   hover,
   onMouseOver,
   openDropAsset,
+  dropdownSelections,
   ...tableProps
 }) => {
   
@@ -146,6 +148,15 @@ const VirtualizedTable = ({
     setDropdownOpen(true);
   };
 
+  const getDropValue = (showDropValue, list) => {
+    let showDropIcon = ''
+    const listIndex = list.findIndex( row => row.id == showDropValue )
+    if( listIndex !== -1 ) {
+      showDropIcon = list[listIndex].icon != '' ? list[listIndex].icon : list[listIndex].image != '' ? <img src={list[listIndex].image} style={{width: '21px'}}/> : ''
+    }
+    return showDropIcon
+  }
+
   const cellRenderer = useCallback(
     ({ cellData, columnIndex, rowData }) => {
       
@@ -211,6 +222,13 @@ const VirtualizedTable = ({
           }
         }
       }
+      let showDropValue = ''
+      if(role == 'static_dropdown') {
+        const index = dropdownSelections.findIndex( r => r.asset == rowData['asset'] )
+        if( index !== -1 ) {
+          showDropValue =  dropdownSelections[index].move_category
+        }
+      }
       cellData =
         validation === true
           ? validationKey == "empty" && cellData == ""
@@ -256,14 +274,20 @@ const VirtualizedTable = ({
               open={ openDropAsset == cellData ? true : false }
               onClose={handleDropdownClose}
               onOpen={handleDropdownOpen} 
-              value={dropdownValue}
+              value={showDropValue}
               onChange={(event) =>  onHandleDropDown(event, onClick, cellData, rowData) }
+              renderValue={(value) => getDropValue(value, list)}
             >
               {
                 list.map( (c, idx) => (
-                  <MenuItem key={idx} value={c.id}>{c.name}</MenuItem>
+                  <MenuItem key={idx} value={c.id}>
+                    {
+                      c.icon != '' ? c.icon : c.image != '' ? <img src={c.image} style={{width: '21px'}}/> : ''
+                    }
+                    <Typography variant="inherit"> {c.name}</Typography> 
+                  </MenuItem> 
                 ))
-              }
+              } 
             </Select>
           )
           :
@@ -317,7 +341,8 @@ const VirtualizedTable = ({
       disableRow,
       disableRowKey,
       columnTextBoldList,
-      openDropAsset
+      openDropAsset,
+      dropdownSelections
     ],
   );
 

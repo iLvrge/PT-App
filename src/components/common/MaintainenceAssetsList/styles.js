@@ -8,7 +8,10 @@ export default makeStyles((theme) => ({
         flex:1,
         overflow: 'hidden auto',
         '& .MuiTableCell-root .MuiSelect-select.MuiSelect-select':{
-          paddingRight: 0
+          paddingRight: 15 
+        },
+        '& .MuiInput-underline:hover:not(.Mui-disabled):before, .MuiInput-underline:before, .MuiInput-underline:after':{
+          border: 0
         }
     },
     topBar: {
@@ -18,81 +21,81 @@ export default makeStyles((theme) => ({
         fontSize: 20,
     },
     listInfinityLoader: {
-        width: '100%',
-        marginTop: '5px',
-        marginBottom: '5px',
-        textAlign: 'center'
-    },
+      width: '100%',
+      marginTop: '5px',
+      marginBottom: '5px',
+      textAlign: 'center'
+    }, 
     list: {
-        overflowY: 'auto',
-        flex: 1,
-        /* marginTop: 40, */
-        '& .MuiListItemAvatar-root': {
-            minWidth: 0,
-        },
-        '& .MuiListItem-gutters': {
-            paddingLeft: 5,
-            paddingRight: 5,
-        },
-        '& .MuiListSubheader-gutters': {
-            padding: '0 8px 0 2px' 
-        },
-        '& .MuiListSubheader-root': {
-            backgroundColor: '#303030',
-            fontSize: '1.1rem',
-            height: '48px',
-            overflow: 'hidden'
-        },
-        '& .MuiSvgIcon-root':{
-            fontSize: '1.1rem'
-        }
+      overflowY: 'auto',
+      flex: 1,
+      /* marginTop: 40, */
+      '& .MuiListItemAvatar-root': {
+        minWidth: 0,
+      },
+      '& .MuiListItem-gutters': {
+        paddingLeft: 5,
+        paddingRight: 5,
+      },
+      '& .MuiListSubheader-gutters': {
+        padding: '0 8px 0 2px' 
+      },
+      '& .MuiListSubheader-root': {
+        backgroundColor: '#303030',
+        fontSize: '1.1rem',
+        height: '48px',
+        overflow: 'hidden'
+      },
+      '& .MuiSvgIcon-root':{
+        fontSize: '1.1rem'
+      }
     },
     listHeight:{
-        maxHeight: '300px',
-        overflowY: 'auto'
+      maxHeight: '300px',
+      overflowY: 'auto'
     },
     listItem: {
-        '&:focus':{
-            outline:'none'
-        },
-        '&:active':{
-            outline:'none'
-        }
+      '&:focus':{
+        outline:'none'
+      },
+      '&:active':{
+        outline:'none'
+      }
     },
     boxItem: {
-        minWidth: 15
+      minWidth: 15
     },
     checkbox: {
-        padding: 5,
-        '&.MuiIconButton-edgeEnd': {
-            marginRight: 0,
-        },
+      padding: 5,
+      '&.MuiIconButton-edgeEnd': {
+        marginRight: 0,
+      },
     },
     patentIndex: {
-        backgroundColor: 'transparent',
-        color: 'initial'
+      backgroundColor: 'transparent',
+      color: 'initial'
     },
     listItemTextContainer: {
-        display: 'flex',
-        alignItems: 'center',
+      display: 'flex',
+      alignItems: 'center',
     },
     expandIcon: {
-        '& svg': {
-            width: 10,
-            height: 10,
-        }
+      '& svg': {
+        width: 10,
+        height: 10,
+      }
     },
     assetTitle: {
-        /* whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis', */
-        marginRight: 5,
-        width: 'calc(100% - 50px)'
+      /* whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis', */
+      marginRight: 5,
+      width: 'calc(100% - 50px)'
     },
     assetTitleTotalCount: {
-        minWidth: 20,
-        position: 'absolute',
-        right: '3px'
+      minWidth: 20,
+      position: 'absolute',
+      right: '3px'
     },
     controllersContainer: {
       position: 'absolute',
@@ -125,23 +128,23 @@ export default makeStyles((theme) => ({
     headingText: {
     },
     transactionList:{
-        height: '100%',
-        '& .MuiListItemAvatar-root': {
-            minWidth: 0,
-        },
-        '& .MuiListItem-gutters': {
-            paddingLeft: 0,
-            paddingRight: 0,
-        }, 
-        '& .MuiList-root':{
-            /*maxHeight: '85%',*/
-        },
-        '& .MuiListSubheader-root':{
-          backgroundColor: '#303030',
-          fontSize: '1.1rem',
-          height: '48px',
-          overflow: 'hidden'
-        }
+      height: '100%',
+      '& .MuiListItemAvatar-root': {
+          minWidth: 0,
+      },
+      '& .MuiListItem-gutters': {
+          paddingLeft: 0,
+          paddingRight: 0,
+      }, 
+      '& .MuiList-root':{
+          /*maxHeight: '85%',*/
+      },
+      '& .MuiListSubheader-root':{
+        backgroundColor: '#303030',
+        fontSize: '1.1rem',
+        height: '48px',
+        overflow: 'hidden'
+      }
     },
     showIcon: {
       /* padding: '10px', */

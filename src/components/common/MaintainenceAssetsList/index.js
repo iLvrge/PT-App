@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Paper } from "@material-ui/core";
+import { Clear } from '@material-ui/icons';
 import moment from "moment";
 
 import useStyles from "./styles";
@@ -90,16 +91,28 @@ const MaintainenceAssetsList = ({
 
   const dropdownList = [
     {
+      id: -1,
+      name: ' ' ,
+      icon: '',
+      image: ''
+    },
+    {
       id: 0,
-      name: 'Remove from this list'
+      name: 'Remove from this list',
+      icon: <Clear />,
+      image: ''
     },
     {
       id: 2,
-      name: 'Move to Sale'
+      name: 'Move to Sale',
+      image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/sell.png',
+      icon: ''
     },
     {
       id: 4,
-      name: 'Move to LicenseOut'
+      name: 'Move to LicenseOut',
+      image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/licenseout.png',
+      icon: ''
     }
   ]
   
@@ -108,18 +121,18 @@ const MaintainenceAssetsList = ({
     const assetSelected = selectItems.includes(asset) ? true : false
     if(currentLayoutIndex !== -1) {
       if( assetSelected === false ) {
-        const addData = {
+        const addData = [{
           asset,
           move_category: event.target.value,
           currentLayout: controlList[currentLayoutIndex].layout_id,
           grant_doc_num: row.grant_doc_num,
           appno_doc_num: row.appno_doc_num,
-        }
+        }]
         const form = new FormData()
         form.append('moved_assets', JSON.stringify(addData))
         const { data } = await PatenTrackApi.moveAssetToLayout(form)        
         if(data.length > 0 ) {
-          setRedoId(data.asset_id)
+          setRedoId(data[0].asset_id)
           setDropOpenAsset(null)
           const list = assetsList.list;
           const filterList = list.filter( row => row.asset != asset )
@@ -135,22 +148,24 @@ const MaintainenceAssetsList = ({
         if(findIndex !== -1) {
           oldMoveAssets.splice(findIndex, 1)
         }
-        oldMoveAssets.push({
-          asset,
-          move_category: event.target.value,
-          currentLayout: controlList[currentLayoutIndex].layout_id,
-          grant_doc_num: row.grant_doc_num,
-          appno_doc_num: row.appno_doc_num,
-        })
-        dispatch(setMoveAssets(oldMoveAssets))
+        if( event.target.value != -1 ) {
+          oldMoveAssets.push({
+            asset,
+            move_category: event.target.value,
+            currentLayout: controlList[currentLayoutIndex].layout_id,
+            grant_doc_num: row.grant_doc_num,
+            appno_doc_num: row.appno_doc_num,
+          })
+          dispatch(setMoveAssets(oldMoveAssets))
+        }        
       }  
     }
   }, [ dispatch, controlList, assetsList, selectItems, move_assets ])
   
   const COLUMNS = [
     {
-      width: 15,
-      minWidth: 15,
+      width: 35,
+      minWidth: 35,
       disableSort: true,
       label: "",
       dataKey: "asset",
@@ -410,6 +425,7 @@ const MaintainenceAssetsList = ({
         rowSelected={selectedRow}
         selectedKey={"asset"}
         rows={assetsList.list}
+        dropdownSelections={move_assets}
         rowHeight={rowHeight}
         headerHeight={rowHeight}
         columns={COLUMNS}

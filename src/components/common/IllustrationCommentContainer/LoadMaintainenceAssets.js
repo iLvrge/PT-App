@@ -60,10 +60,10 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
         },
         {
             width: 70,      
-            minWidth: 70,    
+            minWidth: 70,   
             label: "Fee Amount",
             dataKey: "fee_amount",
-            staticIcon: "US",
+            staticIcon: "$",
             format: numberWithCommas,
             align: "left",		  
         },
@@ -100,14 +100,14 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
             square
             id={`pay_maintainence_assets_to_uspto`}
             >
-            <InputLabel shrink>File Name</InputLabel>   
+            {/* <InputLabel shrink>File Name</InputLabel>   
             <TextField 
                 id='file_name' 
                 label={false}
                 placeholder='File Name' 
                 defaultValue={name} 
                 onChange={onChangeFileName}
-            />
+            /> */}
             <div className={classes.container}>
                 <VirtualizedTable
                     classes={classes}

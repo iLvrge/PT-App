@@ -55,7 +55,7 @@ const GlobalLayout = (props) => {
     const [ typeBarSize, setTypeBarSize ] = useState(0) 
     const [ otherPartyBarSize, setOtherPartyBarSize ] = useState(0)
     const [ assignmentBarSize, setAssignmentBarSize ] = useState(0)
-    const [ customerBarSize, setCustomerBarSize ] = useState(120)
+    const [ customerBarSize, setCustomerBarSize ] = useState(140)
     const [ commentBarSize , setCommentBarSize ] = useState('30%')
     const [ illustrationBarSize , setIllustrationBarSize ] = useState('50%')
     const [ visualizerBarSize , setVisualizerBarSize ] = useState('0%')
@@ -96,7 +96,7 @@ const GlobalLayout = (props) => {
             setChartBar(true)
             setAnalyticsBar(true)
             setCompanyBarSize(0) // company bar size
-            setCustomerBarSize(120)
+            setCustomerBarSize(140)
             setAssignmentBarSize(120) 
             dispatch(setConnectionBoxView( false ))
             dispatch(setPDFView( false ))
@@ -188,7 +188,7 @@ const GlobalLayout = (props) => {
         if(!openCustomerBar === false) {
             setCustomerBarSize(0)
         } else {
-            setCustomerBarSize(120)
+            setCustomerBarSize(140)
         }
     }
 

@@ -71,8 +71,8 @@ export default makeStyles(theme => ({
     siteLogo: {
         /* width: LOGO_WIDTH,
         maxWidth: 'calc(100% - 30px)', */
-        height: '1.7rem',
-        margin: '0px 15px 0 10px'
+        height: '2rem',
+        margin: '0px 15px 0 10px' 
     }, 
 
     userLogo: {
