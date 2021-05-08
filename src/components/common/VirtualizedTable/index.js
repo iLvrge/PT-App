@@ -19,6 +19,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
 import { TableCell, Avatar } from '@material-ui/core'
 import {
   ArrowKeyStepper,
@@ -148,13 +149,19 @@ const VirtualizedTable = ({
     setDropdownOpen(true);
   };
 
-  const getDropValue = (showDropValue, list) => {
-    let showDropIcon = ''
+  const getDropValue = (showDropValue, list, width) => {
     const listIndex = list.findIndex( row => row.id == showDropValue )
-    if( listIndex !== -1 ) {
-      showDropIcon = list[listIndex].icon != '' ? list[listIndex].icon : list[listIndex].image != '' ? <img src={list[listIndex].image} style={{width: '21px'}}/> : ''
-    }
-    return showDropIcon
+    if(listIndex !== -1) {
+      return (
+        <div style={{width: `${width + 5}px`}} className={'selectedIcon'}>
+          {
+            list[listIndex].icon != '' ? list[listIndex].icon : list[listIndex].image != '' ? <img src={list[listIndex].image} style={{width: '21px', position: 'absolute', left: '7px'}}/> : ''
+          }
+        </div>
+      )
+    } else {
+      return ''
+    }    
   }
 
   const cellRenderer = useCallback(
@@ -177,7 +184,8 @@ const VirtualizedTable = ({
         imageIcon,
         extension,
         onClick,
-        list
+        list,
+        width
       } = columns[columnIndex];
       let extensionIcon = '', faIcon = ''
       if(role === 'image' && extension === true ) {
@@ -271,12 +279,15 @@ const VirtualizedTable = ({
             <Select
               labelId='dropdown-open-select-label'
               id='dropdown-open-select'
+              IconComponent={(props) => (
+                <ExpandMoreOutlinedIcon {...props}/>
+              )}
               open={ openDropAsset == cellData ? true : false }
               onClose={handleDropdownClose}
               onOpen={handleDropdownOpen} 
               value={showDropValue}
               onChange={(event) =>  onHandleDropDown(event, onClick, cellData, rowData) }
-              renderValue={(value) => getDropValue(value, list)}
+              renderValue={(value) => getDropValue(value, list, width)}
             >
               {
                 list.map( (c, idx) => (
@@ -284,7 +295,7 @@ const VirtualizedTable = ({
                     {
                       c.icon != '' ? c.icon : c.image != '' ? <img src={c.image} style={{width: '21px'}}/> : ''
                     }
-                    <Typography variant="inherit"> {c.name}</Typography> 
+                    <Typography variant="inherit" className={'heading'}> {c.name}</Typography> 
                   </MenuItem> 
                 ))
               } 

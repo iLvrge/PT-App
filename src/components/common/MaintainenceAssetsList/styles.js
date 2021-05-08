@@ -6,12 +6,23 @@ export default makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         flex:1,
-        overflow: 'hidden auto',
+        overflow: 'hidden auto',        
         '& .MuiTableCell-root .MuiSelect-select.MuiSelect-select':{
-          paddingRight: 15 
+          paddingRight: 7 
+        },
+        '& svg.MuiSelect-icon':{
+          fontSize: '1.8rem'
+        },
+        '& .MuiInput-underline':{
+          paddingRight: 9 
         },
         '& .MuiInput-underline:hover:not(.Mui-disabled):before, .MuiInput-underline:before, .MuiInput-underline:after':{
           border: 0
+        },
+        '& .selectedIcon svg':{          
+          position: 'absolute',
+          left: 9,
+          fontSize: '1.5rem'
         }
     },
     topBar: {

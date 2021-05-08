@@ -129,8 +129,9 @@ const QuillEditor = ({
 
   const onHandleReviewMaintainenceFee = useCallback(async () => { 
     if( maintainenceFrameMode === false) {
-      if(selectedMaintainencePatents.length > 0) {
-        dispatch(setMaintainenceFeeFrameMode( true ))
+      const action = ( selectedMaintainencePatents.length > 0 &&  move_assets.length > 0 ) ? true : move_assets.length > 0 ? true : selectedMaintainencePatents.length > 0 ? true : false
+      
+      if(action === true) {
         if( move_assets.length > 0 ) {
           //move assets to other layout
           const form = new FormData()
@@ -139,9 +140,14 @@ const QuillEditor = ({
           if( data != null && data.length > 0 ) {
             setRedo(data)
             dispatch(setMoveAssets([]))
-            //dispatch( getMaintainenceAssetsList( selectedMainCompanies ))
+            if(selectedMaintainencePatents.length == 0) {
+              dispatch( getMaintainenceAssetsList( selectedMainCompanies ))
+            }
           }
-        }        
+        }
+        if(selectedMaintainencePatents.length > 0) {
+          dispatch(setMaintainenceFeeFrameMode( true ))
+        }
       } else {
         alert("Please select assets from the maintainence list")
       }

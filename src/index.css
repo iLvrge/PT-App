@@ -791,6 +791,9 @@ a.maintain svg.clean_encumbrances path{
 #users_list .MuiMenu-paper{
   margin-top: -33px;
 } 
+.MuiTypography-root.heading{
+  margin-left: 5px
+}
 
 @media(min-width:1200px){.pricing .lab_item:hover h4{display:none}.pricing .lab_item:hover p.font-16{display:block}}
 @media(min-width:992px){.pricing .lab_item{width:202.93px;height:234.15px}}

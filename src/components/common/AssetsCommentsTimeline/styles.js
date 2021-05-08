@@ -37,9 +37,12 @@ export default makeStyles(theme => ({
   },
   commentEditor: {
     /* paddingLeft: 40, */
-    padding: '0',
+    /* padding: '0',
     margin: '0 auto',
-    width: '95% !important'
+    width: '95% !important' */
+    position: 'fixed',
+    bottom: 11,
+    width: 'calc(100vw - 25vw)'
   },
   addCommentBtn: {
     position: 'absolute',
@@ -88,7 +91,7 @@ export default makeStyles(theme => ({
   commentTimelineSection: {
     width: '95% !important',
     overflow: 'hidden auto',
-    height: '18vh',/*'32.5%', */
+    height: 'calc(100% -  100px)',/*'32.5%', */
     margin: '5px auto !Important',
     display: 'flex',
     '& div':{

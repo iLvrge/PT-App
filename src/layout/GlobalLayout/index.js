@@ -80,6 +80,10 @@ const GlobalLayout = (props) => {
     const search_string = useSelector(state => state.patenTrack2.search_string)
     const driveTemplateFrameMode = useSelector(state => state.ui.driveTemplateFrameMode)
     const driveTemplateMode = useSelector(state => state.ui.driveTemplateMode)
+
+    useEffect(() => {
+        editorBar() // run to find editor width
+    }, [])
     
     // When we are in search route disable company, activites, parties icons
 
@@ -139,6 +143,7 @@ const GlobalLayout = (props) => {
 
     useEffect(() => {
         setDriveTemplateBarSize( driveTemplateMode === true ? 200 : 0)
+        editorBar()
     }, [ driveTemplateMode ])
 
 
@@ -150,6 +155,7 @@ const GlobalLayout = (props) => {
         } else {
             setCompanyBarSize(200)
         }
+        editorBar()
     }
 
     const handleTypeBarOpen = (event) => {
@@ -160,6 +166,7 @@ const GlobalLayout = (props) => {
         } else {
             setTypeBarSize(120)
         }
+        editorBar()
     }
 
     const handleOtherPartyBarOpen = (event) => {
@@ -170,6 +177,7 @@ const GlobalLayout = (props) => {
         } else {
             setOtherPartyBarSize(120)
         }
+        editorBar()
     }
 
     const handleAssignmentBarOpen = (event) => {
@@ -180,6 +188,7 @@ const GlobalLayout = (props) => {
         } else {
             setAssignmentBarSize(120)
         }
+        editorBar()
     }
 
     const handleCustomersBarOpen = (event) => {
@@ -190,6 +199,7 @@ const GlobalLayout = (props) => {
         } else {
             setCustomerBarSize(140)
         }
+        editorBar()
     }
 
     const handleAssetFileBarOpen = (event) => {
@@ -200,6 +210,7 @@ const GlobalLayout = (props) => {
         } else {
             setAssetFilesBarSize(200)
         }
+        editorBar()
     }
 
     const changeVisualBar = (chart, analytics, comment, illustration) => {
@@ -213,6 +224,7 @@ const GlobalLayout = (props) => {
         if(chart === true && barOpen === true && barSize == '30%') {
             checkPDFHeight()
         }
+        editorBar()
         setVisualizeOpenBar(barOpen)
         setVisualizerBarSize(barSize)
     }
@@ -278,7 +290,19 @@ const GlobalLayout = (props) => {
                     parentElement.style.height = '100%'
                 }
             }
-        }, 1000)  */
+        }, 1000)  */        
+    }
+
+    const editorBar = () => {
+        setTimeout(() => {
+            const findEditor = document.getElementsByClassName('editor')
+            console.log("findEditor", findEditor)
+            if( findEditor != null && findEditor.length > 0 ) {
+                findEditor[0].style.width = `${(findEditor[0].parentElement.clientWidth * 95 ) / 100}px`
+            } else {
+                editorBar()
+            }
+        }, 1000)
     }
 
     const openAnalyticsAndCharBar = () => {

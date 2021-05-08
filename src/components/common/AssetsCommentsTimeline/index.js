@@ -486,7 +486,7 @@ const handleDriveModalClose = (event) => {
   const renderCommentEditor = useMemo(() => {
     //if (!selectedCommentsEntity) return null
     return (
-      <div className={classes.commentEditor} ref={editorContainerRef}> 
+      <div className={`${classes.commentEditor} editor`} ref={editorContainerRef}> 
         <Droppable
           types={['template_agreement']} 
           onDrop={onDrop}
