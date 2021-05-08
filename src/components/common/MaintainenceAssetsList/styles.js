@@ -8,21 +8,27 @@ export default makeStyles((theme) => ({
         flex:1,
         overflow: 'hidden auto',        
         '& .MuiTableCell-root .MuiSelect-select.MuiSelect-select':{
-          paddingRight: 7 
+          paddingRight: 0 
+        },
+        '& .MuiSelect-select:focus':{
+          background: 'none'
         },
         '& svg.MuiSelect-icon':{
-          fontSize: '1.8rem'
+          fontSize: '1.7rem',
+          top: 3,
+          color: 'rgba(255,255,255,0.7)'
         },
         '& .MuiInput-underline':{
-          paddingRight: 9 
-        },
+          paddingRight: 11 
+        }, 
         '& .MuiInput-underline:hover:not(.Mui-disabled):before, .MuiInput-underline:before, .MuiInput-underline:after':{
           border: 0
         },
         '& .selectedIcon svg':{          
           position: 'absolute',
-          left: 9,
-          fontSize: '1.5rem'
+          left: 5,
+          fontSize: '1.5rem',
+          color: 'rgba(255,255,255,0.7)'
         }
     },
     topBar: {

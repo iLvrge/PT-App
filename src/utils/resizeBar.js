@@ -8,8 +8,8 @@ export const updateResizerBar = (ref, bar, t = 0) => {
         }
         findResizer.style.display = display
     }
+    
 }
-
 
 export const resetAllRowSelect = ( dispatch,  resetList) => {
     resetList.forEach( item => dispatch( item ))

@@ -141,8 +141,8 @@ const MaintainenceAssetsList = ({
   
   const COLUMNS = [
     {
-      width: 30,
-      minWidth: 30,
+      width: 24,
+      minWidth: 24,
       disableSort: true,
       label: "",
       dataKey: "asset",

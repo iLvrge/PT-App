@@ -153,9 +153,9 @@ const VirtualizedTable = ({
     const listIndex = list.findIndex( row => row.id == showDropValue )
     if(listIndex !== -1) {
       return (
-        <div style={{width: `${width + 5}px`}} className={'selectedIcon'}>
+        <div style={{width: `${width + 10}px`}} className={'selectedIcon'}>
           {
-            list[listIndex].icon != '' ? list[listIndex].icon : list[listIndex].image != '' ? <img src={list[listIndex].image} style={{width: '21px', position: 'absolute', left: '7px'}}/> : ''
+            list[listIndex].icon != '' ? list[listIndex].icon : list[listIndex].image != '' ? <img src={list[listIndex].image} style={{width: '17px', position: 'absolute', left: '7px'}}/> : ''
           }
         </div>
       )

@@ -14,7 +14,7 @@ import Loader from '../../components/common/Loader'
 import NavigationIcon from '../../components/NavigationIcon'
 
 import { loginRedirect } from  '../../utils/tokenStorage'
-
+import { editorBar } from  '../../utils/splitpane'
 import { 
     setBreadCrumbs,
     setAssetTypesAssignmentsLoading,
@@ -83,6 +83,8 @@ const GlobalLayout = (props) => {
 
     useEffect(() => {
         editorBar() // run to find editor width
+        window.addEventListener("resize", editorBar) // add on resize window 
+        return () => window.removeEventListener("resize", editorBar)
     }, [])
     
     // When we are in search route disable company, activites, parties icons
@@ -291,19 +293,7 @@ const GlobalLayout = (props) => {
                 }
             }
         }, 1000)  */        
-    }
-
-    const editorBar = () => {
-        setTimeout(() => {
-            const findEditor = document.getElementsByClassName('editor')
-            console.log("findEditor", findEditor)
-            if( findEditor != null && findEditor.length > 0 ) {
-                findEditor[0].style.width = `${(findEditor[0].parentElement.clientWidth * 95 ) / 100}px`
-            } else {
-                editorBar()
-            }
-        }, 1000)
-    }
+    } 
 
     const openAnalyticsAndCharBar = () => {
         setChartBar( true )
