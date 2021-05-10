@@ -192,8 +192,8 @@ const VirtualizedTable = ({
       if(role === 'image' && extension === true ) {
         const urlLink = rowData['url_private']
         const urlExplode = urlLink.split(/[#?]/)[0].split('.').pop().trim()
-        //extensionIcon = urlExplode == 'pdf' ? 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png' : ''
-        faIcon = urlExplode == 'pdf' ? faFilePdf : ''
+        extensionIcon = urlExplode == 'pdf' ? 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/pdf_file.svg' : ''
+        
         if(extensionIcon == '' && faIcon == '') {
           const fileType = rowData['filetype'] ? rowData['filetype'] : 'txt'
           switch(fileType) {
@@ -322,8 +322,8 @@ const VirtualizedTable = ({
             )
           ) : role === 'image'  ? 
               extensionIcon != '' ?
-              <span>
-                <img src={extensionIcon} className={classes.smallImg}/><span className={classes.marginLeft}>{cellData}</span>
+              <span className={classes.flexImageContainer}>
+                <span className={classes.flexImage}><img src={extensionIcon} className={classes.smallImg}/></span><span className={classes.flexData}>{cellData}</span>
               </span> 
               :
               faIcon != ''
@@ -341,7 +341,7 @@ const VirtualizedTable = ({
             staticIcon + format(cellData)
           ) : (
             cellData
-          )}
+          )} 
         </TableCell>
       );
     },

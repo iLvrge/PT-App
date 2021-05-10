@@ -71,8 +71,21 @@ const styles = makeStyles((theme) => ({
   smallImg:{
     width: '18.375px',
     height: '18.375px',
-    position: 'relative',
-    top: 5
+    marginRight: 5
+  },
+  flexImageContainer:{
+    display: 'flex',
+    alignItems: 'center',
+  },
+  flexImage: {
+    display: 'flex',
+    width: 21,
+    height: 21,
+    alignItems: 'center',
+  },
+  flexData: {
+    display: 'flex',
+    alignItems: 'center',
   }
 }))
 
