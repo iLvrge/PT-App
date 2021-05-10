@@ -13,6 +13,7 @@ export default {
     assetTypeAssignments: {list: [], total_records: 0, selected: [], selectAll: false, loading: false, children: {list: [], total_records: 0, loading: false, selected:[]}},
     assetTypeAssignmentAssets: {list: [], total_records: 0, selected: [], selectAll: false, loading: false},
     maintainence_fee_file_name: 'MaintainenceFee',
+    document_transaction: [],
     move_assets: [],
     channel_id: '',
     slack_auth_token: null,

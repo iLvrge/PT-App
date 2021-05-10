@@ -557,6 +557,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state,
           move_assets: action.items
         }
+      case types.SET_DOCUMENT_TRANSACTION:
+        return { 
+          ...state,
+          document_transaction: action.data
+        } 
       default:  
       return state
   } 

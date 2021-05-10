@@ -75,6 +75,7 @@ const VirtualizedTable = ({
   onMouseOver,
   openDropAsset,
   dropdownSelections,
+  resizeColumnsWidth,
   ...tableProps
 }) => {
   
@@ -191,8 +192,9 @@ const VirtualizedTable = ({
       if(role === 'image' && extension === true ) {
         const urlLink = rowData['url_private']
         const urlExplode = urlLink.split(/[#?]/)[0].split('.').pop().trim()
-        extensionIcon = urlExplode == 'pdf' ? 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png' : ''
-        if(extensionIcon == '') {
+        //extensionIcon = urlExplode == 'pdf' ? 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png' : ''
+        faIcon = urlExplode == 'pdf' ? faFilePdf : ''
+        if(extensionIcon == '' && faIcon == '') {
           const fileType = rowData['filetype'] ? rowData['filetype'] : 'txt'
           switch(fileType) {
             case 'xml':
@@ -377,6 +379,7 @@ const VirtualizedTable = ({
     isIndeterminate,
     totalRows,
     onChangeColumnFilters,
+    resizeColumnsWidth
   );
   const checkRowCollapse = (collapsable, index, rowData, tableRef) => {
     if (collapsable) {

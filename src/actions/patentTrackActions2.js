@@ -1118,3 +1118,10 @@ export const setMoveAssets = (items) => {
     items
   }
 } 
+
+export const setDocumentTransaction = (data) => {  
+  return {
+    type: types.SET_DOCUMENT_TRANSACTION, 
+    data
+  }
+} 

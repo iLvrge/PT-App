@@ -15,6 +15,16 @@ const styles = makeStyles((theme) => ({
     boxSizing: 'border-box',
     '&.MuiTableCell-head':{
       minWidth: '35px',
+    },
+    '& .ReactVirtualized__Table__headerColumn':{
+      position: 'relative',
+      '& .DragHandle':{
+        flex: '0 0 16px',
+        zIndex: 2,
+        cursor: 'col-resize',
+        position: 'absolute',
+        right: 0
+      }
     }
   },
   tableRow: {

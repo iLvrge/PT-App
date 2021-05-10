@@ -109,6 +109,7 @@ const GlobalScreen = ({
     openAnalyticsAndCharBar,
     closeAnalyticsAndCharBar,
     checkChartAnalytics,
+    setAssetFilesBarSize,
     assetFilesBarSize,
     assetFilesBar,
     driveTemplateBarSize,
@@ -426,6 +427,7 @@ const GlobalScreen = ({
                                     setIsDragging(!isDragging)
                                 }}
                                 onDragFinished={(size) => {
+                                    resizePane('split10', size, setAssetFilesBarSize)
                                     setIsDragging(!isDragging)
                                 }}
                                 pane2Style={{

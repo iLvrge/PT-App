@@ -31,6 +31,11 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled}) => {
 
     const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
     const assetTypeAssignmentAssetsSelectedAll = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selectAll)
+    const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
+
+    const template_document_url = useSelector(state => state.patenTrack2.template_document_url)
+    const driveTemplateFrameMode = useSelector(state => state.ui.driveTemplateFrameMode)
+    const new_drive_template_file = useSelector(state => state.patenTrack2.new_drive_template_file)
 
     return (
         <div className={classes.showIcon}>
@@ -57,7 +62,9 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled}) => {
                             :
                             t === 4 && (assetsTransactionsSelected.length > 0 || assetsTransactionsSelectedAll === true) ? 'selection_indicator'
                             :
-                            t === 5 && (assetTypeAssignmentAssetsSelected.length > 0 || assetTypeAssignmentAssetsSelectedAll === true) ? 'selection_indicator'
+                            t === 5 && (selectedAssetsPatents.length > 0 || assetTypeAssignmentAssetsSelected.length > 0 || assetTypeAssignmentAssetsSelectedAll === true) ? 'selection_indicator'
+                            :
+                            t === 10 && (driveTemplateFrameMode === true && ( template_document_url != null || new_drive_template_file != null )) ? 'selection_indicator'
                             :
                             ''
                             } 

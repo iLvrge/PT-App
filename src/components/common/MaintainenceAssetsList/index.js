@@ -23,7 +23,8 @@ import {
   setChildSelectedAssetsTransactions,
   setChildSelectedAssetsPatents,
   setSlackMessages,
-  setMoveAssets
+  setMoveAssets,
+  setTemplateDocument
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -37,6 +38,7 @@ import {
   toggleFamilyMode,
   toggleFamilyItemMode,
   toggleLifeSpanMode,
+  setDriveTemplateFrameMode
 } from "../../../actions/uiActions";
 
 import { numberWithCommas, applicationFormat } from "../../../utils/numbers";
@@ -253,6 +255,8 @@ const MaintainenceAssetsList = ({
         dispatch(setAssetTypeCustomerSelectedRow([]));
         dispatch(setChildSelectedAssetsTransactions([]));
         dispatch(setSlackMessages({ messages: [], users: [] }));
+        dispatch(setDriveTemplateFrameMode(false))
+        dispatch(setTemplateDocument(null))
         dispatch(setSelectedAssetsPatents([patent, application]));
         dispatch(
           setAssetsIllustration({ type: "patent", id: patent || application }),

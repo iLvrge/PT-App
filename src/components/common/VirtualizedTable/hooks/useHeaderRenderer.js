@@ -10,6 +10,7 @@ import Fade from '@material-ui/core/Fade'
 import MenuItem from '@material-ui/core/MenuItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
+import Draggable from "react-draggable"
 import _groupBy from 'lodash/groupBy'
 import { makeStyles } from '@material-ui/core/styles'
 import Chip from '@material-ui/core/Chip'
@@ -72,9 +73,10 @@ const HeadCell = ({
   rows,
   totalRows,
   onChangeColumnFilters,
+  resizeColumnsWidth
 }) => {
   const classes = useStyles()
-  const { align, role, disableSort, filterable, paddingLeft, badge } = columns[columnIndex]
+  const { align, role, disableSort, filterable, paddingLeft, badge, draggable } = columns[columnIndex]
   const [ anchorEl, setAnchorEl ] = useState(null)
   const [ columnFilters, setColumnFilters ] = useState([])
 
@@ -170,11 +172,31 @@ const HeadCell = ({
           </>
         )
       }
+      {
+        draggable === true ?
+        <Draggable
+          axis="x"
+          defaultClassName="DragHandle"
+          defaultClassNameDragging="DragHandleActive"
+          onDrag={(event, data) => 
+            resizeColumnsWidth(
+              dataKey,
+              data
+            )
+          } 
+          position={{ x: 0 }}
+          zIndex={999}
+        >
+          <span className="DragHandleIcon">⋮</span>
+        </Draggable>
+        :
+        ''
+      }
     </TableCell>
   )
 }
 
-function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSelectAll, allSelected, isIndeterminate, totalRows, onChangeColumnFilters) {
+function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSelectAll, allSelected, isIndeterminate, totalRows, onChangeColumnFilters, resizeColumnsWidth) {
   return useCallback(({ sortBy, dataKey, sortDirection, label, columnIndex }) => {
     return (
       <HeadCell
@@ -192,6 +214,7 @@ function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSel
         rows={rows}
         totalRows={totalRows}
         onChangeColumnFilters={onChangeColumnFilters}
+        resizeColumnsWidth={resizeColumnsWidth}
       />
     )
   }, [

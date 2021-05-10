@@ -26,9 +26,8 @@ export default makeStyles((theme) => ({
         },
         '& .selectedIcon svg':{          
           position: 'absolute',
-          left: 5,
-          bottom: 3,
-          fontSize: '1.5rem',
+          left: 9,
+          fontSize: '1.3rem',
           color: 'rgba(255,255,255,0.7)'
         }
     },

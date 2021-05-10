@@ -13,8 +13,11 @@ import PatenTrackApi from '../../../api/patenTrack2'
 
 import { getTokenStorage } from '../../../utils/tokenStorage'
 
+import { capitalize } from '../../../utils/numbers'
+
 import { 
-    setTemplateDocument    
+    setTemplateDocument,
+    setDocumentTransaction        
 } from '../../../actions/patentTrackActions2'
 
 import {
@@ -37,8 +40,59 @@ const FilesTemplates = () => {
 
     const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
     const channel_id = useSelector(state => state.patenTrack2.channel_id)
+    const document_transaction = useSelector(state => state.patenTrack2.document_transaction)
+
+    const COLUMNS = [  
+        {
+            width: 120,
+            minWidth: 120,
+            label: 'Document',
+            dataKey: 'title', 
+            role: 'image',
+            imageURL: '',
+            imageIcon: '',
+            extension: true    
+        },
+        {
+            width: 100,
+            minWidth: 100,
+            label: 'Type', 
+            dataKey: 'convey_ty',
+            staticIcon: '',
+            format: capitalize             
+        },
+        {
+            width: 150,
+            minWidth: 150,
+            oldWidth: 150,
+            draggable: true,
+            label: '1st Assignor', 
+            dataKey: 'assignor'             
+        },
+        {
+            width: 150,
+            minWidth: 150,
+            oldWidth: 150,
+            draggable: true,
+            label: '2nd Assignee', 
+            dataKey: 'assignee'             
+        },        
+        {
+            width: 60,
+            minWidth: 60,
+            label: 'Parties',
+            dataKey: 'count_parties'
+        }
+    ]
+
+    const [headerColumns, setHeaderColumns] = useState(COLUMNS)
 
 
+    useEffect(() => {
+        if(selectedRow.length != document_transaction.length ) {
+            setSelectedRow(document_transaction)
+        }
+    }, [document_transaction, selectedRow])
 
     useEffect(() => {
 
@@ -66,42 +120,7 @@ const FilesTemplates = () => {
         getDriveAndAssetFiles()
     }, [ selectedAssetsPatents, channel_id ])
 
-    const COLUMNS = [  
-        {
-            width: 120,
-            minWidth: 120,
-            label: 'Document',
-            dataKey: 'title', 
-            role: 'image',
-            imageURL: '',
-            imageIcon: '',
-            extension: true    
-        },
-        {
-            width: 100,
-            minWidth: 100,
-            label: 'Type', 
-            dataKey: 'convey_ty'             
-        },
-        {
-            width: 150,
-            minWidth: 150,
-            label: 'Assignor', 
-            dataKey: 'assignor'             
-        },
-        {
-            width: 150,
-            minWidth: 150,
-            label: 'Assignee', 
-            dataKey: 'assignee'             
-        },        
-        {
-            width: 60,
-            minWidth: 60,
-            label: 'Parties',
-            dataKey: 'count_parties'
-        }
-    ]
+    
 
     const onHandleSelectAll = () => {
 
@@ -116,7 +135,19 @@ const FilesTemplates = () => {
         }
         setSelectedRow([item.id])
         setCurrentSelection(item.id)
-    }, [ dispatch ])    
+        dispatch(setDocumentTransaction([item.id]))        
+    }, [ dispatch ]) 
+    
+    const resizeColumnsWidth = useCallback((dataKey, data) => {
+        let previousColumns = [...headerColumns]
+        const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
+
+        if( findIndex !== -1 ) {
+          previousColumns[findIndex].width =  previousColumns[findIndex].oldWidth + data.x
+          previousColumns[findIndex].minWidth = previousColumns[findIndex].oldWidth + data.x
+        }
+        setHeaderColumns(previousColumns)
+    }, [ headerColumns ] )
 
     return (
         <Paper className={classes.root} square id={`layout_templates`}>
@@ -131,10 +162,11 @@ const FilesTemplates = () => {
                     rows={assetFiles}
                     rowHeight={rowHeight}
                     headerHeight={rowHeight}
-                    columns={COLUMNS}
+                    columns={headerColumns}
                     onSelect={onHandleClickRow}
                     onSelectAll={onHandleSelectAll}
                     defaultSelectAll={selectedAll}
+                    resizeColumnsWidth={resizeColumnsWidth}
                     responsive={true}
                     collapsable={false}
                     showIsIndeterminate={false} 

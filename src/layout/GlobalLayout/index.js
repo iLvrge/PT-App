@@ -497,6 +497,7 @@ const GlobalLayout = (props) => {
                 openAnalyticsAndCharBar,
                 closeAnalyticsAndCharBar,
                 checkChartAnalytics,
+                setAssetFilesBarSize,
                 assetFilesBarSize,
                 assetFilesBar,
                 driveTemplateBarSize,
