@@ -50,34 +50,60 @@ const COLUMNS = [
         disableSort: true
     },
     {
-      width: 171,  
-      minWidth: 171,
-      label: 'Companies',
-      dataKey: 'original_name',
+        width: 171,  
+        minWidth: 171,
+        oldWidth: 171,
+        draggable: true,
+        label: 'Companies',
+        dataKey: 'original_name',
     },
     {
-      width: 80,  
-      minWidth: 80,
-      label: 'Assets',
-      staticIcon: '',
-      dataKey: 'no_of_assets',
-      format: numberWithCommas,
+        width: 80,  
+        minWidth: 80, 
+        label: 'Acitivites',
+        staticIcon: '',
+        dataKey: 'no_of_assets',
+        format: numberWithCommas,
     },
     {
-      width: 120,  
-      minWidth: 120,
-      label: 'Transactions',
-      staticIcon: '',
-      dataKey: 'no_of_transactions',
-      format: numberWithCommas,
+        width: 80,  
+        minWidth: 80,
+        label: 'Parties',
+        staticIcon: '',
+        dataKey: 'no_of_assets',
+        format: numberWithCommas,
     },
     {
-      width: 80,  
-      minWidth: 80,
-      label: 'Parties',
-      dataKey: 'no_of_parties',
-      staticIcon: '',
-      format: numberWithCommas,
+        width: 80,  
+        minWidth: 80,
+        label: 'Inventors',
+        staticIcon: '',
+        dataKey: 'no_of_assets',
+        format: numberWithCommas,
+    },
+    {
+        width: 120,  
+        minWidth: 120,
+        label: 'Transactions',
+        staticIcon: '',
+        dataKey: 'no_of_transactions',
+        format: numberWithCommas,
+    },
+    {
+        width: 80,  
+        minWidth: 80,
+        label: 'Assets',
+        staticIcon: '',
+        dataKey: 'no_of_assets',
+        format: numberWithCommas,
+    },
+    {
+        width: 80,  
+        minWidth: 80,
+        label: 'Arrows',
+        dataKey: 'no_of_parties',
+        staticIcon: '',
+        format: numberWithCommas,
     }
 ] 
 
@@ -88,6 +114,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const history = useHistory()
     const location = useLocation()
     const tableRef = useRef()
+    const [headerColumns, setHeaderColumns] = useState(COLUMNS)
     const [ width, setWidth ] = useState( 1000 )
     const [ offset, setOffset ] = useState(0)
     const [ rowHeight, setRowHeight ] = useState(40)
@@ -281,6 +308,17 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         setOffset(currOffset => (currOffset + DEFAULT_CUSTOMERS_LIMIT))
     }, [ dispatch, offset])
 
+    const resizeColumnsWidth = useCallback((dataKey, data) => {
+        let previousColumns = [...headerColumns]
+        const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
+
+        if( findIndex !== -1 ) {
+          previousColumns[findIndex].width =  previousColumns[findIndex].oldWidth + data.x
+          previousColumns[findIndex].minWidth = previousColumns[findIndex].oldWidth + data.x
+        }
+        setHeaderColumns(previousColumns)
+    }, [ headerColumns ] )
+
 
     if (isLoadingCompanies && companies.list.length == 0) return <Loader />
 
@@ -294,10 +332,11 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         rows={companies.list}
         rowHeight={rowHeight}
         headerHeight={rowHeight}
-        columns={COLUMNS}
+        columns={headerColumns}
         onSelect={handleClickRow}
         onSelectAll={handleSelectAll}
         defaultSelectAll={selectedCompaniesAll}
+        resizeColumnsWidth={resizeColumnsWidth}
         responsive={true}
         width={width} 
         containerStyle={{ 
@@ -307,7 +346,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         style={{
             width: '100%'
         }}/>
-    </Paper>
+    </Paper> 
   )
 }
 

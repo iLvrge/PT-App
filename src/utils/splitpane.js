@@ -9,7 +9,7 @@ export  const resizePane = (name, size, callBack) => {
 
 
 
-export const editorBar = () => {
+export const editorBar = (time) => {
     setTimeout(() => {
         const findEditor = document.getElementsByClassName('editor')
         if( findEditor != null && findEditor.length > 0 ) {
@@ -17,7 +17,7 @@ export const editorBar = () => {
         } else {
             editorBar()
         }
-    }, 1000)
+    }, typeof time == undefined ? 100 : time)
 }
 
 export  const resizePane2 = (size, callBack) => {

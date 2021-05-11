@@ -81,7 +81,7 @@ export default makeStyles(theme => ({
         marginLeft: `calc(${LEFT_PANEL_WIDTH}% - ${LOGO_WIDTH + ((HEADER_MARGIN + HEADER_PADDING) / 2)}px)`,
     },
     userLogoOfficial: {
-        height: '2.1rem', /*28px */
+        height: '2rem', /*28px */
         maxWidth: '100%',
         marginRight: '20px'
     }, 

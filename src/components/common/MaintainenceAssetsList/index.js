@@ -177,13 +177,13 @@ const MaintainenceAssetsList = ({
     {
       width: 90,
       minWidth: 90,
-      label: "Payment Due",
+      label: "Due Date",
       dataKey: "payment_due",
     },
     {
       width: 80,
       minWidth: 80,
-      label: "Amount",
+      label: "Amount Due",
       dataKey: "fee_amount",
       staticIcon: "$",
       format: numberWithCommas,

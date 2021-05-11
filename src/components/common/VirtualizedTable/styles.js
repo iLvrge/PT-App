@@ -23,7 +23,7 @@ const styles = makeStyles((theme) => ({
         zIndex: 2,
         cursor: 'col-resize',
         position: 'absolute',
-        right: 0
+        right: 10
       }
     }
   },
