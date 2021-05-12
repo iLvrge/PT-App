@@ -16,6 +16,10 @@ import Professionals from './Tabs/Professionals'
 import LawFirms from './Tabs/LawFirms'
 import Grid from '@material-ui/core/Grid'
 
+import { 
+  Home as HomeIcon,
+} from '@material-ui/icons'
+
 import NavigationIcon from '../../components/NavigationIcon'
 
 const TABS = [
@@ -175,8 +179,6 @@ function SettingsPage() {
     }
   ]
 
-  console.log("topToolBar", topToolBar)
-
   return !authenticated ? <Redirect to={'/'} /> : (
     <div className={classes.root}>
       <NewHeader />
@@ -185,6 +187,9 @@ function SettingsPage() {
           <Grid container className={classes.dashboard}>
             <div className={classes.filterToolbar}> 
               <div className={classes.flex}>
+                <div className={classes.navigationHome}>
+                  <HomeIcon />
+                </div>
                 {
                   topToolBar.map( (item, index) => (
                     <NavigationIcon key={index} {...item}/>

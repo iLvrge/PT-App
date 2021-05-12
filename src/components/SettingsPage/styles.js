@@ -66,5 +66,11 @@ export default makeStyles(theme => ({
   flex:{
     width: '3.5rem',
     position: 'absolute'
+  },
+  navigationHome:{
+    height: 40,
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: 10
   }
 }))

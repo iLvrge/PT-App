@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { Grid } from '@material-ui/core'
 
-import FilterListIcon from '@material-ui/icons/FilterList'
+import SettingsIcon from '@material-ui/icons/Settings'
 
 import useStyles from './styles'
 
@@ -517,7 +517,7 @@ const GlobalLayout = (props) => {
                     <div className={classes.filterToolbar}> 
                         <div className={classes.flex}>
                             <div className={classes.showIcon} style={{height: '40px'}}>
-                                <FilterListIcon />
+                                <SettingsIcon />
                             </div>
                             {
                                 topToolBar.map( (item, index) => (

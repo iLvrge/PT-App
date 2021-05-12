@@ -30,6 +30,7 @@ const Repository = () => {
     const google_profile = useSelector(state => state.patenTrack2.google_profile)
     const [ googleToken, setGoogleToken ] = useState('')
     const [ breadcrumbItems, setBreadCrumbItems ] = useState([])
+    const [ repoBreadcrumbItems, setRepoBreadcrumbItems ] = useState([])
     const [ repoFolder, setRepoFolder] = useState('')
     const [ folderId, setFolderId]  = useState('')
     const [ repoDriveFiles, setRepoDriveFiles ] = useState({files: []})
@@ -119,7 +120,7 @@ const Repository = () => {
             const { access_token } = token  
             if(access_token) {
                 setGoogleToken(token)                
-                /* dispatch( getGoogleTemplates(token) ) */
+                dispatch( getGoogleTemplates(token) )
                 const getDriveFolders = async () => {
                     const { data } = await PatenTrackApi.getGoogleTemplates(token, undefined, true) //get only folders
                     if(data != null && data.list != null && data.list.hasOwnProperty('files')) {
@@ -133,6 +134,7 @@ const Repository = () => {
                     getRepoFolder(google_profile.email)
                 } else {
                     dispatch(getGoogleProfile(token))
+                    getRepoDriveFiles()
                 }
                 
             } else { 
@@ -159,17 +161,21 @@ const Repository = () => {
             const token = JSON.parse(googleToken)      
             dispatch( getLayoutWithTemplates(token, google_profile.email) )
             getRepoFolder(google_profile.email)
+        } else {
+            setRepoDriveFiles(drive_files)
         }
-    }, [ dispatch, google_profile ])
+    }, [ dispatch, google_profile, drive_files ])
     
-    const getRepoFolder = async(userAccount) => {
+    const getRepoFolder = useCallback(async(userAccount) => {
+        console.log('getRepoFolder', drive_files)
         const {data} = await PatenTrackApi.getRepoFolder(userAccount)
 
         if(data != null) {
             setRepoFolder(data)
+            setRepoBreadcrumbItems(JSON.parse(data.breadcrumb))
             getRepoDriveFiles(data.container_id)
         }
-    }
+    }, [ drive_files ])
 
     const getRepoDriveFiles = async(containerID) => {
         const googleToken = getTokenStorage( 'google_auth_token_info' )
@@ -180,19 +186,29 @@ const Repository = () => {
         }
     }   
 
-    const openDriveFolder = useCallback((event, id, name) => {
+    const openDriveFolder = useCallback((event, id, name, t, callBack) => {
         //get the list folders and files from selected folder        
         event.preventDefault();
         if(id) {
-            let items = [...breadcrumbItems]
+            let items = t == 1 ? [...breadcrumbItems] : [...repoBreadcrumbItems]
+            if(items.length == 0) {
+                items.push({id: 'undefined', name: 'My Drive'})
+            }
             items.push({id, name})
-            setBreadCrumbItems( items )
-            dispatch(getGoogleTemplates(googleToken, id))
+            if( t === 1 ) {
+                setBreadCrumbItems( items )
+                dispatch(getGoogleTemplates(googleToken, id))
+            } else {
+                setRepoBreadcrumbItems( items )
+                getRepoDriveFiles(id)
+                callBack(id, name, items)
+            }  
         }
-    }, [dispatch, breadcrumbItems, googleToken, google_profile])
+    }, [dispatch, breadcrumbItems, repoBreadcrumbItems, googleToken, google_profile])
 
-    const handleBreadcrumbClick = useCallback((event, item) => {
-        let oldItems = [...breadcrumbItems]
+    const handleBreadcrumbClick = useCallback((event, item, type) => {
+        event.preventDefault()
+        let oldItems = type == 1 ? [...breadcrumbItems] : [...repoBreadcrumbItems]
         if( item.id == 'undefined' ) {
             oldItems = []
         } else {
@@ -200,81 +216,37 @@ const Repository = () => {
             if(findIndex !== -1 ) {
                 oldItems = oldItems.splice( 0, findIndex + 1)
             }
-        }        
-        setBreadCrumbItems(oldItems)
-        dispatch(getGoogleTemplates(googleToken, item.id))
-    }, [ dispatch, googleToken, breadcrumbItems ])
-    
-    const deleteTemplate = async (layoutID, containerID) => {
-        const {data} = await PatenTrackApi.deleteTemplateFromLayout(layoutID, containerID, google_profile.email)
-        if(data != null) {
-            let oldFiles = [...layoutDriveFiles]
-            const promise = oldFiles.map((item, index) => {
-                if( item.layout_id == layoutID ) {
-                    oldFiles[index] = data
-                }
-            })
-            Promise.all(promise)
-            setLayoutDriveFiles(oldFiles)
+        }  
+        if( type === 1 ) {
+            setBreadCrumbItems( oldItems )
+        } else {
+            setRepoBreadcrumbItems( oldItems )
+        }       
+        if( type === 1 ) {
+            dispatch(getGoogleTemplates(googleToken, item.id))
+        } else {
+            getRepoDriveFiles(item.id)
         }
-    }
+    }, [ dispatch, googleToken, breadcrumbItems, repoBreadcrumbItems ])
 
     const BreadCrumbs = ({type }) => {
         return (
             <Breadcrumbs maxItems={2} aria-label="breadcrumb">
                {
                     type == 1 && breadcrumbItems.length > 0 && breadcrumbItems.map( crumb => (
-                        <Link key={crumb.id} color="inherit" href="#" onClick={(e) => handleBreadcrumbClick(e, crumb)}>
+                        <Link key={crumb.id} color="inherit" href="#" onClick={(e) => handleBreadcrumbClick(e, crumb, type)}>
                             {crumb.name}
                         </Link>
                     ))
                }
                {
-                    type == 2 && repoFolder != '' && Object.keys(repoFolder).length > 0 && (
-                        <Link key={repoFolder.container_id} color="inherit" href="#">
-                            {repoFolder.container_name}
+                    type == 2 && repoBreadcrumbItems.length > 0  && repoBreadcrumbItems.map( crumb => (
+                        <Link key={crumb.id} color="inherit" href="#" onClick={(e) => handleBreadcrumbClick(e, crumb, type)}>
+                            {crumb.name}
                         </Link>
-                    )
+                    ))
                }
             </Breadcrumbs>
-        )
-    }
-
-    const handleChange = (event, type) => {
-        if(type == 1) {
-            setFolderId(event.target.value);
-            openDriveFolder(event, event.target.value, event.currentTarget.innerText)
-        } else {
-            let formData = new FormData();
-            formData.append('container_id', event.target.value)
-            formData.append('container_name', event.currentTarget.innerText)
-            formData.append('user_account', google_profile.email)
-            PatenTrackApi
-            .addRepoFolder(formData) 
-            .then(res => {
-                if(res.data != null) {
-                    setRepoFolder(res.data)
-                    getRepoDriveFiles(res.data.container_id)
-                }
-            })
-        }
-    }
-
-    const  DropDownFolderList = ({list, type}) => {
-        return (
-            <Select
-                labelId="drive-folder"
-                id="driveFolder"
-                value={type == 1 ? folderId : repoFolder != '' ? repoFolder.container_id : ''}
-                name={"folder_name"}
-                onChange={(event) => handleChange(event, type)}
-            >
-                {
-                    list.files.length > 0 && list.files.map( (folder, index) => (
-                        <MenuItem key={index} value={folder.id} name={folder.name}>{folder.name}</MenuItem>
-                    ))
-                }
-            </Select>
         )
     }
 
@@ -317,21 +289,41 @@ const Repository = () => {
     const handleClickRepositoryDriveRow = useCallback(async (event, row) => {
         event.preventDefault()
         if(row.mimeType == 'application/vnd.google-apps.folder') {
-            openDriveFolder(event, row.id, row.name)
+            openDriveFolder(event, row.id, row.name, 2, addRepositoryFolder)            
         } else {
             setSelected(row.id)
             setSelectedRepositoryDriveRow([row.id])
+            setSelectedDriveRow([])
         }
-    })
+    }, [ google_profile, googleToken, repoBreadcrumbItems ])
+
+    const addRepositoryFolder = useCallback(async(id, name, repoBreadcrumbItems) => {
+        if(id != 'undefined') {
+            let formData = new FormData();
+            formData.append('container_id', id)
+            formData.append('container_name', name)
+            formData.append('user_account', google_profile.email)
+            formData.append('breadcrumb', JSON.stringify(repoBreadcrumbItems))
+            PatenTrackApi
+            .addRepoFolder(formData) 
+            .then(res => {
+                if(res.data != null) {
+                    setRepoFolder(res.data)
+                    setRepoBreadcrumbItems(JSON.parse(res.data.breadcrumb))
+                }
+            })
+        }
+        
+    }, [ google_profile, googleToken ])
 
     const handleClickDriveRow = useCallback(async (event, row) => {
         event.preventDefault()
         if(row.mimeType == 'application/vnd.google-apps.folder') {
-            openDriveFolder(event, row.id, row.name)
+            openDriveFolder(event, row.id, row.name, 1)
         } else {
-            if(selectItems.length > 0) {
-                const { checked } = event.target;
-                if (checked !== undefined) {
+            const { checked } = event.target;
+            if (checked !== undefined) {
+                if(selectItems.length > 0) {
                     let oldDriveItems = [...selectedDriveItems], insert = false
 
                     if( !oldDriveItems.includes(row.id) ) {
@@ -343,8 +335,7 @@ const Repository = () => {
                             oldDriveItems.splice(findIndex, 1)
                         }
                     }
-                    setSelectedDriveItems(oldDriveItems)
-                    
+                    setSelectedDriveItems(oldDriveItems)                    
                     let formResponse;
                     if(insert === true) {
                         let formData = new FormData();
@@ -356,29 +347,29 @@ const Repository = () => {
                     } else {
                         formResponse = await PatenTrackApi.deleteTemplateFromLayout(JSON.stringify(selectItems), row.id, google_profile.email)
                     }
-
+    
                     if(formResponse) {
                         console.log("formResponse", formResponse)
-                    }                        
-                } else {
-                    const element = event.target.closest(
-                        "div.ReactVirtualized__Table__rowColumn"
-                    );
-                    const index = element.getAttribute("aria-colindex");
-                    if (index == 2) {
-                        setSelected(row.id)
-                        setSelectedDriveRow([row.id])
-                    }
-                }
+                    } 
+                }  else {
+                    alert('Please select layout first.')
+                }                      
             } else {
-                alert('Please select layout first.')
+                const element = event.target.closest(
+                    "div.ReactVirtualized__Table__rowColumn"
+                );
+                const index = element.getAttribute("aria-colindex");
+                if (index == 2) {
+                    setSelected(row.id)
+                    setSelectedDriveRow([row.id])
+                    setSelectedRepositoryDriveRow([])
+                }
             }
         }        
     }, [ dispatch, selectedDriveItems, breadcrumbItems, googleToken, google_profile, selectItems ])
 
     const openGoogleWindow = useCallback(() => {
         if(googleLoginRef.current != null) {
-            console.log("googleLoginRef.current", googleLoginRef.current, googleLoginRef.current.querySelector('button'))
             googleLoginRef.current.querySelector('button').click()
         } 
     }, [ googleLoginRef ])
@@ -423,7 +414,7 @@ const Repository = () => {
                 <div className={classes.flexColumn}>
                     <div className={classes.heading}>
                         <Typography variant="body1" component="h2" className={classes.noWrap}>
-                            Templates Folder:  <DropDownFolderList list={driveFolders} type={1} /> <BreadCrumbs type={1}/>
+                            Templates:  <BreadCrumbs type={1}/>
                         </Typography>
                     </div>
                     <div className={classes.drive}>
@@ -460,7 +451,7 @@ const Repository = () => {
                     <div className={classes.flexColumn}>
                         <div className={classes.heading}>
                             <Typography variant="body1" component="h2" className={classes.noWrap}>
-                                Documents Folder: <DropDownFolderList list={driveFolders} type={2} /> <BreadCrumbs  type={2}/>
+                                Documents: <BreadCrumbs  type={2}/>
                             </Typography>
                         </div>
                         <div className={classes.drive}>
