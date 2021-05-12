@@ -320,7 +320,7 @@ const VirtualizedTable = ({
             ) : (
               <ExpandMoreIcon className={"arrow"} />
             )
-          ) : role === 'image'  ? 
+          ) : role === 'image'  ?  
               extensionIcon != '' ?
               <span className={classes.flexImageContainer}>
                 <span className={classes.flexImage}><img src={extensionIcon} className={classes.smallImg}/></span><span className={classes.flexData}>{cellData}</span>
@@ -331,7 +331,7 @@ const VirtualizedTable = ({
               <span><FontAwesomeIcon icon={faIcon}/><span className={classes.marginLeft}>{cellData}</span></span> 
               :
               rowData[imageURL] ? 
-              <span>
+              <span className={classes.flex}>
                 <Avatar src={rowData[imageURL]} className={classes.small}/><span className={classes.marginLeft}>{cellData}</span>
               </span> 
               :  imageIcon != '' && imageIcon != undefined ? <span><FontAwesomeIcon icon={imageIcon}/><span className={classes.marginLeft}>{cellData}</span></span> : (

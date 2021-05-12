@@ -86,6 +86,9 @@ const styles = makeStyles((theme) => ({
   flexData: {
     display: 'flex',
     alignItems: 'center',
+  },
+  flex:{
+    display: 'flex'
   }
 }))
 

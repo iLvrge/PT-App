@@ -30,6 +30,13 @@ export default makeStyles(theme => ({
         height: '100vh',
         overflow: 'auto',
         background: '#292929',
+        '& .MuiTableCell-root':{
+            whiteSpace: 'nowrap'
+        },
+        '& .MuiAvatar-root':{
+            width: theme.spacing(2),
+            height: theme.spacing(2),
+        }, 
         '& .MuiList-root':{
             width: '100%',
         },
@@ -135,5 +142,8 @@ export default makeStyles(theme => ({
     },
     relative: {
         position: 'relative',
-    } 
+    },
+    noWrap: {
+        whiteSpace: 'nowrap'
+    }
 }))

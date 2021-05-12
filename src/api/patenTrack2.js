@@ -529,7 +529,7 @@ class PatenTrackApi {
     return axios.get(url, getHeader())
   }
   
-  static getGoogleTemplates( token, id ) {
+  static getGoogleTemplates( token, id, showFolders ) {
     let url = `${base_new_api_url}/documents/drive?access_token=ACCESS_TOKEN&refresh_token=REFRESH_TOKEN`
     url = url.replace('ACCESS_TOKEN', token.access_token)
     if( token.refresh_token != undefined && token.refresh_token != 'undefined' ) {
@@ -543,6 +543,11 @@ class PatenTrackApi {
     if( id != undefined && id != 'undefined' ) {
       url += `&id=${id}`
     }
+    console.log('showFolders',showFolders)
+    if( typeof showFolders != undefined ) {
+      url += `&show_folders=true`
+    }
+
     return axios.get(url, getHeader())
   }
 
@@ -568,8 +573,8 @@ class PatenTrackApi {
     return axios.post(`${base_new_api_url}/documents/layout`, data, getFormUrlHeader())
   }
 
-  static deleteTemplateFromLayout( layoutID, containerID, userAccount ) {
-    return axios.delete(`${base_new_api_url}/documents/layout?layout_id=${layoutID}&container_id=${containerID}&user_account=${userAccount}`, getHeader())
+  static deleteTemplateFromLayout( data ) {
+    return axios.put(`${base_new_api_url}/documents/layout`, data , getFormUrlHeader())
   }
 
   static getRepoFolder( userAccount ) {
