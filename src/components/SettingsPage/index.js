@@ -3,7 +3,7 @@ import { Redirect, useHistory, useLocation } from 'react-router-dom'
 import useStyles from './styles'
 import NewHeader from '../NewHeader'
 import _get from 'lodash/get'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 import CompaniesNames from './Tabs/Compaines/Names'
 import CompaniesAdresses from './Tabs/Compaines/Adresses'
@@ -16,10 +16,9 @@ import Professionals from './Tabs/Professionals'
 import LawFirms from './Tabs/LawFirms'
 import Grid from '@material-ui/core/Grid'
 
-import { 
-  Home as HomeIcon,
-} from '@material-ui/icons'
 
+import { setBreadCrumbs } from  '../../actions/patentTrackActions2'
+import { setControlModal } from '../../actions/uiActions'
 import NavigationIcon from '../../components/NavigationIcon'
 
 const TABS = [
@@ -45,9 +44,10 @@ const findTabViaChild = (currentTab) => _get(TABS.find(({ children }) => Array.i
 
 function SettingsPage() {
   const classes = useStyles()
-  const authenticated = useSelector(store => store.auth.authenticated)
   const history = useHistory()
   const location = useLocation()
+  const dispatch = useDispatch()
+  const authenticated = useSelector(store => store.auth.authenticated)  
   const [ openBar, setOpenBar ] = useState(true)
   const currentTab = useMemo(() => {
     const splittedPathname = location.pathname.split('/')
@@ -122,10 +122,26 @@ function SettingsPage() {
     history.push('/settings/lawFirms')  
   }
 
+  const handleHomeLink = useCallback(() => {
+    dispatch(
+      setBreadCrumbs('')
+    )
+    dispatch(
+      setControlModal(true)
+    )
+    history.push('/') 
+  }, [dispatch])
+
   const topToolBar = [
     {
-      tooltip: 'Slack',
+      tooltip: 'Home',
       bar: openBar,
+      click: handleHomeLink,
+      t: 40
+    },
+    {
+      tooltip: 'Slack',
+      bar: openBar, 
       click: handleSlackLink,
       t: 31
     },
@@ -187,9 +203,6 @@ function SettingsPage() {
           <Grid container className={classes.dashboard}>
             <div className={classes.filterToolbar}> 
               <div className={classes.flex}>
-                <div className={classes.navigationHome}>
-                  <HomeIcon />
-                </div>
                 {
                   topToolBar.map( (item, index) => (
                     <NavigationIcon key={index} {...item}/>

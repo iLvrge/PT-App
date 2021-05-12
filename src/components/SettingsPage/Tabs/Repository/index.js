@@ -160,11 +160,10 @@ const Repository = () => {
             const googleToken = getTokenStorage( 'google_auth_token_info' )
             const token = JSON.parse(googleToken)      
             dispatch( getLayoutWithTemplates(token, google_profile.email) )
+            dispatch( getGoogleTemplates(token) )
             getRepoFolder(google_profile.email)
-        } else {
-            setRepoDriveFiles(drive_files)
         }
-    }, [ dispatch, google_profile, drive_files ])
+    }, [ dispatch, google_profile ])
     
     const getRepoFolder = useCallback(async(userAccount) => {
         console.log('getRepoFolder', drive_files)

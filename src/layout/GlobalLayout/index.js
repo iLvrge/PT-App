@@ -2,9 +2,11 @@ import React, { useEffect, useState, useCallback } from "react"
 
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Grid } from '@material-ui/core'
+import { 
+    useHistory,
+  } from 'react-router-dom'
 
-import SettingsIcon from '@material-ui/icons/Settings'
+import { Grid } from '@material-ui/core'
 
 import useStyles from './styles'
 
@@ -34,6 +36,7 @@ import PatenTrackApi from '../../api/patenTrack2'
 const GlobalLayout = (props) => {
     const classes = useStyles()
     const dispatch = useDispatch()
+    const history = useHistory()
     const [ openBar, setOpenBar ] = useState(true)
     const [ openTypeBar, setTypeOpenBar ] = useState(false)
     const [ openOtherPartyBar, setOtherPartyOpenBar ] = useState(false)
@@ -361,7 +364,17 @@ const GlobalLayout = (props) => {
         }
     }
 
+    const handleOpenSettings = useCallback(() => {
+        history.push('/settings/repository')
+    }, [ history ])
+
     const topToolBar = [
+        {
+            tooltip: 'Settings',
+            bar: false,
+            click: handleOpenSettings,
+            t: 0
+        },
         {
             tooltip: 'Companies',
             bar: openBar,
@@ -507,7 +520,7 @@ const GlobalLayout = (props) => {
         }
         return child
     })
-
+ 
 
     return (
         <div className={classes.root}>
@@ -515,10 +528,7 @@ const GlobalLayout = (props) => {
             <Grid container className={classes.dashboardWarapper}>
                 <Grid container className={classes.dashboard}>
                     <div className={classes.filterToolbar}> 
-                        <div className={classes.flex}>
-                            <div className={classes.showIcon} style={{height: '40px'}}>
-                                <SettingsIcon />
-                            </div>
+                        <div className={classes.flex}>                            
                             {
                                 topToolBar.map( (item, index) => (
                                     <NavigationIcon key={index} {...item}/>
