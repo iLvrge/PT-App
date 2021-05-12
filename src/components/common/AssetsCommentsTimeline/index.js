@@ -19,14 +19,14 @@ import {
   InsertDriveFileOutlined as InsertDriveFileOutlinedIcon,
   InsertDriveFile as InsertDriveFileIcon
 } from '@material-ui/icons'
-import GoogleLogin from 'react-google-login'
+
 import { Droppable } from 'react-drag-and-drop'
 import { Timeline, TimelineEvent } from 'react-event-timeline'
 import PatenTrackApi from '../../../api/patenTrack2'
 import { numberWithCommas, applicationFormat } from "../../../utils/numbers"
 import { controlList } from "../../../utils/controlList"
 import QuillEditor from '../QuillEditor'
- 
+import Googlelogin from '../Googlelogin' 
 import useStyles from './styles'
 import { FaChevronCircleDown } from 'react-icons/fa'
 import {
@@ -164,15 +164,6 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
       timelineRef.current.parentNode.style.height = `${ calHeight }px`
     }    
   }
-
-  const responseGoogle = useCallback((response) => {
-    const { code } = response
-    if(code != undefined) {
-      setTokenStorage( 'google_auth_token_info', code )
-      /* setGoogleAuthLogin(false) */
-      dispatch( getGoogleAuthToken( code ) )
-    }
-  }, [ dispatch ])
 
   const getLayout = useMemo(() => {
     return controlList.filter(item => item.category == selectedCategory)
@@ -740,20 +731,7 @@ const handleDriveModalClose = (event) => {
               googleAuthLogin
               ?
                 <span ref={googleLoginRef}>
-                <GoogleLogin
-                clientId={process.env.REACT_APP_GOOGLE_CLIENTID}
-                buttonText="Login with Google"
-                offline={true}
-                accessType="offline"
-                approvalPrompt="force"
-                scope="https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.metadata https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/drive.readonly"
-                responseType="code"
-                onSuccess={responseGoogle}
-                onFailure={responseGoogle}
-                className={classes.googleButton}                
-                >
-                
-                </GoogleLogin>
+                  <Googlelogin/>
                 </span>
               :
                 <Button 
@@ -768,7 +746,7 @@ const handleDriveModalClose = (event) => {
           :
           ''
         }
-        { renderCommentsTimeline }
+        { renderCommentsTimeline }  
         { renderCommentEditor }
       </div>
       <Modal

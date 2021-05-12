@@ -91,7 +91,6 @@ export default makeStyles(theme => ({
     splitPane: {
         position: 'relative !important',
         '& .Resizer': {
-            background: `none`,
             opacity: 1,
             height: '100%',
             width: '3px',

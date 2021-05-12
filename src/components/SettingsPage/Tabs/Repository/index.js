@@ -1,32 +1,17 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback, useRef} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Draggable, Droppable } from 'react-drag-and-drop'
+
 import { 
-        Grid, 
-        List, 
-        ListItem, 
-        ListItemText,
-        ListItemAvatar, 
-        Avatar,
         Typography,
         Breadcrumbs,
         Link,
         Select,
         MenuItem,
-        Checkbox
     } from '@material-ui/core'
-import TreeView from '@material-ui/lab/TreeView'
-import TreeItem from '@material-ui/lab/TreeItem'
-import { 
-    ExpandMore as ExpandMoreIcon, 
-    ChevronRight as ChevronRightIcon,
-    Folder as FolderIcon,
-    Close as CloseIcon
-} from '@material-ui/icons'
 import SplitPane from 'react-split-pane'
 import VirtualizedTable from '../../../common/VirtualizedTable'
 import useStyles from './styles'
-
+import Googlelogin from '../../../common/Googlelogin'
 import { setBreadCrumbs, getLayoutWithTemplates, getGoogleTemplates, getGoogleProfile, setLayoutWithTemplatelist } from  '../../../../actions/patentTrackActions2'
 
 import PatenTrackApi from '../../../../api/patenTrack2';
@@ -36,7 +21,7 @@ import { getTokenStorage } from '../../../../utils/tokenStorage'
 const Repository = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
-    const [ expanded, setExpanded ] = useState([])
+    const googleLoginRef = useRef(null)
     const [ selected, setSelected ] = useState(null)
     const [ layoutDriveFiles, setLayoutDriveFiles] = useState([])
     const [ driveFiles, setDriveFiles] = useState([])
@@ -57,6 +42,7 @@ const Repository = () => {
 
     const [ selectedDriveItems, setSelectedDriveItems ] = useState( [] )
     const [ selectDriveRow, setSelectedDriveRow ] = useState( [] )
+    const [ selectRepositoryDriveRow, setSelectedRepositoryDriveRow ] = useState( [] )
     
 
     const COLUMNS = [
@@ -151,11 +137,11 @@ const Repository = () => {
                 
             } else { 
                 // Not login
-                alert('Please first login with google account.')
+                setTimeout(openGoogleWindow,5000) //google login popup
             }
         } else {
             // Not login
-            alert('Please first login with google account.')
+            setTimeout(openGoogleWindow, 5000) //google login popup
         }
     }, [])
 
@@ -294,14 +280,13 @@ const Repository = () => {
 
     const handleClickRow = useCallback((event, row) => {
         event.preventDefault()
-        const { checked } = event.target;
-        console.log("handleClickRow", checked)
+        const { checked } = event.target
         if (checked !== undefined) {
             let oldLayoutItems = [...selectItems]
             if( !oldLayoutItems.includes(row.layout_id) ) {
                 oldLayoutItems.push(row.layout_id)
             } else {
-                const findIndex = oldLayoutItems.findIndex( item => item.layout_id == row.layout_id)
+                const findIndex = oldLayoutItems.findIndex( item => item == row.layout_id)
                 if( findIndex !== -1) {
                     oldLayoutItems.splice(findIndex, 1)
                 }
@@ -313,8 +298,7 @@ const Repository = () => {
 
     const handleSelectAll = useCallback((event, row) => {
         event.preventDefault()
-        const { checked } = event.target;
-        console.log("handleSelectAll", checked, selectedAll)
+        const { checked } = event.target
         if(layoutDriveFiles.length > 0) {
             if( selectedAll === true ) {
                 setSelectedAll( false )
@@ -329,6 +313,16 @@ const Repository = () => {
             }
         }
     }, [ dispatch, layoutDriveFiles, selectedAll ]) 
+
+    const handleClickRepositoryDriveRow = useCallback(async (event, row) => {
+        event.preventDefault()
+        if(row.mimeType == 'application/vnd.google-apps.folder') {
+            openDriveFolder(event, row.id, row.name)
+        } else {
+            setSelected(row.id)
+            setSelectedRepositoryDriveRow([row.id])
+        }
+    })
 
     const handleClickDriveRow = useCallback(async (event, row) => {
         event.preventDefault()
@@ -381,6 +375,13 @@ const Repository = () => {
             }
         }        
     }, [ dispatch, selectedDriveItems, breadcrumbItems, googleToken, google_profile, selectItems ])
+
+    const openGoogleWindow = useCallback(() => {
+        if(googleLoginRef.current != null) {
+            console.log("googleLoginRef.current", googleLoginRef.current, googleLoginRef.current.querySelector('button'))
+            googleLoginRef.current.querySelector('button').click()
+        } 
+    }, [ googleLoginRef ])
   
     return (
         <SplitPane
@@ -467,12 +468,12 @@ const Repository = () => {
                                 classes={classes}
                                 selected={selectItems}
                                 selectedKey={'id'}
-                                rowSelected={selectedRow}
+                                rowSelected={selectRepositoryDriveRow}
                                 rows={repoDriveFiles.files}
                                 rowHeight={rowHeight}
                                 headerHeight={rowHeight}
                                 columns={headerRepositoryColumns}
-                                onSelect={handleClickDriveRow}
+                                onSelect={handleClickRepositoryDriveRow}
                                 onSelectAll={handleSelectAll}
                                 defaultSelectAll={selectedAll}
                                 disableHeader={true}
@@ -496,7 +497,10 @@ const Repository = () => {
                             :
                             ''
                         }
-                    </div>
+                        <span ref={googleLoginRef}>
+                            <Googlelogin/>
+                        </span>
+                    </div>                    
                 </SplitPane>
             </SplitPane>
         </SplitPane>
