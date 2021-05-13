@@ -32,9 +32,10 @@ const Googlelogin = () => {
             responseType="code"
             onSuccess={responseGoogle}
             onFailure={responseGoogle}
-            className={classes.googleButton}                
+            className={classes.googleButton}    
+            style={{width: '800px'}}            
         >
-        </GoogleLogin>
+        </GoogleLogin> 
     )
 }
 

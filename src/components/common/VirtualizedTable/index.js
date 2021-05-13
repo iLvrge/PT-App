@@ -35,6 +35,7 @@ import Typography from '@material-ui/core/Typography';
 import useStyles from "./styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import Checkbox from "@material-ui/core/Checkbox";
+import Radio from "@material-ui/core/Radio";
 import _orderBy  from "lodash/orderBy";
 import _sortBy  from "lodash/sortBy";
 import useHeaderRenderer from "./hooks/useHeaderRenderer";
@@ -314,7 +315,19 @@ const VirtualizedTable = ({
               } 
               indeterminate={isIndeterminate}
             />
-          ) : role === "arrow" ? (
+          )
+          :
+          role === "radio" ? (
+            <Radio
+              checked={selected.includes(cellData)}
+              disabled={
+                disableRow === true && rowData[disableRowKey] === 0
+                  ? true
+                  : false
+              } 
+            />
+          )
+          : role === "arrow" ? (
             selectedIndex !== cellData ? (
               <ChevronRightIcon className={"arrow"} />
             ) : (

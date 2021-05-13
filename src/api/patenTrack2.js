@@ -573,8 +573,8 @@ class PatenTrackApi {
     return axios.post(`${base_new_api_url}/documents/layout`, data, getFormUrlHeader())
   }
 
-  static deleteTemplateFromLayout( data ) {
-    return axios.put(`${base_new_api_url}/documents/layout`, data , getFormUrlHeader())
+  static deleteTemplateFromLayout( layoutID, containerID, userAccount ) {
+    return axios.delete(`${base_new_api_url}/documents/layout?layout_id=${layoutID}&container_id=${containerID}&user_account=${userAccount}`, getHeader())
   }
 
   static getRepoFolder( userAccount ) {

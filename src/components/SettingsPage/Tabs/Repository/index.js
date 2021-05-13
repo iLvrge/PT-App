@@ -52,8 +52,8 @@ const Repository = () => {
             minWidth: 29,
             label: '',
             dataKey: 'layout_id',
-            role: 'checkbox',
-            disableSort: true
+            role: 'radio',
+            disableSort: true 
         },
         {
             width: 171,  
@@ -98,7 +98,7 @@ const Repository = () => {
     const [headerDriveColumns, setHeaderDriveColumns] = useState(DRIVE_COLUMNS)
     const [headerRepositoryColumns, setHeaderRepositoryColumns] = useState(REPOSITORY_COLUMNS)
 
-    useEffect(() => {
+    /* useEffect(() => {
         if(layoutDriveFiles.length > 0) {
             const selectedTemplates = []
             layoutDriveFiles.map( layout => {
@@ -110,7 +110,7 @@ const Repository = () => {
             })
             setSelectedDriveItems(selectedTemplates)
         }
-    }, [ layoutDriveFiles ])
+    }, [ layoutDriveFiles ]) */
    
     useEffect(() => {
         dispatch(setBreadCrumbs('Settings > Templates and Documents Repository'))
@@ -173,6 +173,8 @@ const Repository = () => {
             setRepoFolder(data)
             setRepoBreadcrumbItems(JSON.parse(data.breadcrumb))
             getRepoDriveFiles(data.container_id)
+        } else {
+            getRepoDriveFiles()
         }
     }, [ drive_files ])
 
@@ -249,41 +251,25 @@ const Repository = () => {
         )
     }
 
-    const handleClickRow = useCallback((event, row) => {
+    const handleClickRow = useCallback(async (event, row) => {
         event.preventDefault()
         const { checked } = event.target
         if (checked !== undefined) {
-            let oldLayoutItems = [...selectItems]
-            if( !oldLayoutItems.includes(row.layout_id) ) {
-                oldLayoutItems.push(row.layout_id)
-            } else {
-                const findIndex = oldLayoutItems.findIndex( item => item == row.layout_id)
-                if( findIndex !== -1) {
-                    oldLayoutItems.splice(findIndex, 1)
-                }
+            setSelectItems([row.layout_id])
+            const { data } = await PatenTrackApi.getLayoutTemplatesByID(row.layout_id, google_profile.email)
+            if(data != null && data.list.length > 0) {
+                const items = [];
+                const promises = data.list.map( item => items.push(item.container_id))
+                await Promise.all(promises)
+                setSelectedDriveItems(items)
             }
-            setSelectItems(oldLayoutItems)
-        } else {
         }
-    }, [ dispatch, selectItems ])
+    }, [ dispatch, google_profile ])
 
     const handleSelectAll = useCallback((event, row) => {
         event.preventDefault()
-        const { checked } = event.target
-        if(layoutDriveFiles.length > 0) {
-            if( selectedAll === true ) {
-                setSelectedAll( false )
-                setSelectItems( [] )
-            } else {
-                const allItems = []
-                layoutDriveFiles.map( file => {
-                    allItems.push(file.layout_id)
-                })
-                setSelectItems(allItems)
-                setSelectedAll( true )
-            }
-        }
-    }, [ dispatch, layoutDriveFiles, selectedAll ]) 
+        setSelectedAll( false )
+    }, [ dispatch]) 
 
     const handleClickRepositoryDriveRow = useCallback(async (event, row) => {
         event.preventDefault()
@@ -329,7 +315,7 @@ const Repository = () => {
                         oldDriveItems.push(row.id)
                         insert = true
                     } else {
-                        const findIndex = oldDriveItems.findIndex( item => item.id == row.id)
+                        const findIndex = oldDriveItems.findIndex( item => item == row.id)
                         if( findIndex !== -1) {
                             oldDriveItems.splice(findIndex, 1)
                         }

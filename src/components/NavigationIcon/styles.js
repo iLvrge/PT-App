@@ -2,12 +2,11 @@ import { makeStyles } from '@material-ui/core/styles'
 
 export default makeStyles(theme => ({
     showIcon: {
-        /* padding: '10px', */
         fontSize: '1.1rem',
         display: 'flex',
         justifyContent: 'center',
-        paddingTop: '10px',
-        paddingBottom: '17px',
+        paddingTop: 7,
+        paddingBottom: 17,
         '& .MuiIconButton-root':{
             padding: 0,
             color: '#5a5a5a',
