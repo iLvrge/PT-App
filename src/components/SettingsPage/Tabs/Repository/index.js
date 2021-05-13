@@ -100,7 +100,7 @@ const Repository = () => {
     useEffect(() => {
         dispatch(setBreadCrumbs('Settings > Templates and Documents Repository'))
         const googleToken = getTokenStorage( 'google_auth_token_info' )
-        if(googleToken && googleToken != ''  && googleToken!= null) {
+        if(googleToken && googleToken != '' && googleToken!= null) {
             const token = JSON.parse(googleToken)      
             const { access_token } = token  
             if(access_token) {
@@ -110,11 +110,11 @@ const Repository = () => {
                 }
             } else { 
                 // Not login
-                setTimeout(openGoogleWindow,5000) //google login popup
+                setTimeout(openGoogleWindow,5000) //open google login popup
             }
         } else {
             // Not login
-            setTimeout(openGoogleWindow, 5000) //google login popup
+            setTimeout(openGoogleWindow, 5000) //open google login popup
         }
     }, [])
 
@@ -125,14 +125,14 @@ const Repository = () => {
         }
         if(googleToken == '') {
             const googleToken = getTokenStorage( 'google_auth_token_info' )
-            if(googleToken != null) {
+            if(googleToken && googleToken != '' && googleToken!= null) {
                 const token = JSON.parse(googleToken)  
                 const { access_token } = token  
                 if(access_token) {
                     setGoogleToken(token)      
                 }
             } else {
-                setTimeout(openGoogleWindow, 5000) //google login popup
+                setTimeout(openGoogleWindow, 5000) //open google login popup
             }
         }
     }, [dispatch, google_profile, googleToken])
