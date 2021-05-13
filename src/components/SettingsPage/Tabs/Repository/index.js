@@ -29,7 +29,7 @@ const Repository = () => {
     const drive_files = useSelector(state => state.patenTrack2.drive_files)
     const google_profile = useSelector(state => state.patenTrack2.google_profile)
     const [ googleToken, setGoogleToken ] = useState('')
-    const [ breadcrumbItems, setBreadCrumbItems ] = useState([])
+    const [ breadcrumbItems, setBreadCrumbItems ] = useState([{id: 'undefined', name: 'My Drive'}])
     const [ repoBreadcrumbItems, setRepoBreadcrumbItems ] = useState([])
     const [ repoFolder, setRepoFolder] = useState('')
     const [ folderId, setFolderId]  = useState('')
@@ -53,7 +53,8 @@ const Repository = () => {
             label: '',
             dataKey: 'layout_id',
             role: 'radio',
-            disableSort: true 
+
+            disableSort: true
         },
         {
             width: 171,  
@@ -98,7 +99,7 @@ const Repository = () => {
     const [headerDriveColumns, setHeaderDriveColumns] = useState(DRIVE_COLUMNS)
     const [headerRepositoryColumns, setHeaderRepositoryColumns] = useState(REPOSITORY_COLUMNS)
 
-    /* useEffect(() => {
+    /*useEffect(() => {
         if(layoutDriveFiles.length > 0) {
             const selectedTemplates = []
             layoutDriveFiles.map( layout => {
@@ -110,7 +111,7 @@ const Repository = () => {
             })
             setSelectedDriveItems(selectedTemplates)
         }
-    }, [ layoutDriveFiles ]) */
+    }, [ layoutDriveFiles ])*/
    
     useEffect(() => {
         dispatch(setBreadCrumbs('Settings > Templates and Documents Repository'))
@@ -152,7 +153,7 @@ const Repository = () => {
     }, [ templateDriveFiles ])
 
     useEffect(() => {
-        setDriveFiles(drive_files.files)
+        setDriveFiles(drive_files.files)        
     }, [drive_files])
 
     useEffect(() => {
@@ -160,7 +161,7 @@ const Repository = () => {
             const googleToken = getTokenStorage( 'google_auth_token_info' )
             const token = JSON.parse(googleToken)      
             dispatch( getLayoutWithTemplates(token, google_profile.email) )
-            dispatch( getGoogleTemplates(token) )
+			dispatch( getGoogleTemplates(token) )
             getRepoFolder(google_profile.email)
         }
     }, [ dispatch, google_profile ])
@@ -173,6 +174,8 @@ const Repository = () => {
             setRepoFolder(data)
             setRepoBreadcrumbItems(JSON.parse(data.breadcrumb))
             getRepoDriveFiles(data.container_id)
+
+
         } else {
             getRepoDriveFiles()
         }
@@ -264,12 +267,13 @@ const Repository = () => {
                 setSelectedDriveItems(items)
             }
         }
-    }, [ dispatch, google_profile ])
+    }, [ dispatch, selectItems, google_profile ])
 
-    const handleSelectAll = useCallback((event, row) => {
+    const handleSelectAll = (event, row) => {
         event.preventDefault()
         setSelectedAll( false )
-    }, [ dispatch]) 
+    }
+
 
     const handleClickRepositoryDriveRow = useCallback(async (event, row) => {
         event.preventDefault()
