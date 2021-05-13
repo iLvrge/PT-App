@@ -74,7 +74,6 @@ const Repository = () => {
             disableSort: true
         },
         {
-            width: 191,
             minWidth: 191,
             label: 'Template Name',
             dataKey: 'name',
@@ -85,7 +84,6 @@ const Repository = () => {
 
     const REPOSITORY_COLUMNS = [
         {
-            width: 200,
             minWidth: 200,
             label: 'Template Name',
             dataKey: 'name',
@@ -473,7 +471,7 @@ const Repository = () => {
                         {
                             selected != null 
                             ?
-                            <iframe src={`https://docs.google.com/file/d/${selected}/preview`} className={classes.frame}></iframe>
+                            <iframe src={`https://docs.google.com/file/d/${selected}/edit`} className={classes.frame}></iframe>
                             :
                             ''
                         }
