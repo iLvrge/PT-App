@@ -457,7 +457,7 @@ const Repository = () => {
                         {
                             selected != null 
                             ?
-                            <iframe src={`https://docs.google.com/document/d/${selected}/preview`} className={classes.frame}></iframe>
+                            <iframe src={`https://docs.google.com/document/d/${selected}/edit`} className={classes.frame}></iframe>
                             :
                             ''
                         }
