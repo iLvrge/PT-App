@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react'
 import { useSelector, useDispatch } from "react-redux"
-
+import moment from 'moment'
 import { Paper } from "@material-ui/core"
 import VirtualizedTable from "../VirtualizedTable"
 
@@ -15,7 +15,8 @@ import {
     } from '../../../actions/patentTrackActions2'
 
 import {
-  setDriveTemplateFrameMode
+  setDriveTemplateFrameMode,
+  setDriveTemplateMode
 } from '../../../actions/uiActions'
 
 import { getTokenStorage } from '../../../utils/tokenStorage'
@@ -42,9 +43,8 @@ const LayoutTemplates = () => {
 
     const COLUMNS = [    
       {
-        width: 100,
         minWidth: 100,
-        label: 'Template Name',
+        label: 'Document Templates',
         dataKey: 'container_name',            
       }
     ]
@@ -87,13 +87,14 @@ const LayoutTemplates = () => {
       }
     }, [dispatch, selectedAssetsPatents, channel_id ])
 
-    const onHandleClickRow = useCallback(async(e, item) => {
+    const onHandleDoubleClick = useCallback(async(e, item) => {
+        console.log('onHandleDoubleClick')
         // Ask que
         const askQ = window.confirm('Would you like to create a new document based on this template?')
 
         if( askQ ) {
           /**
-           * Check Token
+           * Check Token 
           */
           const googleToken = getTokenStorage( 'google_auth_token_info' )
           const slackToken = getTokenStorage( 'slack_auth_token_info' )
@@ -116,7 +117,7 @@ const LayoutTemplates = () => {
                   /**
                    * Create copy of this file and show in the iframe
                    * Send request to the server to get the new copy of file and open in TV.
-                   */
+                   */                  
                   console.log("Create new drive file")       
                   //setCurrentDriveFileItem(item)
                   const formData = new FormData()
@@ -124,13 +125,16 @@ const LayoutTemplates = () => {
                     formData.append('refresh_token', tokenParse.refresh_token)
                     formData.append('user_account', profileInfo.email)
                     formData.append('id', item.container_id)
+                    formData.append('name', `US${selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? selectedAssetsPatents[1] : selectedAssetsPatents[0]} ${moment(new Date()).format('MM DD, YYYY')} ${item.container_name}`)
                     //dispatch(createDriveTemplateFile(formData))
-                    const { data } = await PatenTrackApi.createDriveTemplateFile( formData )
+                    const { data } = await PatenTrackApi.createDriveTemplateFile( formData ) // send request for new document
                     if( data != null && typeof data == 'object') {
-                      dispatch(setDriveTemplateFrameMode(true)) //open drive frame
-                      dispatch(setDriveTemplateFile(data))
-                      // send message via slack channel
-                      sendMessageViaSlack(data)
+                      dispatch(setTemplateDocument('')) // close preview file frame mode
+                      dispatch(setDriveTemplateFrameMode(true)) // open drive frame
+                      dispatch(setDriveTemplateFile(data)) // open file in TV
+                      dispatch(setDriveTemplateMode(false)) // close document template
+                      sendMessageViaSlack(data) // send message via slack channel
+                      alert('A new document was added to the Documents list of this patent.')
                     }
                 } else {
                   tokenExpired = true
@@ -156,11 +160,19 @@ const LayoutTemplates = () => {
         }
     }, [ dispatch ])
 
-    const onMouseOver = useCallback((e, item, flag) => {
+    /* const onMouseOver = useCallback((e, item, flag) => {
         setCurrentSelection(item.container_id)
         dispatch(setDriveTemplateFrameMode(true))
         dispatch(setTemplateDocument(`https://docs.google.com/file/d/${item.container_id}/preview`))
-    }, [ dispatch ])
+    }, [ dispatch ]) */
+
+    const onHandleClickRow = useCallback((e, item, flag) => {
+      setCurrentSelection(item.container_id)
+      setSelectedRow([item.container_id])
+      dispatch(setDriveTemplateFrameMode(true))
+      dispatch(setTemplateDocument(`https://docs.google.com/file/d/${item.container_id}/preview`))
+  }, [ dispatch ])
+
 
     return (
         <Paper className={classes.root} square id={`layout_templates`}>
@@ -176,9 +188,10 @@ const LayoutTemplates = () => {
                   rowHeight={rowHeight}
                   headerHeight={rowHeight}
                   columns={COLUMNS}
-                  hover={true}
-                  onMouseOver={onMouseOver}
+                  /* hover={true}
+                  onMouseOver={onMouseOver} */
                   onSelect={onHandleClickRow}
+                  onDoubleClick={onHandleDoubleClick}
                   onSelectAll={onHandleSelectAll}
                   defaultSelectAll={selectedAll}
                   responsive={true}

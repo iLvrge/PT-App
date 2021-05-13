@@ -122,14 +122,16 @@ function SettingsPage() {
     history.push('/settings/lawFirms')  
   }
 
-  const handleHomeLink = useCallback(() => {
-    dispatch(
-      setBreadCrumbs('')
-    )
-    dispatch(
-      setControlModal(true)
-    )
+  const handleHomeLink = useCallback(() => {    
     history.push('/') 
+    setTimeout(() => {
+      dispatch(
+        setBreadCrumbs('')
+      )
+      dispatch(
+        setControlModal(true)
+      )
+    }, 500) 
   }, [dispatch])
 
   const topToolBar = [

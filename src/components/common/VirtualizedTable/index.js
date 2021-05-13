@@ -74,6 +74,7 @@ const VirtualizedTable = ({
   columnTextBoldList,
   hover,
   onMouseOver,
+  onDoubleClick,
   openDropAsset,
   dropdownSelections,
   resizeColumnsWidth,
@@ -475,7 +476,10 @@ const VirtualizedTable = ({
             event => {
               hover && onMouseOver(event, rowData, 0)
             }
-          }
+          } 
+          onDoubleClick = { event => {
+            onDoubleClick(event, rowData)
+          }}
           onClick={event => {
             onSelect(
               event,
@@ -534,6 +538,7 @@ const VirtualizedTable = ({
       selected,
       hover,
       onMouseOver,
+      onDoubleClick,
       onSelect,
       rowSelected,
       selectedIndex,

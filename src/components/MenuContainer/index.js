@@ -22,7 +22,7 @@ const MenuContainer = ({open}) => {
     const [ active, setActive ] = useState('All')
 
     const onRedirect =  useCallback((e, path) => {
-        dispatch(setControlModal( !controlModal ))
+        //dispatch(setControlModal( !controlModal ))
         history.push(path)
       }, [ dispatch, history, controlModal ])
 

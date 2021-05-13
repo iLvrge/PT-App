@@ -74,7 +74,9 @@ const Repository = () => {
             showOnCondition: 'application/vnd.google-apps.folder' 
         },
         {
+            width: 191,
             minWidth: 191,
+            flexGrow: 1,
             label: 'Template Name',
             dataKey: 'name',
             imageURL: 'iconLink',
@@ -84,14 +86,16 @@ const Repository = () => {
 
     const REPOSITORY_COLUMNS = [
         {
+            width: 200,
             minWidth: 200,
+            flexGrow: 1,
             label: 'Template Name',
             dataKey: 'name',
             imageURL: 'iconLink',
             role: 'image',
             paddingLeft: 10
         }
-    ]
+    ] 
 
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)
     const [headerDriveColumns, setHeaderDriveColumns] = useState(DRIVE_COLUMNS)
@@ -244,14 +248,16 @@ const Repository = () => {
         if (checked !== undefined) {
             setSelectItems([row.layout_id])
             const { data } = await PatenTrackApi.getLayoutTemplatesByID(row.layout_id, google_profile.email)
-            if(data != null && data.list.length > 0) {
-                const items = [];
+            const items = [];
+            if(data != null && data.list.length > 0) {               
                 const promises = data.list.map( item => items.push(item.container_id))
                 await Promise.all(promises)
                 setSelectedDriveItems(items)
+            } else {
+                setSelectedDriveItems(items)
             }
         }
-    }, [ dispatch, selectItems ])
+    }, [ dispatch, selectItems, google_profile ])
 
     const handleSelectAll = useCallback((event, row) => {
         event.preventDefault()
@@ -263,7 +269,7 @@ const Repository = () => {
         if(row.mimeType == 'application/vnd.google-apps.folder') {
             openDriveFolder(event, row.id, row.name, 2, addRepositoryFolder)            
         } else {
-            setSelected(row.id)
+            setSelected(row.webViewLink)
             setSelectedRepositoryDriveRow([row.id])
             setSelectedDriveRow([])
         }
@@ -332,7 +338,7 @@ const Repository = () => {
                 );
                 const index = element.getAttribute("aria-colindex");
                 if (index == 2) {
-                    setSelected(row.id)
+                    setSelected(row.webViewLink)
                     setSelectedDriveRow([row.id])
                     setSelectedRepositoryDriveRow([])
                 }
@@ -457,7 +463,7 @@ const Repository = () => {
                         {
                             selected != null 
                             ?
-                            <iframe src={`https://docs.google.com/document/d/${selected}/edit`} className={classes.frame}></iframe>
+                            <iframe src={`${selected}`} className={classes.frame}></iframe>
                             :
                             ''
                         }

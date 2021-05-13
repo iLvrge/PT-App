@@ -473,7 +473,7 @@ class PatenTrackApi {
   }  
 
   static updateSlackTeam( team ) {
-    return axios.put(`${base_new_api_url}/slacks/team/${team}`, getFormUrlHeader())
+    return axios.put(`${base_new_api_url}/slacks/team/${team}`, getHeader())
   }
 
   static getChannels( ) {

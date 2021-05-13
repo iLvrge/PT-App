@@ -64,9 +64,7 @@ const IllustrationCommentContainer = ({
     
     const [ templateURL, settemplateURL] = useState('about:blank')
 
-    useEffect(() => {
-        console.log('isDrag->isDrag', isDrag)
-    }, [ isDrag ])
+    
     
     useEffect(() => {
         updateResizerBar(illustrationRef, commentBar, 1)

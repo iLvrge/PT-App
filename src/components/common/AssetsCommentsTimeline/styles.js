@@ -91,7 +91,7 @@ export default makeStyles(theme => ({
   commentTimelineSection: {
     width: '95% !important',
     overflow: 'hidden auto',
-    height: 'calc(100% -  100px)',/*'32.5%', */
+    height: 'calc(100% -  180px)',/*'32.5%', */
     margin: '5px auto !Important',
     display: 'flex',
     '& div':{
