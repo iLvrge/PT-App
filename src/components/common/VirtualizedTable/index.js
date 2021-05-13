@@ -185,10 +185,12 @@ const VirtualizedTable = ({
         imageURL,
         imageIcon,
         extension,
+        showOnCondition,
         onClick,
         list,
         width
       } = columns[columnIndex];
+      
       let extensionIcon = '', faIcon = ''
       if(role === 'image' && extension === true ) {
         const urlLink = rowData['url_private']
@@ -276,6 +278,7 @@ const VirtualizedTable = ({
           }}
         >
           {
+            
           
           role === 'static_dropdown' ?
           (
@@ -305,7 +308,7 @@ const VirtualizedTable = ({
             </Select>
           )
           :
-          role === "checkbox" ? (
+          role === "checkbox" ? (typeof showOnCondition == 'string' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition) ? '' : (
             <Checkbox
               checked={selected.includes(cellData)}
               disabled={
@@ -317,16 +320,17 @@ const VirtualizedTable = ({
             />
           )
           :
-          role === "radio" ? (
-            <Radio
-              checked={selected.includes(cellData)}
-              disabled={
-                disableRow === true && rowData[disableRowKey] === 0
-                  ? true
-                  : false
-              } 
-            />
-          )
+          role === "radio" ? (typeof showOnCondition == 'string' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition) ? '' : 
+                (
+                  <Radio
+                    checked={selected.includes(cellData)}
+                    disabled={
+                      disableRow === true && rowData[disableRowKey] === 0
+                        ? true
+                        : false
+                    } 
+                  />
+                )     
           : role === "arrow" ? (
             selectedIndex !== cellData ? (
               <ChevronRightIcon className={"arrow"} />

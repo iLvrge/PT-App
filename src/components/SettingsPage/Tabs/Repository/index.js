@@ -30,7 +30,7 @@ const Repository = () => {
     const google_profile = useSelector(state => state.patenTrack2.google_profile)
     const [ googleToken, setGoogleToken ] = useState('')
     const [ breadcrumbItems, setBreadCrumbItems ] = useState([{id: 'undefined', name: 'My Drive'}])
-    const [ repoBreadcrumbItems, setRepoBreadcrumbItems ] = useState([])
+    const [ repoBreadcrumbItems, setRepoBreadcrumbItems ] = useState([{id: 'undefined', name: 'My Drive'}])
     const [ repoFolder, setRepoFolder] = useState('')
     const [ folderId, setFolderId]  = useState('')
     const [ repoDriveFiles, setRepoDriveFiles ] = useState({files: []})
@@ -53,7 +53,6 @@ const Repository = () => {
             label: '',
             dataKey: 'layout_id',
             role: 'radio',
-
             disableSort: true
         },
         {
@@ -71,7 +70,8 @@ const Repository = () => {
             label: '',
             dataKey: 'id',
             role: 'checkbox',
-            disableSort: true
+            disableSort: true,
+            showOnCondition: 'application/vnd.google-apps.folder' 
         },
         {
             minWidth: 191,
@@ -80,7 +80,7 @@ const Repository = () => {
             imageURL: 'iconLink',
             role: 'image'
         }
-    ]
+    ] 
 
     const REPOSITORY_COLUMNS = [
         {
@@ -96,46 +96,18 @@ const Repository = () => {
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)
     const [headerDriveColumns, setHeaderDriveColumns] = useState(DRIVE_COLUMNS)
     const [headerRepositoryColumns, setHeaderRepositoryColumns] = useState(REPOSITORY_COLUMNS)
-
-    /*useEffect(() => {
-        if(layoutDriveFiles.length > 0) {
-            const selectedTemplates = []
-            layoutDriveFiles.map( layout => {
-                if(layout.templates.length > 0) {
-                    layout.templates.map( template => {
-                        selectedTemplates.push( template.container_id )
-                    })
-                }
-            })
-            setSelectedDriveItems(selectedTemplates)
-        }
-    }, [ layoutDriveFiles ])*/
-   
+    
     useEffect(() => {
         dispatch(setBreadCrumbs('Settings > Templates and Documents Repository'))
         const googleToken = getTokenStorage( 'google_auth_token_info' )
-        if(googleToken && googleToken != '' ) {
+        if(googleToken && googleToken != ''  && googleToken!= null) {
             const token = JSON.parse(googleToken)      
             const { access_token } = token  
             if(access_token) {
-                setGoogleToken(token)                
-                dispatch( getGoogleTemplates(token) )
-                const getDriveFolders = async () => {
-                    const { data } = await PatenTrackApi.getGoogleTemplates(token, undefined, true) //get only folders
-                    if(data != null && data.list != null && data.list.hasOwnProperty('files')) {
-                        setDriveFolders(data.list)
-                    }
-                }
-                getDriveFolders()
-
-                if(google_profile != null && google_profile.hasOwnProperty('email')) {
-                    dispatch( getLayoutWithTemplates(token, google_profile.email) )
-                    getRepoFolder(google_profile.email)
-                } else {
+                setGoogleToken(token) 
+                if(google_profile == null) {
                     dispatch(getGoogleProfile(token))
-                    getRepoDriveFiles()
                 }
-                
             } else { 
                 // Not login
                 setTimeout(openGoogleWindow,5000) //google login popup
@@ -147,33 +119,47 @@ const Repository = () => {
     }, [])
 
     useEffect(() => {
+        if(google_profile != null && google_profile.hasOwnProperty('email')) {
+            dispatch( getLayoutWithTemplates(googleToken, google_profile.email) )
+            getRepoFolder(google_profile.email)
+        }
+        if(googleToken == '') {
+            const googleToken = getTokenStorage( 'google_auth_token_info' )
+            if(googleToken != null) {
+                const token = JSON.parse(googleToken)  
+                const { access_token } = token  
+                if(access_token) {
+                    setGoogleToken(token)      
+                }
+            } else {
+                setTimeout(openGoogleWindow, 5000) //google login popup
+            }
+        }
+    }, [dispatch, google_profile, googleToken])
+
+    useEffect(() => {
+        if(googleToken != '') {
+            dispatch( getGoogleTemplates(googleToken) ) 
+            getRepoDriveFiles()  
+        }
+    }, [ googleToken ])
+
+
+    useEffect(() => {
         setLayoutDriveFiles(templateDriveFiles)
     }, [ templateDriveFiles ])
 
     useEffect(() => {
-        setDriveFiles(drive_files.files)        
+        setDriveFiles(drive_files.files)
     }, [drive_files])
-
-    useEffect(() => {
-        if(google_profile != null && google_profile.hasOwnProperty('email')) {
-            const googleToken = getTokenStorage( 'google_auth_token_info' )
-            const token = JSON.parse(googleToken)      
-            dispatch( getLayoutWithTemplates(token, google_profile.email) )
-			dispatch( getGoogleTemplates(token) )
-            getRepoFolder(google_profile.email)
-        }
-    }, [ dispatch, google_profile ])
     
     const getRepoFolder = useCallback(async(userAccount) => {
-        console.log('getRepoFolder', drive_files)
         const {data} = await PatenTrackApi.getRepoFolder(userAccount)
 
         if(data != null) {
             setRepoFolder(data)
             setRepoBreadcrumbItems(JSON.parse(data.breadcrumb))
             getRepoDriveFiles(data.container_id)
-
-
         } else {
             getRepoDriveFiles()
         }
@@ -212,7 +198,7 @@ const Repository = () => {
         event.preventDefault()
         let oldItems = type == 1 ? [...breadcrumbItems] : [...repoBreadcrumbItems]
         if( item.id == 'undefined' ) {
-            oldItems = []
+            oldItems = [{id: 'undefined', name: 'My Drive'}]
         } else {
             const findIndex = oldItems.findIndex( row => row.id === item.id)
             if(findIndex !== -1 ) {
@@ -265,13 +251,12 @@ const Repository = () => {
                 setSelectedDriveItems(items)
             }
         }
-    }, [ dispatch, selectItems, google_profile ])
+    }, [ dispatch, selectItems ])
 
-    const handleSelectAll = (event, row) => {
+    const handleSelectAll = useCallback((event, row) => {
         event.preventDefault()
         setSelectedAll( false )
-    }
-
+    }, [ dispatch, layoutDriveFiles, selectedAll ]) 
 
     const handleClickRepositoryDriveRow = useCallback(async (event, row) => {
         event.preventDefault()
@@ -417,6 +402,7 @@ const Repository = () => {
                             onSelect={handleClickDriveRow}
                             onSelectAll={handleSelectAll}
                             defaultSelectAll={selectedAll}
+                            disableRowKey={'mimeType'}
                             disableHeader={true}
                             responsive={true}
                             width={width} 
@@ -471,7 +457,7 @@ const Repository = () => {
                         {
                             selected != null 
                             ?
-                            <iframe src={`https://docs.google.com/document/d/${selected}/edit`} className={classes.frame}></iframe>
+                            <iframe src={`https://docs.google.com/document/d/${selected}/preview`} className={classes.frame}></iframe>
                             :
                             ''
                         }
