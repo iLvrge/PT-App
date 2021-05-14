@@ -37,7 +37,8 @@ import {
   getSlackMessages, 
   getSlackUsersList,  
   getGoogleProfile,
-  setLayoutTemplatesByID
+  setLayoutTemplatesByID,
+  setTemplateDocument
 } from '../../../actions/patentTrackActions2'
 
 import {
@@ -54,7 +55,7 @@ import { html } from '../../../utils/html_encode_decode'
 
 import { capitalizeEachWord } from '../../../utils/numbers'
 
-const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }) => {
+const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, illustrationBar }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const googleLoginRef = useRef(null)
@@ -116,7 +117,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
 
   useEffect(() => {
     updateHeight(size, timelineRef)
-  }, [ size, timelineRef ])
+  }, [ size, timelineRef, illustrationBar ])
 
   const checkButtons = () => {
     try{
@@ -157,11 +158,12 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
 
   const updateHeight = ( size, timelineRef ) => {
     if( timelineRef.current != null ) {
-      let calHeight = timelineRef.current.parentNode.clientHeight - 168
-      if(displayButton === false) {
+      console.log('updateHeight=>height', timelineRef.current.parentNode.clientHeight)
+      let calHeight = timelineRef.current.parentNode.clientHeight - 96
+      /* if(displayButton === false) {
         calHeight = timelineRef.current.parentNode.clientHeight - 96
-      }
-      timelineRef.current.parentNode.style.height = `${ calHeight }px`
+      } */
+      timelineRef.current.style.height = `${ calHeight }px`
     }    
   }
 
@@ -190,7 +192,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
            */
           
           let profileInfo = google_profile;
-          if(profileInfo == null || profileInfo == '') {
+          if(profileInfo == null || profileInfo == '' || (profileInfo != null && !profileInfo.hasOwnProperty('email'))) {
             const getGoogleProfile = getTokenStorage('google_profile_info')
             if( getGoogleProfile != '') {
               profileInfo = JSON.parse(getGoogleProfile)
@@ -231,7 +233,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
       }    
     } else {   
       dispatch(setDriveButtonActive( false ))
-      //dispatch(setDriveTemplateFrameMode( false ))
+      dispatch(setDriveTemplateFrameMode( false ))
       dispatch(setDriveTemplateMode(false))
       dispatch(setLayoutTemplatesByID({ list: [], message: '' }))
     }
@@ -305,7 +307,9 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
   }, [ dispatch, getSlackMessages, channel_id ]) 
 
   const onUpdateTeamID = async(team) => {
-    const { status } = await PatenTrackApi.updateSlackTeam(team)
+    const form = new FormData()
+    form.append('team',  team )
+    const { status } = await PatenTrackApi.updateSlackTeam(form)
     if (status === 200) {
       console.log("Team updated")
     }
@@ -393,13 +397,16 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id }
     }
   }, [ editorContainerRef ])
   
-  const onHandleFileExplorer = useCallback(() => {
-    
+  const onHandleFileExplorer = useCallback(() => {    
     if( inputFile.current != null ) {
       inputFile.current.click()
       inputFile.current.addEventListener('change', onHandleFileInputChange)
     }
-  }, [ inputFile ])  
+  }, [ inputFile ])
+  
+const onAttachmentOpenedFile = useCallback(() => {    
+  console.log('onAttachmentOpenedFile')
+}, [] )
 
 const onHandleDriveExplorer = async( event, fileID = undefined ) => {
   event.preventDefault()  
@@ -474,6 +481,17 @@ const handleDriveModalClose = (event) => {
     setCommentHtml( previousContent => previousContent + ` ${data.template_agreement}`)
   }
 
+  const openFile = useCallback((event, file) => {
+    event.preventDefault()
+    if((file.hasOwnProperty('external_url') && file.hasOwnProperty('external_type') && file.external_type == 'gdrive') || (file.hasOwnProperty('external_url') && file.external_url.indexOf('docs.google.com') !== -1)) {
+      //open in TV
+      dispatch(setDriveTemplateFrameMode(true)) // open drive frame
+      dispatch(setTemplateDocument(file.external_url))
+    } else {
+      window.open(file.permalink, '_blank')
+    }
+  }, [dispatch])
+
   const renderCommentEditor = useMemo(() => {
     //if (!selectedCommentsEntity) return null
     return (
@@ -490,6 +508,7 @@ const handleDriveModalClose = (event) => {
             openGoogleWindow={openGoogleWindow}
             onDrive={getDriveDocumentList}
             onAttachmentFile={onHandleFileExplorer}
+            onAttachmentOpenedFile={onAttachmentOpenedFile}
             onAttachmentDriveFile={onHandleDriveExplorer}
             onSelectUser={setSelectUser}
             onFocus={handleFocus}
@@ -510,9 +529,9 @@ const handleDriveModalClose = (event) => {
         {
           checkUser !== -1
           ?
-            users[checkUser].profile.display_name 
-            ? users[checkUser].profile.display_name 
-            : users[checkUser].real_name
+            users[checkUser].profile.first_name 
+            ? `${users[checkUser].profile.first_name} ${users[checkUser].profile.last_name}`
+            : users[checkUser].name
           :
           item.user
         }
@@ -570,7 +589,7 @@ const handleDriveModalClose = (event) => {
       <>
         {
           files.files.map( (file, index) => (
-          <div key={`${indexing}-${index}`}><a href={file.permalink} target={`_blank`}>{file.name}</a></div>
+          <div key={`${indexing}-${index}`}><a onClick={(event) => { openFile(event, file)}} className={classes.fileLink}>{file.name}</a></div>
           ))
         }
       </>
@@ -581,12 +600,17 @@ const handleDriveModalClose = (event) => {
     
     if(comment.hasOwnProperty('subtype')) return null
     let message = comment.text
-    if(message.indexOf('docs.google.com/document') !== -1) {
+    if(message.indexOf('docs.google.com') !== -1) {
       const match = message.match(/<([^\s>]+)(\s|>)+/)
       if(match != null) {
         message = match[1]
-      } 
-    }
+        if( comment.files.length == 1 ) {
+          if(comment.files[0].external_type == 'gdrive' &&  message == comment.files[0].external_url ) {
+            message = ''
+          }
+        }
+      }       
+    } 
     return (
       <TimelineEvent
         key={`comment-${comment.ts}`}

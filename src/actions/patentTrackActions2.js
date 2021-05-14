@@ -1,7 +1,7 @@
 import * as types from './actionTypes2'
 import PatenTrackApi, { DEFAULT_CUSTOMERS_LIMIT, DEFAULT_TRANSACTIONS_LIMIT, DEFAULT_PATENTS_LIMIT } from '../api/patenTrack2'
 
-import { toggleLifeSpanMode, setDriveTemplateFrameMode, setDriveTemplateMode } from './uiActions'
+import { toggleLifeSpanMode, setDriveTemplateFrameMode, setDriveTemplateMode, resetUiStates } from './uiActions'
 
 export const setCompaniesList = data => {
   return {
@@ -1097,6 +1097,7 @@ export const setBreadCrumbsAndCategory = (item) => {
 export const setResetAll = (t = 0, item) => {  
   return async dispatch => {
     dispatch( resetStates() )
+    dispatch( resetUiStates() ) 
     if( t === 1) {
       if(typeof item != undefined) {
         dispatch( setBreadCrumbsAndCategory(item) )

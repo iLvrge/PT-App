@@ -23,6 +23,7 @@ const QuillEditor = ({
   onCancel = () => {},
   onDrive = () => {},
   openGoogleWindow = () => {},
+  onAttachmentOpenedFile = () => {},
   onAttachmentDriveFile = () => {},
   onAttachmentFile = () => {},
   onFocus = () => {},
@@ -44,6 +45,7 @@ const QuillEditor = ({
   const maintainenceFrameMode = useSelector(state => state.ui.maintainenceFrameMode)
   const move_assets = useSelector(state => state.patenTrack2.move_assets)
   const selectedMainCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
+  const driveTemplateMode = useSelector(state => state.ui.driveTemplateMode)
   const [ userListMenu, setUserListMenu ] = useState( null )
   const [ loadingUSPTO, setLoadingUSPTO ] = useState(false)
   const [ redo, setRedo ] = useState([])
@@ -171,15 +173,15 @@ const QuillEditor = ({
   }, [ dispatch, selectedMaintainencePatents, maintainenceFrameMode, move_assets, redo, selectedMainCompanies ])  
 
   const onHandleSubmitToUSPTO =  useCallback( async () => {      
-    if(assetTypeAssignmentAssetsSelected.length == 0) {
-      alert('Please first select assets from list') 
+    if(selectedAssetsPatents.length == 0) {
+      alert('Please select a asset') 
     } else {
       /**
        * Send request to server to create XML file 
       */
       setLoadingUSPTO( true )
       const form = new FormData()
-      form.append('assets', JSON.stringify(assetTypeAssignmentAssetsSelected))
+      form.append('assets', JSON.stringify(selectedAssetsPatents))
 
       const {data} = await PatenTrackApi.downloadXMLFromServer(form)
 
@@ -262,13 +264,14 @@ const QuillEditor = ({
           onChange={onChange}
           onFocus={onFocus}
           onBlur={onBlur}
-        />
+        /> 
         <CustomToolbar 
           quillEditor={quillRef}
           quill={quill} 
           onClick={onSubmit} 
           onUserClick={onUsersList} 
           onDocument={onDrive} 
+          onAttachmentOpenedFile={onAttachmentOpenedFile}
           onAttachmentFile={onAttachmentFile} 
           onAttachmentDriveFile={onAttachmentDriveFile}
           onMaintainenceFeeReview={onHandleReviewMaintainenceFee} 
@@ -279,6 +282,7 @@ const QuillEditor = ({
           driveBtnActive={driveButtonActive}
           maintainenceMode={maintainenceFrameMode}
           selectedAssets={selectedAssetsPatents}
+          driveTemplateMode={driveTemplateMode}
         /> 
         {GetMenuComponent}
       </div>

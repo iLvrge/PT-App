@@ -71,6 +71,7 @@ const IllustrationCommentContainer = ({
     }, [ illustrationRef, commentBar ])
 
     useEffect(() => {
+        console.log('new_drive_template_file', new_drive_template_file)
         if(new_drive_template_file != null && Object.keys(new_drive_template_file).length > 0 && new_drive_template_file.hasOwnProperty('id')) {
             settemplateURL(`https://docs.google.com/document/d/${new_drive_template_file.id}/edit`)
         }
@@ -243,7 +244,10 @@ const IllustrationCommentContainer = ({
                             toggleMinimize={toggleMinimizeAssetsCommentsTimeline} 
                             size={size} 
                             setChannel={setChannel} 
-                            channel_id={channel_id} />
+                            channel_id={channel_id} 
+                            illustrationBar={illustrationBar}
+                        />
+                            
                     :
                     ''
                 }

@@ -1,5 +1,5 @@
 import dashboardIntial from './dashboard_initials'
-
+import uiInitial from './uiInitial'
 export default {
   auth: {
     auth_email_sent: false,
@@ -21,22 +21,7 @@ export default {
     selectedPortfolio: null,
     companies_to_add_lawfirm: [] 
   },
-  ui: {
-    maintainenceFrameMode: false,
-    driveTemplateFrameMode: false,
-    driveTemplateMode: false,
-    usptoMode: false,
-    showThirdParties: true,
-    lifeSpanMode: false,
-    familyMode: false,
-    familyItemMode: false,
-    timeline: {
-      selectedItem: null,
-      selectedAsset: null,
-    },
-    controlModal: true, 
-    driveButtonActive: false
-  },
+  ui: uiInitial,
   assets: {
     records: {
       isLoading: false,

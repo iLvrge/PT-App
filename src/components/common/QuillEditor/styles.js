@@ -23,7 +23,8 @@ export default makeStyles(theme => ({
     marginLeft: 15,
     textTransform: 'initial',
     '&:hover':{
-      border:'1px solid #e60000 !important'
+      border:'1px solid #e60000 !important',
+      color: '#e60000 !important'
     },
     '&:first':{
       marginLeft: 5

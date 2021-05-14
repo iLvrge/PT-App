@@ -1,6 +1,6 @@
 import * as types from '../actions/uiTypes'
 import initialState from './initialState2'
-
+import uiInitial from './uiInitial'
 
 const uiReducer = (state = initialState.ui, action) => {
   switch (action.type) {
@@ -79,6 +79,13 @@ const uiReducer = (state = initialState.ui, action) => {
       return {
         ...state,
         showThirdParties: action.flag,
+      }
+    }
+    case types.SET_RESET_UI_ALL: { 
+      console.log('SET_RESET_UI_ALL', {...state, ...uiInitial})
+      return {
+        ...state,
+        ...uiInitial
       }
     }
     default:

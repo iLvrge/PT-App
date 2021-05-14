@@ -61,3 +61,7 @@ export const toggleShow3rdParities = flag => ({
   type: types.TOGGLE_SHOW_3RD_PARTIES,
   flag,
 })
+
+export const resetUiStates = () => ({
+  type: types.SET_RESET_UI_ALL
+}) 

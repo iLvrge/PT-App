@@ -3,6 +3,7 @@ import initialState from './initialState2'
 
 import dashboardIntial from './dashboard_initials'
 
+
 const arrayToObjectByKey = (array, key) =>
   array.reduce((result, item) => {
     result[item[key]] = item
@@ -550,7 +551,6 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           breadcrumbs,
           selectedCategory,
           layout_id,
-          ui: {...state.ui, maintainenceFrameMode: false, driveTemplateFrameMode: false, driveTemplateMode: false, usptoMode: false}
         }
       case types.SET_MOVE_ASSETS:
         return {

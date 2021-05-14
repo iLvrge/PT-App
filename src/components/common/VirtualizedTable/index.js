@@ -478,7 +478,7 @@ const VirtualizedTable = ({
             }
           } 
           onDoubleClick = { event => {
-            onDoubleClick(event, rowData)
+            typeof onDoubleClick === 'function' && onDoubleClick(event, rowData)
           }}
           onClick={event => {
             onSelect(

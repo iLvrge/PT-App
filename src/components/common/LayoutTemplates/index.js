@@ -44,6 +44,8 @@ const LayoutTemplates = () => {
     const COLUMNS = [    
       {
         minWidth: 100,
+        width: 100,
+        flexGrow: 1,
         label: 'Document Templates',
         dataKey: 'container_name',            
       }
@@ -125,16 +127,17 @@ const LayoutTemplates = () => {
                     formData.append('refresh_token', tokenParse.refresh_token)
                     formData.append('user_account', profileInfo.email)
                     formData.append('id', item.container_id)
-                    formData.append('name', `US${selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? selectedAssetsPatents[1] : selectedAssetsPatents[0]} ${moment(new Date()).format('MM DD, YYYY')} ${item.container_name}`)
+                    formData.append('name', `US${selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? selectedAssetsPatents[1] : selectedAssetsPatents[0]} - ${moment(new Date()).format('MMM DD, YYYY')} - ${item.container_name}`)
                     //dispatch(createDriveTemplateFile(formData))
                     const { data } = await PatenTrackApi.createDriveTemplateFile( formData ) // send request for new document
                     if( data != null && typeof data == 'object') {
-                      dispatch(setTemplateDocument('')) // close preview file frame mode
-                      dispatch(setDriveTemplateFrameMode(true)) // open drive frame
-                      dispatch(setDriveTemplateFile(data)) // open file in TV
-                      dispatch(setDriveTemplateMode(false)) // close document template
+                      dispatch(setTemplateDocument('')) // close preview file frame mode                      
                       sendMessageViaSlack(data) // send message via slack channel
-                      alert('A new document was added to the Documents list of this patent.')
+                      setTimeout(() => {
+                        dispatch(setDriveTemplateFrameMode(true)) // open drive frame
+                        dispatch(setDriveTemplateFile(data)) // open file in TV
+                        dispatch(setDriveTemplateMode(false)) // close document template
+                      }, 500)
                     }
                 } else {
                   tokenExpired = true
@@ -166,12 +169,17 @@ const LayoutTemplates = () => {
         dispatch(setTemplateDocument(`https://docs.google.com/file/d/${item.container_id}/preview`))
     }, [ dispatch ]) */
 
-    const onHandleClickRow = useCallback((e, item, flag) => {
-      setCurrentSelection(item.container_id)
-      setSelectedRow([item.container_id])
-      dispatch(setDriveTemplateFrameMode(true))
-      dispatch(setTemplateDocument(`https://docs.google.com/file/d/${item.container_id}/preview`))
-  }, [ dispatch ])
+    const onHandleClickRow = useCallback((event, item, flag) => {
+      event.preventDefault()
+      if(selectedRow.includes(item.container_id)){
+        onHandleDoubleClick(event, item)
+      } else {
+        setCurrentSelection(item.container_id)
+        setSelectedRow([item.container_id])
+        dispatch(setDriveTemplateFrameMode(true))
+        dispatch(setTemplateDocument(`https://docs.google.com/file/d/${item.container_id}/preview`))
+      }      
+  }, [ dispatch, selectedRow ])
 
 
     return (
