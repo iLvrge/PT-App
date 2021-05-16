@@ -113,12 +113,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const dispatch = useDispatch()
     const history = useHistory()
     const location = useLocation()
-    const tableRef = useRef()
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)
     const [ width, setWidth ] = useState( 1000 )
     const [ offset, setOffset ] = useState(0)
     const [ rowHeight, setRowHeight ] = useState(40)
-    const [ initial, setInitial] = useState(false)
     const [ selectItems, setSelectItems] = useState( [] )
     const [ selectedRow, setSelectedRow] = useState( [] )   
     const [intialization, setInitialization] = useState( false ) 
@@ -128,7 +126,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const selected = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
-    const companyRowSelect = useSelector( state => state.patenTrack2.mainCompaniesList.row_select)
 
     useEffect(() => {
         const initCompanies = async () => {

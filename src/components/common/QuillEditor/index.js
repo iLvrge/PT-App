@@ -4,9 +4,13 @@ import ReactQuill from 'react-quill'
 import {
   Menu,
   MenuItem,
+  Modal,
+  DialogContent
 } from '@material-ui/core'
+
 import useStyles from './styles'
 import CustomToolbar from './CustomToolbar'
+import UserInputForm from './UserInputForm'
 import PatenTrackApi from '../../../api/patenTrack2'
 import { setMaintainenceFeeFrameMode } from '../../../actions/uiActions'
 import { getSlackUsersList, setMoveAssets, getMaintainenceAssetsList } from '../../../actions/patentTrackActions2'
@@ -48,6 +52,7 @@ const QuillEditor = ({
   const driveTemplateMode = useSelector(state => state.ui.driveTemplateMode)
   const [ userListMenu, setUserListMenu ] = useState( null )
   const [ loadingUSPTO, setLoadingUSPTO ] = useState(false)
+  const [ modalOpen, setModalOpen] = useState(false)
   const [ redo, setRedo ] = useState([])
 
   const quill = useMemo(() => {
@@ -177,36 +182,18 @@ const QuillEditor = ({
       alert('Please select a asset') 
     } else {
       /**
-       * Send request to server to create XML file 
-      */
-      setLoadingUSPTO( true )
-      const form = new FormData()
-      form.append('assets', JSON.stringify(selectedAssetsPatents))
-
-      const {data} = await PatenTrackApi.downloadXMLFromServer(form)
-
-      if( data && data != null && data.indexOf('xml') !== -1) {
-        //downloadfile
-        downloadFile(data)
-        setLoadingUSPTO( false )
-      } else {
-        alert(data)
-        setLoadingUSPTO( false )
-      }
-      
+       * Open model
+       * where user can add assignee, assignor and correspondence
+       * add Autocomplete component
+       */
+      setModalOpen(true)
     }
-  }, [assetTypeAssignmentAssetsSelected])
+  }, [ selectedAssetsPatents ])
 
-  const downloadFile = (data) => {
-    const blob = new Blob([data], {type: 'text/plain'})
-    const url = window.URL.createObjectURL(blob)
-    const link = document.createElement("a")
-    link.download = 'uspto.xml'
-    link.href = url
-    link.click()
-    window.URL.revokeObjectURL(url)
+  const onHandleModalClose = () => {
+    setModalOpen(false)
   }
-
+  
   const onCloseUserMenu = () => {
     setUserListMenu(null);
   }
@@ -251,6 +238,8 @@ const QuillEditor = ({
     setUserListMenu( event.currentTarget )
   }, [ dispatch, getSlackUsersList, quillRef ])
 
+
+
   return (
     <div className={classes.root}>
       <div className={classes.textEditor}>
@@ -286,6 +275,17 @@ const QuillEditor = ({
         /> 
         {GetMenuComponent}
       </div>
+      <Modal
+        disableBackdropClick={false}
+        open={modalOpen}
+        onClose={onHandleModalClose}
+        aria-labelledby="assignor-assignee"
+        aria-describedby=""
+      >
+        <DialogContent>
+          <UserInputForm />
+        </DialogContent>
+      </Modal> 
     </div>
   )
 }

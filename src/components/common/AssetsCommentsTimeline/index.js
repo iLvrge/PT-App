@@ -78,7 +78,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
   const slack_auth_token = useSelector(state => state.patenTrack2.slack_auth_token)
-  
+  const template_document_url = useSelector(state => state.patenTrack2.template_document_url)
   const [ selectUser, setSelectUser] = useState(null)
   const [ replyId, setReplyId ] = useState(null)
   const [ file, setFile ] = useState(null)
@@ -405,8 +405,10 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   }, [ inputFile ])
   
 const onAttachmentOpenedFile = useCallback(() => {    
-  console.log('onAttachmentOpenedFile')
-}, [] )
+  if( template_document_url != '') {
+    setCommentHtml( previousContent => previousContent + ' ' + template_document_url)
+  }
+}, [ template_document_url, editorContainerRef ] )
 
 const onHandleDriveExplorer = async( event, fileID = undefined ) => {
   event.preventDefault()  

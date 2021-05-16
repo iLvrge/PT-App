@@ -57,6 +57,10 @@ const getMultiFormUrlHeader = () => {
   }
 }
 
+var CancelToken = axios.CancelToken
+
+var cancel
+
 class PatenTrackApi {
   static getSiteLogo() {
     return axios.get(`${base_api_url}/site_logo`, getHeader())
@@ -608,6 +612,27 @@ class PatenTrackApi {
   static moveAssetRollback( IDs ) {
     return axios.delete(`${base_new_api_url}/assets/rollback?revert=${IDs}`, getHeader())
   } 
+
+  static searchEntity( searchString, type ) {
+    if (cancel !== undefined) {
+      cancel()
+    }
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancel = c
+    })
+    return axios.get(`${base_new_api_url}/entity/search/${encodeURIComponent(searchString)}/${type}`, header)   
+  }    
+
+  static cancelRequest () {
+    if (cancel !== undefined) {
+      try{
+        throw cancel('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
 }
 
 export default PatenTrackApi

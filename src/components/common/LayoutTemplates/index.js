@@ -131,13 +131,12 @@ const LayoutTemplates = () => {
                     //dispatch(createDriveTemplateFile(formData))
                     const { data } = await PatenTrackApi.createDriveTemplateFile( formData ) // send request for new document
                     if( data != null && typeof data == 'object') {
-                      dispatch(setTemplateDocument('')) // close preview file frame mode                      
+                      //dispatch(setTemplateDocument('')) // close preview file frame mode  
                       sendMessageViaSlack(data) // send message via slack channel
-                      setTimeout(() => {
-                        dispatch(setDriveTemplateFrameMode(true)) // open drive frame
-                        dispatch(setDriveTemplateFile(data)) // open file in TV
-                        dispatch(setDriveTemplateMode(false)) // close document template
-                      }, 500)
+                      dispatch(setTemplateDocument(`https://docs.google.com/document/d/${data.id}/edit`))    
+                      dispatch(setDriveTemplateFrameMode(true)) // open drive frame
+                      //dispatch(setDriveTemplateFile(data)) // open file in TV
+                      dispatch(setDriveTemplateMode(false)) // close document template    
                     }
                 } else {
                   tokenExpired = true
