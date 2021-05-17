@@ -795,6 +795,10 @@ a.maintain svg.clean_encumbrances path{
   margin-left: 5px
 }
 
+.MuiBackdrop-root:focus-visible {
+  outline: 0 !important;
+}
+
 
 @media(min-width:1200px){.pricing .lab_item:hover h4{display:none}.pricing .lab_item:hover p.font-16{display:block}}
 @media(min-width:992px){.pricing .lab_item{width:202.93px;height:234.15px}}

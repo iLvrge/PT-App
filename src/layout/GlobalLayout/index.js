@@ -46,7 +46,7 @@ const GlobalLayout = (props) => {
     const [ openCommentBar, setCommentBar ] = useState(true)
     const [ openChartBar, setChartBar ] = useState(false)
     const [ openAnalyticsBar, setAnalyticsBar ] = useState(false)
-    const [ openVisualizerBar, setVisualizeOpenBar ] = useState(true)
+    const [ openVisualizerBar, setVisualizeOpenBar ] = useState(false)
 
     const [ toggleButtonType, setToggleButtonType ] = useState(true)
     const [ toggleTypeButtonType, setToggleTypeButtonType ] = useState(true)

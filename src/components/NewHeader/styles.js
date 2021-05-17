@@ -334,6 +334,9 @@ export default makeStyles(theme => ({
         top: '43px !important',
         '& .MuiBackdrop-root':{
             top: '43px !important',
+        },
+        '&:focus-visible': {
+            outline: '0 !important'
         }
     }
 }))

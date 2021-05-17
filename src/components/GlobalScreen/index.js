@@ -160,10 +160,6 @@ const GlobalScreen = ({
     }
 
     useEffect(() => {
-        console.log("GlobalScreen->driveTemplateMode", driveTemplateMode)
-    }, [driveTemplateMode])
-
-    useEffect(() => {
         if( type === 0 ) {
             if(selectedMainCompanies.length > 0) {
                 dispatch( getMaintainenceAssetsList( selectedMainCompanies ))
@@ -223,6 +219,15 @@ const GlobalScreen = ({
     useEffect(() => {
         updateResizerBar(mainContainerRef, openVisualizerBar)
     }, [ mainContainerRef, openVisualizerBar ])
+
+    useEffect(() => {
+        if( openCommentBar === false && openIllustrationBar === false && openChartBar === false && openAnalyticsBar === false ) {
+            updateResizerBar(mainContainerRef, false)
+            if( openVisualizerBar === true ) {
+                setVisualizeOpenBar(false)
+            }
+        }        
+    }, [ mainContainerRef, openVisualizerBar, openCommentBar, openIllustrationBar, openChartBar, openAnalyticsBar ])
 
     useEffect(() => {
         updateResizerBar(assetFileRef, assetFilesBar)

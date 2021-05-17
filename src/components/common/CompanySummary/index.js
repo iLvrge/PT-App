@@ -23,7 +23,7 @@ const ShowData = ({ data, number }) => {
 
 const CompanySummary = () => {
     const classes = useStyles()
-    const [companyData, setCompanyData] = useState({companies: 0, assignments: 0, third_parties: 0, assets: 0})
+    const [companyData, setCompanyData] = useState({companies: 0, assets: 0, transactions: 0, parties: 0, inventors: 0, activites: 0, products: 0})
 
     useEffect(() => {
         const findSummary = async() => {

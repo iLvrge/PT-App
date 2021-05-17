@@ -277,86 +277,7 @@ const NewHeader = () => {
                     </ListItem>
                     :
                     ''
-                  }
-                  <ListItem button>
-                      <ListItemIcon  color='inherit' >
-                          <HomeIcon /> 
-                      </ListItemIcon>
-                      <ListItemText primary={`Back to PatenTrack`} />
-                  </ListItem>
-                  <ListItem className={`children`} button>
-                    <ListItemIcon aria-label='Settings' color='inherit' className={`children`}>
-                        <SettingsIcon className={`children`}/>
-                    </ListItemIcon>
-                    <ListItemText primary={`Settings`} className={`children`}/>                                            
-                  </ListItem>   
-                  <Divider />  
-                  <List className={classes.childMenu} component='nav'>      
-                    <ListItem onClick={(e) => onRedirect(e, '/settings/slacks')} button>
-                        <ListItemIcon  color='inherit' >
-                          <svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="slack" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" className="MuiSvgIcon-root"><path fill="currentColor" d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1c0-25.9 21.16-47.06 47.06-47.06h47.06v47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V315.1zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06H164.9zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06H164.9zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06h-47.06V196.9zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06V196.9zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06v-47.06h47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06 0-25.9 21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06H283.1z" class=""></path></svg> 
-                        </ListItemIcon>
-                        <ListItemText primary={`Slack`} />
-                    </ListItem>  
-                    <ListItem onClick={(e) => onRedirect(e, '/settings/repository')} button>
-                        <ListItemIcon aria-label='Repository' color='inherit' >
-                            <InsertDriveFileIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={`Repository`} />
-                    </ListItem>                            
-                    <ListItem onClick={(e) => onRedirect(e, '/settings/users')} button>
-                        <ListItemIcon aria-label='Users' color='inherit' >
-                            <PersonIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={`Users`} />
-                    </ListItem>
-                    <ListItem onClick={(e) => onRedirect(e, '/settings/professionals')} button>
-                        <ListItemIcon aria-label='Professionals' color='inherit'  >
-                            <PeopleIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={`Professionals`} />
-                    </ListItem>
-                    <ListItem  onClick={(e) => onRedirect(e, '/settings/documents')} button>
-                        <ListItemIcon aria-label='Documents' color='inherit' >
-                            <InsertDriveFileIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={`Documents`} />
-                    </ListItem>
-                    <ListItem onClick={handleCompanyMenuOpen} className={`children`} button>
-                        <ListItemIcon aria-label='Company' color='inherit' className={`children`}>
-                            <BusinessIcon className={`children`}/>
-                        </ListItemIcon>
-                        <ListItemText primary={`Company`} className={`children`}/>                                            
-                    </ListItem>
-                    <Divider />
-                      <List className={classes.childMenu} component='nav'>
-                        <ListItem onClick={(e) => onRedirect(e, '/settings/companies/names')} button>
-                            <ListItemIcon aria-label='Companies' color='inherit'  >
-                                <BusinessIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={`Names`} />
-                        </ListItem>
-                        <ListItem onClick={(e) => onRedirect(e, '/settings/companies/addresses')} button>
-                            <ListItemIcon aria-label='Companies Address' color='inherit'  >
-                                <ContactsIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={`Address`} />
-                        </ListItem>
-                        <ListItem onClick={(e) => onRedirect(e, '/settings/companies/lawFirms')} button>
-                            <ListItemIcon aria-label='Companies Law Firms' color='inherit'  >
-                                <GavelIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={`Law Firms`} />
-                        </ListItem>
-                      </List>
-                    <Divider />
-                    <ListItem onClick={(e) => onRedirect(e, '/settings/lawFirms')} button>
-                        <ListItemIcon aria-label='Law Firms' color='inherit'  >
-                            <GavelIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={`Law Firms`} />
-                    </ListItem> 
-                  </List> 
+                  }                  
                   <ListItem className={`children`} button style={{marginTop: '50px'}}>
                     <ListItemIcon aria-label='Account Scope' color='inherit' className={`children`}>
                         <BusinessIcon className={`children`}/>
@@ -364,7 +285,7 @@ const NewHeader = () => {
                     <ListItemText primary={`Account Scope`} className={`children`}/>                                            
                   </ListItem>   
                   <Divider />   
-                  <CompanySummary />             
+                  <CompanySummary />
                 </List>    
               </div>
             </Drawer>
@@ -380,6 +301,7 @@ const NewHeader = () => {
         }}
         className={classes.modal}
         style={{backgroundColor: 'rgba(0, 0, 0, 0.8)'}}
+        tabIndex={-1}
       >
         <Home click={hideMenu} closeModal={handleControlModal}/>
       </Modal>

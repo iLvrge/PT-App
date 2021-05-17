@@ -269,7 +269,12 @@ const Repository = () => {
         if(row.mimeType == 'application/vnd.google-apps.folder') {
             openDriveFolder(event, row.id, row.name, 2, addRepositoryFolder)            
         } else {
-            setSelected(row.webViewLink)
+            if(row.mimeType != 'application/pdf') {
+                setSelected(row.webViewLink)
+            } else {
+                setSelected(`https://docs.google.com/file/d/${row.id}/preview`)
+            }
+            
             setSelectedRepositoryDriveRow([row.id])
             setSelectedDriveRow([])
         }

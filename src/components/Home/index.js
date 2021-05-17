@@ -2,7 +2,7 @@ import React, {useEffect} from 'react'
 import { Link } from 'react-router-dom'
 import { controlList } from '../../utils/controlList'
 
-const Home = ({click, closeModal}) => {
+const Home = React.forwardRef((props, ref) => {
 
     // handle for ouside click on Menubar
     const handleOutsideClick = (e) => {
@@ -11,7 +11,7 @@ const Home = ({click, closeModal}) => {
         const elementCategory = target.closest('div.category')
         if(!target.classList.contains('hexagon-in2') || elementCategory != null){
           //close Modal
-          closeModal(e, false)  
+          props.closeModal(e, false)  
         }
       }      
     }
@@ -22,8 +22,8 @@ const Home = ({click, closeModal}) => {
         document.removeEventListener('click', handleOutsideClick, false)
       }
     }, [handleOutsideClick]) 
-    return(
-      <div className='pricing'> 
+    return (
+      <div className='pricing' ref={ref}> 
         <section className='hex-wrapper'>
           <div className='d-inline-flex flex-wrap'>
             {
@@ -38,7 +38,7 @@ const Home = ({click, closeModal}) => {
                             ?
                               <h4 className={`mt-sm-0 ${item.mainHeadingClass}`}>{item.name}</h4>
                             :
-                            <Link to={item.redirect} className={item.mainHeadingClass} onClick={(e) => {click(e, item)}}>
+                            <Link to={item.redirect} className={item.mainHeadingClass} onClick={(e) => {props.click(e, item)}}>
                               {
                                 item.showSvg === true
                                 ?
@@ -63,5 +63,5 @@ const Home = ({click, closeModal}) => {
         </section>
       </div> 
     )  
-}
+})
 export default Home

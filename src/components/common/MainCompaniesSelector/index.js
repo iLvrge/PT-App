@@ -62,7 +62,7 @@ const COLUMNS = [
         minWidth: 80, 
         label: 'Acitivites',
         staticIcon: '',
-        dataKey: 'no_of_assets',
+        dataKey: 'no_of_activities',
         format: numberWithCommas,
     },
     {
@@ -70,7 +70,7 @@ const COLUMNS = [
         minWidth: 80,
         label: 'Parties',
         staticIcon: '',
-        dataKey: 'no_of_assets',
+        dataKey: 'no_of_parties',
         format: numberWithCommas,
     },
     {
@@ -78,7 +78,7 @@ const COLUMNS = [
         minWidth: 80,
         label: 'Inventors',
         staticIcon: '',
-        dataKey: 'no_of_assets',
+        dataKey: 'no_of_inventor',
         format: numberWithCommas,
     },
     {
@@ -101,7 +101,7 @@ const COLUMNS = [
         width: 80,  
         minWidth: 80,
         label: 'Arrows',
-        dataKey: 'no_of_parties',
+        dataKey: 'product',
         staticIcon: '',
         format: numberWithCommas,
     }
