@@ -235,11 +235,11 @@ const NewHeader = () => {
           </div>
             <NotificationsIcon className={classes.notification}/>
             {
-              slack_profile_data != null
+              slack_profile_data != null && Object.keys(slack_profile_data).length > 0
               ?
-              <Avatar className={classes.small} alt={`${slack_profile_data.real_name != '' ? slack_profile_data.real_name : slack_profile_data.profile.real_name != '' ? slack_profile_data.profile.real_name : slack_profile_data.profile.display_name}`} src={slack_profile_data.profile != null && slack_profile_data.profile.hasOwnProperty('image_24') && slack_profile_data.profile.image_24 != '' ? slack_profile_data.profile.image_24 : user && user.logo != '' ? user.logo : slack_profile_data.real_name.toString().substring(0,1).toLocaleUpperCase() } />
+                <Avatar className={classes.small} alt={`${slack_profile_data.real_name != '' ? slack_profile_data.real_name : slack_profile_data.profile.real_name != '' ? slack_profile_data.profile.real_name : slack_profile_data.profile.display_name}`} src={slack_profile_data.profile != null && slack_profile_data.profile.hasOwnProperty('image_24') && slack_profile_data.profile.image_24 != '' ? slack_profile_data.profile.image_24 : user && user.logo != '' ? user.logo : slack_profile_data.real_name.toString().substring(0,1).toLocaleUpperCase() } />
               :
-              <Avatar className={classes.small} alt={`${user ? user.first_name + ' ' + user.last_name : ''}`} src={user && user.logo != '' ? user.logo : user.first_name.toString().substring(0,1).toLocaleUpperCase() } />
+                <Avatar className={classes.small} alt={`${user ? user.first_name + ' ' + user.last_name : ''}`} src={user && user.logo != '' ? user.logo : user.first_name.toString().substring(0,1).toLocaleUpperCase() } />
             }
             <IconButton
                 edge='start'
