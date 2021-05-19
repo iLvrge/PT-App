@@ -8,6 +8,9 @@ import {
         Select,
         MenuItem,
     } from '@material-ui/core'
+
+import LockIcon from '@material-ui/icons/Lock'
+import LockOpenIcon from '@material-ui/icons/LockOpen'
 import SplitPane from 'react-split-pane'
 import VirtualizedTable from '../../../common/VirtualizedTable'
 import useStyles from './styles'
@@ -32,6 +35,8 @@ const Repository = () => {
     const [ breadcrumbItems, setBreadCrumbItems ] = useState([{id: 'undefined', name: 'My Drive'}])
     const [ repoBreadcrumbItems, setRepoBreadcrumbItems ] = useState([{id: 'undefined', name: 'My Drive'}])
     const [ repoFolder, setRepoFolder] = useState('')
+    const [ templates_folder_lock, setTemplatesFolderLock] = useState(0)
+    const [ repo_folder_lock, setRepoFolderLock] = useState(0)
     const [ folderId, setFolderId]  = useState('')
     const [ repoDriveFiles, setRepoDriveFiles ] = useState({files: []})
     const [ driveFolders, setDriveFolders ] = useState({files: []})
@@ -144,7 +149,7 @@ const Repository = () => {
     useEffect(() => {
         if(googleToken != '') {
             dispatch( getGoogleTemplates(googleToken) ) 
-            getRepoDriveFiles()  
+            //getRepoDriveFiles()  
         }
     }, [ googleToken ])
 
@@ -162,12 +167,22 @@ const Repository = () => {
 
         if(data != null) {
             setRepoFolder(data)
-            setRepoBreadcrumbItems(JSON.parse(data.breadcrumb))
-            getRepoDriveFiles(data.container_id)
+            if(data.container_id != '') {
+                setRepoBreadcrumbItems(JSON.parse(data.breadcrumb))
+                getRepoDriveFiles(data.container_id)
+                setRepoFolderLock(1)
+            }
+
+            if(data.template_container_id != '') {
+                /**Set breancrumbs for template */
+                setBreadCrumbItems(JSON.parse(data.template_breadcrumb))
+                dispatch(getGoogleTemplates(googleToken, data.template_container_id))
+                setTemplatesFolderLock(1)
+            }
         } else {
             getRepoDriveFiles()
         }
-    }, [ drive_files ])
+    }, [ dispatch, drive_files, googleToken ])
 
     const getRepoDriveFiles = async(containerID) => {
         const googleToken = getTokenStorage( 'google_auth_token_info' )
@@ -193,7 +208,9 @@ const Repository = () => {
             } else {
                 setRepoBreadcrumbItems( items )
                 getRepoDriveFiles(id)
-                callBack(id, name, items)
+                if(typeof callBack == 'function') {
+                    callBack(id, name, items)
+                }
             }  
         }
     }, [dispatch, breadcrumbItems, repoBreadcrumbItems, googleToken, google_profile])
@@ -267,7 +284,7 @@ const Repository = () => {
     const handleClickRepositoryDriveRow = useCallback(async (event, row) => {
         event.preventDefault()
         if(row.mimeType == 'application/vnd.google-apps.folder') {
-            openDriveFolder(event, row.id, row.name, 2, addRepositoryFolder)            
+            openDriveFolder(event, row.id, row.name, 2)            
         } else {
             if(row.mimeType != 'application/pdf') {
                 setSelected(row.webViewLink)
@@ -280,24 +297,41 @@ const Repository = () => {
         }
     }, [ google_profile, googleToken, repoBreadcrumbItems ])
 
-    const addRepositoryFolder = useCallback(async(id, name, repoBreadcrumbItems) => {
-        if(id != 'undefined') {
-            let formData = new FormData();
-            formData.append('container_id', id)
-            formData.append('container_name', name)
-            formData.append('user_account', google_profile.email)
-            formData.append('breadcrumb', JSON.stringify(repoBreadcrumbItems))
-            PatenTrackApi
-            .addRepoFolder(formData) 
-            .then(res => {
-                if(res.data != null) {
-                    setRepoFolder(res.data)
-                    setRepoBreadcrumbItems(JSON.parse(res.data.breadcrumb))
-                }
-            })
-        }
+    const addRepositoryFolder = useCallback(async() => {
+        let formData = new FormData();
+        formData.append('container_id', repoBreadcrumbItems[repoBreadcrumbItems.length - 1].id)
+        formData.append('container_name', repoBreadcrumbItems[repoBreadcrumbItems.length - 1].name)
+        formData.append('user_account', google_profile.email)
+        formData.append('breadcrumb', JSON.stringify(repoBreadcrumbItems))
+        PatenTrackApi
+        .addRepoFolder(formData) 
+        .then(res => {
+            if(res.data != null) {
+                setRepoFolderLock(1)
+                setRepoFolder(res.data)
+                setRepoBreadcrumbItems(JSON.parse(res.data.breadcrumb))
+            }
+        })
         
-    }, [ google_profile, googleToken ])
+    }, [ google_profile, googleToken, repoBreadcrumbItems ])
+    
+
+    const addTemplateFolder = useCallback(async() => {
+        let formData = new FormData();
+        formData.append('template_container_id', breadcrumbItems[breadcrumbItems.length - 1].id)
+        formData.append('template_container_name', breadcrumbItems[breadcrumbItems.length - 1].name)
+        formData.append('user_account', google_profile.email)
+        formData.append('template_breadcrumb', JSON.stringify(breadcrumbItems))
+        PatenTrackApi
+        .addTemplateFolder(formData) 
+        .then(res => {
+            if(res.data != null) {
+                setTemplatesFolderLock(1)
+                setRepoFolder(res.data)
+                setBreadCrumbItems(JSON.parse(res.data.breadcrumb))
+            }
+        })       
+    }, [ google_profile, googleToken, breadcrumbItems ])
 
     const handleClickDriveRow = useCallback(async (event, row) => {
         event.preventDefault()
@@ -356,6 +390,38 @@ const Repository = () => {
             googleLoginRef.current.querySelector('button').click()
         } 
     }, [ googleLoginRef ])
+
+    const unLockTemplateFolder = useCallback((event, t) => {
+        event.preventDefault()
+        if( t == 1) {
+            /**
+             * Send request to server to lock template folder
+             */
+            if(breadcrumbItems.length > 1 ) {
+                addTemplateFolder()
+            }  else {
+                alert('Please select template folder')
+            }          
+        } else {
+            setTemplatesFolderLock( t )
+        }
+    }, [ breadcrumbItems ])
+
+    const unLockRepoFolder = useCallback((event, t) => {
+        event.preventDefault()
+        if( t == 1) {
+            /**
+             * Send request to server to lock template folder
+             */
+            if(repoBreadcrumbItems.length > 1 ) {                
+                addRepositoryFolder()
+            }  else {
+                alert('Please select template folder')
+            }          
+        } else {
+            setRepoFolderLock( t )
+        }
+    }, [ repoBreadcrumbItems ])
   
     return (
         <SplitPane
@@ -397,7 +463,15 @@ const Repository = () => {
                 <div className={classes.flexColumn}>
                     <div className={classes.heading}>
                         <Typography variant="body1" component="h2" className={classes.noWrap}>
-                            Templates:  <BreadCrumbs type={1}/>
+                            <span className={classes.relativeLockedIcon}>
+                            {
+                               repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('template_container_id') && templates_folder_lock === 1
+                               ?
+                               <LockIcon onClick={(event) => unLockTemplateFolder(event, 0)}/>
+                               :
+                               <LockOpenIcon onClick={(event) => unLockTemplateFolder(event, 1)}/>
+                            }
+                            </span> Templates:  <BreadCrumbs type={1}/>
                         </Typography>
                     </div>
                     <div className={classes.drive}>
@@ -435,7 +509,15 @@ const Repository = () => {
                     <div className={classes.flexColumn}>
                         <div className={classes.heading}>
                             <Typography variant="body1" component="h2" className={classes.noWrap}>
-                                Documents: <BreadCrumbs  type={2}/>
+                            <span className={classes.relativeLockedIcon}>
+                            {
+                               repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('container_id') && repo_folder_lock === 1
+                               ?
+                               <LockIcon onClick={(event) => unLockRepoFolder(event, 0)}/>
+                               :
+                               <LockOpenIcon onClick={(event) => unLockRepoFolder(event, 1)}/>
+                            }
+                            </span> Documents: <BreadCrumbs  type={2}/>
                             </Typography>
                         </div>
                         <div className={classes.drive}>

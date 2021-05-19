@@ -589,6 +589,10 @@ class PatenTrackApi {
     return axios.put(`${base_new_api_url}/documents/repo_folder`, data, getFormUrlHeader())
   }
 
+  static addTemplateFolder( data ) {
+    return axios.put(`${base_new_api_url}/documents/template_folder`, data, getFormUrlHeader())
+  }
+
   static createDriveTemplateFile( data ) {
     return axios.post(`${base_new_api_url}/documents/create_template_drive`, data, getFormUrlHeader())
   }

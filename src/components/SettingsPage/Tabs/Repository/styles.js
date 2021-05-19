@@ -140,7 +140,12 @@ export default makeStyles(theme => ({
         left: 25
     },
     relative: {
+        position: 'relative'
+    },
+    relativeLockedIcon: {
         position: 'relative',
+        top: 5,
+        cursor: 'pointer'
     },
     noWrap: {
         whiteSpace: 'nowrap'
