@@ -252,14 +252,14 @@ const Repository = () => {
         return (
             <Breadcrumbs maxItems={2} aria-label="breadcrumb">
                {
-                    type == 1 && breadcrumbItems.length > 0 && breadcrumbItems.map( crumb => (
+                    type == 1 && breadcrumbItems != null && breadcrumbItems.length > 0 && breadcrumbItems.map( crumb => (
                         <Link key={crumb.id} color="inherit" href="#" onClick={(e) => handleBreadcrumbClick(e, crumb, type)}>
                             {crumb.name}
                         </Link>
                     ))
                }
                {
-                    type == 2 && repoBreadcrumbItems.length > 0  && repoBreadcrumbItems.map( crumb => (
+                    type == 2 && repoBreadcrumbItems != null && repoBreadcrumbItems.length > 0  && repoBreadcrumbItems.map( crumb => (
                         <Link key={crumb.id} color="inherit" href="#" onClick={(e) => handleBreadcrumbClick(e, crumb, type)}>
                             {crumb.name}
                         </Link>
