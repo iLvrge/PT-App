@@ -457,7 +457,10 @@ const handleDriveModalClose = (event) => {
   }
 
   const handleFocus = useCallback((range, source, editor) => {
-    editorContainerRef.current.classList.add('focus')
+    const getSlackUser = getTokenStorage( 'slack_auth_token_info' );
+    if(getSlackUser &&  getSlackUser != '') {
+      editorContainerRef.current.classList.add('focus')
+    }    
   }, [ editorContainerRef ])
 
   const handleBlur = useCallback((previousRange, source, editor) => {

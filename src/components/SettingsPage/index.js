@@ -154,7 +154,7 @@ function SettingsPage() {
       t: 32
     },
     {
-      tooltip: 'Users',
+      tooltip: 'Team',
       bar: openBar,
       click: handleUsersLink,
       t: 33
