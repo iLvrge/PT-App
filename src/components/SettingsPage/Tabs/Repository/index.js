@@ -180,7 +180,7 @@ const Repository = () => {
                 setRepoFolderLock(1)
             }
 
-            if(data.template_container_id != '' && (token != undefined || googleToken != undefined)) {
+            if(data.template_container_id != null && data.template_container_id != '' && (token != undefined || googleToken != undefined)) {
                 /**Set breancrumbs for template */
                 setBreadCrumbItems(JSON.parse(data.template_breadcrumb))
                 console.log('getRepoFolder=>getGoogleTemplates', token != undefined ? token : googleToken)
