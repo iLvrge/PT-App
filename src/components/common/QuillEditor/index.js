@@ -5,6 +5,7 @@ import {
   Menu,
   MenuItem,
   Modal,
+  Backdrop,
   DialogContent
 } from '@material-ui/core'
 
@@ -291,6 +292,10 @@ const QuillEditor = ({
         disableBackdropClick={false}
         open={modalOpen}
         onClose={onHandleModalClose}
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
         aria-labelledby="assignor-assignee"
         aria-describedby=""
       >

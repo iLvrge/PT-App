@@ -34,6 +34,9 @@ export default makeStyles((theme) => ({
       '& .MuiInputBase-root': {
         marginLeft: '20px'
       }
+    },
+    '& .MuiDialogContent-root':{
+      overflowY: 'hidden'
     }
   },
   form: {

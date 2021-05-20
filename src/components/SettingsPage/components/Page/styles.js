@@ -15,5 +15,8 @@ export default makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     background: 'transparent',
+    '& .MuiDialogContent-root':{
+      overflowY: 'hidden'
+    }
   },
 }))

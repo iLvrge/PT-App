@@ -48,7 +48,13 @@ function SettingsPage() {
   const location = useLocation()
   const dispatch = useDispatch()
   const authenticated = useSelector(store => store.auth.authenticated)  
-  const [ openBar, setOpenBar ] = useState(true)
+  const [ openBar, setOpenBar ] = useState(false)
+  const [ openCompanyBar, setOpenCompanyBar ] = useState(false)
+  const [ openTeamBar, setOpenTeamBar ] = useState(false)
+  const [ openDocumentBar, setOpenDocumentBar ] = useState(false)
+  const [ openAddressBar, setOpenAddressBar ] = useState(false)
+  const [ openLawfirmsBar, setOpenLawfirmsBar ] = useState(false)
+  const [ openSlackBar, setOpenSlackBar ] = useState(false)
   const currentTab = useMemo(() => {
     const splittedPathname = location.pathname.split('/')
     return splittedPathname.slice(2).join('/')
@@ -62,6 +68,26 @@ function SettingsPage() {
     const tab = findTabViaChild(currentTab)
     if (!tab) {
       setOpenSubTabs([])
+    }
+    switch(currentTab) {
+      case 'companies/names':
+        setOpenCompanyBar(true)
+        break;
+      case 'users':
+        setOpenTeamBar(true)
+        break;
+      case 'repository':
+        setOpenDocumentBar(true)
+        break;
+      case 'companies/addresses':
+        setOpenAddressBar(true)
+        break;
+      case 'companies/lawFirms':
+        setOpenLawfirmsBar(true)
+        break;
+      case 'slacks':
+        setOpenSlackBar(true)
+        break;
     }
   }, [ currentTab ])
 
@@ -86,15 +112,31 @@ function SettingsPage() {
     return currentTab === tab.value
   }
 
+  const resetAll = () => {
+    setOpenBar(false)
+    setOpenCompanyBar(false)
+    setOpenTeamBar(false)
+    setOpenDocumentBar(false)
+    setOpenAddressBar(false)
+    setOpenLawfirmsBar(false)
+    setOpenSlackBar(false)
+  }
+
   const handleSlackLink = () => {
+    resetAll()
+    setOpenSlackBar(true)
     history.push('/settings/slacks')  
   }
 
   const handleRepositoryLink = () => {
+    resetAll()
+    setOpenDocumentBar(true)
     history.push('/settings/repository')  
   }
 
   const handleUsersLink = () => {
+    resetAll()
+    setOpenTeamBar(true)
     history.push('/settings/users')  
   }
 
@@ -107,14 +149,20 @@ function SettingsPage() {
   }
 
   const handleCompanyNamesLink = () => {
+    resetAll()
+    setOpenCompanyBar(true)
     history.push('/settings/companies/names')  
   }
 
   const handleCompanyAddressLink = () => {
+    resetAll()
+    setOpenAddressBar(true)
     history.push('/settings/companies/addresses')  
   }
 
   const handleCompanyLawfirmsLink = () => {
+    resetAll()
+    setOpenLawfirmsBar(true)
     history.push('/settings/companies/lawFirms')  
   }
 
@@ -143,37 +191,37 @@ function SettingsPage() {
     },
     {
       tooltip: 'Companies',
-      bar: openBar,
+      bar: openCompanyBar,
       click: handleCompanyNamesLink,
       t: 36
     },
     {
       tooltip: 'Team Members',
-      bar: openBar,
+      bar: openTeamBar,
       click: handleUsersLink,
       t: 33
     },    
     {
       tooltip: 'Documents and Templates',
-      bar: openBar,
+      bar: openDocumentBar,
       click: handleRepositoryLink,
       t: 32
     }, 
     {
       tooltip: 'Companies Addresses',
-      bar: openBar,
+      bar: openAddressBar,
       click: handleCompanyAddressLink,
       t: 37
     },
     {
       tooltip: 'Law Firms',
-      bar: openBar,
+      bar: openLawfirmsBar,
       click: handleCompanyLawfirmsLink,
       t: 38
     },
     {
       tooltip: 'Slack',
-      bar: openBar, 
+      bar: openSlackBar, 
       click: handleSlackLink,
       t: 31
     },

@@ -5,7 +5,7 @@ import {
     Grid,
     Button 
 } from '@material-ui/core'
-
+import CloseIcon from '@material-ui/icons/Close'
 import PatenTrackApi from '../../../api/patenTrack2'   
 
 import AutoCompleteSearch from './AutoCompleteSearch'
@@ -271,8 +271,8 @@ const UserInputForm = React.forwardRef((props, ref) => {
                         /> 
                     </Grid> 
                     <div className={classes.btnContainer}>
-                        <Button variant="contained" className={classes.btn} onClick={(event) => {openUSPTO(event)}}>Upload to USPTO</Button>
                         <Button variant="contained" className={classes.btn} onClick={(event) => {downloadXML(event)}}>Save to hardrive</Button>
+                        <Button variant="contained" className={classes.btn} onClick={(event) => {openUSPTO(event)}}>Upload to USPTO</Button>
                     </div>                    
                 </Grid>
             </Grid>

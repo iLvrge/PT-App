@@ -1,6 +1,7 @@
 import React, { useMemo, useEffect, useCallback } from 'react'
 
 import { useSelector, useDispatch } from 'react-redux'
+import SplitPane from 'react-split-pane'
 import { fetchCompanyLawyers, fetchLawFirms, addCompanyLawfirm, setCompaniesToAddLawfirms } from '../../../../../actions/settingsActions'
 import { fetchCompaniesList, setBreadCrumbs } from '../../../../../actions/patentTrackActions2'
 import _keyBy from 'lodash/keyBy'
@@ -8,6 +9,8 @@ import _get from 'lodash/get'
 import LawyerChild from './LawyerChild'
 import LawyerForm from './LawyerChild/LawyerForm'
 import Page from '../../../components/Page'
+import Lawfirms from '../../LawFirms'
+import useStyles from './styles'
 
 const COLUMNS = [
   { id: 'companyName', label: 'Company Name' },
@@ -26,7 +29,8 @@ const ACTIONS = {
   addItem: addCompanyLawfirm,
 }
 
-const LawFirms = () => {
+const CompanyLawFirms = () => {
+  const classes = useStyles()
   const dispatch = useDispatch()
   const companiesList = useSelector(state => state.patenTrack2.companiesList)
   const { list, loading } = useSelector(state => state.settings.companyLawyers)
@@ -60,19 +64,27 @@ const LawFirms = () => {
   ), [lawFirmsList, companiesList])
 
   return (
-    <Page
-      loading={loading}
-      actions={ACTIONS}
-      name={NAME}
-      idKey={ID_KEY}
-      title={TITLE}
-      columns={COLUMNS}
-      childComponent={LawyerChild}
-      fieldsComponent={fieldsComponent}
-      checkbox={onChecked} 
-      data={data}
-    />
+    <SplitPane
+        className={classes.splitPane}
+        split="vertical"
+        size={500}
+    >
+      <Page
+        loading={loading}
+        actions={ACTIONS}
+        name={NAME}
+        idKey={ID_KEY}
+        title={TITLE}
+        columns={COLUMNS}
+        childComponent={LawyerChild}
+        fieldsComponent={fieldsComponent}
+        checkbox={onChecked} 
+        data={data}
+      />
+      <Lawfirms />
+    </SplitPane>
+    
   )
 }
 
-export default LawFirms
+export default CompanyLawFirms

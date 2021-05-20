@@ -14,8 +14,8 @@ const COLUMNS = [
 ]
 
 const ID_KEY = 'lawfirm_id'
-const TITLE = 'Low Firms'
-const NAME = 'low firm'
+const TITLE = 'Law Firms'
+const NAME = 'Law firm'
 
 const ACTIONS = {
   fetchItems: fetchLawFirms,

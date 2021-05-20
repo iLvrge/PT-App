@@ -90,7 +90,7 @@ const LawyerForm = ({ edited, onChangeField, companiesList,  list }) => {
           </Select>
         </div>
         :
-        ''
+        'Please select companies first'
       }
   </Fragment>
   )
