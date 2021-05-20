@@ -27,7 +27,7 @@ const QuillEditor = ({
   onCancel = () => {},
   onDrive = () => {},
   openGoogleWindow = () => {},
-  onAttachmentOpenedFile = () => {},
+  /* onAttachmentOpenedFile = () => {}, */
   onAttachmentDriveFile = () => {},
   onAttachmentFile = () => {},
   onFocus = () => {},
@@ -50,6 +50,7 @@ const QuillEditor = ({
   const move_assets = useSelector(state => state.patenTrack2.move_assets)
   const selectedMainCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
   const driveTemplateMode = useSelector(state => state.ui.driveTemplateMode)
+  const template_document_url = useSelector(state => state.patenTrack2.template_document_url)
   const [ userListMenu, setUserListMenu ] = useState( null )
   const [ loadingUSPTO, setLoadingUSPTO ] = useState(false)
   const [ modalOpen, setModalOpen] = useState(false)
@@ -66,8 +67,9 @@ const QuillEditor = ({
     
     if( driveFile != null ) {
       const editorRef = quillRef.current
-      const selectionIndex = editorRef.getEditorSelection().index
-      editorRef.getEditor().insertText(selectionIndex, driveFile) 
+      const selectionIndex = editorRef.getEditor().getSelection().index
+      editorRef.getEditor().insertText(selectionIndex , driveFile)
+      editorRef.getEditor().setSelection(selectionIndex +  driveFile.length)
     }
   }, [ driveFile, quillRef ])
   
@@ -220,8 +222,9 @@ const QuillEditor = ({
     const name = user.real_name == undefined || user.real_name == null ? user.profile.real_name : user.real_name
     if(quillRef.current  != null) {
       const editorRef = quillRef.current
-      const selectionIndex = editorRef.getEditorSelection().index
-      editorRef.getEditor().insertText(selectionIndex, name+' ') 
+      const selectionIndex = editorRef.getEditor().getSelection().index
+      editorRef.getEditor().insertText(selectionIndex, name) 
+      editorRef.getEditor().setSelection(selectionIndex +  name.length)
     }
     onSelectUser(user.id) 
     setUserListMenu(null);
@@ -230,14 +233,23 @@ const QuillEditor = ({
   const onUsersList = useCallback(( event ) => {
     if(quillRef.current  != null) {
       const editorRef = quillRef.current
-      const selectionIndex = editorRef.getEditorSelection().index
+      const selectionIndex = editorRef.getEditor().getSelection().index
       editorRef.getEditor().insertText(selectionIndex, '@') 
+      editorRef.getEditor().setSelection(selectionIndex +  1)
     }
     
     dispatch(getSlackUsersList())
     setUserListMenu( event.currentTarget )
   }, [ dispatch, getSlackUsersList, quillRef ])
 
+  const onAttachmentOpenedFile = useCallback(() => {    
+    if( template_document_url != '') {
+      const editorRef = quillRef.current
+      const selectionIndex = editorRef.getEditor().getSelection().index
+      editorRef.getEditor().insertText(selectionIndex , template_document_url)
+      editorRef.getEditor().setSelection(selectionIndex +  template_document_url.length)
+    }
+  }, [ template_document_url, quillRef ] )
 
 
   return (

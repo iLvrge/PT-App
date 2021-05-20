@@ -128,6 +128,7 @@ export default function PatentNode(props) {
         let dx = d3.event.offsetX, dy = d3.event.offsetY
         const fromElement = d3.event.fromElement
         const getBoundElementRec = fromElement.getBoundingClientRect()
+        console.log('getBoundElementRec', getBoundElementRec, fromElement)
         d3.select("#patentrackDiagramDiv")
           .append("div")	
           .attr("class", "tooltip_title")	

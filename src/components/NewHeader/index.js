@@ -54,7 +54,14 @@ import {
         getProfile, 
       } from '../../actions/patenTrackActions'
 
-import { setAssetTypeAssignments, setSelectedAssetsTransactions, setSelectedAssetsPatents, setAssetsIllustration, setBreadCrumbsAndCategory, setSearchString, setResetAll } from '../../actions/patentTrackActions2'
+import { setAssetTypeAssignments, 
+  setSelectedAssetsTransactions, 
+  setSelectedAssetsPatents, 
+  setAssetsIllustration, 
+  setBreadCrumbsAndCategory,  
+  setSearchString, 
+  setResetAll,
+  getSlackProfile } from '../../actions/patentTrackActions2'
 import { setControlModal, setTimelineSelectedItem, setTimelineSelectedAsset } from '../../actions/uiActions'
 
 const NewHeader = () => {
@@ -71,6 +78,7 @@ const NewHeader = () => {
   const [layoutName, setLayoutName] = useState(null)
   const [ isCompanyMenuOpen, setCompanyMenuOpen ] = useState(false)
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState( true )
+  const [ slackAuthLogin, setSlackAuthLogin ] = useState( true )
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
 
   const [ openDrawer, setDrawerState] = useState({
@@ -96,6 +104,18 @@ const NewHeader = () => {
   }  
 
   useEffect(() => {
+    if(slack_profile_data == null) {
+      const slackToken = getTokenStorage( 'slack_auth_token_info' )
+      if(slackToken && slackToken != null && slackToken!= '') {
+        const { access_token, id} = slackToken
+        if( access_token != null && id != null ) {
+          dispatch(getSlackProfile(access_token, id))
+        }
+      }
+    }
+  }, [dispatch, slack_profile_data])
+
+  useEffect(() => {
     checkButtons()
   }, [])
 
@@ -115,8 +135,8 @@ const NewHeader = () => {
 
   const checkButtons = () => {
     try {      
-      const  googleToken = getTokenStorage( 'google_auth_token_info' )
-      let googleLoginButton = true
+      const  googleToken = getTokenStorage( 'google_auth_token_info' ), slackToken = getTokenStorage( 'slack_auth_token_info' )
+      let googleLoginButton = true, slackLoginButton = true
       
       if(googleToken && googleToken != '' && googleToken != null) {
         const tokenParse = JSON.parse( googleToken )
@@ -127,6 +147,15 @@ const NewHeader = () => {
         } 
       }
       setGoogleAuthLogin(googleLoginButton)
+      
+      if(slackToken && slackToken != null && slackToken!= '') {
+        const token = JSON.parse(slackToken) 
+        if( token.access_token != null && token.id != null ) {
+          slackLoginButton = false
+        }
+      }
+      setSlackAuthLogin(slackLoginButton)
+
     } catch ( err ) {
       console.error( err )
     }
@@ -234,6 +263,43 @@ const NewHeader = () => {
               />
           </div>
             <NotificationsIcon className={classes.notification}/>
+            {
+              !googleAuthLogin
+              ?
+                <span className={classes.socialIcon} >
+                  <svg xmlns="http://www.w3.org/2000/svg" style={{top: 9, transform: 'translate(35%, 0%)'}}><g fill="#000" fillRule="evenodd"><path d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z" fill="#EA4335"></path><path d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z" fill="#4285F4"></path><path d="M3.88 10.78A5.54 5.54 0 0 1 3.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9.008 9.008 0 0 0 0 9c0 1.45.35 2.82.96 4.04l2.92-2.26z" fill="#FBBC05"></path><path d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.97 13.04C2.45 15.98 5.48 18 9 18z" fill="#34A853"></path><path fill="none" d="M0 0h18v18H0z"></path></g></svg>
+                </span>
+              :
+              ''
+            } 
+            {
+              !slackAuthLogin
+              ?
+              <span className={classes.socialIcon}>
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 270 270">
+                  <g>	                    
+                    <g>		
+                      <path fill="#E01E5A" d="M99.4,151.2c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h12.9V151.2z"/>		
+                      <path fill="#E01E5A" d="M105.9,151.2c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v32.3c0,7.1-5.8,12.9-12.9,12.9s-12.9-5.8-12.9-12.9V151.2z"/>	
+                    </g>	
+                    <g>		
+                      <path fill="#36C5F0" d="M118.8,99.4c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v12.9H118.8z"/>		
+                      <path fill="#36C5F0" d="M118.8,105.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9H86.5c-7.1,0-12.9-5.8-12.9-12.9s5.8-12.9,12.9-12.9H118.8z"/>	
+                    </g>	
+                    <g>	
+                      <path fill="#2EB67D" d="M170.6,118.8c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9h-12.9V118.8z"/>		
+                      <path fill="#2EB67D" d="M164.1,118.8c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9V86.5c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9V118.8z"/>	
+                    </g>
+                    <g>	
+                      <path fill="#ECB22E" d="M151.2,170.6c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9v-12.9H151.2z"/>		
+                      <path fill="#ECB22E" d="M151.2,164.1c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h32.3c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9H151.2z"/>
+                    </g>
+                  </g>
+                </svg>
+              </span>
+              :
+              ''
+            }
             {
               slack_profile_data != null && Object.keys(slack_profile_data).length > 0
               ?

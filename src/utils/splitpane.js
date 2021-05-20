@@ -4,20 +4,20 @@ export  const resizePane = (name, size, callBack) => {
     //TODO set the pass size to callback fn
     callBack(size)
 
-    editorBar()
+    //editorBar()  
 }
 
 
 
 export const editorBar = (time) => {
-    setTimeout(() => {
+    /* setTimeout(() => {
         const findEditor = document.getElementsByClassName('editor')
         if( findEditor != null && findEditor.length > 0 ) {
             findEditor[0].style.width = `${(findEditor[0].parentElement.clientWidth * 95 ) / 100}px`
         } else {
             editorBar()
         }
-    }, typeof time == undefined ? 100 : time)
+    }, typeof time == undefined ? 100 : time) */
 }
 
 export  const resizePane2 = (size, callBack) => {

@@ -156,7 +156,7 @@ const Repository = () => {
             console.log('useEffect=>getGoogleTemplates', googleToken)
             
             dispatch( getGoogleTemplates(googleToken) ) 
-            getRepoDriveFiles()  
+            //getRepoDriveFiles()  
         }
     }, [ googleToken ])
 
@@ -250,7 +250,7 @@ const Repository = () => {
 
     const BreadCrumbs = ({type }) => {
         return (
-            <Breadcrumbs maxItems={2} aria-label="breadcrumb">
+            <Breadcrumbs aria-label="breadcrumb">
                {
                     type == 1 && breadcrumbItems != null && breadcrumbItems.length > 0 && breadcrumbItems.map( crumb => (
                         <Link key={crumb.id} color="inherit" href="#" onClick={(e) => handleBreadcrumbClick(e, crumb, type)}>
@@ -267,6 +267,10 @@ const Repository = () => {
                }
             </Breadcrumbs>
         )
+    }
+
+    const onHandleDoubleClick = (event) => {
+        event.presist()
     }
 
     const handleClickRow = useCallback(async (event, row) => {
@@ -452,7 +456,7 @@ const Repository = () => {
                         rows={layoutDriveFiles}
                         rowHeight={rowHeight}
                         headerHeight={rowHeight}
-                        columns={headerColumns}
+                        columns={headerColumns}                        
                         onSelect={handleClickRow}
                         onSelectAll={handleSelectAll}
                         defaultSelectAll={selectedAll}
@@ -497,6 +501,7 @@ const Repository = () => {
                             rowHeight={rowHeight}
                             headerHeight={rowHeight}
                             columns={headerDriveColumns}
+                            onDoubleClick={onHandleDoubleClick}
                             onSelect={handleClickDriveRow}
                             onSelectAll={handleSelectAll}
                             defaultSelectAll={selectedAll}
@@ -543,6 +548,7 @@ const Repository = () => {
                                 rowHeight={rowHeight}
                                 headerHeight={rowHeight}
                                 columns={headerRepositoryColumns}
+                                onDoubleClick={onHandleDoubleClick}
                                 onSelect={handleClickRepositoryDriveRow}
                                 onSelectAll={handleSelectAll}
                                 defaultSelectAll={selectedAll}

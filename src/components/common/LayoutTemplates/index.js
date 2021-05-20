@@ -11,7 +11,8 @@ import {
         setGoogleAuthToken,
         setSlackAuthToken,
         setChannelID,
-        getSlackMessages
+        getSlackMessages,
+        getChannels
     } from '../../../actions/patentTrackActions2'
 
 import {
@@ -77,8 +78,10 @@ const LayoutTemplates = () => {
             if(status != '' && status == 'Message sent') {
               if(channel_id != channel) {
                 dispatch(setChannelID({channel_id}))
+                dispatch( getChannels() )
               }
               dispatch( getSlackMessages( data.channel ) ) 
+              
             }
           }
         } else {

@@ -142,24 +142,42 @@ function SettingsPage() {
       t: 40
     },
     {
+      tooltip: 'Companies',
+      bar: openBar,
+      click: handleCompanyNamesLink,
+      t: 36
+    },
+    {
+      tooltip: 'Team Members',
+      bar: openBar,
+      click: handleUsersLink,
+      t: 33
+    },    
+    {
+      tooltip: 'Documents and Templates',
+      bar: openBar,
+      click: handleRepositoryLink,
+      t: 32
+    }, 
+    {
+      tooltip: 'Companies Addresses',
+      bar: openBar,
+      click: handleCompanyAddressLink,
+      t: 37
+    },
+    {
+      tooltip: 'Law Firms',
+      bar: openBar,
+      click: handleCompanyLawfirmsLink,
+      t: 38
+    },
+    {
       tooltip: 'Slack',
       bar: openBar, 
       click: handleSlackLink,
       t: 31
     },
-    {
-      tooltip: 'Repository',
-      bar: openBar,
-      click: handleRepositoryLink,
-      t: 32
-    },
-    {
-      tooltip: 'Team',
-      bar: openBar,
-      click: handleUsersLink,
-      t: 33
-    },
-    {
+    /* {
       tooltip: 'Professionals',
       bar: openBar,
       click: handleProfessionalsLink,
@@ -172,29 +190,11 @@ function SettingsPage() {
       t: 35
     },
     {
-      tooltip: 'Company Names',
-      bar: openBar,
-      click: handleCompanyNamesLink,
-      t: 36
-    },
-    {
-      tooltip: 'Company Address',
-      bar: openBar,
-      click: handleCompanyAddressLink,
-      t: 37
-    },
-    {
-      tooltip: 'Company Lawfirms',
-      bar: openBar,
-      click: handleCompanyLawfirmsLink,
-      t: 38
-    },
-    {
       tooltip: 'Lawfirms',
       bar: openBar,
       click: handleLawfirmsLink,
       t: 39
-    }
+    } */
   ]
 
   return !authenticated ? <Redirect to={'/'} /> : (

@@ -38,7 +38,8 @@ import {
   getSlackUsersList,  
   getGoogleProfile,
   setLayoutTemplatesByID,
-  setTemplateDocument
+  setTemplateDocument,
+  getChannels
 } from '../../../actions/patentTrackActions2'
 
 import {
@@ -97,7 +98,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
     checkButtons()
   }, [])
 
-  useEffect(() => {
+   useEffect(() => {
     checkButtons() 
   }, [ google_auth_token, slack_auth_token ])
 
@@ -118,6 +119,25 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   useEffect(() => {
     updateHeight(size, timelineRef)
   }, [ size, timelineRef, illustrationBar ])
+
+  useEffect(() => {
+    if(commentsData.messages != undefined && commentsData.messages.length > 0) {
+      setTimeout(() => {
+        findElementAddClick()
+      }, 2000)
+    }
+  }, [ commentsData ] )
+
+  const findElementAddClick = () => {
+    const elements = document.getElementsByClassName('message_link');
+    if(elements.length > 0) {
+      for (let i=0; i < elements.length; i++) {
+        elements[i].onclick = (event) => {
+          openFile(event, elements[i].getAttribute('data-link'))
+        }
+      }      
+    }
+  }
 
   const checkButtons = () => {
     try{
@@ -267,6 +287,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
               setEditData( null )
               if(channel_id != channel) {
                 dispatch(setChannel({channel_id}))
+                dispatch(getChannels())
               }
               dispatch( getSlackMessages( data.channel ) ) 
             }
@@ -488,10 +509,10 @@ const handleDriveModalClose = (event) => {
 
   const openFile = useCallback((event, file) => {
     event.preventDefault()
-    if((file.hasOwnProperty('external_url') && file.hasOwnProperty('external_type') && file.external_type == 'gdrive') || (file.hasOwnProperty('external_url') && file.external_url.indexOf('docs.google.com') !== -1)) {
+    if((typeof file == 'string' && file.indexOf('docs.google.com') !== -1) || (file.hasOwnProperty('external_url') && file.hasOwnProperty('external_type') && file.external_type == 'gdrive') || (file.hasOwnProperty('external_url') && file.external_url.indexOf('docs.google.com') !== -1)) {
       //open in TV
       dispatch(setDriveTemplateFrameMode(true)) // open drive frame
-      dispatch(setTemplateDocument(file.external_url))
+      dispatch(setTemplateDocument(typeof file == 'string' ? file : file.external_url))
     } else {
       window.open(file.permalink, '_blank')
     }
@@ -501,26 +522,21 @@ const handleDriveModalClose = (event) => {
     //if (!selectedCommentsEntity) return null
     return (
       <div className={`${classes.commentEditor} editor`} ref={editorContainerRef}> 
-        <Droppable
-          types={['template_agreement']} 
-          onDrop={onDrop}
-        >
-          <QuillEditor
-            value={commentHtml}
-            onChange={setCommentHtml}
-            onSubmit={handleSubmitComment}
-            onCancel={handleCancelComment}
-            openGoogleWindow={openGoogleWindow}
-            onDrive={getDriveDocumentList}
-            onAttachmentFile={onHandleFileExplorer}
-            onAttachmentOpenedFile={onAttachmentOpenedFile}
-            onAttachmentDriveFile={onHandleDriveExplorer}
-            onSelectUser={setSelectUser}
-            onFocus={handleFocus}
-            onBlur={handleBlur} 
-            driveFile={selectedDriveFile} 
-          />
-        </Droppable>  
+        <QuillEditor
+          value={commentHtml}
+          onChange={setCommentHtml}
+          onSubmit={handleSubmitComment}
+          onCancel={handleCancelComment}
+          openGoogleWindow={openGoogleWindow}
+          onDrive={getDriveDocumentList}
+          onAttachmentFile={onHandleFileExplorer}
+          onAttachmentOpenedFile={onAttachmentOpenedFile}
+          onAttachmentDriveFile={onHandleDriveExplorer}
+          onSelectUser={setSelectUser}
+          onFocus={handleFocus}
+          onBlur={handleBlur} 
+          driveFile={selectedDriveFile} 
+        />
         <input type='file' id='attach_file' ref={inputFile} style={{display: 'none'}} onChange={onHandleFile}/>
       </div> 
     )
@@ -594,7 +610,7 @@ const handleDriveModalClose = (event) => {
       <>
         {
           files.files.map( (file, index) => (
-          <div key={`${indexing}-${index}`}><a onClick={(event) => { openFile(event, file)}} className={classes.fileLink}>{file.name}</a></div>
+          <div key={`${indexing}-${index}`}><a onClick={(event) => { openFile(event, file)}} className={classes.fileLink}>{file.title}</a></div>
           ))
         }
       </>
@@ -608,13 +624,15 @@ const handleDriveModalClose = (event) => {
     if(message.indexOf('docs.google.com') !== -1) {
       const match = message.match(/<([^\s>]+)(\s|>)+/)
       if(match != null) {
-        message = match[1]
-        if( comment.files.length == 1 ) {
-          if(comment.files[0].external_type == 'gdrive' &&  message == comment.files[0].external_url ) {
+        const link = match[1]
+        if( typeof comment.files != 'undefined' &&  comment.files.length == 1 ) {
+          if(comment.files[0].external_type == 'gdrive' &&  link == comment.files[0].external_url ) {
             message = ''
           }
+        } else {
+          message += `<div><a href='#' class='message_link' data-link="${link}">${link}</a></div>`
         }
-      }       
+      }
     } 
     return (
       <TimelineEvent

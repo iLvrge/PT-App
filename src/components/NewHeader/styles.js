@@ -331,12 +331,21 @@ export default makeStyles(theme => ({
         color: 'rgb(255,255,255)',
     },
     modal: {
-        top: '43px !important',
+        top: '42px !important',
         '& .MuiBackdrop-root':{
-            top: '43px !important',
+            top: '42px !important',
         },
         '&:focus-visible': {
             outline: '0 !important'
+        }
+    },
+    socialIcon:{
+        width: 36,
+        height: 36,
+        marginRight: 10,
+        '& svg':{
+            width: '100%',
+            position: 'relative'
         }
     }
 }))

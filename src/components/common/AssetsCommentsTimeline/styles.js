@@ -40,9 +40,9 @@ export default makeStyles(theme => ({
     /* padding: '0',
     margin: '0 auto',
     width: '95% !important' */
-    position: 'fixed',
-    bottom: 11,
-    width: 'calc(100vw - 25vw)'
+    position: 'sticky',
+    bottom: 3,
+    width: '95% !important'
   },
   addCommentBtn: {
     position: 'absolute',
@@ -58,6 +58,9 @@ export default makeStyles(theme => ({
     padding: '0 !important',
     '& a':{
       color: '#fff'
+    },
+    '& span':{
+      cursor: 'inherit !important'
     }
   },
   minimizeButton: {
