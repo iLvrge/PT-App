@@ -276,7 +276,6 @@ const GlobalScreen = ({
             className={classes.splitPane}
             split="vertical"
             size={companyBarSize}
-            onChange={() => { editorBar(1) }}
             onDragFinished={(size) => resizePane('split1', size, setCompanyBarSize)}
             ref={companyRef}    
         >
@@ -305,7 +304,6 @@ const GlobalScreen = ({
                 className={classes.splitPane}
                 split="vertical"
                 size={typeBarSize}
-                onChange={() => { editorBar(1) }}
                 onDragFinished={(size) => resizePane('split9', size > 900 ? 900 : size, setTypeBarSize)}
                 ref={assignmentTypeRef}
             >
@@ -330,7 +328,6 @@ const GlobalScreen = ({
                     className={classes.splitPane}
                     split="vertical"
                     size={otherPartyBarSize}
-                    onChange={() => { editorBar(1) }}
                     onDragFinished={(size) => resizePane('split7', size > 900 ? 900 : size, setOtherPartyBarSize)}
                     ref={otherPartyRef}
                 >
@@ -355,7 +352,6 @@ const GlobalScreen = ({
                         className={classes.splitPane}
                         split="vertical"
                         size={assignmentBarSize}
-                        onChange={() => { editorBar(1) }}
                         onDragFinished={(size) => resizePane('split8', size > 900 ? 900 : size, setAssignmentBarSize)}
                         ref={assignmentRef}
                     >
@@ -375,7 +371,6 @@ const GlobalScreen = ({
                             className={classes.splitPane}
                             split="vertical"
                             size={customerBarSize}
-                            onChange={() => { editorBar(1) }}
                             onDragFinished={(size) => resizePane('split2', size > 900 ? 900 : size, setCustomerBarSize)}
                             ref={assetRef}
                         >
@@ -433,12 +428,11 @@ const GlobalScreen = ({
                                 split="vertical"
                                 size={assetFilesBarSize}
                                 ref={assetFileRef}
-                                onChange={() => { editorBar(1) }}
                                 onDragStarted={() => {
                                     setIsDragging(!isDragging)
                                 }}
                                 onDragFinished={(size) => {
-                                    resizePane('split10', size, setAssetFilesBarSize)
+                                    //resizePane('split10', size, setAssetFilesBarSize)
                                     setIsDragging(!isDragging)
                                 }}
                                 pane2Style={{
@@ -459,12 +453,11 @@ const GlobalScreen = ({
                                     split="vertical"
                                     size={driveTemplateBarSize}
                                     ref={templateFileRef}
-                                    onChange={() => { editorBar(1) }}
                                     onDragStarted={() => {
                                         setIsDragging(!isDragging)
                                     }}
                                     onDragFinished={(size) => {
-                                        resizePane('split4', size, setVisualizerBarSize)
+                                        /* resizePane('split4', size, setVisualizerBarSize) */
                                         setIsDragging(!isDragging)
                                     }}
                                     pane2Style={{

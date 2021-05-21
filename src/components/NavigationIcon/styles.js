@@ -13,23 +13,27 @@ export default makeStyles(theme => ({
             '&:hover':{
                 color: 'rgb(230, 0, 0)' ,
                 '& svg':{
-                fill: 'rgb(230, 0, 0)',
+                    fill: 'rgb(230, 0, 0)',
+                    stroke: 'rgb(230, 0, 0)',
                 }
             },
             '& svg':{
                 fill: '#5a5a5a',
+                stroke: '#5a5a5a',
                 width: '2rem',
                 height: '2rem'
             },
             '&.active':{
                 color: '#fff !important' ,
                 '& svg':{
-                fill: '#fff !important' 
+                    fill: '#fff !important',
+                    stroke: '#fff !important',
                 },
                 '&:hover':{
                     color: 'rgb(230, 0, 0) !important' ,
                     '& svg':{
                         fill: 'rgb(230, 0, 0) !important',
+                        stroke: 'rgb(230, 0, 0)  !important',
                     }
                 }
             },

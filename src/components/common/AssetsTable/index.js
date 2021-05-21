@@ -158,12 +158,12 @@ const AssetsTable = ({
 
   const [ tableColumns, setTableColumns ] = useState(COLUMNS)
 
-  useEffect(() => {
+  /* useEffect(() => {
     if(selectedCategory == 'restore_ownership') {
       COLUMNS.splice(0,1)
       setTableColumns(COLUMNS)
     }
-  }, [ selectedCategory ])
+  }, [ selectedCategory ]) */
 
   useEffect(() => {
     if (standalone) {
