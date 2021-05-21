@@ -9,6 +9,9 @@ import Typography from '@material-ui/core/Typography'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Tooltip from '@material-ui/core/Tooltip'
 import { makeStyles } from '@material-ui/core/styles'
+
+import { getTokenStorage } from '../../../utils/tokenStorage'
+
 import useStyles from './styles'
 const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, onDocument, onAttachmentOpenedFile, onAttachmentFile, onAttachmentDriveFile, onMaintainenceFeeReview, onMaintainenceFeeFile, onSubmitUSPTO, loadingUSPTO, category, driveBtnActive, maintainenceMode, selectedAssets, driveTemplateMode }) => {
   const classes = useStyles()
@@ -60,10 +63,21 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
 
   const createTemplate = () => {
     if( selectedAssets.length > 0 ) {
-      setBtnActive(previousItem => {
-        return !previousItem
-      })
-      onDocument(!btnActive)
+      const googleToken = getTokenStorage( 'google_auth_token_info' )
+      if(googleToken && googleToken != '') {
+        const tokenParse = JSON.parse( googleToken )
+        const { access_token } = tokenParse
+        if( access_token ) {
+          setBtnActive(previousItem => {
+            return !previousItem
+          })
+          onDocument(!btnActive)
+        } else {
+          onDocument(true)
+        }        
+      } else {
+        onDocument(true)
+      }     
     } else {
       alert("Please select asset from list first.")
     }    

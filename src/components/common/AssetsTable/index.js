@@ -156,7 +156,14 @@ const AssetsTable = ({
     },
   ];
 
-  
+  const [ tableColumns, setTableColumns ] = useState(COLUMNS)
+
+  useEffect(() => {
+    if(selectedCategory == 'restore_ownership') {
+      COLUMNS.splice(0,1)
+      setTableColumns(COLUMNS)
+    }
+  }, [ selectedCategory ])
 
   useEffect(() => {
     if (standalone) {
@@ -425,7 +432,7 @@ const resetAll = () => {
         rows={assetTypeAssignmentAssets}
         rowHeight={rowHeight}
         headerHeight={rowHeight}
-        columns={COLUMNS}
+        columns={tableColumns}
         onSelect={handleClickSelectCheckbox}
         onSelectAll={onHandleSelectAll}
         defaultSelectAll={selectedAll}

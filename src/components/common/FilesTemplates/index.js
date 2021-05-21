@@ -46,6 +46,7 @@ const FilesTemplates = () => {
         {
             width: 120,
             minWidth: 120,
+            oldWidth: 120,
             draggable: true,
             label: 'Document',
             dataKey: 'title', 
