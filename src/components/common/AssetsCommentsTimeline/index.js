@@ -39,7 +39,8 @@ import {
   getGoogleProfile,
   setLayoutTemplatesByID,
   setTemplateDocument,
-  getChannels
+  getChannels,
+  getSlackProfile
 } from '../../../actions/patentTrackActions2'
 
 import {
@@ -79,6 +80,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
   const slack_auth_token = useSelector(state => state.patenTrack2.slack_auth_token)
+  /* const slack_profile_data = useSelector( state => state.patenTrack2.slack_profile_data ) */
   const template_document_url = useSelector(state => state.patenTrack2.template_document_url)
   const [ selectUser, setSelectUser] = useState(null)
   const [ replyId, setReplyId ] = useState(null)
@@ -370,12 +372,13 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   const checkSlackAuth = useCallback(() => {
     const slackToken = getTokenStorage( 'slack_auth_token_info' )
 		if(slackToken && slackToken!= '') {
-      const { access_token, team } = JSON.parse( slackToken )
+      const { access_token, team, id } = JSON.parse( slackToken )
       if( access_token && access_token != null ) {
         /**
          * Set team ID
          */
         onUpdateTeamID(team)
+        dispatch(getSlackProfile(access_token, id))
 
         if( selectedAssetsPatents.length > 0 ) {        
           if( channel_id == '' || channel_id == null ) {

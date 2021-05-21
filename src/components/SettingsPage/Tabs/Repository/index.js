@@ -44,6 +44,7 @@ const Repository = () => {
 	const [ selectItems, setSelectItems] = useState( [] )
     const [ selectedRow, setSelectedRow] = useState( [] )
     const [ selectedAll, setSelectedAll ] = useState(false)
+    const [ isDrag, setIsDrag ] = useState(false)
 
     const [ selectedDriveItems, setSelectedDriveItems ] = useState( [] )
     const [ selectDriveRow, setSelectedDriveRow ] = useState( [] )
@@ -523,6 +524,15 @@ const Repository = () => {
                     className={classes.splitPane}
                     split="vertical"	
                     size={300}
+                    onDragStarted={() => {
+                        setIsDrag(!isDrag)
+                    }}
+                    onDragFinished={(size) => {
+                        setIsDrag(!isDrag)
+                    }}
+                    pane2Style={{
+                        pointerEvents: isDrag === true ? 'none' : 'auto',
+                    }}
                 >
                     <div className={classes.flexColumn}>
                         <div className={classes.heading}>

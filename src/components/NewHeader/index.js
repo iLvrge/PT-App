@@ -69,6 +69,7 @@ const NewHeader = () => {
   const dispatch = useDispatch()
   let history = useHistory()
   const slack_profile_data = useSelector( state => state.patenTrack2.slack_profile_data )
+  const slack_auth_token = useSelector(state => state.patenTrack2.slack_auth_token)
   const profile = useSelector(store => (store.patenTrack.profile))
   const user = useSelector(store => (store.patenTrack.profile ? store.patenTrack.profile.user : {}))
   const siteLogo = useSelector(state => (state.patenTrack.siteLogo.site_logo ? state.patenTrack.siteLogo.site_logo.logo_big : 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/logo/patentrack_new_logo.png'))
@@ -83,7 +84,7 @@ const NewHeader = () => {
 
   const [ openDrawer, setDrawerState] = useState({
       top: false,
-      left: false,
+      left: false, 
       bottom: false,
       right: false,
   })
@@ -112,6 +113,9 @@ const NewHeader = () => {
           dispatch(getSlackProfile(access_token, id))
         }
       }
+    } else {
+      /*console.log("slack_profile_data", slack_profile_data)*/
+      checkButtons() 
     }
   }, [dispatch, slack_profile_data])
 
@@ -122,6 +126,11 @@ const NewHeader = () => {
   useEffect(() => {
     checkButtons() 
   }, [ google_auth_token ])
+
+  useEffect(() => {
+    /*console.log("slack_auth_token", slack_auth_token)*/
+    checkButtons() 
+  }, [ slack_auth_token ])
 
   useEffect(() => {
     setLayoutName(breadcrumbs)
@@ -154,6 +163,7 @@ const NewHeader = () => {
           slackLoginButton = false
         }
       }
+      /*console.log("slackLoginButton", slackLoginButton, slackToken)*/
       setSlackAuthLogin(slackLoginButton)
 
     } catch ( err ) {

@@ -299,9 +299,9 @@ const QuillEditor = ({
         aria-labelledby="assignor-assignee"
         aria-describedby=""
       >
-        <DialogContent>
+        <>
           <UserInputForm />
-        </DialogContent>
+        </>
       </Modal> 
     </div>
   )

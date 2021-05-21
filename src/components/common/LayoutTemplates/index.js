@@ -44,10 +44,10 @@ const LayoutTemplates = () => {
 
     const COLUMNS = [    
       {
-        minWidth: 100,
-        width: 100,
+        minWidth: 250,
+        width: 250,
         flexGrow: 1,
-        label: 'Document Templates',
+        label: 'Templates (doubleclick to create a document)',
         dataKey: 'container_name',            
       }
     ]

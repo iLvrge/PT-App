@@ -137,7 +137,7 @@ export default function PatentNode(props) {
           .style("top", (getBoundElementRec.top - 44) + "px");	
       })
       .on("mouseout", () => {
-        d3.selectAll(".tooltip_title").remove();
+        //d3.selectAll(".tooltip_title").remove();
       })
       .text(data.name) 
       .call(

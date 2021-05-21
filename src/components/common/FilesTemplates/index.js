@@ -75,7 +75,7 @@ const FilesTemplates = () => {
             minWidth: 150,
             oldWidth: 150,
             draggable: true,
-            label: '2nd Assignee', 
+            label: '1st Assignee', 
             dataKey: 'assignee'             
         },        
         {

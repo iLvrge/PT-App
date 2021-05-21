@@ -21,7 +21,7 @@ function Companies() {
   const toggleOpen = useCallback(() => setOpen(open => !open), [])
 
   useEffect(() => {
-    dispatch(setBreadCrumbs('Settings > Companies > Names'))
+    dispatch(setBreadCrumbs('Settings > Companies'))
     dispatch(fetchCompaniesList())
   }, [ dispatch ])
 

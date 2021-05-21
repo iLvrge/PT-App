@@ -32,14 +32,14 @@ const AddMenu = ({ anchorEl, onClose, createParent, associateToParent }) => {
 
       <MenuItem onClick={onAction(createParent)}>
         <AddIcon className={classes.icon} />
-          Import as a Parent
+          Import Company
       </MenuItem>
 
       <NestedMenuItem
         label={
           <Fragment>
             <LayersIcon className={classes.icon} />
-            Associate with a Parent
+            Import under Existing Company
           </Fragment>
         }
         parentMenuOpen={!!anchorEl}

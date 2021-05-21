@@ -197,13 +197,16 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
 div.tooltip_title {
     position: absolute;			
     text-align: left;			
-    width: 180px;					
-    padding: 10px;		
-    border: 1px solid #545454;	
-    background: rgba(34,34,34,0.6);
+    /* margin: 0 auto; */
+    text-align: left;
+    width: auto;
+    padding: 5px 10px;	
+    border: 0;	
+    background: #121212;
     pointer-events: none;
-    font-weight: 500;
+    font-weight: 500; 
     font-size: 12.25px;
+    white-space: nowrap;
 }
 /*
 #toobarUIGap0 { grid-area: 1 / 1 / 2 / 2; text-align: center; justify-content: center; align-items: center; }
