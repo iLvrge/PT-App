@@ -112,13 +112,13 @@ const FamilyContainer = ({ family, onClose }) => {
     }, [ timelineContainerRef ])
 
     useEffect(() => {
-        if (family.length === 0 ) return setTimelineRawData([])
-        const getTimelineRawDataFunction = async () => {
-            console.log("FamilyContainer", family)
+        if (family.length === 0 || selectedAsset.length === 0 ) return setTimelineRawData([])
+        const getTimelineRawDataFunction = async () => {            
             setTimelineRawData(family)
             setIsLoadingTimelineRawData(false)
             const findIndex = family.findIndex(item => selectedAsset.includes(item.application_number) || selectedAsset.includes(item.patent_number))
-            if(findIndex >= 0) { 
+            console.log("FamilyContainer", findIndex, selectedAsset)
+            if(findIndex !== -1 ) { 
                 dispatch(setFamilyItemDisplay(family[findIndex]))
                 dispatch(toggleFamilyItemMode(true))
             }
