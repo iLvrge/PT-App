@@ -57,7 +57,7 @@ const convertDataToItem = (familyItem) => {
         id: familyItem.id,
       content: '',
       type: 'box',
-      start: rawDate.indexOf('-') !== -1 ? new Date(rawDate) : new Date(`${rawDate.substr(0,4)}-${rawDate.substr(4,2)}-${rawDate.substr(6,2)}`),
+      start: new Date(`${rawDate.substr(0,4)}-${rawDate.substr(4,2)}-${rawDate.substr(6,2)}`),
       assetType,
       zoomMin: 3456e5,
       rawData: familyItem,
@@ -68,7 +68,7 @@ const convertDataToItem = (familyItem) => {
     })
 }
 
-const FamilyContainer = ({ family, onClose }) => {
+const CitationData = ({ data }) => {
     const classes = useStyles()
 
     const timelineRef = useRef()
@@ -107,24 +107,26 @@ const FamilyContainer = ({ family, onClose }) => {
     useEffect(() => {
         if(timelineContainerRef.current != null) {
             timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
-            setDisplay('none')
+            //setDisplay('none')
         }        
     }, [ timelineContainerRef ])
 
     useEffect(() => {
-        if (family.length === 0 ) return setTimelineRawData([])
-        const getTimelineRawDataFunction = async () => {
-            console.log("FamilyContainer", family)
-            setTimelineRawData(family)
+        if (data.length === 0 ){
             setIsLoadingTimelineRawData(false)
-            const findIndex = family.findIndex(item => selectedAsset.includes(item.application_number) || selectedAsset.includes(item.patent_number))
+            return setTimelineRawData([])
+        } 
+        const getTimelineRawDataFunction = async () => {
+            setTimelineRawData(data)
+            
+            const findIndex = data.findIndex(item => selectedAsset.includes(item.application_number) || selectedAsset.includes(item.patent_number))
             if(findIndex >= 0) { 
-                dispatch(setFamilyItemDisplay(family[findIndex]))
+                dispatch(setFamilyItemDisplay(data[findIndex]))
                 dispatch(toggleFamilyItemMode(true))
             }
         }        
         getTimelineRawDataFunction()
-    }, [ dispatch, family, selectedAsset ])
+    }, [ dispatch, data, selectedAsset ])
 
     useEffect(() => {
         items.current = new DataSet()
@@ -166,7 +168,7 @@ const FamilyContainer = ({ family, onClose }) => {
                 items.current.add(convertedItems)
                 setDisplay('block')
             } else {
-                setDisplay('none')
+                setDisplay('block')
             }
         }
         /* console.log(items.current, start, end) */
@@ -175,17 +177,17 @@ const FamilyContainer = ({ family, onClose }) => {
     }, [ timelineRawData, isLoadingTimelineRawData, timelineContainerRef ])
 
     return(
-        <Paper className={classes.root}>
+        <Paper className={classes.rootContainer}>
             <ClickAwayListener onClickAway={handleClickAway}>
-                <div className={classes.root}>
+                <div className={classes.rootContainer}>
                 <div
-                    id={`familyTimeline`}
+                    id={`citationdata`}
                     style={{ 
                         display: display,
                         filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`,
                     }}
                     ref={timelineContainerRef}
-                    className={classes.timeline}
+                    className={classes.citation_timeline}
                 />
                     {/* { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> } */} 
                 </div>
@@ -195,4 +197,4 @@ const FamilyContainer = ({ family, onClose }) => {
 }
 
 
-export default FamilyContainer
+export default CitationData

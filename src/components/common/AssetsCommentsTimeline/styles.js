@@ -79,8 +79,14 @@ export default makeStyles(theme => ({
   },
   fileLink: { 
     cursor: 'pointer',
+    textDecoration: 'underline',
     '&:hover':{
-      textDecoration: 'underline'
+      color: '#e60000' 
+    },
+    '& img':{
+      marginRight: 5,
+      position: 'relative',
+      top: 5
     }
   },
   arrowButton:{

@@ -14,10 +14,11 @@ const LifeSpanContainer = () => {
     const [ selectedTab, setSelectedTab ] = useState(0)
 
     const selectedAssetsTransactionLifeSpan = useSelector(state => state.patenTrack2.transaction_life_span)
+    const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
 
     const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
 
-    if (selectedAssetsTransactionLifeSpan.length === 0) return null
+    if (selectedAssetsTransactionLifeSpan.length === 0 || selectedCompanies.length === 0 ) return null
 
     return (
         <Paper className={classes.root} square>  

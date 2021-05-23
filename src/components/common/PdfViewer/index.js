@@ -134,24 +134,24 @@ function PdfViewer(props) {
           }   
         </div>
         {
-          pdfTab < 3
+          pdfTab < 3 && (mainPdf != 'about:blank' || formPdf != 'about:blank' ||  agreementPdf != 'about:blank' )
           ?
-          <Tabs
-            value={pdfTab}
-            onChange={(e, id) => setPdfTabIndex(id)}
-            className={classes.tabs}
-            variant={'scrollable'}
-          >
-            {
-              [ 'Agreement', 'Form', 'Main' ].map((tab) => (
-                <Tab
-                  key={tab}
-                  label={tab}
-                  className={classes.tab}
-                />
-              )) 
-            }
-          </Tabs>
+            <Tabs
+              value={pdfTab}
+              onChange={(e, id) => setPdfTabIndex(id)}
+              className={classes.tabs}
+              variant={'scrollable'}
+            >
+              {
+                [ 'Agreement', 'Form', 'Main' ].map((tab) => (
+                  <Tab
+                    key={tab}
+                    label={tab}
+                    className={classes.tab}
+                  />
+                )) 
+              }
+            </Tabs>
           :
           ''
         }        

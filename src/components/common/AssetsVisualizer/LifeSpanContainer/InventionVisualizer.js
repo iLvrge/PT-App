@@ -37,7 +37,7 @@ const InventionVisualizer = () => {
             // parameter point contains properties x, y, z, and data
             // data is the original object passed to the point constructor
             return 'value: <b>' + point.z + '</b>' 
-        },   
+        },
         tooltipStyle: {
             content: {
               background    : 'rgba(255, 255, 255, 0.7)',
@@ -55,7 +55,7 @@ const InventionVisualizer = () => {
 
     useEffect(() => {
         const getChartData = async () => {
-            console.log('getChartData', getChartData)
+            
             setIsLoadingCharts(true)     
             const items = new DataSet()
 
@@ -69,8 +69,7 @@ const InventionVisualizer = () => {
                 let z = pow(random(), 2)
                 let style = (i%2==0) ? sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2)) : '#00ffff'        
                 items.add({ x:x,y:y,z:z,style:style })
-            }    
-			console.log("items", items)
+            }
             graphRef.current = new Graph3d(graphContainerRef.current, items, options)
 
             setIsLoadingCharts(false)
@@ -80,7 +79,7 @@ const InventionVisualizer = () => {
     }, [ options ])
 
     
- 
+
 
     return (
         <div className={classes.graphContainer}>

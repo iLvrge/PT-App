@@ -222,9 +222,9 @@ const AssetDetailsContainer = ({
                           display={"false"}
                           fullScreen={false}
                           resize={resizeFrame}
-                          /> 
+                          />  
                       ) : lifeSpanMode === true ? (
-                          <InventionVisualizer />
+                          <InventionVisualizer defaultSize={defaultSize}/>
                       ) : familyItemMode === true ? (
                           <FamilyItemContainer item={selectedAssetsFamilyItem} onClose={onCloseFamilyItemMode} />
                       ) : (

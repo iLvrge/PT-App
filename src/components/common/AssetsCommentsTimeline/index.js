@@ -602,8 +602,26 @@ const handleDriveModalClose = (event) => {
       }
     } else {
       return null
+    }    
+  }
+
+  const FileImage = ({file}) => {
+    const fileURL = file !== 'string' && file.hasOwnProperty('external_url') ? file.external_url : ''
+    let imageURL = ''
+    if(fileURL.toString().indexOf('docs.google.com') !== -1 && fileURL.toString().indexOf('document') !== -1){
+      imageURL = 'https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document'
+    } else if(file.hasOwnProperty('external_type') && file.hasOwnProperty('thumb_64')){
+      imageURL = fileURL.thumb_64
     }
-    
+    return(
+      <>
+      {
+        imageURL != '' && (
+          <img src={imageURL} />
+        )
+      }
+      </>
+    )
   }
 
   const ShowFiles = ({indexing, files}) => {
@@ -613,7 +631,9 @@ const handleDriveModalClose = (event) => {
       <>
         {
           files.files.map( (file, index) => (
-          <div key={`${indexing}-${index}`}><a onClick={(event) => { openFile(event, file)}} className={classes.fileLink}>{file.title}</a></div>
+            <div key={`${indexing}-${index}`}>
+              <a onClick={(event) => { openFile(event, file)}} className={classes.fileLink}><FileImage file={file}/>{file.title}</a>
+            </div>
           ))
         }
       </>

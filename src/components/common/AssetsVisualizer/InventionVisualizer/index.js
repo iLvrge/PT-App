@@ -1,31 +1,28 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useSelector } from 'react-redux'
-import Tab from '@material-ui/core/Tab'
-import Tabs from '@material-ui/core/Tabs'
 import Paper from '@material-ui/core/Paper'
 
 import { DataSet } from 'vis-data/esnext'
 import { Graph3d } from 'vis-graph3d/esnext'
 
 
-
 import useStyles from './styles'
 
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
-const InventionVisualizer = () => {
+const InventionVisualizer = ({defaultSize}) => {
     
     const classes = useStyles()
     const graphRef = useRef()
     const graphContainerRef = useRef()  
     const [ isLoadingCharts, setIsLoadingCharts ] = useState(false)
 
-    const [ selectedTab, setSelectedTab ] = useState(0)
+    const selectedAssetsTransactionLifeSpan = useSelector( state => state.patenTrack2.transaction_life_span )
+    const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
 
-    const selectedAssetsTransactionLifeSpan = useSelector(state => state.patenTrack2.transaction_life_span)
+    
 
-    const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
-
+   
     let options = {
         height: '400px',
         width: '100%',
@@ -65,8 +62,7 @@ const InventionVisualizer = () => {
 
     useEffect(() => {
         const getChartData = async () => {
-            if (selectedAssetsTransactionLifeSpan.length === 0) return null
-            
+            if (selectedCompanies.length === 0 || selectedAssetsTransactionLifeSpan.length === 0) return null
             setIsLoadingCharts(true)     
             const items = new DataSet()
             const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet']
@@ -85,7 +81,7 @@ const InventionVisualizer = () => {
             }
             //TODO height 100% not working well, created allot of isues when we resize pane, 
             if(graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0) {
-                options = {...options, height: `${graphContainerRef.current.clientHeight}px`}
+                options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight}px`}
             }
             graphRef.current = new Graph3d(graphContainerRef.current, items, options)
 
@@ -93,9 +89,9 @@ const InventionVisualizer = () => {
         }
 
         getChartData()
-    }, [ options, selectedAssetsTransactionLifeSpan, graphContainerRef ])
+    }, [ options, selectedCompanies, selectedAssetsTransactionLifeSpan, graphContainerRef, defaultSize ])
 
-    if (selectedAssetsTransactionLifeSpan.length === 0) return null
+    if (selectedAssetsTransactionLifeSpan.length === 0 || selectedCompanies.length === 0 ) return null
 
     return (
         <Paper className={classes.root} square>  

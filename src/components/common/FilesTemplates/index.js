@@ -97,7 +97,6 @@ const FilesTemplates = () => {
     }, [document_transaction, selectedRow])
 
     useEffect(() => {
-
         const getDriveAndAssetFiles = async() => {
             if( selectedAssetsPatents.length > 0 ) {
                 if(channel_id != '' && channel_id != null) {
@@ -117,7 +116,11 @@ const FilesTemplates = () => {
                     const { data } = await PatenTrackApi.getDriveAndAssetFiles( 'undefined', 'undefined', selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() )
                     setAssetFiles(data)
                 }                
-            }   
+            } else {
+                setAssetFiles([])
+                setSelectedRow([])
+                setCurrentSelection(null)
+            }
         }
         getDriveAndAssetFiles()
     }, [ selectedAssetsPatents, channel_id ])
@@ -129,16 +132,24 @@ const FilesTemplates = () => {
     }
 
     const onHandleClickRow = useCallback((e, item) => {
-        if(item.external_type == 'gdrive' || item.external_type == 'usptodrive') {
-            dispatch(setDriveTemplateFrameMode(true))
-            dispatch(setTemplateDocument(item.url_private))
+        if(selectedRow.includes(item.id)) {
+            dispatch(setDocumentTransaction([]))     
+            dispatch(setDriveTemplateFrameMode(false))
+            dispatch(setTemplateDocument(null))
+            setSelectedRow([])
+            setCurrentSelection(null)
         } else {
-            window.open(item.url_private)
-        }
-        setSelectedRow([item.id])
-        setCurrentSelection(item.id)
-        dispatch(setDocumentTransaction([item.id]))        
-    }, [ dispatch ]) 
+            if(item.external_type == 'gdrive' || item.external_type == 'usptodrive') {
+                dispatch(setDriveTemplateFrameMode(true))
+                dispatch(setTemplateDocument(item.url_private))
+            } else {
+                window.open(item.url_private)
+            }
+            setSelectedRow([item.id])
+            setCurrentSelection(item.id) 
+            dispatch(setDocumentTransaction([item.id]))     
+        }           
+    }, [ dispatch, selectedRow ]) 
     
     const resizeColumnsWidth = useCallback((dataKey, data) => {
         let previousColumns = [...headerColumns]

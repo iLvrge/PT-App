@@ -9,6 +9,8 @@ import AbstractData from './AbstractData'
 import ClaimData from './ClaimData'
 import FigureData from './FigureData'
 import AssignmentData from './AssignmentData'
+import CitationData from './CitationData'
+import PtabData from './PtabData'
 
 
 import useStyles from './styles'
@@ -21,6 +23,8 @@ const FamilyItemContainer = ({ item, onClose }) => {
     const [ abstractData, setAbsractData ] = useState('')
     const [ claimsData, setClaimsData ] = useState('')
     const [ figureData, setFigureData ] = useState([])
+    const [ citationData, setCitationData ] = useState([])
+    const [ ptabData, setPtabData ] = useState([])
     const [ assignmentsData, setAssignmentsData ] = useState([])
     const handleChangeTab = (event, newTab) => setSelectedTab(newTab)
     const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
@@ -32,6 +36,8 @@ const FamilyItemContainer = ({ item, onClose }) => {
             setClaimsData('')
             setFigureData([])
             setAssignmentsData([])
+            setCitationData([])
+            setPtabData([])
             return setfamilyItemData({})
         } 
 
@@ -95,6 +101,8 @@ const FamilyItemContainer = ({ item, onClose }) => {
                                     {selectedTab === 1 && <AbstractData data={abstractData} />}
                                     {selectedTab === 2 && <ClaimData data={claimsData} />}                                    
                                     {selectedTab === 3 && <FigureData data={figureData} />}
+                                    {selectedTab === 4 && <CitationData data={citationData} />}
+                                    {selectedTab === 5 && <PtabData data={ptabData} />}
                                 </Grid> 
                             </Grid>
                             :

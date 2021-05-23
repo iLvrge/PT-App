@@ -152,10 +152,14 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
             <Button className={classes.review} onClick={onMaintainenceFeeReview}>Cancel</Button>
           </>
         :
+        category == 'restore_ownership'
+        ?
         <>
           <Button className={classes.review} onClick={onSubmitUSPTO} disabled={loadingUSPTO}>Submit to USPTO</Button>
           <Button className={`${classes.review} ${driveTemplateMode === true ? classes.active : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
         </>
+        :
+        <Button className={`${classes.review} ${driveTemplateMode === true ? classes.active : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
       }      
       {/* 
       <button className={classes.review} onClick={onMaintainenceFeeReview}><Typography variant='body2'>Review Maintainence</Typography></button>

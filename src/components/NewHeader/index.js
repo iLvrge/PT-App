@@ -23,6 +23,9 @@ import {
         Divider,
         Modal,
         Backdrop,
+        Typography,
+        Tooltip,
+        Zoom
       } from '@material-ui/core'
 
 import { Menu as MenuIcon, 
@@ -61,7 +64,9 @@ import { setAssetTypeAssignments,
   setBreadCrumbsAndCategory,  
   setSearchString, 
   setResetAll,
-  getSlackProfile } from '../../actions/patentTrackActions2'
+  getSlackProfile,
+  setGoogleProfile
+ } from '../../actions/patentTrackActions2'
 import { setControlModal, setTimelineSelectedItem, setTimelineSelectedAsset } from '../../actions/uiActions'
 
 const NewHeader = () => {
@@ -69,6 +74,7 @@ const NewHeader = () => {
   const dispatch = useDispatch()
   let history = useHistory()
   const slack_profile_data = useSelector( state => state.patenTrack2.slack_profile_data )
+  const google_profile = useSelector( state => state.patenTrack2.google_profile )
   const slack_auth_token = useSelector(state => state.patenTrack2.slack_auth_token)
   const profile = useSelector(store => (store.patenTrack.profile))
   const user = useSelector(store => (store.patenTrack.profile ? store.patenTrack.profile.user : {}))
@@ -89,6 +95,11 @@ const NewHeader = () => {
       right: false,
   })
 
+  /**
+   * This function is deprecated now
+   * @param {data, link} param0 
+   */
+
   
   const ShowLink = ({data, link}) =>{
     return (
@@ -104,6 +115,10 @@ const NewHeader = () => {
     ) 
   }  
 
+
+  /**
+   * After user loggedin with Slack then enable slack logout button
+   */
   useEffect(() => {
     if(slack_profile_data == null) {
       const slackToken = getTokenStorage( 'slack_auth_token_info' )
@@ -114,33 +129,69 @@ const NewHeader = () => {
         }
       }
     } else {
-      /*console.log("slack_profile_data", slack_profile_data)*/
       checkButtons() 
     }
   }, [dispatch, slack_profile_data])
 
   useEffect(() => {
+    if(google_profile == null) {
+      const getGoogleProfile = getTokenStorage('google_profile_info')
+      if( getGoogleProfile != '' && getGoogleProfile != null ) {
+        const profileInfo = JSON.parse(getGoogleProfile)
+        dispatch(setGoogleProfile(profileInfo))
+      }
+    } else {
+      checkButtons() 
+    }
+  }, [dispatch, google_profile])
+
+  
+
+  /**
+   * If use refresh screen then check Google and Slack buttons
+   */
+
+  useEffect(() => {
     checkButtons()
   }, [])
+
+   /**
+   * After user loggedin with Google then enable google logout button
+   */
 
   useEffect(() => {
     checkButtons() 
   }, [ google_auth_token ])
 
+  /**
+   * After user loggedin with Slack then enable slack logout button
+   */
+
   useEffect(() => {
-    /*console.log("slack_auth_token", slack_auth_token)*/
     checkButtons() 
   }, [ slack_auth_token ])
+
+  /**
+   * Set Layout with breadcrumbs
+   */
 
   useEffect(() => {
     setLayoutName(breadcrumbs)
   }, [ breadcrumbs ])
+
+  /**
+   * Get the Loggedin User Profile data
+   */
 
   useEffect(() => {
     if (!profile) {
       dispatch(getProfile(true))
     }
   }, [ dispatch, profile ])
+
+  /**
+   * To check buttons for the Google and Slack
+   */
 
   const checkButtons = () => {
     try {      
@@ -152,7 +203,6 @@ const NewHeader = () => {
         const { access_token } = tokenParse
         if( access_token ) {
           googleLoginButton =  false 
-          //dispatch(getGoogleProfile(tokenParse))  
         } 
       }
       setGoogleAuthLogin(googleLoginButton)
@@ -163,13 +213,16 @@ const NewHeader = () => {
           slackLoginButton = false
         }
       }
-      /*console.log("slackLoginButton", slackLoginButton, slackToken)*/
       setSlackAuthLogin(slackLoginButton)
-
     } catch ( err ) {
       console.error( err )
     }
   }
+
+  /**
+   * Calling this function to hide the Hexagon Menu
+   * and Set the Breacrumbs bases on selected layout
+   */
 
   const hideMenu = useCallback((e, item) => {
     dispatch(setResetAll(1, item))    
@@ -179,15 +232,29 @@ const NewHeader = () => {
     }, 500)
   }, [ dispatch ])
 
+  /***
+   * Deprecated
+   */
+
   const handleCompanyMenuOpen = (event) => {
     setCompanyMenuOpen(!isCompanyMenuOpen)
     if(!isCompanyMenuOpen === true) toggleDrawer( event, true )
   }
 
+  /**
+   * This is to set the flag for the menu to show or disable
+   */
+
   const handleControlModal = useCallback((e, flag) => { 
     e.stopPropagation()
     dispatch(setControlModal( flag )) 
   }, [ dispatch ]) 
+
+  /**
+   * When the setting menu is open then disable the list of keyboard events
+   * @param {} event 
+   * @param {*} open 
+   */
 
   
   const toggleDrawer = (event, open) => {
@@ -197,6 +264,10 @@ const NewHeader = () => {
 
     setDrawerState({ ...openDrawer, right: open });
   };
+
+  /**
+   * Deprecated
+   */
 
   const onRedirect =  useCallback((e, path) => {
     dispatch(setTimelineSelectedAsset(null))
@@ -209,7 +280,9 @@ const NewHeader = () => {
     history.push(path)
   }, [ dispatch, history ])
 
-  
+  /**
+   * Call the function for search by pressing enter key
+   */
   const handleKeyDown = useCallback((event) => {
     if (event.key === 'Enter') {
       dispatch(setResetAll())
@@ -222,8 +295,18 @@ const NewHeader = () => {
   }, [ dispatch, history ])
 
   const onHandleGoogleSignout = () => {
-    removeTokenStorage('google_auth_token_info')
-    setGoogleAuthLogin(true)
+    if(window.confirm('Log Out?')){
+      removeTokenStorage('google_auth_token_info')
+      setGoogleAuthLogin(true)
+    }
+  }
+
+  const onHandleSlackSignout = () => {
+    if(window.confirm('Log Out?')){
+      removeTokenStorage('slack_auth_token_info')
+      removeTokenStorage('slack_profile_data')
+      setSlackAuthLogin(true)
+    }
   }
 
   return (
@@ -247,16 +330,7 @@ const NewHeader = () => {
         <div className={classes.grow} style={{position: 'relative'}}>  
           <div className={classes.breadcrumbs}>{layoutName}</div>   
         </div> 
-        <div className={classes.rightPanel}>
-            {/* <IconButton
-              edge='start'
-              className={classes.menuButton}
-              color='inherit'
-            >
-              <Link to='/due'>
-                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="tasks" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="svg-inline--fa fa-tasks fa-w-16 fa-2x" ><path fill="currentColor" d="M139.61 35.5a12 12 0 0 0-17 0L58.93 98.81l-22.7-22.12a12 12 0 0 0-17 0L3.53 92.41a12 12 0 0 0 0 17l47.59 47.4a12.78 12.78 0 0 0 17.61 0l15.59-15.62L156.52 69a12.09 12.09 0 0 0 .09-17zm0 159.19a12 12 0 0 0-17 0l-63.68 63.72-22.7-22.1a12 12 0 0 0-17 0L3.53 252a12 12 0 0 0 0 17L51 316.5a12.77 12.77 0 0 0 17.6 0l15.7-15.69 72.2-72.22a12 12 0 0 0 .09-16.9zM64 368c-26.49 0-48.59 21.5-48.59 48S37.53 464 64 464a48 48 0 0 0 0-96zm432 16H208a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h288a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-320H208a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h288a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 160H208a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h288a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16z" ></path></svg>
-              </Link>
-            </IconButton> */}
+        <div className={classes.rightPanel}>            
           <div className={classes.search}>
             <div className={classes.searchIcon}> 
               <SearchIcon />
@@ -276,37 +350,77 @@ const NewHeader = () => {
             {
               !googleAuthLogin
               ?
-                <span className={classes.socialIcon} >
-                  <svg xmlns="http://www.w3.org/2000/svg" style={{top: 9, transform: 'translate(35%, 0%)'}}><g fill="#000" fillRule="evenodd"><path d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z" fill="#EA4335"></path><path d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z" fill="#4285F4"></path><path d="M3.88 10.78A5.54 5.54 0 0 1 3.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9.008 9.008 0 0 0 0 9c0 1.45.35 2.82.96 4.04l2.92-2.26z" fill="#FBBC05"></path><path d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.97 13.04C2.45 15.98 5.48 18 9 18z" fill="#34A853"></path><path fill="none" d="M0 0h18v18H0z"></path></g></svg>
-                </span>
+                <IconButton className={classes.padding0} aria-label="Google Logout" component="span" onClick={onHandleGoogleSignout}>
+                  <Tooltip 
+                    title={
+                      <Typography color="inherit" variant='body2'>
+                      {
+                        google_profile != null && Object.keys(google_profile).length > 0
+                        ?
+                          <span className={classes.googleTooltip}>
+                            <span>{google_profile.name}</span>
+                            <span>{google_profile.email}</span>
+                          </span>
+                        :
+                        '' 
+                      }
+                      </Typography>
+                    } 
+                    className={classes.tooltip}  
+                    placement='bottom'
+                    enterDelay={0}
+                    TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" style={{width: '100%', height: '100%', transform: 'translate(25%, 22%)'}}><g fill="#000" fillRule="evenodd"><path d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z" fill="#EA4335"></path><path d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2c1.7-1.57 2.68-3.88 2.68-6.62z" fill="#4285F4"></path><path d="M3.88 10.78A5.54 5.54 0 0 1 3.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9.008 9.008 0 0 0 0 9c0 1.45.35 2.82.96 4.04l2.92-2.26z" fill="#FBBC05"></path><path d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.97 13.04C2.45 15.98 5.48 18 9 18z" fill="#34A853"></path><path fill="none" d="M0 0h18v18H0z"></path></g></svg>
+                  </Tooltip>
+                  
+                </IconButton>
               :
               ''
             } 
             {
               !slackAuthLogin
               ?
-              <span className={classes.socialIcon}>
-                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 270 270">
-                  <g>	                    
-                    <g>		
-                      <path fill="#E01E5A" d="M99.4,151.2c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h12.9V151.2z"/>		
-                      <path fill="#E01E5A" d="M105.9,151.2c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v32.3c0,7.1-5.8,12.9-12.9,12.9s-12.9-5.8-12.9-12.9V151.2z"/>	
-                    </g>	
-                    <g>		
-                      <path fill="#36C5F0" d="M118.8,99.4c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v12.9H118.8z"/>		
-                      <path fill="#36C5F0" d="M118.8,105.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9H86.5c-7.1,0-12.9-5.8-12.9-12.9s5.8-12.9,12.9-12.9H118.8z"/>	
-                    </g>	
-                    <g>	
-                      <path fill="#2EB67D" d="M170.6,118.8c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9h-12.9V118.8z"/>		
-                      <path fill="#2EB67D" d="M164.1,118.8c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9V86.5c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9V118.8z"/>	
+              <Tooltip 
+                title={
+                  <Typography color="inherit" variant='body2'>
+                  {
+                    slack_profile_data != null && Object.keys(slack_profile_data).length > 0
+                    ?
+                      slack_profile_data.real_name  != '' ? slack_profile_data.real_name : slack_profile_data.name
+                    :
+                    '' 
+                  }
+                  </Typography>
+                } 
+                className={classes.tooltip}  
+                placement='bottom'
+                enterDelay={0}
+                TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
+              >
+                <IconButton className={classes.padding0} aria-label="Slack Logout" component="span" onClick={onHandleSlackSignout} style={{marginRight: 6}}>
+                  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 270 270">
+                    <g>	                    
+                      <g>		
+                        <path fill="#E01E5A" d="M99.4,151.2c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h12.9V151.2z"/>		
+                        <path fill="#E01E5A" d="M105.9,151.2c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v32.3c0,7.1-5.8,12.9-12.9,12.9s-12.9-5.8-12.9-12.9V151.2z"/>	
+                      </g>	
+                      <g>		
+                        <path fill="#36C5F0" d="M118.8,99.4c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v12.9H118.8z"/>		
+                        <path fill="#36C5F0" d="M118.8,105.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9H86.5c-7.1,0-12.9-5.8-12.9-12.9s5.8-12.9,12.9-12.9H118.8z"/>	
+                      </g>	
+                      <g>	
+                        <path fill="#2EB67D" d="M170.6,118.8c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9h-12.9V118.8z"/>		
+                        <path fill="#2EB67D" d="M164.1,118.8c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9V86.5c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9V118.8z"/>	
+                      </g>
+                      <g>	
+                        <path fill="#ECB22E" d="M151.2,170.6c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9v-12.9H151.2z"/>		
+                        <path fill="#ECB22E" d="M151.2,164.1c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h32.3c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9H151.2z"/>
+                      </g>
                     </g>
-                    <g>	
-                      <path fill="#ECB22E" d="M151.2,170.6c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9v-12.9H151.2z"/>		
-                      <path fill="#ECB22E" d="M151.2,164.1c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h32.3c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9H151.2z"/>
-                    </g>
-                  </g>
-                </svg>
-              </span>
+                  </svg>
+                </IconButton>
+              </Tooltip>
               :
               ''
             }

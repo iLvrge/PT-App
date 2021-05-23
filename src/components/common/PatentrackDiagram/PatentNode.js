@@ -1,8 +1,10 @@
 import { useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux'
 import moment from "moment";
 import * as d3 from "d3";
 
-const time2String = dateStr => moment(dateStr).format("MM/DD/YYYY");
+const time2String = dateStr => moment(dateStr).format("MM/DD/YYYY")
+
 function wrapText(str, width, lines, node) {
   let lineCount = 0;
   
@@ -50,7 +52,7 @@ function wrapText(str, width, lines, node) {
 
 export default function PatentNode(props) {
   const { node, data, config, childrenLinks, parent, pdfView } = props;
-  
+  const pdfFile = useSelector(state => state.patenTrack.pdfFile)
   function unsetAllActiveLink() {
     const element = document.querySelector(
       "g#patentLinksGroup",
@@ -137,7 +139,7 @@ export default function PatentNode(props) {
           .style("top", (getBoundElementRec.top - 44) + "px");	
       })
       .on("mouseout", () => {
-        d3.selectAll(".tooltip_title").remove();
+        //d3.selectAll(".tooltip_title").remove();
       })
       .text(data.name) 
       .call(
@@ -149,7 +151,7 @@ export default function PatentNode(props) {
 
     if (data.document != null && data.document != "") {
       g.append("svg:image")
-        .attr("xlink:href", config.pdfIcon)
+        .attr("xlink:href", Object.keys(pdfFile).length > 0 && pdfFile.document == data.document ?  config.pdfIconActive  : config.pdfIcon)
         .attr("width", node.pdf.size)
         .attr("height", node.pdf.size)
         .attr("x", node.pdf.x)
@@ -158,30 +160,30 @@ export default function PatentNode(props) {
         .on("click", () => {
           unsetAllActiveLink()
           const targetElement = d3.event.target
-          targetElement.setAttribute('href',config.pdfIconActive)
-          const element = d3.event.target.closest(
-            "g#patentNodesGroup",
-          )
-          const images = element.querySelectorAll('image')
-          
-          if(images != null && images.length > 0) {
-            [].forEach.call(images, function(el) {
-              if(el != targetElement) {
-                el.setAttribute('href',config.pdfIcon)
-              }
-            })
+          const togglePDF = targetElement.getAttribute('href')
+          console.log('togglePDF', togglePDF, targetElement)
+          if( togglePDF == '' || togglePDF  == config.pdfIcon ) {
+            targetElement.setAttribute('href',config.pdfIconActive)
+            console.log('SET IMAGE')
+            const element = d3.event.target.closest(
+              "g#patentNodesGroup",
+            )
+            const images = element.querySelectorAll('image')
+            
+            if(images != null && images.length > 0) {
+              [].forEach.call(images, function(el) {
+                if(el != targetElement) {
+                  el.setAttribute('href',config.pdfIcon)
+                }
+              })
+            }
+            //pdfView
+            
+            pdfView(data.json);
+          } else {
+            targetElement.setAttribute('href',config.pdfIcon)
+            pdfView({})
           }
-           
-          //pdfView
-          /*  
-          I can pass any data you want, by now
-          it's just json.box[i].document
-          
-          Please delete handlePdfView() function at App/index.js
-          I have used it just for mockup
-          
-          */
-          pdfView(data.json);
         });
     }
 

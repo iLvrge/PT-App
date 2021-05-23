@@ -615,7 +615,7 @@ div.vis-tooltip span{
 } */
 
 
-.MuiTooltip-tooltipPlacementRight{
+.MuiTooltip-tooltipPlacementRight, .MuiTooltip-tooltipPlacementBottom{
   margin: 0 8px !important;
   border-radius: 0 !important;
   opacity: 1 !important;

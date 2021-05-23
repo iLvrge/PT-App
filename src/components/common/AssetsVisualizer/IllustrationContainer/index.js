@@ -120,7 +120,19 @@ const IllustrationContainer = ({
         agreement: obj.document_agreement  
       }, null)      
     } else {
-      alert('No document found!')
+      dispatch(
+        setPDFView(true)
+      )
+      dispatch(
+        setPDFFile(
+          { 
+            document: '', 
+            form: '', 
+            agreement: '' 
+          }
+        )
+      )
+      //alert('No document found!')
     }
   }, [chartsBar] )
 
@@ -189,6 +201,8 @@ const IllustrationContainer = ({
         setConnectionBoxView(false)
       )
       checkChartAnalytics(null, null, true)
+    } else {
+      checkChartAnalytics(null, null, false)
     }
   }, [ dispatch ])
 

@@ -63,7 +63,7 @@ const convertDataToItem = (eventItem, index, type, cls, icons) => {
   return (item)
 }
 
-const LegalEventsContainer = ({ events }) => {
+const PtabData = ({ data }) => {
   const classes = useStyles()
   const timelineRef = useRef()
   const timelineContainerRef = useRef()
@@ -78,25 +78,25 @@ const LegalEventsContainer = ({ events }) => {
   }, [])
 
   useEffect(() => {
-    if(events.length == 0 || events.main.length == 0) {
+    if(data.length == 0 || data.main.length == 0) {
       setIsLoadingTimelineRawData(false)
       return setLegalEvents([])
     }
     const getLegalEventListFunction = async () => {
-      setLegalEvents(events)
+      setLegalEvents(data)
       setIsLoadingTimelineRawData(false)
     }
     getLegalEventListFunction()
-  }, [ events ])
+  }, [ data ])
 
   useEffect(() => {
     if (isLoadingTimelineRawData) return 
    
-    const mainItems = Object.keys(events).length > 0 &&  events.main != undefined ? events.main.map((event, index) => convertDataToItem(event, index, 0, classes, events.icons)) : []
+    const mainItems = Object.keys(data).length > 0 &&  data.main != undefined ? data.main.map((event, index) => convertDataToItem(event, index, 0, classes, data.icons)) : []
     let otherItems = []
      
-    if( Object.keys(events).length > 0 && events.other != undefined &&  events.other.length > 0 ) {
-      otherItems = events.other.map((event, index ) => convertDataToItem(event, mainItems.length + index, 1, classes, events.icons))
+    if( Object.keys(data).length > 0 && data.other != undefined &&  data.other.length > 0 ) {
+      otherItems = data.other.map((event, index ) => convertDataToItem(event, mainItems.length + index, 1, classes, data.icons))
     }
 
     const convertedItems = [...mainItems, ...otherItems]
@@ -128,19 +128,19 @@ const LegalEventsContainer = ({ events }) => {
       setDisplay('block')
       
     } else {
-      setDisplay('none')
+      setDisplay('block')
     }
     timelineRef.current.setItems(items.current)
     
     timelineRef.current.setOptions({ ...options, start, end, min, max  }) 
     
-}, [ legalEvents, isLoadingTimelineRawData, events ])
+}, [ legalEvents, isLoadingTimelineRawData, data ])
 
   return (
-    <Paper className={`${classes.root} timelineRoot`} square >
+    <Paper className={`${classes.rootContainer} timelineRoot`} square >
         <>
             <div
-                id={`timelineCharts`}
+                id={`ptabdata`}
                 style={{ 
                     display: display,
                     filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`,
@@ -154,4 +154,4 @@ const LegalEventsContainer = ({ events }) => {
   )
 }
 
-export default LegalEventsContainer
+export default PtabData

@@ -339,13 +339,19 @@ export default makeStyles(theme => ({
             outline: '0 !important'
         }
     },
-    socialIcon:{
-        width: 36,
-        height: 36,
-        marginRight: 10,
-        '& svg':{
-            width: '100%',
-            position: 'relative'
+    padding0: {
+        padding: 0,
+        '& .MuiIconButton-label':{
+            width: 36,
+            height: 36
+        }
+    },
+    tooltip:{
+        fontSize: '1rem'
+    },
+    googleTooltip: {
+        '& span':{
+            display: 'block'
         }
     }
 }))
