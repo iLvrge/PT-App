@@ -29,14 +29,7 @@ const USPTOContainer = ({ asset, onClose }) => {
   }, [ asset, dispatch ])
 
   return (
-    <div className={classes.root}>
-      {/* {
-        onClose && (
-          <IconButton className={classes.close} onClick={onClose} size={'small'}>
-            <CloseIcon />
-          </IconButton>
-        )
-      } */}
+    <div className={classes.root}>     
       <div className={classes.forceStrech}>
         {
           isLoadingAssetUSPTO ?
