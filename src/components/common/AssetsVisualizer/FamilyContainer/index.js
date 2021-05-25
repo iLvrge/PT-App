@@ -4,7 +4,7 @@ import moment from 'moment'
 import _debounce from 'lodash/debounce'
 import Paper from '@material-ui/core/Paper'
 import { DataSet } from 'vis-data/esnext'
-import { Timeline } from 'vis-timeline-73/esnext'
+import { Timeline } from 'vis-timeline/esnext'
 
 import CircularProgress from '@material-ui/core/CircularProgress'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'

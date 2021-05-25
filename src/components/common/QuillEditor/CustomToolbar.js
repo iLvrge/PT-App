@@ -10,10 +10,14 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import Tooltip from '@material-ui/core/Tooltip'
 import { makeStyles } from '@material-ui/core/styles'
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {
+  faShareAlt,
+} from "@fortawesome/free-solid-svg-icons"
 import { getTokenStorage } from '../../../utils/tokenStorage'
 
 import useStyles from './styles'
-const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, onDocument, onAttachmentOpenedFile, onAttachmentFile, onAttachmentDriveFile, onMaintainenceFeeReview, onMaintainenceFeeFile, onSubmitUSPTO, loadingUSPTO, category, driveBtnActive, maintainenceMode, selectedAssets, driveTemplateMode }) => {
+const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, onDocument, onAttachmentOpenedFile, onAttachmentFile, onAttachmentDriveFile, onMaintainenceFeeReview, onMaintainenceFeeFile, onSubmitUSPTO, loadingUSPTO, category, driveBtnActive, maintainenceMode, selectedAssets, driveTemplateMode, onShare }) => {
   const classes = useStyles()
   const toolBarRef = useRef(null) 
 
@@ -159,7 +163,17 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
           <Button className={`${classes.review} ${driveTemplateMode === true ? classes.active : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
         </>
         :
-        <Button className={`${classes.review} ${driveTemplateMode === true ? classes.active : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
+        <>
+          <Tooltip title="Share illustration for selected assets" arrow classes={classesTooltip}>
+            <Button className={classes.share} onClick={onShare} >
+              <FontAwesomeIcon
+                icon={faShareAlt}
+              />
+            </Button>
+          </Tooltip>
+          
+          <Button className={`${classes.review} ${driveTemplateMode === true ? classes.active : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
+        </>
       }      
       {/* 
       <button className={classes.review} onClick={onMaintainenceFeeReview}><Typography variant='body2'>Review Maintainence</Typography></button>

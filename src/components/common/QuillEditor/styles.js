@@ -83,5 +83,14 @@ export default makeStyles(theme => ({
     display: 'flex',
     height: 30,
     margin: 10
+  },
+  share: {
+    width: '30px !important',
+    minWidth: '30px !important',
+    float: 'right !important',
+    paddingLeft: '10px !important',
+  },
+  icon:{
+    
   }
 }))

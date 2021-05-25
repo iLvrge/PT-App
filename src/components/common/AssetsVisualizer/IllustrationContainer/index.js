@@ -139,7 +139,7 @@ const IllustrationContainer = ({
   const handleShare = async (obj) => {
     if (obj != null && typeof obj.original_number != undefined && obj.original_number != null) {
       let form = new FormData()
-      form.append('assets', obj.original_number)
+      form.append('assets', JSON.stringify([obj.original_number]))
       form.append('type', 2)
 
       const res = await PatenTrackApi.shareIllustration(form)
@@ -149,7 +149,7 @@ const IllustrationContainer = ({
           /**
            * just for temporary replacing
            */
-          shareURL = shareURL.replace('https://share.patentrack.com','http://167.172.195.92:3000')
+          //shareURL = shareURL.replace('https://share.patentrack.com','http://167.172.195.92:3000')
           window.open(shareURL,'_BLANK')
           //dispatch(setAssetShareURL(shareURL));
         }

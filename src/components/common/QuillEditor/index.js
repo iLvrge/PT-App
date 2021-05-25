@@ -252,6 +252,38 @@ const QuillEditor = ({
     }
   }, [ template_document_url, quillRef ] )
 
+  const onShare = useCallback(async () => {
+    let selectAssetsList = []
+    if(category == "pay_maintainence_fee") {
+      selectAssetsList = [...selectedMaintainencePatents]
+    } else {
+      selectAssetsList = [...assetTypeAssignmentAssetsSelected]
+    }
+
+    if(selectAssetsList.length == 0) {
+      if(selectedAssetsPatents.length  == 2) {
+        selectAssetsList.push(selectedAssetsPatents[0] != "" ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString())
+      }
+    }
+
+    if(selectAssetsList.length == 0) {
+      alert('Please select asset first.')
+    } else {
+      // Share list of assets and create share link
+      let form = new FormData()
+      form.append('assets', JSON.stringify(selectAssetsList))
+      form.append('type', 2)
+      const {data} = await PatenTrackApi.shareIllustration(form)
+      if (data.indexOf('share') >= 0) {
+        /**
+         * just for temporary replacing
+         */
+        const shareURL = data.replace('https://share.patentrack.com','http://167.172.195.92:3000')
+        window.open(shareURL,'_BLANK')
+      }
+    }
+  }, [ dispatch, category, selectedAssetsPatents, selectedMaintainencePatents, assetTypeAssignmentAssetsSelected ])
+
 
   return (
     <div className={classes.root}>
@@ -279,12 +311,13 @@ const QuillEditor = ({
           onMaintainenceFeeReview={onHandleReviewMaintainenceFee} 
           onMaintainenceFeeFile={onMaintainenceFeeFile}
           onSubmitUSPTO={onHandleSubmitToUSPTO}
+          onShare={onShare}
           loadingUSPTO={loadingUSPTO}
           category={category}
           driveBtnActive={driveButtonActive}
           maintainenceMode={maintainenceFrameMode}
           selectedAssets={selectedAssetsPatents}
-          driveTemplateMode={driveTemplateMode}
+          driveTemplateMode={driveTemplateMode}          
         /> 
         {GetMenuComponent}
       </div>
