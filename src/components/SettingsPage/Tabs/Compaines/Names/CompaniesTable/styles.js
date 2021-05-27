@@ -4,6 +4,9 @@ export default makeStyles(theme => ({
   actionTh: {
     width: 50,
   },
+  tableContainer:{
+    height: 'calc(100vh - 113px)'
+  },
   table: {
     backgroundColor: theme.palette.background.default,
     '& th': {

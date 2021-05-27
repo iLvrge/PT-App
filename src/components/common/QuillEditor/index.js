@@ -277,10 +277,11 @@ const QuillEditor = ({
       if (data.indexOf('share') >= 0) {
         /**
          * just for temporary replacing
+         * open share url new tab
          */
-        const shareURL = data.replace('https://share.patentrack.com','http://167.172.195.92:3000')
-        window.open(shareURL,'_BLANK')
-      }
+        //const shareURL = data.replace('https://share.patentrack.com','http://167.172.195.92:3000')
+        window.open(data,'_BLANK')
+      } 
     }
   }, [ dispatch, category, selectedAssetsPatents, selectedMaintainencePatents, assetTypeAssignmentAssetsSelected ])
 

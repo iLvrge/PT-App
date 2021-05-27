@@ -26,7 +26,6 @@ if (token) {
     slackToken = JSON.parse(slack_auth_token_info)      
   } else {
     slackToken = getTokenStorage('slack_auth_token_info')
-    console.log("slackToken", slackToken)
     if( slackToken != '' && slackToken != null ) {
       slackToken = JSON.parse(slackToken)
     }  

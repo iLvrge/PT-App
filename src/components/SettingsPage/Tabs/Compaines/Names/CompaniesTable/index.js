@@ -139,11 +139,11 @@ function CompaniesTable({
         isLoading ? (
           <Loader />
         ) : (
-          <TableContainer>
+          <TableContainer className={classes.tableContainer}>
             <Table
               className={classes.table}
               stickyHeader
-              size={'medium'}
+              size={'medium'} 
               aria-label="collapsible table">
               <TableHead>
                 <TableRow>

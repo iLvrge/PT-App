@@ -429,7 +429,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   }, [ inputFile ])
   
 const onAttachmentOpenedFile = useCallback(() => {    
-  if( template_document_url != '') {
+  if( template_document_url != 'about:blank' && template_document_url != null ) {
     setCommentHtml( previousContent => previousContent + ' ' + template_document_url)
   }
 }, [ template_document_url, editorContainerRef ] )
@@ -453,6 +453,7 @@ const onHandleDriveExplorer = async( event, fileID = undefined ) => {
     alert('Token Expired, please first login with google account.')
     checkButtons()
     getDriveDocumentList()
+    openGoogleWindow()
   }  
 }
 
@@ -513,13 +514,16 @@ const handleDriveModalClose = (event) => {
   const openFile = useCallback((event, file) => {
     event.preventDefault()
     if((typeof file == 'string' && file.indexOf('docs.google.com') !== -1) || (file.hasOwnProperty('external_url') && file.hasOwnProperty('external_type') && file.external_type == 'gdrive') || (file.hasOwnProperty('external_url') && file.external_url.indexOf('docs.google.com') !== -1)) {
-      //open in TV
-      dispatch(setDriveTemplateFrameMode(true)) // open drive frame
-      dispatch(setTemplateDocument(typeof file == 'string' ? file : file.external_url))
+      dispatch(
+        setDriveTemplateFrameMode(true)
+      )
+      dispatch(
+        setTemplateDocument( typeof file == 'string' ? file : file.external_url)
+      )
     } else {
       window.open(file.permalink, '_blank')
     }
-  }, [dispatch])
+  }, [ dispatch ])
 
   const renderCommentEditor = useMemo(() => {
     //if (!selectedCommentsEntity) return null

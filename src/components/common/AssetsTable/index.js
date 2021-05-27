@@ -29,7 +29,8 @@ import {
   setAssetTypeCustomerSelectedRow,
   setChildSelectedAssetsTransactions,
   setDriveTemplateFile,
-  setTemplateDocument
+  setTemplateDocument,
+  setChannelID
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -222,6 +223,10 @@ const AssetsTable = ({
     setAssetRows(assetTypeAssignmentAssets)
   }, [ assetTypeAssignmentAssets ])
 
+  /**
+   * Adding channel to assets data
+   */
+
   useEffect(() => {
     const checkAssetChannel = async () => {
       if(assetTypeAssignmentAssets.length > 0 && slack_channel_list.length > 0) {
@@ -314,6 +319,7 @@ const AssetsTable = ({
         dispatch(setAssetTypeSelectedRow([]));
         dispatch(setAssetTypeCustomerSelectedRow([]));
         dispatch(setChildSelectedAssetsTransactions([]));
+        dispatch(setChannelID(''))
         dispatch(setDriveTemplateFrameMode(false));
         dispatch(setDriveTemplateFile(null));
         dispatch(setTemplateDocument(null));
@@ -366,12 +372,14 @@ const resetAll = () => {
     dispatch(setSelectedAssetsPatents([]))
     dispatch(setAssetFamily([]))
     dispatch(setFamilyItemDisplay({}))
+    dispatch(setChannelID(''))
     dispatch(setConnectionBoxView(false));
     dispatch(setPDFView(false));
     dispatch(toggleUsptoMode(false));
     dispatch(toggleLifeSpanMode(false));
     dispatch(toggleFamilyMode(false));
     dispatch(toggleFamilyItemMode(false));
+    dispatch(setDriveTemplateFrameMode(false))
     if(openChartBar === true || openAnalyticsBar === true) {
         closeAnalyticsAndCharBar()
     }
