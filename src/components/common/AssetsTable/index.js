@@ -38,6 +38,7 @@ import {
   setConnectionBoxView,
   setPDFView,
   setFamilyItemDisplay,
+  assetFamilySingle,
   setAssetFamily,
   setPDFFile
 } from "../../../actions/patenTrackActions";
@@ -123,6 +124,7 @@ const AssetsTable = ({
   const channel_id = useSelector(state => state.patenTrack2.channel_id)
   const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
   const [data, setData] = useState([])
+  const [assetRows, setAssetRows] = useState([])
 
   const COLUMNS = [
     {
@@ -152,11 +154,21 @@ const AssetsTable = ({
       secondaryFormat: applicationFormat,
       align: "left",
       badge: true,
-      textBold: true
+      /* textBold: true */
     },
+    {
+      width: 22,
+      minWidth: 22,
+      label: "",
+      dataKey: "channel",
+      formatCondition: 'asset',
+      role: 'slack_image',      
+    }
   ];
 
   const [ tableColumns, setTableColumns ] = useState(COLUMNS)
+
+  
 
   /* useEffect(() => {
     if(selectedCategory == 'restore_ownership') {
@@ -205,6 +217,32 @@ const AssetsTable = ({
     selectedAssetAssignmentsAll,
     selectedAssetAssignments,
   ]);
+
+  useEffect(() => {
+    setAssetRows(assetTypeAssignmentAssets)
+  }, [ assetTypeAssignmentAssets ])
+
+  useEffect(() => {
+    const checkAssetChannel = async () => {
+      if(assetTypeAssignmentAssets.length > 0 && slack_channel_list.length > 0) {
+        let findChannel = false, oldAssets = [...assetTypeAssignmentAssets]
+        const promises = slack_channel_list.map( channelAsset => {
+          const findIndex = oldAssets.findIndex(rowAsset => rowAsset.asset == channelAsset)
+          if(findIndex !== -1) {
+            oldAssets[findIndex]['channel'] = channelAsset
+            if(findChannel === false) {
+              findChannel = true
+            }
+          }
+        })
+        await Promise.all(promises)
+        if(findChannel === true){
+          setAssetRows(oldAssets)
+        }      
+      }
+    }    
+    checkAssetChannel()
+  },[ slack_channel_list, assetTypeAssignmentAssets])
 
   /* useEffect(() => {
     if (standalone && assetTypeAssignmentAssets.length > 0) {
@@ -280,7 +318,7 @@ const AssetsTable = ({
         dispatch(setDriveTemplateFile(null));
         dispatch(setTemplateDocument(null));
         dispatch(setConnectionBoxView(false));
-        dispatch(setPDFView(false));
+        dispatch(setPDFView(false));        
         //dispatch(toggleUsptoMode(false));
         dispatch(toggleLifeSpanMode(false));
         dispatch(toggleFamilyMode(true));
@@ -307,6 +345,7 @@ const AssetsTable = ({
             id: grant_doc_num || appno_doc_num,
         }),
         );
+        dispatch(assetFamilySingle(appno_doc_num))
         dispatch(assetLegalEvents(appno_doc_num, grant_doc_num));
         dispatch(assetFamily(appno_doc_num));
         dispatch(setSlackMessages({ messages: [], users: [] }));
@@ -429,7 +468,7 @@ const resetAll = () => {
         rowSelected={selectedRow}
         selectedIndex={currentSelection}
         selectedKey={"asset"}
-        rows={assetTypeAssignmentAssets}
+        rows={assetRows}
         rowHeight={rowHeight}
         headerHeight={rowHeight}
         columns={tableColumns}
@@ -449,7 +488,7 @@ const resetAll = () => {
         totalRows={totalRecords}
         defaultSortField={`asset`}
         defaultSortDirection={`desc`}
-        columnTextBoldList={slack_channel_list}
+        /* columnTextBoldList={slack_channel_list} */
         responsive={true}
         width={width}
         containerStyle={{

@@ -63,6 +63,10 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/family/${applicationNumber}`, getHeader())
   } 
 
+  static assetFamilySingle(applicationNumber) { 
+    return axios.get(`${base_new_api_url}/family/single/${applicationNumber}`, getHeader())
+  } 
+
   static assetLegalEvents(applicationNumber, patentNumber) { 
     return axios.get(`${base_new_api_url}/events/${applicationNumber}/${patentNumber != '' ? patentNumber : applicationNumber}`, getHeader())
   }

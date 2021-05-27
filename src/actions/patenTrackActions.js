@@ -317,6 +317,22 @@ export const fetchMoreFixItItems = (currentTab, from, companyName) => {
   }
 }
 
+export const assetFamilySingle = (applicationNumber) => { 
+  return dispatch => {
+    dispatch(setFamilyItemDataEventRetrieved(false))
+    return PatenTrackApi
+      .assetFamilySingle(applicationNumber)
+      .then(res => {
+        dispatch(toggleFamilyMode(true))
+        dispatch(setFamilyItemDisplay(res.data))
+      }) 
+      .catch(err => {
+        throw(err)
+      })
+  }
+}
+
+
 export const assetFamily = (applicationNumber) => { 
   return dispatch => {
     dispatch(setFamilyItemDataEventRetrieved(false))

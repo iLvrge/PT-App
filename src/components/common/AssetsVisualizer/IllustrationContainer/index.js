@@ -5,9 +5,10 @@ import { Paper, Modal } from '@material-ui/core'
 
 import PatenTrackApi from '../../../../api/patenTrack2'
 import PatentrackDiagram from '../../PatentrackDiagram'
-import { toggleUsptoMode } from "../../../../actions/uiActions";
+import { toggleUsptoMode, toggleFamilyMode } from "../../../../actions/uiActions";
 import { setAssetsIllustrationLoading } from '../../../../actions/patentTrackActions2' 
 import { setPDFFile, setPDFView, setPdfTabIndex, setConnectionData, setConnectionBoxView } from '../../../../actions/patenTrackActions' 
+
 
 import PdfViewer from '../../../common/PdfViewer'
 
@@ -89,7 +90,7 @@ const IllustrationContainer = ({
   }, [ asset, dispatch])
 
   const handlePdfView = useCallback((obj) => {
-    if (typeof obj.document_file != 'undefined') {
+    if (Object.keys(obj).length > 0 && typeof obj.document_file != 'undefined') {
       /* if( chartsBar === false ) {
         chartsBarToggle(!chartsBar)
       } */
@@ -121,7 +122,10 @@ const IllustrationContainer = ({
       }, null)      
     } else {
       dispatch(
-        setPDFView(true)
+        setPDFView(false)
+      )
+      dispatch(
+        toggleFamilyMode(true)
       )
       dispatch(
         setPDFFile(
