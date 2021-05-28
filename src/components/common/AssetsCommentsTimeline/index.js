@@ -100,7 +100,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
     checkButtons()
   }, [])
 
-   useEffect(() => {
+  useEffect(() => {
     checkButtons() 
   }, [ google_auth_token, slack_auth_token ])
 
@@ -108,6 +108,12 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
     setCommentsData(slack_messages)
     updateHeight(size, timelineRef)
   }, [ slack_messages, size, timelineRef ])
+
+  useEffect(() => {
+    if( selectedAssetsPatents.length == 0 ) {
+      setCommentsData([])
+    }
+  }, [ selectedAssetsPatents ])
 
   useEffect(() => {
     if(slack_auth_token && slack_auth_token != null ) {

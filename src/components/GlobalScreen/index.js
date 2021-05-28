@@ -68,8 +68,10 @@ const GlobalScreen = ({
     toggleTypeButtonType,
     typeButtonVisible,
     openOtherPartyBar,
+    openInventorBar,
     otherPartyBarSize,
     setOtherPartyBarSize,
+    partyBarSize,
     handleOtherPartyButton,
     handleOtherPartyBarOpen,
     toggleOtherPartyButtonType,
@@ -205,8 +207,8 @@ const GlobalScreen = ({
     }, [ assignmentTypeRef, openTypeBar ])
 
     useEffect(() => {
-        updateResizerBar(otherPartyRef, openOtherPartyBar)
-    }, [ otherPartyRef, openOtherPartyBar ])
+        updateResizerBar(otherPartyRef, openOtherPartyBar === false && openInventorBar === false ? false : true)
+    }, [ otherPartyRef, openOtherPartyBar, openInventorBar ])
 
     useEffect(() => {
         updateResizerBar(assignmentRef, openAssignmentBar)
@@ -333,16 +335,27 @@ const GlobalScreen = ({
                 >
                     <div id={`parties_container`}  style={{ height: '100%'}}>
                         { 
-                            openOtherPartyBar === true 
+                            openOtherPartyBar === true || openInventorBar === true
                             ? 
                                 <>
                                     <ArrowButton arrowId={`arrow_parties`} handleClick={handleOtherPartyBarOpen} buttonType={toggleOtherPartyButtonType} buttonVisible={otherPartyButtonVisible}/>
-                                    <CustomerTable 
-                                        standalone={true}
-                                        parentBarDrag={setVisualizerBarSize}
-                                        parentBar={setVisualizeOpenBar}
-                                        type={type}
-                                    />
+                                    <SplitPane
+                                        className={classes.splitPane}
+                                        split={`horizontal`}
+                                        size={partyBarSize}
+                                        /* onDragFinished={(size) => resizePane('split8', size > 900 ? 900 : size, setAssignmentBarSize)} */
+                                       /*  ref={assignmentRef} */
+                                    >
+                                        <CustomerTable 
+                                            standalone={true}
+                                            parentBarDrag={setVisualizerBarSize}
+                                            parentBar={setVisualizeOpenBar}
+                                            type={type}
+                                        />
+                                        <div>
+                                            Inventor
+                                        </div>
+                                    </SplitPane>
                                 </>
                             : 
                             ''

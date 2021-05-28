@@ -37,12 +37,17 @@ const FilesTemplates = () => {
     const [selectedRow, setSelectedRow] = useState([])
     const [currentSelection, setCurrentSelection] = useState(null)
     const [ assetFiles, setAssetFiles ] = useState([])
+    const [ documentFiles, setDocumentsFiles ] = useState([])
+    const [selectedDocumentAll, setSelectDocumentAll] = useState(false)
+    const [selectDocumentItems, setSelectDocumentItems] = useState([])
+    const [selectedDocumentRow, setSelectedDocumentRow] = useState([])
+    const [currentDocumentSelection, setCurrentDocumentSelection] = useState(null)
 
     const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
     const channel_id = useSelector(state => state.patenTrack2.channel_id)
     const document_transaction = useSelector(state => state.patenTrack2.document_transaction)
 
-    const COLUMNS = [  
+    const ASSET_COLUMNS = [  
         {
             width: 120,
             minWidth: 120,
@@ -87,8 +92,23 @@ const FilesTemplates = () => {
         }
     ]
 
-    const [headerColumns, setHeaderColumns] = useState(COLUMNS)
+    const DOCUMENT_COLUMNS = [  
+        {
+            width: 300,
+            minWidth: 300,
+            oldWidth: 300,
+            draggable: true,
+            label: 'Document',
+            dataKey: 'title', 
+            role: 'image',
+            imageURL: '',
+            imageIcon: '',
+            extension: true    
+        }
+    ]
 
+    const [headerColumns, setHeaderColumns] = useState(ASSET_COLUMNS)
+    const [documentHeaderColumns, setDocumentHeaderColumns] = useState(DOCUMENT_COLUMNS)
 
     useEffect(() => {
         if(selectedRow.length != document_transaction.length ) {
@@ -106,18 +126,23 @@ const FilesTemplates = () => {
         
                         if( Object.keys(tokenJSON).length > 0 && tokenJSON.hasOwnProperty('access_token') ) {
                             const { data } = await PatenTrackApi.getDriveAndAssetFiles( channel_id, tokenJSON.access_token, selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() )
-                            setAssetFiles(data)
+                            setAssetFiles(data.assets_files)
+
+                            setDocumentsFiles(data.document_files)
                         }
                     } else {
                         const { data } = await PatenTrackApi.getDriveAndAssetFiles( 'undefined', 'undefined', selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() )
-                        setAssetFiles(data)
+                        setAssetFiles(data.assets_files)
+                        setDocumentsFiles(data.document_files)
                     }
                 } else if( selectedAssetsPatents.length > 0 ) {
                     const { data } = await PatenTrackApi.getDriveAndAssetFiles( 'undefined', 'undefined', selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() )
-                    setAssetFiles(data)
+                    setAssetFiles(data.assets_files)
+                    setDocumentsFiles(data.document_files)
                 }                
             } else {
                 setAssetFiles([])
+                setDocumentsFiles([])
                 setSelectedRow([])
                 setCurrentSelection(null)
             }
@@ -150,6 +175,29 @@ const FilesTemplates = () => {
             dispatch(setDocumentTransaction([item.id]))     
         }           
     }, [ dispatch, selectedRow ]) 
+
+    const onHandleDocumentSelectAll = () => {
+    }
+
+    const onHandleClickDocumentRow = useCallback((e, item) => {
+        if(selectedDocumentRow.includes(item.id)) {
+            dispatch(setDocumentTransaction([]))     
+            dispatch(setDriveTemplateFrameMode(false))
+            dispatch(setTemplateDocument(null))
+            setSelectedDocumentRow([])
+            setCurrentDocumentSelection(null)
+        } else {
+            if(item.external_type == 'gdrive' || item.external_type == 'usptodrive') {
+                dispatch(setDriveTemplateFrameMode(true))
+                dispatch(setTemplateDocument(item.url_private))
+            } else {
+                window.open(item.url_private)
+            }
+            setSelectedDocumentRow([item.id])
+            setCurrentDocumentSelection(item.id) 
+            dispatch(setDocumentTransaction([item.id]))     
+        }           
+    }, [ dispatch, selectedDocumentRow ]) 
     
     const resizeColumnsWidth = useCallback((dataKey, data) => {
         let previousColumns = [...headerColumns]
@@ -162,38 +210,84 @@ const FilesTemplates = () => {
         setHeaderColumns(previousColumns)
     }, [ headerColumns ] )
 
+    const resizeDocumentColumnsWidth = useCallback((dataKey, data) => {
+        let previousColumns = [...documentHeaderColumns]
+        const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
+
+        if( findIndex !== -1 ) {
+          previousColumns[findIndex].width =  previousColumns[findIndex].oldWidth + data.x
+          previousColumns[findIndex].minWidth = previousColumns[findIndex].oldWidth + data.x
+        }
+        setDocumentHeaderColumns(previousColumns)
+    }, [ documentHeaderColumns ] )
+
     return (
         <Paper className={classes.root} square id={`layout_templates`}>
-            {
-                assetFiles.length > 0  && 
-                <VirtualizedTable
-                    classes={classes}
-                    selected={selectItems}
-                    rowSelected={selectedRow}
-                    selectedIndex={currentSelection}
-                    selectedKey={"id"}
-                    rows={assetFiles}
-                    rowHeight={rowHeight}
-                    headerHeight={rowHeight}
-                    columns={headerColumns}
-                    onSelect={onHandleClickRow}
-                    onSelectAll={onHandleSelectAll}
-                    defaultSelectAll={selectedAll}
-                    resizeColumnsWidth={resizeColumnsWidth}
-                    responsive={true}
-                    collapsable={false}
-                    showIsIndeterminate={false} 
-                    totalRows={assetFiles.length}
-                    width={width}
-                    containerStyle={{
-                        width: "100%",
-                        maxWidth: "100%",
-                    }}
-                    style={{
-                        width: "100%",
-                    }}
-                />
-            }            
+            <div style={{height: '50vh'}}>
+                {
+                    assetFiles.length > 0  && 
+                    <VirtualizedTable
+                        classes={classes}
+                        selected={selectItems}
+                        rowSelected={selectedRow}
+                        selectedIndex={currentSelection}
+                        selectedKey={"id"}
+                        rows={assetFiles}
+                        rowHeight={rowHeight}
+                        headerHeight={rowHeight}
+                        columns={headerColumns}
+                        onSelect={onHandleClickRow}
+                        onSelectAll={onHandleSelectAll}
+                        defaultSelectAll={selectedAll}
+                        resizeColumnsWidth={resizeColumnsWidth}
+                        responsive={true}
+                        collapsable={false}
+                        showIsIndeterminate={false} 
+                        totalRows={assetFiles.length}
+                        width={width}
+                        containerStyle={{
+                            width: "100%",
+                            maxWidth: "100%",
+                        }}
+                        style={{
+                            width: "100%",
+                        }}
+                    />
+                }   
+            </div> 
+            <div style={{height: '50vh'}}>
+                {
+                    documentFiles.length > 0  && 
+                    <VirtualizedTable
+                        classes={classes}
+                        selected={selectDocumentItems}
+                        rowSelected={selectedDocumentRow}
+                        selectedIndex={currentDocumentSelection}                        
+                        selectedKey={"id"}
+                        rows={documentFiles}
+                        rowHeight={rowHeight}
+                        headerHeight={rowHeight}
+                        columns={documentHeaderColumns}
+                        onSelect={onHandleClickDocumentRow}
+                        onSelectAll={onHandleDocumentSelectAll}
+                        defaultSelectAll={selectedDocumentAll}
+                        resizeColumnsWidth={resizeDocumentColumnsWidth}
+                        disableHeader={true}
+                        responsive={true}
+                        collapsable={false}
+                        showIsIndeterminate={false} 
+                        totalRows={documentFiles.length}
+                        width={width}
+                        containerStyle={{
+                            width: "100%",
+                            maxWidth: "100%",
+                        }}
+                        style={{
+                            width: "100%",
+                        }}
+                    />
+                }
+            </div>        
         </Paper>
     )
 }

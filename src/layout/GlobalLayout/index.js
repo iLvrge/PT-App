@@ -31,7 +31,7 @@ import {
 
 import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode } from '../../actions/uiActions'
 
-import PatenTrackApi from '../../api/patenTrack2'
+import PatenTrackApi from '../../api/patenTrack2' 
 
 const GlobalLayout = (props) => {
     const classes = useStyles()
@@ -40,6 +40,7 @@ const GlobalLayout = (props) => {
     const [ openBar, setOpenBar ] = useState(true)
     const [ openTypeBar, setTypeOpenBar ] = useState(false)
     const [ openOtherPartyBar, setOtherPartyOpenBar ] = useState(false)
+    const [ openInventorBar, setInventorOpenBar ] = useState(false)
     const [ openAssignmentBar, setAssignmentOpenBar ] = useState(false)
     const [ openCustomerBar, setCustomerOpenBar ] = useState(true)
     const [ openIllustrationBar, setIllustrationBar ] = useState(true)
@@ -68,14 +69,15 @@ const GlobalLayout = (props) => {
         bar50: '50%'
     }
 
-    const [ companyBarSize, setCompanyBarSize ] = useState(DEFAULT_SCREEN_SIZE.companyBar) 
-    const [ typeBarSize, setTypeBarSize ] = useState(DEFAULT_SCREEN_SIZE.typeBar) 
-    const [ otherPartyBarSize, setOtherPartyBarSize ] = useState(DEFAULT_SCREEN_SIZE.otherPartyBar)
-    const [ assignmentBarSize, setAssignmentBarSize ] = useState(DEFAULT_SCREEN_SIZE.assignmentBar)
-    const [ customerBarSize, setCustomerBarSize ] = useState(DEFAULT_SCREEN_SIZE.customerBar)
-    const [ commentBarSize , setCommentBarSize ] = useState(DEFAULT_SCREEN_SIZE.commentBar)
-    const [ illustrationBarSize , setIllustrationBarSize ] = useState(DEFAULT_SCREEN_SIZE.illustrationBar)
-    const [ visualizerBarSize , setVisualizerBarSize ] = useState(DEFAULT_SCREEN_SIZE.visualizeBar)
+    const [ companyBarSize, setCompanyBarSize ] = useState(200) 
+    const [ typeBarSize, setTypeBarSize ] = useState(0) 
+    const [ otherPartyBarSize, setOtherPartyBarSize ] = useState(0)
+    const [ partyBarSize, setPartyBarSize ] = useState('50%')
+    const [ assignmentBarSize, setAssignmentBarSize ] = useState(0)  
+    const [ customerBarSize, setCustomerBarSize ] = useState(160)
+    const [ commentBarSize , setCommentBarSize ] = useState('30%')
+    const [ illustrationBarSize , setIllustrationBarSize ] = useState('50%')
+    const [ visualizerBarSize , setVisualizerBarSize ] = useState('0%')
 
     const [ companyButtonVisible, setCompanyButtonVisible ] = useState(false)
     const [ typeButtonVisible, setTypeButtonVisible ] = useState(false)
@@ -83,11 +85,11 @@ const GlobalLayout = (props) => {
     const [ assignmentButtonVisible, setAssignmentButtonVisible ] = useState(false)
     const [ customerButtonVisible, setCustomerButtonVisible ] = useState(false)
 
-    const [ assetFilesBarSize, setAssetFilesBarSize ] = useState(DEFAULT_SCREEN_SIZE.assetFileBar)
+    const [ assetFilesBarSize, setAssetFilesBarSize ] = useState(0)
     const [ assetFilesBar, setAssetFilesBar ] = useState(false)
     const [ toggleAssetFileButtonType, setToggleAssetFileButtonType ] = useState(true)
 
-    const [ driveTemplateBarSize, setDriveTemplateBarSize ] = useState(DEFAULT_SCREEN_SIZE.driveTemplateBar)
+    const [ driveTemplateBarSize, setDriveTemplateBarSize ] = useState(200)
 
     const [ isDrag, setIsDrag ] = useState(false)
     const [ size, setSize] = useState(0)
@@ -115,12 +117,15 @@ const GlobalLayout = (props) => {
             setOtherPartyOpenBar( false ) // parties
             setCustomerOpenBar( true ) //assets
             setAssignmentOpenBar( true ) //transactions
-            setVisualizerBarSize(DEFAULT_SCREEN_SIZE.visualizeBar)
+            setVisualizerBarSize('30%')
+
             setChartBar(true)
             setAnalyticsBar(true)
             setCompanyBarSize(0) // company bar size
-            setCustomerBarSize(DEFAULT_SCREEN_SIZE.customerBar)
-            setAssignmentBarSize(DEFAULT_SCREEN_SIZE.assignmentBar) 
+            setCustomerBarSize(160)
+            setAssignmentBarSize(120)
+
+
             dispatch(setConnectionBoxView( false ))
             dispatch(setPDFView( false ))
             dispatch(toggleUsptoMode( false ))
@@ -172,7 +177,8 @@ const GlobalLayout = (props) => {
         if(!openBar === false) {
             setCompanyBarSize(0)
         } else {
-            setCompanyBarSize(DEFAULT_SCREEN_SIZE.companyBar)
+            setCompanyBarSize(200)
+
         }
         editorBar()
     }
@@ -183,7 +189,8 @@ const GlobalLayout = (props) => {
         if(!openTypeBar === false) {
             setTypeBarSize(0)
         } else {
-            setTypeBarSize(DEFAULT_SCREEN_SIZE.typeBar)
+            setTypeBarSize(120)
+
         }
         editorBar()
     }
@@ -191,10 +198,35 @@ const GlobalLayout = (props) => {
     const handleOtherPartyBarOpen = (event) => {
         setToggleOtherPartyButtonType( !toggleOtherPartyButtonType )
         setOtherPartyOpenBar( !openOtherPartyBar )
-        if(!openOtherPartyBar === false) {
+        if(!openOtherPartyBar === false && openInventorBar === false) {
             setOtherPartyBarSize(0)
         } else {
-            setOtherPartyBarSize(DEFAULT_SCREEN_SIZE.otherPartyBar)
+            setOtherPartyBarSize(120)
+            if(openInventorBar === false) {
+                setPartyBarSize('100%')
+            } else if(!openOtherPartyBar === false){
+                setPartyBarSize('0%')
+            } else {
+                setPartyBarSize('50%')
+            }
+        }
+        editorBar()
+    }
+
+    const handleInventorBarOpen = (event) => {
+        setToggleOtherPartyButtonType( !toggleOtherPartyButtonType )
+        setInventorOpenBar( !openInventorBar )
+        if(!openInventorBar === false && openOtherPartyBar === false) {
+            setOtherPartyBarSize(0)
+        } else {
+            setOtherPartyBarSize(120)
+            if(openOtherPartyBar === false) {
+                setPartyBarSize('0%')
+            } else if(!openInventorBar === false){
+                setPartyBarSize('100%')
+            } else {
+                setPartyBarSize('50%')
+            }
         }
         editorBar()
     }
@@ -205,7 +237,8 @@ const GlobalLayout = (props) => {
         if(!openAssignmentBar === false) {
             setAssignmentBarSize(0)
         } else {
-            setAssignmentBarSize(DEFAULT_SCREEN_SIZE.assignmentBar)
+            setAssignmentBarSize(120)
+
         }
         editorBar()
     }
@@ -216,7 +249,8 @@ const GlobalLayout = (props) => {
         if(!openCustomerBar === false) {
             setCustomerBarSize(0)
         } else {
-            setCustomerBarSize(DEFAULT_SCREEN_SIZE.customerBar)
+            setCustomerBarSize(160)
+
         }
         editorBar()
     }
@@ -227,7 +261,8 @@ const GlobalLayout = (props) => {
         if(!assetFilesBar === false) {
             setAssetFilesBarSize(0)
         } else {
-            setAssetFilesBarSize(DEFAULT_SCREEN_SIZE.assetFileBar)
+            setAssetFilesBarSize(200)
+
         }
         editorBar()
     }
@@ -249,36 +284,42 @@ const GlobalLayout = (props) => {
     }
 
     const handleIllustrationBarOpen = () => {
-        let bar = openIllustrationBar, barSize = DEFAULT_SCREEN_SIZE.commentBar
+        let bar = openIllustrationBar, barSize = '30%'
         setIllustrationBar( !bar )
         if(!bar === false && openCommentBar === true) {
-            barSize = DEFAULT_SCREEN_SIZE.bar100
+            barSize = '100%'
+
         } else if((!bar === false && openCommentBar === false) || (!bar === true && openCommentBar === false)) {
-            barSize = DEFAULT_SCREEN_SIZE.bar0 
+            barSize = 0  
+
         }
         setCommentBarSize(barSize)
         changeVisualBar(openChartBar, openAnalyticsBar, openCommentBar, !bar)
     }
 
     const handleCommentBarOpen = () => {
-        let bar = openCommentBar, barSize = DEFAULT_SCREEN_SIZE.commentBar
+        let bar = openCommentBar, barSize = '30%'
         setCommentBar( !bar )
         if((!bar === false && openIllustrationBar === false) || (!bar === false && openIllustrationBar === true)) {
-            barSize = DEFAULT_SCREEN_SIZE.bar0  
+            barSize = 0    
+
         } else if(!bar === true && openIllustrationBar === false) {
-            barSize = DEFAULT_SCREEN_SIZE.bar100
+            barSize = '100%'
+
         }
         setCommentBarSize(barSize)
         changeVisualBar(openChartBar, openAnalyticsBar, !bar, openIllustrationBar)
     }
 
     const handleChartBarOpen = () => {
-        let bar = openChartBar, barSize = DEFAULT_SCREEN_SIZE.illustrationBar
+        let bar = openChartBar, barSize = '50%'
         setChartBar( !bar )
         if(!bar === false && openAnalyticsBar === true) {
-            barSize = DEFAULT_SCREEN_SIZE.bar100
+            barSize = '100%'
+
         } else if((!bar === true && openAnalyticsBar === false) || ( !bar === false && openAnalyticsBar === false )) {
-            barSize = DEFAULT_SCREEN_SIZE.bar0          
+            barSize = 0          
+
         }
         
         setIllustrationBarSize(barSize)       
@@ -286,12 +327,14 @@ const GlobalLayout = (props) => {
     }
 
     const handleAnalyticsBarOpen = () => {
-        let bar = openAnalyticsBar, barSize = DEFAULT_SCREEN_SIZE.illustrationBar
+        let bar = openAnalyticsBar, barSize = '50%'
         setAnalyticsBar( !bar )
         if((!bar === false && openChartBar === false) || (openChartBar === true && !bar === false)) {
-            barSize = DEFAULT_SCREEN_SIZE.bar0  
+            barSize = 0 
+
         } else if((!bar === false && openChartBar === true) || (!bar === true && openChartBar === false ) ) {
-            barSize = DEFAULT_SCREEN_SIZE.bar100
+            barSize = '100%'
+
         }   
             
         setIllustrationBarSize(barSize)
@@ -315,14 +358,14 @@ const GlobalLayout = (props) => {
     const openAnalyticsAndCharBar = () => {
         setChartBar( true )
         setAnalyticsBar( true )
-        setIllustrationBarSize( DEFAULT_SCREEN_SIZE.illustrationBar )
+        setIllustrationBarSize( '50%' )
         changeVisualBar(true, true, openCommentBar, openIllustrationBar)
     }
 
     const closeAnalyticsAndCharBar = () => {
         setChartBar( false )
         setAnalyticsBar( false )
-        setIllustrationBarSize( DEFAULT_SCREEN_SIZE.illustrationBar )
+        setIllustrationBarSize( '50%' )
         changeVisualBar(false, false, openCommentBar, openIllustrationBar)
     }
 
@@ -355,25 +398,31 @@ const GlobalLayout = (props) => {
         if( pdfFile != null && Object.keys(pdfFile).length > 0 ) {
             setChartBar( true )
             setVisualizeOpenBar( true )
-            setVisualizerBarSize(DEFAULT_SCREEN_SIZE.commentBar)
+            setVisualizerBarSize('30%')
+
         }
 
         if( connectionBoxData != null && Object.keys(connectionBoxData).length > 0 ) {  
             setVisualizeOpenBar( true )
-            setVisualizerBarSize(DEFAULT_SCREEN_SIZE.commentBar)
+            setVisualizerBarSize('30%')
+
             setAnalyticsBar( true )
             setChartBar( true ) 
-            setIllustrationBarSize(DEFAULT_SCREEN_SIZE.illustrationBar)
+            setIllustrationBarSize('50%')
+
         }
 
         if( typeof usptoMode != undefined && usptoMode === true ) {
             setVisualizeOpenBar( true )
-            setVisualizerBarSize(DEFAULT_SCREEN_SIZE.commentBar)
+            setVisualizerBarSize('30%')
+
             setAnalyticsBar( true ) 
             if(openChartBar === false) {
-                setIllustrationBarSize(DEFAULT_SCREEN_SIZE.bar100)
+                setIllustrationBarSize('100%')
+
             } else {
-                setIllustrationBarSize(DEFAULT_SCREEN_SIZE.illustrationBar)
+                setIllustrationBarSize('50%')
+
             }
         }
     }
@@ -406,6 +455,12 @@ const GlobalLayout = (props) => {
             bar: openOtherPartyBar,
             click: handleOtherPartyBarOpen,
             t: 3
+        },
+        {
+            tooltip: 'Inventors',
+            bar: openInventorBar,
+            click: handleInventorBarOpen,
+            t: 11
         },
         {
             tooltip: 'Assignments',
@@ -482,10 +537,12 @@ const GlobalLayout = (props) => {
                 toggleTypeButtonType,
                 typeButtonVisible,
                 openOtherPartyBar,
+                openInventorBar,
                 otherPartyBarSize,
                 setOtherPartyBarSize,
                 handleOtherPartyButton,
                 handleOtherPartyBarOpen,
+                partyBarSize,
                 toggleOtherPartyButtonType,
                 otherPartyButtonVisible,
                 assignmentBarSize,

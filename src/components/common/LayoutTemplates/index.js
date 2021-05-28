@@ -41,6 +41,7 @@ const LayoutTemplates = () => {
     const google_profile = useSelector(state => state.patenTrack2.google_profile)
     const channel_id = useSelector( state => state.patenTrack2.channel_id )  
     const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
+    let ranMessageAPI = 0
 
     const COLUMNS = [    
       {
@@ -57,8 +58,9 @@ const LayoutTemplates = () => {
     }
 
     const sendMessageViaSlack = useCallback(async(data) => {
+      const fileLink = `https://docs.google.com/document/d/${data.id}/edit`
       const formData = new FormData()
-      formData.append('text',  `https://docs.google.com/document/d/${data.id}/edit` )
+      formData.append('text',  fileLink )
       formData.append('asset', selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? selectedAssetsPatents[1] : selectedAssetsPatents[0])
       formData.append('asset_format', selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? 'us'+selectedAssetsPatents[1] : 'us'+selectedAssetsPatents[0])
       formData.append('user', '')
@@ -80,8 +82,7 @@ const LayoutTemplates = () => {
                 dispatch(setChannelID({channel_id}))
                 dispatch( getChannels() )
               }
-              dispatch( getSlackMessages( data.channel ) ) 
-              
+              renderMessages(data.channel, fileLink)
             }
           }
         } else {
@@ -91,6 +92,47 @@ const LayoutTemplates = () => {
         alert("Please login first with your Slack Account")
       }
     }, [dispatch, selectedAssetsPatents, channel_id ])
+
+
+    /**
+     * wait for the file conversion
+     * @param {*} channel 
+     * @param {*} file 
+     */
+
+    const renderMessages = (channel, file) => {
+      setTimeout( () => {
+        (async () => {
+          const getSlackToken = localStorage.getItem('slack_auth_token_info')
+          const tokenJSON = JSON.parse( getSlackToken )
+          const { data } = await PatenTrackApi.getMessages( tokenJSON.access_token, channel)
+  
+          if(data.messages != undefined && data.messages.length > 0) {
+            let findLinkMissingName = false
+            const promises = data.messages.map( message => {
+              if(message.text.indexOf('docs.google.com') !== -1) {
+                const match = message.text.match(/<([^\s>]+)(\s|>)+/)
+                if(match != null) {
+                  const link = match[1]
+                  if(link == file) {
+                    if( typeof message.files != 'undefined' &&  message.files.length == 0 ) {
+                      findLinkMissingName = true
+                    }
+                  }                
+                }
+              }
+            })
+            await Promise.all(promises)
+            if(findLinkMissingName === true && ranMessageAPI < 3) {
+              ranMessageAPI++
+              renderMessages(channel, file)
+            } else {
+              dispatch(getSlackMessages(channel))  
+            }
+          }
+        })();        
+      }, 1000 )      
+    }
 
     const onHandleDoubleClick = useCallback(async(e, item) => {
         console.log('onHandleDoubleClick')

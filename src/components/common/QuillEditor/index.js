@@ -236,7 +236,7 @@ const QuillEditor = ({
       const editorRef = quillRef.current
       const selectionIndex = editorRef.getEditor().getSelection().index
       editorRef.getEditor().insertText(selectionIndex, '@') 
-      editorRef.getEditor().setSelection(selectionIndex +  1)
+      editorRef.getEditor().setSelection(selectionIndex +  2)
     }
     
     dispatch(getSlackUsersList())
@@ -248,7 +248,7 @@ const QuillEditor = ({
       const editorRef = quillRef.current
       const selectionIndex = editorRef.getEditor().getSelection().index
       editorRef.getEditor().insertText(selectionIndex , template_document_url)
-      editorRef.getEditor().setSelection(selectionIndex +  template_document_url.length)
+      editorRef.getEditor().setSelection(selectionIndex +  template_document_url.length + 1)
     }
   }, [ template_document_url, quillRef ] )
 

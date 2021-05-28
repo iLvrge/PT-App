@@ -48,7 +48,7 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
     }
   }, [ quillEditor ])  */
   
-  useEffect(() => {
+  /* useEffect(() => {
     if (!quill) return
     const toolbar = quill.getModule('toolbar')
     toolbar.addHandler('atButton', AtButton.handler(quill))
@@ -63,7 +63,7 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
       const italic = toolBarRef.current.querySelector('.ql-italic')
       italic.querySelector('svg').setAttribute('class', 'MuiSvgIcon-root')
     }
-  }, [ toolBarRef ])
+  }, [ toolBarRef ]) */
 
   const createTemplate = () => {
     if( selectedAssets.length > 0 ) {
@@ -94,7 +94,7 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
         <option value='2' />
         <option selected />
       </select> */}
-      <Tooltip title="Bold" arrow classes={classesTooltip}>
+     {/*  <Tooltip title="Bold" arrow classes={classesTooltip}>
         <button className='ql-bold'>
           <FormatBoldIcon />
         </button>
@@ -103,7 +103,7 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
         <button className='ql-italic'>
           <FormatItalicIcon />
         </button> 
-      </Tooltip>       
+      </Tooltip>   */}     
       {/* <select className='ql-color'>
         <option value='red' />
         <option value='green' />

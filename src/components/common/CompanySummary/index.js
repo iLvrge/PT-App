@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 
 import PatenTrackApi from '../../../api/patenTrack2'
 import { capitalize, numberWithCommas } from '../../../utils/numbers'
+import { getTokenStorage } from '../../../utils/tokenStorage'
 
 import TableContainer from '@material-ui/core/TableContainer'
 import Table from '@material-ui/core/Table'
@@ -47,6 +48,10 @@ const ShowData = ({ data, number, c }) => {
             ?
             <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><path d="M51.258 62.386a.996.996 0 0 1-.707-.293l-8.279-8.28 1.414-1.414 7.572 7.573 7.568-7.573 1.414 1.414-8.275 8.28a1.003 1.003 0 0 1-.707.293z"/><path d="M52.254 60.271h-2V40.313c0-4.698-3.822-8.521-8.52-8.521h-10.67v-2h10.67c5.801 0 10.52 4.72 10.52 10.521v19.958z"/><path d="M32.9 31.792H22.261c-5.801 0-10.52-4.719-10.52-10.519V2.614h2v18.659c0 4.697 3.822 8.519 8.52 8.519H32.9v2zM12.741 62.386c-.265 0-.52-.105-.708-.293l-8.275-8.28 1.415-1.414 7.568 7.573 7.571-7.573 1.414 1.414-8.278 8.28a1.002 1.002 0 01-.707.293z"/><path d="M11.744 34.009h2v26.265h-2z"/></svg>
             :
+            data == 'documents'
+            ?
+            <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" x="0" y="0" version="1.1" viewBox="0 0 52 52"><path d="M14.013 49.502a.5.5 0 0 1-.353-.146l-11-11a.501.501 0 0 1 .353-.854h11.001a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-.5.5zm-9.793-11l9.293 9.293.001-9.293H4.22z"></path><path d="M37.014 49.498h-23a.5.5 0 0 1-.353-.147l-11-11a.5.5 0 0 1-.147-.353v-35a.5.5 0 0 1 .5-.5h34a.5.5 0 0 1 .5.5v13.21a.5.5 0 0 1-.146.353L25.36 28.568l3.573 3.572 7.727-7.726a.5.5 0 0 1 .853.354v24.23a.5.5 0 0 1-.5.5zm-22.793-1h22.293V25.975L29.288 33.2a.5.5 0 0 1-.707 0l-4.28-4.28a.5.5 0 0 1 0-.707L36.514 16V3.498h-33V37.79l10.707 10.707zm22.793-32.29h.01-.01z"></path><path d="M28.934 33.347a.498.498 0 0 1-.353-.146l-4.28-4.28a.5.5 0 0 1 0-.707l17.12-17.12a.515.515 0 0 1 .707 0l4.28 4.28a.5.5 0 0 1 0 .707l-17.12 17.12a.498.498 0 0 1-.354.146zm-3.573-4.78l3.573 3.573 16.413-16.412-3.573-3.574-16.413 16.414z"></path><path d="M22.013 35.99a.5.5 0 01-.466-.68l2.674-6.954a.501.501 0 01.934.36l-2.271 5.904 5.904-2.272a.5.5 0 01.36.934l-6.955 2.675a.5.5 0 01-.18.033zM46.053 16.23a.498.498 0 01-.354-.854l2.363-2.362a1.456 1.456 0 000-2.056L46.546 9.44c-.548-.548-1.506-.55-2.056 0l-2.363 2.363a.5.5 0 11-.707-.707l2.363-2.363c.927-.927 2.545-.926 3.47 0l1.516 1.516a2.458 2.458 0 010 3.47l-2.363 2.363a.498.498 0 01-.353.147zM33.013 10.502h-26a.5.5 0 110-1h26a.5.5 0 110 1zM33.014 16.502h-26a.5.5 0 110-1h26a.5.5 0 110 1zM23.013 22.502H7.014a.5.5 0 110-1h16a.5.5 0 110 1zM19.912 28.502H7.014a.5.5 0 110-1h12.898a.5.5 0 110 1z"></path></svg>
+            :
             ''
         }  
         </span>
@@ -57,11 +62,32 @@ const ShowData = ({ data, number, c }) => {
 
 const CompanySummary = () => {
     const classes = useStyles()
-    const [companyData, setCompanyData] = useState({companies: 0, assets: 0, transactions: 0, parties: 0, inventors: 0, activites: 0, arrows: 0})
+    const [companyData, setCompanyData] = useState({companies: 0, assets: 0, transactions: 0, parties: 0, inventors: 0, activites: 0, arrows: 0, documents: 0})
+    const google_profile = useSelector(state => state.patenTrack2.google_profile)
+
 
     useEffect(() => {
         const findSummary = async() => {
-            const { data } = await PatenTrackApi.getCompanySummary()
+            const googleToken = getTokenStorage( 'google_auth_token_info' )
+            let access_token = '', user_email = ''
+            if( googleToken && googleToken != '' && googleToken != null ) {
+                const tokenParse = JSON.parse( googleToken )
+                if( tokenParse && Object.keys(tokenParse).length > 0 ) {
+                    access_token = tokenParse.access_token
+                } 
+                
+                let profileInfo = google_profile
+                if(profileInfo == null) {
+                  const getGoogleProfile = getTokenStorage('google_profile_info')
+                  if( getGoogleProfile != '') {
+                    profileInfo = JSON.parse(getGoogleProfile)
+                  }
+                }
+                if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
+                    user_email = profileInfo.email
+                }
+            }
+            const { data } = await PatenTrackApi.getCompanySummary( access_token, user_email )
             if( data != null ) {
                 setCompanyData( data )
             }

@@ -195,8 +195,8 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/search/${searchString}`, getHeader())
   }
 
-  static getCompanySummary() {
-    return axios.get(`${base_new_api_url}/companies/summary`, getHeader())
+  static getCompanySummary(accessToken, userEmail) {
+    return axios.get(`${base_new_api_url}/companies/summary?access_token=${accessToken}&user_account=${userEmail}`, getHeader())
   }
 
   static getAssetsCompanies(assetsType) {

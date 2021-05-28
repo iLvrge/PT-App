@@ -129,7 +129,7 @@ export default function PatentNode(props) {
       .on("mouseover", () => {
         //let dx = d3.event.offsetX, dy = d3.event.offsetY
         let fromElement = d3.event.fromElement
-        if(fromElement.nodeName != 'rect') {
+        if(fromElement != null && fromElement.nodeName != 'rect') {
           const path =  d3.event.path
           if(path.length > 0) {
             const findIndex = path.findIndex( r => r.nodeName == 'g' && r.id.indexOf('PatentrackNode') !== -1)
