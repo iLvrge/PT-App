@@ -90,15 +90,16 @@ const ChildTable = ({ transactionId, headerRowDisabled }) => {
   const childSelectedAssetsPatents = useSelector(
     state => state.patenTrack2.childSelectedAssetsPatents,
   );
+  const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);  
 
   const COLUMNS = [
-    {
+    /* {
       width: 29,
       label: "",
       dataKey: "asset",
       role: "checkbox",
       disableSort: true,
-    },
+    }, */
     {
       width: 100,
       label: "Assets",
@@ -106,6 +107,7 @@ const ChildTable = ({ transactionId, headerRowDisabled }) => {
       staticIcon: "US",
       format: numberWithCommas,
       align: "left",
+      paddingLeft: '20px'    
     },
   ];
 
@@ -134,9 +136,9 @@ const ChildTable = ({ transactionId, headerRowDisabled }) => {
 
   useEffect(() => {
     if (transactionId != null) {
-      dispatch(getAssetTypeAssignmentAssets(transactionId, false));
+      dispatch(getAssetTypeAssignmentAssets(transactionId, selectedCategory != '' ? selectedCategory : '', false));
     }
-  }, [dispatch]);
+  }, [dispatch, selectedCategory]);
 
   const callSelectedAssets = ({ grant_doc_num, appno_doc_num }) => {
     const selectedItems = [];

@@ -785,10 +785,10 @@ export const setAssetTypesSelect = (data) => {
   } 
 }
 
-export const getAssetTypeIDCompanies = ( companies, tabID, append = false ) => {
+export const getAssetTypeIDCompanies = ( companies, tabID, layout, append = false ) => {
   return async dispatch => {
     dispatch( setAssetTypesIDCompaniesLoading( tabID, true ) )
-    const { data } = await PatenTrackApi.getAssetTypeIDCompanies( companies, tabID )
+    const { data } = await PatenTrackApi.getAssetTypeIDCompanies( companies, tabID, layout )
     dispatch( setAssetTypesIDCompaniesLoading( tabID, false ) )
     dispatch( setAssetTypeIDCompanies(data, append) )
   }

@@ -59,7 +59,7 @@ const ChildTable = ({ assetType, headerRowDisabled, parentBarDrag, parentBar }) 
     const assetTypeCompaniesSelectedRow = useSelector(state => state.patenTrack2.assetTypeChildCompanies.row_select)
     const assetTypeCompaniesSelected = useSelector(state => state.patenTrack2.assetTypeChildCompanies.selected)
     const assetTypeCompaniesLoading = useSelector(state => state.patenTrack2.assetTypeCompanies.loading)
-    
+    const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
 
     const [ data, setData ] = useState( [] )
 
@@ -67,7 +67,8 @@ const ChildTable = ({ assetType, headerRowDisabled, parentBarDrag, parentBar }) 
         {
             width: 300,
             label: 'Parties',
-            dataKey: 'name',            
+            dataKey: 'entityName', 
+            paddingLeft: '20px'           
         }
     ]
 
@@ -113,7 +114,7 @@ const ChildTable = ({ assetType, headerRowDisabled, parentBarDrag, parentBar }) 
 
     useEffect(() => {
         if(assetType != null) {
-            dispatch( getAssetTypeIDCompanies(selectedCompaniesAll === true ? [] : selectedCompanies, assetType, false ) )
+            dispatch( getAssetTypeIDCompanies(selectedCompaniesAll === true ? [] : selectedCompanies, assetType, selectedCategory != '' ? selectedCategory : '', false ) )
         }
     }, [ dispatch, selectedCompanies, selectedCompaniesAll ] ) 
 

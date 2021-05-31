@@ -126,20 +126,20 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/customers/asset_types?companies=${JSON.stringify(companies)}`, getHeader())
   }
 
-  static getAssetTypeIDCompanies(companies, tabID) { 
-    return axios.get(`${base_new_api_url}/customers/asset_types/${tabID}/companies?companies=${JSON.stringify(companies)}`, getHeader())
+  static getAssetTypeIDCompanies(companies, tabID, layoutID) { 
+    return axios.get(`${base_new_api_url}/customers/asset_types/${tabID}/companies?companies=${JSON.stringify(companies)}&layout=${layoutID}`, getHeader())
   }
 
   static getAssetTypeCompanies(companies, tabs) { 
     return axios.get(`${base_new_api_url}/customers/asset_types/companies?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}`, getHeader())
   }
 
-  static getAssetTypeAssignments(companies, tabs, customers) { 
-    return axios.get(`${base_new_api_url}/customers/asset_types/assignments?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}`, getHeader())
+  static getAssetTypeAssignments(companies, tabs, customers, layoutID) { 
+    return axios.get(`${base_new_api_url}/customers/asset_types/assignments?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&layout=${layoutID}`, getHeader())
   }
 
-  static getAssetTypeAssignmentAssets(assignmentRFID) { 
-    return axios.get(`${base_new_api_url}/customers/asset_types/assignments/${assignmentRFID}`, getHeader())
+  static getAssetTypeAssignmentAssets(assignmentRFID, layoutID) { 
+    return axios.get(`${base_new_api_url}/customers/asset_types/assignments/${assignmentRFID}?layout=${layoutID}`, getHeader())
   }
 
   static getAssetTypeAssignmentAllAssets(companies, tabs, customers, rfIDs) { 

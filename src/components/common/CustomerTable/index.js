@@ -86,7 +86,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         {
             width: 300,
             label: 'Parties',
-            dataKey: 'name', 
+            dataKey: 'entityName', 
             badge: true,           
         },
         {
@@ -170,14 +170,17 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         }  else {
             
             const element = e.target.closest('div.ReactVirtualized__Table__rowColumn')
-            const index = element.getAttribute('aria-colindex')
-            if(index == 2) {
-                if(currentSelection != row.id) {
-                    setCurrentSelection(row.id)
-                } else { 
-                    setCurrentSelection(null)
+            if( element != null ) {
+                const index = element.getAttribute('aria-colindex')
+                if(index == 2) {
+                    if(currentSelection != row.id) {
+                        setCurrentSelection(row.id)
+                    } else { 
+                        setCurrentSelection(null)
+                    }
                 }
-            }/*  else {                    
+            }
+            /*  else {                    
                 getTimelineData(dispatch, row.id) 
             } */
         } 

@@ -59,14 +59,14 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
     const assetTypesSelectAll = useSelector(state => state.patenTrack2.assetTypes.selectAll)
     const assetTypeCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies)
     const assetTypeAssignmentAssets = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list)
-
+    const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
 
     const COLUMNS = [ 
         {
             width: 100,
             label: 'Transactions', 
             dataKey: 'date',
-            align: 'left'          
+            align: 'left'   
         },
         {
             width: 100,
@@ -86,7 +86,7 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
                     tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
                     customers = [partiesId]
                 
-                const { data } = await PatenTrackApi.getAssetTypeAssignments(companies, tabs, customers, false)
+                const { data } = await PatenTrackApi.getAssetTypeAssignments(companies, tabs, customers, selectedCategory != '' ? selectedCategory : '', false)
                 setAssignments(data.list)
                 setAssignmentLoading( false )
                 if( data.list != null && data != '' && data.list.length > 0 ){
@@ -112,7 +112,7 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
             }
         }
         getAssignments()
-    }, [ dispatch, selectedCompanies, selectedCompaniesAll, assetTypesSelected, assetTypesSelectAll, partiesId ])
+    }, [ dispatch, selectedCategory, selectedCompanies, selectedCompaniesAll, assetTypesSelected, assetTypesSelectAll, partiesId ])
 
     const onHandleSelectAll = useCallback((event, row) => {
         
