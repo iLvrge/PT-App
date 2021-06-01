@@ -314,8 +314,8 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/timeline/item/${itemID}`, getHeader())
   }
 
-  static getActivitiesTimelineData(companies, tabs, customers, rfIDs = []) {
-    return axios.get(`${base_new_api_url}/customers/timeline?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}`, getHeader())
+  static getActivitiesTimelineData(companies, tabs, customers, rfIDs = [], layout) {
+    return axios.get(`${base_new_api_url}/customers/timeline?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}`, getHeader())
   }
 
   static getAssetsErrorsData(paramsUrl) {

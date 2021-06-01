@@ -296,7 +296,7 @@ const TimelineContainer = ({ data }) => {
                     assetTypesCompaniesSelected;
 
                    
-        const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers)
+        const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, [], selectedCategory)
         
         setTimelineRawGroups(data.groups) //groups
         setTimelineRawData(data.list) //items        
@@ -311,7 +311,7 @@ const TimelineContainer = ({ data }) => {
     }
     getTimelineRawDataFunction()
     
-  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments,  assignmentList, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string ])
+  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments,  assignmentList, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, selectedCategory ])
 
   /**
    * Intial timline items dataset and ref setup
