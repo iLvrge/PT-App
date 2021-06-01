@@ -159,8 +159,8 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/customers/${type}/transactions?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}`, getHeader())
   }
 
-  static getCustomerParties(type, companies, tabs) { 
-    return axios.get(`${base_new_api_url}/customers/${type}/parties?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}`, getHeader())
+  static getCustomerParties(type, companies, tabs, customerType) {  
+    return axios.get(`${base_new_api_url}/customers/${type}/parties?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&t=${customerType}`, getHeader())
   }
 
   static getCustomerActivites(type, companies) { 
@@ -512,8 +512,8 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/assets/${assets}/files`, getHeader())
   }
 
-  static getDriveAndAssetFiles( channelID, code, assets ) {
-    return axios.get(`${base_new_api_url}/assets/${assets}/files/${channelID}/slack/${code}`, getHeader())
+  static getDriveAndAssetFiles( channelID, code, assets, companies, layoutID, gToken, gAccount ) {
+    return axios.get(`${base_new_api_url}/assets/${assets}/files/${channelID}/slack/${code}?companies=${JSON.stringify(companies)}&layout=${layoutID}&g=${gToken}&ga=${gAccount}`, getHeader())
   }
 
   static getGoogleAuthToken( code ) {

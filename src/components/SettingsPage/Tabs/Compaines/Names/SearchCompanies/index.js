@@ -24,6 +24,9 @@ const COLUMNS = [
   },
   {
     width: 240,
+    minWidth: 240,
+    oldWidth: 240,
+    draggable: true,
     label: 'Name',
     dataKey: 'name',
   },
@@ -44,6 +47,7 @@ function SearchCompanies({ onClose, selected, setSelected }) {
   const searchTxtField = useRef(null);
   const dispatch = useDispatch()
   const classes = useStyles()
+  const [headerColumns, setHeaderColumns] = useState(COLUMNS)
   const [ menuAnchorEl, setMenuAnchorEl ] = useState(null)
   const [ loading, setLoading ] = useState(false)
   const [ search, setSearch ] = useState('')
@@ -116,6 +120,17 @@ function SearchCompanies({ onClose, selected, setSelected }) {
     setSelected([])
   }, [ setSelected, dispatch, selected ])
 
+  const resizeColumnsWidth = useCallback((dataKey, data) => {
+    let previousColumns = [...headerColumns]
+    const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
+
+    if( findIndex !== -1 ) {
+      previousColumns[findIndex].width =  previousColumns[findIndex].oldWidth + data.x
+      previousColumns[findIndex].minWidth = previousColumns[findIndex].oldWidth + data.x
+    }
+    setHeaderColumns(previousColumns)
+}, [ headerColumns ] )
+
   const handleOnInputChange = useCallback((e) => setSearch(e.target.value), [])
   const openAddMenu = useCallback((e) => setMenuAnchorEl(e.currentTarget), [])
   const closeAddMenu = useCallback(() => setMenuAnchorEl(null), [])
@@ -181,9 +196,10 @@ function SearchCompanies({ onClose, selected, setSelected }) {
               rowHeight={50}
               rowCount={rows.length}
               rows={rows}
-              columns={COLUMNS}
+              columns={headerColumns}
               onSelect={onSelect}
               onSelectAll={onSelectAll}
+              resizeColumnsWidth={resizeColumnsWidth}
             />
           )
         }

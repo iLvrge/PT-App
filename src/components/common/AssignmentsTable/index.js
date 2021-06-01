@@ -57,6 +57,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   const history = useHistory();
   const location = useLocation();
   const [offset, setOffset] = useState(0);
+  const [headerRowHeight, setHeaderRowHeight] = useState(47)
   const [rowHeight, setRowHeight] = useState(40);
   const [width, setWidth] = useState(800);
   const [childHeight, setChildHeight] = useState(500);
@@ -359,7 +360,7 @@ const onHandleClickRow = useCallback(
         selectedKey={"rf_id"}
         rows={assignmentList}
         rowHeight={rowHeight}
-        headerHeight={rowHeight}
+        headerHeight={headerRowHeight}
         columns={COLUMNS}
         onSelect={onHandleClickRow}
         onSelectAll={onHandleSelectAll}

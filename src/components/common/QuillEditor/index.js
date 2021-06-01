@@ -252,6 +252,13 @@ const QuillEditor = ({
     }
   }, [ template_document_url, quillRef ] )
 
+  const onAttachmentOpenedFileAndEmail = useCallback(() => {    
+    if( template_document_url != '') {
+      navigator.clipboard.writeText(template_document_url)
+      window.open('https://mail.google.com/mail/u/0/?view=btop&ver=ops2cvpehp6#cmid%253D1&s','GMAIL')
+    }
+  }, [ template_document_url, quillRef ] )  
+
   const onShare = useCallback(async () => {
     let selectAssetsList = []
     if(category == "pay_maintainence_fee") {
@@ -307,6 +314,7 @@ const QuillEditor = ({
           onUserClick={onUsersList} 
           onDocument={onDrive} 
           onAttachmentOpenedFile={onAttachmentOpenedFile}
+          onAttachmentOpenedFileAndEmail={onAttachmentOpenedFileAndEmail}
           onAttachmentFile={onAttachmentFile} 
           onAttachmentDriveFile={onAttachmentDriveFile}
           onMaintainenceFeeReview={onHandleReviewMaintainenceFee} 

@@ -835,6 +835,21 @@ export const setAssetTypeCompanies = (data, append) => {
   }
 }
 
+export const setAssetTypesInventorsLoading = (flag) => {
+  return {
+    type: types.SET_ASSET_TYPES_INVENTORS_LOADING,
+    flag
+  }
+}
+
+export const setAssetTypeInventor = (data, append) => {
+  return {
+    type: types.SET_ASSET_TYPE_INVENTORS,
+    data,
+    append
+  }
+}
+
 export const setAllAssignmentCustomers = (flag) => {
   return {
     type: types.SET_ASSET_TYPES_COMPANIES_SELECT_ALL,
@@ -994,14 +1009,24 @@ export const getCustomerTransactions = ( type, companies, tabs, customers, appen
  * @param {*} tabs 
  */
 
-export const getCustomerParties = ( type, companies, tabs, append = false ) => {
+export const getCustomerParties = ( type, companies, tabs, customerType, append = false ) => {
   return async dispatch => {
-    dispatch( setAssetTypesCompaniesLoading( true ) )
-    const { data } = await PatenTrackApi.getCustomerParties( type, companies, tabs )    
-    dispatch( setAssetTypesCompaniesLoading( false ) )
-    dispatch( setAssetTypeCompanies(data, append) )
+    if(customerType === 1) {
+      dispatch( setAssetTypesInventorsLoading( true ) )
+    } else {
+      dispatch( setAssetTypesCompaniesLoading( true ) )
+    }
+    const { data } = await PatenTrackApi.getCustomerParties( type, companies, tabs, customerType )    
+    if(customerType === 1) {
+      dispatch( setAssetTypesInventorsLoading( false ) )
+      dispatch( setAssetTypeInventor(data, append) )
+    } else {
+      dispatch( setAssetTypesCompaniesLoading( false ) )
+      dispatch( setAssetTypeCompanies(data, append) )
+    }
+    
   } 
-}
+} 
 
 /**
  * Activites

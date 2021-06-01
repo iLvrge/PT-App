@@ -37,7 +37,7 @@ import {
 
 import ChildTable from './ChildTable'
 
-const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag, parentBar, customerType }) => {
+const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag, parentBar, customerType }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
@@ -62,7 +62,11 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const assetTypeCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.list)
+    const assetTypeInventors = useSelector(state => state.patenTrack2.assetTypeInventors.list)
+    const assetTypeInventorsLoading = useSelector(state => state.patenTrack2.assetTypeInventors.loading)
+    const totalInventorRecords = useSelector(state => state.patenTrack2.assetTypeInventors.total_records)
     const totalRecords = useSelector(state => state.patenTrack2.assetTypeCompanies.total_records)
+
     /* const assetTypeCompaniesSelectedRow = useSelector(state => state.patenTrack2.assetTypeCompanies.row_select) */
     const assetTypeCompaniesSelected = useSelector(state => state.patenTrack2.assetTypeCompanies.selected)
     const assetTypeCompaniesLoading = useSelector(state => state.patenTrack2.assetTypeCompanies.loading)
@@ -86,7 +90,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         },
         {
             width: 300,
-            label: 'Parties',
+            label: 'Inventors',
             dataKey: 'entityName', 
             badge: true,           
         },
@@ -137,8 +141,10 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             dispatch( setSelectAssignmentCustomers([] ))
         } else {
             let items = [], list = [] ;
-            if(standalone && assetTypeCompanies.length > 0) {
+            if(customerType != 1 && standalone && assetTypeCompanies.length > 0) {
                 list = [...assetTypeCompanies]
+            } else if(customerType == 1 && standalone && assetTypeInventors.length > 0) {
+                list = [...assetTypeInventors]
             } else if(!standalone && data.length > 0) {
                 list = [...data]
             }
@@ -148,7 +154,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         }
         setSelectAll(checked)
         dispatch( setAllAssignmentCustomers( checked ) )
-    }, [ dispatch, standalone, assetTypeCompanies, data ])
+    }, [ dispatch, standalone, assetTypeCompanies, data, customerType, assetTypeInventors ])
 
     const onHandleClickRow = useCallback((e,  row) => {
         e.preventDefault()
@@ -208,7 +214,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         dispatch(toggleFamilyItemMode( false )) 
     }
 
-    if ((!standalone && assetTypesCompaniesLoading) || (standalone && assetTypeCompaniesLoading)) return <Loader />
+    if ( (customerType == 1 && assetTypeInventorsLoading) || (customerType != 1 && assetTypeCompaniesLoading)) return <Loader />
 
     return (
         <Paper className={classes.root} square id={`assets_type_companies`}>
@@ -218,7 +224,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             rowSelected={selectedRow}
 			selectedIndex={currentSelection}
             selectedKey={'id'}
-            rows={assetTypeCompanies}
+            rows={customerType == 1 ? assetTypeInventors : assetTypeCompanies}
             rowHeight={rowHeight}
             headerHeight={headerRowHeight}  
             columns={COLUMNS}
@@ -235,7 +241,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
                 <ChildTable partiesId={currentSelection} headerRowDisabled={true} />
             }
             /* forceChildWaitCall={true} */
-            totalRows={totalRecords}
+            totalRows={customerType == 1 ? totalInventorRecords : totalRecords}
             responsive={false} 
             width={width}
             containerStyle={{ 
@@ -250,4 +256,4 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
 }
 
 
-export default CustomerTable
+export default InventorTable

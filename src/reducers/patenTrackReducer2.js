@@ -400,6 +400,16 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state,
           assetTypeCompanies:  {...state.assetTypeCompanies, total_records: action.data.total_records,  list: action.append === true ? [...state.assetTypeCompanies.list, ...action.data.list] : action.data.list}
         }
+      case types.SET_ASSET_TYPES_INVENTORS_LOADING:
+        return {
+          ...state,
+          assetTypeInventors: {...state.assetTypeInventors, loading: action.flag}
+        } 
+      case types.SET_ASSET_TYPE_INVENTORS:
+        return {
+          ...state,
+          assetTypeInventors:  {...state.assetTypeInventors, total_records: action.data.total_records,  list: action.append === true ? [...state.assetTypeInventors.list, ...action.data.list] : action.data.list}
+        }
       case types.SET_ASSET_TYPES_COMPANIES_SELECT:
         return {
           ...state,

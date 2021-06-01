@@ -173,6 +173,7 @@ const VirtualizedTable = ({
       const {
         align,
         role,
+        secondaryKey,
         format,
         formatCondition,
         formatDefaultValue,
@@ -194,9 +195,9 @@ const VirtualizedTable = ({
       
       let extensionIcon = '', faIcon = ''
       if(role === 'image' && extension === true ) {
-        const urlLink = rowData['url_private']
-        const urlExplode = urlLink.split(/[#?]/)[0].split('.').pop().trim()
-        extensionIcon = urlExplode == 'pdf' ? 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/pdf_file.svg' : ''
+        const urlLink = rowData['url_private'] ? rowData['url_private'] : rowData['webViewLink']
+        const urlExplode = urlLink != null && urlLink != 'undefined' ? urlLink.split(/[#?]/)[0].split('.').pop().trim() : ''
+        extensionIcon = urlExplode == 'pdf' ? 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/pdf_file.svg' : rowData[imageURL] != null ? rowData[imageURL] : ''
         
         if(extensionIcon == '' && faIcon == '') {
           const fileType = rowData['filetype'] ? rowData['filetype'] : 'txt'
@@ -343,8 +344,8 @@ const VirtualizedTable = ({
           ) : role === 'image'  ?  
               extensionIcon != '' ?
               <span className={classes.flexImageContainer}>
-                <span className={classes.flexImage}><img src={extensionIcon} className={classes.smallImg}/></span><span className={classes.flexData}>{cellData}</span>
-              </span> 
+                <span className={classes.flexImage}><img src={extensionIcon} className={classes.smallImg}/></span><span className={classes.flexData}>{(cellData == '' || cellData == null || cellData == undefined) && rowData[secondaryKey] != undefined && rowData[secondaryKey] != null ? rowData[secondaryKey] :  cellData }</span>
+              </span>  
               :
               faIcon != ''
               ?

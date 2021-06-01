@@ -51,7 +51,7 @@ export const controlList = [
     },
     {
         type: 'menu',
-        mainHeading: 'Correct Address',
+        mainHeading: 'Correct Details',
         subHeading: 'Get a list of patents and assignments filed with incorrect address and correct them automatically.',
         svg: '',
         image: `https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/correct_address.png`,

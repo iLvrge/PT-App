@@ -10,6 +10,7 @@ export default {
     layout_id: 0,
     assetTypes: { list: [], row_select: [], selected: [], selectAll: false, loading: false, loading_companies: true },
     assetTypeCompanies: { list: [], row_select: [], total_records: 0, selected: [], selectAll: false, loading: false },
+    assetTypeInventors: { list: [], loading: false},
     assetTypeAssignments: { list: [], total_records: 0, selected: [], selectAll: false, loading: false, children: { ist: [], total_records: 0, loading: false, selected:[] } },
     assetTypeAssignmentAssets: { list: [], total_records: 0, selected: [], selectAll: false, loading: false},
     maintainence_fee_file_name: 'MaintainenceFee',

@@ -7,6 +7,7 @@ import ArrowButton from '../common/ArrowButton'
 import MainCompaniesSelector from '../common/MainCompaniesSelector'
 import AssignmentsType from '../common/AssignmentsType'
 import CustomerTable from '../common/CustomerTable'
+import InventorTable from '../common/InventorTable'
 import AssignmentsTable from '../common/AssignmentsTable'
 import AssetsTable from '../common/AssetsTable'
 import IllustrationCommentContainer from '../common/IllustrationCommentContainer'
@@ -346,15 +347,33 @@ const GlobalScreen = ({
                                         /* onDragFinished={(size) => resizePane('split8', size > 900 ? 900 : size, setAssignmentBarSize)} */
                                        /*  ref={assignmentRef} */
                                     >
-                                        <CustomerTable 
-                                            standalone={true}
-                                            parentBarDrag={setVisualizerBarSize}
-                                            parentBar={setVisualizeOpenBar}
-                                            type={type}
-                                        />
-                                        <div>
-                                            Inventor
-                                        </div>
+                                        {
+                                            openOtherPartyBar === true 
+                                            ?
+                                                <CustomerTable 
+                                                    standalone={true}
+                                                    parentBarDrag={setVisualizerBarSize}
+                                                    parentBar={setVisualizeOpenBar}
+                                                    type={type}
+                                                    customerType={0}
+                                                />
+                                            :
+                                            <div></div>
+                                        }
+
+                                        {
+                                            openInventorBar === true 
+                                            ?
+                                                <InventorTable 
+                                                    standalone={true}
+                                                    parentBarDrag={setVisualizerBarSize}
+                                                    parentBar={setVisualizeOpenBar}
+                                                    type={type}
+                                                    customerType={1}
+                                                />
+                                            :
+                                            <div></div>
+                                        }
                                     </SplitPane>
                                 </>
                             : 

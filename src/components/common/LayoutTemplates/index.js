@@ -29,7 +29,7 @@ import useStyles from "./styles"
 const LayoutTemplates = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
-
+    const [headerRowHeight, setHeaderRowHeight] = useState(47)
     const [rowHeight, setRowHeight] = useState(40)
     const [width, setWidth] = useState(800)
     const [selectedAll, setSelectAll] = useState(false)
@@ -238,7 +238,7 @@ const LayoutTemplates = () => {
                   selectedKey={"container_id"}
                   rows={driveFiles}
                   rowHeight={rowHeight}
-                  headerHeight={rowHeight}
+                  headerHeight={headerRowHeight}
                   columns={COLUMNS}
                   /* hover={true}
                   onMouseOver={onMouseOver} */

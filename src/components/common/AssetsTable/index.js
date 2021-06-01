@@ -71,6 +71,7 @@ const AssetsTable = ({
   const dispatch = useDispatch();
   const [offset, setOffset] = useState(0);
   const [rowHeight, setRowHeight] = useState(40);
+  const [headerRowHeight, setHeaderRowHeight] = useState(47)
   const [width, setWidth] = useState(800);
   const tableRef = useRef();
   const [counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT);
@@ -478,7 +479,7 @@ const resetAll = () => {
         selectedKey={"asset"}
         rows={assetRows}
         rowHeight={rowHeight}
-        headerHeight={rowHeight}
+        headerHeight={headerRowHeight}
         columns={tableColumns}
         onSelect={handleClickSelectCheckbox}
         onSelectAll={onHandleSelectAll}
