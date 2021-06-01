@@ -102,7 +102,7 @@ const pages = [
   },
   {    
     exact: true,
-    path: routeList.correct_address,
+    path: routeList.correct_details,
     component: GlobalScreen,
     layout: GlobalLayout,
     type: 1
