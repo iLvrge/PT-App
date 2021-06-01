@@ -56,12 +56,12 @@ export const controlList = [
         svg: '',
         image: `https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/correct_address.png`,
         class: 'hex-4',
-        breadCrumbs: 'Maintenance > Correct Address',
-        category: 'correct_address',
+        breadCrumbs: 'Maintenance > Correct Details',
+        category: 'correct_details',
         layout_id: 4,
         showSvg: false,
         mainHeadingClass: 'maintain',
-        redirect: routeList.correct_address
+        redirect: routeList.correct_details
     },     
     {
         type: 'category',
