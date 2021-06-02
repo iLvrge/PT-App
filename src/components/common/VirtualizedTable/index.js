@@ -66,6 +66,7 @@ const VirtualizedTable = ({
   showIsIndeterminate,
   optionalKey,
   totalRows,
+  grandTotal,
   forceChildWaitCall,
   backgroundRow,
   backgroundRowKey,
@@ -399,6 +400,7 @@ const VirtualizedTable = ({
     allSelected,
     isIndeterminate,
     totalRows,
+    grandTotal,
     onChangeColumnFilters,
     resizeColumnsWidth
   );
@@ -409,7 +411,7 @@ const VirtualizedTable = ({
       if (disableRow === false) {
         const rowContainer = tableRef.current.Grid._scrollingContainer.querySelector(
           `div.rowIndex_${index}`,
-        );
+        ); 
         if (rowContainer != null) {
           if (
             rowContainer.querySelector(".ReactVirtualized__Table__row") != null

@@ -49,6 +49,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     const [ width, setWidth ] = useState( 800 ) 
     const tableRef = useRef()
     const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
+    const [ grandTotal, setGrandTotal ] = useState( 0 )
     const [ childSelected, setCheckedSelected] = useState( 0 )
     const [ currentSelection, setCurrentSelection] = useState(null)    
     const [ selectedRow, setSelectedRow] = useState( [] )
@@ -85,22 +86,31 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             disableSort: true
         },
         {
-            width: 300,
+            width: 200,
+            minWidth: 200,
+            oldWidth: 200,
+            draggable: true,
             label: 'Parties',
             dataKey: 'entityName', 
-            badge: true,           
+            badge: true,   
+            align: 'left'         
         },
         {
-            width: 300,
-            label: 'Count',
+            width: 70,
+            label: 'Transactions',
             dataKey: 'totalTransactions', 
-            badge: true,           
+            showGrandTotal: true,  
+            align: 'center'             
         }
     ]
-
-    /* useEffect(() => {
-        setSelectedRow(assetTypeCompaniesSelectedRow)
-    }, [ assetTypeCompaniesSelectedRow ]) */
+    const [headerColumns, setHeaderColumns] = useState(COLUMNS)
+    useEffect(() => {
+        if( assetTypeCompanies.length > 0 ) {
+            setGrandTotal(assetTypeCompanies[assetTypeCompanies.length - 1].grand_total)
+        } else {
+            setGrandTotal(0)
+        }
+    }, [ assetTypeCompanies ]) 
     
 
     useEffect(() => {
@@ -128,6 +138,17 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             }       
         }
     }, [ dispatch, selectedCompanies, selectedCompaniesAll, assetTypesSelectAll, assetTypesSelected, customerType ]) 
+
+    const resizeColumnsWidth = useCallback((dataKey, data) => {
+        let previousColumns = [...headerColumns]
+        const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
+
+        if( findIndex !== -1 ) {
+          previousColumns[findIndex].width =  previousColumns[findIndex].oldWidth + data.x
+          previousColumns[findIndex].minWidth = previousColumns[findIndex].oldWidth + data.x
+        }
+        setHeaderColumns(previousColumns)
+    }, [ headerColumns ] )
 
     const onHandleSelectAll = useCallback((event, row) => {
         event.preventDefault()
@@ -230,12 +251,14 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
 			childSelect={childSelected}
             childRows={data}
             childCounterColumn={`totalTransactions`}
+            resizeColumnsWidth={resizeColumnsWidth}
             showIsIndeterminate={false}
             renderCollapsableComponent={
                 <ChildTable partiesId={currentSelection} headerRowDisabled={true} />
             }
             /* forceChildWaitCall={true} */
             totalRows={totalRecords}
+            grandTotal={grandTotal}
             responsive={false} 
             width={width}
             containerStyle={{ 

@@ -63,6 +63,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   const [childHeight, setChildHeight] = useState(500);
   const tableRef = useRef();
   const [counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT);
+  const [ grandTotal, setGrandTotal ] = useState( 0 )
   const [data, setData] = useState([]);
   const [initialize, setIntialize] = useState(false);
   const [selectedAll, setSelectAll] = useState(false);
@@ -143,7 +144,8 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       dataKey: "assets",
       staticIcon: "",
       format: numberWithCommas,
-      align: "left",
+      align: "center",
+      showGrandTotal: true,     
     },
   ];
 
@@ -185,6 +187,14 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
     }
   }, [currentRowSelection, selectedRow]);   
 
+
+  useEffect(() => {
+    if( assignmentList.length > 0 ) {
+      setGrandTotal(assignmentList[assignmentList.length - 1].grand_total ? assignmentList[assignmentList.length - 1].grand_total : 0)
+    } else {
+      setGrandTotal( 0 )
+    }
+  }, [ assignmentList ] )
 
   useEffect(() => {
     
@@ -379,6 +389,7 @@ const onHandleClickRow = useCallback(
           />
         }
         totalRows={totalRecords}
+        grandTotal={grandTotal}
         width={width}
         containerStyle={{
           width: "100%",

@@ -72,11 +72,12 @@ const HeadCell = ({
   columnIndex,
   rows,
   totalRows,
+  grandTotal,
   onChangeColumnFilters,
   resizeColumnsWidth
 }) => {
   const classes = useStyles()
-  const { align, role, disableSort, filterable, paddingLeft, badge, draggable } = columns[columnIndex]
+  const { align, role, disableSort, filterable, paddingLeft, badge, showGrandTotal, draggable } = columns[columnIndex]
   const [ anchorEl, setAnchorEl ] = useState(null)
   const [ columnFilters, setColumnFilters ] = useState([])
 
@@ -94,7 +95,7 @@ const HeadCell = ({
   useEffect(() => {
     onChangeColumnFilters(dataKey, columnFilters)
   }, [ onChangeColumnFilters, dataKey, columnFilters ])
-
+  
   return (
     <TableCell
       component={'div'}
@@ -132,9 +133,10 @@ const HeadCell = ({
                       :
                       label
                     } {badge === true ? <Badge color='primary' max={99999} className={classes.badge} badgeContent={`(${numberWithCommas(totalRows)})`} showZero></Badge> : ''}
+                    {showGrandTotal === true ? <Badge color='primary' max={99999} className={classes.badge} badgeContent={ `(${numberWithCommas(grandTotal > 0 ? grandTotal : rows.length > 0 && rows[rows.length - 1].grand_total ? rows[rows.length - 1].grand_total : 0)})`} showZero></Badge> : ''}
                 </TableSortLabel>
               )
-            }
+            } 
 
             { 
               (
@@ -202,7 +204,7 @@ const HeadCell = ({
   )
 }
 
-function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSelectAll, allSelected, isIndeterminate, totalRows, onChangeColumnFilters, resizeColumnsWidth) {
+function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSelectAll, allSelected, isIndeterminate, totalRows, grandTotal, onChangeColumnFilters, resizeColumnsWidth) {
   return useCallback(({ sortBy, dataKey, sortDirection, label, columnIndex }) => {
     return (
       <HeadCell
@@ -219,6 +221,7 @@ function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSel
         label={label}
         rows={rows}
         totalRows={totalRows}
+        grandTotal={grandTotal}
         onChangeColumnFilters={onChangeColumnFilters}
         resizeColumnsWidth={resizeColumnsWidth}
       />

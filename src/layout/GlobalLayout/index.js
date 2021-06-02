@@ -73,6 +73,7 @@ const GlobalLayout = (props) => {
     const [ typeBarSize, setTypeBarSize ] = useState(0) 
     const [ otherPartyBarSize, setOtherPartyBarSize ] = useState(0)
     const [ partyBarSize, setPartyBarSize ] = useState('50%')
+    const [ driveBarSize, setDriveBarSize ] = useState('50%')
     const [ assignmentBarSize, setAssignmentBarSize ] = useState(0)  
     const [ customerBarSize, setCustomerBarSize ] = useState(160)
     const [ commentBarSize , setCommentBarSize ] = useState('30%')
@@ -87,6 +88,7 @@ const GlobalLayout = (props) => {
 
     const [ assetFilesBarSize, setAssetFilesBarSize ] = useState(0)
     const [ assetFilesBar, setAssetFilesBar ] = useState(false)
+    const [ openGoogleDriveBar, setGoogleDriveBar] = useState(false)
     const [ toggleAssetFileButtonType, setToggleAssetFileButtonType ] = useState(true)
 
     const [ driveTemplateBarSize, setDriveTemplateBarSize ] = useState(200)
@@ -258,11 +260,36 @@ const GlobalLayout = (props) => {
     const handleAssetFileBarOpen = (event) => {
         setToggleAssetFileButtonType( !toggleAssetFileButtonType )
         setAssetFilesBar( !assetFilesBar )
-        if(!assetFilesBar === false) {
+        if(!assetFilesBar === false && openGoogleDriveBar === false) {
             setAssetFilesBarSize(0)
         } else {
             setAssetFilesBarSize(200)
+            if(openGoogleDriveBar === false) {
+                setDriveBarSize('100%')
+            } else if(!assetFilesBar === false){
+                setDriveBarSize('0%')
+            } else {
+                setDriveBarSize('50%')
+            }
 
+        }
+        editorBar()
+    }
+
+    const handleGoogleDriveBarOpen = (event) => {
+        setToggleAssetFileButtonType( !toggleAssetFileButtonType )
+        setGoogleDriveBar( !openGoogleDriveBar )
+        if(!openGoogleDriveBar === false && assetFilesBar === false) {
+            setAssetFilesBarSize(0)
+        } else {
+            setAssetFilesBarSize(200)
+            if(assetFilesBar === false) {
+                setDriveBarSize('0%')
+            } else if(!openGoogleDriveBar === false){
+                setDriveBarSize('100%')
+            } else {
+                setDriveBarSize('50%')
+            }
         }
         editorBar()
     }
@@ -479,7 +506,13 @@ const GlobalLayout = (props) => {
             bar: assetFilesBar,
             click: handleAssetFileBarOpen,
             t: 10
-        }
+        },
+        {
+            tooltip: 'Google Drive',
+            bar: openGoogleDriveBar,
+            click: handleGoogleDriveBarOpen,
+            t: 12
+        },
     ]
 
     const bottomToolBar = [
@@ -538,11 +571,13 @@ const GlobalLayout = (props) => {
                 typeButtonVisible,
                 openOtherPartyBar,
                 openInventorBar,
+                openGoogleDriveBar,
                 otherPartyBarSize,
                 setOtherPartyBarSize,
                 handleOtherPartyButton,
                 handleOtherPartyBarOpen,
                 partyBarSize,
+                driveBarSize,
                 toggleOtherPartyButtonType,
                 otherPartyButtonVisible,
                 assignmentBarSize,

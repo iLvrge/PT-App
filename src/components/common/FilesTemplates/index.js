@@ -3,9 +3,7 @@ import { useSelector, useDispatch } from "react-redux"
 
 import { Paper } from "@material-ui/core"
 
-import {
-    faFile
-} from "@fortawesome/free-solid-svg-icons"
+import Loader from '../Loader'
 
 import VirtualizedTable from "../VirtualizedTable"
 
@@ -26,7 +24,7 @@ import {
 
 import useStyles from "./styles"
 
-const FilesTemplates = () => {
+const FilesTemplates = ({type}) => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const [headerRowHeight, setHeaderRowHeight] = useState(47)
@@ -42,6 +40,7 @@ const FilesTemplates = () => {
     const [selectDocumentItems, setSelectDocumentItems] = useState([])
     const [selectedDocumentRow, setSelectedDocumentRow] = useState([])
     const [currentDocumentSelection, setCurrentDocumentSelection] = useState(null)
+    const [ loading, setLoading ] = useState(false)
 
     const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
     const channel_id = useSelector(state => state.patenTrack2.channel_id)
@@ -126,46 +125,60 @@ const FilesTemplates = () => {
             setDocumentsFiles([])
             setSelectedRow([])
             setCurrentSelection(null)
-            if(channel_id != '' && channel_id != null) {
-                const getSlackToken = getTokenStorage("slack_auth_token_info");
-                if (getSlackToken && getSlackToken != "") {
-                    const tokenJSON = JSON.parse( getSlackToken )
-    
-                    if( Object.keys(tokenJSON).length > 0 && tokenJSON.hasOwnProperty('access_token') ) {
-                        const { data } = await PatenTrackApi.getDriveAndAssetFiles( channel_id, tokenJSON.access_token, selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString(), selectedCompanies, selectedCategory )
-                        setAssetFiles(data.assets_files)
 
-                        setDocumentsFiles(data.document_files)
+            if(type == 1) {
+                if(channel_id != '' && channel_id != null) {
+                    const getSlackToken = getTokenStorage("slack_auth_token_info");
+                    if (getSlackToken && getSlackToken != "") {
+                        const tokenJSON = JSON.parse( getSlackToken )
+        
+                        if( Object.keys(tokenJSON).length > 0 && tokenJSON.hasOwnProperty('access_token') ) {
+                            setLoading(true)
+                            const { data } = await PatenTrackApi.getDriveAndAssetFiles(1, channel_id, tokenJSON.access_token, selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString(), selectedCompanies, selectedCategory )
+                            setAssetFiles(data.assets_files)
+                            setLoading(false)
+                            setDocumentsFiles(data.document_files)
+                        }
                     }
                 } else {
-                    const { data } = await PatenTrackApi.getDriveAndAssetFiles( 'undefined', 'undefined', selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString(), selectedCompanies, selectedCategory )
+                    const getGoogleToken = getTokenStorage("google_auth_token_info"), getGoogleProfile = getTokenStorage('google_profile_info')
+                    let gToken = '', gAccount = ''
+                    if (getGoogleToken && getGoogleToken != "") {
+                        const tokenJSON = JSON.parse( getGoogleToken )
+                        if( Object.keys(tokenJSON).length > 0 && tokenJSON.hasOwnProperty('access_token') ) {
+                            gToken = tokenJSON.access_token
+                        }
+                    }
+
+                    if( getGoogleProfile != '') {
+                        const profileInfo = JSON.parse(getGoogleProfile)
+                        if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
+                            gAccount =  profileInfo.email
+                        }
+                    }
+                    const { data } = await PatenTrackApi.getDriveAndAssetFiles(1, 'undefined', 'undefined', selectedAssetsPatents.length > 0 ? selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() : 'undefined', selectedCompanies, selectedCategory, gToken, gAccount )
+                    setLoading(false)
                     setAssetFiles(data.assets_files)
                     setDocumentsFiles(data.document_files)
                 }
             } else {
-                const getGoogleToken = getTokenStorage("google_auth_token_info"), getGoogleProfile = getTokenStorage('google_profile_info')
-                let gToken = '', gAccount = ''
-                if (getGoogleToken && getGoogleToken != "") {
-                    const tokenJSON = JSON.parse( getGoogleToken )
-                    if( Object.keys(tokenJSON).length > 0 && tokenJSON.hasOwnProperty('access_token') ) {
-                        gToken = tokenJSON.access_token
-                    }
+                if( selectedAssetsPatents.length > 0 ) {
+                    setLoading(true)
+                    const { data } = await PatenTrackApi.getDriveAndAssetFiles(0, 'undefined', 'undefined', selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString(), selectedCompanies, selectedCategory )
+                    setLoading(false)
+                    setAssetFiles(data.assets_files)
+                    setDocumentsFiles(data.document_files)
+                } else {
+                    setLoading(true)
+                    const { data } = await PatenTrackApi.getDriveAndAssetFiles(0, 'undefined', 'undefined', selectedAssetsPatents.length > 0 ? selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() : 'undefined', selectedCompanies, selectedCategory )
+                    setLoading(false)
+                    setAssetFiles(data.assets_files)
+                    setDocumentsFiles(data.document_files)
                 }
-
-                if( getGoogleProfile != '') {
-                    const profileInfo = JSON.parse(getGoogleProfile)
-                    if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
-                        gAccount =  profileInfo.email
-                    }
-                  }
-                
-                const { data } = await PatenTrackApi.getDriveAndAssetFiles( 'undefined', 'undefined', selectedAssetsPatents.length > 0 ? selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() : 'undefined', selectedCompanies, selectedCategory, gToken, gAccount )
-                setAssetFiles(data.assets_files)
-                setDocumentsFiles(data.document_files)
             }
         }
         getDriveAndAssetFiles()
-    }, [ selectedAssetsPatents, channel_id, selectedCompanies, selectedCompaniesAll, selectedCategory ])
+    }, [ type, selectedAssetsPatents, channel_id, selectedCompanies, selectedCompaniesAll, selectedCategory ])
 
     
 
@@ -245,65 +258,80 @@ const FilesTemplates = () => {
 
     return (
         <Paper className={classes.root} square id={`layout_templates`}>
-            <div style={{height: '50vh'}}>
-                <VirtualizedTable
-                    classes={classes}
-                    selected={selectItems}
-                    rowSelected={selectedRow}
-                    selectedIndex={currentSelection}
-                    selectedKey={"id"}
-                    rows={assetFiles}
-                    rowHeight={rowHeight}
-                    headerHeight={headerRowHeight}
-                    columns={headerColumns}
-                    onSelect={onHandleClickRow}
-                    onSelectAll={onHandleSelectAll}
-                    defaultSelectAll={selectedAll}
-                    resizeColumnsWidth={resizeColumnsWidth}
-                    responsive={true}
-                    collapsable={false}
-                    showIsIndeterminate={false} 
-                    totalRows={assetFiles.length}
-                    width={width}
-                    containerStyle={{
-                        width: "100%",
-                        maxWidth: "100%",
-                    }}
-                    style={{
-                        width: "100%",
-                    }}
-                />   
-            </div> 
-            <div style={{height: '50vh'}}>
-                <VirtualizedTable
-                    classes={classes}
-                    selected={selectDocumentItems}
-                    rowSelected={selectedDocumentRow}
-                    selectedIndex={currentDocumentSelection}                        
-                    selectedKey={"id"}
-                    rows={documentFiles}
-                    rowHeight={rowHeight}
-                    headerHeight={headerRowHeight}
-                    columns={documentHeaderColumns}
-                    onSelect={onHandleClickDocumentRow}
-                    onSelectAll={onHandleDocumentSelectAll}
-                    defaultSelectAll={selectedDocumentAll}
-                    resizeColumnsWidth={resizeDocumentColumnsWidth}
-                    disableHeader={true}
-                    responsive={true}
-                    collapsable={false}
-                    showIsIndeterminate={false} 
-                    totalRows={documentFiles.length}
-                    width={width}
-                    containerStyle={{
-                        width: "100%",
-                        maxWidth: "100%",
-                    }}
-                    style={{
-                        width: "100%",
-                    }}
-                />
-            </div>        
+           {
+                type === 0
+                ?
+                    loading === true
+                ?
+                    <Loader />
+                :
+                    <VirtualizedTable
+                        classes={classes}
+                        selected={selectItems}
+                        rowSelected={selectedRow}
+                        selectedIndex={currentSelection}
+                        selectedKey={"id"}
+                        rows={assetFiles}
+                        rowHeight={rowHeight}
+                        headerHeight={headerRowHeight}
+                        columns={headerColumns}
+                        onSelect={onHandleClickRow}
+                        onSelectAll={onHandleSelectAll}
+                        defaultSelectAll={selectedAll}
+                        resizeColumnsWidth={resizeColumnsWidth}
+                        responsive={true}
+                        collapsable={false}
+                        showIsIndeterminate={false} 
+                        totalRows={assetFiles.length}
+                        width={width}
+                        containerStyle={{
+                            width: "100%",
+                            maxWidth: "100%",
+                        }}
+                        style={{
+                            width: "100%",
+                        }}
+                    /> 
+                :
+                ''  
+            }            
+            {
+                type === 1
+                ?
+                    loading === true
+                ?
+                    <Loader />
+                :
+                    <VirtualizedTable
+                        classes={classes}
+                        selected={selectDocumentItems}
+                        rowSelected={selectedDocumentRow}
+                        selectedIndex={currentDocumentSelection}                        
+                        selectedKey={"id"}
+                        rows={documentFiles}
+                        rowHeight={rowHeight}
+                        headerHeight={headerRowHeight}
+                        columns={documentHeaderColumns}
+                        onSelect={onHandleClickDocumentRow}
+                        onSelectAll={onHandleDocumentSelectAll}
+                        defaultSelectAll={selectedDocumentAll}
+                        resizeColumnsWidth={resizeDocumentColumnsWidth}
+                        responsive={true}
+                        collapsable={false}
+                        showIsIndeterminate={false} 
+                        totalRows={documentFiles.length}
+                        width={width}
+                        containerStyle={{
+                            width: "100%",
+                            maxWidth: "100%",
+                        }}
+                        style={{
+                            width: "100%",
+                        }}
+                    />
+                :
+                ''
+            }    
         </Paper>
     )
 }

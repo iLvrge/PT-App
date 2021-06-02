@@ -512,13 +512,13 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/assets/${assets}/files`, getHeader())
   }
 
-  static getDriveAndAssetFiles( channelID, code, assets, companies, layoutID, gToken, gAccount ) {
-    return axios.get(`${base_new_api_url}/assets/${assets}/files/${channelID}/slack/${code}?companies=${JSON.stringify(companies)}&layout=${layoutID}&g=${gToken}&ga=${gAccount}`, getHeader())
+  static getDriveAndAssetFiles(type, channelID, code, assets, companies, layoutID, gToken, gAccount ) {
+    return axios.get(`${base_new_api_url}/assets/${assets}/files/${channelID}/slack/${code}?type=${type}&companies=${JSON.stringify(companies)}&layout=${layoutID}&g=${gToken}&ga=${gAccount}`, getHeader())
   }
 
   static getGoogleAuthToken( code ) {
     return axios.get(`${base_new_api_url}/documents/auth_token?code=${code}`, getHeader())
-  }
+  } 
 
   static getGoogleProfile( token ) {
     let url = `${base_new_api_url}/documents/profile?access_token=ACCESS_TOKEN&refresh_token=REFRESH_TOKEN`

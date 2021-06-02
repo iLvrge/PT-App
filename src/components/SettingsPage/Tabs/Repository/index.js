@@ -242,7 +242,6 @@ const Repository = () => {
             setRepoBreadcrumbItems( oldItems )
         }       
         if( type === 1 ) {
-            console.log('handleBreadcrumbClick=>getGoogleTemplates', googleToken)
             dispatch(getGoogleTemplates(googleToken, item.id))
         } else {
             getRepoDriveFiles(item.id)
@@ -302,11 +301,12 @@ const Repository = () => {
             console.log('handleClickRepositoryDriveRow=>openDriveFolder', googleToken)
             openDriveFolder(event, row.id, row.name, 2)            
         } else {
-            if(row.mimeType != 'application/pdf') {
-                setSelected(row.webViewLink)
-            } else {
-                setSelected(`https://docs.google.com/file/d/${row.id}/preview`)
+            
+            let webViewLink = row.webViewLink
+            if(webViewLink.indexOf('drive.google.com') !== -1) {
+                webViewLink = `https://docs.google.com/file/d/${row.id}/preview`
             }
+            setSelected(webViewLink)
             
             setSelectedRepositoryDriveRow([row.id])
             setSelectedDriveRow([])
@@ -395,7 +395,11 @@ const Repository = () => {
                 );
                 const index = element.getAttribute("aria-colindex");
                 if (index == 2) {
-                    setSelected(row.webViewLink)
+                    let webViewLink = row.webViewLink
+                    if(webViewLink.indexOf('drive.google.com') !== -1) {
+                        webViewLink = `https://docs.google.com/file/d/${row.id}/preview`
+                    }
+                    setSelected(webViewLink)
                     setSelectedDriveRow([row.id])
                     setSelectedRepositoryDriveRow([])
                 }

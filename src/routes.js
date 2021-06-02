@@ -104,7 +104,7 @@ const pages = [
     exact: true,
     path: routeList.correct_details,
     component: GlobalScreen,
-    layout: GlobalLayout,
+    layout: GlobalLayout, 
     type: 1
   }
 ] 

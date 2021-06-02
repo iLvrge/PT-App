@@ -64,6 +64,8 @@ function SettingsPage() {
   const initialOpenSubTabs = findTabViaChild(currentTab)
   const [ openSubTabs, setOpenSubTabs ] = useState(initialOpenSubTabs ? [ initialOpenSubTabs ] : [])
 
+  console.log("SettingsPage")  
+
   useEffect(() => {
     const tab = findTabViaChild(currentTab)
     if (!tab) {

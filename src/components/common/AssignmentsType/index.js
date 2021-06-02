@@ -63,6 +63,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
     const [ width, setWidth ] = useState( 800 )
     const tableRef = useRef()
     const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
+    const [ grandTotal, setGrandTotal ] = useState( 0 )
     const [ selectedAll, setSelectAll ] = useState( false )
     const [ selectItems, setSelectItems] = useState( [] )
     const [ selectedRow, setSelectedRow] = useState( [] )
@@ -103,14 +104,17 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
             width: 100,
             minWidth: 100,
             label: 'Activities',
-            dataKey: 'tab_name',            
+            dataKey: 'tab_name', 
+            badge: true,              
         },
         {
             width: 80,
-            label: 'Count',
+            label: 'Parties',
             dataKey: 'customer_count', 
             staticIcon: '',
-            format: numberWithCommas           
+            format: numberWithCommas,
+            align: 'center',
+            showGrandTotal: true,              
         }
     ]
 /* 
@@ -177,6 +181,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
                 if(findIndex >= 0) {                    
                     item = {...item, ...assetTypes[findIndex]}
                 }
+                setGrandTotal(assetTypes[assetTypes.length - 1].grand_total)
             }
             list.push(item)
         })
@@ -290,6 +295,8 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
             backgroundRowKey={`background`}
             disableRow={true}
             disableRowKey={'customer_count'}
+            totalRows={assetTypes.length}
+            grandTotal={grandTotal}
             responsive={true}
             collapsable={true}
             childHeight={childHeight}

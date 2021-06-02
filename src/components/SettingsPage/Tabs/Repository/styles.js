@@ -127,7 +127,9 @@ export default makeStyles(theme => ({
         paddingLeft: 25,
         '& .MuiBreadcrumbs-root':{
             display: 'inline-block',
-            marginLeft: 30
+            marginLeft: 30,
+            /*overflow: 'hidden',*/
+            width: '100vw'
         }
     },
     small: {
