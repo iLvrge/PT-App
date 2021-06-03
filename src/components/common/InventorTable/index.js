@@ -101,7 +101,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         },
         {
             width: 70,
-            label: 'Count',
+            label: 'Transactions',
             dataKey: 'totalTransactions', 
             showGrandTotal: true,   
             align: 'center'           

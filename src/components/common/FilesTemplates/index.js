@@ -48,6 +48,10 @@ const FilesTemplates = ({type}) => {
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
+    const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
+    const selectedAssetAssignments = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
+    const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected )
+    const assetTypesSelected = useSelector(state => state.patenTrack2.assetTypes.selected)
 
     const ASSET_COLUMNS = [  
         {
@@ -127,6 +131,7 @@ const FilesTemplates = ({type}) => {
             setCurrentSelection(null)
 
             if(type == 1) {
+                setDocumentsFiles([])
                 if(channel_id != '' && channel_id != null) {
                     const getSlackToken = getTokenStorage("slack_auth_token_info");
                     if (getSlackToken && getSlackToken != "") {
@@ -135,7 +140,7 @@ const FilesTemplates = ({type}) => {
                         if( Object.keys(tokenJSON).length > 0 && tokenJSON.hasOwnProperty('access_token') ) {
                             setLoading(true)
                             const { data } = await PatenTrackApi.getDriveAndAssetFiles(1, channel_id, tokenJSON.access_token, selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString(), selectedCompanies, selectedCategory )
-                            setAssetFiles(data.assets_files)
+                            //setAssetFiles(data.assets_files)
                             setLoading(false)
                             setDocumentsFiles(data.document_files)
                         }
@@ -158,27 +163,28 @@ const FilesTemplates = ({type}) => {
                     }
                     const { data } = await PatenTrackApi.getDriveAndAssetFiles(1, 'undefined', 'undefined', selectedAssetsPatents.length > 0 ? selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() : 'undefined', selectedCompanies, selectedCategory, gToken, gAccount )
                     setLoading(false)
-                    setAssetFiles(data.assets_files)
+                    //setAssetFiles(data.assets_files)
                     setDocumentsFiles(data.document_files)
                 }
             } else {
+                setAssetFiles([])
                 if( selectedAssetsPatents.length > 0 ) {
                     setLoading(true)
                     const { data } = await PatenTrackApi.getDriveAndAssetFiles(0, 'undefined', 'undefined', selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString(), selectedCompanies, selectedCategory )
                     setLoading(false)
                     setAssetFiles(data.assets_files)
-                    setDocumentsFiles(data.document_files)
-                } else {
+                    //setDocumentsFiles(data.document_files)
+                } else if(selectedCompanies.length > 0 || assetTypesSelected.length > 0 || selectedAssetCompanies.length > 0 || selectedAssetAssignments.length > 0 || assetTypeAssignmentAssetsSelected.length > 0){
                     setLoading(true)
-                    const { data } = await PatenTrackApi.getDriveAndAssetFiles(0, 'undefined', 'undefined', selectedAssetsPatents.length > 0 ? selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() : 'undefined', selectedCompanies, selectedCategory )
+                    const { data } = await PatenTrackApi.getDriveAndAssetFiles(0, 'undefined', 'undefined', 'undefined', selectedCompanies, selectedCategory, '', '', assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssetsSelected)
                     setLoading(false)
                     setAssetFiles(data.assets_files)
-                    setDocumentsFiles(data.document_files)
+                    //setDocumentsFiles(data.document_files)
                 }
             }
         }
         getDriveAndAssetFiles()
-    }, [ type, selectedAssetsPatents, channel_id, selectedCompanies, selectedCompaniesAll, selectedCategory ])
+    }, [ type, selectedAssetsPatents, channel_id, selectedCompanies, selectedCompaniesAll, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssetsSelected, selectedCategory ])
 
     
 
