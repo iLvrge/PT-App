@@ -95,7 +95,7 @@ const InventionVisualizer = ({defaultSize}) => {
             if (isLoadingCharts || graphRawData.length == 0 || graphRawGroupData.length == 0) return null
             items.current = new DataSet()
             console.log("defaultSize", defaultSize)
-            const colors = ['#1fa463', '#4688f4', '#ffd04b', '#ff0000']
+            const colors = ['#70A800', '#00a9e6', '#E69800', '#ff0000']
             let xMin = 0, xMax = 0, years=[];
             const promises = graphRawData.map( (data, index) => {
                 const findIndex = graphRawGroupData.findIndex( row => row.cpc_code == data.cpc_code )
