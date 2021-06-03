@@ -35,12 +35,17 @@ const InventionVisualizer = ({defaultSize}) => {
         width: '100%',
         style: 'bar-color',
         axisFontSize: 30,
-        yBarWidth:  30,
+        /* yBarWidth:  30, */
+        //yStep: 20,
+        yCenter: '30%',
         showPerspective: true,
         showGrid: true,
         axisColor: '#fff',
         keepAspectRatio: false,
         verticalRatio: 0.5,
+        xLabel: '',
+        yLabel: '',
+        zLabel: '',
         tooltip: function (point) {
             // parameter point contains properties x, y, z, and data
             // data is the original object passed to the point constructor
