@@ -122,7 +122,7 @@ const InventionVisualizer = ({defaultSize}) => {
                         y: graphRawGroupData[findIndex].id,
                         z: data.countAssets,
                         style: {
-                            stroke: col,
+                            stroke: '#5a5a5a',
                             fill: col,
                         }
                         
