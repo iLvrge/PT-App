@@ -31,21 +31,16 @@ const InventionVisualizer = ({defaultSize}) => {
     const [ graphRawGroupData, setGraphRawGroupData ] = useState([])
    
     let options = {
-        height: '400px',
+        height: '100%',
         width: '100%',
         style: 'bar-color',
+        axisFontSize: 30,
+        yBarWidth:  30,
         showPerspective: true,
         showGrid: true,
-        xBarWidth: 10,
-        yBarWidth: 10,
         axisColor: '#fff',
-        keepAspectRatio: true,
+        keepAspectRatio: false,
         verticalRatio: 0.5,
-        cameraPosition: {
-          horizontal: -0.35,
-          vertical: 0.22,
-          distance: 1.8
-        },
         tooltip: function (point) {
             // parameter point contains properties x, y, z, and data
             // data is the original object passed to the point constructor
@@ -56,7 +51,7 @@ const InventionVisualizer = ({defaultSize}) => {
             const findIndex = graphRawGroupData.findIndex( row => row.id == value)
             if( findIndex !== -1 ) {
                 return graphRawGroupData[findIndex].cpc_code
-            }
+            } 
             return value;
         },
 
@@ -99,30 +94,72 @@ const InventionVisualizer = ({defaultSize}) => {
         const generateChart = async () => {
             if (isLoadingCharts || graphRawData.length == 0 || graphRawGroupData.length == 0) return null
             items.current = new DataSet()
-            const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet']
-            const promises = graphRawData.map( data => {
+            console.log("defaultSize", defaultSize)
+            const colors = ['#1fa463', '#4688f4', '#ffd04b', '#ff0000']
+            let xMin = 0, xMax = 0, years=[];
+            const promises = graphRawData.map( (data, index) => {
                 const findIndex = graphRawGroupData.findIndex( row => row.cpc_code == data.cpc_code )
                 if(findIndex !== -1) {
+                    const year = parseInt(data.fillingYear)
+                    if(xMin == 0) {
+                        xMin = year     
+                    }
+                    if(xMax == 0) {
+                        xMax = year
+                    }
+                    if(!years.includes(year)){
+                        years.push(year)
+                    }
+
+                    if(year < xMin){
+                        xMin = year
+                    } else  if(year > xMax){
+                        xMax = year
+                    }
+                    const col = colors[Math.floor((Math.random()*colors.length))]
                     items.current.add({
-                        x: parseInt(data.fillingYear),
+                        x: year,
                         y: graphRawGroupData[findIndex].id,
                         z: data.countAssets,
-                        stroke: '#fff',
-                        fill: colors[Math.floor((Math.random()*colors.length))],
+                        style: {
+                            stroke: col,
+                            fill: col,
+                        }
+                        
                     })
+
+                   /*  if(graphRawData.length - 1  === index ) {
+                        for(let x = xMin; x <= xMax; x++) {
+                            if(!years.includes(x)) {
+                                years.push(x)
+                                items.current.add({
+                                    x: x,
+                                    y: graphRawGroupData[0].id,
+                                    z: 1,
+                                    stroke: '#fff',
+                                    fill: colors[Math.floor((Math.random()*colors.length))],
+                                })
+                            }
+                        }
+                        console.log('xMin, xMin', xMin, xMax, years.sort())
+                    } */
+                    
                 }                
             })
 
-            await Promise.all(promises)            
+            await Promise.all(promises) 
+            
+           
             //TODO height 100% not working well, created allot of isues when we resize pane, 
             if(graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0) {
-                options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight}px`}
-            }       
+               options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight}px`, xMin, xMax}
+            }     
             graphRef.current = new Graph3d(graphContainerRef.current, items.current, options)
         }
         generateChart()
         
-    }, [ isLoadingCharts, graphRawData, graphRawGroupData, graphContainerRef ])
+    }, [ isLoadingCharts, graphRawData, graphRawGroupData, graphContainerRef, defaultSize ])
+
 
     if (selectedAssetsTransactionLifeSpan.length === 0 || selectedCompanies.length === 0 ) return null
 
