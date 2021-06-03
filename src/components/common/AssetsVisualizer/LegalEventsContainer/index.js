@@ -6,7 +6,7 @@ import Paper from '@material-ui/core/Paper'
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
 import { DataSet } from 'vis-data/esnext'
-import { Timeline } from 'vis-timeline-73/esnext'
+import { Timeline } from 'vis-timeline/esnext'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 import useStyles from './styles'

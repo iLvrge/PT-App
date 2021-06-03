@@ -4,7 +4,7 @@ import routes from "../../../../routeList";
 import moment from 'moment'
 import _debounce from 'lodash/debounce'
 import { useDispatch, useSelector } from 'react-redux'
-import { DataSet } from 'vis-data-71/esnext'
+import { DataSet } from 'vis-data/esnext'
 import { Timeline } from 'vis-timeline/esnext'
 import Paper from '@material-ui/core/Paper'
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -311,7 +311,7 @@ const TimelineContainer = ({ data }) => {
     }
     getTimelineRawDataFunction()
     
-  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments,  assignmentList, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, selectedCategory ])
+  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments,  assignmentList, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string ])
 
   /**
    * Intial timline items dataset and ref setup

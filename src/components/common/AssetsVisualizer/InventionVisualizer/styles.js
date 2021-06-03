@@ -24,6 +24,7 @@ export default makeStyles(theme => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        fontSize: 16
     },
     loadingIndicator: {
         position: 'absolute',

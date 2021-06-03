@@ -11,7 +11,7 @@ import useStyles from './styles'
 
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
-const InventionVisualizer = ({defaultSize}) => {
+const InventionVisualizer = ({defaultSize, visualizerBarSize}) => {
     
     const classes = useStyles()
     const graphRef = useRef()
@@ -36,7 +36,7 @@ const InventionVisualizer = ({defaultSize}) => {
         style: 'bar-color',
         axisFontSize: 30,
         /* yBarWidth:  30, */
-        //yStep: 20,
+        yStep: 1,
         yCenter: '30%',
         showPerspective: true,
         showGrid: true,
@@ -49,9 +49,13 @@ const InventionVisualizer = ({defaultSize}) => {
         tooltip: function (point) {
             // parameter point contains properties x, y, z, and data
             // data is the original object passed to the point constructor
-            return 'value: <b>' + point.z + '</b>' 
+            const findIndex = graphRawGroupData.findIndex( row => row.id == point.z )
+            let code = ''
+            if(findIndex !== -1) {
+                code = graphRawGroupData[findIndex].cpc_code
+            }
+            return `Filling Year: <b>${point.x}</b><br/>Assets: <b>${point.y}</b><br/>CPC: <b>${code}<b>`
         },
-
         yValueLabel: function(value) {
             const findIndex = graphRawGroupData.findIndex( row => row.id == value)
             if( findIndex !== -1 ) {
@@ -63,14 +67,16 @@ const InventionVisualizer = ({defaultSize}) => {
         tooltipStyle: {
             content: {
               padding       : '10px',
-              borderRadius  : '10px',
-              color         : 'rgba(255, 255, 255, 0.7)'
+              borderRadius  : '0px',
+              color         : '#fff',
+              background    : '#000',
+              boxShadow     : 'none'
             },
             line: {
-              borderLeft    : '1px dotted rgba(0, 0, 0, 0.5)'
+              borderLeft    : '1px dotted #e60000'
             },
             dot: {
-              border        : '5px solid rgba(0, 0, 0, 0.5)'
+              border        : '5px solid rgba(230, 0, 0, 0.5)'
             }
         }
     }
@@ -121,34 +127,17 @@ const InventionVisualizer = ({defaultSize}) => {
                     } else  if(year > xMax){
                         xMax = year
                     }
-                    const col = colors[Math.floor((Math.random()*colors.length))]
+                    //const col = colors[Math.floor((Math.random()*colors.length))]
                     items.current.add({
                         x: year,
                         y: graphRawGroupData[findIndex].id,
                         z: data.countAssets,
                         style: {
                             stroke: '#5a5a5a',
-                            fill: col,
+                            fill: '#4f81bd',
                         }
                         
                     })
-
-                   /*  if(graphRawData.length - 1  === index ) {
-                        for(let x = xMin; x <= xMax; x++) {
-                            if(!years.includes(x)) {
-                                years.push(x)
-                                items.current.add({
-                                    x: x,
-                                    y: graphRawGroupData[0].id,
-                                    z: 1,
-                                    stroke: '#fff',
-                                    fill: colors[Math.floor((Math.random()*colors.length))],
-                                })
-                            }
-                        }
-                        console.log('xMin, xMin', xMin, xMax, years.sort())
-                    } */
-                    
                 }                
             })
 
@@ -157,13 +146,21 @@ const InventionVisualizer = ({defaultSize}) => {
            
             //TODO height 100% not working well, created allot of isues when we resize pane, 
             if(graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0) {
-               options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight}px`, xMin, xMax}
+               options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight}px`, xMin, xMax, axisFontSize: visualizerBarSize == '30%' ? 20 : 30, yStep:  visualizerBarSize == '30%' ? 10 : 1 }
             }     
             graphRef.current = new Graph3d(graphContainerRef.current, items.current, options)
         }
         generateChart()
         
     }, [ isLoadingCharts, graphRawData, graphRawGroupData, graphContainerRef, defaultSize ])
+
+    useEffect(() => {
+        if( graphRef.current != undefined && graphRawGroupData.length > 0 && graphRawData.length > 0 && !isLoadingCharts ){
+            options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight}px`, axisFontSize: visualizerBarSize == '30%' ? 20 : 30, yStep:  visualizerBarSize == '30%' ? 10 : 1 }
+            graphRef.current.setOptions(options)
+            graphRef.current.redraw()
+        }
+    }, [ visualizerBarSize ]) 
 
 
     if (selectedAssetsTransactionLifeSpan.length === 0 || selectedCompanies.length === 0 ) return null

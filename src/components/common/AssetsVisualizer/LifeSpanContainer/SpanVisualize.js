@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import Moment from 'moment'
 import { DataSet } from 'vis-data/esnext'
-import { Graph2d } from 'vis-timeline-73/esnext'
+import { Graph2d } from 'vis-timeline/esnext'
 
 import useStyles from './styles'
 

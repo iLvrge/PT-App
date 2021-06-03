@@ -36,6 +36,7 @@ const AssetDetailsContainer = ({
   parentBarDrag,
   parentBar,
   illustrationData,
+  visualizerBarSize
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -224,7 +225,7 @@ const AssetDetailsContainer = ({
                           resize={resizeFrame}
                           />  
                       ) : lifeSpanMode === true ? (
-                          <InventionVisualizer defaultSize={defaultSize}/>
+                          <InventionVisualizer defaultSize={defaultSize} illustrationBar={openIllustrationBar} visualizerBarSize={visualizerBarSize}/>
                       ) : familyItemMode === true ? (
                           <FamilyItemContainer item={selectedAssetsFamilyItem} onClose={onCloseFamilyItemMode} />
                       ) : (

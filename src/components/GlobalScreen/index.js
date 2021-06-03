@@ -70,9 +70,11 @@ const GlobalScreen = ({
     typeButtonVisible,
     openOtherPartyBar,
     openInventorBar,
+    openGoogleDriveBar,
     otherPartyBarSize,
     setOtherPartyBarSize,
     partyBarSize,
+    driveBarSize,
     handleOtherPartyButton,
     handleOtherPartyBarOpen,
     toggleOtherPartyButtonType,
@@ -472,13 +474,27 @@ const GlobalScreen = ({
                                 }}  
                             >
                                 <div id={`assets_files_container`} style={{ height: '100%'}}>
-                                    {
-                                        assetFilesBar === true
-                                        ?
-                                            <FilesTemplates />
-                                        :
-                                        ''
-                                    }
+                                    <SplitPane
+                                        className={classes.splitPane}
+                                        split={`horizontal`}
+                                        size={driveBarSize}
+                                    >
+                                        {
+                                            assetFilesBar === true
+                                            ?
+                                                <FilesTemplates type={0}/>
+                                            :
+                                            <div></div>
+                                        }  
+                                        {
+                                            openGoogleDriveBar === true
+                                            ?
+                                                <FilesTemplates type={1}/>
+                                            :
+                                            <div></div>
+                                        }
+                                    </SplitPane>
+                                    
                                 </div> 
                                 <SplitPane
                                     className={classes.splitPane}
@@ -568,6 +584,7 @@ const GlobalScreen = ({
                                                     dragStart={setIsDrag}
                                                     dragFinished={setIsDrag}
                                                     bar={openVisualizerBar}
+                                                    visualizerBarSize={visualizerBarSize}
                                                     parentBarDrag={setVisualizerBarSize}
                                                     parentBar={setVisualizeOpenBar}
                                                     primary={'second'}
