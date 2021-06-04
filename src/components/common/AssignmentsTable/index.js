@@ -23,7 +23,7 @@ import {
   setSelectedAssetsTransactions,
   setSelectedAssetsPatents,
   setAssetsIllustration,
-  getAssetsTransactionsEvents,
+  getAssetsAllTransactionsEvents,
   setChildSelectedAssetsTransactions,
   setChildSelectedAssetsPatents,
   getAssetTypeAssignmentAssets,
@@ -355,7 +355,7 @@ const onHandleClickRow = useCallback(
       dispatch(getAssetTypeAssignmentAssets(rf_id, false, 1, search_string)) // fill assets table 
     }
     dispatch(setAssetsIllustration({ type: "transaction", id: rf_id }));
-    dispatch(getAssetsTransactionsEvents(null, 0, 0, rf_id));
+    dispatch(getAssetsAllTransactionsEvents(selectedCategory == '' ? '' : selectedCategory, [], [], [], [rf_id]));
   };
 
   if (assignmentListLoading ) return <Loader />;

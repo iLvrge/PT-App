@@ -16,7 +16,7 @@ import {
     setChildSelectedAssetsTransactions,
     setSelectedAssetsPatents,
     setAssetsIllustration,
-    getAssetsTransactionsEvents,
+    getAssetsAllTransactionsEvents,
 } from '../../../actions/patentTrackActions2'
 
 import {
@@ -137,7 +137,7 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
         dispatch(setSelectedAssetsTransactions([]))     
         dispatch(setSelectedAssetsPatents([]))
         dispatch(setAssetsIllustration({ type: 'transaction', id: rf_id }))
-        dispatch(getAssetsTransactionsEvents(null, 0, 0, rf_id))
+        dispatch(getAssetsAllTransactionsEvents(selectedCategory == '' ? '' : selectedCategory, [], [], [], [rf_id]))
     }
 
     if (assignmentLoading) return <Loader />

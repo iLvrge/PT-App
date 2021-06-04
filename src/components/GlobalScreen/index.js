@@ -135,7 +135,7 @@ const GlobalScreen = ({
     const [ isDragging, setIsDragging] = useState(false)
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false)
 
-    
+    const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const selectedMainCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
 
@@ -163,6 +163,24 @@ const GlobalScreen = ({
             }            
         }, 1000)
     }
+
+    useEffect(() => {
+        if(selectedCategory == 'correct_details') {
+            if(openAssignmentBar === false) {
+                handleAssignmentBarOpen()
+            }
+            if(openCustomerBar === true) {
+                handleCustomersBarOpen()
+            }
+        } else {
+            if(openAssignmentBar === true) {
+                handleAssignmentBarOpen()
+            }
+            if(openCustomerBar === false) {
+                handleCustomersBarOpen()
+            }
+        }
+    }, [selectedCategory])
 
     useEffect(() => {
         if( type === 0 ) {

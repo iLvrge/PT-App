@@ -105,7 +105,6 @@ const InventionVisualizer = ({defaultSize, visualizerBarSize}) => {
         const generateChart = async () => {
             if (isLoadingCharts || graphRawData.length == 0 || graphRawGroupData.length == 0) return null
             items.current = new DataSet()
-            console.log("defaultSize", defaultSize)
             const colors = ['#70A800', '#00a9e6', '#E69800', '#ff0000']
             let xMin = 0, xMax = 0, years=[];
             const promises = graphRawData.map( (data, index) => {
@@ -141,8 +140,7 @@ const InventionVisualizer = ({defaultSize, visualizerBarSize}) => {
                 }                
             })
 
-            await Promise.all(promises) 
-            
+            await Promise.all(promises)            
            
             //TODO height 100% not working well, created allot of isues when we resize pane, 
             if(graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0) {
