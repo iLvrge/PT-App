@@ -353,5 +353,34 @@ export default makeStyles(theme => ({
         '& span':{
             display: 'block'
         }
-    }
+    },
+    clipIcon:{
+        '& svg':{
+            width: 24,
+            height: 24,
+            fill: '#fff',
+            stroke: '#fff'
+        }        
+    },
+    clipIconActive: {
+        '& svg':{
+            fill: '#E60000',
+            stroke: '#E60000' 
+        }
+    },
+    modalClipboard: {
+        margin: '100px auto',
+        width: 800,
+        height: '50vh' 
+    },
+    rootClipboard: {
+        height: '100%',
+        width: '100%',
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        '& .vis-panel.vis-background.vis-horizontal .vis-grid': {
+            borderColor: '#e5e5e51c',
+        }
+    },
 }))

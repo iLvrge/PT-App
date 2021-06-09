@@ -10,23 +10,8 @@ import {
     fetchParentCompanies,
     setMainCompaniesSelected,
     setMainCompaniesAllSelected,
-    setMainCompaniesRowSelect,
-    setSelectedAssetsPatents,
-    setSelectedAssetsTransactions,
-    setAssetsIllustration,
-    setAssetTypeSelectedRow,
-    setAssetTypeCustomerSelectedRow,
-    setAssetTypeChildCustomerSelectedRow,
-    setChildSelectedAssetsPatents,
-    setChildSelectedAssetsTransactions
+    setMainCompaniesRowSelect
 } from '../../../actions/patentTrackActions2'
-
-import {
-    setConnectionBoxView, 
-    setPDFView,
-} from '../../../actions/patenTrackActions'
-
-import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode } from '../../../actions/uiActions'
 
 import { DEFAULT_CUSTOMERS_LIMIT } from '../../../api/patenTrack2'
 
@@ -230,11 +215,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                     existingCompany => existingCompany !== parseInt( row.representative_id )
                 )
             }
-            /* if(defaultSelect != undefined && defaultSelect == 'first') {
-                history.push({
-                    hash: updateHashLocation(location, 'companies', updateSelected).join('&')
-                })
-            } */
             history.push({
                 hash: updateHashLocation(location, 'companies', updateSelected).join('&')
             })
@@ -242,9 +222,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             setSelectItems(updateSelected)
             updateUserCompanySelection(updateSelected)
             dispatch( setMainCompaniesSelected( updateSelected, updateSelectedWithName ) ) 
-        } /* else {
-            getTimelineData(dispatch, row.representative_id)
-        } */
+        }
     }
 
     const updateUserCompanySelection = async(representativeIDs) => {
@@ -252,26 +230,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         form.append('representative_id', JSON.stringify(representativeIDs))
 
         const { status } = await PatenTrackApi.saveUserCompanySelection(form)
-    }
-
-    const getTimelineData = (dispatch, representative_id) => {
-        parentBarDrag(0)
-        parentBar(false)
-        setSelectedRow([representative_id])
-        dispatch(setAssetTypeSelectedRow([]))
-        dispatch(setAssetTypeCustomerSelectedRow([]))
-        dispatch(setAssetTypeChildCustomerSelectedRow([]))
-        dispatch(setSelectedAssetsTransactions([]))   
-        dispatch(setChildSelectedAssetsPatents([]))            
-        dispatch(setSelectedAssetsPatents([])) 
-        dispatch(setChildSelectedAssetsTransactions([]))
-        dispatch(setMainCompaniesRowSelect([representative_id]))
-        dispatch(setAssetsIllustration(null))
-        dispatch(setConnectionBoxView( false ))
-        dispatch(setPDFView( false ))
-        dispatch(toggleUsptoMode( false ))
-        dispatch(toggleFamilyMode( false ))
-        dispatch(toggleFamilyItemMode( false )) 
     }
 
     const handleClickRow = useCallback((event, row) => {

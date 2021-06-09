@@ -1,17 +1,19 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useSelector } from 'react-redux'
-import Paper from '@material-ui/core/Paper'
+import { Modal, Backdrop, Paper } from '@material-ui/core'
 
 import { DataSet } from 'vis-data/esnext'
 import { Graph3d } from 'vis-graph3d/esnext'
 
+import AssetsList from './AssetsList'
 import Loader from '../../Loader'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import useStyles from './styles'
 
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
+import { setAssets } from '../../../../actions/patenTrackActions'
 
-const InventionVisualizer = ({defaultSize, visualizerBarSize}) => {
+const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) => {
     
     const classes = useStyles()
     const graphRef = useRef()
@@ -19,6 +21,9 @@ const InventionVisualizer = ({defaultSize, visualizerBarSize}) => {
     const items = useRef(new DataSet())
 
     const [ isLoadingCharts, setIsLoadingCharts ] = useState(false)
+    const [ openModal, setModalOpen ] = useState(false)
+    const [ assetLoading, setAssetsLoading ] = useState(false)
+    const [ assets, setAssets ] = useState([])
 
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const selectedAssetsTransactionLifeSpan = useSelector( state => state.patenTrack2.transaction_life_span )
@@ -29,12 +34,12 @@ const InventionVisualizer = ({defaultSize, visualizerBarSize}) => {
 
     const [ graphRawData, setGraphRawData ] = useState([])
     const [ graphRawGroupData, setGraphRawGroupData ] = useState([])
-   
+
     let options = {
         height: '100%',
         width: '100%',
         style: 'bar-color',
-        axisFontSize: 30,
+        axisFontSize: 18,
         /* yBarWidth:  30, */
         yStep: 1,
         yCenter: '30%',
@@ -47,14 +52,20 @@ const InventionVisualizer = ({defaultSize, visualizerBarSize}) => {
         yLabel: '',
         zLabel: '',
         tooltip: function (point) {
+            console.log('point, data', point)
             // parameter point contains properties x, y, z, and data
             // data is the original object passed to the point constructor
-            const findIndex = graphRawGroupData.findIndex( row => row.id == point.z )
-            let code = ''
+            const findIndex = graphRawGroupData.findIndex( row => row.id == point.y )
+            let code = '', defination = '', origin = point.data.origin
             if(findIndex !== -1) {
                 code = graphRawGroupData[findIndex].cpc_code
+                defination = graphRawGroupData[findIndex].defination
             }
-            return `Filling Year: <b>${point.x}</b><br/>Assets: <b>${point.y}</b><br/>CPC: <b>${code}<b>`
+            if( origin != null ) {
+                origin = origin.split('@@').join('<br/>')
+            }
+
+            return `<div class="graphTooltip">Filling Year: ${point.x}<br/>Patents: ${point.data.patent}<br/>${point.data.application_number > 0 ? 'Applications: '+ point.data.application_number +'<br/>' : ''}Origin: ${origin}<br/> Subject Matter : ${defination}</div>`
         },
         yValueLabel: function(value) {
             const findIndex = graphRawGroupData.findIndex( row => row.id == value)
@@ -63,10 +74,11 @@ const InventionVisualizer = ({defaultSize, visualizerBarSize}) => {
             } 
             return value;
         },
-
+        gridColor: '#e5e5e51c',
         tooltipStyle: {
             content: {
               padding       : '10px',
+              border        : '0px',
               borderRadius  : '0px',
               color         : '#fff',
               background    : '#000',
@@ -81,9 +93,18 @@ const InventionVisualizer = ({defaultSize, visualizerBarSize}) => {
         }
     }
 
-    const custom = (x, y) =>{
-        return (-Math.sin(x/Math.PI) * Math.cos(y/Math.PI) * 10 + 10);
-    }
+    const graphClickHandler = useCallback(async (point) => {
+        const findIndex = graphRawGroupData.findIndex( row => row.id == point.y )
+
+        if(findIndex !== -1) {
+            const code = graphRawGroupData[findIndex].cpc_code
+            setModalOpen(true)
+            setAssetsLoading(true)
+            const {data} = await PatenTrackApi.getAssetsByCPCCode(point.x, code, selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments)
+            setAssetsLoading(false)
+            setAssets(data.list)
+        }
+    },[ graphRawGroupData, selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments ])
 
     useEffect(() => {
         const getChartData = async () => {
@@ -97,11 +118,7 @@ const InventionVisualizer = ({defaultSize, visualizerBarSize}) => {
         getChartData()
     }, [selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments])
 
-
-
-
-    useEffect(() => {
-        
+    useEffect(() => {        
         const generateChart = async () => {
             if (isLoadingCharts || graphRawData.length == 0 || graphRawGroupData.length == 0) return null
             items.current = new DataSet()
@@ -134,8 +151,10 @@ const InventionVisualizer = ({defaultSize, visualizerBarSize}) => {
                         style: {
                             stroke: '#5a5a5a',
                             fill: '#4f81bd',
-                        }
-                        
+                        },
+                        patent: data.patent_number,
+                        application_number: data.application_number,   
+                        origin: data.group_name
                     })
                 }                
             })
@@ -144,22 +163,36 @@ const InventionVisualizer = ({defaultSize, visualizerBarSize}) => {
            
             //TODO height 100% not working well, created allot of isues when we resize pane, 
             if(graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0) {
-               options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight}px`, xMin, xMax, axisFontSize: visualizerBarSize == '30%' ? 20 : 30, yStep:  visualizerBarSize == '30%' ? 10 : 1 }
+               options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight}px`, xMin, xMax, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1 }
             }     
             graphRef.current = new Graph3d(graphContainerRef.current, items.current, options)
+            graphRef.current.on('click', graphClickHandler)
         }
         generateChart()
         
     }, [ isLoadingCharts, graphRawData, graphRawGroupData, graphContainerRef, defaultSize ])
 
     useEffect(() => {
-        if( graphRef.current != undefined && graphRawGroupData.length > 0 && graphRawData.length > 0 && !isLoadingCharts ){
-            options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight}px`, axisFontSize: visualizerBarSize == '30%' ? 20 : 30, yStep:  visualizerBarSize == '30%' ? 10 : 1 }
+        if( graphRef.current != undefined && graphRawGroupData.length > 0 && graphRawData.length > 0 && !isLoadingCharts ) {
+            let fontSize = 18, step = 1, verticalRatio = 0.5
+            if( visualizerBarSize == '100%' ) {
+                if(defaultSize != '0') {
+                    step = 3
+                    verticalRatio = 0.2
+                } 
+            } else if(visualizerBarSize == '30%') {
+                fontSize = 18
+                step = 8
+            }
+            options = { ...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight}px`, axisFontSize: fontSize, yStep: step, verticalRatio }
             graphRef.current.setOptions(options)
             graphRef.current.redraw()
         }
-    }, [ visualizerBarSize ]) 
+    }, [ visualizerBarSize, analyticsBar, defaultSize ]) 
 
+    const handleClose = () => {
+        setModalOpen(false);
+    }
 
     if (selectedAssetsTransactionLifeSpan.length === 0 || selectedCompanies.length === 0 ) return null
 
@@ -180,7 +213,23 @@ const InventionVisualizer = ({defaultSize, visualizerBarSize}) => {
                     />
                     :
                     <Loader />
-                }              
+                }  
+                <Modal
+                    disableBackdropClick={false}
+                    open={openModal}
+                    onClose={handleClose}
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                    timeout: 500,
+                    }}
+                    aria-labelledby="year-cpc-assets"
+                    aria-describedby=""
+                    className={classes.modal}
+                >
+                    <>
+                        <AssetsList loading={assetLoading} assets={assets}/>
+                    </>
+                </Modal>           
             </div>            
         </Paper>
     )

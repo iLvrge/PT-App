@@ -29,7 +29,10 @@ import {
   getAssetTypeAssignmentAssets,
   setAssetsTransactionsLifeSpan,
   setDriveTemplateFile,
-  setTemplateDocument
+  setTemplateDocument,
+  getChannelIDTransaction,
+  setChannelID,
+  getChannels
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -69,6 +72,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   const [selectedAll, setSelectAll] = useState(false);
   const [selectItems, setSelectItems] = useState([]);
   const [selectedRow, setSelectedRow] = useState([]);
+  const [rows, setRows] = useState([]);
   const [childSelected, setCheckedSelected] = useState(0);
   const [currentSelection, setCurrentSelection] = useState(null);
   const search_string = useSelector(state => state.patenTrack2.search_string)
@@ -110,7 +114,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   const selectedAssetsPatents = useSelector(
     state => state.patenTrack2.selectedAssetsPatents,
   );
-
+  const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
 
   const COLUMNS = [
@@ -139,6 +143,14 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       badge: true,
     },
     {
+      width: 22,
+      minWidth: 22,
+      label: "",
+      dataKey: "channel",
+      formatCondition: 'asset',
+      role: 'slack_image',      
+    },
+    {
       width: 100,
       label: "Assets", 
       dataKey: "assets",
@@ -149,7 +161,37 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
     },
   ];
 
-  
+  const [headerColumns, setHeaderColumns] = useState(COLUMNS)
+
+  useEffect(() => {
+    setRows(assignmentList)
+  }, [assignmentList])
+
+  /**
+   * Adding channel to transaction list
+   */
+
+  useEffect(() => {
+    const checkAssetChannel = async () => {
+      if(assignmentList.length > 0 && slack_channel_list.length > 0) {
+        let findChannel = false, oldAssets = [...assignmentList]
+        const promises = slack_channel_list.map( channelAsset => {
+          const findIndex = oldAssets.findIndex(rowTransaction => rowTransaction.rf_id == channelAsset)
+          if(findIndex !== -1) {
+            oldAssets[findIndex]['channel'] = channelAsset
+            if(findChannel === false) {
+              findChannel = true
+            }
+          }
+        })
+        await Promise.all(promises)
+        if(findChannel === true){
+          setRows(oldAssets)
+        }      
+      }
+    }    
+    checkAssetChannel()
+  },[ slack_channel_list, assignmentList])
 
   useEffect(() => {
     if (currentSelection > 0) {
@@ -168,6 +210,26 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       setData([]);
     }
   }, [currentSelection]);
+
+  useEffect(() => {
+    if(selectedCategory == 'correct_details') {
+      const cols = [...COLUMNS]
+      cols[0].role = 'radio'
+      cols.push(
+        {
+          width: 150,
+          label: "Recorded Company", 
+          dataKey: "recorded_company_name",
+        },
+        {
+          width: 150,
+          label: "Recorded Correspondence", 
+          dataKey: "cname",
+        }
+      )
+      setHeaderColumns(cols)
+    }
+  }, [selectedCategory])
 
   useEffect(() => {
     /* if(selectedAssetsTransactions.length != selectedRow ) {
@@ -235,7 +297,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
             tabs, 
             customers, 
             false));
-        
+        dispatch(getChannels())
         
       } else {
         dispatch(setAssetTypeAssignments({ list: [], total_records: 0 }));
@@ -282,25 +344,33 @@ const onHandleClickRow = useCallback(
     const { checked } = e.target;
     let oldSelection = [...selectItems]
     if (checked !== undefined) {
-        if (!oldSelection.includes(row.rf_id)) {
+        if(selectedCategory == 'correct_details') {
+          oldSelection = [row.rf_id]
+          setSelectAll(false);
+          setSelectItems(oldSelection)
+          dispatch(setChannelID(''))
+          dispatch(getChannelIDTransaction(row.rf_id));
+        } else {
+          if (!oldSelection.includes(row.rf_id)) {
             oldSelection.push(row.rf_id);
-        }else {
+          } else {
             oldSelection = oldSelection.filter(
                 customer => customer !== parseInt(row.rf_id),
             );
-        }
-        // setSelectItems(oldSelection);
-        setSelectAll(false);
-        history.push({
-        hash: updateHashLocation(location, "assignments", oldSelection).join(
-            "&",
-        ),
-        });
-        setSelectItems(prevItems =>
-            prevItems.includes(row.rf_id)
-            ? prevItems.filter(item => item !== row.rf_id)
-            : [...prevItems, row.rf_id],
-        );
+          }
+          // setSelectItems(oldSelection);
+          setSelectAll(false);
+          history.push({
+            hash: updateHashLocation(location, "assignments", oldSelection).join(
+                "&",
+            ),
+          });
+          setSelectItems(prevItems =>
+              prevItems.includes(row.rf_id)
+              ? prevItems.filter(item => item !== row.rf_id)
+              : [...prevItems, row.rf_id],
+          );
+        }        
         dispatch(setAllAssignments(false));
         dispatch(setSelectAssignments(oldSelection));
     } else {
@@ -318,11 +388,15 @@ const onHandleClickRow = useCallback(
         } else {
           //toggle to show illustration or timeline
           if(!selectedRow.includes(row.rf_id)){
+            dispatch(setChannelID(''))
+            dispatch(setSelectedAssetsPatents([]))
             getTransactionData(dispatch, row.rf_id, defaultLoad, search_string)
             dispatch(setDriveTemplateFrameMode(false));
             dispatch(setDriveTemplateFile(null));
             dispatch(setTemplateDocument(null));
+            dispatch(getChannelIDTransaction(row.rf_id));
           } else {
+            dispatch(setChannelID(''))
             setSelectedRow([])
             dispatch(setAssetsIllustration(null))
             dispatch(setSelectedAssetsTransactions([]))
@@ -334,7 +408,7 @@ const onHandleClickRow = useCallback(
         }
     }      
   },
-  [dispatch, selectItems, currentSelection, selectedRow, defaultLoad, search_string],
+  [dispatch, selectedCategory, selectItems, currentSelection, selectedRow, defaultLoad, search_string],
 );
 
   const getTransactionData = (dispatch, rf_id, defaultLoad, search_string) => {
@@ -356,6 +430,7 @@ const onHandleClickRow = useCallback(
     }
     dispatch(setAssetsIllustration({ type: "transaction", id: rf_id }));
     dispatch(getAssetsAllTransactionsEvents(selectedCategory == '' ? '' : selectedCategory, [], [], [], [rf_id]));
+    dispatch(getChannelIDTransaction(rf_id));
   };
 
   if (assignmentListLoading ) return <Loader />;
@@ -368,10 +443,10 @@ const onHandleClickRow = useCallback(
         rowSelected={selectedRow}
         selectedIndex={currentSelection}
         selectedKey={"rf_id"}
-        rows={assignmentList}
+        rows={rows}
         rowHeight={rowHeight}
         headerHeight={headerRowHeight}
-        columns={COLUMNS}
+        columns={headerColumns}
         onSelect={onHandleClickRow}
         onSelectAll={onHandleSelectAll}
         defaultSelectAll={selectedAll}

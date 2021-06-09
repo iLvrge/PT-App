@@ -580,6 +580,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state,
           document_transaction: action.data
         } 
+      case types.SET_CLIPBOARD_ASSETS:
+        return { 
+          ...state,
+          clipboard_assets: action.data
+        }
       default:  
       return state
   } 

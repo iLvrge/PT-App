@@ -701,6 +701,13 @@ export const getChannelID = ( patent, application ) => {
   }
 }
 
+export const getChannelIDTransaction = ( transactionID ) => {
+  return async dispatch => {
+    const { data } = await PatenTrackApi.getChannelID( transactionID )
+    dispatch(setChannelID(data))
+  }
+}
+
 export const setChannelID = (data) => {
   return {
     type: types.SET_CHANNEL_ID,
@@ -1148,6 +1155,13 @@ export const setMoveAssets = (items) => {
 export const setDocumentTransaction = (data) => {  
   return {
     type: types.SET_DOCUMENT_TRANSACTION, 
+    data
+  }
+}
+
+export const setClipboardAssets = (data) => {  
+  return {
+    type: types.SET_CLIPBOARD_ASSETS, 
     data
   }
 } 

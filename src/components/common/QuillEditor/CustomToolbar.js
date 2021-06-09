@@ -162,7 +162,7 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
             <Button className={classes.review} onClick={onMaintainenceFeeReview}>Cancel</Button>
           </>
         :
-        category == 'restore_ownership'
+        category == 'restore_ownership' || category == 'correct_details'
         ?
         <>
           <Button className={classes.review} onClick={onSubmitUSPTO} disabled={loadingUSPTO}>Submit to USPTO</Button>

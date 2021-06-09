@@ -24,7 +24,9 @@ export default makeStyles(theme => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        fontSize: 16
+        fontSize: 16,
+        background: '#222222 !important',
+        border: '1px solid #5c5c5c !important'
     },
     loadingIndicator: {
         position: 'absolute',
@@ -44,4 +46,9 @@ export default makeStyles(theme => ({
         flex: 1,
         display: 'flex'
     },
+    modal: {
+        margin: '100px auto',
+        width: 800,
+        height: '50vh'
+    }
 }))

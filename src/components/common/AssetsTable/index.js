@@ -288,10 +288,9 @@ const AssetsTable = ({
     let filter = []    
     if(assetTypeAssignmentAssets.length > 0 && selectedAssetsPatents.length > 0) {
       filter = assetTypeAssignmentAssets.filter( row => row.asset == selectedAssetsPatents[0].toString() || row.asset == selectedAssetsPatents[1].toString() )
-    }
-    
-    if(filter.length === 0) {
-      resetAll()
+      if(filter.length === 0) {
+        resetAll()
+      }
     }
   }, [ assetTypeAssignmentAssets ]) 
 

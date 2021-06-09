@@ -159,6 +159,10 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/assets/cpc?type=${type}&companies=${JSON.stringify(companies)}&activities=${JSON.stringify(tabs)}&parties=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
   }
 
+  static getAssetsByCPCCode(year, cpcCode, type, companies, tabs, customers, rfIDs) { 
+    return axios.get(`${base_new_api_url}/assets/cpc/${year}/${cpcCode}?type=${type}&companies=${JSON.stringify(companies)}&activities=${JSON.stringify(tabs)}&parties=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
+  }
+
   static getCustomerTransactions(type, companies, tabs, customers) { 
     return axios.get(`${base_new_api_url}/customers/${type}/transactions?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}`, getHeader())
   }
@@ -466,6 +470,10 @@ class PatenTrackApi {
 
   static getTransactions(companies) {
     return axios.get(`${base_new_api_url}/transactions?companies=${companies}`, getHeader())
+  }
+
+  static getAssignorAssigneeByTransaction(transactionId, companies) {
+    return axios.get(`${base_new_api_url}/transactions/${transactionId}`, getHeader())
   }
 
   static shareIllustration( data ) {

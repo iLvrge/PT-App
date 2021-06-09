@@ -41,6 +41,12 @@ const LayoutTemplates = () => {
     const google_profile = useSelector(state => state.patenTrack2.google_profile)
     const channel_id = useSelector( state => state.patenTrack2.channel_id )  
     const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
+    
+    const category = useSelector(state => state.patenTrack2.selectedCategory)
+    const selectedAssetsTransactions = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
+    const currentRowSelection = useSelector(
+      state => state.patenTrack2.selectedAssetsTransactions
+    )
     let ranMessageAPI = 0
 
     const COLUMNS = [    
@@ -61,7 +67,11 @@ const LayoutTemplates = () => {
       const fileLink = `https://docs.google.com/document/d/${data.id}/edit`
       const formData = new FormData()
       formData.append('text',  fileLink )
-      formData.append('asset', selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? selectedAssetsPatents[1] : selectedAssetsPatents[0])
+      if(category == 'correct_details') {
+        formData.append('transaction', selectedAssetsTransactions.length == 1 ? selectedAssetsTransactions[0] : currentRowSelection )
+      } else {
+        formData.append('asset', selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? selectedAssetsPatents[1] : selectedAssetsPatents[0])
+      }
       formData.append('asset_format', selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? 'us'+selectedAssetsPatents[1] : 'us'+selectedAssetsPatents[0])
       formData.append('user', '')
       formData.append('reply', '')
@@ -91,7 +101,7 @@ const LayoutTemplates = () => {
       } else {
         alert("Please login first with your Slack Account")
       }
-    }, [dispatch, selectedAssetsPatents, channel_id ])
+    }, [dispatch, selectedAssetsPatents, channel_id, currentRowSelection, selectedAssetsTransactions ])
 
 
     /**
@@ -172,7 +182,12 @@ const LayoutTemplates = () => {
                     formData.append('refresh_token', tokenParse.refresh_token)
                     formData.append('user_account', profileInfo.email)
                     formData.append('id', item.container_id)
-                    formData.append('name', `US${selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? selectedAssetsPatents[1] : selectedAssetsPatents[0]} - ${moment(new Date()).format('MMM DD, YYYY')} - ${item.container_name}`)
+                    if(category == 'correct_details') {
+                      formData.append('name', `${selectedAssetsTransactions[0]} - ${moment(new Date()).format('MMM DD, YYYY')} - ${item.container_name}`)
+                    } else {
+                      formData.append('name', `US${selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? selectedAssetsPatents[1] : selectedAssetsPatents[0]} - ${moment(new Date()).format('MMM DD, YYYY')} - ${item.container_name}`)
+                    }
+                    
                     //dispatch(createDriveTemplateFile(formData))
                     const { data } = await PatenTrackApi.createDriveTemplateFile( formData ) // send request for new document
                     if( data != null && typeof data == 'object') {
@@ -205,7 +220,7 @@ const LayoutTemplates = () => {
             dispatch(setSlackAuthToken(null))
           }
         }
-    }, [ dispatch ])
+    }, [ dispatch, category ])
 
     /* const onMouseOver = useCallback((e, item, flag) => {
         setCurrentSelection(item.container_id)

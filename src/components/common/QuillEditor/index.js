@@ -40,6 +40,7 @@ const QuillEditor = ({
   const quillRef = useRef(null)
   const dispatch = useDispatch()
   const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
+  const selectedAssetsTransactions = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
   const maintainence_fee_file_name = useSelector(state => state.patenTrack2.maintainence_fee_file_name)
   const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
   const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
@@ -181,8 +182,8 @@ const QuillEditor = ({
   }, [ dispatch, selectedMaintainencePatents, maintainenceFrameMode, move_assets, redo, selectedMainCompanies ])  
 
   const onHandleSubmitToUSPTO =  useCallback( async () => {      
-    if(selectedAssetsPatents.length == 0) {
-      alert('Please select a asset') 
+    if( (category == 'correct_details' && selectedAssetsTransactions.length == 0) || (category != 'correct_details' && selectedAssetsPatents.length == 0)) {
+      alert(category == 'correct_details' ? 'Please select a transaction' : 'Please select a asset') 
     } else {
       /**
        * Open model
@@ -191,7 +192,7 @@ const QuillEditor = ({
        */
       setModalOpen(true)
     }
-  }, [ selectedAssetsPatents ])
+  }, [ selectedAssetsPatents, selectedAssetsTransactions, category ])
 
   const onHandleModalClose = () => {
     setModalOpen(false)
@@ -260,9 +261,11 @@ const QuillEditor = ({
   }, [ template_document_url, quillRef ] )  
 
   const onShare = useCallback(async () => {
-    let selectAssetsList = []
+    let selectAssetsList = [], selectedTransactions = []
     if(category == "pay_maintainence_fee") {
       selectAssetsList = [...selectedMaintainencePatents]
+    } else if (category == 'correct_details') {
+      selectedTransactions = [...selectedAssetsTransactions]
     } else {
       selectAssetsList = [...assetTypeAssignmentAssetsSelected]
     }
@@ -273,12 +276,13 @@ const QuillEditor = ({
       }
     }
 
-    if(selectAssetsList.length == 0) {
-      alert('Please select asset first.')
+    if( (category == 'correct_details' && selectedTransactions.length == 0) || (category != 'correct_details' && selectAssetsList.length == 0)) {
+      alert(category == 'correct_details' ? 'Please select a transaction' : 'Please select a asset')
     } else {
       // Share list of assets and create share link
       let form = new FormData()
       form.append('assets', JSON.stringify(selectAssetsList))
+      form.append('transactions', JSON.stringify(selectedTransactions))
       form.append('type', 2)
       const {data} = await PatenTrackApi.shareIllustration(form)
       if (data.indexOf('share') >= 0) {
@@ -290,7 +294,7 @@ const QuillEditor = ({
         window.open(data,'_BLANK')
       } 
     }
-  }, [ dispatch, category, selectedAssetsPatents, selectedMaintainencePatents, assetTypeAssignmentAssetsSelected ])
+  }, [ dispatch, category, selectedAssetsPatents, selectedMaintainencePatents, assetTypeAssignmentAssetsSelected, selectedAssetsTransactions ])
 
 
   return (

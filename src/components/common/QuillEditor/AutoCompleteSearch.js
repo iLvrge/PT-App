@@ -13,6 +13,7 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 
 const AutoCompleteSearch = ({
+        value,
         open, 
         setOpen, 
         setOptions, 
@@ -33,7 +34,8 @@ const AutoCompleteSearch = ({
         <Autocomplete
             id={id}
             open={open}     
-            multiple={multiple}       
+            multiple={multiple}    
+            value={value}   
             disableCloseOnSelect
             onOpen={() => {
                 setOpen(true)

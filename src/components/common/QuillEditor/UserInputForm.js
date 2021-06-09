@@ -38,7 +38,61 @@ const UserInputForm = React.forwardRef((props, ref) => {
     const [ selectedCorrespondence, setSelectedCorrespondence ] = useState(null)
 
     const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
+    const selectedAssetsTransactions = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
+    const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
 
+    const [ transactionPatents, setTransactionPatents ] = useState([])
+
+    useEffect(() =>{
+        if( selectedAssetsTransactions.length > 0 ) {
+            (async() => {
+                const {data} = await PatenTrackApi.getAssignorAssigneeByTransaction( selectedAssetsTransactions[0], selectedCompanies )
+                if(data != null) {
+                    const {assignees, assignors, assignments, patent} = data
+
+                    if( ( assignees != undefined || assignees != null ) && assignees.length > 0 ) {
+                        const findAllAssignee = []
+                        const promiseAssignee = assignees.map( assignee => {
+                            let name = assignee.name
+
+                            if( assignee.assignor_and_assignee != null && assignee.assignor_and_assignee.representative != null ) {
+                                name = assignee.assignor_and_assignee.representative.name
+                            } else {
+                                name = assignee.assignor_and_assignee.name
+                            }
+                            findAllAssignee.push({id: assignee.assignor_and_assignee_id, name})
+                        })
+                        await Promise.all(promiseAssignee)
+                        setSelectedAssignee(findAllAssignee)
+                    }
+
+                    if( ( assignors != undefined || assignors != null ) && assignors.length > 0 ) {
+                        const findAllAssignor = []
+                        const promiseAssignor = assignors.map( assignor => {
+                            let name = assignor.name
+
+                            if( assignor.assignor_and_assignee != null && assignor.assignor_and_assignee.representative != null ) {
+                                name = assignor.assignor_and_assignee.representative.name
+                            } else {
+                                name = assignor.assignor_and_assignee.name
+                            }
+                            findAllAssignor.push({id: assignor.assignor_and_assignee_id, name})
+                        })
+                        await Promise.all(promiseAssignor)
+                        setSelectedAssignor(findAllAssignor)
+                    }
+
+                    if( ( assignments != undefined || assignments != null ) && Object.keys(assignments).length > 0 ) {
+                        setSelectedCorrespondence({id: assignments.id,  name:  assignments.name != '' ? assignments.name : assignments.caddress_1 })
+                    }
+
+                    if( ( patent != undefined || patent != null ) && patent.length > 0 ) {
+                        setTransactionPatents(patent)
+                    }
+                }
+            })()            
+        }
+    }, [ selectedAssetsTransactions, selectedCompanies ])
 
     /**
      * 
@@ -47,17 +101,18 @@ const UserInputForm = React.forwardRef((props, ref) => {
      */
     const downloadXML = useCallback(async (event) => {
         event.preventDefault()
-        console.log('downloadXML', selectedAssignee, selectedAssignor, selectedCorrespondence, selectedAssetsPatents)
+        console.log('downloadXML', selectedAssignee, selectedAssignor, selectedCorrespondence, selectedAssetsPatents, selectedAssetsTransactions)
         if( selectedAssignee.length > 0 && selectedAssignor.length > 0 && selectedCorrespondence != null && Object.keys(selectedCorrespondence).length > 0 ) {
             
             const formData = new FormData()
-            formData.append('asset', JSON.stringify(selectedAssetsPatents) )    
-            formData.append('assignee',  JSON.stringify(selectedAssignee) )
-            formData.append('assignor',  JSON.stringify(selectedAssignor) )
-            formData.append('correspondance',  JSON.stringify(selectedCorrespondence) )
+            formData.append('asset', JSON.stringify(selectedAssetsPatents))    
+            formData.append('transactions', JSON.stringify(selectedAssetsTransactions))    
+            formData.append('assignee',  JSON.stringify(selectedAssignee))
+            formData.append('assignor',  JSON.stringify(selectedAssignor))
+            formData.append('correspondance',  JSON.stringify(selectedCorrespondence))
+            formData.append('transaction_patent', JSON.stringify(transactionPatents))
 
             const response = await PatenTrackApi.downloadXMLFromServer(formData)
-
             if(response) {
                 const { data } = response
                 downloadFile(data)                
@@ -76,7 +131,7 @@ const UserInputForm = React.forwardRef((props, ref) => {
                 alert("Please add correspondance.")
             }
         }
-    }, [ dispatch, selectedAssignee, selectedAssignor, selectedCorrespondence, selectedAssetsPatents ])
+    }, [ dispatch, selectedAssignee, selectedAssignor, selectedCorrespondence, selectedAssetsPatents, selectedAssetsTransactions ])
 
 
     const downloadFile = (data) => {
@@ -105,21 +160,23 @@ const UserInputForm = React.forwardRef((props, ref) => {
      */
 
     const onChangeCorrespondence = useCallback(async (event, value) => {
-        event.preventDefault()
-        try {            
-            if (value.length > 2) {
-                PatenTrackApi.cancelRequest()
-                setOptionsCorrespondence([])
-                setLoadingCorrespondence(true)
-                const response = await PatenTrackApi.searchEntity(value, 2)
-                setLoadingCorrespondence(false)
-                if(response) {
-                    setOptionsCorrespondence(response.data != null ? response.data : [])
-                }               
-            }
-        } catch (e){
-            console.log(e)
-        }        
+        if( event != null ) {
+            event.preventDefault()
+            try {            
+                if (value.length > 2) {
+                    PatenTrackApi.cancelRequest()
+                    setOptionsCorrespondence([])
+                    setLoadingCorrespondence(true)
+                    const response = await PatenTrackApi.searchEntity(value, 2)
+                    setLoadingCorrespondence(false)
+                    if(response) {
+                        setOptionsCorrespondence(response.data != null ? response.data : [])
+                    }               
+                }
+            } catch (e){
+                console.log(e)
+            } 
+        }               
     }, [])
 
     /**
@@ -213,6 +270,7 @@ const UserInputForm = React.forwardRef((props, ref) => {
                         className={classes.flexColumn} 
                     >
                         <AutoCompleteSearch
+                            value={selectedAssignee}
                             open={openAssignee}
                             setOpen={setOpenAssignee}
                             setOptions={setOptionsAssignee}
@@ -235,6 +293,7 @@ const UserInputForm = React.forwardRef((props, ref) => {
                         className={classes.flexColumn}
                     >
                         <AutoCompleteSearch
+                            value={selectedAssignor}
                             open={openAssignor}
                             setOpen={setOpenAssignor}
                             setOptions={setOptionsAssignor}
@@ -257,6 +316,7 @@ const UserInputForm = React.forwardRef((props, ref) => {
                         className={classes.flexColumn}
                     >
                         <AutoCompleteSearch
+                            value={selectedCorrespondence}
                             open={openCorrespondence}
                             setOpen={setOpenCorrespondence}
                             setOptions={setOptionsCorrespondence}

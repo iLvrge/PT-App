@@ -225,7 +225,7 @@ const AssetDetailsContainer = ({
                           resize={resizeFrame}
                           />  
                       ) : lifeSpanMode === true ? (
-                          <InventionVisualizer defaultSize={defaultSize} illustrationBar={openIllustrationBar} visualizerBarSize={visualizerBarSize}/>
+                          <InventionVisualizer defaultSize={defaultSize} illustrationBar={openIllustrationBar} visualizerBarSize={visualizerBarSize} analyticsBar={analyticsBar}/>
                       ) : familyItemMode === true ? (
                           <FamilyItemContainer item={selectedAssetsFamilyItem} onClose={onCloseFamilyItemMode} />
                       ) : (

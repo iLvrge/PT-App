@@ -74,6 +74,8 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   const driveButtonActive = useSelector(state => state.ui.driveButtonActive)
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
   const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
+  const selectedAssetsTransactions = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
+  const currentRowSelection = useSelector(state => state.patenTrack2.selectedAssetsTransactions)
   const slack_messages = useSelector(state => state.patenTrack2.slack_messages)
   const layout_id = useSelector(state => state.patenTrack2.layout_id)
   const google_profile = useSelector(state => state.patenTrack2.google_profile)
@@ -273,7 +275,11 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
     if(selectedAssetsPatents.length > 0) {
       const formData = new FormData()
       formData.append('text',  html.encode(commentHtml) )
-      formData.append('asset', selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? selectedAssetsPatents[1] : selectedAssetsPatents[0])
+      if(selectedCategory == 'correct_details') {
+        formData.append('transaction', selectedAssetsTransactions.length == 1 ? selectedAssetsTransactions[0] : currentRowSelection )
+      } else {
+        formData.append('asset', selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? selectedAssetsPatents[1] : selectedAssetsPatents[0])
+      }
       formData.append('asset_format', selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? 'us'+selectedAssetsPatents[1] : 'us'+selectedAssetsPatents[0])
       formData.append('user', selectUser == null ? '' : selectUser)
       formData.append('reply', replyId == null ? '' : replyId)
@@ -307,7 +313,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
         alert("Please login first with your Slack Account")
       }    
     }    
-  }, [ dispatch, commentHtml, selectedAssetsPatents, getSlackMessages, channel_id, selectUser, replyId, editData, file ])
+  }, [ dispatch, commentHtml, selectedAssetsPatents, getSlackMessages, channel_id, selectUser, replyId, editData, file, selectedAssetsTransactions, currentRowSelection, selectedCategory ])
 
   const handleCancelComment = useCallback(() => {
     setCommentHtml('')
