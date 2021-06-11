@@ -66,7 +66,8 @@ import { setAssetTypeAssignments,
   setSearchString, 
   setResetAll,
   getSlackProfile,
-  setGoogleProfile
+  setGoogleProfile,
+  setClipboardAssetsDisplay
  } from '../../actions/patentTrackActions2'
 import { setControlModal, setTimelineSelectedItem, setTimelineSelectedAsset } from '../../actions/uiActions'
 
@@ -87,8 +88,8 @@ const NewHeader = () => {
   const [ isCompanyMenuOpen, setCompanyMenuOpen ] = useState(false)
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState( true )
   const [ slackAuthLogin, setSlackAuthLogin ] = useState( true )
-  const [ openClipboardModal, setClipboardModal ] = useState( false )
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
+  const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
   const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
 
   const [ openDrawer, setDrawerState] = useState({
@@ -254,10 +255,6 @@ const NewHeader = () => {
   }, [ dispatch ]) 
 
 
-  const handleClipboardModal = () => {
-    setClipboardModal(false)
-  }
-
   /**
    * When the setting menu is open then disable the list of keyboard events
    * @param {} event 
@@ -319,9 +316,9 @@ const NewHeader = () => {
 
   const handleClipboard = useCallback(() => {
     if( clipboard_assets.length > 0 ) {
-      setClipboardModal( !openClipboardModal )
+      dispatch(setClipboardAssetsDisplay( !display_clipboard ))
     }
-  }, [ clipboard_assets, openClipboardModal ])
+  }, [ dispatch, clipboard_assets, display_clipboard ])
 
   return (
 
@@ -521,22 +518,6 @@ const NewHeader = () => {
         <>
           <Home click={hideMenu} closeModal={handleControlModal}/>
         </>
-      </Modal>
-      <Modal 
-        open={openClipboardModal}
-        disableBackdropClick={false}
-        onClose={handleClipboardModal}
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-        className={classes.modalClipboard}
-        style={{backgroundColor: 'rgba(0, 0, 0, 0.8)'}}
-        tabIndex={-1}
-      >
-        <>
-          <ClipboardAssets />
-        </> 
       </Modal>
     </AppBar>
   ) 

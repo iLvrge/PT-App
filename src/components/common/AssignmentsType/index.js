@@ -40,7 +40,7 @@ import {
     employeesGroups
   } from '../../../utils/assetTypes'
 
-
+import PatenTrackApi from '../../../api/patenTrack2'
 import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode } from '../../../actions/uiActions'
 
 import {
@@ -89,7 +89,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
           minWidth: 29,
           label: '',
           dataKey: 'tab_id',
-          role: 'checkbox',
+          role: 'radio',
           disableSort: true
         },
         {
@@ -157,7 +157,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
             
             const assetType = convertTabIdToAssetType(tab)
             const findNameIndex = updateActivities.findIndex( activity => activity.type == assetType )
-            let backgroundRowColor = "";
+            /* let backgroundRowColor = "";
             if(ownershipGroups().includes(tab)){
                 backgroundRowColor = "#100000"
             } else if(licensingGroups().includes(tab)){
@@ -168,13 +168,13 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
                 backgroundRowColor = "#424141"
             } else if(otherGroup().includes(tab)){
                 backgroundRowColor = "#491B1B"
-            }
+            } */
             let item = {
                         tab_id: tab, 
                         customer_count: 0, 
                         tab_name: findNameIndex >= 0 ? updateActivities[findNameIndex].name : assetType, 
                         children: [], 
-                        background: backgroundRowColor
+                        /* background: backgroundRowColor */
                     }
             if(assetTypes.length > 0) {
                 const findIndex = assetTypes.findIndex( aTab => aTab.tab_id == tab )
@@ -189,7 +189,16 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
             setSelectItems([])
             setSelectedRow([])
             dispatch( setAssetTypesSelect([]) )
-        }  
+        } else {
+            (async() => {
+                const { data } = await PatenTrackApi.getUserActivitySelection()
+                if(data != null && Object.keys(data).length > 0) {
+                    console.log([data.activity_id])
+                    setSelectItems([data.activity_id])
+                    dispatch( setAssetTypesSelect([data.activity_id]) )
+                }
+            })();            
+        }
         setTypeData(list)
     }, [ assetTypes ])
 
@@ -220,23 +229,18 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
     const onHandleClickRow = useCallback((e,  row, t) => {
         e.preventDefault()
         const { checked } = e.target;
-        let oldSelection = [...selectItems]
+        //let oldSelection = [...selectItems]
         if(row.customer_count > 0) {
             if( checked !== undefined) {
-                if( !oldSelection.includes(row.tab_id) ){
-                    oldSelection.push(row.tab_id)                        
-                } else {
-                    oldSelection = oldSelection.filter(
-                        tab => tab !== parseInt( row.tab_id ),
-                    )
-                }                
+                
                 history.push({
-                    hash: updateHashLocation(location, 'activities', oldSelection).join('&')
+                    hash: updateHashLocation(location, 'activities', [row.tab_id]).join('&')
                 })
-                setSelectItems(oldSelection)
-                setSelectAll(tabs.length == oldSelection.length ? true : false)
-                dispatch( setAllAssetTypes(tabs.length == oldSelection.length ? true : false ) )
-                dispatch( setAssetTypesSelect(oldSelection) ) 
+                setSelectItems([row.tab_id])
+                setSelectAll(false)
+                dispatch( setAllAssetTypes( false ) )
+                dispatch( setAssetTypesSelect([row.tab_id]) )
+                updateAssetTypeSelected( row.tab_id )
             } else {                
                 const element = e.target.closest('div.ReactVirtualized__Table__rowColumn')
                 const index = element.getAttribute('aria-colindex')
@@ -252,6 +256,13 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
             }
         }
     }, [ dispatch, selectItems, currentSelection ]) 
+
+    const updateAssetTypeSelected = async(activityID) => {
+        const form = new FormData();
+        form.append('activity_id', activityID)
+
+        const { status } = await PatenTrackApi.updateAssetTypeSelected(form)
+    } 
 
     const getTimelineData = (dispatch, tab_id) => {
         parentBarDrag(0)

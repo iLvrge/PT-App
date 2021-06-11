@@ -92,6 +92,32 @@ const MaintainenceAssetsList = ({
     setAssetsLists(assets)
   }, [ assets ])
 
+  /**
+   * Adding channel to assets data
+   */
+
+  useEffect(() => {
+    const checkAssetChannel = async () => {
+      if(assets.list.length > 0 && slack_channel_list.length > 0) {
+        let findChannel = false, oldAssets = [...assets.list]
+        const promises = slack_channel_list.map( channelAsset => {
+          const findIndex = oldAssets.findIndex(rowAsset => rowAsset.asset == channelAsset)
+          if(findIndex !== -1) {
+            oldAssets[findIndex]['channel'] = channelAsset
+            if(findChannel === false) {
+              findChannel = true
+            }
+          }
+        })
+        await Promise.all(promises)
+        if(findChannel === true){
+          setAssetsLists({list: oldAssets, total_records: assets.total_records})
+        }      
+      }
+    }    
+    checkAssetChannel()
+  },[ slack_channel_list, assets])
+
   const dropdownList = [
     {
       id: -1,
@@ -162,8 +188,8 @@ const MaintainenceAssetsList = ({
       role: "checkbox",
     },
     {
-      width: 80,
-      minWidth: 80,
+      width: 80,  
+      minWidth: 80,    
       label: "Assets",
       dataKey: "asset",
       staticIcon: "US",
@@ -173,7 +199,15 @@ const MaintainenceAssetsList = ({
       secondaryFormat: applicationFormat,
       align: "left",
       badge: true,
-      textBold: true
+      /* textBold: true */
+    },
+    {
+      width: 22,
+      minWidth: 22,
+      label: "",
+      dataKey: "channel",
+      formatCondition: 'asset',
+      role: 'slack_image',      
     },
     {
       width: 90,
@@ -417,7 +451,6 @@ const MaintainenceAssetsList = ({
         totalRows={assetsList.total_records}
         defaultSortField={`asset`}
         defaultSortDirection={`desc`}
-        columnTextBoldList={slack_channel_list}
         responsive={false}
         width={width}
         containerStyle={{

@@ -50,7 +50,7 @@ import {
 
 import { updateHashLocation } from "../../../utils/hashLocation";
 
-import { numberWithCommas } from "../../../utils/numbers";
+import { numberWithCommas, capitalize } from "../../../utils/numbers";
 
 import Loader from "../Loader";
 
@@ -147,7 +147,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       minWidth: 22,
       label: "",
       dataKey: "channel",
-      formatCondition: 'asset',
+      formatCondition: 'rf_id',
       role: 'slack_image',      
     },
     {
@@ -174,6 +174,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   useEffect(() => {
     const checkAssetChannel = async () => {
       if(assignmentList.length > 0 && slack_channel_list.length > 0) {
+        console.log('slack_channel_list', slack_channel_list)
         let findChannel = false, oldAssets = [...assignmentList]
         const promises = slack_channel_list.map( channelAsset => {
           const findIndex = oldAssets.findIndex(rowTransaction => rowTransaction.rf_id == channelAsset)
@@ -218,13 +219,45 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       cols.push(
         {
           width: 150,
-          label: "Recorded Company", 
+          minWidth: 150,
+          oldWidth: 150,
+          draggable: true,
+          label: "Assignee",
+          staticIcon: "",
+          format: capitalize, 
           dataKey: "recorded_company_name",
         },
         {
           width: 150,
-          label: "Recorded Correspondence", 
+          minWidth: 150,
+          oldWidth: 150,
+          draggable: true,
+          label: "Assignee Address", 
+          dataKey: "assignee_address",
+          staticIcon: "",
+          format: capitalize,
+          align: "left"
+        },
+        {
+          width: 150,
+          minWidth: 150,
+          oldWidth: 150,
+          draggable: true,
+          label: "Correspondence", 
+          staticIcon: "",
+          format: capitalize,
           dataKey: "cname",
+        },
+        {
+          width: 150,
+          minWidth: 150,
+          oldWidth: 150,
+          draggable: true,
+          label: "Correspondence Address", 
+          dataKey: "correspondance_address",
+          staticIcon: "",
+          format: capitalize,
+          align: "left"
         }
       )
       setHeaderColumns(cols)
@@ -433,6 +466,17 @@ const onHandleClickRow = useCallback(
     dispatch(getChannelIDTransaction(rf_id));
   };
 
+  const resizeColumnsWidth = useCallback((dataKey, data) => {
+    let previousColumns = [...headerColumns]
+    const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
+
+    if( findIndex !== -1 ) {
+      previousColumns[findIndex].width =  previousColumns[findIndex].oldWidth + data.x
+      previousColumns[findIndex].minWidth = previousColumns[findIndex].oldWidth + data.x
+    }
+    setHeaderColumns(previousColumns)
+  }, [ headerColumns ] )
+
   if (assignmentListLoading ) return <Loader />;
 
   return (
@@ -455,6 +499,7 @@ const onHandleClickRow = useCallback(
         childHeight={childHeight}
         childSelect={childSelected}
         childRows={data}
+        resizeColumnsWidth={resizeColumnsWidth}
         childCounterColumn={`assets`}
         showIsIndeterminate={false}
         renderCollapsableComponent={

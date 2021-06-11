@@ -9,7 +9,7 @@ import { DEFAULT_CUSTOMERS_LIMIT } from '../../../api/patenTrack2'
 import {
     getAssetTypeIDCompanies,
     getCustomerParties,
-    setAssetTypeCompanies,
+    setAssetTypeInventor,
     setAssetTypesSelect,
     setAllAssignmentCustomers,
     setSelectAssignmentCustomers,
@@ -108,9 +108,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         }
     ]
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)
-    useEffect(() => {
-        console.log("grandTotal", grandTotal)
-    }, [grandTotal])
+
     useEffect(() => {
         if( assetTypeInventors.length > 0 ) {
             setGrandTotal(assetTypeInventors[assetTypeInventors.length - 1].grand_total)
@@ -126,7 +124,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     }, [ assetTypeCompaniesSelected, selectItems ]) 
 
     useEffect(() => {
-        if(standalone) {            
+        if(standalone) {         
             const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
                 tabs = assetTypesSelectAll === true ? [] : assetTypesSelected
             if(selectedCompaniesAll === true || selectedCompanies.length > 0) {
@@ -140,7 +138,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
                     )
                 ) 
             } else {
-                dispatch(setAssetTypeCompanies({list: [], total_records: 0}))
+                dispatch(setAssetTypeInventor({list: [], total_records: 0}))
             }       
         }
     }, [ dispatch, selectedCompanies, selectedCompaniesAll, assetTypesSelectAll, assetTypesSelected, customerType ]) 

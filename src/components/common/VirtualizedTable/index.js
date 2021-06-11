@@ -79,6 +79,8 @@ const VirtualizedTable = ({
   openDropAsset,
   dropdownSelections,
   resizeColumnsWidth,
+  icon,
+  checkedIcon,
   ...tableProps
 }) => {
   
@@ -402,7 +404,9 @@ const VirtualizedTable = ({
     totalRows,
     grandTotal,
     onChangeColumnFilters,
-    resizeColumnsWidth
+    resizeColumnsWidth,
+    icon,
+    checkedIcon
   );
   const checkRowCollapse = (collapsable, index, rowData, tableRef) => {
     if (collapsable) {

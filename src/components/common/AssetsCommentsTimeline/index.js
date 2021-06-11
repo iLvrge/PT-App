@@ -74,6 +74,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   const driveButtonActive = useSelector(state => state.ui.driveButtonActive)
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
   const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
+  const selectPatents = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
   const selectedAssetsTransactions = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
   const currentRowSelection = useSelector(state => state.patenTrack2.selectedAssetsTransactions)
   const slack_messages = useSelector(state => state.patenTrack2.slack_messages)
@@ -480,8 +481,6 @@ const handleDriveModalClose = (event) => {
   event.preventDefault()
   setDriveModal(false)
 }
-
-
   
   const onHandleGoogleSignout = () => {
     removeTokenStorage('google_auth_token_info')
@@ -537,6 +536,12 @@ const handleDriveModalClose = (event) => {
     }
   }, [ dispatch ])
 
+  const onSalesAssets = useCallback(async () => {
+    if( selectPatents.length == 0) {
+
+    }
+  }, [ selectPatents ])
+
   const renderCommentEditor = useMemo(() => {
     //if (!selectedCommentsEntity) return null
     return (
@@ -548,6 +553,7 @@ const handleDriveModalClose = (event) => {
           onCancel={handleCancelComment}
           openGoogleWindow={openGoogleWindow}
           onDrive={getDriveDocumentList}
+          onSalesAssets={onSalesAssets}
           onAttachmentFile={onHandleFileExplorer}
           onAttachmentOpenedFile={onAttachmentOpenedFile}
           onAttachmentDriveFile={onHandleDriveExplorer}

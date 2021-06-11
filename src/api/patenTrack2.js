@@ -183,6 +183,14 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/user_company_selection`,  getHeader())
   }
 
+  static updateAssetTypeSelected(saveUserActivitySelection) {
+    return axios.post(`${base_new_api_url}/user_activity_selection`, saveUserActivitySelection, getFormUrlHeader())
+  } 
+
+  static getUserActivitySelection() {
+    return axios.get(`${base_new_api_url}/user_activity_selection`,  getHeader())
+  }
+
   static getPorfolioSummary(selectedCompaniesIds) {
     return axios.get(
       `${base_new_api_url}/customers/portfolios?portfolio=${JSON.stringify(

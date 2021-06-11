@@ -52,7 +52,7 @@ import {
   setDriveTemplateFrameMode
 } from "../../../actions/uiActions";
 
-import { numberWithCommas, applicationFormat } from "../../../utils/numbers";
+import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/numbers";
 
 import { getTokenStorage } from "../../../utils/tokenStorage";
 
@@ -125,6 +125,8 @@ const AssetsTable = ({
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
   const channel_id = useSelector(state => state.patenTrack2.channel_id)
   const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
+  const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
+  const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
   const [data, setData] = useState([])
   const [assetRows, setAssetRows] = useState([])
 
@@ -146,7 +148,8 @@ const AssetsTable = ({
       disableSort: true,
     },
     {
-      width: 100,      
+      width: 100,  
+      minWidth: 100,    
       label: "Assets",
       dataKey: "asset",
       staticIcon: "US",
@@ -198,6 +201,7 @@ const AssetsTable = ({
             false,
           ),
         );
+        setWidth(800)
       } else {
         dispatch(
           setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
@@ -207,7 +211,7 @@ const AssetsTable = ({
       if (transactionId != null) {
         dispatch(getAssetTypeAssignmentAssets(transactionId, false));
       }
-    }
+    } 
   }, [
     dispatch,
     selectedCompanies,
@@ -217,12 +221,48 @@ const AssetsTable = ({
     selectedAssetCompanies,
     selectedAssetCompaniesAll,
     selectedAssetAssignmentsAll,
-    selectedAssetAssignments,
+    selectedAssetAssignments    
   ]);
 
   useEffect(() => {
     setAssetRows(assetTypeAssignmentAssets)
   }, [ assetTypeAssignmentAssets ])
+
+
+  useEffect(() => {
+    if( display_clipboard === true &&  clipboard_assets.length > 0 ) {
+      setTableColumns([...COLUMNS, {
+        width: 400,
+        minWidth: 400,
+        oldWidth: 400,
+        draggable: true,
+        label: "Title",
+        dataKey: "title",
+        staticIcon: "",
+        format: capitalize
+
+      }, {
+        width: 60,
+        minWidth: 60,
+        oldWidth: 60,
+        draggable: true,
+        label: "CPC",
+        dataKey: "cpc_code",
+      }, {
+        width: 400,
+        minWidth: 400,
+        oldWidth: 400,
+        draggable: true,
+        label: "CPC description",
+        dataKey: "defination",
+        staticIcon: "",
+        format: capitalize
+      }])
+      //console.log("clipboard_assets", clipboard_assets)
+      setWidth(1000)
+      dispatch(setAssetTypeAssignmentAllAssets({list: clipboard_assets, total_records: clipboard_assets.length}))
+    }
+  }, [ dispatch,  display_clipboard, clipboard_assets])
 
   /**
    * Adding channel to assets data
@@ -458,6 +498,17 @@ const resetAll = () => {
     [dispatch, standalone, assetTypeAssignmentAssets, data],
   );
 
+  const resizeColumnsWidth = useCallback((dataKey, data) => {
+    let previousColumns = [...tableColumns]
+    const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
+
+    if( findIndex !== -1 ) {
+      previousColumns[findIndex].width =  previousColumns[findIndex].oldWidth + data.x
+      previousColumns[findIndex].minWidth = previousColumns[findIndex].oldWidth + data.x
+    }
+    setTableColumns(previousColumns)
+  }, [ tableColumns ] )
+
   if (
     (!standalone && assetTypeAssignmentLoadingAssets) ||
     (standalone && assetTypeAssignmentAssetsLoading)
@@ -483,6 +534,7 @@ const resetAll = () => {
         onSelect={handleClickSelectCheckbox}
         onSelectAll={onHandleSelectAll}
         defaultSelectAll={selectedAll}
+        resizeColumnsWidth={resizeColumnsWidth}
         collapsable={true}
         childHeight={childHeight}
         childSelect={childSelected}

@@ -28,7 +28,7 @@ const QuillEditor = ({
   onCancel = () => {},
   onDrive = () => {},
   openGoogleWindow = () => {},
-  /* onAttachmentOpenedFile = () => {}, */
+  onSalesAssets = () => {}, 
   onAttachmentDriveFile = () => {},
   onAttachmentFile = () => {},
   onFocus = () => {},
@@ -324,6 +324,7 @@ const QuillEditor = ({
           onMaintainenceFeeReview={onHandleReviewMaintainenceFee} 
           onMaintainenceFeeFile={onMaintainenceFeeFile}
           onSubmitUSPTO={onHandleSubmitToUSPTO}
+          onSalesAssets={onSalesAssets}
           onShare={onShare}
           loadingUSPTO={loadingUSPTO}
           category={category}

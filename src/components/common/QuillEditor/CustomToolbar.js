@@ -17,7 +17,7 @@ import {
 import { getTokenStorage } from '../../../utils/tokenStorage'
 
 import useStyles from './styles'
-const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, onDocument, onAttachmentOpenedFile, onAttachmentOpenedFileAndEmail, onAttachmentFile, onAttachmentDriveFile, onMaintainenceFeeReview, onMaintainenceFeeFile, onSubmitUSPTO, loadingUSPTO, category, driveBtnActive, maintainenceMode, selectedAssets, driveTemplateMode, onShare }) => {
+const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, onDocument, onAttachmentOpenedFile, onAttachmentOpenedFileAndEmail, onAttachmentFile, onAttachmentDriveFile, onMaintainenceFeeReview, onMaintainenceFeeFile, onSubmitUSPTO, onSalesAssets, loadingUSPTO, category, driveBtnActive, maintainenceMode, selectedAssets, driveTemplateMode, onShare }) => {
   const classes = useStyles()
   const toolBarRef = useRef(null) 
 
@@ -169,6 +169,10 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
           <Button className={`${classes.review} ${driveTemplateMode === true ? classes.active : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
         </>
         :
+        category == 'sell_payments' 
+        ?
+          <Button className={classes.review} onClick={onSalesAssets}>Select Assets and Click Here</Button>
+        :
         <>
           <Tooltip title="Share illustration for selected assets" arrow classes={classesTooltip}>
             <Button className={classes.share} onClick={onShare} >
@@ -180,11 +184,7 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
           
           <Button className={`${classes.review} ${driveTemplateMode === true ? classes.active : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
         </>
-      }      
-      {/* 
-      <button className={classes.review} onClick={onMaintainenceFeeReview}><Typography variant='body2'>Review Maintainence</Typography></button>
-      <button className={classes.review} onClick={onMaintainenceFeeFile}><Typography variant='body2'>Maintainence Fee</Typography></button>
-      <button className={classes.review} onClick={onDocument}><Typography variant='body2'>Templates</Typography></button> */}
+      }            
     </div> 
   )
 }

@@ -74,7 +74,9 @@ const HeadCell = ({
   totalRows,
   grandTotal,
   onChangeColumnFilters,
-  resizeColumnsWidth
+  resizeColumnsWidth,
+  icon,
+  checkedIcon
 }) => {
   const classes = useStyles()
   const { align, role, disableSort, filterable, paddingLeft, badge, showGrandTotal, draggable } = columns[columnIndex]
@@ -106,7 +108,7 @@ const HeadCell = ({
       align={align}>
       {
         role === 'checkbox' ? (
-          onSelectAll && <Checkbox checked={allSelected} onChange={onSelectAll} indeterminate={isIndeterminate} />
+          onSelectAll && <Checkbox checked={allSelected} onChange={onSelectAll} indeterminate={isIndeterminate} {...(icon != undefined ? { icon, checkedIcon } : {})}/>
         ) : (
           <>
             {
@@ -204,7 +206,7 @@ const HeadCell = ({
   )
 }
 
-function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSelectAll, allSelected, isIndeterminate, totalRows, grandTotal, onChangeColumnFilters, resizeColumnsWidth) {
+function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSelectAll, allSelected, isIndeterminate, totalRows, grandTotal, onChangeColumnFilters, resizeColumnsWidth, icon, checkedIcon) {
   return useCallback(({ sortBy, dataKey, sortDirection, label, columnIndex }) => {
     return (
       <HeadCell
@@ -213,6 +215,8 @@ function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSel
         headerHeight={headerHeight}
         createSortHandler={createSortHandler}
         onSelectAll={onSelectAll}
+        icon={icon}
+        checkedIcon={checkedIcon}
         allSelected={allSelected}
         isIndeterminate={isIndeterminate}
         sortBy={sortBy}

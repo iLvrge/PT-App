@@ -4,7 +4,7 @@ export const numberWithCommas = (x) => {
 
 export const capitalize = (s) => {
     if (typeof s !== 'string') return ''
-    return s.charAt(0).toUpperCase() + s.slice(1)
+    return s.toLowerCase().charAt(0).toUpperCase() + s.toLowerCase().slice(1)
 }
 
 export const addCommas = (nStr) => {
@@ -18,7 +18,7 @@ export const addCommas = (nStr) => {
     }
     return x1 + x2
 }
-
+ 
 export const applicationFormat = (x) => {
     return x != undefined ? x.toString().substr(0,2) +'/'+ x.toString().substr(2, x.toString().length - 1).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''
 }

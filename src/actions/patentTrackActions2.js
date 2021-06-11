@@ -1165,3 +1165,10 @@ export const setClipboardAssets = (data) => {
     data
   }
 } 
+
+export const setClipboardAssetsDisplay = (flag) => {  
+  return {
+    type: types.SET_CLIPBOARD_ASSETS_DISPLAY, 
+    flag
+  } 
+} 

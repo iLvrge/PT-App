@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useSelector } from 'react-redux'
-import { Modal, Backdrop, Paper } from '@material-ui/core'
+import { Modal, Backdrop, Paper, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core'
+import Draggable from "react-draggable"
+
 
 import { DataSet } from 'vis-data/esnext'
 import { Graph3d } from 'vis-graph3d/esnext'
@@ -116,7 +118,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
             setGraphRawGroupData(data.group)
         }
         getChartData()
-    }, [selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments])
+        //console.log( "getChartData", selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments )
+    }, [selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments]) 
 
     useEffect(() => {        
         const generateChart = async () => {
@@ -149,8 +152,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                         y: graphRawGroupData[findIndex].id,
                         z: data.countAssets,
                         style: {
-                            stroke: '#5a5a5a',
-                            fill: '#4f81bd',
+                            stroke: '#50719C',
+                            fill: '#395270'
                         },
                         patent: data.patent_number,
                         application_number: data.application_number,   
@@ -163,7 +166,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
            
             //TODO height 100% not working well, created allot of isues when we resize pane, 
             if(graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0) {
-               options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight}px`, xMin, xMax, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1 }
+               options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight}px`, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1 }
+               console.log("options", options)
             }     
             graphRef.current = new Graph3d(graphContainerRef.current, items.current, options)
             graphRef.current.on('click', graphClickHandler)
@@ -194,6 +198,14 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
         setModalOpen(false);
     }
 
+    const PaperComponent = (props) => {
+        return (
+            <Draggable handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'}>
+                <Paper square={true} {...props} />
+            </Draggable>
+        );
+    }
+
     if (selectedAssetsTransactionLifeSpan.length === 0 || selectedCompanies.length === 0 ) return null
 
     return (
@@ -213,23 +225,20 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                     />
                     :
                     <Loader />
-                }  
-                <Modal
-                    disableBackdropClick={false}
+                } 
+
+                <Dialog
                     open={openModal}
                     onClose={handleClose}
-                    BackdropComponent={Backdrop}
-                    BackdropProps={{
-                    timeout: 500,
-                    }}
-                    aria-labelledby="year-cpc-assets"
-                    aria-describedby=""
                     className={classes.modal}
+                    PaperComponent={PaperComponent}
+                    aria-labelledby="year-cpc-assets"
                 >
-                    <>
+                    <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title"></DialogTitle>
+                    <DialogContent>
                         <AssetsList loading={assetLoading} assets={assets}/>
-                    </>
-                </Modal>           
+                    </DialogContent>
+                </Dialog>            
             </div>            
         </Paper>
     )

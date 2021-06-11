@@ -47,8 +47,19 @@ export default makeStyles(theme => ({
         display: 'flex'
     },
     modal: {
-        margin: '100px auto',
-        width: 800,
-        height: '50vh'
-    }
+        '& .react-draggable':{
+            width: 800,
+            height: '50vh',
+        },
+        '& .MuiDialog-paperWidthSm':{
+            maxWidth: 'inherit',
+        },
+        '& .MuiDialogContent-root':{
+            padding: 0,
+            overflowX: 'hidden'
+        },
+        '& .MuiDialogTitle-root':{
+            //padding: 0,
+        }
+    },
 }))

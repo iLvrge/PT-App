@@ -140,7 +140,6 @@ const FilesTemplates = ({type}) => {
                         if( Object.keys(tokenJSON).length > 0 && tokenJSON.hasOwnProperty('access_token') ) {
                             setLoading(true)
                             const { data } = await PatenTrackApi.getDriveAndAssetFiles(1, channel_id, tokenJSON.access_token, selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString(), selectedCompanies, selectedCategory )
-                            //setAssetFiles(data.assets_files)
                             setLoading(false)
                             setDocumentsFiles(data.document_files)
                         }
@@ -163,23 +162,20 @@ const FilesTemplates = ({type}) => {
                     }
                     const { data } = await PatenTrackApi.getDriveAndAssetFiles(1, 'undefined', 'undefined', selectedAssetsPatents.length > 0 ? selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() : 'undefined', selectedCompanies, selectedCategory, gToken, gAccount )
                     setLoading(false)
-                    //setAssetFiles(data.assets_files)
                     setDocumentsFiles(data.document_files)
                 }
             } else {
                 setAssetFiles([])
-                if( selectedAssetsPatents.length > 0 ) {
+                if(selectedCompanies.length > 0 && selectedAssetsPatents.length > 0 ) {
                     setLoading(true)
                     const { data } = await PatenTrackApi.getDriveAndAssetFiles(0, 'undefined', 'undefined', selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString(), selectedCompanies, selectedCategory )
                     setLoading(false)
                     setAssetFiles(data.assets_files)
-                    //setDocumentsFiles(data.document_files)
                 } else if(selectedCompanies.length > 0 || assetTypesSelected.length > 0 || selectedAssetCompanies.length > 0 || selectedAssetAssignments.length > 0 || assetTypeAssignmentAssetsSelected.length > 0){
                     setLoading(true)
                     const { data } = await PatenTrackApi.getDriveAndAssetFiles(0, 'undefined', 'undefined', 'undefined', selectedCompanies, selectedCategory, '', '', assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssetsSelected)
                     setLoading(false)
                     setAssetFiles(data.assets_files)
-                    //setDocumentsFiles(data.document_files)
                 }
             }
         }

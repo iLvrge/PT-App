@@ -282,7 +282,7 @@ const TimelineContainer = ({ data }) => {
         if(search_rf_id.length > 0) {
           const { data } = await PatenTrackApi.getActivitiesTimelineData([], [], [], search_rf_id) // empty array for company, tabs, customers
         
-          setTimelineRawGroups(data.groups) //groups
+          //setTimelineRawGroups(data.groups) //groups
           setTimelineRawData(data.list) //items
         } else {
           setTimelineRawGroups([]) //groups
@@ -298,7 +298,7 @@ const TimelineContainer = ({ data }) => {
                    
         const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, [], selectedCategory)
         
-        setTimelineRawGroups(data.groups) //groups
+        //setTimelineRawGroups(data.groups) //groups
         setTimelineRawData(data.list) //items        
 
         dispatch(
@@ -311,7 +311,7 @@ const TimelineContainer = ({ data }) => {
     }
     getTimelineRawDataFunction()
     
-  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments,  assignmentList, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, selectedCategory ])
+  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments,  assignmentList, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string ])
 
   /**
    * Intial timline items dataset and ref setup
@@ -372,7 +372,7 @@ const TimelineContainer = ({ data }) => {
       start = convertedItems.length ? new moment(convertedItems[startIndex].start).subtract(1, 'week') : new Date()
       end = new moment().add(1, 'month')
       items.current.add(convertedItems.slice(0, startIndex))
-      const groupItemsList = [], groupList = []
+      /* const groupItemsList = [], groupList = []
       timelineGroups.map( item => {
         groupItemsList.push(item.group)
       })
@@ -383,7 +383,6 @@ const TimelineContainer = ({ data }) => {
           if(groupItemsList.includes(item) && tap === false) {
             groupList.push({
               id: row.id,
-              /* content: row.name, */  
               content: '',
               className: row.className
             })
@@ -391,11 +390,11 @@ const TimelineContainer = ({ data }) => {
           }
         })
       })
-      groups.current.add(groupList)      
+      groups.current.add(groupList) */      
     }
     
     timelineRef.current.setItems(items.current)
-    timelineRef.current.setGroups(groups.current)
+    //timelineRef.current.setGroups(groups.current)
     timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('2000-01-01')), max: new moment().add(3, 'year')})
     
   }, [ timelineRawData, isLoadingTimelineRawData, timelineGroups ])

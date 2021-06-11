@@ -561,7 +561,8 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         const google_profile = {...state.google_profile},
               breadcrumbs = {...state.breadCrumbs},
               selectedCategory = {...state.category},
-              layout_id = {...state.layout_id}
+              layout_id = {...state.layout_id},
+              clipboard_assets = [...state.clipboard_assets]
         return {
           ...state,
           ...dashboardIntial,
@@ -569,6 +570,7 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           breadcrumbs,
           selectedCategory,
           layout_id,
+          clipboard_assets 
         }
       case types.SET_MOVE_ASSETS:
         return {
@@ -584,6 +586,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         return { 
           ...state,
           clipboard_assets: action.data
+        }
+      case types.SET_CLIPBOARD_ASSETS_DISPLAY:
+        return { 
+          ...state,
+          display_clipboard: action.flag 
         }
       default:  
       return state
