@@ -249,9 +249,9 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
           dataKey: "cname",
         },
         {
-          width: 150,
-          minWidth: 150,
-          oldWidth: 150,
+          width: 250,
+          minWidth: 250,
+          oldWidth: 250,
           draggable: true,
           label: "Correspondence Address", 
           dataKey: "correspondance_address",
