@@ -13,6 +13,12 @@ export default makeStyles(theme => ({
         '& .MuiTableCell-root .MuiSelect-select.MuiSelect-select':{
             paddingRight: 0 
         },
+        '& .MuiListItem-root':{
+            '& svg.clipboard':{
+                width: 24,
+                height: 24
+            }
+        },
         '& .MuiSelect-select:focus':{
             background: 'none'
         },
@@ -25,13 +31,20 @@ export default makeStyles(theme => ({
             paddingRight: 11 
         }, 
         '& .MuiInput-underline:hover:not(.Mui-disabled):before, .MuiInput-underline:before, .MuiInput-underline:after':{
-            border: 0
+            border: 0 
         },
-        '& .selectedIcon svg':{          
-            position: 'absolute',
-            left: 9,
-            fontSize: '1.3rem',
-            color: 'rgba(255,255,255,0.7)'
+        '& .selectedIcon ':{     
+            '& svg': {
+                position: 'absolute',
+                left: 9,
+                fontSize: '1.3rem',
+                color: 'rgba(255,255,255,0.7)'
+            } ,
+            '& svg.clipboard':{
+                width: 17,
+                height: 17
+            }   
+            
         }
     },
     clipboard: {

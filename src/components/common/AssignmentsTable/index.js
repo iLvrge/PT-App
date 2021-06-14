@@ -252,7 +252,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
           width: 250,
           minWidth: 250,
           oldWidth: 250,
-          draggable: true,
+          draggable: true, 
           label: "Correspondence Address", 
           dataKey: "correspondance_address",
           staticIcon: "",

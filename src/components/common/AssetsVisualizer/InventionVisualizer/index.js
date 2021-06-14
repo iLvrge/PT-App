@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Modal, Backdrop, Paper, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core'
 import Draggable from "react-draggable"
 
@@ -9,6 +9,10 @@ import { Graph3d } from 'vis-graph3d/esnext'
 
 import AssetsList from './AssetsList'
 import Loader from '../../Loader'
+import {
+    setAssetTypeAssignmentAllAssets,
+    setMaintainenceAssetsList
+} from '../../../../actions/patentTrackActions2'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import useStyles from './styles'
 
@@ -19,6 +23,7 @@ import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) => {
     
     const classes = useStyles()
+    const dispatch = useDispatch()
     const graphRef = useRef()
     const graphContainerRef = useRef()  
     const items = useRef(new DataSet())
@@ -119,16 +124,29 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
             if (selectedCompanies.length === 0) return null
             setIsLoadingCharts(true)   
             const list = [];
-            if( assetsSelected.length > 0 && assetsList.length != assetsSelected.length) {  
-                const promise = assetsSelected.map(asset => {
-                    const findIndex = assetsList.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num.toString() == asset.toString() )
-                    if( findIndex !== -1 ) {
-                        if( assetsList[findIndex].appno_doc_num != '' ) {
-                            list.push(assetsList[findIndex].appno_doc_num)
+            
+            if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {  
+                if( assetsSelected.length > 0 ) {
+                    const promise = assetsSelected.map(asset => {
+                        const findIndex = assetsList.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num.toString() == asset.toString() )
+                        if( findIndex !== -1 ) {
+                            if( assetsList[findIndex].appno_doc_num != '' ) {
+                                list.push(assetsList[findIndex].appno_doc_num.toString())
+                            }
                         }
-                    }
-                })
-                await Promise.all(promise)
+                    })
+                    await Promise.all(promise)
+                } else {
+                    const promise = selectedMaintainencePatents.map(asset => {
+                        const findIndex = maintainenceAssetsList.findIndex( row => row.appno_doc_num.toString() == asset[1].toString() || row.grant_doc_num.toString() == asset[0].toString() )
+                        if( findIndex !== -1 ) {
+                            if( maintainenceAssetsList[findIndex].appno_doc_num != '' ) {
+                                list.push(maintainenceAssetsList[findIndex].appno_doc_num.toString())
+                            }
+                        }
+                    })
+                    await Promise.all(promise)
+                }                
             } else {
                 if( assetsList.length > 0 ) {
                     const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
@@ -226,6 +244,23 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
         }
     }, [ visualizerBarSize, analyticsBar, defaultSize ]) 
 
+    const remoteAssetFromList = useCallback(async (asset) => {
+        const list = maintainenceAssetsList.length > 0 ? [...maintainenceAssetsList] : [...assetsList]
+
+        if( list.length > 0 ) {
+            const findIndex = list.findIndex( row => row.asset == asset)
+            if(findIndex !== -1) {
+                list.splice(findIndex, 1)
+                if( maintainenceAssetsList.length > 0 ) {
+                    dispatch(setMaintainenceAssetsList({list, total_records: list.length }, { append: false }))
+                } else {
+                    dispatch( setAssetTypeAssignmentAllAssets({list, total_records: list.length }, false) )
+                }
+            }
+        }
+
+    },[ dispatch, assetsList, maintainenceAssetsList ])
+
     const handleClose = () => {
         setModalOpen(false);
     }
@@ -268,7 +303,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                 >
                     <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title"></DialogTitle>
                     <DialogContent>
-                        <AssetsList loading={assetLoading} assets={assets}/>
+                        <AssetsList loading={assetLoading} assets={assets} remoteAssetFromList={remoteAssetFromList}/>
                     </DialogContent>
                 </Dialog>            
             </div>            

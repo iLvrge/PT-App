@@ -16,7 +16,7 @@ import { setClipboardAssets, setMoveAssets } from '../../../../actions/patentTra
 
 import Loader from '../../Loader'
 
-const AssetsList = ({ assets, loading }) => {
+const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
 
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -43,7 +43,7 @@ const AssetsList = ({ assets, loading }) => {
     }, [ clipboard_assets ])
     const Clipboard = () => {
         return (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="#fff" enableBackground="new 0 0 80 80" viewBox="0 0 80 80"><path d="M40,5c-3.3085938,0-6,2.6914062-6,6v3h-5c-0.4199219,0-0.7949219,0.262207-0.9394531,0.6567383l-0.880188,2.4077148	h-9.0836792C16.9404297,17.0644531,16,18.0048828,16,19.1611328v53.7421875C16,74.0595703,16.9404297,75,18.0966797,75h43.8066406
+            <svg xmlns="http://www.w3.org/2000/svg" className='clipboard' fill="#fff" enableBackground="new 0 0 80 80" viewBox="0 0 80 80"><path d="M40,5c-3.3085938,0-6,2.6914062-6,6v3h-5c-0.4199219,0-0.7949219,0.262207-0.9394531,0.6567383l-0.880188,2.4077148	h-9.0836792C16.9404297,17.0644531,16,18.0048828,16,19.1611328v53.7421875C16,74.0595703,16.9404297,75,18.0966797,75h43.8066406
  C63.0595703,75,64,74.0595703,64,72.9033203V19.1611328c0-1.15625-0.9404297-2.0966797-2.0966797-2.0966797H52.755188
  L51.875,14.6567383C51.7304688,14.262207,51.3554688,14,50.9355469,14H46v-3C46,7.6914062,43.3085938,5,40,5z M53.1289062,22
  c0.3261719,0,0.6328125-0.1591797,0.8193359-0.4267578c0.1875-0.2680664,0.2324219-0.6098633,0.1201172-0.9165039
@@ -108,32 +108,34 @@ const AssetsList = ({ assets, loading }) => {
             setSelectItems(oldItems)
             setSelectedAssets(oldAssets)
             dispatch(setClipboardAssets(oldAssets))
-        } else {  
-            if(display_clipboard === true && event.target.value == 0) {
-                const remAssets = clipboard_assets.reducers( r => r.id != row.id)
+        } else if( event.target.value == 0 ) {
+            if(clipboard_assets.length > 0) {
+                const remAssets = clipboard_assets.reduce( r => r.id != row.id)
                 dispatch(setClipboardAssets(remAssets))
                 setSelectedAssets(remAssets)
-            } else {
-                const currentLayoutIndex = controlList.findIndex(r => r.type == 'menu' && r.category == selectedCategory )
-                if(currentLayoutIndex !== -1) {
-                    setDropOpenAsset(null)
-                    let oldMoveAssets = [...move_assets]
-                    const findIndex = oldMoveAssets.findIndex(row => row.asset == asset)
-                    if(findIndex !== -1) {
-                    oldMoveAssets.splice(findIndex, 1)
-                    }
-                    if( event.target.value != -1 ) {
-                    oldMoveAssets.push({
-                        asset,
-                        move_category: event.target.value,
-                        currentLayout: controlList[currentLayoutIndex].layout_id,
-                        grant_doc_num: row.grant_doc_num,
-                        appno_doc_num: row.appno_doc_num,
-                    })          
-                    }   
-                    dispatch(setMoveAssets(oldMoveAssets)) 
-                }                
+            }            
+            console.log("Remove from list")
+            remoteAssetFromList(row.asset)
+        }
+        
+        const currentLayoutIndex = controlList.findIndex(r => r.type == 'menu' && r.category == selectedCategory )
+        if(currentLayoutIndex !== -1) {
+            setDropOpenAsset(null)
+            let oldMoveAssets = [...move_assets]
+            const findIndex = oldMoveAssets.findIndex(row => row.asset == asset)
+            if(findIndex !== -1) {
+                oldMoveAssets.splice(findIndex, 1)
             }
+            if( event.target.value != -1 ) {
+                oldMoveAssets.push({
+                    asset,
+                    move_category: event.target.value,
+                    currentLayout: controlList[currentLayoutIndex].layout_id,
+                    grant_doc_num: row.grant_doc_num,
+                    appno_doc_num: row.appno_doc_num,
+                })          
+            }   
+            dispatch(setMoveAssets(oldMoveAssets)) 
         }
         /*  */
     }, [ dispatch, controlList, move_assets, display_clipboard, selectItems, selectedAssets, clipboard_assets ])

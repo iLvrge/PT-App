@@ -813,6 +813,11 @@ a.maintain svg.clean_encumbrances path{
   max-height: 200px;
 }
 
+.MuiListItem-root svg.clipboard{
+  width: 24px;
+  height: 24px
+}
+
 @media(min-width:1200px){.pricing .lab_item:hover h4{display:none}.pricing .lab_item:hover p.font-16{display:block}}
 @media(min-width:992px){.pricing .lab_item{width:202.93px;height:234.15px}}
 @media(min-width:768px) and (max-width:1199.98px){.pricing .lab_item{width:199.66px;height:230.38px}}

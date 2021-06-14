@@ -24,7 +24,8 @@ import {
   setChildSelectedAssetsPatents,
   setSlackMessages,
   setMoveAssets,
-  setTemplateDocument
+  setTemplateDocument,
+  setMaintainenceAssetsList
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -41,7 +42,7 @@ import {
   setDriveTemplateFrameMode
 } from "../../../actions/uiActions";
 
-import { numberWithCommas, applicationFormat } from "../../../utils/numbers";
+import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/numbers";
 
 import { getTokenStorage } from "../../../utils/tokenStorage";
 
@@ -87,36 +88,8 @@ const MaintainenceAssetsList = ({
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
   const move_assets = useSelector(state => state.patenTrack2.move_assets)
   const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list) 
-
-  useEffect(() => {
-    setAssetsLists(assets)
-  }, [ assets ])
-
-  /**
-   * Adding channel to assets data
-   */
-
-  useEffect(() => {
-    const checkAssetChannel = async () => {
-      if(assets.list.length > 0 && slack_channel_list.length > 0) {
-        let findChannel = false, oldAssets = [...assets.list]
-        const promises = slack_channel_list.map( channelAsset => {
-          const findIndex = oldAssets.findIndex(rowAsset => rowAsset.asset == channelAsset)
-          if(findIndex !== -1) {
-            oldAssets[findIndex]['channel'] = channelAsset
-            if(findChannel === false) {
-              findChannel = true
-            }
-          }
-        })
-        await Promise.all(promises)
-        if(findChannel === true){
-          setAssetsLists({list: oldAssets, total_records: assets.total_records})
-        }      
-      }
-    }    
-    checkAssetChannel()
-  },[ slack_channel_list, assets])
+  const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
+  const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
 
   const dropdownList = [
     {
@@ -259,6 +232,78 @@ const MaintainenceAssetsList = ({
     },
   ];
 
+  const [ tableColumns, setTableColumns ] = useState(COLUMNS)
+
+  useEffect(() => {
+    if( display_clipboard === false ){
+      setAssetsLists(assets)
+    }    
+  }, [ display_clipboard, assets ])
+
+ 
+  useEffect(() => {
+    if( display_clipboard === true &&  clipboard_assets.length > 0 ) {
+      setTableColumns([...COLUMNS, {
+        width: 400,
+        minWidth: 400,
+        oldWidth: 400,
+        draggable: true,
+        label: "Title",
+        dataKey: "title",
+        staticIcon: "",
+        format: capitalize
+
+      }, {
+        width: 60,
+        minWidth: 60,
+        oldWidth: 60,
+        draggable: true,
+        label: "CPC",
+        dataKey: "cpc_code",
+      }, {
+        width: 400,
+        minWidth: 400,
+        oldWidth: 400,
+        draggable: true,
+        label: "CPC description",
+        dataKey: "defination",
+        staticIcon: "",
+        format: capitalize
+      }])
+      //console.log("clipboard_assets", clipboard_assets)
+      setWidth(1000)
+      dispatch(setMaintainenceAssetsList({list: clipboard_assets, total_records: clipboard_assets.length}, { append: false }))
+      setAssetsLists({list: clipboard_assets, total_records: clipboard_assets.length})
+    }
+  }, [ dispatch,  display_clipboard, clipboard_assets])
+
+  /**
+   * Adding channel to assets data
+   */
+
+  useEffect(() => {
+    const checkAssetChannel = async () => {
+      if(assets.list.length > 0 && slack_channel_list.length > 0) {
+        let findChannel = false, oldAssets = [...assets.list]
+        const promises = slack_channel_list.map( channelAsset => {
+          const findIndex = oldAssets.findIndex(rowAsset => rowAsset.asset == channelAsset)
+          if(findIndex !== -1) {
+            oldAssets[findIndex]['channel'] = channelAsset
+            if(findChannel === false) {
+              findChannel = true
+            }
+          }
+        })
+        await Promise.all(promises)
+        if(findChannel === true){
+          setAssetsLists({list: oldAssets, total_records: assets.total_records})
+        }      
+      }
+    }    
+    checkAssetChannel()
+  },[ slack_channel_list, assets])
+
+  
   const callSelectedAssets = useCallback(({ patent, application, asset }) => {
     /* const selectedItems = [];
     if (grant_doc_num != "") {
@@ -444,7 +489,7 @@ const MaintainenceAssetsList = ({
         dropdownSelections={move_assets}
         rowHeight={rowHeight}
         headerHeight={headerRowHeight}
-        columns={COLUMNS}
+        columns={tableColumns}
         onSelect={handleClickSelectCheckbox}
         onSelectAll={handleSelectAll}
         defaultSelectAll={selectedAll}
