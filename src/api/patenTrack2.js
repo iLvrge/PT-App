@@ -155,21 +155,21 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/customers/${type}/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
   }
 
-  static getCPC(type, companies, tabs, customers, rfIDs) { 
-    return axios.get(`${base_new_api_url}/assets/cpc?type=${type}&companies=${JSON.stringify(companies)}&activities=${JSON.stringify(tabs)}&parties=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
+  static getCPC( form ) { 
+    return axios.post(`${base_new_api_url}/assets/cpc`, form, getFormUrlHeader())
   }
 
-  static getAssetsByCPCCode(year, cpcCode, type, companies, tabs, customers, rfIDs) { 
-    return axios.get(`${base_new_api_url}/assets/cpc/${year}/${cpcCode}?type=${type}&companies=${JSON.stringify(companies)}&activities=${JSON.stringify(tabs)}&parties=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
+  static getAssetsByCPCCode( year, cpcCode, form ) { 
+    return axios.post(`${base_new_api_url}/assets/cpc/${year}/${cpcCode}`, form, getFormUrlHeader())
   }
 
   static getCustomerTransactions(type, companies, tabs, customers) { 
     return axios.get(`${base_new_api_url}/customers/${type}/transactions?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}`, getHeader())
-  }
+  } 
 
   static getCustomerParties(type, companies, tabs, customerType) {  
     return axios.get(`${base_new_api_url}/customers/${type}/parties?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&t=${customerType}`, getHeader())
-  }
+  } 
 
   static getCustomerActivites(type, companies) { 
     return axios.get(`${base_new_api_url}/customers/${type}/activites?companies=${JSON.stringify(companies)}`, getHeader())

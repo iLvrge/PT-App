@@ -39,13 +39,13 @@ const options = {
   zoomFriction: 30,
   zoomMin: 1000 * 60 * 60 * 24 * 7, // 7 days
   /* zoomMax: 1000 * 60 * 60 * 24 * 30 * 3, */ // 3months
-  cluster: {
+  /* cluster: {
   //   titleTemplate: 'Cluster containing {count} events.<br/> Zoom in to see the individual events.',
     showStipes: false,
     clusterCriteria: (firstItem, secondItem) => {
       return ( firstItem.rawData.company === secondItem.rawData.company &&  firstItem.rawData.tab_id == secondItem.rawData.tab_id)
     }
-  },
+  }, */
   template: function(item, element, data) {
     if (data.isCluster) {
       return data.items.length > 0 ? `<span class="cluster-header"><span class="cluster-image cluster-${data.items[0].assetType}"></span><span>${data.items.length} ${data.items[0].companyName.length > 0 ? capitalize(data.items[0].assetType)  : ''} transactions</span></span>` : ``
@@ -130,7 +130,7 @@ const TimelineContainer = ({ data }) => {
     
     const assetType = Number.isInteger(assetsCustomer.tab_id) ? oldConvertTabIdToAssetType(assetsCustomer.tab_id) : 'default'
     const companyName =  selectedWithName.filter( company => assetsCustomer.company == company.id ? company.name : '')
-    const customerFirstName = assetsCustomer.tab_id == 9 ? assetsCustomer.customerName.split(' ')[0] : assetsCustomer.customerName
+    const customerFirstName = assetsCustomer.tab_id == 10 ? assetsCustomer.customerName.split(' ')[0] : assetsCustomer.customerName
     return ({
       
       type: 'point',
@@ -341,8 +341,8 @@ const TimelineContainer = ({ data }) => {
   useEffect(() => {
     if (isLoadingTimelineRawData) return null
     const clusteredItems = timelineRawData.reduce((result, dataItem) => {
-      const itemName = dataItem.tab_id == 9 ? dataItem.customerName.split(' ')[0] : dataItem.customerName
-
+      const itemName = dataItem.tab_id == 10 ? dataItem.customerName.split(' ')[0] : dataItem.customerName
+       /*
       if (result[`${itemName}_${dataItem.exec_dt}`]) {
         result[`${itemName}_${dataItem.exec_dt}`].collection.push({ id: dataItem.id, totalAssets: dataItem.totalAssets })
         result[`${itemName}_${dataItem.exec_dt}`].totalAssets = result[`${itemName}_${dataItem.exec_dt}`].totalAssets + dataItem.totalAssets
@@ -355,7 +355,8 @@ const TimelineContainer = ({ data }) => {
       `
       } else {
         result[`${itemName}_${dataItem.exec_dt}`] = convertDataToItem(dataItem)
-      }
+      }  */
+      result[`${itemName}_${dataItem.exec_dt}`] = convertDataToItem(dataItem)
       return result 
     }, {})
     const convertedItems = Object.values(clusteredItems).sort((a, b) => (new Date(a.start) > new Date(b.start)))  
@@ -400,7 +401,7 @@ const TimelineContainer = ({ data }) => {
   }, [ timelineRawData, isLoadingTimelineRawData, timelineGroups ])
 
   /**
-   * return component
+   * return component 
    */
 
   return (

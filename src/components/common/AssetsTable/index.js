@@ -183,35 +183,37 @@ const AssetsTable = ({
   }, [ selectedCategory ]) */
 
   useEffect(() => {
-    if (standalone) {
-      const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-        tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-        customers =
-          selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
-        assignments =
-          selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
-      if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
-        dispatch(
-          getCustomerAssets(
-            selectedCategory == '' ? '' : selectedCategory,
-            companies,
-            tabs,
-            customers,
-            assignments,
-            false,
-          ),
-        );
-        setWidth(800)
+    if(display_clipboard === false) {
+      if (standalone) {
+        const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+          tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+          customers =
+            selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
+          assignments =
+            selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
+        if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
+          dispatch(
+            getCustomerAssets(
+              selectedCategory == '' ? '' : selectedCategory,
+              companies,
+              tabs,
+              customers,
+              assignments,
+              false,
+            ),
+          );
+          setWidth(800)
+        } else {
+          dispatch(
+            setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
+          );
+        }
       } else {
-        dispatch(
-          setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
-        );
+        if (transactionId != null) {
+          dispatch(getAssetTypeAssignmentAssets(transactionId, false));
+        }
       }
-    } else {
-      if (transactionId != null) {
-        dispatch(getAssetTypeAssignmentAssets(transactionId, false));
-      }
-    } 
+    }     
   }, [
     dispatch,
     selectedCompanies,
@@ -221,7 +223,8 @@ const AssetsTable = ({
     selectedAssetCompanies,
     selectedAssetCompaniesAll,
     selectedAssetAssignmentsAll,
-    selectedAssetAssignments    
+    selectedAssetAssignments,
+    display_clipboard    
   ]);
 
   useEffect(() => {

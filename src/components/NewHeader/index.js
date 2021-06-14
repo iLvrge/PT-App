@@ -67,9 +67,27 @@ import { setAssetTypeAssignments,
   setResetAll,
   getSlackProfile,
   setGoogleProfile,
-  setClipboardAssetsDisplay
+  setClipboardAssetsDisplay,  
+  setChannelID,
  } from '../../actions/patentTrackActions2'
-import { setControlModal, setTimelineSelectedItem, setTimelineSelectedAsset } from '../../actions/uiActions'
+
+ import {  
+  setAssetFamily,
+  setConnectionBoxView,
+  setPDFView,
+  setFamilyItemDisplay,
+ } from '../../actions/patenTrackActions'
+
+import { 
+  setControlModal, 
+  setTimelineSelectedItem, 
+  setTimelineSelectedAsset, 
+  setDriveTemplateFrameMode,
+  toggleFamilyMode,
+  toggleFamilyItemMode,
+  toggleUsptoMode,
+  toggleLifeSpanMode,
+} from '../../actions/uiActions'
 
 const NewHeader = () => {
   const classes = useStyles()
@@ -317,6 +335,21 @@ const NewHeader = () => {
   const handleClipboard = useCallback(() => {
     if( clipboard_assets.length > 0 ) {
       dispatch(setClipboardAssetsDisplay( !display_clipboard ))
+
+      if( !display_clipboard === false ) {
+        dispatch(setAssetsIllustration(null))
+        dispatch(setSelectedAssetsPatents([]))
+        dispatch(setAssetFamily([]))
+        dispatch(setFamilyItemDisplay({}))
+        dispatch(setChannelID(''))
+        dispatch(setConnectionBoxView(false))
+        dispatch(setPDFView(false))
+        dispatch(toggleUsptoMode(false))
+        dispatch(toggleLifeSpanMode(false))
+        dispatch(toggleFamilyMode(false))
+        dispatch(toggleFamilyItemMode(false))
+        dispatch(setDriveTemplateFrameMode(false))
+      }
     }
   }, [ dispatch, clipboard_assets, display_clipboard ])
 

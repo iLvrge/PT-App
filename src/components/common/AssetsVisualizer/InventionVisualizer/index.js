@@ -12,8 +12,9 @@ import Loader from '../../Loader'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import useStyles from './styles'
 
+import { capitalize } from "../../../../utils/numbers";
+
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
-import { setAssets } from '../../../../actions/patenTrackActions'
 
 const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) => {
     
@@ -26,13 +27,16 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
     const [ openModal, setModalOpen ] = useState(false)
     const [ assetLoading, setAssetsLoading ] = useState(false)
     const [ assets, setAssets ] = useState([])
+    const [ filterList, setFilterList ] = useState([])
 
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const selectedAssetsTransactionLifeSpan = useSelector( state => state.patenTrack2.transaction_life_span )
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected ) //companies
-    const assetTypesSelected = useSelector(state => state.patenTrack2.assetTypes.selected) //activities
-    const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected ) //parties + inventors
-    const selectedAssetAssignments = useSelector(state => state.patenTrack2.assetTypeAssignments.selected) // Transactions
+    const assetsList = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list) //Assets List
+    const maintainenceAssetsList = useSelector( state => state.patenTrack2.maintainenceAssetsList.list )
+    const selectedMaintainencePatents = useSelector( state => state.patenTrack2.selectedMaintainencePatents )
+    const assetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected) //Assets Selected
+    
 
     const [ graphRawData, setGraphRawData ] = useState([])
     const [ graphRawGroupData, setGraphRawGroupData ] = useState([])
@@ -67,13 +71,13 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                 origin = origin.split('@@').join('<br/>')
             }
 
-            return `<div class="graphTooltip">Filling Year: ${point.x}<br/>Patents: ${point.data.patent}<br/>${point.data.application_number > 0 ? 'Applications: '+ point.data.application_number +'<br/>' : ''}Origin: ${origin}<br/> Subject Matter : ${defination}</div>`
+            return `<div class="graphTooltip">Filling Year: ${point.x}<br/>Patents: ${point.data.patent}<br/>${point.data.application_number > 0 ? 'Applications: '+ point.data.application_number +'<br/>' : ''}Origin: ${origin != null ? origin : ''}<br/> Subject Matter : <div class='noWrapText'>${capitalize(defination)}</div></div>`
         },
         yValueLabel: function(value) {
             const findIndex = graphRawGroupData.findIndex( row => row.id == value)
             if( findIndex !== -1 ) {
                 return graphRawGroupData[findIndex].cpc_code
-            } 
+            }  
             return value;
         },
         gridColor: '#e5e5e51c',
@@ -102,24 +106,52 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
             const code = graphRawGroupData[findIndex].cpc_code
             setModalOpen(true)
             setAssetsLoading(true)
-            const {data} = await PatenTrackApi.getAssetsByCPCCode(point.x, code, selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments)
+            const form = new FormData()
+            form.append("list", JSON.stringify(filterList))
+            const {data} = await PatenTrackApi.getAssetsByCPCCode(point.x, code,form) 
             setAssetsLoading(false)
             setAssets(data.list)
         }
-    },[ graphRawGroupData, selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments ])
+    },[ graphRawGroupData, filterList ])
 
     useEffect(() => {
         const getChartData = async () => {
             if (selectedCompanies.length === 0) return null
             setIsLoadingCharts(true)   
-            const {data} = await PatenTrackApi.getCPC(selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments)
-            setIsLoadingCharts(false)
-            setGraphRawData(data.list)
-            setGraphRawGroupData(data.group)
+            const list = [];
+            if( assetsSelected.length > 0 && assetsList.length != assetsSelected.length) {  
+                const promise = assetsSelected.map(asset => {
+                    const findIndex = assetsList.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num.toString() == asset.toString() )
+                    if( findIndex !== -1 ) {
+                        if( assetsList[findIndex].appno_doc_num != '' ) {
+                            list.push(assetsList[findIndex].appno_doc_num)
+                        }
+                    }
+                })
+                await Promise.all(promise)
+            } else {
+                if( assetsList.length > 0 ) {
+                    const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
+                    await Promise.all(promise)
+                } else if ( maintainenceAssetsList.length > 0 ) {
+                    const promise = maintainenceAssetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
+                    await Promise.all(promise)
+                }
+            }
+
+            if( list.length > 0 ) {
+                setFilterList(list)
+                const form = new FormData()
+                form.append("list", JSON.stringify(list))
+                const {data} = await PatenTrackApi.getCPC(form) 
+                setIsLoadingCharts(false)
+                setGraphRawData(data.list)
+                setGraphRawGroupData(data.group)
+            } 
         }
         getChartData()
         //console.log( "getChartData", selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments )
-    }, [selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments]) 
+    }, [selectedCategory, selectedCategory, selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected ]) 
 
     useEffect(() => {        
         const generateChart = async () => {
