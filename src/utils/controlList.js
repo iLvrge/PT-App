@@ -51,13 +51,13 @@ export const controlList = [
     },
     {
         type: 'menu',
-        mainHeading: 'Correct Details',
+        mainHeading: 'Correct Names',
         subHeading: 'Get a list of patents and assignments filed with incorrect address and correct them automatically.',
         svg: '',
         image: `https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/correct_address.png`,
         class: 'hex-4',
-        breadCrumbs: 'Maintenance > Correct Details',
-        category: 'correct_details',
+        breadCrumbs: 'Maintenance > Correct Names',
+        category: 'correct_names',
         layout_id: 4,
         showSvg: false,
         mainHeadingClass: 'maintain',
@@ -201,11 +201,12 @@ export const controlList = [
         image: `https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png`,
         class: 'hex-16',
         breadCrumbs: 'Financing > Secure a Loan',
-        category: 'secure_a_loan',
+        /*category: 'secure_a_loan',*/
+        category: 'correct_address',
         layout_id: 12,
         showSvg: false,
         mainHeadingClass: 'bank',
-        redirect: routeList.maintainence
+        redirect: routeList.correct_address
     },
     {
         type: 'menu',

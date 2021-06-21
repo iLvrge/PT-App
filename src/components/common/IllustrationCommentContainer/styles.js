@@ -3,8 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 export default makeStyles(theme => ({
     root:{
         width: '100%',
-        height: '100%',
-        paddingTop: 6,        
+        height: '100%', 
         '& .MuiInputLabel-root':{
             display: 'inline-flex',
             paddingLeft: 6,

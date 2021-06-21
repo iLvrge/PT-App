@@ -24,6 +24,7 @@ function PdfViewer(props) {
   const [ mainPdf, setMainPdf ] = useState('about:blank')
   const [ formPdf, setFormPdf ] = useState('about:blank')
   const [ agreementPdf, setAgreementPdf ] = useState('about:blank')
+  const [ showTabs, setShowTabs ] = useState(true)
   const [ fullView, setFullView ] = useState('')
   const [numPages, setNumPages] = useState(null)
   const [pageNumber, setPageNumber] = useState(1)
@@ -35,11 +36,18 @@ function PdfViewer(props) {
     const iframeElement = parentElement.querySelector(`iframe`)
     if(iframeElement != null) {
         /* const height = props.fullScreen === false ? parentElement.parentNode.clientHeight : ( props.pdfFile.agreement == '' || props.pdfFile.agreement == null) ?  window.innerHeight : parentElement.clientHeight */
-      const height =  window.innerHeight
-      iframeElement.style.height = height - 43 + 'px'
+      const height =  window.innerHeight 
+      console.log('checkHeight', typeof props.show_tab, height - 93)
+      iframeElement.style.height =  `${typeof props.show_tab != undefined ? height - 97 : height - 43}px` 
       parentElement.style.height = '100%'
     }    
   } 
+
+  useEffect(() => {
+    if(typeof props.show_tab != undefined) {
+      setShowTabs(props.show_tab)
+    }
+  }, [ props ])
 
   useEffect(()=> {
     if(props.pdfView == 'true') {
@@ -134,14 +142,14 @@ function PdfViewer(props) {
           }   
         </div>
         {
-          pdfTab < 3 && (mainPdf != 'about:blank' || formPdf != 'about:blank' ||  agreementPdf != 'about:blank' )
+          pdfTab < 3 && showTabs === true && (mainPdf != 'about:blank' || formPdf != 'about:blank' ||  agreementPdf != 'about:blank' )
           ?
             <Tabs
               value={pdfTab}
               onChange={(e, id) => setPdfTabIndex(id)}
               className={classes.tabs}
               variant={'scrollable'}
-            >
+            > 
               {
                 [ 'Agreement', 'Form', 'Main' ].map((tab) => (
                   <Tab

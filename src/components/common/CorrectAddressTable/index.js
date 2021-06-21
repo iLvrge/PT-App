@@ -7,12 +7,11 @@ import useStyles from './styles'
 import VirtualizedTable from '../VirtualizedTable'
 import { DEFAULT_CUSTOMERS_LIMIT } from '../../../api/patenTrack2'
 import {
-    getAssetTypeIDCompanies,
-    getCustomerParties,
+    getCustomerAdressTransactions,
     setAssetTypeCompanies,
-    setAssetTypesSelect,
-    setAllAssignmentCustomers,
-    setSelectAssignmentCustomers,
+    setSelectedAssetAddressTransactions,
+    setAssetAddressTransactionsSelectAll,
+    setAssetAddressTransactionsSelectedRow,
     setAssetTypeCustomerSelectedRow,
     setAssetTypeChildCustomerSelectedRow,
     setChildSelectedAssetsTransactions,
@@ -21,7 +20,8 @@ import {
     setMainCompaniesRowSelect,
     setChildSelectedAssetsPatents,
     setSelectedAssetsPatents,
-    setSelectedAssetsTransactions
+    setSelectedAssetsTransactions,
+    setAllGroupRfIDs
   } from '../../../actions/patentTrackActions2'
 
   import {
@@ -37,7 +37,7 @@ import {
 
 import ChildTable from './ChildTable'
 
-const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag, parentBar, customerType }) => {
+const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag, parentBar, customerType }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
@@ -62,11 +62,14 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     const assetTypesSelectAll = useSelector(state => state.patenTrack2.assetTypes.selectAll)
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
-    const assetTypeCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.list)
-    const totalRecords = useSelector(state => state.patenTrack2.assetTypeCompanies.total_records)
-    /* const assetTypeCompaniesSelectedRow = useSelector(state => state.patenTrack2.assetTypeCompanies.row_select) */
-    const assetTypeCompaniesSelected = useSelector(state => state.patenTrack2.assetTypeCompanies.selected)
-    const assetTypeCompaniesLoading = useSelector(state => state.patenTrack2.assetTypeCompanies.loading)
+
+
+    const assetTypeAddress = useSelector(state => state.patenTrack2.assetTypeAddress.list)
+    const totalRecords = useSelector(state => state.patenTrack2.assetTypeAddress.total_records)
+    const assetTypeAddressSelected = useSelector(state => state.patenTrack2.assetTypeAddress.selected)
+    const assetTypeAddressLoading = useSelector(state => state.patenTrack2.assetTypeAddress.loading)
+
+
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
     const [ data, setData ] = useState( [] )
 
@@ -86,12 +89,12 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             disableSort: true
         },
         {
-            width: 200,
-            minWidth: 200,
-            oldWidth: 200,
+            width: 400,
+            minWidth: 400,
+            oldWidth: 400,
             draggable: true,
-            label: 'Parties',
-            dataKey: 'entityName', 
+            label: 'Address',
+            dataKey: 'address', 
             badge: true,   
             align: 'left'         
         },
@@ -105,19 +108,38 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     ]
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)
     useEffect(() => {
-        if( assetTypeCompanies.length > 0 ) {
-            setGrandTotal(assetTypeCompanies[assetTypeCompanies.length - 1].grand_total)
+        if( assetTypeAddress.length > 0 ) {
+            setGrandTotal(assetTypeAddress[assetTypeAddress.length - 1].grand_total)
         } else {
             setGrandTotal(0)
         }
-    }, [ assetTypeCompanies ]) 
+    }, [ assetTypeAddress ]) 
     
 
     useEffect(() => {
-        if(assetTypeCompaniesSelected.length > 0 && (selectItems.length == 0 || selectItems.length != assetTypeCompaniesSelected.length) ){
-            setSelectItems(assetTypeCompaniesSelected)
+        if(assetTypeAddressSelected.length > 0 && (selectItems.length == 0 || selectItems.length != assetTypeAddressSelected.length) ){
+            setSelectItems(assetTypeAddressSelected)
         }
-    }, [ assetTypeCompaniesSelected, selectItems ]) 
+    }, [ assetTypeAddressSelected, selectItems ]) 
+
+
+    useEffect(() => {
+        const getAllGroupIDs = async() => {
+            if(assetTypeAddressSelected.length > 0) {
+                let allRFIDS = [];
+                const promise =  assetTypeAddressSelected.map( id => {
+                    const findIndex = assetTypeAddress.findIndex( address => address.id == id)
+                    if(findIndex !== -1) {
+                        const groupIDs = assetTypeAddress[findIndex].group_ids.toString().split(',')
+                        allRFIDS = [...allRFIDS, ...groupIDs]
+                    }
+                })
+                await Promise.all(promise)
+                dispatch(setAllGroupRfIDs(allRFIDS))
+            }
+        }
+        getAllGroupIDs()
+    }, [ dispatch, assetTypeAddressSelected ])
 
     useEffect(() => {
         if(standalone) {            
@@ -125,11 +147,10 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
                 tabs = assetTypesSelectAll === true ? [] : assetTypesSelected
             if(selectedCompaniesAll === true || selectedCompanies.length > 0) {
                 dispatch(
-                    getCustomerParties(
-                        selectedCategory == '' ? '' : selectedCategory,
+                    getCustomerAdressTransactions(
                         companies, 
                         tabs, 
-                        customerType,
+                        [],
                         false 
                     )
                 ) 
@@ -137,7 +158,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
                 dispatch(setAssetTypeCompanies({list: [], total_records: 0}))
             }       
         }
-    }, [ dispatch, selectedCompanies, selectedCompaniesAll, assetTypesSelectAll, assetTypesSelected, customerType ]) 
+    }, [ dispatch, selectedCompanies, selectedCompaniesAll, assetTypesSelectAll, assetTypesSelected ]) 
 
     const resizeColumnsWidth = useCallback((dataKey, data) => {
         let previousColumns = [...headerColumns]
@@ -155,21 +176,21 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         const { checked } = event.target;
         if(!checked) {
             setSelectItems([])
-            dispatch( setSelectAssignmentCustomers([] ))
+            dispatch( setSelectedAssetAddressTransactions([] ))
         } else {
             let items = [], list = [] ;
-            if(standalone && assetTypeCompanies.length > 0) {
-                list = [...assetTypeCompanies]
+            if(standalone && assetTypeAddress.length > 0) {
+                list = [...assetTypeAddress]
             } else if(!standalone && data.length > 0) {
                 list = [...data]
             }
             list.forEach( item => items.push(item.id))
             setSelectItems(items)
-            dispatch( setSelectAssignmentCustomers(items) )
+            dispatch( setSelectedAssetAddressTransactions(items) )
         }
         setSelectAll(checked)
-        dispatch( setAllAssignmentCustomers( checked ) )
-    }, [ dispatch, standalone, assetTypeCompanies, data ])
+        dispatch( setAssetAddressTransactionsSelectAll( checked ) )
+    }, [ dispatch, standalone, assetTypeAddress, data ])
 
     const onHandleClickRow = useCallback((e,  row) => {
         e.preventDefault()
@@ -184,12 +205,12 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
                 )
             }
             history.push({
-                hash: updateHashLocation(location, 'otherParties', oldSelection).join('&')
+                hash: updateHashLocation(location, 'address', oldSelection).join('&')
             })
             setSelectItems(oldSelection)
             setSelectAll(false)
-            dispatch( setAllAssignmentCustomers(assetTypeCompanies.length == oldSelection.length ||  data.length == oldSelection.length ? true : false ) )
-            dispatch( setSelectAssignmentCustomers(oldSelection) )
+            dispatch( setAssetAddressTransactionsSelectAll(assetTypeAddress.length == oldSelection.length ||  data.length == oldSelection.length ? true : false ) )
+            dispatch( setSelectedAssetAddressTransactions(oldSelection) )
         }  else {
             
             const element = e.target.closest('div.ReactVirtualized__Table__rowColumn')
@@ -229,17 +250,17 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         dispatch(toggleFamilyItemMode( false )) 
     }
 
-    if ((!standalone && assetTypesCompaniesLoading) || (standalone && assetTypeCompaniesLoading)) return <Loader />
+    if ((!standalone && assetTypeAddressLoading) || (standalone && assetTypeAddressLoading)) return <Loader />
 
     return (
-        <Paper className={classes.root} square id={`assets_type_companies`}>
+        <Paper className={classes.root} square id={`assets_type_address`}>
             <VirtualizedTable
             classes={classes}
             selected={selectItems}
             rowSelected={selectedRow}
 			selectedIndex={currentSelection}
             selectedKey={'id'}
-            rows={assetTypeCompanies}
+            rows={assetTypeAddress}
             rowHeight={rowHeight}
             headerHeight={headerRowHeight}  
             columns={headerColumns}
@@ -254,7 +275,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             resizeColumnsWidth={resizeColumnsWidth}
             showIsIndeterminate={false}
             renderCollapsableComponent={
-                <ChildTable partiesId={currentSelection} headerRowDisabled={true} />
+                <ChildTable addressId={currentSelection} headerRowDisabled={true} />
             }
             /* forceChildWaitCall={true} */
             totalRows={totalRecords}
@@ -273,4 +294,4 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
 }
 
 
-export default CustomerTable
+export default CorrectAddressTable

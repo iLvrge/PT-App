@@ -231,5 +231,10 @@ export default makeStyles(theme => ({
   message_time: {
     fontSize: '0.65rem',
     marginLeft: 5
-  } 
+  } ,
+  btn:{
+    position: 'absolute',
+    right: 10, 
+    bottom: 10
+  }
 }))

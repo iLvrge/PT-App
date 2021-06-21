@@ -184,6 +184,8 @@ const AssetsTable = ({
 
   useEffect(() => {
     if(display_clipboard === false) {
+      setTableColumns([...COLUMNS])
+      setWidth(800)
       if (standalone) {
         const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
           tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
@@ -262,7 +264,7 @@ const AssetsTable = ({
         format: capitalize
       }])
       //console.log("clipboard_assets", clipboard_assets)
-      setWidth(1000)
+      setWidth(1500)
       dispatch(setAssetTypeAssignmentAllAssets({list: clipboard_assets, total_records: clipboard_assets.length}))
     }
   }, [ dispatch,  display_clipboard, clipboard_assets])

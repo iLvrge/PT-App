@@ -114,7 +114,6 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
                 dispatch(setClipboardAssets(remAssets))
                 setSelectedAssets(remAssets)
             }            
-            console.log("Remove from list")
             remoteAssetFromList(row.asset)
         }
         

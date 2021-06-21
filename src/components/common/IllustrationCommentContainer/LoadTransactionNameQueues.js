@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import moment from 'moment'
 import { Paper, TextField, InputLabel } from "@material-ui/core";
 import Loader from "../Loader";
@@ -7,83 +7,101 @@ import useStyles from "./styles";
 import VirtualizedTable from "../VirtualizedTable";
 import { numberWithCommas, applicationFormat } from "../../../utils/numbers";
 
-const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
-    const classes = useStyles();
+import {
+    setFixedTransactionName
+  } from '../../../actions/patentTrackActions2'
+
+const LoadTransactionNameQueues = ({}) => {
+    const classes = useStyles()
+    const dispatch = useDispatch()
     const [rowHeight, setRowHeight] = useState(40)
     const [headerRowHeight, setHeaderRowHeight] = useState(47)
-    const [width, setWidth] = useState(800);
+    const [width, setWidth] = useState(1200)
     const [currentSelection, setCurrentSelection] = useState(null)
-    const [assets, setAssets] = useState([])
+    const [rows, setRows] = useState([])
     const [selectedAll, setSelectAll] = useState(false)
     const [selectItems, setSelectItems] = useState([])
     const [selectedRow, setSelectedRow] = useState([])
-    const [ name, setName ] = useState(`${moment(new Date()).format('MM-DD-YYYY')}_Patent_Maintenance_Fee_Bulk_File`)
+    const nameQueues = useSelector(state => state.patenTrack2.nameQueues)
 
     const COLUMNS = [
+        { 
+            width: 29, 
+            minWidth: 29,   
+            label: '',
+            dataKey: 'id',
+            role: 'radio',
+            disableSort: true
+        },
         {
             width: 80,
             minWidth: 80,   
-            label: "Patent #",
-            dataKey: "patent",
-            staticIcon: "US",
-            format: numberWithCommas,
+            label: "Rf/Id",
+            dataKey: "id",
             align: "left",
-            paddingLeft: 20
+        },
+        {
+            width: 200,
+            minWidth: 200,   
+            label: "Current Assignee Name",
+            dataKey: "name",
+            align: "left",
+        },
+        {
+            width: 200,
+            minWidth: 200,   
+            label: "New Name",
+            dataKey: "new_name",
+            align: "left",
+        },
+        {
+            width: 130,
+            minWidth: 130,   
+            label: "Conveyance Type",
+            dataKey: "convey_ty",
+            align: "left",
         },
         {
             width: 110,
             minWidth: 110,   
-            label: "Application #",
-            dataKey: "application",
-            staticIcon: "US",
-            format: applicationFormat,
+            label: "Executed Date",
+            dataKey: "exec_dt",
             align: "left",
         },
         {
-            width: 135,  
-            minWidth: 135,      
-            label: "Attorney Docket #",
-            dataKey: "attorney",
+            width: 110,
+            minWidth: 110,   
+            label: "Recorded Date",
+            dataKey: "record_dt",
             align: "left",
         },
         {
-            width: 80,  
-            minWidth: 80,          
-            label: "Fee Code",
-            dataKey: "fee_code",
-            align: "left",		  
-        },
-        {
-            width: 70,      
-            minWidth: 70,   
-            label: "Fee Amount",
-            dataKey: "fee_amount",
-            staticIcon: "$",
+            width: 100,
+            minWidth: 100,   
+            label: "Assets",
+            dataKey: "assets",
+            staticIcon: "",
             format: numberWithCommas,
+            align: "left",
+        },        
+        {
+            width: 120,      
+            minWidth: 120,   
+            label: "Original Correspondence",
+            dataKey: "original_correspondence",
             align: "left",		  
-        },
+        }
     ]
 
-    useEffect(() => {
-        const maintainenceAssets = []
-        if( rows.length > 0 ) {
-            rows.map( row => {
-                maintainenceAssets.push({
-                    id: ' ',
-                    patent: row[0],
-                    application: row[1],
-                    attorney: row[2]+' ',
-                    fee_code: row[3],
-                    fee_amount: row[4],
-                })
-            })
-        }
-        setAssets(maintainenceAssets)
-    }, [ rows ])
+    useEffect(() => {        
+        setRows(nameQueues)
+    }, [ nameQueues ])
 
-    const handleClickSelectCheckbox = () => {
-
-    }
+    const handleClickSelectCheckbox = useCallback((event, row) => {
+        event.preventDefault()
+        setSelectItems([row.id])
+        dispatch(setFixedTransactionName([[row.id, row.new_name]]))
+    }, [dispatch])
 
     const onHandleSelectAll = () => {
         
@@ -109,19 +127,19 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
                     selected={selectItems}
                     rowSelected={selectedRow}
                     selectedIndex={currentSelection}
-                    selectedKey={"asset"}
-                    rows={assets}
+                    selectedKey={"id"}
+                    rows={rows}
                     rowHeight={rowHeight}
-                    headerHeight={headerRowHeight}
+                    headerHeight={headerRowHeight}  
                     columns={COLUMNS}
                     onSelect={handleClickSelectCheckbox}
                     onSelectAll={onHandleSelectAll}
                     defaultSelectAll={selectedAll}
                     collapsable={false}
                     showIsIndeterminate={false}
-                    totalRows={assets.length}
-                    defaultSortField={`asset`}
-                    defaultSortDirection={`desc`}
+                    totalRows={rows.length}
+                    /* defaultSortField={`exec_dt`}
+                    defaultSortDirection={`desc`} */
                     responsive={true}
                     width={width}
                     containerStyle={{
@@ -139,4 +157,4 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
 
 
 
-export default LoadMaintainenceAssets;
+export default LoadTransactionNameQueues;

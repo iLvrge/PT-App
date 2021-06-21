@@ -11,7 +11,8 @@ import { Paper,
   Avatar,
   Modal,
   Grid,
-  Typography
+  Typography,
+  TextField
 } from '@material-ui/core'
 import { 
   Folder as FolderIcon,
@@ -26,6 +27,7 @@ import PatenTrackApi from '../../../api/patenTrack2'
 import { numberWithCommas, applicationFormat } from "../../../utils/numbers"
 import { controlList } from "../../../utils/controlList"
 import QuillEditor from '../QuillEditor'
+import CustomerAddress from '../CustomerAddress'
 import Googlelogin from '../Googlelogin' 
 import useStyles from './styles'
 import { FaChevronCircleDown } from 'react-icons/fa'
@@ -40,7 +42,11 @@ import {
   setLayoutTemplatesByID,
   setTemplateDocument,
   getChannels,
-  getSlackProfile
+  getSlackProfile,
+  getAddressQueue,
+  setAddressQueueDisplay,
+  getNameQueue,
+  setNameQueueDisplay
 } from '../../../actions/patentTrackActions2'
 
 import {
@@ -80,9 +86,14 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   const slack_messages = useSelector(state => state.patenTrack2.slack_messages)
   const layout_id = useSelector(state => state.patenTrack2.layout_id)
   const google_profile = useSelector(state => state.patenTrack2.google_profile)
+  const assetTypeAddressSelected = useSelector(state => state.patenTrack2.assetTypeAddress.selected)
+  const assetTypeAddressGroups = useSelector(state => state.patenTrack2.assetTypeAddress.all_groups)
+  const assetTypeNamesGroups = useSelector(state => state.patenTrack2.assetTypeNames.all_groups)
+  const mainCompaniesSelected = useSelector(state => state.patenTrack2.mainCompaniesList.selected)
+  const assetTypeNamesSelected = useSelector(state => state.patenTrack2.assetTypeNames.selected)
   
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
-  const slack_auth_token = useSelector(state => state.patenTrack2.slack_auth_token)
+  const slack_auth_token = useSelector(state => state.patenTrack2.slack_auth_token) 
   /* const slack_profile_data = useSelector( state => state.patenTrack2.slack_profile_data ) */
   const template_document_url = useSelector(state => state.patenTrack2.template_document_url)
   const [ selectUser, setSelectUser] = useState(null)
@@ -90,10 +101,14 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   const [ file, setFile ] = useState(null)
   const [ displayButton, setDisplayButton] = useState( true )
   const [ commentHtml, setCommentHtml ] = useState('')
-  
+  const [ newCompanyName, setNewCompanyName] = useState('')
   const [ slackAuthLogin, setSlackAuthLogin ] = useState( true )
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState( true )
   const [ driveModal, setDriveModal ] = useState(false)
+  const [ correctAddressModal, setCorrectAddressModal ] = useState(false)
+  const [ changeAddressModal, setChangeAddressModal ] = useState(false)
+  const [ correctNameModal, setCorrectNameModal ] = useState(false)
+  const [ changeNameModal, setChangeNameModal ] = useState(false)
   const [ driveFilesAndFolder, setDriveFilesAndFolder ] = useState( {} )
   const [ selectedDriveFile, setSelectedDriveFile] = useState(null)
   const [ activeBtn, setActiveBtn] = useState({display: false})  
@@ -475,7 +490,20 @@ const onHandleFile = (event) => {
   setFile(event.target.value)
 }
 
+const handleCompanyNameChange = (event)=>{
+  event.preventDefault()
+  setNewCompanyName(event.target.value)
+}
 
+const handleChangeNameModal = (event) => {
+  event.preventDefault()
+  setChangeNameModal(false)
+}
+
+const handleCorrectAddressModal = (event) => {
+  event.preventDefault()
+  setCorrectAddressModal(false)
+}
 
 const handleDriveModalClose = (event) => {
   event.preventDefault()
@@ -538,9 +566,104 @@ const handleDriveModalClose = (event) => {
 
   const onSalesAssets = useCallback(async () => {
     if( selectPatents.length == 0) {
+      alert('Please select assets from list for sale')
+    } else {
+      /**
+       * check slack auth and google auth
+       * create channel and document
+       * add list of assets
+       * 
+      */
+      const slackToken = getTokenStorage( 'slack_auth_token_info' ), googleToken = getTokenStorage( 'google_auth_token_info' )
+      let slackTokenFlag = false, googleTokenFlag = false
+      if(slackToken && slackToken!= '') {
+        const token = JSON.parse(slackToken)
+        if(typeof token === 'string') {
+          token = JSON.parse(token)
+        }
+        if(typeof token === 'object') {
+          const { access_token } = token          
+          if(access_token && access_token != '') {
+            slackTokenFlag = true
+          }
+        }
+      }
+      
+      if(googleToken && googleToken != '') {
+        const tokenParse = JSON.parse( googleToken )
+        const { access_token } = tokenParse
+        if( access_token ) {
+          googleTokenFlag = true
+        }
+      }
 
+      if( slackTokenFlag === true && googleTokenFlag === true ) {
+        /**
+         * Send request
+        */
+      } else{
+        if( slackTokenFlag === false ) {
+          setSlackAuthLogin(true) //show slack login button
+        }
+
+        if( googleTokenFlag === false ) {
+          openGoogleWindow() //open google login window
+        }
+      }
     }
-  }, [ selectPatents ])
+  }, [ dispatch, selectPatents ])
+
+  const onCorrectAddress = () => {
+    /**
+     * Show selected company address list
+     */
+    setCorrectAddressModal(true)    
+  }
+
+  const onChangeAddress = () => {
+    /**
+     * Show selected company address list
+     */
+    setCorrectAddressModal(true)
+  }
+
+  const onChangeName = () => {
+    //show Modal for enter new company 
+    setChangeNameModal(true)    
+  }
+
+  const onHandleSubmitName = useCallback(() => {
+    if(newCompanyName != '') {
+      onHandleGetNameQueue(newCompanyName, assetTypeNamesGroups, mainCompaniesSelected)
+    } else {
+      alert('Please enter company new name')
+    }
+  }, [ newCompanyName, assetTypeNamesGroups, mainCompaniesSelected ] )
+
+  const onHandleGetNameQueue = useCallback((newName, assetTypeNamesGroups, mainCompaniesSelected) => {
+    if( typeof newName == undefined && mainCompaniesSelected.length > 1) {
+      alert('Please select only one company')
+    } else {
+      console.log("assetTypeNamesGroups", assetTypeNamesGroups)
+      setChangeNameModal( false )
+      const form = new FormData()
+      form.append( 'group_ids', JSON.stringify(assetTypeNamesGroups) )
+      form.append( 'new_name', newName )
+      form.append( 'company_ids', mainCompaniesSelected[0] )
+      dispatch(getNameQueue(form))
+      dispatch(setNameQueueDisplay(true))
+    }   
+  }, [ dispatch ])
+
+  const onHandleSelectAddress = useCallback((addressID) => {
+    setCorrectAddressModal( false )
+    const form = new FormData()
+    form.append( 'group_ids', JSON.stringify(assetTypeAddressGroups) )
+    form.append( 'new_address', addressID )
+    form.append( 'company_ids', JSON.stringify(mainCompaniesSelected) )
+    dispatch(getAddressQueue(form))
+    dispatch(setAddressQueueDisplay(true))
+  }, [ dispatch, assetTypeAddressGroups, mainCompaniesSelected ])
 
   const renderCommentEditor = useMemo(() => {
     //if (!selectedCommentsEntity) return null
@@ -554,6 +677,10 @@ const handleDriveModalClose = (event) => {
           openGoogleWindow={openGoogleWindow}
           onDrive={getDriveDocumentList}
           onSalesAssets={onSalesAssets}
+          onCorrectAddress={onCorrectAddress}
+          onChangeAddress={onChangeAddress}
+          onCorrectName={onHandleGetNameQueue}
+          onChangeName={onChangeName}
           onAttachmentFile={onHandleFileExplorer}
           onAttachmentOpenedFile={onAttachmentOpenedFile}
           onAttachmentDriveFile={onHandleDriveExplorer}
@@ -839,6 +966,31 @@ const handleDriveModalClose = (event) => {
         aria-describedby=""
       >
         {templateBody}
+      </Modal>
+      <Modal
+        open={correctAddressModal}
+        onClose={(e) => handleCorrectAddressModal(e)}
+        aria-labelledby="Correct-Address-Modal"
+        aria-describedby=""
+      >
+        <div style={{display: 'flex', height: '50vh', width: '600px', margin: '43px auto'}}>
+          <CustomerAddress onHandleSelectAddress={onHandleSelectAddress}/>
+        </div>
+      </Modal>
+      <Modal
+        open={changeNameModal}
+        onClose={(e) => handleChangeNameModal(e)}
+        aria-labelledby="Change-Name-Modal"
+        aria-describedby=""
+      >
+        <div style={{display: 'flex', height: '20vh', width: '300px', margin: '30vh auto', background: '#424242', position:' relative', padding: '0 10px'}}>
+          <form className={classes.root} noValidate autoComplete="off">
+            <TextField id="change-name" label="Company Name" onChange={handleCompanyNameChange} placeholder="Enter a new company name"/>
+          </form>
+          <Button variant="outlined" onClick={onHandleSubmitName} className={classes.btn}>
+            Submit
+          </Button>
+        </div>
       </Modal>
     </Paper>
   )

@@ -10,6 +10,8 @@ import IllustrationContainer from '../AssetsVisualizer/IllustrationContainer'
 import TimelineContainer from '../AssetsVisualizer/TimelineContainer'
 import AssetsCommentsTimeline from '../AssetsCommentsTimeline'
 import LoadMaintainenceAssets from './LoadMaintainenceAssets'
+import LoadTransactionQueues from './LoadTransactionQueues'
+import LoadTransactionNameQueues from './LoadTransactionNameQueues'
 import ArrowButton from '../ArrowButton'
 import { updateResizerBar } from '../../../utils/resizeBar'
 import useStyles from './styles'
@@ -61,7 +63,8 @@ const IllustrationCommentContainer = ({
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const assetCompaniesRowSelect = useSelector(state => state.patenTrack2.mainCompaniesList.row_select)
     const search_string = useSelector(state => state.patenTrack2.search_string)   
-    
+    const addressQueuesDisplay = useSelector(state => state.patenTrack2.addressQueuesDisplay)   
+    const nameQueuesDisplay = useSelector(state => state.patenTrack2.nameQueuesDisplay)
     const [ templateURL, settemplateURL] = useState('about:blank')
 
     
@@ -171,13 +174,21 @@ const IllustrationCommentContainer = ({
                         <LoadMaintainenceAssets 
                             rows={selectedMaintainencePatents} onChangeFileName={onChangeFileName}/>
                     :
+                    addressQueuesDisplay === true
+                    ?
+                        <LoadTransactionQueues />
+                    :
+                    nameQueuesDisplay === true
+                    ?
+                        <LoadTransactionNameQueues />
+                    :
                     !isFullscreenOpen && 
                         illustrationBar === true && 
                         ( search_string != '' || assetCompaniesRowSelect.length > 0 || 
                             selectedCompaniesAll === true || 
                             selectedCompanies.length > 0
 
-                        )
+                        ) 
                     ?
                         shouldShowTimeline
                         ?

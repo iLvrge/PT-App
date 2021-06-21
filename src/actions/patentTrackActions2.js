@@ -351,6 +351,15 @@ export const setAssetsIllustration = data => {
   }
 }
 
+
+export const setAssetsIllustrationData = data => {
+  return {
+    type: types.SET_ASSET_ILLUSTRATION_DATA,
+    data,
+  }
+}
+
+
 export const setChartsLoading = data => {
   return {
     type: types.SET_CHARTS_LOADING,
@@ -1035,6 +1044,66 @@ export const getCustomerParties = ( type, companies, tabs, customerType, append 
   } 
 } 
 
+
+/**
+ * Address Transactions 
+ * @param {*} companies ID as array
+ * @param {*} tabs ID as array
+ * @param {*} customers ID as array
+ * @param {*} append  as Boolean
+ */
+
+export const getCustomerAdressTransactions = ( companies, tabs, customers , append = false ) => {
+  return async dispatch => {
+    dispatch( setAssetAddressTransactionsLoading( true ) )
+    const { data } = await PatenTrackApi.getCustomerAddressTransactions( companies, tabs, customers )    
+    dispatch( setAssetAddressTransactionsLoading( false ) )
+    dispatch( setAssetAddressTransactions(data, append) )
+  } 
+}
+
+/**
+ * Address Transactions 
+ * @param {*} companies ID as array
+ * @param {*} tabs ID as array
+ * @param {*} customers ID as array
+ * @param {*} append  as Boolean
+ */
+
+export const getCustomerNormalizeNameTransactions = ( companies, tabs, customers , append = false ) => {
+  return async dispatch => {
+    dispatch( setNamesTransactionsLoading( true ) )
+    const { data } = await PatenTrackApi.getCustomerNormalizeNameTransactions( companies, tabs, customers )    
+    dispatch( setNamesTransactionsLoading( false ) )
+    dispatch( setNamesTransactions(data, append) )
+  } 
+}
+
+export const getAddressQueue = ( form ) => {
+  return async dispatch => {
+    dispatch( setAddressQueueLoading( true ) )
+    const { data } = await PatenTrackApi.getAddressQueue( form )    
+    dispatch( setAddressQueueLoading( false ) )
+    dispatch( setAddressQueueData(data) )
+  } 
+}
+
+/**
+ * 
+ * @param {*} form 
+ */
+
+export const getNameQueue = ( form ) => {
+  return async dispatch => {
+    dispatch( setNameQueueLoading( true ) )
+    const { data } = await PatenTrackApi.getNameQueue( form )    
+    dispatch( setNameQueueLoading( false ) )
+    dispatch( setNameQueueData(data) )
+  } 
+}
+
+
+
 /**
  * Activites
  * @param {*} type 
@@ -1065,6 +1134,149 @@ export const getAssetTypeAssignmentAllAssets = ( companies, tabs, customers, rfI
     const { data } = await PatenTrackApi.getAssetTypeAssignmentAllAssets( companies, tabs, customers, rfIDs )    
     dispatch( setAssetTypeAssignmentAllAssets(data, append) )
     dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
+  }
+}
+
+export const setAddressQueueDisplay = (flag) => {
+  return {
+    type: types.SET_ADDRESS_QUEUE_DISPLAY,
+    flag
+  }
+}
+
+export const setAddressQueueLoading = (flag) => {
+  return {
+    type: types.SET_ADDRESS_QUEUE_LOADING,
+    flag
+  }
+}
+
+export const setAddressQueueData = (data) => {
+  return {
+    type: types.SET_ADDRESS_QUEUES_TRANSACTIONS,
+    data
+  }
+} 
+
+export const setFixedTransactionAddress = (data) => {
+  return {
+    type: types.SET_FIXED_TRANSACTION_ADDRESS,
+    data
+  }
+}
+
+export const setNameQueueDisplay = (flag) => {
+  return {
+    type: types.SET_NAME_QUEUE_DISPLAY,
+    flag
+  }
+}
+
+export const setNameQueueLoading = (flag) => {
+  return {
+    type: types.SET_NAME_QUEUE_LOADING,
+    flag
+  }
+}
+
+export const setNameQueueData = (data) => {
+  return {
+    type: types.SET_NAME_QUEUES_TRANSACTIONS,
+    data
+  }
+} 
+
+export const setFixedTransactionName = (data) => {
+  return {
+    type: types.SET_FIXED_TRANSACTION_NAME,
+    data
+  }
+}
+
+export const setNamesTransactionsLoading = (flag) => {
+  return {
+    type: types.SET_NAMES_TRANSACTIONS_LOADING,
+    flag
+  }
+}
+
+export const setNamesTransactions = (data, append) => {
+  return {
+    type: types.SET_NAMES_TRANSACTIONS,
+    data,
+    append
+  }
+}
+
+export const setSelectedNamesTransactions = data => {
+  return {
+    type: types.SET_SELECTED_NAMES_TRANSACTIONS,
+    data,
+  }
+}  
+
+export const setNamesTransactionsSelectAll = (flag) => {
+  return {
+    type: types.SET_NAMES_TRANSACTIONS_SELECT_ALL,
+    flag
+  }
+}
+
+export const setNamesTransactionsSelectedRow = (data) => {
+  return {
+    type: types.SET_NAMES_TRANSACTIONS_ROW_SELECT,
+    data 
+  }
+}
+
+
+export const setAssetAddressTransactionsLoading = (flag) => {
+  return {
+    type: types.SET_ASSETS_ADDRESS_TRANSACTIONS_LOADING,
+    flag
+  }
+}
+
+export const setAssetAddressTransactions = (data, append) => {
+  return {
+    type: types.SET_ASSETS_ADDRESS_TRANSACTIONS,
+    data,
+    append
+  }
+}
+
+export const setSelectedAssetAddressTransactions = data => {
+  return {
+    type: types.SET_SELECTED_ASSETS_ADDRESS_TRANSACTIONS,
+    data,
+  }
+} 
+
+export const setAssetAddressTransactionsSelectAll = (flag) => {
+  return {
+    type: types.SET_ASSETS_ADDRESS_TRANSACTIONS_SELECT_ALL,
+    flag
+  }
+}
+
+export const setAssetAddressTransactionsSelectedRow = (data) => {
+  return {
+    type: types.SET_ASSETS_ADDRESS_TRANSACTIONS_ROW_SELECT,
+    data 
+  }
+}
+
+export const setAllGroupRfIDs = (data) => {
+  return {
+    type: types.SET_ASSETS_ADDRESS_TRANSACTIONS_ALL_GROUP,
+    data 
+  }
+}
+
+export const setAllNameGroupRfIDs = (data) => {
+  return {
+    type: types.SET_NAMES_TRANSACTIONS_ALL_GROUP,
+    data 
   }
 }
 

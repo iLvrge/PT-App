@@ -75,6 +75,7 @@ const GlobalLayout = (props) => {
     const [ partyBarSize, setPartyBarSize ] = useState('50%')
     const [ driveBarSize, setDriveBarSize ] = useState('50%')
     const [ assignmentBarSize, setAssignmentBarSize ] = useState(0)  
+    const [ addressBarSize, setAddressBarSize ] = useState(450)
     const [ customerBarSize, setCustomerBarSize ] = useState(160)
     const [ commentBarSize , setCommentBarSize ] = useState('30%')
     const [ illustrationBarSize , setIllustrationBarSize ] = useState('50%')
@@ -582,6 +583,8 @@ const GlobalLayout = (props) => {
                 otherPartyButtonVisible,
                 assignmentBarSize,
                 setAssignmentBarSize,
+                addressBarSize,
+                setAddressBarSize,
                 handleAssignmentButton,
                 openAssignmentBar,
                 handleAssignmentBarOpen,

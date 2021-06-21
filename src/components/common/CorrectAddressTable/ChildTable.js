@@ -34,7 +34,7 @@ import { numberWithCommas } from '../../../utils/numbers'
 
 import Loader from '../Loader'
 
-const ChildTable = ({ partiesId, headerRowDisabled }) => {
+const ChildTable = ({ addressId, headerRowDisabled }) => {
 
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -61,12 +61,16 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
     const assetTypeAssignmentAssets = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
 
+    const assetTypeAddress = useSelector(state => state.patenTrack2.assetTypeAddress.list)
+
+
     const COLUMNS = [ 
         {
             width: 100,
             label: 'Transactions', 
             dataKey: 'date',
-            align: 'left'   
+            align: 'left',
+            paddingLeft: 20
         },
         {
             width: 100,
@@ -80,39 +84,32 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
        
     useEffect(() => {
         const getAssignments = async () => {            
-            if( partiesId > 0 ) {
+            if( addressId > 0 ) {
                 setAssignmentLoading( true )
-                const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-                    tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-                    customers = [partiesId]
-                
-                const { data } = await PatenTrackApi.getAssetTypeAssignments(companies, tabs, customers, selectedCategory != '' ? selectedCategory : '', false)
-                setAssignments(data.list)
-                setAssignmentLoading( false )
-                if( data.list != null && data != '' && data.list.length > 0 ){
-                    let companiesList = [...assetTypeCompanies.list] 
-                    const promise = companiesList.map( (row, index) => {
-                        console.log(row.id, partiesId)
-                        if( row.id == partiesId){                            
-                            companiesList[index].totalTransactions = data.list.length
-                        }
-                        return row
-                    })
-                    await Promise.all(promise)
-                    dispatch(
-                        setAssetTypeCompanies({
-                            ...assetTypeCompanies,
-                            list: companiesList, 
-                            append: false 
-                        })
-                    )
-                }
+
+                const findIndex = assetTypeAddress.findIndex( address => address.id == addressId)
+
+                let rfIDs = []
+
+                if(findIndex !== -1) {
+                    rfIDs = assetTypeAddress[findIndex].group_ids.toString().split(',')
+                }            
+                if(rfIDs.length > 0) {
+                    const form = new FormData()
+                    form.append('group_ids', JSON.stringify(rfIDs))
+                    const { data } = await PatenTrackApi.getTransactionByRfIds(form)
+                    setAssignments(data.list)
+                    setAssignmentLoading( false )   
+                } else {
+                    setAssignmentLoading( false )
+                } 
+                             
             } else {
                 setAssignmentLoading( false )
             }
         }
         getAssignments()
-    }, [ dispatch, selectedCategory, selectedCompanies, selectedCompaniesAll, assetTypesSelected, assetTypesSelectAll, partiesId ])
+    }, [ dispatch, selectedCategory, selectedCompanies, selectedCompaniesAll, addressId ])
 
     const onHandleSelectAll = useCallback((event, row) => {
         
@@ -143,7 +140,7 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
     if (assignmentLoading) return <Loader />
 
     return (
-        <Paper className={classes.root} square id={`assets_assignments`}>
+        <Paper className={classes.root} square id={`assets_address_assignments`}>
             <VirtualizedTable
             classes={classes}
             selected={selectItems}

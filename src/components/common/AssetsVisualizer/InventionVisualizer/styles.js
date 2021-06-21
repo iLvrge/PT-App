@@ -7,6 +7,10 @@ export default makeStyles(theme => ({
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
+        '& .MuiTab-root':{
+            minWidth: 'inherit',
+            maxWidth: '100px'
+        },
         '& .vis-panel.vis-background.vis-horizontal .vis-grid': {
             borderColor: '#e5e5e51c',
         },
@@ -44,8 +48,15 @@ export default makeStyles(theme => ({
                 width: 17,
                 height: 17
             }   
-            
         }
+    },
+    tabs: {
+        minHeight: 35,
+    },
+    tab: {
+        flex: 1,
+        minWidth: '25%',
+        minHeight: 35,
     },
     clipboard: {
         fill: '#fff',

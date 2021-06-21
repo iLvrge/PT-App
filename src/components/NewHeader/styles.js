@@ -358,15 +358,33 @@ export default makeStyles(theme => ({
         '& svg':{
             width: 24,
             height: 24,
-            fill: '#fff',
-            stroke: '#fff'
+            fill: '#5a5a5a',
+            stroke: '#5a5a5a'
+        },
+        '&:hover':{
+            '& svg':{
+                fill: 'rgb(230, 0, 0)',
+                stroke: 'rgb(230, 0, 0)',
+            }
         }        
     },
     clipIconActive: {
         '& svg':{
-            fill: '#E60000',
-            stroke: '#E60000' 
-        }
+            fill: '#f48fb1',
+            stroke: '#f48fb1' 
+        },
+    },
+    clipIconIsActive: {
+        '& svg':{
+            fill: '#FFF',
+            stroke: '#FFF' 
+        },
+        '&:hover':{
+            '& svg':{
+                fill: '#FFF',
+                stroke: '#FFF' 
+            }
+        }  
     },
     modalClipboard: {
         margin: '100px auto',

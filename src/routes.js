@@ -14,6 +14,7 @@ import BigScreen from './components/BigScreen'
 import DueDilligence from './components/DueDilligence'
 import Search from './components/Search'
 import GlobalScreen from './components/GlobalScreen'
+import CorrectLayout from './components/CorrectLayout'
 
 import Auth from './components/auth'
 import AuthSlack from './components/AuthSlack'
@@ -103,7 +104,14 @@ const pages = [
   {    
     exact: true,
     path: routeList.correct_details,
-    component: GlobalScreen,
+    component: CorrectLayout,
+    layout: GlobalLayout, 
+    type: 1
+  },
+  {    
+    exact: true,
+    path: routeList.correct_address,
+    component: CorrectLayout,
     layout: GlobalLayout, 
     type: 1
   }

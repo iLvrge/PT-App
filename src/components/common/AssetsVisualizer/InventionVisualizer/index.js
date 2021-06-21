@@ -7,12 +7,20 @@ import Draggable from "react-draggable"
 import { DataSet } from 'vis-data/esnext'
 import { Graph3d } from 'vis-graph3d/esnext'
 
+
+import Tab from '@material-ui/core/Tab'
+import Tabs from '@material-ui/core/Tabs'
+
 import AssetsList from './AssetsList'
+import PdfViewer from '../../PdfViewer'
 import Loader from '../../Loader'
 import {
     setAssetTypeAssignmentAllAssets,
-    setMaintainenceAssetsList
+    setMaintainenceAssetsList,
+    getCustomerAssets,
+    setAssetsIllustrationData
 } from '../../../../actions/patentTrackActions2'
+import { setPDFFile, setPdfTabIndex } from '../../../../actions/patenTrackActions' 
 import PatenTrackApi from '../../../../api/patenTrack2'
 import useStyles from './styles'
 
@@ -33,15 +41,26 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
     const [ assetLoading, setAssetsLoading ] = useState(false)
     const [ assets, setAssets ] = useState([])
     const [ filterList, setFilterList ] = useState([])
+    const [ selectedTab, setSelectedTab ] = useState(0)
 
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const selectedAssetsTransactionLifeSpan = useSelector( state => state.patenTrack2.transaction_life_span )
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected ) //companies
+    const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll )
     const assetsList = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list) //Assets List
     const maintainenceAssetsList = useSelector( state => state.patenTrack2.maintainenceAssetsList.list )
     const selectedMaintainencePatents = useSelector( state => state.patenTrack2.selectedMaintainencePatents )
     const assetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected) //Assets Selected
-    
+    const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected )
+    const assetTypesSelectAll = useSelector( state => state.patenTrack2.assetTypes.selectAll )
+    const selectedAssetCompanies = useSelector( state => state.patenTrack2.assetTypeCompanies.selected )
+    const selectedAssetCompaniesAll = useSelector( state => state.patenTrack2.assetTypeCompanies.selectAll )
+    const selectedAssetAssignments = useSelector( state => state.patenTrack2.assetTypeAssignments.selected )
+    const selectedAssetAssignmentsAll = useSelector( state => state.patenTrack2.assetTypeAssignments.selectAll )
+
+    const assetIllustration = useSelector( state => state.patenTrack2.assetIllustration )
+    const assetIllustrationData = useSelector( state => state.patenTrack2.assetIllustrationData )
+    const selectedRow = useSelector( state => state.patenTrack2.selectedAssetsTransactions )
 
     const [ graphRawData, setGraphRawData ] = useState([])
     const [ graphRawGroupData, setGraphRawGroupData ] = useState([])
@@ -148,13 +167,42 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                     await Promise.all(promise)
                 }                
             } else {
-                if( assetsList.length > 0 ) {
-                    const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
-                    await Promise.all(promise)
-                } else if ( maintainenceAssetsList.length > 0 ) {
-                    const promise = maintainenceAssetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
-                    await Promise.all(promise)
-                }
+                if( assetsList.length > 0 || maintainenceAssetsList.length > 0 ) {
+                    if( assetsList.length > 0 ) {
+                        const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
+                        await Promise.all(promise)
+                    } else if ( maintainenceAssetsList.length > 0 ) {
+                        const promise = maintainenceAssetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
+                        await Promise.all(promise)
+                    }
+                } else {
+                    /**
+                     * Check which layout and get the assets list first and then 
+                     */
+                    if( selectedCategory == '' ) { //pay_maintenece_fee
+
+                    } else {
+                        const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+                        tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+                        customers =
+                          selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
+                        assignments =
+                          selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
+                        
+                        if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
+                            dispatch(
+                                getCustomerAssets(
+                                  selectedCategory == '' ? '' : selectedCategory,
+                                  companies,
+                                  tabs,
+                                  customers,
+                                  assignments,
+                                  false,
+                                ),
+                            );
+                        }
+                    }
+                }                
             }
 
             if( list.length > 0 ) {
@@ -169,62 +217,71 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
         }
         getChartData()
         //console.log( "getChartData", selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments )
-    }, [selectedCategory, selectedCategory, selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected ]) 
+    }, [selectedCategory, selectedCategory, selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll ]) 
 
-    useEffect(() => {        
-        const generateChart = async () => {
-            if (isLoadingCharts || graphRawData.length == 0 || graphRawGroupData.length == 0) return null
-            items.current = new DataSet()
-            const colors = ['#70A800', '#00a9e6', '#E69800', '#ff0000']
-            let xMin = 0, xMax = 0, years=[];
-            const promises = graphRawData.map( (data, index) => {
-                const findIndex = graphRawGroupData.findIndex( row => row.cpc_code == data.cpc_code )
-                if(findIndex !== -1) {
-                    const year = parseInt(data.fillingYear)
-                    if(xMin == 0) {
-                        xMin = year     
-                    }
-                    if(xMax == 0) {
-                        xMax = year
-                    }
-                    if(!years.includes(year)){
-                        years.push(year)
-                    }
+    const generateChart = async () => {
+        if (isLoadingCharts || graphRawData.length == 0 || graphRawGroupData.length == 0) return null
+        items.current = new DataSet()
+        const colors = ['#70A800', '#00a9e6', '#E69800', '#ff0000']
+        let xMin = 0, xMax = 0, years=[];
+        const promises = graphRawData.map( (data, index) => {
+            const findIndex = graphRawGroupData.findIndex( row => row.cpc_code == data.cpc_code )
+            if(findIndex !== -1) {
+                const year = parseInt(data.fillingYear)
+                if(xMin == 0) {
+                    xMin = year     
+                }
+                if(xMax == 0) {
+                    xMax = year
+                }
+                if(!years.includes(year)){
+                    years.push(year)
+                }
 
-                    if(year < xMin){
-                        xMin = year
-                    } else  if(year > xMax){
-                        xMax = year
-                    }
-                    //const col = colors[Math.floor((Math.random()*colors.length))]
-                    items.current.add({
-                        x: year,
-                        y: graphRawGroupData[findIndex].id,
-                        z: data.countAssets,
-                        style: {
-                            stroke: '#50719C',
-                            fill: '#395270'
-                        },
-                        patent: data.patent_number,
-                        application_number: data.application_number,   
-                        origin: data.group_name
-                    })
-                }                
-            })
+                if(year < xMin){
+                    xMin = year
+                } else  if(year > xMax){
+                    xMax = year
+                }
+                //const col = colors[Math.floor((Math.random()*colors.length))]
+                items.current.add({
+                    x: year,
+                    y: graphRawGroupData[findIndex].id,
+                    z: data.countAssets,
+                    style: {
+                        stroke: '#50719C',
+                        fill: '#395270'
+                    },
+                    patent: data.patent_number,
+                    application_number: data.application_number,   
+                    origin: data.group_name
+                })
+            }                
+        })
 
-            await Promise.all(promises)            
-           
-            //TODO height 100% not working well, created allot of isues when we resize pane, 
-            if(graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0) {
-               options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight}px`, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1 }
-               console.log("options", options)
-            }     
-            graphRef.current = new Graph3d(graphContainerRef.current, items.current, options)
-            graphRef.current.on('click', graphClickHandler)
-        }
+        await Promise.all(promises)            
+       
+        //TODO height 100% not working well, created allot of isues when we resize pane, 
+        if(graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0) {
+           options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight - 50 }px`, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1 }
+           console.log("options", options)
+        }     
+        graphRef.current = new Graph3d(graphContainerRef.current, items.current, options)
+        graphRef.current.on('click', graphClickHandler)
+    }
+
+    useEffect(() => { 
         generateChart()
-        
     }, [ isLoadingCharts, graphRawData, graphRawGroupData, graphContainerRef, defaultSize ])
+
+
+    useEffect(() => {
+        if( !isLoadingCharts && graphRawData.length > 0 && graphRawGroupData.length > 0 && graphContainerRef.current != null ) {
+            if( graphContainerRef.current.childNodes.length == 0 ) { // if comes from different tab
+                generateChart()
+            }
+        }
+    })
 
     useEffect(() => {
         if( graphRef.current != undefined && graphRawGroupData.length > 0 && graphRawData.length > 0 && !isLoadingCharts ) {
@@ -238,11 +295,44 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                 fontSize = 18
                 step = 8
             }
-            options = { ...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight}px`, axisFontSize: fontSize, yStep: step, verticalRatio }
+            options = { ...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight - 50 }px`, axisFontSize: fontSize, yStep: step, verticalRatio }
             graphRef.current.setOptions(options)
             graphRef.current.redraw()
         }
     }, [ visualizerBarSize, analyticsBar, defaultSize ]) 
+
+
+    useEffect(() => {
+        if(assetIllustration != null && Object.keys(assetIllustration).length > 0) {
+            if((selectedAssetAssignments.length == 1 && selectedCategory == 'correct_details') || selectedRow.length == 1) {
+                setAssets(assetIllustration)
+                if(assetIllustrationData != null ) {                    
+                    dispatch(
+                        setPDFFile(
+                          { 
+                            document: assetIllustrationData.line[0].document1, 
+                            form: assetIllustrationData.line[0].document1_form, 
+                            agreement: assetIllustrationData.line[0].document1_agreement 
+                          }
+                        )
+                    )
+                    dispatch(
+                        setPdfTabIndex(0)
+                    )
+                } else {
+                    (async() => {
+                        const { data } = await PatenTrackApi.getCollectionIllustration(assetIllustration.id)
+                        dispatch(
+                            setAssetsIllustrationData(data != '' ? data : null)
+                        )
+                    })();
+                }
+                
+            }
+        }
+    }, [ assetIllustration, assetIllustrationData, selectedAssetAssignments, selectedRow, selectedCategory ])
+
+
 
     const remoteAssetFromList = useCallback(async (asset) => {
         const list = maintainenceAssetsList.length > 0 ? [...maintainenceAssetsList] : [...assetsList]
@@ -273,40 +363,75 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
         );
     }
 
+    const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
+
     if (selectedAssetsTransactionLifeSpan.length === 0 || selectedCompanies.length === 0 ) return null
 
     return (
         <Paper className={classes.root} square>  
             <div className={classes.graphContainer}>
+                
                 {
-                    !isLoadingCharts
+                    selectedTab === 0
                     ?
-                    <div
-                        style={{
-                        height: '100%',
-                        width: '100%',
-                        filter: `blur(${isLoadingCharts ? '4px' : 0})`,
-                        }}
-                        ref={graphContainerRef}
-                        className={classes.timeline}
-                    />
+                        !isLoadingCharts
+                        ?
+                            <div
+                                style={{
+                                height: '100%',
+                                width: '100%',
+                                filter: `blur(${isLoadingCharts ? '4px' : 0})`,
+                                }}
+                                ref={graphContainerRef}
+                                className={classes.timeline}
+                            />
+                        :
+                            <Loader />
                     :
-                    <Loader />
-                } 
-
-                <Dialog
-                    open={openModal}
-                    onClose={handleClose}
-                    className={classes.modal}
-                    PaperComponent={PaperComponent}
-                    aria-labelledby="year-cpc-assets"
-                >
-                    <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title"></DialogTitle>
-                    <DialogContent>
-                        <AssetsList loading={assetLoading} assets={assets} remoteAssetFromList={remoteAssetFromList}/>
-                    </DialogContent>
-                </Dialog>            
-            </div>            
+                    selectedTab === 1
+                    ?
+                        <PdfViewer display={true} pdfTab={0} show_tab={false}/>         
+                    :
+                    selectedTab === 2
+                    ?
+                        <PdfViewer display={true} pdfTab={1} show_tab={false}/>        
+                    :
+                    selectedTab === 3
+                    ?
+                        <PdfViewer display={true} pdfTab={2} show_tab={false}/>
+                    :
+                    ''
+                }                           
+            </div> 
+            <Tabs
+                value={selectedTab}
+                variant="scrollable"
+                scrollButtons="auto"
+                onChange={handleChangeTab}
+                className={classes.tabs}
+            >
+                {
+                    [ 'Innovation', 'Agreement', 'Form', 'Main' ].map((tab) => (
+                        <Tab
+                            key={tab}
+                            label={tab}
+                            classes={{ root: classes.tab }}
+                        />
+                    )) 
+                }
+            </Tabs> 
+            <Dialog
+                open={openModal}
+                onClose={handleClose}
+                className={classes.modal}
+                PaperComponent={PaperComponent}
+                aria-labelledby="year-cpc-assets"
+            >
+                <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title"></DialogTitle>
+                <DialogContent>
+                    <AssetsList loading={assetLoading} assets={assets} remoteAssetFromList={remoteAssetFromList}/>
+                </DialogContent>
+            </Dialog>            
         </Paper>
     )
 }

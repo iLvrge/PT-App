@@ -137,7 +137,7 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
         dispatch(setSelectedAssetsTransactions([])) 
         dispatch(setSelectedAssetsPatents([]))
         dispatch(setAssetsIllustration({ type: 'transaction', id: rf_id }))
-        dispatch(getAssetsAllTransactionsEvents(selectedCategory == '' ? '' : selectedCategory, [], [], [], [rf_id]))
+        //dispatch(getAssetsAllTransactionsEvents(selectedCategory == '' ? '' : selectedCategory, [], [], [], [rf_id]))
     }
 
     if (assignmentLoading) return <Loader />

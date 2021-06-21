@@ -210,6 +210,12 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         assetIllustration: action.data,
       }
 
+    case types.SET_ASSET_ILLUSTRATION_DATA:
+      return {
+        ...state,
+        assetIllustrationData: action.data,
+      }
+
     case types.SET_ASSETS_USPTO:
       return {
         ...state,
@@ -424,7 +430,108 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         return {
           ...state,
           assetTypeCompanies: {...state.assetTypeCompanies, row_select: action.data}
-        }        
+        } 
+      case types.SET_ASSETS_ADDRESS_TRANSACTIONS_LOADING:
+        return {
+          ...state,
+          assetTypeAddress: {...state.assetTypeAddress, loading: action.flag}
+        } 
+      case types.SET_ASSETS_ADDRESS_TRANSACTIONS:
+        return {
+          ...state,
+          assetTypeAddress:  {...state.assetTypeAddress, total_records: action.data.total_records,  list: action.append === true ? [...state.assetTypeAddress.list, ...action.data.list] : action.data.list}
+        }
+	    case types.SET_SELECTED_ASSETS_ADDRESS_TRANSACTIONS: 
+        return {
+          ...state,
+          assetTypeAddress:  {...state.assetTypeAddress, selected: action.data}
+        }
+      case types.SET_ASSETS_ADDRESS_TRANSACTIONS_SELECT_ALL:
+        return {
+          ...state,
+          assetTypeAddress:  {...state.assetTypeAddress, selectAll: action.flag}
+        }
+      case types.SET_ASSETS_ADDRESS_TRANSACTIONS_ROW_SELECT:
+        return {
+          ...state,
+          assetTypeAddress: {...state.assetTypeAddress, row_select: action.data}
+        }
+        case types.SET_NAMES_TRANSACTIONS_LOADING:
+        return {
+          ...state,
+          assetTypeNames: {...state.assetTypeNames, loading: action.flag}
+        } 
+      case types.SET_NAMES_TRANSACTIONS:
+        return {
+          ...state,
+          assetTypeNames:  {...state.assetTypeNames, total_records: action.data.total_records,  list: action.append === true ? [...state.assetTypeNames.list, ...action.data.list] : action.data.list}
+        }
+	    case types.SET_SELECTED_NAMES_TRANSACTIONS:
+        return {
+          ...state,
+          assetTypeNames:  {...state.assetTypeNames, selected: action.data}
+        }
+      case types.SET_NAMES_TRANSACTIONS_SELECT_ALL:
+        return {
+          ...state,
+          assetTypeNames:  {...state.assetTypeNames, selectAll: action.flag}
+        }
+      case types.SET_NAMES_TRANSACTIONS_ROW_SELECT:
+        return {
+          ...state,
+          assetTypeNames: {...state.assetTypeNames, row_select: action.data}
+        }
+      case types.SET_ASSETS_ADDRESS_TRANSACTIONS_ALL_GROUP:
+        return {
+          ...state,
+          assetTypeAddress: {...state.assetTypeAddress, all_groups: action.data}
+        } 
+      case types.SET_NAMES_TRANSACTIONS_ALL_GROUP:
+        return {
+          ...state,
+          assetTypeNames: {...state.assetTypeNames, all_groups: action.data}
+        }
+      case types.SET_ADDRESS_QUEUE_DISPLAY:
+        return {
+          ...state,
+          addressQueuesDisplay: action.flag
+        }
+      case types.SET_ADDRESS_QUEUE_LOADING:
+        return {
+          ...state,
+          addressQueuesLoading: action.flag
+        } 
+      case types.SET_ADDRESS_QUEUES_TRANSACTIONS:
+        return {
+          ...state,
+          addressQueues: action.data
+        } 
+      case types.SET_FIXED_TRANSACTION_ADDRESS:
+        return { 
+          ...state,
+          fixedTransactionAddress: action.data
+        } 
+        
+      case types.SET_NAME_QUEUE_DISPLAY:
+        return {
+          ...state,
+          nameQueuesDisplay: action.flag
+        }
+      case types.SET_NAME_QUEUE_LOADING:
+        return {
+          ...state,
+          nameQueuesLoading: action.flag
+        } 
+      case types.SET_NAME_QUEUES_TRANSACTIONS:
+        return {
+          ...state,
+          nameQueues: action.data 
+        } 
+      case types.SET_FIXED_TRANSACTION_NAME:
+        return { 
+          ...state,
+          fixedTransactionName: action.data
+        }
       case types.SET_ASSET_TYPE_ID_COMPANIES_LOADING:
         return {
           ...state,

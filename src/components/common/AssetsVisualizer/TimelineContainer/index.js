@@ -6,7 +6,7 @@ import _debounce from 'lodash/debounce'
 import { useDispatch, useSelector } from 'react-redux'
 import { DataSet } from 'vis-data-71/esnext'
 import { Timeline } from 'vis-timeline/esnext'
-import Paper from '@material-ui/core/Paper'
+mport Paper from '@material-ui/core/Paper'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
@@ -128,7 +128,7 @@ const TimelineContainer = ({ data }) => {
 
   const convertDataToItem = (assetsCustomer) => {
     
-    const assetType = Number.isInteger(assetsCustomer.tab_id) ? oldConvertTabIdToAssetType(assetsCustomer.tab_id) : 'default'
+    const assetType = Number.isInteger(assetsCustomer.tab_id) ? convertTabIdToAssetType(assetsCustomer.tab_id) : 'default'
     const companyName =  selectedWithName.filter( company => assetsCustomer.company == company.id ? company.name : '')
     const customerFirstName = assetsCustomer.tab_id == 10 ? assetsCustomer.customerName.split(' ')[0] : assetsCustomer.customerName
     return ({
@@ -139,7 +139,7 @@ const TimelineContainer = ({ data }) => {
       assetType,
       companyName,
       rawData: assetsCustomer,
-      group: assetsCustomer.group,
+      /* group: assetsCustomer.group, */
       className: `asset-type-${assetType}`,
       collection: [ { id: assetsCustomer.id, totalAssets: assetsCustomer.totalAssets } ],
       showTooltips: false, 
@@ -239,15 +239,26 @@ const TimelineContainer = ({ data }) => {
    * this call when Timeline rangechange
    */
 
-  const onRangeChange = useCallback((properties) => {
+ /*  const onRangeChange = useCallback((properties) => {
     setIsLoadingTimelineData(true)
-  }, [])
+  }, []) */
+
+  const onRangeChange = useCallback(_debounce((properties) => {
+    setIsLoadingTimelineData(true)
+    const updatedItems = timelineItems.filter((item) => (item.start >= properties.start && item.start <= properties.end))
+    items.current = new DataSet()
+    items.current.add(updatedItems)
+    timelineRef.current.setItems(items.current)
+    setIsLoadingTimelineData(false)
+  }, 100), [ timelineItems ])
+
 
   /**
    * this call when Timeline rangechanged
    */
 
   const onRangeChanged = useCallback(_debounce((properties) => {
+    setIsLoadingTimelineData(true)
     const updatedItems = timelineItems.filter((item) => (item.start >= properties.start && item.start <= properties.end))
     items.current = new DataSet()
     items.current.add(updatedItems)

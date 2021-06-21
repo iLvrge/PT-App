@@ -52,3 +52,11 @@ export const html = {
         return str.replace(decodeRexs, function(m) { return html.decodeMap[m]; }) // m = &lt; &quot; &gt;
     }
 }; 
+
+export const downloadFile = (data) => {
+    const blob = new Blob([data], {type: 'text/plain'}), url = window.URL.createObjectURL(blob), link = document.createElement("a")
+    link.download = 'uspto.xml'
+    link.href = url
+    link.click()
+    window.URL.revokeObjectURL(url)
+}

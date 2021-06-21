@@ -154,6 +154,10 @@ class PatenTrackApi {
   static getCustomerAssets(type, companies, tabs, customers, rfIDs) { 
     return axios.get(`${base_new_api_url}/customers/${type}/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
   }
+  
+  static getAssetLifeSpan( form ) { 
+    return axios.post(`${base_new_api_url}/events/assets`, form, getFormUrlHeader())
+  }
 
   static getCPC( form ) { 
     return axios.post(`${base_new_api_url}/assets/cpc`, form, getFormUrlHeader())
@@ -163,12 +167,36 @@ class PatenTrackApi {
     return axios.post(`${base_new_api_url}/assets/cpc/${year}/${cpcCode}`, form, getFormUrlHeader())
   }
 
+  static getTransactionByRfIds( form ) { 
+    return axios.post(`${base_new_api_url}/customers/transactions/groupids`, form, getFormUrlHeader())
+  }
+
+  static getAddressQueue( form ) { 
+    return axios.post(`${base_new_api_url}/customers/transactions/queues/address`, form, getFormUrlHeader())
+  }
+
+  static getNameQueue( form ) { 
+    return axios.post(`${base_new_api_url}/customers/transactions/queues/name`, form, getFormUrlHeader())
+  }
+
+  static getCustomerAddressByCompanyIDs( companies) {  
+    return axios.get(`${base_new_api_url}/address/companies?companies=${JSON.stringify(companies)}`, getHeader())
+  } 
+
   static getCustomerTransactions(type, companies, tabs, customers) { 
     return axios.get(`${base_new_api_url}/customers/${type}/transactions?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}`, getHeader())
   } 
 
   static getCustomerParties(type, companies, tabs, customerType) {  
     return axios.get(`${base_new_api_url}/customers/${type}/parties?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&t=${customerType}`, getHeader())
+  } 
+
+  static getCustomerAddressTransactions( companies, tabs, customers) {  
+    return axios.get(`${base_new_api_url}/customers/transactions/address?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}`, getHeader())
+  } 
+
+  static getCustomerNormalizeNameTransactions( companies, tabs, customers) {  
+    return axios.get(`${base_new_api_url}/customers/transactions/name?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}`, getHeader())
   } 
 
   static getCustomerActivites(type, companies) { 
@@ -619,6 +647,14 @@ class PatenTrackApi {
 
   static downloadXMLFromServer( data ) {
     return axios.post(`${base_new_api_url}/documents/downloadXML`, data, getFormUrlHeader())
+  }
+
+  static fixedTransactionAddressXML( form ) {
+    return axios.post(`${base_new_api_url}/documents/fixed_transaction_address/downloadXML`, form, getFormUrlHeader())
+  }
+
+  static fixedTransactionNameXML( form ) { 
+    return axios.post(`${base_new_api_url}/documents/fixed_transaction_name/downloadXML`, form, getFormUrlHeader())
   }
 
   static createMaintainenceFeeFile( data ) {

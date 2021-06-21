@@ -17,7 +17,7 @@ import PatenTrackApi from '../../../api/patenTrack2';
 
 /*let pdfFile = "";*/
 
-function CommentBox(props) {
+function ConnectionBox(props) {
   const classes = useStyles()
   const [ showSwitcher, setShowSwitcher ] = useState(0)
   const [ boxData, setBoxData ] = useState({})
@@ -82,7 +82,7 @@ function CommentBox(props) {
                   <ShowText data={info[0].patAssignorEarliestExDate}/>
                 </TableCell>
                 <TableCell>
-                  <ShowText data={`Reel/frame`}/>
+                  <ShowText classes={classes.red} data={`Reel/frame`}/>
                   <ShowText data={info[0].displayId}/>
                 </TableCell>
               </TableRow>
@@ -189,4 +189,4 @@ const mapDispatchToProps = {
   setConnectionBoxView
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CommentBox)
+export default connect(mapStateToProps, mapDispatchToProps)(ConnectionBox)

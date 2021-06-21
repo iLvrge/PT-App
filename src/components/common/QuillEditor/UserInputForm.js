@@ -8,6 +8,8 @@ import {
 import CloseIcon from '@material-ui/icons/Close'
 import PatenTrackApi from '../../../api/patenTrack2'   
 
+import {downloadFile} from '../../../utils/html_encode_decode'
+
 import AutoCompleteSearch from './AutoCompleteSearch'
 
 import useStyles from './styles'
@@ -132,17 +134,6 @@ const UserInputForm = React.forwardRef((props, ref) => {
             }
         }
     }, [ dispatch, selectedAssignee, selectedAssignor, selectedCorrespondence, selectedAssetsPatents, selectedAssetsTransactions ])
-
-
-    const downloadFile = (data) => {
-        const blob = new Blob([data], {type: 'text/plain'})
-        const url = window.URL.createObjectURL(blob)
-        const link = document.createElement("a")
-        link.download = 'uspto.xml'
-        link.href = url
-        link.click()
-        window.URL.revokeObjectURL(url)
-    }
 
     /**
      * 

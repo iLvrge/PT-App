@@ -14,8 +14,19 @@ import CustomToolbar from './CustomToolbar'
 import UserInputForm from './UserInputForm'
 import PatenTrackApi from '../../../api/patenTrack2'
 import { setMaintainenceFeeFrameMode } from '../../../actions/uiActions'
-import { getSlackUsersList, setMoveAssets, getMaintainenceAssetsList } from '../../../actions/patentTrackActions2'
+import { 
+    getSlackUsersList, 
+    setMoveAssets, 
+    getMaintainenceAssetsList,
+    setAddressQueueDisplay,
+    setAddressQueueData,
+    setAddressQueueLoading,
+    setNameQueueDisplay,
+    setNameQueueData,
+    setNameQueueLoading 
+  } from '../../../actions/patentTrackActions2'
 import { setTokenStorage, getTokenStorage } from '../../../utils/tokenStorage'
+import {downloadFile} from '../../../utils/html_encode_decode'
 import 'react-quill/dist/quill.snow.css'
 import './styles.css'
 
@@ -29,6 +40,10 @@ const QuillEditor = ({
   onDrive = () => {},
   openGoogleWindow = () => {},
   onSalesAssets = () => {}, 
+  onCorrectAddress = () => {},
+  onChangeAddress = () => {},
+  onCorrectName = () => {},
+  onChangeName = () => {},
   onAttachmentDriveFile = () => {},
   onAttachmentFile = () => {},
   onFocus = () => {},
@@ -42,6 +57,8 @@ const QuillEditor = ({
   const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
   const selectedAssetsTransactions = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
   const maintainence_fee_file_name = useSelector(state => state.patenTrack2.maintainence_fee_file_name)
+  const assetTypeAddressSelected = useSelector(state => state.patenTrack2.assetTypeAddress.selected)
+  const assetTypeNamesSelected = useSelector(state => state.patenTrack2.assetTypeNames.selected)
   const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
   const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
   const google_profile = useSelector(state => state.patenTrack2.google_profile)
@@ -49,10 +66,17 @@ const QuillEditor = ({
   const slack_users = useSelector(state => state.patenTrack2.slack_users)
   const driveButtonActive = useSelector(state => state.ui.driveButtonActive)
   const maintainenceFrameMode = useSelector(state => state.ui.maintainenceFrameMode)
+  const addressQueuesDisplay = useSelector(state => state.patenTrack2.addressQueuesDisplay)
+  const nameQueuesDisplay = useSelector(state => state.patenTrack2.nameQueuesDisplay)
+  const fixedTransactionAddress = useSelector(state => state.patenTrack2.fixedTransactionAddress)
+  const fixedTransactionName = useSelector(state => state.patenTrack2.fixedTransactionName)
   const move_assets = useSelector(state => state.patenTrack2.move_assets)
   const selectedMainCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
   const driveTemplateMode = useSelector(state => state.ui.driveTemplateMode)
   const template_document_url = useSelector(state => state.patenTrack2.template_document_url)
+  const assetTypeNamesGroups = useSelector(state => state.patenTrack2.assetTypeNames.all_groups)
+  const mainCompaniesSelected = useSelector(state => state.patenTrack2.mainCompaniesList.selected)
+
   const [ userListMenu, setUserListMenu ] = useState( null )
   const [ loadingUSPTO, setLoadingUSPTO ] = useState(false)
   const [ modalOpen, setModalOpen] = useState(false)
@@ -296,6 +320,79 @@ const QuillEditor = ({
     }
   }, [ dispatch, category, selectedAssetsPatents, selectedMaintainencePatents, assetTypeAssignmentAssetsSelected, selectedAssetsTransactions ])
 
+  const onHandleCorrectAddress = useCallback(() => {
+    if(assetTypeAddressSelected.length > 0) {
+      onCorrectAddress()
+    } else {
+      alert('Please select address first.')
+    }
+  }, [ assetTypeAddressSelected ])
+
+  const onHandleChangeAddress = useCallback(() => {
+    if(assetTypeAddressSelected.length > 0) {
+      onChangeAddress()
+    } else {
+      alert('Please select address first.')
+    }
+  }, [ assetTypeAddressSelected ])
+
+  const onHandleChangeName = useCallback(() => {
+    if(assetTypeNamesSelected.length > 0) {
+      onChangeName()
+    } else {
+      alert('Please select name first.')
+    }
+  }, [ assetTypeNamesSelected ])
+
+  const onHandleCorrectName = useCallback(() => {
+    if(assetTypeNamesSelected.length > 0) {
+      onCorrectName(undefined, assetTypeNamesGroups, mainCompaniesSelected)
+      console.log("onHandleCorrectName", assetTypeNamesSelected, assetTypeNamesGroups, mainCompaniesSelected)
+    } else {
+      alert('Please select name first.')
+    }
+  }, [ assetTypeNamesSelected, assetTypeNamesGroups, mainCompaniesSelected ])
+
+  const onHandleNamesCancel = useCallback(() => {
+    dispatch(setNameQueueDisplay(false))
+    dispatch(setNameQueueData([]))
+    dispatch(setNameQueueLoading(false))    
+  }, [dispatch])
+
+  const onHandleSubmitNamesUSPTO = useCallback(async() => {
+    if( fixedTransactionName.length > 0 ) {
+      const form = new FormData()
+      form.append('id', fixedTransactionName[0][0])
+      form.append('new_name', fixedTransactionName[0][1])
+      form.append('company_ids', JSON.stringify(selectedMainCompanies))
+      const { data } = await PatenTrackApi.fixedTransactionNameXML(form)
+ 
+      if( data != null && data != '') {
+        downloadFile(data)
+      }
+    }
+  }, [ dispatch, fixedTransactionName ])
+
+  const onHandleAddressCancel = useCallback(() => {
+    dispatch(setAddressQueueDisplay(false))
+    dispatch(setAddressQueueData([]))
+    dispatch(setAddressQueueLoading(false))    
+  }, [dispatch])
+
+  const onHandleSubmitAddressUSPTO = useCallback(async() => {
+    if( fixedTransactionAddress.length > 0 ) {
+      const form = new FormData()
+      form.append('id', fixedTransactionAddress[0][0])
+      form.append('update_address', fixedTransactionAddress[0][1])
+      form.append('company_ids', JSON.stringify(selectedMainCompanies))
+      const { data } = await PatenTrackApi.fixedTransactionAddressXML(form)
+
+      if( data != null && data != '') {
+        downloadFile(data)
+      }
+    }
+  }, [ dispatch, fixedTransactionAddress ])
+
 
   return (
     <div className={classes.root}>
@@ -325,13 +422,23 @@ const QuillEditor = ({
           onMaintainenceFeeFile={onMaintainenceFeeFile}
           onSubmitUSPTO={onHandleSubmitToUSPTO}
           onSalesAssets={onSalesAssets}
-          onShare={onShare}
+          onCorrectAddress={onHandleCorrectAddress}
+          onChangeAddress={onHandleChangeAddress}
+          onCorrectName={onHandleCorrectName}
+          onChangeName={onHandleChangeName}
+          onShare={onShare} 
           loadingUSPTO={loadingUSPTO}
           category={category}
           driveBtnActive={driveButtonActive}
           maintainenceMode={maintainenceFrameMode}
           selectedAssets={selectedAssetsPatents}
-          driveTemplateMode={driveTemplateMode}          
+          driveTemplateMode={driveTemplateMode}
+          addressQueuesDisplay={addressQueuesDisplay} 
+          nameQueuesDisplay={nameQueuesDisplay} 
+          onHandleAddressCancel={onHandleAddressCancel}        
+          onHandleSubmitAddressUSPTO={onHandleSubmitAddressUSPTO}
+          onHandleSubmitNamesUSPTO={onHandleSubmitNamesUSPTO}
+          onHandleNamesCancel={onHandleNamesCancel}
         /> 
         {GetMenuComponent}
       </div>

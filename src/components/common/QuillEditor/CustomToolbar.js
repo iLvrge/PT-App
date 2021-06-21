@@ -17,7 +17,7 @@ import {
 import { getTokenStorage } from '../../../utils/tokenStorage'
 
 import useStyles from './styles'
-const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, onDocument, onAttachmentOpenedFile, onAttachmentOpenedFileAndEmail, onAttachmentFile, onAttachmentDriveFile, onMaintainenceFeeReview, onMaintainenceFeeFile, onSubmitUSPTO, onSalesAssets, loadingUSPTO, category, driveBtnActive, maintainenceMode, selectedAssets, driveTemplateMode, onShare }) => {
+const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, onDocument, onAttachmentOpenedFile, onAttachmentOpenedFileAndEmail, onAttachmentFile, onAttachmentDriveFile, onMaintainenceFeeReview, onMaintainenceFeeFile, onSubmitUSPTO, onCorrectAddress, onChangeAddress, onCorrectName, onChangeName, onSalesAssets, loadingUSPTO, category, driveBtnActive, maintainenceMode, selectedAssets, driveTemplateMode, onShare, addressQueuesDisplay, nameQueuesDisplay, onHandleSubmitAddressUSPTO, onHandleAddressCancel, onHandleSubmitNamesUSPTO, onHandleNamesCancel }) => {
   const classes = useStyles()
   const toolBarRef = useRef(null) 
 
@@ -27,7 +27,7 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
     },
     arrow: {
       color: '#000'
-    }
+    }  
   }))
  
   const classesTooltip = useStylesTooltip()
@@ -157,17 +157,45 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
           ? 
             <Button className={classes.review} onClick={onMaintainenceFeeReview}>Process Selections</Button>
           :
-          <>
-            <Button className={classes.review} onClick={onMaintainenceFeeFile}>Pay Maintenance Fees</Button>
-            <Button className={classes.review} onClick={onMaintainenceFeeReview}>Cancel</Button>
-          </>
+            <>
+              <Button className={classes.review} onClick={onMaintainenceFeeFile}>Pay Maintenance Fees</Button>
+              <Button className={classes.review} onClick={onMaintainenceFeeReview}>Cancel</Button>
+            </>
         :
         category == 'restore_ownership' || category == 'correct_details'
         ?
-        <>
-          <Button className={classes.review} onClick={onSubmitUSPTO} disabled={loadingUSPTO}>Submit to USPTO</Button>
-          <Button className={`${classes.review} ${driveTemplateMode === true ? classes.active : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
-        </>
+          <>
+            <Button className={classes.review} onClick={onSubmitUSPTO} disabled={loadingUSPTO}>Submit to USPTO</Button>
+            <Button className={`${classes.review} ${driveTemplateMode === true ? classes.active : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
+          </>
+        :
+        category == 'correct_address' 
+        ?
+          addressQueuesDisplay === true
+          ?
+          <>
+            <Button className={classes.review} onClick={onHandleSubmitAddressUSPTO}>Submit to USPTO</Button>
+            <Button className={classes.review} onClick={onHandleAddressCancel}>Cancel</Button>
+          </>
+          :
+          <>
+            <Button className={classes.review} onClick={onCorrectAddress}>Correct Addresses</Button>
+            <Button className={classes.review} onClick={onChangeAddress}>Change Addresses</Button>
+          </>
+        :
+        category == 'correct_names' 
+        ?
+          nameQueuesDisplay === true
+          ?
+          <>
+            <Button className={classes.review} onClick={onHandleSubmitNamesUSPTO}>Submit to USPTO</Button>
+            <Button className={classes.review} onClick={onHandleNamesCancel}>Cancel</Button>
+          </>
+          :
+          <>
+            <Button className={classes.review} onClick={onCorrectName}>Correct Name</Button>
+            <Button className={classes.review} onClick={onChangeName}>Change Name</Button>
+          </>
         :
         category == 'sell_payments' 
         ?

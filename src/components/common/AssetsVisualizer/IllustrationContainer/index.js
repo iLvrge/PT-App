@@ -6,7 +6,7 @@ import { Paper, Modal } from '@material-ui/core'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import PatentrackDiagram from '../../PatentrackDiagram'
 import { toggleUsptoMode, toggleFamilyMode } from "../../../../actions/uiActions";
-import { setAssetsIllustrationLoading } from '../../../../actions/patentTrackActions2' 
+import { setAssetsIllustrationLoading, setAssetsIllustrationData } from '../../../../actions/patentTrackActions2' 
 import { setPDFFile, setPDFView, setPdfTabIndex, setConnectionData, setConnectionBoxView } from '../../../../actions/patenTrackActions' 
 
 
@@ -69,6 +69,7 @@ const IllustrationContainer = ({
         try {
           const { data } = await PatenTrackApi.getAssetsByPatentNumber(asset.id, axiosCancelToken.token)
           setIllustrationData(data != '' ? data : null)
+          dispatch(setAssetsIllustrationData(data != '' ? data : null))
           if(setIllustrationRecord) { setIllustrationRecord(data) }
         } catch (error) { if (axios.isCancel(error)) {} else { throw error } }
 
@@ -76,6 +77,7 @@ const IllustrationContainer = ({
         try {
           const { data } = await PatenTrackApi.getCollectionIllustration(asset.id, axiosCancelToken.token)
           setIllustrationData(data != '' ? data : null)
+          dispatch(setAssetsIllustrationData(data != '' ? data : null))
           if(setIllustrationRecord) { setIllustrationRecord(data) }
         } catch (error) { if (axios.isCancel(error)) {} else { throw error } }
       }

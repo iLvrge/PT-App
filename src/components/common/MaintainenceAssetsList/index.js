@@ -175,8 +175,8 @@ const MaintainenceAssetsList = ({
       /* textBold: true */
     },
     {
-      width: 22,
-      minWidth: 22,
+      width: 40,
+      minWidth: 40,
       label: "",
       dataKey: "channel",
       formatCondition: 'asset',

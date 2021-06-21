@@ -51,7 +51,7 @@ import useStyles from './styles'
 
 import Home from '../Home'
 import CompanySummary from '../common/CompanySummary'
-import ClipboardAssets from './ClipboardAssets'
+/* import ClipboardAssets from './ClipboardAssets' */
 import { signOut } from '../../actions/authActions'
 import { getTokenStorage, removeTokenStorage } from '../../utils/tokenStorage'
 import { 
@@ -103,6 +103,7 @@ const NewHeader = () => {
   const breadcrumbs = useSelector(state =>  state.patenTrack2.breadcrumbs )
   const search_string = useSelector(state => state.patenTrack2.search_string)
   const [layoutName, setLayoutName] = useState(null)
+  const [ isClipboardActive, setIsClipboardActive ] = useState(false)
   const [ isCompanyMenuOpen, setCompanyMenuOpen ] = useState(false)
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState( true )
   const [ slackAuthLogin, setSlackAuthLogin ] = useState( true )
@@ -334,6 +335,7 @@ const NewHeader = () => {
 
   const handleClipboard = useCallback(() => {
     if( clipboard_assets.length > 0 ) {
+      setIsClipboardActive(true)
       dispatch(setClipboardAssetsDisplay( !display_clipboard ))
 
       if( !display_clipboard === false ) {
@@ -375,7 +377,7 @@ const NewHeader = () => {
           <div className={classes.breadcrumbs}>{layoutName}</div>   
         </div> 
         <div className={classes.rightPanel}>      
-          <IconButton className={`${classes.clipIcon} ${clipboard_assets.length > 0 ? classes.clipIconActive : ''}`} onClick={handleClipboard}>
+          <IconButton className={`${classes.clipIcon} ${clipboard_assets.length > 0 ? classes.clipIconActive : ''} ${ display_clipboard === true ? classes.clipIconIsActive : ''}`} onClick={handleClipboard}>
             <svg xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 80 80" viewBox="0 0 80 80"><path d="M40,5c-3.3085938,0-6,2.6914062-6,6v3h-5c-0.4199219,0-0.7949219,0.262207-0.9394531,0.6567383l-0.880188,2.4077148	h-9.0836792C16.9404297,17.0644531,16,18.0048828,16,19.1611328v53.7421875C16,74.0595703,16.9404297,75,18.0966797,75h43.8066406
 	C63.0595703,75,64,74.0595703,64,72.9033203V19.1611328c0-1.15625-0.9404297-2.0966797-2.0966797-2.0966797H52.755188
 	L51.875,14.6567383C51.7304688,14.262207,51.3554688,14,50.9355469,14H46v-3C46,7.6914062,43.3085938,5,40,5z M53.1289062,22
