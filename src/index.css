@@ -806,10 +806,23 @@ a.maintain svg.clean_encumbrances path{
   font-size: 0.875rem;
 }
 
+.tootlip_data{
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+.tootlip_data li {
+  margin-top: 5px;
+}
+
+.tootlip_data li:first-child{
+  margin-top: 0;
+}
+
 .noWrapText{
   overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 200px;
+  /* text-overflow: ellipsis;
+  max-width: 60%; */
   max-height: 200px;
 }
 

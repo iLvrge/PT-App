@@ -95,7 +95,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                 origin = origin.split('@@').join('<br/>')
             }
 
-            return `<div class="graphTooltip">Filling Year: ${point.x}<br/>Patents: ${point.data.patent}<br/>${point.data.application_number > 0 ? 'Applications: '+ point.data.application_number +'<br/>' : ''}Origin: ${origin != null ? origin : ''}<br/> Subject Matter : <div class='noWrapText'>${capitalize(defination)}</div></div>`
+            return `<div class="graphTooltip"><ul class="tootlip_data"><li><strong>Filling Year</strong>: ${point.x}</li><li><strong>Patents</strong>: ${point.data.patent}</li>${point.data.application_number > 0 ? '<li><strong>Applications</strong>: '+ point.data.application_number +'</li>' : ''}<li><strong>Origin</strong>: ${origin != null ? origin : ''}</li><li><div class='noWrapText'><strong>Subject Matter</strong>: ${capitalize(defination)}</div></li></div>`
         },
         yValueLabel: function(value) {
             const findIndex = graphRawGroupData.findIndex( row => row.id == value)
@@ -112,7 +112,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
               borderRadius  : '0px',
               color         : '#fff',
               background    : '#000',
-              boxShadow     : 'none'
+              boxShadow     : 'none',
+              maxWidth      : '40%'
             },
             line: {
               borderLeft    : '1px dotted #e60000'
