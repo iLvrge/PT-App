@@ -170,6 +170,9 @@ const IllustrationContainer = ({
   const handleConnectionBox = useCallback((obj) => {
     if (typeof obj.popup != 'undefined') {
       dispatch(
+        toggleUsptoMode(false)
+      )
+      dispatch(
         setPDFView(true)
       )
       dispatch(
@@ -205,6 +208,9 @@ const IllustrationContainer = ({
     if(usptoMode === true) {
       dispatch(
         setConnectionBoxView(false)
+      )
+      dispatch(
+        setConnectionData({})
       )
       checkChartAnalytics(null, null, true)
     } else {

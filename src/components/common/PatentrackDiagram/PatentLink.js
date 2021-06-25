@@ -346,7 +346,10 @@ export default function PatentLink(props) {
           .attr("x", dx + 70 )
           .attr("y", dy )
           .attr("class", "link-tooltip")
-          .attr("fill", config.node.fontColor)
+          .attr("fill", config.colors[
+            data.category.charAt(0).toLowerCase() +
+              data.category.slice(1).replace(" ", "")
+          ])
           .attr("font-size", config.link.tooltip.fontSize)
           .attr("text-anchor", "middle")
           .attr("alignment-baseline", "middle")

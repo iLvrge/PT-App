@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import { Add, Remove } from '@material-ui/icons'
+import moment from 'moment'
 import useStyles from './styles'
 import FullWidthSwitcher from '../FullWidthSwitcher'
 import { connect } from 'react-redux'
@@ -56,6 +57,11 @@ function ConnectionBox(props) {
     )
   }
 
+  const dateDifference = (date1, date2) => {
+    const diffTime = Math.abs(new Date(date2) - new Date(date1))
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  }
+
   const RetreieveBoxData = (props) => {
     const info = assetData.popup && assetData.popup.filter(p => {
       return p.id == props.popup.id
@@ -70,51 +76,62 @@ function ConnectionBox(props) {
           <Table className={classes.table}>
             <TableBody>
               <TableRow>
-                <TableCell><ShowText data={info[0].conveyanceText}/></TableCell>
+                <TableCell className={classes.cellHeading}><ShowText data={info[0].conveyanceText}/></TableCell>
               </TableRow>
               </TableBody>
           </Table>  
           <Table className={classes.table}>
             <TableBody>
-              <TableRow>
-                <TableCell className={classes.fixedWidth}>
-                  <ShowText classes={classes.red} data={`Execution Date`}/>
-                  <ShowText data={info[0].patAssignorEarliestExDate}/>
-                </TableCell>
-                <TableCell>
-                  <ShowText classes={classes.red} data={`Reel/frame`}/>
-                  <ShowText data={info[0].displayId}/>
-                </TableCell>
-              </TableRow>
-              <TableRow>
+            <TableRow>
                 <TableCell>
                   <ShowText classes={classes.red} data={`Assignors`}/>
                   {
                     info[0].patAssignorName.map( (assignor, index) =>(
-                      <ShowText key={`assignor-${index}`} data={assignor}/>
+                      <ShowText key={`assignor-${index}`} className={index > 0 && index < info[0].patAssignorName.length ? classes.marginBottom : ''} data={assignor}/>
                     ))
                   }
                 </TableCell>
                 <TableCell>
-                  <ShowText classes={classes.red} data={`Assignee`}/>
+                  <ShowText classes={classes.red} data={`Assignees`}/>
                   {
-                    info[0].patAssigneeName.map( (assignor, index) =>(
-                      <ShowText key={`assignee-${index}`} data={assignor}/>
+                    info[0].patAssigneeName.map( (assignee, index) =>(
+                      <ShowText key={`assignee-${index}`} className={index > 0 && index < info[0].patAssigneeName.length ? classes.marginBottom : ''} data={assignee} />
                     ))
                   }
-                  <ShowText data={info[0].patAssigneeAddress1[index]}/>
-                  <ShowText data={info[0].patAssigneeCity[index]}/>
-                  <ShowText data={info[0].patAssigneeState[index]}/>
-                  <ShowText data={info[0].patAssigneePostcode[index]}/>
                 </TableCell>
-                <TableCell>
+                <TableCell colSpan={2}>
+                  <ShowText classes={classes.red} data={`Assignee's Address`}/>
+                  {
+                    info[0].patAssigneeName.map( (assignee, index) => (
+                      <div className={index > 0 && index < info[0].patAssigneeName.length ? classes.marginBottom : ''}>
+                        <ShowText data={info[0].patAssigneeAddress1[index]}/>
+                        <ShowText data={`${info[0].patAssigneeCity[index]} ${info[0].patAssigneeState[index]} ${info[0].patAssigneePostcode[index]}`}/>
+                      </div>
+                    ))
+                  }                  
+                </TableCell>           
+              </TableRow>
+              <TableRow>
+                <TableCell className={classes.fixedWidth}>
+                  <ShowText classes={classes.red} data={`Executed`}/>
+                  <ShowText data={moment(new Date(info[0].patAssignorEarliestExDate)).format('MMM. DD YYYY')} classes={classes.marginBottom}/>
+                  <ShowText classes={classes.red} data={`Recorded`}/>
+                  <ShowText data={moment(new Date(info[0].recordedDate)).format('MMM. DD YYYY')}/>                  
+                </TableCell>
+                <TableCell className={classes.fixedWidth}>    
+                  <ShowText classes={classes.red} data={`Lapsed`}/>
+                  <ShowText classes={`${classes.marginBottom} ${dateDifference(info[0].patAssignorEarliestExDate, info[0].recordedDate) > 90 ? classes.blue : ''} `} data={`${dateDifference(info[0].patAssignorEarliestExDate, info[0].recordedDate)} days`} />              
+                  <ShowText classes={classes.red} data={`Reel/frame`}/>
+                  <ShowText data={info[0].displayId}/>
+                </TableCell>
+                <TableCell colSpan={2}>
                   <ShowText classes={classes.red} data={`Correspondent`}/>
-                  <ShowText data={info[0].corrName}/>
+                  <ShowText data={info[0].corrName} classes={classes.marginBottom}/>
                   <ShowText data={info[0].corrAddress1}/>
                   <ShowText data={info[0].corrAddress2}/>
                   <ShowText data={info[0].corrAddress3}/>
-                </TableCell>
-              </TableRow>
+                </TableCell>                
+              </TableRow>              
             </TableBody>
           </Table>
           <Table className={classes.table}>
@@ -128,7 +145,7 @@ function ConnectionBox(props) {
               </TableRow>
               </TableBody>
           </Table>
-          <Table className={classes.table}>
+          <Table className={`${classes.table} ${classes.tablebg}`}>
             <TableHead>
               <TableRow>
                 {

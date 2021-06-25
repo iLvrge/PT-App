@@ -6,6 +6,14 @@ export default makeStyles(theme => ({
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
+    background: '#424242',
+    color: '#fff',
+    '& .MuiTableCell-body, .MuiTableCell-root, .MuiTableCell-head, .MuiButtonBase-root':{
+      color: '#fff',
+    },
+    '& .MuiTableCell-root':{
+      borderBottom: '1px solid #5c5c5c'
+    }
   },
   pdfContainer: {
     flexGrow: 1,
@@ -53,5 +61,34 @@ export default makeStyles(theme => ({
   },
   red: {
     color: '#e60000'
+  },
+  table:{
+    tableLayout: 'fixed'
+  },
+  tablebg:{
+    
+  },
+  cellHeading:{
+    whiteSpace: 'nowrap',
+    padding: '19px 19px 17px 19px', 
+    background: '#292929', 
+    '& .MuiTypography-body2':{
+      fontSize: '1rem'
+    }    
+  },
+  blue:{
+    color: '#228DE8',
+    fontWeight: 'bold' 
+  },
+  marginHeading: {
+    '& .MuiTypography-body2':{
+      marginBottom: 5,
+      '&:last-child':{
+        marginBottom: 0
+      }
+    }
+  },
+  marginBottom: {
+    marginBottom: 5,
   }
 }))
