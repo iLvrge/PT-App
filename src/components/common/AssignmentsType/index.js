@@ -236,11 +236,17 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
                 history.push({
                     hash: updateHashLocation(location, 'activities', [row.tab_id]).join('&')
                 })
-                setSelectItems([row.tab_id])
-                setSelectAll(false)
-                dispatch( setAllAssetTypes( false ) )
-                dispatch( setAssetTypesSelect([row.tab_id]) )
-                updateAssetTypeSelected( row.tab_id )
+                if(!selectItems.includes(row.tab_id)) {
+                    setSelectItems([row.tab_id])
+                    setSelectAll(false)
+                    dispatch( setAllAssetTypes( false ) )
+                    dispatch( setAssetTypesSelect([row.tab_id]) )
+                    updateAssetTypeSelected( row.tab_id )
+                } else {
+                    setSelectItems([])
+                    dispatch( setAssetTypesSelect([]) )
+                    deleteAssetTypeSelected( row.tab_id )
+                }                
             } else {                
                 const element = e.target.closest('div.ReactVirtualized__Table__rowColumn')
                 const index = element.getAttribute('aria-colindex')
@@ -262,6 +268,13 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
         form.append('activity_id', activityID)
 
         const { status } = await PatenTrackApi.updateAssetTypeSelected(form)
+    } 
+
+    const deleteAssetTypeSelected = async(activityID) => {
+        const form = new FormData();
+        form.append('activity_id', activityID)
+
+        const { status } = await PatenTrackApi.deleteAssetTypeSelected(form)
     } 
 
     const getTimelineData = (dispatch, tab_id) => {

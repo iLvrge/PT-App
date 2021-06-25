@@ -3,6 +3,7 @@ import React, {
   useEffect,
   useState,
   useRef,
+  useMemo
 } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Paper } from "@material-ui/core";
@@ -30,7 +31,8 @@ import {
   setChildSelectedAssetsTransactions,
   setDriveTemplateFile,
   setTemplateDocument,
-  setChannelID
+  setChannelID,
+  getChannels
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -54,7 +56,7 @@ import {
 
 import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/numbers";
 
-import { getTokenStorage } from "../../../utils/tokenStorage";
+import { getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
 
 import ChildTable from "./ChildTable";
 
@@ -125,6 +127,8 @@ const AssetsTable = ({
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
   const channel_id = useSelector(state => state.patenTrack2.channel_id)
   const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
+  const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
+
   const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
   const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
   const [data, setData] = useState([])
@@ -162,8 +166,8 @@ const AssetsTable = ({
       /* textBold: true */
     },
     {
-      width: 22,
-      minWidth: 22,
+      width: 35,
+      minWidth: 35,
       label: "",
       dataKey: "channel",
       formatCondition: 'asset',
@@ -236,7 +240,7 @@ const AssetsTable = ({
 
   useEffect(() => {
     if( display_clipboard === true &&  clipboard_assets.length > 0 ) {
-      setTableColumns([...COLUMNS, {
+      let tableColumns = [...COLUMNS, {
         width: 400,
         minWidth: 400,
         oldWidth: 400,
@@ -247,9 +251,9 @@ const AssetsTable = ({
         format: capitalize
 
       }, {
-        width: 60,
-        minWidth: 60,
-        oldWidth: 60,
+        width: 80,
+        minWidth: 80,
+        oldWidth: 80,
         draggable: true,
         label: "CPC",
         dataKey: "cpc_code",
@@ -262,7 +266,9 @@ const AssetsTable = ({
         dataKey: "defination",
         staticIcon: "",
         format: capitalize
-      }])
+      }]
+      tableColumns[2].label = 'Clipboard'
+      setTableColumns(tableColumns)
       //console.log("clipboard_assets", clipboard_assets)
       setWidth(1500)
       dispatch(setAssetTypeAssignmentAllAssets({list: clipboard_assets, total_records: clipboard_assets.length}))
@@ -278,9 +284,10 @@ const AssetsTable = ({
       if(assetTypeAssignmentAssets.length > 0 && slack_channel_list.length > 0) {
         let findChannel = false, oldAssets = [...assetTypeAssignmentAssets]
         const promises = slack_channel_list.map( channelAsset => {
-          const findIndex = oldAssets.findIndex(rowAsset => rowAsset.asset == channelAsset)
+          const findIndex = oldAssets.findIndex(rowAsset => `us${rowAsset.asset}`.toString().toLowerCase() == channelAsset.name)
           if(findIndex !== -1) {
-            oldAssets[findIndex]['channel'] = channelAsset
+            oldAssets[findIndex]['channel'] = oldAssets[findIndex].asset
+
             if(findChannel === false) {
               findChannel = true
             }
@@ -289,11 +296,43 @@ const AssetsTable = ({
         await Promise.all(promises)
         if(findChannel === true){
           setAssetRows(oldAssets)
-        }      
+        }   
+        /**
+         * If asset selected find ChannelID
+         */
+        if(selectedRow.length > 0) {
+          const channelID = findChannelID(selectedRow[0])
+          if( channelID != '') {
+            dispatch(setChannelID({channel_id: channelID}))
+          }
+        }   
       }
     }    
     checkAssetChannel()
-  },[ slack_channel_list, assetTypeAssignmentAssets])
+  },[ slack_channel_list, assetTypeAssignmentAssets, selectedRow])
+
+
+  useEffect(() => {
+    if(slack_channel_list.length == 0 && slack_channel_list_loading === false) {
+      const slackToken = getTokenStorage( 'slack_auth_token_info' )
+      if(slackToken && slackToken!= '') {
+        let token = JSON.parse(slackToken)
+        
+        if(typeof token === 'string') {
+          token = JSON.parse(token)
+          setTokenStorage( 'slack_auth_token_info', token )
+
+        }
+        
+        if(typeof token === 'object') {
+          const { access_token } = token          
+          if(access_token && access_token != '') {
+            dispatch(getChannels(access_token))
+          }
+        }
+      }      
+    }
+  }, [slack_channel_list, slack_channel_list_loading])
 
   /* useEffect(() => {
     if (standalone && assetTypeAssignmentAssets.length > 0) {
@@ -400,7 +439,12 @@ const AssetsTable = ({
         dispatch(assetLegalEvents(appno_doc_num, grant_doc_num));
         dispatch(assetFamily(appno_doc_num));
         dispatch(setSlackMessages({ messages: [], users: [] }));
-        dispatch(getChannelID(grant_doc_num, appno_doc_num));
+        const channelID = findChannelID(grant_doc_num != '' ? grant_doc_num : appno_doc_num)
+        console.log("channelID", channelID)
+        if( channelID != '') {
+          dispatch(setChannelID({channel_id: channelID}))
+        }
+        //dispatch(getChannelID(grant_doc_num, appno_doc_num));
         /* if(openAnalyticsBar === false || openChartBar === false) {
             openAnalyticsAndCharBar()
         } */
@@ -420,14 +464,16 @@ const resetAll = () => {
     dispatch(setChannelID(''))
     dispatch(setConnectionBoxView(false));
     dispatch(setPDFView(false));
+
     dispatch(toggleUsptoMode(false));
     dispatch(toggleLifeSpanMode(false));
     dispatch(toggleFamilyMode(false));
     dispatch(toggleFamilyItemMode(false));
+
     dispatch(setDriveTemplateFrameMode(false))
-    if(openChartBar === true || openAnalyticsBar === true) {
-        closeAnalyticsAndCharBar()
-    }
+    /* if(openChartBar === true || openAnalyticsBar === true) {
+      closeAnalyticsAndCharBar()
+    } */
 }
 
   /**
@@ -503,6 +549,19 @@ const resetAll = () => {
     [dispatch, standalone, assetTypeAssignmentAssets, data],
   );
 
+  const findChannelID = useCallback((asset) => {
+    let channelID = ''
+    if(slack_channel_list.length > 0) {
+      const findIndex = slack_channel_list.findIndex( channel => channel.name == `us${asset}`.toString().toLocaleLowerCase())
+  
+      if( findIndex !== -1) {
+        channelID = slack_channel_list[findIndex].id
+      }
+    }
+    return channelID
+  }, [ slack_channel_list ]) 
+
+
   const resizeColumnsWidth = useCallback((dataKey, data) => {
     let previousColumns = [...tableColumns]
     const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
@@ -510,6 +569,16 @@ const resetAll = () => {
     if( findIndex !== -1 ) {
       previousColumns[findIndex].width =  previousColumns[findIndex].oldWidth + data.x
       previousColumns[findIndex].minWidth = previousColumns[findIndex].oldWidth + data.x
+    }
+    setTableColumns(previousColumns)
+  }, [ tableColumns ] )
+
+  const resizeColumnsStop = useCallback((dataKey, data) => {
+    let previousColumns = [...tableColumns]
+    const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
+
+    if( findIndex !== -1 ) {
+      previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width + data.x
     }
     setTableColumns(previousColumns)
   }, [ tableColumns ] )
@@ -540,6 +609,7 @@ const resetAll = () => {
         onSelectAll={onHandleSelectAll}
         defaultSelectAll={selectedAll}
         resizeColumnsWidth={resizeColumnsWidth}
+        resizeColumnsStop={resizeColumnsStop}
         collapsable={true}
         childHeight={childHeight}
         childSelect={childSelected}

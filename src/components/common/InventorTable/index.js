@@ -154,6 +154,16 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         setHeaderColumns(previousColumns)
     }, [ headerColumns ] )
 
+    const resizeColumnsStop = useCallback((dataKey, data) => {
+        let previousColumns = [...headerColumns]
+        const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
+    
+        if( findIndex !== -1 ) {
+          previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width + data.x
+        }
+        setHeaderColumns(previousColumns)
+    }, [ headerColumns ] )
+
     const onHandleSelectAll = useCallback((event, row) => {
         event.preventDefault()
         const { checked } = event.target;
@@ -258,6 +268,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             childRows={data}
             childCounterColumn={`totalTransactions`}
             resizeColumnsWidth={resizeColumnsWidth}
+            resizeColumnsStop={resizeColumnsStop}
             showIsIndeterminate={false}
             renderCollapsableComponent={
                 <ChildTable partiesId={currentSelection} headerRowDisabled={true} />

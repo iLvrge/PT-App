@@ -14,12 +14,7 @@ import {
     setAllNameGroupRfIDs
   } from '../../../actions/patentTrackActions2'
 
-  import {
-    setConnectionBoxView, 
-    setPDFView,
-  } from '../../../actions/patenTrackActions'
-
-import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode } from '../../../actions/uiActions'
+import { numberWithCommas } from '../../../utils/numbers'
 
 import {
     updateHashLocation
@@ -36,7 +31,7 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
     const [ childHeight, setChildHeight ] = useState(500)
     const [ rowHeight, setRowHeight ] = useState(40)
     const [headerRowHeight, setHeaderRowHeight] = useState(47)
-    const [ width, setWidth ] = useState( 800 ) 
+    const [ width, setWidth ] = useState( 1500 ) 
     const tableRef = useRef()
     const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
     const [ grandTotal, setGrandTotal ] = useState( 0 )
@@ -83,7 +78,7 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
             minWidth: 300,
             oldWidth: 300,
             draggable: true,
-            label: 'Name',   
+            label: 'Company Name - Variations',   
             dataKey: 'name', 
             badge: true,   
             align: 'left'         
@@ -92,8 +87,10 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
             width: 70,
             label: 'Transactions',
             dataKey: 'totalTransactions', 
-            showGrandTotal: true,  
-            align: 'center'             
+            staticIcon: '',
+            format: numberWithCommas,
+            align: 'center',    
+            showGrandTotal: true               
         }
     ]
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)
@@ -157,6 +154,16 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
         if( findIndex !== -1 ) {
           previousColumns[findIndex].width =  previousColumns[findIndex].oldWidth + data.x
           previousColumns[findIndex].minWidth = previousColumns[findIndex].oldWidth + data.x
+        }
+        setHeaderColumns(previousColumns)
+    }, [ headerColumns ] )
+
+    const resizeColumnsStop = useCallback((dataKey, data) => {
+        let previousColumns = [...headerColumns]
+        const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
+    
+        if( findIndex !== -1 ) {
+          previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width + data.x
         }
         setHeaderColumns(previousColumns)
     }, [ headerColumns ] )
@@ -244,9 +251,10 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
             childRows={data} 
             childCounterColumn={`totalTransactions`}
             resizeColumnsWidth={resizeColumnsWidth}
+            resizeColumnsStop={resizeColumnsStop}
             showIsIndeterminate={false}
             renderCollapsableComponent={
-                <ChildTable addressId={currentSelection} headerRowDisabled={true} />
+                <ChildTable addressId={currentSelection} headerRowDisabled={false} />
             }
             /* forceChildWaitCall={true} */
             totalRows={totalRecords}

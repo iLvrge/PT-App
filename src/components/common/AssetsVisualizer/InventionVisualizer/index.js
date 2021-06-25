@@ -222,6 +222,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
 
     const generateChart = async () => {
         if (isLoadingCharts || graphRawData.length == 0 || graphRawGroupData.length == 0) return null
+        console.log("graphRawData", graphRawData.length, graphContainerRef, graphContainerRef.current)
         items.current = new DataSet()
         const colors = ['#70A800', '#00a9e6', '#E69800', '#ff0000']
         let xMin = 0, xMax = 0, years=[];
@@ -267,8 +268,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
            options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight - 50 }px`, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1 }
            console.log("options", options)
         }     
+
         graphRef.current = new Graph3d(graphContainerRef.current, items.current, options)
-        graphRef.current.on('click', graphClickHandler)
+        graphRef.current.on('click', graphClickHandler)      
     }
 
     useEffect(() => { 
@@ -366,7 +368,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
 
     const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
 
-    if (selectedAssetsTransactionLifeSpan.length === 0 || selectedCompanies.length === 0 ) return null
+    /* if (assetsList.length === 0 || maintainenceAssetsList.length === 0 ) return null */
 
     return (
         <Paper className={classes.root} square>  

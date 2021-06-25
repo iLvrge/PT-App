@@ -75,6 +75,7 @@ const HeadCell = ({
   grandTotal,
   onChangeColumnFilters,
   resizeColumnsWidth,
+  resizeColumnsStop,
   icon,
   checkedIcon
 }) => {
@@ -194,6 +195,12 @@ const HeadCell = ({
               data
             )
           } 
+          onStop={(event, data) => 
+            resizeColumnsStop(
+              dataKey,
+              data
+            )
+          }
           position={{ x: 0 }}
           zIndex={999}
         >
@@ -206,7 +213,7 @@ const HeadCell = ({
   )
 }
 
-function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSelectAll, allSelected, isIndeterminate, totalRows, grandTotal, onChangeColumnFilters, resizeColumnsWidth, icon, checkedIcon) {
+function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSelectAll, allSelected, isIndeterminate, totalRows, grandTotal, onChangeColumnFilters, resizeColumnsWidth, resizeColumnsStop, icon, checkedIcon) {
   return useCallback(({ sortBy, dataKey, sortDirection, label, columnIndex }) => {
     return (
       <HeadCell
@@ -228,6 +235,7 @@ function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSel
         grandTotal={grandTotal}
         onChangeColumnFilters={onChangeColumnFilters}
         resizeColumnsWidth={resizeColumnsWidth}
+        resizeColumnsStop={resizeColumnsStop}
       />
     )
   }, [

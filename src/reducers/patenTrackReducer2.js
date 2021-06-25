@@ -350,11 +350,16 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           slack_messages: action.data
         }
       case types.SET_SLACK_CHANNEL_LIST:
-        const channelList = []
-        action.data.forEach( row => channelList.push(row.asset))
+        /* const channelList = []
+        action.data.forEach( row => channelList.push(row.asset)) */
         return {
           ...state,
-          slack_channel_list: channelList
+          slack_channel_list: action.data
+        }
+      case types.SET_SLACK_CHANNEL_LIST_LOADING:
+        return {
+          ...state,
+          slack_channel_list_loading: action.flag
         }
       case types.SET_SLACK_USERS:
         return {

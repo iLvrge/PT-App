@@ -46,7 +46,8 @@ import {
   getAddressQueue,
   setAddressQueueDisplay,
   getNameQueue,
-  setNameQueueDisplay
+  setNameQueueDisplay,
+  setChannelID
 } from '../../../actions/patentTrackActions2'
 
 import {
@@ -91,6 +92,8 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   const assetTypeNamesGroups = useSelector(state => state.patenTrack2.assetTypeNames.all_groups)
   const mainCompaniesSelected = useSelector(state => state.patenTrack2.mainCompaniesList.selected)
   const assetTypeNamesSelected = useSelector(state => state.patenTrack2.assetTypeNames.selected)
+  const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
+  const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
   
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
   const slack_auth_token = useSelector(state => state.patenTrack2.slack_auth_token) 
@@ -137,10 +140,23 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
     if(slack_auth_token && slack_auth_token != null ) {
       const { access_token } = slack_auth_token;
       if( access_token && access_token != null && (channel_id == '' || channel_id == null) && selectedAssetsPatents.length > 0) {
-        dispatch( getChannelID( selectedAssetsPatents[0], selectedAssetsPatents[1] ) )
+        //dispatch( getChannelID( selectedAssetsPatents[0], selectedAssetsPatents[1] ) )
+        if(slack_channel_list.length > 0) {
+          const channelID = findChannelID(selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0] : selectedAssetsPatents[1])
+          if( channelID != '') {
+            dispatch(setChannelID({channel_id: channelID}))
+          }  
+        }
+      }
+      
+      if( access_token && access_token != null && slack_channel_list.length === 0 && slack_channel_list_loading === false ) {
+        dispatch(getChannels(access_token))
       }
     }
-  }, [ dispatch, slack_auth_token, selectedAssetsPatents ] )
+  }, [ dispatch, slack_auth_token, selectedAssetsPatents, slack_channel_list, slack_channel_list_loading ] )
+
+  
+
 
   useEffect(() => {
     updateHeight(size, timelineRef)
@@ -153,6 +169,18 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       }, 2000)
     }
   }, [ commentsData ] )
+
+  const findChannelID = useMemo(async(asset) => {
+    let channelID = ''
+    if(slack_channel_list.length > 0) {
+      const findIndex = slack_channel_list.findIndex( channel => channel.name == `us${asset}`.toString().toLocaleLowerCase())
+  
+      if( findIndex !== -1) {
+        channelID = slack_channel_list[findIndex].id
+      }
+    }
+    return channelID
+  }, [ slack_channel_list ])
 
   const findElementAddClick = () => {
     const elements = document.getElementsByClassName('message_link');
@@ -176,6 +204,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
         if(typeof token === 'string') {
           token = JSON.parse(token)
           setTokenStorage( 'slack_auth_token_info', token )
+
         }
         
         if(typeof token === 'object') {
@@ -183,8 +212,12 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
           const { access_token } = token          
           if(access_token && access_token != '') {
             slackLoginButton =  false 
+            console.log("Slacklogin auth")
+            if( slack_channel_list.length == 0 && slack_channel_list_loading === false) {
+              dispatch(getChannels(access_token))
+            }
           }
-        }        
+        }         
       }
       
       if(googleToken && googleToken != '') {
@@ -204,7 +237,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
 
   const updateHeight = ( size, timelineRef ) => {
     if( timelineRef.current != null ) {
-      console.log('updateHeight=>height', timelineRef.current.parentNode.clientHeight)
+      //console.log('updateHeight=>height', timelineRef.current.parentNode.clientHeight)
       let calHeight = timelineRef.current.parentNode.clientHeight - 96
       /* if(displayButton === false) {
         calHeight = timelineRef.current.parentNode.clientHeight - 96
@@ -317,7 +350,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
               setEditData( null )
               if(channel_id != channel) {
                 dispatch(setChannel({channel_id}))
-                dispatch(getChannels())
+                dispatch(getChannels(access_token))
               }
               dispatch( getSlackMessages( data.channel ) ) 
             }

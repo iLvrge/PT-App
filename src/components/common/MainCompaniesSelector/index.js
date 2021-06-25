@@ -41,6 +41,8 @@ const COLUMNS = [
         draggable: true,
         label: 'Companies',
         dataKey: 'original_name',
+        align: "left",
+        badge: true
     },
     {
         width: 80,  
@@ -275,6 +277,16 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         setHeaderColumns(previousColumns)
     }, [ headerColumns ] )
 
+    const resizeColumnsStop = useCallback((dataKey, data) => {
+        let previousColumns = [...headerColumns]
+        const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
+    
+        if( findIndex !== -1 ) {
+          previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width + data.x
+        }
+        setHeaderColumns(previousColumns)
+    }, [ headerColumns ] )
+
 
     if (isLoadingCompanies && companies.list.length == 0) return <Loader />
 
@@ -289,10 +301,12 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         rowHeight={rowHeight}
         headerHeight={headerRowHeight}
         columns={headerColumns}
+        totalRows={companies.list.length}
         onSelect={handleClickRow}
         onSelectAll={handleSelectAll}
         defaultSelectAll={selectedCompaniesAll}
         resizeColumnsWidth={resizeColumnsWidth}
+        resizeColumnsStop={resizeColumnsStop}
         responsive={true}
         width={width} 
         containerStyle={{ 

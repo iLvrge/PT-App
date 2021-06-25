@@ -128,9 +128,11 @@ const GlobalScreen = ({
     const companyRef = useRef()
     const assignmentTypeRef = useRef()
     const otherPartyRef = useRef()
+    const entityRef = useRef()
     const assignmentRef = useRef()
     const assetRef = useRef()
     const assetFileRef = useRef()
+    const fileBarRef = useRef()
     const templateFileRef = useRef()
     const [ gap, setGap ] = useState( { x: '14.1rem', y: '7.5rem'} )
     const [ isDragging, setIsDragging] = useState(false)
@@ -230,7 +232,8 @@ const GlobalScreen = ({
 
     useEffect(() => {
         updateResizerBar(otherPartyRef, openOtherPartyBar === false && openInventorBar === false ? false : true)
-    }, [ otherPartyRef, openOtherPartyBar, openInventorBar ])
+        updateResizerBar(entityRef, openOtherPartyBar === true && openInventorBar === true ? true : false, 1 )
+    }, [ otherPartyRef, entityRef, openOtherPartyBar, openInventorBar ])
 
     useEffect(() => {
         updateResizerBar(assignmentRef, openAssignmentBar)
@@ -254,8 +257,9 @@ const GlobalScreen = ({
     }, [ mainContainerRef, openVisualizerBar, openCommentBar, openIllustrationBar, openChartBar, openAnalyticsBar ])
 
     useEffect(() => {
-        updateResizerBar(assetFileRef, assetFilesBar)
-    }, [ assetFileRef, assetFilesBar ])
+        updateResizerBar(assetFileRef, assetFilesBar === false && openGoogleDriveBar === false ? false : true )
+        updateResizerBar(fileBarRef, assetFilesBar === true && openGoogleDriveBar === true ? true : false, 1 )
+    }, [ assetFileRef, fileBarRef,  assetFilesBar, openGoogleDriveBar ])  
 
     useEffect(() => {
         updateResizerBar(templateFileRef, driveTemplateMode)
@@ -365,6 +369,7 @@ const GlobalScreen = ({
                                         className={classes.splitPane}
                                         split={`horizontal`}
                                         size={partyBarSize}
+                                        ref={entityRef}
                                         /* onDragFinished={(size) => resizePane('split8', size > 900 ? 900 : size, setAssignmentBarSize)} */
                                        /*  ref={assignmentRef} */
                                     >
@@ -497,6 +502,7 @@ const GlobalScreen = ({
                                         className={classes.splitPane}
                                         split={`horizontal`}
                                         size={driveBarSize}
+                                        ref={fileBarRef}
                                     >
                                         {
                                             assetFilesBar === true
@@ -512,8 +518,7 @@ const GlobalScreen = ({
                                             :
                                             <div></div>
                                         }
-                                    </SplitPane>
-                                    
+                                    </SplitPane>                                    
                                 </div> 
                                 <SplitPane
                                     className={classes.splitPane}

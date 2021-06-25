@@ -82,6 +82,8 @@ const TimelineContainer = ({ data }) => {
   const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
   const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
   const selectedAssetAssignments = useSelector( state => state.patenTrack2.assetTypeAssignments.selected )
+  const assetTypeInventors = useSelector(state => state.patenTrack2.assetTypeInventors.list)
+  
   
   const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
   const assignmentList = useSelector(
@@ -307,7 +309,7 @@ const TimelineContainer = ({ data }) => {
                     assetTypesCompaniesSelected;
 
                    
-        const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, [], selectedCategory)
+        const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, [], selectedCategory, assetTypeInventors.length > 0 ? true : undefined)
         
         //setTimelineRawGroups(data.groups) //groups
         setTimelineRawData(data.list) //items        
@@ -322,7 +324,7 @@ const TimelineContainer = ({ data }) => {
     }
     getTimelineRawDataFunction()
     
-  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments,  assignmentList, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string ])
+  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments,  assignmentList, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors ])
 
   /**
    * Intial timline items dataset and ref setup

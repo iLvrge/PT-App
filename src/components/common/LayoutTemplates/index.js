@@ -90,7 +90,7 @@ const LayoutTemplates = () => {
             if(status != '' && status == 'Message sent') {
               if(channel_id != channel) {
                 dispatch(setChannelID({channel_id}))
-                dispatch( getChannels() )
+                dispatch( getChannels(access_token) )
               }
               renderMessages(data.channel, fileLink)
             }

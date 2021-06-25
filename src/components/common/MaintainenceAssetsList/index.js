@@ -25,7 +25,9 @@ import {
   setSlackMessages,
   setMoveAssets,
   setTemplateDocument,
-  setMaintainenceAssetsList
+  setMaintainenceAssetsList,
+  setChannelID,
+  getChannels
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -44,7 +46,7 @@ import {
 
 import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/numbers";
 
-import { getTokenStorage } from "../../../utils/tokenStorage";
+import { getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
 
 import Loader from "../Loader";
 
@@ -88,6 +90,7 @@ const MaintainenceAssetsList = ({
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
   const move_assets = useSelector(state => state.patenTrack2.move_assets)
   const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list) 
+  const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
   const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
   const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
 
@@ -286,9 +289,9 @@ const MaintainenceAssetsList = ({
       if(assets.list.length > 0 && slack_channel_list.length > 0) {
         let findChannel = false, oldAssets = [...assets.list]
         const promises = slack_channel_list.map( channelAsset => {
-          const findIndex = oldAssets.findIndex(rowAsset => rowAsset.asset == channelAsset)
+          const findIndex = oldAssets.findIndex(rowAsset => `us${rowAsset.asset}`.toString().toLowerCase() == channelAsset.name)
           if(findIndex !== -1) {
-            oldAssets[findIndex]['channel'] = channelAsset
+            oldAssets[findIndex]['channel'] = oldAssets[findIndex].asset
             if(findChannel === false) {
               findChannel = true
             }
@@ -297,11 +300,42 @@ const MaintainenceAssetsList = ({
         await Promise.all(promises)
         if(findChannel === true){
           setAssetsLists({list: oldAssets, total_records: assets.total_records})
-        }      
+        }  
+        /**
+         * If asset selected find ChannelID
+         */
+        if(selectedRow.length > 0) {
+          const channelID = findChannelID(selectedRow[0])
+          if( channelID != '') {
+            dispatch(setChannelID({channel_id: channelID}))
+          }
+        }     
       }
     }    
     checkAssetChannel()
   },[ slack_channel_list, assets])
+
+  useEffect(() => {
+    if(slack_channel_list.length == 0 && slack_channel_list_loading === false) {
+      const slackToken = getTokenStorage( 'slack_auth_token_info' )
+      if(slackToken && slackToken!= '') {
+        let token = JSON.parse(slackToken)
+        
+        if(typeof token === 'string') {
+          token = JSON.parse(token)
+          setTokenStorage( 'slack_auth_token_info', token )
+
+        }
+        
+        if(typeof token === 'object') {
+          const { access_token } = token          
+          if(access_token && access_token != '') {
+            dispatch(getChannels(access_token))
+          }
+        }
+      }      
+    }
+  }, [slack_channel_list, slack_channel_list_loading])
 
   
   const callSelectedAssets = useCallback(({ patent, application, asset }) => {
@@ -322,6 +356,7 @@ const MaintainenceAssetsList = ({
       if(!selectedRow.includes(asset)) {
         callSelectedAssets({ patent, application, asset });
         dispatch(setConnectionBoxView(false));
+        dispatch(setChannelID(''))
         dispatch(setPDFView(false));
         dispatch(toggleUsptoMode(false));
         dispatch(toggleShow3rdParities(false));
@@ -346,7 +381,11 @@ const MaintainenceAssetsList = ({
         );
         dispatch(assetLegalEvents(application, patent));
         dispatch(assetFamily(application));
-        dispatch(getChannelID(patent, application));
+        //dispatch(getChannelID(patent, application));
+        const channelID = findChannelID(patent != '' ? patent : application)
+        if( channelID != '') {
+          dispatch(setChannelID({channel_id: channelID}))
+        }
       }
     },
     [dispatch, selectedAssetsPatents],
@@ -474,6 +513,18 @@ const MaintainenceAssetsList = ({
     },
     [dispatch, assets],
   );
+
+  const findChannelID = useCallback((asset) => {
+    let channelID = ''
+    if(slack_channel_list.length > 0) {
+      const findIndex = slack_channel_list.findIndex( channel => channel.name == `us${asset}`.toString().toLocaleLowerCase())
+  
+      if( findIndex !== -1) {
+        channelID = slack_channel_list[findIndex].id
+      }
+    }
+    return channelID
+  }, [ slack_channel_list ])
 
   if (isLoading && assets.list.length == 0) return <Loader />;
 

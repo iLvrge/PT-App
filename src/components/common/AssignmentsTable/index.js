@@ -54,6 +54,8 @@ import { updateHashLocation } from "../../../utils/hashLocation";
 
 import { numberWithCommas, capitalize } from "../../../utils/numbers";
 
+import { getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
+
 import Loader from "../Loader";
 
 const AssignmentsTable = ({ defaultLoad, type }) => {
@@ -117,6 +119,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
     state => state.patenTrack2.selectedAssetsPatents,
   );
   const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
+  const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
   const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
   
@@ -180,12 +183,11 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   useEffect(() => {
     const checkAssetChannel = async () => {
       if(assignmentList.length > 0 && slack_channel_list.length > 0) {
-        console.log('slack_channel_list', slack_channel_list)
         let findChannel = false, oldAssets = [...assignmentList]
         const promises = slack_channel_list.map( channelAsset => {
-          const findIndex = oldAssets.findIndex(rowTransaction => rowTransaction.rf_id == channelAsset)
+          const findIndex = oldAssets.findIndex(rowTransaction => rowTransaction.rf_id.toString().toLowerCase() == channelAsset.name)
           if(findIndex !== -1) {
-            oldAssets[findIndex]['channel'] = channelAsset
+            oldAssets[findIndex]['channel'] = oldAssets[findIndex].rf_id
             if(findChannel === false) {
               findChannel = true
             }
@@ -194,14 +196,46 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
         await Promise.all(promises)
         if(findChannel === true){
           setRows(oldAssets)
-        }      
+        } 
+        
+        /**
+         * If transaction selected find ChannelID
+         */
+        if(selectedRow.length > 0) {
+          const channelID = findChannelID(selectedRow[0])
+          if( channelID != '') {
+            dispatch(setChannelID({channel_id: channelID}))
+          }
+        }
       }
     }    
     checkAssetChannel()
-  },[ slack_channel_list, assignmentList])
+  },[ slack_channel_list, assignmentList, selectedRow])
 
   useEffect(() => {
-    if (currentSelection > 0) {
+    if(slack_channel_list.length == 0 && slack_channel_list_loading === false) {
+      const slackToken = getTokenStorage( 'slack_auth_token_info' )
+      if(slackToken && slackToken!= '') {
+        let token = JSON.parse(slackToken)
+        
+        if(typeof token === 'string') {
+          token = JSON.parse(token)
+          setTokenStorage( 'slack_auth_token_info', token )
+
+        }
+        
+        if(typeof token === 'object') {
+          const { access_token } = token          
+          if(access_token && access_token != '') {
+            dispatch(getChannels(access_token))
+          }
+        }
+      }      
+    }
+  }, [slack_channel_list, slack_channel_list_loading])
+
+  useEffect(() => {
+    if (currentSelection > 0) { 
       const findIndex = assignmentList.findIndex(
         assignment => parseInt(assignment.rf_id) === parseInt(currentSelection),
       );
@@ -337,7 +371,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
             tabs, 
             customers, 
             false));
-        dispatch(getChannels())
+        //dispatch(getChannels())
         
       } else {
         dispatch(setAssetTypeAssignments({ list: [], total_records: 0 }));
@@ -399,7 +433,7 @@ const onHandleClickRow = useCallback(
           dispatch(setDriveTemplateFrameMode(false));
           dispatch(setDriveTemplateFile(null));
           dispatch(setTemplateDocument(null));
-          dispatch(getChannelIDTransaction(row.rf_id));
+          //dispatch(getChannelIDTransaction(row.rf_id));
         } else {
           if (!oldSelection.includes(row.rf_id)) {
             oldSelection.push(row.rf_id);
@@ -444,7 +478,11 @@ const onHandleClickRow = useCallback(
             dispatch(setDriveTemplateFrameMode(false));
             dispatch(setDriveTemplateFile(null));
             dispatch(setTemplateDocument(null));
-            dispatch(getChannelIDTransaction(row.rf_id));
+            const channelID = findChannelID(row.rf_id)
+            if( channelID != '') {
+              dispatch(setChannelID({channel_id: channelID}))
+            }            
+            //dispatch(getChannelIDTransaction(row.rf_id));
           } else {
             dispatch(setChannelID(''))
             setSelectedRow([])
@@ -460,6 +498,18 @@ const onHandleClickRow = useCallback(
   },
   [dispatch, selectedCategory, selectItems, currentSelection, selectedRow, defaultLoad, search_string, display_clipboard],
 );
+
+const findChannelID = useCallback((rfID) => {
+  let channelID = ''
+  if(slack_channel_list.length > 0) {
+    const findIndex = slack_channel_list.findIndex( channel => channel.name == rfID.toString())
+
+    if( findIndex !== -1) {
+      channelID = slack_channel_list[findIndex].id
+    }
+  }
+  return channelID
+}, [ slack_channel_list ])
 
   const getTransactionData = (dispatch, rf_id, defaultLoad, search_string) => {
     setSelectedRow([rf_id]);
@@ -480,7 +530,11 @@ const onHandleClickRow = useCallback(
     }
     dispatch(setAssetsIllustration({ type: "transaction", id: rf_id }));
     //dispatch(getAssetsAllTransactionsEvents(selectedCategory == '' ? '' : selectedCategory, [], [], [], [rf_id]));
-    dispatch(getChannelIDTransaction(rf_id)); 
+    //dispatch(getChannelIDTransaction(rf_id)); 
+    const channelID = findChannelID(rf_id)
+    if( channelID != '') {
+      dispatch(setChannelID({channel_id: channelID}))
+    }
   };
 
   const resizeColumnsWidth = useCallback((dataKey, data) => {
@@ -493,6 +547,16 @@ const onHandleClickRow = useCallback(
     }
     setHeaderColumns(previousColumns)
   }, [ headerColumns ] )
+
+  const resizeColumnsStop = useCallback((dataKey, data) => {
+    let previousColumns = [...headerColumns]
+    const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
+
+    if( findIndex !== -1 ) {
+      previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width + data.x
+    }
+    setHeaderColumns(previousColumns)
+}, [ headerColumns ] )
 
   if (assignmentListLoading ) return <Loader />;
 
@@ -517,6 +581,7 @@ const onHandleClickRow = useCallback(
         childSelect={childSelected}
         childRows={data}
         resizeColumnsWidth={resizeColumnsWidth}
+        resizeColumnsStop={resizeColumnsStop}
         childCounterColumn={`assets`}
         showIsIndeterminate={false}
         renderCollapsableComponent={

@@ -79,6 +79,7 @@ const VirtualizedTable = ({
   openDropAsset,
   dropdownSelections,
   resizeColumnsWidth,
+  resizeColumnsStop,
   icon,
   checkedIcon,
   ...tableProps
@@ -405,11 +406,12 @@ const VirtualizedTable = ({
     grandTotal,
     onChangeColumnFilters,
     resizeColumnsWidth,
+    resizeColumnsStop,
     icon,
     checkedIcon
   );
   const checkRowCollapse = (collapsable, index, rowData, tableRef) => {
-    if (collapsable) {
+    if (collapsable) { 
       tableRef.current.recomputeRowHeights();
       tableRef.current.forceUpdate();
       if (disableRow === false) {
@@ -574,10 +576,12 @@ const VirtualizedTable = ({
     });
     
     return filteredRows.sort((a, b) => {
-      if (a[sortBy] < b[sortBy]) {
+      const sortA = !isNaN(Number(a[sortBy])) ? Number(a[sortBy]) : a[sortBy]
+      const sortB = !isNaN(Number(b[sortBy])) ? Number(b[sortBy]) : b[sortBy]
+      if (sortA < sortB) {
         return sortDirection === SortDirection.ASC ? -1 : 1;
       }
-      if (a[sortBy] > b[sortBy]) {
+      if (sortA > sortB) {
         return sortDirection === SortDirection.ASC ? 1 : -1;
       }
       return 0;

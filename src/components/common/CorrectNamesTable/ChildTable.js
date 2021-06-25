@@ -61,7 +61,7 @@ const ChildTable = ({ addressId, headerRowDisabled }) => {
     const assetTypeAssignmentAssets = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
 
-    const assetTypeAddress = useSelector(state => state.patenTrack2.assetTypeAddress.list)
+    const assetTypeNames = useSelector(state => state.patenTrack2.assetTypeNames.list)
 
 
     const COLUMNS = [ 
@@ -73,13 +73,20 @@ const ChildTable = ({ addressId, headerRowDisabled }) => {
             paddingLeft: 20
         },
         {
+            width: 300,
+            label: 'Correspondence Name', 
+            dataKey: 'name',
+            align: 'left',
+            paddingLeft: 20
+        }/* ,
+        {
             width: 100,
             label: 'Assets', 
             dataKey: 'assets',
             staticIcon: '',
             format: numberWithCommas,
             align: 'left'           
-        }
+        } */
     ]
        
     useEffect(() => {
@@ -87,12 +94,12 @@ const ChildTable = ({ addressId, headerRowDisabled }) => {
             if( addressId > 0 ) {
                 setAssignmentLoading( true )
 
-                const findIndex = assetTypeAddress.findIndex( address => address.id == addressId)
+                const findIndex = assetTypeNames.findIndex( address => address.id == addressId)
 
                 let rfIDs = []
 
                 if(findIndex !== -1) {
-                    rfIDs = assetTypeAddress[findIndex].group_ids.toString().split(',')
+                    rfIDs = assetTypeNames[findIndex].group_ids.toString().split(',')
                 }            
                 if(rfIDs.length > 0) {
                     const form = new FormData()

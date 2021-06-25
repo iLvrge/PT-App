@@ -4,7 +4,7 @@ import _toLower from 'lodash/toLower'
 import { base_api_url, base_new_api_url } from '../config/config'
 import { convertAssetTypeToTabId } from '../utils/assetTypes'
 
-export const DEFAULT_CUSTOMERS_LIMIT = 100
+export const DEFAULT_CUSTOMERS_LIMIT = 1000
 export const DEFAULT_TRANSACTIONS_LIMIT = 15
 export const DEFAULT_PATENTS_LIMIT = 15
 
@@ -215,6 +215,10 @@ class PatenTrackApi {
     return axios.post(`${base_new_api_url}/user_activity_selection`, saveUserActivitySelection, getFormUrlHeader())
   } 
 
+  static deleteAssetTypeSelected(saveUserActivitySelection) {
+    return axios.delete(`${base_new_api_url}/user_activity_selection`, saveUserActivitySelection, getFormUrlHeader())
+  }
+
   static getUserActivitySelection() {
     return axios.get(`${base_new_api_url}/user_activity_selection`,  getHeader())
   }
@@ -358,8 +362,8 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/timeline/item/${itemID}`, getHeader())
   }
 
-  static getActivitiesTimelineData(companies, tabs, customers, rfIDs = [], layout) {
-    return axios.get(`${base_new_api_url}/customers/timeline?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}`, getHeader())
+  static getActivitiesTimelineData(companies, tabs, customers, rfIDs = [], layout, exclude) {
+    return axios.get(`${base_new_api_url}/customers/timeline?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}`, getHeader())
   }
 
   static getAssetsErrorsData(paramsUrl) {
@@ -528,8 +532,8 @@ class PatenTrackApi {
     return axios.put(`${base_new_api_url}/slacks/team`, data, getFormUrlHeader())
   }
 
-  static getChannels( ) {
-    return axios.get(`${base_new_api_url}/slacks/channels`, getHeader()) 
+  static getChannels( token ) {
+    return axios.get(`${base_new_api_url}/slacks/channels/${token}`, getHeader()) 
   }
 
   static sendMessage( code, data ) {

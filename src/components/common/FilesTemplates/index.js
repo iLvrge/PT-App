@@ -64,7 +64,9 @@ const FilesTemplates = ({type}) => {
             role: 'image',
             imageURL: '',
             imageIcon: '',
-            extension: true    
+            extension: true,
+            badge: true,   
+            align: 'left' 
         },
         {
             width: 100,
@@ -110,7 +112,29 @@ const FilesTemplates = ({type}) => {
             role: 'image',
             imageURL: 'iconLink',
             imageIcon: '',
-            extension: true     
+            extension: true,
+            badge: true,   
+            align: 'left'    
+        },
+        {
+            width: 120,
+            minWidth: 120,
+            oldWidth: 120,
+            draggable: true,
+            label: 'Created',
+            dataKey: 'createdTime',
+            secondaryKey: 'created',
+            align: 'left'    
+        },
+        {
+            width: 300,
+            minWidth: 300,
+            oldWidth: 300,
+            draggable: true,
+            label: 'Author',
+            dataKey: 'owners',
+            secondaryKey: 'user',
+            align: 'left'    
         }
     ]
 
@@ -247,6 +271,16 @@ const FilesTemplates = ({type}) => {
         setHeaderColumns(previousColumns)
     }, [ headerColumns ] )
 
+    const resizeColumnsStop = useCallback((dataKey, data) => {
+        let previousColumns = [...headerColumns]
+        const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
+    
+        if( findIndex !== -1 ) {
+          previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width + data.x
+        }
+        setHeaderColumns(previousColumns)
+    }, [ headerColumns ] )
+
     const resizeDocumentColumnsWidth = useCallback((dataKey, data) => {
         let previousColumns = [...documentHeaderColumns]
         const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
@@ -256,6 +290,16 @@ const FilesTemplates = ({type}) => {
           previousColumns[findIndex].minWidth = previousColumns[findIndex].oldWidth + data.x
         }
         setDocumentHeaderColumns(previousColumns)
+    }, [ documentHeaderColumns ] )
+
+    const resizeDocumentColumnsStop = useCallback((dataKey, data) => {
+        let previousColumns = [...documentHeaderColumns]
+        const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
+    
+        if( findIndex !== -1 ) {
+          previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width + data.x
+        }
+        setHeaderColumns(previousColumns)
     }, [ documentHeaderColumns ] )
 
     return (
@@ -281,6 +325,7 @@ const FilesTemplates = ({type}) => {
                         onSelectAll={onHandleSelectAll}
                         defaultSelectAll={selectedAll}
                         resizeColumnsWidth={resizeColumnsWidth}
+                        resizeColumnsStop={resizeColumnsStop}
                         responsive={true}
                         collapsable={false}
                         showIsIndeterminate={false} 
@@ -318,6 +363,7 @@ const FilesTemplates = ({type}) => {
                         onSelectAll={onHandleDocumentSelectAll}
                         defaultSelectAll={selectedDocumentAll}
                         resizeColumnsWidth={resizeDocumentColumnsWidth}
+                        resizeColumnsStop={resizeDocumentColumnsStop}
                         responsive={true}
                         collapsable={false}
                         showIsIndeterminate={false} 

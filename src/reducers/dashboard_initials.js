@@ -34,6 +34,7 @@ export default {
     google_profile: null,    
     slack_profile_data: null,
     slack_channel_list: [],
+    slack_channel_list_loading: false,
     slack_messages: [],
     slack_users: [], 
     drive_files: { files: [], nextPageToken: '' },

@@ -426,7 +426,7 @@ export const fetchParentCompanies = ( offset = 0 ) => {
   return async dispatch => {
     dispatch(setMainCompaniesLoadingMore(true))
     const { data } = await PatenTrackApi.getParentCompanies(offset)
-    dispatch(getChannels())
+    //dispatch(getChannels())
     dispatch(setMainCompaniesLoadingMore(false))
     dispatch(setMainCompanies(data, { append: true }))
   }
@@ -653,11 +653,19 @@ export const getSlackMessages = ( channelID ) => {
   }
 }
 
-export const getChannels = () => {
+export const getChannels = (token) => {
   return async dispatch => {
-    const { data } = await PatenTrackApi.getChannels()
-
+    dispatch(setChannelLoading(true))
+    const { data } = await PatenTrackApi.getChannels(token)
+    dispatch(setChannelLoading(true))
     dispatch(setChannelsList(data))
+  }
+}
+
+export const setChannelLoading = (flag) => {
+  return {
+    type: types.SET_SLACK_CHANNEL_LIST_LOADING,
+    flag
   }
 }
 

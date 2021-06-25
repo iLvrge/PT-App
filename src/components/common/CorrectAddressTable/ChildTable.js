@@ -73,13 +73,20 @@ const ChildTable = ({ addressId, headerRowDisabled }) => {
             paddingLeft: 20
         },
         {
+            width: 300,
+            label: 'Correspondence Name', 
+            dataKey: 'name',
+            align: 'left',
+            paddingLeft: 20
+        }/* ,
+        {
             width: 100,
             label: 'Assets', 
             dataKey: 'assets',
             staticIcon: '',
             format: numberWithCommas,
             align: 'left'           
-        }
+        } */
     ]
        
     useEffect(() => {
@@ -152,7 +159,7 @@ const ChildTable = ({ addressId, headerRowDisabled }) => {
             columns={COLUMNS}
             defaultSelectAll={selectedAll}
             onSelect={onHandleClickRow}
-            onSelectAll={onHandleSelectAll}
+            onSelectAll={onHandleSelectAll} 
             disableHeader={headerRowDisabled} 
             responsive={false}
             width={width}

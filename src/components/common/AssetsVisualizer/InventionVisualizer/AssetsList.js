@@ -151,13 +151,14 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
             onClick: onHandleDropDownlist
         },
         {
-          width: 100,
+          width: 120,
           label: "Assets",
           dataKey: "asset",
           staticIcon: "US",
           format: numberWithCommas,
           align: "left",
-          paddingLeft: '20px'    
+          paddingLeft: '20px'   ,
+          badge: true, 
         },
         {
             width: 671,
@@ -284,6 +285,7 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
                 icon={<ClipIcon/>}
                 checkedIcon={<ClipCheckedIcon/>}
                 defaultSelectAll={selectedAll}
+                totalRows={assets.length}
                 responsive={false}
                 width={width}
                 containerStyle={{

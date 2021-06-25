@@ -131,6 +131,16 @@ function SearchCompanies({ onClose, selected, setSelected }) {
     setHeaderColumns(previousColumns)
 }, [ headerColumns ] )
 
+const resizeColumnsStop = useCallback((dataKey, data) => {
+  let previousColumns = [...headerColumns]
+  const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
+
+  if( findIndex !== -1 ) {
+    previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width + data.x
+  }
+  setHeaderColumns(previousColumns)
+}, [ headerColumns ] )
+
   const handleOnInputChange = useCallback((e) => setSearch(e.target.value), [])
   const openAddMenu = useCallback((e) => setMenuAnchorEl(e.currentTarget), [])
   const closeAddMenu = useCallback(() => setMenuAnchorEl(null), [])
@@ -200,6 +210,7 @@ function SearchCompanies({ onClose, selected, setSelected }) {
               onSelect={onSelect}
               onSelectAll={onSelectAll}
               resizeColumnsWidth={resizeColumnsWidth}
+              resizeColumnsStop={resizeColumnsStop}
             />
           )
         }

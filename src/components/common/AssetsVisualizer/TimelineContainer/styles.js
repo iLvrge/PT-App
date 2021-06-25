@@ -82,6 +82,7 @@ export default makeStyles(theme => ({
       '& .vis-item-content':{
         width: '95px',
         whiteSpace: 'normal',
+        paddingLeft: 13,
         '& .cluster-header':{
           width: '100%',
           textAlign: 'left',

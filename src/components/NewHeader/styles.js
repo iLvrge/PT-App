@@ -119,6 +119,12 @@ export default makeStyles(theme => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        '& .MuiBadge-anchorOriginTopRightRectangle': {
+            transform: 'scale(1) translate(0%, 22%)'
+        },
+        '& .MuiBadge-anchorOriginTopRightRectangle.MuiBadge-invisible': {
+            transform: 'scale(0) translate(50%, -50%)'
+        }
     },
     breadcrumbs: {
         display: 'flex',

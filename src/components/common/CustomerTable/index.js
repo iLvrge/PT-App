@@ -144,8 +144,21 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
 
         if( findIndex !== -1 ) {
+            console.log("Width", data, previousColumns[findIndex])
           previousColumns[findIndex].width =  previousColumns[findIndex].oldWidth + data.x
           previousColumns[findIndex].minWidth = previousColumns[findIndex].oldWidth + data.x
+        }
+        setHeaderColumns(previousColumns)
+    }, [ headerColumns ] )
+
+
+    const resizeColumnsStop = useCallback((dataKey, data) => {
+        let previousColumns = [...headerColumns]
+        const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
+
+        if( findIndex !== -1 ) {
+            console.log("resizeColumnsStop Width", data, previousColumns[findIndex])
+          previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width + data.x
         }
         setHeaderColumns(previousColumns)
     }, [ headerColumns ] )
@@ -252,6 +265,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             childRows={data}
             childCounterColumn={`totalTransactions`}
             resizeColumnsWidth={resizeColumnsWidth}
+            resizeColumnsStop={resizeColumnsStop}
             showIsIndeterminate={false}
             renderCollapsableComponent={
                 <ChildTable partiesId={currentSelection} headerRowDisabled={true} />

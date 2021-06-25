@@ -29,7 +29,7 @@ import {
     setPDFView,
 } from '../../actions/patenTrackActions'
 
-import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode } from '../../actions/uiActions'
+import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpanMode } from '../../actions/uiActions'
 
 import PatenTrackApi from '../../api/patenTrack2' 
 
@@ -102,6 +102,12 @@ const GlobalLayout = (props) => {
     const search_string = useSelector(state => state.patenTrack2.search_string)
     const driveTemplateFrameMode = useSelector(state => state.ui.driveTemplateFrameMode)
     const driveTemplateMode = useSelector(state => state.ui.driveTemplateMode)
+
+    const usptoMode = useSelector(state => state.ui.usptoMode)
+    const familyMode = useSelector(state => state.ui.familyMode)
+    const familyItemMode = useSelector(state => state.ui.familyItemMode)
+    const lifeSpanMode = useSelector(state => state.ui.lifeSpanMode)
+    const pdfView = useSelector(state => state.patenTrack.pdfView)
 
     useEffect(() => {
         editorBar() // run to find editor width
@@ -350,7 +356,10 @@ const GlobalLayout = (props) => {
 
         }
         
-        setIllustrationBarSize(barSize)       
+        setIllustrationBarSize(barSize)  
+        if(usptoMode === false && lifeSpanMode === false && familyItemMode === false && pdfView === false && !bar === true) {
+            dispatch( toggleLifeSpanMode( true ) )
+        }
         changeVisualBar(!bar, openAnalyticsBar, openCommentBar, openIllustrationBar)
     }
 
@@ -364,7 +373,11 @@ const GlobalLayout = (props) => {
             barSize = '100%'
 
         }   
-            
+        
+        if(usptoMode === false && lifeSpanMode === false && familyMode === false && pdfView === false && !bar === true) {
+            dispatch( toggleLifeSpanMode( true ) )
+        }    
+
         setIllustrationBarSize(barSize)
         changeVisualBar(openChartBar, !bar, openCommentBar, openIllustrationBar)
     }
@@ -467,49 +480,49 @@ const GlobalLayout = (props) => {
             t: 0
         },
         {
-            tooltip: 'Companies',
+            tooltip: 'Filter by Companies',
             bar: openBar,
             click: handleCompanyBarOpen,
             t: 1
         },
         {
-            tooltip: 'Activities',
+            tooltip: 'Filter by Activities',
             bar: openTypeBar,
             click: handleTypeBarOpen,
             t: 2
         },
         {
-            tooltip: 'Parties',
+            tooltip: 'Filter by Parties',
             bar: openOtherPartyBar,
             click: handleOtherPartyBarOpen,
             t: 3
         },
         {
-            tooltip: 'Inventors',
+            tooltip: 'Filter by Inventors',
             bar: openInventorBar,
             click: handleInventorBarOpen,
             t: 11
         },
         {
-            tooltip: 'Assignments',
+            tooltip: 'Filter by Assignments',
             bar: openAssignmentBar,
             click: handleAssignmentBarOpen,
             t: 4
         },
         {
-            tooltip: 'Assets',
+            tooltip: 'Filter by Assets',
             bar: openCustomerBar,
             click: handleCustomersBarOpen,
             t: 5
         },
         {
-            tooltip: 'Documents',
+            tooltip: 'Recorded Documents',
             bar: assetFilesBar,
             click: handleAssetFileBarOpen,
             t: 10
         },
         {
-            tooltip: 'Google Drive',
+            tooltip: 'Initiated Documents',
             bar: openGoogleDriveBar,
             click: handleGoogleDriveBarOpen,
             t: 12

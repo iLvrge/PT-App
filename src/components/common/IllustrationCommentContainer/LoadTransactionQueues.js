@@ -92,8 +92,8 @@ const LoadTransactionQueues = ({}) => {
             align: "left",
         },        
         {
-            width: 120,      
-            minWidth: 120,   
+            width: 300,      
+            minWidth: 300,   
             label: "Original Correspondence",
             dataKey: "original_correspondence",
             align: "left",		  
