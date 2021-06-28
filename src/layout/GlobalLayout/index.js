@@ -21,7 +21,9 @@ import {
     setBreadCrumbs,
     setAssetTypesAssignmentsLoading,
     setAssetTypeAssignments,
-    setSearchRfIDs
+    setSearchRfIDs,
+    setAssetTypeAssignmentAllAssets,
+    setMaintainenceAssetsList
 } from '../../actions/patentTrackActions2'
 
 import { 
@@ -114,6 +116,69 @@ const GlobalLayout = (props) => {
         window.addEventListener("resize", editorBar) // add on resize window 
         return () => window.removeEventListener("resize", editorBar)
     }, [])
+
+
+    useEffect(() => {
+        if( openIllustrationBar === false && openCommentBar === false && openChartBar === false && openAnalyticsBar === false ) {
+            if( openGoogleDriveBar === true || assetFilesBar === true ) {
+                setAssetFilesBarSize('100%')
+            } else if (openCustomerBar === true) {
+                setCustomerBarSize('100%')
+                if(openAssignmentBar === true && assignmentBarSize === '100%') {
+                    setAssignmentBarSize(120)
+                }
+                if ((openOtherPartyBar === true || openInventorBar === true) && otherPartyBarSize === '100%') {
+                    setOtherPartyBarSize(120)
+                }
+                if ( openTypeBar === true && typeBarSize === '100%' ) {
+                    setTypeBarSize(120)
+                }
+                if (openBar === true && companyBarSize === '100%') {
+                    setCompanyBarSize(120)
+                }
+            } else if (openAssignmentBar === true) {
+                setAssignmentBarSize('100%')
+                if ((openOtherPartyBar === true || openInventorBar === true) && otherPartyBarSize === '100%') {
+                    setOtherPartyBarSize(120)
+                }
+                if ( openTypeBar === true && typeBarSize === '100%' ) {
+                    setTypeBarSize(120)
+                }
+                if (openBar === true && companyBarSize === '100%') {
+                    setCompanyBarSize(120)
+                }
+            } else if (openOtherPartyBar === true || openInventorBar === true) {
+                setOtherPartyBarSize('100%')
+                if ( openTypeBar === true && typeBarSize === '100%' ) {
+                    setTypeBarSize(120)
+                }
+                if (openBar === true && companyBarSize === '100%') {
+                    setCompanyBarSize(120)
+                }
+            } else if (openTypeBar === true ) {
+                setTypeBarSize('100%')
+                if (openBar === true && companyBarSize === '100%') {
+                    setCompanyBarSize(120)
+                }
+            } else if (openBar === true ) {
+                setCompanyBarSize('100%')                
+            }
+        }  else {
+            if(assetFilesBarSize === '100%' && (openGoogleDriveBar === true || assetFilesBar === true)){
+                setAssetFilesBarSize(200)
+            } else if(customerBarSize === '100%') {
+                setCustomerBarSize(160)
+            } else if(assignmentBarSize === '100%') {
+                setAssignmentBarSize(120)
+            } else if(otherPartyBarSize === '100%') {
+                setOtherPartyBarSize(120)
+            } else if(typeBarSize === '100%') {
+                setTypeBarSize(120)
+            } else if(companyBarSize === '100%') {
+                setCompanyBarSize(120)
+            }
+        }
+    }, [ openIllustrationBar, openCommentBar, openChartBar, openAnalyticsBar, openGoogleDriveBar, assetFilesBar, openCustomerBar, openAssignmentBar, openOtherPartyBar, openInventorBar, openTypeBar, openBar ])
     
     // When we are in search route disable company, activites, parties icons
 
@@ -257,9 +322,10 @@ const GlobalLayout = (props) => {
         setCustomerOpenBar( !openCustomerBar )
         if(!openCustomerBar === false) {
             setCustomerBarSize(0)
+            dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))
+            dispatch(setMaintainenceAssetsList({list: [], total_records: 0}, false))
         } else {
             setCustomerBarSize(160)
-
         }
         editorBar()
     }
@@ -504,13 +570,13 @@ const GlobalLayout = (props) => {
             t: 11
         },
         {
-            tooltip: 'Filter by Assignments',
+            tooltip: 'Filter by Transactions',
             bar: openAssignmentBar,
             click: handleAssignmentBarOpen,
             t: 4
         },
         {
-            tooltip: 'Filter by Assets',
+            tooltip: 'Assets',
             bar: openCustomerBar,
             click: handleCustomersBarOpen,
             t: 5

@@ -46,14 +46,14 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     const [ childHeight, setChildHeight ] = useState(500)
     const [ rowHeight, setRowHeight ] = useState(40)
     const [headerRowHeight, setHeaderRowHeight] = useState(47)
-    const [ width, setWidth ] = useState( 800 ) 
+    const [ width, setWidth ] = useState( 1900 ) 
     const tableRef = useRef()
     const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
     const [ grandTotal, setGrandTotal ] = useState( 0 )
     const [ childSelected, setCheckedSelected] = useState( 0 )
     const [ currentSelection, setCurrentSelection] = useState(null)    
     const [ selectedRow, setSelectedRow] = useState( [] )
-    const [ selectedAll, setSelectAll ] = useState( false )
+    const [ selectedAll, setSelectAll ] = useState( false ) 
     const [ selectItems, setSelectItems] = useState( [] )
     
     

@@ -46,7 +46,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     const [ childHeight, setChildHeight ] = useState(500)
     const [ rowHeight, setRowHeight ] = useState(40)
     const [headerRowHeight, setHeaderRowHeight] = useState(47)
-    const [ width, setWidth ] = useState( 800 ) 
+    const [ width, setWidth ] = useState( 1900 ) 
     const tableRef = useRef()
     const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
     const [ grandTotal, setGrandTotal ] = useState( 0 )
@@ -54,7 +54,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     const [ currentSelection, setCurrentSelection] = useState(null)    
     const [ selectedRow, setSelectedRow] = useState( [] )
     const [ selectedAll, setSelectAll ] = useState( false )
-    const [ selectItems, setSelectItems] = useState( [] )
+    const [ selectItems, setSelectItems] = useState( [] ) 
     
     
     const assetTypesCompaniesLoading = useSelector(state => state.patenTrack2.assetTypes.loading_companies)
@@ -144,7 +144,6 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
 
         if( findIndex !== -1 ) {
-            console.log("Width", data, previousColumns[findIndex])
           previousColumns[findIndex].width =  previousColumns[findIndex].oldWidth + data.x
           previousColumns[findIndex].minWidth = previousColumns[findIndex].oldWidth + data.x
         }
@@ -157,7 +156,6 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
 
         if( findIndex !== -1 ) {
-            console.log("resizeColumnsStop Width", data, previousColumns[findIndex])
           previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width + data.x
         }
         setHeaderColumns(previousColumns)

@@ -21,6 +21,7 @@ const SpanVisualize = ({ chart }) => {
         width: '100%',
         style: 'bar',
         drawPoints: false,
+        stack: true,
         dataAxis: {
             left: {
                 format: function(value){

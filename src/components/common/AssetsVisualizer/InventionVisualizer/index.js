@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Modal, Backdrop, Paper, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core'
+import { Paper, Dialog, DialogContent, DialogTitle, Typography, Slider } from '@material-ui/core'
 import Draggable from "react-draggable"
 
 
@@ -42,6 +42,30 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
     const [ assets, setAssets ] = useState([])
     const [ filterList, setFilterList ] = useState([])
     const [ selectedTab, setSelectedTab ] = useState(0)
+    const [ value, setValue ] = useState([])
+    const [ scopeRange, setScopeRange ] = useState([])
+    const [ depthRange, setDepthRange ] = useState([
+        {
+          value: 1,
+          label: 'Section',
+        },
+        {
+          value: 2,
+          label: 'Class',
+        },
+        {
+          value: 3,
+          label: 'Sub Class',
+        },
+        {
+          value: 4,
+          label: 'Main Group',
+        },
+        {
+            value: 5,
+            label: 'Sub Group',
+        },
+    ])
 
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const selectedAssetsTransactionLifeSpan = useSelector( state => state.patenTrack2.transaction_life_span )
@@ -64,6 +88,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
 
     const [ graphRawData, setGraphRawData ] = useState([])
     const [ graphRawGroupData, setGraphRawGroupData ] = useState([])
+
 
     let options = {
         height: '100%',
@@ -214,6 +239,16 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                 setIsLoadingCharts(false)
                 setGraphRawData(data.list)
                 setGraphRawGroupData(data.group)
+                const scopeGroup = []
+                const promise = data.group.map( group => {
+                    scopeGroup.push({
+                        value: group.id,
+                        label: group.cpc_code,
+                    })
+                })
+                setScopeRange(scopeGroup)
+                setValue([data.group[0].id, data.group[data.group.length - 1].id])
+                await Promise.all(promise)
             } 
         }
         getChartData()
@@ -368,6 +403,29 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
 
     const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
 
+    const depthRangeText = (value)=> {
+        const findIndex = depthRange.findIndex( range => range.value === value)
+        if(findIndex !== -1) {
+            return depthRange[findIndex].label;
+        } else {
+            return ''
+        }        
+    }
+
+    const scopeRangeText = (value) => {
+        const findIndex = scopeRange.findIndex( range => range.value === value)
+        if(findIndex !== -1) {
+            return scopeRange[findIndex].label;
+        } else {
+            return ''
+        }
+        
+    }
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
     /* if (assetsList.length === 0 || maintainenceAssetsList.length === 0 ) return null */
 
     return (
@@ -379,15 +437,40 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                     ?
                         !isLoadingCharts
                         ?
-                            <div
-                                style={{
-                                height: '100%',
-                                width: '100%',
-                                filter: `blur(${isLoadingCharts ? '4px' : 0})`,
-                                }}
-                                ref={graphContainerRef}
-                                className={classes.timeline}
-                            />
+                            <>
+                                <div className={classes.sliderContainer}>
+                                    <Typography gutterBottom>Scope:</Typography>
+                                    <Slider
+                                        value={value}
+                                        onChange={handleChange}
+                                        valueLabelDisplay="auto"
+                                        aria-labelledby="range-slider"
+                                        getAriaValueText={scopeRangeText}
+                                        marks={scopeRange}
+                                        step={30}
+                                    />
+                                    <Typography gutterBottom>Depth:</Typography>
+                                    <Slider
+                                        defaultValue={3}
+                                        getAriaValueText={depthRangeText}
+                                        aria-labelledby="discrete-slider"
+                                        valueLabelDisplay="auto"
+                                        marks={depthRange}
+                                        max={5}
+                                        min={1}
+                                        step={1}  
+                                    />
+                                </div>
+                                <div
+                                    style={{
+                                    height: '100%',
+                                    width: '100%',
+                                    filter: `blur(${isLoadingCharts ? '4px' : 0})`,
+                                    }}
+                                    ref={graphContainerRef}
+                                    className={classes.timeline}
+                                />
+                            </>
                         :
                             <Loader />
                     :

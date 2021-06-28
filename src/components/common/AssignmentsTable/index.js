@@ -419,17 +419,17 @@ const onHandleClickRow = useCallback(
     const { checked } = e.target;
     let oldSelection = [...selectItems]
     if (checked !== undefined) {
+        if(display_clipboard === false) {
+          dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
+          dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+        }
         if(selectedCategory == 'correct_details') {
           oldSelection = [row.rf_id]
           setSelectAll(false);
           setSelectItems(oldSelection)
           dispatch(setChannelID(''))
           dispatch(setSelectedAssetsPatents([]))
-          getTransactionData(dispatch, row.rf_id, defaultLoad, search_string)
-          if(display_clipboard === false) {
-            dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
-            dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
-          }          
+          getTransactionData(dispatch, row.rf_id, defaultLoad, search_string)                    
           dispatch(setDriveTemplateFrameMode(false));
           dispatch(setDriveTemplateFile(null));
           dispatch(setTemplateDocument(null));

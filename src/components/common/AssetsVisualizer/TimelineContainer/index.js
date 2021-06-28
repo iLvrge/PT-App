@@ -22,10 +22,6 @@ import { numberWithCommas, capitalize } from '../../../../utils/numbers'
 import useStyles from './styles'
 import { setTimelineSelectedItem, setTimelineSelectedAsset } from '../../../../actions/uiActions'
 
-/**
- * Default options parameter for the Timeline
- */
-
 const options = {
   height: '100%',
   autoResize: true,
@@ -314,12 +310,12 @@ const TimelineContainer = ({ data }) => {
         //setTimelineRawGroups(data.groups) //groups
         setTimelineRawData(data.list) //items        
 
-        dispatch(
+        /*dispatch(
           getAssetsAllTransactionsEvents(
             selectedCategory == '' ? '' : selectedCategory,  
             companies, 
             tabs, 
-            customers, [])) // Get life span according to filters 
+            customers, [])) // Get life span according to filters */
       } 
     }
     getTimelineRawDataFunction()

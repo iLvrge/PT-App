@@ -114,4 +114,12 @@ export default makeStyles(theme => ({
             //padding: 0,
         }
     },
+    sliderContainer: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        width: 300,
+        height: 180,
+        zIndex: 999
+    }
 }))

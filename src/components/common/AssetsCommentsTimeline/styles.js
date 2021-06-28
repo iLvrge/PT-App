@@ -236,5 +236,8 @@ export default makeStyles(theme => ({
     position: 'absolute',
     right: 10, 
     bottom: 10
-  }
+  },
+  tooltip:{
+      fontSize: '1rem'
+  },
 }))
