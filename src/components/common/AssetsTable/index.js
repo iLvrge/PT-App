@@ -156,6 +156,7 @@ const AssetsTable = ({
       width: 100,  
       minWidth: 100,    
       label: "Assets",
+      headingIcon: 'assets',
       dataKey: "asset",
       staticIcon: "US",
       format: numberWithCommas,
@@ -180,17 +181,10 @@ const AssetsTable = ({
 
   
 
-  /* useEffect(() => {
-    if(selectedCategory == 'restore_ownership') {
-      COLUMNS.splice(0,1)
-      setTableColumns(COLUMNS)
-    }
-  }, [ selectedCategory ]) */
-
   useEffect(() => {
     if(display_clipboard === false) {
       setTableColumns([...COLUMNS])
-      setWidth(800)
+      setWidth(1500)
       if (standalone) {
         const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
           tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
@@ -210,6 +204,7 @@ const AssetsTable = ({
                     false,
                   ),
                 );
+
                 setWidth(1500)
               } else {
                 dispatch(
@@ -234,7 +229,13 @@ const AssetsTable = ({
                   setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
                 );
               }
-            }        
+            }
+            
+            if(selectedCategory == 'restore_ownership') {    
+              let cols = [...COLUMNS]
+              cols[0].role = 'radio'
+              setTableColumns(cols)
+            }
       } else {
         if (transactionId != null) {
           dispatch(getAssetTypeAssignmentAssets(transactionId, false));
@@ -488,7 +489,7 @@ const resetAll = () => {
     dispatch(setPDFView(false));
 
     dispatch(toggleUsptoMode(false));
-    dispatch(toggleLifeSpanMode(false));
+    dispatch(toggleLifeSpanMode(true));
     dispatch(toggleFamilyMode(false));
     dispatch(toggleFamilyItemMode(false));
 
@@ -506,6 +507,10 @@ const resetAll = () => {
         e.preventDefault()
         const { checked } = e.target
         if(checked !== undefined) {
+          if(selectedCategory == 'restore_ownership') {
+            dispatch(setAssetTypesPatentsSelected([row.asset]))
+            setSelectItems([row.asset])
+          } else {
             let oldSelection = [...selectItems]
             if (!oldSelection.includes(row.asset)) {
               oldSelection.push(row.asset);
@@ -520,7 +525,8 @@ const resetAll = () => {
                 prevItems.includes(row.asset)
                 ? prevItems.filter(item => item !== row.asset)
                 : [...prevItems, row.asset],
-            );            
+            );  
+          }                      
         } else {
             const element = e.target.closest('div.ReactVirtualized__Table__rowColumn')
             const index = element.getAttribute('aria-colindex')           

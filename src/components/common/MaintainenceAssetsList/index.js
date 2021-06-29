@@ -167,6 +167,7 @@ const MaintainenceAssetsList = ({
       width: 80,  
       minWidth: 80,    
       label: "Assets",
+      headingIcon: 'assets',
       dataKey: "asset",
       staticIcon: "US",
       format: numberWithCommas,

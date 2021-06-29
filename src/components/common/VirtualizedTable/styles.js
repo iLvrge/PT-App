@@ -89,6 +89,11 @@ const styles = makeStyles((theme) => ({
   },
   flex:{
     display: 'flex'
+  },
+  headingIcon: {
+    width: 24,
+    height: 24,
+    fill: '#fff'
   }
 }))
 

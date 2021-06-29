@@ -90,6 +90,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             minWidth: 200,
             oldWidth: 200,
             draggable: true,
+            headingIcon: 'parties',
             label: 'Parties',
             dataKey: 'entityName', 
             badge: true,   

@@ -21,7 +21,7 @@ const LifeSpanContainer = () => {
     const [ selectedTab, setSelectedTab ] = useState(0)
     const [ assets, setAssets ] = useState(null)
     const [ filterList, setFilterList ] = useState([])
-
+    const [ lifeSpanTabs, setLifeSpanTabs ] = useState(['Lifespan'])
     const selectedAssetsTransactionLifeSpan = useSelector(state => state.patenTrack2.transaction_life_span)
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const assetIllustration = useSelector( state => state.patenTrack2.assetIllustration )
@@ -40,7 +40,13 @@ const LifeSpanContainer = () => {
     const selectedAssetCompaniesAll = useSelector( state => state.patenTrack2.assetTypeCompanies.selectAll )
     const selectedAssetAssignments = useSelector( state => state.patenTrack2.assetTypeAssignments.selected )
     const selectedAssetAssignmentsAll = useSelector( state => state.patenTrack2.assetTypeAssignments.selectAll )
+    const connectionBoxView = useSelector( state => state.patenTrack.connectionBoxView)
 
+    useEffect(() => {
+        if( connectionBoxView === true) {
+            setLifeSpanTabs([ 'Lifespan', 'Assignment', 'USPTO' ])
+        }
+    }, [ connectionBoxView ])
 
     useEffect(() => {
         const getChartData = async () => {
@@ -178,7 +184,7 @@ const LifeSpanContainer = () => {
                 className={classes.tabs}
             >
                 {
-                    [ 'Lifespan', 'Assignment', 'USPTO' ].map((tab) => (
+                    lifeSpanTabs.map((tab) => (
                         <Tab
                             key={tab}
                             label={tab}

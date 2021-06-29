@@ -94,7 +94,8 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             minWidth: 200,
             oldWidth: 200,
             draggable: true,
-            label: 'Inventors',
+            label: 'Inventors', 
+            headingIcon: 'inventors',
             dataKey: 'entityName', 
             badge: true,           
             align: 'left' 

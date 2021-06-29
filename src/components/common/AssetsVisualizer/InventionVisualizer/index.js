@@ -2,15 +2,15 @@ import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Paper, Dialog, DialogContent, DialogTitle, Typography, Slider } from '@material-ui/core'
 import Draggable from "react-draggable"
-
+import CloseIcon from '@material-ui/icons/Close'
 
 import { DataSet } from 'vis-data/esnext'
 import { Graph3d } from 'vis-graph3d/esnext'
 
-
+import FilterListIcon from '@material-ui/icons/FilterList'
 import Tab from '@material-ui/core/Tab'
 import Tabs from '@material-ui/core/Tabs'
-
+import FilterCPC from './FilterCPC'
 import AssetsList from './AssetsList'
 import PdfViewer from '../../PdfViewer'
 import Loader from '../../Loader'
@@ -39,6 +39,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
     const [ isLoadingCharts, setIsLoadingCharts ] = useState(false)
     const [ openModal, setModalOpen ] = useState(false)
     const [ assetLoading, setAssetsLoading ] = useState(false)
+    const [ openFilter, setOpenFilter ] = React.useState(false);
     const [ assets, setAssets ] = useState([])
     const [ filterList, setFilterList ] = useState([])
     const [ selectedTab, setSelectedTab ] = useState(0)
@@ -67,6 +68,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
         },
     ])
 
+    const [ inventionTabs, setInventionTabs ] = useState(['Innovation'])
+
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const selectedAssetsTransactionLifeSpan = useSelector( state => state.patenTrack2.transaction_life_span )
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected ) //companies
@@ -85,6 +88,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
     const assetIllustration = useSelector( state => state.patenTrack2.assetIllustration )
     const assetIllustrationData = useSelector( state => state.patenTrack2.assetIllustrationData )
     const selectedRow = useSelector( state => state.patenTrack2.selectedAssetsTransactions )
+    const connectionBoxView = useSelector( state => state.patenTrack.connectionBoxView)
 
     const [ graphRawData, setGraphRawData ] = useState([])
     const [ graphRawGroupData, setGraphRawGroupData ] = useState([])
@@ -163,6 +167,12 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
             setAssets(data.list)
         }
     },[ graphRawGroupData, filterList ])
+
+    useEffect(() => {
+        if( connectionBoxView === true) {
+            setInventionTabs([ 'Innovation', 'Agreement', 'Form', 'Main' ])
+        }
+    }, [ connectionBoxView ])
 
     useEffect(() => {
         const getChartData = async () => {
@@ -279,7 +289,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
 
     const generateChart = async () => {
         if (isLoadingCharts || graphRawData.length == 0 || graphRawGroupData.length == 0) return null
-        console.log("graphRawData", graphRawData.length, graphContainerRef, graphContainerRef.current)
+        
         items.current = new DataSet()
         const colors = ['#70A800', '#00a9e6', '#E69800', '#ff0000']
         let xMin = 0, xMax = 0, years=[];
@@ -392,7 +402,13 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
         }
     }, [ assetIllustration, assetIllustrationData, selectedAssetAssignments, selectedRow, selectedCategory ])
 
-
+    const handleOpenFilter = () => {
+        setOpenFilter(true);
+    };
+    
+    const handleCloseFilter = () => {
+        setOpenFilter(false);
+    };
 
     const remoteAssetFromList = useCallback(async (asset) => {
         const list = maintainenceAssetsList.length > 0 ? [...maintainenceAssetsList] : [...assetsList]
@@ -423,6 +439,14 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
         );
     }
 
+    const PaperComponentFilter = (props) => {
+        return (
+            <Draggable handle="#draggable-dialog-filter" cancel={'[class*="MuiDialogContent-root"]'}>
+                <Paper square={true} {...props} />
+            </Draggable>
+        );
+    }
+
     const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
 
     const depthRangeText = (value)=> {
@@ -444,16 +468,13 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
         
     }
 
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
+    
 
     /* if (assetsList.length === 0 || maintainenceAssetsList.length === 0 ) return null */
 
     return (
         <Paper className={classes.root} square>  
-            <div className={classes.graphContainer}>
-                
+            <div className={classes.graphContainer}>                
                 {
                     selectedTab === 0
                     ?
@@ -461,27 +482,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                         ?
                             <>
                                 <div className={classes.sliderContainer}>
-                                    <Typography gutterBottom>Scope:</Typography>
-                                    <Slider
-                                        value={value}
-                                        onChange={handleChange}
-                                        valueLabelDisplay="auto"
-                                        aria-labelledby="range-slider"
-                                        getAriaValueText={scopeRangeText}
-                                        marks={scopeRange}
-                                        step={30}
-                                    />
-                                    <Typography gutterBottom>Depth:</Typography>
-                                    <Slider
-                                        defaultValue={3}
-                                        getAriaValueText={depthRangeText}
-                                        aria-labelledby="discrete-slider"
-                                        valueLabelDisplay="auto"
-                                        marks={depthRange}
-                                        max={5}
-                                        min={1}
-                                        step={1}  
-                                    />
+                                    <FilterListIcon onClick={handleOpenFilter}/>                                    
                                 </div>
                                 <div
                                     style={{
@@ -519,7 +520,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                 className={classes.tabs}
             >
                 {
-                    [ 'Innovation', 'Agreement', 'Form', 'Main' ].map((tab) => (
+                    inventionTabs.map((tab) => (
                         <Tab
                             key={tab}
                             label={tab}
@@ -539,8 +540,22 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                 <DialogContent>
                     <AssetsList loading={assetLoading} assets={assets} remoteAssetFromList={remoteAssetFromList}/>
                 </DialogContent>
-            </Dialog>            
-        </Paper>
+            </Dialog>    
+            <Dialog
+                open={openFilter}
+                onClose={handleCloseFilter}
+                className={classes.modal}
+                PaperComponent={PaperComponentFilter}
+                aria-labelledby="filter-cpc"
+            >
+                <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-filter">
+                    <CloseIcon onClick={handleCloseFilter} style={{ position: 'absolute', right: 10}}/>
+                </DialogTitle>
+                <DialogContent className={classes.filterContent}>
+                    <FilterCPC onClose={handleClose} depthRange={depthRange} scopeRange={scopeRange} depthRangeText={depthRangeText} scopeRangeText={scopeRangeText} value={value} />
+                </DialogContent>
+            </Dialog>   
+        </Paper> 
     )
 }
 

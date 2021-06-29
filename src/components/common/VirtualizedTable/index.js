@@ -253,7 +253,7 @@ const VirtualizedTable = ({
           ? validationKey == "empty" && cellData == ""
             ? rowData[optionalKey]
             : cellData
-          : cellData;
+          : cellData; 
 
       const isIndeterminate =
         showIsIndeterminate &&
@@ -262,6 +262,7 @@ const VirtualizedTable = ({
         childSelect > 0
           ? true
           : false;
+      
       return (
         <TableCell
           component={"div"}
@@ -357,7 +358,7 @@ const VirtualizedTable = ({
               :
               rowData[imageURL] ? 
               <span className={classes.flex}>
-                <Avatar src={rowData[imageURL]} className={classes.small}/><span className={classes.marginLeft}>{cellData}</span>
+                <Avatar src={rowData[imageURL]} className={classes.smallImg}/><span className={classes.marginLeft}>{cellData}</span>
               </span> 
               :  imageIcon != '' && imageIcon != undefined ? <span><FontAwesomeIcon icon={imageIcon}/><span className={classes.marginLeft}>{cellData}</span></span> : (
                 cellData

@@ -118,8 +118,10 @@ export default makeStyles(theme => ({
         position: 'absolute',
         top: 10,
         right: 10,
-        width: 300,
-        height: 180,
+        cursor: 'pointer',
         zIndex: 999
+    },
+    filterContent: {
+        padding: '10px 40px !important'
     }
 }))

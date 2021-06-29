@@ -146,6 +146,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       width: 100,
       minWidth: 100,
       label: "Transactions",
+      headingIcon: 'transactions',
       dataKey: "date",
       align: "left",
       badge: true,

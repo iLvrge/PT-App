@@ -614,6 +614,13 @@ div.vis-tooltip span{
   font-size: 1rem !important;
 } */
 
+.tableheadingIcon{
+  width: 24px;
+  height: 24px;
+  fill: #fff;
+  stroke: #fff;
+  margin-right: 5px;
+}
 
 .MuiTooltip-tooltipPlacementRight, .MuiTooltip-tooltipPlacementBottom, .MuiTooltip-tooltipPlacementLeft{
   margin: 0 8px !important;

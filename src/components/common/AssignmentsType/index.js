@@ -93,6 +93,16 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
           disableSort: true
         },
         {
+            width: 20,
+            minWidth: 20,
+            label: '',
+            dataKey: 'icon',
+            role: 'image',
+            imageURL: 'imageURL',
+            disableSort: true,
+            extension: false
+        },
+        {
             width: 15,
             minWidth: 15,
             label: '',
@@ -104,6 +114,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
             width: 100,
             minWidth: 100,
             label: 'Activities',
+            headingIcon: 'activities',
             dataKey: 'tab_name', 
             badge: true,              
         },
@@ -169,9 +180,58 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
             } else if(otherGroup().includes(tab)){
                 backgroundRowColor = "#491B1B"
             } */
+            let image = '';
+            switch(parseInt(tab)) {
+                case 1:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/acquisition.png'
+                    break;
+                case 2:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png'
+                    break;
+                case 3:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licensein.png'
+                    break;
+                case 4:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licenseout.png'
+                    break;
+                case 5:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+                    break;
+                case 6:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png'
+                    break;
+                case 7:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png'
+                    break;
+                case 8:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/options.png'
+                    break;
+                case 9:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/courtorder.png'
+                    break;
+                case 10:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png'
+                    break;
+                case 11:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/release.png'
+                    break;
+                case 12:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+                    break;
+                case 13:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+                    break;
+                case 14:
+                default:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png'
+                    break;
+            }
+            
             let item = {
                         tab_id: tab, 
                         customer_count: 0, 
+                        icon: '',
+                        imageURL: image,
                         tab_name: findNameIndex >= 0 ? updateActivities[findNameIndex].name : assetType, 
                         children: [], 
                         /* background: backgroundRowColor */
@@ -185,6 +245,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
             }
             list.push(item)
         })
+        
         if(assetTypes.length == 0) {
             setSelectItems([])
             setSelectedRow([])
@@ -193,9 +254,13 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
             (async() => {
                 const { data } = await PatenTrackApi.getUserActivitySelection()
                 if(data != null && Object.keys(data).length > 0) {
-                    console.log([data.activity_id])
-                    setSelectItems([data.activity_id])
-                    dispatch( setAssetTypesSelect([data.activity_id]) )
+                    
+                    const findIndex = assetTypes.findIndex( aTab => aTab.tab_id == data.activity_id )
+
+                    if(findIndex !== -1 ) {
+                        setSelectItems([data.activity_id])
+                        dispatch( setAssetTypesSelect([data.activity_id]) )
+                    }
                 }
             })();            
         }

@@ -40,8 +40,9 @@ const COLUMNS = [
         oldWidth: 171,
         draggable: true,
         label: 'Companies',
+        headingIcon: 'company',
         dataKey: 'original_name',
-        align: "left",
+        align: "left", 
         badge: true
     },
     {
