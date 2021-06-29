@@ -12,5 +12,6 @@ export default {
   duedilligence: '/due' ,
   search: '/search',
   global: '/global',
-  default: '/'
+  default: '/',
+  standard_default: '/:code'
 } 

@@ -39,7 +39,7 @@ const GlobalLayout = (props) => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
-    const [ openBar, setOpenBar ] = useState(true)
+    const [ openBar, setOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? false : true)
     const [ openTypeBar, setTypeOpenBar ] = useState(false)
     const [ openOtherPartyBar, setOtherPartyOpenBar ] = useState(false)
     const [ openInventorBar, setInventorOpenBar ] = useState(false)
@@ -47,9 +47,9 @@ const GlobalLayout = (props) => {
     const [ openCustomerBar, setCustomerOpenBar ] = useState(true)
     const [ openIllustrationBar, setIllustrationBar ] = useState(true)
     const [ openCommentBar, setCommentBar ] = useState(true)
-    const [ openChartBar, setChartBar ] = useState(false)
-    const [ openAnalyticsBar, setAnalyticsBar ] = useState(false)
-    const [ openVisualizerBar, setVisualizeOpenBar ] = useState(false)
+    const [ openChartBar, setChartBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? true : false)
+    const [ openAnalyticsBar, setAnalyticsBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? true : false)
+    const [ openVisualizerBar, setVisualizeOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? true : false)
 
     const [ toggleButtonType, setToggleButtonType ] = useState(true)
     const [ toggleTypeButtonType, setToggleTypeButtonType ] = useState(true)
@@ -71,7 +71,7 @@ const GlobalLayout = (props) => {
         bar50: '50%'
     }
 
-    const [ companyBarSize, setCompanyBarSize ] = useState(200) 
+    const [ companyBarSize, setCompanyBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 0 : 200) 
     const [ typeBarSize, setTypeBarSize ] = useState(0) 
     const [ otherPartyBarSize, setOtherPartyBarSize ] = useState(0)
     const [ partyBarSize, setPartyBarSize ] = useState('50%')
@@ -81,7 +81,7 @@ const GlobalLayout = (props) => {
     const [ customerBarSize, setCustomerBarSize ] = useState(160)
     const [ commentBarSize , setCommentBarSize ] = useState('30%')
     const [ illustrationBarSize , setIllustrationBarSize ] = useState('50%')
-    const [ visualizerBarSize , setVisualizerBarSize ] = useState('0%')
+    const [ visualizerBarSize , setVisualizerBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? '30%' : '0%')
 
     const [ companyButtonVisible, setCompanyButtonVisible ] = useState(false)
     const [ typeButtonVisible, setTypeButtonVisible ] = useState(false)
@@ -117,6 +117,11 @@ const GlobalLayout = (props) => {
         return () => window.removeEventListener("resize", editorBar)
     }, [])
 
+    useEffect(() => {
+        if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ) {
+            dispatch(toggleLifeSpanMode(true))
+        }
+    }, [])
 
     useEffect(() => {
         if( openIllustrationBar === false && openCommentBar === false && openChartBar === false && openAnalyticsBar === false ) {
@@ -538,59 +543,63 @@ const GlobalLayout = (props) => {
         history.push('/settings/repository')
     }, [ history ])
 
+    const handleAlertPop = () => {
+        console.log('Popup')
+    }
+
     const topToolBar = [
         {
             tooltip: 'Settings',
             bar: false,
-            click: handleOpenSettings,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? handleAlertPop : handleOpenSettings,
             t: 0
         },
         {
             tooltip: 'Filter by Companies',
             bar: openBar,
-            click: handleCompanyBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? handleAlertPop : handleCompanyBarOpen,
             t: 1
         },
         {
             tooltip: 'Filter by Activities',
             bar: openTypeBar,
-            click: handleTypeBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? handleAlertPop : handleTypeBarOpen,
             t: 2
         },
         {
             tooltip: 'Filter by Parties',
             bar: openOtherPartyBar,
-            click: handleOtherPartyBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? handleAlertPop : handleOtherPartyBarOpen,
             t: 3
         },
         {
             tooltip: 'Filter by Inventors',
             bar: openInventorBar,
-            click: handleInventorBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? handleAlertPop : handleInventorBarOpen,
             t: 11
         },
         {
             tooltip: 'Filter by Transactions',
             bar: openAssignmentBar,
-            click: handleAssignmentBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? handleAlertPop : handleAssignmentBarOpen,
             t: 4
         },
         {
             tooltip: 'Assets',
             bar: openCustomerBar,
-            click: handleCustomersBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? handleAlertPop : handleCustomersBarOpen,
             t: 5
         },
         {
             tooltip: 'Recorded Documents',
             bar: assetFilesBar,
-            click: handleAssetFileBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? handleAlertPop : handleAssetFileBarOpen,
             t: 10
         },
         {
             tooltip: 'Initiated Documents',
             bar: openGoogleDriveBar,
-            click: handleGoogleDriveBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? handleAlertPop : handleGoogleDriveBarOpen,
             t: 12
         },
     ]
@@ -623,7 +632,9 @@ const GlobalLayout = (props) => {
     ]
 
     useEffect(()=>{
-        loginRedirect(authenticated)
+        if(process.env.REACT_APP_ENVIROMENT_MODE === 'PRO') {
+            loginRedirect(authenticated)
+        }        
         // Fetch data for logged in user using token
     },[authenticated]);
 

@@ -22,6 +22,10 @@ import { numberWithCommas, capitalize } from '../../../../utils/numbers'
 import useStyles from './styles'
 import { setTimelineSelectedItem, setTimelineSelectedAsset } from '../../../../actions/uiActions'
 
+/**
+ * Default options parameter for the Timeline
+ */
+
 const options = {
   height: '100%',
   autoResize: true,
@@ -98,7 +102,7 @@ const TimelineContainer = ({ data }) => {
   );
 
   const selectedItem = useSelector(state => state.ui.timeline.selectedItem)
-
+  const auth_token = useSelector(state => state.patenTrack2.auth_token)
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
 
   const setSelectedItem = useCallback((item) => {
@@ -279,7 +283,12 @@ const TimelineContainer = ({ data }) => {
     /**
      * return empty if no company selected
      */
-    if( (selectedCompaniesAll === false && selectedCompanies.length == 0 ) && ( search_string == '' || search_string == null ) ) return setTimelineRawData([])
+    if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ) {
+      if( auth_token == null && ( search_string == '' || search_string == null ) ) return setTimelineRawData([])
+    } else {
+      if( (selectedCompaniesAll === false && selectedCompanies.length == 0 ) && ( search_string == '' || search_string == null ) ) return setTimelineRawData([])
+    }
+    
     /**|| selectedAssetsPatents.length > 0  || selectedAssetAssignments.length > 0 */
 
     /**
@@ -320,7 +329,7 @@ const TimelineContainer = ({ data }) => {
     }
     getTimelineRawDataFunction()
     
-  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments,  assignmentList, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors ])
+  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments,  assignmentList, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors, auth_token ])
 
   /**
    * Intial timline items dataset and ref setup

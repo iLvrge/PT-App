@@ -81,7 +81,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
     const selectedAssetCompaniesAll = useSelector( state => state.patenTrack2.assetTypeCompanies.selectAll )
     const selectedAssetAssignments = useSelector( state => state.patenTrack2.assetTypeAssignments.selected )
     const selectedAssetAssignmentsAll = useSelector( state => state.patenTrack2.assetTypeAssignments.selectAll )
-
+    const auth_token = useSelector(state => state.patenTrack2.auth_token)
     const assetIllustration = useSelector( state => state.patenTrack2.assetIllustration )
     const assetIllustrationData = useSelector( state => state.patenTrack2.assetIllustrationData )
     const selectedRow = useSelector( state => state.patenTrack2.selectedAssetsTransactions )
@@ -166,11 +166,16 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
 
     useEffect(() => {
         const getChartData = async () => {
-            if (selectedCompanies.length === 0) return null
+            if (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0){
+                return null
+            } else if (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' && auth_token === null){
+                return null
+            }
             setIsLoadingCharts(true)   
             const list = [];
             
-            if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {  
+            if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {
+                
                 if( assetsSelected.length > 0 ) {
                     const promise = assetsSelected.map(asset => {
                         const findIndex = assetsList.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num.toString() == asset.toString() )
@@ -193,6 +198,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                     await Promise.all(promise)
                 }                
             } else {
+                
                 if( assetsList.length > 0 || maintainenceAssetsList.length > 0 ) {
                     if( assetsList.length > 0 ) {
                         const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
@@ -202,6 +208,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                         await Promise.all(promise)
                     }
                 } else {
+                    
                     /**
                      * Check which layout and get the assets list first and then 
                      */
@@ -214,19 +221,34 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                           selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
                         assignments =
                           selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
-                        
-                        if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
-                            dispatch(
-                                getCustomerAssets(
-                                  selectedCategory == '' ? '' : selectedCategory,
-                                  companies,
-                                  tabs,
-                                  customers,
-                                  assignments,
-                                  false,
-                                ),
-                            );
-                        }
+                          
+                        if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ) {
+                            if( auth_token != null ) {
+                                dispatch(
+                                    getCustomerAssets(
+                                        selectedCategory == '' ? '' : selectedCategory,
+                                        companies,
+                                        tabs,
+                                        customers,
+                                        assignments,
+                                        false,
+                                    ),
+                                );
+                            }
+                        } else {
+                            if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
+                                dispatch(
+                                    getCustomerAssets(
+                                      selectedCategory == '' ? '' : selectedCategory,
+                                      companies,
+                                      tabs,
+                                      customers,
+                                      assignments,
+                                      false,
+                                    ),
+                                );
+                            }
+                        }                        
                     }
                 }                
             }
@@ -253,7 +275,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
         }
         getChartData()
         //console.log( "getChartData", selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments )
-    }, [selectedCategory, selectedCategory, selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll ]) 
+    }, [selectedCategory, selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token ]) 
 
     const generateChart = async () => {
         if (isLoadingCharts || graphRawData.length == 0 || graphRawGroupData.length == 0) return null

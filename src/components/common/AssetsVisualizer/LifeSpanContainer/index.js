@@ -28,7 +28,7 @@ const LifeSpanContainer = () => {
     const assetIllustrationData = useSelector( state => state.patenTrack2.assetIllustrationData )
     const selectedRow = useSelector( state => state.patenTrack2.selectedAssetsTransactions )
     const selectedCategory = useSelector( state => state.patenTrack2.selectedCategory )
-
+    const auth_token = useSelector(state => state.patenTrack2.auth_token)
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll )
     const assetsList = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list) //Assets List
     const maintainenceAssetsList = useSelector( state => state.patenTrack2.maintainenceAssetsList.list )
@@ -44,7 +44,11 @@ const LifeSpanContainer = () => {
 
     useEffect(() => {
         const getChartData = async () => {
-            if (selectedCompanies.length === 0) return null
+            if (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0){
+                return null
+            } else if (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' && auth_token === null){
+                return null
+            }
             const list = [];
             
             if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {  
@@ -91,18 +95,33 @@ const LifeSpanContainer = () => {
                           selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
                         assignments =
                           selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
-                        
-                        if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
-                            dispatch(
-                                getCustomerAssets(
-                                  selectedCategory == '' ? '' : selectedCategory,
-                                  companies,
-                                  tabs,
-                                  customers,
-                                  assignments,
-                                  false,
-                                ),
-                            );
+
+                        if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ) {
+                            if( auth_token != null ) {
+                                dispatch(
+                                    getCustomerAssets(
+                                        selectedCategory == '' ? '' : selectedCategory,
+                                        companies,
+                                        tabs,
+                                        customers,
+                                        assignments,
+                                        false,
+                                    ),
+                                );
+                            }
+                        } else {
+                            if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
+                                dispatch(
+                                    getCustomerAssets(
+                                      selectedCategory == '' ? '' : selectedCategory,
+                                      companies,
+                                      tabs,
+                                      customers,
+                                      assignments,
+                                      false,
+                                    ),
+                                );
+                            }
                         }
                     }
                 }                
@@ -117,7 +136,7 @@ const LifeSpanContainer = () => {
             } 
         }
         getChartData()
-    }, [selectedCategory,  selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll ])
+    }, [selectedCategory,  selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token ])
 
     useEffect(() => {
         if(assetIllustration != null && Object.keys(assetIllustration).length > 0) {
@@ -143,8 +162,8 @@ const LifeSpanContainer = () => {
 
 
     const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
-
-    if (selectedAssetsTransactionLifeSpan.length === 0 || selectedCompanies.length === 0 ) return null
+    
+    if ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && (selectedAssetsTransactionLifeSpan.length === 0 || selectedCompanies.length === 0)) || (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' && (auth_token == null || selectedAssetsTransactionLifeSpan.length === 0)) ) return null
 
     return (
         <Paper className={classes.root} square>  

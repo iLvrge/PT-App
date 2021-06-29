@@ -12,6 +12,11 @@ const arrayToObjectByKey = (array, key) =>
 
 const patenTrackReducer = (state = initialState.dashboard, action) => {
   switch (action.type) {
+    case types.SET_AUTHENTICATE_AUTH_TOKEN:
+      return {
+        ...state,
+        auth_token: action.data,
+      }
     case types.SET_COMPANY_LIST_LOADING:
       return {
         ...state,

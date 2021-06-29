@@ -407,4 +407,24 @@ export default makeStyles(theme => ({
             borderColor: '#e5e5e51c',
         }
     },
+    calendly: {
+        '& svg': {
+            width: 60,
+            height: 60
+        },
+        '& .cls-1':{
+            fill: '#006bff'
+        },
+        '& .cls-2':{
+            fill: '#0ae8f0'
+        },
+        '&:hover': {
+            '& .cls-1':{
+                fill: '#ef0000'
+            },
+            '& .cls-2':{
+                fill: '#ef0000'
+            }
+        }
+    }
 }))

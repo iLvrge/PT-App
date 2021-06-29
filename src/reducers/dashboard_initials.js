@@ -2,6 +2,7 @@ import { assetsTypes } from '../utils/assetTypes'
 import { BlurLinear } from '@material-ui/icons'
 
 export default {
+    auth_token: null,
     familyChartVisiblity: 'hidden',
     search_string: null,
     search_rf_id: [],

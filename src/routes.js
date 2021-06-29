@@ -24,7 +24,7 @@ import MainLayout from './layout/MainLayout'
 import BlankLayout from './layout/BlankLayout'
 import GlobalLayout from './layout/GlobalLayout'
 
-const pages = [
+let pages = [
   //Authenticated  pages   
   {
     exact: true,
@@ -117,6 +117,18 @@ const pages = [
   }
 ] 
 
+if(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') {
+  pages = [  
+    {
+      exact: true,
+      path: routeList.standard_default,
+      component: GlobalScreen,
+      layout: GlobalLayout,
+      type: 1
+    },
+  ] 
+}
+
 export default (
   <Switch>
     {/* <Route path="/dashboard" component={DashBoard} />
@@ -135,10 +147,17 @@ export default (
         />
       )
     )}
-    <Route path="/settings" component={Settings} />
-
-    <Route path="/reset/:token" component={Auth} />
-    <Route path="/auth" component={Auth} />
-    <Route path="/slack" component={AuthSlack} />    
+    {
+      process.env.REACT_APP_ENVIROMENT_MODE === 'PRO'
+      ?
+        <>
+        <Route path="/settings" component={Settings} />
+        <Route path="/reset/:token" component={Auth} />
+        <Route path="/auth" component={Auth} />
+        <Route path="/slack" component={AuthSlack} />
+        </>
+      :
+      ''
+    }        
   </Switch>
 )

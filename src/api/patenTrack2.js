@@ -20,9 +20,14 @@ const getCookie = name => {
 }
 
 const getHeader = () => {
-  let token = localStorage.getItem('token')
-  if (token === null) {
-    token = getCookie('token')
+  let token = null
+  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ) {
+    token = localStorage.getItem('auth_signature')
+  } else {
+    token = localStorage.getItem('token')
+    if (token === null) {
+      token = getCookie('token')
+    }
   }
   return {
     headers: {
@@ -32,9 +37,14 @@ const getHeader = () => {
 }
 
 const getFormUrlHeader = () => {
-  let token = localStorage.getItem('token')
-  if (token === null) {
-    token = getCookie('token')
+  let token = null
+  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ) {
+    token = localStorage.getItem('auth_signature')
+  } else {
+    token = localStorage.getItem('token')
+    if (token === null) {
+      token = getCookie('token')
+    }
   }
   return {
     headers: {
@@ -42,12 +52,17 @@ const getFormUrlHeader = () => {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   }
-}
+} 
 
 const getMultiFormUrlHeader = () => {
-  let token = localStorage.getItem('token')
-  if (token === null) {
-    token = getCookie('token')
+  let token = null
+  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ) {
+    token = localStorage.getItem('auth_signature')
+  } else {
+    token = localStorage.getItem('token')
+    if (token === null) {
+      token = getCookie('token')
+    }
   }
   return {
     headers: {

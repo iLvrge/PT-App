@@ -7,6 +7,10 @@ class AuthApi {
     return axios.post(`${base_new_api_url}/signin`, user)
   }
 
+  static signInWithShareCode(code) {
+    return axios.get(`${base_new_api_url}/authenticate/${code}`)
+  }
+
   static forget(user) {
     return axios.post(`${base_api_url}/forgot_password`, user)
   }

@@ -131,6 +131,7 @@ const AssetsTable = ({
 
   const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
   const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
+  const auth_token = useSelector(state => state.patenTrack2.auth_token)
   const [data, setData] = useState([])
   const [assetRows, setAssetRows] = useState([])
 
@@ -197,23 +198,43 @@ const AssetsTable = ({
             selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
           assignments =
             selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
-        if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
-          dispatch(
-            getCustomerAssets(
-              selectedCategory == '' ? '' : selectedCategory,
-              companies,
-              tabs,
-              customers,
-              assignments,
-              false,
-            ),
-          );
-          setWidth(800)
-        } else {
-          dispatch(
-            setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
-          );
-        }
+            if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ) {
+              if (auth_token != null) {
+                dispatch(
+                  getCustomerAssets(
+                    selectedCategory == '' ? '' : selectedCategory,
+                    companies,
+                    tabs,
+                    customers,
+                    assignments,
+                    false,
+                  ),
+                );
+                setWidth(1500)
+              } else {
+                dispatch(
+                  setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
+                );
+              }
+            } else {
+              if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
+                dispatch(
+                  getCustomerAssets(
+                    selectedCategory == '' ? '' : selectedCategory,
+                    companies,
+                    tabs,
+                    customers,
+                    assignments,
+                    false,
+                  ),
+                );
+                setWidth(1500)
+              } else {
+                dispatch(
+                  setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
+                );
+              }
+            }        
       } else {
         if (transactionId != null) {
           dispatch(getAssetTypeAssignmentAssets(transactionId, false));
@@ -230,7 +251,8 @@ const AssetsTable = ({
     selectedAssetCompaniesAll,
     selectedAssetAssignmentsAll,
     selectedAssetAssignments,
-    display_clipboard    
+    display_clipboard,
+    auth_token        
   ]);
 
   useEffect(() => {

@@ -3,6 +3,13 @@ import PatenTrackApi, { DEFAULT_CUSTOMERS_LIMIT, DEFAULT_TRANSACTIONS_LIMIT, DEF
 
 import { toggleLifeSpanMode, setDriveTemplateFrameMode, setDriveTemplateMode, resetUiStates } from './uiActions'
 
+export const setAuthenticateAuthToken = data => {
+  return {
+    type: types.SET_AUTHENTICATE_AUTH_TOKEN,
+    data,
+  }
+}
+
 export const setCompaniesList = data => {
   return {
     type: types.SET_COMPANIES_LIST,
