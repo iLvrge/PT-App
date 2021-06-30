@@ -123,5 +123,15 @@ export default makeStyles(theme => ({
     },
     filterContent: {
         padding: '10px 40px !important'
+    },
+    displayFlex:{
+        display: 'flex', 
+        height: '100%',
+        paddingTop: 20
+    },
+    flexColumn: {
+        display: 'flex', 
+        flexDirection: 'column',
+        flexBasis: '50%'       
     }
 }))

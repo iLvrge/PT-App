@@ -21,7 +21,9 @@ import {
     setMainCompaniesRowSelect,
     setChildSelectedAssetsPatents,
     setSelectedAssetsPatents,
-    setSelectedAssetsTransactions
+    setSelectedAssetsTransactions,
+    setMaintainenceAssetsList,
+    setAssetTypeAssignmentAllAssets
   } from '../../../actions/patentTrackActions2'
 
   import {
@@ -67,7 +69,8 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     /* const assetTypeCompaniesSelectedRow = useSelector(state => state.patenTrack2.assetTypeCompanies.row_select) */
     const assetTypeCompaniesSelected = useSelector(state => state.patenTrack2.assetTypeCompanies.selected)
     const assetTypeCompaniesLoading = useSelector(state => state.patenTrack2.assetTypeCompanies.loading)
-    const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
+    const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
+    const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
     const [ data, setData ] = useState( [] )
 
     const COLUMNS = [
@@ -188,6 +191,10 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         const { checked } = e.target;
         let oldSelection = [...selectItems]
         if( checked !== undefined) {
+            if(display_clipboard === false) {
+                dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
+                dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+            }
             if( !oldSelection.includes(row.id) ){
                 oldSelection.push(row.id)
             } else {
@@ -219,7 +226,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
                 getTimelineData(dispatch, row.id) 
             } */
         } 
-    }, [ dispatch, currentSelection, selectItems ])
+    }, [ dispatch, currentSelection, selectItems, display_clipboard ])
 
     const getTimelineData = (dispatch, id) => {
         parentBarDrag(0)

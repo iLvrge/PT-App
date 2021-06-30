@@ -136,7 +136,8 @@ const LifeSpanContainer = () => {
             if( list.length > 0 ) {
                 setFilterList(list)
                 const form = new FormData()
-                form.append("list", JSON.stringify(list))
+                form.append("list", JSON.stringify(list)) 
+                PatenTrackApi.cancelLifeSpanRequest()
                 const {data} = await PatenTrackApi.getAssetLifeSpan(form) 
                 dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, data))
             } 

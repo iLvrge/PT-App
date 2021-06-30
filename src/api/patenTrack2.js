@@ -74,7 +74,7 @@ const getMultiFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan
 
 class PatenTrackApi {
   static getSiteLogo() {
@@ -167,15 +167,57 @@ class PatenTrackApi {
   }
 
   static getCustomerAssets(type, companies, tabs, customers, rfIDs) { 
-    return axios.get(`${base_new_api_url}/customers/${type}/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelAssets = c
+    })
+    return axios.get(`${base_new_api_url}/customers/${type}/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, header)
+  }
+
+  static cancelAssets() {
+    if (cancelAssets !== undefined) {
+      try{
+        throw cancelAssets('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
   }
   
   static getAssetLifeSpan( form ) { 
-    return axios.post(`${base_new_api_url}/events/assets`, form, getFormUrlHeader())
+    let header = getFormUrlHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelLifeSpan = c
+    })
+    return axios.post(`${base_new_api_url}/events/assets`, form, header)
+  }
+
+  static cancelLifeSpanRequest() {
+    if (cancelLifeSpan !== undefined) {
+      try{
+        throw cancelLifeSpan('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
   }
 
   static getCPC( form ) { 
-    return axios.post(`${base_new_api_url}/assets/cpc`, form, getFormUrlHeader())
+    let header = getFormUrlHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelCPC = c
+    })
+    return axios.post(`${base_new_api_url}/assets/cpc`, form, header)
+  }
+
+  static cancelCPCRequest() {
+    if (cancelCPC !== undefined) {
+      try{
+        throw cancelCPC('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
   }
 
   static getAssetsByCPCCode( year, cpcCode, form ) { 

@@ -10,7 +10,9 @@ import {
     fetchParentCompanies,
     setMainCompaniesSelected,
     setMainCompaniesAllSelected,
-    setMainCompaniesRowSelect
+    setMainCompaniesRowSelect,
+    setMaintainenceAssetsList,
+    setAssetTypeAssignmentAllAssets
 } from '../../../actions/patentTrackActions2'
 
 import { DEFAULT_CUSTOMERS_LIMIT } from '../../../api/patenTrack2'
@@ -115,7 +117,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const selected = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
-
+    const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
     useEffect(() => {
         const initCompanies = async () => {
             dispatch(fetchParentCompanies( offset ) )
@@ -237,9 +239,13 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
 
     const handleClickRow = useCallback((event, row) => {
         event.preventDefault()
+        if(display_clipboard === false) {
+            dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
+            dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+        }
         const { checked } = event.target;
         updateCompanySelection( dispatch, row, checked, selected, defaultSelect)
-    }, [ dispatch, selected ])
+    }, [ dispatch, selected, display_clipboard ])
     
     const handleSelectAll = useCallback((event, row) => {
         event.preventDefault()

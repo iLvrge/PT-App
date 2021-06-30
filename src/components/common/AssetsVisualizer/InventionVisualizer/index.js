@@ -43,7 +43,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
     const [ assets, setAssets ] = useState([])
     const [ filterList, setFilterList ] = useState([])
     const [ selectedTab, setSelectedTab ] = useState(0)
-    const [ value, setValue ] = useState([])
+    const [ valueScope, setValueScope ] = useState([2, 3])
+    const [ valueRange, setValueRange ] = useState(3)
     const [ scopeRange, setScopeRange ] = useState([])
     const [ depthRange, setDepthRange ] = useState([
         {
@@ -267,6 +268,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                 setFilterList(list)
                 const form = new FormData()
                 form.append("list", JSON.stringify(list))
+                PatenTrackApi.cancelCPCRequest()
                 const {data} = await PatenTrackApi.getCPC(form) 
                 setIsLoadingCharts(false)
                 setGraphRawData(data.list)
@@ -279,7 +281,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                     })
                 })
                 setScopeRange(scopeGroup)
-                setValue([data.group[0].id, data.group[data.group.length - 1].id])
+                    
                 await Promise.all(promise)
             } 
         }
@@ -468,7 +470,25 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
         
     }
 
-    
+    const onChangeSlider = useCallback(async (range, scope) => {
+        setValueRange(range)
+        setValueScope(scope)
+        const scopeList = []
+        const promise = scopeRange.map( r => {
+            if(r.value >= scope[0] && r.value <= scope[1]){
+                scopeList.push(r.label)
+            }
+        })
+        await Promise.all(scopeList)
+        const form = new FormData()
+        form.append("list", JSON.stringify(filterList))        
+        form.append("range", range)
+        form.append("scope", JSON.stringify(scopeList))
+        PatenTrackApi.cancelCPCRequest()
+        const {data} = await PatenTrackApi.getCPC(form) 
+        setGraphRawData(data.list)
+        //setGraphRawGroupData(data.group)
+    }, [ filterList, scopeRange ] )
 
     /* if (assetsList.length === 0 || maintainenceAssetsList.length === 0 ) return null */
 
@@ -552,7 +572,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                     <CloseIcon onClick={handleCloseFilter} style={{ position: 'absolute', right: 10}}/>
                 </DialogTitle>
                 <DialogContent className={classes.filterContent}>
-                    <FilterCPC onClose={handleClose} depthRange={depthRange} scopeRange={scopeRange} depthRangeText={depthRangeText} scopeRangeText={scopeRangeText} value={value} />
+                    <FilterCPC onClose={handleClose} depthRange={depthRange} scopeRange={scopeRange} depthRangeText={depthRangeText} scopeRangeText={scopeRangeText} valueScope={valueScope} valueRange={valueRange} onChange={onChangeSlider}/>
                 </DialogContent>
             </Dialog>   
         </Paper> 

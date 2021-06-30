@@ -22,7 +22,9 @@ import {
     setAssetTypeChildCustomerSelectedRow,
     setAssetTypeChildCustomerSelected,
     setChildSelectedAssetsTransactions,
-    setChildSelectedAssetsPatents
+    setChildSelectedAssetsPatents,
+    setMaintainenceAssetsList,
+    setAssetTypeAssignmentAllAssets
 } from '../../../actions/patentTrackActions2'
 
 import {
@@ -79,8 +81,8 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     
     const assetTypeCompaniesList = useSelector(state => state.patenTrack2.assetTypeCompanies.list)
-    const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
-    
+    const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
+    const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
     const tabs = [1,2,6,7,3,4,5,11,12,13,10,8,9,14] 
 
     const COLUMNS = [        
@@ -296,8 +298,12 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
         const { checked } = e.target;
         //let oldSelection = [...selectItems]
         if(row.customer_count > 0) {
+
             if( checked !== undefined) {
-                
+                if(display_clipboard === false) {
+                    dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
+                    dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+                }
                 history.push({
                     hash: updateHashLocation(location, 'activities', [row.tab_id]).join('&')
                 })
@@ -326,7 +332,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
                 } */
             }
         }
-    }, [ dispatch, selectItems, currentSelection ]) 
+    }, [ dispatch, selectItems, currentSelection, display_clipboard ]) 
 
     const updateAssetTypeSelected = async(activityID) => {
         const form = new FormData();

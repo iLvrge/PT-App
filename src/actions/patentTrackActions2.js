@@ -1010,6 +1010,7 @@ export const setAssetTypeAssignmentsAssets = (rf_id, data, append) => {
 export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, append = false ) => {
   return async dispatch => {
     dispatch( setAssetTypesAssignmentsAllAssetsLoading( true ) )
+    PatenTrackApi.cancelAssets()
     const { data } = await PatenTrackApi.getCustomerAssets( type, companies, tabs, customers, rfIDs )    
     dispatch( setAssetTypeAssignmentAllAssets(data, append) )
     dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
