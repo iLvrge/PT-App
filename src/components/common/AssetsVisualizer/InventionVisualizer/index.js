@@ -39,7 +39,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
     const [ isLoadingCharts, setIsLoadingCharts ] = useState(false)
     const [ openModal, setModalOpen ] = useState(false)
     const [ assetLoading, setAssetsLoading ] = useState(false)
-    const [ openFilter, setOpenFilter ] = React.useState(false);
+    const [ openFilter, setOpenFilter ] = useState(false)
+    const [ showContainer, setShowContainer ] = useState(true)
     const [ assets, setAssets ] = useState([])
     const [ filterList, setFilterList ] = useState([])
     const [ selectedTab, setSelectedTab ] = useState(0)
@@ -48,25 +49,25 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
     const [ scopeRange, setScopeRange ] = useState([])
     const [ depthRange, setDepthRange ] = useState([
         {
-          value: 1,
-          label: 'Section',
-        },
-        {
-          value: 2,
-          label: 'Class',
-        },
-        {
-          value: 3,
-          label: 'Sub Class',
-        },
-        {
-          value: 4,
-          label: 'Main Group',
-        },
-        {
-            value: 5,
+            value: 1,
             label: 'Sub Group',
         },
+        {
+            value: 2,
+            label: 'Main Group',
+        },
+        {
+            value: 3,
+            label: 'Sub Class',
+        },
+        {
+            value: 4,
+            label: 'Class',
+        },
+        {
+          value: 5,
+          label: 'Section',
+        }
     ])
 
     const [ inventionTabs, setInventionTabs ] = useState(['Innovation'])
@@ -90,7 +91,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
     const assetIllustrationData = useSelector( state => state.patenTrack2.assetIllustrationData )
     const selectedRow = useSelector( state => state.patenTrack2.selectedAssetsTransactions )
     const connectionBoxView = useSelector( state => state.patenTrack.connectionBoxView)
-
+    const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
     const [ graphRawData, setGraphRawData ] = useState([])
     const [ graphRawGroupData, setGraphRawGroupData ] = useState([])
 
@@ -175,11 +176,17 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
         }
     }, [ connectionBoxView ])
 
+
     useEffect(() => {
         const getChartData = async () => {
+            setGraphRawData([])
+            setGraphRawGroupData([])      
+            setShowContainer(true)      
             if (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0){
+                setShowContainer(false)
                 return null
             } else if (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' && auth_token === null){
+                setShowContainer(false)
                 return null
             }
             setIsLoadingCharts(true)   
@@ -263,6 +270,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                     }
                 }                
             }
+            
 
             if( list.length > 0 ) {
                 setFilterList(list)
@@ -274,20 +282,24 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                 setGraphRawData(data.list)
                 setGraphRawGroupData(data.group)
                 const scopeGroup = []
+                let i = data.group.length + 1
                 const promise = data.group.map( group => {
+                    i = i - 1
                     scopeGroup.push({
-                        value: group.id,
-                        label: group.cpc_code,
+                        value: i,
+                        label: `${group.cpc_code} - ${group.defination}`,
+                        code: group.cpc_code
                     })
-                })
-                setScopeRange(scopeGroup)
-                    
+                })    
                 await Promise.all(promise)
-            } 
+                        
+                console.log('reverse', scopeGroup)
+                setScopeRange([...scopeGroup].reverse())
+            }
         }
         getChartData()
         //console.log( "getChartData", selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments )
-    }, [selectedCategory, selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token ]) 
+    }, [selectedCategory, selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_clipboard ]) 
 
     const generateChart = async () => {
         if (isLoadingCharts || graphRawData.length == 0 || graphRawGroupData.length == 0) return null
@@ -335,7 +347,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
         //TODO height 100% not working well, created allot of isues when we resize pane, 
         if(graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0) {
            options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight - 50 }px`, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1 }
-           console.log("options", options)
         }     
 
         graphRef.current = new Graph3d(graphContainerRef.current, items.current, options)
@@ -476,10 +487,10 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
         const scopeList = []
         const promise = scopeRange.map( r => {
             if(r.value >= scope[0] && r.value <= scope[1]){
-                scopeList.push(r.label)
+                scopeList.push(r.code)
             }
         })
-        await Promise.all(scopeList)
+        await Promise.all(promise)
         const form = new FormData()
         form.append("list", JSON.stringify(filterList))        
         form.append("range", range)
@@ -490,7 +501,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
         //setGraphRawGroupData(data.group)
     }, [ filterList, scopeRange ] )
 
-    /* if (assetsList.length === 0 || maintainenceAssetsList.length === 0 ) return null */
+    if(showContainer === false) return null 
 
     return (
         <Paper className={classes.root} square>  
@@ -564,7 +575,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
             <Dialog
                 open={openFilter}
                 onClose={handleCloseFilter}
-                className={classes.modal}
+                className={`${classes.modal} ${classes.modalFilter}`}
                 PaperComponent={PaperComponentFilter}
                 aria-labelledby="filter-cpc"
             >
