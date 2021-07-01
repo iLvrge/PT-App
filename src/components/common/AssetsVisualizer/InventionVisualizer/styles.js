@@ -114,6 +114,18 @@ export default makeStyles(theme => ({
             //padding: 0,
         }
     },
+    modalFilter: {
+        '& .react-draggable':{
+            width: '70vw',
+            height: '70vh',
+        },
+        '& .MuiDialog-paperWidthSm':{
+            maxWidth: 'inherit',
+            maxHeight: 'inherit',
+            height: '100%',
+            margin: 0
+        },
+    },
     sliderContainer: {
         position: 'absolute',
         top: 10,
@@ -122,16 +134,46 @@ export default makeStyles(theme => ({
         zIndex: 999
     },
     filterContent: {
-        padding: '10px 40px !important'
+        margin: '10px 40px',
+        padding: '0 !important'
+    },
+    heading: {
+        '& .MuiTypography-body1': {
+            fontWeight: 500,
+            marginBottom: 10
+        },
+        marginBottom: 10
     },
     displayFlex:{
         display: 'flex', 
         height: '100%',
-        paddingTop: 20
     },
     flexColumn: {
         display: 'flex', 
         flexDirection: 'column',
         flexBasis: '50%'       
+    },
+    flexColumnDepth: {
+        flexBasis: '13%'   
+    },
+    resizable:{
+        position: "relative",
+        display: 'flex',
+        flexDirection: 'column',
+        "& .react-resizable-handle": {
+            position: "absolute",
+            width: 20,
+            height: 20,
+            bottom: 0,
+            right: 0,
+            background:
+                "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiNmZmYiLz48L2c+PC9zdmc+')",
+            backgroundPosition: "bottom right",
+            padding: "0 3px 3px 0",
+            backgroundRepeat: "no-repeat",
+            backgroundOrigin: "content-box",
+            boxSizing: "border-box",
+            cursor: "se-resize"
+        }
     }
 }))

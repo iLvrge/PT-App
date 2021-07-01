@@ -23,7 +23,9 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRange
     return (
         <div className={classes.displayFlex}>          
             <div className={`${classes.flexColumn} ${classes.flexColumnDepth}`}>
-                <Typography gutterBottom>Depth:</Typography>
+                <div className={classes.heading}>
+                    <Typography>Depth:</Typography>
+                </div>                
                 <Slider
                     defaultValue={valueRange}
                     orientation="vertical"
@@ -36,9 +38,11 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRange
                     step={1}
                     track={'inverted'}  
                 />
-            </div>
+            </div>  
             <div className={classes.flexColumn}>
-                <Typography gutterBottom>Scope:</Typography>
+                <div className={classes.heading}>
+                    <Typography>Scope:</Typography> 
+                </div> 
                 <Slider
                     orientation="vertical"
                     defaultValue={valueScope}
