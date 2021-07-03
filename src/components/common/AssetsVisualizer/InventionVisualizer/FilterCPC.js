@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { Typography, Slider } from '@material-ui/core'
 import useStyles from './styles'
 
-const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRangeText, valueScope, valueRange, onChange }) => {
+const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRangeText, valueScope, valueRange, onChangeRangeSlider, onChangeScopeSlider }) => {
     const classes = useStyles()
     const [ scopeValue, setScopeValue ] = useState(valueScope)
     const [ rangeValue, setRangeValue ] = useState(valueRange)
@@ -12,12 +12,12 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRange
 
     const handleScopeChange = (event, newValue) => {
         setScopeValue(newValue)
-        onChange(rangeValue, newValue)
+        onChangeScopeSlider(rangeValue, newValue)
     }
 
     const handleRangeChange = (event, newValue) => {
         setRangeValue(newValue)
-        onChange(newValue, scopeValue)
+        onChangeRangeSlider(newValue)
     }   
 
     return (

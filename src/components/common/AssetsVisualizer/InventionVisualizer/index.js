@@ -274,32 +274,46 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
 
             if( list.length > 0 ) {
                 setFilterList(list)
-                const form = new FormData()
-                form.append("list", JSON.stringify(list))
-                PatenTrackApi.cancelCPCRequest()
-                const {data} = await PatenTrackApi.getCPC(form) 
-                setIsLoadingCharts(false)
-                setGraphRawData(data.list)
-                setGraphRawGroupData(data.group)
-                const scopeGroup = []
-                let i = data.group.length + 1
-                const promise = data.group.map( group => {
-                    i = i - 1
-                    scopeGroup.push({
-                        value: i,
-                        label: `${group.cpc_code} - ${group.defination}`,
-                        code: group.cpc_code
-                    })
-                })    
-                await Promise.all(promise)
-                        
-                console.log('reverse', scopeGroup)
-                setScopeRange([...scopeGroup].reverse())
+                findCPCList(list)
             }
         }
         getChartData()
         //console.log( "getChartData", selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments )
     }, [selectedCategory, selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_clipboard ]) 
+
+
+    const findCPCList = async(list, range, scope) => {
+        
+        const form = new FormData()
+        form.append("list", JSON.stringify(list))
+        if(typeof range != 'undefined') {
+            form.append("range", range)
+        }
+
+        if(typeof scope != 'undefined') {
+            form.append("scope", JSON.stringify(scope))  
+        }
+
+        PatenTrackApi.cancelCPCRequest()
+        const {data} = await PatenTrackApi.getCPC(form) 
+        setIsLoadingCharts(false)
+        setGraphRawData(data.list)
+        setGraphRawGroupData(data.group)
+        const scopeGroup = []
+        let i = data.group.length + 1
+        const promise = data.group.map( group => {
+            i = i - 1
+            scopeGroup.push({
+                value: i,
+                label: `${group.cpc_code} - ${group.defination}`,
+                code: group.cpc_code
+            })
+        })    
+        await Promise.all(promise)
+        setScopeRange([...scopeGroup].reverse())
+    }
+
+
 
     const generateChart = async () => {
         if (isLoadingCharts || graphRawData.length == 0 || graphRawGroupData.length == 0) return null
@@ -458,6 +472,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                 <ResizableBox
                     height={650}
                     width={1300}
+                    resizeHandles={['w', 'e']}
                     className={classes.resizable}
                 ><Paper square={true} {...props} /></ResizableBox>                
             </Draggable>
@@ -483,10 +498,15 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
             return ''
         }
         
-    }
+    }    
 
-    const onChangeSlider = useCallback(async (range, scope) => {
-        setValueRange(range)
+    const onChangeRangeSlider = useCallback(async (range) => {
+        setValueRange(range)       
+        findCPCList(filterList, range)        
+    }, [ filterList ] )
+
+    
+    const onChangeScopeSlider = useCallback(async (range, scope) => {
         setValueScope(scope)
         const scopeList = []
         const promise = scopeRange.map( r => {
@@ -495,14 +515,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
             }
         })
         await Promise.all(promise)
-        const form = new FormData()
-        form.append("list", JSON.stringify(filterList))        
-        form.append("range", range)
-        form.append("scope", JSON.stringify(scopeList))
-        PatenTrackApi.cancelCPCRequest()
-        const {data} = await PatenTrackApi.getCPC(form) 
-        setGraphRawData(data.list)
-        //setGraphRawGroupData(data.group)
+        findCPCList(filterList, range, scopeList)        
     }, [ filterList, scopeRange ] )
 
     if(showContainer === false) return null 
@@ -518,7 +531,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                             <>
                                 <div className={classes.sliderContainer}>
                                     <IconButton onClick={handleOpenFilter}>
-                                        <svg style={{width: '24px', color: '#fff'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M5 11.86V29a1 1 0 0 0 2 0V11.86A4 4 0 0 0 7 4.14V3A1 1 0 0 0 5 3V4.14a4 4 0 0 0 0 7.72zM6 6A2 2 0 1 1 4 8 2 2 0 0 1 6 6zM27 12.14V3a1 1 0 0 0-2 0v9.14a4 4 0 0 0 0 7.72V29a1 1 0 0 0 2 0V19.86a4 4 0 0 0 0-7.72zM26 18a2 2 0 1 1 2-2A2 2 0 0 1 26 18zM16 30a1 1 0 0 0 1-1V23.86a4 4 0 0 0 0-7.72V3a1 1 0 0 0-2 0V16.14a4 4 0 0 0 0 7.72V29A1 1 0 0 0 16 30zM14 20a2 2 0 1 1 2 2A2 2 0 0 1 14 20z" /></svg> 
+                                        <svg style={{width: '24px', fill: '#fff'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M5 11.86V29a1 1 0 0 0 2 0V11.86A4 4 0 0 0 7 4.14V3A1 1 0 0 0 5 3V4.14a4 4 0 0 0 0 7.72zM6 6A2 2 0 1 1 4 8 2 2 0 0 1 6 6zM27 12.14V3a1 1 0 0 0-2 0v9.14a4 4 0 0 0 0 7.72V29a1 1 0 0 0 2 0V19.86a4 4 0 0 0 0-7.72zM26 18a2 2 0 1 1 2-2A2 2 0 0 1 26 18zM16 30a1 1 0 0 0 1-1V23.86a4 4 0 0 0 0-7.72V3a1 1 0 0 0-2 0V16.14a4 4 0 0 0 0 7.72V29A1 1 0 0 0 16 30zM14 20a2 2 0 1 1 2 2A2 2 0 0 1 14 20z" /></svg> 
                                     </IconButton>                                    
                                 </div>
                                 <div
@@ -589,7 +602,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                     <CloseIcon onClick={handleCloseFilter} style={{ position: 'absolute', right: 10}}/>
                 </DialogTitle>
                 <DialogContent className={classes.filterContent}>
-                    <FilterCPC onClose={handleClose} depthRange={depthRange} scopeRange={scopeRange} depthRangeText={depthRangeText} scopeRangeText={scopeRangeText} valueScope={valueScope} valueRange={valueRange} onChange={onChangeSlider}/>
+                    <FilterCPC onClose={handleClose} depthRange={depthRange} scopeRange={scopeRange} depthRangeText={depthRangeText} scopeRangeText={scopeRangeText} valueScope={valueScope} valueRange={valueRange} onChangeRangeSlider={onChangeRangeSlider} onChangeScopeSlider={onChangeScopeSlider}/>
                 </DialogContent>
             </Dialog>   
         </Paper> 
