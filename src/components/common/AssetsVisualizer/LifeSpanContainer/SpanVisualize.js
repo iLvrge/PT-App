@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react'
-import Moment from 'moment'
+/* import Moment from 'moment'
 import { DataSet } from 'vis-data/esnext'
-import { Graph2d } from 'vis-timeline-73/esnext'
+import { Graph2d } from 'vis-timeline/esnext' */
 
 import useStyles from './styles'
 
-import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
+//import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
-
+/* 
 const SpanVisualize = ({ chart }) => {
 
     const graphRef = useRef()
@@ -72,6 +72,54 @@ const SpanVisualize = ({ chart }) => {
                 className={classes.timeline}
             />  
         </div>
+    )
+}
+
+export default SpanVisualize */
+
+
+
+import { Chart } from "react-google-charts";
+
+const SpanVisualize = ({ chart }) => {
+
+    return (
+        <Chart
+            width={'500px'}
+            height={'300px'}
+            chartType="ColumnChart"
+            loader={<div>Loading...</div>}
+            data={chart}
+            options={{
+                legend: { position: 'none' },
+                bar: { groupWidth: '75%' },
+                isStacked: true,
+
+                backgroundColor: '#424242',
+                hAxis: {
+                    textStyle: {
+                        color: '#fff'
+                    },
+                    titleTextStyle: {
+                        color: '#fff'
+                    },
+                    gridlines: {
+                        color: '#5c5c5c'
+                    }
+                },
+                vAxis: {
+                    textStyle: {
+                        color: '#fff'
+                    },
+                    titleTextStyle: {
+                        color: '#fff'
+                    },
+                    gridlines: {
+                        color: '#5c5c5c'
+                    }
+                },
+            }}
+        />
     )
 }
 
