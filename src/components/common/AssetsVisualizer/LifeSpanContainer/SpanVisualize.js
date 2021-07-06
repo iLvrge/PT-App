@@ -99,15 +99,15 @@ const SpanVisualize = ({ chart }) => {
         <div className={classes.graphContainer}>  
             <Chart
                 width={'100%'}
-                height={'80%'}
+                height={'100%'}
                 chartType="ColumnChart"
                 loader={<div>Loading...</div>}
                 data={chart}
                 options={{
                     legend: { position: 'none' },
-                    bar: { groupWidth: '100%' },
+                    bar: { groupWidth: '95%' },
                     isStacked: true,
-                    colors: ['#50719C'],
+                    colors: ['#395270'],
                     backgroundColor: '#222222',
                     hAxis: {
                         baselineColor: '#fff',
@@ -119,7 +119,7 @@ const SpanVisualize = ({ chart }) => {
                             color: '#fff'
                         },
                         gridlines: {
-                            color: '#5c5c5c', 
+                            color: 'transparent'
                             /* minSpacing: 3 */
                         },
                        /*  minValue: minMax[0], 
@@ -135,13 +135,15 @@ const SpanVisualize = ({ chart }) => {
                             color: '#fff'
                         },
                         gridlines: {
-                            color: '#5c5c5c' ,
+                            color: '#5c5c5c', 
                             /* minSpacing: 0  */
                         }
                     },
                     chartArea: {
-                        width: '80%',
-                        height: '80%'
+                        width: '96%',
+                        height: '95%',
+                        left:50,
+                        top:15,
                     }
                     /* axes: {
                         y: {
