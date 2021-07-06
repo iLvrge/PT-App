@@ -44,6 +44,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
     const [ assets, setAssets ] = useState([])
     const [ filterList, setFilterList ] = useState([])
     const [ selectedTab, setSelectedTab ] = useState(0)
+    const [ resizableWidthHeight, setResizableWidthHeight ] = useState([1300, 650])
+    const [ filterDrag, setFilterDrag ] =  useState([0, 0])
     const [ valueScope, setValueScope ] = useState([2, 3])
     const [ valueRange, setValueRange ] = useState(3)
     const [ scopeRange, setScopeRange ] = useState([])
@@ -458,6 +460,17 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
         setModalOpen(false);
     }
 
+    const handleResize = (event, {element, size, handle}) => {
+        console.log("handleResize", size)
+        setResizableWidthHeight([size.width, size.height])
+    }
+
+    const handleDragStop = (e, position) => {
+        const {x, y} = position;
+        setFilterDrag([x,y])
+        console.log("handleDragStop", x, y)
+    }
+
     const PaperComponent = (props) => {
         return (
             <Draggable handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'}>
@@ -468,12 +481,14 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
 
     const PaperComponentFilter = (props) => {
         return (
-            <Draggable handle="#draggable-dialog-filter" cancel={'[class*="MuiDialogContent-root"]'}>
+            <Draggable handle="#draggable-dialog-filter" defaultPosition={{x: filterDrag[0], y: filterDrag[1]}} cancel={'[class*="MuiDialogContent-root"]'} onStop={handleDragStop}>
                 <ResizableBox
-                    height={650}
-                    width={1300}
-                    resizeHandles={['w', 'e']}
+                    height={resizableWidthHeight[1]}
+                    width={resizableWidthHeight[0]}
+                    minConstraints={[720, 450]}
+                    maxConstraints={[1500, 800]}
                     className={classes.resizable}
+                    onResizeStop={handleResize}
                 ><Paper square={true} {...props} /></ResizableBox>                
             </Draggable>
         );
@@ -599,7 +614,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                 aria-labelledby="filter-cpc"
             >                
                 <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-filter">
-                    <CloseIcon onClick={handleCloseFilter} style={{ position: 'absolute', right: 10}}/>
+                    <CloseIcon onClick={handleCloseFilter} style={{ position: 'absolute', right: 10, top: 7, zIndex: 999}}/>
                 </DialogTitle>
                 <DialogContent className={classes.filterContent}>
                     <FilterCPC onClose={handleClose} depthRange={depthRange} scopeRange={scopeRange} depthRangeText={depthRangeText} scopeRangeText={scopeRangeText} valueScope={valueScope} valueRange={valueRange} onChangeRangeSlider={onChangeRangeSlider} onChangeScopeSlider={onChangeScopeSlider}/>

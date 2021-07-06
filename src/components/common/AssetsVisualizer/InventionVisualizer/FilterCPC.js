@@ -39,7 +39,7 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRange
                     track={'inverted'}  
                 />
             </div>  
-            <div className={classes.flexColumn}>
+            <div className={`${classes.flexColumn} ${classes.flexColumnScope}`}>
                 <div className={classes.heading}>
                     <Typography>Scope:</Typography> 
                 </div> 

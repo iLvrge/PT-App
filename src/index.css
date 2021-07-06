@@ -630,6 +630,23 @@ div.vis-tooltip span{
   transition: none !important;
 } 
 
+.google-visualization-tooltip, .google-visualization-tooltip path{
+  background-color: #121212 !important; 
+  border-color:  #121212 !important; 
+  border-radius: 0 !important;
+}
+
+.google-visualization-tooltip path{
+  fill: #121212 !important; 
+  stroke: #121212 !important; 
+}
+
+.google-visualization-tooltip text{
+  fill: #fff !important; 
+  font-family: Roboto;
+  font-size: 0.875rem;
+}
+
 .height-full{
   height: 100%
 }

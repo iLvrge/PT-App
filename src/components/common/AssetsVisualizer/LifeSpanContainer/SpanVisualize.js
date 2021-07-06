@@ -82,44 +82,80 @@ export default SpanVisualize */
 import { Chart } from "react-google-charts";
 
 const SpanVisualize = ({ chart }) => {
+    const classes = useStyles() 
+    const [minMax, setMinMax] = useState([0,0])
+
+    useEffect(() => {
+        if( chart.length > 1 ) {
+            setMinMax([chart[1][0], chart[chart.length - 1][0]])
+        }
+    }, [ chart ])
+
+    useEffect(() => {
+        console.log('minMax', minMax)
+    }, [minMax])
 
     return (
-        <Chart
-            width={'500px'}
-            height={'300px'}
-            chartType="ColumnChart"
-            loader={<div>Loading...</div>}
-            data={chart}
-            options={{
-                legend: { position: 'none' },
-                bar: { groupWidth: '75%' },
-                isStacked: true,
-
-                backgroundColor: '#424242',
-                hAxis: {
-                    textStyle: {
-                        color: '#fff'
+        <div className={classes.graphContainer}>  
+            <Chart
+                width={'100%'}
+                height={'80%'}
+                chartType="ColumnChart"
+                loader={<div>Loading...</div>}
+                data={chart}
+                options={{
+                    legend: { position: 'none' },
+                    bar: { groupWidth: '100%' },
+                    isStacked: true,
+                    colors: ['#50719C'],
+                    backgroundColor: '#222222',
+                    hAxis: {
+                        baselineColor: '#fff',
+                        format: '0',
+                        textStyle: {
+                            color: '#fff'
+                        },
+                        titleTextStyle: {
+                            color: '#fff'
+                        },
+                        gridlines: {
+                            color: '#5c5c5c', 
+                            /* minSpacing: 3 */
+                        },
+                       /*  minValue: minMax[0], 
+                        maxValue: minMax[1], */
                     },
-                    titleTextStyle: {
-                        color: '#fff'
+                    vAxis: {
+                        baselineColor: '#fff',
+                        format: '0',
+                        textStyle: {
+                            color: '#fff'
+                        },
+                        titleTextStyle: {
+                            color: '#fff'
+                        },
+                        gridlines: {
+                            color: '#5c5c5c' ,
+                            /* minSpacing: 0  */
+                        }
                     },
-                    gridlines: {
-                        color: '#5c5c5c'
+                    chartArea: {
+                        width: '80%',
+                        height: '80%'
                     }
-                },
-                vAxis: {
-                    textStyle: {
-                        color: '#fff'
-                    },
-                    titleTextStyle: {
-                        color: '#fff'
-                    },
-                    gridlines: {
-                        color: '#5c5c5c'
-                    }
-                },
-            }}
-        />
+                    /* axes: {
+                        y: {
+                            all: {
+                                range: {
+                                    max: minMax[1],
+                                    min: minMax[0]
+                                }
+                            }
+                        }
+                    }, */
+                }}
+            />
+        </div> 
     )
 }
 

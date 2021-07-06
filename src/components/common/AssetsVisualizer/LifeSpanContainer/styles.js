@@ -28,6 +28,9 @@ export default makeStyles(theme => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        fontSize: 16,
+        background: '#222222 !important',
+        border: '1px solid #5c5c5c !important'
     },
     loadingIndicator: {
         position: 'absolute',

@@ -134,15 +134,18 @@ export default makeStyles(theme => ({
         zIndex: 999
     },
     filterContent: {
-        margin: '10px 40px',
-        padding: '0 !important'
+        margin: '0px 40px 32px 40px',
+        padding: '0 !important',
+        overflow: 'hidden'
     },
     heading: {
         '& .MuiTypography-body1': {
             fontWeight: 500,
-            marginBottom: 10
+            marginBottom: 0
         },
-        marginBottom: 10
+        marginBottom: 10,
+        background: '#292929',
+        padding: '8px 15px'
     },
     displayFlex:{
         display: 'flex', 
@@ -151,10 +154,13 @@ export default makeStyles(theme => ({
     flexColumn: {
         display: 'flex', 
         flexDirection: 'column',
-        flexBasis: '50%'       
+        height:'98.5%'       
     },
     flexColumnDepth: {
         flexBasis: '13%'   
+    },
+    flexColumnScope: {
+        flexBasis: '87%'   
     },
     resizable:{
         position: "relative",
