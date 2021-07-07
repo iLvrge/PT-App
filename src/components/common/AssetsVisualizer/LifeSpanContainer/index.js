@@ -15,7 +15,7 @@ import PatenTrackApi from '../../../../api/patenTrack2'
 
 import useStyles from './styles'
 
-const LifeSpanContainer = ({chartBar}) => {
+const LifeSpanContainer = ({chartBar, openCustomerBar}) => {
     const classes = useStyles() 
     const dispatch = useDispatch()
     const [ selectedTab, setSelectedTab ] = useState(0)
@@ -118,7 +118,7 @@ const LifeSpanContainer = ({chartBar}) => {
                                 );
                             }
                         } else {
-                            if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
+                            if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
                                 dispatch(
                                     getCustomerAssets(
                                       selectedCategory == '' ? '' : selectedCategory,

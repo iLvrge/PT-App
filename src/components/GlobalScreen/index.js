@@ -615,6 +615,7 @@ const GlobalScreen = ({
                                                     illustrationData={illustrationRecord}
                                                     chartBar={openChartBar}
                                                     analyticsBar={openAnalyticsBar}
+                                                    openCustomerBar={openCustomerBar}
                                                     type={type}
                                                 />
                                             }

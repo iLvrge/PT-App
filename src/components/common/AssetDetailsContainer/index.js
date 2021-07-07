@@ -36,7 +36,8 @@ const AssetDetailsContainer = ({
   parentBarDrag,
   parentBar,
   illustrationData,
-  visualizerBarSize
+  visualizerBarSize,
+  openCustomerBar
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -228,7 +229,7 @@ const AssetDetailsContainer = ({
                           resize={resizeFrame}
                           />  
                       ) : lifeSpanMode === true ? (
-                          <InventionVisualizer defaultSize={defaultSize} illustrationBar={openIllustrationBar} visualizerBarSize={visualizerBarSize} analyticsBar={analyticsBar}/>
+                          <InventionVisualizer defaultSize={defaultSize} illustrationBar={openIllustrationBar} visualizerBarSize={visualizerBarSize} analyticsBar={analyticsBar} openCustomerBar={openCustomerBar}/>
                       ) : familyItemMode === true ? (
                           <FamilyItemContainer item={selectedAssetsFamilyItem} onClose={onCloseFamilyItemMode} />
                       ) : (
@@ -260,7 +261,7 @@ const AssetDetailsContainer = ({
                                     />
                                 ) : 
                                 lifeSpanMode === true ? (
-                                    <LifeSpanContainer chartBar={chartBar}/>
+                                    <LifeSpanContainer chartBar={chartBar} openCustomerBar={openCustomerBar}/>
                                 ) :
                                 familyMode && (
                                     <FamilyContainer

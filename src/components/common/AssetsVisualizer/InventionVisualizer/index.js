@@ -28,7 +28,7 @@ import { capitalize } from "../../../../utils/numbers";
 
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
-const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) => {
+const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar }) => {
     
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -256,7 +256,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                                 );
                             }
                         } else {
-                            if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
+                            if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
                                 dispatch(
                                     getCustomerAssets(
                                       selectedCategory == '' ? '' : selectedCategory,
@@ -271,8 +271,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar }) =
                         }                        
                     }
                 }                
-            }
-            
+            }            
 
             if( list.length > 0 ) {
                 setFilterList(list)
