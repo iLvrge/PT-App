@@ -90,15 +90,15 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             label: '',
             dataKey: 'id',
             role: 'arrow',
-            disableSort: true
+            headingIcon: 'inventors',
+            /* disableSort: true */
         },
         {
             width: 200,
             minWidth: 200,
             oldWidth: 200,
             draggable: true,
-            label: 'Inventors', 
-            headingIcon: 'inventors',
+            label: 'Inventors',             
             dataKey: 'entityName', 
             badge: true,           
             align: 'left' 

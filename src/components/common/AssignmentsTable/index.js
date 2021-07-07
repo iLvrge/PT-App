@@ -135,18 +135,19 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       disableSort: true,
     },
     {
-      width: 15,
-      minWidth: 15,
+      width: 20,
+      minWidth: 20,
       label: "",
       dataKey: "rf_id",
       role: "arrow",
-      disableSort: true,
+      headingIcon: 'transactions',
+      /* disableSort: true, */
     },
     {
       width: 100,
       minWidth: 100,
       label: "Transactions",
-      headingIcon: 'transactions',
+      
       dataKey: "date",
       align: "left",
       badge: true,

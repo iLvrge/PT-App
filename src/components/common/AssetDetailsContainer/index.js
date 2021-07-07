@@ -261,7 +261,7 @@ const AssetDetailsContainer = ({
                                     />
                                 ) : 
                                 lifeSpanMode === true ? (
-                                    <LifeSpanContainer chartBar={chartBar} openCustomerBar={openCustomerBar}/>
+                                    <LifeSpanContainer chartBar={chartBar} openCustomerBar={openCustomerBar} visualizerBarSize={visualizerBarSize}/>
                                 ) :
                                 familyMode && (
                                     <FamilyContainer

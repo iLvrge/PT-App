@@ -14,6 +14,9 @@ export default makeStyles(theme => ({
             minWidth: 'inherit',
             maxWidth: '100px'
         },
+        '& .MuiTab-wrapper':{
+            whiteSpace: 'nowrap'
+        }
     },
     tabs: {
         minHeight: 35,

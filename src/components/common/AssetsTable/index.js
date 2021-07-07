@@ -145,18 +145,19 @@ const AssetsTable = ({
       disableSort: true,
     },
     {
-      width: 15,
-      minWidth: 15,
+      width: 20,
+      minWidth: 20,
       label: "",
       dataKey: "asset",
       role: "arrow",
-      disableSort: true,
+      /* disableSort: true, */
+      headingIcon: 'assets',
     },
     {
       width: 100,  
       minWidth: 100,    
       label: "Assets",
-      headingIcon: 'assets',
+      
       dataKey: "asset",
       staticIcon: "US",
       format: numberWithCommas,

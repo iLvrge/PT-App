@@ -15,7 +15,7 @@ import PatenTrackApi from '../../../../api/patenTrack2'
 
 import useStyles from './styles'
 
-const LifeSpanContainer = ({chartBar, openCustomerBar}) => {
+const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize}) => {
     const classes = useStyles() 
     const dispatch = useDispatch()
     const [ selectedTab, setSelectedTab ] = useState(0)
@@ -176,7 +176,7 @@ const LifeSpanContainer = ({chartBar, openCustomerBar}) => {
 
     return (
         <Paper className={classes.root} square>  
-            {selectedTab === 0 && <SpanVisualize chart={selectedAssetsTransactionLifeSpan} chartBar={chartBar}/>}
+            {selectedTab === 0 && <SpanVisualize chart={selectedAssetsTransactionLifeSpan} chartBar={chartBar} visualizerBarSize={visualizerBarSize}/>}
             {selectedTab === 1 && <ConnectionBox display={"false"} assets={assets}/>}
             {selectedTab === 2 && <USPTOContainer assets={assets}/>}
             <Tabs

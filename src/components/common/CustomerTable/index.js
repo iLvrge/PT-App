@@ -84,16 +84,16 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         {
             width: 15,
             label: '',
+            headingIcon: 'parties',
             dataKey: 'id',
             role: 'arrow',
-            disableSort: true
+            /* disableSort: true */  
         },
         {
             width: 200,
             minWidth: 200,
             oldWidth: 200,
-            draggable: true,
-            headingIcon: 'parties',
+            draggable: true,            
             label: 'Parties',
             dataKey: 'entityName', 
             badge: true,   

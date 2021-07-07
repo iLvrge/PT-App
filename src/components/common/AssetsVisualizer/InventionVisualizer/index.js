@@ -300,18 +300,20 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         setIsLoadingCharts(false)
         setGraphRawData(data.list)
         setGraphRawGroupData(data.group)
-        const scopeGroup = []
-        let i = data.group.length + 1
-        const promise = data.group.map( group => {
-            i = i - 1
-            scopeGroup.push({
-                value: i,
-                label: `${group.cpc_code} - ${group.defination}`,
-                code: group.cpc_code
-            })
-        })    
-        await Promise.all(promise)
-        setScopeRange([...scopeGroup].reverse())
+        if(typeof scope == 'undefined') {
+            const scopeGroup = []
+            let i = data.group.length + 1
+            const promise = data.group.map( group => {
+                i = i - 1
+                scopeGroup.push({
+                    value: i,
+                    label: `${group.cpc_code} - ${group.defination}`,
+                    code: group.cpc_code
+                })
+            })    
+            await Promise.all(promise)
+            setScopeRange([...scopeGroup].reverse())
+        }
     }
 
 

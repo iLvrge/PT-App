@@ -408,7 +408,17 @@ export default makeStyles(theme => ({
         }
     },
     calendly: {
-        '& svg': {
+        border:'1px solid #5a5a5a !important',
+        marginLeft: 15,
+        textTransform: 'initial',
+        '&:hover':{
+        border:'1px solid #e60000 !important',
+        color: '#e60000 !important'
+        },
+        '&:first':{
+        marginLeft: 5
+        }
+        /* '& svg': {
             width: 60,
             height: 60
         },
@@ -425,6 +435,6 @@ export default makeStyles(theme => ({
             '& .cls-2':{
                 fill: '#ef0000'
             }
-        }
+        } */
     }
 }))

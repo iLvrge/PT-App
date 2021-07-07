@@ -5,7 +5,7 @@ import useStyles from './styles'
 
 import { Chart } from "react-google-charts";
 
-const SpanVisualize = ({ chart, chartBar }) => {
+const SpanVisualize = ({ chart, chartBar, visualizerBarSize }) => {
     const containerRef = useRef(null)
     const classes = useStyles() 
     const [height, setHeight] = useState('100%');
@@ -20,27 +20,42 @@ const SpanVisualize = ({ chart, chartBar }) => {
             baselineColor: '#fff',
             format: '0',
             textStyle: {
-                color: '#fff'
+                color: '#fff',
+                fontSize: 12,
+                fontFamily: 'Roboto'
             },
             titleTextStyle: {
-                color: '#fff'
+                color: '#fff',
+                fontSize: 12,
+                fontFamily: 'Roboto'
             },
             gridlines: {
-                color: 'transparent'
-            }
+                color: 'transparent',
+                count: 0,
+            },
+            minorGridlines:{
+                color:'transparent' 
+            },
         },
         vAxis: {
             baselineColor: '#fff',
             format: '0',
             textStyle: {
-                color: '#fff'
+                color: '#fff',
+                fontSize: 12,
+                fontFamily: 'Roboto'
             },
             titleTextStyle: {
-                color: '#fff'
+                color: '#fff',
+                fontSize: 12,
+                fontFamily: 'Roboto'
             },
             gridlines: {
-                color: '#5c5c5c', 
-            }
+                color: '#5c5c5c'
+            },
+            minorGridlines:{
+                color:'transparent' 
+            },
         },
         annotations: {
             style: 'line',
@@ -50,9 +65,9 @@ const SpanVisualize = ({ chart, chartBar }) => {
             }
         },
         chartArea: {
-            width: '96%',
-            height: '95%',
-            left:50,
+            width: '83%',
+            height: '92%',
+            left:40,
             top:15,
         }
     });
@@ -63,19 +78,29 @@ const SpanVisualize = ({ chart, chartBar }) => {
         }
     }, [ chart ])
 
-    useEffect(() => {        
+    useEffect(() => {    
         if(chartBar === false) {
             setHeight('100%')
             const opt = {...option}
-            opt.chartArea.height = '95%'
+            opt.chartArea.height = '92%'
+            if(visualizerBarSize == '100%'){
+                opt.chartArea.width = '92%'
+            } else {
+                opt.chartArea.width = '83%'
+            }
             setOption(opt)
         } else {
             setHeight('90%')
             const opt = {...option}
-            opt.chartArea.height = '90%'
+            opt.chartArea.height = '85%'
+            if(visualizerBarSize == '100%'){
+                opt.chartArea.width = '92%'
+            } else {
+                opt.chartArea.width = '83%'
+            }
             setOption(opt)
         }
-    }, [chartBar])
+    }, [chartBar, visualizerBarSize])
 
     useEffect(() => {
         if(containerRef.current != null) {            
