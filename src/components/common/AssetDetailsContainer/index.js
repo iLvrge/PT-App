@@ -42,10 +42,11 @@ const AssetDetailsContainer = ({
   const dispatch = useDispatch();
   const chartAnalyticsContainer = useRef(null);
   const [isDrag, setIsDrag] = useState(false);
+  
   const [toggleDetailsButtonType, setToggleDetailsButtonType] = useState(true);
   const [openDetailsBar, setDetailsOpenBar] = useState(bar);
   const [detailsButtonVisible, setDetailsButtonVisible] = useState(false);
-
+ 
   const [
     toggleIllustrationButtonType,
     setToggleIllustrationButtonType,
@@ -79,6 +80,8 @@ const AssetDetailsContainer = ({
   useEffect(() => {
     console.log("isDrag", isDrag)
   }, [ isDrag ])
+
+  
   /* useEffect(() => {        
         if( chartAnalyticsContainer != null && chartAnalyticsContainer.current != null ) {            
             if( familyItemMode === true && familyMode === true && familyDataRetrieved === true && legalEventDataRetrieved === true) {
@@ -257,7 +260,7 @@ const AssetDetailsContainer = ({
                                     />
                                 ) : 
                                 lifeSpanMode === true ? (
-                                    <LifeSpanContainer />
+                                    <LifeSpanContainer chartBar={chartBar}/>
                                 ) :
                                 familyMode && (
                                     <FamilyContainer
