@@ -42,6 +42,13 @@ const SpanVisualize = ({ chart, chartBar }) => {
                 color: '#5c5c5c', 
             }
         },
+        annotations: {
+            style: 'line',
+            stem: {
+                color: 'red',
+                length: 50
+            }
+        },
         chartArea: {
             width: '96%',
             height: '95%',
