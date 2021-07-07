@@ -76,18 +76,20 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     const COLUMNS = [
         {
           width: 29, 
+          minWidth: 29,
           label: '',
           dataKey: 'id',
           role: 'checkbox',
           disableSort: true
         },
         {
-            width: 15,
+            width: 20,
+            minWidth: 20,
             label: '',
             headingIcon: 'parties',
             dataKey: 'id',
             role: 'arrow',
-            /* disableSort: true */  
+            disableSort: true 
         },
         {
             width: 200,
@@ -101,6 +103,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         },
         {
             width: 70,
+            minWidth: 70,
             label: 'Transactions',
             dataKey: 'totalTransactions', 
             showGrandTotal: true,  

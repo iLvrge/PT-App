@@ -12,9 +12,6 @@ export default makeStyles(theme => ({
                 /* visibility: 'hidden' */
                 display: 'none'
             }
-        },
-        '& .ReactVirtualized__Table__headerColumn, .ReactVirtualized__Table__rowColumn':{
-            paddingLeft: 10
-        }        
+        }       
     }    
 }))

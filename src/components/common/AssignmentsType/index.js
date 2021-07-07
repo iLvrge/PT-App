@@ -101,6 +101,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
             dataKey: 'icon',
             role: 'image',
             imageURL: 'imageURL',
+            headingIcon: 'activities',
             disableSort: true,
             extension: false
         },
@@ -115,8 +116,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
         {
             width: 100,
             minWidth: 100,
-            label: 'Activities',
-            headingIcon: 'activities',
+            label: 'Activities',            
             dataKey: 'tab_name', 
             badge: true,              
         },
@@ -271,26 +271,9 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
 
     const onHandleSelectAll = useCallback((event, row) => {
         event.preventDefault()
-        const { checked } = event.target;
-        if(checked === false) {
-            setSelectItems([])
-            //setSelectedRow([])
-            dispatch( setAssetTypesSelect([]) )
-            
-        } else if( checked === true ){
-            if(assetTypes.length > 0) {
-                let items = [];
-                assetTypes.forEach( tab => {
-                    if(tab.customer_count > 0) {
-                        items.push(tab.tab_id)
-                    }
-                })
-                setSelectItems(items)
-                dispatch( setAssetTypesSelect(items) )
-            }
-        }
-        setSelectAll(checked)
-        dispatch( setAllAssetTypes( checked ) )
+        dispatch( setAssetTypesSelect([]) )
+        setSelectAll(false)
+        setSelectItems([])        
     }, [ dispatch, assetTypes ])
 
     const onHandleClickRow = useCallback((e,  row, t) => {
@@ -298,7 +281,6 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
         const { checked } = e.target;
         //let oldSelection = [...selectItems]
         if(row.customer_count > 0) {
-
             if( checked !== undefined) {
                 if(display_clipboard === false) {
                     dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))

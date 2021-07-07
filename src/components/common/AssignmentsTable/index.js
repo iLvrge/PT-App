@@ -141,16 +141,15 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       dataKey: "rf_id",
       role: "arrow",
       headingIcon: 'transactions',
-      /* disableSort: true, */
+      disableSort: true,
     },
     {
       width: 100,
       minWidth: 100,
       label: "Transactions",
-      
       dataKey: "date",
       align: "left",
-      badge: true,
+      badge: true, 
     },
     {
       width: 40,
@@ -158,7 +157,8 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       label: "",
       dataKey: "channel",
       formatCondition: 'rf_id',
-      role: 'slack_image',      
+      role: 'slack_image',   
+      headingIcon: 'slack_image',   
     },
     { 
       width: 100,

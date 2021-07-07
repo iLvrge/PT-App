@@ -37,12 +37,20 @@ const COLUMNS = [
         disableSort: true
     },
     {
+        width: 20,
+        minWidth: 20,
+        label: '',
+        dataKey: 'representative_id',
+        headingIcon: 'company',
+        role: "arrow",
+        disableSort: true
+    },
+    {
         width: 171,  
         minWidth: 171,
         oldWidth: 171,
         draggable: true,
-        label: 'Companies',
-        headingIcon: 'company',
+        label: 'Companies',        
         dataKey: 'original_name',
         align: "left", 
         badge: true

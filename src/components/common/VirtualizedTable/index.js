@@ -358,13 +358,13 @@ const VirtualizedTable = ({
               :
               rowData[imageURL] ? 
               <span className={classes.flex}>
-                <Avatar src={rowData[imageURL]} className={classes.smallImg}/><span className={classes.marginLeft}>{cellData}</span>
+                <span><img src={rowData[imageURL]} className={classes.imgIcon}/></span>{/* <Avatar src={rowData[imageURL]} /> */}<span className={classes.marginLeft}>{cellData}</span>
               </span> 
               :  imageIcon != '' && imageIcon != undefined ? <span><FontAwesomeIcon icon={imageIcon}/><span className={classes.marginLeft}>{cellData}</span></span> : (
                 cellData
               )
             : format != undefined ? formatCondition != undefined && rowData[formatCondition] != formatDefaultValue ? staticIcon + secondaryFormat(cellData) : (
-            staticIcon + format(cellData)
+            staticIcon + format(cellData) 
           ) : (
             cellData
           )} 

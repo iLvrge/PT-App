@@ -55,9 +55,9 @@ const FilesTemplates = ({type}) => {
 
     const ASSET_COLUMNS = [  
         {
-            width: 45, 
-            minWidth: 45,
-            oldWidth: 45,
+            width: 29, 
+            minWidth: 29,
+            oldWidth: 29,
             label: '',
             dataKey: 'id',
             role: 'checkbox',
@@ -71,7 +71,7 @@ const FilesTemplates = ({type}) => {
             label: 'Recorded',
             headingIcon: 'recorded',
             dataKey: 'title', 
-            role: 'image',
+            role: 'image', 
             imageURL: '',
             imageIcon: '',
             extension: true,
@@ -112,9 +112,9 @@ const FilesTemplates = ({type}) => {
 
     const DOCUMENT_COLUMNS = [  
         {
-            width: 45, 
-            minWidth: 45,
-            oldWidth: 45,
+            width: 29, 
+            minWidth: 29,
+            oldWidth: 29,
             label: '',
             dataKey: 'id',
             role: 'checkbox',

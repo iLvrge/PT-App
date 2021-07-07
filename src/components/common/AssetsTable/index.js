@@ -150,14 +150,13 @@ const AssetsTable = ({
       label: "",
       dataKey: "asset",
       role: "arrow",
-      /* disableSort: true, */
+      disableSort: true,
       headingIcon: 'assets',
     },
     {
       width: 100,  
       minWidth: 100,    
-      label: "Assets",
-      
+      label: "Assets",      
       dataKey: "asset",
       staticIcon: "US",
       format: numberWithCommas,
@@ -169,11 +168,12 @@ const AssetsTable = ({
       /* textBold: true */
     },
     {
-      width: 35,
-      minWidth: 35,
+      width: 40,
+      minWidth: 40,
       label: "",
       dataKey: "channel",
       formatCondition: 'asset',
+      headingIcon: 'slack_image',
       role: 'slack_image',      
     }
   ];
