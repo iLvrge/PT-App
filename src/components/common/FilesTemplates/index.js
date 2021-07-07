@@ -55,6 +55,15 @@ const FilesTemplates = ({type}) => {
 
     const ASSET_COLUMNS = [  
         {
+            width: 45, 
+            minWidth: 45,
+            oldWidth: 45,
+            label: '',
+            dataKey: 'id',
+            role: 'checkbox',
+            disableSort: true
+        },
+        {
             width: 120,
             minWidth: 120,
             oldWidth: 120,
@@ -102,6 +111,15 @@ const FilesTemplates = ({type}) => {
     ]
 
     const DOCUMENT_COLUMNS = [  
+        {
+            width: 45, 
+            minWidth: 45,
+            oldWidth: 45,
+            label: '',
+            dataKey: 'id',
+            role: 'checkbox',
+            disableSort: true
+        },
         {
             width: 300,
             minWidth: 300,
@@ -242,7 +260,7 @@ const FilesTemplates = ({type}) => {
     const onHandleDocumentSelectAll = () => {
     }
 
-    const onHandleClickDocumentRow = useCallback((e, item) => {
+    const onHandleClickDocumentRow = useCallback((e, item) => { 
         if(selectedDocumentRow.includes(item.id)) {
             dispatch(setDocumentTransaction([]))     
             dispatch(setDriveTemplateFrameMode(false))
@@ -301,7 +319,7 @@ const FilesTemplates = ({type}) => {
         if( findIndex !== -1 ) {
           previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width + data.x
         }
-        setHeaderColumns(previousColumns)
+        setDocumentHeaderColumns(previousColumns)
     }, [ documentHeaderColumns ] )
 
     return (
