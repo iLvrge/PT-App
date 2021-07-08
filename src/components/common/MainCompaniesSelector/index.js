@@ -25,6 +25,8 @@ import {
     updateHashLocation
 } from '../../../utils/hashLocation' 
 
+import ChildTable from './ChildTable'
+
 import Loader from '../Loader'
 
 const COLUMNS = [
@@ -64,7 +66,7 @@ const COLUMNS = [
         format: numberWithCommas,
     },
     {
-        width: 80,  
+        width: 80,   
         minWidth: 80,
         label: 'Parties',
         staticIcon: '',
@@ -112,12 +114,16 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const history = useHistory()
     const location = useLocation()
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)
-    const [ width, setWidth ] = useState( 1000 )
+    const [childHeight, setChildHeight] = useState(500)
+    const [childSelected, setCheckedSelected] = useState(0)
+    const [ data, setData ] = useState( [] )
+    const [ width, setWidth ] = useState( 1900 )
     const [ offset, setOffset ] = useState(0)
     const [headerRowHeight, setHeaderRowHeight] = useState(47)
     const [ rowHeight, setRowHeight ] = useState(40)
     const [ selectItems, setSelectItems] = useState( [] )
     const [ selectedRow, setSelectedRow] = useState( [] )   
+    const [ currentSelection, setCurrentSelection] = useState(null)   
     const [intialization, setInitialization] = useState( false ) 
     const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
     const companies = useSelector( state => state.patenTrack2.mainCompaniesList )
@@ -214,7 +220,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }
     }, [ dispatch, companies, initial ]) */
 
-    const updateCompanySelection = (dispatch, row, checked, selected, defaultSelect) => {
+    const updateCompanySelection = (event, dispatch, row, checked, selected, defaultSelect, currentSelection) => {
         if(checked != undefined) {
             let updateSelected = [...selected], updateSelectedWithName = [...selectedWithName]
             if(!updateSelected.includes(parseInt( row.representative_id ))) {
@@ -235,6 +241,18 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             setSelectItems(updateSelected)
             updateUserCompanySelection(updateSelected)
             dispatch( setMainCompaniesSelected( updateSelected, updateSelectedWithName ) ) 
+        } else {
+            const element = event.target.closest('div.ReactVirtualized__Table__rowColumn')
+            if( element != null ) {
+                const index = element.getAttribute('aria-colindex')
+                if(index == 2) {
+                    if(currentSelection != row.representative_id) {
+                        setCurrentSelection(row.representative_id)
+                    } else { 
+                        setCurrentSelection(null)
+                    }
+                }
+            }
         }
     }
 
@@ -247,13 +265,15 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
 
     const handleClickRow = useCallback((event, row) => {
         event.preventDefault()
-        if(display_clipboard === false) {
-            dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
-            dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
-        }
         const { checked } = event.target;
-        updateCompanySelection( dispatch, row, checked, selected, defaultSelect)
-    }, [ dispatch, selected, display_clipboard ])
+        if(checked != undefined) {
+            if(display_clipboard === false) {
+                dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
+                dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+            }
+        } 
+        updateCompanySelection(event, dispatch, row, checked, selected, defaultSelect, currentSelection)
+    }, [ dispatch, selected, display_clipboard, currentSelection ])
     
     const handleSelectAll = useCallback((event, row) => {
         event.preventDefault()
@@ -310,8 +330,9 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         <VirtualizedTable
         classes={classes}
         selected={selectItems}
-        selectedKey={'representative_id'}
         rowSelected={selectedRow}
+        selectedIndex={currentSelection}
+        selectedKey={'representative_id'}        
         rows={companies.list}
         rowHeight={rowHeight}
         headerHeight={headerRowHeight}
@@ -322,6 +343,14 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         defaultSelectAll={selectedCompaniesAll}
         resizeColumnsWidth={resizeColumnsWidth}
         resizeColumnsStop={resizeColumnsStop}
+        collapsable={true}
+        childHeight={childHeight}
+        childSelect={childSelected}
+        childRows={data}
+        childCounterColumn={`child_count`}
+        renderCollapsableComponent={
+            <ChildTable parentCompanyId={currentSelection} headerRowDisabled={true} />
+        }
         responsive={true}
         width={width} 
         containerStyle={{ 

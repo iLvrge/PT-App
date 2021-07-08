@@ -2,12 +2,10 @@ import React, { Fragment, useCallback, useEffect, useMemo, useState, useRef } fr
 import { useDispatch, useSelector } from 'react-redux'
 import useStyles from './styles'
 import Loader from '../../../../../common/Loader'
-import IconButton from '@material-ui/core/IconButton'
 import { addCompany, setSearchCompanies } from '../../../../../../actions/patenTrackActions'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import StyledSearch from '../../../../../common/StyledSearch'
-import Tooltip from '@material-ui/core/Tooltip'
-import Toolbar from '@material-ui/core/Toolbar'
+import { Toolbar, IconButton, Tooltip, Typography, Zoom } from '@material-ui/core'
 import { DebounceInput } from 'react-debounce-input'
 import VirtualizedTable from '../../../../../common/VirtualizedTable'
 import PatenTrackApi from '../../../../../../api/patenTrack'
@@ -176,17 +174,22 @@ const resizeColumnsStop = useCallback((dataKey, data) => {
             createParent={createParent}
             associateToParent={associateToParent} />
 
-          <Tooltip title={'Send'}>
+          <Tooltip 
+            title={
+              <Typography color="inherit" variant='body2'>{'Import a company to your account'}</Typography>
+            } 
+            enterDelay={0}
+            TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+          >
             <div>
               <IconButton
-                disabled={!selected.length}
-                
+                disabled={!selected.length}                
                 color={'primary'}
                 onClick={openAddMenu}>
                 <SendIcon />
               </IconButton>
             </div>
-          </Tooltip>
+          </Tooltip>          
         </Fragment>
 
         <IconButton onClick={onClose} style={{ display: 'none' }}>

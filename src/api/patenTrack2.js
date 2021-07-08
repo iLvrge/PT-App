@@ -89,6 +89,10 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/companies`, getHeader())
   }
 
+  static getChildCompanies(companyID, offset = 0 ) {
+    return axios.get(`${base_new_api_url}/companies/${companyID}/list?offset=${offset}&limit=${DEFAULT_CUSTOMERS_LIMIT}`, getHeader())
+  }
+
   static getParentCompanies( offset = 0 ) {
     return axios.get(`${base_new_api_url}/companies/list?offset=${offset}&limit=${DEFAULT_CUSTOMERS_LIMIT}`,
       getHeader(),
