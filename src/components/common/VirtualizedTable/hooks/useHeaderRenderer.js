@@ -51,10 +51,12 @@ const useStyles = makeStyles(() => ({
   },
   badge: {
     position: 'absolute',
-    left: 'calc(100% - 50%)',
+    left: '-4px', 
     '& .MuiBadge-colorPrimary': {
-      top: '12px',
-      backgroundColor: 'inherit'
+      top: '4px',
+      backgroundColor: 'inherit',
+      right: 'inherit',
+      transform: 'none'
     }    
   }
 }))

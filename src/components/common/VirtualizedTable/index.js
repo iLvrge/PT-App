@@ -470,16 +470,17 @@ const VirtualizedTable = ({
                     ? rowData[disableRowKey] * rowHeight + rowHeight
                     : childHeight + rowHeight
                   : childCounterColumn != undefined
-                  ? rowData[childCounterColumn] * rowHeight < childHeight
+                  ? typeof childCounterColumn == 'string' ? rowData[childCounterColumn] * rowHeight < childHeight
                     ? rowData[childCounterColumn] * rowHeight + rowHeight
                     : childHeight + rowHeight
+                    : childCounterColumn * rowHeight + rowHeight
                   : collapseRowHeight
                 : rowHeight,
             alignItems:
               collapsable === true && selectedIndex == rowData[selectedKey]
                 ? "flex-start"
                 : "center",
-            backgroundColor: 
+            backgroundColor:  
               backgroundRow === true ? rowData[backgroundRowKey] : 'transparent'
           }}
           component={"div"}
@@ -528,9 +529,10 @@ const VirtualizedTable = ({
                     ? rowData[disableRowKey] * rowHeight + rowHeight
                     : childHeight + rowHeight
                   : childCounterColumn != undefined
-                  ? rowData[childCounterColumn] * rowHeight < childHeight
-                    ? rowData[childCounterColumn] * rowHeight + rowHeight
-                    : childHeight + rowHeight
+                  ? typeof childCounterColumn == 'string' ? rowData[childCounterColumn] * rowHeight < childHeight
+                    ? rowData[childCounterColumn] * rowHeight 
+                    : childHeight 
+                    : childCounterColumn * rowHeight
                   : collapseRowHeight,
               display: "flex",
               position: "absolute",
@@ -605,6 +607,7 @@ const VirtualizedTable = ({
             ? rowData[childCounterColumn] * rowHeight + rowHeight
             : childHeight + rowHeight
           : collapseRowHeight + rowHeight;
+        console.log('getRowHeight', height)
       }
       return height
     },

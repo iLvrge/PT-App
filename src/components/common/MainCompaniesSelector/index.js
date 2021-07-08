@@ -116,6 +116,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)
     const [childHeight, setChildHeight] = useState(500)
     const [childSelected, setCheckedSelected] = useState(0)
+    const [childCounter, setChildCounter] = useState(0)    
     const [ data, setData ] = useState( [] )
     const [ width, setWidth ] = useState( 1900 )
     const [ offset, setOffset ] = useState(0)
@@ -126,6 +127,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const [ currentSelection, setCurrentSelection] = useState(null)   
     const [intialization, setInitialization] = useState( false ) 
     const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
+    const [ companiesList, setCompaniesList ] = useState([])
     const companies = useSelector( state => state.patenTrack2.mainCompaniesList )
     const isLoadingCompanies = useSelector( state => state.patenTrack2.mainCompaniesLoadingMore )
     const selected = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
@@ -138,6 +140,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         } 
         initCompanies()
     }, []) 
+
+    useEffect(() => {
+        setCompaniesList( companies.list )
+    }, [ companies.list ])
 
     useEffect(() => {
 
@@ -173,6 +179,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
 
         getSelectedCompanies()
     }, [ companies.list ])
+
+    
 
     /* useEffect(() => {
         setSelectedRow(companyRowSelect)
@@ -322,6 +330,18 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         setHeaderColumns(previousColumns)
     }, [ headerColumns ] )
 
+    const handleCounter = async(counter) => {
+        let list = [...companiesList]
+        const promise = list.map( (row, index) => {
+            if( row.representative_id == currentSelection){                            
+                list[index].child_total = counter
+            }
+            return row
+        })
+        await Promise.all(promise)
+        console.log('handleCounter', list)
+        setCompaniesList(list)
+    }
 
     if (isLoadingCompanies && companies.list.length == 0) return <Loader />
 
@@ -333,7 +353,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         rowSelected={selectedRow}
         selectedIndex={currentSelection}
         selectedKey={'representative_id'}        
-        rows={companies.list}
+        rows={companiesList}
         rowHeight={rowHeight}
         headerHeight={headerRowHeight}
         columns={headerColumns}
@@ -347,9 +367,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         childHeight={childHeight}
         childSelect={childSelected}
         childRows={data}
-        childCounterColumn={`child_count`}
+        childCounterColumn={`child_total`}
+        forceChildWaitCall={true}
         renderCollapsableComponent={
-            <ChildTable parentCompanyId={currentSelection} headerRowDisabled={true} />
+            <ChildTable parentCompanyId={currentSelection} headerRowDisabled={true} callBack={handleCounter}/>
         }
         responsive={true}
         width={width} 
