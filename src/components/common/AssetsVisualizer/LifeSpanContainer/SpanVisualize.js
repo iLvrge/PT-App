@@ -90,9 +90,9 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize }) => {
             }
             setOption(opt)
         } else {
-            setHeight('90%')
+            setHeight('95%')
             const opt = {...option}
-            opt.chartArea.height = '85%'
+            opt.chartArea.height = '91%'
             if(visualizerBarSize == '100%'){
                 opt.chartArea.width = '92%'
             } else {

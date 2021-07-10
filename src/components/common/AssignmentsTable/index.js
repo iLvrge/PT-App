@@ -133,6 +133,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       dataKey: "rf_id",
       role: "checkbox",
       disableSort: true,
+      show_selection_count: true
     },
     {
       width: 20,

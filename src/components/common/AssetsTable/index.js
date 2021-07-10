@@ -147,7 +147,7 @@ const AssetsTable = ({
   const [data, setData] = useState([])
   const [assetRows, setAssetRows] = useState([])
   useEffect(() => {
-    console.log("TAB=>", clipboard_assets.length, selectedAssets.length)
+    
     if(clipboard_assets.length > 0 && clipboard_assets.length != selectedAssets.length ) {      
       setSelectedAssets([...clipboard_assets])
     }
@@ -276,10 +276,11 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     {
       width: 29,
       minWidth: 29,
-      label: "",
+      label: "", 
       dataKey: "asset",
       role: "checkbox",
       disableSort: true,
+      show_selection_count: true
     },
     {
       width: 20,
@@ -330,7 +331,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
             if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
               if (auth_token != null) {
-                console.log("CUSTOMER ASSETS", process.env.REACT_APP_ENVIROMENT_MODE)
+                
                 dispatch(
                   process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
                   getCustomerAssets(
@@ -364,7 +365,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
                     false,
                   ),
                 );
-                setWidth(1500)
+                setWidth(1900)
               } else {
                 dispatch(
                   setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),

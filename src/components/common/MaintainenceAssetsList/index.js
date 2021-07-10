@@ -213,6 +213,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       label: "",
       dataKey: "asset",
       role: "checkbox",
+      show_selection_count: true
     },
     {
       width: 80,  

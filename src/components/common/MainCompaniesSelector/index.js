@@ -36,7 +36,8 @@ const COLUMNS = [
         label: '',
         dataKey: 'representative_id',
         role: 'checkbox',
-        disableSort: true
+        disableSort: true,
+        show_selection_count: true
     },
     {
         width: 20,

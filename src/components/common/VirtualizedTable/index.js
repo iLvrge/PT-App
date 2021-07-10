@@ -84,7 +84,7 @@ const VirtualizedTable = ({
   checkedIcon,
   ...tableProps
 }) => {
-  
+  console.log('MAIN=>selected', selected)
   const classes = useStyles();
   const [sortDirection, setSortDirection] = useState(SortDirection.ASC);
   const [sortBy, setSortBy] = useState("");
@@ -92,6 +92,7 @@ const VirtualizedTable = ({
   const [collapseRowHeight, setCollapseRowHeight] = useState(100);
   const [dropdownValue, setDropdownValue] = useState('')
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [noOfSelectedItems, setNoOfSelectedItems] = useState([])
   const rowRef = useRef(null);
   const tableRef = useRef();
   /*useEffect(() => {
@@ -109,6 +110,10 @@ const VirtualizedTable = ({
       setSortDirection(defaultSortDirection == 'desc' ? SortDirection.DESC : SortDirection.ASC)
     }
   }, [defaultSortField, defaultSortDirection])
+
+  useEffect(() => {
+    setNoOfSelectedItems([...selected])
+  }, [ selected ])
 
   const createSortHandler = useCallback(
     property => () => {
@@ -395,6 +400,7 @@ const VirtualizedTable = ({
     () => selected.length > 0 && selected.length < rows.length,
     [rows, selected],
   );
+  
   const headerRenderer = useHeaderRenderer(
     rows,
     headerHeight,
@@ -409,9 +415,10 @@ const VirtualizedTable = ({
     resizeColumnsWidth,
     resizeColumnsStop,
     icon,
-    checkedIcon
+    checkedIcon,
+    noOfSelectedItems
   );
-  const checkRowCollapse = (collapsable, index, rowData, tableRef) => {
+  const checkRowCollapse = (collapsable, index, rowData, tableRef) => { 
     if (collapsable) { 
       tableRef.current.recomputeRowHeights();
       tableRef.current.forceUpdate();

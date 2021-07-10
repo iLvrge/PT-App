@@ -84,7 +84,8 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
           label: '',
           dataKey: 'id',
           role: 'checkbox',
-          disableSort: true
+          disableSort: true,
+          show_selection_count: true 
         },
         {
             width: 20,

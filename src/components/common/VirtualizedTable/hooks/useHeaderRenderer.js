@@ -58,6 +58,17 @@ const useStyles = makeStyles(() => ({
       right: 'inherit',
       transform: 'none'
     }    
+  },
+  badgeSelection: {
+    position: 'absolute',
+    left: 'calc(100% - 83%)', 
+    '& .MuiBadge-colorPrimary': {
+      top: '4px',
+      backgroundColor: 'inherit',
+      right: 'inherit',
+      transform: 'none',
+      color: '#E60000'
+    }   
   }
 }))
 
@@ -80,10 +91,11 @@ const HeadCell = ({
   resizeColumnsWidth,
   resizeColumnsStop,
   icon,
-  checkedIcon
+  checkedIcon,
+  selectedItems
 }) => {
   const classes = useStyles()
-  const { align, role, disableSort, filterable, paddingLeft, badge, showGrandTotal, draggable, headingIcon } = columns[columnIndex]
+  const { align, role, disableSort, filterable, paddingLeft, badge, showGrandTotal, draggable, headingIcon, show_selection_count } = columns[columnIndex]
   const [ anchorEl, setAnchorEl ] = useState(null)
   const [ columnFilters, setColumnFilters ] = useState([])
 
@@ -101,7 +113,6 @@ const HeadCell = ({
   useEffect(() => {
     onChangeColumnFilters(dataKey, columnFilters)
   }, [ onChangeColumnFilters, dataKey, columnFilters ])
-  
   return (
     <TableCell
       component={'div'}
@@ -112,9 +123,29 @@ const HeadCell = ({
       align={align}>
       {
         role === 'checkbox' ? (
-          onSelectAll && <Checkbox checked={allSelected} onChange={onSelectAll} indeterminate={isIndeterminate} {...(icon != undefined ? { icon, checkedIcon } : {})}/>
+          onSelectAll && (
+            <>
+              <Checkbox checked={allSelected} onChange={onSelectAll} indeterminate={isIndeterminate} {...(icon != undefined ? { icon, checkedIcon } : {})}/>
+              {
+                show_selection_count === true
+                ?
+                <Badge color='primary' max={99999} className={classes.badgeSelection} badgeContent={numberWithCommas(selectedItems.length)} showZero={false}></Badge>
+                :
+                ''
+              }
+            </>
+          )
         ) : role === 'radio' ? (
-          <Radio color="secondary" onChange={onSelectAll} checked={allSelected}/>
+          <>
+            <Radio color="secondary" onChange={onSelectAll} checked={allSelected}/>
+            {
+              show_selection_count === true
+              ?
+              <Badge color='primary' max={99999} className={classes.badgeSelection} badgeContent={numberWithCommas(selectedItems)} showZero={false}></Badge>
+              :
+              ''
+            }
+          </>
         ) : (
           <>
             {
@@ -166,14 +197,17 @@ const HeadCell = ({
               '' 
             }
             {
-              disableSort ? label : (
+              disableSort 
+              ? 
+                label
+              : (
                 <TableSortLabel
                   onClick={createSortHandler(dataKey)}
                   active={dataKey === sortBy}
                   direction={sortDirection.toLowerCase()}>                    
-                    {  label }
-                    {badge === true ? <Badge color='primary' max={99999} className={classes.badge} badgeContent={`(${numberWithCommas(totalRows)})`} showZero></Badge> : ''}
-                    {showGrandTotal === true ? <Badge color='primary' max={99999} className={classes.badge} badgeContent={ `(${numberWithCommas(grandTotal > 0 ? grandTotal : rows.length > 0 && rows[rows.length - 1].grand_total ? rows[rows.length - 1].grand_total : 0)})`} showZero></Badge> : ''}
+                    { label }
+                    {badge === true ? <Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(totalRows)} showZero></Badge> : ''}
+                    {showGrandTotal === true ? <Badge color='primary' max={99999} className={classes.badge} badgeContent={ numberWithCommas(grandTotal > 0 ? grandTotal : rows.length > 0 && rows[rows.length - 1].grand_total ? rows[rows.length - 1].grand_total : 0)} showZero></Badge> : ''}
                 </TableSortLabel>
               )
             }
@@ -249,7 +283,7 @@ const HeadCell = ({
   )
 }
 
-function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSelectAll, allSelected, isIndeterminate, totalRows, grandTotal, onChangeColumnFilters, resizeColumnsWidth, resizeColumnsStop, icon, checkedIcon) {
+function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSelectAll, allSelected, isIndeterminate, totalRows, grandTotal, onChangeColumnFilters, resizeColumnsWidth, resizeColumnsStop, icon, checkedIcon, selectedItems) {
   return useCallback(({ sortBy, dataKey, sortDirection, label, columnIndex }) => {
     return (
       <HeadCell
@@ -257,6 +291,7 @@ function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSel
         columnIndex={columnIndex}
         headerHeight={headerHeight}
         createSortHandler={createSortHandler}
+        selectedItems={selectedItems}
         onSelectAll={onSelectAll}
         icon={icon}
         checkedIcon={checkedIcon}
@@ -284,6 +319,7 @@ function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSel
     rows,
     totalRows,
     onChangeColumnFilters,
+    selectedItems
   ])
 }
 

@@ -92,7 +92,8 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
           label: '',
           dataKey: 'tab_id',
           role: 'radio',
-          disableSort: true
+          disableSort: true,
+          show_selection_count: true 
         },
         {
             width: 20,

@@ -23,7 +23,8 @@ import {
     setAssetTypeAssignments,
     setSearchRfIDs,
     setAssetTypeAssignmentAllAssets,
-    setMaintainenceAssetsList
+    setMaintainenceAssetsList,
+    setAssetTypeInventor
 } from '../../actions/patentTrackActions2'
 
 import { 
@@ -297,6 +298,7 @@ const GlobalLayout = (props) => {
         setInventorOpenBar( !openInventorBar )
         if(!openInventorBar === false && openOtherPartyBar === false) {
             setOtherPartyBarSize(0)
+            dispatch(setAssetTypeInventor({list: [], total_records: 0}))
         } else {
             setOtherPartyBarSize(120)
             if(openOtherPartyBar === false) {

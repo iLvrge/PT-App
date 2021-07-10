@@ -61,7 +61,8 @@ const FilesTemplates = ({type}) => {
             label: '',
             dataKey: 'id',
             role: 'checkbox',
-            disableSort: true
+            disableSort: true,
+            show_selection_count: true
         },
         {
             width: 120,
@@ -118,7 +119,8 @@ const FilesTemplates = ({type}) => {
             label: '',
             dataKey: 'id',
             role: 'checkbox',
-            disableSort: true
+            disableSort: true,
+            show_selection_count: true
         },
         {
             width: 300,
@@ -175,7 +177,6 @@ const FilesTemplates = ({type}) => {
             setCurrentSelection(null)
 
             if(type == 1) {
-                setDocumentsFiles([])
                 if(channel_id != '' && channel_id != null) {
                     const getSlackToken = getTokenStorage("slack_auth_token_info");
                     if (getSlackToken && getSlackToken != "") {
@@ -189,27 +190,28 @@ const FilesTemplates = ({type}) => {
                         }
                     }
                 } else {
-                    const getGoogleToken = getTokenStorage("google_auth_token_info"), getGoogleProfile = getTokenStorage('google_profile_info')
-                    let gToken = '', gAccount = ''
-                    if (getGoogleToken && getGoogleToken != "") {
-                        const tokenJSON = JSON.parse( getGoogleToken )
-                        if( Object.keys(tokenJSON).length > 0 && tokenJSON.hasOwnProperty('access_token') ) {
-                            gToken = tokenJSON.access_token
+                    if(selectedCompanies.length > 0 || assetTypesSelected.length > 0 || selectedAssetCompanies.length > 0 || selectedAssetAssignments.length > 0 || assetTypeAssignmentAssetsSelected.length > 0){
+                        const getGoogleToken = getTokenStorage("google_auth_token_info"), getGoogleProfile = getTokenStorage('google_profile_info')
+                        let gToken = '', gAccount = ''
+                        if (getGoogleToken && getGoogleToken != "") {
+                            const tokenJSON = JSON.parse( getGoogleToken )
+                            if( Object.keys(tokenJSON).length > 0 && tokenJSON.hasOwnProperty('access_token') ) {
+                                gToken = tokenJSON.access_token
+                            }
                         }
-                    }
 
-                    if( getGoogleProfile != '') {
-                        const profileInfo = JSON.parse(getGoogleProfile)
-                        if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
-                            gAccount =  profileInfo.email
+                        if( getGoogleProfile != '') {
+                            const profileInfo = JSON.parse(getGoogleProfile)
+                            if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
+                                gAccount =  profileInfo.email
+                            }
                         }
+                        const { data } = await PatenTrackApi.getDriveAndAssetFiles(1, 'undefined', 'undefined', selectedAssetsPatents.length > 0 ? selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() : 'undefined', selectedCompanies, selectedCategory, gToken, gAccount )
+                        setLoading(false)
+                        setDocumentsFiles(data.document_files)
                     }
-                    const { data } = await PatenTrackApi.getDriveAndAssetFiles(1, 'undefined', 'undefined', selectedAssetsPatents.length > 0 ? selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() : 'undefined', selectedCompanies, selectedCategory, gToken, gAccount )
-                    setLoading(false)
-                    setDocumentsFiles(data.document_files)
                 }
             } else {
-                setAssetFiles([])
                 if(selectedCompanies.length > 0 && selectedAssetsPatents.length > 0 ) {
                     setLoading(true)
                     const { data } = await PatenTrackApi.getDriveAndAssetFiles(0, 'undefined', 'undefined', selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString(), selectedCompanies, selectedCategory )
@@ -233,6 +235,15 @@ const FilesTemplates = ({type}) => {
     }
 
     const onHandleClickRow = useCallback((e, item) => {
+        e.preventDefault()
+        const { checked } = e.target;
+        if( checked !== undefined) {
+            setSelectItems(prevItems =>
+                prevItems.includes(item.id)
+                ? prevItems.filter(row => item.id !== row.id)
+                : [...prevItems, item.id],
+            );
+        }
         if(selectedRow.includes(item.id)) {
             dispatch(setDocumentTransaction([]))     
             dispatch(setDriveTemplateFrameMode(false))
@@ -254,13 +265,22 @@ const FilesTemplates = ({type}) => {
             setSelectedRow([item.id])
             setCurrentSelection(item.id) 
             dispatch(setDocumentTransaction([item.id]))     
-        }           
+        }                   
     }, [ dispatch, selectedRow ]) 
 
     const onHandleDocumentSelectAll = () => {
     }
 
     const onHandleClickDocumentRow = useCallback((e, item) => { 
+        e.preventDefault()
+        const { checked } = e.target;
+        if( checked !== undefined) {
+            setSelectDocumentItems(prevItems =>
+                prevItems.includes(item.id)
+                ? prevItems.filter(row => item.id !== row.id)
+                : [...prevItems, item.id],
+            );
+        }        
         if(selectedDocumentRow.includes(item.id)) {
             dispatch(setDocumentTransaction([]))     
             dispatch(setDriveTemplateFrameMode(false))

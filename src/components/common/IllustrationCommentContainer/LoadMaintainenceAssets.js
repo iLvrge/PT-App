@@ -21,8 +21,8 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
 
     const COLUMNS = [
         {
-            width: 80,
-            minWidth: 80,   
+            width: 110,
+            minWidth: 110,   
             label: "Patent #",
             dataKey: "patent",
             staticIcon: "US",
@@ -67,6 +67,7 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
     useEffect(() => {
         const maintainenceAssets = []
         if( rows.length > 0 ) {
+            let total = 0
             rows.map( row => {
                 maintainenceAssets.push({
                     id: ' ',
@@ -76,7 +77,18 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
                     fee_code: row[3],
                     fee_amount: row[4],
                 })
+                total += parseInt(row[4]) > 0 ? parseInt(row[4]) : 0
             })
+
+            maintainenceAssets.push({
+                id: ' ',
+                patent: '',
+                application: '',
+                attorney: '',
+                fee_code: 'Total',
+                fee_amount: total,
+            })
+
         }
         setAssets(maintainenceAssets)
     }, [ rows ])
