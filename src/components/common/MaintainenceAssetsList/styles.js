@@ -28,7 +28,8 @@ export default makeStyles((theme) => ({
           position: 'absolute',
           left: 9,
           fontSize: '1.3rem',
-          color: 'rgba(255,255,255,0.7)'
+          color: 'rgba(255,255,255,0.7)',
+          width: 19
         }
     },
     topBar: {

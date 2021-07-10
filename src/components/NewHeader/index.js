@@ -385,7 +385,7 @@ const NewHeader = () => {
         </div> 
         <div className={classes.rightPanel}>  
           {
-            process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD'
+            process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'
             ?
               <Button className={classes.calendly} onClick={handleScheduleViaCalendly}>
                 Schedule a demo for Pro version

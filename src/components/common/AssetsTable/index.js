@@ -6,7 +6,9 @@ import React, {
   useMemo
 } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import {useLocation} from 'react-router-dom'
 import { Paper } from "@material-ui/core";
+import { Clear, NotInterested } from '@material-ui/icons';
 import Loader from "../Loader";
 import useStyles from "./styles";
 import VirtualizedTable from "../VirtualizedTable";
@@ -14,6 +16,7 @@ import { DEFAULT_CUSTOMERS_LIMIT } from "../../../api/patenTrack2";
 import {
   setAssetTypesPatentsSelected,
   getCustomerAssets,
+  getCustomerSelectedAssets,
   getAssetTypeAssignmentAssets,
   getAssetTypeAssignmentAllAssets,
   setAssetTypeAssignmentAllAssets,  
@@ -32,7 +35,9 @@ import {
   setDriveTemplateFile,
   setTemplateDocument,
   setChannelID,
-  getChannels
+  getChannels,
+  setClipboardAssets,
+  setMoveAssets
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -54,6 +59,8 @@ import {
   setDriveTemplateFrameMode
 } from "../../../actions/uiActions";
 
+import  { controlList } from '../../../utils/controlList'
+
 import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/numbers";
 
 import { getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
@@ -69,21 +76,25 @@ const AssetsTable = ({
     openAnalyticsAndCharBar,
     closeAnalyticsAndCharBar,
     headerRowDisabled }) => {
-  const classes = useStyles();
-  const dispatch = useDispatch();
-  const [offset, setOffset] = useState(0);
-  const [rowHeight, setRowHeight] = useState(40);
+  const classes = useStyles()
+  const dispatch = useDispatch()
+  const location = useLocation()
+  const tableRef = useRef()
+  const [offset, setOffset] = useState(0)
+  const [rowHeight, setRowHeight] = useState(40)
   const [headerRowHeight, setHeaderRowHeight] = useState(47)
-  const [width, setWidth] = useState(1500);
-  const tableRef = useRef();
-  const [counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT);
-  const [childHeight, setChildHeight] = useState(500);
+  const [width, setWidth] = useState(1500) 
+  const [counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
+  const [childHeight, setChildHeight] = useState(500)
   const [childSelected, setCheckedSelected] = useState(0);
   const [currentSelection, setCurrentSelection] = useState(null);
   const [asset, setAsset] = useState(null);
   const [selectedAll, setSelectAll] = useState(false);
   const [selectItems, setSelectItems] = useState([]);
   const [selectedRow, setSelectedRow] = useState([]);
+  const [selectedAssets, setSelectedAssets] = useState([])  
+  const [movedAssets, setMovedAssets] = useState([])  
+  const [ dropOpenAsset, setDropOpenAsset ] = useState(null)
   const assetTypesSelected = useSelector(
     state => state.patenTrack2.assetTypes.selected,
   );
@@ -124,6 +135,7 @@ const AssetsTable = ({
     state => state.patenTrack2.assetTypeAssignmentAssets.selected,
   );
   const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
+  const move_assets = useSelector(state => state.patenTrack2.move_assets)
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
   const channel_id = useSelector(state => state.patenTrack2.channel_id)
   const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
@@ -134,8 +146,133 @@ const AssetsTable = ({
   const auth_token = useSelector(state => state.patenTrack2.auth_token)
   const [data, setData] = useState([])
   const [assetRows, setAssetRows] = useState([])
+  useEffect(() => {
+    console.log("TAB=>", clipboard_assets.length, selectedAssets.length)
+    if(clipboard_assets.length > 0 && clipboard_assets.length != selectedAssets.length ) {      
+      setSelectedAssets([...clipboard_assets])
+    }
+  }, [ clipboard_assets ])  
+
+  useEffect(() => {
+    if(move_assets.length > 0 && move_assets.length != movedAssets.length ) {      
+      setMovedAssets([...move_assets])
+    }
+  }, [ move_assets ])  
+
+  useEffect(() => {
+    dispatch(setClipboardAssets(selectedAssets))
+  }, [selectedAssets])
+
+  useEffect(() => {
+    dispatch(setMoveAssets(movedAssets))
+  }, [movedAssets])
+
+
+  const Clipboard = () => {
+    return (
+      <svg xmlns="http://www.w3.org/2000/svg" className='clipboard' fill="#fff" enableBackground="new 0 0 80 80" viewBox="0 0 80 80"><path d="M40,5c-3.3085938,0-6,2.6914062-6,6v3h-5c-0.4199219,0-0.7949219,0.262207-0.9394531,0.6567383l-0.880188,2.4077148	h-9.0836792C16.9404297,17.0644531,16,18.0048828,16,19.1611328v53.7421875C16,74.0595703,16.9404297,75,18.0966797,75h43.8066406
+C63.0595703,75,64,74.0595703,64,72.9033203V19.1611328c0-1.15625-0.9404297-2.0966797-2.0966797-2.0966797H52.755188
+L51.875,14.6567383C51.7304688,14.262207,51.3554688,14,50.9355469,14H46v-3C46,7.6914062,43.3085938,5,40,5z M53.1289062,22
+c0.3261719,0,0.6328125-0.1591797,0.8193359-0.4267578c0.1875-0.2680664,0.2324219-0.6098633,0.1201172-0.9165039
+l-0.5820923-1.5922852h8.4170532C61.9541016,19.0644531,62,19.1103516,62,19.1611328v53.7421875
+C62,72.9541016,61.9541016,73,61.9033203,73H18.0966797C18.0458984,73,18,72.9541016,18,72.9033203V19.1611328
+c0-0.0507812,0.0458984-0.0966797,0.0966797-0.0966797h8.3526001l-0.5820923,1.5922852
+c-0.1123047,0.3066406-0.0673828,0.6484375,0.1201172,0.9165039C26.1738281,21.8408203,26.4804688,22,26.8066406,22H53.1289062z
+M50.2363281,16l1.4619141,4H28.2373047l1.4619141-4H35c0.5527344,0,1-0.4477539,1-1v-4c0-2.2055664,1.7939453-4,4-4
+s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23,38h8V28h-8V38z M25,30h4v6h-4V30z" ></path><rect width="23" height="2" x="34" y="32" ></rect><rect width="17" height="2" x="23" y="44" ></rect><rect width="34" height="2" x="23" y="54" ></rect><rect width="34" height="2" x="23" y="64" ></rect><rect width="2" height="4" x="38.968" y="9" ></rect></svg>
+    )
+  }
+
+  const dropdownList = [
+    {
+      id: -1,
+      name: 'No action' ,
+      icon: <NotInterested />,
+      image: ''
+    },
+    {
+      id: 0,
+      name: 'Remove from this list', 
+      icon: <Clear />,
+      image: ''
+    },
+    {
+      id: 2,
+      name: 'Move to Sale',
+      image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/sell.png',
+      icon: ''
+    }, 
+    {
+      id: 4,
+      name: 'Move to License-Out',
+      image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/licenseout.png',
+      icon: ''
+    },
+    {
+      id: 5,
+      name: 'Add to Clipboard',
+      image: '',
+      icon: <Clipboard />
+    }
+  ]
+
+  const onHandleDropDownlist = (event, asset, row ) => { 
+    if(event.target.value == 5) {
+      /* let oldAssets = [...copyAssets]
+      if( oldAssets.length > 0 ) {
+        const findIndex = oldAssets.findIndex( r => r.asset == asset)
+        if( findIndex !== -1 ) {
+          oldAssets.splice( findIndex, 1 )
+        } else {
+          oldAssets.push(row)
+        }
+      } else {
+        oldAssets.push(row)
+      }
+      copyAssets = [...oldAssets] */
+      //setSelectedAssets(oldAssets)
+      setSelectedAssets(prevItems => {
+        const findIndex = prevItems.findIndex( r => r.asset == asset)
+        if( findIndex !== -1 ) {
+          return prevItems.splice( findIndex, 1 )
+        } else {
+          return [...prevItems, row]
+        }
+      })
+      
+    } 
+
+    const currentLayoutIndex = controlList.findIndex(r => r.type == 'menu' && r.category == selectedCategory )
+    if(currentLayoutIndex !== -1) {
+      setDropOpenAsset(null)
+      setMovedAssets(prevItems => {
+        const findIndex = prevItems.findIndex(row => row.asset == asset)
+        if(findIndex !== -1) {
+          return prevItems.splice( findIndex, 1 )
+        } else {
+          return [...prevItems, {
+            asset,
+            move_category: event.target.value,
+            currentLayout: controlList[currentLayoutIndex].layout_id,
+            grant_doc_num: row.grant_doc_num,
+            appno_doc_num: row.appno_doc_num,
+          }]
+        }
+      })      
+    }
+  }
 
   const COLUMNS = [
+    {
+      width: 24,
+      minWidth: 24,
+      disableSort: true,
+      label: "",
+      dataKey: "asset",
+      role: "static_dropdown",
+      list: dropdownList,
+      onClick: onHandleDropDownlist
+    },
     {
       width: 29,
       minWidth: 29,
@@ -180,8 +317,6 @@ const AssetsTable = ({
 
   const [ tableColumns, setTableColumns ] = useState(COLUMNS)
 
-  
-
   useEffect(() => {
     if(display_clipboard === false) {
       setTableColumns([...COLUMNS])
@@ -193,9 +328,11 @@ const AssetsTable = ({
             selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
           assignments =
             selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
-            if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ) {
+            if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
               if (auth_token != null) {
+                console.log("CUSTOMER ASSETS", process.env.REACT_APP_ENVIROMENT_MODE)
                 dispatch(
+                  process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
                   getCustomerAssets(
                     selectedCategory == '' ? '' : selectedCategory,
                     companies,
@@ -203,10 +340,13 @@ const AssetsTable = ({
                     customers,
                     assignments,
                     false,
-                  ),
+                  )
+                  : 
+                  getCustomerSelectedAssets(location.pathname.replace('/', ''))
                 );
+                
 
-                setWidth(1500)
+                setWidth(1900)
               } else {
                 dispatch(
                   setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
@@ -291,7 +431,7 @@ const AssetsTable = ({
         staticIcon: "",
         format: capitalize
       }]
-      tableColumns[2].label = 'Clipboard'
+      tableColumns[3].label = 'Clipboard'
       setTableColumns(tableColumns)
       //console.log("clipboard_assets", clipboard_assets)
       setWidth(1500)
@@ -402,6 +542,10 @@ const AssetsTable = ({
     }
   }, [ assetTypeAssignmentAssets ]) 
 
+  
+ 
+  
+
 
   const callSelectedAssets = useCallback(({ grant_doc_num, appno_doc_num, asset }) => {
     /* const selectedItems = [];
@@ -508,7 +652,7 @@ const resetAll = () => {
         e.preventDefault()
         const { checked } = e.target
         if(checked !== undefined) {
-          if(selectedCategory == 'restore_ownership') {
+          if(selectedCategory == 'restore_ownership' && display_clipboard === false) {
             dispatch(setAssetTypesPatentsSelected([row.asset]))
             setSelectItems([row.asset])
           } else {
@@ -529,22 +673,37 @@ const resetAll = () => {
             );  
           }                      
         } else {
+          if(typeof e.target.closest == 'function') {
             const element = e.target.closest('div.ReactVirtualized__Table__rowColumn')
-            const index = element.getAttribute('aria-colindex')           
-            if(index == 2) {
-                if(currentSelection != row.asset) {
-                    setCurrentSelection(row.asset) 
-                    setAsset(row.appno_doc_num)
-                } else { 
-                    setCurrentSelection(null)
-                    setAsset(null)
+            if(element != null) {
+              const index = element.getAttribute('aria-colindex')   
+              const findElement = element.querySelector('div.MuiSelect-select')
+              if( index == 1 && findElement != null ) {
+                setDropOpenAsset(row.asset)
+              } else {
+                if(index == 3) {
+                  if(currentSelection != row.asset) {
+                      setCurrentSelection(row.asset) 
+                      setAsset(row.appno_doc_num)
+                  } else { 
+                      setCurrentSelection(null)
+                      setAsset(null)
+                  }
+                } else {                    
+                  handleOnClick(row)
                 }
-            } else {                    
+              }
+            } else {
+              if( row.asset == dropOpenAsset ) {
+                setDropOpenAsset(null)
+              } else {
                 handleOnClick(row)
-            }             
+              }
+            }
+          }                         
         }         
     },
-    [dispatch, selectedAssetsPatents, selectItems, currentSelection],
+    [dispatch, selectedAssetsPatents, selectItems, currentSelection, dropOpenAsset],
   );
 
   /**
@@ -626,10 +785,12 @@ const resetAll = () => {
     >
       <VirtualizedTable
         classes={classes}
+        openDropAsset={dropOpenAsset}
         selected={selectItems}
         rowSelected={selectedRow}
         selectedIndex={currentSelection}
         selectedKey={"asset"}
+        dropdownSelections={move_assets}
         rows={assetRows}
         rowHeight={rowHeight}
         headerHeight={headerRowHeight}

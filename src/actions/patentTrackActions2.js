@@ -1018,6 +1018,27 @@ export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, appe
 }
 
 /**
+ * Assets
+ * @param {*} type 
+ * @param {*} companies 
+ * @param {*} tabs 
+ * @param {*} customers 
+ * @param {*} rfIDs 
+ * @param {*} append 
+ */
+
+export const getCustomerSelectedAssets = ( shareCode, append = false ) => {
+  console.log('getCustomerSelectedAssets', shareCode)
+  return async dispatch => {
+    dispatch( setAssetTypesAssignmentsAllAssetsLoading( true ) )
+    PatenTrackApi.cancelAssets()
+    const { data } = await PatenTrackApi.getCustomerSelectedAssets( shareCode )    
+    dispatch( setAssetTypeAssignmentAllAssets(data, append) )
+    dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
+  } 
+}
+
+/**
  * Transactions
  * @param {*} type 
  * @param {*} companies 

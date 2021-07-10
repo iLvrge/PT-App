@@ -14,7 +14,7 @@ const getCookie = (name)=> {
 
 const getHeader = () => {
   let token = null
-  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ) {
+  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
     token = localStorage.getItem('auth_signature')
   } else {
     token = localStorage.getItem('token')
@@ -32,7 +32,7 @@ const getHeader = () => {
 
 const getMultiFormUrlHeader = () => {
   let token = null
-  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ) {
+  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
     token = localStorage.getItem('auth_signature')
   } else {
     token = localStorage.getItem('token')
@@ -50,7 +50,7 @@ const getMultiFormUrlHeader = () => {
 
 const getFormUrlHeader = () => {
   let token = null
-  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ) {
+  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
     token = localStorage.getItem('auth_signature')
   } else {
     token = localStorage.getItem('token')

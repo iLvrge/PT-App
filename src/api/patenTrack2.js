@@ -21,7 +21,8 @@ const getCookie = name => {
 
 const getHeader = () => {
   let token = null
-  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ) {
+  console.log("process.env.REACT_APP_ENVIROMENT_MODE", process.env.REACT_APP_ENVIROMENT_MODE)
+  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
     token = localStorage.getItem('auth_signature')
   } else {
     token = localStorage.getItem('token')
@@ -38,7 +39,8 @@ const getHeader = () => {
 
 const getFormUrlHeader = () => {
   let token = null
-  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ) {
+  console.log("process.env.REACT_APP_ENVIROMENT_MODE", process.env.REACT_APP_ENVIROMENT_MODE)
+  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
     token = localStorage.getItem('auth_signature')
   } else {
     token = localStorage.getItem('token')
@@ -56,7 +58,8 @@ const getFormUrlHeader = () => {
 
 const getMultiFormUrlHeader = () => {
   let token = null
-  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ) {
+  console.log("process.env.REACT_APP_ENVIROMENT_MODE", process.env.REACT_APP_ENVIROMENT_MODE)
+  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
     token = localStorage.getItem('auth_signature')
   } else {
     token = localStorage.getItem('token')
@@ -177,6 +180,15 @@ class PatenTrackApi {
     })
     return axios.get(`${base_new_api_url}/customers/${type}/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, header)
   }
+
+  static getCustomerSelectedAssets(shareCode) { 
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelAssets = c
+    })
+    return axios.get(`${base_new_api_url}/share/${shareCode}/2`, header)
+  }
+
 
   static cancelAssets() {
     if (cancelAssets !== undefined) {

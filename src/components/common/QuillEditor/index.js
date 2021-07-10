@@ -76,6 +76,8 @@ const QuillEditor = ({
   const template_document_url = useSelector(state => state.patenTrack2.template_document_url)
   const assetTypeNamesGroups = useSelector(state => state.patenTrack2.assetTypeNames.all_groups)
   const mainCompaniesSelected = useSelector(state => state.patenTrack2.mainCompaniesList.selected)
+  const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
+  const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
 
   const [ userListMenu, setUserListMenu ] = useState( null )
   const [ loadingUSPTO, setLoadingUSPTO ] = useState(false)
@@ -286,12 +288,17 @@ const QuillEditor = ({
 
   const onShare = useCallback(async () => {
     let selectAssetsList = [], selectedTransactions = []
-    if(category == "pay_maintainence_fee") {
-      selectAssetsList = [...selectedMaintainencePatents]
-    } else if (category == 'correct_details') {
-      selectedTransactions = [...selectedAssetsTransactions]
+    
+    if(display_clipboard === true) {
+      selectAssetsList =  selectedMaintainencePatents.length > 0 ? [...selectedMaintainencePatents] : [...assetTypeAssignmentAssetsSelected]
     } else {
-      selectAssetsList = [...assetTypeAssignmentAssetsSelected]
+      if(category == "pay_maintainence_fee") {
+        selectAssetsList = [...selectedMaintainencePatents]
+      } else if (category == 'correct_details') {
+        selectedTransactions = [...selectedAssetsTransactions]
+      } else {
+        selectAssetsList = [...assetTypeAssignmentAssetsSelected]
+      }
     }
 
     if(selectAssetsList.length == 0) {
@@ -303,13 +310,13 @@ const QuillEditor = ({
     if( (category == 'correct_details' && selectedTransactions.length == 0) || (category != 'correct_details' && selectAssetsList.length == 0)) {
       alert(category == 'correct_details' ? 'Please select a transaction' : 'Please select a asset')
     } else {
-      // Share list of assets and create share link
+      // Share list of assets and create share link 
       let form = new FormData()
       form.append('assets', JSON.stringify(selectAssetsList))
       form.append('transactions', JSON.stringify(selectedTransactions))
-      form.append('type', 2)
+      form.append('type', 2)      
       const {data} = await PatenTrackApi.shareIllustration(form)
-      if (data.indexOf('share') >= 0) {
+      if (data.indexOf('pitch') >= 0) {
         /**
          * just for temporary replacing
          * open share url new tab

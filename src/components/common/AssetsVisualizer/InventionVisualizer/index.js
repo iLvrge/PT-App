@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import {useLocation} from 'react-router-dom'
 import { Paper, Dialog, DialogContent, DialogTitle, IconButton  } from '@material-ui/core'
 import Draggable from "react-draggable"
 import CloseIcon from '@material-ui/icons/Close'
@@ -18,7 +19,8 @@ import {
     setAssetTypeAssignmentAllAssets,
     setMaintainenceAssetsList,
     getCustomerAssets,
-    setAssetsIllustrationData
+    setAssetsIllustrationData,
+    getCustomerSelectedAssets
 } from '../../../../actions/patentTrackActions2'
 import { setPDFFile, setPdfTabIndex } from '../../../../actions/patenTrackActions' 
 import PatenTrackApi from '../../../../api/patenTrack2'
@@ -33,6 +35,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const classes = useStyles()
     const dispatch = useDispatch()
     const graphRef = useRef()
+    const location = useLocation()
     const graphContainerRef = useRef()  
     const items = useRef(new DataSet())
 
@@ -104,6 +107,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         style: 'bar-color',
         axisFontSize: 18,
         /* yBarWidth:  30, */
+        zStep: 1,
         yStep: 1,
         yCenter: '30%',
         showPerspective: true,
@@ -187,7 +191,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             if (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0){
                 setShowContainer(false)
                 return null
-            } else if (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' && auth_token === null){
+            } else if ((process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') && auth_token === null){
                 setShowContainer(false)
                 return null
             }
@@ -242,19 +246,22 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         assignments =
                           selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
                           
-                        if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ) {
-                            if( auth_token != null ) {
+                        if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+                            /* if( auth_token != null ) {
                                 dispatch(
+                                    process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
                                     getCustomerAssets(
-                                        selectedCategory == '' ? '' : selectedCategory,
-                                        companies,
-                                        tabs,
-                                        customers,
-                                        assignments,
-                                        false,
-                                    ),
+                                      selectedCategory == '' ? '' : selectedCategory,
+                                      companies,
+                                      tabs,
+                                      customers,
+                                      assignments,
+                                      false,
+                                    )
+                                    : 
+                                    getCustomerSelectedAssets(location.pathname.replace('/', ''))
                                 );
-                            }
+                            } */
                         } else {
                             if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
                                 dispatch(

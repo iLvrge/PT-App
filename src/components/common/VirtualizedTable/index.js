@@ -607,7 +607,6 @@ const VirtualizedTable = ({
             ? rowData[childCounterColumn] * rowHeight + rowHeight
             : childHeight + rowHeight
           : collapseRowHeight + rowHeight;
-        console.log('getRowHeight', height)
       }
       return height
     },

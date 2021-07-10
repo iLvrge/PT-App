@@ -148,14 +148,22 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
           <SendIcon />   
         </button> 
       </Tooltip>      
-      
+      <Tooltip title="Share illustration for selected assets" arrow classes={classesTooltip}>
+        <Button className={classes.share} onClick={onShare} >
+          <FontAwesomeIcon
+            icon={faShareAlt}
+          />
+        </Button>
+      </Tooltip>  
       {loadingUSPTO && <CircularProgress size={24} className={classes.buttonProgress} />}
       {
         category == 'pay_maintainence_fee'
         ?
           maintainenceMode === false
           ? 
-            <Button className={classes.review} onClick={onMaintainenceFeeReview}>Process Selections</Button>
+            <>
+              <Button className={classes.review} onClick={onMaintainenceFeeReview}>Process Selections</Button>
+            </>
           :
             <>
               <Button className={classes.review} onClick={onMaintainenceFeeFile}>Pay Maintenance Fees</Button>
@@ -201,17 +209,7 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
         ?
           <Button className={classes.review} onClick={onSalesAssets}>Select Assets and Click Here</Button>
         :
-        <>
-          <Tooltip title="Share illustration for selected assets" arrow classes={classesTooltip}>
-            <Button className={classes.share} onClick={onShare} >
-              <FontAwesomeIcon
-                icon={faShareAlt}
-              />
-            </Button>
-          </Tooltip>
-          
-          <Button className={`${classes.review} ${driveTemplateMode === true ? classes.active : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
-        </>
+        <Button className={`${classes.review} ${driveTemplateMode === true ? classes.active : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
       }            
     </div> 
   )

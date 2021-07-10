@@ -277,9 +277,9 @@ const GlobalScreen = ({
         dispatch( setConnectionData( null ) )
         dispatch( setConnectionBoxView( false ) )
         dispatch( toggleUsptoMode( false ) )
-        dispatch( toggleLifeSpanMode( false ) )
-        dispatch( toggleFamilyMode( true ) )
-        dispatch( toggleFamilyItemMode( true ) )
+        dispatch( toggleLifeSpanMode( true ) )
+        dispatch( toggleFamilyMode( false ) )
+        dispatch( toggleFamilyItemMode( false ) )
     }
 
     const onHandleIllustrationSize = (size) => {
