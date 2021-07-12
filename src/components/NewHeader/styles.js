@@ -61,6 +61,8 @@ export default makeStyles(theme => ({
     },
     menuButton: {
         marginRight: theme.spacing(1),
+        marginLeft: theme.spacing(1),
+        padding: 0,
         '& svg': {
             color: 'white'
         },
@@ -189,9 +191,9 @@ export default makeStyles(theme => ({
         },
         marginRight: theme.spacing(1),
         marginLeft: '10px !important',
-        marginTop: '2px',
-        height: '26px',
-        width: '100%',
+       /*  marginTop: 1,  */
+        height: 26,
+        width: '100%', 
         [theme.breakpoints.up('sm')]: {
           marginLeft: '10px',
           width: 'auto',
@@ -361,6 +363,7 @@ export default makeStyles(theme => ({
         }
     },
     clipIcon:{
+        padding: 0,
         '& svg':{
             width: 24,
             height: 24,

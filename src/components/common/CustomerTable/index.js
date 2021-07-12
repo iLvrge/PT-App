@@ -164,7 +164,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
 
         if( findIndex !== -1 ) {
-          previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width + data.x
+            previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width 
         }
         setHeaderColumns(previousColumns)
     }, [ headerColumns ] )

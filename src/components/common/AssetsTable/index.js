@@ -512,7 +512,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       if(selectedRow.length == 0) {
         setSelectedRow([selectedAssetsPatents[0] != "" ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString()])
       }
-    } else if (selectedAssetsPatents.length > 0 && selectedRow.length == 0) {
+    } else if (selectedAssetsPatents.length == 0 && selectedRow.length > 0) {
       setSelectedRow([])
     }
   }, [selectedAssetsPatents, selectedRow])
@@ -758,7 +758,7 @@ const resetAll = () => {
     const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
 
     if( findIndex !== -1 ) {
-      previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width + data.x
+      previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width 
     }
     setTableColumns(previousColumns)
   }, [ tableColumns ] )

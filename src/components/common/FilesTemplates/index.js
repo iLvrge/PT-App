@@ -316,7 +316,7 @@ const FilesTemplates = ({type}) => {
         const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
     
         if( findIndex !== -1 ) {
-          previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width + data.x
+            previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width 
         }
         setHeaderColumns(previousColumns)
     }, [ headerColumns ] )
@@ -337,7 +337,7 @@ const FilesTemplates = ({type}) => {
         const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
     
         if( findIndex !== -1 ) {
-          previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width + data.x
+            previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width 
         }
         setDocumentHeaderColumns(previousColumns)
     }, [ documentHeaderColumns ] )

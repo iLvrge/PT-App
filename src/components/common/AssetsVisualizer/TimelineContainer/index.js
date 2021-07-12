@@ -314,7 +314,7 @@ const TimelineContainer = ({ data }) => {
                     assetTypesCompaniesSelected;
 
                    
-        const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, [], selectedCategory, assetTypeInventors.length > 0 ? true : undefined)
+        const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, [], selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
         
         //setTimelineRawGroups(data.groups) //groups
         setTimelineRawData(data.list) //items        

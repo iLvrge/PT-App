@@ -23,17 +23,26 @@ export default makeStyles(theme => ({
                 width: '2rem',
                 height: '2rem'
             },
+            '& svg.noStroke':{
+                stroke: 'none !important'
+            },
             '&.active':{
                 color: '#fff !important' ,
                 '& svg':{
                     fill: '#fff !important',
                     stroke: '#fff !important',
                 },
+                '& svg.noStroke':{
+                    stroke: 'none !important'
+                },
                 '&:hover':{
                     color: 'rgb(230, 0, 0) !important' ,
                     '& svg':{
                         fill: 'rgb(230, 0, 0) !important',
                         stroke: 'rgb(230, 0, 0)  !important',
+                    },
+                    '& svg.noStroke':{
+                        stroke: 'none !important'
                     }
                 }
             },
@@ -47,4 +56,7 @@ export default makeStyles(theme => ({
     tooltip:{
         fontSize: '1rem'
     },
+    noStroke: {
+        stroke: 'none !important'
+    }
 }))

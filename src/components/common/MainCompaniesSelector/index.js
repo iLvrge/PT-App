@@ -313,7 +313,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const resizeColumnsWidth = useCallback((dataKey, data) => {
         let previousColumns = [...headerColumns]
         const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
-
         if( findIndex !== -1 ) {
           previousColumns[findIndex].width =  previousColumns[findIndex].oldWidth + data.x
           previousColumns[findIndex].minWidth = previousColumns[findIndex].oldWidth + data.x
@@ -324,9 +323,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const resizeColumnsStop = useCallback((dataKey, data) => {
         let previousColumns = [...headerColumns]
         const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
-    
         if( findIndex !== -1 ) {
-          previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width + data.x
+          previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width 
         }
         setHeaderColumns(previousColumns)
     }, [ headerColumns ] )
@@ -340,7 +338,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             return row
         })
         await Promise.all(promise)
-        console.log('handleCounter', list)
         setCompaniesList(list)
     }
 

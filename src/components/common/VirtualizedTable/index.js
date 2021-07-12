@@ -84,7 +84,6 @@ const VirtualizedTable = ({
   checkedIcon,
   ...tableProps
 }) => {
-  console.log('MAIN=>selected', selected)
   const classes = useStyles();
   const [sortDirection, setSortDirection] = useState(SortDirection.ASC);
   const [sortBy, setSortBy] = useState("");

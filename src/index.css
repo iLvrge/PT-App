@@ -618,7 +618,7 @@ div.vis-tooltip span{
   width: 17px;
   height: 17px;
   fill: #fff;
-  stroke: #fff;
+  /*stroke: #fff;*/
   margin-right: 5px;
 }
 
