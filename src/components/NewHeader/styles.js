@@ -411,9 +411,10 @@ export default makeStyles(theme => ({
         border:'1px solid #5a5a5a !important',
         marginLeft: 15,
         textTransform: 'initial',
+        padding: '3px 5px',
         '&:hover':{
-        border:'1px solid #e60000 !important',
-        color: '#e60000 !important'
+            border:'1px solid #e60000 !important',
+            color: '#e60000 !important'
         },
         '&:first':{
         marginLeft: 5
