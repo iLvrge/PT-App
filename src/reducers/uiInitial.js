@@ -11,6 +11,6 @@ export default {
       selectedItem: null,
       selectedAsset: null,
     },
-    controlModal: true, 
+    controlModal: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? false : true, 
     driveButtonActive: false
 }

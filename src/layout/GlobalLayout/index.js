@@ -547,6 +547,7 @@ const GlobalLayout = (props) => {
 
     const handleAlertPop = () => {
         console.log('Popup')
+        alert('Message....')
     }
 
     const topToolBar = [

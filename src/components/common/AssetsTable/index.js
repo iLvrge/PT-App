@@ -217,55 +217,46 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   ]
 
   const onHandleDropDownlist = (event, asset, row ) => { 
-    if(event.target.value == 5) {
-      /* let oldAssets = [...copyAssets]
-      if( oldAssets.length > 0 ) {
-        const findIndex = oldAssets.findIndex( r => r.asset == asset)
-        if( findIndex !== -1 ) {
-          oldAssets.splice( findIndex, 1 )
-        } else {
-          oldAssets.push(row)
-        }
-      } else {
-        oldAssets.push(row)
+    if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+      alert('Message....')
+    } else {
+      if(event.target.value == 5) {
+        setSelectedAssets(prevItems => {
+          const findIndex = prevItems.findIndex( r => r.asset == asset)
+          if( findIndex !== -1 ) {
+            return prevItems.splice( findIndex, 1 )
+          } else {
+            return [...prevItems, row]
+          }
+        })
+        
+      } 
+  
+      const currentLayoutIndex = controlList.findIndex(r => r.type == 'menu' && r.category == selectedCategory )
+      if(currentLayoutIndex !== -1) {
+        setDropOpenAsset(null)
+        setMovedAssets(prevItems => {
+          const findIndex = prevItems.findIndex(row => row.asset == asset)
+          if(findIndex !== -1) {
+            return prevItems.splice( findIndex, 1 )
+          } else {
+            return [...prevItems, {
+              asset,
+              move_category: event.target.value,
+              currentLayout: controlList[currentLayoutIndex].layout_id,
+              grant_doc_num: row.grant_doc_num,
+              appno_doc_num: row.appno_doc_num,
+            }]
+          }
+        })      
       }
-      copyAssets = [...oldAssets] */
-      //setSelectedAssets(oldAssets)
-      setSelectedAssets(prevItems => {
-        const findIndex = prevItems.findIndex( r => r.asset == asset)
-        if( findIndex !== -1 ) {
-          return prevItems.splice( findIndex, 1 )
-        } else {
-          return [...prevItems, row]
-        }
-      })
-      
-    } 
-
-    const currentLayoutIndex = controlList.findIndex(r => r.type == 'menu' && r.category == selectedCategory )
-    if(currentLayoutIndex !== -1) {
-      setDropOpenAsset(null)
-      setMovedAssets(prevItems => {
-        const findIndex = prevItems.findIndex(row => row.asset == asset)
-        if(findIndex !== -1) {
-          return prevItems.splice( findIndex, 1 )
-        } else {
-          return [...prevItems, {
-            asset,
-            move_category: event.target.value,
-            currentLayout: controlList[currentLayoutIndex].layout_id,
-            grant_doc_num: row.grant_doc_num,
-            appno_doc_num: row.appno_doc_num,
-          }]
-        }
-      })      
-    }
+    }    
   }
 
   const COLUMNS = [
     {
-      width: 24,
-      minWidth: 24,
+      width: 25,
+      minWidth: 25,
       disableSort: true,
       label: "",
       dataKey: "asset",

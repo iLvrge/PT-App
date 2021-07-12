@@ -250,11 +250,16 @@ const NewHeader = () => {
    */
 
   const hideMenu = useCallback((e, item) => {
-    dispatch(setResetAll(1, item))    
-    handleControlModal(e, false)
-    setTimeout(()=>{
-      dispatch(setBreadCrumbsAndCategory(item))
-    }, 500)
+    if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+      alert('Message.....')
+    } else {
+      dispatch(setResetAll(1, item))    
+      handleControlModal(e, false)
+      setTimeout(()=>{
+        dispatch(setBreadCrumbsAndCategory(item))
+      }, 500)
+    }
+    
   }, [ dispatch ])
 
   /***

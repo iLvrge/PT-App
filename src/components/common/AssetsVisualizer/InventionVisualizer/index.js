@@ -119,7 +119,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         yLabel: '',
         zLabel: '',
         tooltip: function (point) {
-            console.log('point, data', point)
             // parameter point contains properties x, y, z, and data
             // data is the original object passed to the point constructor
             const findIndex = graphRawGroupData.findIndex( row => row.id == point.y )
@@ -134,7 +133,13 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
             return `<div class="graphTooltip"><ul class="tootlip_data"><li><strong>Filling Year</strong>: ${point.x}</li><li><strong>Patents</strong>: ${point.data.patent}</li>${point.data.application_number > 0 ? '<li><strong>Applications</strong>: '+ point.data.application_number +'</li>' : ''}<li><strong>Origin</strong>: ${origin != null ? origin : ''}</li><li><div class='noWrapText'><strong>Subject Matter</strong>: ${capitalize(defination)}</div></li></div>`
         },
-        yValueLabel: function(value) {
+        yValueLabel: function(value) {            
+            return parseInt(value)
+        },
+        xValueLabel: function(value) {
+            return parseInt(value)
+        },
+        zValueLabel: function(value) {
             const findIndex = graphRawGroupData.findIndex( row => row.id == value)
             if( findIndex !== -1 ) {
                 return graphRawGroupData[findIndex].cpc_code
