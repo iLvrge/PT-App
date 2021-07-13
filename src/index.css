@@ -815,6 +815,10 @@ a.maintain svg.clean_encumbrances path{
   display: inline;
 }
 
+.editor{
+  min-width: 387px;
+}
+
 #users_list .MuiMenu-paper{
   margin-top: -33px;
 } 
