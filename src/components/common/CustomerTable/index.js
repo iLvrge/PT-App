@@ -105,7 +105,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         {
             width: 70,
             minWidth: 70,
-            label: 'Transactions',
+            label: 'Assignments',
             dataKey: 'totalTransactions', 
             showGrandTotal: true,  
             align: 'center'             

@@ -6,9 +6,9 @@ export default makeStyles(theme => ({
         display: 'flex',
         justifyContent: 'center',
         paddingTop: 7,
-        paddingBottom: 17,
+       /*  paddingBottom: 17, */
         '& .MuiIconButton-root':{
-            padding: 0,
+            padding: 8,
             color: '#5a5a5a',
             '&:hover':{
                 color: 'rgb(230, 0, 0)' ,

@@ -61,6 +61,7 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
     height: 32px;
     position: sticky;
     bottom: 0;
+    min-width: 100vw;
 }
 
 #bottomUIToolbarExpanded {

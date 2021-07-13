@@ -101,7 +101,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             minWidth: 200,
             oldWidth: 200,
             draggable: true,
-            label: 'Inventors',             
+            label: 'Employees',             
             dataKey: 'entityName', 
             badge: true,           
             align: 'left' 
@@ -109,7 +109,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         {
             width: 70,
             minWidth: 70,
-            label: 'Transactions',
+            label: 'Assignments',
             dataKey: 'totalTransactions', 
             showGrandTotal: true,   
             align: 'center'           

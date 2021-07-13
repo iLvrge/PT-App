@@ -145,8 +145,8 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       disableSort: true,
     },
     {
-      width: 100,
-      minWidth: 100,
+      width: 90,
+      minWidth: 90,
       label: "Transactions",
       dataKey: "date",
       align: "left",
@@ -162,8 +162,8 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       headingIcon: 'slack_image',   
     },
     { 
-      width: 100,
-      minWidth: 100,
+      width: 70,
+      minWidth: 70,
       label: "Assets", 
       dataKey: "assets",
       staticIcon: "",

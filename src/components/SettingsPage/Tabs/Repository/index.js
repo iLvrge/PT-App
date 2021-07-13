@@ -105,6 +105,8 @@ const Repository = () => {
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)
     const [headerDriveColumns, setHeaderDriveColumns] = useState(DRIVE_COLUMNS)
     const [headerRepositoryColumns, setHeaderRepositoryColumns] = useState(REPOSITORY_COLUMNS)
+
+    const TIMER_OPEN = 2000
     
     useEffect(() => {
         dispatch(setBreadCrumbs('Settings > Templates and Documents Repository'))
@@ -119,11 +121,11 @@ const Repository = () => {
                 }
             } else { 
                 // Not login
-                setTimeout(openGoogleWindow,5000) //open google login popup
+                setTimeout(openGoogleWindow, TIMER_OPEN) //open google login popup
             }
         } else {
             // Not login
-            setTimeout(openGoogleWindow, 5000) //open google login popup
+            setTimeout(openGoogleWindow, TIMER_OPEN) //open google login popup
         }
     }, [])
 
@@ -143,7 +145,7 @@ const Repository = () => {
                     }
                 }
             } else {
-                setTimeout(openGoogleWindow, 5000) //open google login popup
+                setTimeout(openGoogleWindow, TIMER_OPEN) //open google login popup
             }
         } else {
             if(google_profile != null && google_profile.hasOwnProperty('email')) {
@@ -153,9 +155,7 @@ const Repository = () => {
     }, [dispatch, google_profile, googleToken])
 
     useEffect(() => {
-        if(googleToken != '') {
-            console.log('useEffect=>getGoogleTemplates', googleToken)
-            
+        if(googleToken != '') {            
             dispatch( getGoogleTemplates(googleToken) ) 
             //getRepoDriveFiles()  
         }
@@ -184,7 +184,6 @@ const Repository = () => {
             if(data.template_container_id != null && data.template_container_id != '' && (token != undefined || googleToken != undefined)) {
                 /**Set breancrumbs for template */
                 setBreadCrumbItems(JSON.parse(data.template_breadcrumb))
-                console.log('getRepoFolder=>getGoogleTemplates', token != undefined ? token : googleToken)
                 dispatch(getGoogleTemplates(token != undefined ? token : googleToken, data.template_container_id))
                 setTemplatesFolderLock(1)
             }
@@ -210,57 +209,64 @@ const Repository = () => {
             if(items.length == 0) {
                 items.push({id: 'undefined', name: 'My Drive'})
             }
-            items.push({id, name})
-            if( t === 1 ) {
-                setBreadCrumbItems( items )
-                console.log('openDriveFolder', googleToken)
-                dispatch(getGoogleTemplates(googleToken, id))
-            } else {
-                setRepoBreadcrumbItems( items )
-                getRepoDriveFiles(id)
-                if(typeof callBack == 'function') {
-                    callBack(id, name, items)
+            const findIndex = items.findIndex( row => row.id === id)
+            if(findIndex === -1) {
+                items.push({id, name})
+                if( t === 1 ) {
+                    setBreadCrumbItems( items )
+                    dispatch(getGoogleTemplates(googleToken, id))
+                } else {
+                    setRepoBreadcrumbItems( items )
+                    getRepoDriveFiles(id)
+                    if(typeof callBack == 'function') {
+                        callBack(id, name, items)
+                    }
                 }
-            }  
+            } 
         }
     }, [dispatch, breadcrumbItems, repoBreadcrumbItems, googleToken, google_profile])
 
-    const handleBreadcrumbClick = useCallback((event, item, type) => {
+    const handleBreadcrumbClick = useCallback((event, item, type, clicked) => {
         event.preventDefault()
-        let oldItems = type == 1 ? [...breadcrumbItems] : [...repoBreadcrumbItems]
-        if( item.id == 'undefined' ) {
-            oldItems = [{id: 'undefined', name: 'My Drive'}]
-        } else {
-            const findIndex = oldItems.findIndex( row => row.id === item.id)
-            if(findIndex !== -1 ) {
-                oldItems = oldItems.splice( 0, findIndex + 1)
+        if(clicked === false) {
+            let oldItems = type == 1 ? [...breadcrumbItems] : [...repoBreadcrumbItems]
+            if( item.id == 'undefined' ) {
+                oldItems = [{id: 'undefined', name: 'My Drive'}]
+            } else {
+                const findIndex = oldItems.findIndex( row => row.id === item.id)
+                if(findIndex !== -1 ) {
+                    oldItems = oldItems.splice( 0, findIndex + 1)
+                }
+            }   
+            if( type === 1 ) {
+                setBreadCrumbItems( oldItems )
+            } else {
+                setRepoBreadcrumbItems( oldItems )
+            }       
+            if( type === 1 ) {
+                dispatch(getGoogleTemplates(googleToken, item.id))
+            } else {
+                getRepoDriveFiles(item.id)
             }
-        }  
-        if( type === 1 ) {
-            setBreadCrumbItems( oldItems )
         } else {
-            setRepoBreadcrumbItems( oldItems )
-        }       
-        if( type === 1 ) {
-            dispatch(getGoogleTemplates(googleToken, item.id))
-        } else {
-            getRepoDriveFiles(item.id)
+            alert("Please unlock first.")
         }
+        
     }, [ dispatch, googleToken, breadcrumbItems, repoBreadcrumbItems ])
 
-    const BreadCrumbs = ({type }) => {
+    const BreadCrumbs = ({type, click }) => {
         return (
             <Breadcrumbs aria-label="breadcrumb">
                {
                     type == 1 && breadcrumbItems != null && breadcrumbItems.length > 0 && breadcrumbItems.map( crumb => (
-                        <Link key={crumb.id} color="inherit" href="#" onClick={(e) => handleBreadcrumbClick(e, crumb, type)}>
+                        <Link key={crumb.id} color="inherit" href="#" onClick={(e) => handleBreadcrumbClick(e, crumb, type, click)}>
                             {crumb.name}
                         </Link>
                     ))
                }
                {
                     type == 2 && repoBreadcrumbItems != null && repoBreadcrumbItems.length > 0  && repoBreadcrumbItems.map( crumb => (
-                        <Link key={crumb.id} color="inherit" href="#" onClick={(e) => handleBreadcrumbClick(e, crumb, type)}>
+                        <Link key={crumb.id} color="inherit" href="#" onClick={(e) => handleBreadcrumbClick(e, crumb, type, click)}>
                             {crumb.name}
                         </Link>
                     ))
@@ -298,7 +304,7 @@ const Repository = () => {
     const handleClickRepositoryDriveRow = useCallback(async (event, row) => {
         event.preventDefault()
         if(row.mimeType == 'application/vnd.google-apps.folder') {
-            console.log('handleClickRepositoryDriveRow=>openDriveFolder', googleToken)
+            
             openDriveFolder(event, row.id, row.name, 2)            
         } else {
             
@@ -326,9 +332,6 @@ const Repository = () => {
                 setRepoFolderLock(1)
                 setRepoFolder(res.data)
                 setRepoBreadcrumbItems(JSON.parse(res.data.breadcrumb))
-
-
-
             }
         })        
     }, [ google_profile, googleToken, repoBreadcrumbItems ])
@@ -345,7 +348,7 @@ const Repository = () => {
             if(res.data != null) {
                 setTemplatesFolderLock(1)
                 setRepoFolder(res.data)
-                setBreadCrumbItems(JSON.parse(res.data.breadcrumb))
+                setBreadCrumbItems(JSON.parse(res.data.template_breadcrumb))
             }
         })       
     }, [ google_profile, googleToken, breadcrumbItems ])
@@ -493,7 +496,7 @@ const Repository = () => {
                                :
                                <LockOpenIcon onClick={(event) => unLockTemplateFolder(event, 1)}/>
                             }
-                            </span> Templates:  <BreadCrumbs type={1}/>
+                            </span> Templates:  <BreadCrumbs type={1} click={repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('template_container_id') && templates_folder_lock === 1 ? true : false}/>
                         </Typography>
                     </div>
                     <div className={classes.drive}>
@@ -549,7 +552,7 @@ const Repository = () => {
                                 :
                                 <LockOpenIcon onClick={(event) => unLockRepoFolder(event, 1)}/>
                                 }
-                                </span> Documents: <BreadCrumbs  type={2}/>
+                                </span> Documents: <BreadCrumbs  type={2} click={repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('container_id') && repo_folder_lock === 1 ? true : false}/>
                             </Typography>
                         </div>
                         <div className={classes.drive}>
