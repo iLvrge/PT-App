@@ -819,6 +819,27 @@ a.maintain svg.clean_encumbrances path{
   min-width: 387px;
 }
 
+.scopeTooltip{
+  display: flex;
+  z-index: 9999;
+  padding: 10px;
+  width: 500px;
+  background: #000;
+  color: #fff;
+  position: absolute;   
+}
+
+.depth .MuiSlider-rail {
+  color: #Ef0000
+}
+.MuiSlider-thumb,  .scope .MuiSlider-track, .MuiSlider-markActive{
+  background-color: #Ef0000 !important
+}
+
+.MuiSlider-thumb.Mui-focusVisible, .MuiSlider-thumb:hover {
+  box-shadow: 0px 0px 0px 8px rgb(239 0 0 / 16%) !important;
+}
+
 #users_list .MuiMenu-paper{
   margin-top: -33px;
 } 

@@ -1,17 +1,55 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import { Typography, Slider } from '@material-ui/core'
 import useStyles from './styles'
 
 const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRangeText, valueScope, valueRange, onChangeRangeSlider, onChangeScopeSlider }) => {
     const classes = useStyles()
+    const scopeRef = useRef(null)
     const [ scopeValue, setScopeValue ] = useState(valueScope)
     const [ rangeValue, setRangeValue ] = useState(valueRange)
     const CONTANT_HEIGHT = 18
     const [ height, setHeight] = useState('550px')
     
     useEffect(() => {
-        setHeight(`${scopeRange.length * CONTANT_HEIGHT}px`)
+        setHeight(`${(scopeRange.length * CONTANT_HEIGHT) + 15}px`)
     }, [ scopeRange ])
+
+    useEffect(() => {
+        if(scopeRef.current !== null) {
+            addTooltip()
+        }
+    }, [ scopeRef ])
+
+    const addTooltip = () => {
+        setTimeout(() => {
+            const element = scopeRef.current
+            if(element !== null && element.querySelectorAll('.MuiSlider-markLabel') !== null && element.querySelectorAll('.MuiSlider-markLabel').length > 0) {
+                if(document.querySelector('.scopeTooltip') !== null){
+                    document.querySelector('.scopeTooltip').remove()
+                }
+                element.querySelectorAll('.MuiSlider-markLabel').forEach( item => {
+                    item.onmouseover = (e) => {
+                        //const rect = item.getBoundingClientRect();
+                        //console.log('onmouseover', rect)
+                        const div = document.createElement('div')
+                            div.innerText = item.innerText
+                            div.setAttribute('id', `element-${item.getAttribute('data-index')}`)
+                            div.setAttribute('class', `scopeTooltip`)
+                            div.style = `top: ${e.clientY + 10}px; left: ${e.clientX + 20}px`
+                            document.body.appendChild(div)
+                    }
+                    item.onmouseleave = (e) => {
+                        const element = document.querySelector(`.scopeTooltip`)
+                        if(element !== null) {
+                            element.remove()
+                        } 
+                    }
+                })
+            } else {
+                addTooltip()
+            }
+        }, 1000)
+    }
 
     const handleScopeChange = (event, newValue) => {
         setScopeValue(newValue)
@@ -36,38 +74,41 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRange
                         <Typography>Scope:</Typography> 
                     </div>    
                 </div>   
-            </div>  
-            <div className={classes.selectorContainer}>  
-                <div className={classes.holder} style={{height}}>  
-                    <div className={`${classes.flexColumn} ${classes.flexColumnDepth}`}>
-                        <Slider
-                            defaultValue={valueRange}
-                            orientation="vertical"
-                            onChangeCommitted={handleRangeChange}
-                            getAriaValueText={depthRangeText}
-                            aria-labelledby="vertical-slider"
-                            marks={depthRange}
-                            max={depthRange.length}
-                            min={1}
-                            step={1}
-                            track={'inverted'}  
-                        />
-                    </div>  
-                    <div className={`${classes.flexColumn} ${classes.flexColumnScope}`}>
-                        <Slider
-                            orientation="vertical"
-                            defaultValue={valueScope}
-                            onChangeCommitted={handleScopeChange}
-                            aria-labelledby="vertical-slider"
-                            getAriaValueText={scopeRangeText}
-                            marks={scopeRange}
-                            max={scopeRange.length}
-                            step={1} 
-                            min={1} 
-                        /> 
+            </div>    
+            <div className={classes.mainContainer}>
+                <div className={`depth ${classes.flexColumn} ${classes.flexColumnDepth} ${classes.topMargin}`}>
+                    <Slider
+                        defaultValue={valueRange}
+                        orientation="vertical"
+                        onChangeCommitted={handleRangeChange}
+                        getAriaValueText={depthRangeText}
+                        aria-labelledby="vertical-slider"
+                        marks={depthRange}
+                        max={depthRange.length}
+                        min={1}
+                        step={1}
+                        track={'inverted'}  
+                    />
+                </div>
+                <div className={`${classes.flexColumn} ${classes.flexColumnScope}`}>
+                    <div className={classes.selectorContainer}>
+                        <div className={`scope ${classes.holder} ${classes.topMargin}`} style={{height}}>  
+                            <Slider
+                                orientation="vertical"
+                                defaultValue={valueScope}
+                                onChangeCommitted={handleScopeChange}
+                                aria-labelledby="vertical-slider"
+                                getAriaValueText={scopeRangeText}
+                                marks={scopeRange}
+                                max={scopeRange.length}
+                                step={1} 
+                                min={1}
+                                ref={scopeRef} 
+                            /> 
+                        </div>             
                     </div>             
-                </div>             
-            </div>             
+                </div> 
+            </div>      
         </div> 
     )
 }

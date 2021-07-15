@@ -48,6 +48,15 @@ export default makeStyles(theme => ({
                 width: 17,
                 height: 17
             }   
+        },
+        '& .MuiSlider-rail':{
+            color: '#Ef0000'
+        },
+        '& .MuiSlider-thumb': {
+            backgroundColor: '#Ef0000'
+        },
+        '& .MuiSlider-markActive': {
+            backgroundColor: '#Ef0000'
         }
     },
     tabs: {
@@ -143,7 +152,6 @@ export default makeStyles(theme => ({
             fontWeight: 500,
             marginBottom: 0
         },
-        marginBottom: 15,
         background: '#292929',
         padding: '8px 15px'
     },
@@ -157,23 +165,30 @@ export default makeStyles(theme => ({
         display: 'flex',
         height: 37
     },
+    topMargin: {
+        marginTop: 15
+    },  
+    mainContainer: {
+        display: 'flex',
+        height: '94%',        
+    },
     selectorContainer: {
         display: 'flex',
-        height: '94%',
-        overflow: 'auto'
+        height: '100%',
+        overflow: 'hidden auto'
     },
     holder: {
         display: 'flex',
         width: '100%',
-        marginTop: 15,
     },
     flexColumn: {
         display: 'flex', 
         flexDirection: 'column',
-        height:'99.5%'       
+        height:'100%'       
     },
     flexColumnDepth: {
-        flexBasis: '13%'   
+        flexBasis: '13%'  ,
+        height:'95%'    
     },
     flexColumnScope: {
         flexBasis: '87%'   
@@ -184,8 +199,8 @@ export default makeStyles(theme => ({
         flexDirection: 'column',
         "& .react-resizable-handle": {
             position: "absolute",
-            width: 20,
-            height: 20,
+            width: 25,
+            height: '90%',
             bottom: 0,
             right: 0,
             background:
@@ -195,7 +210,8 @@ export default makeStyles(theme => ({
             backgroundRepeat: "no-repeat",
             backgroundOrigin: "content-box",
             boxSizing: "border-box",
-            cursor: "se-resize"
+            cursor: "se-resize",
+            padding: 5
         }
     }
 }))

@@ -495,7 +495,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 <ResizableBox
                     height={resizableWidthHeight[1]}
                     width={resizableWidthHeight[0]}
-                    minConstraints={[720, 550]}
+                    minConstraints={[420, 350]}
                     maxConstraints={[1500, 800]}
                     className={classes.resizable}
                     onResizeStop={handleResize}
