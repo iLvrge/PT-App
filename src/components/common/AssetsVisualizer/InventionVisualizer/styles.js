@@ -150,11 +150,27 @@ export default makeStyles(theme => ({
     displayFlex:{
         display: 'flex', 
         height: '100%',
+        flexDirection: 'column',
+        width: '100%',
+    },
+    headingContainer: {
+        display: 'flex',
+        height: 37
+    },
+    selectorContainer: {
+        display: 'flex',
+        height: '94%',
+        overflow: 'auto'
+    },
+    holder: {
+        display: 'flex',
+        width: '100%',
+        marginTop: 15,
     },
     flexColumn: {
         display: 'flex', 
         flexDirection: 'column',
-        height:'98.5%'       
+        height:'99.5%'       
     },
     flexColumnDepth: {
         flexBasis: '13%'   
@@ -173,9 +189,9 @@ export default makeStyles(theme => ({
             bottom: 0,
             right: 0,
             background:
-                "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiNmZmYiLz48L2c+PC9zdmc+')",
+                "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3R5bGU9ImZpbGw6I2ZmZmZmZiIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyMHB4IiBoZWlnaHQ9IjIwcHgiPjxwYXRoIGQ9Ik0xOSAxMmgtMnYzaC0zdjJoNXYtNXpNNyA5aDNWN0g1djVoMlY5em0xNC02SDNjLTEuMSAwLTIgLjktMiAydjE0YzAgMS4xLjkgMiAyIDJoMThjMS4xIDAgMi0uOSAyLTJWNWMwLTEuMS0uOS0yLTItMnptMCAxNi4wMUgzVjQuOTloMTh2MTQuMDJ6Ij48L3BhdGg+PC9zdmc+')",
             backgroundPosition: "bottom right",
-            padding: "0 3px 3px 0",
+            /* padding: "0 3px 3px 0", */
             backgroundRepeat: "no-repeat",
             backgroundOrigin: "content-box",
             boxSizing: "border-box",

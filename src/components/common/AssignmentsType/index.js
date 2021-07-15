@@ -247,8 +247,33 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
             }
             list.push(item)
         })
-        
-        if(assetTypes.length == 0) {
+        if( selectItems.length == 0 ) {
+            (async() => {
+                const { data } = await PatenTrackApi.getUserActivitySelection()
+                if(data != null && Object.keys(data).length > 0) {
+                    
+                    const findIndex = assetTypes.findIndex( aTab => aTab.tab_id == data.activity_id )
+
+                    if(findIndex !== -1 ) {
+                        let insert = false;
+                        setSelectItems(prevItems => {
+                            if(!prevItems.includes(data.activity_id)) {
+                                insert = true
+                                return [data.activity_id]
+                            } else {
+                                return prevItems
+                            }
+                        })
+                        if(insert === true) {
+                            dispatch( 
+                                setAssetTypesSelect([data.activity_id])
+                            )
+                        }                        
+                    }
+                }
+            })();  
+        }
+        /* if(assetTypes.length == 0) {
             setSelectItems([])
             setSelectedRow([])
             dispatch( setAssetTypesSelect([]) )
@@ -265,7 +290,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
                     }
                 }
             })();            
-        }
+        } */
         setTypeData(list)
     }, [ assetTypes ])
 

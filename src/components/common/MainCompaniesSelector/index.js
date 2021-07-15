@@ -56,7 +56,7 @@ const COLUMNS = [
         label: 'Companies',        
         dataKey: 'original_name',
         align: "left", 
-        badge: true
+        badge: true,
     },
     {
         width: 80,  
@@ -154,26 +154,36 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                 const { data } = await PatenTrackApi.getUserCompanySelections();
 
                 if(data != null && data.list.length > 0) {
-                    const IDs = [], names = []
-                    const promise = data.list.map( representative => {
-                        IDs.push(representative.representative_id)
-                        return representative
-                    })
-                    Promise.all(promise)
-                    
-                    
-                    IDs.forEach( id => {
-                        companies.list.forEach( company => {
-                            if( id === company.representative_id ) {
-                                names.push( {id: company.representative_id, name: company.original_name} )
-                                return false;
-                            }
+                    if(selectItems.length == 0) {
+                        let insert = false, oldItems = [], names = []
+                        setSelectItems(prevItems => {
+                            oldItems = [...prevItems]
+                            const promise = data.list.map( representative => {
+                                if(!prevItems.includes(representative.representative_id)){
+                                    insert = true
+                                    oldItems.push(representative.representative_id)
+                                }
+                            })
+                            Promise.all(promise)
+                            if(insert === true) {
+                                return oldItems
+                            } else {
+                                return prevItems
+                            }                            
                         })
-                    })
 
-                    
-                    setSelectItems(IDs)
-                    dispatch(setMainCompaniesSelected(IDs, names))
+                        if( insert === true ) {
+                            oldItems.forEach( id => {
+                                companies.list.forEach( company => {
+                                    if( id === company.representative_id ) {
+                                        names.push( {id: company.representative_id, name: company.original_name} )
+                                        return false;
+                                    }
+                                })
+                            })
+                            dispatch(setMainCompaniesSelected(oldItems, names))
+                        }
+                    }
                 } 
             }            
         }  

@@ -6,9 +6,12 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRange
     const classes = useStyles()
     const [ scopeValue, setScopeValue ] = useState(valueScope)
     const [ rangeValue, setRangeValue ] = useState(valueRange)
-
-    console.log("reverse", scopeRange)
+    const CONTANT_HEIGHT = 18
+    const [ height, setHeight] = useState('550px')
     
+    useEffect(() => {
+        setHeight(`${scopeRange.length * CONTANT_HEIGHT}px`)
+    }, [ scopeRange ])
 
     const handleScopeChange = (event, newValue) => {
         setScopeValue(newValue)
@@ -21,39 +24,49 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRange
     }   
 
     return (
-        <div className={classes.displayFlex}>          
-            <div className={`${classes.flexColumn} ${classes.flexColumnDepth}`}>
-                <div className={classes.heading}>
-                    <Typography>Depth:</Typography>
-                </div>                
-                <Slider
-                    defaultValue={valueRange}
-                    orientation="vertical"
-                    onChangeCommitted={handleRangeChange}
-                    getAriaValueText={depthRangeText}
-                    aria-labelledby="vertical-slider"
-                    marks={depthRange}
-                    max={depthRange.length}
-                    min={1}
-                    step={1}
-                    track={'inverted'}  
-                />
+        <div className={classes.displayFlex}>   
+            <div className={classes.headingContainer}>
+                <div className={`${classes.flexColumn} ${classes.flexColumnDepth}`}>
+                    <div className={classes.heading}>
+                        <Typography>Depth:</Typography>
+                    </div>
+                </div>   
+                <div className={`${classes.flexColumn} ${classes.flexColumnScope}`}>
+                    <div className={classes.heading}>
+                        <Typography>Scope:</Typography> 
+                    </div>    
+                </div>   
             </div>  
-            <div className={`${classes.flexColumn} ${classes.flexColumnScope}`}>
-                <div className={classes.heading}>
-                    <Typography>Scope:</Typography> 
-                </div> 
-                <Slider
-                    orientation="vertical"
-                    defaultValue={valueScope}
-                    onChangeCommitted={handleScopeChange}
-                    aria-labelledby="vertical-slider"
-                    getAriaValueText={scopeRangeText}
-                    marks={scopeRange}
-                    max={scopeRange.length}
-                    step={1} 
-                    min={1} 
-                /> 
+            <div className={classes.selectorContainer}>  
+                <div className={classes.holder} style={{height}}>  
+                    <div className={`${classes.flexColumn} ${classes.flexColumnDepth}`}>
+                        <Slider
+                            defaultValue={valueRange}
+                            orientation="vertical"
+                            onChangeCommitted={handleRangeChange}
+                            getAriaValueText={depthRangeText}
+                            aria-labelledby="vertical-slider"
+                            marks={depthRange}
+                            max={depthRange.length}
+                            min={1}
+                            step={1}
+                            track={'inverted'}  
+                        />
+                    </div>  
+                    <div className={`${classes.flexColumn} ${classes.flexColumnScope}`}>
+                        <Slider
+                            orientation="vertical"
+                            defaultValue={valueScope}
+                            onChangeCommitted={handleScopeChange}
+                            aria-labelledby="vertical-slider"
+                            getAriaValueText={scopeRangeText}
+                            marks={scopeRange}
+                            max={scopeRange.length}
+                            step={1} 
+                            min={1} 
+                        /> 
+                    </div>             
+                </div>             
             </div>             
         </div> 
     )

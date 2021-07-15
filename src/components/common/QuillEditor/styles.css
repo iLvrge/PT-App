@@ -57,7 +57,7 @@
 }
 .ql-toolbar.ql-snow{
   border-top: 0px;
-  padding: 4px;
+  padding: 4px 45px 4px 4px;
 }
 .ql-snow.ql-toolbar button svg{
   stroke: none;

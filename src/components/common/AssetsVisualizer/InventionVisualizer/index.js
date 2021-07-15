@@ -107,7 +107,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         style: 'bar-color',
         axisFontSize: 18,
         /* yBarWidth:  30, */
-        zStep: 1,
         yStep: 1,
         yCenter: '30%',
         showPerspective: true,
@@ -133,18 +132,18 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
             return `<div class="graphTooltip"><ul class="tootlip_data"><li><strong>Filling Year</strong>: ${point.x}</li><li><strong>Patents</strong>: ${point.data.patent}</li>${point.data.application_number > 0 ? '<li><strong>Applications</strong>: '+ point.data.application_number +'</li>' : ''}<li><strong>Origin</strong>: ${origin != null ? origin : ''}</li><li><div class='noWrapText'><strong>Subject Matter</strong>: ${capitalize(defination)}</div></li></div>`
         },
-        yValueLabel: function(value) {            
-            return parseInt(value)
-        },
-        xValueLabel: function(value) {
-            return parseInt(value)
-        },
-        zValueLabel: function(value) {
+        yValueLabel: function(value) {
             const findIndex = graphRawGroupData.findIndex( row => row.id == value)
             if( findIndex !== -1 ) {
                 return graphRawGroupData[findIndex].cpc_code
             }  
             return value;
+        },
+        xValueLabel: function(value) {
+            return parseInt(value)
+        },
+        zValueLabel: function(value) {
+            return parseInt(value)
         },
         gridColor: '#e5e5e51c',
         tooltipStyle: {
@@ -474,14 +473,12 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     }
 
     const handleResize = (event, {element, size, handle}) => {
-        console.log("handleResize", size)
         setResizableWidthHeight([size.width, size.height])
     }
 
     const handleDragStop = (e, position) => {
         const {x, y} = position;
         setFilterDrag([x,y])
-        console.log("handleDragStop", x, y)
     }
 
     const PaperComponent = (props) => {
@@ -498,7 +495,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 <ResizableBox
                     height={resizableWidthHeight[1]}
                     width={resizableWidthHeight[0]}
-                    minConstraints={[720, 450]}
+                    minConstraints={[720, 550]}
                     maxConstraints={[1500, 800]}
                     className={classes.resizable}
                     onResizeStop={handleResize}
@@ -529,6 +526,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     }    
 
     const onChangeRangeSlider = useCallback(async (range) => {
+        console.log("onChangeRangeSlider", range)
         setValueRange(range)       
         findCPCList(filterList, range)        
     }, [ filterList ] )

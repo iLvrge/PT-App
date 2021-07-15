@@ -54,8 +54,10 @@ const LayoutTemplates = () => {
         minWidth: 250,
         width: 250,
         flexGrow: 1,
-        label: 'Templates (doubleclick to create a document)',
-        dataKey: 'container_name',            
+        label: 'Templates',
+        secondLabel: '(doubleclick to create a document)',
+        dataKey: 'container_name', 
+        badge: true            
       }
     ]
  

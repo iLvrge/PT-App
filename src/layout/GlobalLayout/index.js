@@ -576,7 +576,7 @@ const GlobalLayout = (props) => {
             t: 3
         },
         {
-            tooltip: 'Filter by Inventors',
+            tooltip: 'Filter by Employees',
             bar: openInventorBar,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleInventorBarOpen,
             t: 11
