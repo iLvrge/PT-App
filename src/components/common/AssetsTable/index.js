@@ -19,7 +19,8 @@ import {
   getCustomerSelectedAssets,
   getAssetTypeAssignmentAssets,
   getAssetTypeAssignmentAllAssets,
-  setAssetTypeAssignmentAllAssets,  
+  setAssetTypeAssignmentAllAssets, 
+  setAssetTypesAssignmentsAllAssetsLoading, 
   setAssetsIllustration,
   setSelectedAssetsPatents,
   setCommentsEntity,
@@ -64,6 +65,8 @@ import  { controlList } from '../../../utils/controlList'
 import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/numbers";
 
 import { getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
+
+import PatenTrackApi from '../../../api/patenTrack2'
 
 import ChildTable from "./ChildTable";
 
@@ -337,12 +340,12 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
                   getCustomerSelectedAssets(location.pathname.replace('/', ''))
                 );
                 
-
                 setWidth(1900)
               } else {
                 dispatch(
                   setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
                 );
+                dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
               }
             } else {
               if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
@@ -358,9 +361,11 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
                 );
                 setWidth(1900)
               } else {
+                PatenTrackApi.cancelAssets()
                 dispatch(
                   setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
                 );
+                dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) ) 
               }
             }
             
@@ -391,6 +396,28 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
 
   useEffect(() => {
     setAssetRows(assetTypeAssignmentAssets)
+    if(assetTypeAssignmentAssets.length > 0 && assetTypeAssignmentAssetsSelected.length > 0) {
+      const excludeSelections = []
+      const checkElement = assetTypeAssignmentAssetsSelected.map( asset => {
+        const findIndex = assetTypeAssignmentAssets.findIndex(row => row.asset == asset)
+        if(findIndex === -1) {
+          excludeSelections.push(asset)
+        }
+      })      
+      Promise.all(checkElement)
+      if(excludeSelections.length > 0) {        
+        const newSelectedAssets = [...assetTypeAssignmentAssetsSelected]
+        const mapSelection = excludeSelections.map( asset => {
+          const findIndex = newSelectedAssets.findIndex( item => item == asset)
+          if(findIndex !== -1) {
+            newSelectedAssets.splice(findIndex, 1)
+          }
+        })
+        Promise.all(mapSelection)
+        dispatch(setAssetTypesPatentsSelected(newSelectedAssets));
+        setSelectItems(newSelectedAssets)
+      }
+    } 
   }, [ assetTypeAssignmentAssets ])
 
 

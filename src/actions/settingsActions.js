@@ -213,9 +213,7 @@ export const addCompanyLawfirm = (formData) => async dispatch => {
   formData.lawfirms = JSON.stringify(store.getState().settings.selected_law_firm)
   formData.companies = JSON.stringify(store.getState().settings.companies_to_add_lawfirm)
   const companyLawFirmFormData = _createFormData(formData)
-  console.log("addCompanyLawfirm", formData);
   const { data } = await PatenTrackApi.addCompanyLawfirm(companyLawFirmFormData)
-  console.log(data);
   
   dispatch(fetchCompanyLawyers())
   /*formData.lawfirms = JSON.stringify(store.getState().settings.selected_law_firm)

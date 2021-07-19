@@ -45,8 +45,10 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRange
                         } 
                     }
                 })
+                const containerElement = document.body.querySelector('.selContainer')
+                containerElement.scrollTo(0, containerElement.querySelectorAll('.MuiSlider-markLabelActive')[0].offsetTop)
             } else {
-                addTooltip()
+                addTooltip()  
             }
         }, 1000)
     }
@@ -76,7 +78,7 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRange
                 </div>   
             </div>    
             <div className={classes.mainContainer}>
-                <div className={`depth ${classes.flexColumn} ${classes.flexColumnDepth} ${classes.topMargin}`}>
+                <div className={`depth ${classes.flexColumn} ${classes.flexColumnDepth} ${classes.topMargin} ${classes.customHeight}`}>
                     <Slider
                         defaultValue={valueRange}
                         orientation="vertical"
@@ -91,7 +93,7 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRange
                     />
                 </div>
                 <div className={`${classes.flexColumn} ${classes.flexColumnScope}`}>
-                    <div className={classes.selectorContainer}>
+                    <div className={`selContainer ${classes.selectorContainer}`}>
                         <div className={`scope ${classes.holder} ${classes.topMargin}`} style={{height}}>  
                             <Slider
                                 orientation="vertical"

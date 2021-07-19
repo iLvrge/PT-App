@@ -134,6 +134,10 @@ export default makeStyles(theme => ({
             height: '100%',
             margin: 0
         },
+        '& .MuiDialog-scrollPaper':{
+            alignItems: 'flex-end',
+            justifyContent: 'end'
+        }
     },
     sliderContainer: {
         position: 'absolute',
@@ -174,7 +178,7 @@ export default makeStyles(theme => ({
     },
     selectorContainer: {
         display: 'flex',
-        height: '100%',
+        height: '93%',
         overflow: 'hidden auto'
     },
     holder: {
@@ -186,12 +190,22 @@ export default makeStyles(theme => ({
         flexDirection: 'column',
         height:'100%'       
     },
+    customHeight: {
+        height:'200px'    
+    },
     flexColumnDepth: {
-        flexBasis: '13%'  ,
-        height:'95%'    
+        flexBasis: '13%',
+        minWidth: 200 
     },
     flexColumnScope: {
         flexBasis: '87%'   
+    },
+    close: { 
+        position: 'absolute', 
+        right: 10, 
+        top: 7, 
+        zIndex: 999,
+        cursor: 'pointer'
     },
     resizable:{
         position: "relative",
@@ -200,7 +214,7 @@ export default makeStyles(theme => ({
         "& .react-resizable-handle": {
             position: "absolute",
             width: 25,
-            height: '90%',
+            height: 25,
             bottom: 0,
             right: 0,
             background:

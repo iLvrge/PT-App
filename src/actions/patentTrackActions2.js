@@ -525,7 +525,6 @@ export const setGoogleAuthToken = ( token ) => {
 export const getGoogleProfile = ( token ) => {
   return async dispatch => {
     const { data } = await PatenTrackApi.getGoogleProfile( token )
-    console.log("getGoogleProfile", data)
     if(data == 'Error while retreiving profile data') {
       localStorage.setItem('google_auth_token_info', '')
     } else {
@@ -1028,7 +1027,6 @@ export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, appe
  */
 
 export const getCustomerSelectedAssets = ( shareCode, append = false ) => {
-  console.log('getCustomerSelectedAssets', shareCode)
   return async dispatch => {
     dispatch( setAssetTypesAssignmentsAllAssetsLoading( true ) )
     PatenTrackApi.cancelAssets()

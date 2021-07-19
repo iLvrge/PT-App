@@ -177,6 +177,28 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
 
   useEffect(() => {
     setRows(assignmentList)
+    if(assignmentList.length > 0 && selectedAssetsTransactions.length > 0) {
+      const excludeSelections = []
+      const checkElement = selectedAssetsTransactions.map( transaction => {
+        const findIndex = assignmentList.findIndex(row => row.rf_id == transaction)
+        if(findIndex === -1) {
+          excludeSelections.push(transaction)
+        }
+      })      
+      Promise.all(checkElement)
+      if(excludeSelections.length > 0) {        
+        const newSelectedTransaction = [...selectedAssetsTransactions]
+        const mapSelection = excludeSelections.map( transaction => {
+          const findIndex = newSelectedTransaction.findIndex( item => item == transaction)
+          if(findIndex !== -1) {
+            newSelectedTransaction.splice(findIndex, 1)
+          }
+        })
+        Promise.all(mapSelection)
+        dispatch(setSelectAssignments(newSelectedTransaction));
+        setSelectItems(newSelectedTransaction)
+      }
+    } 
   }, [assignmentList])
 
   /**
@@ -341,6 +363,8 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       setSelectItems(selectedAssetsTransactions)
     }
   }, [ selectedAssetsTransactions, selectItems ]) 
+
+
 
   //incase of search
   useEffect(() => {

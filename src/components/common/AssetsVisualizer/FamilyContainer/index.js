@@ -4,7 +4,7 @@ import moment from 'moment'
 import _debounce from 'lodash/debounce'
 import Paper from '@material-ui/core/Paper'
 import { DataSet } from 'vis-data/esnext'
-import { Timeline } from 'vis-timeline/esnext'
+import { Timeline } from 'vis-timeline-73/esnext'
 
 import CircularProgress from '@material-ui/core/CircularProgress'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
@@ -24,7 +24,7 @@ import { numberWithCommas } from '../../../../utils/numbers'
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
 import useStyles from './styles'
-
+  
 const DATE_FORMAT = 'MMM DD, YYYY'
 
 const options = {
@@ -40,19 +40,23 @@ const options = {
     zoomMin: 1000 * 60 * 60 * 24 * 7,    
     template: function(item, element, data) { 
       let applicationDate = data.rawData.application_date, grantDate = data.rawData.publication_date
-      if( applicationDate!= '' && applicationDate != null ) {
-        applicationDate = moment(new Date(applicationDate.substr(0,4)+'-'+ applicationDate.substr(4,2)+'-'+applicationDate.substr(6,2))).format(DATE_FORMAT)
+      if( applicationDate != '' && applicationDate != null ) {
+        applicationDate = moment(new Date(data.start)).format(DATE_FORMAT)
       }
       if( grantDate!= '' && grantDate != null ) {
-        grantDate = moment(new Date(grantDate.substr(0,4)+'-'+ grantDate.substr(4,2)+'-'+grantDate.substr(6,2))).format(DATE_FORMAT)
+        grantDate = grantDate.indexOf('-') !== -1 ? moment(new Date(grantDate)).format(DATE_FORMAT) :   moment(new Date(grantDate.substr(0,4)+'-'+ grantDate.substr(4,2)+'-'+grantDate.substr(6,2))).format(DATE_FORMAT)
+      } else {
+        grantDate = ''
       }
+      console.log('Template', `<div class='first'>${data.country.toUpperCase()} ${numberWithCommas(data.number)}</div><div class='flexMain ${ data.country.toLowerCase() == "cn" ? 'alignBaseline' : ''} '><img src='${data.country.toLowerCase() == 'ep' || data.country.toLowerCase() == 'wo' ? 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/'+data.country.toLowerCase()+'.png' : 'https://flagcdn.com/w80/'+data.country.toLowerCase()+'.png'}' srcset='${data.country.toLowerCase() == 'ep' || data.country.toLowerCase() == 'wo' ? 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/'+data.country.toLowerCase()+'.png' : 'https://flagcdn.com/w160/'+data.country.toLowerCase()+'.png 2x'}'/><div class='textColumn'><div class='absolute'><div>${applicationDate}</div><div>${grantDate}</div></div></div></div>`)
       return `<div class='first'>${data.country.toUpperCase()} ${numberWithCommas(data.number)}</div><div class='flexMain ${ data.country.toLowerCase() == "cn" ? 'alignBaseline' : ''} '><img src='${data.country.toLowerCase() == 'ep' || data.country.toLowerCase() == 'wo' ? 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/'+data.country.toLowerCase()+'.png' : 'https://flagcdn.com/w80/'+data.country.toLowerCase()+'.png'}' srcset='${data.country.toLowerCase() == 'ep' || data.country.toLowerCase() == 'wo' ? 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/'+data.country.toLowerCase()+'.png' : 'https://flagcdn.com/w160/'+data.country.toLowerCase()+'.png 2x'}'/><div class='textColumn'><div class='absolute'><div>${applicationDate}</div><div>${grantDate}</div></div></div></div>`
     },  
-}
+} 
 
 const convertDataToItem = (familyItem) => {
     const assetType = 'default'
     const rawDate = familyItem.application_date
+    console.log("rawDate", rawDate)
     return ({
         id: familyItem.id,
       content: '',
@@ -61,7 +65,7 @@ const convertDataToItem = (familyItem) => {
       assetType,
       zoomMin: 3456e5,
       rawData: familyItem,
-      number: familyItem.patent_number != '' ? familyItem.patent_number : familyItem.application_number,
+      number: familyItem.patent_number !== '' && familyItem.patent_number !== null && familyItem.patent_number !== 'null' ? familyItem.patent_number : familyItem.application_number,
       country: familyItem.publication_country,
       className: `asset-type-${assetType}`,
       collection: []
@@ -117,7 +121,7 @@ const FamilyContainer = ({ family, onClose }) => {
             setTimelineRawData(family)
             setIsLoadingTimelineRawData(false)
             const findIndex = family.findIndex(item => selectedAsset.includes(item.application_number) || selectedAsset.includes(item.patent_number))
-            console.log("FamilyContainer", findIndex, selectedAsset)
+            console.log("FamilyContainers", findIndex, selectedAsset)
             if(findIndex !== -1 ) { 
                 dispatch(setFamilyItemDisplay(family[findIndex]))
                 dispatch(toggleFamilyItemMode(true))
@@ -141,7 +145,9 @@ const FamilyContainer = ({ family, onClose }) => {
         let start = new moment().subtract(18, 'months')
         let end = new moment().add(18, 'months')
         if(timelineContainerRef.current != null) {
+            console.log('timelineRawData', timelineRawData)
             const convertedItems = timelineRawData.map(convertDataToItem)
+            console.log('convertedItems', convertedItems)
             setTimelineItems(convertedItems)
             items.current = new DataSet()
             if (convertedItems.length > 0) {

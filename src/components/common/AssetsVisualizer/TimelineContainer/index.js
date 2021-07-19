@@ -283,11 +283,12 @@ const TimelineContainer = ({ data }) => {
     /**
      * return empty if no company selected
      */
-    if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-      if( auth_token == null && ( search_string == '' || search_string == null ) ) return setTimelineRawData([])
-    } else {
-      if( (selectedCompaniesAll === false && selectedCompanies.length == 0 ) && ( search_string == '' || search_string == null ) ) return setTimelineRawData([])
-    }
+    setTimelineRawGroups([]) //groups
+    setTimelineRawData([]) //items
+    setIsLoadingTimelineData(false)
+    PatenTrackApi.cancelTimeline()
+    
+    console.log( 'selectedCompanies, selectedCompaniesAll', selectedCompanies, selectedCompaniesAll )
     
     /**|| selectedAssetsPatents.length > 0  || selectedAssetAssignments.length > 0 */
 
@@ -296,33 +297,34 @@ const TimelineContainer = ({ data }) => {
      */
     const getTimelineRawDataFunction = async () => {
       //search
+      
       if(search_string != '' && search_string != null){
         if(search_rf_id.length > 0) {
           const { data } = await PatenTrackApi.getActivitiesTimelineData([], [], [], search_rf_id) // empty array for company, tabs, customers
-        
           //setTimelineRawGroups(data.groups) //groups
           setTimelineRawData(data.list) //items
-        } else {
-          setTimelineRawGroups([]) //groups
-          setTimelineRawData([]) //items   
-        }        
+        }       
       } else {
         const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
         tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-        customers = assetTypesCompaniesSelectAll === true ? []
-                    : 
-                    assetTypesCompaniesSelected;
+        customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected;
 
-                   
-        const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, [], selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
+        if( process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
+         
+          const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, [], selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
+          setTimelineRawData(data.list)
+        } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+          const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, [], selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
+          setTimelineRawData(data.list) 
+        }
         
         //setTimelineRawGroups(data.groups) //groups
-        setTimelineRawData(data.list) //items        
+        //setTimelineRawData(data.list) //items        
 
         /*dispatch(
           getAssetsAllTransactionsEvents(
             selectedCategory == '' ? '' : selectedCategory,  
-            companies, 
+            companies,
             tabs, 
             customers, [])) // Get life span according to filters */
       } 

@@ -1,9 +1,34 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 
 import useStyles from './styles'
+import Loader from "../../Loader"
+import PatenTrackApi from '../../../../api/patenTrack2'
 
-const ClaimData = ({ data }) => {
+const ClaimData = ({ data, number }) => {
     const classes = useStyles()
+    const [loading, setLoading] = useState(false)
+    const [ claimParseData, setClaimParseData] = useState('')
+    useEffect(() => {
+        let parseData = data
+        try{
+            parseData =  JSON.parse(data)
+        } catch(e) {
+            parseData = data
+        }
+        console.log("FAMILY", parseData)
+        if((Array.isArray(parseData) && parseData.length == 0) || parseData == '' || parseData == null) {
+            const getAbstractData = async () => {
+                setLoading(true)
+                const getData = await PatenTrackApi.getClaimsData(number)
+                setLoading(false)
+                if( getData.data != null && getData.data != '' ) {
+                    setClaimParseData(getData.data)
+                }
+            }
+            getAbstractData()
+        }
+        setClaimParseData(parseData)
+    }, [data])
 
     const ClaimTree = (props) => {
         return(
@@ -21,21 +46,17 @@ const ClaimData = ({ data }) => {
         )
     }
 
-    let parseData = data
-    try{
-        parseData =  JSON.parse(data)
-    } catch(e) {
-        parseData = data
-    }
+    
+    if(loading) return <Loader/> 
 
     return ( 
         <>
         {
-            Array.isArray(parseData) 
+            Array.isArray(claimParseData) 
             ?
-            <ClaimTree children={parseData}/>
+            <ClaimTree children={claimParseData}/>
             :
-            <div dangerouslySetInnerHTML={ { __html:parseData } } className={classes.filetree}></div>
+            <div dangerouslySetInnerHTML={ { __html:claimParseData } } className={classes.filetree}></div>
         }
         </>
     )

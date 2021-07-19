@@ -30,6 +30,7 @@ const FamilyItemContainer = ({ item, onClose }) => {
     const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
+    const [selectedNumber, setSelectedNumber] = useState()
     useEffect(() => {
         if(item == undefined || item == null || Object.keys(item).length === 0){
             setAbsractData('')
@@ -40,8 +41,8 @@ const FamilyItemContainer = ({ item, onClose }) => {
             setPtabData([])
             return setfamilyItemData({})
         } 
-
-        const getFamuliyItemDataFunction = async () => {
+        console.log("item", item)
+        const getFamilyItemDataFunction = async () => {
             setfamilyItemData({
                 inventors: item.inventors,
                 applicants: item.applicants,
@@ -54,6 +55,7 @@ const FamilyItemContainer = ({ item, onClose }) => {
                 publication_country: item.publication_country,
                 publication_kind: item.publication_kind
             })
+            setSelectedNumber(item.publication_kind.toString().toLowerCase().indexOf('a') ? `${item.publication_country}${item.application_number}${item.publication_kind}` : `${item.publication_country}${item.patent_number}${item.publication_kind}`)
             setAbsractData(item.abstracts)
             setClaimsData(item.claims)
             try{
@@ -63,7 +65,7 @@ const FamilyItemContainer = ({ item, onClose }) => {
                 console.log(err)
             }
         }
-        getFamuliyItemDataFunction()
+        getFamilyItemDataFunction()
     }, [ item ])
 
     return(
@@ -98,8 +100,8 @@ const FamilyItemContainer = ({ item, onClose }) => {
                                 className={classes.flexColumn}
                                 >   
                                     
-                                    {selectedTab === 1 && <AbstractData data={abstractData} />}
-                                    {selectedTab === 2 && <ClaimData data={claimsData} />}                                    
+                                    {selectedTab === 1 && <AbstractData data={abstractData} number={selectedNumber} />}
+                                    {selectedTab === 2 && <ClaimData data={claimsData} number={selectedNumber} />}                                    
                                     {selectedTab === 3 && <FigureData data={figureData} />}
                                     {selectedTab === 4 && <CitationData data={citationData} />}
                                     {selectedTab === 5 && <PtabData data={ptabData} />}

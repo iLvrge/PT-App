@@ -21,7 +21,6 @@ const getCookie = name => {
 
 const getHeader = () => {
   let token = null
-  console.log("process.env.REACT_APP_ENVIROMENT_MODE", process.env.REACT_APP_ENVIROMENT_MODE)
   if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
     token = localStorage.getItem('auth_signature')
   } else {
@@ -39,7 +38,6 @@ const getHeader = () => {
 
 const getFormUrlHeader = () => {
   let token = null
-  console.log("process.env.REACT_APP_ENVIROMENT_MODE", process.env.REACT_APP_ENVIROMENT_MODE)
   if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
     token = localStorage.getItem('auth_signature')
   } else {
@@ -58,7 +56,6 @@ const getFormUrlHeader = () => {
 
 const getMultiFormUrlHeader = () => {
   let token = null
-  console.log("process.env.REACT_APP_ENVIROMENT_MODE", process.env.REACT_APP_ENVIROMENT_MODE)
   if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
     token = localStorage.getItem('auth_signature')
   } else {
@@ -77,7 +74,7 @@ const getMultiFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline
 
 class PatenTrackApi {
   static getSiteLogo() {
@@ -436,7 +433,21 @@ class PatenTrackApi {
   }
 
   static getActivitiesTimelineData(companies, tabs, customers, rfIDs = [], layout, exclude) {
-    return axios.get(`${base_new_api_url}/customers/timeline?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}`, getHeader())
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelTimeline = c
+    })
+    return axios.get(`${base_new_api_url}/customers/timeline?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}`, header)
+  }
+
+  static cancelTimeline() {
+    if (cancelTimeline !== undefined) {
+      try{
+        throw cancelTimeline('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
   }
 
   static getAssetsErrorsData(paramsUrl) {
@@ -672,7 +683,6 @@ class PatenTrackApi {
     if( id != undefined && id != 'undefined' ) {
       url += `&id=${id}`
     }
-    console.log('showFolders',showFolders)
     if( typeof showFolders != undefined ) {
       url += `&show_folders=true`
     }
@@ -769,6 +779,14 @@ class PatenTrackApi {
         console.log('cancelRequest->', e)
       }
     } 
+  }
+
+  static getAbstractData( applicationNumber ) {
+    return axios.get(`${base_new_api_url}/family/abstract/${applicationNumber}`,  getHeader())
+  }
+
+  static getClaimsData( applicationNumber ) {
+    return axios.get(`${base_new_api_url}/family/claims/${applicationNumber}`,  getHeader())
   }
 }
 

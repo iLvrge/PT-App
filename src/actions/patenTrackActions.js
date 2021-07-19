@@ -409,7 +409,6 @@ export const setRecordItemsLoading = (data) => {
 }
 
 export const getRecordItems = (type, option, flag) => {
-  console.log('option', option)
   return dispatch => {
     dispatch(setRecordItemsLoading(true))
     return PatenTrackApi
@@ -535,7 +534,6 @@ export const addLawyer = ( user ) => {
     return PatenTrackApi
       .addLawyer( user )
       .then(res => {
-        console.log('userAdded', res)  
         dispatch(getLawyers())
       })
       .catch(err => {
@@ -578,7 +576,6 @@ export const addAddress = ( address, companyID ) => {
     return PatenTrackApi
       .addAddress( address, companyID )
       .then(res => {
-        console.log('address', res)  
         dispatch(getAddressList(companyID))
       })
       .catch(err => {
@@ -593,7 +590,6 @@ export const addCompanyLawyer = ( companyLawyer, companyID ) => {
     return PatenTrackApi
       .addCompanyLawyer( companyLawyer, companyID )
       .then(res => {
-        console.log('companyLawyer', res)  
         dispatch(getCompanyLawyerList(companyID))
       })
       .catch(err => {
@@ -608,7 +604,6 @@ export const addTelephone = ( telephone, companyID ) => {
     return PatenTrackApi
       .addTelephone( telephone, companyID )
       .then(res => {
-        console.log('telephone', res)  
         dispatch(getTelephoneList(companyID))
       })
       .catch(err => {
@@ -930,7 +925,6 @@ export const updateUser = ( user, ID ) => {
     return PatenTrackApi
       .updateUser( user, ID )
       .then(res => {
-        console.log('editUser', res)  
         dispatch(setEditRow(true))
       })
       .catch(err => {
@@ -945,7 +939,6 @@ export const addUser = ( user ) => {
     return PatenTrackApi
       .addUser( user )
       .then(res => {
-        console.log('userAdded', res)  
         dispatch(getUsers())
       })
       .catch(err => {
@@ -1123,7 +1116,6 @@ export const setTimeLineLoading = (data) => {
 }
 
 export const getTimeLine = (tabId, flag) => {
-  console.log('TIMELINE', tabId, flag)
   return dispatch => { 
     dispatch(setTimeLineLoading(true))
     dispatch(setAddYears(true))
@@ -1214,7 +1206,6 @@ export const getComments = (type, value) => {
 }
 
 export const setPortfolioCompany = (company) => {
-  console.log('setPortfolioCompany', company)
   return {
     type: types.SET_PORTFOLIO_COMPANY,
     company
@@ -1239,7 +1230,6 @@ export const updateComment = ( comment, method, type, value ) => {
   return dispatch => {
   return PatenTrackApi.updateComment(method, comment, type, value)
       .then(res => {
-        console.log(res)
         dispatch(commentSaved(res.data))
         dispatch(getComments(type, value))
       })
@@ -1284,7 +1274,6 @@ export const getAssets = (patentNumber) => {
       .then(res => {
         dispatch(setAssetsLoading(false))
         dispatch(setIllustrationUrl('./d3/index.html'))
-        console.log('ASSETS_DATA', res.data)
         dispatch(setAssets(res.data))
       })
       .catch(err => {
@@ -1346,8 +1335,7 @@ export const share = (data) => {
   return dispatch => {
     return PatenTrackApi
       .shareIllustration(data)
-      .then(res => {        
-        console.log(res)
+      .then(res => {     
         if(typeof res == 'object') {
           
           let shareURL = res.data
