@@ -91,7 +91,7 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
                 const findIndex = companies.findIndex( row => row.representative_id == item)
                 if(findIndex !== -1) {
                     inserted = true
-                    oldSelection.push(row.representative_id)
+                    oldSelection.push(companies[findIndex].representative_id)
                 }
             })
             Promise.all(promiseFind)
