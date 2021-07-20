@@ -38,7 +38,9 @@ const IllustrationCommentContainer = ({
     chartsBar,
     chartsBarToggle, 
     checkChartAnalytics,
-    onHandleGapSize }) => {
+    onHandleGapSize,
+    assignmentBar,
+    assignmentBarToggle }) => {
     const classes = useStyles() 
     const iframeRef = useRef()
     const illustrationRef = useRef()
@@ -192,7 +194,7 @@ const IllustrationCommentContainer = ({
                     ?
                         shouldShowTimeline
                         ?
-                            <TimelineContainer />
+                            <TimelineContainer assignmentBar={assignmentBar} assignmentBarToggle={assignmentBarToggle}/>
                         :
 
                             <IllustrationContainer 
@@ -224,7 +226,7 @@ const IllustrationCommentContainer = ({
                         </IconButton> 
                         {
                             shouldShowTimeline === true ? (
-                                <TimelineContainer />
+                                <TimelineContainer assignmentBar={assignmentBar} assignmentBarToggle={assignmentBarToggle}/>
                             )
                             :
                                 illustrationBar === true ? (

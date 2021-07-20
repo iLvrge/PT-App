@@ -82,7 +82,6 @@ export default makeStyles(theme => ({
       '& .vis-item-content':{
         width: '95px',
         whiteSpace: 'normal',
-        paddingLeft: 13,
         '& .cluster-header':{
           width: '100%',
           textAlign: 'left',
@@ -117,13 +116,13 @@ export default makeStyles(theme => ({
       '& .vis-dot':{ 
         backgroundColor: 'inherit',
         borderColor: 'inherit',
-        width: 28,
-        height: 28,
+        width: 20,
+        height: 20,
         top: '7px !important',
-        border: 0,
-        left: 10,
+         /* left: 10, */
+        border: 0,       
         backgroundRepeat: 'no-repeat',
-        backgroundSize: 28
+        backgroundSize: 20
       },
       '& .vis-dot.asset-type-default': {
         borderColor: indigo[500],

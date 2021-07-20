@@ -56,9 +56,8 @@ const options = {
 const convertDataToItem = (familyItem) => {
     const assetType = 'default'
     const rawDate = familyItem.application_date
-    console.log("rawDate", rawDate)
     return ({
-        id: familyItem.id,
+      id: familyItem.id,
       content: '',
       type: 'box',
       start: rawDate.indexOf('-') !== -1 ? new Date(rawDate) : new Date(`${rawDate.substr(0,4)}-${rawDate.substr(4,2)}-${rawDate.substr(6,2)}`),

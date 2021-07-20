@@ -299,7 +299,7 @@ const QuillEditor = ({
       } else {
         selectAssetsList = [...assetTypeAssignmentAssetsSelected]
       }
-    }
+    } 
 
     if(selectAssetsList.length == 0) {
       if(selectedAssetsPatents.length  == 2) {

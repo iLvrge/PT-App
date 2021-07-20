@@ -11,7 +11,29 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
-import { setSelectedAssetsPatents, getAssetTypeAssignments, getAssetsAllTransactionsEvents } from '../../../../actions/patentTrackActions2'
+import { 
+  setSelectedAssetsPatents, 
+  setChannelID,
+  setDriveTemplateFile,
+  setTemplateDocument,
+  setMainCompaniesRowSelect,
+  setAssetTypeSelectedRow,
+  setAssetTypeCustomerSelectedRow,
+  setSelectedAssetsTransactions,
+  setAssetsIllustration,
+  setChildSelectedAssetsTransactions,
+  setChildSelectedAssetsPatents,
+} from '../../../../actions/patentTrackActions2'
+import {
+  toggleUsptoMode, 
+  toggleFamilyMode,
+  toggleFamilyItemMode,
+  setDriveTemplateFrameMode
+} from "../../../../actions/uiActions";
+import {
+  setConnectionBoxView,
+  setPDFView,
+} from "../../../../actions/patenTrackActions"
 import PatenTrackApi from '../../../../api/patenTrack2'
 import { convertAssetTypeToTabId, oldConvertTabIdToAssetType, convertTabIdToAssetType, exportGroups } from '../../../../utils/assetTypes'
 import { numberWithCommas, capitalize } from '../../../../utils/numbers'
@@ -64,9 +86,9 @@ const options = {
 
 
 
-const TIME_INTERVAL = 2000
+const TIME_INTERVAL = 1000
 
-const TimelineContainer = ({ data }) => {
+const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -160,13 +182,15 @@ const TimelineContainer = ({ data }) => {
   const showTooltip = (itemID, event) => {    
       setTimeout(() => {
         PatenTrackApi
+        .cancelTimelineItem()
+        PatenTrackApi
         .getTimelineItemData(itemID)
         .then( response => {
           const { data } = response
           if( data != null) {
             const executionDate = data.assignor.length > 0 ? data.assignor[0].exec_dt : ''
             
-            const tootltipTemplate = `<div class='custom_tooltip' style='top:80px;left:${event.layerY}px;'>
+            const tootltipTemplate = `<div class='custom_tooltip' style='top:${event.layerY}px;left:${event.layerY}px;'>
                                         <div>
                                           ${ executionDate != '' ? moment(executionDate.exec_dt).format('ll') : ''}
                                         </div>
@@ -182,7 +206,7 @@ const TimelineContainer = ({ data }) => {
                                             '<div>'+ee.ee_name+'</div>'
                                           )).join('')}
                                         </div>
-                                      </div>`
+                                      </div>` 
               resetTooltipContainer()
             if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
               timelineContainerRef.current.childNodes[0].insertAdjacentHTML('beforeend',tootltipTemplate)
@@ -203,9 +227,29 @@ const TimelineContainer = ({ data }) => {
       const item = items.current.get(properties.items[0])
       setSelectedAsset({ type: 'transaction', id: item.rawData.id })
       setSelectedItem(item)
-      history.push(routes.review3)
+      dispatch(setChannelID(''))
+      dispatch(setDriveTemplateFrameMode(false));
+      dispatch(setDriveTemplateFile(null));
+      dispatch(setTemplateDocument(null));      
+      dispatch(setConnectionBoxView(true));
+      dispatch(setPDFView(false));
+      dispatch(toggleUsptoMode(false));
+      dispatch(toggleFamilyMode(false));
+      dispatch(toggleFamilyItemMode(false)); 
+      dispatch(setMainCompaniesRowSelect([]));
+      dispatch(setAssetTypeSelectedRow([]));
+      dispatch(setAssetTypeCustomerSelectedRow([]));
+      dispatch(setChildSelectedAssetsTransactions([]));
+      dispatch(setChildSelectedAssetsPatents([])); 
+      dispatch(setSelectedAssetsPatents([]));
+      dispatch(setSelectedAssetsTransactions([item.rawData.id]));
+      dispatch(setAssetsIllustration({ type: "transaction", id: item.rawData.id }));
+      if(assignmentBar === false) {
+        assignmentBarToggle()
+      }
+      //history.push(routes.review3)
     }
-  }, [ setSelectedItem, setSelectedAsset ])
+  }, [ ])
 
   /**
    * on Itemover for the tooltip data
@@ -223,8 +267,10 @@ const TimelineContainer = ({ data }) => {
    */
 
   const onItemout = () => {
+    PatenTrackApi.cancelTimelineItem()
     resetTooltipContainer()
     setToolTipItem([])
+    
     /* clearInterval(timeInterval) */
   }
 
@@ -232,7 +278,7 @@ const TimelineContainer = ({ data }) => {
     const findOldToolTip = document.getElementsByClassName('custom_tooltip')
     if( findOldToolTip.length > 0 ) {
       findOldToolTip[0].parentNode.removeChild(findOldToolTip[0])      
-    }
+    } 
   }
 
   
@@ -297,7 +343,7 @@ const TimelineContainer = ({ data }) => {
      */
     const getTimelineRawDataFunction = async () => {
       //search
-      
+      resetTooltipContainer()
       if(search_string != '' && search_string != null){
         if(search_rf_id.length > 0) {
           const { data } = await PatenTrackApi.getActivitiesTimelineData([], [], [], search_rf_id) // empty array for company, tabs, customers
@@ -341,17 +387,16 @@ const TimelineContainer = ({ data }) => {
     groups.current = new DataSet()
     timelineRef.current.setOptions(options) 
     timelineRef.current.on('select', onSelect)
-    /* timelineRef.current.on('itemover', onItemover)
-    timelineRef.current.on('itemout', onItemout) */
+    timelineRef.current.on('itemover', onItemover)
+    timelineRef.current.on('itemout', onItemout)
     timelineRef.current.on('rangechanged', onRangeChanged)
     timelineRef.current.on('rangechange', onRangeChange)    
     return () => {
       timelineRef.current.off('select', onSelect)
-      /* timelineRef.current.off('itemover', onItemover) 
-      timelineRef.current.off('itemout', onItemout) */
+      timelineRef.current.off('itemover', onItemover) 
+      timelineRef.current.off('itemout', onItemout)
       timelineRef.current.off('rangechange', onRangeChange)
       timelineRef.current.off('rangechanged', onRangeChanged)
-      
     } 
   }, [ onRangeChange, onRangeChanged, onSelect, onItemover ])
 

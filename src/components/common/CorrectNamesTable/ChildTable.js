@@ -42,6 +42,7 @@ const ChildTable = ({ addressId, headerRowDisabled }) => {
     const location = useLocation()
     const [ offset, setOffset ] = useState(0)
     const [ rowHeight, setRowHeight ] = useState(40)
+    const [headerRowHeight, setHeaderRowHeight] = useState(47)
     const [ width, setWidth ] = useState( 800 )
     const [ childHeight, setChildHeight ] = useState(500)
     const tableRef = useRef()
@@ -67,6 +68,7 @@ const ChildTable = ({ addressId, headerRowDisabled }) => {
     const COLUMNS = [ 
         {
             width: 100,
+            minWidth: 100,
             label: 'Transactions', 
             dataKey: 'date',
             align: 'left',
@@ -74,6 +76,7 @@ const ChildTable = ({ addressId, headerRowDisabled }) => {
         },
         {
             width: 300,
+            minWidth: 300,
             label: 'Correspondence Name', 
             dataKey: 'name',
             align: 'left',
@@ -155,12 +158,13 @@ const ChildTable = ({ addressId, headerRowDisabled }) => {
             selectedKey={'rf_id'}
             rows={assignments}
             rowHeight={rowHeight}
-            headerHeight={rowHeight} 
+            headerHeight={headerRowHeight} 
             columns={COLUMNS}
             defaultSelectAll={selectedAll}
             onSelect={onHandleClickRow}
             onSelectAll={onHandleSelectAll}
             disableHeader={headerRowDisabled} 
+            headerRowDisabled={headerRowDisabled} 
             responsive={false}
             width={width}
             containerStyle={{ 

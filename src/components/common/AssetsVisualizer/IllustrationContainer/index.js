@@ -79,9 +79,20 @@ const IllustrationContainer = ({
           setIllustrationData(data != '' ? data : null)
           dispatch(setAssetsIllustrationData(data != '' ? data : null))
           if(setIllustrationRecord) { setIllustrationRecord(data) }
+          dispatch(setConnectionData(data.line[0]))
+          dispatch(
+            setPDFView(true)
+          )
+          dispatch(setPDFFile(
+            { 
+              document: data.line[0].document1, 
+              form: data.line[0].document1_form, 
+              agreement: data.line[0].document1_agreement 
+            }
+          ))
         } catch (error) { if (axios.isCancel(error)) {} else { throw error } }
       }
-      dispatch(setAssetsIllustrationLoading(false))
+      dispatch(setAssetsIllustrationLoading(false)) 
     }
 
     getIllustration()

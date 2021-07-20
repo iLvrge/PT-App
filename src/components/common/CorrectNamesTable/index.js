@@ -31,7 +31,7 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
     const [ childHeight, setChildHeight ] = useState(500)
     const [ rowHeight, setRowHeight ] = useState(40)
     const [headerRowHeight, setHeaderRowHeight] = useState(47)
-    const [ width, setWidth ] = useState( 1500 ) 
+    const [ width, setWidth ] = useState( 1800 ) 
     const tableRef = useRef()
     const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
     const [ grandTotal, setGrandTotal ] = useState( 0 )
@@ -78,7 +78,7 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
             minWidth: 300,
             oldWidth: 300,
             draggable: true,
-            label: 'Company Name - Variations',   
+            label: 'Company Name Variations',
             dataKey: 'name', 
             badge: true,   
             align: 'left'         
@@ -246,6 +246,7 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
             onSelectAll={onHandleSelectAll}
             defaultSelectAll={selectedAll}
             collapsable={true}
+            childHeader={true}
             childHeight={childHeight}
 			childSelect={childSelected}
             childRows={data} 

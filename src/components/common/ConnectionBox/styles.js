@@ -70,10 +70,12 @@ export default makeStyles(theme => ({
   },
   cellHeading:{
     whiteSpace: 'nowrap',
-    padding: '19px 19px 17px 19px', 
+    /* padding: '19px 19px 17px 19px',  */
+    padding: '13px 19px', 
     background: '#292929', 
     '& .MuiTypography-body2':{
-      fontSize: '1rem'
+      fontSize: '1rem',
+      overflow: 'hidden'
     }    
   },
   blue:{

@@ -30,6 +30,8 @@ import { capitalize } from "../../../../utils/numbers";
 
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
+var newRange = [1,2]
+
 const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar }) => {
     
     const classes = useStyles()
@@ -49,7 +51,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const [ selectedTab, setSelectedTab ] = useState(0)
     const [ resizableWidthHeight, setResizableWidthHeight ] = useState([665, 350])
     const [ filterDrag, setFilterDrag ] =  useState([0, 0])
-    const [ valueScope, setValueScope ] = useState([1, 5])
+    const [ valueScope, setValueScope ] = useState([1, 2])
     const [ valueRange, setValueRange ] = useState(3)
     const [ preValueRange, setPreValueRange ] = useState(3)
     const [ scopeRange, setScopeRange ] = useState([])
@@ -100,7 +102,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
     const [ graphRawData, setGraphRawData ] = useState([])
     const [ graphRawGroupData, setGraphRawGroupData ] = useState([])
-
+    
 
     let options = {
         height: '100%',
@@ -108,7 +110,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         style: 'bar-color',
         axisFontSize: 18,
         /* yBarWidth:  30, */
+        xStep: 1,
         yStep: 1,
+        zStep: 1,
         yCenter: '30%',
         showPerspective: true,
         showGrid: true,
@@ -134,7 +138,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             return `<div class="graphTooltip"><ul class="tootlip_data"><li><strong>Filling Year</strong>: ${point.x}</li><li><strong>Patents</strong>: ${point.data.patent}</li>${point.data.application_number > 0 ? '<li><strong>Applications</strong>: '+ point.data.application_number +'</li>' : ''}<li><strong>Origin</strong>: ${origin != null ? origin : ''}</li><li><div class='noWrapText'><strong>Subject Matter</strong>: ${capitalize(defination)}</div></li></div>`
         },
         yValueLabel: function(value) {
-            console.log('yValueLabel', graphRawGroupData)
             const findIndex = graphRawGroupData.findIndex( row => row.id == value)
             if( findIndex !== -1 ) {
                 return graphRawGroupData[findIndex].cpc_code
@@ -187,7 +190,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             setInventionTabs([ 'Innovation', 'Agreement', 'Form', 'Main' ])
         }
     }, [ connectionBoxView ])
-
 
     useEffect(() => {
         const getChartData = async () => {
@@ -296,8 +298,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     }, [selectedCategory, selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_clipboard ]) 
 
 
-    const findCPCList = async(oldScopeRange, list, range, scope) => {
-        console.log('findCPCList', oldScopeRange, list, range, scope)
+    const findCPCList = async(oldScopeRange, list, range, scope) => {       
         const form = new FormData()
         form.append("list", JSON.stringify(list))
         if(typeof range != 'undefined') {
@@ -313,10 +314,11 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         setIsLoadingCharts(false)
         setGraphRawData(data.list)
         setGraphRawGroupData(data.group)
-        if(typeof scope == 'undefined') {            
+        if(typeof scope == 'undefined') {  
+            console.log('findCPCList', oldScopeRange, newRange)          
             const findOldRange = []
             if(oldScopeRange.length > 0 && typeof range !== 'undefined') {
-                const promiseScope = valueScope.map( scope => {
+                const promiseScope = newRange.map( scope => {
                     const findIndex = oldScopeRange.findIndex( s => s.value === scope)
                     if(findIndex !== -1) {
                         findOldRange.push(oldScopeRange[findIndex])
@@ -347,7 +349,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 const selectScope = []
                 const promiseSelect = findOldRange.map( r => {
                     scopeGroup.map( scope => {
-                        let rValue, nValue;
+                        /* let rValue, nValue;
                         switch( preValueRange ) {
                             case 5:
                                 rValue = r.section
@@ -369,7 +371,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                 rValue = `${r.section}${r.class}${r.sub_class}`
                                 nValue = `${scope.section}${scope.class}${scope.sub_class}`
                                 break;
-                        }
+                        } */
                         if(scope.section === r.section) {
                             if(!selectScope.includes(scope.value)) {
                                 selectScope.push(scope.value)
@@ -379,7 +381,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 })
                 await Promise.all(promiseSelect)
                 if(selectScope.length > 0) {
-                    console.log('selectScope', selectScope)
+                    newRange = [Math.min(...selectScope), Math.max(...selectScope)]      // useState still gives oldValue
                     setValueScope([Math.min(...selectScope), Math.max(...selectScope)])
                 }
             }
@@ -402,6 +404,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         })
         await Promise.all(codePromise)
         console.log('codeList', codeList) */
+        let tap = 0;
         const promises = graphRawData.map( (data, index) => {
             /*if(codeList.includes(data.cpc_code)) {
                 
@@ -437,6 +440,21 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     application_number: data.application_number,   
                     origin: data.group_name
                 })
+
+                if( tap === 0 ) {
+                    items.current.add({
+                        x: year,
+                        y: graphRawGroupData[findIndex].id,
+                        z: 0,
+                        style: {
+                            stroke: '#50719C',
+                            fill: '#395270'
+                        },
+                        patent: data.patent_number,
+                        application_number: data.application_number,   
+                        origin: data.group_name
+                    })
+                }
             }                
         })
 
@@ -549,8 +567,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const handleDragStop = (e, position) => {
         const {x, y} = position;
         const {availWidth, availHeight} = window.screen
-        const calcHeight = ((availHeight - 105) - resizableWidthHeight[1]) * -1
-        setFilterDrag([x < 0 ? 0 : availWidth - resizableWidthHeight[0] < x ? availWidth - resizableWidthHeight[0] : x, y > 0 ? 0 : calcHeight > y ? calcHeight : y])
+        const calcHeight = ((availHeight - 105) - resizableWidthHeight[1]) 
+        setFilterDrag([x < 0 ? 0 : x > availWidth - resizableWidthHeight[0] ? availWidth - resizableWidthHeight[0] : x, y < 0 ? 0 : y > calcHeight ? calcHeight : y])
+        //setFilterDrag([x < 0 ? 0 : availWidth - resizableWidthHeight[0] < x ? availWidth - resizableWidthHeight[0] : x, y > 0 ? 0 : calcHeight > y ? calcHeight : y])
     }
 
     const PaperComponent = (props) => {
@@ -600,12 +619,13 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const onChangeRangeSlider = useCallback(async (range) => {
         setPreValueRange(prevItem => prevItem != valueRange ? valueRange : prevItem)
         setValueRange(range) 
-
+        setScopeRange([])
         findCPCList([...scopeRange], filterList, range)      
     }, [ filterList, scopeRange, valueRange ] )
 
     
     const onChangeScopeSlider = useCallback(async (range, scope) => {
+        newRange = scope
         setValueScope(scope)
         const scopeList = []
         const promise = scopeRange.map( r => {

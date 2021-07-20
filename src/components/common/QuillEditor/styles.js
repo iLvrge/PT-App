@@ -5,7 +5,6 @@ export default makeStyles(theme => ({
     color: '#000',
     margin: 0,
     '& .ql-attachDriveButton':{
-      marginRight: 7
     }
   },
   buttonGroup: {
@@ -15,19 +14,31 @@ export default makeStyles(theme => ({
   button: {
     marginLeft: theme.spacing(1),
   },
+  seperator: {
+    display: 'flex',
+    width: 1,
+    height: 20,
+    borderLeft: '1px solid #494949',
+    marginRight: 6
+  },
+  secondaryGroup: {
+    display: 'flex',
+    padding: '0 15px'
+  },
   review: {
-    float: 'right !important',
     width: 'auto !important',
+    minWidth: '130px !important',
     height: 'auto !important',
+    padding: '3px 5px',
     border:'1px solid #5a5a5a !important',
-    marginLeft: 15,
     textTransform: 'initial',
     '&:hover':{
       border:'1px solid #e60000 !important',
       color: '#e60000 !important'
     },
-    '&:first':{
-      marginLeft: 5
+    '&:first-child':{
+      /* marginLeft: 20,
+      borderLeft: '1px solid #545454' */
     }
   }, 
   active: {
@@ -85,10 +96,6 @@ export default makeStyles(theme => ({
     margin: 10
   },
   share: {
-    width: '30px !important',
-    minWidth: '30px !important',
-    float: 'right !important',
-    paddingLeft: '10px !important',
   },
   icon:{
     

@@ -135,8 +135,8 @@ export default makeStyles(theme => ({
             margin: 0
         },
         '& .MuiDialog-scrollPaper':{
-            alignItems: 'flex-end',
-            justifyContent: 'end'
+            alignItems: 'flex-start',
+            justifyContent: 'flex-start'
         }
     },
     sliderContainer: {

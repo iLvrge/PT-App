@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react'
 import { Typography, Slider } from '@material-ui/core'
+import Loader from '../../Loader'
 import useStyles from './styles'
 
 const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRangeText, valueScope, valueRange, onChangeRangeSlider, onChangeScopeSlider }) => {
@@ -28,7 +29,7 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRange
                     document.querySelector('.scopeTooltip').remove()
                 }
                 element.querySelectorAll('.MuiSlider-markLabel').forEach( item => {
-                    item.onmouseover = (e) => {
+                    item.onmouseover = (e) => { 
                         //const rect = item.getBoundingClientRect();
                         //console.log('onmouseover', rect)
                         const div = document.createElement('div')
@@ -45,8 +46,8 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRange
                         } 
                     }
                 })
-                const containerElement = document.body.querySelector('.selContainer')
-                containerElement.scrollTo(0, containerElement.querySelectorAll('.MuiSlider-markLabelActive')[0].offsetTop)
+                const containerElement = document.body.querySelector('.selContainer'), activeRange = containerElement.querySelectorAll('.MuiSlider-markLabelActive')
+                containerElement.scrollTo(0, activeRange[activeRange.length - 1].offsetTop + 23)
             } else {
                 addTooltip()  
             }
@@ -95,18 +96,24 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRange
                 <div className={`${classes.flexColumn} ${classes.flexColumnScope}`}>
                     <div className={`selContainer ${classes.selectorContainer}`}>
                         <div className={`scope ${classes.holder} ${classes.topMargin}`} style={{height}}>  
-                            <Slider
-                                orientation="vertical"
-                                defaultValue={valueScope}
-                                onChangeCommitted={handleScopeChange}
-                                aria-labelledby="vertical-slider"
-                                getAriaValueText={scopeRangeText}
-                                marks={scopeRange}
-                                max={scopeRange.length}
-                                step={1} 
-                                min={1}
-                                ref={scopeRef} 
-                            /> 
+                            {
+                                scopeRange.length > 0
+                                ?
+                                <Slider
+                                    orientation="vertical"
+                                    defaultValue={valueScope}
+                                    onChangeCommitted={handleScopeChange}
+                                    aria-labelledby="vertical-slider"
+                                    getAriaValueText={scopeRangeText}
+                                    marks={scopeRange}
+                                    max={scopeRange.length}
+                                    step={1} 
+                                    min={1}
+                                    ref={scopeRef} 
+                                /> 
+                                :
+                                <Loader/>
+                            }                            
                         </div>             
                     </div>             
                 </div> 

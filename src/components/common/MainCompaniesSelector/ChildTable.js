@@ -67,6 +67,9 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
                 if( data.list != null && data != '' && data.list.length > 0 ){                   
                     callBack(data.list.length) 
                 }
+                if(selected.includes(parentCompanyId)){
+                    checkedAllChildCompanies(data.list)
+                }
             } else {
                 setChildCompaniesLoading( false )
             }
@@ -80,9 +83,41 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
         }
     }, [selected, selectItems])
 
+    useEffect(() => {
+        if(selected.length > 0 && companies.length > 0) {
+            const oldSelection = [...selectItems]
+            let inserted = false
+            const promiseFind = selected.map( item => {
+                const findIndex = companies.findIndex( row => row.representative_id == item)
+                if(findIndex !== -1) {
+                    inserted = true
+                    oldSelection.push(row.representative_id)
+                }
+            })
+            Promise.all(promiseFind)
+            if(inserted === true) {
+                setSelectItems(oldSelection)
+            }
+        }
+    }, [selected, companies])
+
     const onHandleSelectAll = useCallback((event, row) => {
         
     }, [ dispatch ])
+
+    const checkedAllChildCompanies = async(list) => {
+        const oldSelection = [...selected], updateSelectedWithName = [...selectedWithName], childItems = []
+        const listPromise = list.map( row => {
+            if(!oldSelection.includes(parseInt( row.representative_id ))) {
+                oldSelection.push(row.representative_id)
+                updateSelectedWithName.push({id: row.representative_id, name: row.original_name})
+            }
+            childItems.push(row.representative_id)
+        })
+        await Promise.all(listPromise)
+        setSelectItems(childItems)
+        dispatch( setMainCompaniesSelected( oldSelection, updateSelectedWithName ) ) 
+    }
 
     const onHandleClickRow = useCallback((e,  row) => {
         e.preventDefault()

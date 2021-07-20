@@ -147,14 +147,9 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
         <button className={'ql-saveButton'} onClick={onClick}>
           <SendIcon />   
         </button> 
-      </Tooltip>      
-      <Tooltip title="Share illustration for selected assets" arrow classes={classesTooltip}>
-        <Button className={classes.share} onClick={onShare} >
-          <FontAwesomeIcon
-            icon={faShareAlt}
-          />
-        </Button>
-      </Tooltip>  
+      </Tooltip>     
+      <span className={classes.seperator}></span>
+      <div className={classes.secondaryGroup}>
       {loadingUSPTO && <CircularProgress size={24} className={classes.buttonProgress} />}
       {
         category == 'pay_maintainence_fee'
@@ -210,7 +205,15 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
           <Button className={classes.review} onClick={onSalesAssets}>Select Assets and Click Here</Button>
         :
         <Button className={`${classes.review} ${driveTemplateMode === true ? classes.active : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
-      }            
+      }
+      <Tooltip title="Share illustration for selected assets" arrow classes={classesTooltip}>
+        <Button className={classes.share} onClick={onShare} >
+          <FontAwesomeIcon
+            icon={faShareAlt}
+          />
+        </Button>
+      </Tooltip>
+      </div>              
     </div> 
   )
 }

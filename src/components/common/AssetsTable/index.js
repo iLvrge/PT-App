@@ -371,7 +371,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             
             if(selectedCategory == 'restore_ownership') {    
               let cols = [...COLUMNS]
-              cols[0].role = 'radio'
+              cols[1].role = 'radio'
               setTableColumns(cols)
             }
       } else {
@@ -416,6 +416,12 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         Promise.all(mapSelection)
         dispatch(setAssetTypesPatentsSelected(newSelectedAssets));
         setSelectItems(newSelectedAssets)
+      }
+      if(selectedAssetsPatents.length > 0) {
+        const findIndex = assetTypeAssignmentAssets.findIndex(row => row.asset == selectedAssetsPatents[0] || row.rf_id == selectedAssetsPatents[1])
+        if(findIndex === -1) {
+          resetAll()
+        }        
       }
     } 
   }, [ assetTypeAssignmentAssets ])

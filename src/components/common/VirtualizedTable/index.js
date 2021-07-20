@@ -82,6 +82,7 @@ const VirtualizedTable = ({
   resizeColumnsStop,
   icon,
   checkedIcon,
+  childHeader,
   ...tableProps
 }) => {
   const classes = useStyles();
@@ -477,9 +478,9 @@ const VirtualizedTable = ({
                     : childHeight + rowHeight
                   : childCounterColumn != undefined
                   ? typeof childCounterColumn == 'string' ? rowData[childCounterColumn] * rowHeight < childHeight
-                    ? rowData[childCounterColumn] * rowHeight + rowHeight
-                    : childHeight + rowHeight
-                    : childCounterColumn * rowHeight + rowHeight
+                    ? rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
+                    : childHeight + rowHeight + (childHeader === true ? headerHeight : 0)
+                    : childCounterColumn * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
                   : collapseRowHeight
                 : rowHeight,
             alignItems:
@@ -536,9 +537,9 @@ const VirtualizedTable = ({
                     : childHeight + rowHeight
                   : childCounterColumn != undefined
                   ? typeof childCounterColumn == 'string' ? rowData[childCounterColumn] * rowHeight < childHeight
-                    ? rowData[childCounterColumn] * rowHeight 
+                    ? rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0)
                     : childHeight 
-                    : childCounterColumn * rowHeight
+                    : childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
                   : collapseRowHeight,
               display: "flex",
               position: "absolute",
@@ -570,7 +571,8 @@ const VirtualizedTable = ({
       forceChildWaitCall,
       backgroundRow,
       backgroundRowKey,
-      childCounterColumn
+      childCounterColumn,
+      childHeader
     ],
   );
 
@@ -604,14 +606,15 @@ const VirtualizedTable = ({
       const rowData = items[index];
       let height = rowHeight
       if (collapsable === true && selectedIndex == rowData[selectedKey]) {
+        console.log('getRowHeight=>childHeader', childHeader, rowData[childCounterColumn], rowHeight, childHeight, rowData[childCounterColumn] * rowHeight < childHeight, headerHeight, rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0))
         height = disableRow === true
           ? rowData[disableRowKey] * rowHeight < childHeight
             ? rowData[disableRowKey] * rowHeight + rowHeight
             : childHeight + rowHeight
           : childCounterColumn != undefined
           ? rowData[childCounterColumn] * rowHeight < childHeight
-            ? rowData[childCounterColumn] * rowHeight + rowHeight
-            : childHeight + rowHeight
+            ? rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
+            : childHeight + rowHeight + (childHeader === true ? headerHeight : 0)
           : collapseRowHeight + rowHeight;
       }
       return height
@@ -626,6 +629,8 @@ const VirtualizedTable = ({
       collapseRowHeight,
       childHeight,
       childCounterColumn,
+      headerHeight,
+      childHeader
     ],
   );
 

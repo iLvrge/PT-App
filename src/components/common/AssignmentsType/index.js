@@ -297,7 +297,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
     const onHandleSelectAll = useCallback((event, row) => {
         event.preventDefault()
         dispatch( setAssetTypesSelect([]) )
-        setSelectAll(false)
+        setSelectAll(true)
         setSelectItems([])        
     }, [ dispatch, assetTypes ])
 

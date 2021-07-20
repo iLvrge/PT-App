@@ -120,7 +120,10 @@ export default makeStyles(theme => ({
         justifyContent: 'space-between',
         alignItems: 'center',
         '& .MuiBadge-anchorOriginTopRightRectangle': {
-            transform: 'scale(1) translate(75%, -22%)'
+            transform: 'scale(1) translate(27%, 0%)',
+            padding: '0 3px',
+            minWidth: 15,
+            height: 15
         },
         '& .MuiBadge-anchorOriginTopRightRectangle.MuiBadge-invisible': {
             transform: 'scale(0) translate(50%, -50%)'

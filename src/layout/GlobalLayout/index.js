@@ -111,6 +111,7 @@ const GlobalLayout = (props) => {
     const familyItemMode = useSelector(state => state.ui.familyItemMode)
     const lifeSpanMode = useSelector(state => state.ui.lifeSpanMode)
     const pdfView = useSelector(state => state.patenTrack.pdfView)
+    const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
 
     useEffect(() => {
         editorBar() // run to find editor width
@@ -166,6 +167,8 @@ const GlobalLayout = (props) => {
                 if (openBar === true && companyBarSize === '100%') {
                     setCompanyBarSize(120)
                 }
+            } else if(selectedCategory == 'correct_names' || selectedCategory == 'correct_address') {
+                setAddressBarSize('100%')
             } else if (openBar === true ) {
                 setCompanyBarSize('100%')                
             }

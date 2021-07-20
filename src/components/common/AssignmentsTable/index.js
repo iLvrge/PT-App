@@ -177,26 +177,38 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
 
   useEffect(() => {
     setRows(assignmentList)
-    if(assignmentList.length > 0 && selectedAssetsTransactions.length > 0) {
-      const excludeSelections = []
-      const checkElement = selectedAssetsTransactions.map( transaction => {
-        const findIndex = assignmentList.findIndex(row => row.rf_id == transaction)
-        if(findIndex === -1) {
-          excludeSelections.push(transaction)
-        }
-      })      
-      Promise.all(checkElement)
-      if(excludeSelections.length > 0) {        
-        const newSelectedTransaction = [...selectedAssetsTransactions]
-        const mapSelection = excludeSelections.map( transaction => {
-          const findIndex = newSelectedTransaction.findIndex( item => item == transaction)
-          if(findIndex !== -1) {
-            newSelectedTransaction.splice(findIndex, 1)
+    if(assignmentList.length > 0 ) {
+      if(selectedAssetsTransactions.length > 0) {
+        const excludeSelections = []
+        const checkElement = selectedAssetsTransactions.map( transaction => {
+          const findIndex = assignmentList.findIndex(row => row.rf_id == transaction)
+          if(findIndex === -1) {
+            excludeSelections.push(transaction)
           }
-        })
-        Promise.all(mapSelection)
-        dispatch(setSelectAssignments(newSelectedTransaction));
-        setSelectItems(newSelectedTransaction)
+        })      
+        Promise.all(checkElement)
+        if(excludeSelections.length > 0) {        
+          const newSelectedTransaction = [...selectedAssetsTransactions]
+          const mapSelection = excludeSelections.map( transaction => {
+            const findIndex = newSelectedTransaction.findIndex( item => item == transaction)
+            if(findIndex !== -1) {
+              newSelectedTransaction.splice(findIndex, 1)
+            }
+          })
+          Promise.all(mapSelection)
+          dispatch(setSelectAssignments(newSelectedTransaction));
+          setSelectItems(newSelectedTransaction)
+        }
+      }
+      if(currentRowSelection.length > 0) {
+        const findIndex = assignmentList.findIndex(row => row.rf_id == currentRowSelection[0])
+        if(findIndex === -1) {
+          setCurrentSelection(null)
+          setSelectedRow([])
+          dispatch(setSelectedAssetsTransactions([]));
+          dispatch(setChannelID(''))
+          dispatch(setAssetsIllustration(null))
+        }        
       }
     } 
   }, [assignmentList])
@@ -441,7 +453,6 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
 
 const onHandleClickRow = useCallback(
   (e, row) => {
-    console.log("onHandleClickRow")
     e.preventDefault();
     const { checked } = e.target;
     let oldSelection = [...selectItems]
@@ -485,7 +496,6 @@ const onHandleClickRow = useCallback(
         dispatch(setAllAssignments(false));
         dispatch(setSelectAssignments(oldSelection));
     } else {
-        console.log("CHECKBOX_SELECTION")
         const element = e.target.closest(
         "div.ReactVirtualized__Table__rowColumn",
         );
@@ -500,15 +510,10 @@ const onHandleClickRow = useCallback(
           //toggle to show illustration or timeline
           if(!selectedRow.includes(row.rf_id)){
             dispatch(setChannelID(''))
-            dispatch(setSelectedAssetsPatents([]))
             getTransactionData(dispatch, row.rf_id, defaultLoad, search_string)
             dispatch(setDriveTemplateFrameMode(false));
             dispatch(setDriveTemplateFile(null));
             dispatch(setTemplateDocument(null));
-            const channelID = findChannelID(row.rf_id)
-            if( channelID != '') {
-              dispatch(setChannelID({channel_id: channelID}))
-            }            
             //dispatch(getChannelIDTransaction(row.rf_id));
           } else {
             dispatch(setChannelID(''))
@@ -539,9 +544,8 @@ const findChannelID = useCallback((rfID) => {
 }, [ slack_channel_list ])
 
   const getTransactionData = (dispatch, rf_id, defaultLoad, search_string) => {
-    setSelectedRow([rf_id]);
-    dispatch(setSelectedAssetsTransactions([rf_id]));
-    dispatch(setConnectionBoxView(false));
+    setSelectedRow([rf_id]);    
+    dispatch(setConnectionBoxView(true));
     dispatch(setPDFView(false));
     dispatch(toggleUsptoMode(false));
     dispatch(toggleFamilyMode(false));
@@ -552,6 +556,7 @@ const findChannelID = useCallback((rfID) => {
     dispatch(setChildSelectedAssetsTransactions([]));
     dispatch(setChildSelectedAssetsPatents([])); 
     dispatch(setSelectedAssetsPatents([]));
+    dispatch(setSelectedAssetsTransactions([rf_id]));
     if(defaultLoad === false){
       dispatch(getAssetTypeAssignmentAssets(rf_id, false, 1, search_string)) // fill assets table 
     }
