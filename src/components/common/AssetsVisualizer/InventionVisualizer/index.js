@@ -441,7 +441,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     origin: data.group_name
                 })
 
-                /* if( tap === 0 ) {
+                if( tap === 0 ) {
                     items.current.add({
                         x: year,
                         y: graphRawGroupData[findIndex].id,
@@ -454,7 +454,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         application_number: data.application_number,   
                         origin: data.group_name
                     })
-                } */
+                    tap = 1
+                }
             }                
         })
 
