@@ -96,6 +96,7 @@ export default makeStyles(theme => ({
     margin: 10
   },
   share: {
+    marginLeft: 12
   },
   icon:{
     

@@ -32,7 +32,7 @@ export default makeStyles(theme => ({
       background:'#222222',
       border:'1px solid #545454',
       color:'#BDBDBD',
-      padding: 5,
+      padding: '5px 10px' ,
       '& h4':{
         margin: '5px 0 0 0' 
       },
@@ -161,7 +161,7 @@ export default makeStyles(theme => ({
         backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png)',
       },
       '& .vis-dot.asset-type-other, .cluster-other': {
-        /* backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png)', */
+        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png)', 
       },
     },
     '& .vis-cluster': {

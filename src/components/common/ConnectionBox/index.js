@@ -180,15 +180,12 @@ function ConnectionBox(props) {
     )
   } 
   return (
-    <Paper className={classes.root} square>
-      {/* <span className={classes.close} onClick={closeViewer}><i className={'fal fa-times-circle'}></i></span> */}
-      <div className={classes.container}>
-        {
-          Object.keys(boxData).length > 0 &&
-          boxData.popup.map(pop => <RetreieveBoxData key={pop} keyIndex={pop} popup={pop}/>)
-        }                 
-      </div>  
-    </Paper>
+    <div className={classes.container}>
+      {
+        Object.keys(boxData).length > 0 &&
+        boxData.popup.map((pop, index) => <RetreieveBoxData key={index} keyIndex={pop} popup={pop}/>)
+      }                 
+    </div>
   )
 }
 

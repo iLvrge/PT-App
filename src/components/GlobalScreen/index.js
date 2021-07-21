@@ -548,7 +548,7 @@ const GlobalScreen = ({
                                     <SplitPane
                                         className={`${classes.splitPane} ${classes.splitPane2}  ${classes.splitPane3} ${classes.splitPane2OverflowUnset}`}
                                         split="vertical"
-                                        minSize={10}
+                                        minSize={100}
                                         size={visualizerBarSize}
                                         onChange={() => { editorBar(1) }}
                                         onDragStarted={() => {
@@ -566,12 +566,12 @@ const GlobalScreen = ({
                                         }}
                                         ref={mainContainerRef}
                                         primary={'second'}
-                                        maxSize={-250} 
+                                        maxSize={-400} 
                                     >
                                         <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
                                             <IllustrationCommentContainer 
                                                 cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPane1OverflowUnset, classes.paneHeightZero, { [classes.minimized]: assetsCommentsTimelineMinimized })}
-                                                split={`horizontal`}
+                                                split={`horizontal`} 
                                                 minSize={50}
                                                 defaultSize={commentBarSize}
                                                 fn={resizePane}
@@ -598,29 +598,27 @@ const GlobalScreen = ({
                                             />
                                         </div>
                                         <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
-                                            {
-                                                <AssetDetailsContainer 
-                                                    cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPaneMainOverflowUnset, { [classes.minimized]: assetsCommentsTimelineMinimized })}
-                                                    split={`horizontal`}
-                                                    minSize={10}
-                                                    defaultSize={illustrationBarSize}
-                                                    fn={resizePane}
-                                                    fnParams={setIllustrationBarSize}
-                                                    fnVarName={`split6`}
-                                                    dragStart={setIsDrag}
-                                                    dragFinished={setIsDrag}
-                                                    bar={openVisualizerBar}
-                                                    visualizerBarSize={visualizerBarSize}
-                                                    parentBarDrag={setVisualizerBarSize}
-                                                    parentBar={setVisualizeOpenBar}
-                                                    primary={'second'}
-                                                    illustrationData={illustrationRecord}
-                                                    chartBar={openChartBar}
-                                                    analyticsBar={openAnalyticsBar}
-                                                    openCustomerBar={openCustomerBar}
-                                                    type={type}
-                                                />
-                                            }
+                                            <AssetDetailsContainer 
+                                                cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPaneMainOverflowUnset, { [classes.minimized]: assetsCommentsTimelineMinimized })}
+                                                split={`horizontal`}
+                                                minSize={10}
+                                                defaultSize={illustrationBarSize}
+                                                fn={resizePane}
+                                                fnParams={setIllustrationBarSize}
+                                                fnVarName={`split6`}
+                                                dragStart={setIsDrag}
+                                                dragFinished={setIsDrag}
+                                                bar={openVisualizerBar}
+                                                visualizerBarSize={visualizerBarSize}
+                                                parentBarDrag={setVisualizerBarSize}
+                                                parentBar={setVisualizeOpenBar}
+                                                primary={'second'}
+                                                illustrationData={illustrationRecord}
+                                                chartBar={openChartBar}
+                                                analyticsBar={openAnalyticsBar}
+                                                openCustomerBar={openCustomerBar}
+                                                type={type}
+                                            />
                                         </div>
                                     </SplitPane>
                                 </SplitPane>

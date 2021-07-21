@@ -723,7 +723,7 @@ const handleDriveModalClose = (event) => {
           onFocus={handleFocus}
           onBlur={handleBlur} 
           driveFile={selectedDriveFile} 
-        />
+        /> 
         <input type='file' id='attach_file' ref={inputFile} style={{display: 'none'}} onChange={onHandleFile}/>
       </div> 
     )
@@ -1001,7 +1001,7 @@ const handleDriveModalClose = (event) => {
         }
         { renderCommentsTimeline }  
         { renderCommentEditor }
-      </div>
+      </div>  
       <Modal
         open={driveModal}
         onClose={(e) => handleDriveModalClose(e)}

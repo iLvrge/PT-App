@@ -179,18 +179,81 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
 
   // Custom ToolTip
   
-  const showTooltip = (itemID, event) => {    
+  const showTooltip = (item, event) => {    
       setTimeout(() => {
         PatenTrackApi
         .cancelTimelineItem()
         PatenTrackApi
-        .getTimelineItemData(itemID)
+        .getTimelineItemData(item.id)
         .then( response => {
           const { data } = response
-          if( data != null) {
+          console.log(event)
+          if( data != null && ( data.assignor.length > 0 || data.assignee.length > 0 )) {
             const executionDate = data.assignor.length > 0 ? data.assignor[0].exec_dt : ''
+            const transactionType = convertTabIdToAssetType(item.tab_id)
             
-            const tootltipTemplate = `<div class='custom_tooltip' style='top:${event.layerY}px;left:${event.layerY}px;'>
+            let image = '', color ='';
+            switch(parseInt(item.tab_id)) {
+              case 1:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/acquisition.png'
+                color = '#E60000'
+                break;
+              case 2:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png'
+                color = '#70A800'
+                break;
+              case 3:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licensein.png'
+                color = '#E69800'
+                break;
+              case 4:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licenseout.png'
+                color = '#E69800'
+                break;
+              case 5:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+                color = '#00a9e6'
+                break;
+              case 6:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png'
+                color = '#FFFFFF'
+                break;
+              case 7:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png'
+                color = '#FFFFFF'
+                break;
+              case 8:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/options.png'
+                color = '#000000'
+                break;
+              case 9:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/courtorder.png'
+                color = '#E60000'
+                break;
+              case 10:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png'
+                color = '#FFFFFF'
+                break;
+              case 11:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/release.png'
+                color = '#00a9e6'
+                break;
+              case 12:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+                color = '#00a9e6'
+                break;
+              case 13:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+                color = '#00a9e6'
+                break;
+              case 14:
+              default:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png'
+                color = '#FFFFFF'
+                break;
+            }
+            const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.layerY - 30}px;left:${event.layerX + 100}px;'>
+                                        <h4 style='color:${color};text-align:left;margin:0'>${capitalize(transactionType)}</h4>
                                         <div>
                                           ${ executionDate != '' ? moment(executionDate.exec_dt).format('ll') : ''}
                                         </div>
@@ -207,10 +270,12 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
                                           )).join('')}
                                         </div>
                                       </div>` 
-              resetTooltipContainer()
+              resetTooltipContainer() 
             if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
               timelineContainerRef.current.childNodes[0].insertAdjacentHTML('beforeend',tootltipTemplate)
             }
+          } else {
+            resetTooltipContainer()
           }
         })        
       }, TIME_INTERVAL) 
@@ -258,7 +323,8 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
   const onItemover = useCallback(({item, event}) => {
     const overItem = items.current.get(item)
     if(overItem != null) {
-      showTooltip(overItem.rawData.id, event)
+      onItemout()
+      showTooltip(overItem.rawData, event)
     }
   }, [ timelineItems, timeInterval ])
 
@@ -280,8 +346,6 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
       findOldToolTip[0].parentNode.removeChild(findOldToolTip[0])      
     } 
   }
-
-  
 
   /**
    * this call when Timeline rangechange
@@ -333,14 +397,9 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
     setTimelineRawData([]) //items
     setIsLoadingTimelineData(false)
     PatenTrackApi.cancelTimeline()
-    
-    console.log( 'selectedCompanies, selectedCompaniesAll', selectedCompanies, selectedCompaniesAll )
-    
-    /**|| selectedAssetsPatents.length > 0  || selectedAssetAssignments.length > 0 */
-
     /**
      * call for the timeline api data
-     */
+    */
     const getTimelineRawDataFunction = async () => {
       //search
       resetTooltipContainer()
@@ -407,62 +466,28 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
     if (isLoadingTimelineRawData) return null
     const clusteredItems = timelineRawData.reduce((result, dataItem) => {
       const itemName = dataItem.tab_id == 10 ? dataItem.customerName.split(' ')[0] : dataItem.customerName
-       /*
-      if (result[`${itemName}_${dataItem.exec_dt}`]) {
-        result[`${itemName}_${dataItem.exec_dt}`].collection.push({ id: dataItem.id, totalAssets: dataItem.totalAssets })
-        result[`${itemName}_${dataItem.exec_dt}`].totalAssets = result[`${itemName}_${dataItem.exec_dt}`].totalAssets + dataItem.totalAssets
-        result[`${itemName}_${dataItem.exec_dt}`].title = `
-        <div>
-          <span><strong>Transaction Date:</strong>${moment(dataItem.exec_dt).format('ll')}</span> 
-          <span><strong>Other Party:</strong> ${dataItem.customerName}</span>
-          <span><strong>Number of Assets:</strong> ${dataItem.totalAssets} assets</span>
-        </div>
-      `
-      } else {
-        result[`${itemName}_${dataItem.exec_dt}`] = convertDataToItem(dataItem)
-      }  */
-      result[`${itemName}_${dataItem.exec_dt}`] = convertDataToItem(dataItem)
+      console.log('dataItem', dataItem)      
+      result[`${dataItem.id}_${itemName}_${dataItem.exec_dt}`] = convertDataToItem(dataItem)
       return result 
     }, {})
-    const convertedItems = Object.values(clusteredItems).sort((a, b) => (new Date(a.start) > new Date(b.start)))  
     
-    // const convertedItems = timelineRawData.map(convertDataToItem).sort((a, b) => (new Date(a.start) > new Date(b.start)))
+    const convertedItems = Object.values(clusteredItems).sort((a, b) => (new Date(a.start) > new Date(b.start)))  
+    console.log('clusteredItems', clusteredItems, timelineRawData.length, convertedItems.length)
+
     setTimelineItems(convertedItems)
     items.current = new DataSet()
     groups.current = new DataSet()
     let start = new moment().subtract(1, 'year')
-    let end = new moment().add(3, 'months')
+    let end = new moment().add(3, 'months')  
 
     if (convertedItems.length > 0) {
       const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
       start = convertedItems.length ? new moment(convertedItems[startIndex].start).subtract(1, 'week') : new Date()
       end = new moment().add(1, 'month')
-      items.current.add(convertedItems.slice(0, startIndex))
-      /* const groupItemsList = [], groupList = []
-      timelineGroups.map( item => {
-        groupItemsList.push(item.group)
-      })
-      const mainGroup = exportGroups()
-      mainGroup.forEach( row => {
-        let tap = false;
-        row.list.forEach( item => {
-          if(groupItemsList.includes(item) && tap === false) {
-            groupList.push({
-              id: row.id,
-              content: '',
-              className: row.className
-            })
-            tap = true
-          }
-        })
-      })
-      groups.current.add(groupList) */      
-    }
-    
+      items.current.add(convertedItems.slice(0, startIndex))      
+    }    
     timelineRef.current.setItems(items.current)
-    //timelineRef.current.setGroups(groups.current)
-    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('2000-01-01')), max: new moment().add(3, 'year')})
-    
+    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'year')})    
   }, [ timelineRawData, isLoadingTimelineRawData, timelineGroups ])
 
   /**

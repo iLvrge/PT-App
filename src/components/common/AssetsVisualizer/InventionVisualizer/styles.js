@@ -87,7 +87,8 @@ export default makeStyles(theme => ({
         alignItems: 'center',
         fontSize: 16,
         background: '#222222 !important',
-        border: '1px solid #5c5c5c !important'
+        border: '1px solid #5c5c5c !important',
+        overflow: 'hidden'
     },
     loadingIndicator: {
         position: 'absolute',

@@ -622,6 +622,10 @@ div.vis-tooltip span{
   margin-right: 5px;
 }
 
+.addStroke{
+  stroke: #fff;
+}
+
 .MuiTooltip-tooltipPlacementRight, .MuiTooltip-tooltipPlacementBottom, .MuiTooltip-tooltipPlacementLeft{
   margin: 0 8px !important;
   border-radius: 0 !important;
@@ -815,9 +819,9 @@ a.maintain svg.clean_encumbrances path{
   display: inline;
 }
 
-.editor{
+/* .editor{
   min-width: 387px;
-}
+} */
 
 .scopeTooltip{
   display: flex;

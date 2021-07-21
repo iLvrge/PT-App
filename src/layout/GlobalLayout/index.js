@@ -127,8 +127,24 @@ const GlobalLayout = (props) => {
 
     useEffect(() => {
         if( openIllustrationBar === false && openCommentBar === false && openChartBar === false && openAnalyticsBar === false ) {
+            console.log('openIllustrationBar', openGoogleDriveBar, assetFilesBar)
             if( openGoogleDriveBar === true || assetFilesBar === true ) {
                 setAssetFilesBarSize('100%')
+                if(openCustomerBar === true && customerBarSize === '100%') {
+                    setCustomerBarSize(160)
+                }
+                if(openAssignmentBar === true && assignmentBarSize === '100%') {
+                    setAssignmentBarSize(120)
+                }
+                if ((openOtherPartyBar === true || openInventorBar === true) && otherPartyBarSize === '100%') {
+                    setOtherPartyBarSize(120)
+                }
+                if ( openTypeBar === true && typeBarSize === '100%' ) {
+                    setTypeBarSize(120)
+                }
+                if (openBar === true && companyBarSize === '100%') {
+                    setCompanyBarSize(120)
+                }
             } else if (openCustomerBar === true) {
                 setCustomerBarSize('100%')
                 if(openAssignmentBar === true && assignmentBarSize === '100%') {
@@ -183,11 +199,13 @@ const GlobalLayout = (props) => {
                 setOtherPartyBarSize(120)
             } else if(typeBarSize === '100%') {
                 setTypeBarSize(120)
+            } else if(addressBarSize === '100%' && (selectedCategory == 'correct_names' || selectedCategory == 'correct_address')) {
+                setAddressBarSize(450)
             } else if(companyBarSize === '100%') {
                 setCompanyBarSize(120)
             }
         }
-    }, [ openIllustrationBar, openCommentBar, openChartBar, openAnalyticsBar, openGoogleDriveBar, assetFilesBar, openCustomerBar, openAssignmentBar, openOtherPartyBar, openInventorBar, openTypeBar, openBar ])
+    }, [ openIllustrationBar, openCommentBar, openChartBar, openAnalyticsBar, openGoogleDriveBar, assetFilesBar, openCustomerBar, openAssignmentBar, openOtherPartyBar, openInventorBar, openTypeBar, openBar  ])
     
     // When we are in search route disable company, activites, parties icons
 
@@ -378,7 +396,8 @@ const GlobalLayout = (props) => {
     }
 
     const changeVisualBar = (chart, analytics, comment, illustration) => {
-        let barOpen = true, barSize = '30%'
+        let barOpen = true, barSize = visualizerBarSize == '0%' ? '30%' : visualizerBarSize
+        /*console.log('changeVisualBar=>visualizerBarSize', visualizerBarSize)*/
         if(chart === false && analytics === false && (comment === true || illustration === true)){
             barSize = '0%'
             barOpen = false
@@ -389,9 +408,9 @@ const GlobalLayout = (props) => {
             checkPDFHeight()
         }
         editorBar()
-        setVisualizeOpenBar(barOpen)
+        setVisualizeOpenBar(barOpen)  
         setVisualizerBarSize(barSize)
-    }
+    } 
 
     const handleIllustrationBarOpen = () => {
         let bar = openIllustrationBar, barSize = '30%'

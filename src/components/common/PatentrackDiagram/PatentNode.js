@@ -125,7 +125,7 @@ export default function PatentNode(props) {
       .attr("fill", node.fontColor)
       .attr("text-rendering", "geometricPrecision")
       .attr('class', 'wrapText')
-      .attr('title', data.name)
+      .attr('title', typeof data.json != 'undefined' && typeof data.json.original_name !== 'undefined' && data.json.original_name != '' && data.json.original_name !== null ? data.json.original_name : data.name)
       .on("mouseover", () => {
         //let dx = d3.event.offsetX, dy = d3.event.offsetY
         /* let fromElement = d3.event.fromElement
@@ -139,11 +139,11 @@ export default function PatentNode(props) {
           } 
         }
         const getBoundElementRec = fromElement.getBoundingClientRect() */
-        
+        console.log('tooltip_title', data)
         d3.select("#patentrackDiagramDiv")
           .append("div")	
           .attr("class", "tooltip_title")	
-          .html(data.name)
+          .html(typeof data.json != 'undefined' && typeof data.json.original_name !== 'undefined' && data.json.original_name != '' && data.json.original_name !== null ? data.json.original_name : data.name)
           .style("left", `${d3.event.offsetX + 30}px`)		
           .style("top", `${(d3.event.offsetY)}px`);	 
       })

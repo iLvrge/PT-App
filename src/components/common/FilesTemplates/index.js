@@ -42,16 +42,19 @@ const FilesTemplates = ({type}) => {
     const [currentDocumentSelection, setCurrentDocumentSelection] = useState(null)
     const [ loading, setLoading ] = useState(false)
 
-    const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
+    
     const channel_id = useSelector(state => state.patenTrack2.channel_id)
     const document_transaction = useSelector(state => state.patenTrack2.document_transaction)
+    const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
-    const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
-    const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
-    const selectedAssetAssignments = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
-    const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected )
+
     const assetTypesSelected = useSelector(state => state.patenTrack2.assetTypes.selected)
+    const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected )
+    const selectedAssetsTransactions = useSelector( state => state.patenTrack2.selectedAssetsTransactions  )
+    const selectedAssetAssignments = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
+    const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
+    const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
 
     const ASSET_COLUMNS = [  
         {
@@ -79,7 +82,7 @@ const FilesTemplates = ({type}) => {
             badge: true,   
             align: 'left' 
         },
-        {
+        { 
             width: 100,
             minWidth: 100,
             label: 'Type', 
@@ -219,14 +222,15 @@ const FilesTemplates = ({type}) => {
                     setAssetFiles(data.assets_files)
                 } else if(selectedCompanies.length > 0 || assetTypesSelected.length > 0 || selectedAssetCompanies.length > 0 || selectedAssetAssignments.length > 0 || assetTypeAssignmentAssetsSelected.length > 0){
                     setLoading(true)
-                    const { data } = await PatenTrackApi.getDriveAndAssetFiles(0, 'undefined', 'undefined', 'undefined', selectedCompanies, selectedCategory, '', '', assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssetsSelected)
+                    console.log("FIle Templates", 0, 'undefined', 'undefined', 'undefined', selectedCompanies, selectedCategory, '', '', assetTypesSelected, selectedAssetCompanies, selectedAssetsTransactions.length > 0 ? selectedAssetsTransactions : selectedAssetAssignments, assetTypeAssignmentAssetsSelected)
+                    const { data } = await PatenTrackApi.getDriveAndAssetFiles(0, 'undefined', 'undefined', 'undefined', selectedCompanies, selectedCategory, '', '', assetTypesSelected, selectedAssetCompanies, selectedAssetsTransactions.length > 0 ? selectedAssetsTransactions : selectedAssetAssignments, assetTypeAssignmentAssetsSelected)
                     setLoading(false)
                     setAssetFiles(data.assets_files)
                 }
             }
         }
         getDriveAndAssetFiles()
-    }, [ type, selectedAssetsPatents, channel_id, selectedCompanies, selectedCompaniesAll, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssetsSelected, selectedCategory ])
+    }, [ type, selectedAssetsPatents, channel_id, selectedCompanies, selectedCompaniesAll, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssetsSelected, selectedCategory, selectedAssetsTransactions ])
 
     
 

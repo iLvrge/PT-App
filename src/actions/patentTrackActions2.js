@@ -961,6 +961,13 @@ export const setAssetTypesPatentsSelected = (data) => {
   }
 }
 
+export const setAssetTypesPatentsSelectAll = (flag) => {
+  return {
+    type: types.SET_ASSET_TYPE_ASSIGNMENTS_ASSETS_SELECT_ALL,
+    flag
+  } 
+}
+
 export const getAssetTypeAssignmentAssets = ( assignmentRFID, append = false, type = 0, searchString = '' ) => {
   return async dispatch => {
     dispatch( setAssetTypesAssignmentAssetsLoading( true ) )

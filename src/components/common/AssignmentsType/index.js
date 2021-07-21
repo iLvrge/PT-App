@@ -59,7 +59,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
     const history = useHistory()
     const location = useLocation()
     const [ offset, setOffset ] = useState(0)
-    const [headerRowHeight, setHeaderRowHeight] = useState(47)
+    const [ headerRowHeight, setHeaderRowHeight] = useState(47)
     const [ rowHeight, setRowHeight ] = useState(40)
     const [ childHeight, setChildHeight ] = useState(500)
     const [ width, setWidth ] = useState( 800 )
@@ -75,6 +75,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
     const assetTypes = useSelector(state => state.patenTrack2.assetTypes.list)
     
     const assetTypesSelected = useSelector(state => state.patenTrack2.assetTypes.selected)
+    const assetTypesSelectAll = useSelector(state => state.patenTrack2.assetTypes.selectAll)
     
     const assetTypesLoading = useSelector(state => state.patenTrack2.assetTypes.loading)
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
@@ -247,7 +248,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
             }
             list.push(item)
         })
-        if( selectItems.length == 0 ) {
+        if( selectItems.length == 0  && assetTypesSelectAll === false ) {
             (async() => {
                 const { data } = await PatenTrackApi.getUserActivitySelection()
                 if(data != null && Object.keys(data).length > 0) {
@@ -298,7 +299,8 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
         event.preventDefault()
         dispatch( setAssetTypesSelect([]) )
         setSelectAll(true)
-        setSelectItems([])        
+        setSelectItems([])    
+        dispatch( setAllAssetTypes( true ) )    
     }, [ dispatch, assetTypes ])
 
     const onHandleClickRow = useCallback((e,  row, t) => {

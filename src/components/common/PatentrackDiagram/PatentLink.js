@@ -324,43 +324,50 @@ export default function PatentLink(props) {
           .node()
           .getBBox();
         d3.selectAll("#dummy").remove();
-
-        d3.select("#" + svg)
+        let gtooltip = d3.select("#" + svg)
+                        .append('g')
+                        .attr("class", "link-tooltip")
+                        .attr("visibility", "visible")
+                        .attr("transform", `translate(${dx + 70}, ${dy})`)
+          gtooltip
           .append("rect")
-          .attr("x", dx)
-          .attr("y", dy)
           .attr("rx", config.link.tooltip.corners)
           .attr("ry", config.link.tooltip.corners)
           .attr("class", "link-tooltip")
-          .attr("width", bbox.width * 1.4)
-          .attr("height", bbox.height * 1.4)
+          .attr("width", '135')
+          .attr("height", '63')
           .attr("fill", config.node.background)
           .attr("stroke", config.colors[
             data.category.charAt(0).toLowerCase() +
               data.category.slice(1).replace(" ", "")
           ])
-          .attr("opacity", config.node.opacity);
+          .attr("fill-opacity", config.node.opacity);
+        let offsetX = "0.6rem";
 
-        d3.select("#" + svg)
-          .append("text")
-          .attr("x", dx + 70 )
-          .attr("y", dy )
-          .attr("class", "link-tooltip")
-          .attr("fill", config.colors[
-            data.category.charAt(0).toLowerCase() +
-              data.category.slice(1).replace(" ", "")
-          ])
+        gtooltip.append("text")
+          .attr("dx", offsetX)
+          .attr("dy", "1.1rem")
+          .attr("class", "link-tooltip")   
+          .attr("fill", '#fff')       
           .attr("font-size", config.link.tooltip.fontSize)
-          .attr("text-anchor", "middle")
-          .attr("alignment-baseline", "middle")
-          /* .text(data.category); */
-          .html("<tspan dx='0rem' dy='1.1rem'>"+ data.category + "</tspan><tspan dx='-2.9rem' dy='1.5rem'>Execution: " +
-                  time2String(data.line.date) +
-                  '</tspan><tspan dx="-8.2rem" dy="1.1rem">' +
+          .attr("text-rendering", "geometricPrecision")
+          .text(data.category) 
+        gtooltip.append("text")
+          .attr("dx", offsetX)
+          .attr("dy", "3.05rem")
+          .attr("class", "link-tooltip")   
+          .attr("font-size", config.link.tooltip.fontSize)
+          .attr("fill", '#fff')       
+          .html(
+            "<tspan>Execution: " +
+              time2String(data.line.date) +
+                  '</tspan><tspan x="' +
+                  offsetX +
+                  '" dy="1.1rem">' +
                   "Recorded: " +
                   time2String(data.line.recorded) +
-                  "</tspan>",
-          );
+                  "</tspan>"
+            );         
       })
       .on("mouseout", () => {
         d3.selectAll(".link-tooltip").remove();

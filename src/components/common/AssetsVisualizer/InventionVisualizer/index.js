@@ -112,7 +112,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         /* yBarWidth:  30, */
         xStep: 1,
         yStep: 1,
-        zStep: 1,
+        zStep: 3,
         yCenter: '30%',
         showPerspective: true,
         showGrid: true,
@@ -186,10 +186,10 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     },[ graphRawGroupData, filterList ])
 
     useEffect(() => {
-        if( connectionBoxView === true) {
+        if( connectionBoxView === true || selectedRow.length > 0 ) {
             setInventionTabs([ 'Innovation', 'Agreement', 'Form', 'Main' ])
         }
-    }, [ connectionBoxView ])
+    }, [ connectionBoxView, selectedRow ])
 
     useEffect(() => {
         const getChartData = async () => {
@@ -441,7 +441,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     origin: data.group_name
                 })
 
-                if( tap === 0 ) {
+                /* if( tap === 0 ) {
                     items.current.add({
                         x: year,
                         y: graphRawGroupData[findIndex].id,
@@ -449,12 +449,12 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         style: {
                             stroke: '#50719C',
                             fill: '#395270'
-                        },
+                        }, 
                         patent: data.patent_number,
                         application_number: data.application_number,   
                         origin: data.group_name
                     })
-                }
+                } */
             }                
         })
 
@@ -462,7 +462,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
        
         //TODO height 100% not working well, created allot of isues when we resize pane, 
         if(graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0) {
-           options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight - 50 }px`, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1 }
+           options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight - 50 }px`, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1, zStep: graphRawData.length > 2 ? 3 : 1 }
         }     
 
         graphRef.current = new Graph3d(graphContainerRef.current, items.current, options)
@@ -475,7 +475,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
 
     useEffect(() => {
-        if( !isLoadingCharts && graphRawData.length > 0 && graphRawGroupData.length > 0 && graphContainerRef.current != null ) {
+        if( !isLoadingCharts && graphRawData.length > 0 && graphRawGroupData.length > 0 && graphContainerRef.current !== null ) {
             if( graphContainerRef.current.childNodes.length == 0 ) { // if comes from different tab
                 generateChart()
             }
@@ -483,7 +483,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     })
 
     useEffect(() => {
-        if( graphRef.current != undefined && graphRawGroupData.length > 0 && graphRawData.length > 0 && !isLoadingCharts ) {
+        if( graphRef.current != undefined &&  graphRef.current !== null && graphRawGroupData.length > 0 && graphRawData.length > 0 && !isLoadingCharts ) {
             let fontSize = 18, step = 1, verticalRatio = 0.5
             if( visualizerBarSize == '100%' ) {
                 if(defaultSize != '0') {
@@ -494,7 +494,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 fontSize = 18
                 step = 8
             }
-            options = { ...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight - 50 }px`, axisFontSize: fontSize, yStep: step, verticalRatio }
+            const height = graphContainerRef.current.parentNode !== null ? graphContainerRef.current.parentNode.parentNode !== null ? `${graphContainerRef.current.parentNode.parentNode.clientHeight - 50 }px` : `${graphContainerRef.current.parentNode.clientHeight - 50 }px` : '100%'
+            options = { ...options, axisFontSize: fontSize, height, yStep: step, verticalRatio }
             graphRef.current.setOptions(options)
             graphRef.current.redraw()
         }
@@ -503,7 +504,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
     useEffect(() => {
         if(assetIllustration != null && Object.keys(assetIllustration).length > 0) {
-            if((selectedAssetAssignments.length == 1 && selectedCategory == 'correct_details') || selectedRow.length == 1) {
+            /* if((selectedAssetAssignments.length == 1 && selectedCategory == 'correct_details') || selectedRow.length == 1) { */
+                if((selectedAssetAssignments.length == 1 ) || selectedRow.length == 1) {
                 setAssets(assetIllustration)
                 if(assetIllustrationData != null ) {                    
                     dispatch(

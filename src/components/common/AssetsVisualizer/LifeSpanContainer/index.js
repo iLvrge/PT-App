@@ -44,12 +44,10 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize}) => {
     const connectionBoxView = useSelector( state => state.patenTrack.connectionBoxView)
 
     useEffect(() => {
-        if( connectionBoxView === true) {
+        if( connectionBoxView === true || selectedRow.length > 0 ) {
             setLifeSpanTabs([ 'Lifespan', 'Assignment', 'USPTO' ])
         }
-    }, [ connectionBoxView ])
-
-    
+    }, [ connectionBoxView, selectedRow ])
 
     useEffect(() => {
         const getChartData = async () => {

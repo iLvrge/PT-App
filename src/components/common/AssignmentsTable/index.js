@@ -545,7 +545,8 @@ const findChannelID = useCallback((rfID) => {
 
   const getTransactionData = (dispatch, rf_id, defaultLoad, search_string) => {
     setSelectedRow([rf_id]);    
-    dispatch(setConnectionBoxView(true));
+    dispatch(toggleLifeSpanMode(true))
+    dispatch(setConnectionBoxView(false));
     dispatch(setPDFView(false));
     dispatch(toggleUsptoMode(false));
     dispatch(toggleFamilyMode(false));

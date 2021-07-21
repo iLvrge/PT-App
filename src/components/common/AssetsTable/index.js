@@ -15,6 +15,7 @@ import VirtualizedTable from "../VirtualizedTable";
 import { DEFAULT_CUSTOMERS_LIMIT } from "../../../api/patenTrack2";
 import {
   setAssetTypesPatentsSelected,
+  setAssetTypesPatentsSelectAll,
   getCustomerAssets,
   getCustomerSelectedAssets,
   getAssetTypeAssignmentAssets,
@@ -696,7 +697,8 @@ const resetAll = () => {
                 ? prevItems.filter(item => item !== row.asset)
                 : [...prevItems, row.asset],
             );  
-          }                      
+          }
+          dispatch(setAssetTypesPatentsSelectAll(false))                      
         } else {
           if(typeof e.target.closest == 'function') {
             const element = e.target.closest('div.ReactVirtualized__Table__rowColumn')
@@ -736,30 +738,26 @@ const resetAll = () => {
    */
 
   const onHandleSelectAll = useCallback(
-    (event, row) => {
+    async(event, row) => {
       event.preventDefault();
       const { checked } = event.target;
       if (checked === false) {
         setSelectItems([]);
+        dispatch(setAssetTypesPatentsSelected([]))
       } else if (checked === true) {
         let items = [],
-          list = [];
-        if (standalone && assetTypeAssignmentAssets.length > 0) {
-          list = [...assetTypeAssignmentAssets];
-        } else if (!standalone && data.length > 0) {
-          list = [...data];
-        }
+          list = [...assetRows]
         const promise = list.map(item =>
-          items.push(
-            item.grant_doc_num != "" ? item.grant_doc_num : item.appno_doc_num,
-          ),
-        );
-        Promise.all(promise);
+          items.push(item.asset),
+        ); 
+        await Promise.all(promise);
         setSelectItems(items);
+        dispatch(setAssetTypesPatentsSelected(items))
       }
       setSelectAll(checked);
+      dispatch(setAssetTypesPatentsSelectAll(checked))
     },
-    [dispatch, standalone, assetTypeAssignmentAssets, data],
+    [dispatch, assetRows ],
   );
 
   const findChannelID = useCallback((asset) => {

@@ -80,7 +80,7 @@ const IllustrationContainer = ({
           dispatch(setAssetsIllustrationData(data != '' ? data : null))
           if(setIllustrationRecord) { setIllustrationRecord(data) }
           dispatch(setConnectionData(data.line[0]))
-          dispatch(
+          /*dispatch(
             setPDFView(true)
           )
           dispatch(setPDFFile(
@@ -89,7 +89,7 @@ const IllustrationContainer = ({
               form: data.line[0].document1_form, 
               agreement: data.line[0].document1_agreement 
             }
-          ))
+          ))*/
         } catch (error) { if (axios.isCancel(error)) {} else { throw error } }
       }
       dispatch(setAssetsIllustrationLoading(false)) 
