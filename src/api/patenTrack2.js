@@ -81,7 +81,7 @@ class PatenTrackApi {
     return axios.get(`${base_api_url}/site_logo`, getHeader())
   }
 
-  static getProfile() {
+  static getProfile() {  
     return axios.get(`${base_new_api_url}/profile`, getHeader())
   }
 
