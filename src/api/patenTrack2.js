@@ -74,7 +74,7 @@ const getMultiFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecorded
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords
 
 class PatenTrackApi {
   static getSiteLogo() {
@@ -668,7 +668,7 @@ class PatenTrackApi {
       if(type === 1) {
         cancelInitiated = c
       } else {
-        cancelRecorded = c
+        cancelRecords = c
       }
     })
 
@@ -685,8 +685,8 @@ class PatenTrackApi {
     } 
   }
 
-  static cancelRecorded () {
-    if (cancelRecorded !== undefined) {
+  static cancelRecords () {
+    if (cancelRecords !== undefined) {
       try{
         throw cancel('Operation canceled by the user.')
       } catch (e){
