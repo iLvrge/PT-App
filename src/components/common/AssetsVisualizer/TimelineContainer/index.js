@@ -253,7 +253,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
                   color = '#FFFFFF'
                   break;
               }
-              const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.layerY - 100}px;left:${event.layerX }px;'>
+              const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.clientY}px;left:${event.clientX + 20 }px;'>
                                           <h4 style='color:${color};text-align:left;margin:0'>${capitalize(transactionType)}</h4>
                                           <div>
                                             ${ executionDate != '' ? moment(executionDate.exec_dt).format('ll') : ''}
@@ -273,7 +273,8 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
                                         </div>` 
                 resetTooltipContainer() 
               if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
-                timelineContainerRef.current.childNodes[0].insertAdjacentHTML('beforeend',tootltipTemplate)
+                document.body.insertAdjacentHTML('beforeend',tootltipTemplate)
+                //timelineContainerRef.current.childNodes[0].insertAdjacentHTML('beforeend',tootltipTemplate)
               }
             } else {
               resetTooltipContainer()
