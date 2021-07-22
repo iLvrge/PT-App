@@ -74,7 +74,7 @@ const getMultiFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecorded
 
 class PatenTrackApi {
   static getSiteLogo() {
@@ -663,8 +663,37 @@ class PatenTrackApi {
   }
 
   static getDriveAndAssetFiles(type, channelID, code, assets, companies, layoutID, gToken, gAccount, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedAssetsPatents ) {
-    return axios.get(`${base_new_api_url}/assets/${assets}/files/${channelID}/slack/${code}?type=${type}&companies=${JSON.stringify(companies)}&layout=${layoutID}&g=${gToken}&ga=${gAccount}&activities=${JSON.stringify(assetTypesSelected)}&parties=${JSON.stringify(selectedAssetCompanies)}&rfIDs=${JSON.stringify(selectedAssetAssignments)}&patents=${JSON.stringify(selectedAssetsPatents)}`, getHeader())
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      if(type === 1) {
+        cancelInitiated = c
+      } else {
+        cancelRecorded = c
+      }
+    })
+
+    return axios.get(`${base_new_api_url}/assets/${assets}/files/${channelID}/slack/${code}?type=${type}&companies=${JSON.stringify(companies)}&layout=${layoutID}&g=${gToken}&ga=${gAccount}&activities=${JSON.stringify(assetTypesSelected)}&parties=${JSON.stringify(selectedAssetCompanies)}&rfIDs=${JSON.stringify(selectedAssetAssignments)}&patents=${JSON.stringify(selectedAssetsPatents)}`, header)
   } 
+
+  static cancelInitiated () {
+    if (cancelInitiated !== undefined) {
+      try{
+        throw cancel('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
+  static cancelRecorded () {
+    if (cancelRecorded !== undefined) {
+      try{
+        throw cancel('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
 
   static getGoogleAuthToken( code ) {
     return axios.get(`${base_new_api_url}/documents/auth_token?code=${code}`, getHeader())

@@ -55,6 +55,54 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
             align: "left", 
             badge: true
         },
+        {
+            width: 80,  
+            minWidth: 80, 
+            label: 'Acitivites',
+            staticIcon: '',
+            dataKey: 'no_of_activities',
+            format: numberWithCommas,
+        },
+        {
+            width: 80,   
+            minWidth: 80,
+            label: 'Parties',
+            staticIcon: '',
+            dataKey: 'no_of_parties',
+            format: numberWithCommas,
+        },
+        {
+            width: 80,  
+            minWidth: 80,
+            label: 'Inventors',
+            staticIcon: '',
+            dataKey: 'no_of_inventor',
+            format: numberWithCommas,
+        },
+        {
+            width: 120,  
+            minWidth: 120,
+            label: 'Transactions',
+            staticIcon: '',
+            dataKey: 'no_of_transactions',
+            format: numberWithCommas,
+        },
+        {
+            width: 80,  
+            minWidth: 80,
+            label: 'Assets',
+            staticIcon: '',
+            dataKey: 'no_of_assets',
+            format: numberWithCommas,
+        },
+        {
+            width: 80,  
+            minWidth: 80,
+            label: 'Arrows',
+            dataKey: 'product',
+            staticIcon: '',
+            format: numberWithCommas,
+        }
     ]
        
     useEffect(() => {
@@ -123,7 +171,7 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
         e.preventDefault()
         const { checked } = e.target;
         if(checked != undefined) {
-            let updateSelected = [...selectItems], updateSelectedWithName = [...selectedWithName]
+            let updateSelected = [...selected], updateSelectedWithName = [...selectedWithName]
             if(!updateSelected.includes(parseInt( row.representative_id ))) {
                 updateSelected.push(parseInt( row.representative_id ))
                 updateSelectedWithName.push({id: row.representative_id, name: row.original_name})
@@ -140,7 +188,7 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
             updateUserCompanySelection(updateSelected)
             dispatch( setMainCompaniesSelected( updateSelected, updateSelectedWithName ) ) 
         }
-    }, [ dispatch, selectItems, selectedWithName ])
+    }, [ dispatch, selected, selectItems, selectedWithName ])
 
     const updateUserCompanySelection = async(representativeIDs) => {
         const form = new FormData();

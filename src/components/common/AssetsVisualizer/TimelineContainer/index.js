@@ -87,7 +87,7 @@ const options = {
 
 
 const TIME_INTERVAL = 1000
-
+var tootlTip = ''
 const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -181,103 +181,105 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
   
   const showTooltip = (item, event) => {    
       setTimeout(() => {
-        PatenTrackApi
-        .cancelTimelineItem()
-        PatenTrackApi
-        .getTimelineItemData(item.id)
-        .then( response => {
-          const { data } = response
-          console.log(event)
-          if( data != null && ( data.assignor.length > 0 || data.assignee.length > 0 )) {
-            const executionDate = data.assignor.length > 0 ? data.assignor[0].exec_dt : ''
-            const transactionType = convertTabIdToAssetType(item.tab_id)
-            
-            let image = '', color ='';
-            switch(parseInt(item.tab_id)) {
-              case 1:
-                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/acquisition.png'
-                color = '#E60000'
-                break;
-              case 2:
-                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png'
-                color = '#70A800'
-                break;
-              case 3:
-                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licensein.png'
-                color = '#E69800'
-                break;
-              case 4:
-                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licenseout.png'
-                color = '#E69800'
-                break;
-              case 5:
-                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
-                color = '#00a9e6'
-                break;
-              case 6:
-                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png'
-                color = '#FFFFFF'
-                break;
-              case 7:
-                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png'
-                color = '#FFFFFF'
-                break;
-              case 8:
-                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/options.png'
-                color = '#000000'
-                break;
-              case 9:
-                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/courtorder.png'
-                color = '#E60000'
-                break;
-              case 10:
-                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png'
-                color = '#FFFFFF'
-                break;
-              case 11:
-                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/release.png'
-                color = '#00a9e6'
-                break;
-              case 12:
-                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
-                color = '#00a9e6'
-                break;
-              case 13:
-                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
-                color = '#00a9e6'
-                break;
-              case 14:
-              default:
-                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png'
-                color = '#FFFFFF'
-                break;
+        if(tootlTip === item.id) {
+          PatenTrackApi
+          .cancelTimelineItem()
+          PatenTrackApi
+          .getTimelineItemData(item.id)
+          .then( response => {
+            const { data } = response
+            console.log(event)
+            if( data != null && ( data.assignor.length > 0 || data.assignee.length > 0 ) && tootlTip === data.assignment.rf_id) {
+              const executionDate = data.assignor.length > 0 ? data.assignor[0].exec_dt : ''
+              const transactionType = convertTabIdToAssetType(item.tab_id)
+              
+              let image = '', color ='';
+              switch(parseInt(item.tab_id)) {
+                case 1:
+                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/acquisition.png'
+                  color = '#E60000'
+                  break;
+                case 2:
+                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png'
+                  color = '#70A800'
+                  break;
+                case 3:
+                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licensein.png'
+                  color = '#E69800'
+                  break;
+                case 4:
+                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licenseout.png'
+                  color = '#E69800'
+                  break;
+                case 5:
+                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+                  color = '#00a9e6'
+                  break;
+                case 6:
+                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png'
+                  color = '#FFFFFF'
+                  break;
+                case 7:
+                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png'
+                  color = '#FFFFFF'
+                  break;
+                case 8:
+                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/options.png'
+                  color = '#000000'
+                  break;
+                case 9:
+                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/courtorder.png'
+                  color = '#E60000'
+                  break;
+                case 10:
+                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png'
+                  color = '#FFFFFF'
+                  break;
+                case 11:
+                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/release.png'
+                  color = '#00a9e6'
+                  break;
+                case 12:
+                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+                  color = '#00a9e6'
+                  break;
+                case 13:
+                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+                  color = '#00a9e6'
+                  break;
+                case 14:
+                default:
+                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png'
+                  color = '#FFFFFF'
+                  break;
+              }
+              const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.layerY - 100}px;left:${event.layerX }px;'>
+                                          <h4 style='color:${color};text-align:left;margin:0'>${capitalize(transactionType)}</h4>
+                                          <div>
+                                            ${ executionDate != '' ? moment(executionDate.exec_dt).format('ll') : ''}
+                                          </div>
+                                          <div>
+                                            <h4>Assignors:</h4>
+                                            ${data.assignor.map(or => ( 
+                                              '<div>'+or.or_name+'</div>'
+                                            )).join('')}
+                                          </div>
+                                          <div>
+                                            <h4>Assignees:</h4>
+                                            ${data.assignee.map(ee => (
+                                              '<div>'+ee.ee_name+'</div>'
+                                            )).join('')}
+                                          </div>
+                                        </div>` 
+                resetTooltipContainer() 
+              if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
+                timelineContainerRef.current.childNodes[0].insertAdjacentHTML('beforeend',tootltipTemplate)
+              }
+            } else {
+              resetTooltipContainer()
             }
-            const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.layerY - 30}px;left:${event.layerX + 100}px;'>
-                                        <h4 style='color:${color};text-align:left;margin:0'>${capitalize(transactionType)}</h4>
-                                        <div>
-                                          ${ executionDate != '' ? moment(executionDate.exec_dt).format('ll') : ''}
-                                        </div>
-                                        <div>
-                                          <h4>Assignors:</h4>
-                                          ${data.assignor.map(or => (
-                                            '<div>'+or.or_name+'</div>'
-                                          )).join('')}
-                                        </div>
-                                        <div>
-                                          <h4>Assignees:</h4>
-                                          ${data.assignee.map(ee => (
-                                            '<div>'+ee.ee_name+'</div>'
-                                          )).join('')}
-                                        </div>
-                                      </div>` 
-              resetTooltipContainer() 
-            if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
-              timelineContainerRef.current.childNodes[0].insertAdjacentHTML('beforeend',tootltipTemplate)
-            }
-          } else {
-            resetTooltipContainer()
-          }
-        })        
+          })
+        }                
       }, TIME_INTERVAL) 
   } 
 
@@ -321,9 +323,10 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
    */
 
   const onItemover = useCallback(({item, event}) => {
-    const overItem = items.current.get(item)
+    const overItem = items.current.get(item)    
     if(overItem != null) {
       onItemout()
+      tootlTip = overItem.rawData.id
       showTooltip(overItem.rawData, event)
     }
   }, [ timelineItems, timeInterval ])
@@ -333,6 +336,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
    */
 
   const onItemout = () => {
+    tootlTip = ''
     PatenTrackApi.cancelTimelineItem()
     resetTooltipContainer()
     setToolTipItem([])

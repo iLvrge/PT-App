@@ -157,7 +157,7 @@ const FilesTemplates = ({type}) => {
             oldWidth: 300,
             draggable: true,
             label: 'Author',
-            dataKey: 'owners',
+            dataKey: 'displayName',
             secondaryKey: 'user',
             align: 'left'    
         }
@@ -180,11 +180,11 @@ const FilesTemplates = ({type}) => {
             setCurrentSelection(null)
 
             if(type == 1) {
+                await PatenTrackApi.cancelInitiated()
                 if(channel_id != '' && channel_id != null) {
                     const getSlackToken = getTokenStorage("slack_auth_token_info");
                     if (getSlackToken && getSlackToken != "") {
                         const tokenJSON = JSON.parse( getSlackToken )
-        
                         if( Object.keys(tokenJSON).length > 0 && tokenJSON.hasOwnProperty('access_token') ) {
                             setLoading(true)
                             const { data } = await PatenTrackApi.getDriveAndAssetFiles(1, channel_id, tokenJSON.access_token, selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString(), selectedCompanies, selectedCategory )
@@ -215,6 +215,7 @@ const FilesTemplates = ({type}) => {
                     }
                 }
             } else {
+                await PatenTrackApi.cancelRecords()
                 if(selectedCompanies.length > 0 && selectedAssetsPatents.length > 0 ) {
                     setLoading(true)
                     const { data } = await PatenTrackApi.getDriveAndAssetFiles(0, 'undefined', 'undefined', selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString(), selectedCompanies, selectedCategory )
@@ -255,11 +256,12 @@ const FilesTemplates = ({type}) => {
             setSelectedRow([])
             setCurrentSelection(null)
         } else {
+            
             if(item.external_type == 'gdrive' || item.external_type == 'usptodrive') {
                 dispatch(setDriveTemplateFrameMode(true))
                 dispatch(setTemplateDocument(item.url_private))
             } else {
-                if(item.webViewLink != undefined && item.webViewLink != null) {
+                if(typeof item.webViewLink !== 'undefined') {
                     dispatch(setDriveTemplateFrameMode(true))
                     dispatch(setTemplateDocument(item.webViewLink))
                 } else {
@@ -272,7 +274,7 @@ const FilesTemplates = ({type}) => {
         }                   
     }, [ dispatch, selectedRow ]) 
 
-    const onHandleDocumentSelectAll = () => {
+    const onHandleDocumentSelectAll = () => { 
     }
 
     const onHandleClickDocumentRow = useCallback((e, item) => { 
@@ -292,11 +294,17 @@ const FilesTemplates = ({type}) => {
             setSelectedDocumentRow([])
             setCurrentDocumentSelection(null)
         } else {
+            console.log('item', item)
             if(item.external_type == 'gdrive' || item.external_type == 'usptodrive') {
                 dispatch(setDriveTemplateFrameMode(true))
                 dispatch(setTemplateDocument(item.url_private))
             } else {
-                window.open(item.url_private)
+                if(typeof item.webViewLink !== 'undefined') {
+                    dispatch(setDriveTemplateFrameMode(true))
+                    dispatch(setTemplateDocument(item.webViewLink))
+                } else {
+                    window.open(item.url_private)
+                } 
             }
             setSelectedDocumentRow([item.id])
             setCurrentDocumentSelection(item.id) 

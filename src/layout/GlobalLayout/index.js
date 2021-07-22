@@ -127,7 +127,7 @@ const GlobalLayout = (props) => {
 
     useEffect(() => {
         if( openIllustrationBar === false && openCommentBar === false && openChartBar === false && openAnalyticsBar === false ) {
-            console.log('openIllustrationBar', openGoogleDriveBar, assetFilesBar)
+            
             if( openGoogleDriveBar === true || assetFilesBar === true ) {
                 setAssetFilesBarSize('100%')
                 if(openCustomerBar === true && customerBarSize === '100%') {
@@ -396,17 +396,23 @@ const GlobalLayout = (props) => {
     }
 
     const changeVisualBar = (chart, analytics, comment, illustration) => {
-        let barOpen = true, barSize = visualizerBarSize == '0%' ? '30%' : visualizerBarSize
-        /*console.log('changeVisualBar=>visualizerBarSize', visualizerBarSize)*/
+        let barOpen = true, barSize = '30%'        
         if(chart === false && analytics === false && (comment === true || illustration === true)){
             barSize = '0%'
             barOpen = false
         } else if (comment === false && illustration === false && ( chart === true ||  analytics === true )) {
             barSize = '100%'
         }
+
+        if(barSize === '30%' && ((comment === true || illustration === true) || (chart === true || analytics === true)) ){
+            if( visualizerBarSize !== '0%' &&  visualizerBarSize !== '30%' &&  visualizerBarSize !== '100%' ) {
+                barSize = visualizerBarSize
+            }
+        }
+        
         if(chart === true && barOpen === true && barSize == '30%') {
             checkPDFHeight()
-        }
+        } 
         editorBar()
         setVisualizeOpenBar(barOpen)  
         setVisualizerBarSize(barSize)
@@ -445,10 +451,8 @@ const GlobalLayout = (props) => {
         setChartBar( !bar )
         if(!bar === false && openAnalyticsBar === true) {
             barSize = '100%'
-
         } else if((!bar === true && openAnalyticsBar === false) || ( !bar === false && openAnalyticsBar === false )) {
-            barSize = 0          
-
+            barSize = 0      
         }
         
         setIllustrationBarSize(barSize)  
