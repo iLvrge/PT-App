@@ -199,7 +199,11 @@ const VirtualizedTable = ({
         showOnCondition,
         onClick,
         list,
-        width
+        width,
+        style,
+        justifyContent,
+        underline,
+        selectedFromChild
       } = columns[columnIndex];
       
       let extensionIcon = '', faIcon = ''
@@ -260,14 +264,19 @@ const VirtualizedTable = ({
             : cellData
           : cellData; 
 
-      const isIndeterminate =
+      let isIndeterminate =
         showIsIndeterminate &&
         collapsable === true &&
         selectedIndex == cellData &&
         childSelect > 0
           ? true
           : false;
-      
+      if(typeof selectedFromChild !== 'undefined' && selectedFromChild === true) {
+        const getChild = JSON.parse(rowData['child'])
+        if(getChild.length > 0 ) {
+          isIndeterminate = getChild.some(item => selected.includes(item))
+        }
+      }
       return (
         <TableCell
           component={"div"}
@@ -287,6 +296,9 @@ const VirtualizedTable = ({
           style={{
             height: rowHeight,
             paddingLeft: paddingLeft != undefined ? paddingLeft : "inherit",
+            justifyContent: typeof style !== 'undefined' && style === true ? justifyContent : "inherit",
+            paddingRight: typeof style !== 'undefined' && style === true ? '21px' : "inherit",
+            textDecoration: typeof underline !== 'undefined' && underline === true ? 'underline' : 'inherit'
           }}
         >
           {
@@ -368,11 +380,16 @@ const VirtualizedTable = ({
               :  imageIcon != '' && imageIcon != undefined ? <span><FontAwesomeIcon icon={imageIcon}/><span className={classes.marginLeft}>{cellData}</span></span> : (
                 cellData
               )
-            : format != undefined ? formatCondition != undefined && rowData[formatCondition] != formatDefaultValue ? staticIcon + secondaryFormat(cellData) : (
-            staticIcon + format(cellData) 
-          ) : (
-            cellData
-          )} 
+            : format != undefined ? 
+                formatCondition != undefined && rowData[formatCondition] != formatDefaultValue 
+                ? 
+                  cellData != '' && cellData != undefined && cellData != 'undefined' ? staticIcon + secondaryFormat(cellData) : ''
+                : (
+                    cellData != '' && cellData != undefined && cellData != 'undefined' ? staticIcon + format(cellData) : ''
+                ) : (
+                  cellData
+                )
+          }   
         </TableCell>
       );
     },
@@ -587,8 +604,8 @@ const VirtualizedTable = ({
     });
     
     return filteredRows.sort((a, b) => {
-      const sortA = !isNaN(Number(a[sortBy])) ? Number(a[sortBy]) : a[sortBy]
-      const sortB = !isNaN(Number(b[sortBy])) ? Number(b[sortBy]) : b[sortBy]
+      const sortA = !isNaN(Number(a[sortBy])) ? Number(a[sortBy]) :  sortBy == 'date' ? new Date(a[sortBy]).getTime() : a[sortBy]
+      const sortB = !isNaN(Number(b[sortBy])) ? Number(b[sortBy]) :  sortBy == 'date' ? new Date(b[sortBy]).getTime() : b[sortBy]
       if (sortA < sortB) {
         return sortDirection === SortDirection.ASC ? -1 : 1;
       }
@@ -606,7 +623,6 @@ const VirtualizedTable = ({
       const rowData = items[index];
       let height = rowHeight
       if (collapsable === true && selectedIndex == rowData[selectedKey]) {
-        console.log('getRowHeight=>childHeader', childHeader, rowData[childCounterColumn], rowHeight, childHeight, rowData[childCounterColumn] * rowHeight < childHeight, headerHeight, rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0))
         height = disableRow === true
           ? rowData[disableRowKey] * rowHeight < childHeight
             ? rowData[disableRowKey] * rowHeight + rowHeight

@@ -188,7 +188,6 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
           .getTimelineItemData(item.id)
           .then( response => {
             const { data } = response
-            console.log(event)
             if( data != null && ( data.assignor.length > 0 || data.assignee.length > 0 ) && tootlTip === data.assignment.rf_id) {
               const executionDate = data.assignor.length > 0 ? data.assignor[0].exec_dt : ''
               const transactionType = convertTabIdToAssetType(item.tab_id)
@@ -471,13 +470,11 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
     if (isLoadingTimelineRawData) return null
     const clusteredItems = timelineRawData.reduce((result, dataItem) => {
       const itemName = dataItem.tab_id == 10 ? dataItem.customerName.split(' ')[0] : dataItem.customerName
-      console.log('dataItem', dataItem)      
       result[`${dataItem.id}_${itemName}_${dataItem.exec_dt}`] = convertDataToItem(dataItem)
       return result 
     }, {})
     
     const convertedItems = Object.values(clusteredItems).sort((a, b) => (new Date(a.start) > new Date(b.start)))  
-    console.log('clusteredItems', clusteredItems, timelineRawData.length, convertedItems.length)
 
     setTimelineItems(convertedItems)
     items.current = new DataSet()

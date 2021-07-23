@@ -131,25 +131,6 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
             showGrandTotal: true,              
         }
     ]
-/* 
-    useEffect(() => {
-        console.log("assetTypeCompaniesSelected", assetTypeCompaniesSelected)
-        setCheckedSelected(assetTypeCompaniesSelected.length)
-    }, [ assetTypeCompaniesSelected ]) */
-
-    
-
-    useEffect(() => {
-        if(assetTypesSelected.length > 0 && (selectItems.length == 0 || selectItems.length != assetTypesSelected.length) ){
-            setSelectItems(assetTypesSelected)
-        }
-    }, [ assetTypesSelected, selectItems ]) 
-
-    /* useEffect(() => {
-        if(assetTypesSelectedRow.length === 0) {
-            setSelectedRow([])
-        }
-    }, [ assetTypesSelectedRow ]) */
 
     useEffect(() => {
         if( selectedCompaniesAll === true || selectedCompanies.length > 0 ) {
@@ -171,18 +152,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
             
             const assetType = convertTabIdToAssetType(tab)
             const findNameIndex = updateActivities.findIndex( activity => activity.type == assetType )
-            /* let backgroundRowColor = "";
-            if(ownershipGroups().includes(tab)){
-                backgroundRowColor = "#100000"
-            } else if(licensingGroups().includes(tab)){
-                backgroundRowColor = "#171700"
-            } else if(financingGroup().includes(tab)){
-                backgroundRowColor = "#1b1200"
-            } else if(employeesGroups().includes(tab)){
-                backgroundRowColor = "#424141"
-            } else if(otherGroup().includes(tab)){
-                backgroundRowColor = "#491B1B"
-            } */
+            
             let image = '';
             switch(parseInt(tab)) {
                 case 1:
@@ -248,33 +218,8 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
             }
             list.push(item)
         })
-        if( selectItems.length == 0  && assetTypesSelectAll === false ) {
-            (async() => {
-                const { data } = await PatenTrackApi.getUserActivitySelection()
-                if(data != null && Object.keys(data).length > 0) {
-                    
-                    const findIndex = assetTypes.findIndex( aTab => aTab.tab_id == data.activity_id )
-
-                    if(findIndex !== -1 ) {
-                        let insert = false;
-                        setSelectItems(prevItems => {
-                            if(!prevItems.includes(data.activity_id)) {
-                                insert = true
-                                return [data.activity_id]
-                            } else {
-                                return prevItems
-                            }
-                        })
-                        if(insert === true) {
-                            dispatch( 
-                                setAssetTypesSelect([data.activity_id])
-                            )
-                        }                        
-                    }
-                }
-            })();  
-        }
-        /* if(assetTypes.length == 0) {
+        
+        if(assetTypes.length == 0) {
             setSelectItems([])
             setSelectedRow([])
             dispatch( setAssetTypesSelect([]) )
@@ -288,10 +233,14 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
                     if(findIndex !== -1 ) {
                         setSelectItems([data.activity_id])
                         dispatch( setAssetTypesSelect([data.activity_id]) )
+                    } else {
+                        setSelectItems([])
+                        setSelectedRow([])
+                        dispatch( setAssetTypesSelect([]) )
                     }
                 }
             })();            
-        } */
+        } 
         setTypeData(list)
     }, [ assetTypes ])
 

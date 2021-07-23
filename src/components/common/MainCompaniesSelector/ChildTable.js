@@ -62,6 +62,8 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
             staticIcon: '',
             dataKey: 'no_of_activities',
             format: numberWithCommas,
+            style: true,
+            justifyContent: 'flex-end'
         },
         {
             width: 80,   
@@ -70,6 +72,8 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
             staticIcon: '',
             dataKey: 'no_of_parties',
             format: numberWithCommas,
+            style: true,
+            justifyContent: 'flex-end'
         },
         {
             width: 80,  
@@ -78,6 +82,8 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
             staticIcon: '',
             dataKey: 'no_of_inventor',
             format: numberWithCommas,
+            style: true,
+            justifyContent: 'flex-end'
         },
         {
             width: 120,  
@@ -86,6 +92,8 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
             staticIcon: '',
             dataKey: 'no_of_transactions',
             format: numberWithCommas,
+            style: true,
+            justifyContent: 'flex-end'
         },
         {
             width: 80,  
@@ -94,6 +102,8 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
             staticIcon: '',
             dataKey: 'no_of_assets',
             format: numberWithCommas,
+            style: true,
+            justifyContent: 'flex-end'
         },
         {
             width: 80,  
@@ -102,6 +112,8 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
             dataKey: 'product',
             staticIcon: '',
             format: numberWithCommas,
+            style: true,
+            justifyContent: 'flex-end'
         }
     ]
        

@@ -613,6 +613,21 @@ div.vis-tooltip span{
 /* .MuiTooltip-tooltip{
   font-size: 1rem !important;
 } */
+#bookMeeting {
+  position: fixed; 
+  top: 42px; 
+  z-index: 1300;
+  inset: 0px;
+  background-color: rgba(0, 0, 0, 0.8); 
+  visibility: hidden;
+}
+.meeting-popup{
+  margin: 10px auto;
+  width: 800px;
+  max-height: 678px;
+  min-height: 516px;
+  padding-top: 20px;
+}
 
 .custom_tooltip {
   position: absolute;  

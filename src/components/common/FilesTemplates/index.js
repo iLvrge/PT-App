@@ -1,7 +1,9 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react'
+import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import { useSelector, useDispatch } from "react-redux"
 
 import { Paper } from "@material-ui/core"
+
+import Googlelogin from '../Googlelogin' 
 
 import Loader from '../Loader'
 
@@ -15,7 +17,8 @@ import { capitalize } from '../../../utils/numbers'
 
 import { 
     setTemplateDocument,
-    setDocumentTransaction        
+    setDocumentTransaction,
+    getGoogleProfile,
 } from '../../../actions/patentTrackActions2'
 
 import {
@@ -27,6 +30,7 @@ import useStyles from "./styles"
 const FilesTemplates = ({type}) => {
     const classes = useStyles()
     const dispatch = useDispatch()
+    const googleLoginRef = useRef(null)
     const [headerRowHeight, setHeaderRowHeight] = useState(47)
     const [rowHeight, setRowHeight] = useState(40)
     const [width, setWidth] = useState(800)
@@ -41,7 +45,9 @@ const FilesTemplates = ({type}) => {
     const [selectedDocumentRow, setSelectedDocumentRow] = useState([])
     const [currentDocumentSelection, setCurrentDocumentSelection] = useState(null)
     const [ loading, setLoading ] = useState(false)
-
+    const [ googleAuthLogin, setGoogleAuthLogin ] = useState(true)
+    const [ callByAuthLogin, setCallByAuth ] = useState(false)
+    
     
     const channel_id = useSelector(state => state.patenTrack2.channel_id)
     const document_transaction = useSelector(state => state.patenTrack2.document_transaction)
@@ -55,6 +61,7 @@ const FilesTemplates = ({type}) => {
     const selectedAssetAssignments = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
     const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
     const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
+    const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
 
     const ASSET_COLUMNS = [  
         {
@@ -74,7 +81,7 @@ const FilesTemplates = ({type}) => {
             draggable: true,
             label: 'Recorded',
             headingIcon: 'recorded',
-            dataKey: 'title', 
+            dataKey: 'date',  
             role: 'image', 
             imageURL: '',
             imageIcon: '',
@@ -166,11 +173,44 @@ const FilesTemplates = ({type}) => {
     const [headerColumns, setHeaderColumns] = useState(ASSET_COLUMNS)
     const [documentHeaderColumns, setDocumentHeaderColumns] = useState(DOCUMENT_COLUMNS)
 
+
+    useEffect(() => {
+        if(type == 1) {
+            checkButtons()
+        }
+    }, [type])
+
+
     useEffect(() => {
         if(selectedRow.length != document_transaction.length ) {
             setSelectedRow(document_transaction)
         }
     }, [document_transaction, selectedRow])
+
+    useEffect(() => {
+        let notFindItem = false
+        if( assetFiles.length > 0 && document_transaction.length > 0) {
+            const findIndex = assetFiles.findIndex( row => row.id == document_transaction[0])
+
+            if(findIndex === -1) {
+                notFindItem = true
+            }
+        }
+
+        if( documentFiles.length > 0 && document_transaction.length > 0) {
+            const findIndex = documentFiles.findIndex( row => row.id == document_transaction[0])
+
+            if(findIndex === -1) {
+                notFindItem = true
+            }
+        }
+
+        if(notFindItem === true ) {
+            dispatch(setDocumentTransaction([]))     
+            dispatch(setDriveTemplateFrameMode(false))
+            dispatch(setTemplateDocument(null))
+        }
+    }, [ assetFiles, document_transaction, documentFiles])
 
     useEffect(() => {
         const getDriveAndAssetFiles = async() => {
@@ -194,24 +234,7 @@ const FilesTemplates = ({type}) => {
                     }
                 } else {
                     if(selectedCompanies.length > 0 || assetTypesSelected.length > 0 || selectedAssetCompanies.length > 0 || selectedAssetAssignments.length > 0 || assetTypeAssignmentAssetsSelected.length > 0){
-                        const getGoogleToken = getTokenStorage("google_auth_token_info"), getGoogleProfile = getTokenStorage('google_profile_info')
-                        let gToken = '', gAccount = ''
-                        if (getGoogleToken && getGoogleToken != "") {
-                            const tokenJSON = JSON.parse( getGoogleToken )
-                            if( Object.keys(tokenJSON).length > 0 && tokenJSON.hasOwnProperty('access_token') ) {
-                                gToken = tokenJSON.access_token
-                            }
-                        }
-
-                        if( getGoogleProfile != '') {
-                            const profileInfo = JSON.parse(getGoogleProfile)
-                            if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
-                                gAccount =  profileInfo.email
-                            }
-                        }
-                        const { data } = await PatenTrackApi.getDriveAndAssetFiles(1, 'undefined', 'undefined', selectedAssetsPatents.length > 0 ? selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() : 'undefined', selectedCompanies, selectedCategory, gToken, gAccount )
-                        setLoading(false)
-                        setDocumentsFiles(data.document_files)
+                        getDriveFiles()                       
                     }
                 }
             } else {
@@ -223,7 +246,6 @@ const FilesTemplates = ({type}) => {
                     setAssetFiles(data.assets_files)
                 } else if(selectedCompanies.length > 0 || assetTypesSelected.length > 0 || selectedAssetCompanies.length > 0 || selectedAssetAssignments.length > 0 || assetTypeAssignmentAssetsSelected.length > 0){
                     setLoading(true)
-                    console.log("FIle Templates", 0, 'undefined', 'undefined', 'undefined', selectedCompanies, selectedCategory, '', '', assetTypesSelected, selectedAssetCompanies, selectedAssetsTransactions.length > 0 ? selectedAssetsTransactions : selectedAssetAssignments, assetTypeAssignmentAssetsSelected)
                     const { data } = await PatenTrackApi.getDriveAndAssetFiles(0, 'undefined', 'undefined', 'undefined', selectedCompanies, selectedCategory, '', '', assetTypesSelected, selectedAssetCompanies, selectedAssetsTransactions.length > 0 ? selectedAssetsTransactions : selectedAssetAssignments, assetTypeAssignmentAssetsSelected)
                     setLoading(false)
                     setAssetFiles(data.assets_files)
@@ -233,7 +255,68 @@ const FilesTemplates = ({type}) => {
         getDriveAndAssetFiles()
     }, [ type, selectedAssetsPatents, channel_id, selectedCompanies, selectedCompaniesAll, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssetsSelected, selectedCategory, selectedAssetsTransactions ])
 
-    
+    useEffect(() => {
+        if(callByAuthLogin === true) {
+            getDriveFiles()
+        }        
+    }, [callByAuthLogin, google_auth_token])
+
+
+    const openGoogleWindow = () => {
+        if(googleLoginRef.current != null) {
+            if(googleLoginRef.current.querySelector('button') !== null) {
+                setCallByAuth(true)
+                googleLoginRef.current.querySelector('button').click()
+            } else {
+                setTimeout(openGoogleWindow, 1000)
+            }          
+        } else {
+            setTimeout(openGoogleWindow, 1000)
+        }
+    }
+
+    const getDriveFiles = async() => {
+        const getGoogleToken = getTokenStorage("google_auth_token_info"), getGoogleProfile = getTokenStorage('google_profile_info')
+        let gToken = '', gAccount = ''
+        if (getGoogleToken && getGoogleToken != "") {
+            const tokenJSON = JSON.parse( getGoogleToken )
+            if( Object.keys(tokenJSON).length > 0 && tokenJSON.hasOwnProperty('access_token') ) {
+                gToken = tokenJSON.access_token
+            }
+        }
+
+        if( getGoogleProfile != '') {
+            const profileInfo = JSON.parse(getGoogleProfile)
+            if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
+                gAccount =  profileInfo.email
+            }
+        }
+        if(gToken != '' && gAccount != '') {
+            await PatenTrackApi.cancelInitiated()
+            const { data } = await PatenTrackApi.getDriveAndAssetFiles(1, 'undefined', 'undefined', selectedAssetsPatents.length > 0 ? selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() : 'undefined', selectedCompanies, selectedCategory, gToken, gAccount )
+            setLoading(false)
+            setDocumentsFiles(data.document_files)
+        }
+    }
+
+    const checkButtons = () => {
+        try {
+            const googleToken = getTokenStorage( 'google_auth_token_info' )
+            if(googleToken && googleToken != '') {
+                const tokenParse = JSON.parse( googleToken )
+                const { access_token } = tokenParse
+                if( access_token ) {
+                  dispatch(getGoogleProfile(tokenParse))  
+                } else {
+                    setTimeout(openGoogleWindow, 2000)
+                }
+            } else {
+                setTimeout(openGoogleWindow, 2000)
+            }
+        } catch ( err ) {
+            console.error( err )
+        }
+    }
 
     const onHandleSelectAll = () => {
 
@@ -242,12 +325,12 @@ const FilesTemplates = ({type}) => {
     const onHandleClickRow = useCallback((e, item) => {
         e.preventDefault()
         const { checked } = e.target;
-        if( checked !== undefined) {
-            setSelectItems(prevItems =>
+        if( checked !== undefined) {           
+             setSelectItems(prevItems =>
                 prevItems.includes(item.id)
-                ? prevItems.filter(row => item.id !== row.id)
+                ? prevItems.filter(row => item.id !== row)
                 : [...prevItems, item.id],
-            );
+            ); 
         }
         if(selectedRow.includes(item.id)) {
             dispatch(setDocumentTransaction([]))     
@@ -263,7 +346,7 @@ const FilesTemplates = ({type}) => {
             } else {
                 if(typeof item.webViewLink !== 'undefined') {
                     dispatch(setDriveTemplateFrameMode(true))
-                    dispatch(setTemplateDocument(item.webViewLink))
+                    dispatch(setTemplateDocument(item.mimeType == "application/pdf" ? item.webViewLink.toString().replace('view?usp=drivesdk', 'preview')  : item.webViewLink))
                 } else {
                     window.open(item.url_private)
                 }                
@@ -283,7 +366,7 @@ const FilesTemplates = ({type}) => {
         if( checked !== undefined) {
             setSelectDocumentItems(prevItems =>
                 prevItems.includes(item.id)
-                ? prevItems.filter(row => item.id !== row.id)
+                ? prevItems.filter(row => item.id !== row)
                 : [...prevItems, item.id],
             );
         }        
@@ -301,7 +384,7 @@ const FilesTemplates = ({type}) => {
             } else {
                 if(typeof item.webViewLink !== 'undefined') {
                     dispatch(setDriveTemplateFrameMode(true))
-                    dispatch(setTemplateDocument(item.webViewLink))
+                    dispatch(setTemplateDocument(item.mimeType == "application/pdf" ? item.webViewLink.toString().replace('view?usp=drivesdk', 'preview')  : item.webViewLink))
                 } else {
                     window.open(item.url_private)
                 } 
@@ -356,7 +439,13 @@ const FilesTemplates = ({type}) => {
 
     return (
         <Paper className={classes.root} square id={`layout_templates`}>
-           {
+            {
+              googleAuthLogin && (
+                <span ref={googleLoginRef}>
+                  <Googlelogin/>
+                </span>)
+            }
+            {
                 type === 0
                 ?
                     loading === true

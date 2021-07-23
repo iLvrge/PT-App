@@ -36,6 +36,7 @@ const COLUMNS = [
         label: '',
         dataKey: 'representative_id',
         role: 'checkbox',
+        selectedFromChild: true,     
         disableSort: true,
         show_selection_count: true
     },
@@ -65,6 +66,8 @@ const COLUMNS = [
         staticIcon: '',
         dataKey: 'no_of_activities',
         format: numberWithCommas,
+        style: true,
+        justifyContent: 'flex-end'
     },
     {
         width: 80,   
@@ -73,6 +76,8 @@ const COLUMNS = [
         staticIcon: '',
         dataKey: 'no_of_parties',
         format: numberWithCommas,
+        style: true,
+        justifyContent: 'flex-end'
     },
     {
         width: 80,  
@@ -81,6 +86,8 @@ const COLUMNS = [
         staticIcon: '',
         dataKey: 'no_of_inventor',
         format: numberWithCommas,
+        style: true,
+        justifyContent: 'flex-end'
     },
     {
         width: 120,  
@@ -89,6 +96,8 @@ const COLUMNS = [
         staticIcon: '',
         dataKey: 'no_of_transactions',
         format: numberWithCommas,
+        style: true,
+        justifyContent: 'flex-end'
     },
     {
         width: 80,  
@@ -97,6 +106,8 @@ const COLUMNS = [
         staticIcon: '',
         dataKey: 'no_of_assets',
         format: numberWithCommas,
+        style: true,
+        justifyContent: 'flex-end'   
     },
     {
         width: 80,  
@@ -105,6 +116,8 @@ const COLUMNS = [
         dataKey: 'product',
         staticIcon: '',
         format: numberWithCommas,
+        style: true,
+        justifyContent: 'flex-end'
     }
 ] 
 
@@ -360,7 +373,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         selected={selectItems}
         rowSelected={selectedRow}
         selectedIndex={currentSelection}
-        selectedKey={'representative_id'}        
+        selectedKey={'representative_id'} 
         rows={companiesList}
         rowHeight={rowHeight}
         headerHeight={headerRowHeight}

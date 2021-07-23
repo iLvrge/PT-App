@@ -208,15 +208,15 @@ const AssetDetailsContainer = ({
           <div
             id={`charts_container`}
             style={{ height: "100%" }}
-          >
-            <ArrowButton
+          > 
+            {/* <ArrowButton
               arrowId={`arrow_charts`}
               handleClick={handleDetailsBarOpen}
               buttonType={toggleDetailsButtonType}
               buttonVisible={detailsButtonVisible}
               arrow={3}
               cls={classes.btnLeft}
-            />
+            /> */}
             {
                 chartBar == true ?
                   pdfView === true && !connectionBoxView ? (

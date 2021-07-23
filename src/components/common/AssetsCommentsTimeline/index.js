@@ -684,7 +684,7 @@ const handleDriveModalClose = (event) => {
       const form = new FormData()
       form.append( 'group_ids', JSON.stringify(assetTypeNamesGroups) )
       form.append( 'new_name', newName )
-      form.append( 'company_ids', mainCompaniesSelected[0] )
+      form.append( 'company_ids', JSON.stringify(mainCompaniesSelected) )
       dispatch(getNameQueue(form))
       dispatch(setNameQueueDisplay(true))
     }   

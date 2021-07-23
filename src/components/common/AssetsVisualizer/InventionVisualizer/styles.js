@@ -57,6 +57,9 @@ export default makeStyles(theme => ({
         },
         '& .MuiSlider-markActive': {
             backgroundColor: '#Ef0000'
+        },
+        '& .MuiTab-wrapper':  {
+            whiteSpace: 'nowrap'
         }
     },
     tabs: {
@@ -195,8 +198,8 @@ export default makeStyles(theme => ({
         height:'200px'    
     },
     flexColumnDepth: {
-        flexBasis: '13%',
-        minWidth: 200 
+        minWidth: 135,
+        maxWidth: 135 
     },
     flexColumnScope: {
         flexBasis: '87%'   

@@ -665,7 +665,7 @@ class PatenTrackApi {
   static getDriveAndAssetFiles(type, channelID, code, assets, companies, layoutID, gToken, gAccount, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedAssetsPatents ) {
     let header = getHeader()
     header['cancelToken'] = new CancelToken(function executor(c) {
-      if(type === 1) {
+      if(type == 1) {
         cancelInitiated = c
       } else {
         cancelRecords = c
@@ -678,9 +678,9 @@ class PatenTrackApi {
   static cancelInitiated () {
     if (cancelInitiated !== undefined) {
       try{
-        throw cancel('Operation canceled by the user.')
+        throw cancelInitiated('Operation canceled by the user.')
       } catch (e){
-        console.log('cancelRequest->', e)
+        console.log('cancelInitiated->', e)
       }
     } 
   }
@@ -688,9 +688,9 @@ class PatenTrackApi {
   static cancelRecords () {
     if (cancelRecords !== undefined) {
       try{
-        throw cancel('Operation canceled by the user.')
+        throw cancelRecords('Operation canceled by the user.')
       } catch (e){
-        console.log('cancelRequest->', e)
+        console.log('cancelRecords->', e)
       }
     } 
   }

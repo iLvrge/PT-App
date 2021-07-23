@@ -186,9 +186,14 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     },[ graphRawGroupData, filterList ])
 
     useEffect(() => {
-        if( connectionBoxView === true || selectedRow.length > 0 ) {
+        if(selectedRow.length  === 0) {
+            setInventionTabs([ 'Innovation'])
+            setSelectedTab(0)
+        } else if( connectionBoxView === true || selectedRow.length > 0 ) {
             setInventionTabs([ 'Innovation', 'Agreement', 'Form', 'Main' ])
+            setSelectedTab(1)
         }
+        
     }, [ connectionBoxView, selectedRow ])
 
     useEffect(() => {
@@ -383,6 +388,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 if(selectScope.length > 0) {
                     newRange = [Math.min(...selectScope), Math.max(...selectScope)]      // useState still gives oldValue
                     setValueScope([Math.min(...selectScope), Math.max(...selectScope)])
+                    //findCPCList(oldScopeRange, list, range, newRange)
                 }
             }
         }
@@ -460,7 +466,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         })
 
         await Promise.all(promises)            
-       
+        const height = graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0 ? graphContainerRef.current.parentNode !== null && graphContainerRef.current.parentNode.parentNode !== null ? `${graphContainerRef.current.parentNode.parentNode.clientHeight - 50 }px` : `${graphContainerRef.current.clientHeight - 50 }px` : '100%'
         //TODO height 100% not working well, created allot of isues when we resize pane, 
         if(graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0) {
            options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight - 50 }px`, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1, zStep: graphRawData.length > 2 ? 3 : 1 }

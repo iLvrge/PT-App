@@ -566,7 +566,7 @@ const GlobalScreen = ({
                                         }}
                                         ref={mainContainerRef}
                                         primary={'second'}
-                                        maxSize={-400} 
+                                        maxSize={-500}  
                                     >
                                         <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
                                             <IllustrationCommentContainer 
@@ -595,7 +595,7 @@ const GlobalScreen = ({
                                                 type={type}
                                                 assignmentBar={openAssignmentBar}
                                                 assignmentBarToggle={handleAssignmentBarOpen}
-                                            />
+                                            /> 
                                         </div>
                                         <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
                                             <AssetDetailsContainer 

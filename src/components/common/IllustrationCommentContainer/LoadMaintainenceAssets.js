@@ -51,7 +51,10 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
             minWidth: 80,          
             label: "Fee Code",
             dataKey: "fee_code",
-            align: "left",		  
+            align: "left",		
+            style: true,
+            justifyContent: 'flex-end'  ,
+            underline: true  		  
         },
         {
             width: 70,      
@@ -60,7 +63,10 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
             dataKey: "fee_amount",
             staticIcon: "$",
             format: numberWithCommas,
-            align: "left",		  
+            align: "left",		
+            style: true,
+            justifyContent: 'flex-end',
+            underline: true  		  
         },
     ]
 

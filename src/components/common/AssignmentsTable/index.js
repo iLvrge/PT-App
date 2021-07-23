@@ -34,12 +34,14 @@ import {
   setChannelID,
   getChannels,
   setMaintainenceAssetsList,
-  setAssetTypeAssignmentAllAssets
+  setAssetTypeAssignmentAllAssets,
+  setAssetsIllustrationData
 } from "../../../actions/patentTrackActions2";
 
 import {
     setConnectionBoxView,
     setPDFView,
+    setPDFFile
   } from "../../../actions/patenTrackActions";
 
 import {
@@ -519,9 +521,22 @@ const onHandleClickRow = useCallback(
             dispatch(setChannelID(''))
             setSelectedRow([])
             dispatch(setAssetsIllustration(null))
+            dispatch(setAssetsIllustrationData(null))
             dispatch(setSelectedAssetsTransactions([]))
             dispatch(setSelectedAssetsPatents([]))
-            dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, []))
+            dispatch(
+              setPDFFile(
+                { 
+                  document: '',  
+                  form: '', 
+                  agreement: '' 
+                }
+              )
+            )
+            dispatch(
+              setPDFView(true)
+            )
+            //dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, []))
             //dispatch(toggleLifeSpanMode(false))
             //dispatch(toggleFamilyItemMode(false))
           }
