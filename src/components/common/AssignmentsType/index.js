@@ -132,21 +132,27 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
         }
     ]
 
-    useEffect(() => {
-        if( selectedCompaniesAll === true || selectedCompanies.length > 0 ) {
+    useEffect(() => {        
+        if((selectedCompaniesAll === true || selectedCompanies.length > 0 ) && assetTypes.length == 0) {
             dispatch(
                 getCustomerActivites(
                     selectedCategory == '' ? '' : selectedCategory,
                     selectedCompaniesAll === true ? [] : selectedCompanies
                 )
             )
-        } else {
+        } else if(selectedCompaniesAll === false && selectedCompanies.length == 0 ) {
             dispatch( setAssetTypes([]) )
         }
     }, [ dispatch, selectedCompaniesAll, selectedCompanies ])
 
 
     useEffect(() => {
+        if(assetTypes.length > 0) {
+            fillTable()
+        }
+    }, [ assetTypes ])
+
+    const fillTable = () => {
         const list = [], updateActivities = [...assetsTypesWithKey]
         tabs.forEach( tab => {
             
@@ -224,25 +230,34 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
             setSelectedRow([])
             dispatch( setAssetTypesSelect([]) )
         } else {
-            (async() => {
-                const { data } = await PatenTrackApi.getUserActivitySelection()
-                if(data != null && Object.keys(data).length > 0) {
-                    
-                    const findIndex = assetTypes.findIndex( aTab => aTab.tab_id == data.activity_id )
-
-                    if(findIndex !== -1 ) {
-                        setSelectItems([data.activity_id])
-                        dispatch( setAssetTypesSelect([data.activity_id]) )
-                    } else {
-                        setSelectItems([])
-                        setSelectedRow([])
-                        dispatch( setAssetTypesSelect([]) )
+            if( assetTypesSelected.length === 0 && assetTypesSelectAll === false ) {
+                const getUserSelection = async () => {
+                    const { data } = await PatenTrackApi.getUserActivitySelection()
+                    if(data != null && Object.keys(data).length > 0) {
+                        
+                        const findIndex = assetTypes.findIndex( aTab => aTab.tab_id == data.activity_id )
+    
+                        if(findIndex !== -1 ) {
+                            setSelectItems([data.activity_id])
+                            dispatch( setAssetTypesSelect([data.activity_id]) )
+                        } else {
+                            setSelectItems([])
+                            setSelectedRow([])
+                            dispatch( setAssetTypesSelect([]) )
+                        }
                     }
                 }
-            })();            
+                getUserSelection();   
+            } else {
+                if( assetTypesSelected.length > 0 ) {
+                    setSelectItems(assetTypesSelected)
+                } else if (assetTypesSelectAll === true) {
+                    setSelectAll(true)
+                }
+            }                     
         } 
         setTypeData(list)
-    }, [ assetTypes ])
+    }
 
     const onHandleSelectAll = useCallback((event, row) => {
         event.preventDefault()

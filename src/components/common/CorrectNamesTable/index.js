@@ -11,7 +11,10 @@ import {
     setNamesTransactions,
     setSelectedNamesTransactions,
     setNamesTransactionsSelectAll,
-    setAllNameGroupRfIDs
+    setAllNameGroupRfIDs,
+    getNameQueue,
+    setNameQueueDisplay,
+    setNameQueueData
   } from '../../../actions/patentTrackActions2'
 
 import { numberWithCommas } from '../../../utils/numbers'
@@ -47,13 +50,13 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
     const assetTypesSelectAll = useSelector(state => state.patenTrack2.assetTypes.selectAll)
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
-
+    const mainCompaniesSelected = useSelector(state => state.patenTrack2.mainCompaniesList.selected)
 
     const assetTypeNames = useSelector(state => state.patenTrack2.assetTypeNames.list)
     const totalRecords = useSelector(state => state.patenTrack2.assetTypeNames.total_records)
     const assetNamesSelected = useSelector(state => state.patenTrack2.assetTypeNames.selected)
     const assetNamesLoading = useSelector(state => state.patenTrack2.assetTypeNames.loading)
-
+    const assetTypeNamesGroups = useSelector(state => state.patenTrack2.assetTypeNames.all_groups)
 
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
     const [ data, setData ] = useState( [] )
@@ -147,6 +150,14 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
         }
     }, [ dispatch, selectedCompanies, selectedCompaniesAll ]) 
 
+    useEffect(() => {
+        if(mainCompaniesSelected.length > 0 && assetTypeNamesGroups.length > 0) {
+            onHandleGetNameQueue()
+        } else {
+            dispatch(setNameQueueData([]))
+        }        
+    }, [ assetTypeNamesGroups, mainCompaniesSelected])
+
     const resizeColumnsWidth = useCallback((dataKey, data) => {
         let previousColumns = [...headerColumns]
         const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
@@ -208,6 +219,7 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
             setSelectAll(false)
             dispatch( setNamesTransactionsSelectAll(assetTypeNames.length == oldSelection.length ||  data.length == oldSelection.length ? true : false ) )
             dispatch( setSelectedNamesTransactions(oldSelection) )
+            
         }  else {
             
             const element = e.target.closest('div.ReactVirtualized__Table__rowColumn')
@@ -222,11 +234,22 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
                 }
             }
             /*  else {                    
-                getTimelineData(dispatch, row.id) 
+                getTimelineData(dispatch, row.id)  
             } */
         } 
     }, [ dispatch, currentSelection, selectItems ])
 
+
+
+    const onHandleGetNameQueue = useCallback(() => { 
+        const form = new FormData()
+        form.append( 'group_ids', JSON.stringify(assetTypeNamesGroups) )
+        form.append( 'new_name', undefined )
+        form.append( 'company_ids', mainCompaniesSelected[0] )
+        dispatch(getNameQueue(form))
+        dispatch(setNameQueueDisplay(true))
+    }, [mainCompaniesSelected, assetTypeNamesGroups] )
+ 
 
     if ((!standalone && assetNamesLoading) || (standalone && assetNamesLoading)) return <Loader />
 

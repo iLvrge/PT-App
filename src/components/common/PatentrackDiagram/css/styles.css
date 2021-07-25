@@ -206,13 +206,24 @@ div.tooltip_title {
     /* margin: 0 auto; */
     text-align: left;
     width: auto;
-    padding: 5px 10px;	
-    border: 0;	
+    border: 0 !important;	
+    border-radius: 0 !important;	
     background: #121212;
     pointer-events: none;
     font-weight: 500; 
     font-size: 12.25px;
     white-space: nowrap;
+}
+.tooltipContainer {
+    display: flex;
+    justify-content: center;
+}
+.tooltipContainer  .svg-inline--fa.fa-w-14{
+    width: 1rem;
+    height: 1rem;
+}
+.tooltip {
+    font-size: 1rem
 }
 /*
 #toobarUIGap0 { grid-area: 1 / 1 / 2 / 2; text-align: center; justify-content: center; align-items: center; }

@@ -286,6 +286,8 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
                 <ChildTable partiesId={currentSelection} headerRowDisabled={true} />
             }
             /* forceChildWaitCall={true} */
+            defaultSortField={`entityName`}
+            defaultSortDirection={`asc`}
             totalRows={totalInventorRecords}
             grandTotal={grandTotal}
             responsive={false} 

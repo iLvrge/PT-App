@@ -14,7 +14,7 @@ import {
   faCheckSquare,
   faSquare,
 } from "@fortawesome/free-solid-svg-icons";
-import Tooltip from "@material-ui/core/Tooltip";
+import { Tooltip, Typography, Zoom } from "@material-ui/core";
 import clsx from "clsx";
 import { withStyles } from "@material-ui/styles";
 import { FaLightbulb } from "react-icons/fa";
@@ -118,64 +118,141 @@ class PatentBottomUI extends React.Component {
 
           <div id="toolbarUIGap1" className="toolbarUIGap"></div>
           <div id="fastBackward" className="toolbarUIElement">
-            <FontAwesomeIcon
-              title="go to start"
-              icon={faFastBackward}
-              onClick={this.props.update}
-            />
+            <Tooltip 
+            className='tooltip'
+              title={
+                <Typography color="inherit" variant='body2'>{'Go to start'}</Typography>
+              }
+              placement='top'
+              enterDelay={0}
+              TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+            >
+              <div className="tooltipContainer">
+                <FontAwesomeIcon
+                  icon={faFastBackward}
+                  onClick={this.props.update}
+                />
+              </div>
+            </Tooltip>
           </div>
           <div id="fastForward" className="toolbarUIElement">
-            <FontAwesomeIcon
-              title="go to end"
-              icon={faFastForward}
-              onClick={this.props.update}
-            />
+            <Tooltip 
+            className='tooltip'
+            title={
+              <Typography color="inherit" variant='body2'>{'Go to end'}</Typography>
+            }
+            placement='top'
+            enterDelay={0}
+            TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+            >
+              <div className="tooltipContainer">
+                <FontAwesomeIcon
+                  icon={faFastForward}
+                  onClick={this.props.update}
+                />
+              </div>
+            </Tooltip>
           </div>
           <div id="toolbarUIGap2" className="toolbarUIGap"></div>
           <div id="prevAssignment" className="toolbarUIElement">
-            <FontAwesomeIcon
-              title="go to previous assignment"
-              icon={faAngleDoubleLeft}
-              onClick={this.props.update}
-            />
+            <Tooltip 
+            className='tooltip'
+              title={
+                <Typography color="inherit" variant='body2'>{'Go to previous assignment'}</Typography>
+              }
+              placement='top'
+              enterDelay={0}
+              TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+              >
+              <div className="tooltipContainer">
+                <FontAwesomeIcon
+                  icon={faAngleDoubleLeft}
+                  onClick={this.props.update}
+                />
+              </div>
+            </Tooltip>
           </div>
           <div id="assignmentQuantative" className="toolbarUIQuantative">
             {this.props.quantatives.assignment.current} /{" "}
             {this.props.quantatives.assignment.total}
           </div>
           <div id="nextAssignment" className="toolbarUIElement">
-            <FontAwesomeIcon
-              title="go to next assignment"
-              icon={faAngleDoubleRight}
-              onClick={this.props.update}
-            />
+            <Tooltip 
+            className='tooltip'
+            title={
+              <Typography color="inherit" variant='body2'>{'Go to next assignment'}</Typography>
+            }
+            placement='top'
+            enterDelay={0}
+            TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+            >
+              <div className="tooltipContainer">
+                <FontAwesomeIcon
+                  icon={faAngleDoubleRight}
+                  onClick={this.props.update}
+                />
+              </div>
+            </Tooltip>
           </div>
           <div id="toolbarUIGap3" className="toolbarUIGap"></div>
           <div id="prevAssignee" className="toolbarUIElement">
-            <FontAwesomeIcon
-              title="go to previous assignee"
-              icon={faAngleLeft}
-              onClick={this.props.update}
-            />
+            <Tooltip 
+            className='tooltip'
+            title={
+              <Typography color="inherit" variant='body2'>{'Go to previous assignee'}</Typography>
+            }
+            placement='top'
+            enterDelay={0}
+            TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+            >
+              <div className="tooltipContainer">
+                <FontAwesomeIcon
+                  icon={faAngleLeft}
+                  onClick={this.props.update}
+                />
+              </div>
+            </Tooltip>
           </div>
           <div id="assigneeQuantative" className="toolbarUIQuantative">
             {this.props.quantatives.assignee.current} /{" "}
             {this.props.quantatives.assignee.total}
           </div>
           <div id="nextAssignee" className="toolbarUIElement">
-            <FontAwesomeIcon
-              title="go to next assignee"
-              icon={faAngleRight}
-              onClick={this.props.update}
-            />
+            <Tooltip 
+            className='tooltip'
+            title={
+              <Typography color="inherit" variant='body2'>{'Go to next assignee'}</Typography>
+            }
+            placement='top'
+            enterDelay={0}
+            TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+            >
+              <div className="tooltipContainer">
+                <FontAwesomeIcon
+                  icon={faAngleRight}
+                  onClick={this.props.update}
+                />
+              </div>
+            </Tooltip>
           </div>
           <div id="toolbarUIGap4" className="toolbarUIGap"></div>
           <div id="show3rdParties" className="toolbarUIElement">
-            <FontAwesomeIcon
-              title="Show/Hide 3rd Parties"
-              icon={showThirdParties ? faCheckSquare : faSquare}
-              onClick={() => toggleShow3rdParities(!showThirdParties)}
-            />
+            <Tooltip 
+            className='tooltip'
+            title={
+              <Typography color="inherit" variant='body2'>{'Show/Hide 3rd Parties'}</Typography>
+            }
+            placement='top'
+            enterDelay={0}
+            TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+            >
+              <div className="tooltipContainer">
+                <FontAwesomeIcon
+                  icon={showThirdParties ? faCheckSquare : faSquare}
+                  onClick={() => toggleShow3rdParities(!showThirdParties)}
+                />
+              </div>
+            </Tooltip>
           </div>
           <div id="toolbarUIGap4_1" className="toolbarUIGap"></div>
           <div
@@ -186,7 +263,19 @@ class PatentBottomUI extends React.Component {
             onMouseLeave={this.hidePopup}
             onClick={this.showPopup}
           >
-            <FontAwesomeIcon title="go to filters" icon={faFilter} />
+            <Tooltip 
+            className='tooltip'
+            title={
+              <Typography color="inherit" variant='body2'>{'Go to filters'}</Typography>
+            }
+            placement='top'
+            enterDelay={0}
+            TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+            >
+              <div className="tooltipContainer">
+                <FontAwesomeIcon icon={faFilter} />
+              </div>
+            </Tooltip>
             <div
               id="PatentrackFilters"
               ref={this.filtersPopup}
@@ -204,8 +293,16 @@ class PatentBottomUI extends React.Component {
             id="toolbarUIGap7"
             className="toolbarUIGap" /* style={{ marginLeft: 'auto' }} */
           >
-            <Tooltip title={"USPTO"}>
-              <div style={{ display: "flex", justifyContent: "center" }}>
+            <Tooltip 
+            className='tooltip'
+            title={
+              <Typography color="inherit" variant='body2'>{'USPTO'}</Typography>
+            }
+            placement='top'
+            enterDelay={0}
+            TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+            >
+              <div className="tooltipContainer">
                 <FaLightbulb
                   className={clsx({ [classes.active]: usptoMode })}
                   onClick={() => this.props.uspto(!usptoMode)}
@@ -219,11 +316,22 @@ class PatentBottomUI extends React.Component {
             </div>  */}
           <div id="toolbarUIGap4" className="toolbarUIGap"></div>
           <div id="shareDiagram" className="toolbarUIElement">
-            <FontAwesomeIcon
-              title="share diagram"
-              icon={faShareAlt}
-              onClick={() => this.props.share(this.props.patent)}
-            />
+            <Tooltip 
+            className='tooltip'
+            title={
+              <Typography color="inherit" variant='body2'>{'Share a diagram'}</Typography>
+            }
+            placement='top'
+            enterDelay={0}
+            TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+            >
+              <div className="tooltipContainer">
+                <FontAwesomeIcon
+                  icon={faShareAlt}
+                  onClick={() => this.props.share(this.props.patent)}
+                />
+              </div>
+            </Tooltip>
           </div>
           <div id="toolbarUIGap8" className="toolbarUIGap"></div>
         </div>
@@ -237,7 +345,19 @@ class PatentBottomUI extends React.Component {
             className="toolbarUIElement"
             onClick={this.update}
           >
-            <FontAwesomeIcon title="toolbar is on" icon={faAngleRight} />
+            <Tooltip 
+            className='tooltip'
+            title={
+              <Typography color="inherit" variant='body2'>{'Toolbar is on'}</Typography>
+            }
+            placement='top'
+            enterDelay={0}
+            TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+            >
+              <div className="tooltipContainer">
+                <FontAwesomeIcon icon={faAngleRight} />
+              </div>
+            </Tooltip>
           </div>
         </div>
       </div>

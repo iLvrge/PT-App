@@ -12,6 +12,10 @@ import {
     setMainCompaniesAllSelected,
     setMainCompaniesRowSelect,
     setMaintainenceAssetsList,
+    setAssetTypes,
+    setAssetTypeInventor,
+    setAssetTypeCompanies,
+    setAssetTypeAssignments,
     setAssetTypeAssignmentAllAssets
 } from '../../../actions/patentTrackActions2'
 
@@ -28,6 +32,7 @@ import {
 import ChildTable from './ChildTable'
 
 import Loader from '../Loader'
+import { resetAllRowSelect } from '../../../utils/resizeBar'
 
 const COLUMNS = [
     {
@@ -134,12 +139,12 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const [ data, setData ] = useState( [] )
     const [ width, setWidth ] = useState( 1900 )
     const [ offset, setOffset ] = useState(0)
-    const [headerRowHeight, setHeaderRowHeight] = useState(47)
+    const [ headerRowHeight, setHeaderRowHeight ] = useState(47)
     const [ rowHeight, setRowHeight ] = useState(40)
     const [ selectItems, setSelectItems] = useState( [] )
     const [ selectedRow, setSelectedRow] = useState( [] )   
-    const [ currentSelection, setCurrentSelection] = useState(null)   
-    const [intialization, setInitialization] = useState( false ) 
+    const [ currentSelection, setCurrentSelection ] = useState(null)   
+    const [ intialization, setInitialization ] = useState( false ) 
     const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
     const [ companiesList, setCompaniesList ] = useState([])
     const companies = useSelector( state => state.patenTrack2.mainCompaniesList )
@@ -148,6 +153,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
+    const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
+
     useEffect(() => {
         const initCompanies = async () => {
             dispatch(fetchParentCompanies( offset ) )
@@ -158,6 +165,18 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     useEffect(() => {
         setCompaniesList( companies.list )
     }, [ companies.list ])
+
+    useEffect(() => {
+        if(selectedCategory === 'correct_names') {
+            let headerColumns = [...COLUMNS]
+            headerColumns[0].role = 'radio'
+            setHeaderColumns(headerColumns)
+        } else {
+            let headerColumns = [...COLUMNS]
+            headerColumns[0].role = 'checkbox'
+            setHeaderColumns(headerColumns)
+        }
+    }, [selectedCategory])
 
     useEffect(() => {
 
@@ -256,8 +275,13 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         if(checked != undefined) {
             let updateSelected = [...selected], updateSelectedWithName = [...selectedWithName]
             if(!updateSelected.includes(parseInt( row.representative_id ))) {
-                updateSelected.push(parseInt( row.representative_id ))
-                updateSelectedWithName.push({id: row.representative_id, name: row.original_name})
+                if(selectedCategory === 'correct_names') {
+                    updateSelected.push([row.representative_id])
+                    updateSelectedWithName([{id: row.representative_id, name: row.original_name}])
+                } else {
+                    updateSelected.push(parseInt( row.representative_id ))
+                    updateSelectedWithName.push({id: row.representative_id, name: row.original_name})
+                }                
             } else {
                 updateSelected = updateSelected.filter(
                     existingCompany => existingCompany !== parseInt( row.representative_id )
@@ -270,6 +294,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                 hash: updateHashLocation(location, 'companies', updateSelected).join('&')
             })
             dispatch(setMainCompaniesRowSelect([]))
+            resetAll()
             setSelectItems(updateSelected)
             updateUserCompanySelection(updateSelected)
             dispatch( setMainCompaniesSelected( updateSelected, updateSelectedWithName ) ) 
@@ -286,6 +311,14 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                 }
             }
         }
+    }
+
+    const resetAll = () => {
+        dispatch(setAssetTypes([]))
+        dispatch(setAssetTypeCompanies({ list: [], total_records: 0 }))
+        dispatch(setAssetTypeInventor({ list: [], total_records: 0 }))
+        dispatch(setAssetTypeAssignments({ list: [], total_records: 0 }))
+        dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
     }
 
     const updateUserCompanySelection = async(representativeIDs) => {
@@ -393,6 +426,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         renderCollapsableComponent={
             <ChildTable parentCompanyId={currentSelection} headerRowDisabled={true} callBack={handleCounter}/>
         }
+        defaultSortField={`original_name`}
+        defaultSortDirection={`desc`}
         responsive={true}
         width={width} 
         containerStyle={{ 

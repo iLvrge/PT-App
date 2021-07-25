@@ -372,7 +372,9 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             
             if(selectedCategory == 'restore_ownership') {    
               let cols = [...COLUMNS]
-              cols[1].role = 'radio'
+              /* cols[1].role = 'radio'
+              delete cols[1].show_selection_count  */
+              cols.splice(1,1)
               setTableColumns(cols)
             }
       } else {
@@ -590,6 +592,10 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       console.log("grant_doc_num, appno_doc_num, asset", grant_doc_num, appno_doc_num, asset, selectedRow )
       /*TV, Comment, Family, FamilyItem, getChannelID Legal Events */
       if(!selectedRow.includes(asset)) {
+        if(selectedCategory == 'restore_ownership') {
+          dispatch(setAssetTypesPatentsSelected([asset]))
+          setSelectItems([asset])
+        }
         callSelectedAssets({ grant_doc_num, appno_doc_num, asset });
         dispatch(setChildSelectedAssetsPatents([]));
         dispatch(setSelectedAssetsTransactions([]));
@@ -643,7 +649,11 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             openAnalyticsAndCharBar()
         } */
       } else {
-          resetAll()
+        resetAll()
+        if(selectedCategory == 'restore_ownership') {
+          dispatch(setAssetTypesPatentsSelected([]))
+          setSelectItems([])
+        }
       }
     },
     [ dispatch, selectedAssetsPatents, selectedRow, openAnalyticsBar, openChartBar ],
@@ -703,23 +713,24 @@ const resetAll = () => {
           if(typeof e.target.closest == 'function') {
             const element = e.target.closest('div.ReactVirtualized__Table__rowColumn')
             if(element != null) {
-              const index = element.getAttribute('aria-colindex')   
+              let index = element.getAttribute('aria-colindex')   
               const findElement = element.querySelector('div.MuiSelect-select')
-              if( index == 1 && findElement != null ) {
-                setDropOpenAsset(row.asset)
-              } else {
-                if(index == 3) {
-                  if(currentSelection != row.asset) {
-                      setCurrentSelection(row.asset) 
-                      setAsset(row.appno_doc_num)
-                  } else { 
-                      setCurrentSelection(null)
-                      setAsset(null)
+               
+                if( index == 1 && findElement != null ) {
+                  setDropOpenAsset(row.asset)
+                } else {
+                  if(( index == 3 && selectedCategory != 'restore_ownership' ) || (index == 2 && selectedCategory == 'restore_ownership')) {
+                    if(currentSelection != row.asset) {
+                        setCurrentSelection(row.asset) 
+                        setAsset(row.appno_doc_num)
+                    } else { 
+                        setCurrentSelection(null)
+                        setAsset(null)
+                    }
+                  } else {                    
+                    handleOnClick(row)                    
                   }
-                } else {                    
-                  handleOnClick(row)
                 }
-              }
             } else {
               if( row.asset == dropOpenAsset ) {
                 setDropOpenAsset(null)

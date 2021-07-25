@@ -638,6 +638,8 @@ const findChannelID = useCallback((rfID) => {
             headerRowDisabled={true}
           />
         }
+        defaultSortField={`date`}
+        defaultSortDirection={`desc`}
         totalRows={totalRecords}
         grandTotal={grandTotal}
         width={width}

@@ -4,10 +4,7 @@ import AttachButton from './AttachButton'
 import SendIcon from '@material-ui/icons/Send'
 import FormatBoldIcon from '@material-ui/icons/FormatBold'
 import FormatItalicIcon from '@material-ui/icons/FormatItalic'
-import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import Tooltip from '@material-ui/core/Tooltip'
+import { Tooltip, Typography, Zoom, Button, CircularProgress }  from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -168,8 +165,8 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
         category == 'restore_ownership' || category == 'correct_details'
         ?
           <>
-            <Button className={classes.review} onClick={onSubmitUSPTO} disabled={loadingUSPTO}>Submit to USPTO</Button>
             <Button className={`${classes.review} ${driveTemplateMode === true ? classes.active : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
+            <Button className={classes.review} onClick={onSubmitUSPTO} disabled={loadingUSPTO}>Submit to USPTO</Button>
           </>
         :
         category == 'correct_address' 
@@ -188,15 +185,15 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
         :
         category == 'correct_names' 
         ?
-          nameQueuesDisplay === true
+          /* nameQueuesDisplay === true
           ?
           <>
             <Button className={classes.review} onClick={onHandleSubmitNamesUSPTO}>Submit to USPTO</Button>
             <Button className={classes.review} onClick={onHandleNamesCancel}>Cancel</Button>
           </>
-          :
+          : */
           <>
-            <Button className={classes.review} onClick={onCorrectName}>Correct Name</Button>
+            <Button className={classes.review} onClick={onHandleSubmitNamesUSPTO}>Submit to USPTO</Button>
             <Button className={classes.review} onClick={onChangeName}>Change Name</Button>
           </>
         :
@@ -206,7 +203,13 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
         :
         <Button className={`${classes.review} ${driveTemplateMode === true ? classes.active : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
       }
-      <Tooltip title="Share illustration for selected assets" arrow classes={classesTooltip}>
+      <Tooltip 
+        title={
+          <Typography color="inherit" variant='body2'>{'Share illustration for selected assets'}</Typography>
+        } 
+        enterDelay={0}
+        TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+        classes={classesTooltip}>
         <Button className={classes.share} onClick={onShare} >
           <FontAwesomeIcon
             icon={faShareAlt}

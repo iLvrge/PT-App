@@ -391,7 +391,7 @@ const NewHeader = () => {
         </div> 
         <div className={classes.rightPanel}>  
             <Button className={classes.calendly} onClick={handleScheduleViaHubspot}>
-              Schedule a demo {process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'for Pro version' : '' }
+              Schedule a {process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'd' : 'D' }emo {process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'for Pro version' : '' }
             </Button>    
             <IconButton className={`${classes.buttonIcon} ${clipboard_assets.length > 0 ? classes.clipIconActive : ''} ${ display_clipboard === true ? classes.clipIconIsActive : ''}`} onClick={handleClipboard}>
               <Badge badgeContent={clipboard_assets.length} color="secondary">    

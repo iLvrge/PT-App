@@ -29,7 +29,7 @@ export default makeStyles(theme => ({
     width: 'auto !important',
     minWidth: '130px !important',
     height: 'auto !important',
-    padding: '3px 5px',
+    padding: '3px 5px !important',
     border:'1px solid #5a5a5a !important',
     textTransform: 'initial',
     '&:hover':{

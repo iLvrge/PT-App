@@ -281,6 +281,8 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
                 <ChildTable partiesId={currentSelection} headerRowDisabled={true} />
             }
             /* forceChildWaitCall={true} */
+            defaultSortField={`entityName`}
+            defaultSortDirection={`asc`}
             totalRows={totalRecords}
             grandTotal={grandTotal}
             responsive={false} 

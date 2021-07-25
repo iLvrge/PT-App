@@ -239,12 +239,12 @@ const FilesTemplates = ({type}) => {
                 }
             } else {
                 await PatenTrackApi.cancelRecords()
-                if(selectedCompanies.length > 0 && selectedAssetsPatents.length > 0 ) {
+                /* if(selectedCompanies.length > 0 && selectedAssetsPatents.length > 0 ) {
                     setLoading(true)
                     const { data } = await PatenTrackApi.getDriveAndAssetFiles(0, 'undefined', 'undefined', selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString(), selectedCompanies, selectedCategory )
                     setLoading(false)
                     setAssetFiles(data.assets_files)
-                } else if(selectedCompanies.length > 0 || assetTypesSelected.length > 0 || selectedAssetCompanies.length > 0 || selectedAssetAssignments.length > 0 || assetTypeAssignmentAssetsSelected.length > 0){
+                } else  */if(selectedCompanies.length > 0 || assetTypesSelected.length > 0 || selectedAssetCompanies.length > 0 || selectedAssetAssignments.length > 0 || assetTypeAssignmentAssetsSelected.length > 0){
                     setLoading(true)
                     const { data } = await PatenTrackApi.getDriveAndAssetFiles(0, 'undefined', 'undefined', 'undefined', selectedCompanies, selectedCategory, '', '', assetTypesSelected, selectedAssetCompanies, selectedAssetsTransactions.length > 0 ? selectedAssetsTransactions : selectedAssetAssignments, assetTypeAssignmentAssetsSelected)
                     setLoading(false)

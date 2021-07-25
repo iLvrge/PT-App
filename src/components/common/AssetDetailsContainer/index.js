@@ -233,7 +233,7 @@ const AssetDetailsContainer = ({
                       ) : familyItemMode === true ? (
                           <FamilyItemContainer item={selectedAssetsFamilyItem} onClose={onCloseFamilyItemMode} />
                       ) : (
-                          ""
+                        <InventionVisualizer defaultSize={defaultSize} illustrationBar={openIllustrationBar} visualizerBarSize={visualizerBarSize} analyticsBar={analyticsBar} openCustomerBar={openCustomerBar}/>
                       )
                   )
                 :
@@ -250,7 +250,7 @@ const AssetDetailsContainer = ({
             {
                 analyticsBar === true ? (
                     connectionBoxView === true ? (
-                        <ConnectionBox display={"false"} assets={illustrationData} />
+                      <ConnectionBox display={"false"} assets={illustrationData} />
                     ) : openIllustrationBar === true ? (
                         <>
                             {                
@@ -271,10 +271,10 @@ const AssetDetailsContainer = ({
                             }
                         </>
                     ) : (
-                        ""
+                      <LifeSpanContainer chartBar={chartBar} openCustomerBar={openCustomerBar} visualizerBarSize={visualizerBarSize}/>
                     )
                 ) : (
-                    ""
+                  <LifeSpanContainer chartBar={chartBar} openCustomerBar={openCustomerBar} visualizerBarSize={visualizerBarSize}/>
                 )
             }
           </div>

@@ -862,6 +862,9 @@ a.maintain svg.clean_encumbrances path{
   color: #fff;
   position: absolute;   
 }
+.MuiTooltip-tooltip{
+  background-color: #000 !important;
+}
 
 .depth .MuiSlider-rail {
   color: #Ef0000

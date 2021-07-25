@@ -48,7 +48,7 @@ const IllustrationCommentContainer = ({
     const [ openCommentBar, setCommentOpenBar ] = useState(true)
     const [ commentButtonVisible, setCommentButtonVisible ] = useState(false)
     const [ isDrag, setIsDrag ] = useState(false)
-    
+    const [ templateURL, settemplateURL] = useState('about:blank')
     const [ isFullscreenOpen, setIsFullscreenOpen ] = useState(false)
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false)
     const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
@@ -67,8 +67,7 @@ const IllustrationCommentContainer = ({
     const search_string = useSelector(state => state.patenTrack2.search_string)   
     const addressQueuesDisplay = useSelector(state => state.patenTrack2.addressQueuesDisplay)   
     const nameQueuesDisplay = useSelector(state => state.patenTrack2.nameQueuesDisplay)
-    const [ templateURL, settemplateURL] = useState('about:blank')
-
+    const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     
     
     useEffect(() => {
@@ -180,7 +179,7 @@ const IllustrationCommentContainer = ({
                     ?
                         <LoadTransactionQueues />
                     :
-                    nameQueuesDisplay === true
+                    nameQueuesDisplay === true || selectedCategory === 'correct_names' 
                     ?
                         <LoadTransactionNameQueues />
                     :
