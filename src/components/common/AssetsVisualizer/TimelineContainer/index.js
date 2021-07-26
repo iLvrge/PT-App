@@ -409,9 +409,9 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
       resetTooltipContainer()
       if(search_string != '' && search_string != null){
         if(search_rf_id.length > 0) {
-          setIsLoadingTimelineRawData(true)
+          //setIsLoadingTimelineData(true)
           const { data } = await PatenTrackApi.getActivitiesTimelineData([], [], [], search_rf_id) // empty array for company, tabs, customers
-          setIsLoadingTimelineRawData(false)
+          //setIsLoadingTimelineData(false)
           //setTimelineRawGroups(data.groups) //groups
           setTimelineRawData(data.list) //items
         }       
@@ -421,14 +421,14 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
         customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected;
 
         if( process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
-          setIsLoadingTimelineRawData(true)
+          //setIsLoadingTimelineData(true)
           const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, [], selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
-          setIsLoadingTimelineRawData(false)
+          //setIsLoadingTimelineData(false)
           setTimelineRawData(data.list)
         } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-          setIsLoadingTimelineRawData(true)
+          //setIsLoadingTimelineData(true)
           const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, [], selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
-          setIsLoadingTimelineRawData(false)
+          //setIsLoadingTimelineData(false)
           setTimelineRawData(data.list) 
         }
       } 
@@ -437,6 +437,15 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
     
   }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors, auth_token ])
 
+
+  const redrawTimeline = () => {
+    if(timelineRef.current !== null) {
+      timelineRef.current.destroy()
+      timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
+    }
+  }
+
+  
   /**
    * Intial timline items dataset and ref setup
    */
@@ -457,15 +466,6 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
       timelineRef.current.off('rangechanged', onRangeChanged)
     } 
   }, [ onRangeChange, onRangeChanged, onSelect, onItemover ])
-
-
-  const redrawTimeline = () => {
-    if(timelineRef.current !== null) {
-      items.current = new DataSet()
-      timelineRef.current.setItems(items.current)
-      timelineRef.current.redraw()
-    }
-  }
 
   /**
    * Add timeline items to the the dataset and set the start, end, min and max date
@@ -493,9 +493,8 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
       items.current.add(convertedItems.slice(0, startIndex))      
     }    
     timelineRef.current.setItems(items.current)
-    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'year')}) 
-      
-  }, [ timelineRawData ])  
+    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'year')})    
+  }, [ timelineRawData, isLoadingTimelineRawData, timelineGroups ])
 
   /**
    * return component 

@@ -91,7 +91,7 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
                 patent: '',
                 application: '',
                 attorney: '',
-                fee_code: 'Total',
+                fee_code: 'Total:',
                 fee_amount: total,
             })
 

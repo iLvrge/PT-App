@@ -388,7 +388,15 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 if(selectScope.length > 0) {
                     newRange = [Math.min(...selectScope), Math.max(...selectScope)]      // useState still gives oldValue
                     setValueScope([Math.min(...selectScope), Math.max(...selectScope)])
-                    //findCPCList(oldScopeRange, list, range, newRange)
+                    const scopeList = []
+                    const promise = scopeGroup.map( r => {
+                        if(r.value >= newRange[0] && r.value <= newRange[1]){
+                            scopeList.push(r.code)
+                        }
+                    })
+                    await Promise.all(promise)
+                    console.log("scopeList", scopeList)
+                    findCPCList(oldScopeRange, list, range, scopeList)
                 }
             }
         }

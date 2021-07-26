@@ -403,7 +403,7 @@ const GlobalLayout = (props) => {
         } else if (comment === false && illustration === false && ( chart === true ||  analytics === true )) {
             barSize = '100%'
         }
-
+        console.log('changeVisualBar', barSize, visualizerBarSize, comment, illustration, chart, analytics)
         if(barSize === '30%' && ((comment === true || illustration === true) || (chart === true || analytics === true)) ){
             if( visualizerBarSize !== '0%' &&  visualizerBarSize !== '30%' &&  visualizerBarSize !== '100%' ) {
                 barSize = visualizerBarSize
@@ -412,7 +412,7 @@ const GlobalLayout = (props) => {
         
         if(chart === true && barOpen === true && barSize == '30%') {
             checkPDFHeight()
-        } 
+        }    
         editorBar()
         setVisualizeOpenBar(barOpen)  
         setVisualizerBarSize(barSize)
@@ -538,13 +538,24 @@ const GlobalLayout = (props) => {
         if( pdfFile != null && Object.keys(pdfFile).length > 0 ) {
             setChartBar( true )
             setVisualizeOpenBar( true )
-            setVisualizerBarSize('30%')
-
+            setVisualizerBarSize(prevItem =>{
+                if(prevItem == '0%') {
+                    return  '30%'
+                } else {
+                    return prevItem
+                }
+            })
         }
 
         if( connectionBoxData != null && Object.keys(connectionBoxData).length > 0 ) {  
             setVisualizeOpenBar( true )
-            setVisualizerBarSize('30%')
+            setVisualizerBarSize(prevItem =>{
+                if(prevItem == '0%') {
+                    return  '30%'
+                } else {
+                    return prevItem
+                }
+            })
 
             setAnalyticsBar( true )
             setChartBar( true ) 
@@ -554,15 +565,18 @@ const GlobalLayout = (props) => {
 
         if( typeof usptoMode != undefined && usptoMode === true ) {
             setVisualizeOpenBar( true )
-            setVisualizerBarSize('30%')
-
+            setVisualizerBarSize(prevItem =>{
+                if(prevItem == '0%') {
+                    return  '30%'
+                } else {
+                    return prevItem
+                }
+            })
             setAnalyticsBar( true ) 
             if(openChartBar === false) {
                 setIllustrationBarSize('100%')
-
             } else {
                 setIllustrationBarSize('50%')
-
             }
         }
     }
