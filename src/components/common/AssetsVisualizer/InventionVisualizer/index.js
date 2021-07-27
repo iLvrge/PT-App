@@ -162,10 +162,11 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
               maxWidth      : '40%'
             },
             line: {
-              borderLeft    : '1px dotted #e60000'
+              borderLeft    : '0px dotted #e60000',
+              height        : '0px'
             },
             dot: {
-              border        : '5px solid rgba(230, 0, 0, 0.5)'
+              border        : '0px solid rgba(230, 0, 0, 0.5)'
             }
         }
     }
@@ -320,8 +321,10 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         setIsLoadingCharts(false)
         setGraphRawData(data.list)
         setGraphRawGroupData(data.group)
-        if(typeof scope == 'undefined') {  
-            console.log('findCPCList', oldScopeRange, newRange)          
+        if( typeof range === 'undefined' && typeof scope ===  'undefined'  && data.group.length > 0) {
+            setValueScope([ data.group[0].id, data.group[data.group.length - 1].id ])
+        }    
+        if(typeof scope == 'undefined') {         
             const findOldRange = []
             if(oldScopeRange.length > 0 && typeof range !== 'undefined') {
                 const promiseScope = newRange.map( scope => {
@@ -354,30 +357,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             if(findOldRange.length > 0) {
                 const selectScope = []
                 const promiseSelect = findOldRange.map( r => {
-                    scopeGroup.map( scope => {
-                        /* let rValue, nValue;
-                        switch( preValueRange ) {
-                            case 5:
-                                rValue = r.section
-                                nValue = scope.section
-                                break;
-                            case 4:
-                                rValue = `${r.section}${r.class}`
-                                nValue = `${scope.section}${scope.class}`
-                                break;
-                            case 2:
-                                rValue = `${r.section}${r.class}${r.sub_class}${r.main_group}/00`
-                                nValue = `${scope.section}${scope.class}${scope.sub_class}${scope.main_group}/00`
-                                break;
-                            case 1:
-                                rValue = `${r.section}${r.class}${r.sub_class}${r.main_group}/${scope.sub_group}`
-                                nValue = `${scope.section}${scope.class}${scope.sub_class}${scope.main_group}/${scope.sub_group}`
-                                break;
-                            default:
-                                rValue = `${r.section}${r.class}${r.sub_class}`
-                                nValue = `${scope.section}${scope.class}${scope.sub_class}`
-                                break;
-                        } */
+                    scopeGroup.map( scope => {                        
                         if(scope.section === r.section) {
                             if(!selectScope.includes(scope.value)) {
                                 selectScope.push(scope.value)
@@ -396,7 +376,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         }
                     })
                     await Promise.all(promise)
-                    console.log("scopeList", scopeList)
                     findCPCList(oldScopeRange, list, range, scopeList)
                 }
             }
@@ -551,7 +530,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
     const handleOpenFilter = () => {
         setOpenFilter(true);
-        onChangeScopeSlider(valueRange, valueScope)
+        //onChangeScopeSlider(valueRange, valueScope)
     };
     
     const handleCloseFilter = () => {

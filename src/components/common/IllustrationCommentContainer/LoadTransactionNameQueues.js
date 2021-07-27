@@ -31,7 +31,8 @@ const LoadTransactionNameQueues = ({}) => {
             label: '',
             dataKey: 'id',
             role: 'radio',
-            disableSort: true
+            disableSort: true,
+            show: false
         },
         {
             width: 80,
@@ -99,9 +100,14 @@ const LoadTransactionNameQueues = ({}) => {
 
     const handleClickSelectCheckbox = useCallback((event, row) => {
         event.preventDefault()
-        setSelectItems([row.id])
-        dispatch(setFixedTransactionName([[row.id, row.new_name]]))
-    }, [dispatch])
+        if(!selectItems.includes(row.id)) {
+            setSelectItems([row.id])
+            dispatch(setFixedTransactionName([[row.id, row.new_name]]))
+        } else {
+            setSelectItems([])
+            dispatch(setFixedTransactionName([]))
+        }       
+    }, [dispatch, selectItems])
 
     const onHandleSelectAll = () => {
         

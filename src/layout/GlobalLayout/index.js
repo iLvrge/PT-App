@@ -211,7 +211,6 @@ const GlobalLayout = (props) => {
 
     useEffect(() => {
         /* dispatch(setBreadCrumbs( props.type == 0 ? 'Maintenance > Pay Maintenance Fee' : props.type == 2 ? 'Search' : 'Due Dilligence > Review')) */
-        console.log("props.type", props.type)
         if( props.type === 2 ) { 
             setOpenBar( false ) //company
             setTypeOpenBar( false ) //activites
@@ -403,7 +402,6 @@ const GlobalLayout = (props) => {
         } else if (comment === false && illustration === false && ( chart === true ||  analytics === true )) {
             barSize = '100%'
         }
-        console.log('changeVisualBar', barSize, visualizerBarSize, comment, illustration, chart, analytics)
         if(barSize === '30%' && ((comment === true || illustration === true) || (chart === true || analytics === true)) ){
             if( visualizerBarSize !== '0%' &&  visualizerBarSize !== '30%' &&  visualizerBarSize !== '100%' ) {
                 barSize = visualizerBarSize
@@ -586,7 +584,6 @@ const GlobalLayout = (props) => {
     }, [ history ])
 
     const handleAlertPop = () => {
-        console.log('Popup')
         alert('Message....')
     }
 

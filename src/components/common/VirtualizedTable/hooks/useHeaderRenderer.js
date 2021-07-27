@@ -100,7 +100,7 @@ const HeadCell = ({
   selectedItems
 }) => {
   const classes = useStyles()
-  const { align, role, disableSort, filterable, paddingLeft, badge, showGrandTotal, draggable, headingIcon, show_selection_count, secondLabel } = columns[columnIndex]
+  const { align, role, disableSort, filterable, paddingLeft, badge, showGrandTotal, draggable, headingIcon, show_selection_count, secondLabel, show } = columns[columnIndex]
   const [ anchorEl, setAnchorEl ] = useState(null)
   const [ columnFilters, setColumnFilters ] = useState([])
 
@@ -142,7 +142,9 @@ const HeadCell = ({
           )
         ) : role === 'radio' ? (
           <>
-            <Radio color="secondary" onChange={onSelectAll} checked={allSelected}/>
+            {
+              typeof show === 'undefined' || typeof show !== 'undefined' &&  show === true ? <Radio color="secondary" onChange={onSelectAll} checked={allSelected}/> : ''
+            }
             {
               show_selection_count === true && selectedItems.length > 0
               ?

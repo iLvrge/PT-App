@@ -24,7 +24,9 @@ import {
     setAllAssetTypes,
     setAssetTypesSelect,
     setAllAssignmentCustomers,
-    setSelectAssignmentCustomers
+    setSelectAssignmentCustomers,
+    setNamesTransactionsSelectAll,
+    setSelectedNamesTransactions
 } from '../../../actions/patentTrackActions2'
 
 
@@ -191,10 +193,14 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         if(selectedCategory === 'correct_names') {
             let headerColumns = [...COLUMNS]
             headerColumns[0].role = 'radio'
+            headerColumns[0].selectedFromChild = false
+            headerColumns[0].show_selection_count = false
             setHeaderColumns(headerColumns)
         } else {
             let headerColumns = [...COLUMNS]
             headerColumns[0].role = 'checkbox'
+            headerColumns[0].selectedFromChild = true
+            headerColumns[0].show_selection_count = true
             setHeaderColumns(headerColumns)
         }
     }, [selectedCategory])
@@ -209,33 +215,38 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                 if(data != null && data.list.length > 0) {
                     if(selectItems.length == 0) {
                         let insert = false, oldItems = [], names = []
-                        setSelectItems(prevItems => {
-                            oldItems = [...prevItems]
-                            const promise = data.list.map( representative => {
-                                if(!prevItems.includes(representative.representative_id)){
-                                    insert = true
-                                    oldItems.push(representative.representative_id)
-                                }
-                            })
-                            Promise.all(promise)
-                            if(insert === true) {
-                                return oldItems
-                            } else {
-                                return prevItems
-                            }                            
-                        })
-
-                        if( insert === true ) {
-                            oldItems.forEach( id => {
-                                companies.list.forEach( company => {
-                                    if( id === company.representative_id ) {
-                                        names.push( {id: company.representative_id, name: company.original_name} )
-                                        return false;
+                        if(selectedCategory === 'correct_names') {
+                            setSelectItems([data.list[0].representative_id])
+                            dispatch(setMainCompaniesSelected([data.list[0].representative_id], [{id: data.list[0].representative_id, name: data.list[0].original_name}]))
+                        } else {
+                            setSelectItems(prevItems => {
+                                oldItems = [...prevItems]
+                                const promise = data.list.map( representative => {
+                                    if(!prevItems.includes(representative.representative_id)){
+                                        insert = true
+                                        oldItems.push(representative.representative_id)
                                     }
                                 })
+                                Promise.all(promise)
+                                if(insert === true) {
+                                    return oldItems
+                                } else {
+                                    return prevItems
+                                }                            
                             })
-                            dispatch(setMainCompaniesSelected(oldItems, names))
-                        }
+    
+                            if( insert === true ) {
+                                oldItems.forEach( id => {
+                                    companies.list.forEach( company => {
+                                        if( id === company.representative_id ) {
+                                            names.push( {id: company.representative_id, name: company.original_name} )
+                                            return false;
+                                        }
+                                    })
+                                })
+                                dispatch(setMainCompaniesSelected(oldItems, names))
+                            }
+                        }                        
                     }
                 } 
             }            
@@ -297,8 +308,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             let updateSelected = [...selected], updateSelectedWithName = [...selectedWithName]
             if(!updateSelected.includes(parseInt( row.representative_id ))) {
                 if(selectedCategory === 'correct_names') {
-                    updateSelected.push([row.representative_id])
-                    updateSelectedWithName([{id: row.representative_id, name: row.original_name}])
+                    updateSelected = [parseInt(row.representative_id)]
+                    updateSelectedWithName = [{id: row.representative_id, name: row.original_name}]
                 } else {
                     updateSelected.push(parseInt( row.representative_id ))
                     updateSelectedWithName.push({id: row.representative_id, name: row.original_name})
@@ -319,6 +330,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             setSelectItems(updateSelected)
             updateUserCompanySelection(updateSelected)
             dispatch( setMainCompaniesSelected( updateSelected, updateSelectedWithName ) ) 
+            dispatch( setNamesTransactionsSelectAll( false ) )
+            dispatch( setSelectedNamesTransactions([]) )
         } else {
             const element = event.target.closest('div.ReactVirtualized__Table__rowColumn')
             if( element != null ) {

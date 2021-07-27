@@ -483,18 +483,33 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
     setTimelineItems(convertedItems)
     items.current = new DataSet()
     groups.current = new DataSet()
-    let start = new moment().subtract(1, 'year')
+    let start =new moment().subtract(1, 'year')  //new moment(new Date('1998-01-01'))
     let end = new moment().add(3, 'months')  
 
     if (convertedItems.length > 0) {
       const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
       start = convertedItems.length ? new moment(convertedItems[startIndex].start).subtract(1, 'week') : new Date()
-      end = new moment().add(1, 'month')
+      //end = new moment().add(1, 'month')
       items.current.add(convertedItems.slice(0, startIndex))      
     }    
     timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'year')})  
-    timelineRef.current.setItems(items.current)      
+    setTimeout(() => {
+      timelineRef.current.setItems(items.current)      
+    }, 1)    
+    //checkCurrentDateStatus()
   }, [ timelineRawData, isLoadingTimelineRawData, timelineGroups ])
+
+  /* const checkCurrentDateStatus = () => {
+    setTimeout(() => {
+      if( document.getElementsByClassName('vis-current-time').length == 0 ) {
+        let currentElementTransform = document.getElementsByClassName('vis-current-time')[0].style.transform
+        currentElementTransform = parseInt(currentElementTransform.replace('translateX(', '').replace(')', ''))
+
+      } else {
+        checkCurrentDateStatus()
+      }
+    }, 1000)
+  } */
 
   /**
    * return component 
