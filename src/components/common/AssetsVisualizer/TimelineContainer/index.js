@@ -483,7 +483,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
     setTimelineItems(convertedItems)
     items.current = new DataSet()
     groups.current = new DataSet()
-    let start =  new moment(new Date('1998-01-01')), end = new moment().add(3, 'months'), min = new moment(new Date('1998-01-01')), max = new moment().add(3, 'year')  
+    let start =  new moment(), end = new moment().add(1, 'year')  
 
     if (convertedItems.length > 0) {
       const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
@@ -491,7 +491,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
       //end = new moment().add(1, 'month')
       items.current.add(convertedItems.slice(0, startIndex))      
     }    
-    timelineRef.current.setOptions({ ...options, start, end, min, max})
+    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'year')})
     timelineRef.current.setItems(items.current)   
     //checkCurrentDateStatus()
   }, [ timelineRawData, isLoadingTimelineRawData, timelineGroups ])
