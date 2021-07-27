@@ -202,7 +202,6 @@ const VirtualizedTable = ({
         width,
         style,
         justifyContent,
-        underline,
         selectedFromChild
       } = columns[columnIndex];
       
@@ -298,7 +297,7 @@ const VirtualizedTable = ({
             paddingLeft: paddingLeft != undefined ? paddingLeft : "inherit",
             justifyContent: typeof style !== 'undefined' && style === true ? justifyContent : "inherit",
             paddingRight: typeof style !== 'undefined' && style === true ? '21px' : "inherit",
-            textDecoration: typeof underline !== 'undefined' && underline === true ? 'underline' : 'inherit'
+            textDecoration: typeof rowData['underline'] !== 'undefined' && rowData['underline'] === true ? 'underline' : 'inherit'
           }}
         >
           {

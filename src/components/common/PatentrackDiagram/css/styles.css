@@ -210,7 +210,7 @@ div.tooltip_title {
     border-radius: 0 !important;	
     background: #121212;
     pointer-events: none;
-    font-weight: 500; 
+    font-weight: inherit; 
     font-size: 12.25px;
     white-space: nowrap;
 }
@@ -223,7 +223,8 @@ div.tooltip_title {
     height: 1rem;
 }
 .tooltip {
-    font-size: 1rem
+    font-size: 1rem;
+    border-radius: 0;
 }
 /*
 #toobarUIGap0 { grid-area: 1 / 1 / 2 / 2; text-align: center; justify-content: center; align-items: center; }

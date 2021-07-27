@@ -405,13 +405,15 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
             ? []
             : assetTypesCompaniesSelected;
       if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
-        dispatch(
-          getCustomerTransactions(
-            selectedCategory == '' ? '' : selectedCategory, 
-            companies, 
-            tabs, 
-            customers, 
-            false));
+        if(assignmentList.length === 0) {
+          dispatch(
+            getCustomerTransactions(
+              selectedCategory == '' ? '' : selectedCategory, 
+              companies, 
+              tabs, 
+              customers, 
+              false));
+        }
         //dispatch(getChannels())
         
       } else {
@@ -536,6 +538,9 @@ const onHandleClickRow = useCallback(
             dispatch(
               setPDFView(true)
             )
+            dispatch(toggleLifeSpanMode(true));
+            dispatch(toggleFamilyMode(false));
+            dispatch(toggleFamilyItemMode(false));
             //dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, []))
             //dispatch(toggleLifeSpanMode(false))
             //dispatch(toggleFamilyItemMode(false))
@@ -563,6 +568,7 @@ const findChannelID = useCallback((rfID) => {
     dispatch(toggleLifeSpanMode(true))
     dispatch(setConnectionBoxView(false));
     dispatch(setPDFView(false));
+    dispatch(toggleLifeSpanMode(true));
     dispatch(toggleUsptoMode(false));
     dispatch(toggleFamilyMode(false));
     dispatch(toggleFamilyItemMode(false)); 

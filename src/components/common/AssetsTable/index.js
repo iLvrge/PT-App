@@ -324,49 +324,51 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
           assignments =
             selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
-            if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-              if (auth_token != null) {
-                
-                dispatch(
-                  process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
-                  getCustomerAssets(
-                    selectedCategory == '' ? '' : selectedCategory,
-                    companies,
-                    tabs,
-                    customers,
-                    assignments,
-                    false,
-                  )
-                  : 
-                  getCustomerSelectedAssets(location.pathname.replace('/', ''))
-                );
-                
-                setWidth(1900)
+            if(assetTypeAssignmentAssets.length === 0 ) {
+              if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+                if (auth_token != null) {
+                  
+                  dispatch(
+                    process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
+                    getCustomerAssets(
+                      selectedCategory == '' ? '' : selectedCategory,
+                      companies,
+                      tabs,
+                      customers,
+                      assignments,
+                      false,
+                    )
+                    : 
+                    getCustomerSelectedAssets(location.pathname.replace('/', ''))
+                  );
+                  
+                  setWidth(1900)
+                } else {
+                  dispatch(
+                    setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
+                  );
+                  dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
+                }
               } else {
-                dispatch(
-                  setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
-                );
-                dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
-              }
-            } else {
-              if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
-                dispatch(
-                  getCustomerAssets(
-                    selectedCategory == '' ? '' : selectedCategory,
-                    companies,
-                    tabs,
-                    customers,
-                    assignments,
-                    false,
-                  ),
-                );
-                setWidth(1900)
-              } else {
-                PatenTrackApi.cancelAssets()
-                dispatch(
-                  setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
-                );
-                dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) ) 
+                if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
+                  dispatch(
+                    getCustomerAssets(
+                      selectedCategory == '' ? '' : selectedCategory,
+                      companies,
+                      tabs,
+                      customers,
+                      assignments,
+                      false,
+                    ),
+                  );
+                  setWidth(1900)
+                } else {
+                  PatenTrackApi.cancelAssets()
+                  dispatch(
+                    setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
+                  );
+                  dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) ) 
+                }
               }
             }
             

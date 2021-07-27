@@ -16,8 +16,29 @@ import {
     setAssetTypeInventor,
     setAssetTypeCompanies,
     setAssetTypeAssignments,
-    setAssetTypeAssignmentAllAssets
+    setAssetTypeAssignmentAllAssets,
+    setAssetsIllustration,
+    setAssetsIllustrationData,
+    setSelectedAssetsTransactions,
+    setSelectedAssetsPatents,
+    setAllAssetTypes,
+    setAssetTypesSelect,
+    setAllAssignmentCustomers,
+    setSelectAssignmentCustomers
 } from '../../../actions/patentTrackActions2'
+
+
+import {
+    setPDFView,
+    setPDFFile
+  } from "../../../actions/patenTrackActions";
+
+import {
+    toggleUsptoMode, 
+    toggleFamilyMode,
+    toggleFamilyItemMode,
+    toggleLifeSpanMode
+  } from "../../../actions/uiActions";
 
 import { DEFAULT_CUSTOMERS_LIMIT } from '../../../api/patenTrack2'
 
@@ -311,7 +332,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                 }
             }
         }
-    }
+    } 
 
     const resetAll = () => {
         dispatch(setAssetTypes([]))
@@ -319,6 +340,33 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         dispatch(setAssetTypeInventor({ list: [], total_records: 0 }))
         dispatch(setAssetTypeAssignments({ list: [], total_records: 0 }))
         dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
+    }
+
+    const clearOtherItems = () => {
+        dispatch(setAssetsIllustration(null))
+        dispatch(setAssetsIllustrationData(null))
+        dispatch(setSelectedAssetsTransactions([]))
+        dispatch(setSelectedAssetsPatents([]))
+        dispatch(
+            setPDFFile(
+            { 
+                document: '',  
+                form: '', 
+                agreement: '' 
+            }
+            )
+        )
+        dispatch(
+            setPDFView(true)
+        )
+        dispatch(toggleLifeSpanMode(true));
+        dispatch(toggleFamilyMode(false));
+        dispatch(toggleUsptoMode(false));
+        dispatch(toggleFamilyItemMode(false));	
+        dispatch( setAllAssetTypes( false ) )
+        dispatch( setAssetTypesSelect([]))	
+        dispatch( setAllAssignmentCustomers( false ) )
+        dispatch( setSelectAssignmentCustomers([]))														
     }
 
     const updateUserCompanySelection = async(representativeIDs) => {
@@ -347,16 +395,20 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         if(checked === false) {
             setSelectItems([])
             dispatch( setMainCompaniesSelected([], []) )
+            resetAll()
+            clearOtherItems()
         } else if( checked === true ){
-            if(companies.list.length > 0) {
-                const items = [], itemsWithName = []
-                companies.list.forEach( company => {
-                    items.push(company.representative_id)
-                    itemsWithName.push({id: company.representative_id, name:company.original_name})
-                })
-                setSelectItems(items)
-                dispatch( setMainCompaniesSelected(items, itemsWithName) )
-            } 
+            if(selectedCategory !== 'correct_names') {
+                if(companies.list.length > 0) {
+                    const items = [], itemsWithName = []
+                    companies.list.forEach( company => {
+                        items.push(company.representative_id)
+                        itemsWithName.push({id: company.representative_id, name:company.original_name})
+                    })
+                    setSelectItems(items)
+                    dispatch( setMainCompaniesSelected(items, itemsWithName) )
+                } 
+            }            
         }
         dispatch( setMainCompaniesAllSelected( checked ) )
     }, [ dispatch, companies ]) 

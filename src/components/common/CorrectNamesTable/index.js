@@ -126,6 +126,8 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
                 })
                 await Promise.all(promise)
                 dispatch(setAllNameGroupRfIDs(allRFIDS))
+            } else {
+                dispatch(setAllNameGroupRfIDs([]))
             }
         }
         getAllGroupIDs()
@@ -151,6 +153,7 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
     }, [ dispatch, selectedCompanies, selectedCompaniesAll ]) 
 
     useEffect(() => {
+        console.log("NamesGroup", mainCompaniesSelected, assetTypeNamesGroups)
         if(mainCompaniesSelected.length > 0 && assetTypeNamesGroups.length > 0) {
             onHandleGetNameQueue()
         } else {
@@ -212,9 +215,7 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
                     customer => customer !== parseInt( row.id ),
                 )
             }
-            history.push({
-                hash: updateHashLocation(location, 'name', oldSelection).join('&')
-            })
+            
             setSelectItems(oldSelection)
             setSelectAll(false)
             dispatch( setNamesTransactionsSelectAll(assetTypeNames.length == oldSelection.length ||  data.length == oldSelection.length ? true : false ) )

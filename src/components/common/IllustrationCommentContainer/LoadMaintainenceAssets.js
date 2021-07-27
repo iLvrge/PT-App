@@ -53,8 +53,7 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
             dataKey: "fee_code",
             align: "left",		
             style: true,
-            justifyContent: 'flex-end'  ,
-            underline: true  		  
+            justifyContent: 'flex-end',
         },
         {
             width: 70,      
@@ -66,7 +65,6 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
             align: "left",		
             style: true,
             justifyContent: 'flex-end',
-            underline: true  		  
         },
     ]
 
@@ -93,6 +91,7 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
                 attorney: '',
                 fee_code: 'Total:',
                 fee_amount: total,
+                underline: true   
             })
 
         }

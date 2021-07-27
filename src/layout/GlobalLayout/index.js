@@ -350,8 +350,8 @@ const GlobalLayout = (props) => {
         setCustomerOpenBar( !openCustomerBar )
         if(!openCustomerBar === false) {
             setCustomerBarSize(0)
-            dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))
-            dispatch(setMaintainenceAssetsList({list: [], total_records: 0}, false))
+            /* dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))
+            dispatch(setMaintainenceAssetsList({list: [], total_records: 0}, false)) */
         } else {
             setCustomerBarSize(160)
         }

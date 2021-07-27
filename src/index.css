@@ -656,7 +656,7 @@ div.vis-tooltip span{
   stroke: #fff;
 }
 
-.MuiTooltip-tooltipPlacementRight, .MuiTooltip-tooltipPlacementBottom, .MuiTooltip-tooltipPlacementLeft{
+.MuiTooltip-tooltipPlacementRight, .MuiTooltip-tooltipPlacementBottom, .MuiTooltip-tooltipPlacementLeft, .MuiTooltip-tooltipPlacementTop{
   margin: 0 8px !important;
   border-radius: 0 !important;
   opacity: 1 !important;
@@ -864,6 +864,7 @@ a.maintain svg.clean_encumbrances path{
 }
 .MuiTooltip-tooltip{
   background-color: #000 !important;
+  border-radius: 0px;
 }
 
 .depth .MuiSlider-rail {

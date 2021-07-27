@@ -34,6 +34,9 @@ import {
 import {
   setConnectionBoxView,
   setPDFView,
+  setAssetFamily,
+  setPDFFile,
+  setFamilyItemDisplay
 } from "../../../actions/patenTrackActions";
 
 import {
@@ -425,6 +428,15 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         dispatch(setSlackMessages({ messages: [], users: [] }));
         dispatch(setDriveTemplateFrameMode(false))
         dispatch(setTemplateDocument(null))
+        dispatch(
+          setPDFFile(
+            { 
+              document: null, 
+              form: null, 
+              agreement: null 
+            }
+          )
+        )
         dispatch(setSelectedAssetsPatents([patent, application]));
         dispatch(
           setAssetsIllustration({ type: "patent", id: patent || application }),
@@ -439,10 +451,33 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         if( channelID != '') {
           dispatch(setChannelID({channel_id: channelID}))
         }
+      } else {
+        resetAll()
       }
     },
     [dispatch, selectedAssetsPatents],
   );
+
+  const resetAll = () => {
+    setSelectedRow([])
+    dispatch(setAssetsIllustration(null))
+    dispatch(setSelectedAssetsPatents([]))
+    dispatch(setAssetFamily([]))
+    dispatch(setFamilyItemDisplay({}))
+    dispatch(setChannelID(''))
+    dispatch(setConnectionBoxView(false));
+    dispatch(setPDFView(false));
+
+    dispatch(toggleUsptoMode(false));
+    dispatch(toggleLifeSpanMode(true));
+    dispatch(toggleFamilyMode(false));
+    dispatch(toggleFamilyItemMode(false));
+
+    dispatch(setDriveTemplateFrameMode(false))
+    /* if(openChartBar === true || openAnalyticsBar === true) {
+      closeAnalyticsAndCharBar()
+    } */
+  }
 
   useEffect(() => {
     if (selectedAssetsPatents.length == 0) {

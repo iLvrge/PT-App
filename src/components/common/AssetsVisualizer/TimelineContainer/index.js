@@ -492,8 +492,8 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
       end = new moment().add(1, 'month')
       items.current.add(convertedItems.slice(0, startIndex))      
     }    
-    timelineRef.current.setItems(items.current)
-    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'year')})    
+    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'year')})  
+    timelineRef.current.setItems(items.current)      
   }, [ timelineRawData, isLoadingTimelineRawData, timelineGroups ])
 
   /**

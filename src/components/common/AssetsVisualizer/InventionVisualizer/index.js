@@ -179,7 +179,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             setAssetsLoading(true)
             const form = new FormData()
             form.append("list", JSON.stringify(filterList))
-            const {data} = await PatenTrackApi.getAssetsByCPCCode(point.x, code,form) 
+            form.append(`range`, valueRange)
+            const {data} = await PatenTrackApi.getAssetsByCPCCode(point.x, encodeURIComponent(code), form) 
             setAssetsLoading(false)
             setAssets(data.list)
         }
@@ -550,6 +551,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
     const handleOpenFilter = () => {
         setOpenFilter(true);
+        onChangeScopeSlider(valueRange, valueScope)
     };
     
     const handleCloseFilter = () => {
