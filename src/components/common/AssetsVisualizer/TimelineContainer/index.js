@@ -399,7 +399,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
      */
     setTimelineRawGroups([]) //groups
     setTimelineRawData([]) //items
-    redrawTimeline()
+    //redrawTimeline()
     PatenTrackApi.cancelTimeline()
     /**
      * call for the timeline api data
@@ -483,8 +483,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
     setTimelineItems(convertedItems)
     items.current = new DataSet()
     groups.current = new DataSet()
-    let start =new moment().subtract(1, 'year')  //new moment(new Date('1998-01-01'))
-    let end = new moment().add(3, 'months')  
+    let start =  new moment(new Date('1998-01-01')), end = new moment().add(3, 'months'), min = new moment(new Date('1998-01-01')), max = new moment().add(3, 'year')  
 
     if (convertedItems.length > 0) {
       const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
@@ -492,10 +491,8 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
       //end = new moment().add(1, 'month')
       items.current.add(convertedItems.slice(0, startIndex))      
     }    
-    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'year')})  
-    setTimeout(() => {
-      timelineRef.current.setItems(items.current)      
-    }, 1)    
+    timelineRef.current.setOptions({ ...options, start, end, min, max})
+    timelineRef.current.setItems(items.current)   
     //checkCurrentDateStatus()
   }, [ timelineRawData, isLoadingTimelineRawData, timelineGroups ])
 
