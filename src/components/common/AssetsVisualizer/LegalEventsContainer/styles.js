@@ -98,8 +98,17 @@ export default makeStyles(theme => ({
               height: '100%'
             },
             '& svg':{
-              '& path.st1': {
+              '& path': {
                 fill: '#fff' 
+              },
+              '& path.svg_red': {
+                fill: '#E60000' 
+              },
+              '& path.svg_blue': {
+                fill: '#00A9E6' 
+              },
+              '& path.svg_green': {
+                fill: '#70A800' 
               }
             },
             '& div':{
@@ -124,8 +133,17 @@ export default makeStyles(theme => ({
             '& svg':{
               width: '100%',
               height: '100%',
-              '& path.st1': {
+              '& path': {
                 fill: '#fff' 
+              },
+              '& path.svg_red': {
+                fill: '#E60000' 
+              },
+              '& path.svg_blue': {
+                fill: '#00A9E6' 
+              },
+              '& path.svg_green': {
+                fill: '#70A800' 
               }
             }
           },

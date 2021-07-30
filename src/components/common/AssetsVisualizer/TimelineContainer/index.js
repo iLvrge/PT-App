@@ -494,7 +494,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
     timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'year')})
     timelineRef.current.setItems(items.current)   
     //checkCurrentDateStatus()
-  }, [ timelineRawData, isLoadingTimelineRawData, timelineGroups ])
+  }, [ timelineRawData ])
 
   /* const checkCurrentDateStatus = () => {
     setTimeout(() => {

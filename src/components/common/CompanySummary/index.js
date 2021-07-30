@@ -47,7 +47,7 @@ const ShowData = ({ data, number, c }) => {
             ?
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="noStroke"><path d="M0 0h24v24H0V0z" fill="none"></path><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 4h2v5l-1-.75L9 9V4zm9 16H6V4h1v9l3-2.25L13 13V4h5v16z"></path></svg>
             :
-            data == 'arrows'
+            data == 'rights'
             ?
                 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><path d="M51.258 62.386a.996.996 0 0 1-.707-.293l-8.279-8.28 1.414-1.414 7.572 7.573 7.568-7.573 1.414 1.414-8.275 8.28a1.003 1.003 0 0 1-.707.293z"/><path d="M52.254 60.271h-2V40.313c0-4.698-3.822-8.521-8.52-8.521h-10.67v-2h10.67c5.801 0 10.52 4.72 10.52 10.521v19.958z"/><path d="M32.9 31.792H22.261c-5.801 0-10.52-4.719-10.52-10.519V2.614h2v18.659c0 4.697 3.822 8.519 8.52 8.519H32.9v2zM12.741 62.386c-.265 0-.52-.105-.708-.293l-8.275-8.28 1.415-1.414 7.568 7.573 7.571-7.573 1.414 1.414-8.278 8.28a1.002 1.002 0 01-.707.293z"/><path d="M11.744 34.009h2v26.265h-2z"/></svg>
             :
@@ -66,7 +66,7 @@ const ShowData = ({ data, number, c }) => {
 const CompanySummary = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
-    const [companyData, setCompanyData] = useState({companies: 0, activites: 0, parties: 0, employees: 0, transactions: 0, assets: 0, arrows: 0, documents: 0})
+    const [companyData, setCompanyData] = useState({companies: 0, activites: 0, parties: 0, employees: 0, transactions: 0, assets: 0, rights: 0, documents: 0})
     const google_profile = useSelector(state => state.patenTrack2.google_profile)
     const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
 
