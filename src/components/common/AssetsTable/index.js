@@ -12,6 +12,7 @@ import { Clear, NotInterested } from '@material-ui/icons';
 import Loader from "../Loader";
 import useStyles from "./styles";
 import VirtualizedTable from "../VirtualizedTable";
+import Googlelogin from '../Googlelogin' 
 import { DEFAULT_CUSTOMERS_LIMIT } from "../../../api/patenTrack2";
 import {
   setAssetTypesPatentsSelected,
@@ -39,7 +40,12 @@ import {
   setChannelID,
   getChannels,
   setClipboardAssets,
-  setMoveAssets
+  setMoveAssets,
+  linkWithSheetSelectedAsset,
+  linkWithSheet,
+  linkWithSheetOpenPanel,
+  setLinkAssetListSelected,
+  setLinkAssetData
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -84,6 +90,7 @@ const AssetsTable = ({
   const dispatch = useDispatch()
   const location = useLocation()
   const tableRef = useRef()
+  const googleLoginRef = useRef(null)
   const [offset, setOffset] = useState(0)
   const [rowHeight, setRowHeight] = useState(40)
   const [headerRowHeight, setHeaderRowHeight] = useState(47)
@@ -99,6 +106,12 @@ const AssetsTable = ({
   const [selectedAssets, setSelectedAssets] = useState([])  
   const [movedAssets, setMovedAssets] = useState([])  
   const [ dropOpenAsset, setDropOpenAsset ] = useState(null)
+  const [ callByAuthLogin, setCallByAuth ] = useState(false)
+  const [data, setData] = useState([])
+  const [assetRows, setAssetRows] = useState([])
+  const [ googleAuthLogin, setGoogleAuthLogin ] = useState(true)
+  const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
+  const google_profile = useSelector(state => state.patenTrack2.google_profile)
   const assetTypesSelected = useSelector(
     state => state.patenTrack2.assetTypes.selected,
   );
@@ -148,8 +161,8 @@ const AssetsTable = ({
   const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
   const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
   const auth_token = useSelector(state => state.patenTrack2.auth_token)
-  const [data, setData] = useState([])
-  const [assetRows, setAssetRows] = useState([])
+  const link_assets_sheet_type = useSelector(state => state.patenTrack2.link_assets_sheet_type)
+  
   useEffect(() => {
     
     if(clipboard_assets.length > 0 && clipboard_assets.length != selectedAssets.length ) {      
@@ -170,6 +183,18 @@ const AssetsTable = ({
   useEffect(() => {
     dispatch(setMoveAssets(movedAssets))
   }, [movedAssets])
+
+  useEffect(() => {
+    if(callByAuthLogin === true) {
+      if(google_auth_token !== null && google_auth_token != '' && google_profile !== null && google_profile != '' && link_assets_sheet_type.type !== null && link_assets_sheet_type.asset !== null){
+        setCallByAuth(false)
+        const form = new FormData()
+        form.append('access_token', google_auth_token.access_token)
+        form.append('user_account', google_profile.email)
+        dispatch(linkWithSheet(link_assets_sheet_type.type, form))
+      }
+    }
+  }, [callByAuthLogin, google_auth_token, google_profile])
 
 
   const Clipboard = () => {
@@ -217,43 +242,105 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       name: 'Add to Clipboard',
       image: '',
       icon: <Clipboard />
+    },
+    {
+      id: 6,
+      name: 'Link to Our Products',
+      image: '',
+      icon: <Clipboard />
+    },
+    {
+      id: 7,
+      name: 'Link to Technology',
+      image: '',
+      icon: <Clipboard />
+    },
+    {
+      id: 8,
+      name: 'Link to Competition',
+      image: '',
+      icon: <Clipboard />
     }
   ]
+
+  const openGoogleWindow = () => {
+      if(googleLoginRef.current != null) {
+          if(googleLoginRef.current.querySelector('button') !== null) {
+              setCallByAuth(true)
+              googleLoginRef.current.querySelector('button').click()
+          } else {
+              setTimeout(openGoogleWindow, 1000)
+          }          
+      } else {
+          setTimeout(openGoogleWindow, 1000)
+      }
+}
 
   const onHandleDropDownlist = (event, asset, row ) => { 
     if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
       alert('Message....')
     } else {
-      if(event.target.value == 5) {
-        setSelectedAssets(prevItems => {
-          const findIndex = prevItems.findIndex( r => r.asset == asset)
-          if( findIndex !== -1 ) {
-            return prevItems.splice( findIndex, 1 )
-          } else {
-            return [...prevItems, row]
-          }
-        })
-        
-      } 
-  
-      const currentLayoutIndex = controlList.findIndex(r => r.type == 'menu' && r.category == selectedCategory )
-      if(currentLayoutIndex !== -1) {
+      if(event.target.value >= 6 && event.target.value <= 8) {
+        //6=>Product,7=>Technology,8=>Competition
         setDropOpenAsset(null)
-        setMovedAssets(prevItems => {
-          const findIndex = prevItems.findIndex(row => row.asset == asset)
-          if(findIndex !== -1) {
-            return prevItems.splice( findIndex, 1 )
-          } else {
-            return [...prevItems, {
-              asset,
-              move_category: event.target.value,
-              currentLayout: controlList[currentLayoutIndex].layout_id,
-              grant_doc_num: row.grant_doc_num,
-              appno_doc_num: row.appno_doc_num,
-            }]
-          }
-        })      
-      }
+        const type = event.target.value === 7 ? 'technology' : event.target.value === 8 ? 'competitors' : 'products'
+        dispatch(linkWithSheetOpenPanel(true))
+        dispatch(linkWithSheetSelectedAsset(type, encodeURIComponent(row.asset_type == 1 ? `US${applicationFormat(asset)}` : `US${numberWithCommas(asset)}`)))
+        //Check Google Auth  
+        const getGoogleToken = getTokenStorage("google_auth_token_info"), getGoogleProfile = getTokenStorage('google_profile_info')
+
+        let gToken = '', gAccount = ''
+        if (getGoogleToken && getGoogleToken != "") {
+            const tokenJSON = JSON.parse( getGoogleToken )
+            if( Object.keys(tokenJSON).length > 0 && tokenJSON.hasOwnProperty('access_token') ) {
+              gToken = tokenJSON.access_token
+            }
+        }
+
+        if( getGoogleProfile != '') {
+            const profileInfo = JSON.parse(getGoogleProfile)
+            if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
+              gAccount =  profileInfo.email
+            }
+        }
+        if(gToken != '' && gAccount != '') {
+          const form = new FormData()
+          form.append('access_token', gToken)
+          form.append('user_account', gAccount)
+          dispatch(linkWithSheet(type, form))
+        } else {
+          openGoogleWindow()
+        }
+      } else {
+        if(event.target.value == 5) {
+          setSelectedAssets(prevItems => {
+            const findIndex = prevItems.findIndex( r => r.asset == asset)
+            if( findIndex !== -1 ) {
+              return prevItems.splice( findIndex, 1 )
+            } else {
+              return [...prevItems, row]
+            }
+          })          
+        }     
+        const currentLayoutIndex = controlList.findIndex(r => r.type == 'menu' && r.category == selectedCategory )
+        if(currentLayoutIndex !== -1) {
+          setDropOpenAsset(null)
+          setMovedAssets(prevItems => {
+            const findIndex = prevItems.findIndex(row => row.asset == asset)
+            if(findIndex !== -1) {
+              return prevItems.splice( findIndex, 1 )
+            } else {
+              return [...prevItems, {
+                asset,
+                move_category: event.target.value,
+                currentLayout: controlList[currentLayoutIndex].layout_id,
+                grant_doc_num: row.grant_doc_num,
+                appno_doc_num: row.appno_doc_num,
+              }]
+            }
+          })      
+        }
+      }      
     }    
   }
 
@@ -677,6 +764,11 @@ const resetAll = () => {
     dispatch(toggleFamilyItemMode(false));
 
     dispatch(setDriveTemplateFrameMode(false))
+
+    dispatch(linkWithSheetOpenPanel(false))
+    dispatch(linkWithSheetSelectedAsset(null, null))
+    dispatch(setLinkAssetData([]))
+    dispatch(setLinkAssetListSelected([]))
     /* if(openChartBar === true || openAnalyticsBar === true) {
       closeAnalyticsAndCharBar()
     } */
@@ -860,6 +952,12 @@ const resetAll = () => {
           width: "100%",
         }}
       />
+      {
+        googleAuthLogin && (
+          <span ref={googleLoginRef}>
+            <Googlelogin/>
+          </span>)
+      }
     </Paper>
   );
 };

@@ -1393,6 +1393,51 @@ export const setResetAll = (t = 0, item) => {
   }
 }
 
+export const linkWithSheetSelectedAsset = (link_type, asset) => {  
+  return {
+    type: types.SET_LINK_ASSET_SHEET,
+    link_type,
+    asset
+  }
+}
+
+export const linkWithSheetOpenPanel = (flag) => {  
+  return {
+    type: types.SET_LINK_ASSET_PANEL,
+    flag
+  }
+}
+
+export const linkWithSheet = (type, form) => {  
+  return async dispatch => {
+    dispatch( setLinkAssetDataLoading( true ) )
+    const { data } = await PatenTrackApi.linkWithSheet( type, form )    
+    dispatch( setLinkAssetData(data) )
+    dispatch( setLinkAssetDataLoading( false ) )
+  }  
+}
+
+export const setLinkAssetDataLoading = (flag) => {
+  return {
+    type: types.SET_LINK_ASSET_DATA_LOADING,
+    flag
+  }
+}
+
+export const setLinkAssetData = (items) => {
+  return {
+    type: types.SET_LINK_ASSET_LIST,
+    items
+  }
+}
+
+export const setLinkAssetListSelected = (items) => {  
+  return {
+    type: types.SET_LINK_ASSET_LIST_SELECTED,
+    items
+  }
+}
+
 export const resetStates = () => {  
   return {
     type: types.SET_RESET_ALL

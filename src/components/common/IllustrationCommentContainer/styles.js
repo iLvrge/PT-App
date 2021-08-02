@@ -88,5 +88,14 @@ export default makeStyles(theme => ({
         width: '100%',
         height: '100%',
         cursor: 'move' 
-    }
+    },
+    headerContainer: {
+        position: 'absolute',
+        width: 90,
+        height: 30,
+        zIndex: 1,
+        right: 70,
+        top: 15,
+        color: '#E60000'
+    }  
 }))

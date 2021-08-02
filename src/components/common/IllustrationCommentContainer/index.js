@@ -12,6 +12,7 @@ import AssetsCommentsTimeline from '../AssetsCommentsTimeline'
 import LoadMaintainenceAssets from './LoadMaintainenceAssets'
 import LoadTransactionQueues from './LoadTransactionQueues'
 import LoadTransactionNameQueues from './LoadTransactionNameQueues'
+import LoadLinkAssets from './LoadLinkAssets'
 import ArrowButton from '../ArrowButton'
 import { updateResizerBar } from '../../../utils/resizeBar'
 import useStyles from './styles'
@@ -67,6 +68,7 @@ const IllustrationCommentContainer = ({
     const search_string = useSelector(state => state.patenTrack2.search_string)   
     const addressQueuesDisplay = useSelector(state => state.patenTrack2.addressQueuesDisplay)   
     const nameQueuesDisplay = useSelector(state => state.patenTrack2.nameQueuesDisplay)
+    const link_assets_sheet_display = useSelector(state => state.patenTrack2.link_assets_sheet_display)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     
     
@@ -182,6 +184,10 @@ const IllustrationCommentContainer = ({
                     nameQueuesDisplay === true || selectedCategory === 'correct_names' 
                     ?
                         <LoadTransactionNameQueues />
+                    :
+                    link_assets_sheet_display === true 
+                    ?
+                        <LoadLinkAssets />
                     :
                     !isFullscreenOpen && 
                         illustrationBar === true && 

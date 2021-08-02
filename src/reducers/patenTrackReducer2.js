@@ -521,7 +521,31 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state,
           fixedTransactionAddress: action.data
         } 
-        
+      case types.SET_LINK_ASSET_PANEL:
+        return {
+          ...state,
+          link_assets_sheet_display: action.flag
+        }
+      case types.SET_LINK_ASSET_DATA_LOADING:
+        return {
+          ...state,
+          link_assets_sheet_loading: action.flag
+        } 
+      case types.SET_LINK_ASSET_LIST:
+        return {
+          ...state,
+          link_assets_sheet_list: action.items 
+        } 
+      case types.SET_LINK_ASSET_SHEET:
+        return {
+          ...state,
+          link_assets_sheet_type: {type: action.link_type, asset: action.asset}
+        } 
+      case types.SET_LINK_ASSET_LIST_SELECTED:
+        return {
+          ...state,
+          link_assets_selected: action.items  
+        }        
       case types.SET_NAME_QUEUE_DISPLAY:
         return {
           ...state,

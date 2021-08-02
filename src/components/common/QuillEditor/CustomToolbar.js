@@ -14,7 +14,7 @@ import {
 import { getTokenStorage } from '../../../utils/tokenStorage'
 
 import useStyles from './styles'
-const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, onDocument, onAttachmentOpenedFile, onAttachmentOpenedFileAndEmail, onAttachmentFile, onAttachmentDriveFile, onMaintainenceFeeReview, onMaintainenceFeeFile, onSubmitUSPTO, onCorrectAddress, onChangeAddress, onCorrectName, onChangeName, onSalesAssets, loadingUSPTO, category, driveBtnActive, maintainenceMode, selectedAssets, driveTemplateMode, onShare, addressQueuesDisplay, nameQueuesDisplay, onHandleSubmitAddressUSPTO, onHandleAddressCancel, onHandleSubmitNamesUSPTO, onHandleNamesCancel }) => {
+const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, onDocument, onAttachmentOpenedFile, onAttachmentOpenedFileAndEmail, onAttachmentFile, onAttachmentDriveFile, onMaintainenceFeeReview, onMaintainenceFeeFile, onSubmitUSPTO, onCorrectAddress, onChangeAddress, onCorrectName, onChangeName, onSalesAssets, loadingUSPTO, category, driveBtnActive, maintainenceMode, selectedAssets, driveTemplateMode, onShare, addressQueuesDisplay, nameQueuesDisplay, onHandleSubmitAddressUSPTO, onHandleAddressCancel, onHandleSubmitNamesUSPTO, onHandleNamesCancel, onHandleLinkAssetWithSheet, linkAssetsSheetDisplay, linkAssetsSelected  }) => {
   const classes = useStyles()
   const toolBarRef = useRef(null) 
 
@@ -148,6 +148,13 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
       <span className={classes.seperator}></span>
       <div className={classes.secondaryGroup}>
       {loadingUSPTO && <CircularProgress size={24} className={classes.buttonProgress} />}
+      {
+        linkAssetsSheetDisplay === true && linkAssetsSelected.length > 0  
+        ?
+        <Button className={classes.review} onClick={onHandleLinkAssetWithSheet}>Process Selections</Button>  
+        :
+        ''
+      }
       {
         category == 'pay_maintainence_fee'
         ?

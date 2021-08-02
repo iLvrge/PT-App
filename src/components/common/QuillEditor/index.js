@@ -78,6 +78,9 @@ const QuillEditor = ({
   const mainCompaniesSelected = useSelector(state => state.patenTrack2.mainCompaniesList.selected)
   const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
   const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
+  const link_assets_sheet_display = useSelector(state => state.patenTrack2.link_assets_sheet_display)
+  const link_assets_sheet_type = useSelector(state => state.patenTrack2.link_assets_sheet_type)
+  const link_assets_selected = useSelector(state => state.patenTrack2.link_assets_selected)
 
   const [ userListMenu, setUserListMenu ] = useState( null )
   const [ loadingUSPTO, setLoadingUSPTO ] = useState(false)
@@ -400,6 +403,34 @@ const QuillEditor = ({
     }
   }, [ dispatch, fixedTransactionAddress ])
 
+  const onHandleLinkAssetWithSheet = useCallback(async() => {
+    if(link_assets_selected.length > 0 && link_assets_sheet_type.type !== null && link_assets_sheet_type.asset !== null && link_assets_sheet_display === true) {
+      const getGoogleToken = getTokenStorage("google_auth_token_info"), getGoogleProfile = getTokenStorage('google_profile_info')
+      let gToken = '', gAccount = ''
+      if (getGoogleToken && getGoogleToken != "") {
+        const tokenJSON = JSON.parse( getGoogleToken )
+        if( Object.keys(tokenJSON).length > 0 && tokenJSON.hasOwnProperty('access_token') ) {
+          gToken = tokenJSON.access_token
+        }
+      }
+
+      if( getGoogleProfile != '') {
+        const profileInfo = JSON.parse(getGoogleProfile)
+        if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
+          gAccount =  profileInfo.email
+        }
+      }
+      if(gToken != '' && gAccount != '') {
+        const form = new FormData()
+        form.append('access_token', gToken)
+        form.append('user_account', gAccount)
+        form.append('asset', decodeURIComponent(link_assets_sheet_type.asset))
+        form.append('values', JSON.stringify(link_assets_selected))
+        const { data } = await PatenTrackApi.linkSheetUpdateData(form, link_assets_sheet_type.type)
+        console.log('updateSHeet', data)
+      }      
+    }
+  }, [link_assets_selected, link_assets_sheet_type])
 
   return (
     <div className={classes.root}>
@@ -446,7 +477,10 @@ const QuillEditor = ({
           onHandleSubmitAddressUSPTO={onHandleSubmitAddressUSPTO}
           onHandleSubmitNamesUSPTO={onHandleSubmitNamesUSPTO}
           onHandleNamesCancel={onHandleNamesCancel}
-        /> 
+          onHandleLinkAssetWithSheet={onHandleLinkAssetWithSheet}
+          linkAssetsSheetDisplay={link_assets_sheet_display}
+          linkAssetsSelected={link_assets_selected}
+        />   
         {GetMenuComponent}
       </div>
       <Modal

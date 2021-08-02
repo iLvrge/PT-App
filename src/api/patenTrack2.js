@@ -74,7 +74,7 @@ const getMultiFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink
 
 class PatenTrackApi {
   static getSiteLogo() {
@@ -103,6 +103,40 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/companies/maintainence_assets?representative_id=${JSON.stringify(representative_id)}&offset=${offset}&limit=${DEFAULT_CUSTOMERS_LIMIT}`,
       getHeader(),
     )
+  }
+
+  static linkWithSheet( type, form ) {
+    let header = getFormUrlHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelLink = c
+    })
+    return axios.post(`${base_new_api_url}/documents/sheet/${type}`, form, header)
+  }
+
+  static cancelLinkRequest() {
+    if (cancelLink !== undefined) {
+      try{
+        throw cancelLink('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
+  static linkSheetSelectedData( type, asset, form ) {
+    let header = getFormUrlHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelLink = c
+    })
+    return axios.post(`${base_new_api_url}/documents/sheet/${type}/${asset}`, form, header)    
+  }
+
+  static linkSheetUpdateData( form, type  ) {
+    let header = getFormUrlHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelLink = c
+    })
+    return axios.put(`${base_new_api_url}/documents/sheet/${type}`, form, header)
   }
 
   static getUsers() {
