@@ -432,7 +432,7 @@ const NewHeader = () => {
             {
               !googleAuthLogin
               ?
-                <IconButton className={`${classes.buttonIcon} ${classes.padding0}`} aria-label="Google Logout" component="span" onClick={onHandleGoogleSignout}>
+                <IconButton className={`${classes.padding0}`} aria-label="Google Logout" component="span" onClick={onHandleGoogleSignout}>
                   <Tooltip 
                     title={
                       <Typography color="inherit" variant='body2'>

@@ -13,8 +13,10 @@ import LoadMaintainenceAssets from './LoadMaintainenceAssets'
 import LoadTransactionQueues from './LoadTransactionQueues'
 import LoadTransactionNameQueues from './LoadTransactionNameQueues'
 import LoadLinkAssets from './LoadLinkAssets'
+import AllComponentsMenu from '../AllComponentsMenu'
 import ArrowButton from '../ArrowButton'
 import { updateResizerBar } from '../../../utils/resizeBar'
+import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/numbers";
 import useStyles from './styles'
 
 const IllustrationCommentContainer = ({ 
@@ -52,6 +54,8 @@ const IllustrationCommentContainer = ({
     const [ templateURL, settemplateURL] = useState('about:blank')
     const [ isFullscreenOpen, setIsFullscreenOpen ] = useState(false)
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false)
+    const [ menuComponent, setMenuComponent ] = useState([])
+    const [ showManualComponent, setShowManualComponent ] = useState(false)
     const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
     const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
     const maintainenceFrameMode = useSelector(state => state.ui.maintainenceFrameMode)
@@ -70,7 +74,7 @@ const IllustrationCommentContainer = ({
     const nameQueuesDisplay = useSelector(state => state.patenTrack2.nameQueuesDisplay)
     const link_assets_sheet_display = useSelector(state => state.patenTrack2.link_assets_sheet_display)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
-    
+    const link_assets_sheet_type = useSelector(state => state.patenTrack2.link_assets_sheet_type)
     
     useEffect(() => {
         updateResizerBar(illustrationRef, commentBar, 1)
@@ -125,6 +129,13 @@ const IllustrationCommentContainer = ({
         [ selectedAssetsPatents, selectedAssetAssignments, assetIllustration ],
     )
 
+    const onHandleComponentMenuItem = (item) => {
+        setShowManualComponent(true)     
+        setMenuComponent(item)
+    }
+
+    
+
     return (
         <SplitPane
             className={cls}
@@ -149,6 +160,7 @@ const IllustrationCommentContainer = ({
             }}
         >         
             <div style={{display: 'unset'}}>   
+                <AllComponentsMenu onClick={onHandleComponentMenuItem}/>
                 {
                     !isFullscreenOpen && 
                         illustrationBar === true && 
@@ -166,8 +178,16 @@ const IllustrationCommentContainer = ({
                         </IconButton>
                     :
                     ''
-                }                 
+                }                                 
                 {  
+                    showManualComponent === true && menuComponent.length > 0
+                    ?                        
+                        menuComponent.map(
+                            ({component: Component, ...props }, index) => (
+                                <Component key={index} {...props}/>
+                            )
+                        )
+                    :
                     driveTemplateFrameMode === true && (templateURL != 'about:blank' && templateURL != null)
                     ?
                         <iframe src={templateURL} className={classes.templateFrame}></iframe>
@@ -187,7 +207,7 @@ const IllustrationCommentContainer = ({
                     :
                     link_assets_sheet_display === true 
                     ?
-                        <LoadLinkAssets />
+                        <LoadLinkAssets type={link_assets_sheet_type.type} asset={link_assets_sheet_type.asset}/>
                     :
                     !isFullscreenOpen && 
                         illustrationBar === true && 

@@ -91,11 +91,14 @@ export default makeStyles(theme => ({
     },
     headerContainer: {
         position: 'absolute',
-        width: 90,
         height: 30,
         zIndex: 1,
-        right: 70,
-        top: 15,
+        right: 255,
+        top: -3,
         color: '#E60000'
-    }  
+    },
+    iframe: {
+        width: '100%',
+        marginTop: 47
+    } 
 }))

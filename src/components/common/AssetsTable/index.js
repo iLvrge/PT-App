@@ -274,7 +274,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       } else {
           setTimeout(openGoogleWindow, 1000)
       }
-}
+  }
 
   const onHandleDropDownlist = (event, asset, row ) => { 
     if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
@@ -285,32 +285,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         setDropOpenAsset(null)
         const type = event.target.value === 7 ? 'technology' : event.target.value === 8 ? 'competitors' : 'products'
         dispatch(linkWithSheetOpenPanel(true))
-        dispatch(linkWithSheetSelectedAsset(type, encodeURIComponent(row.asset_type == 1 ? `US${applicationFormat(asset)}` : `US${numberWithCommas(asset)}`)))
-        //Check Google Auth  
-        const getGoogleToken = getTokenStorage("google_auth_token_info"), getGoogleProfile = getTokenStorage('google_profile_info')
-
-        let gToken = '', gAccount = ''
-        if (getGoogleToken && getGoogleToken != "") {
-            const tokenJSON = JSON.parse( getGoogleToken )
-            if( Object.keys(tokenJSON).length > 0 && tokenJSON.hasOwnProperty('access_token') ) {
-              gToken = tokenJSON.access_token
-            }
-        }
-
-        if( getGoogleProfile != '') {
-            const profileInfo = JSON.parse(getGoogleProfile)
-            if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
-              gAccount =  profileInfo.email
-            }
-        }
-        if(gToken != '' && gAccount != '') {
-          const form = new FormData()
-          form.append('access_token', gToken)
-          form.append('user_account', gAccount)
-          dispatch(linkWithSheet(type, form))
-        } else {
-          openGoogleWindow()
-        }
+        dispatch(linkWithSheetSelectedAsset(type, encodeURIComponent(row.asset_type == 1 ? `US${applicationFormat(asset)}` : `US${numberWithCommas(asset)}`)))        
       } else {
         if(event.target.value == 5) {
           setSelectedAssets(prevItems => {

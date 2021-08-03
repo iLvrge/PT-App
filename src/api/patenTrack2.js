@@ -139,6 +139,22 @@ class PatenTrackApi {
     return axios.put(`${base_new_api_url}/documents/sheet/${type}`, form, header)
   }
 
+  static getSheetDetails( form ) {   
+    let header = getFormUrlHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelLink = c
+    })
+    return axios.post(`${base_new_api_url}/documents/sheet`, form, header)    
+  }
+
+  static getSheet( type, form ) {
+    let header = getFormUrlHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelLink = c
+    })
+    return axios.post(`${base_new_api_url}/documents/sheet/${type}/url`, form, header)    
+  }
+
   static getUsers() {
     return axios.get(`${base_new_api_url}/users`, getHeader())
   }
