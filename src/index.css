@@ -758,7 +758,7 @@ div.vis-tooltip span{
 .pricing a{text-decoration: none; width: 100%}
 .pricing .lab_item p.font-16{display:none;} 
 .pricing .hex-wrapper{margin:10px auto}
-.pricing .hexagon-in2:hover{background-color:#bfbfbf;}
+.pricing .hexagon-in2:hover{background-color:#555;}
 
 /* .pricing .category{ display: flex; flex-direction: column;  flex-basis: 300px;}
 .pricing .category ul {display: flex; font-size: 20px; flex-direction: column; list-style: none;}
