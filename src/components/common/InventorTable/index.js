@@ -23,7 +23,8 @@ import {
     setSelectedAssetsPatents,
     setSelectedAssetsTransactions,
     setMaintainenceAssetsList,
-    setAssetTypeAssignmentAllAssets
+    setAssetTypeAssignmentAllAssets,
+    setAssetTypeAssignments
   } from '../../../actions/patentTrackActions2'
 
   import {
@@ -192,6 +193,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             dispatch( setSelectAssignmentCustomers(items) )
         }
         setSelectAll(checked)
+        dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
         dispatch( setAllAssignmentCustomers( checked ) )
     }, [ dispatch, standalone, assetTypeCompanies, data, customerType, assetTypeInventors ])
 
@@ -204,6 +206,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
                 dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
                 dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
             }
+            dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
             if( !oldSelection.includes(row.id) ){
                 oldSelection.push(row.id)
             } else {

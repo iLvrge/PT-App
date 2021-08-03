@@ -24,7 +24,10 @@ import {
     setChildSelectedAssetsTransactions,
     setChildSelectedAssetsPatents,
     setMaintainenceAssetsList,
-    setAssetTypeAssignmentAllAssets
+    setAssetTypeAssignmentAllAssets,
+    setAssetTypeAssignments,
+    setAssetTypeInventor,
+    setAssetTypeCompanies
 } from '../../../actions/patentTrackActions2'
 
 import {
@@ -237,7 +240,10 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
                         
                         const findIndex = assetTypes.findIndex( aTab => aTab.tab_id == data.activity_id )
     
-                        if(findIndex !== -1 ) {
+                        if(findIndex !== -1 ) {                            
+                            dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
+                            dispatch( setAssetTypeCompanies({ list: [], total_records: 0 }) )
+                            dispatch( setAssetTypeInventor({ list: [], total_records: 0 }) )
                             setSelectItems([data.activity_id])
                             dispatch( setAssetTypesSelect([data.activity_id]) )
                         } else {
@@ -265,7 +271,10 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
         setSelectAll(true)
         setSelectItems([])    
         dispatch( setAllAssetTypes( true ) )    
-    }, [ dispatch, assetTypes ])
+        dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
+        dispatch( setAssetTypeCompanies({ list: [], total_records: 0 }) )
+        dispatch( setAssetTypeInventor({ list: [], total_records: 0 }) )
+    }, [ dispatch, assetTypes ])  
 
     const onHandleClickRow = useCallback((e,  row, t) => {
         e.preventDefault()
@@ -277,6 +286,9 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
                     dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
                     dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
                 }
+                dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
+                dispatch( setAssetTypeCompanies({ list: [], total_records: 0 }) )
+                dispatch( setAssetTypeInventor({ list: [], total_records: 0 }) )
                 history.push({
                     hash: updateHashLocation(location, 'activities', [row.tab_id]).join('&')
                 })

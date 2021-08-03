@@ -450,6 +450,10 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
         }
       }
       setSelectAll(checked);
+      if(display_clipboard === false) {
+        dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
+        dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+      }
       dispatch(setAllAssignments(checked));
     },
     [dispatch, assignmentList],
