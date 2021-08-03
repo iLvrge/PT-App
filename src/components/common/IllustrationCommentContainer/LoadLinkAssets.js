@@ -146,7 +146,7 @@ const LoadLinkAssets = ({type, asset}) => {
                 form.append('access_token', gToken)
                 form.append('user_account', gAccount)
                 const { data } = await PatenTrackApi.linkSheetSelectedData(type, encodeURIComponent(selectedAsset), form)
-                if(data !== null && data.length > 0) {
+                if(data !== null) {
                     setSelectItems(data)
                 }
             }
