@@ -63,9 +63,10 @@ export default makeStyles(theme => ({
     },
     fullscreenBtn: {
         position: 'absolute',
-        top: '6px',
-        right: '6px',
-        zIndex: 1
+        top: 12,
+        right: 9,
+        zIndex: 1,
+        padding: 0
     },
     singleAssetContainer: {
         flex: 1,
@@ -91,14 +92,22 @@ export default makeStyles(theme => ({
     },
     headerContainer: {
         position: 'absolute',
-        height: 30,
         zIndex: 1,
-        right: 255,
-        top: -3,
+        right: 30,
+        top: 0,
         color: '#E60000'
     },
     iframe: {
         width: '100%',
         marginTop: 47
-    } 
+    },
+    buttonMenu: {
+        borderRadius: 0,
+        '& .MuiTypography-body2':{
+            marginLeft: 5
+        },        
+    },
+    active: {
+        color: '#E60000'
+    }
 }))

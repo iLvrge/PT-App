@@ -160,7 +160,7 @@ const IllustrationCommentContainer = ({
             }}
         >         
             <div style={{display: 'unset'}}>   
-                <AllComponentsMenu onClick={onHandleComponentMenuItem}/>
+                {/* <AllComponentsMenu onClick={onHandleComponentMenuItem}/> */}
                 {
                     !isFullscreenOpen && 
                         illustrationBar === true && 
@@ -205,7 +205,7 @@ const IllustrationCommentContainer = ({
                     ?
                         <LoadTransactionNameQueues />
                     :
-                    link_assets_sheet_display === true 
+                    link_assets_sheet_display === true || selectedCategory === 'technical_scope'
                     ?
                         <LoadLinkAssets type={link_assets_sheet_type.type} asset={link_assets_sheet_type.asset}  size={size}/>
                     :

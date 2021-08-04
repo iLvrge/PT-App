@@ -1,15 +1,18 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Paper, Button } from "@material-ui/core";
+import { Paper, Button, Typography } from "@material-ui/core";
 import Loader from "../Loader";
 import Googlelogin from '../Googlelogin' 
 import useStyles from "./styles";
 import VirtualizedTable from "../VirtualizedTable";
+import MenuButtons from "./MenuButtons";
 import { getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
 import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/numbers";
 import PatenTrackApi from '../../../api/patenTrack2'
 import {
-    setLinkAssetListSelected
+    setLinkAssetListSelected,
+    linkWithSheetOpenPanel,
+    linkWithSheetSelectedAsset
   } from '../../../actions/patentTrackActions2'
 
 const LoadLinkAssets = ({type, asset, size}) => {
@@ -112,6 +115,45 @@ const LoadLinkAssets = ({type, asset, size}) => {
         }
     }
 
+    const onHandleRating = async(event, newValue, cellData, row) => {
+        let items = [...rows], scoreItems = [...selectedItemsWithScore], movedItems = [...movedProducts]
+        
+        const findScoreIndex = scoreItems.findIndex(item => item.name == row.name)
+        if(findScoreIndex !== -1) {
+            scoreItems[findScoreIndex].score = newValue
+        } else {
+            scoreItems.push({
+                score: newValue,
+                name: row.name
+            })
+        }
+        setSelectedItemsWithScore(scoreItems)
+
+        const findMoveIndex = movedItems.findIndex(item => item.asset == row.name)
+
+        if(findScoreIndex !== -1) {
+            movedItems[findMoveIndex].move_category = newValue
+        } else {
+            movedItems.push({
+                move_category: newValue,
+                asset: row.name
+            })
+        }
+        setMovedProducts(movedItems)
+        
+        const findIndex = items.findIndex(item => item.name === row.name)
+        if(findIndex !== -1) {
+            items[findIndex].score = newValue
+            setRows(items)
+
+            let selectedFindIndex = selectItems.findIndex( item => item == row.name)
+
+            if(selectedFindIndex !== -1) {
+                onHandleLinkAssetWithSheet(selectItems)
+            }
+        }
+    }
+
     const COLUMNS = [
         { 
             width: 29, 
@@ -130,14 +172,13 @@ const LoadLinkAssets = ({type, asset, size}) => {
             align: "left",
         },  
         {
-            width: 50,
-            minWidth: 50,   
-            label: "Score",
-            dataKey: "name",
+            width: 80,
+            minWidth: 80,   
+            label: "Relevancy",
+            dataKey: "score",
             align: "left",
-            role: "static_dropdown",
-            list: dropdownList,
-            onClick: onHandleDropDownlist
+            role: "rating",
+            onClick: onHandleRating
         },   
         {
             width: 1300,
@@ -208,11 +249,11 @@ const LoadLinkAssets = ({type, asset, size}) => {
     }, [selectedAsset])
 
     useEffect(() => {
-        if(rows.length > 0 && selectItems.length > 0 && selectedItemsWithScore.length > 0) {
+        if(rows.length > 0 && selectItems.length > 0 && selectedItemsWithScore.length > 0 || (rows.length > 0 && selectItems.length == 0 && selectedItemsWithScore.length == 0)) {
            updateRows()
         } else if (selectItems.length > 0 && selectedItemsWithScore.length > 0 && rows.length == 0) {
             waitForRows()
-        } 
+        }
     }, [selectItems, selectedItemsWithScore])
 
     const waitForRows = () => {
@@ -227,10 +268,13 @@ const LoadLinkAssets = ({type, asset, size}) => {
 
     const updateRows = async() => {
         let items = [...rows]
+        items.forEach((item, index) =>  {
+            items[index].score = null
+        });
         const promiseScore = selectedItemsWithScore.map( item => {
             const findIndex = items.findIndex( row => row.name == item.name)
             if(findIndex !== -1) {
-                rows[findIndex].score = item.score
+                items[findIndex].score = item.score
             }
         })
         await Promise.all(promiseScore)
@@ -250,7 +294,7 @@ const LoadLinkAssets = ({type, asset, size}) => {
                 list.push({
                     name: item[0],
                     asset: item[0],
-                    score: '',
+                    score: null,
                     description: item.length > 1 ? item[1] : ''
                 })
             })
@@ -270,7 +314,7 @@ const LoadLinkAssets = ({type, asset, size}) => {
             if (getGoogleToken && getGoogleToken != "") {
                 const tokenJSON = JSON.parse( getGoogleToken )
                 if( Object.keys(tokenJSON).length > 0 && tokenJSON.hasOwnProperty('access_token') ) {
-                gToken = tokenJSON.access_token
+                    gToken = tokenJSON.access_token
                 }
             }
 
@@ -294,10 +338,11 @@ const LoadLinkAssets = ({type, asset, size}) => {
                             move_category: item.score,
                         })
                     })           
+                    
                     await Promise.all(promise)
                     setSelectItems(items)
                     setMovedProducts(score)
-                    setSelectedItemsWithScore(data)                   
+                    setSelectedItemsWithScore(data)                                      
                 }
             }
         }
@@ -334,12 +379,18 @@ const LoadLinkAssets = ({type, asset, size}) => {
                 const element = event.target.closest('div.ReactVirtualized__Table__rowColumn')
                 if(element != null) {
                     let index = element.getAttribute('aria-colindex')   
-                    const findElement = element.querySelector('div.MuiSelect-select')
+                    const findElement = element.querySelector('span.MuiRating-root')
                     if( index == 3 && findElement != null ) {
-                        setDropOpenScoring(row.name)
+                        let attribute = event.target.getAttribute('for')
+                        if(attribute.indexOf('rating') !== -1) {
+                            attribute = attribute.replace('virtual-rating-', '')
+                            if(!isNaN(attribute)) {
+                                onHandleRating(event, attribute, row.score, row)
+                            }
+                        }
                     }
                 }
-            }
+            } 
         }
     }, [selectItems])
 
@@ -356,7 +407,7 @@ const LoadLinkAssets = ({type, asset, size}) => {
         }    
         setSelectItems(items)
         setSelectAll(checked);
-        onHandleLinkAssetWithSheet(selectItems)
+        onHandleLinkAssetWithSheet(items)
     }
 
     const onHandleLinkAssetWithSheet = async(selectItems) => {
@@ -451,6 +502,16 @@ const LoadLinkAssets = ({type, asset, size}) => {
            iframeElement.style =  `height: ${parentElement.clientHeight}px;` 
         }
     }
+
+    const onClickButton = (event, type) => {
+        if(type >= 1 && type <= 3) {
+            const type = event.target.value === 2 ? 'technology' : event.target.value === 3 ? 'competitors' : 'products'
+            dispatch(linkWithSheetOpenPanel(true))
+            dispatch(linkWithSheetSelectedAsset(type, asset))
+        } else {
+            openCloseFile()
+        }
+    }
     
     return ( 
         <Paper
@@ -459,9 +520,7 @@ const LoadLinkAssets = ({type, asset, size}) => {
             square
             id={`link_assets_to_product_technology_competition`}
         >       
-            <div className={classes.headerContainer}>
-                <Button variant="text" onClick={openCloseFile}>{editSheet === true ? 'Close File' : 'Edit File'}</Button>
-            </div>
+            <MenuButtons onClick={onClickButton} type={type}/>
             {
                 editSheet === true && sheetUrl !== null
                 ?

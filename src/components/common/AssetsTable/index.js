@@ -660,6 +660,10 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           dispatch(setAssetTypesPatentsSelected([asset]))
           setSelectItems([asset])
         }
+        if(selectedCategory == 'technical_scope') {
+          dispatch(linkWithSheetOpenPanel(true))
+          dispatch(linkWithSheetSelectedAsset('products', encodeURIComponent(grant_doc_num  == '' ? `US${applicationFormat(appno_doc_num)}` : `US${numberWithCommas(grant_doc_num)}`)))     
+        }
         callSelectedAssets({ grant_doc_num, appno_doc_num, asset });
         dispatch(setChildSelectedAssetsPatents([]));
         dispatch(setSelectedAssetsTransactions([]));
@@ -669,7 +673,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         dispatch(setChildSelectedAssetsTransactions([]));
         dispatch(setChannelID(''))
         dispatch(setDriveTemplateFrameMode(false));
-        dispatch(setDriveTemplateFile(null));
+        dispatch(setDriveTemplateFile(null));  
         dispatch(setTemplateDocument(null));
         dispatch(setConnectionBoxView(false));
         dispatch(setPDFView(false));        
