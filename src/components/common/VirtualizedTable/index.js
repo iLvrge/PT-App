@@ -167,12 +167,12 @@ const VirtualizedTable = ({
       return (
         <div style={{width: `${width + 10}px`}} className={'selectedIcon'}>
           {
-            list[listIndex].icon != '' ? list[listIndex].icon : list[listIndex].image != '' ? <img src={list[listIndex].image} style={{width: '17px', position: 'absolute', left: '7px'}}/> : ''
+            list[listIndex].icon != '' ? list[listIndex].icon : list[listIndex].image != '' ? <img src={list[listIndex].image} style={{width: '17px', position: 'absolute', left: '7px'}}/> : showDropValue
           }
         </div>
       )
     } else {
-      return ''
+      return '' 
     }    
   }
 

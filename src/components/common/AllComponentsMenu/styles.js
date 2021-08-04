@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 export default makeStyles(theme => ({
     menu: {
         position: 'absolute',
-        right: 75,
+        right: 40,
         zIndex: 9,
         minWidth: 100,
         '& .MuiInput-underline:hover:not(.Mui-disabled):before, .MuiInput-underline:before, .MuiInput-underline:after':{

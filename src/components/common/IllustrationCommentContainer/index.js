@@ -184,7 +184,7 @@ const IllustrationCommentContainer = ({
                     ?                        
                         menuComponent.map(
                             ({component: Component, ...props }, index) => (
-                                <Component key={index} {...props}/>
+                                <Component key={index} {...props} size={size}/>
                             )
                         )
                     :
@@ -207,7 +207,7 @@ const IllustrationCommentContainer = ({
                     :
                     link_assets_sheet_display === true 
                     ?
-                        <LoadLinkAssets type={link_assets_sheet_type.type} asset={link_assets_sheet_type.asset}/>
+                        <LoadLinkAssets type={link_assets_sheet_type.type} asset={link_assets_sheet_type.asset}  size={size}/>
                     :
                     !isFullscreenOpen && 
                         illustrationBar === true && 
