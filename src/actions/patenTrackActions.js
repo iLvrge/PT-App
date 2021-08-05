@@ -323,6 +323,7 @@ export const assetFamilySingle = (applicationNumber) => {
     return PatenTrackApi
       .assetFamilySingle(applicationNumber)
       .then(res => {
+        dispatch(setFamilyItemDataEventRetrieved(true))
         dispatch(toggleFamilyMode(true))
         dispatch(setFamilyItemDisplay(res.data))
       }) 

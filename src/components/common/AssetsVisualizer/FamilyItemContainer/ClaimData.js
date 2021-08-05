@@ -15,11 +15,11 @@ const ClaimData = ({ data, number }) => {
         } catch(e) {
             parseData = data
         }
-        console.log("FAMILY", parseData)
+        console.log("ClaimData", parseData)
         if((Array.isArray(parseData) && parseData.length == 0) || parseData == '' || parseData == null) {
             const getAbstractData = async () => {
                 setLoading(true)
-                const getData = await PatenTrackApi.getClaimsData(number)
+                const getData = await PatenTrackApi.getClaimsData(number.replace('/', '').replace(/[, ]+/g, ''))
                 setLoading(false)
                 if( getData.data != null && getData.data != '' ) {
                     setClaimParseData(getData.data)

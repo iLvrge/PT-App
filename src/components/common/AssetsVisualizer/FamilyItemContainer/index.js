@@ -26,53 +26,62 @@ const FamilyItemContainer = ({ item, onClose }) => {
     const [ citationData, setCitationData ] = useState([])
     const [ ptabData, setPtabData ] = useState([])
     const [ assignmentsData, setAssignmentsData ] = useState([])
+    const [selectedNumber, setSelectedNumber] = useState('')
     const handleChangeTab = (event, newTab) => setSelectedTab(newTab)
     const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
-    const [selectedNumber, setSelectedNumber] = useState('')
+    const familyDataRetrieved = useSelector( state => state.patenTrack.familyDataRetrieved  )
+    
+    
     useEffect(() => {
-        if(item == undefined || item == null || Object.keys(item).length === 0){
-            setAbsractData('')
-            setClaimsData('')
-            setFigureData([])
-            setAssignmentsData([])
-            setCitationData([])
-            setPtabData([])
-            setSelectedNumber('')
-            if(selectedAssetsPatents.length > 0) {
-                setSelectedNumber(selectedAssetsPatents[0] !== '' ? `US${numberWithCommas(selectedAssetsPatents[0])}` : `US${applicationFormat(selectedAssetsPatents[1])}`)
+        console.log('FamilyItemContainer', item, familyDataRetrieved)
+        if( familyDataRetrieved === true ) {
+            if(item == undefined || item == null || Object.keys(item).length === 0){
+                setAbsractData('')
+                setClaimsData('')
+                setFigureData([])
+                setAssignmentsData([])
+                setCitationData([])
+                setPtabData([])
+                setSelectedNumber('')
+                if(selectedAssetsPatents.length > 0) {
+                    setSelectedNumber(selectedAssetsPatents[0] !== '' ? `US${numberWithCommas(selectedAssetsPatents[0])}` : `US${applicationFormat(selectedAssetsPatents[1])}`)
+                }
+                return setfamilyItemData({})
             }
-            return setfamilyItemData({})
-        }
-        
-        const getFamilyItemDataFunction = async () => {
-            setfamilyItemData({
-                inventors: item.inventors,
-                applicants: item.applicants,
-                assignee: item.assignee,
-                priority_date: item.priority_date,
-                patent_number: item.patent_number,
-                application_date: item.application_date,
-                publication_date: item.publication_date,
-                application_number: item.application_number,                
-                publication_country: item.publication_country,
-                publication_kind: item.publication_kind
-            })
-            setSelectedNumber(item.publication_kind.toString().toLowerCase().indexOf('a') !== -1? `${item.publication_country}${applicationFormat(item.application_number)}${item.publication_kind}` : `${item.publication_country}${numberWithCommas(item.patent_number)}${item.publication_kind}`)
-            setAbsractData(item.abstracts)
-            setClaimsData(item.claims)
-            try{
-                setFigureData(JSON.parse(item.images))                
-                setAssignmentsData(JSON.parse(item.assigments))
-            } catch( err) {
-                console.log(err)
+            
+            const getFamilyItemDataFunction = async () => {
+                setfamilyItemData({
+                    inventors: item.inventors,
+                    applicants: item.applicants,
+                    assignee: item.assignee,
+                    priority_date: item.priority_date,
+                    patent_number: item.patent_number,
+                    application_date: item.application_date,
+                    publication_date: item.publication_date,
+                    application_number: item.application_number,                
+                    publication_country: item.publication_country,
+                    publication_kind: item.publication_kind
+                })
+                setSelectedNumber(item.publication_kind.toString().toLowerCase().indexOf('a') !== -1? `${item.publication_country}${applicationFormat(item.application_number)}${item.publication_kind}` : `${item.publication_country}${numberWithCommas(item.patent_number)}${item.publication_kind}`)
+                setAbsractData(item.abstracts)
+                setClaimsData(item.claims)
+                try{
+                    setFigureData(JSON.parse(item.images))                
+                    setAssignmentsData(JSON.parse(item.assigments))
+                } catch( err) {
+                    console.log(err)
+                }
             }
+            getFamilyItemDataFunction()  
         }
-        getFamilyItemDataFunction()
-    }, [ item ])
+    }, [ item, familyDataRetrieved ])
 
+    useEffect(() => {
+        console.log('FamilyItemContainer_selectedAssetsPatents', selectedAssetsPatents)
+    }, [selectedAssetsPatents])
     return(
         <Paper className={classes.root} square>
             {

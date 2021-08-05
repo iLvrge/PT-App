@@ -12,21 +12,25 @@ const AbstractData = ({ data, number }) => {
     const [ abstractData, setAbstractData ] = useState('')
     const [loading, setLoading] = useState(false)
     const selectedAsset = useSelector(state => state.patenTrack2.selectedAssetsPatents)
+    const familyDataRetrieved = useSelector( state => state.patenTrack.familyDataRetrieved  )
     useEffect(() => {
-        if(data == null || data.toString().trim() == '') {
-            const getAbstractData = async (applicationNumber) => {
-                setLoading(true)
-                const getData = await PatenTrackApi.getAbstractData(number)
-                setLoading(false)
-                if( getData.data != null && getData.data != '' ) {
-                    setAbstractData(getData.data.abstracts)
+        console.log("AbstractData", data, familyDataRetrieved)
+        if(familyDataRetrieved === true) {
+            if(data == null || data.toString().trim() == '') {
+                const getAbstractData = async (applicationNumber) => {
+                    setLoading(true)
+                    const getData = await PatenTrackApi.getAbstractData(number.replace('/', '').replace(/[, ]+/g, ''))
+                    setLoading(false)
+                    if( getData.data != null && getData.data != '' ) {
+                        setAbstractData(getData.data.abstracts)
+                    }
                 }
+                getAbstractData(selectedAsset[1])
+            } else {
+                setAbstractData(data)
             }
-            getAbstractData(selectedAsset[1])
-        } else {
-            setAbstractData(data)
-        }
-    },[ data ]) 
+        }        
+    }, [data, familyDataRetrieved]) 
 
     if(loading) return <Loader/> 
     return (
