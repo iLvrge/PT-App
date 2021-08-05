@@ -505,9 +505,9 @@ const LoadLinkAssets = ({type, asset, size}) => {
 
     const onClickButton = (event, type) => {
         if(type >= 1 && type <= 3) {
-            const type = event.target.value === 2 ? 'technology' : event.target.value === 3 ? 'competitors' : 'products'
+            const sheet =type === 2 ? 'technology' : type === 3 ? 'competitors' : 'products'
             dispatch(linkWithSheetOpenPanel(true))
-            dispatch(linkWithSheetSelectedAsset(type, asset))
+            dispatch(linkWithSheetSelectedAsset(sheet, asset))
         } else {
             openCloseFile()
         }

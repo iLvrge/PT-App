@@ -618,8 +618,21 @@ div.vis-tooltip span{
   top: 42px; 
   z-index: 1300;
   inset: 0px;
-  background-color: rgba(0, 0, 0, 0.8); 
+  /* background-color: rgba(0, 0, 0, 0.8);  */
   visibility: hidden;
+}
+#bookMeeting .MuiBackdrop-root {
+  top: 42px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  z-index: -1;
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  -webkit-tap-highlight-color: transparent;
 }
 .meeting-popup{
   margin: 10px auto;
@@ -631,7 +644,7 @@ div.vis-tooltip span{
 
 .custom_tooltip {
   position: absolute;  
-  width: 150px;
+  max-width: 500px;
   background:#222222;
   border: 1px solid #545454;
   color: #BDBDBD;

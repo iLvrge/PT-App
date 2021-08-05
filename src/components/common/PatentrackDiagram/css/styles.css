@@ -206,13 +206,14 @@ div.tooltip_title {
     /* margin: 0 auto; */
     text-align: left;
     width: auto;
+    max-width: 500px;
     border: 0 !important;	
     border-radius: 0 !important;	
     background: #121212;
     pointer-events: none;
     font-weight: inherit; 
     font-size: 12.25px;
-    white-space: nowrap;
+    white-space: normal;
 }
 .tooltipContainer {
     display: flex;

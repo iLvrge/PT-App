@@ -438,4 +438,11 @@ export default makeStyles(theme => ({
     width: '100%',
     position: 'relative',
   },
+  heading: {
+    position: 'absolute',
+    top: 40,
+    zIndex: 1,
+    left: 32,
+    color: '#e60000'
+  }
 }))

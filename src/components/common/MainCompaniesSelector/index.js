@@ -140,7 +140,7 @@ const COLUMNS = [
     {
         width: 80,  
         minWidth: 80,
-        label: 'Arrows',
+        label: 'Rights',
         dataKey: 'product',
         staticIcon: '',
         format: numberWithCommas,

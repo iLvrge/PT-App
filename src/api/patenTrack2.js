@@ -74,7 +74,7 @@ const getMultiFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary
 
 class PatenTrackApi {
   static getSiteLogo() {
@@ -364,7 +364,21 @@ class PatenTrackApi {
   }
 
   static getCompanySummary(accessToken, userEmail) {
-    return axios.get(`${base_new_api_url}/companies/summary?access_token=${accessToken}&user_account=${userEmail}`, getHeader())
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelSummary = c 
+    })
+    return axios.get(`${base_new_api_url}/companies/summary?access_token=${accessToken}&user_account=${userEmail}`, header)
+  }
+
+  static cancelSummaryRequest() {
+    if (cancelSummary !== undefined) {
+      try{
+        throw cancelSummary('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
   }
 
   static getAssetsCompanies(assetsType) {

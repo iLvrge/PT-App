@@ -35,7 +35,7 @@ import {
   setPDFView,
 } from "../../../../actions/patenTrackActions"
 import PatenTrackApi from '../../../../api/patenTrack2'
-import { convertAssetTypeToTabId, oldConvertTabIdToAssetType, convertTabIdToAssetType, exportGroups } from '../../../../utils/assetTypes'
+import { convertAssetTypeToTabId, oldConvertTabIdToAssetType, convertTabIdToAssetType, exportGroups, assetsTypesWithKey } from '../../../../utils/assetTypes'
 import { numberWithCommas, capitalize } from '../../../../utils/numbers'
 
 
@@ -190,8 +190,14 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
             const { data } = response
             if( data != null && ( data.assignor.length > 0 || data.assignee.length > 0 ) && tootlTip === data.assignment.rf_id) {
               const executionDate = data.assignor.length > 0 ? data.assignor[0].exec_dt : ''
-              const transactionType = convertTabIdToAssetType(item.tab_id)
-              
+              let transactionType = convertTabIdToAssetType(item.tab_id)
+              const findIndex = assetsTypesWithKey.findIndex( row => row.type == transactionType)
+
+              if(findIndex !== -1) {
+                transactionType = assetsTypesWithKey[findIndex].name
+              } else {
+                transactionType = capitalize(transactionType)
+              }
               let image = '', color ='';
               switch(parseInt(item.tab_id)) {
                 case 1:
@@ -253,7 +259,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
                   break;
               }
               const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.clientY}px;left:${event.clientX + 20 }px;'>
-                                          <h4 style='color:${color};text-align:left;margin:0'>${capitalize(transactionType)}</h4>
+                                          <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
                                           <div>
                                             ${ executionDate != '' ? moment(executionDate.exec_dt).format('ll') : ''}
                                           </div>
@@ -344,7 +350,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
     /* clearInterval(timeInterval) */
   }
 
-  const resetTooltipContainer = () => {
+  const resetTooltipContainer = () => {  
     const findOldToolTip = document.getElementsByClassName('custom_tooltip')
     if( findOldToolTip.length > 0 ) {
       findOldToolTip[0].parentNode.removeChild(findOldToolTip[0])      

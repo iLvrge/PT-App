@@ -566,7 +566,7 @@ const GlobalScreen = ({
                                         }}
                                         ref={mainContainerRef}
                                         primary={'second'}
-                                        maxSize={-500}  
+                                        maxSize={-520}  
                                     >
                                         <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
                                             <IllustrationCommentContainer 

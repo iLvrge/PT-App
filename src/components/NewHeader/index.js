@@ -363,8 +363,15 @@ const NewHeader = () => {
   }, [ dispatch, clipboard_assets, display_clipboard ])
 
   const handleScheduleViaHubspot = () => {
-    document.getElementById('bookMeeting').style.visibility = document.getElementById('bookMeeting').style.visibility === 'hidden' ? 'visible' : 'hidden'
-    document.getElementById('bookMeeting').style.top = '42px'
+    const elementContainer = document.getElementById('bookMeeting')
+    elementContainer.querySelector('.MuiBackdrop-root').addEventListener('click', function() {
+      if(this.parentElement.style.visibility == 'visible') {
+        this.parentElement.style.visibility = 'hidden'
+      }
+    })
+    elementContainer.style.visibility = elementContainer.style.visibility === 'hidden' ? 'visible' : 'hidden'
+    elementContainer.style.top = '42px'
+    
   }
 
   return (

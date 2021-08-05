@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useSelector } from 'react-redux'
 import moment from 'moment'
 
 import Paper from '@material-ui/core/Paper'
@@ -8,6 +9,7 @@ import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import { DataSet } from 'vis-data/esnext'
 import { Timeline } from 'vis-timeline-73/esnext'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import Loader from '../../Loader'
 
 import useStyles from './styles'
 
@@ -72,10 +74,17 @@ const LegalEventsContainer = ({ events }) => {
   
   const [ legalEvents, setLegalEvents ] = useState([])
   const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(true)
+  const [ isLoadingTimelineData, setIsLoadingTimelineData ] = useState(false)
+  
+  const legalEventDataRetrieved = useSelector(state => state.patenTrack.legalEventDataRetrieved)
   
   useEffect(() => {
       timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
   }, [])
+
+  useEffect(() => {
+    setIsLoadingTimelineData(legalEventDataRetrieved)
+  }, [legalEventDataRetrieved])
 
   useEffect(() => {
     if(events.length == 0 || events.main.length == 0) {
@@ -149,9 +158,10 @@ const LegalEventsContainer = ({ events }) => {
                 className={classes.timeline}
             />
             { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> }
+            { isLoadingTimelineData && <Loader /> }
         </>
     </Paper>
   )
-}
+} 
 
 export default LegalEventsContainer

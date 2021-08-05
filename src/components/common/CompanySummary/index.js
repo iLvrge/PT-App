@@ -114,10 +114,11 @@ const CompanySummary = () => {
     }
 
     const getSummaryData = async(access_token, user_email) => {
+        await PatenTrackApi.cancelSummaryRequest()
         const { data } = await PatenTrackApi.getCompanySummary( access_token, user_email )
         if( data != null ) {
             setCompanyData( data )
-        }
+        }  
     }
 
     return(

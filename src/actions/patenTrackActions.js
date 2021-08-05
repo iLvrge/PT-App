@@ -358,11 +358,11 @@ export const setAssetFamily = (family) => {
 
 export const assetLegalEvents = (applicationNumber, patentNumber) => { 
   return dispatch => {
-    dispatch(setLegalDataEventRetrieved(false))
+    dispatch(setLegalDataEventRetrieved(true))
     return PatenTrackApi
       .assetLegalEvents(applicationNumber, patentNumber)
       .then(res => {        
-        dispatch(setLegalDataEventRetrieved(true))
+        dispatch(setLegalDataEventRetrieved(false))
         dispatch(setAssetLegalEvents(res.data))
       }) 
       .catch(err => {

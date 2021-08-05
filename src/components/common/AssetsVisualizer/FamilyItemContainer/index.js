@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react'
 
 import { useSelector } from 'react-redux'
-import { Tab, Tabs, Paper, Grid } from '@material-ui/core'
+import { Tab, Tabs, Paper, Grid, Typography } from '@material-ui/core'
 
 import LegalEventsContainer from '../LegalEventsContainer'
 import ItemData from './ItemData'
@@ -11,7 +11,7 @@ import FigureData from './FigureData'
 import AssignmentData from './AssignmentData'
 import CitationData from './CitationData'
 import PtabData from './PtabData'
-
+import { numberWithCommas, applicationFormat, capitalize } from "../../../../utils/numbers";
 
 import useStyles from './styles'
 
@@ -30,7 +30,8 @@ const FamilyItemContainer = ({ item, onClose }) => {
     const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
-    const [selectedNumber, setSelectedNumber] = useState()
+    const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
+    const [selectedNumber, setSelectedNumber] = useState('')
     useEffect(() => {
         if(item == undefined || item == null || Object.keys(item).length === 0){
             setAbsractData('')
@@ -39,9 +40,13 @@ const FamilyItemContainer = ({ item, onClose }) => {
             setAssignmentsData([])
             setCitationData([])
             setPtabData([])
+            setSelectedNumber('')
+            if(selectedAssetsPatents.length > 0) {
+                setSelectedNumber(selectedAssetsPatents[0] !== '' ? `US${numberWithCommas(selectedAssetsPatents[0])}` : `US${applicationFormat(selectedAssetsPatents[1])}`)
+            }
             return setfamilyItemData({})
-        } 
-        console.log("item", item)
+        }
+        
         const getFamilyItemDataFunction = async () => {
             setfamilyItemData({
                 inventors: item.inventors,
@@ -55,7 +60,7 @@ const FamilyItemContainer = ({ item, onClose }) => {
                 publication_country: item.publication_country,
                 publication_kind: item.publication_kind
             })
-            setSelectedNumber(item.publication_kind.toString().toLowerCase().indexOf('a') ? `${item.publication_country}${item.application_number}${item.publication_kind}` : `${item.publication_country}${item.patent_number}${item.publication_kind}`)
+            setSelectedNumber(item.publication_kind.toString().toLowerCase().indexOf('a') !== -1? `${item.publication_country}${applicationFormat(item.application_number)}${item.publication_kind}` : `${item.publication_country}${numberWithCommas(item.patent_number)}${item.publication_kind}`)
             setAbsractData(item.abstracts)
             setClaimsData(item.claims)
             try{
@@ -74,7 +79,7 @@ const FamilyItemContainer = ({ item, onClose }) => {
                 selectedCompaniesAll === true || selectedCompanies.length > 0
                 ?
                     <>
-                        {familyItemData != '' && familyItemData.title != undefined ? `<span>${familyItemData.publication_country}${familyItemData.patent_number != '' ? familyItemData.patent_number : familyItemData.application_number}${familyItemData.patent_number != '' ? familyItemData.publication_kind : familyItemData.application_kind}</span>` : '' } 
+                        <Typography variant='body2' className={classes.heading}>{selectedNumber}</Typography>
                         <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
                             {
                                 ['Fees', 'Abstract', 'Claims', 'Figures', 'Citations', 'PTAB', 'Litigation', 'Events'].map( (item, index) => (
