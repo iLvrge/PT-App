@@ -444,5 +444,9 @@ export default makeStyles(theme => ({
     zIndex: 1,
     left: 32,
     color: '#e60000'
+  },
+  figures: {
+    width: '100%',
+    marginBottom: 15
   }
 }))

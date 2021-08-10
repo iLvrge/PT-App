@@ -7,6 +7,7 @@ import LegalEventsContainer from '../LegalEventsContainer'
 import ItemData from './ItemData'
 import AbstractData from './AbstractData'
 import ClaimData from './ClaimData'
+import SpecificationData from './SpecificationData'
 import FigureData from './FigureData'
 import AssignmentData from './AssignmentData'
 import CitationData from './CitationData'
@@ -24,6 +25,7 @@ const FamilyItemContainer = ({ item, onClose }) => {
     const [ claimsData, setClaimsData ] = useState('')
     const [ figureData, setFigureData ] = useState([])
     const [ citationData, setCitationData ] = useState([])
+    const [ specificationData, setSpecificationData ] = useState([])
     const [ ptabData, setPtabData ] = useState([])
     const [ assignmentsData, setAssignmentsData ] = useState([])
     const [selectedNumber, setSelectedNumber] = useState('')
@@ -44,6 +46,7 @@ const FamilyItemContainer = ({ item, onClose }) => {
                 setFigureData([])
                 setAssignmentsData([])
                 setCitationData([])
+                setSpecificationData([])
                 setPtabData([])
                 setSelectedNumber('')
                 if(selectedAssetsPatents.length > 0) {
@@ -68,6 +71,7 @@ const FamilyItemContainer = ({ item, onClose }) => {
                 setSelectedNumber(item.publication_kind.toString().toLowerCase().indexOf('a') !== -1? `${item.publication_country}${applicationFormat(item.application_number)}${item.publication_kind}` : `${item.publication_country}${numberWithCommas(item.patent_number)}${item.publication_kind}`)
                 setAbsractData(item.abstracts)
                 setClaimsData(item.claims)
+                setClaimsData(item.specification)
                 try{
                     setFigureData(JSON.parse(item.images))                
                     setAssignmentsData(JSON.parse(item.assigments))
@@ -91,7 +95,7 @@ const FamilyItemContainer = ({ item, onClose }) => {
                         <Typography variant='body2' className={classes.heading}>{selectedNumber}</Typography>
                         <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
                             {
-                                ['Fees', 'Abstract', 'Claims', 'Figures', 'Citations', 'PTAB', 'Litigation', 'Events'].map( (item, index) => (
+                                ['Fees', 'Abstract', 'Specifications', 'Claims', 'Figures', 'Citations', 'PTAB', 'Litigation', 'Events'].map( (item, index) => (
                                     <Tab
                                         key={index}
                                         className={classes.tab}
@@ -113,12 +117,12 @@ const FamilyItemContainer = ({ item, onClose }) => {
                                 xs={12}
                                 className={classes.flexColumn}
                                 >   
-                                    
                                     {selectedTab === 1 && <AbstractData data={abstractData} number={selectedNumber} />}
-                                    {selectedTab === 2 && <ClaimData data={claimsData} number={selectedNumber} />}                                    
-                                    {selectedTab === 3 && <FigureData data={figureData} />}
-                                    {selectedTab === 4 && <CitationData data={citationData} />}
-                                    {selectedTab === 5 && <PtabData data={ptabData} />}
+                                    {selectedTab === 2 && <SpecificationData data={specificationData} number={selectedNumber} />}                                    
+                                    {selectedTab === 3 && <ClaimData data={claimsData} number={selectedNumber} />}                                    
+                                    {selectedTab === 4 && <FigureData data={figureData} number={selectedNumber}/>}
+                                    {selectedTab === 5 && <CitationData data={citationData} />}
+                                    {selectedTab === 6 && <PtabData data={ptabData} />}
                                 </Grid> 
                             </Grid>
                             :

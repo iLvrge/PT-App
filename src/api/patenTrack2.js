@@ -894,6 +894,14 @@ class PatenTrackApi {
 
   static getClaimsData( applicationNumber ) {
     return axios.get(`${base_new_api_url}/family/claims/${applicationNumber}`,  getHeader())
+  } 
+
+  static getSpecificationData( applicationNumber ) {
+    return axios.get(`${base_new_api_url}/family/specifications/${applicationNumber}`,  getHeader())
+  }
+
+  static getFamilyData( applicationNumber ) {
+    return axios.get(`${base_new_api_url}/family/images/${applicationNumber}`,  getHeader())
   }
 }
 

@@ -22,7 +22,7 @@ const AbstractData = ({ data, number }) => {
                     const getData = await PatenTrackApi.getAbstractData(number.replace('/', '').replace(/[, ]+/g, ''))
                     setLoading(false)
                     if( getData.data != null && getData.data != '' ) {
-                        setAbstractData(getData.data.abstracts)
+                        setAbstractData(typeof getData.data.abstracts !== 'undefined' ? getData.data.abstracts : getData.data)
                     }
                 }
                 getAbstractData(selectedAsset[1])
