@@ -19,20 +19,28 @@ const FigureData = ( { data, number } ) => {
             parseData = data
         }
         console.log("FigureData", parseData)
-        if((Array.isArray(parseData) && parseData.length == 0) || parseData == '' || parseData == null) {
-            const getSpecificationData = async () => {
-                setLoading(true)
-                const getData = await PatenTrackApi.getFamilyData(number.replace('/', '').replace(/[, ]+/g, ''))
-                setLoading(false)
-                if( getData.data != null && getData.data != '' ) {
-                    setFigures(getData.data)
-                }
-            }
-            getSpecificationData()
+        if((Array.isArray(parseData) && parseData.length == 0) || parseData == '' || parseData == null) {            
+            getFamilyData()
         } else {
             setFigures(parseData)
         }        
     }, [data])
+
+    useEffect(() => {
+        getFamilyData()
+    }, [number])
+
+    const getFamilyData = async () => {
+        setLoading(true)
+        PatenTrackApi.cancelFamilyData()
+        const getData = await PatenTrackApi.getFamilyData(number.replace('/', '').replace(/[, ]+/g, ''))
+        setLoading(false)
+        if( getData.data != null && getData.data != '' ) {
+            setFigures(getData.data)
+        } else {
+            setFigures([])
+        } 
+    }
 
     if(loading) return <Loader/> 
 

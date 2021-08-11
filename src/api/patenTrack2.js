@@ -74,7 +74,7 @@ const getMultiFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims
 
 class PatenTrackApi {
   static getSiteLogo() {
@@ -889,19 +889,75 @@ class PatenTrackApi {
   }
 
   static getAbstractData( applicationNumber ) {
-    return axios.get(`${base_new_api_url}/family/abstract/${applicationNumber}`,  getHeader())
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelAbstract = c
+    })
+    return axios.get(`${base_new_api_url}/family/abstract/${applicationNumber}`,  header)
+  }
+
+  static cancelAbstractData () {
+    if (cancelAbstract !== undefined) {
+      try{
+        throw cancelAbstract('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
   }
 
   static getClaimsData( applicationNumber ) {
-    return axios.get(`${base_new_api_url}/family/claims/${applicationNumber}`,  getHeader())
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelClaims = c
+    })
+    return axios.get(`${base_new_api_url}/family/claims/${applicationNumber}`,  header)
   } 
 
+  static cancelClaimsData () {
+    if (cancelClaims !== undefined) {
+      try{
+        throw cancelClaims('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
   static getSpecificationData( applicationNumber ) {
-    return axios.get(`${base_new_api_url}/family/specifications/${applicationNumber}`,  getHeader())
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelSpecifications = c
+    })
+    return axios.get(`${base_new_api_url}/family/specifications/${applicationNumber}`,  header)
+  }
+
+  static cancelSpecificationData () {
+    if (cancelSpecifications !== undefined) {
+      try{
+        throw cancelSpecifications('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
   }
 
   static getFamilyData( applicationNumber ) {
-    return axios.get(`${base_new_api_url}/family/images/${applicationNumber}`,  getHeader())
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelFamily = c
+    })
+    return axios.get(`${base_new_api_url}/family/images/${applicationNumber}`,  header)
+  }
+
+  static cancelFamilyData() {
+    if (cancelFamily !== undefined) {
+      try{
+        throw cancelFamily('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
   }
 }
 

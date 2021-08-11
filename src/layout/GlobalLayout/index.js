@@ -113,6 +113,8 @@ const GlobalLayout = (props) => {
     const pdfView = useSelector(state => state.patenTrack.pdfView)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
 
+    
+
     useEffect(() => {
         editorBar() // run to find editor width
         window.addEventListener("resize", editorBar) // add on resize window 

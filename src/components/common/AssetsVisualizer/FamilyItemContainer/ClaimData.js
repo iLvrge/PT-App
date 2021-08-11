@@ -17,18 +17,27 @@ const ClaimData = ({ data, number }) => {
         }
         console.log("ClaimData", parseData)
         if((Array.isArray(parseData) && parseData.length == 0) || parseData == '' || parseData == null) {
-            const getAbstractData = async () => {
-                setLoading(true)
-                const getData = await PatenTrackApi.getClaimsData(number.replace('/', '').replace(/[, ]+/g, ''))
-                setLoading(false)
-                if( getData.data != null && getData.data != '' ) {
-                    setClaimParseData(getData.data)
-                }
-            }
-            getAbstractData()
-        }
-        setClaimParseData(parseData)
+            getClaimData()
+        } else {
+            setClaimParseData(parseData)
+        }        
     }, [data])
+
+    useEffect(() => {
+        getClaimData()
+    }, [number])
+
+    const getClaimData = async () => {
+        setLoading(true)
+        PatenTrackApi.cancelClaimsData()
+        const getData = await PatenTrackApi.getClaimsData(number.replace('/', '').replace(/[, ]+/g, ''))
+        setLoading(false)
+        if( getData.data != null && getData.data != '' ) {
+            setClaimParseData(getData.data)
+        } else {
+            setClaimParseData([])
+        }
+    }
 
     const ClaimTree = (props) => {
         return(

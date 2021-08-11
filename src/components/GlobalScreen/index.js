@@ -617,6 +617,10 @@ const GlobalScreen = ({
                                                 chartBar={openChartBar}
                                                 analyticsBar={openAnalyticsBar}
                                                 openCustomerBar={openCustomerBar}
+                                                commentBar={openCommentBar}
+                                                illustrationBar={openIllustrationBar}
+                                                customerBarSize={customerBarSize}
+                                                companyBarSize={companyBarSize}
                                                 type={type}
                                             />
                                         </div>

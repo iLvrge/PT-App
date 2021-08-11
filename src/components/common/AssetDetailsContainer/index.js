@@ -37,8 +37,12 @@ const AssetDetailsContainer = ({
   parentBar,
   illustrationData,
   visualizerBarSize,
-  openCustomerBar
-}) => {
+  openCustomerBar,
+  commentBar,
+  illustrationBar,
+  customerBarSize,
+  companyBarSize
+}) => { 
   const classes = useStyles();
   const dispatch = useDispatch();
   const chartAnalyticsContainer = useRef(null);
@@ -229,11 +233,11 @@ const AssetDetailsContainer = ({
                           resize={resizeFrame}
                           />  
                       ) : lifeSpanMode === true ? (
-                          <InventionVisualizer defaultSize={defaultSize} illustrationBar={openIllustrationBar} visualizerBarSize={visualizerBarSize} analyticsBar={analyticsBar} openCustomerBar={openCustomerBar}/>
+                          <InventionVisualizer defaultSize={defaultSize} illustrationBar={openIllustrationBar} visualizerBarSize={visualizerBarSize} analyticsBar={analyticsBar} openCustomerBar={openCustomerBar} commentBar={commentBar} illustrationBar={illustrationBar} customerBarSize={customerBarSize} companyBarSize={companyBarSize} />
                       ) : familyItemMode === true ? (
                           <FamilyItemContainer item={selectedAssetsFamilyItem} onClose={onCloseFamilyItemMode} />
                       ) : (
-                        <InventionVisualizer defaultSize={defaultSize} illustrationBar={openIllustrationBar} visualizerBarSize={visualizerBarSize} analyticsBar={analyticsBar} openCustomerBar={openCustomerBar}/>
+                        <InventionVisualizer defaultSize={defaultSize} illustrationBar={openIllustrationBar} visualizerBarSize={visualizerBarSize} analyticsBar={analyticsBar} openCustomerBar={openCustomerBar} commentBar={commentBar} illustrationBar={illustrationBar} customerBarSize={customerBarSize} companyBarSize={companyBarSize} />
                       )
                   )
                 :

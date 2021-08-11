@@ -48,7 +48,6 @@ const options = {
       } else {
         grantDate = ''
       }
-      console.log('Template', `<div class='first'>${data.country.toUpperCase()} ${numberWithCommas(data.number)}</div><div class='flexMain ${ data.country.toLowerCase() == "cn" ? 'alignBaseline' : ''} '><img src='${data.country.toLowerCase() == 'ep' || data.country.toLowerCase() == 'wo' ? 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/'+data.country.toLowerCase()+'.png' : 'https://flagcdn.com/w80/'+data.country.toLowerCase()+'.png'}' srcset='${data.country.toLowerCase() == 'ep' || data.country.toLowerCase() == 'wo' ? 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/'+data.country.toLowerCase()+'.png' : 'https://flagcdn.com/w160/'+data.country.toLowerCase()+'.png 2x'}'/><div class='textColumn'><div class='absolute'><div>${applicationDate}</div><div>${grantDate}</div></div></div></div>`)
       return `<div class='first'>${data.country.toUpperCase()} ${numberWithCommas(data.number)}</div><div class='flexMain ${ data.country.toLowerCase() == "cn" ? 'alignBaseline' : ''} '><img src='${data.country.toLowerCase() == 'ep' || data.country.toLowerCase() == 'wo' ? 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/'+data.country.toLowerCase()+'.png' : 'https://flagcdn.com/w80/'+data.country.toLowerCase()+'.png'}' srcset='${data.country.toLowerCase() == 'ep' || data.country.toLowerCase() == 'wo' ? 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/'+data.country.toLowerCase()+'.png' : 'https://flagcdn.com/w160/'+data.country.toLowerCase()+'.png 2x'}'/><div class='textColumn'><div class='absolute'><div>${applicationDate}</div><div>${grantDate}</div></div></div></div>`
     },  
 } 
@@ -120,7 +119,7 @@ const FamilyContainer = ({ family, onClose }) => {
             setTimelineRawData(family)
             setIsLoadingTimelineRawData(false)
             const findIndex = family.findIndex(item => selectedAsset.includes(item.application_number) || selectedAsset.includes(item.patent_number))
-            console.log("FamilyContainers", findIndex, selectedAsset)
+            
             if(findIndex !== -1 ) { 
                 dispatch(setFamilyItemDisplay(family[findIndex]))
                 dispatch(toggleFamilyItemMode(true))
@@ -144,9 +143,7 @@ const FamilyContainer = ({ family, onClose }) => {
         let start = new moment().subtract(18, 'months')
         let end = new moment().add(18, 'months')
         if(timelineContainerRef.current != null) {
-            console.log('timelineRawData', timelineRawData)
             const convertedItems = timelineRawData.map(convertDataToItem)
-            console.log('convertedItems', convertedItems)
             setTimelineItems(convertedItems)
             items.current = new DataSet()
             if (convertedItems.length > 0) {

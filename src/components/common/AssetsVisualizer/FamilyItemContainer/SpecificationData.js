@@ -16,20 +16,28 @@ const SpecificationData = ({ data, number }) => {
             parseData = data
         }
         console.log("SpecificationData", parseData)
-        if((Array.isArray(parseData) && parseData.length == 0) || parseData == '' || parseData == null) {
-            const getSpecificationData = async () => {
-                setLoading(true)
-                const getData = await PatenTrackApi.getSpecificationData(number.replace('/', '').replace(/[, ]+/g, ''))
-                setLoading(false)
-                if( getData.data != null && getData.data != '' ) {
-                    setSpecificationParseData(getData.data)
-                }
-            }
+        if((Array.isArray(parseData) && parseData.length == 0) || parseData == '' || parseData == null) {            
             getSpecificationData()
         } else {
             setSpecificationParseData(parseData)
         }        
     }, [data])
+
+    useEffect(() => {
+        getSpecificationData()
+    }, [number])
+
+    const getSpecificationData = async () => {
+        setLoading(true)
+        PatenTrackApi.cancelSpecificationData()
+        const getData = await PatenTrackApi.getSpecificationData(number.replace('/', '').replace(/[, ]+/g, ''))
+        setLoading(false)
+        if( getData.data != null && getData.data != '' ) {
+            setSpecificationParseData(getData.data)
+        } else {
+            setSpecificationParseData([])
+        }
+    }
 
     const SpecificationTree = (props) => {
         return(

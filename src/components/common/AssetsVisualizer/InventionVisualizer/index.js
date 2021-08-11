@@ -32,7 +32,7 @@ import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
 var newRange = [1,2]
 
-const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar }) => {
+const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize }) => {
     
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -103,7 +103,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const [ graphRawData, setGraphRawData ] = useState([])
     const [ graphRawGroupData, setGraphRawGroupData ] = useState([])
     
-
+    
     let options = {
         height: '100%',
         width: '100%',
@@ -159,7 +159,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
               color         : '#fff',
               background    : '#000',
               boxShadow     : 'none',
-              maxWidth      : '40%'
+              /* maxWidth      : '40%' */
             },
             line: {
               borderLeft    : '0px dotted #e60000',
@@ -494,7 +494,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             graphRef.current.setOptions(options)
             graphRef.current.redraw()
         }
-    }, [ visualizerBarSize, analyticsBar, defaultSize ]) 
+    }, [ visualizerBarSize, analyticsBar, defaultSize, commentBar, illustrationBar, customerBarSize, companyBarSize ]) 
 
 
     useEffect(() => {
