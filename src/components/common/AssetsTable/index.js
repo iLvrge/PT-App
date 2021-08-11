@@ -181,6 +181,7 @@ const AssetsTable = ({
   }, [selectedAssets])
 
   useEffect(() => {
+    console.log('movedAssets', movedAssets)
     dispatch(setMoveAssets(movedAssets))
   }, [movedAssets])
 
@@ -243,7 +244,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       image: '',
       icon: <Clipboard />
     },
-    {
+    /* {
       id: 6,
       name: 'Link to Our Products',
       image: '',
@@ -260,7 +261,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       name: 'Link to Competition',
       image: '',
       icon: <Clipboard />
-    }
+    } */
   ]
 
   const openGoogleWindow = () => {
@@ -287,31 +288,52 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         dispatch(linkWithSheetOpenPanel(true))
         dispatch(linkWithSheetSelectedAsset(type, encodeURIComponent(row.asset_type == 1 ? `US${applicationFormat(asset)}` : `US${numberWithCommas(asset)}`)))        
       } else {
+
         if(event.target.value == 5) {
           setSelectedAssets(prevItems => {
             const findIndex = prevItems.findIndex( r => r.asset == asset)
             if( findIndex !== -1 ) {
-              return prevItems.splice( findIndex, 1 )
+              const items = [...prevItems]
+              items.splice( findIndex, 1 )
+              return items
             } else {
               return [...prevItems, row]
             }
           })          
+        } else if (event.target.value === -1) {
+          setSelectedAssets(prevItems => {
+            const findIndex = prevItems.findIndex( r => r.asset == asset)
+            if( findIndex !== -1 ) {
+              const items = [...prevItems]
+              items.splice( findIndex, 1 )
+              return items
+            } else {
+              return [...prevItems]
+            }
+          }) 
         }     
         const currentLayoutIndex = controlList.findIndex(r => r.type == 'menu' && r.category == selectedCategory )
         if(currentLayoutIndex !== -1) {
           setDropOpenAsset(null)
           setMovedAssets(prevItems => {
             const findIndex = prevItems.findIndex(row => row.asset == asset)
+            
             if(findIndex !== -1) {
-              return prevItems.splice( findIndex, 1 )
+              const items = [...prevItems]
+              items.splice( findIndex, 1 )
+              return items
             } else {
-              return [...prevItems, {
-                asset,
-                move_category: event.target.value,
-                currentLayout: controlList[currentLayoutIndex].layout_id,
-                grant_doc_num: row.grant_doc_num,
-                appno_doc_num: row.appno_doc_num,
-              }]
+              if(event.target.value !== -1) {
+                return [...prevItems, {
+                  asset,
+                  move_category: event.target.value,
+                  currentLayout: controlList[currentLayoutIndex].layout_id,
+                  grant_doc_num: row.grant_doc_num,
+                  appno_doc_num: row.appno_doc_num,
+                }]
+              } else {
+                return prevItems
+              }              
             }
           })      
         }
