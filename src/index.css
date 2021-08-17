@@ -904,6 +904,7 @@ a.maintain svg.clean_encumbrances path{
 
 .graphTooltip{
   font-size: 0.875rem;
+  z-index: 9999;
 }
 
 .tootlip_data{

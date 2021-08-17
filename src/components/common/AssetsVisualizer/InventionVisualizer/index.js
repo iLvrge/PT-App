@@ -102,7 +102,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
     const [ graphRawData, setGraphRawData ] = useState([])
     const [ graphRawGroupData, setGraphRawGroupData ] = useState([])
-    
+    let interval;
     
     let options = {
         height: '100%',
@@ -184,8 +184,37 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             const {data} = await PatenTrackApi.getAssetsByCPCCode(point.x, encodeURIComponent(code), form) 
             setAssetsLoading(false)
             setAssets(data.list)
-        }
+        }  
     },[ graphRawGroupData, filterList ])
+
+    const onCameraPositionChange = useCallback(async (event) => {
+        
+    })
+
+    const checkToolTip = () => {
+        const elementFound = document.getElementsByClassName('graphTooltip')
+        if(elementFound !== null && elementFound.length > 0) {
+            const parentElement = elementFound[0].parentElement,
+            computedStyle = window.getComputedStyle(parentElement),
+            left = computedStyle.left, top = computedStyle.top
+
+            if(left !== '' && parseInt(left) < 0) {
+                parentElement.style.left = '0px'
+            }
+
+            if(top !== '' && parseInt(top) < 0) {
+                parentElement.style.top = '0px'
+            }
+        }
+    }
+
+    const onHandleMouseOver = (event) => {
+        interval = setInterval(checkToolTip, 100)
+    }
+
+    const onHandleMouseOut = (event) => {
+        clearInterval(interval)
+    }
 
     useEffect(() => {
         if(selectedRow.length  === 0) {
@@ -462,6 +491,12 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
         graphRef.current = new Graph3d(graphContainerRef.current, items.current, options)
         graphRef.current.on('click', graphClickHandler)      
+        graphRef.current.on('cameraPositionChange', onCameraPositionChange)
+        if(graphContainerRef.current != null ) {
+            graphContainerRef.current.removeEventListener('mouseover', onHandleMouseOver)
+            graphContainerRef.current.addEventListener('mouseout', onHandleMouseOut)
+            graphContainerRef.current.addEventListener('mouseover', onHandleMouseOver)            
+        }
     }
 
     useEffect(() => { 
