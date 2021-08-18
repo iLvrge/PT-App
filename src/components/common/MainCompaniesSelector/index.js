@@ -405,6 +405,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         event.preventDefault()
         const { checked } = event.target;
         /* dispatch(setMainCompaniesRowSelect([])) */
+        dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
+        dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
         if(checked === false) {
             setSelectItems([])
             dispatch( setMainCompaniesSelected([], []) )
