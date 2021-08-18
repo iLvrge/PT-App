@@ -65,7 +65,7 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize}) => {
             if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {  
                 if( assetsSelected.length > 0 ) {
                     const promise = assetsSelected.map(asset => {
-                        const findIndex = assetsList.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num.toString() == asset.toString() )
+                        const findIndex = assetsList.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset.toString() )
                         if( findIndex !== -1 ) {
                             if( assetsList[findIndex].appno_doc_num != '' ) {
                                 list.push(assetsList[findIndex].appno_doc_num.toString())
@@ -75,7 +75,7 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize}) => {
                     await Promise.all(promise)
                 } else {
                     const promise = selectedMaintainencePatents.map(asset => {
-                        const findIndex = maintainenceAssetsList.findIndex( row => row.appno_doc_num.toString() == asset[1].toString() || row.grant_doc_num.toString() == asset[0].toString() )
+                        const findIndex = maintainenceAssetsList.findIndex( row => row.appno_doc_num.toString() == asset[1].toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset[0].toString() )
                         if( findIndex !== -1 ) {
                             if( maintainenceAssetsList[findIndex].appno_doc_num != '' ) {
                                 list.push(maintainenceAssetsList[findIndex].appno_doc_num.toString())

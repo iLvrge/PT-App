@@ -139,13 +139,18 @@ export default function PatentNode(props) {
           } 
         }
         const getBoundElementRec = fromElement.getBoundingClientRect() */
-        
+        //let pos = d3.select(d3.event.fromElement).node().getBoundingClientRect();
+
         d3.select("#patentrackDiagramDiv")
           .append("div")	
           .attr("class", "tooltip_title MuiTooltip-tooltip")	
           .html(typeof data.json != 'undefined' && typeof data.json.original_name !== 'undefined' && data.json.original_name != '' && data.json.original_name !== null ? data.json.original_name : data.name)
+          /* .style('left', `${pos['x']}px`)
+          .style('top', `${(window.pageYOffset  + pos['y'] - 100)}px`); */
+          /* .style("left", `${d3.event.pageX }px`)		
+          .style("top", `${d3.event.pageY }px`);	  */
           .style("left", `${d3.event.offsetX + 30}px`)		
-          .style("top", `${(d3.event.offsetY)}px`);	 
+          .style("top", `${(d3.event.offsetY)}px`);	  
       })
       .on("mouseout", () => {
         d3.selectAll(".tooltip_title").remove();

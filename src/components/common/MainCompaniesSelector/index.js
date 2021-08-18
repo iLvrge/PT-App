@@ -370,7 +370,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             )
         )
         dispatch(
-            setPDFView(true)
+            setPDFView(false)
         )
         dispatch(toggleLifeSpanMode(true));
         dispatch(toggleFamilyMode(false));

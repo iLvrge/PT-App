@@ -281,6 +281,7 @@ const VirtualizedTable = ({
           isIndeterminate = getChild.some(item => selected.includes(item))
         }
       }
+      
       return (
         <TableCell
           component={"div"}
