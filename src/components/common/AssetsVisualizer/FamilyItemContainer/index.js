@@ -92,7 +92,7 @@ const FamilyItemContainer = ({ item, onClose }) => {
                 selectedCompaniesAll === true || selectedCompanies.length > 0
                 ?
                     <>
-                        <Typography variant='body2' className={classes.heading}>{selectedNumber}</Typography>
+                        {/* <Typography variant='body2' className={classes.heading}>{selectedNumber}</Typography> */}
                         <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
                             {
                                 ['Fees', 'Abstract', 'Specifications', 'Claims', 'Figures', 'Citations', 'PTAB', 'Litigation', 'Events'].map( (item, index) => (
