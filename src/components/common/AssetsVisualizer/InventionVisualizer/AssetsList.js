@@ -91,26 +91,24 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
 
     const onHandleDropDownlist = useCallback(async(event, asset, row ) => { 
         if(event.target.value == 5) {
-            let oldItems = [...selectItems], oldAssets = [...selectedAssets]
-            if( oldItems.length > 0 ) {
-                const findIndex = oldItems.findIndex( id => id == row.id)
-                if( findIndex !== -1 ) {
-                    oldItems.splice( findIndex, 1 )
-                    oldAssets.splice( findIndex, 1 )
-                } else {
-                    oldItems.push(row.id)
-                    oldAssets.push(row)
-                }
+           
+            /* setSelectItems(prevItems =>
+                prevItems.includes(row.asset)
+                ? prevItems.filter(item => item !== row.asset)
+                : [...prevItems, row.asset],
+            ); */
+            
+            let oldItems = [...clipboard_assets]
+            const findIndex = oldItems.findIndex(item => item.asset == row.asset)
+            if(findIndex === -1) {
+                oldItems.push(row)
             } else {
-                oldItems.push(row.id)
-                oldAssets.push(row)
+                oldItems = oldItems.filter( item => item.asset !== row.asset)
             }
-            setSelectItems(oldItems)
-            setSelectedAssets(oldAssets)
-            dispatch(setClipboardAssets(oldAssets))
+            dispatch(setClipboardAssets(oldItems))
         } else if( event.target.value == 0 ) {
             if(clipboard_assets.length > 0) {
-                const remAssets = clipboard_assets.reduce( r => r.id != row.id)
+                const remAssets = clipboard_assets.filter( r => r.asset != row.asset)
                 dispatch(setClipboardAssets(remAssets))
                 setSelectedAssets(remAssets)
             }            
