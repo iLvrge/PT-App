@@ -37,7 +37,7 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
     const [ width, setWidth ] = useState( 1800 ) 
     const tableRef = useRef()
     const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
-    const [ grandTotal, setGrandTotal ] = useState( 0 )
+    /* const [ grandTotal, setGrandTotal ] = useState( 0 ) */
     const [ childSelected, setCheckedSelected] = useState( 0 )
     const [ currentSelection, setCurrentSelection] = useState(null)    
     const [ selectedRow, setSelectedRow] = useState( [] )
@@ -60,6 +60,8 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
 
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
     const [ data, setData ] = useState( [] )
+
+    let grandTotal = 0;
 
     const COLUMNS = [
         {
@@ -99,9 +101,11 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)
     useEffect(() => {
         if( assetTypeNames.length > 0 ) {
-            setGrandTotal(assetTypeNames[assetTypeNames.length - 1].grand_total)
+            /* setGrandTotal(assetTypeNames[assetTypeNames.length - 1].grand_total) */
+            grandTotal = assetTypeNames[assetTypeNames.length - 1].grand_total
         } else {
-            setGrandTotal(0)
+            /* setGrandTotal(0) */
+            grandTotal = 0
         }
     }, [ assetTypeNames ]) 
     

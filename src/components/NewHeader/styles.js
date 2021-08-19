@@ -133,7 +133,8 @@ export default makeStyles(theme => ({
         display: 'flex',
         height: '100%',
         alignItems: 'flex-end',
-        color: '#FFFFFF'
+        color: '#FFFFFF',
+        whiteSpace: 'nowrap'
     },
     grow: {
         flexGrow: 1,
@@ -419,7 +420,10 @@ export default makeStyles(theme => ({
             color: '#e60000 !important'
         },
         '&:first':{
-        marginLeft: 5
+            marginLeft: 5
+        },
+        '& .MuiButton-label':{
+            whiteSpace: 'nowrap'
         }
         /* '& svg': {
             width: 60,

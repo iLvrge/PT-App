@@ -4,8 +4,9 @@ export default makeStyles(theme => ({
   textEditor: {
     color: '#000',
     margin: 0,
+    overflow: 'hidden',
     '& .ql-attachDriveButton':{
-    }
+    }    
   },
   buttonGroup: {
     width: '100%',
@@ -39,6 +40,9 @@ export default makeStyles(theme => ({
     '&:first-child':{
       /* marginLeft: 20,
       borderLeft: '1px solid #545454' */
+    },
+    '& .MuiButton-label': {
+      whiteSpace: 'nowrap'
     }
   }, 
   active: {
