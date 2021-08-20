@@ -94,6 +94,7 @@ const CompanySummary = () => {
                 getSummaryData(access_token, user_email)
             } else {
                 openGoogleWindow()
+                getSummaryData('', '')
             }            
         }
         findSummary()
