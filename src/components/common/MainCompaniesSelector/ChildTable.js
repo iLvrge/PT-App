@@ -121,6 +121,7 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
         const getChildCompanies = async () => {            
             if( parentCompanyId > 0 ) { 
                 setChildCompaniesLoading( true )
+                PatenTrackApi.cancelChildCompanies()
                 const { data } = await PatenTrackApi.getChildCompanies(parentCompanyId)
                 setChildCompanies(data.list)
                 setChildCompaniesLoading( false )
@@ -129,7 +130,7 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
                 }
                 if(selected.includes(parentCompanyId)){
                     checkedAllChildCompanies(data.list)
-                }
+                } 
             } else {
                 setChildCompaniesLoading( false )
             }

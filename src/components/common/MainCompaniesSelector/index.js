@@ -66,7 +66,9 @@ const COLUMNS = [
         role: 'checkbox',
         selectedFromChild: true,     
         disableSort: true,
-        show_selection_count: true
+        show_selection_count: true,
+        showOnCondition: '1'
+
     },
     {
         width: 20,
@@ -474,6 +476,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         rowSelected={selectedRow}
         selectedIndex={currentSelection}
         selectedKey={'representative_id'} 
+        disableRowKey={'type'}
         rows={companiesList}
         rowHeight={rowHeight}
         headerHeight={headerRowHeight}
@@ -499,7 +502,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         width={width} 
         containerStyle={{ 
             width: '100%',
-            maxWidth: '100%'
+            maxWidth: '100%' 
         }}
         style={{
             width: '100%'

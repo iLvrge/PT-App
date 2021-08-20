@@ -39,20 +39,23 @@ const AddMenu = ({ anchorEl, onClose, createParent, associateToParent }) => {
         label={
           <Fragment>
             <LayersIcon className={classes.icon} />
-            Import under Existing Company
+            Import under Existing Group
           </Fragment>
         }
         parentMenuOpen={!!anchorEl}
         onClick={onClose}>
-        {
-          (companiesList || []).map((company) => (
-            <MenuItem key={company.id} onClick={onAction(associateToParent(company))}>{
-              company.representative_name === null
-                ? company.original_name
-                : company.representative_name
-            }</MenuItem>
-          ))
-        }
+        {(companiesList || []).map(company => {
+          return company.type == 1 
+            ?
+              <MenuItem key={company.id} onClick={onAction(associateToParent(company))}>{
+                company.representative_name === null
+                  ? company.original_name
+                  : company.representative_name
+              }
+              </MenuItem>
+            :
+             ''
+        })}        
       </NestedMenuItem>
     </Menu>
   )

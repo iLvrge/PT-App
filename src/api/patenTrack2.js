@@ -74,7 +74,7 @@ const getMultiFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest
 
 class PatenTrackApi {
   static getSiteLogo() {
@@ -90,7 +90,21 @@ class PatenTrackApi {
   }
 
   static getChildCompanies(companyID, offset = 0 ) {
-    return axios.get(`${base_new_api_url}/companies/${companyID}/list?offset=${offset}&limit=${DEFAULT_CUSTOMERS_LIMIT}`, getHeader())
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelChildCompaniesRequest = c
+    })
+    return axios.get(`${base_new_api_url}/companies/${companyID}/list?offset=${offset}&limit=${DEFAULT_CUSTOMERS_LIMIT}`, header)
+  }
+
+  static cancelChildCompanies() {
+    if (cancelChildCompaniesRequest !== undefined) {
+      try{
+        throw cancelChildCompaniesRequest('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
   }
 
   static getParentCompanies( offset = 0 ) {
@@ -865,6 +879,10 @@ class PatenTrackApi {
 
   static moveAssetRollback( IDs ) {
     return axios.delete(`${base_new_api_url}/assets/rollback?revert=${IDs}`, getHeader())
+  } 
+
+  static addGroup( form ) {
+    return axios.post(`${base_new_api_url}/companies/group`,  form, getFormUrlHeader())
   } 
 
   static searchEntity( searchString, type ) {

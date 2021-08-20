@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { Fragment, useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import useStyles from './styles'
 import { fetchCompaniesList, setBreadCrumbs } from '../../../../../actions/patentTrackActions2'
@@ -7,21 +7,26 @@ import { deleteCompany, deleteSameCompany } from '../../../../../actions/patenTr
 import SearchCompanies from './SearchCompanies'
 import SplitPaneDrawer from '../../../../SplitPaneDrawer'
 import Header from '../../../components/Header'
+import Group from './Group'
+
 
 
 function Companies() {
   const classes = useStyles()
   const dispatch = useDispatch()
   const [ open, setOpen ] = useState(true)
-  const [ search, setSearch ] = React.useState('')
-  const [ companiesSelected, setCompaniesSelected ] = React.useState([])
-  const [ childCompaniesSelected, setChildCompaniesSelected ] = React.useState([])
+  const [ search, setSearch ] = useState('')
+  const [ companiesSelected, setCompaniesSelected ] = useState([])
+  const [ childCompaniesSelected, setChildCompaniesSelected ] = useState([])
   
-  const [ searchSelected, setSearchSelected ] = React.useState([])
+  const [ searchSelected, setSearchSelected ] = useState([])
   const toggleOpen = useCallback(() => setOpen(open => !open), [])
+  const [ childComponentList, setChildComponentList ] = useState([])
+
+
 
   useEffect(() => {
-    dispatch(setBreadCrumbs('Settings > Companies'))
+    dispatch(setBreadCrumbs('Settings > Companies'))  
     dispatch(fetchCompaniesList())
   }, [ dispatch ])
 
@@ -51,6 +56,14 @@ function Companies() {
     }
   }, [ searchSelected ])
 
+  useEffect(() => {
+    setChildComponentList([{
+      component: Group,      
+    }])
+  }, [])
+
+  
+
   return (
     <SplitPaneDrawer
       open={open}
@@ -65,7 +78,9 @@ function Companies() {
             onDelete={onDeleteCompanies}
             numSelected={companiesSelected.length + childCompaniesSelected.length}
             search={search}
-            setSearch={setSearch} />
+            setSearch={setSearch} 
+            childComponent={childComponentList}
+          />
 
           <CompaniesTable
             search={search}

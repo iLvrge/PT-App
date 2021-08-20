@@ -34,7 +34,7 @@ function Row({ onSelect, isSelected, isChildSelected, row }) {
         <TableCell padding="none">
           <IconButton
             onClick={toggleOpen} size="small"
-            style={{ visibility: row.children.length > 1 ? 'visible' : 'hidden' }}>
+            style={{ visibility: row.children.length > 0 ? 'visible' : 'hidden' }}>
             {open ? <ExpandMoreIcon /> : <ChevronRightIcon />}
           </IconButton>
         </TableCell>
@@ -49,7 +49,7 @@ function Row({ onSelect, isSelected, isChildSelected, row }) {
         <TableCell>
           {row.representative_name === null
             ? row.original_name
-            : row.representative_name} {row.children.length > 1 ? `(${row.children.length})` : ''}
+            : row.representative_name} {row.children.length > 0 ? `(${row.children.length})` : ''}
         </TableCell>
 
         <TableCell align={'center'}>
@@ -57,7 +57,7 @@ function Row({ onSelect, isSelected, isChildSelected, row }) {
         </TableCell>
       </TableRow>
       {
-        row.children.length > 1 && (
+        row.children.length > 0 && (
           <TableRow>
             <TableCell className={classes.collapsedCell} colSpan={6}>
               <Collapse in={open} timeout="auto" unmountOnExit>

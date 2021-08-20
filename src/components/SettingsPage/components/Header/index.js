@@ -15,7 +15,7 @@ import Button from '@material-ui/core/Button'
 import StyledSearch from '../../../common/StyledSearch'
 import clsx from 'clsx'
 
-const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setSearch }) => {
+const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setSearch, childComponent }) => {
   const classes = useStyles()
 
   const [ openDialog, setOpenDialog ] = useState(false)
@@ -32,7 +32,7 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
     setOpenDialog(false)
     onDelete()
   }, [ onDelete ])
-
+  console.log(`typeof childComponent !== 'undefined' && childComponent.length > 0`, typeof childComponent, childComponent )
   return (
     <Fragment>
       <Dialog open={openDialog} onClose={onCloseDialog}>
@@ -57,6 +57,17 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
         <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
           {numSelected > 0 ? `${numSelected} Selected` : title}
         </Typography>
+        {
+          typeof childComponent !== 'undefined' && childComponent.length > 0
+          ?
+            childComponent.map(
+              ({component: Component, ...props }, index) => (
+                  <Component key={index} {...props} />
+              )
+            )
+          :
+          ''
+        }
         {
           !onCheckable && numSelected > 0 ? (
             <Tooltip title="Delete">
