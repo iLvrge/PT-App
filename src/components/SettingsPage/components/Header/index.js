@@ -36,7 +36,7 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
   return (
     <Fragment>
       <Dialog open={openDialog} onClose={onCloseDialog}>
-        <DialogTitle id="alert-dialog-title">Delete Items</DialogTitle>
+        <DialogTitle id="alert-dialog-title">Remove Items</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Are you sure you want to remove {numSelected} {title.toLowerCase()}?
@@ -56,8 +56,7 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
       <Toolbar className={clsx(classes.root, /* { [classes.highlight]: numSelected > 0 } */)}>
         <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
           {numSelected > 0 ? `${numSelected} Selected` : title}
-        </Typography>
-        {
+          {
           typeof childComponent !== 'undefined' && childComponent.length > 0
           ?
             childComponent.map(
@@ -68,6 +67,8 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
           :
           ''
         }
+        </Typography>
+        
         {
           !onCheckable && numSelected > 0 ? (
             <Tooltip title="Delete">

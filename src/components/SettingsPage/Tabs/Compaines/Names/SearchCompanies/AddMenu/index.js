@@ -27,19 +27,19 @@ const AddMenu = ({ anchorEl, onClose, createParent, associateToParent }) => {
       }}
       transformOrigin={{
         vertical: 'top',
-        horizontal: 'center',
+        horizontal: 'center',  
       }}>
 
       <MenuItem onClick={onAction(createParent)}>
         <AddIcon className={classes.icon} />
-          Import Company
+          Import outside a Group
       </MenuItem>
 
       <NestedMenuItem
         label={
           <Fragment>
             <LayersIcon className={classes.icon} />
-            Import under Existing Group
+            Import into Group
           </Fragment>
         }
         parentMenuOpen={!!anchorEl}

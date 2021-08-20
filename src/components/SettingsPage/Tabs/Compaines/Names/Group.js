@@ -2,7 +2,9 @@ import React, { Fragment, useCallback, useEffect, useState, useRef } from 'react
 
 import { useDispatch } from 'react-redux'
 
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core'
+
+import AddIcon from '@material-ui/icons/Add'
 
 import { fetchCompaniesList } from '../../../../../actions/patentTrackActions2'
 
@@ -38,29 +40,32 @@ function Groups() {
 
     return (
         <div className={classes.dialogButton}>
-          <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-            Add a Group
-          </Button>
+            <Button 
+                variant="outlined" 
+                color="inherit" 
+                onClick={handleClickOpen}
+                startIcon={<AddIcon className={classes.icon} />}
+                className={classes.btnGroup}
+            >
+                Add a new Group
+            </Button>
           <Dialog open={openDialog} onClose={handleClose} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">Group</DialogTitle>
             <DialogContent>
-                <DialogContentText>
-                    To add several companies to a Group
-                </DialogContentText>
                 <TextField
                     autoFocus
                     ref={inputGroup}
                     margin="dense"
                     id="group_name"
                     label="Group Name"
+                    color='secondary'
                     fullWidth
                 />     
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose} color="primary">
+              <Button onClick={handleClose} color="inherit">
                 Cancel
               </Button>
-              <Button onClick={handleAddGroup} color="primary">
+              <Button onClick={handleAddGroup} color="inherit">
                 Create
               </Button>
             </DialogActions>
