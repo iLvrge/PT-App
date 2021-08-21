@@ -9,13 +9,126 @@ import { DEFAULT_CUSTOMERS_LIMIT } from '../../../api/patenTrack2'
 import PatenTrackApi from '../../../api/patenTrack2'
 import {
     setMainCompaniesSelected,
-    setMainCompaniesRowSelect
+    setMainCompaniesRowSelect,
+    setMaintainenceAssetsList,
+    setAssetTypes,
+    setAssetTypeInventor,
+    setAssetTypeCompanies,
+    setAssetTypeAssignments,
+    setAssetTypeAssignmentAllAssets,
+    setAssetsIllustration,
+    setAssetsIllustrationData,
+    setSelectedAssetsTransactions,
+    setSelectedAssetsPatents,
+    setAllAssetTypes,
+    setAssetTypesSelect,
+    setAllAssignmentCustomers,
+    setSelectAssignmentCustomers,
+    setNamesTransactionsSelectAll,
+    setSelectedNamesTransactions
 } from '../../../actions/patentTrackActions2'
+
+import {
+    setPDFView,
+    setPDFFile
+  } from "../../../actions/patenTrackActions";
+
+import {
+    toggleUsptoMode, 
+    toggleFamilyMode,
+    toggleFamilyItemMode,
+    toggleLifeSpanMode
+  } from "../../../actions/uiActions";
+
+import {
+    updateHashLocation
+} from '../../../utils/hashLocation' 
 
 
 import { numberWithCommas } from '../../../utils/numbers'
 
 import Loader from '../Loader'
+
+const COLUMNS = [ 
+    {
+        width: 29,
+        minWidth: 29,
+        label: '',
+        dataKey: 'representative_id',
+        role: 'checkbox',
+        disableSort: true
+    },
+    {
+        width: 171,  
+        minWidth: 171,
+        oldWidth: 171,
+        draggable: true,
+        label: 'Companies',        
+        dataKey: 'original_name',
+        align: "left", 
+        badge: true
+    },
+    {
+        width: 80,  
+        minWidth: 80, 
+        label: 'Acitivites',
+        staticIcon: '',
+        dataKey: 'no_of_activities',
+        format: numberWithCommas,
+        style: true,
+        justifyContent: 'flex-end'
+    },
+    {
+        width: 80,   
+        minWidth: 80,
+        label: 'Parties',
+        staticIcon: '',
+        dataKey: 'no_of_parties',
+        format: numberWithCommas,
+        style: true,
+        justifyContent: 'flex-end'
+    },
+    {
+        width: 80,  
+        minWidth: 80,
+        label: 'Inventors',
+        staticIcon: '',
+        dataKey: 'no_of_inventor',
+        format: numberWithCommas,
+        style: true,
+        justifyContent: 'flex-end'
+    },
+    {
+        width: 120,  
+        minWidth: 120,
+        label: 'Transactions',
+        staticIcon: '',
+        dataKey: 'no_of_transactions',
+        format: numberWithCommas,
+        style: true,
+        justifyContent: 'flex-end'
+    },
+    {
+        width: 80,  
+        minWidth: 80,
+        label: 'Assets',
+        staticIcon: '',
+        dataKey: 'no_of_assets',
+        format: numberWithCommas,
+        style: true,
+        justifyContent: 'flex-end'
+    },
+    {
+        width: 80,  
+        minWidth: 80,
+        label: 'Arrows',
+        dataKey: 'product',
+        staticIcon: '',
+        format: numberWithCommas,
+        style: true,
+        justifyContent: 'flex-end'
+    }
+]
 
 const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
 
@@ -27,6 +140,7 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
     const [ rowHeight, setRowHeight ] = useState(40)
     const [ width, setWidth ] = useState( 1900 )
     const tableRef = useRef()
+    const [headerColumns, setHeaderColumns] = useState(COLUMNS)
     const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
     const [ childCompaniesLoading, setChildCompaniesLoading] = useState( true )
     const [ companies, setChildCompanies] = useState( [] )
@@ -34,88 +148,24 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
     const [ selectItems, setSelectItems] = useState( [] )
     const [ selectedRow, setSelectedRow] = useState( [] )
     const selected = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
-	const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
+    const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
+    const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
+    const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
 
-    const COLUMNS = [ 
-        {
-            width: 29,
-            minWidth: 29,
-            label: '',
-            dataKey: 'representative_id',
-            role: 'checkbox',
-            disableSort: true
-        },
-        {
-            width: 171,  
-            minWidth: 171,
-            oldWidth: 171,
-            draggable: true,
-            label: 'Companies',        
-            dataKey: 'original_name',
-            align: "left", 
-            badge: true
-        },
-        {
-            width: 80,  
-            minWidth: 80, 
-            label: 'Acitivites',
-            staticIcon: '',
-            dataKey: 'no_of_activities',
-            format: numberWithCommas,
-            style: true,
-            justifyContent: 'flex-end'
-        },
-        {
-            width: 80,   
-            minWidth: 80,
-            label: 'Parties',
-            staticIcon: '',
-            dataKey: 'no_of_parties',
-            format: numberWithCommas,
-            style: true,
-            justifyContent: 'flex-end'
-        },
-        {
-            width: 80,  
-            minWidth: 80,
-            label: 'Inventors',
-            staticIcon: '',
-            dataKey: 'no_of_inventor',
-            format: numberWithCommas,
-            style: true,
-            justifyContent: 'flex-end'
-        },
-        {
-            width: 120,  
-            minWidth: 120,
-            label: 'Transactions',
-            staticIcon: '',
-            dataKey: 'no_of_transactions',
-            format: numberWithCommas,
-            style: true,
-            justifyContent: 'flex-end'
-        },
-        {
-            width: 80,  
-            minWidth: 80,
-            label: 'Assets',
-            staticIcon: '',
-            dataKey: 'no_of_assets',
-            format: numberWithCommas,
-            style: true,
-            justifyContent: 'flex-end'
-        },
-        {
-            width: 80,  
-            minWidth: 80,
-            label: 'Arrows',
-            dataKey: 'product',
-            staticIcon: '',
-            format: numberWithCommas,
-            style: true,
-            justifyContent: 'flex-end'
+    
+
+    useEffect(() => {
+        if(selectedCategory === 'correct_names') {
+            let headerColumns = [...COLUMNS]
+            headerColumns[0].role = 'radio'
+            setHeaderColumns(headerColumns)
+        } else {
+            let headerColumns = [...COLUMNS]
+            headerColumns[0].role = 'checkbox'
+            setHeaderColumns(headerColumns)
         }
-    ]
+    }, [selectedCategory])
+
        
     useEffect(() => {
         const getChildCompanies = async () => {            
@@ -180,7 +230,7 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
         dispatch( setMainCompaniesSelected( oldSelection, updateSelectedWithName ) ) 
     }
 
-    const onHandleClickRow = useCallback((e,  row) => {
+    /* const onHandleClickRow = useCallback((e,  row) => {
         e.preventDefault()
         const { checked } = e.target;
         if(checked != undefined) {
@@ -201,13 +251,98 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
             updateUserCompanySelection(updateSelected)
             dispatch( setMainCompaniesSelected( updateSelected, updateSelectedWithName ) ) 
         }
-    }, [ dispatch, selected, selectItems, selectedWithName ])
+    }, [ dispatch, selected, selectItems, selectedWithName ]) */
+
+
+    const handleClickRow = useCallback((event, row) => {
+        event.preventDefault()
+        const { checked } = event.target;
+        if(checked != undefined) {
+            if(display_clipboard === false) {
+                dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
+                dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+            }
+        } 
+        updateCompanySelection(event, dispatch, row, checked, selected)
+    }, [ dispatch, selected, display_clipboard ])
+
+
 
     const updateUserCompanySelection = async(representativeIDs) => {
         const form = new FormData();
         form.append('representative_id', JSON.stringify(representativeIDs))
 
         const { status } = await PatenTrackApi.saveUserCompanySelection(form)
+    }
+
+    const updateCompanySelection = (event, dispatch, row, checked, selected) => {
+        if(checked != undefined) {
+            let updateSelected = [...selected], updateSelectedWithName = [...selectedWithName]
+            if(!updateSelected.includes(parseInt( row.representative_id ))) {
+                if(selectedCategory === 'correct_names') {
+                    updateSelected = [parseInt(row.representative_id)]
+                    updateSelectedWithName = [{id: row.representative_id, name: row.original_name}]
+                } else {
+                    updateSelected.push(parseInt( row.representative_id ))
+                    updateSelectedWithName.push({id: row.representative_id, name: row.original_name})
+                }                
+            } else {
+                updateSelected = updateSelected.filter(
+                    existingCompany => existingCompany !== parseInt( row.representative_id )
+                )
+                updateSelectedWithName = updateSelectedWithName.filter(
+                    existingCompany => existingCompany !== parseInt( row.representative_id )
+                )
+            }
+            history.push({
+                hash: updateHashLocation(location, 'companies', updateSelected).join('&')
+            })
+            dispatch(setMainCompaniesRowSelect([]))
+            resetAll()
+            if(updateSelected.length === 0 ) {
+                clearOtherItems()
+            }
+            setSelectItems(updateSelected)
+            updateUserCompanySelection(updateSelected)
+            dispatch( setMainCompaniesSelected( updateSelected, updateSelectedWithName ) ) 
+            dispatch( setNamesTransactionsSelectAll( false ) )
+            dispatch( setSelectedNamesTransactions([]) )
+        }
+    } 
+
+    const resetAll = () => {
+        dispatch(setAssetTypes([]))
+        dispatch(setAssetTypeCompanies({ list: [], total_records: 0 }))
+        dispatch(setAssetTypeInventor({ list: [], total_records: 0 }))
+        dispatch(setAssetTypeAssignments({ list: [], total_records: 0 }))
+        dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
+    }
+
+    const clearOtherItems = () => {
+        dispatch(setAssetsIllustration(null))
+        dispatch(setAssetsIllustrationData(null))
+        dispatch(setSelectedAssetsTransactions([]))
+        dispatch(setSelectedAssetsPatents([]))
+        dispatch(
+            setPDFFile(
+            { 
+                document: '',  
+                form: '', 
+                agreement: '' 
+            }
+            )
+        )
+        dispatch(
+            setPDFView(false)
+        )
+        dispatch(toggleLifeSpanMode(true));
+        dispatch(toggleFamilyMode(false));
+        dispatch(toggleUsptoMode(false));
+        dispatch(toggleFamilyItemMode(false));	
+        dispatch( setAllAssetTypes( false ) )
+        dispatch( setAssetTypesSelect([]))	
+        dispatch( setAllAssignmentCustomers( false ) )
+        dispatch( setSelectAssignmentCustomers([]))														
     }
 
     if (childCompaniesLoading) return <Loader /> 
@@ -224,7 +359,7 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
             headerHeight={rowHeight} 
             columns={COLUMNS}
             defaultSelectAll={selectedAll}
-            onSelect={onHandleClickRow}
+            onSelect={handleClickRow}
             onSelectAll={onHandleSelectAll}
             disableHeader={headerRowDisabled} 
             responsive={false}

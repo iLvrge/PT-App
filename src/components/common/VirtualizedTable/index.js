@@ -387,8 +387,8 @@ const VirtualizedTable = ({
               <span><FontAwesomeIcon icon={faIcon}/><span className={classes.marginLeft}>{cellData}</span></span> 
               :
               rowData[imageURL] ? 
-              <span className={classes.flex}>
-                <span><img src={rowData[imageURL]} className={classes.imgIcon}/></span>{/* <Avatar src={rowData[imageURL]} /> */}<span className={classes.marginLeft}>{cellData}</span>
+              <span className={classes.flexImageContainer}>
+                <span className={classes.flex}><img src={rowData[imageURL]} className={classes.imgIcon}/></span>{/* <Avatar src={rowData[imageURL]} /> */}<span className={`${classes.marginLeft} ${classes.flex}`}>{cellData}</span>
               </span> 
               :  imageIcon != '' && imageIcon != undefined ? <span><FontAwesomeIcon icon={imageIcon}/><span className={classes.marginLeft}>{cellData}</span></span> : (
                 cellData
@@ -468,7 +468,7 @@ const VirtualizedTable = ({
               updateHeight = allRowHeight + 10;
             }
             setCollapseRowHeight(updateHeight);
-            updateNewHeight(500);
+            updateNewHeight(499);
           } else {
             waitAndCall(collapsable, index, rowData, tableRef);
           }
