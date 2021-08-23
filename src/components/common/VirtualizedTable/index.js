@@ -280,6 +280,12 @@ const VirtualizedTable = ({
         const getChild = JSON.parse(rowData['child'])
         if(getChild.length > 0 ) {
           isIndeterminate = getChild.some(item => selected.includes(item))
+          if(isIndeterminate) {
+            const findItems = getChild.filter(item => selected.includes(item))
+            if(findItems.length  === getChild.length) {
+              isIndeterminate = false
+            }
+          }
         }
       }
       return (

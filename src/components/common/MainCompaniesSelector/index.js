@@ -67,7 +67,7 @@ const COLUMNS = [
         selectedFromChild: true,     
         disableSort: true,
         show_selection_count: true,
-        showOnCondition: '1'
+        /* showOnCondition: '1' */
 
     },
     {
@@ -311,16 +311,40 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }
     }, [ dispatch, companies, initial ]) */
 
-    const updateCompanySelection = (event, dispatch, row, checked, selected, defaultSelect, currentSelection) => {
+    const updateCompanySelection = async(event, dispatch, row, checked, selected, defaultSelect, currentSelection) => {
         if(checked != undefined) {
-            let updateSelected = [...selected], updateSelectedWithName = [...selectedWithName]
+            let updateSelected = [...selected], updateSelectedWithName = [...selectedWithName], sendRequest = false
             if(!updateSelected.includes(parseInt( row.representative_id ))) {
                 if(selectedCategory === 'correct_names') {
                     updateSelected = [parseInt(row.representative_id)]
                     updateSelectedWithName = [{id: row.representative_id, name: row.original_name}]
+                    if(parseInt(row.type) === 1) {
+                        if(row.child_total > 0) {
+                            const parseChild = JSON.parse(row.child),  parseChildDetails = JSON.parse(row.child_full_detail)
+                            updateSelected = [...updateSelected, ...parseChild]
+                            const childPromise = parseChildDetails.map(child => {
+                                updateSelectedWithName.push({id: child.representative_id, name: child.original_name})
+                                return row
+                            }) 
+                            updateSelected = [...new Set(updateSelected)]
+                            await Promise.all(childPromise)
+                        }
+                    }                   
                 } else {
                     updateSelected.push(parseInt( row.representative_id ))
                     updateSelectedWithName.push({id: row.representative_id, name: row.original_name})
+                    if(parseInt(row.type) === 1) {
+                        if(row.child_total > 0) {
+                            const parseChild = JSON.parse(row.child),  parseChildDetails = JSON.parse(row.child_full_detail)
+                            updateSelected = [...updateSelected, ...parseChild]
+                            const childPromise = parseChildDetails.map(child => {
+                                updateSelectedWithName.push({id: child.representative_id, name: child.original_name})
+                                return row
+                            }) 
+                            updateSelected = [...new Set(updateSelected)]
+                            await Promise.all(childPromise)
+                        }
+                    } 
                 }                
             } else {
                 updateSelected = updateSelected.filter(
@@ -329,6 +353,20 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                 updateSelectedWithName = updateSelectedWithName.filter(
                     existingCompany => existingCompany !== parseInt( row.representative_id )
                 )
+                if(parseInt(row.type) === 1) {
+                    if(row.child_total > 0) {
+                        const parseChild = JSON.parse(row.child)
+                        const childFilterPromise = parseChild.map( child => {
+                            updateSelected = updateSelected.filter(
+                                existingCompany => existingCompany !== parseInt( child.representative_id )
+                            )
+                            updateSelectedWithName = updateSelectedWithName.filter(
+                                existingCompany => existingCompany !== parseInt( child.representative_id )
+                            )
+                        })
+                        await Promise.all(childFilterPromise)                            
+                    }
+                }
             }
             history.push({
                 hash: updateHashLocation(location, 'companies', updateSelected).join('&')
@@ -336,7 +374,9 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             dispatch(setMainCompaniesRowSelect([]))
             resetAll()
             setSelectItems(updateSelected)
-            updateUserCompanySelection(updateSelected)
+            if(parseInt(row.type) !== 1){
+                updateUserCompanySelection(updateSelected)
+            }            
             dispatch( setMainCompaniesSelected( updateSelected, updateSelectedWithName ) ) 
             dispatch( setNamesTransactionsSelectAll( false ) )
             dispatch( setSelectedNamesTransactions([]) )
@@ -423,10 +463,23 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         } else if( checked === true ){
             if(selectedCategory !== 'correct_names') {
                 if(companies.list.length > 0) {
-                    const items = [], itemsWithName = []
-                    companies.list.forEach( company => {
+                    let items = [], itemsWithName = []
+                    companies.list.forEach( async company => {
                         items.push(company.representative_id)
                         itemsWithName.push({id: company.representative_id, name:company.original_name})
+                        if( parseInt(company.type) === 1 ) {
+                           if(company.child_total > 0) {
+                               const parseChild = JSON.parse(company.child),  parseChildDetails = JSON.parse(company.child_full_detail)
+                               items = [...items, ...parseChild]
+                               const childPromise = parseChildDetails.map(row => {
+                                    itemsWithName.push({id: row.representative_id, name: row.original_name})
+                                    return row
+                                })
+                                 
+                                items = [...new Set(items)]
+                                await Promise.all(childPromise)
+                           }
+                        }
                     })
                     setSelectItems(items)
                     dispatch( setMainCompaniesSelected(items, itemsWithName) )
@@ -482,7 +535,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         rowSelected={selectedRow}
         selectedIndex={currentSelection}
         selectedKey={'representative_id'} 
-        disableRowKey={'type'}
+        /* disableRowKey={'type'} */
         rows={companiesList}
         rowHeight={rowHeight}
         headerHeight={headerRowHeight}
