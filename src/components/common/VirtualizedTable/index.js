@@ -197,6 +197,7 @@ const VirtualizedTable = ({
         validationKey,
         optionalKey,
         paddingLeft,
+        paddingRight,
         textBold,
         imageURL,
         imageIcon,
@@ -301,7 +302,7 @@ const VirtualizedTable = ({
             height: rowHeight,
             paddingLeft: paddingLeft != undefined ? paddingLeft : "inherit",
             justifyContent: typeof style !== 'undefined' && style === true ? justifyContent : "inherit",
-            paddingRight: typeof style !== 'undefined' && style === true ? '21px' : "inherit",
+            paddingRight: typeof paddingRight !== 'undefined' ? paddingRight : "inherit",
             textDecoration: typeof rowData['underline'] !== 'undefined' && rowData['underline'] === true ? 'underline' : 'inherit'
           }}
         >
@@ -706,7 +707,7 @@ const VirtualizedTable = ({
     </AutoSizer>
   );
 };
-
+  
 VirtualizedTable.propTypes = {
   classes: PropTypes.object.isRequired,
   columns: PropTypes.arrayOf(

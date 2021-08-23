@@ -100,7 +100,7 @@ const HeadCell = ({
   selectedItems
 }) => {
   const classes = useStyles()
-  const { align, role, disableSort, filterable, paddingLeft, badge, showGrandTotal, draggable, headingIcon, show_selection_count, secondLabel, show } = columns[columnIndex]
+  const { align, headerAlign, role, disableSort, filterable, paddingLeft, badge, showGrandTotal, draggable, headingIcon, show_selection_count, secondLabel, show } = columns[columnIndex]
   const [ anchorEl, setAnchorEl ] = useState(null)
   const [ columnFilters, setColumnFilters ] = useState([])
 
@@ -118,14 +118,14 @@ const HeadCell = ({
   useEffect(() => {
     onChangeColumnFilters(dataKey, columnFilters)
   }, [ onChangeColumnFilters, dataKey, columnFilters ])
-  return (
+  return ( 
     <TableCell
       component={'div'}
       padding={role === 'checkbox' ? 'none' : undefined}
       className={clsx(classes.tableCell, classes.flexContainer, classes.th)}
       variant="head"
       style={{ height: headerHeight, paddingLeft: paddingLeft != undefined ? paddingLeft : 'inherit' }}
-      align={align}>
+      align={typeof headerAlign !== 'undefined' ? headerAlign : align}>
       {
         role === 'checkbox' ? (
           onSelectAll && (
@@ -137,7 +137,7 @@ const HeadCell = ({
                 <Badge color='primary' max={99999} className={classes.badgeSelection} badgeContent={numberWithCommas(selectedItems.length)} showZero={false}></Badge>
                 :
                 ''
-              }
+              } 
             </>
           )
         ) : role === 'radio' ? (
