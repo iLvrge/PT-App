@@ -239,17 +239,24 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
     }, [ dispatch ])
 
     const checkedAllChildCompanies = async(list) => {
-        const oldSelection = [...selected], updateSelectedWithName = [...selectedWithName], childItems = []
+        const oldSelection = [...selected], updateSelectedWithName = [...selectedWithName], childItems = [], findChildOldSelections = []
+        
         const listPromise = list.map( row => {
             if(!oldSelection.includes(parseInt( row.representative_id ))) {
                 oldSelection.push(row.representative_id)
                 updateSelectedWithName.push({id: row.representative_id, name: row.original_name})
+            } else {
+                findChildOldSelections.push(parseInt( row.representative_id ))
             }
             childItems.push(row.representative_id)
         })
-        await Promise.all(listPromise)
-        setSelectItems(childItems)
-        dispatch( setMainCompaniesSelected( oldSelection, updateSelectedWithName ) ) 
+        await Promise.all(listPromise) 
+        if(findChildOldSelections.length === 0) {
+            setSelectItems(childItems)
+            dispatch( setMainCompaniesSelected( oldSelection, updateSelectedWithName ) ) 
+        } else {
+            setSelectItems(findChildOldSelections)
+        }        
     }
 
     /* const onHandleClickRow = useCallback((e,  row) => {
