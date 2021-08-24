@@ -196,27 +196,12 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
 
     useEffect(() => {
         if(selectItems.length != selected.length) {
-            setSelectItems(selected)
+            setSelectItems([...new Set(selected)])
         }
-    }, [selected, selectItems])
+    }, [selected])
 
-    useEffect(() => {
-        if(companies.length > 0 && selectItems.length > 0 && selectItems.length == companies.length) {
-            const findIndex = mainCompanies.findIndex(c => c.representative_id == parentCompanyId)
-            if(findIndex !== -1) {
-                let oldSelected = [...selected], oldSelectedWithNames = [...selectedWithName]
-                if(!oldSelected.includes(parentCompanyId)){
-                    oldSelected.push(mainCompanies[findIndex].representative_id)
-                    oldSelectedWithNames.push({
-                        id: mainCompanies[findIndex].representative_id, name: mainCompanies[findIndex].original_name
-                    })
-                    dispatch( setMainCompaniesSelected( oldSelected, oldSelectedWithNames ) ) 
-                }
-            }
-        }
-    }, [selectItems,  companies])
 
-    useEffect(() => {
+    /* useEffect(() => {
         if(selected.length > 0 && companies.length > 0) {
             const oldSelection = [...selectItems]
             let inserted = false
@@ -232,7 +217,40 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
                 setSelectItems(oldSelection)
             }
         }
-    }, [selected, companies])
+    }, [selected, companies]) */
+    
+    useEffect(() => {
+        if(selectItems.length > 0 && companies.length > 0 && selectedCategory !== 'correct_names') {
+            console.log('Find Companies', selectItems)
+            let added = true;
+            let oldSelected = [...selectItems], oldSelectedWithNames = [...selectedWithName]
+            if(!oldSelected.includes(parseInt(parentCompanyId))) {
+                console.log('Parent company not added')
+                const promise = companies.map( c => {                
+                    const find = oldSelected.some(item => parseInt(item) === parseInt(c.representative_id))
+                    if(find === false && added === true) {
+                        added = false
+                    }
+                })
+                Promise
+                .all(promise)
+                .then(() => {
+                    console.log('Find Companies', added, oldSelected)
+                    if(added === true) {
+
+                        const findIndex = mainCompanies.findIndex(c => c.representative_id == parentCompanyId)
+                        if(findIndex !== -1) {
+                            oldSelected.push(parseInt( mainCompanies[findIndex].representative_id ))
+                            oldSelectedWithNames.push({id: mainCompanies[findIndex].representative_id, name: mainCompanies[findIndex].original_name})
+                            updateUserCompanySelection(oldSelected)
+                            dispatch( setMainCompaniesSelected( oldSelected, oldSelectedWithNames ) ) 
+                        }
+                    }
+                })
+            }
+        }
+    }, [selectItems])
+
 
     const onHandleSelectAll = useCallback((event, row) => {
         
@@ -321,7 +339,7 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
                 )
                 console.log('sdfs',  updateSelected )
                 updateSelectedWithName = updateSelectedWithName.filter(
-                    existingCompany => existingCompany !== parseInt( row.representative_id )
+                    existingCompany => existingCompany.id !== parseInt( row.representative_id )
                 )
 
                 updateSelected = updateSelected.filter(
@@ -329,7 +347,7 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
                 )    
                 console.log('sdfs1',  updateSelected )
                 updateSelectedWithName = updateSelectedWithName.filter(
-                    existingCompany => existingCompany !== parseInt( parentCompanyId )
+                    existingCompany => existingCompany.id !== parseInt( parentCompanyId )
                 )
             }
             history.push({
