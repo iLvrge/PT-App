@@ -151,8 +151,8 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
     const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
-
-    
+    const mainCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.list )
+    const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
 
     useEffect(() => {
         if(selectedCategory === 'correct_names') {
@@ -165,6 +165,12 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
             setHeaderColumns(headerColumns)
         }
     }, [selectedCategory])
+
+    useEffect(() => {
+        if(selectedCompaniesAll === false) {
+            setSelectItems([])
+        }
+    }, [selectedCompaniesAll])
 
        
     useEffect(() => {
@@ -190,9 +196,25 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
 
     useEffect(() => {
         if(selectItems.length == 0) {
-            setSelectItems(selectItems)
+            setSelectItems(selected)
         }
     }, [selected, selectItems])
+
+    useEffect(() => {
+        if(companies.length > 0 && selectItems.length > 0 && selectItems.length == companies.length) {
+            const findIndex = mainCompanies.findIndex(c => c.representative_id == parentCompanyId)
+            if(findIndex !== -1) {
+                let oldSelected = [...selected], oldSelectedWithNames = [...selectedWithName]
+                if(!oldSelected.includes(parentCompanyId)){
+                    oldSelected.push(mainCompanies[findIndex].representative_id)
+                    oldSelectedWithNames.push({
+                        id: mainCompanies[findIndex].representative_id, name: mainCompanies[findIndex].original_name
+                    })
+                    dispatch( setMainCompaniesSelected( oldSelected, oldSelectedWithNames ) ) 
+                }
+            }
+        }
+    }, [selectItems,  companies])
 
     useEffect(() => {
         if(selected.length > 0 && companies.length > 0) {
@@ -288,10 +310,19 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
                 }                
             } else {
                 updateSelected = updateSelected.filter(
-                    existingCompany => existingCompany !== parseInt( row.representative_id )
+                    existingCompany => existingCompany !== parseInt( row.representative_id ) 
                 )
+                console.log('sdfs',  updateSelected )
                 updateSelectedWithName = updateSelectedWithName.filter(
                     existingCompany => existingCompany !== parseInt( row.representative_id )
+                )
+
+                updateSelected = updateSelected.filter(
+                    existingCompany => existingCompany !== parseInt( parentCompanyId ) 
+                )    
+                console.log('sdfs1',  updateSelected )
+                updateSelectedWithName = updateSelectedWithName.filter(
+                    existingCompany => existingCompany !== parseInt( parentCompanyId )
                 )
             }
             history.push({

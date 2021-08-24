@@ -170,6 +170,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const [ data, setData ] = useState( [] )
     const [ width, setWidth ] = useState( 1900 )
     const [ offset, setOffset ] = useState(0)
+    const [ totalRecords, setTotalRecords ] = useState(0)
     const [ headerRowHeight, setHeaderRowHeight ] = useState(47)
     const [ rowHeight, setRowHeight ] = useState(40)
     const [ selectItems, setSelectItems] = useState( [] )
@@ -195,6 +196,17 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
 
     useEffect(() => {
         setCompaniesList( companies.list )
+        let counter = 0;
+
+        if(companies.list.length > 0) {
+            companies.list.map(row => {
+                counter++;
+                if(row.child_total > 0) {
+                    counter += row.child_total
+                }
+            })
+            setTotalRecords(counter)
+        }
     }, [ companies.list ])
 
     useEffect(() => {
@@ -514,7 +526,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     }, [ headerColumns ] )
 
     const handleCounter = async(counter) => {
-        let list = [...companiesList]
+        /*let list = [...companiesList]
         const promise = list.map( (row, index) => {
             if( row.representative_id == currentSelection){                            
                 list[index].child_total = counter
@@ -522,7 +534,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             return row
         })
         await Promise.all(promise)
-        setCompaniesList(list)
+        setCompaniesList(list)*/
     }
 
     if (isLoadingCompanies && companies.list.length == 0) return <Loader />
@@ -540,7 +552,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         rowHeight={rowHeight}
         headerHeight={headerRowHeight}
         columns={headerColumns}
-        totalRows={companies.list.length}
+        totalRows={totalRecords}
         onSelect={handleClickRow}
         onSelectAll={handleSelectAll}
         defaultSelectAll={selectedCompaniesAll}
