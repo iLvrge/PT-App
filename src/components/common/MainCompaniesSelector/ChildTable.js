@@ -195,7 +195,7 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
     }, [ dispatch, parentCompanyId ])
 
     useEffect(() => {
-        if(selectItems.length == 0) {
+        if(selectItems.length != selected.length) {
             setSelectItems(selected)
         }
     }, [selected, selectItems])

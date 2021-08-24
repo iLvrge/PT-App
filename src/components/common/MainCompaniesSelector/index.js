@@ -360,22 +360,25 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                 }                
             } else {
                 updateSelected = updateSelected.filter(
-                    existingCompany => existingCompany !== parseInt( row.representative_id )
+                    existingCompany => parseInt(existingCompany) !== parseInt( row.representative_id )
                 )
                 updateSelectedWithName = updateSelectedWithName.filter(
-                    existingCompany => existingCompany !== parseInt( row.representative_id )
+                    existingCompany => parseInt(existingCompany.representative_id) !== parseInt( row.representative_id )
                 )
                 if(parseInt(row.type) === 1) {
+                    console.log('tab', 1)
                     if(row.child_total > 0) {
+                        console.log('tab1', row.child_total)
                         const parseChild = JSON.parse(row.child)
                         const childFilterPromise = parseChild.map( child => {
                             updateSelected = updateSelected.filter(
-                                existingCompany => existingCompany !== parseInt( child.representative_id )
+                                existingCompany => parseInt(existingCompany) !== parseInt( child )
                             )
                             updateSelectedWithName = updateSelectedWithName.filter(
-                                existingCompany => existingCompany !== parseInt( child.representative_id )
+                                existingCompany => parseInt(existingCompany.representative_id) !== parseInt( child )
                             )
                         })
+                        console.log('tab2', updateSelected)
                         await Promise.all(childFilterPromise)                            
                     }
                 }
@@ -389,6 +392,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             if(parseInt(row.type) !== 1){
                 updateUserCompanySelection(updateSelected)
             }            
+            console.log('tab3', updateSelected)
             dispatch( setMainCompaniesSelected( updateSelected, updateSelectedWithName ) ) 
             dispatch( setNamesTransactionsSelectAll( false ) )
             dispatch( setSelectedNamesTransactions([]) )
