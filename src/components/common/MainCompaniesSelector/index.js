@@ -366,9 +366,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                     existingCompany => parseInt(existingCompany.representative_id) !== parseInt( row.representative_id )
                 )
                 if(parseInt(row.type) === 1) {
-                    console.log('tab', 1)
                     if(row.child_total > 0) {
-                        console.log('tab1', row.child_total)
                         const parseChild = JSON.parse(row.child)
                         const childFilterPromise = parseChild.map( child => {
                             updateSelected = updateSelected.filter(
@@ -389,10 +387,11 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             dispatch(setMainCompaniesRowSelect([]))
             resetAll()
             setSelectItems(updateSelected)
-            if(parseInt(row.type) !== 1){
+            /* if(parseInt(row.type) !== 1){
                 updateUserCompanySelection(updateSelected)
             }            
-            console.log('tab3', updateSelected)
+            console.log('tab3', updateSelected) */
+            updateUserCompanySelection(updateSelected)
             dispatch( setMainCompaniesSelected( updateSelected, updateSelectedWithName ) ) 
             dispatch( setNamesTransactionsSelectAll( false ) )
             dispatch( setSelectedNamesTransactions([]) )
