@@ -261,7 +261,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
               const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.clientY}px;left:${event.clientX + 20 }px;'>
                                           <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
                                           <div>
-                                            ${ executionDate != '' ? moment(executionDate.exec_dt).format('ll') : ''}
+                                            ${ executionDate != '' ? moment(executionDate).format('ll') : ''}
                                           </div>
                                           <div>
                                             <h4>Assignors:</h4>

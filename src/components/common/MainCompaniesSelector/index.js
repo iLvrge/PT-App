@@ -395,6 +395,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             dispatch( setMainCompaniesSelected( updateSelected, updateSelectedWithName ) ) 
             dispatch( setNamesTransactionsSelectAll( false ) )
             dispatch( setSelectedNamesTransactions([]) )
+            dispatch( setMainCompaniesAllSelected( updateSelected.length === updateSelected ? true : false ) )
         } else {
             const element = event.target.closest('div.ReactVirtualized__Table__rowColumn')
             if( element != null ) {
@@ -470,10 +471,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         /* dispatch(setMainCompaniesRowSelect([])) */
         dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
         dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+        resetAll()
         if(checked === false) {
             setSelectItems([])
-            dispatch( setMainCompaniesSelected([], []) )
-            resetAll()
+            dispatch( setMainCompaniesSelected([], []) )            
             clearOtherItems()
         } else if( checked === true ){
             if(selectedCategory !== 'correct_names') {

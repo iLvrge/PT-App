@@ -350,8 +350,8 @@ class PatenTrackApi {
   } 
 
   static deleteAssetTypeSelected(saveUserActivitySelection) {
-    return axios.delete(`${base_new_api_url}/user_activity_selection`, saveUserActivitySelection, getFormUrlHeader())
-  }
+    return axios.put(`${base_new_api_url}/user_activity_selection`, saveUserActivitySelection, getFormUrlHeader())
+  }  
 
   static getUserActivitySelection() {
     return axios.get(`${base_new_api_url}/user_activity_selection`,  getHeader())

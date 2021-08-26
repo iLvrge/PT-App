@@ -115,6 +115,8 @@ const HeadCell = ({
     setColumnFilters(prevFilters => prevFilters.includes(value) ? prevFilters.filter((val) => val !== value) : [ ...prevFilters, value ])
   )
 
+  console.log('useHEaderRenderer=>', allSelected, selectedItems.length, totalRows, (selectedItems.length > 0 && selectedItems.length < totalRows) )
+
   useEffect(() => {
     onChangeColumnFilters(dataKey, columnFilters)
   }, [ onChangeColumnFilters, dataKey, columnFilters ])
@@ -130,7 +132,7 @@ const HeadCell = ({
         role === 'checkbox' ? (
           onSelectAll && (
             <>
-              <Checkbox checked={allSelected} onChange={onSelectAll || selectedItems.length == totalRows} indeterminate={selectedItems.length > 0 && selectedItems.length < totalRows} {...(icon != undefined ? { icon, checkedIcon } : {})}/>
+              <Checkbox checked={allSelected  || selectedItems.length == totalRows } onChange={onSelectAll} indeterminate={selectedItems.length > 0 && selectedItems.length < totalRows} {...(icon != undefined ? { icon, checkedIcon } : {})}/>
               {
                 show_selection_count === true && selectedItems.length > 0
                 ?
