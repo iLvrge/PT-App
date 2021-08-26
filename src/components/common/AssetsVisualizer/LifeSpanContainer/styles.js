@@ -53,4 +53,11 @@ export default makeStyles(theme => ({
         flex: 1,
         display: 'flex'
     },
+    fullScreenContainer:{
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        cursor: 'pointer',
+        zIndex: 999
+    }
 }))

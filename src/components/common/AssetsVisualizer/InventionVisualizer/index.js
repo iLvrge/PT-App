@@ -14,6 +14,7 @@ import Tabs from '@material-ui/core/Tabs'
 import FilterCPC from './FilterCPC'
 import AssetsList from './AssetsList'
 import PdfViewer from '../../PdfViewer'
+import FullScreen from '../../FullScreen'
 import Loader from '../../Loader'
 import {
     setAssetTypeAssignmentAllAssets,
@@ -32,7 +33,7 @@ import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
 var newRange = [1,2]
 
-const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize }) => {
+const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone }) => {
     
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -77,6 +78,23 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
           label: 'Section',
         }
     ])
+
+    const menuItems = [
+        {
+            id: 1,
+            label: 'Invention Data',
+            component: InventionVisualizer,
+            standalone: true,
+            defaultSize, 
+            visualizerBarSize, 
+            analyticsBar, 
+            openCustomerBar, 
+            commentBar, 
+            illustrationBar, 
+            customerBarSize, 
+            companyBarSize
+        }
+    ]
 
     const [ inventionTabs, setInventionTabs ] = useState(['Innovation'])
 
@@ -682,7 +700,13 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         ?
                             <>
                                 <div className={classes.sliderContainer}>
-                                    <IconButton onClick={handleOpenFilter}>
+                                    {
+                                        typeof standalone === 'undefined' && (
+                                            <FullScreen componentItems={menuItems}/>
+                                        )
+                                    }
+                                    
+                                    <IconButton onClick={handleOpenFilter} className={classes.settingBtn}>
                                         <svg style={{width: '24px', fill: '#fff'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M5 11.86V29a1 1 0 0 0 2 0V11.86A4 4 0 0 0 7 4.14V3A1 1 0 0 0 5 3V4.14a4 4 0 0 0 0 7.72zM6 6A2 2 0 1 1 4 8 2 2 0 0 1 6 6zM27 12.14V3a1 1 0 0 0-2 0v9.14a4 4 0 0 0 0 7.72V29a1 1 0 0 0 2 0V19.86a4 4 0 0 0 0-7.72zM26 18a2 2 0 1 1 2-2A2 2 0 0 1 26 18zM16 30a1 1 0 0 0 1-1V23.86a4 4 0 0 0 0-7.72V3a1 1 0 0 0-2 0V16.14a4 4 0 0 0 0 7.72V29A1 1 0 0 0 16 30zM14 20a2 2 0 1 1 2 2A2 2 0 0 1 14 20z" /></svg> 
                                     </IconButton>                                    
                                 </div>

@@ -2,12 +2,23 @@ import React, { useEffect, useState, useRef } from 'react'
 import useStyles from './styles'
 
 
-
+import FullScreen from '../../FullScreen'
 import { Chart } from "react-google-charts";
 
-const SpanVisualize = ({ chart, chartBar, visualizerBarSize }) => {
+const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
     const containerRef = useRef(null)
     const classes = useStyles() 
+    const menuItems = [
+        {
+            id: 1,
+            label: 'Assets Lifespan Data',
+            component: SpanVisualize,
+            standalone: true,
+            chart,
+            chartBar, 
+            visualizerBarSize
+        }
+    ]
     const [height, setHeight] = useState('100%');
     const [minMax, setMinMax] = useState([0,0])
     const [option, setOption] = useState({
@@ -123,9 +134,18 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize }) => {
     }
 
     return (
-        <div className={classes.graphContainer} ref={containerRef}>              
-            <DisplayChart />
-        </div> 
+        <>
+            {
+                typeof standalone === 'undefined' && (
+                    <div className={classes.fullScreenContainer}>
+                        <FullScreen componentItems={menuItems}/>
+                    </div>
+                )
+            } 
+            <div className={classes.graphContainer} ref={containerRef}>  
+                <DisplayChart />
+            </div> 
+        </>
     )
 }
 

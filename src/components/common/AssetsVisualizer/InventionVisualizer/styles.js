@@ -231,5 +231,11 @@ export default makeStyles(theme => ({
             cursor: "se-resize",
             padding: 5
         }
+    },
+    settingBtn:{
+        padding: 0,
+        position: 'absolute',
+        right: 35,
+        top: 6
     }
 }))

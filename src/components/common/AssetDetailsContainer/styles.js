@@ -39,5 +39,5 @@ export default makeStyles(theme => ({
     },      
     isInteractive: {
         pointerEvents: 'auto'
-    }
+    },
 })) 
