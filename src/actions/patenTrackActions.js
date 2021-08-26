@@ -874,8 +874,8 @@ export const addCompany = (data) => {
           console.log(res.data)          
         }
         dispatch(getCompanies())
-        dispatch(getTimeLine(0, true))
-        dispatch(getCustomers('employee', true))
+        /* dispatch(getTimeLine(0, true))
+        dispatch(getCustomers('employee', true)) */
       })
       .catch(err => {
         throw(err)
