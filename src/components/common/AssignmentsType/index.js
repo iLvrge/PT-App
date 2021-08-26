@@ -150,9 +150,10 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
 
 
     useEffect(() => {
-        if(assetTypes.length > 0) {
+        /* if(assetTypes.length > 0) {
             fillTable()
-        }
+        } */
+        fillTable()
     }, [ assetTypes ])
 
     const fillTable = () => {
