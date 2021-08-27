@@ -229,10 +229,12 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
             list.push(item)
         })
         
-        if(assetTypes.length == 0) {
-            setSelectItems([])
-            setSelectedRow([])
-            dispatch( setAssetTypesSelect([]) )
+        if(assetTypes.length == 0 ) {
+            if(selectItems.length > 0 || assetTypesSelected.length > 0) {
+                setSelectItems([])
+                setSelectedRow([])
+                dispatch( setAssetTypesSelect([]) )
+            }           
         } else {
             if( assetTypesSelected.length === 0 && assetTypesSelectAll === false ) {
                 const getUserSelection = async () => {
@@ -253,7 +255,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
                             setSelectedRow([])
                             dispatch( setAssetTypesSelect([]) )
                         }
-                    }
+                    } 
                 }
                 getUserSelection();   
             } else {
