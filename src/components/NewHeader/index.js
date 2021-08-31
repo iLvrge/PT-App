@@ -371,11 +371,9 @@ const NewHeader = () => {
     })
     elementContainer.style.visibility = elementContainer.style.visibility === 'hidden' ? 'visible' : 'hidden'
     elementContainer.style.top = '42px'
-    
   }
 
   return (
-
     <AppBar className={classes.root} color='transparent' position='relative'>
       <Toolbar className={classes.toolbar}>
         <img src={siteLogo} className={classes.siteLogo} alt={''} />
@@ -582,7 +580,7 @@ const NewHeader = () => {
         style={{backgroundColor: 'rgba(0, 0, 0, 0.8)'}}
       >
         <>
-          <Home click={hideMenu} closeModal={handleControlModal}/>
+          <Home click={hideMenu} closeModal={handleControlModal}/> 
         </>
       </Modal>
     </AppBar>
