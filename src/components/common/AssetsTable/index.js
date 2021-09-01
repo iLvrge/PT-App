@@ -151,6 +151,10 @@ const AssetsTable = ({
   const assetTypeAssignmentAssetsSelected = useSelector(
     state => state.patenTrack2.assetTypeAssignmentAssets.selected,
   );
+
+  const assetTypeAssignmentAssetsSelectedAll = useSelector(
+    state => state.patenTrack2.assetTypeAssignmentAssets.selectAll,
+  );
   const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
   const move_assets = useSelector(state => state.patenTrack2.move_assets)
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
@@ -645,6 +649,13 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       setSelectItems(assetTypeAssignmentAssetsSelected)
     }
   }, [ assetTypeAssignmentAssetsSelected, selectItems ])
+
+  useEffect(() => {
+    console.log("assetTypeAssignmentAssetsSelectedAll", assetTypeAssignmentAssetsSelectedAll, selectedAll)
+    if(assetTypeAssignmentAssetsSelectedAll !== selectedAll) {
+      setSelectAll(assetTypeAssignmentAssetsSelectedAll)
+    }
+  }, [assetTypeAssignmentAssetsSelectedAll])
 
   useEffect(() => {
     let filter = []    

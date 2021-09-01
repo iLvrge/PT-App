@@ -162,7 +162,8 @@ const IllustrationCommentContainer = ({
             <div style={{display: 'unset'}}>   
                 {/* <AllComponentsMenu onClick={onHandleComponentMenuItem}/> */}
                 {
-                    !isFullscreenOpen && 
+                    selectedCompanies.length > 0
+                     && !isFullscreenOpen && 
                         illustrationBar === true && 
                         ( search_string != '' || assetCompaniesRowSelect.length > 0 || 
                             selectedCompaniesAll === true || 
@@ -180,59 +181,63 @@ const IllustrationCommentContainer = ({
                     ''
                 }                                 
                 {  
-                    showManualComponent === true && menuComponent.length > 0
-                    ?                        
-                        menuComponent.map(
-                            ({component: Component, ...props }, index) => (
-                                <Component key={index} {...props} size={size}/>
+                    selectedCompanies.length > 0
+                    ?
+                        showManualComponent === true && menuComponent.length > 0
+                        ?                        
+                            menuComponent.map(
+                                ({component: Component, ...props }, index) => (
+                                    <Component key={index} {...props} size={size}/>
+                                )
                             )
-                        )
-                    :
-                    driveTemplateFrameMode === true && (templateURL != 'about:blank' && templateURL != null)
-                    ?
-                        <iframe src={templateURL} className={classes.templateFrame}></iframe>
-                    :                  
-                    maintainenceFrameMode === true
-                    ?
-                        <LoadMaintainenceAssets 
-                            rows={selectedMaintainencePatents} onChangeFileName={onChangeFileName}/>
-                    :
-                    addressQueuesDisplay === true
-                    ?
-                        <LoadTransactionQueues />
-                    :
-                    nameQueuesDisplay === true || selectedCategory === 'correct_names' 
-                    ?
-                        <LoadTransactionNameQueues />
-                    :
-                    link_assets_sheet_display === true || selectedCategory === 'technical_scope'
-                    ?
-                        <LoadLinkAssets type={link_assets_sheet_type.type} asset={link_assets_sheet_type.asset}  size={size}/>
-                    :
-                    !isFullscreenOpen && 
-                        illustrationBar === true && 
-                        ( search_string != '' || assetCompaniesRowSelect.length > 0 || 
-                            selectedCompaniesAll === true || 
-                            selectedCompanies.length > 0
-
-                        ) 
-                    ?
-                        shouldShowTimeline
-                        ?
-                            <TimelineContainer assignmentBar={assignmentBar} assignmentBarToggle={assignmentBarToggle}/>
                         :
+                        driveTemplateFrameMode === true && (templateURL != 'about:blank' && templateURL != null)
+                        ?
+                            <iframe src={templateURL} className={classes.templateFrame}></iframe>
+                        :                  
+                        maintainenceFrameMode === true
+                        ?
+                            <LoadMaintainenceAssets 
+                                rows={selectedMaintainencePatents} onChangeFileName={onChangeFileName}/>
+                        :
+                        addressQueuesDisplay === true
+                        ?
+                            <LoadTransactionQueues />
+                        :
+                        nameQueuesDisplay === true || selectedCategory === 'correct_names' 
+                        ?
+                            <LoadTransactionNameQueues />
+                        :
+                        link_assets_sheet_display === true || selectedCategory === 'technical_scope'
+                        ?
+                            <LoadLinkAssets type={link_assets_sheet_type.type} asset={link_assets_sheet_type.asset}  size={size}/>
+                        :
+                        !isFullscreenOpen && 
+                            illustrationBar === true && 
+                            ( search_string != '' || assetCompaniesRowSelect.length > 0 || 
+                                selectedCompaniesAll === true || 
+                                selectedCompanies.length > 0
 
-                            <IllustrationContainer 
-                                isFullscreenOpen={isFullscreenOpen} 
-                                asset={assetIllustration} 
-                                setIllustrationRecord={illustrationRecord} 
-                                chartsBar={chartsBar}
-                                chartsBarToggle={chartsBarToggle}
-                                checkChartAnalytics={checkChartAnalytics}
-                                gap={gap}
-                            />
+                            ) 
+                        ?
+                            shouldShowTimeline
+                            ?
+                                <TimelineContainer assignmentBar={assignmentBar} assignmentBarToggle={assignmentBarToggle}/>
+                            :
+
+                                <IllustrationContainer 
+                                    isFullscreenOpen={isFullscreenOpen} 
+                                    asset={assetIllustration} 
+                                    setIllustrationRecord={illustrationRecord} 
+                                    chartsBar={chartsBar}
+                                    chartsBarToggle={chartsBarToggle}
+                                    checkChartAnalytics={checkChartAnalytics}
+                                    gap={gap}
+                                />
+                        :
+                        ''
                     :
-                    ''
+                    ''  
                 }
                 
                 <Modal

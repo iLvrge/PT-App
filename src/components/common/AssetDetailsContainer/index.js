@@ -81,6 +81,7 @@ const AssetDetailsContainer = ({
   const familyMode = useSelector(state => state.ui.familyMode);
   const familyItemMode = useSelector(state => state.ui.familyItemMode);
   const lifeSpanMode = useSelector(state => state.ui.lifeSpanMode);
+  const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
   
   useEffect(() => {
     console.log("isDrag", isDrag)
@@ -222,6 +223,8 @@ const AssetDetailsContainer = ({
               cls={classes.btnLeft}
             /> */}
             {
+              selectedCompanies.length > 0
+              ?
                 chartBar == true ?
                   pdfView === true && !connectionBoxView ? (
                       <PdfViewer display={"false"} resize={resizeFrame} />
@@ -242,6 +245,8 @@ const AssetDetailsContainer = ({
                   )
                 :
                 '' 
+              :
+                '' 
             }
           </div>
           <div
@@ -252,6 +257,8 @@ const AssetDetailsContainer = ({
             onMouseLeave={event => handleIllustrationButton(event, false)} */
           >
             {
+              selectedCompanies.length > 0
+              ?
                 analyticsBar === true ? (
                     connectionBoxView === true ? (
                       <ConnectionBox display={"false"} assets={illustrationData} />
@@ -280,6 +287,7 @@ const AssetDetailsContainer = ({
                 ) : (
                   <LifeSpanContainer chartBar={chartBar} openCustomerBar={openCustomerBar} visualizerBarSize={visualizerBarSize}/>
                 )
+              : ''
             }
           </div>
         </SplitPane>

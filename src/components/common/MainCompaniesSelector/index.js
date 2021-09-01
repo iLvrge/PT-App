@@ -26,7 +26,12 @@ import {
     setAllAssignmentCustomers,
     setSelectAssignmentCustomers,
     setNamesTransactionsSelectAll,
-    setSelectedNamesTransactions
+    setSelectedNamesTransactions,
+    setAssetTypesPatentsSelected,
+    setAssetTypesPatentsSelectAll,
+    setAllAssignments, 
+    setSelectAssignments,
+    setSlackMessages
 } from '../../../actions/patentTrackActions2'
 
 
@@ -442,6 +447,12 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         dispatch(setAssetTypeInventor({ list: [], total_records: 0 }))
         dispatch(setAssetTypeAssignments({ list: [], total_records: 0 }))
         dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
+        dispatch(setAssetTypesPatentsSelected([]))
+        dispatch(setAssetTypesPatentsSelectAll(false))
+        dispatch(setAllAssignments(false))
+	    dispatch(setSelectAssignments([]))	
+        dispatch(setSelectAssignmentCustomers([]))
+        dispatch(setAllAssignmentCustomers(false))
     }
 
     const clearOtherItems = () => {
@@ -449,6 +460,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         dispatch(setAssetsIllustrationData(null))
         dispatch(setSelectedAssetsTransactions([]))
         dispatch(setSelectedAssetsPatents([]))
+        dispatch(setSlackMessages([]))
         dispatch(
             setPDFFile(
             { 
@@ -461,6 +473,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         dispatch(
             setPDFView(false)
         )
+        dispatch(setAssetsIllustrationData(null))
+	    dispatch(setAssetsIllustration(null)) 
         dispatch(toggleLifeSpanMode(true));
         dispatch(toggleFamilyMode(false));
         dispatch(toggleUsptoMode(false));
