@@ -152,6 +152,13 @@ export default makeStyles(theme => ({
             padding: '0 20px'
         }
     },
+    grow_buttons: {
+        flexGrow: 1,
+        display: 'flex',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-end',
+        height: '100%',
+    },
     rightMenu:{
         '& .MuiList-root':{
             paddingLeft: '20px',

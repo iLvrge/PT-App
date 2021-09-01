@@ -179,6 +179,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const [ intialization, setInitialization ] = useState( false ) 
     const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
     const [ companiesList, setCompaniesList ] = useState([])
+    const [ selectedGroup, setSelectGroups ] = useState([])
     const companies = useSelector( state => state.patenTrack2.mainCompaniesList )
     const isLoadingCompanies = useSelector( state => state.patenTrack2.mainCompaniesLoadingMore )
     const selected = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
@@ -193,6 +194,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         } 
         initCompanies()
     }, []) 
+
+    useEffect(() => {
+        console.log('selectedGroup', selectedGroup)
+    }, [selectedGroup])
 
     useEffect(() => {
         setCompaniesList( companies.list )
@@ -312,6 +317,23 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }
     }, [ selected, selectItems ])
 
+    useEffect(() => {
+        const getGroupItems = async() => {
+            const groupList = companiesList.filter( company => parseInt(company.type) === 1)
+            if(groupList.length > 0) {
+                const groupItems = []
+                const groupPromise = groupList.map(item => {
+                    if(selectItems.includes(parseInt(item.representative_id))) {
+                        groupItems.push(parseInt(item.representative_id))
+                    }
+                }) 
+                await Promise.all(groupPromise)
+                setSelectGroups(groupItems)
+            }
+        }
+        getGroupItems()
+    }, [ selectItems ])
+
     /* useEffect(() => {
         
         if( defaultSelect != undefined && defaultSelect == 'first' ) {
@@ -325,7 +347,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
 
     const updateCompanySelection = async(event, dispatch, row, checked, selected, defaultSelect, currentSelection) => {
         if(checked != undefined) {
-            let updateSelected = [...selected], updateSelectedWithName = [...selectedWithName], sendRequest = false
+            let updateSelected = [...selected], updateSelectedWithName = [...selectedWithName], sendRequest = false/* , updateGroup = [...selectedGroup] */
             if(!updateSelected.includes(parseInt( row.representative_id ))) {
                 if(selectedCategory === 'correct_names') {
                     updateSelected = [parseInt(row.representative_id)]
@@ -356,6 +378,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                             updateSelected = [...new Set(updateSelected)]
                             await Promise.all(childPromise)
                         }
+                        //updateGroup.push(parseInt(row.representative_id))
                     } 
                 }                
             } else {
@@ -376,9 +399,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                                 existingCompany => parseInt(existingCompany.representative_id) !== parseInt( child )
                             )
                         })
-                        console.log('tab2', updateSelected)
+                        //console.log('tab2', updateSelected)
                         await Promise.all(childFilterPromise)                            
                     }
+                    //updateGroup = updateGroup.filter( id => id !== parseInt( row.representative_id ))
                 }
             }
             history.push({
@@ -387,6 +411,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             dispatch(setMainCompaniesRowSelect([]))
             resetAll()
             setSelectItems(updateSelected)
+            //setSelectGroups(updateGroup)
             /* if(parseInt(row.type) !== 1){
                 updateUserCompanySelection(updateSelected)
             }            
@@ -551,6 +576,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         rowSelected={selectedRow}
         selectedIndex={currentSelection}
         selectedKey={'representative_id'} 
+        selectedGroup={selectedGroup}
         /* disableRowKey={'type'} */
         rows={companiesList}
         rowHeight={rowHeight}

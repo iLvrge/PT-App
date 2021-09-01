@@ -48,6 +48,7 @@ import { Menu as MenuIcon,
         Close
       } from '@material-ui/icons'
 
+  import { controlList } from '../../utils/controlList'
 
 import useStyles from './styles'
 
@@ -103,6 +104,7 @@ const NewHeader = () => {
   const siteLogo = useSelector(state => (state.patenTrack.siteLogo.site_logo ? state.patenTrack.siteLogo.site_logo.logo_big : 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/logo/patentrack_new_logo.png'))
   const controlModal = useSelector(state => state.ui.controlModal)
   const breadcrumbs = useSelector(state =>  state.patenTrack2.breadcrumbs )
+  const selectedCategory = useSelector(state =>  state.patenTrack2.selectedCategory )
   const search_string = useSelector(state => state.patenTrack2.search_string)
   const [layoutName, setLayoutName] = useState(null)
   const [ isClipboardActive, setIsClipboardActive ] = useState(false)
@@ -373,6 +375,18 @@ const NewHeader = () => {
     elementContainer.style.top = '42px'
   }
 
+  const handleChangeLayout = (event) => {
+    let findIndex = -1
+    if(selectedCategory == 'due_dilligence') {
+      findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
+    } else {
+      findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'due_dilligence')
+    }
+    if( findIndex !== -1 ) {
+      hideMenu(event, controlList[findIndex])
+    }
+  }
+
   return (
     <AppBar className={classes.root} color='transparent' position='relative'>
       <Toolbar className={classes.toolbar}>
@@ -390,10 +404,15 @@ const NewHeader = () => {
             ''
           }
         </span>
-        <div className={classes.grow} style={{position: 'relative'}}>  
+        {/* <div className={classes.grow} style={{position: 'relative'}}>  
           <div className={classes.breadcrumbs}>{layoutName}</div>   
           <div className={classes.breadcrumbs} style={{marginLeft: 100, fontSize: '1rem'}}>Version: {process.env.REACT_APP_ENVIROMENT_MODE}</div>   
-        </div> 
+        </div> */} 
+        <div className={classes.grow_buttons}>
+          <Button className={classes.calendly} onClick={handleChangeLayout}>
+            {selectedCategory == 'due_dilligence' ? 'Show Broken Chain' : 'Show All Assets'}
+          </Button>  
+        </div>
         <div className={classes.rightPanel}>  
             <Button className={classes.calendly} onClick={handleScheduleViaHubspot}>
               Schedule a {process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'd' : 'D' }emo {process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'for Pro version' : '' }

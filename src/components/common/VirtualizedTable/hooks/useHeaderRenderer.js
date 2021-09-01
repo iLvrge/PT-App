@@ -97,7 +97,8 @@ const HeadCell = ({
   resizeColumnsStop,
   icon,
   checkedIcon,
-  selectedItems
+  selectedItems,
+  selectedGroup
 }) => {
   const classes = useStyles()
   const { align, headerAlign, role, disableSort, filterable, paddingLeft, badge, showGrandTotal, draggable, headingIcon, show_selection_count, secondLabel, show } = columns[columnIndex]
@@ -115,7 +116,7 @@ const HeadCell = ({
     setColumnFilters(prevFilters => prevFilters.includes(value) ? prevFilters.filter((val) => val !== value) : [ ...prevFilters, value ])
   )
 
-  console.log('useHEaderRenderer=>', allSelected, selectedItems.length, totalRows, (selectedItems.length > 0 && selectedItems.length < totalRows) )
+  /* console.log('useHEaderRenderer=>', allSelected, selectedItems.length, totalRows, (selectedItems.length > 0 && selectedItems.length < totalRows) ) */
 
   useEffect(() => {
     onChangeColumnFilters(dataKey, columnFilters)
@@ -129,14 +130,14 @@ const HeadCell = ({
       style={{ height: headerHeight, paddingLeft: paddingLeft != undefined ? paddingLeft : 'inherit' }}
       align={typeof headerAlign !== 'undefined' ? headerAlign : align}>
       {
-        role === 'checkbox' ? (
+        role === 'checkbox' ? (  
           onSelectAll && (
             <>
               <Checkbox checked={allSelected  || selectedItems.length == totalRows } onChange={onSelectAll} indeterminate={selectedItems.length > 0 && selectedItems.length < totalRows} {...(icon != undefined ? { icon, checkedIcon } : {})}/>
               {
-                show_selection_count === true && selectedItems.length > 0
+                show_selection_count === true && selectedItems.length > 0 
                 ?
-                <Badge color='primary' max={99999} className={classes.badgeSelection} badgeContent={numberWithCommas(selectedItems.length)} showZero={false}></Badge>
+                <Badge color='primary' max={99999} className={classes.badgeSelection} badgeContent={numberWithCommas(typeof selectedGroup !== 'undefined' ? selectedItems.length - selectedGroup.length : selectedItems.length)} showZero={false}></Badge>
                 :
                 ''
               } 
@@ -297,7 +298,7 @@ const HeadCell = ({
   )
 }
 
-function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSelectAll, allSelected, isIndeterminate, totalRows, grandTotal, onChangeColumnFilters, resizeColumnsWidth, resizeColumnsStop, icon, checkedIcon, selectedItems) {
+function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSelectAll, allSelected, isIndeterminate, totalRows, grandTotal, onChangeColumnFilters, resizeColumnsWidth, resizeColumnsStop, icon, checkedIcon, selectedItems, selectedGroup) {
   return useCallback(({ sortBy, dataKey, sortDirection, label, columnIndex }) => {
     return (
       <HeadCell
@@ -305,6 +306,7 @@ function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSel
         columnIndex={columnIndex}
         headerHeight={headerHeight}
         createSortHandler={createSortHandler}
+        selectedGroup={selectedGroup}
         selectedItems={selectedItems}
         onSelectAll={onSelectAll}
         icon={icon}
