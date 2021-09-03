@@ -105,7 +105,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
   const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
   const selectedAssetAssignments = useSelector( state => state.patenTrack2.assetTypeAssignments.selected )
   const assetTypeInventors = useSelector(state => state.patenTrack2.assetTypeInventors.list)
-  
+  const switch_button_assets = useSelector(state => state.patenTrack2.switch_button_assets)
   
   const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
   const assignmentList = useSelector(
@@ -441,7 +441,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
     }
     getTimelineRawDataFunction()
     
-  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors, auth_token ])
+  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors, auth_token, switch_button_assets ])
 
 
   const redrawTimeline = () => {

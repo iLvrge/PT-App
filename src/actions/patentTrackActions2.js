@@ -1471,3 +1471,10 @@ export const setClipboardAssetsDisplay = (flag) => {
     flag
   } 
 } 
+
+export const setSwitchAssetButton = (value) => {
+  return {
+    type: types.SET_SWITCH_ASSET_BUTTON,
+    value
+  }
+}

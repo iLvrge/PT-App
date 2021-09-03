@@ -4,6 +4,7 @@ import { BlurLinear } from '@material-ui/icons'
 export default {
     auth_token: null,
     familyChartVisiblity: 'hidden',
+    switch_button_assets: 0,
     search_string: null,
     search_rf_id: [],
     breadcrumbs: '',
@@ -28,7 +29,7 @@ export default {
     link_assets_selected: [],  
     link_assets_sheet_type:{type: null, asset: null},
     nameQueuesDisplay: false,
-    nameQueuesLoading: false,
+    nameQueuesLoading: false, 
     nameQueues: [],
     fixedTransactionName:[],
     maintainence_fee_file_name: 'MaintainenceFee',

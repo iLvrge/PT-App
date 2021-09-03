@@ -738,6 +738,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state,
           display_clipboard: action.flag 
         }
+      case types.SET_SWITCH_ASSET_BUTTON:
+        return { 
+          ...state,
+          switch_button_assets: action.value  
+        }
       default:  
       return state
   } 

@@ -378,7 +378,7 @@ const VirtualizedTable = ({
                     } 
                   />
                 )     
-          : role === "arrow" ? (
+          : role === "arrow" ? (typeof showOnCondition == 'string' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition) ? '' :(
             selectedIndex !== cellData ? (
               <ChevronRightIcon className={"arrow"} />
             ) : (

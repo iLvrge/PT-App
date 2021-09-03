@@ -72,6 +72,8 @@ import { setAssetTypeAssignments,
   setGoogleProfile,
   setClipboardAssetsDisplay,  
   setChannelID,
+  setAssetTypeAssignmentAllAssets,
+  setSwitchAssetButton
  } from '../../actions/patentTrackActions2'
 
  import {  
@@ -383,7 +385,10 @@ const NewHeader = () => {
       findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'due_dilligence')
     }
     if( findIndex !== -1 ) {
-      hideMenu(event, controlList[findIndex])
+      //hideMenu(event, controlList[findIndex])
+      dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))
+      dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
+      dispatch(setSwitchAssetButton(controlList[findIndex].category == 'due_dilligence' ? 0 : 1))
     }
   }
 
@@ -410,8 +415,8 @@ const NewHeader = () => {
         </div> */} 
         <div className={classes.grow_buttons}>
           <Button className={classes.calendly} onClick={handleChangeLayout}>
-            {selectedCategory == 'due_dilligence' ? 'Show Broken Chain' : 'Show All Assets'}
-          </Button>  
+            {selectedCategory == 'due_dilligence' ? 'Broken Chain' : 'All Assets'}
+          </Button> 
         </div>
         <div className={classes.rightPanel}>  
             <Button className={classes.calendly} onClick={handleScheduleViaHubspot}>

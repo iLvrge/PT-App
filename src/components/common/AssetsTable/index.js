@@ -166,6 +166,7 @@ const AssetsTable = ({
   const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
   const auth_token = useSelector(state => state.patenTrack2.auth_token)
   const link_assets_sheet_type = useSelector(state => state.patenTrack2.link_assets_sheet_type)
+  const switch_button_assets = useSelector(state => state.patenTrack2.switch_button_assets)
   
   useEffect(() => {
     
@@ -480,11 +481,12 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     assetTypesSelectAll,
     assetTypesSelected,
     selectedAssetCompanies,
-    selectedAssetCompaniesAll,
+    selectedAssetCompaniesAll, 
     selectedAssetAssignmentsAll,
     selectedAssetAssignments,
     display_clipboard,
-    auth_token        
+    auth_token,
+    switch_button_assets        
   ]);
 
   useEffect(() => {
