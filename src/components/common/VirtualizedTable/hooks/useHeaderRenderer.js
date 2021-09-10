@@ -130,10 +130,10 @@ const HeadCell = ({
       style={{ height: headerHeight, paddingLeft: paddingLeft != undefined ? paddingLeft : 'inherit' }}
       align={typeof headerAlign !== 'undefined' ? headerAlign : align}>
       {
-        role === 'checkbox' ? (  
+        role === 'checkbox' ? (     
           onSelectAll && (
             <>
-              <Checkbox checked={allSelected  || selectedItems.length == totalRows } onChange={onSelectAll} indeterminate={selectedItems.length > 0 && selectedItems.length < totalRows} {...(icon != undefined ? { icon, checkedIcon } : {})}/>
+              <Checkbox checked={totalRows > 0 && (allSelected  || selectedItems.length == totalRows) } onChange={onSelectAll} indeterminate={selectedItems.length > 0 && selectedItems.length < totalRows} {...(icon != undefined ? { icon, checkedIcon } : {})}/>
               {
                 show_selection_count === true && selectedItems.length > 0 
                 ?
