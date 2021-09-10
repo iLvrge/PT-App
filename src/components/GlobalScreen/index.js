@@ -304,8 +304,11 @@ const GlobalScreen = ({
             className={classes.splitPane}
             split="vertical"
             size={companyBarSize}
+            onChange={(size) => { 
+                setCompanyBarSize(size > 900 ? 900 : size)
+            }}
             onDragFinished={(size) => resizePane('split1', size, setCompanyBarSize)}
-            ref={companyRef}    
+            ref={companyRef}
         >
             <div 
                 className={classes.companyBar}
@@ -332,6 +335,9 @@ const GlobalScreen = ({
                 className={classes.splitPane}
                 split="vertical"
                 size={typeBarSize}
+                onChange={(size) => { 
+                    setTypeBarSize(size > 900 ? 900 : size)
+                }}
                 onDragFinished={(size) => resizePane('split9', size > 900 ? 900 : size, setTypeBarSize)}
                 ref={assignmentTypeRef}
             >
@@ -356,6 +362,9 @@ const GlobalScreen = ({
                     className={classes.splitPane}
                     split="vertical"
                     size={otherPartyBarSize}
+                    onChange={(size) => { 
+                        setOtherPartyBarSize(size > 900 ? 900 : size)
+                    }} 
                     onDragFinished={(size) => resizePane('split7', size > 900 ? 900 : size, setOtherPartyBarSize)}
                     ref={otherPartyRef}
                 >
@@ -410,6 +419,9 @@ const GlobalScreen = ({
                         className={classes.splitPane}
                         split="vertical"
                         size={assignmentBarSize}
+                        onChange={(size) => { 
+                            setAssignmentBarSize(size > 900 ? 900 : size)
+                        }} 
                         onDragFinished={(size) => resizePane('split8', size > 900 ? 900 : size, setAssignmentBarSize)}
                         ref={assignmentRef}
                     >
@@ -418,8 +430,14 @@ const GlobalScreen = ({
                                 openAssignmentBar === true 
                                 ? 
                                     <>
-                                        <ArrowButton arrowId={`arrow_transactions`} handleClick={handleAssignmentBarOpen} buttonType={toggleAssignmentButtonType} buttonVisible={assignmentButtonVisible}/>
-                                        <AssignmentsTable type={type} defaultLoad={type === 2 ? false : true} />
+                                        <ArrowButton 
+                                            arrowId={`arrow_transactions`} 
+                                            handleClick={handleAssignmentBarOpen} 
+                                            buttonType={toggleAssignmentButtonType} 
+                                            buttonVisible={assignmentButtonVisible}/>
+                                        <AssignmentsTable 
+                                            type={type} 
+                                            defaultLoad={type === 2 ? false : true} />
                                     </>
                                 : 
                                 ''
@@ -429,6 +447,9 @@ const GlobalScreen = ({
                             className={classes.splitPane}
                             split="vertical"
                             size={customerBarSize}
+                            onChange={(size) => { 
+                                setCustomerBarSize(size > 900 ? 900 : size)
+                            }} 
                             onDragFinished={(size) => resizePane('split2', size > 900 ? 900 : size, setCustomerBarSize)}
                             ref={assetRef}
                         >
@@ -437,7 +458,11 @@ const GlobalScreen = ({
                                     openCustomerBar === true 
                                     ? 
                                         <>
-                                            <ArrowButton arrowId={`arrow_assets`} handleClick={handleCustomersBarOpen} buttonType={toggleCustomerButtonType} buttonVisible={customerButtonVisible}/>
+                                            <ArrowButton 
+                                                arrowId={`arrow_assets`} 
+                                                handleClick={handleCustomersBarOpen} 
+                                                buttonType={toggleCustomerButtonType} 
+                                                buttonVisible={customerButtonVisible}/>
                                             {
                                                 type == 0 ? (
                                                     <MaintainenceAssetsList 
@@ -550,7 +575,10 @@ const GlobalScreen = ({
                                         split="vertical"
                                         minSize={100}
                                         size={visualizerBarSize}
-                                        onChange={() => { editorBar(1) }}
+                                        onChange={(size) => { 
+                                            setVisualizerBarSize(size)
+                                            //editorBar(1) 
+                                        }} 
                                         onDragStarted={() => {
                                             setIsDragging(!isDragging)
                                         }}
@@ -621,6 +649,7 @@ const GlobalScreen = ({
                                                 illustrationBar={openIllustrationBar}
                                                 customerBarSize={customerBarSize}
                                                 companyBarSize={companyBarSize}
+                                                isDragging={isDragging}
                                                 type={type}
                                             />
                                         </div>

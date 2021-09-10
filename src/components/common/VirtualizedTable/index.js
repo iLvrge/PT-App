@@ -85,6 +85,7 @@ const VirtualizedTable = ({
   icon,
   checkedIcon,
   childHeader,
+  scrollToIndex,
   ...tableProps
 }) => {
   const classes = useStyles();
@@ -438,6 +439,8 @@ const VirtualizedTable = ({
     () => selected.length > 0 && selected.length < rows.length,
     [rows, selected],
   );
+
+  
   
   const headerRenderer = useHeaderRenderer(
     rows,
@@ -672,6 +675,16 @@ const VirtualizedTable = ({
     ],
   );
 
+  const getSelectedItemIndex = useMemo(() => {
+    let findIndex = -1
+    if( rowSelected.length > 0 && items.length > 0) {
+      findIndex = items.findIndex(row => row[selectedKey] === rowSelected[0])
+    } 
+    console.log('findIndex', findIndex)
+    return findIndex
+  }, [items, rowSelected, selectedKey])
+
+  console.log('scrollToIndex', scrollToIndex)
   return (
     <AutoSizer {...(responsive === false ? "disableWidth" : "")}>
       {({ height, width: tableWidth }) => (
@@ -686,6 +699,7 @@ const VirtualizedTable = ({
             headerRowDisabled === true ? "disable_header" : ""
           }`}
           rowCount={items.length}
+          {...(typeof scrollToIndex !== 'undefined' && scrollToIndex === true ? {scrollToIndex: getSelectedItemIndex} : {})}          
           {...tableProps}
           sortBy={sortBy}
           sortDirection={sortDirection}
@@ -703,7 +717,7 @@ const VirtualizedTable = ({
                     columnIndex: index,
                   })
                 }
-                className={classes.flexContainer}
+                className={classes.flexContainer} 
                 cellRenderer={cellRenderer}
                 dataKey={dataKey}
                 {...other}

@@ -78,6 +78,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   const [selectedAll, setSelectAll] = useState(false);
   const [selectItems, setSelectItems] = useState([]);
   const [selectedRow, setSelectedRow] = useState([]);
+  const [scrollToIndex, setScrollToIndex] = useState(0);
   const [rows, setRows] = useState([]);
   const [childSelected, setCheckedSelected] = useState(0);
   const [currentSelection, setCurrentSelection] = useState(null);
@@ -252,6 +253,17 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   },[ slack_channel_list, assignmentList, selectedRow])
 
   useEffect(() => {
+    console.log('selectedRow, assignmentList', selectedRow, assignmentList.length)
+    if( selectedRow.length > 0 && assignmentList.length > 0) {
+      const findIndex = assignmentList.findIndex(rowTransaction => rowTransaction.rf_id === selectedRow[0])
+      console.log('SELECT ROW INDEX', findIndex)
+      if(findIndex !== -1) {
+        setScrollToIndex(findIndex)
+      }
+    }
+  }, [selectedRow])
+
+  useEffect(() => {
     if(slack_channel_list.length == 0 && slack_channel_list_loading === false) {
       const slackToken = getTokenStorage( 'slack_auth_token_info' )
       if(slackToken && slackToken!= '') {
@@ -357,6 +369,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   useEffect(() => {
     
     //setSelectedRow(selectedAssetsTransactions);
+    console.log('currentRowSelection, selectedRow', currentRowSelection, selectedRow)
     if (currentRowSelection.length != selectedRow.length  ) {
       setSelectedRow(currentRowSelection); 
     }
@@ -626,6 +639,7 @@ const findChannelID = useCallback((rfID) => {
         rowSelected={selectedRow}
         selectedIndex={currentSelection}
         selectedKey={"rf_id"}
+        scrollToIndex={true}
         rows={rows}
         rowHeight={rowHeight}
         headerHeight={headerRowHeight}
@@ -642,7 +656,7 @@ const findChannelID = useCallback((rfID) => {
         resizeColumnsStop={resizeColumnsStop}
         childCounterColumn={`assets`}
         showIsIndeterminate={false}
-        renderCollapsableComponent={
+        renderCollapsableComponent={  
           <ChildTable
             transactionId={currentSelection}
             headerRowDisabled={true}
