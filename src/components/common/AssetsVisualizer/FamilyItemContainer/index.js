@@ -44,13 +44,13 @@ const FamilyItemContainer = ({ item, onClose }) => {
                 setAbsractData('')
                 setClaimsData('')
                 setFigureData([])
-                setAssignmentsData([])
+                setAssignmentsData([])  
                 setCitationData([])
                 setSpecificationData([])
                 setPtabData([])
                 setSelectedNumber('')
                 if(selectedAssetsPatents.length > 0) {
-                    setSelectedNumber(selectedAssetsPatents[0] !== '' ? `US${numberWithCommas(selectedAssetsPatents[0])}` : `US${applicationFormat(selectedAssetsPatents[1])}`)
+                    setSelectedNumber(selectedAssetsPatents[1] !== '' ? `US${numberWithCommas(selectedAssetsPatents[1])}` : `US${applicationFormat(selectedAssetsPatents[0])}`)
                 }
                 return setfamilyItemData({})
             }
@@ -68,7 +68,8 @@ const FamilyItemContainer = ({ item, onClose }) => {
                     publication_country: item.publication_country,
                     publication_kind: item.publication_kind
                 })
-                setSelectedNumber(item.publication_kind.toString().toLowerCase().indexOf('a') !== -1? `${item.publication_country}${applicationFormat(item.application_number)}${item.publication_kind}` : `${item.publication_country}${numberWithCommas(item.patent_number)}${item.publication_kind}`)
+                console.log("ITEM", item)
+                setSelectedNumber(item.publication_kind.toString().toLowerCase().indexOf('a') !== -1 ? `${item.publication_country}${applicationFormat(item.application_number)}${item.publication_kind}` : item.publication_country.toLowerCase().indexOf('us') !== -1 && item.application_number !== '' ? `${item.publication_country}${applicationFormat(item.application_number)}` :  `${item.publication_country}${numberWithCommas(item.patent_number)}${item.publication_kind}`)
                 setAbsractData(item.abstracts)
                 setClaimsData(item.claims)
                 setClaimsData(item.specification)
