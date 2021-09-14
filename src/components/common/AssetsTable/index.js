@@ -608,7 +608,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
 
         }
         
-        if(typeof token === 'object') {
+        if(typeof token === 'object' && token !== null) {
           const { access_token } = token          
           if(access_token && access_token != '') {
             dispatch(getChannels(access_token))

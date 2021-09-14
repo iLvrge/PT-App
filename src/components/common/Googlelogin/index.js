@@ -15,6 +15,7 @@ const Googlelogin = () => {
 
     const responseGoogle = useCallback((response) => {
         const { code } = response
+        console.log(response)
         if(code != undefined) {
             setTokenStorage( 'google_auth_token_info', code )
             dispatch( getGoogleAuthToken( code ) )

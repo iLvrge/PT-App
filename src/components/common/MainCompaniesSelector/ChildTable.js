@@ -337,7 +337,6 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
                 updateSelected = updateSelected.filter(
                     existingCompany => existingCompany !== parseInt( row.representative_id ) 
                 )
-                console.log('sdfs',  updateSelected )
                 updateSelectedWithName = updateSelectedWithName.filter(
                     existingCompany => existingCompany.id !== parseInt( row.representative_id )
                 )
@@ -345,7 +344,6 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
                 updateSelected = updateSelected.filter(
                     existingCompany => existingCompany !== parseInt( parentCompanyId ) 
                 )    
-                console.log('sdfs1',  updateSelected )
                 updateSelectedWithName = updateSelectedWithName.filter(
                     existingCompany => existingCompany.id !== parseInt( parentCompanyId )
                 )

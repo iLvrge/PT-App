@@ -282,11 +282,22 @@ const QuillEditor = ({
     }
   }, [ template_document_url, quillRef ] )
 
+  const copyToClipboard = (data) => {
+    var textField = document.createElement('textarea')
+    textField.innerText = data
+    document.body.appendChild(textField)
+    textField.select()
+    document.execCommand('copy')
+    textField.remove()
+  }
+
   const onAttachmentOpenedFileAndEmail = useCallback(() => {    
-    if( template_document_url != '') {
-      navigator.clipboard.writeText(template_document_url)
-      window.open('https://mail.google.com/mail/u/0/?view=btop&ver=ops2cvpehp6#cmid%253D1&s','GMAIL')
-    }
+    let url = `https://mail.google.com/mail/u/0/?fs=1&tf=cm${template_document_url != '' ? '&body='+template_document_url : ''}`
+    /* if( template_document_url != '') {
+      copyToClipboard(template_document_url)
+
+    } */
+    window.open(url,'GMAIL')
   }, [ template_document_url, quillRef ] )  
 
   const onShare = useCallback(async () => {

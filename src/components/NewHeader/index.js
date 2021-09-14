@@ -73,7 +73,20 @@ import { setAssetTypeAssignments,
   setClipboardAssetsDisplay,  
   setChannelID,
   setAssetTypeAssignmentAllAssets,
-  setSwitchAssetButton
+  setSwitchAssetButton,
+  setAssetTypes,
+  setAssetTypeInventor,
+  setAssetTypeCompanies,
+  setAssetsIllustrationData,
+  setAllAssetTypes,
+  setAssetTypesSelect,
+  setAllAssignmentCustomers,
+  setSelectAssignmentCustomers,
+  setAssetTypesPatentsSelected,
+  setAssetTypesPatentsSelectAll,
+  setAllAssignments, 
+  setSelectAssignments,
+  setSlackMessages
  } from '../../actions/patentTrackActions2'
 
  import {  
@@ -81,6 +94,7 @@ import { setAssetTypeAssignments,
   setConnectionBoxView,
   setPDFView,
   setFamilyItemDisplay,
+  setPDFFile
  } from '../../actions/patenTrackActions'
 
 import { 
@@ -386,11 +400,56 @@ const NewHeader = () => {
     }
     if( findIndex !== -1 ) {
       //hideMenu(event, controlList[findIndex])
-      dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))
-      dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
+      resetAll()
+      clearOtherItems()
+      dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))      
       dispatch(setSwitchAssetButton(controlList[findIndex].category == 'due_dilligence' ? 0 : 1))
     }
   }
+
+  const resetAll = () => {
+  dispatch(setAssetTypes([]))
+  dispatch(setAssetTypeCompanies({ list: [], total_records: 0 }))
+  dispatch(setAssetTypeInventor({ list: [], total_records: 0 }))
+  dispatch(setAssetTypeAssignments({ list: [], total_records: 0 }))
+  dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
+  dispatch(setAssetTypesPatentsSelected([]))
+  dispatch(setAssetTypesPatentsSelectAll(false))
+  dispatch(setAllAssignments(false))
+  dispatch(setSelectAssignments([]))	
+  dispatch(setSelectAssignmentCustomers([]))
+  dispatch(setAllAssignmentCustomers(false))
+}
+
+const clearOtherItems = () => {
+  dispatch(setAssetsIllustration(null))
+  dispatch(setAssetsIllustrationData(null))
+  dispatch(setSelectedAssetsTransactions([]))
+  dispatch(setSelectedAssetsPatents([]))
+  dispatch(setSlackMessages([]))
+  dispatch(
+      setPDFFile(
+      { 
+          document: '',  
+          form: '', 
+          agreement: '' 
+      }
+      )
+  )
+  dispatch(
+      setPDFView(false)
+  )
+  dispatch(setAssetsIllustrationData(null))
+  dispatch(setAssetsIllustration(null)) 
+  dispatch(toggleLifeSpanMode(true));
+  dispatch(toggleFamilyMode(false));
+  dispatch(toggleUsptoMode(false));
+  dispatch(toggleFamilyItemMode(false));	
+  dispatch( setAllAssetTypes( false ) )
+  dispatch( setAssetTypesSelect([]))	
+  dispatch( setAllAssignmentCustomers( false ) )
+  dispatch( setSelectAssignmentCustomers([]))														
+}
 
   return (
     <AppBar className={classes.root} color='transparent' position='relative'>

@@ -294,6 +294,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
    */
 
   const onSelect = useCallback((properties) => {
+    resetTooltipContainer()
     if (properties.items.length === 0) {
       setSelectedItem()
     } else {
@@ -470,8 +471,9 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
       timelineRef.current.off('itemout', onItemout)
       timelineRef.current.off('rangechange', onRangeChange)
       timelineRef.current.off('rangechanged', onRangeChanged)
+      resetTooltipContainer()
     } 
-  }, [ onRangeChange, onRangeChanged, onSelect, onItemover ])
+  }, [ onRangeChange, onRangeChanged, onSelect, onItemover ]) 
 
   /**
    * Add timeline items to the the dataset and set the start, end, min and max date

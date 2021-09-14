@@ -100,6 +100,7 @@ const HeadCell = ({
   selectedItems,
   selectedGroup
 }) => {
+  /*console.log('LIBRARY1', selectedItems, selectedGroup, typeof selectedGroup, typeof selectedGroup !== 'undefined')*/
   const classes = useStyles()
   const { align, headerAlign, role, disableSort, filterable, paddingLeft, badge, showGrandTotal, draggable, headingIcon, show_selection_count, secondLabel, show } = columns[columnIndex]
   const [ anchorEl, setAnchorEl ] = useState(null)
@@ -151,7 +152,7 @@ const HeadCell = ({
             {
               show_selection_count === true && selectedItems.length > 0
               ?
-              <Badge color='primary' max={99999} className={classes.badgeSelection} badgeContent={numberWithCommas(selectedItems)} showZero={false}></Badge>
+              <Badge color='primary' max={99999} className={classes.badgeSelection} badgeContent={numberWithCommas(typeof selectedGroup !== 'undefined' ? selectedItems.length - selectedGroup.length : selectedItems.length)} showZero={false}></Badge>
               :
               ''
             }
@@ -299,6 +300,7 @@ const HeadCell = ({
 }
 
 function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSelectAll, allSelected, isIndeterminate, totalRows, grandTotal, onChangeColumnFilters, resizeColumnsWidth, resizeColumnsStop, icon, checkedIcon, selectedItems, selectedGroup) {
+  console.log('LIBRARY', selectedGroup)
   return useCallback(({ sortBy, dataKey, sortDirection, label, columnIndex }) => {
     return (
       <HeadCell

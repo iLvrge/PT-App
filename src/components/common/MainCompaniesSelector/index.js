@@ -266,14 +266,21 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                             })
     
                             if( insert === true ) {
+                                let checkGroups = []
                                 oldItems.forEach( id => {
                                     companies.list.forEach( company => {
                                         if( id === company.representative_id ) {
                                             names.push( {id: company.representative_id, name: company.original_name} )
+                                            if(parseInt(company.type) === 1) {
+                                                checkGroups.push(id)
+                                            }
                                             return false;
                                         }
                                     })
                                 })
+                                if(checkGroups.length > 0) {
+                                    setSelectGroups(prevItems => prevItems.length > 0 ? [...prevItems, ...checkGroups] : checkGroups)
+                                }
                                 dispatch(setMainCompaniesSelected(oldItems, names))
                             }
                         }                        

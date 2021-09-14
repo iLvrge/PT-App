@@ -209,7 +209,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
 
         }
         
-        if(typeof token === 'object') {
+        if(typeof token === 'object' && token !== null) {
           slackLoginButton =  false           
           const { access_token } = token          
           if(access_token && access_token != '') {
