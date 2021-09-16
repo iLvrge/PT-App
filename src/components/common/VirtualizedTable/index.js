@@ -677,10 +677,9 @@ const VirtualizedTable = ({
 
   const getSelectedItemIndex = useMemo(() => {
     let findIndex = -1
-    if( rowSelected.length > 0 && items.length > 0) {
+    if( typeof rowSelected !== 'undefined' && typeof items !== 'undefined' && rowSelected.length > 0 && items.length > 0) {
       findIndex = items.findIndex(row => row[selectedKey] === rowSelected[0])
-    } 
-    console.log('findIndex', findIndex)
+    }
     return findIndex
   }, [items, rowSelected, selectedKey])
 

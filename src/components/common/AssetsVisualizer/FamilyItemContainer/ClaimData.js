@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react'
-
+import {Typography} from '@material-ui/core'
 import useStyles from './styles'
 import Loader from "../../Loader"
 import PatenTrackApi from '../../../../api/patenTrack2'
+
+
 
 const ClaimData = ({ data, number }) => {
     const classes = useStyles()
@@ -47,7 +49,11 @@ const ClaimData = ({ data, number }) => {
                     <li
                         key={`asset-type-${index}`}
                     >
-                        <span id={`claim${index}`}>{ Object.keys(child).length > 0 && child.text != undefined ? child.text : child }</span>
+                        <span id={`claim${index}`}>
+                            <Typography variant='body2'
+                                style={{ whiteSpace: "pre-line" }}
+                            >{ Object.keys(child).length > 0 && child.text != undefined ? child.text : child }</Typography>
+                        </span>
                     </li>
                 ))}
                 </ul>
