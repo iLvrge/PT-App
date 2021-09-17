@@ -231,16 +231,36 @@ const AssetDetailsContainer = ({
                   ) :  (
                       connectionBoxView === true ? (
                           <PdfViewer
-                          display={"false"}
-                          fullScreen={false}
-                          resize={resizeFrame}
+                            display={"false"}
+                            fullScreen={false}
+                            resize={resizeFrame}
                           />  
                       ) : lifeSpanMode === true ? (
-                          <InventionVisualizer defaultSize={defaultSize} illustrationBar={openIllustrationBar} visualizerBarSize={visualizerBarSize} analyticsBar={analyticsBar} openCustomerBar={openCustomerBar} commentBar={commentBar} illustrationBar={illustrationBar} customerBarSize={customerBarSize} companyBarSize={companyBarSize} />
+                          <InventionVisualizer 
+                            defaultSize={defaultSize} 
+                            illustrationBar={openIllustrationBar} 
+                            visualizerBarSize={visualizerBarSize} 
+                            analyticsBar={analyticsBar} 
+                            openCustomerBar={openCustomerBar} 
+                            commentBar={commentBar} 
+                            illustrationBar={illustrationBar} 
+                            customerBarSize={customerBarSize} 
+                            companyBarSize={companyBarSize} />
                       ) : familyItemMode === true ? (
-                          <FamilyItemContainer item={selectedAssetsFamilyItem} onClose={onCloseFamilyItemMode} />
+                          <FamilyItemContainer 
+                            item={selectedAssetsFamilyItem} 
+                            onClose={onCloseFamilyItemMode} />
                       ) : (
-                        <InventionVisualizer defaultSize={defaultSize} illustrationBar={openIllustrationBar} visualizerBarSize={visualizerBarSize} analyticsBar={analyticsBar} openCustomerBar={openCustomerBar} commentBar={commentBar} illustrationBar={illustrationBar} customerBarSize={customerBarSize} companyBarSize={companyBarSize} />
+                        <InventionVisualizer 
+                            defaultSize={defaultSize} 
+                            illustrationBar={openIllustrationBar} 
+                            visualizerBarSize={visualizerBarSize} 
+                            analyticsBar={analyticsBar} 
+                            openCustomerBar={openCustomerBar} 
+                            commentBar={commentBar} 
+                            illustrationBar={illustrationBar} 
+                            customerBarSize={customerBarSize} 
+                            companyBarSize={companyBarSize} />
                       )
                   )
                 :
@@ -272,7 +292,10 @@ const AssetDetailsContainer = ({
                                     />
                                 ) : 
                                 lifeSpanMode === true ? (
-                                  <LifeSpanContainer chartBar={chartBar} openCustomerBar={openCustomerBar} visualizerBarSize={visualizerBarSize}/>
+                                  <LifeSpanContainer 
+                                    chartBar={chartBar} 
+                                    openCustomerBar={openCustomerBar} 
+                                    visualizerBarSize={visualizerBarSize}/>
                                 ) :
                                 familyMode && (
                                     <FamilyContainer
@@ -282,10 +305,16 @@ const AssetDetailsContainer = ({
                             }
                         </>
                     ) : (
-                      <LifeSpanContainer chartBar={chartBar} openCustomerBar={openCustomerBar} visualizerBarSize={visualizerBarSize}/>
+                      <LifeSpanContainer 
+                        chartBar={chartBar} 
+                        openCustomerBar={openCustomerBar} 
+                        visualizerBarSize={visualizerBarSize}/>
                     )
                 ) : (
-                  <LifeSpanContainer chartBar={chartBar} openCustomerBar={openCustomerBar} visualizerBarSize={visualizerBarSize}/>
+                  <LifeSpanContainer 
+                    chartBar={chartBar} 
+                    openCustomerBar={openCustomerBar} 
+                    visualizerBarSize={visualizerBarSize}/>
                 )
               : ''
             }

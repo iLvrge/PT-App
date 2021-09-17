@@ -866,6 +866,10 @@ a.maintain svg.clean_encumbrances path{
   min-width: 387px;
 } */
 
+.claim-text.patent-text {
+  margin: 14px 0 0 20px;
+}
+
 .scopeTooltip{
   display: flex;
   z-index: 9999;

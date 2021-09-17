@@ -48,8 +48,8 @@ export default makeStyles(theme => ({
       display: 'flex'
   },
   fullscreenBtn: {
-      position: 'absolute',
-      top: 0,
-      right: 0,
+    position: 'absolute',
+    top: 0,
+    right: 0,
   }
 }))

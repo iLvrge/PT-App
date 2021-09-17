@@ -121,7 +121,7 @@ export const assetsTypesWithKey = [
       case 'mergersIn':
         return 6
       case 'mergersOut':
-          return 7
+        return 7
       case 'options':
         return 8
       case 'courtOrders':

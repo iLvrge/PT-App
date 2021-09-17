@@ -34,7 +34,8 @@ export default makeStyles(theme => ({
     },
     '& .MuiTabScrollButton-root':{
       width: '20px'
-    }
+    },
+    
   },
   dashboard: {
     position: 'absolute',
@@ -109,6 +110,11 @@ export default makeStyles(theme => ({
       lineHeight: '25px',
       '&:first-child': {
         padding: 0
+      },
+      '& .MuiTypography-body2': {
+        '& .index.1': {
+          margin: '14px 0 0 20px'
+        }
       }
     },
     '& .node': {

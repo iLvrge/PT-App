@@ -52,7 +52,8 @@ const ClaimData = ({ data, number }) => {
                         <span id={`claim${index}`}>
                             <Typography variant='body2'
                                 style={{ whiteSpace: "pre-line" }}
-                            >{ Object.keys(child).length > 0 && child.text != undefined ? child.text : child }</Typography>
+                                dangerouslySetInnerHTML={{__html: Object.keys(child).length > 0 && child.text != undefined ? child.text : child}}
+                            ></Typography>
                         </span>
                     </li>
                 ))}
