@@ -89,6 +89,43 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
         }
     ]
 
+    const onHandleHeadDropDownlist = useCallback(async(event) => { 
+        if(event.target.value == 5) {
+            let oldItems = [...clipboard_assets, ...assets]
+            dispatch(setClipboardAssets(oldItems))
+        } else if( event.target.value == 0 ) {
+            let oldItems = [...clipboard_assets]
+            const promiseAsset = assets.map( row => {
+                const findIndex = oldItems.findIndex( item => item.asset == row.asset )
+                if( findIndex !== -1 ) {
+                    oldItems.splice(findIndex, 1)
+                }
+            })
+            await Promise.all(promiseAsset)
+        }
+        const currentLayoutIndex = controlList.findIndex(r => r.type == 'menu' && r.category == selectedCategory )
+        if(currentLayoutIndex !== -1) {
+            setDropOpenAsset(null)
+            let oldMoveAssets = [...move_assets]           
+            const promiseMoveAsset = assets.map( row => {
+                const findIndex = oldMoveAssets.findIndex(item => item.asset == row.asset)
+                if(findIndex !== -1) {
+                    oldMoveAssets.splice(findIndex, 1)
+                }
+                if( event.target.value != -1 ) {
+                    oldMoveAssets.push({
+                        asset: row.asset,
+                        move_category: event.target.value,
+                        currentLayout: controlList[currentLayoutIndex].layout_id,
+                        grant_doc_num: row.grant_doc_num,
+                        appno_doc_num: row.appno_doc_num,
+                    })          
+                }    
+            })
+            await Promise.all(promiseMoveAsset)
+            dispatch(setMoveAssets(oldMoveAssets)) 
+        }
+    })
     const onHandleDropDownlist = useCallback(async(event, asset, row ) => { 
         if(event.target.value == 5) {
            
@@ -146,7 +183,9 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
             dataKey: "asset",
             role: "static_dropdown",
             list: dropdownList,
-            onClick: onHandleDropDownlist
+            onClick: onHandleDropDownlist,
+            showDropdown: true,
+            onClickHeadDropdown: onHandleHeadDropDownlist
         },
         {
           width: 120,

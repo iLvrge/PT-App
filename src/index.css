@@ -891,7 +891,7 @@ a.maintain svg.clean_encumbrances path{
 .depth .MuiSlider-rail {
   color: #Ef0000
 }
-.MuiSlider-thumb,  .scope .MuiSlider-track, .MuiSlider-markActive{
+.MuiSlider-thumb,  .scope .MuiSlider-track, .year .MuiSlider-track, .MuiSlider-markActive{
   background-color: #Ef0000 !important
 }
 

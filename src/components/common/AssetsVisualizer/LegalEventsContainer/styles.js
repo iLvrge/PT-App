@@ -2,13 +2,68 @@ import { makeStyles } from '@material-ui/core/styles'
 import { indigo, purple, blue, pink, teal, cyan, lime, green, orange, grey } from '@material-ui/core/colors'
 
 export default makeStyles(theme => ({
+   
   root: {
-    height: 'calc(100% - 38px)',
+    flex: 1,
+    overflow: 'auto',
+    position: 'relative',
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    '& .MuiTab-root':{
+      minWidth: 'inherit',
+    },
+    '& .MuiTypography-root':{
+      lineHeight: '25px'
+    },
+    '& embed':{
+      height: '100%',
+      width: '100%'
+    },
+    '& .MuiPaper-elevation1': {
+      boxShadow: 'none'
+    },
+    '& .MuiTableCell-root': {
+      padding: '0 10px',
+      lineHeight: '25px',
+      verticalAlign: 'top',
+      borderBottom: '0px',
+      '&:first-child': {
+        paddingLeft: '0px'
+      }
+    },
+    '& .MuiTabScrollButton-root':{
+      width: '20px'
+    },
+    
+  },
+  graphContainer: {
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    background: '#222222 !important',
+    border: '1px solid #5c5c5c !important',
+    overflow: 'hidden'
+  }, 
+  timelineRoot: {
+    height: '100%',
     width: '100%',
     position: 'relative',
+    flex: 1,
     display: 'flex',
-    alignItems: 'flex-end',
-    overflow: 'hidden auto'
+  },
+  tab: {
+    minWidth: '25%',
+    minHeight: 35,
+  },
+  tabs: {
+    minHeight: 35,
+    display: 'flex',
+    '& .MuiTab-root': {
+      fontSize: '1rem'
+    }
   },
   loader: {
     position: 'absolute',
@@ -24,9 +79,9 @@ export default makeStyles(theme => ({
     },
     '& .vis-timeline':{
       border: '0 !important',
-      backgroundColor: '#424242 !important',
+      backgroundColor: '#222222 !important',
       '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground':{
-        backgroundColor: '#424242 !important',
+        /* backgroundColor: '#424242 !important', */
       }
     },
     '& .vis-left.vis-panel.vis-vertical-scroll, .vis-right.vis-panel.vis-vertical-scroll':{

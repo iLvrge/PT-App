@@ -3,17 +3,23 @@ import { Typography, Slider } from '@material-ui/core'
 import Loader from '../../Loader'
 import useStyles from './styles'
 
-const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRangeText, valueScope, valueRange, onChangeRangeSlider, onChangeScopeSlider }) => {
+const FilterCPC = ({ onClose, depthRange, scopeRange, yearRange, yearRangeText, depthRangeText, scopeRangeText, valueScope, valueRange, valueYear, onChangeRangeSlider, onChangeScopeSlider, onChangeYearSlider }) => {
     const classes = useStyles()
     const scopeRef = useRef(null)
     const [ scopeValue, setScopeValue ] = useState(valueScope)
     const [ rangeValue, setRangeValue ] = useState(valueRange)
+    const [ yearValue, setYearValue ] = useState(valueYear)
     const CONTANT_HEIGHT = 18
     const [ height, setHeight] = useState('550px')
-    
+    const [ heightYear, setHeightYear] = useState('250px')
+    console.log('valueYear', valueYear)
     useEffect(() => {
         setHeight(`${(scopeRange.length * CONTANT_HEIGHT) + 15}px`)
     }, [ scopeRange ])
+
+    useEffect(() => {
+        setHeightYear(`${(yearRange.length * CONTANT_HEIGHT) + 15}px`)
+    }, [ yearRange ])
 
     useEffect(() => {
         if(scopeRef.current !== null) {
@@ -52,11 +58,11 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRange
                 addTooltip()  
             }
         }, 1000)
-    }
+    } 
 
     const handleScopeChange = (event, newValue) => {
         setScopeValue(newValue)
-        onChangeScopeSlider(rangeValue, newValue)
+        onChangeScopeSlider(yearValue, rangeValue, newValue)
     }
 
     const handleRangeChange = (event, newValue) => {
@@ -64,9 +70,18 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRange
         onChangeRangeSlider(newValue)
     }   
 
+    const handleYearChange = (event, newValue) => {
+        onChangeYearSlider(rangeValue, newValue)
+    }
+
     return (
         <div className={classes.displayFlex}>   
             <div className={classes.headingContainer}>
+                <div className={`${classes.flexColumn} ${classes.flexColumnYear}`}>
+                    <div className={classes.heading}>
+                        <Typography>Year:</Typography>
+                    </div>
+                </div>   
                 <div className={`${classes.flexColumn} ${classes.flexColumnDepth}`}>
                     <div className={classes.heading}>
                         <Typography>Depth:</Typography>
@@ -79,6 +94,29 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRange
                 </div>   
             </div>    
             <div className={classes.mainContainer}>
+                <div className={`${classes.flexColumn} ${classes.flexColumnYear}`}>
+                    <div className={classes.selectorContainer}>
+                        <div className={`year ${classes.holder} ${classes.topMargin}`} style={{height: heightYear}}>  
+                            {
+                                yearRange.length > 0
+                                ?
+                                <Slider
+                                    orientation="vertical"
+                                    defaultValue={valueYear} 
+                                    onChangeCommitted={handleYearChange}
+                                    aria-labelledby="vertical-slider"
+                                    getAriaValueText={yearRangeText}
+                                    marks={yearRange}
+                                    max={yearRange.length}
+                                    step={1} 
+                                    min={1}
+                                /> 
+                                :
+                                <Loader/>
+                            }
+                        </div>             
+                    </div>             
+                </div>
                 <div className={`depth ${classes.flexColumn} ${classes.flexColumnDepth} ${classes.topMargin} ${classes.customHeight}`}>
                     <Slider
                         defaultValue={valueRange}
@@ -116,7 +154,7 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, depthRangeText, scopeRange
                             }                            
                         </div>             
                     </div>             
-                </div> 
+                </div>
             </div>      
         </div> 
     )

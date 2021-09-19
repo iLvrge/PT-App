@@ -6,6 +6,7 @@ export default makeStyles(theme => ({
     height: '100%',
     width: '100%',
     position: 'relative',
+    background: 'inherit !important'
   },
   loader: {
     position: 'absolute',
@@ -27,9 +28,9 @@ export default makeStyles(theme => ({
     // },
     '& .vis-timeline':{
       border: '0 !important',
-      backgroundColor: '#424242 !important',
+      /* backgroundColor: '#424242 !important', */
       '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground':{
-        backgroundColor: '#424242 !important',
+        /* backgroundColor: '#424242 !important', */
       }
     },
     '& .vis-left.vis-panel.vis-vertical-scroll, & .vis-right.vis-panel.vis-vertical-scroll': {
@@ -172,7 +173,7 @@ export default makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     minWidth: 150,
-    background: '#424242',
+    /* background: '#424242', */
     borderRadius: 2,
   },
   legendAssetType: {
@@ -204,7 +205,7 @@ export default makeStyles(theme => ({
   },
   onRangeChangeMessage: {
     position: 'absolute',
-    background: '#424242cc',
+    /* background: '#424242cc', */
     borderRadius: 2,    
     top: 10,
     right: 30,

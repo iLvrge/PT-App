@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useSelector } from 'react-redux'
 import moment from 'moment'
 
 import Paper from '@material-ui/core/Paper'
@@ -6,8 +7,9 @@ import Paper from '@material-ui/core/Paper'
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
 import { DataSet } from 'vis-data/esnext'
-import { Timeline } from 'vis-timeline/esnext'
+import { Timeline } from 'vis-timeline-73/esnext'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import Loader from '../../Loader'
 
 import useStyles from './styles'
 
@@ -63,7 +65,7 @@ const convertDataToItem = (eventItem, index, type, cls, icons) => {
   return (item)
 }
 
-const PtabData = ({ data }) => {
+const Fees = ({ events }) => {
   const classes = useStyles()
   const timelineRef = useRef()
   const timelineContainerRef = useRef()
@@ -72,31 +74,38 @@ const PtabData = ({ data }) => {
   
   const [ legalEvents, setLegalEvents ] = useState([])
   const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(true)
+  const [ isLoadingTimelineData, setIsLoadingTimelineData ] = useState(false)
+  
+  const legalEventDataRetrieved = useSelector(state => state.patenTrack.legalEventDataRetrieved)
   
   useEffect(() => {
       timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
   }, [])
 
   useEffect(() => {
-    if(data.length == 0 || data.main.length == 0) {
+    setIsLoadingTimelineData(legalEventDataRetrieved)
+  }, [legalEventDataRetrieved])
+
+  useEffect(() => {
+    if(events.length == 0 || events.main.length == 0) {
       setIsLoadingTimelineRawData(false)
       return setLegalEvents([])
     }
     const getLegalEventListFunction = async () => {
-      setLegalEvents(data)
+      setLegalEvents(events)
       setIsLoadingTimelineRawData(false)
     }
     getLegalEventListFunction()
-  }, [ data ])
+  }, [ events ])
 
   useEffect(() => {
     if (isLoadingTimelineRawData) return 
    
-    const mainItems = Object.keys(data).length > 0 &&  data.main != undefined ? data.main.map((event, index) => convertDataToItem(event, index, 0, classes, data.icons)) : []
+    const mainItems = Object.keys(events).length > 0 &&  events.main != undefined ? events.main.map((event, index) => convertDataToItem(event, index, 0, classes, events.icons)) : []
     let otherItems = []
      
-    if( Object.keys(data).length > 0 && data.other != undefined &&  data.other.length > 0 ) {
-      otherItems = data.other.map((event, index ) => convertDataToItem(event, mainItems.length + index, 1, classes, data.icons))
+    if( Object.keys(events).length > 0 && events.other != undefined &&  events.other.length > 0 ) {
+      otherItems = events.other.map((event, index ) => convertDataToItem(event, mainItems.length + index, 1, classes, events.icons))
     }
 
     const convertedItems = [...mainItems, ...otherItems]
@@ -128,19 +137,18 @@ const PtabData = ({ data }) => {
       setDisplay('block')
       
     } else {
-      setDisplay('block')
+      setDisplay('none')
     }
     timelineRef.current.setItems(items.current)
     
     timelineRef.current.setOptions({ ...options, start, end, min, max  }) 
     
-}, [ legalEvents, isLoadingTimelineRawData, data ])
+}, [ legalEvents, isLoadingTimelineRawData, events ])
 
   return (
-    <Paper className={`${classes.rootContainer} timelineRoot`} square >
-        <>
+        <Paper className={`${classes.timelineRoot} timelineRoot`} square >
             <div
-                id={`ptabdata`}
+                id={`timelineCharts`}
                 style={{ 
                     display: display,
                     filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`,
@@ -149,9 +157,9 @@ const PtabData = ({ data }) => {
                 className={classes.timeline}
             />
             { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> }
-        </>
-    </Paper>
-  )
-}
+            { isLoadingTimelineData && <Loader /> }
+        </Paper>
+    )
+} 
 
-export default PtabData
+export default Fees

@@ -197,12 +197,16 @@ export default makeStyles(theme => ({
     customHeight: {
         height:'200px'    
     },
+    flexColumnYear: {
+        minWidth: 135,
+        maxWidth: 135 
+    },
     flexColumnDepth: {
         minWidth: 135,
         maxWidth: 135 
     },
     flexColumnScope: {
-        flexBasis: '87%'   
+        flexBasis: '74%'   
     },
     close: { 
         position: 'absolute', 

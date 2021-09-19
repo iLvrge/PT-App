@@ -2,16 +2,13 @@ import React, { useState, useCallback, useEffect, useRef } from 'react'
 
 import { useSelector } from 'react-redux'
 import { Tab, Tabs, Paper, Grid, Typography } from '@material-ui/core'
-
+import FamilyContainer from '../FamilyContainer'
 import LegalEventsContainer from '../LegalEventsContainer'
 import ItemData from './ItemData'
 import AbstractData from './AbstractData'
 import ClaimData from './ClaimData'
 import SpecificationData from './SpecificationData'
 import FigureData from './FigureData'
-import AssignmentData from './AssignmentData'
-import CitationData from './CitationData'
-import PtabData from './PtabData'
 import { numberWithCommas, applicationFormat, capitalize } from "../../../../utils/numbers";
 
 import useStyles from './styles'
@@ -35,7 +32,7 @@ const FamilyItemContainer = ({ item, onClose }) => {
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
     const familyDataRetrieved = useSelector( state => state.patenTrack.familyDataRetrieved  )
-    
+    const selectedAssetsFamily = useSelector(state => state.patenTrack.assetFamily);
     
     useEffect(() => {
         console.log('FamilyItemContainer', item, familyDataRetrieved)
@@ -81,31 +78,38 @@ const FamilyItemContainer = ({ item, onClose }) => {
                 }
             }
             getFamilyItemDataFunction()  
+        } else {
+            if(selectedAssetsPatents.length > 0) {
+                setSelectedNumber(selectedAssetsPatents[1] !== '' ? `US${numberWithCommas(selectedAssetsPatents[1])}` : `US${applicationFormat(selectedAssetsPatents[0])}`)
+            }
         }
     }, [ item, familyDataRetrieved ])
 
     useEffect(() => {
         console.log('FamilyItemContainer_selectedAssetsPatents', selectedAssetsPatents)
     }, [selectedAssetsPatents])
+
+    useEffect(() => {
+        console.log('FamilyItemContainer_selectedNumber', selectedNumber)
+    }, [])
+
+    const onCloseFamilyMode = useCallback(() => {
+        //dispatch(toggleFamilyMode());
+      }, [/*dispatch*/]);
+
+
     return(
         <Paper className={classes.root} square>
+
             {
                 selectedCompaniesAll === true || selectedCompanies.length > 0
                 ?
                     <>
+                        <div className={classes.graphContainer}>        
                         {/* <Typography variant='body2' className={classes.heading}>{selectedNumber}</Typography> */}
-                        <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
-                            {
-                                ['Fees', 'Abstract', 'Specifications', 'Claims', 'Figures', 'Citations', 'PTAB', 'Litigation', 'Events'].map( (item, index) => (
-                                    <Tab
-                                        key={index}
-                                        className={classes.tab}
-                                        label={item}
-                                    />
-                                ))
-                            }                            
-                        </Tabs>
-                        {selectedTab === 0 && <LegalEventsContainer events={selectedAssetsLegalEvents} />}
+                        {selectedTab === 0 && <FamilyContainer
+                                    family={selectedAssetsFamily}
+                                    onClose={onCloseFamilyMode} />}
                         {
                             selectedTab > 0
                             ?
@@ -122,13 +126,23 @@ const FamilyItemContainer = ({ item, onClose }) => {
                                     {selectedTab === 2 && <SpecificationData data={specificationData} number={selectedNumber} />}                                    
                                     {selectedTab === 3 && <ClaimData data={claimsData} number={selectedNumber} />}                                    
                                     {selectedTab === 4 && <FigureData data={figureData} number={selectedNumber}/>}
-                                    {selectedTab === 5 && <CitationData data={citationData} />}
-                                    {selectedTab === 6 && <PtabData data={ptabData} />}
                                 </Grid> 
                             </Grid>
                             :
-                            ''
+                            '' 
                         }
+                        </div>
+                        <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
+                            {
+                                ['Family', 'Abstract', 'Specifications', 'Claims', 'Figures'].map( (item, index) => (
+                                    <Tab
+                                        key={index}
+                                        className={classes.tab}
+                                        label={item}
+                                    />
+                                ))
+                            }                            
+                        </Tabs>
                     </>
                 :
                 ''

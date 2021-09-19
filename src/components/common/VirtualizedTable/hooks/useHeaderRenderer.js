@@ -8,6 +8,8 @@ import Badge from '@material-ui/core/Badge'
 import TableSortLabel from '@material-ui/core/TableSortLabel'
 import Menu from '@material-ui/core/Menu'
 import Fade from '@material-ui/core/Fade'
+import Typography from '@material-ui/core/Typography'
+import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -15,6 +17,7 @@ import Draggable from "react-draggable"
 import _groupBy from 'lodash/groupBy'
 import { makeStyles } from '@material-ui/core/styles'
 import Chip from '@material-ui/core/Chip'
+import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined'
 
 import { numberWithCommas } from '../../../../utils/numbers'
 
@@ -102,12 +105,16 @@ const HeadCell = ({
 }) => {
   /*console.log('LIBRARY1', selectedItems, selectedGroup, typeof selectedGroup, typeof selectedGroup !== 'undefined')*/
   const classes = useStyles()
-  const { align, headerAlign, role, disableSort, filterable, paddingLeft, badge, showGrandTotal, draggable, headingIcon, show_selection_count, secondLabel, show } = columns[columnIndex]
+  const { align, headerAlign, role, disableSort, filterable, paddingLeft, badge, showGrandTotal, draggable, headingIcon, show_selection_count, secondLabel, show, showDropdown, list, onClickHeadDropdown } = columns[columnIndex]
   const [ anchorEl, setAnchorEl ] = useState(null)
   const [ columnFilters, setColumnFilters ] = useState([])
-
+  const [dropdownOpen, setDropdownOpen] = useState(false)
   const openMenu = e => setAnchorEl(e.currentTarget)
   const closeMenu = () => setAnchorEl(null)
+
+  useEffect(() => {
+    onChangeColumnFilters(dataKey, columnFilters)
+  }, [ onChangeColumnFilters, dataKey, columnFilters ])
 
   const filterValues = useMemo(() => {
     return Object.entries(_groupBy(rows, dataKey)).map(([ key, values ]) => ({ key, count: values.length }))
@@ -117,11 +124,15 @@ const HeadCell = ({
     setColumnFilters(prevFilters => prevFilters.includes(value) ? prevFilters.filter((val) => val !== value) : [ ...prevFilters, value ])
   )
 
-  /* console.log('useHEaderRenderer=>', allSelected, selectedItems.length, totalRows, (selectedItems.length > 0 && selectedItems.length < totalRows) ) */
+  const handleDropdownClose = () => {
+    setDropdownOpen(false);
+  };
 
-  useEffect(() => {
-    onChangeColumnFilters(dataKey, columnFilters)
-  }, [ onChangeColumnFilters, dataKey, columnFilters ])
+  const handleDropdownOpen = () => {
+    setDropdownOpen(true);
+  };
+
+  /* console.log('useHEaderRenderer=>', allSelected, selectedItems.length, totalRows, (selectedItems.length > 0 && selectedItems.length < totalRows) ) */
   return ( 
     <TableCell
       component={'div'}
@@ -157,6 +168,30 @@ const HeadCell = ({
               ''
             }
           </>
+        ) : role === 'static_dropdown' && showDropdown === true ? (
+          <Select
+              labelId='dropdown-open-select-label'
+              id='dropdown-open-select'
+              IconComponent={(props) => (
+                <ExpandMoreOutlinedIcon {...props}/>
+              )}
+              open={dropdownOpen}
+              onClose={handleDropdownClose}
+              onOpen={handleDropdownOpen} 
+              value={''}
+              onChange={onClickHeadDropdown}
+            >
+              {
+                list.map( (c, idx) => (
+                  <MenuItem key={idx} value={c.id}>
+                    {
+                      c.icon != '' ? c.icon : c.image != '' ? <img src={c.image} style={{width: '21px'}}/> : ''
+                    }
+                    <Typography variant="inherit" className={'heading'}> {c.name}</Typography> 
+                  </MenuItem> 
+                ))
+              } 
+            </Select>
         ) : (
           <>
             {

@@ -49,9 +49,11 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const [ showContainer, setShowContainer ] = useState(true)
     const [ assets, setAssets ] = useState([])
     const [ filterList, setFilterList ] = useState([])
+    const [ filterYear, setFilterYear ] = useState([])
     const [ selectedTab, setSelectedTab ] = useState(0)
     const [ resizableWidthHeight, setResizableWidthHeight ] = useState([665, 350])
     const [ filterDrag, setFilterDrag ] =  useState([0, 0])
+    const [ valueYear, setValueYear ] = useState([1, 2])
     const [ valueScope, setValueScope ] = useState([1, 2])
     const [ valueRange, setValueRange ] = useState(3)
     const [ preValueRange, setPreValueRange ] = useState(3)
@@ -352,15 +354,19 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     }, [selectedCategory, selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_clipboard ]) 
 
 
-    const findCPCList = async(oldScopeRange, list, range, scope) => {       
+    const findCPCList = async(oldScopeRange, list, year, range, scope) => {       
         const form = new FormData()
         form.append("list", JSON.stringify(list))
-        if(typeof range != 'undefined') {
+        if(typeof range !== 'undefined') {
             form.append("range", range)
         }
 
-        if(typeof scope != 'undefined') {
+        if(typeof scope !== 'undefined') {
             form.append("scope", JSON.stringify(scope))  
+        }
+
+        if(typeof year !== 'undefined') {
+            form.append('year', JSON.stringify(year))
         }
 
         PatenTrackApi.cancelCPCRequest()
@@ -368,10 +374,26 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         setIsLoadingCharts(false)
         setGraphRawData(data.list)
         setGraphRawGroupData(data.group)
+
+        if( typeof year === 'undefined' &&  data.list.length > 0 ) {
+            let yearList = [], yearLabelList = []
+            const promiseYear = data.list.map( item => yearList.push(item.fillingYear))
+            await Promise.all(promiseYear)
+            yearList = [...new Set(yearList)]
+            yearList.sort(function(a, b) {
+                return a > b ? -1 : 0
+            });
+            console.log('yearList', yearList)
+            const promiseYearLabel = yearList.map( (item, index) => yearLabelList.push({ value: index + 1, label: item }) )
+            await Promise.all(promiseYearLabel)
+            setFilterYear(yearLabelList)            
+            setValueYear([yearLabelList[0].value, yearLabelList[yearLabelList.length - 1].value]) 
+        }
+
         if( typeof range === 'undefined' && typeof scope ===  'undefined'  && data.group.length > 0) {
             setValueScope([ data.group[0].id, data.group[data.group.length - 1].id ])
         }    
-        if(typeof scope == 'undefined') {         
+        if(typeof scope == 'undefined') {
             const findOldRange = []
             if(oldScopeRange.length > 0 && typeof range !== 'undefined') {
                 const promiseScope = newRange.map( scope => {
@@ -412,7 +434,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         }
                     })
                 })
-                await Promise.all(promiseSelect)
+                await Promise.all(promiseSelect) 
                 if(selectScope.length > 0) {
                     newRange = [Math.min(...selectScope), Math.max(...selectScope)]      // useState still gives oldValue
                     setValueScope([Math.min(...selectScope), Math.max(...selectScope)])
@@ -423,7 +445,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         }
                     })
                     await Promise.all(promise)
-                    findCPCList(oldScopeRange, list, range, scopeList)
+                    findCPCList(oldScopeRange, list, year, range, scopeList)
                 }
             }
         }
@@ -531,7 +553,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     })
 
     useEffect(() => {
-        console.log('visualizerBarSize, analyticsBar, defaultSize, commentBar, illustrationBar, customerBarSize, companyBarSize', visualizerBarSize, analyticsBar, defaultSize, commentBar, illustrationBar, customerBarSize, companyBarSize)
         if( graphRef.current != undefined &&  graphRef.current !== null && graphRawGroupData.length > 0 && graphRawData.length > 0 && !isLoadingCharts ) {
             let fontSize = 18, step = 1, verticalRatio = 0.5
             if( visualizerBarSize == '100%' ) {
@@ -649,6 +670,15 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
     const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
 
+    const yearRangeText = (value)=> {
+        const findIndex = filterYear.findIndex( range => range.value === value)
+        if(findIndex !== -1) {
+            return filterYear[findIndex].label;
+        } else {
+            return ''
+        }        
+    }
+
     const depthRangeText = (value)=> {
         const findIndex = depthRange.findIndex( range => range.value === value)
         if(findIndex !== -1) {
@@ -664,19 +694,34 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             return scopeRange[findIndex].label;
         } else {
             return ''
-        }
-        
+        } 
     }    
 
+    const onChangeYearSlider = useCallback(async (range, year) => {
+        console.log('range, year', range, year)
+        setValueYear(year)
+        setScopeRange([])
+        const yearList = []
+        const promise = filterYear.map( r => {
+            if(r.value >= year[0] && r.value <= year[1]){
+                yearList.push(parseInt(r.label))
+            }
+        })
+        await Promise.all(promise)
+        findCPCList([...scopeRange], filterList, yearList, range)      
+    }, [filterList])
+
     const onChangeRangeSlider = useCallback(async (range) => {
+        // Depth
         setPreValueRange(prevItem => prevItem != valueRange ? valueRange : prevItem)
         setValueRange(range) 
         setScopeRange([])
-        findCPCList([...scopeRange], filterList, range)      
+        findCPCList([...scopeRange], filterList, valueYear, range)      
     }, [ filterList, scopeRange, valueRange ] )
 
     
-    const onChangeScopeSlider = useCallback(async (range, scope) => {
+    const onChangeScopeSlider = useCallback(async (year, range, scope) => {
+        // A, B, .... H
         newRange = scope
         setValueScope(scope)
         const scopeList = []
@@ -686,7 +731,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             }
         })
         await Promise.all(promise)
-        findCPCList([...scopeRange], filterList, range, scopeList)        
+        findCPCList([...scopeRange], filterList, year, range, scopeList)        
     }, [ filterList, scopeRange ] )
 
     if(showContainer === false) return null 
@@ -780,7 +825,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 </DialogTitle>
                 <DialogContent className={classes.filterContent}>
                     <CloseIcon onClick={handleCloseFilter} className={classes.close}/>
-                    <FilterCPC onClose={handleClose} depthRange={depthRange} scopeRange={scopeRange} depthRangeText={depthRangeText} scopeRangeText={scopeRangeText} valueScope={valueScope} valueRange={valueRange} onChangeRangeSlider={onChangeRangeSlider} onChangeScopeSlider={onChangeScopeSlider}/>
+                    <FilterCPC onClose={handleClose} depthRange={depthRange} scopeRange={scopeRange} yearRange={filterYear} yearRangeText={yearRangeText} depthRangeText={depthRangeText} scopeRangeText={scopeRangeText} valueScope={valueScope} valueRange={valueRange} valueYear={valueYear} onChangeRangeSlider={onChangeRangeSlider} onChangeScopeSlider={onChangeScopeSlider} onChangeYearSlider={onChangeYearSlider}/>
                 </DialogContent>
             </Dialog>   
         </Paper> 

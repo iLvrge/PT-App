@@ -37,13 +37,29 @@ export default makeStyles(theme => ({
     },
     
   },
+  graphContainer: {
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    background: '#222222 !important',
+    border: '1px solid #5c5c5c !important',
+    overflow: 'hidden'
+  },  
   dashboard: {
-    position: 'absolute',
+    /* position: 'absolute',
     top: '38px',
     left: 0,
     right: 0,
-    bottom: 0,
+    bottom: 0,*/
     padding: '10px',
+    height: '100%',
+    width: '100%',
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'flex-end',
+    overflow: 'hidden auto',
+    background: '#222222 !important' 
   },
   flexColumn: {
     display: 'flex',
@@ -55,10 +71,10 @@ export default makeStyles(theme => ({
   },
   tab: {
     minWidth: '25%',
-    minHeight: 38,
+    minHeight: 35,
   },
   tabs: {
-    minHeight: 0,
+    minHeight: 35,
     display: 'flex',
     '& .MuiTab-root': {
       fontSize: '1rem'

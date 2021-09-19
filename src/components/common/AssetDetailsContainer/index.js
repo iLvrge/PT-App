@@ -2,11 +2,12 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SplitPane from "react-split-pane";
 import ConnectionBox from '../../common/ConnectionBox'
-import FamilyItemContainer from '../../common/AssetsVisualizer/FamilyItemContainer'
-import USPTOContainer from '../../common/AssetsVisualizer/USPTOContainer'
-import FamilyContainer from '../../common/AssetsVisualizer/FamilyContainer'
-import LifeSpanContainer from '../../common/AssetsVisualizer/LifeSpanContainer'
-import InventionVisualizer from '../../common/AssetsVisualizer/InventionVisualizer'
+import FamilyItemContainer from '../AssetsVisualizer/FamilyItemContainer'
+import USPTOContainer from '../AssetsVisualizer/USPTOContainer'
+/* import FamilyContainer from '..//AssetsVisualizer/FamilyContainer' */
+import LegalEventsContainer from '../AssetsVisualizer/LegalEventsContainer'
+import LifeSpanContainer from '../AssetsVisualizer/LifeSpanContainer'
+import InventionVisualizer from '..//AssetsVisualizer/InventionVisualizer'
 import PdfViewer from '../../common/PdfViewer'
 import {
   setTimelineSelectedItem,
@@ -82,7 +83,8 @@ const AssetDetailsContainer = ({
   const familyItemMode = useSelector(state => state.ui.familyItemMode);
   const lifeSpanMode = useSelector(state => state.ui.lifeSpanMode);
   const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
-  
+  const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
+
   useEffect(() => {
     console.log("isDrag", isDrag)
   }, [ isDrag ])
@@ -298,9 +300,8 @@ const AssetDetailsContainer = ({
                                     visualizerBarSize={visualizerBarSize}/>
                                 ) :
                                 familyMode && (
-                                    <FamilyContainer
-                                    family={selectedAssetsFamily}
-                                    onClose={onCloseFamilyMode} />
+                                    <LegalEventsContainer
+                                      events={selectedAssetsLegalEvents} />
                                 ) 
                             }
                         </>
