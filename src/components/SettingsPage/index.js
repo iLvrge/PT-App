@@ -178,9 +178,9 @@ function SettingsPage() {
       dispatch(
         setBreadCrumbs('')
       )
-      dispatch(
+      /* dispatch(
         setControlModal(true)
-      )
+      ) */
     }, 500) 
   }, [dispatch])
 

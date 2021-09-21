@@ -359,7 +359,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
 
     const updateCompanySelection = async(event, dispatch, row, checked, selected, defaultSelect, currentSelection) => {
         if(checked != undefined) {
-            let updateSelected = [...selected], updateSelectedWithName = [...selectedWithName], sendRequest = false/* , updateGroup = [...selectedGroup] */
+            let updateSelected = [...selected], updateSelectedWithName = [...selectedWithName], sendRequest = false , updateGroup = [...selectedGroup] 
             if(!updateSelected.includes(parseInt( row.representative_id ))) {
                 if(selectedCategory === 'correct_names') {
                     updateSelected = [parseInt(row.representative_id)]
@@ -390,7 +390,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                             updateSelected = [...new Set(updateSelected)]
                             await Promise.all(childPromise)
                         }
-                        //updateGroup.push(parseInt(row.representative_id))
+                        updateGroup.push(parseInt(row.representative_id))
                     } 
                 }                
             } else {
@@ -414,7 +414,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                         //console.log('tab2', updateSelected)
                         await Promise.all(childFilterPromise)                            
                     }
-                    //updateGroup = updateGroup.filter( id => id !== parseInt( row.representative_id ))
+                    updateGroup = updateGroup.filter( id => id !== parseInt( row.representative_id ))
                 }
             }
             history.push({
@@ -423,7 +423,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             dispatch(setMainCompaniesRowSelect([]))
             resetAll()
             setSelectItems(updateSelected)
-            //setSelectGroups(updateGroup)
+            setSelectGroups(updateGroup)
             /* if(parseInt(row.type) !== 1){
                 updateUserCompanySelection(updateSelected)
             }            

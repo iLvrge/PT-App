@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-
+import {Typography} from '@material-ui/core'
 import useStyles from './styles'
 import Loader from "../../Loader"
 import PatenTrackApi from '../../../../api/patenTrack2'
@@ -46,8 +46,13 @@ const SpecificationData = ({ data, number }) => {
                 {props.children.length > 0 && props.children.map( (child, index) => (
                     <li
                         key={`asset-type-${index}`}
-                    >
-                        <span id={`specification_${index}`}>{ Object.keys(child).length > 0 && child.text != undefined ? child.text : child }</span>
+                    >   
+                        <span id={`specification_${index}`}>
+                            <Typography variant='body2'
+                                style={{ whiteSpace: "pre-line" }}
+                                dangerouslySetInnerHTML={{__html: Object.keys(child).length > 0 && child.text != undefined ? child.text : child}}
+                            ></Typography>
+                        </span>
                     </li>
                 ))}
                 </ul>

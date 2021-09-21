@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import {Typography} from '@material-ui/core'
 import useStyles from './styles'
 import Loader from "../../Loader"
@@ -8,6 +8,7 @@ import PatenTrackApi from '../../../../api/patenTrack2'
 
 const ClaimData = ({ data, number }) => {
     const classes = useStyles()
+    const treeRef = useRef(null)
     const [loading, setLoading] = useState(false)
     const [ claimParseData, setClaimParseData] = useState('')
     useEffect(() => {
@@ -17,7 +18,6 @@ const ClaimData = ({ data, number }) => {
         } catch(e) {
             parseData = data
         }
-        console.log("ClaimData", parseData)
         if((Array.isArray(parseData) && parseData.length == 0) || parseData == '' || parseData == null) {
             getClaimData()
         } else {
@@ -28,6 +28,25 @@ const ClaimData = ({ data, number }) => {
     useEffect(() => {
         getClaimData()
     }, [number])
+
+    useEffect( () => {
+        if(Array.isArray(claimParseData)) {
+            if(treeRef.current !== null) {
+                console.log(treeRef.current)
+                const findSpans = treeRef.current.querySelectorAll('span[idref]')
+                if(findSpans.length > 0) {
+                    findSpans.forEach( child => {
+                        const classList = child.parentNode.classList
+                        classList
+                            .add('claim-text')
+                        classList
+                            .add('patent-text-1')
+                        
+                    }) 
+                }
+            }
+        }
+    }, [ claimParseData, treeRef ])
 
     const getClaimData = async () => {
         setLoading(true)
@@ -43,7 +62,7 @@ const ClaimData = ({ data, number }) => {
 
     const ClaimTree = (props) => {
         return(
-            <div className={classes.filetree}>
+            <div className={classes.filetree} ref={treeRef}>
                 <ul id={`claimsTree`} className={`filetree treeview`} width='100%'>
                 {props.children.length > 0 && props.children.map( (child, index) => (
                     <li
