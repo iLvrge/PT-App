@@ -1013,11 +1013,13 @@ export const setAssetTypeAssignmentsAssets = (rf_id, data, append) => {
  * @param {*} append 
  */
 
-export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, append = false ) => {
+export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, append = false, startIndex, endIndex ) => {
   return async dispatch => {
-    dispatch( setAssetTypesAssignmentsAllAssetsLoading( true ) )
+    if(append === false) {
+      dispatch( setAssetTypesAssignmentsAllAssetsLoading( true ) )
+    }
     PatenTrackApi.cancelAssets()
-    const { data } = await PatenTrackApi.getCustomerAssets( type, companies, tabs, customers, rfIDs )    
+    const { data } = await PatenTrackApi.getCustomerAssets( type, companies, tabs, customers, rfIDs, startIndex, endIndex )    
     dispatch( setAssetTypeAssignmentAllAssets(data, append) )
     dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
   } 

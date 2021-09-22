@@ -69,7 +69,8 @@
         "security": "#FFAA00",
         "license": "#C0C000",
         "release": "#70A800",
-        "licenseEnd": "#CA7C46"
+        "licenseEnd": "#CA7C46",
+        "correct": "#FFFFFF"
         
     }
     

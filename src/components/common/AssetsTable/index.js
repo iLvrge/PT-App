@@ -91,7 +91,8 @@ const AssetsTable = ({
   const location = useLocation()
   const tableRef = useRef()
   const googleLoginRef = useRef(null)
-  const [offset, setOffset] = useState(0)
+  const [offsetWithLimit, setOffsetWithLimit] = useState([0, DEFAULT_CUSTOMERS_LIMIT])
+  const [scrollPos, setScrollPos] = useState(0)
   const [rowHeight, setRowHeight] = useState(40)
   const [headerRowHeight, setHeaderRowHeight] = useState(47)
   const [width, setWidth] = useState(1500) 
@@ -426,6 +427,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
                       customers,
                       assignments,
                       false,
+                      offsetWithLimit[0],
+                      offsetWithLimit[1]
                     )
                     : 
                     getCustomerSelectedAssets(location.pathname.replace('/', ''))
@@ -448,6 +451,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
                       customers,
                       assignments,
                       false,
+                      offsetWithLimit[0],
+                      offsetWithLimit[1]
                     ),
                   );
                   setWidth(1900)
@@ -913,6 +918,53 @@ const resetAll = () => {
     setTableColumns(previousColumns)
   }, [ tableColumns ] )
 
+  const loadMoreRows =  (startIndex, endIndex) => {
+    const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+          tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+          customers =
+            selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
+          assignments =
+            selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
+    if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+      if (auth_token != null) {
+        dispatch(
+          process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
+          getCustomerAssets(
+            selectedCategory == '' ? '' : selectedCategory,
+            companies,
+            tabs,
+            customers,
+            assignments,
+            true,
+            startIndex,
+            endIndex
+          )
+          : 
+          getCustomerSelectedAssets(location.pathname.replace('/', ''))
+        );
+      }
+    } else {
+      if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
+        dispatch(
+          getCustomerAssets(
+            selectedCategory == '' ? '' : selectedCategory,
+            companies,
+            tabs,
+            customers,
+            assignments,
+            true,
+            startIndex,
+            endIndex
+          ),
+        );
+      }
+    }
+  }
+
+  const onScrollTable = (scrollPos) => {
+    setScrollPos(scrollPos)
+  }
+
   if (
     (!standalone && assetTypeAssignmentLoadingAssets) ||
     (standalone && assetTypeAssignmentAssetsLoading)
@@ -927,6 +979,7 @@ const resetAll = () => {
     >
       <VirtualizedTable
         classes={classes}
+        scrollTop={scrollPos}
         openDropAsset={dropOpenAsset}
         selected={selectItems}
         rowSelected={selectedRow}
@@ -953,6 +1006,8 @@ const resetAll = () => {
         }
         forceChildWaitCall={true}
         totalRows={totalRecords}
+        getMoreRows={loadMoreRows}
+        onScrollTable={onScrollTable}
         defaultSortField={`asset`}
         defaultSortDirection={`desc`}
         /* columnTextBoldList={slack_channel_list} */

@@ -234,12 +234,12 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/customers/restore_ownership/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
   }
 
-  static getCustomerAssets(type, companies, tabs, customers, rfIDs) { 
+  static getCustomerAssets(type, companies, tabs, customers, rfIDs, startIndex, endIndex) { 
     let header = getHeader()
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelAssets = c
     })
-    return axios.get(`${base_new_api_url}/customers/${type}/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, header)
+    return axios.get(`${base_new_api_url}/customers/${type}/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}&offset=${startIndex}&limit=${endIndex}`, header)
   }
 
   static getCustomerSelectedAssets(shareCode) { 

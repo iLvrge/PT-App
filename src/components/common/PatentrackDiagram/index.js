@@ -308,6 +308,7 @@ class PatentrackDiagram extends React.Component {
         License: true,
         LicenseEnd: true,
         NameChange: true,
+        Correct: true
       },
     };
     this.updateDiagram = this.updateDiagram.bind(this);

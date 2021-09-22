@@ -27,6 +27,7 @@ import {
   Column,
   SortDirection,
   Table,
+  InfiniteLoader
 } from "react-virtualized";
 import TableRow from "@material-ui/core/TableRow";
 import Select from '@material-ui/core/Select'; 
@@ -86,6 +87,9 @@ const VirtualizedTable = ({
   checkedIcon,
   childHeader,
   scrollToIndex,
+  getMoreRows,
+  onScrollTable,
+  scrollTop,
   ...tableProps
 }) => {
   const classes = useStyles();
@@ -682,50 +686,81 @@ const VirtualizedTable = ({
     }
     return findIndex
   }, [items, rowSelected, selectedKey])
+  
 
-  console.log('scrollToIndex', scrollToIndex)
+  const isRowLoaded =  ({ index }) => {
+    return !!items[index]
+  } 
+
+  const loadMoreRows = ({ startIndex, stopIndex }) => { 
+    console.log("loadMoreRows => startIndex, stopIndex", startIndex, stopIndex)
+    if(typeof getMoreRows !== 'undefined') {
+      getMoreRows(startIndex, stopIndex)
+    }    
+  } 
+
+  const onScroll = ({scrollTop}) => {
+    if(typeof onScrollTable !== 'undefined') {
+      onScrollTable(scrollTop)
+    }
+  }
+
   return (
-    <AutoSizer {...(responsive === false ? "disableWidth" : "")}>
-      {({ height, width: tableWidth }) => (
-        <Table
-          size={"small"}
-          ref={tableRef}
-          height={height}
-          width={responsive === false ? width : tableWidth}
-          rowHeight={getRowHeight}
-          headerHeight={headerHeight}
-          className={`${classes.table} ${
-            headerRowDisabled === true ? "disable_header" : ""
-          }`}
-          rowCount={items.length}
-          {...(typeof scrollToIndex !== 'undefined' && scrollToIndex === true ? {scrollToIndex: getSelectedItemIndex} : {})}          
-          {...tableProps}
-          sortBy={sortBy}
-          sortDirection={sortDirection}
-          rowRenderer={rowRenderer}
-          rowGetter={rowGetter}
-          rowClassName={getRowClassName}
-        >
-          {columns.map(({ dataKey, fullWidth, ...other }, index) => {
-            return (
-              <Column
-                key={dataKey}
-                headerRenderer={headerProps =>
-                  headerRenderer({
-                    ...headerProps,
-                    columnIndex: index,
-                  })
-                }
-                className={classes.flexContainer} 
-                cellRenderer={cellRenderer}
-                dataKey={dataKey}
-                {...other}
-              />
-            );
-          })}
-        </Table>
+    <InfiniteLoader
+      isRowLoaded={isRowLoaded}
+      loadMoreRows={loadMoreRows}
+      rowCount={totalRows}
+      minimumBatchSize={500}
+      threshold={500}
+    >
+      {({ onRowsRendered, registerChild }) => (
+      <AutoSizer {...(responsive === false ? "disableWidth" : "")}>
+        {({ height, width: tableWidth }) => (
+          <Table
+            size={"small"}
+            ref={tableRef}
+            ref={registerChild}
+            height={height}
+            width={responsive === false ? width : tableWidth}            
+            rowHeight={getRowHeight}
+            headerHeight={headerHeight}
+            scrollTop={typeof scrollTop !== 'undefined' ? scrollTop : 0}
+            onRowsRendered={onRowsRendered}
+            className={`${classes.table} ${
+              headerRowDisabled === true ? "disable_header" : ""
+            }`}
+            rowCount={items.length}
+            {...(typeof scrollToIndex !== 'undefined' && scrollToIndex === true ? {scrollToIndex: getSelectedItemIndex} : {})}          
+            {...tableProps}
+            sortBy={sortBy}
+            sortDirection={sortDirection}
+            rowRenderer={rowRenderer}
+            rowGetter={rowGetter}
+            rowClassName={getRowClassName}
+            onScroll={onScroll}
+          >
+            {columns.map(({ dataKey, fullWidth, ...other }, index) => {
+              return (
+                <Column
+                  key={dataKey}
+                  headerRenderer={headerProps =>
+                    headerRenderer({
+                      ...headerProps,
+                      columnIndex: index,
+                    })
+                  }
+                  className={classes.flexContainer} 
+                  cellRenderer={cellRenderer}
+                  dataKey={dataKey}
+                  {...other}
+                />
+              );
+            })}
+          </Table>
+        )}
+      </AutoSizer>
       )}
-    </AutoSizer>
+    </InfiniteLoader>
   );
 };
   

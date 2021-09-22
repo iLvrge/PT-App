@@ -87,7 +87,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
     const assetTypeCompaniesList = useSelector(state => state.patenTrack2.assetTypeCompanies.list)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
-    const tabs = [1,2,6,7,3,4,5,11,12,13,10,8,9,14] 
+    const tabs = [1,2,6,7,3,4,5,11,12,13,10,8,9,15,14] 
 
     const COLUMNS = [        
         {
@@ -203,6 +203,9 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
                     break;
                 case 13:
                     image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+                    break;
+                case 15:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png'
                     break;
                 case 14:
                 default:

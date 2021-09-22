@@ -281,6 +281,7 @@ export default function PatentLink(props) {
       straightPath = getStraightMedianPoints(data);
     }
     updatePositions();
+    
     //set CSS classes for filters and playback
     let g = d3
       .select("#" + parent)
@@ -301,7 +302,7 @@ export default function PatentLink(props) {
     g.append("path")
       .attr("d", straightPath)
       .attr("stroke-width", config.link.hitArea * 2)
-      .attr("stroke", "transparent")
+      .attr("stroke", "transparent")      
       .attr("fill", "none")
       .attr("cursor", "pointer")
       .on("mouseover", () => {
@@ -402,6 +403,7 @@ export default function PatentLink(props) {
       .attr("pointer-events", "none")
       .attr("stroke-width", config.link.width)
       .attr("stroke", data.color)
+      .attr("stroke-dasharray", data.line.type_line == "Dashed" ? '5,5' : '')
       .attr("fill", "none");
 
     g.append("path")
