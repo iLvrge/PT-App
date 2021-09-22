@@ -466,8 +466,9 @@ const VirtualizedTable = ({
   );
   const checkRowCollapse = (collapsable, index, rowData, tableRef) => { 
     if (collapsable) { 
+      console.log('tableRef.current', tableRef.current)
       tableRef.current.recomputeRowHeights();
-      tableRef.current.forceUpdate();
+      tableRef.current.forceUpdate(); 
       if (disableRow === false) {
         const rowContainer = tableRef.current.Grid._scrollingContainer.querySelector(
           `div.rowIndex_${index}`,
@@ -714,12 +715,11 @@ const VirtualizedTable = ({
       threshold={500}
     >
       {({ onRowsRendered, registerChild }) => (
-      <AutoSizer {...(responsive === false ? "disableWidth" : "")}>
+      <AutoSizer {...(responsive === false ? "disableWidth" : "")} ref={registerChild}>
         {({ height, width: tableWidth }) => (
           <Table
-            size={"small"}
+            size={"small"}            
             ref={tableRef}
-            ref={registerChild}
             height={height}
             width={responsive === false ? width : tableWidth}            
             rowHeight={getRowHeight}
@@ -733,7 +733,7 @@ const VirtualizedTable = ({
             {...(typeof scrollToIndex !== 'undefined' && scrollToIndex === true ? {scrollToIndex: getSelectedItemIndex} : {})}          
             {...tableProps}
             sortBy={sortBy}
-            sortDirection={sortDirection}
+            sortDirection={sortDirection}  
             rowRenderer={rowRenderer}
             rowGetter={rowGetter}
             rowClassName={getRowClassName}

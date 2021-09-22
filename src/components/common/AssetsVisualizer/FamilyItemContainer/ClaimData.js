@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react'
+import React, {useEffect, useState, useRef, useCallback} from 'react'
 import {Typography} from '@material-ui/core'
 import useStyles from './styles'
 import Loader from "../../Loader"
@@ -8,7 +8,6 @@ import PatenTrackApi from '../../../../api/patenTrack2'
 
 const ClaimData = ({ data, number }) => {
     const classes = useStyles()
-    const treeRef = useRef(null)
     const [loading, setLoading] = useState(false)
     const [ claimParseData, setClaimParseData] = useState('')
     useEffect(() => {
@@ -29,24 +28,32 @@ const ClaimData = ({ data, number }) => {
         getClaimData()
     }, [number])
 
-    useEffect( () => {
+    /* useEffect( () => {
         if(Array.isArray(claimParseData)) {
-            if(treeRef.current !== null) {
-                console.log(treeRef.current)
-                const findSpans = treeRef.current.querySelectorAll('span[idref]')
-                if(findSpans.length > 0) {
-                    findSpans.forEach( child => {
-                        const classList = child.parentNode.classList
-                        classList
-                            .add('claim-text')
-                        classList
-                            .add('patent-text-1')                        
-                    }) 
-                }
+            if(treeRef !== null && treeRef.current !== null) {  
+                updateDOMElement() 
             }
         }
-    }, [ claimParseData, treeRef ])
+    }, [ claimParseData, treeRef ]) */
 
+
+    const treeRef = useCallback(node => {
+        if (node !== null) {
+            const findSpans = node.querySelectorAll('span[idref]')
+            console.log('node', node, findSpans.length)
+            if(findSpans.length > 0) {
+                findSpans.forEach( child => {
+                    const classList = child.closest('div[num]').classList
+                    classList
+                        .add('claim-text')
+                    classList
+                        .add('patent-text-1')                        
+                }) 
+            }
+        }
+    }, []);
+
+   
     const getClaimData = async () => {
         setLoading(true)
         PatenTrackApi.cancelClaimsData()
