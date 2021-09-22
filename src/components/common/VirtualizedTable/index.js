@@ -724,7 +724,7 @@ const VirtualizedTable = ({
             width={responsive === false ? width : tableWidth}            
             rowHeight={getRowHeight}
             headerHeight={headerHeight}
-            scrollTop={typeof scrollTop !== 'undefined' ? scrollTop : 0}
+            {...(typeof scrollTop !== 'undefined'  ? {scrollTop: scrollTop} : {})}   
             onRowsRendered={onRowsRendered}
             className={`${classes.table} ${
               headerRowDisabled === true ? "disable_header" : ""
