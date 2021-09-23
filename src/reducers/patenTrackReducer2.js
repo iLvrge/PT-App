@@ -263,7 +263,7 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
       }
     case types.SET_MAIN_COMPANIES_SELECTED: 
       return { 
-        ...state, mainCompaniesList: { ...state.mainCompaniesList, selected: action.selected, selectedWithName: action.selectedWithName, selectAll: false } 
+        ...state, mainCompaniesList: { ...state.mainCompaniesList, selected: action.selected, selectedGroups: action.groups } 
       }
     case types.SET_MAIN_COMPANIES_ALL_SELECTED: 
       return { 

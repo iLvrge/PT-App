@@ -130,7 +130,7 @@ const COLUMNS = [
     }
 ]
 
-const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
+const ChildTable = ({ parentCompanyId, headerRowDisabled, itemCallback, groups }) => {
 
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -171,7 +171,6 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
             setSelectItems([])
         }
     }, [selectedCompaniesAll])
-
        
     useEffect(() => {
         const getChildCompanies = async () => {            
@@ -181,9 +180,6 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
                 const { data } = await PatenTrackApi.getChildCompanies(parentCompanyId)
                 setChildCompanies(data.list)
                 setChildCompaniesLoading( false )
-                if( data.list != null && data != '' && data.list.length > 0 ){                   
-                    callBack(data.list.length) 
-                }
                 if(selected.includes(parentCompanyId)){
                     checkedAllChildCompanies(data.list)
                 } 
@@ -199,57 +195,42 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
             setSelectItems([...new Set(selected)])
         }
     }, [selected])
+    
+    /**
+     * it parent is selected then select all the items
+     */
 
-
-    /* useEffect(() => {
-        if(selected.length > 0 && companies.length > 0) {
-            const oldSelection = [...selectItems]
-            let inserted = false
-            const promiseFind = selected.map( item => {
-                const findIndex = companies.findIndex( row => row.representative_id == item)
-                if(findIndex !== -1) {
-                    inserted = true
-                    oldSelection.push(companies[findIndex].representative_id)
+    /* const checkAllChildCompany = async(list, items) => {
+        if(selectItems.length > 0 && list.length > 0 && selectedCategory !== 'correct_names') { 
+            let oldSelected = items.length > 0 ? [ ...new Set(items)] : [...new Set(selectItems)]
+            console.log('oldSelected', oldSelected)
+            //Check All childs selected
+            let included = true
+            const promiseCheck = list.map( item => {
+                if(!oldSelected.includes(item.representative_id)) {
+                    included = false
                 }
             })
-            Promise.all(promiseFind)
-            if(inserted === true) {
-                setSelectItems(oldSelection)
+            await Promise.all(promiseCheck)
+            if(included === true && !oldSelected.includes(parseInt(parentCompanyId))) {                   
+                oldSelected.push(parseInt(parentCompanyId))
+                dispatch( setMainCompaniesSelected( oldSelected ) ) 
+                groupCallBack(prevItems =>
+                    prevItems.includes(parseInt(parentCompanyId))
+                    ? prevItems.filter(item => item !== parseInt(parentCompanyId))
+                    : [...prevItems, parseInt(parentCompanyId)],
+                );
+            } else {
+                if(oldSelected.includes(parseInt(parentCompanyId))){
+                    groupCallBack(prevItems =>
+                        prevItems.includes(parseInt(parentCompanyId))
+                        ? prevItems.filter(item => item !== parseInt(parentCompanyId))
+                        : [...prevItems, parseInt(parentCompanyId)],
+                    );
+                }
             }
         }
-    }, [selected, companies]) */
-    
-    useEffect(() => {
-        if(selectItems.length > 0 && companies.length > 0 && selectedCategory !== 'correct_names') {
-            console.log('Find Companies', selectItems)
-            let added = true;
-            let oldSelected = [...selectItems], oldSelectedWithNames = [...selectedWithName]
-            if(!oldSelected.includes(parseInt(parentCompanyId))) {
-                console.log('Parent company not added')
-                const promise = companies.map( c => {                
-                    const find = oldSelected.some(item => parseInt(item) === parseInt(c.representative_id))
-                    if(find === false && added === true) {
-                        added = false
-                    }
-                })
-                Promise
-                .all(promise)
-                .then(() => {
-                    console.log('Find Companies', added, oldSelected)
-                    if(added === true) {
-
-                        const findIndex = mainCompanies.findIndex(c => c.representative_id == parentCompanyId)
-                        if(findIndex !== -1) {
-                            oldSelected.push(parseInt( mainCompanies[findIndex].representative_id ))
-                            oldSelectedWithNames.push({id: mainCompanies[findIndex].representative_id, name: mainCompanies[findIndex].original_name})
-                            updateUserCompanySelection(oldSelected)
-                            dispatch( setMainCompaniesSelected( oldSelected, oldSelectedWithNames ) ) 
-                        }
-                    }
-                })
-            }
-        }
-    }, [selectItems])
+    } */
 
 
     const onHandleSelectAll = useCallback((event, row) => {
@@ -257,12 +238,11 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
     }, [ dispatch ])
 
     const checkedAllChildCompanies = async(list) => {
-        const oldSelection = [...selected], updateSelectedWithName = [...selectedWithName], childItems = [], findChildOldSelections = []
+        const oldSelection = [...selected], childItems = [], findChildOldSelections = []
         
         const listPromise = list.map( row => {
             if(!oldSelection.includes(parseInt( row.representative_id ))) {
                 oldSelection.push(row.representative_id)
-                updateSelectedWithName.push({id: row.representative_id, name: row.original_name})
             } else {
                 findChildOldSelections.push(parseInt( row.representative_id ))
             }
@@ -271,35 +251,12 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
         await Promise.all(listPromise) 
         if(findChildOldSelections.length === 0) {
             setSelectItems(childItems)
-            dispatch( setMainCompaniesSelected( oldSelection, updateSelectedWithName ) ) 
+            let group = [...groups, parseInt(parentCompanyId)]
+            dispatch( setMainCompaniesSelected( oldSelection, [...new Set(group)] ) ) 
         } else {
             setSelectItems(findChildOldSelections)
         }        
     }
-
-    /* const onHandleClickRow = useCallback((e,  row) => {
-        e.preventDefault()
-        const { checked } = e.target;
-        if(checked != undefined) {
-            let updateSelected = [...selected], updateSelectedWithName = [...selectedWithName]
-            if(!updateSelected.includes(parseInt( row.representative_id ))) {
-                updateSelected.push(parseInt( row.representative_id ))
-                updateSelectedWithName.push({id: row.representative_id, name: row.original_name})
-            } else {
-                updateSelected = updateSelected.filter(
-                    existingCompany => existingCompany !== parseInt( row.representative_id )
-                )
-                updateSelectedWithName = updateSelectedWithName.filter(
-                    existingCompany => existingCompany !== parseInt( row.representative_id )
-                )
-            }
-            dispatch(setMainCompaniesRowSelect([]))
-            setSelectItems(updateSelected)
-            updateUserCompanySelection(updateSelected)
-            dispatch( setMainCompaniesSelected( updateSelected, updateSelectedWithName ) ) 
-        }
-    }, [ dispatch, selected, selectItems, selectedWithName ]) */
-
 
     const handleClickRow = useCallback((event, row) => {
         event.preventDefault()
@@ -310,43 +267,38 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
                 dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
             }
         } 
-        updateCompanySelection(event, dispatch, row, checked, selected)
-    }, [ dispatch, selected, display_clipboard ])
+        updateCompanySelection(event, dispatch, row, checked, selectItems)
+    }, [ dispatch, selectItems, display_clipboard ])
 
-
+    /**
+     * Save user selections
+     * @param {*} representativeIDs 
+     */
 
     const updateUserCompanySelection = async(representativeIDs) => {
         const form = new FormData();
         form.append('representative_id', JSON.stringify(representativeIDs))
-
         const { status } = await PatenTrackApi.saveUserCompanySelection(form)
     }
 
     const updateCompanySelection = (event, dispatch, row, checked, selected) => {
         if(checked != undefined) {
-            let updateSelected = [...selected], updateSelectedWithName = [...selectedWithName]
+            let updateSelected = [...selected]
+            console.log('updateSelected=>child', updateSelected)
             if(!updateSelected.includes(parseInt( row.representative_id ))) {
                 if(selectedCategory === 'correct_names') {
                     updateSelected = [parseInt(row.representative_id)]
-                    updateSelectedWithName = [{id: row.representative_id, name: row.original_name}]
                 } else {
                     updateSelected.push(parseInt( row.representative_id ))
-                    updateSelectedWithName.push({id: row.representative_id, name: row.original_name})
                 }                
             } else {
                 updateSelected = updateSelected.filter(
                     existingCompany => existingCompany !== parseInt( row.representative_id ) 
                 )
-                updateSelectedWithName = updateSelectedWithName.filter(
-                    existingCompany => existingCompany.id !== parseInt( row.representative_id )
-                )
 
                 updateSelected = updateSelected.filter(
                     existingCompany => existingCompany !== parseInt( parentCompanyId ) 
                 )    
-                updateSelectedWithName = updateSelectedWithName.filter(
-                    existingCompany => existingCompany.id !== parseInt( parentCompanyId )
-                )
             }
             history.push({
                 hash: updateHashLocation(location, 'companies', updateSelected).join('&')
@@ -355,14 +307,42 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, callBack }) => {
             resetAll()
             if(updateSelected.length === 0 ) {
                 clearOtherItems()
+            }            
+            
+            let included = true
+            companies.forEach( item => {
+                if(!updateSelected.includes(item.representative_id)) {
+                    included = false
+                    return false
+                } 
+            })
+            let group = [...groups]
+            if(included === true && !updateSelected.includes(parseInt(parentCompanyId))) {            
+                //updateSelected.push(parseInt(parentCompanyId))
+                group.push(parseInt(parentCompanyId))
+            } else {
+                console.log('ENTER')
+                if(updateSelected.includes(parseInt(parentCompanyId))){
+                    console.log('ENTER1')
+                    if(group.includes(parseInt(parentCompanyId))){    
+                        console.log('ENTER2')                    
+                        const findIndex = group.findIndex( item => parseInt(item) === parseInt(parentCompanyId))
+                        if(findIndex !== -1) {
+                            console.log('ENTER3')
+                            group.splice(findIndex, 1)
+                        }
+                    }                    
+                }
             }
             setSelectItems(updateSelected)
+            itemCallback(updateSelected, groups)
+            //checkAllChildCompany(companies, updateSelected)
             updateUserCompanySelection(updateSelected)
-            dispatch( setMainCompaniesSelected( updateSelected, updateSelectedWithName ) ) 
+            dispatch( setMainCompaniesSelected( updateSelected, [...new Set(group)] ) )     
             dispatch( setNamesTransactionsSelectAll( false ) )
             dispatch( setSelectedNamesTransactions([]) )
         }
-    } 
+    }   
 
     const resetAll = () => {
         dispatch(setAssetTypes([]))

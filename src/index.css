@@ -868,6 +868,7 @@ a.maintain svg.clean_encumbrances path{
 
 .claim-text.patent-text, .claim-text.patent-text-1 {
   margin: 14px 0 0 20px;
+  line-height: 20px;
 }
 
 .claim-text.patent-text-1{

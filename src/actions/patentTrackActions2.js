@@ -454,16 +454,16 @@ export const setMainCompanies = (data, { append = false }) => {
   }
 }
 
-export const setMainCompaniesSelected = (selected, selectedWithName) => {
+export const setMainCompaniesSelected = (selected, groups) => {
   return {
     type: types.SET_MAIN_COMPANIES_SELECTED,
     selected,
-    selectedWithName
+    groups
   }
 }
 
 export const setMainCompaniesAllSelected = ( flag ) => {
-  return {
+  return { 
     type: types.SET_MAIN_COMPANIES_ALL_SELECTED,
     flag 
   }

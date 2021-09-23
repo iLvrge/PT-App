@@ -104,6 +104,9 @@ const HeadCell = ({
   selectedGroup
 }) => {
   /*console.log('LIBRARY1', selectedItems, selectedGroup, typeof selectedGroup, typeof selectedGroup !== 'undefined')*/
+  if(typeof selectedGroup !== 'undefined') {
+    console.log('LIBRARY1', selectedItems, selectedGroup, typeof selectedGroup, typeof selectedGroup !== 'undefined')
+  }
   const classes = useStyles()
   const { align, headerAlign, role, disableSort, filterable, paddingLeft, badge, showGrandTotal, draggable, headingIcon, show_selection_count, secondLabel, show, showDropdown, list, onClickHeadDropdown } = columns[columnIndex]
   const [ anchorEl, setAnchorEl ] = useState(null)

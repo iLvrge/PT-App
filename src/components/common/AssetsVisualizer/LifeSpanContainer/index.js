@@ -12,6 +12,7 @@ import USPTOContainer from '../USPTOContainer'
 import { setConnectionData } from '../../../../actions/patenTrackActions' 
 import { setAssetsIllustrationData, setAssetsTransactionsLifeSpan, getCustomerAssets, getCustomerSelectedAssets } from '../../../../actions/patentTrackActions2' 
 import PatenTrackApi from '../../../../api/patenTrack2'
+import { DEFAULT_CUSTOMERS_LIMIT } from "../../../../api/patenTrack2";
 
 import useStyles from './styles'
 
@@ -19,6 +20,7 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize}) => {
     const classes = useStyles() 
     const dispatch = useDispatch()
     const location = useLocation()
+    const [offsetWithLimit, setOffsetWithLimit] = useState([0, DEFAULT_CUSTOMERS_LIMIT])
     const [ selectedTab, setSelectedTab ] = useState(0)
     const [ assets, setAssets ] = useState(null)
     const [ filterList, setFilterList ] = useState([])
@@ -133,6 +135,8 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize}) => {
                                       customers,
                                       assignments,
                                       false,
+                                      0,
+                                      0
                                     ),
                                 );
                             }

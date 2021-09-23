@@ -159,6 +159,9 @@ export default makeStyles(theme => ({
         alignItems: 'flex-end',
         height: '100%',
     },
+    alignItemCenter: {
+        alignItems: 'center',
+    },
     rightMenu:{
         '& .MuiList-root':{
             paddingLeft: '20px',

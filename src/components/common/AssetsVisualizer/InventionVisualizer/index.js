@@ -25,6 +25,7 @@ import {
 } from '../../../../actions/patentTrackActions2'
 import { setPDFFile, setPdfTabIndex } from '../../../../actions/patenTrackActions' 
 import PatenTrackApi from '../../../../api/patenTrack2'
+import { DEFAULT_CUSTOMERS_LIMIT } from "../../../../api/patenTrack2";
 import useStyles from './styles'
 
 import { capitalize } from "../../../../utils/numbers";
@@ -41,7 +42,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const location = useLocation()
     const graphContainerRef = useRef()  
     const items = useRef(new DataSet())
-
+    const [offsetWithLimit, setOffsetWithLimit] = useState([0, DEFAULT_CUSTOMERS_LIMIT])
     const [ isLoadingCharts, setIsLoadingCharts ] = useState(false)
     const [ openModal, setModalOpen ] = useState(false)
     const [ assetLoading, setAssetsLoading ] = useState(false)
@@ -328,6 +329,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                             } */
                         } else {
                             if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
+                                
                                 dispatch(
                                     getCustomerAssets(
                                       selectedCategory == '' ? '' : selectedCategory,
@@ -336,6 +338,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                       customers,
                                       assignments,
                                       false,
+                                      0,
+                                      0
                                     ),
                                 );
                             }
@@ -382,8 +386,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             yearList = [...new Set(yearList)]
             yearList.sort(function(a, b) {
                 return a > b ? -1 : 0
-            });
-            console.log('yearList', yearList)
+            });            
             const promiseYearLabel = yearList.map( (item, index) => yearLabelList.push({ value: index + 1, label: item }) )
             await Promise.all(promiseYearLabel)
             setFilterYear(yearLabelList)            
@@ -698,18 +701,16 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     }    
 
     const onChangeYearSlider = useCallback(async (range, year) => {
-        console.log('range, year', range, year)
         setValueYear(year)
         setScopeRange([])
         const yearList = []
-        const promise = filterYear.map( r => {
+        filterYear.forEach( r => {
             if(r.value >= year[0] && r.value <= year[1]){
                 yearList.push(parseInt(r.label))
             }
         })
-        await Promise.all(promise)
         findCPCList([...scopeRange], filterList, yearList, range)      
-    }, [filterList])
+    }, [filterList, filterYear])
 
     const onChangeRangeSlider = useCallback(async (range) => {
         // Depth

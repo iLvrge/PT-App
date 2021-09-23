@@ -282,14 +282,16 @@ const VirtualizedTable = ({
         childSelect > 0
           ? true
           : false;
-      if(typeof selectedFromChild !== 'undefined' && selectedFromChild === true) {
+      let checkedIsInderminateCheckbox = false
+      if(typeof selectedFromChild !== 'undefined' && selectedFromChild === true) {        
         const getChild = JSON.parse(rowData['child'])
         if(getChild.length > 0 ) {
-          isIndeterminate = getChild.some(item => selected.includes(item))
+          isIndeterminate = getChild.some(item => selected.includes(parseInt(item)))
           if(isIndeterminate) {
-            const findItems = getChild.filter(item => selected.includes(item))
+            const findItems = getChild.filter(item => selected.includes(parseInt(item)))
             if(findItems.length  === getChild.length) {
               isIndeterminate = false
+              checkedIsInderminateCheckbox = true
             }
           }
         }
@@ -356,13 +358,13 @@ const VirtualizedTable = ({
                     <Typography variant="inherit" className={'heading'}> {c.name}</Typography> 
                   </MenuItem> 
                 ))
-              } 
+              }  
             </Select>
           )
           :
           role === "checkbox" ? (typeof showOnCondition == 'string' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition) ? '' : (
             <Checkbox
-              checked={selected.includes(cellData)}
+              checked={checkedIsInderminateCheckbox === true ? checkedIsInderminateCheckbox : selected.includes(cellData) }
               disabled={
                 disableRow === true && rowData[disableRowKey] === 0
                   ? true

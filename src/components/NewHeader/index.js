@@ -472,7 +472,7 @@ const clearOtherItems = () => {
           <div className={classes.breadcrumbs}>{layoutName}</div>   
           <div className={classes.breadcrumbs} style={{marginLeft: 100, fontSize: '1rem'}}>Version: {process.env.REACT_APP_ENVIROMENT_MODE}</div>   
         </div> */} 
-        <div className={classes.grow_buttons}>
+        <div className={`${classes.grow_buttons} ${classes.alignItemCenter}`}>
           <Button className={classes.calendly} onClick={handleChangeLayout}>
             {selectedCategory == 'due_dilligence' ? 'Broken Chain' : 'All Assets'}
           </Button> 

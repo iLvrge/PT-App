@@ -39,6 +39,24 @@ const ClaimData = ({ data, number }) => {
 
     const treeRef = useCallback(node => {
         if (node !== null) {
+            const findClaimContainer = node.querySelectorAll('div[num]')
+            if(findClaimContainer.length > 0) {
+                findClaimContainer.forEach( claim => {
+                    const findText = claim.querySelectorAll('p')
+                    if(findText.length > 0) {
+                        findText.forEach( (text, index)  => {
+                            if(index > 0) {
+                                const childContainer = text.classList
+                                childContainer
+                                    .add('claim-text')
+                                childContainer
+                                    .add('patent-text')     
+                            }
+                        })
+                    }
+                })
+            }
+
             const findSpans = node.querySelectorAll('span[idref]')
             console.log('node', node, findSpans.length)
             if(findSpans.length > 0) {
@@ -50,6 +68,7 @@ const ClaimData = ({ data, number }) => {
                         .add('patent-text-1')                        
                 }) 
             }
+
         }
     }, []);
 

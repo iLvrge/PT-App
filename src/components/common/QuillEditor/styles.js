@@ -24,15 +24,15 @@ export default makeStyles(theme => ({
   },
   secondaryGroup: {
     display: 'flex',
-    padding: '0 15px'
+    padding: '0 15px',
+    flexGrow: 1
   },
   review: {
-    width: 'auto !important',
-    /* minWidth: '130px !important', */
-    height: 'auto !important',
-    padding: '3px 5px !important',
     border:'1px solid #5a5a5a !important',
+    borderRadius: 4,
     textTransform: 'initial',
+    width: 'auto !important',
+    padding: '3px 5px !important',
     '&:hover':{
       border:'1px solid #e60000 !important',
       color: '#e60000 !important'
@@ -100,7 +100,13 @@ export default makeStyles(theme => ({
     margin: 10
   },
   share: {
-    marginLeft: 12
+    marginLeft: 12,
+    marginRight: '30px !important',
+    '& svg':{
+      width: 20,
+      height: 20
+    }
+    
   },
   icon:{
     
