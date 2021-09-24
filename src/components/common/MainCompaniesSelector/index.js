@@ -443,15 +443,23 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                     }  else {
                         updateSelected = [parseInt(row.representative_id)]
                     }                  
-                } else {
-                    
+                } else {                    
                     if(parseInt(row.type) === 1) {
                         if(row.child_total > 0) {
                             const parseChild = JSON.parse(row.child)
-                            updateSelected = [...updateSelected, ...parseChild]
-                            updateSelected = [...new Set(updateSelected)]
+                            if(!updateSelected.includes(parseInt(parseChild[0]))) {
+                                updateSelected = [...updateSelected, ...parseChild]
+                                updateSelected = [...new Set(updateSelected)]
+                            } else {
+                                const childFilterPromise = parseChild.map( child => {
+                                    updateSelected = updateSelected.filter(
+                                        existingCompany => parseInt(existingCompany) !== parseInt( child )
+                                    )
+                                })
+                                await Promise.all(childFilterPromise)
+                            }                            
                         }   
-                        updateGroup.push(parseInt(row.representative_id))
+                        //updateGroup.push(parseInt(row.representative_id))
                     } else {
                         updateSelected.push(parseInt( row.representative_id ))
                     }
@@ -460,19 +468,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                 updateSelected = updateSelected.filter(
                     existingCompany => parseInt(existingCompany) !== parseInt( row.representative_id )
                 )
-                if(parseInt(row.type) === 1) {
-                    if(row.child_total > 0) {
-                        const parseChild = JSON.parse(row.child)
-                        const childFilterPromise = parseChild.map( child => {
-                            updateSelected = updateSelected.filter(
-                                existingCompany => parseInt(existingCompany) !== parseInt( child )
-                            )
-                        })
-                        //console.log('tab2', updateSelected)
-                        await Promise.all(childFilterPromise)                            
-                    }
-                    updateGroup = updateGroup.filter( id => id !== parseInt( row.representative_id ))
-                }
             }
             history.push({
                 hash: updateHashLocation(location, 'companies', updateSelected).join('&')
