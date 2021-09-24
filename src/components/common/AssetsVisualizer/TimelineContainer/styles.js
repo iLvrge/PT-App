@@ -357,4 +357,8 @@ export default makeStyles(theme => ({
       background: '#78787826',
     },
   },
+  defaultLoadingImages: {
+    position: 'absolute',
+    top: '-99999999px'
+  }
 }))

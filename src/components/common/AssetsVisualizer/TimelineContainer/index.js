@@ -148,6 +148,20 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
   const search_string = useSelector(state => state.patenTrack2.search_string)
   const search_rf_id = useSelector(state => state.patenTrack2.search_rf_id)
 
+  const assetsTypesImages = ['https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/acquisition.png',
+  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png',
+  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licensein.png',
+  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licenseout.png',
+  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png',
+  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png',
+  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png',
+  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/options.png',
+  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/courtorder.png',
+  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png',
+  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/release.png',
+  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png',
+  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png'];
+
   //Item for the timeline
 
   const convertDataToItem = (assetsCustomer) => {
@@ -251,6 +265,10 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
                 case 13:
                   image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
                   color = '#00a9e6'
+                  break;
+                case 14:
+                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png'
+                  color = '#FFFFFF'
                   break;
                 case 14:
                 default:
@@ -516,12 +534,25 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
     }, 1000)
   } */
 
+  const LoadImages = () => {
+      return (
+        <div className={classes.defaultLoadingImages}>
+          {
+            assetsTypesImages.map( (img, index) => (
+              <img key={index} src={img}/>
+            ))
+          }
+        </div>
+      )
+  }
+
   /**
    * return component 
-   */
+   */    
 
   return (
-      <div className={classes.root}>
+      <div className={classes.root}> 
+        <LoadImages/>
         <div
           style={{ 
             filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
