@@ -444,15 +444,17 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                         updateSelected = [parseInt(row.representative_id)]
                     }                  
                 } else {
-                    updateSelected.push(parseInt( row.representative_id ))
+                    
                     if(parseInt(row.type) === 1) {
                         if(row.child_total > 0) {
                             const parseChild = JSON.parse(row.child)
                             updateSelected = [...updateSelected, ...parseChild]
                             updateSelected = [...new Set(updateSelected)]
-                        }
+                        }   
                         updateGroup.push(parseInt(row.representative_id))
-                    } 
+                    } else {
+                        updateSelected.push(parseInt( row.representative_id ))
+                    }
                 }                
             } else {
                 updateSelected = updateSelected.filter(
