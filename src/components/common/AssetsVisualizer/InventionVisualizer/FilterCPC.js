@@ -67,7 +67,7 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, yearRange, yearRangeText, 
 
     const handleRangeChange = (event, newValue) => {
         setRangeValue(newValue)
-        onChangeRangeSlider(newValue)
+        onChangeRangeSlider(yearValue, newValue)
     }   
 
     const handleYearChange = (event, newValue) => {
@@ -77,7 +77,7 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, yearRange, yearRangeText, 
     return (
         <div className={classes.displayFlex}>   
             <div className={classes.headingContainer}>
-                <div className={`${classes.flexColumn} ${classes.flexColumnYear}`}>
+                <div className={`${classes.flexColumn} ${classes.flexColumnYear}`}> 
                     <div className={classes.heading}>
                         <Typography>Year:</Typography>
                     </div>

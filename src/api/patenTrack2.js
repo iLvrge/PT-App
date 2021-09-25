@@ -74,7 +74,7 @@ const getMultiFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL
 
 class PatenTrackApi {
   static getSiteLogo() {
@@ -294,6 +294,24 @@ class PatenTrackApi {
       } catch (e){
         console.log('cancelRequest->', e)
       }
+    } 
+  }
+
+  static downloadPDFUrl( ID ) { 
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelDownloadURL = c
+    })
+    return axios.get(`${base_new_api_url}/assets/download/${ID}`, header)
+  }
+
+  static cancelDownloadRequest() {
+    if (cancelDownloadURL !== undefined) {
+      try{
+        throw cancelDownloadURL('Operation canceled by the user.') 
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }  
     } 
   }
 

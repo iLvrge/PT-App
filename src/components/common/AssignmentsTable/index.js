@@ -179,41 +179,46 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   const [headerColumns, setHeaderColumns] = useState(COLUMNS)
 
   useEffect(() => {
-    setRows(assignmentList)
-    if(assignmentList.length > 0 ) {
-      if(selectedAssetsTransactions.length > 0) {
-        const excludeSelections = []
-        const checkElement = selectedAssetsTransactions.map( transaction => {
-          const findIndex = assignmentList.findIndex(row => row.rf_id == transaction)
-          if(findIndex === -1) {
-            excludeSelections.push(transaction)
-          }
-        })      
-        Promise.all(checkElement)
-        if(excludeSelections.length > 0) {        
-          const newSelectedTransaction = [...selectedAssetsTransactions]
-          const mapSelection = excludeSelections.map( transaction => {
-            const findIndex = newSelectedTransaction.findIndex( item => item == transaction)
-            if(findIndex !== -1) {
-              newSelectedTransaction.splice(findIndex, 1)
+    if( selectedCompanies.length > 0  || selectedCompaniesAll === true ) {
+      setRows(assignmentList)
+      if(assignmentList.length > 0 ) {
+        if(selectedAssetsTransactions.length > 0) {
+          const excludeSelections = []
+          const checkElement = selectedAssetsTransactions.map( transaction => {
+            const findIndex = assignmentList.findIndex(row => row.rf_id == transaction)
+            if(findIndex === -1) {
+              excludeSelections.push(transaction)
             }
-          })
-          Promise.all(mapSelection)
-          dispatch(setSelectAssignments(newSelectedTransaction));
-          setSelectItems(newSelectedTransaction)
+          })      
+          Promise.all(checkElement)
+          if(excludeSelections.length > 0) {        
+            const newSelectedTransaction = [...selectedAssetsTransactions]
+            const mapSelection = excludeSelections.map( transaction => {
+              const findIndex = newSelectedTransaction.findIndex( item => item == transaction)
+              if(findIndex !== -1) {
+                newSelectedTransaction.splice(findIndex, 1)
+              }
+            })
+            Promise.all(mapSelection)
+            dispatch(setSelectAssignments(newSelectedTransaction));
+            setSelectItems(newSelectedTransaction)
+          }
+        }
+        if(currentRowSelection.length > 0) {
+          const findIndex = assignmentList.findIndex(row => row.rf_id == currentRowSelection[0])
+          if(findIndex === -1) {
+            setCurrentSelection(null)
+            setSelectedRow([])
+            dispatch(setSelectedAssetsTransactions([]));
+            dispatch(setChannelID(''))
+            dispatch(setAssetsIllustration(null))
+          }        
         }
       }
-      if(currentRowSelection.length > 0) {
-        const findIndex = assignmentList.findIndex(row => row.rf_id == currentRowSelection[0])
-        if(findIndex === -1) {
-          setCurrentSelection(null)
-          setSelectedRow([])
-          dispatch(setSelectedAssetsTransactions([]));
-          dispatch(setChannelID(''))
-          dispatch(setAssetsIllustration(null))
-        }        
-      }
-    } 
+    } else {
+      setRows([])
+      setGrandTotal(0)
+    }     
   }, [assignmentList])
 
   /**
@@ -253,10 +258,10 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   },[ slack_channel_list, assignmentList, selectedRow])
 
   useEffect(() => {
-    console.log('selectedRow, assignmentList', selectedRow, assignmentList.length)
+   
     if( selectedRow.length > 0 && assignmentList.length > 0) {
       const findIndex = assignmentList.findIndex(rowTransaction => rowTransaction.rf_id === selectedRow[0])
-      console.log('SELECT ROW INDEX', findIndex)
+      
       if(findIndex !== -1) {
         setScrollToIndex(findIndex)
       }
@@ -369,7 +374,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   useEffect(() => {
     
     //setSelectedRow(selectedAssetsTransactions);
-    console.log('currentRowSelection, selectedRow', currentRowSelection, selectedRow)
+    
     if (currentRowSelection.length != selectedRow.length  ) {
       setSelectedRow(currentRowSelection); 
     }
@@ -411,6 +416,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
 
   useEffect(() => {
     if (defaultLoad === true || defaultLoad === undefined) {
+      console.log('TRANSAACTION', selectedCompanies, selectedCompaniesAll)
       const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
         tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
         customers =
@@ -431,12 +437,16 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
         
       } else {
         dispatch(setAssetTypeAssignments({ list: [], total_records: 0 }));
+        setRows([])
+        setGrandTotal(0)
       }
     } else if (type != 1) {
-      dispatch(setAssetTypeAssignments({ list: [], total_records: 0 }, true));
+      dispatch(setAssetTypeAssignments({ list: [], total_records: 0 }, true))
+      setRows([])
+      setGrandTotal(0)
     }
   }, [
-    dispatch,
+    dispatch, 
     selectedCompanies,
     selectedCompaniesAll,
     assetTypesSelected,

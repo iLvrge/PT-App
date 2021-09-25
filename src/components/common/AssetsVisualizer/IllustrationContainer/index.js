@@ -103,6 +103,7 @@ const IllustrationContainer = ({
   }, [ asset, dispatch])
 
   const handlePdfView = useCallback((obj) => {
+    console.log('ONCLICK HANDLE handlePdfView', obj)
     if (Object.keys(obj).length > 0 && typeof obj.document_file != 'undefined') {
       /* if( chartsBar === false ) {
         chartsBarToggle(!chartsBar)
@@ -110,15 +111,19 @@ const IllustrationContainer = ({
       dispatch(
         setPDFView(true)
       )
-      dispatch(
-        setPDFFile(
-          { 
-            document: obj.document_file, 
-            form: obj.document_form, 
-            agreement: obj.document_agreement 
-          }
+      if(obj.document_file.indexOf('legacy-assignments.uspto.gov') !== -1) {
+        retrievePDFFromServer(obj)
+      } else {
+        dispatch(
+          setPDFFile(
+            { 
+              document: obj.document_file, 
+              form: obj.document_form, 
+              agreement: obj.document_agreement 
+            }
+          )
         )
-      )
+      }
       dispatch(
         setPdfTabIndex(0)
       )
@@ -178,7 +183,28 @@ const IllustrationContainer = ({
     console.log('handleComment ', obj)
   }
 
+  const retrievePDFFromServer = async(item) => {    
+    PatenTrackApi.cancelDownloadRequest()
+    const {data} = await PatenTrackApi.downloadPDFUrl(item.rf_id)
+
+    if(data != null && typeof data.link !== 'undefined') {
+        dispatch(
+          setPDFFile(
+            { 
+              document: data.link, 
+              form: data.link, 
+              agreement: data.link 
+            }
+          )
+        )
+        dispatch(
+          setPdfTabIndex(0)
+        )
+    }
+  }
+
   const handleConnectionBox = useCallback((obj) => {
+    console.log('ONCLICK HANDLE handleConnectionBox', obj)
     if (typeof obj.popup != 'undefined') {
       dispatch(
         toggleUsptoMode(false)
@@ -186,15 +212,20 @@ const IllustrationContainer = ({
       dispatch(
         setPDFView(true)
       )
-      dispatch(
-        setPDFFile(
-          { 
-            document: obj.document1, 
-            form: obj.document1_form, 
-            agreement: obj.document1_agreement 
-          }
+      if(obj.document1.indexOf('legacy-assignments.uspto.gov') !== -1) {
+        retrievePDFFromServer(obj)
+      } else {
+        dispatch(
+          setPDFFile(
+            { 
+              document: obj.document1, 
+              form: obj.document1_form, 
+              agreement: obj.document1_agreement 
+            }
+          )
         )
-      )
+      }
+      
       dispatch(
         setPdfTabIndex(0)
       )

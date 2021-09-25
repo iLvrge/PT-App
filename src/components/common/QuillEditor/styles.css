@@ -20,12 +20,12 @@
   stroke: #fff;
 }
 
-.ql-snow .ql-stroke, .ql-snow button.ql-bold , .ql-snow button.ql-italic , .ql-snow button.ql-atButton , .ql-snow button.ql-atButton svg, .ql-snow button.ql-attachButton , .ql-snow button.ql-attachButton svg, .ql-snow button.ql-saveButton , .ql-snow button.ql-saveButton svg {
+.ql-snow .ql-stroke, .ql-snow button.ql-bold , .ql-snow button.ql-italic , .ql-snow button.ql-atButton , .ql-snow button.ql-atButton svg, .ql-snow button.ql-attachButton , .ql-snow button.ql-attachButton svg, .ql-snow button.ql-saveButton , .ql-snow button.ql-saveButton svg, .ql-snow button.ql-sendattachButton svg {
   stroke: #545454;
   color: #545454;
   pointer-events: none;  
 }
-.ql-snow .ql-stroke, .ql-snow button.ql-bold , .ql-snow button.ql-italic , .ql-snow button.ql-atButton,.ql-snow button.ql-attachButton, .ql-snow button.ql-saveButton {
+.ql-snow .ql-stroke, .ql-snow button.ql-bold , .ql-snow button.ql-italic , .ql-snow button.ql-atButton,.ql-snow button.ql-attachButton, .ql-snow button.ql-sendattachButton svg, .ql-snow button.ql-saveButton {
   display: flex;
   align-items: center;
   justify-items: center;
@@ -33,7 +33,7 @@
   width: 32px;
   height: 32px;
 }
-.ql-snow button.ql-atButton svg, .ql-snow button.ql-attachButton , .ql-snow button.ql-attachButton svg, .ql-snow button.ql-saveButton , .ql-snow button.ql-saveButton svg {
+.ql-snow button.ql-atButton svg, .ql-snow button.ql-attachButton , .ql-snow button.ql-attachButton svg, .ql-snow button.ql-sendattachButton, .ql-snow button.ql-sendattachButton svg, .ql-snow button.ql-saveButton , .ql-snow button.ql-saveButton svg {
   width: 20px;
   height: 20px;
 }
@@ -43,7 +43,12 @@
   pointer-events: all;
 }
 
-.focus .ql-snow .ql-stroke{  
+.attach .ql-snow .ql-sendattachButton svg{
+  color: #fff;
+  pointer-events: all;
+}
+
+.focus .ql-snow .ql-stroke, .attach .ql-snow .ql-stroke{  
   stroke: #fff;
 }
 

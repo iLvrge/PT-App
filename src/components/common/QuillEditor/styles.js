@@ -102,6 +102,7 @@ export default makeStyles(theme => ({
   share: {
     marginLeft: 12,
     marginRight: '30px !important',
+    paddingRight: '10px !important',
     '& svg':{
       width: 20,
       height: 20

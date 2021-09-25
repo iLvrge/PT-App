@@ -219,7 +219,7 @@ export default makeStyles(theme => ({
     },
     inputInput: {
         padding: 0,
-        height: '2em',
+        height: 26,
         // vertical padding + font size from searchIcon
         paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
         transition: theme.transitions.create('width'),
@@ -375,8 +375,8 @@ export default makeStyles(theme => ({
         padding: 0,
         margin: '0 4px',
         '& svg':{
-            width: 24,
-            height: 24,
+            width: '2rem',
+            height: '2rem',
             fill: '#5a5a5a',
             stroke: '#5a5a5a'
         },

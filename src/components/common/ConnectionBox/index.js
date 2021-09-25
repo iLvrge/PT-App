@@ -68,7 +68,7 @@ function ConnectionBox(props) {
     })
     const index = assetData.popup && assetData.popup.findIndex(x => x.id === props.popup.id)
     return(
-      <div key={props.keyIndex} className={classes.rootContainer}>
+      <div key={`${props.keyIndex}_${props.key}`} className={classes.rootContainer}>
       {
         info && info != null && info.length > 0 && Object.keys(info[0]).length > 0 
         ?

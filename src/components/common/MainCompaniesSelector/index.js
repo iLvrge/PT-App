@@ -224,11 +224,13 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
 
         if(companies.list.length > 0) {
             companies.list.map(row => {
-                if(parseInt(row.type) !== 1) {
+                if(parseInt(row.type) == 1) {
+                    const parseChild = JSON.parse(row.child)
+                    if(parseChild.length > 0) {
+                        counter += parseChild.length
+                    }
+                }  else {
                     counter++;
-                }                
-                if(row.child_total > 0) {
-                    counter += row.child_total
                 }
             })
             setTotalRecords(counter)
@@ -473,7 +475,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                 hash: updateHashLocation(location, 'companies', updateSelected).join('&')
             })
             dispatch(setMainCompaniesRowSelect([]))
-            resetAll()
+            
             setSelectItems(updateSelected)
             //setSelectGroups(updateGroup)
             updateUserCompanySelection(updateSelected)
@@ -481,6 +483,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             dispatch( setNamesTransactionsSelectAll( false ) )
             dispatch( setSelectedNamesTransactions([]) )
             dispatch( setMainCompaniesAllSelected( updateSelected.length === totalRecords ? true : false ) )
+            resetAll() 
+            clearOtherItems()
         } else {
             const element = event.target.closest('div.ReactVirtualized__Table__rowColumn')
             if( element != null ) {
@@ -531,14 +535,16 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                 if(companies.list.length > 0) {
                     let items = [], groups = []
                     companies.list.forEach( async company => {
-                        items.push(parseInt(company.representative_id))
+                        
                         if( parseInt(company.type) === 1 ) {
-                            groups.push(company.representative_id)
-                            if(company.child_total > 0) {
-                                const parseChild = JSON.parse(company.child), 
+                            //groups.push(company.representative_id)
+                            const parseChild = JSON.parse(company.child)
+                            if(parseChild.length > 0) {                                
                                 items = [...items, ...parseChild]                               
-                                items = [...new Set(items)]                                
+                                items = [...new Set(items)]       
                             }
+                        } else {
+                            items.push(parseInt(company.representative_id))
                         }
                     })
                     setSelectItems(items)

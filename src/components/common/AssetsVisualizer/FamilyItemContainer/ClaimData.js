@@ -39,10 +39,18 @@ const ClaimData = ({ data, number }) => {
 
     const treeRef = useCallback(node => {
         if (node !== null) {
-            const findClaimContainer = node.querySelectorAll('div[num]')
+            let findClaimContainer = node.querySelectorAll('div[num]')
+            if(findClaimContainer.length == 0) {
+                findClaimContainer = node.querySelectorAll('div[id*="CLM-"]')
+            }
             if(findClaimContainer.length > 0) {
                 findClaimContainer.forEach( claim => {
-                    const findText = claim.querySelectorAll('p')
+                    const classList = claim.classList
+                    classList
+                        .add('claim-text')
+                    classList
+                        .add('patent-text')            
+                    const findText = claim.querySelectorAll('div')
                     if(findText.length > 0) {
                         findText.forEach( (text, index)  => {
                             if(index > 0) {
@@ -57,18 +65,29 @@ const ClaimData = ({ data, number }) => {
                 })
             }
 
-            const findSpans = node.querySelectorAll('span[idref]')
-            console.log('node', node, findSpans.length)
+            let findSpans = node.querySelectorAll('span[idref]'), tap = false
+            if(findSpans.length == 0) {
+                findSpans = node.querySelectorAll('dependent-claim-reference')
+                tap = true
+            }
             if(findSpans.length > 0) {
                 findSpans.forEach( child => {
-                    const classList = child.closest('div[num]').classList
-                    classList
-                        .add('claim-text')
-                    classList
-                        .add('patent-text-1')                        
+                    if(tap === true) {
+                        child.classList.add('margin-l-r')
+                    }
+                    let elementParent = child.closest('div[num]')
+                    if(elementParent === null) {
+                        elementParent = child.closest('div[id*="CLM-"]')
+                    }
+                    if(elementParent !== null)  {
+                        const classList =  elementParent.classList
+                        classList
+                            .add('claim-text')
+                        classList
+                            .add('patent-text-1')      
+                    }                
                 }) 
             }
-
         }
     }, []);
 

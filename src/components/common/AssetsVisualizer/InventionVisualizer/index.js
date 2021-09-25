@@ -712,12 +712,18 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         findCPCList([...scopeRange], filterList, yearList, range)      
     }, [filterList, filterYear])
 
-    const onChangeRangeSlider = useCallback(async (range) => {
+    const onChangeRangeSlider = useCallback(async (year, range) => {
         // Depth
         setPreValueRange(prevItem => prevItem != valueRange ? valueRange : prevItem)
         setValueRange(range) 
         setScopeRange([])
-        findCPCList([...scopeRange], filterList, valueYear, range)      
+        const yearList = []
+        filterYear.forEach( r => {
+            if(r.value >= year[0] && r.value <= year[1]){
+                yearList.push(parseInt(r.label))
+            }
+        })
+        findCPCList([...scopeRange], filterList, yearList, range)      
     }, [ filterList, scopeRange, valueRange ] )
 
     
@@ -725,14 +731,19 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         // A, B, .... H
         newRange = scope
         setValueScope(scope)
-        const scopeList = []
+        const scopeList = [], yearList = []
         const promise = scopeRange.map( r => {
             if(r.value >= scope[0] && r.value <= scope[1]){
                 scopeList.push(r.code)
             }
         })
         await Promise.all(promise)
-        findCPCList([...scopeRange], filterList, year, range, scopeList)        
+        filterYear.forEach( r => {
+            if(r.value >= year[0] && r.value <= year[1]){  
+                yearList.push(parseInt(r.label))
+            }
+        })
+        findCPCList([...scopeRange], filterList, yearList, range, scopeList)        
     }, [ filterList, scopeRange ] )
 
     if(showContainer === false) return null 

@@ -872,8 +872,17 @@ a.maintain svg.clean_encumbrances path{
 }
 
 .claim-text.patent-text-1{
-  color: #9E9E9E
+  color: #9E9E9E;
+  margin-left: 60px;
 }  
+
+.margin-l-r{
+  margin: 0 3px
+}
+
+.react-viewer-mask, .react-viewer-canvas{
+  top: 90px
+}
 
 .scopeTooltip{
   display: flex;

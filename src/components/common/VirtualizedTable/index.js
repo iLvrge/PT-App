@@ -100,8 +100,11 @@ const VirtualizedTable = ({
   const [dropdownValue, setDropdownValue] = useState('')
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [noOfSelectedItems, setNoOfSelectedItems] = useState([])
+  /* const [currentScrollIndex, setcurrentScrollIndex] = useState(0) */
   const rowRef = useRef(null);
   const tableRef = useRef();
+  const containerRef = useRef(null);
+  let currentScrollIndex = 0
   /*useEffect(() => {
     if(collapsable === true && rowSelected.length > 0) {
       setTimeout(() => {
@@ -121,6 +124,15 @@ const VirtualizedTable = ({
   useEffect(() => {
     setNoOfSelectedItems([...selected])
   }, [ selected ])
+
+  useEffect(() => {
+    if(containerRef.current !== null) {
+      containerRef.current.addEventListener('keydown', handleKeyEvent)
+      /* return () => {
+        containerRef.current.removeEventListener('keydown', handleKeyEvent)
+      } */
+    }    
+  }, [containerRef])   
 
   const createSortHandler = useCallback(
     property => () => {
@@ -625,6 +637,8 @@ const VirtualizedTable = ({
     ],
   );
 
+  
+
   const items = useMemo(() => {
     let filteredRows = rows.filter(row => {
       return filters.every(
@@ -647,6 +661,8 @@ const VirtualizedTable = ({
       return 0;
     });
   }, [rows, sortBy, sortDirection, filters]);
+
+
 
   const rowGetter = useMemo(() => ({ index }) => items[index], [items]);
 
@@ -708,61 +724,79 @@ const VirtualizedTable = ({
     }
   }
 
+  const handleKeyEvent = useCallback(event => {
+    event.preventDefault()
+    if(event.key === 'ArrowDown') {
+      currentScrollIndex++
+      
+    }
+    if (event.key === 'ArrowUp' ) {
+      currentScrollIndex--;
+    }
+    const findRow =  containerRef.current.querySelector(`.rowIndex_${currentScrollIndex}`)
+    if(findRow !== null) {
+      findRow.click()
+    }  
+  }, [currentScrollIndex])
+
   return (
-    <InfiniteLoader
-      isRowLoaded={isRowLoaded}
-      loadMoreRows={loadMoreRows}
-      rowCount={totalRows}
-      minimumBatchSize={500}
-      threshold={500}
-    >
-      {({ onRowsRendered, registerChild }) => (
-      <AutoSizer {...(responsive === false ? "disableWidth" : "")} ref={registerChild}>
-        {({ height, width: tableWidth }) => (
-          <Table
-            size={"small"}            
-            ref={tableRef}
-            height={height}
-            width={responsive === false ? width : tableWidth}            
-            rowHeight={getRowHeight}
-            headerHeight={headerHeight}
-            {...(typeof scrollTop !== 'undefined'  ? {scrollTop: scrollTop} : {})}   
-            onRowsRendered={onRowsRendered}
-            className={`${classes.table} ${
-              headerRowDisabled === true ? "disable_header" : ""
-            }`}
-            rowCount={items.length}
-            {...(typeof scrollToIndex !== 'undefined' && scrollToIndex === true ? {scrollToIndex: getSelectedItemIndex} : {})}          
-            {...tableProps}
-            sortBy={sortBy}
-            sortDirection={sortDirection}  
-            rowRenderer={rowRenderer}
-            rowGetter={rowGetter}
-            rowClassName={getRowClassName}
-            onScroll={onScroll}
-          >
-            {columns.map(({ dataKey, fullWidth, ...other }, index) => {
-              return (
-                <Column
-                  key={dataKey}
-                  headerRenderer={headerProps =>
-                    headerRenderer({
-                      ...headerProps,
-                      columnIndex: index,
-                    })
-                  }
-                  className={classes.flexContainer} 
-                  cellRenderer={cellRenderer}
-                  dataKey={dataKey}
-                  {...other}
-                />
-              );
-            })}
-          </Table>
+    <div ref={containerRef} style={{display: 'flex', position: 'relative', height: '100%', width: '100%'}}>
+      <InfiniteLoader
+        isRowLoaded={isRowLoaded}
+        loadMoreRows={loadMoreRows}  
+        rowCount={totalRows}
+        minimumBatchSize={500}
+        threshold={500}
+      >
+        {({ onRowsRendered, registerChild }) => (
+        <AutoSizer {...(responsive === false ? "disableWidth" : "")} ref={registerChild}>
+          {({ height, width: tableWidth }) => (
+            <Table
+              size={"small"}            
+              ref={tableRef}
+              height={height}
+              width={responsive === false ? width : tableWidth}            
+              rowHeight={getRowHeight}
+              headerHeight={headerHeight}
+              {...(typeof scrollTop !== 'undefined'  ? {scrollTop: scrollTop} : {})}   
+              onRowsRendered={onRowsRendered}
+              className={`${classes.table} ${
+                headerRowDisabled === true ? "disable_header" : ""
+              }`}
+              rowCount={items.length}
+              /* {...(typeof scrollToIndex !== 'undefined' && scrollToIndex === true ? {scrollToIndex: getSelectedItemIndex} : {})}    */
+              scrollToIndex={ scrollToIndex === true ? getSelectedItemIndex : currentScrollIndex}                     
+              {...tableProps}
+              sortBy={sortBy}
+              sortDirection={sortDirection}  
+              rowRenderer={rowRenderer}
+              rowGetter={rowGetter}
+              rowClassName={getRowClassName}
+              onScroll={onScroll}
+            >
+              {columns.map(({ dataKey, fullWidth, ...other }, index) => {
+                return (
+                  <Column
+                    key={dataKey}
+                    headerRenderer={headerProps =>
+                      headerRenderer({
+                        ...headerProps,
+                        columnIndex: index,
+                      })
+                    }
+                    className={classes.flexContainer} 
+                    cellRenderer={cellRenderer}
+                    dataKey={dataKey}
+                    {...other}
+                  />
+                );
+              })}
+            </Table>
+          )}
+        </AutoSizer>
         )}
-      </AutoSizer>
-      )}
-    </InfiniteLoader>
+      </InfiniteLoader>
+    </div>
   );
 };
   

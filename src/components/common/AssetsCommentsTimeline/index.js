@@ -228,7 +228,12 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
         if( access_token ) {
           googleLoginButton =  false 
           dispatch(getGoogleProfile(tokenParse))  
-        } 
+          if(editorContainerRef.current !== null) {
+            editorContainerRef.current.classList.add('attach')
+          }
+        } else {
+          editorContainerRef.current.classList.remove('attach');
+        }
       }
       setSlackAuthLogin(slackLoginButton)
       setGoogleAuthLogin(googleLoginButton)
@@ -556,10 +561,19 @@ const handleDriveModalClose = (event) => {
   }
 
   const handleFocus = useCallback((range, source, editor) => {
-    const getSlackUser = getTokenStorage( 'slack_auth_token_info' );
+    const getSlackUser = getTokenStorage( 'slack_auth_token_info' ), googleToken = getTokenStorage( 'google_auth_token_info' );
     if(getSlackUser &&  getSlackUser != '') {
       editorContainerRef.current.classList.add('focus')
     }    
+
+    if(googleToken && googleToken != '') {
+      const tokenParse = JSON.parse( googleToken )
+      const { access_token } = tokenParse
+      if( access_token ) {
+        editorContainerRef.current.classList.add('attach')
+      }
+    }
+
   }, [ editorContainerRef ])
 
   const handleBlur = useCallback((previousRange, source, editor) => {

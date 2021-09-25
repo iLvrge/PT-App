@@ -469,6 +469,17 @@ export default makeStyles(theme => ({
   },
   figures: {
     width: '100%',
-    marginBottom: 15
+    marginBottom: 15,
+    '&:last':{
+      marginBottom: 0
+    },
+    '&:first':{
+      marginTop: 15
+    }
+  },
+  iconButton: {
+    display: 'flex',
+    alignItems:'center',
+    justifyContent: 'center'
   }
 }))

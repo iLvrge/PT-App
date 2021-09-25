@@ -261,9 +261,17 @@ const FilesTemplates = ({type}) => {
         }        
     }, [callByAuthLogin, google_auth_token])
 
+    const dowloadPDFUrl = async(item) => {
+        PatenTrackApi.cancelDownloadRequest()
+        const {data} = await PatenTrackApi.downloadPDFUrl(item.id)
+
+        if(data != null && typeof data.link !== 'undefined') {
+            dispatch(setTemplateDocument(data.link))
+        }
+    }
 
     const openGoogleWindow = () => {
-        if(googleLoginRef.current != null) {
+        if(googleLoginRef.current != null) { 
             if(googleLoginRef.current.querySelector('button') !== null) {
                 setCallByAuth(true)
                 googleLoginRef.current.querySelector('button').click()
@@ -338,15 +346,23 @@ const FilesTemplates = ({type}) => {
             dispatch(setTemplateDocument(null))
             setSelectedRow([])
             setCurrentSelection(null)
-        } else {
-            
+        } else {            
             if(item.external_type == 'gdrive' || item.external_type == 'usptodrive') {
                 dispatch(setDriveTemplateFrameMode(true))
-                dispatch(setTemplateDocument(item.url_private))
+                let webLink = item.url_private
+                if(webLink.toString().indexOf('legacy-assignments')) {
+                    dowloadPDFUrl(item)
+                }
+                dispatch(setTemplateDocument(webLink))
             } else {
                 if(typeof item.webViewLink !== 'undefined') {
                     dispatch(setDriveTemplateFrameMode(true))
-                    dispatch(setTemplateDocument(item.mimeType == "application/pdf" ? item.webViewLink.toString().replace('view?usp=drivesdk', 'preview')  : item.webViewLink))
+                    let webLink = item.mimeType == "application/pdf" ? item.webViewLink.toString().replace('view?usp=drivesdk', 'preview')  : item.webViewLink
+                    if(webLink.toString().indexOf('legacy-assignments')) {
+                        //webLink = `https://drive.google.com/viewerng/viewer?url=${webLink}&embedded=true`
+                        dowloadPDFUrl(item)
+                    }
+                    dispatch(setTemplateDocument(webLink))
                 } else {
                     window.open(item.url_private)
                 }                
@@ -380,11 +396,21 @@ const FilesTemplates = ({type}) => {
             console.log('item', item)
             if(item.external_type == 'gdrive' || item.external_type == 'usptodrive') {
                 dispatch(setDriveTemplateFrameMode(true))
-                dispatch(setTemplateDocument(item.url_private))
+                let webLink = item.url_private
+                if(webLink.toString().indexOf('legacy-assignments')) {
+                   // webLink = `https://drive.google.com/viewerng/viewer?url=${webLink}&embedded=true`
+                   dowloadPDFUrl(item)
+                }
+                dispatch(setTemplateDocument(webLink))
             } else {
                 if(typeof item.webViewLink !== 'undefined') {
                     dispatch(setDriveTemplateFrameMode(true))
-                    dispatch(setTemplateDocument(item.mimeType == "application/pdf" ? item.webViewLink.toString().replace('view?usp=drivesdk', 'preview')  : item.webViewLink))
+                    let webLink = item.mimeType == "application/pdf" ? item.webViewLink.toString().replace('view?usp=drivesdk', 'preview')  : item.webViewLink
+                    if(webLink.toString().indexOf('legacy-assignments')) {
+                        //webLink = `https://drive.google.com/viewerng/viewer?url=${webLink}&embedded=true`
+                        dowloadPDFUrl(item)
+                    }
+                    dispatch(setTemplateDocument(webLink))
                 } else {
                     window.open(item.url_private)
                 } 
@@ -478,7 +504,7 @@ const FilesTemplates = ({type}) => {
                         }}
                         style={{
                             width: "100%",
-                        }}
+                        }}  
                     /> 
                 :
                 ''  
