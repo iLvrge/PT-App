@@ -9,11 +9,12 @@ import PatenTrackApi from '../../../../api/patenTrack2'
 
 
 const FigureData = ( { data, number } ) => {
-
     const classes = useStyles()
     const [loading, setLoading] = useState(false)
     const [ figures, setFigures ] = useState([])
-    const [ visible, setVisible ] = useState(false);
+    const [ visible, setVisible ] = useState(true);
+    const [ mode, setMode ] = useState('inline')
+
 
     useEffect(() => {
         let parseData = data
@@ -54,22 +55,22 @@ const FigureData = ( { data, number } ) => {
     if(loading) return <Loader/> 
 
     return (
-        <div>
+        <div>            
             <div className={classes.iconButton}>
             {
                 Array.isArray(figures) && figures.length > 0 && (
                     <Tooltip 
                         title={
-                            <Typography color="inherit" variant='body2'>{ visible === false  ? `View images in panel` : `Close images panel`}</Typography>
+                            <Typography color="inherit" variant='body2'>{ visible === 'inline'  ? `View images in panel` : `Close images panel`}</Typography>
                         } 
                         className={classes.tooltip}  
                         placement='right'
                         enterDelay={0}
                         TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
                     >
-                        <IconButton onClick={() => { setVisible(!visible); } }>
+                        <IconButton onClick={() => { setMode(mode === 'inline' ? 'modal' : 'inline'); } }>
                             { 
-                                visible === false 
+                                mode === 'inline' 
                                 ? 
                                     <PhotoAlbumIcon/>
                                 :
@@ -80,22 +81,31 @@ const FigureData = ( { data, number } ) => {
                 )
             }
             </div>
-            {                
-                Array.isArray(figures) && figures.length > 0 && visible === false && figures.map( (figure, index) => (
-                    <img key={index} src={figure.src} className={classes.figures}/>
-                ))
-            }
+            <div className={classes.inlineContainer} id='container'></div>
             {
-                Array.isArray(figures) && figures.length > 0 && (
+                Array.isArray(figures) && figures.length > 0 && mode === 'inline' && (
                     <Viewer
                         visible={visible}
-                        onClose={() => { setVisible(false); } }
+                        container={document.getElementById("container")}
                         images={figures}
+                        noClose={true}
+                        noImgDetails={true}
+                    />
+                )
+            }
+
+            {
+                Array.isArray(figures) && figures.length > 0 && mode === 'modal' && (
+                    <Viewer
+                        visible={visible}
+                        images={figures}
+                        noImgDetails={true}
+                        onClose={() => {setMode(mode === 'inline' ? 'modal' : 'inline');}}
                     />
                 )
             }
         </div>
     )
-}
+}  
 
 export default FigureData
