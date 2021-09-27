@@ -562,6 +562,7 @@ const VirtualizedTable = ({
             typeof onDoubleClick === 'function' && onDoubleClick(event, rowData)
           }}
           onClick={event => {
+            currentScrollIndex = index
             onSelect(
               event,
               rowData,
@@ -579,7 +580,7 @@ const VirtualizedTable = ({
               ? rowSelected.includes(rowData[optionalKey])
               : rowSelected != undefined
               ? rowSelected.includes(rowData[selectedKey])
-              : selected.includes(rowData.id)
+              : selected.includes(rowData.id) 
           }
         >
           {columns}

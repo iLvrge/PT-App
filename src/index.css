@@ -881,7 +881,7 @@ a.maintain svg.clean_encumbrances path{
 }
 
 .react-viewer-mask, .react-viewer-canvas{
-  top: 90px
+  top: 90px !important;
 }
 
 .scopeTooltip{
