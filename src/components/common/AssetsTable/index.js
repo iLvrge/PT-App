@@ -45,7 +45,8 @@ import {
   linkWithSheet,
   linkWithSheetOpenPanel,
   setLinkAssetListSelected,
-  setLinkAssetData
+  setLinkAssetData,
+  getForeignAssetsBySheet
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -156,6 +157,7 @@ const AssetsTable = ({
   const assetTypeAssignmentAssetsSelectedAll = useSelector(
     state => state.patenTrack2.assetTypeAssignmentAssets.selectAll,
   );
+
   const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
   const move_assets = useSelector(state => state.patenTrack2.move_assets)
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
@@ -168,6 +170,7 @@ const AssetsTable = ({
   const auth_token = useSelector(state => state.patenTrack2.auth_token)
   const link_assets_sheet_type = useSelector(state => state.patenTrack2.link_assets_sheet_type)
   const switch_button_assets = useSelector(state => state.patenTrack2.switch_button_assets)
+  const foreignAssets = useSelector(state => state.patenTrack2.foreignAssets)
   
   useEffect(() => {
     
@@ -394,7 +397,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       width: 40,
       minWidth: 40,
       label: "",
-      dataKey: "channel",
+      dataKey: "channel", 
       formatCondition: 'asset',
       headingIcon: 'slack_image',
       role: 'slack_image',      
@@ -408,7 +411,26 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       setTableColumns([...COLUMNS])
       setWidth(1500)
       if (standalone) {
-        const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+        if( type === 9 ) {
+          if(foreignAssets.selected.length > 0) {
+            const googleToken = getTokenStorage( 'google_auth_token_info' )
+            const token = JSON.parse(googleToken)  
+            const { access_token } = token  
+            if(access_token) {
+              const form = new FormData()
+              form.append('account', google_profile.email)
+              form.append('token', access_token)
+              form.append('sheet_names', JSON.stringify(foreignAssets.selectNames))
+              dispatch(getForeignAssetsBySheet(form))
+            }            
+          } else {
+            dispatch(
+              setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
+            );
+            dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
+          }          
+        }  else {
+          const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
           tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
           customers =
             selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
@@ -473,10 +495,12 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
               cols.splice(1,1)
               setTableColumns(cols)
             }
+        }
+        
       } else {
         if (transactionId != null) {
           dispatch(getAssetTypeAssignmentAssets(transactionId, false));
-        }
+        } 
       }
     }     
   }, [

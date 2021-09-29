@@ -14,7 +14,7 @@ import BigScreen from './components/BigScreen'
 import DueDilligence from './components/DueDilligence'
 import Search from './components/Search'
 import GlobalScreen from './components/GlobalScreen'
-import CorrectLayout from './components/CorrectLayout'
+import CorrectLayout from './components/CorrectLayout' 
 
 import Auth from './components/auth'
 import AuthSlack from './components/AuthSlack'
@@ -31,7 +31,7 @@ let pages = [
     path: routeList.insights,
     component: InSight,
     layout: BlankLayout
-  },
+  }, 
   {
     exact: true,
     path: routeList.resources,
@@ -114,6 +114,13 @@ let pages = [
     component: CorrectLayout,
     layout: GlobalLayout, 
     type: 1
+  },
+  {    
+    exact: true,
+    path: routeList.review_foreign_assets,
+    component: GlobalScreen,
+    layout: GlobalLayout,
+    type: 9
   }
 ] 
 

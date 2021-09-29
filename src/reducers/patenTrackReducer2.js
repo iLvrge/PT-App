@@ -247,6 +247,10 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         ...state,
         activeMenuButton: action.index,
       }
+    case types.SET_FOREIGN_ASSETS_SHEETS_SELECTIONS: 
+      return { 
+        ...state, foreignAssets: { ...state.foreignAssets, selected: action.selected, selectNames: action.names } 
+      }
     case types.SET_MAIN_CUSTOMERS_LOADING_MORE: 
       return {
         ...state,

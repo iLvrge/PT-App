@@ -74,7 +74,7 @@ const getMultiFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline
 
 class PatenTrackApi {
   static getSiteLogo() {
@@ -314,6 +314,69 @@ class PatenTrackApi {
       }  
     } 
   }
+
+  static validateForeignAssets(form) {  
+    return axios.post(`${base_new_api_url}/assets/validate/`, form, getFormUrlHeader())
+  }
+
+  static saveForeignAssets(form) { 
+    return axios.post(`${base_new_api_url}/assets/save_foreign_assets/`, form, getFormUrlHeader())
+  }
+
+  static getForeignAssetsSheets(form) {  
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelForeignAssetsSheet = c
+    })
+    return axios.post(`${base_new_api_url}/assets/foreign_assets/sheets`, form, header)
+  }
+
+  static cancelForeignAssetsSheet() {
+    if (cancelForeignAssetsSheet !== undefined) {
+      try{
+        throw cancelForeignAssetsSheet('Operation canceled by the user.') 
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }  
+    } 
+  }
+
+  static getForeignAssetsBySheet(form) { 
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelForeignAssetsBySheet = c
+    })
+    return axios.post(`${base_new_api_url}/assets/foreign_assets/sheets/assets`, form, header)
+  } 
+
+  static cancelForeignAssetsBySheet() {
+    if (cancelForeignAssetsBySheet !== undefined) {
+      try{
+        throw cancelForeignAssetsBySheet('Operation canceled by the user.') 
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }  
+    } 
+  }
+   
+  static getForeignAssetsTimeline(form) { 
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelForeignAssetTimeline = c
+    })
+    return axios.post(`${base_new_api_url}/assets/foreign_assets/sheets/timeline`, form, header)
+  } 
+
+  static cancelForeignAssetTimeline() {
+    if (cancelForeignAssetTimeline !== undefined) {
+      try{
+        throw cancelForeignAssetTimeline('Operation canceled by the user.') 
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }  
+    } 
+  }
+  
 
   static getAssetsByCPCCode( year, cpcCode, form ) { 
     return axios.post(`${base_new_api_url}/assets/cpc/${year}/${cpcCode}`, form, getFormUrlHeader())

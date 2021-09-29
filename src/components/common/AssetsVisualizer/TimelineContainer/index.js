@@ -88,7 +88,8 @@ const options = {
 
 const TIME_INTERVAL = 1000
 var tootlTip = ''
-const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
+const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) => {
+  
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -105,6 +106,9 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
   const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
   const selectedAssetAssignments = useSelector( state => state.patenTrack2.assetTypeAssignments.selected )
   const assetTypeInventors = useSelector(state => state.patenTrack2.assetTypeInventors.list)
+  const assetTypeAssignmentAssets = useSelector(
+    state => state.patenTrack2.assetTypeAssignmentAssets.list,
+  );
   const switch_button_assets = useSelector(state => state.patenTrack2.switch_button_assets)
   
   const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
@@ -122,6 +126,8 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
   const assetTypesSelected = useSelector(
     state => state.patenTrack2.assetTypes.selected,
   );
+
+  const foreignAssets = useSelector(state => state.patenTrack2.foreignAssets)
 
   const selectedItem = useSelector(state => state.ui.timeline.selectedItem)
   const auth_token = useSelector(state => state.patenTrack2.auth_token)
@@ -441,20 +447,22 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
           setTimelineRawData(data.list) //items
         }       
       } else {
-        const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-        tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-        customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected;
-
-        if( process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
-          //setIsLoadingTimelineData(true)
-          const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, [], selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
-          //setIsLoadingTimelineData(false)
-          setTimelineRawData(data.list)
-        } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-          //setIsLoadingTimelineData(true)
-          const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, [], selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
-          //setIsLoadingTimelineData(false)
-          setTimelineRawData(data.list) 
+        if(type !== 9)  {
+          const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+          tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+          customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected;
+  
+          if( process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
+            //setIsLoadingTimelineData(true)
+            const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, [], selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
+            //setIsLoadingTimelineData(false)
+            setTimelineRawData(data.list)
+          } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+            //setIsLoadingTimelineData(true)
+            const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, [], selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
+            //setIsLoadingTimelineData(false)
+            setTimelineRawData(data.list) 
+          }
         }
       } 
     }
@@ -462,6 +470,25 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle }) => {
     
   }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors, auth_token, switch_button_assets ])
 
+  useEffect(() => {
+    console.log('Timeline=>', foreignAssets, assetTypeAssignmentAssets)
+    const getForeignAssetTimelineData = async(foreignAssets, assetTypeAssignmentAssets) => {
+      if(foreignAssets.selected.length > 0 && assetTypeAssignmentAssets.length > 0) {
+        const assets = []
+        assetTypeAssignmentAssets.forEach( item => {
+          assets.push(item.asset)
+        })
+        const form = new FormData()
+        form.append('assets', JSON.stringify(assets)) 
+        PatenTrackApi.cancelForeignAssetTimeline()
+        const { data } = await PatenTrackApi.getForeignAssetsTimeline(form)
+        //setIsLoadingTimelineData(false)
+        setTimelineRawData(data.list) 
+      }
+    }
+    getForeignAssetTimelineData(foreignAssets, assetTypeAssignmentAssets)
+    
+  }, [foreignAssets, assetTypeAssignmentAssets])
 
   const redrawTimeline = () => {
     if(timelineRef.current !== null) {

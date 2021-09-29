@@ -483,8 +483,17 @@ export default makeStyles(theme => ({
     justifyContent: 'center'
   },
   inlineContainer: {
-    '& .react-viewer-mask, .react-viewer-canvas':{
+    '& .react-viewer-mask, .react-viewer-canvas': {
       top: '0px !important'
+    },
+    '& .react-viewer-icon-reset': {
+      display: 'none'
+    },
+    '& .react-viewer-mask':{
+      background: 'none'
+    },
+    '& .react-viewer-navbar': {
+      backgroundColor: '#424242'
     }
   }
 }))

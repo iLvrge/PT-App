@@ -12,6 +12,7 @@ export default {
     selectedCategory: 'due_dilligence',
     layout_id: 0,
     clipboard_assets: [],
+    foreignAssets: { selected: [], selectNames: [] },
     assetTypes: { list: [], row_select: [], selected: [], selectAll: false, loading: false, loading_companies: true },
     assetTypeCompanies: { list: [], row_select: [], total_records: 0, selected: [], selectAll: false, loading: false },
     assetTypeInventors: { list: [], total_records: 0, loading: false},

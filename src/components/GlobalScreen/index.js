@@ -16,6 +16,7 @@ import AssetDetailsContainer from '../common/AssetDetailsContainer'
 import MaintainenceAssetsList from '../common/MaintainenceAssetsList'
 import LayoutTemplates from '../common/LayoutTemplates'
 import FilesTemplates from '../common/FilesTemplates'
+import ForeignAsset from '../common/ForeignAsset'
 import { resizePane, resizePane2, editorBar } from '../../utils/splitpane'
 import { updateResizerBar } from '../../utils/resizeBar'
 
@@ -298,6 +299,7 @@ const GlobalScreen = ({
             }
         }
     }
+    console.log('GlobalScreen=>type', type)
 
     return (
         <SplitPane
@@ -318,14 +320,19 @@ const GlobalScreen = ({
                     ? 
                         <>
                             <ArrowButton arrowId={`arrow_company`} handleClick={handleCompanyBarOpen} buttonType={toggleButtonType} buttonVisible={companyButtonVisible}/>
-                            <MainCompaniesSelector 
-                                selectAll={false} 
-                                defaultSelect={''} 
-                                addUrl={true} 
-                                parentBarDrag={setVisualizerBarSize}
-                                parentBar={setVisualizeOpenBar}                                
-                            /> 
-
+                            {
+                                type == 9 
+                                ? 
+                                    <ForeignAsset />
+                                :
+                                    <MainCompaniesSelector 
+                                        selectAll={false} 
+                                        defaultSelect={''} 
+                                        addUrl={true} 
+                                        parentBarDrag={setVisualizerBarSize}
+                                        parentBar={setVisualizeOpenBar}                                
+                                    /> 
+                            }
                         </>
                     : 
                     ''

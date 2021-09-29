@@ -439,6 +439,14 @@ export const fetchParentCompanies = ( offset = 0 ) => {
   }
 }
 
+export const updateForeightAssetsSheetSelections = (selected, names) => {
+  return {
+    type: types.SET_FOREIGN_ASSETS_SHEETS_SELECTIONS,
+    selected,  
+    names
+  }
+}
+
 export const setMainCompaniesLoadingMore = data => {
   return {
     type: types.SET_MAIN_CUSTOMERS_LOADING_MORE,
@@ -1002,6 +1010,18 @@ export const setAssetTypeAssignmentsAssets = (rf_id, data, append) => {
     append
   }
 }
+
+export const getForeignAssetsBySheet = ( form ) => {
+  return async dispatch => {
+    dispatch( setAssetTypesAssignmentsAllAssetsLoading( true ) )
+    PatenTrackApi.cancelForeignAssetsBySheet()
+    const { data } = await PatenTrackApi.getForeignAssetsBySheet(form)
+    //dispatch(getChannels())
+    dispatch( setAssetTypeAssignmentAllAssets(data, true) )
+    dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
+  }
+}
+
 
 /**
  * Assets

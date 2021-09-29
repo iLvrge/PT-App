@@ -43,7 +43,8 @@ const IllustrationCommentContainer = ({
     checkChartAnalytics,
     onHandleGapSize,
     assignmentBar,
-    assignmentBarToggle }) => {
+    assignmentBarToggle,
+    type }) => {
     const classes = useStyles() 
     const iframeRef = useRef()
     const illustrationRef = useRef()
@@ -134,7 +135,6 @@ const IllustrationCommentContainer = ({
         setMenuComponent(item)
     }
 
-    
 
     return (
         <SplitPane
@@ -167,7 +167,8 @@ const IllustrationCommentContainer = ({
                         illustrationBar === true && 
                         ( search_string != '' || assetCompaniesRowSelect.length > 0 || 
                             selectedCompaniesAll === true || 
-                            selectedCompanies.length > 0
+                            selectedCompanies.length > 0 ||
+                            type === 9
                         )
                     ?
                         <IconButton 
@@ -181,7 +182,7 @@ const IllustrationCommentContainer = ({
                     ''
                 }                                 
                 {  
-                    selectedCompanies.length > 0
+                    selectedCompanies.length > 0 || type === 9
                     ?
                         showManualComponent === true && menuComponent.length > 0
                         ?                        
@@ -214,15 +215,16 @@ const IllustrationCommentContainer = ({
                         :
                         !isFullscreenOpen && 
                             illustrationBar === true && 
-                            ( search_string != '' || assetCompaniesRowSelect.length > 0 || 
+                            (   search_string != '' || 
+                                assetCompaniesRowSelect.length > 0 || 
                                 selectedCompaniesAll === true || 
-                                selectedCompanies.length > 0
-
+                                selectedCompanies.length > 0 ||
+                                type === 9
                             ) 
                         ?
                             shouldShowTimeline
                             ?
-                                <TimelineContainer assignmentBar={assignmentBar} assignmentBarToggle={assignmentBarToggle}/>
+                                <TimelineContainer assignmentBar={assignmentBar} assignmentBarToggle={assignmentBarToggle} type={type}/>
                             :
 
                                 <IllustrationContainer 
@@ -256,7 +258,7 @@ const IllustrationCommentContainer = ({
                         </IconButton> 
                         {
                             shouldShowTimeline === true ? (
-                                <TimelineContainer assignmentBar={assignmentBar} assignmentBarToggle={assignmentBarToggle}/>
+                                <TimelineContainer assignmentBar={assignmentBar} assignmentBarToggle={assignmentBarToggle} type={type}/>
                             )
                             :
                                 illustrationBar === true ? (
