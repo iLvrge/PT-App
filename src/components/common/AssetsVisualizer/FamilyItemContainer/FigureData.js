@@ -5,11 +5,11 @@ import Loader from "../../Loader"
 import PatenTrackApi from '../../../../api/patenTrack2'
 
 
-const FigureData = ( { data, number } ) => {
+const FigureData = ( { analyticsBar, data, number } ) => {
     const classes = useStyles()
-    const [loading, setLoading] = useState(false)
+    const [ loading, setLoading ] = useState(false)
     const [ figures, setFigures ] = useState([])
-
+    const [ visible, setVisible ] = useState(true)
 
     useEffect(() => {
         let parseData = data
@@ -28,6 +28,8 @@ const FigureData = ( { data, number } ) => {
     useEffect(() => {
         getFamilyData()
     }, [number])
+
+    
 
     const containerRef = node => {
         if (node !== null) {
@@ -69,19 +71,21 @@ const FigureData = ( { data, number } ) => {
     if(loading) return <Loader/> 
 
     return (
-        <div ref={containerRef}>    
+        <div ref={containerRef} className={classes.container}>    
             <div className={classes.inlineContainer} id='container'></div>
             {
                 Array.isArray(figures) && figures.length > 0 && (
                     <Viewer
-                        visible={true}
+                        visible={visible}
                         container={document.getElementById("container")}
                         images={figures}
+                        defaultScale={1}
                         minScale={1}
                         noClose={true}
                         noImgDetails={true}
                         scalable={false}
                         noResetZoomAfterChange={true}
+                        disableMouseZoom={true}
                     />
                 )
             }

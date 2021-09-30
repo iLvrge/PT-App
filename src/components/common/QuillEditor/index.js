@@ -292,7 +292,8 @@ const QuillEditor = ({
   }
 
   const onAttachmentOpenedFileAndEmail = useCallback(() => {    
-    let url = `https://mail.google.com/mail/u/0/?fs=1&tf=cm${template_document_url != '' ? '&body='+template_document_url : ''}`
+    const bodyURL = encodeURIComponent(`\n\n\n\n${template_document_url}`)
+    let url = `https://mail.google.com/mail/u/0/?fs=1&tf=cm${template_document_url != '' ? '&body='+bodyURL : ''}`
     /* if( template_document_url != '') {
       copyToClipboard(template_document_url)
 

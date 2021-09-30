@@ -883,8 +883,8 @@ a.maintain svg.clean_encumbrances path{
   margin: 0 3px
 }
 
-.react-viewer-mask, .react-viewer-canvas{
-  top: 90px !important;
+.react-viewer-inline {
+  min-height: inherit
 }
 
 .scopeTooltip{

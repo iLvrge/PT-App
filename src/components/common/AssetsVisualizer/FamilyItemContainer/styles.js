@@ -483,9 +483,9 @@ export default makeStyles(theme => ({
     justifyContent: 'center'
   },
   inlineContainer: {
-    '& .react-viewer-mask, .react-viewer-canvas': {
-      top: '0px !important'
-    },
+    display: 'flex',
+    height: '100%',
+    width: '100%',
     '& .react-viewer-icon-reset': {
       display: 'none'
     },
@@ -495,5 +495,10 @@ export default makeStyles(theme => ({
     '& .react-viewer-navbar': {
       backgroundColor: '#424242'
     }
+  },
+  container: {
+    display: 'flex',
+    height: '100%',
+    width: '100%',
   }
 }))

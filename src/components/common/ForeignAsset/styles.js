@@ -26,24 +26,28 @@ export default makeStyles(theme => ({
     importContainer: {
         display: 'flex',
         width: 600,
-        height: 500,
         padding: 20,
         margin: '50px auto'
     },
     rows: {
-        marginTop: 20
+        marginTop: 8
     },
     textarea: {
         width: '100%',
     },
     txtField: {
-        width: 100
+        width: 100,
+        marginLeft: 10
     },
     button: {
         border:'1px solid #5a5a5a !important',
         marginLeft: 15,
         textTransform: 'initial',
         padding: '3px 5px',
+        minWidth: 'auto',
+        '& .MuiButton-label':{
+            whiteSpace: 'nowrap'
+        },
         '&:hover':{
             border:'1px solid #e60000 !important',
             color: '#e60000 !important'
@@ -51,5 +55,8 @@ export default makeStyles(theme => ({
         '&:first':{
             marginLeft: 5
         },
+    },
+    headerButton: {
+        textTransform: 'initial'
     }
 }))

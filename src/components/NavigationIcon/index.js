@@ -17,7 +17,7 @@ import {
 import useStyles from './styles'
 
 {/* <IconButton onClick={click} className={(( bar === true ) || (bar === false && data.length > 0 && (selected.length > 0 || selectAll === true))) ? cl.filterButtonActive : ''}></IconButton> */}
-const NavigationIcon = ({click, tooltip, bar, t, disabled}) => {
+const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight}) => {
     const classes = useStyles() 
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
@@ -64,7 +64,7 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled}) => {
                             :
                             bar === true   ? 'active' 
                             :  
-                            t === 1 && (selectedCompanies.length > 0 || selectedCompaniesAll === true) ? 'selection_indicator'
+                            t === 1 &&  highlight == undefined && (selectedCompanies.length > 0 || selectedCompaniesAll === true) ? 'selection_indicator'
                             :
                             t === 2 && (assetTypesSelected.length > 0 || assetTypesSelectedAll === true) ? 'selection_indicator'
                             :
@@ -77,7 +77,7 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled}) => {
                             t === 10 && (driveTemplateFrameMode === true && ( template_document_url != null || new_drive_template_file != null )) ? 'selection_indicator'
                             :
                             ''
-                            } 
+                        } 
                         {...(disabled && {disabled: true})} >
                         {
                             t === 0 

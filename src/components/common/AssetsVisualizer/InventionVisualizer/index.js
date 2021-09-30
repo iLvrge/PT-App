@@ -139,7 +139,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         showGrid: true,
         axisColor: '#fff',
         keepAspectRatio: false,
-        verticalRatio: 0.5,
+        verticalRatio: 0.4,
         xLabel: '',
         yLabel: '',
         zLabel: '',
@@ -557,7 +557,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
     useEffect(() => {
         if( graphRef.current != undefined &&  graphRef.current !== null && graphRawGroupData.length > 0 && graphRawData.length > 0 && !isLoadingCharts ) {
-            let fontSize = 18, step = 1, verticalRatio = 0.5
+            let fontSize = 18, step = 1, verticalRatio = 0.4
             if( visualizerBarSize == '100%' ) {
                 if(defaultSize != '0') {
                     step = 3
@@ -565,7 +565,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 } 
             } else if(visualizerBarSize == '30%') {
                 fontSize = 18
-                step = 8
+                step = 7
             }
             const height = graphContainerRef.current.parentNode !== null ? graphContainerRef.current.parentNode.parentNode !== null ? `${graphContainerRef.current.parentNode.parentNode.clientHeight - 50 }px` : `${graphContainerRef.current.parentNode.clientHeight - 50 }px` : '100%'
             options = { ...options, axisFontSize: fontSize, height, yStep: step, verticalRatio }

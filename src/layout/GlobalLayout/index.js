@@ -274,6 +274,9 @@ const GlobalLayout = (props) => {
 
 
     const handleCompanyBarOpen = (event) => {
+        if(props.type === 9) {
+            history.push('/')
+        }
         setToggleButtonType( !toggleButtonType )
         setOpenBar( !openBar )
         if(!openBar === false) {
@@ -598,33 +601,38 @@ const GlobalLayout = (props) => {
         },
         {
             tooltip: 'Filter by Companies',
-            bar: openBar,
+            bar: props.type === 9 ? false : openBar,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleCompanyBarOpen,
-            t: 1
+            t: 1,
+            ...(props.type === 9 && {highlight: false})
         },
         {
             tooltip: 'Filter by Activities',
             bar: openTypeBar,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleTypeBarOpen,
-            t: 2
+            t: 2,
+            ...(props.type === 9 && {disabled: true})
         },
         {
             tooltip: 'Filter by Parties',
             bar: openOtherPartyBar,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleOtherPartyBarOpen,
-            t: 3
+            t: 3,
+            ...(props.type === 9 && {disabled: true})
         },
         {
             tooltip: 'Filter by Employees',
             bar: openInventorBar,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleInventorBarOpen,
-            t: 11
+            t: 11,
+            ...(props.type === 9 && {disabled: true})
         },
         {
             tooltip: 'Filter by Transactions',
             bar: openAssignmentBar,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleAssignmentBarOpen,
-            t: 4
+            t: 4,
+            ...(props.type === 9 && {disabled: true})
         },
         {
             tooltip: 'Assets',
@@ -772,7 +780,7 @@ const GlobalLayout = (props) => {
                         <div className={classes.flex}>                            
                             {
                                 topToolBar.map( (item, index) => (
-                                    <NavigationIcon key={index} {...item}/>
+                                    <NavigationIcon key={index} {...item} />
                                 ))
                             }
                         </div>

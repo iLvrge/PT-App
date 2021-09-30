@@ -82,12 +82,12 @@ const ForeignAsset = () => {
             minWidth: 200,
             oldWidth: 200,
             draggable: true,
-            label: 'Sheet name',        
+            label: 'External Lists',        
             dataKey: 'sheet_name',
             align: "left", 
             badge: true,
             show_button: true,
-            button: <Button onClick={onHandleImport}> <Add/> Import</Button>
+            button: <Button onClick={onHandleImport}> <Add/> <span className={classes.headerButton}>Add List</span></Button>
         }
     ]
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)
@@ -191,6 +191,21 @@ const ForeignAsset = () => {
             setTimeout(openGoogleWindow, TIMER_OPEN) //open google login popup
         }
     }, [ googleLoginRef ])
+
+    const onHandleRetrieveList = () => {
+        const googleToken = getTokenStorage( 'google_auth_token_info' )
+        if(googleToken && googleToken != '' && googleToken!= null) {
+            const token = JSON.parse(googleToken)      
+            const { access_token } = token  
+            if(access_token && google_profile !== null) {
+                getForeignAssetsSheets(google_profile.email, access_token)
+            } else {
+                dispatch(getGoogleProfile(token))
+            }
+        } else {
+            setTimeout(openGoogleWindow, TIMER_OPEN)
+        }
+    }
 
     const getForeignAssetsSheets = async(email, token) => {
         if(sendRequest === false) {
@@ -371,7 +386,7 @@ const ForeignAsset = () => {
                 style={{backgroundColor: 'rgba(0, 0, 0, 0.8)'}}
             >
                 <>
-                    <ImportAsset closeModal={setOpen}/> 
+                    <ImportAsset closeModal={setOpen} callback={onHandleRetrieveList}/> 
                 </>
             </Modal>
         </Paper>

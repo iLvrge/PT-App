@@ -7,7 +7,7 @@ import PatenTrackApi from '../../../api/patenTrack2'
 import { getTokenStorage } from '../../../utils/tokenStorage'
 import useStyles from "./styles"
 
-const ImportAsset = ({closeModal}) => {
+const ImportAsset = ({closeModal, callback}) => {
     const classes = useStyles()
     const [ isLoading, setIsLoading ] = useState(false)
     const textAreaRef  = useRef(null)
@@ -94,6 +94,7 @@ const ImportAsset = ({closeModal}) => {
 
     const validateRawItems = async(items) => {
         console.log('Validate Raw items with database', items);
+        setInvalidAssets([])
         const form = new FormData()
         form.append('foreign_assets', JSON.stringify(items))
         const { data } = await PatenTrackApi.validateForeignAssets(form)
@@ -116,15 +117,24 @@ const ImportAsset = ({closeModal}) => {
             form.append('user_account', google_profile.email)
             form.append('access_token', access_token)
             const { data } = await PatenTrackApi.saveForeignAssets(form)
-
-            if( data !== null && data.length > 0) {
-                setIsLoading(false)
-                closeModal(false)
-            } else {
+            if(data !== null ) {
+                setIsLoading(false)         
+                if( data.error == '') {
+                    setIsLoading(false)
+                    closeModal(false)
+                    callback()                    
+                    alert(data.message)
+                } else if(data.error !== ''){
+                    alert(data.error)
+                } else {
+                    alert('Error while saving foreign assets')
+                }
+            } else{      
+                setIsLoading(false)      
                 alert('Error while saving foreign assets')
             } 
         } else {
-            alert('Some of the assets are invalid')
+            alert(`Some of the assets are invalid\n\n ${JSON.stringify(invalidAssets)}`)
         }
     }
 
@@ -156,16 +166,16 @@ const ImportAsset = ({closeModal}) => {
         <Paper className={classes.importContainer} square id={`import_container`}>
             <Grid container className={classes.dashboard}>
                 <Grid item lg={12} md={12} sm={12} xs={12} className={classes.flexColumn}>
-                    <div className={classes.rows}>
+                    <Typography color="inherit" variant='body2'>Paste here the list of foreign assets:</Typography>
+                    <div className={classes.rows}>                        
                         <TextField
                             multiline
-                            label="Paste here the list of foreign assets:"
                             rows={20}
                             variant="outlined" 
                             value={assetsValue}
                             onChange={handleChange}
                             ref={textAreaRef}                       
-                        />
+                        /> 
                     </div>
                     <div className={classes.rows}>
                         <Typography color="inherit" variant='body2'>
@@ -178,7 +188,7 @@ const ImportAsset = ({closeModal}) => {
                                 ref={textFiledRef}
                             /> 
                             <LoadingImportButton />
-                        </Typography>
+                        </Typography>     
                     </div>
                 </Grid>
             </Grid>

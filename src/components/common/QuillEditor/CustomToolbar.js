@@ -161,7 +161,7 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
 
       <Tooltip 
         title={
-          <Typography color="inherit" variant='body2'>{'Share illustration for selected assets'}</Typography>
+          <Typography color="inherit" variant='body2'>{'Share Selected Assets'}</Typography>
         }    
         enterDelay={0}
         TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}

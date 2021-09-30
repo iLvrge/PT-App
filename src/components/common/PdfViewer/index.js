@@ -126,19 +126,15 @@ function PdfViewer(props) {
         
         <div className={classes.container}>
           {
-            (pdfTab === 2 || pdfTab === 3) && mainPdf != 'about:blank'
-            ?
-            <iframe id={'iframe_main'} title='main iframe' onLoad={() => checkHeight(2)} className={classes.outsource} src={mainPdf}/>
-            :
             pdfTab === 1 && formPdf != 'about:blank'
             ?
             <iframe id={'iframe_form'} title='form iframe' className={classes.outsource} onLoad={() => checkHeight(1)} src={formPdf}/>
             :
-            agreementPdf != 'about:blank' 
+            pdfTab === 0 && agreementPdf != 'about:blank' 
             ? 
             <iframe id={'iframe_agreement'} title='agreement iframe' onLoad={() => checkHeight(0)} className={classes.outsource} src={agreementPdf}/>
             :
-            ''
+            <iframe id={'iframe_main'} title='main iframe' onLoad={() => checkHeight(2)} className={classes.outsource} src={mainPdf}/>
           }   
         </div>
         {

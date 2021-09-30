@@ -251,7 +251,12 @@ const AssetDetailsContainer = ({
                       ) : familyItemMode === true ? (
                           <FamilyItemContainer 
                             item={selectedAssetsFamilyItem} 
-                            onClose={onCloseFamilyItemMode} />
+                            onClose={onCloseFamilyItemMode} 
+                            analyticsBar={analyticsBar} 
+                            chartBar={chartBar} 
+                            illustrationBar={illustrationBar}
+                            visualizerBarSize={visualizerBarSize} 
+                          />
                       ) : (
                         <InventionVisualizer 
                             defaultSize={defaultSize} 
