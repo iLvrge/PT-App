@@ -24,7 +24,7 @@ export default makeStyles(theme => ({
   },
   secondaryGroup: {
     display: 'flex',
-    padding: '0 15px',
+    padding: '0 5px',
     flexGrow: 1
   },
   review: {

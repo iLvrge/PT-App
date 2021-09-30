@@ -84,7 +84,8 @@ const ClaimData = ({ data, number }) => {
                         classList
                             .add('claim-text')
                         classList
-                            .add('patent-text-1')      
+                            .add('patent-text')    
+                        elementParent.parentElement.classList.add('claim-dependent') 
                     }                
                 }) 
             }
