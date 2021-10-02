@@ -277,7 +277,7 @@ const GlobalLayout = (props) => {
     }, [ driveTemplateMode ])
 
     const handleKeyEvent = (event) => {
-        event.preventDefault()
+        //event.preventDefault()
         console.log('handleKeyEvent', event)
         if(event.key === 'ArrowDown' || event.key === 'ArrowUp' ) {
             console.log('handleKeyEvent=>assetTableFocus', assetTableFocus)
