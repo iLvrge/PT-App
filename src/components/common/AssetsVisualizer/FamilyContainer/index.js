@@ -172,14 +172,15 @@ const FamilyContainer = ({ family, onClose }) => {
             }
         }
         /* console.log(items.current, start, end) */
-        timelineRef.current.setItems(items.current)
-        timelineRef.current.setOptions({ ...options, start, end, min: start, max: end })
+        setTimeout(() => {
+            timelineRef.current.setItems(items.current)
+            timelineRef.current.setOptions({ ...options, start, end, min: start, max: end })
+        }, 50)
     }, [ timelineRawData, isLoadingTimelineRawData, timelineContainerRef ])
 
     return(
-        <Paper className={classes.root}>
-            <ClickAwayListener onClickAway={handleClickAway}>
-                <div className={classes.root}>
+        <Paper className={classes.root}>   
+            <div className={classes.root}>
                 <div
                     id={`familyTimeline`}
                     style={{ 
@@ -189,9 +190,8 @@ const FamilyContainer = ({ family, onClose }) => {
                     ref={timelineContainerRef}
                     className={classes.timeline}
                 />
-                    {/* { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> } */} 
-                </div>
-            </ClickAwayListener>
+                {/* { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> } */} 
+            </div>
         </Paper>
     )
 }

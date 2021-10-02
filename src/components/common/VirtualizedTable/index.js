@@ -90,6 +90,7 @@ const VirtualizedTable = ({
   getMoreRows,
   onScrollTable,
   scrollTop,
+  selectItemWithArrowKey,
   ...tableProps
 }) => {
   const classes = useStyles();
@@ -123,16 +124,7 @@ const VirtualizedTable = ({
 
   useEffect(() => {
     setNoOfSelectedItems([...selected])
-  }, [ selected ])
-
-  useEffect(() => {
-    if(containerRef.current !== null) {
-      containerRef.current.addEventListener('keydown', handleKeyEvent)
-      /* return () => {
-        containerRef.current.removeEventListener('keydown', handleKeyEvent)
-      } */
-    }    
-  }, [containerRef])   
+  }, [ selected ])  
 
   const createSortHandler = useCallback(
     property => () => {
@@ -724,21 +716,6 @@ const VirtualizedTable = ({
       onScrollTable(scrollTop)
     }
   }
-
-  const handleKeyEvent = useCallback(event => {
-    event.preventDefault()
-    if(event.key === 'ArrowDown') {
-      currentScrollIndex++
-      
-    }
-    if (event.key === 'ArrowUp' ) {
-      currentScrollIndex--;
-    }
-    const findRow =  containerRef.current.querySelector(`.rowIndex_${currentScrollIndex}`)
-    if(findRow !== null) {
-      findRow.click()
-    }  
-  }, [currentScrollIndex])
 
   return (
     <div ref={containerRef} style={{display: 'flex', position: 'relative', height: '100%', width: '100%'}}>

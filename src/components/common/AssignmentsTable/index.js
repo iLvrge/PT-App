@@ -530,7 +530,10 @@ const onHandleClickRow = useCallback(
         const element = e.target.closest(
         "div.ReactVirtualized__Table__rowColumn",
         );
-        const index = element.getAttribute("aria-colindex");
+        let index = -1
+        if(element !== null ) {
+          index = element.getAttribute("aria-colindex");
+        }        
         if (index == 2) {
             if (currentSelection != row.rf_id) {
               setCurrentSelection(row.rf_id);

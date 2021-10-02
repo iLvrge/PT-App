@@ -5,7 +5,7 @@ import Loader from "../../Loader"
 import PatenTrackApi from '../../../../api/patenTrack2'
 
 
-const FigureData = ( { analyticsBar, data, number } ) => {
+const FigureData = ( { analyticsBar, illustrationBar, visualizerBarSize, data, number } ) => {
     const classes = useStyles()
     const [ loading, setLoading ] = useState(false)
     const [ figures, setFigures ] = useState([])
@@ -29,27 +29,6 @@ const FigureData = ( { analyticsBar, data, number } ) => {
         getFamilyData()
     }, [number])
 
-    
-
-    const containerRef = node => {
-        if (node !== null) {
-            const containerButtons = node.querySelector('.react-viewer-toolbar')
-            console.log('containerButtons', containerButtons, node)
-            if(containerButtons !== null) {                
-                const resetButton = containerButtons.querySelector('.react-viewer-icon-reset')
-                console.log('resetButton', resetButton)
-                if( resetButton !== null ) {
-                    console.log('resetButton.parentElement.style.display', resetButton.parentElement.style.display)
-                    resetButton.parentElement.style.display = 'none'
-                }
-            } else {
-                setTimeout(() => {
-                    containerRef(node)
-                }, 500)
-            }
-        }
-    }
-
     const getFamilyData = async () => {
         setLoading(true)
         PatenTrackApi.cancelFamilyData()
@@ -71,7 +50,7 @@ const FigureData = ( { analyticsBar, data, number } ) => {
     if(loading) return <Loader/> 
 
     return (
-        <div ref={containerRef} className={classes.container}>    
+        <div className={classes.container}>    
             <div className={classes.inlineContainer} id='container'></div>
             {
                 Array.isArray(figures) && figures.length > 0 && (

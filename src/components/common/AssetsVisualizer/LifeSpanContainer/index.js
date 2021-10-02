@@ -202,6 +202,8 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize}) => {
                             key={tab}
                             label={tab}
                             classes={{ root: classes.tab }}
+                            disableFocusRipple={true}
+                            disableRipple={true}
                         />
                     )) 
                 }

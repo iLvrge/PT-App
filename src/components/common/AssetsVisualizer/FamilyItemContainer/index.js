@@ -13,7 +13,7 @@ import { numberWithCommas, applicationFormat, capitalize } from "../../../../uti
 
 import useStyles from './styles'
 
-const FamilyItemContainer = ({ item, onClose }) => {
+const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrationBar, visualizerBarSize }) => {
 
     const classes = useStyles()
     const [ selectedTab, setSelectedTab ] = useState(0)
@@ -93,6 +93,15 @@ const FamilyItemContainer = ({ item, onClose }) => {
         console.log('FamilyItemContainer_selectedNumber', selectedNumber)
     }, [])
 
+    useEffect(() => {
+        if(selectedTab === 4) {
+            setSelectedTab(-1)
+            setTimeout(() => {
+                setSelectedTab(4)
+            }, 1)
+        }
+    }, [analyticsBar, illustrationBar, visualizerBarSize])
+
     const onCloseFamilyMode = useCallback(() => {
         //dispatch(toggleFamilyMode());
       }, [/*dispatch*/]);
@@ -125,7 +134,7 @@ const FamilyItemContainer = ({ item, onClose }) => {
                                     {selectedTab === 1 && <AbstractData data={abstractData} number={selectedNumber} />}
                                     {selectedTab === 2 && <SpecificationData data={specificationData} number={selectedNumber} />}                                    
                                     {selectedTab === 3 && <ClaimData data={claimsData} number={selectedNumber} />}                                    
-                                    {selectedTab === 4 && <FigureData data={figureData} number={selectedNumber}/>}
+                                    {selectedTab === 4 && <FigureData data={figureData} number={selectedNumber} analyticsBar={analyticsBar} illustrationBar={illustrationBar} visualizerBarSize={visualizerBarSize}/>}
                                 </Grid> 
                             </Grid>
                             :
@@ -139,6 +148,8 @@ const FamilyItemContainer = ({ item, onClose }) => {
                                         key={index}
                                         className={classes.tab}
                                         label={item}
+                                        disableFocusRipple={true}
+                                        disableRipple={true}
                                     />
                                 ))
                             }                            

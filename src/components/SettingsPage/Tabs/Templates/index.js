@@ -20,7 +20,7 @@ import PatenTrackApi from '../../../../api/patenTrack2';
 
 import { getTokenStorage } from '../../../../utils/tokenStorage'
 
-const Repository = () => {
+const Templates = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const googleLoginRef = useRef(null)
@@ -451,47 +451,23 @@ const Repository = () => {
     return (
         <SplitPane
             className={classes.splitPane}
-            split="vertical"	
-            size={300}
-            onDragStarted={() => {
-                setIsDrag(!isDrag)
-            }}
-            onDragFinished={(size) => {
-                setIsDrag(!isDrag)
-            }}
-            pane2Style={{
-                pointerEvents: isDrag === true ? 'none' : 'auto',
-            }}
+            split="vertical"
+            size={200}
         >
-            <div className={classes.flexColumn}>
-                <div className={classes.heading}>
-                    <Typography variant="body1" component="h2" className={classes.noWrap}>
-                        <span className={classes.relativeLockedIcon}>
-                        {
-                        repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('container_id') && repo_folder_lock === 1
-                        ?
-                        <LockIcon onClick={(event) => unLockRepoFolder(event, 0)}/>
-                        :
-                        <LockOpenIcon onClick={(event) => unLockRepoFolder(event, 1)}/>
-                        }
-                        </span> Repository: <BreadCrumbs  type={2} click={repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('container_id') && repo_folder_lock === 1 ? true : false}/>
-                    </Typography>
-                </div>
-                <div className={classes.drive}>
+            <div className={classes.flexColumn}> 
+                <div className={classes.drive}  style={{height: '100vh'}}>
                     <VirtualizedTable
                         classes={classes}
                         selected={selectItems}
-                        selectedKey={'id'}
-                        rowSelected={selectRepositoryDriveRow}
-                        rows={repoDriveFiles.files}
+                        selectedKey={'layout_id'}
+                        rowSelected={selectedRow}
+                        rows={layoutDriveFiles}
                         rowHeight={rowHeight}
                         headerHeight={rowHeight}
-                        columns={headerRepositoryColumns}
-                        onDoubleClick={onHandleDoubleClick}
-                        onSelect={handleClickRepositoryDriveRow}
+                        columns={headerColumns}                        
+                        onSelect={handleClickRow}
                         onSelectAll={handleSelectAll}
                         defaultSelectAll={selectedAll}
-                        disableHeader={true}
                         responsive={true}
                         width={width} 
                         containerStyle={{ 
@@ -501,23 +477,71 @@ const Repository = () => {
                         style={{
                             width: '100%'
                         }}
-                    /> 
-                </div> 
+                    />
+                </div>                
             </div>
-            <div>
-                {
-                    selected != null 
-                    ?
-                    <iframe src={`${selected}`} className={classes.frame}></iframe>
-                    :
-                    ''
-                }
-                <span ref={googleLoginRef}>
-                    <Googlelogin/>
-                </span>
-            </div>                    
+            <SplitPane
+            className={classes.splitPane}
+            split="vertical"
+            size={300}	
+            >
+                <div className={classes.flexColumn}>
+                    <div className={classes.heading}>
+                        <Typography variant="body1" component="h2" className={classes.noWrap}>
+                            <span className={classes.relativeLockedIcon}>
+                            {
+                               repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('template_container_id') && templates_folder_lock === 1
+                               ?
+                               <LockIcon onClick={(event) => unLockTemplateFolder(event, 0)}/>
+                               :
+                               <LockOpenIcon onClick={(event) => unLockTemplateFolder(event, 1)}/>
+                            }
+                            </span> Templates:  <BreadCrumbs type={1} click={repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('template_container_id') && templates_folder_lock === 1 ? true : false}/>
+                        </Typography>
+                    </div>
+                    <div className={classes.drive}>
+                        <VirtualizedTable 
+                            classes={classes}
+                            selected={selectedDriveItems}
+                            selectedKey={'id'}
+                            rowSelected={selectDriveRow}
+                            rows={driveFiles}
+                            rowHeight={rowHeight}
+                            headerHeight={rowHeight}
+                            columns={headerDriveColumns}
+                            onDoubleClick={onHandleDoubleClick}
+                            onSelect={handleClickDriveRow}
+                            onSelectAll={handleSelectAll}
+                            defaultSelectAll={selectedAll}
+                            disableRowKey={'mimeType'}
+                            disableHeader={true}
+                            responsive={true}
+                            width={width} 
+                            containerStyle={{ 
+                                width: '100%',
+                                maxWidth: '100%'
+                            }}
+                            style={{
+                                width: '100%'
+                            }}
+                        /> 
+                    </div>   
+                </div>         
+                <div>
+                    {
+                        selected != null 
+                        ?
+                        <iframe src={`${selected}`} className={classes.frame}></iframe>
+                        :
+                        ''
+                    }
+                    <span ref={googleLoginRef}>
+                        <Googlelogin/>
+                    </span>
+                </div>
+            </SplitPane>
         </SplitPane>
     ) 
 }
 
-export default Repository
+export default Templates

@@ -10,20 +10,24 @@ import CompaniesAdresses from './Tabs/Compaines/Adresses'
 import CompaniesLawFirms from './Tabs/Compaines/LawFirms'
 import Slacks from './Tabs/Slacks'
 import Users from './Tabs/Users'
+import Templates from './Tabs/Templates'
 import Repository from './Tabs/Repository'
+import Utilities from './Tabs/Utilities'
 import Documents from './Tabs/Documents/index'
 import Professionals from './Tabs/Professionals'
 import LawFirms from './Tabs/LawFirms'
 import Grid from '@material-ui/core/Grid'
 
 
-import { setBreadCrumbs } from  '../../actions/patentTrackActions2'
+import { setBreadCrumbs } from  '../../actions/patentTrackActions2' 
 import { setControlModal } from '../../actions/uiActions'
 import NavigationIcon from '../../components/NavigationIcon'
 
 const TABS = [
   { label: 'Slacks', value: 'slacks', component: Slacks },
+  { label: 'Templates', value: 'templates', component: Templates },
   { label: 'Repository', value: 'repository', component: Repository },
+  { label: 'Utilities', value: 'utilities', component: Utilities },
   { label: 'Users', value: 'users', component: Users },
   { label: 'Professionals', value: 'professionals', component: Professionals },
   { label: 'Documents', value: 'documents', component: Documents },
@@ -51,7 +55,9 @@ function SettingsPage() {
   const [ openBar, setOpenBar ] = useState(false)
   const [ openCompanyBar, setOpenCompanyBar ] = useState(false)
   const [ openTeamBar, setOpenTeamBar ] = useState(false)
+  const [ openTemplateBar, setOpenTemplateBar ] = useState(false)
   const [ openDocumentBar, setOpenDocumentBar ] = useState(false)
+  const [ openUtilitiesBar, setOpenUtilitiesBar ] = useState(false)
   const [ openAddressBar, setOpenAddressBar ] = useState(false)
   const [ openLawfirmsBar, setOpenLawfirmsBar ] = useState(false)
   const [ openSlackBar, setOpenSlackBar ] = useState(false)
@@ -78,8 +84,14 @@ function SettingsPage() {
       case 'users':
         setOpenTeamBar(true)
         break;
+      case 'templates':
+        setOpenTemplateBar(true)
+        break;
       case 'repository':
         setOpenDocumentBar(true)
+        break;
+      case 'utilities':
+        setOpenUtilitiesBar(true)
         break;
       case 'companies/addresses':
         setOpenAddressBar(true)
@@ -118,7 +130,9 @@ function SettingsPage() {
     setOpenBar(false)
     setOpenCompanyBar(false)
     setOpenTeamBar(false)
+    setOpenTemplateBar(false)
     setOpenDocumentBar(false)
+    setOpenUtilitiesBar(false)
     setOpenAddressBar(false)
     setOpenLawfirmsBar(false)
     setOpenSlackBar(false)
@@ -130,10 +144,22 @@ function SettingsPage() {
     history.push('/settings/slacks')  
   }
 
+  const handleTemplatesLink = () => {
+    resetAll()
+    setOpenTemplateBar(true)
+    history.push('/settings/templates')  
+  }
+
   const handleRepositoryLink = () => {
     resetAll()
     setOpenDocumentBar(true)
     history.push('/settings/repository')  
+  }
+
+  const handleUtilitiesLink = () => {
+    resetAll()
+    setOpenUtilitiesBar(true)
+    history.push('/settings/utilities')  
   }
 
   const handleUsersLink = () => {
@@ -204,11 +230,23 @@ function SettingsPage() {
       t: 33
     },    
     {
-      tooltip: 'Documents and Templates',
+      tooltip: 'Templates',
+      bar: openTemplateBar,
+      click: handleTemplatesLink,
+      t: 32
+    }, 
+    {
+      tooltip: 'Documents',
       bar: openDocumentBar,
       click: handleRepositoryLink,
       t: 32
-    }, 
+    },
+    {
+      tooltip: 'Utilities',
+      bar: openUtilitiesBar,
+      click: handleUtilitiesLink,
+      t: 32
+    },
     {
       tooltip: 'Companies Addresses',
       bar: openAddressBar,

@@ -74,7 +74,7 @@ const getMultiFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder
 
 class PatenTrackApi {
   static getSiteLogo() {
@@ -324,7 +324,7 @@ class PatenTrackApi {
   }
 
   static getForeignAssetsSheets(form) {  
-    let header = getHeader()
+    let header = getFormUrlHeader()
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelForeignAssetsSheet = c
     })
@@ -342,7 +342,7 @@ class PatenTrackApi {
   }
 
   static getForeignAssetsBySheet(form) { 
-    let header = getHeader()
+    let header = getFormUrlHeader()
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelForeignAssetsBySheet = c
     })
@@ -360,7 +360,7 @@ class PatenTrackApi {
   }
    
   static getForeignAssetsTimeline(form) { 
-    let header = getHeader()
+    let header = getFormUrlHeader()
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelForeignAssetTimeline = c
     })
@@ -919,7 +919,21 @@ class PatenTrackApi {
   }
 
   static getRepoFolder( userAccount ) {
-    return axios.get(`${base_new_api_url}/documents/repo_folder?user_account=${userAccount}`,  getHeader())
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelGetRepoFolder = c
+    })
+    return axios.get(`${base_new_api_url}/documents/repo_folder?user_account=${userAccount}`,  header)
+  }
+
+  static cancelGetRepoFolder() {
+    if (cancelGetRepoFolder !== undefined) {
+      try{
+        throw cancelGetRepoFolder('Operation canceled by the user.') 
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }  
+    } 
   }
 
   static addRepoFolder( data ) {

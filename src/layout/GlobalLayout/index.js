@@ -84,6 +84,7 @@ const GlobalLayout = (props) => {
     const [ illustrationBarSize , setIllustrationBarSize ] = useState('50%')
     const [ visualizerBarSize , setVisualizerBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? '30%' : '0%')
 
+    const [ assetTableFocus, setAssetTableFocus ] = useState( false )
     const [ companyButtonVisible, setCompanyButtonVisible ] = useState(false)
     const [ typeButtonVisible, setTypeButtonVisible ] = useState(false)
     const [ otherPartyButtonVisible, setOtherPartyButtonVisible ] = useState(false)
@@ -113,8 +114,6 @@ const GlobalLayout = (props) => {
     const pdfView = useSelector(state => state.patenTrack.pdfView)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
 
-    
-
     useEffect(() => {
         editorBar() // run to find editor width
         window.addEventListener("resize", editorBar) // add on resize window 
@@ -125,6 +124,11 @@ const GlobalLayout = (props) => {
         if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
             dispatch(toggleLifeSpanMode(true))
         }
+    }, [])
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyEvent)
+        return () => window.removeEventListener("keydown", handleKeyEvent)
     }, [])
 
     useEffect(() => {
@@ -272,6 +276,43 @@ const GlobalLayout = (props) => {
         editorBar()
     }, [ driveTemplateMode ])
 
+    const handleKeyEvent = (event) => {
+        event.preventDefault()
+        console.log('handleKeyEvent', event)
+        if(event.key === 'ArrowDown' || event.key === 'ArrowUp' ) {
+            console.log('handleKeyEvent=>assetTableFocus', assetTableFocus)
+            let tableContainer = document.getElementById('assets_type_assignment_all_assets'), findActiveRow = null
+            if(tableContainer !== null) {
+                findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                if(findActiveRow === null) {
+                    tableContainer = document.getElementById('assets_assignments')
+                    findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                }
+            }
+
+            if(findActiveRow !== null) {
+                const classList = findActiveRow.className.split(/\s+/);
+                const findClass = classList.filter( c => c.indexOf('rowIndex_') !== -1 ? c : '')
+                if(findClass.length > 0) {
+                    let index = findClass[0].toString().replace('rowIndex_', '')
+                    if(index !== '' && !isNaN(index)){
+                        index = Number(index) 
+                        if (event.key === 'ArrowUp' ) {
+                            index = index - 1 
+                        } else if(event.key === 'ArrowDown') {
+                            index = index + 1 
+                        }
+                    }
+                    if(index >= 0) {
+                        const findNextRow =  tableContainer.querySelector(`.rowIndex_${index}`)
+                        if(findNextRow !== null) {
+                            findNextRow.click()  
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     const handleCompanyBarOpen = (event) => {
         if(props.type === 9) {
@@ -280,7 +321,7 @@ const GlobalLayout = (props) => {
         setToggleButtonType( !toggleButtonType )
         setOpenBar( !openBar )
         if(!openBar === false) {
-            setCompanyBarSize(0)
+            setCompanyBarSize(0)  
         } else {
             setCompanyBarSize(200)
 
@@ -585,12 +626,14 @@ const GlobalLayout = (props) => {
     }
 
     const handleOpenSettings = useCallback(() => {
-        history.push('/settings/repository')
+        history.push('/settings/templates')
     }, [ history ])
 
     const handleAlertPop = () => {
         alert('Message....')
     }
+
+    
 
     const topToolBar = [
         {
@@ -772,7 +815,7 @@ const GlobalLayout = (props) => {
  
 
     return (
-        <div className={classes.root}>
+        <div className={classes.root} id='main'>
             <NewHeader />
             <Grid container className={classes.dashboardWarapper}>
                 <Grid container className={classes.dashboard}>

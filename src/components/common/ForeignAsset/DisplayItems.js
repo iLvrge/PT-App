@@ -1,0 +1,83 @@
+import React, {useRef, useEffect, useState} from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Paper, Grid, Typography, TextField, Button, CircularProgress  } from  '@material-ui/core'
+import { Close } from "@material-ui/icons"
+import useStyles from "./styles"
+
+const DisplayItems = ({items, invalidItems, updateItems}) => {
+    const classes = useStyles()
+    const [activeItem, setActiveItem] = useState(null)
+    const [currentItem, setCurrentItem] = useState(null)
+
+    
+    const onChangeItem = (event, index, item) => {
+        setCurrentItem(event.target.value)
+    }
+
+    const onItemKeyPress = (event, index, item) => {
+        event.preventDefault()
+        if (event.key === 'Enter') {
+            const element = event.target.offsetParent.offsetParent.offsetParent
+            element.querySelector('.input_item').style.display = 'none'
+            element.querySelector('.MuiTypography-root').style.display = 'block'            
+            const oldItems = [...items]
+            oldItems[activeItem] = currentItem
+            updateItems(oldItems)
+            setActiveItem(null)
+            setCurrentItem(null)         
+        }
+    }
+
+
+    const deleteItem = (event, index, item) => {
+        const confirm = window.confirm("Delete the item?")
+        if(confirm) {
+            const oldItems = [...items]
+            oldItems.splice(index, 1)
+            updateItems(oldItems)
+        }        
+    }
+
+    const onDoubleClick = (event, index, item) => {
+        const element = event.target.parentElement
+        element.querySelector('.input_item').style.display = 'block'
+        element.querySelector('.MuiTypography-root').style.display = 'none'
+        setActiveItem(index)
+        setCurrentItem(item)
+    }
+
+    console.log('invalidItems', invalidItems)
+
+    return (
+        <Paper className={classes.items} square>
+            {
+                items.length > 0 && items.map( (row, index) => (
+                    <div 
+                        key={index} 
+                        className={classes.item} 
+                        onDoubleClick = { (event) => { onDoubleClick(event, index, row)
+                      }}>                        
+                        <Typography color="inherit" variant='body2' className={invalidItems.includes(row) ? classes.item_error : classes.item_valid}>{row}</Typography>
+                        <div className={'input_item'}>
+                            {
+                                index === activeItem
+                                ?
+                                    <TextField 
+                                        variant="standard" 
+                                        value={currentItem}
+                                        onChange={(event) => onChangeItem(event, index, row)}
+                                        onKeyPress={(event) => onItemKeyPress(event, index, row)}
+                                    />
+                                :
+                                ''
+                            }
+                        </div>
+                        <Button className={'closeBtn'}><Close onClick={(event) => deleteItem(event, index, row)} /></Button>
+                    </div>
+                ))
+            }
+        </Paper>
+    )
+}
+
+export default DisplayItems;

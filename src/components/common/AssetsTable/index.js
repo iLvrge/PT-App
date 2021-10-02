@@ -412,19 +412,21 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       setWidth(1500)
       if (standalone) {
         if( type === 9 ) {
-          if(foreignAssets.selected.length > 0) {
-            const googleToken = getTokenStorage( 'google_auth_token_info' )
-            const token = JSON.parse(googleToken)  
-            const { access_token } = token  
-            if(access_token) {
-              const form = new FormData()
-              form.append('account', google_profile.email)
-              form.append('token', access_token)
-              form.append('sheet_names', JSON.stringify(foreignAssets.selectNames))
-              dispatch(getForeignAssetsBySheet(form))
-            }            
+          if(foreignAssets.selected.length > 0 ) {
+            if( assetTypeAssignmentAssets.length === 0 ) {
+              const googleToken = getTokenStorage( 'google_auth_token_info' )
+              const token = JSON.parse(googleToken)  
+              const { access_token } = token  
+              if(access_token) {
+                const form = new FormData()
+                form.append('account', google_profile.email)
+                form.append('token', access_token)
+                form.append('sheet_names', JSON.stringify(foreignAssets.selectNames))
+                dispatch(getForeignAssetsBySheet(form))
+              }   
+            }                     
           } else {
-            dispatch(
+            dispatch(  
               setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
             );
             dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
@@ -1034,6 +1036,7 @@ const resetAll = () => {
         onScrollTable={onScrollTable}
         defaultSortField={`asset`}
         defaultSortDirection={`desc`}
+        selectItemWithArrowKey={true}
         /* columnTextBoldList={slack_channel_list} */
         responsive={true}
         width={width}

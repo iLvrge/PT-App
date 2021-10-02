@@ -25,12 +25,21 @@ export default makeStyles(theme => ({
     },
     importContainer: {
         display: 'flex',
-        width: 600,
-        padding: 20,
-        margin: '50px auto'
+        width: '100%',
+        boxShadow: 'none'
     },
     rows: {
-        marginTop: 8
+        marginTop: 8,
+        display: 'flex'
+    },
+    columns: {
+        display: 'flex',
+    },
+    col1: {
+        width: '25%'
+    },
+    col2: {
+        width: '75%'
     },
     textarea: {
         width: '100%',
@@ -58,5 +67,72 @@ export default makeStyles(theme => ({
     },
     headerButton: {
         textTransform: 'initial'
-    }
+    },
+    items: {
+        display: 'flex',
+        maxHeight: '100%',
+        overflow: 'auto',
+        overflowX: 'hidden',
+        justifyContent: 'start',
+        flexWrap: 'wrap',
+        boxShadow: 'none'
+    },
+    item: {
+        position: 'relative',
+        display: 'flex',
+        flexBasis: '100px',
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#292929',
+        border: '1px solid #5c5c5c',
+        margin: '0 5px 5px',        
+        "&:hover": {
+            background: '#303030',
+            '& .closeBtn': {
+                display: 'block'
+            }
+        },
+        '&.active':{
+            '& .input_item': {
+                display: ''
+            },
+        },
+        '& .closeBtn': {
+            position: 'absolute',
+            minWidth: 15,
+            height: 'auto',
+            right: 0,
+            top: 0,
+            display: 'none',
+            background: 'none',
+            padding: 0,
+            lineHeight: 1,
+            '& svg':{
+                width: 15,
+                height: 15
+            }
+        },
+        '& .input_item': {
+            display: 'none'
+        },
+        '& .MuiButton-root:hover':{
+            color: '#5c5c5c'
+        },
+        '& input':{
+            width: 100
+        }
+        
+    },
+    item_error: {
+        color: '#E60000'
+    },
+    close: { 
+        position: 'absolute', 
+        right: 10, 
+        top: 7, 
+        zIndex: 999,
+        cursor: 'pointer'
+    },
+    
 }))

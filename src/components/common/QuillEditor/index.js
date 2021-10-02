@@ -331,7 +331,7 @@ const QuillEditor = ({
       form.append('transactions', JSON.stringify(selectedTransactions))
       form.append('type', 2)      
       const {data} = await PatenTrackApi.shareIllustration(form)
-      if (data.indexOf('pitch') >= 0) {
+      if (data.indexOf('sample') >= 0) {
         /**
          * just for temporary replacing
          * open share url new tab

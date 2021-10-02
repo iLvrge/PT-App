@@ -7,9 +7,11 @@ import {
     Backdrop 
 } from "@material-ui/core"
 import { Add } from "@material-ui/icons"
+import CloseIcon from '@material-ui/icons/Close'
 import ImportAsset from './ImportAsset'
 import Googlelogin from '../Googlelogin'
 import VirtualizedTable from '../VirtualizedTable'
+import DialogPopup from '../DialogPopup'
 import Loader from '../Loader'
 import useStyles from "./styles"
 
@@ -60,6 +62,7 @@ const ForeignAsset = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const [ open, setOpen] = useState( false)
+    const [ items, setItems] = useState([])
     const googleLoginRef = useRef(null)
 
     const onHandleImport = (event) => {
@@ -374,22 +377,18 @@ const ForeignAsset = () => {
             <span ref={googleLoginRef}>
                 <Googlelogin/>
             </span>
-            <Modal 
-                open={open}
-                disableBackdropClick={false}
-                onClose={(e) => setOpen(!open)}
-                BackdropComponent={Backdrop}
-                BackdropProps={{
-                timeout: 500,
-                }}
-                className={classes.modal}
-                style={{backgroundColor: 'rgba(0, 0, 0, 0.8)'}}
+            
+            <DialogPopup 
+                open={open} 
+                resizable={true}
+                resizableWidth={680}
+                resizableHeight={490} 
+                onClose={(e) => setOpen(!open)} 
             >
-                <>
-                    <ImportAsset closeModal={setOpen} callback={onHandleRetrieveList}/> 
-                </>
-            </Modal>
-        </Paper>
+                <CloseIcon onClick={(e) => setOpen(!open)} className={classes.close}/>
+                <ImportAsset closeModal={setOpen} callback={onHandleRetrieveList} updateItems={setItems} items={items}/> 
+            </DialogPopup>
+        </Paper>   
     )
 }
 

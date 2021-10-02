@@ -486,6 +486,9 @@ export default makeStyles(theme => ({
     display: 'flex',
     height: '100%',
     width: '100%',
+    '& .react-viewer-toolbar li:nth-child(4)':{
+      display: 'none'
+    },
     '& .react-viewer-icon-reset': {
       display: 'none'
     },

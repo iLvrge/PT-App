@@ -1,20 +1,28 @@
 import React, {useRef, useEffect, useState} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Paper, Grid, Typography, TextField, Button, CircularProgress  } from  '@material-ui/core'
-
+import DisplayItems from './DisplayItems'
 import PatenTrackApi from '../../../api/patenTrack2'
 
 import { getTokenStorage } from '../../../utils/tokenStorage'
 import useStyles from "./styles"
 
-const ImportAsset = ({closeModal, callback}) => {
+const ImportAsset = ({items, closeModal, callback, updateItems}) => {
     const classes = useStyles()
     const [ isLoading, setIsLoading ] = useState(false)
     const textAreaRef  = useRef(null)
     const textFiledRef = useRef(null)
-    const [assetsValue, setAssetsValue] = useState('')
+    const [assetsValue, setAssetsValue] = useState([])
     const [sheetName, setSheetName] = useState('')
     const [invalidAssets, setInvalidAssets] = useState([])
+    const [ currentItem, setCurrentItem] = useState('')
+
+
+    useEffect(() => {
+        if(assetsValue.length === 0) {
+            setAssetsValue(items)
+        }
+    }, [items])
 
     const google_profile = useSelector(state => state.patenTrack2.google_profile)
 
@@ -38,7 +46,10 @@ const ImportAsset = ({closeModal, callback}) => {
                     }
                 })
                 if(finalItems.length > 0) {
-                    setAssetsValue(finalItems.join('\n'))   
+                    /* setAssetsValue(finalItems.join('\n'))    */
+                    const oldItems = [...assetsValue, ...finalItems]
+                    setAssetsValue([...new Set(oldItems)])   
+                    updateItems([...new Set(oldItems)])
                     validateRawItems(finalItems);
                 } else {
                     alert("Data is not in proper format");
@@ -89,7 +100,7 @@ const ImportAsset = ({closeModal, callback}) => {
     }
 
     /**
-     * 
+     * Validate Items
      */
 
     const validateRawItems = async(items) => {
@@ -105,23 +116,28 @@ const ImportAsset = ({closeModal, callback}) => {
         }
     }
 
-    const handleImport = async() => {        
-        if(invalidAssets.length === 0) {
+    const handleImport = async() => {  
+        const form = new FormData()
+        form.append('foreign_assets', JSON.stringify(assetsValue))
+        const { data } = await PatenTrackApi.validateForeignAssets(form)
+        if(data.length === 0) {
             setIsLoading(true)           
             const googleToken = getTokenStorage( 'google_auth_token_info' )
             const token = JSON.parse(googleToken)  
             const { access_token } = token  
             const form = new FormData()
             form.append('sheet_name', sheetName)
-            form.append('foreign_assets', JSON.stringify(assetsValue.split('\n')))
+            form.append('foreign_assets', JSON.stringify(assetsValue))
             form.append('user_account', google_profile.email)
             form.append('access_token', access_token)
             const { data } = await PatenTrackApi.saveForeignAssets(form)
             if(data !== null ) {
                 setIsLoading(false)         
                 if( data.error == '') {
+                    setAssetsValue([])
                     setIsLoading(false)
                     closeModal(false)
+                    updateItems([])
                     callback()                    
                     alert(data.message)
                 } else if(data.error !== ''){
@@ -134,21 +150,36 @@ const ImportAsset = ({closeModal, callback}) => {
                 alert('Error while saving foreign assets')
             } 
         } else {
-            alert(`Some of the assets are invalid\n\n ${JSON.stringify(invalidAssets)}`)
+            setInvalidAssets(data)
+            alert(`The following items were not found in the USPTO database: \n\n ${data.join(", ")}`)
         }
     }
 
+    const onAddNewItemKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            const items = [...assetsValue]
+            items.push(event.target.value)
+            setAssetsValue(items)
+            updateItems(items)
+            setCurrentItem('')
+        }
+    }
+
+    
     const handleChange = (event) => {
-        setAssetsValue(event.target.value);
+        setCurrentItem(event.target.value);
     }
 
     const handleTextChange = (event) => {
         setSheetName(event.target.value);
     }
 
+    const onHandleChangeItem = (items) => {
+        setAssetsValue(items)
+        updateItems(items)
+    }
+
     const LoadingImportButton = () => {
-
-
         return(
             <Button 
                 className={classes.button}
@@ -167,15 +198,21 @@ const ImportAsset = ({closeModal, callback}) => {
             <Grid container className={classes.dashboard}>
                 <Grid item lg={12} md={12} sm={12} xs={12} className={classes.flexColumn}>
                     <Typography color="inherit" variant='body2'>Paste here the list of foreign assets:</Typography>
-                    <div className={classes.rows}>                        
-                        <TextField
-                            multiline
-                            rows={20}
-                            variant="outlined" 
-                            value={assetsValue}
-                            onChange={handleChange}
-                            ref={textAreaRef}                       
-                        /> 
+                    <div className={classes.rows}>    
+                        <Grid item lg={3} md={3} sm={3} xs={3} className={classes.flexColumn}>
+                            <TextField 
+                                multiline
+                                rows={20}
+                                variant="outlined" 
+                                value={currentItem}
+                                onChange={handleChange}
+                                onKeyPress={onAddNewItemKeyPress}
+                                ref={textAreaRef}                       
+                            />
+                        </Grid>
+                        <Grid item lg={9} md={9} sm={9} xs={9} className={classes.flexColumn}>
+                            <DisplayItems items={assetsValue} invalidItems={invalidAssets} updateItems={onHandleChangeItem}/>
+                        </Grid>
                     </div>
                     <div className={classes.rows}>
                         <Typography color="inherit" variant='body2'>
