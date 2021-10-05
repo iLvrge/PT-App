@@ -8,7 +8,7 @@ import PatentrackDiagram from '../../PatentrackDiagram'
 import { toggleUsptoMode, toggleFamilyMode } from "../../../../actions/uiActions";
 import { setAssetsIllustrationLoading, setAssetsIllustrationData } from '../../../../actions/patentTrackActions2' 
 import { setPDFFile, setPDFView, setPdfTabIndex, setConnectionData, setConnectionBoxView } from '../../../../actions/patenTrackActions' 
-
+import { copyToClipboard } from '../../../../utils/html_encode_decode'
 
 import PdfViewer from '../../../common/PdfViewer'
 
@@ -168,11 +168,15 @@ const IllustrationContainer = ({
       if (typeof res == 'object') {
         let shareURL = res.data
         if (shareURL.indexOf('share') >= 0) {
+            if(window.confirm("Copy a url of the selected item to your clipboard:")){
+              copyToClipboard(shareURL)
+            }
+            
           /**
            * just for temporary replacing
            */
           //shareURL = shareURL.replace('https://share.patentrack.com','http://167.172.195.92:3000')
-          window.open(shareURL,'_BLANK')
+          //window.open(shareURL,'_BLANK')
           //dispatch(setAssetShareURL(shareURL));
         }
       }

@@ -60,3 +60,12 @@ export const downloadFile = (data) => {
     link.click()
     window.URL.revokeObjectURL(url)
 }
+
+export const copyToClipboard = (data) => {
+    var textField = document.createElement('textarea')
+    textField.innerText = data
+    document.body.appendChild(textField)
+    textField.select()
+    document.execCommand('copy')
+    textField.remove()
+}

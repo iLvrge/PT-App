@@ -38,6 +38,9 @@ export default makeStyles(theme => ({
         padding: '0 !important',
         overflow: 'hidden'
     },
+    scroll: {
+        overflowY: 'auto'
+    },
     resizable:{
         position: "relative",
         display: 'flex',

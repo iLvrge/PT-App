@@ -82,7 +82,7 @@ const Templates = () => {
             width: 191,
             minWidth: 191,
             flexGrow: 1,
-            label: 'Template Name',
+            label: 'Layout Templates:',
             dataKey: 'name',
             imageURL: 'iconLink',
             role: 'image'

@@ -86,7 +86,8 @@ export default makeStyles(theme => ({
         justifyContent: 'center',
         background: '#292929',
         border: '1px solid #5c5c5c',
-        margin: '0 5px 5px',        
+        padding: '0 3px',
+        margin: '0 5px 5px',
         "&:hover": {
             background: '#303030',
             '& .closeBtn': {
@@ -134,5 +135,10 @@ export default makeStyles(theme => ({
         zIndex: 999,
         cursor: 'pointer'
     },
-    
+    btnClear:{
+        position: 'absolute',
+        right: 35,
+        bottom: 0,
+        width: 120
+    }
 }))

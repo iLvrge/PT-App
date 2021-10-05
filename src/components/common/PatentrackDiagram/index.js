@@ -1206,7 +1206,7 @@ class PatentrackDiagram extends React.Component {
         }
       
         d3.selectAll('.PatentrackLink').nodes().map(node_ =>{
-                
+                console.log("node_.attributes.class", node_.attributes.class, this.state.filters)
             let id = Number(node_.attributes.id.value.replace('PatentrackLink_', ''));
             let category = null;
 

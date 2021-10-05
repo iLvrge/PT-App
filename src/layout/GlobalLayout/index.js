@@ -127,8 +127,10 @@ const GlobalLayout = (props) => {
     }, [])
 
     useEffect(() => {
-        window.addEventListener('keydown', handleKeyEvent)
-        return () => window.removeEventListener("keydown", handleKeyEvent)
+        if(props.type !== 9) {
+            window.addEventListener('keydown', handleKeyEvent)
+            return () => window.removeEventListener("keydown", handleKeyEvent)
+        }
     }, [])
 
     useEffect(() => {
@@ -548,7 +550,7 @@ const GlobalLayout = (props) => {
         changeVisualBar(true, true, openCommentBar, openIllustrationBar)
     }
 
-    const closeAnalyticsAndCharBar = () => {
+    const closeAnalyticsAndCharBar = () => {  
         setChartBar( false )
         setAnalyticsBar( false )
         setIllustrationBarSize( '50%' )

@@ -550,9 +550,9 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
   }, [ timelineRawData ])
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyEvent)
-    return () => window.removeEventListener("keydown", handleKeyEvent)
-  }, [])
+    /* window.addEventListener('keydown', handleKeyEvent)
+    return () => window.removeEventListener("keydown", handleKeyEvent) */
+  }, []) 
 
   /* const checkCurrentDateStatus = () => {
     setTimeout(() => {

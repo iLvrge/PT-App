@@ -37,17 +37,22 @@ const DialogPopup = (props) => {
                     maxConstraints={[1500, 800]}
                     className={classes.resizable}
                     onResizeStop={handleResize}
-                ><Paper square={true} {...props} /></ResizableBox>                
+                >
+                    <Paper square={true} {...props} />
+                    
+                </ResizableBox>                
             </Draggable>
         );
     }
+
 
     return (
         <Dialog
             open={props.open}
             onClose={props.onClose}
-            className={`${classes.modal} ${classes.modalFilter}`}
+            className={`${classes.modal} ${classes.modalFilter} `}
             {...( props.resizable ===  true  ? {PaperComponent: PaperComponentFilter} : {})}   
+            
             aria-labelledby="filter-cpc"
         >                
             <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-filter">
@@ -57,10 +62,11 @@ const DialogPopup = (props) => {
                     :
                     ''
                 }
-            </DialogTitle>
-            <DialogContent className={classes.filterContent}>
-                {props.children}
+            </DialogTitle> 
+            <DialogContent className={`${classes.filterContent} ${props.scroll === true ? classes.scroll : ''}`}>
+                {props.children}               
             </DialogContent>
+            {typeof props.footerCallBack !== 'undefined' ? props.footerCallBack : ''}
         </Dialog>
     )
 }

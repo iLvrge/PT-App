@@ -6,7 +6,7 @@ import {
     Modal,
     Backdrop 
 } from "@material-ui/core"
-import { Add } from "@material-ui/icons"
+import { Add, Delete } from "@material-ui/icons"
 import CloseIcon from '@material-ui/icons/Close'
 import ImportAsset from './ImportAsset'
 import Googlelogin from '../Googlelogin'
@@ -63,6 +63,7 @@ const ForeignAsset = () => {
     const dispatch = useDispatch()
     const [ open, setOpen] = useState( false)
     const [ items, setItems] = useState([])
+    const [ invalidItems, setInvalidItems] = useState([])
     const googleLoginRef = useRef(null)
 
     const onHandleImport = (event) => {
@@ -122,6 +123,10 @@ const ForeignAsset = () => {
     useEffect(() => {
         checkGoogleToken()
     }, [])
+
+    useEffect(() => {
+        console.log("invalidItems", invalidItems)
+    }, [invalidItems])
 
     useEffect(() => {   
         const googleToken = getTokenStorage( 'google_auth_token_info' )
@@ -341,6 +346,11 @@ const ForeignAsset = () => {
         }
         setHeaderColumns(previousColumns)
     }, [ headerColumns ] )
+
+    const onHandleClearItems = () => {
+        setItems([])
+        setInvalidItems([])
+    }
     
 
     if (isLoadingSheets && sheets.length == 0) return <Loader />
@@ -381,15 +391,32 @@ const ForeignAsset = () => {
             <DialogPopup 
                 open={open} 
                 resizable={true}
-                resizableWidth={680}
+                resizableWidth={660}
                 resizableHeight={490} 
                 onClose={(e) => setOpen(!open)} 
+                scroll={true}
+                footerCallBack={
+                                <Button
+                                    onClick={onHandleClearItems}
+                                    className={classes.btnClear}
+                                >
+                                <Delete/> Clear Items
+                                </Button>
+                            }
             >
-                <CloseIcon onClick={(e) => setOpen(!open)} className={classes.close}/>
-                <ImportAsset closeModal={setOpen} callback={onHandleRetrieveList} updateItems={setItems} items={items}/> 
+                <CloseIcon 
+                    onClick={(e) => setOpen(!open)} 
+                    className={classes.close}/>
+                <ImportAsset 
+                    closeModal={setOpen} 
+                    callback={onHandleRetrieveList} 
+                    updateItems={setItems} 
+                    updateInvalidItems={setInvalidItems} 
+                    items={items} 
+                    invalidItems={invalidItems}/>   
             </DialogPopup>
         </Paper>   
     )
-}
+}  
 
 export default ForeignAsset;

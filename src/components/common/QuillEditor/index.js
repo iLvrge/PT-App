@@ -26,7 +26,7 @@ import {
     setNameQueueLoading 
   } from '../../../actions/patentTrackActions2'
 import { setTokenStorage, getTokenStorage } from '../../../utils/tokenStorage'
-import {downloadFile} from '../../../utils/html_encode_decode'
+import { downloadFile, copyToClipboard } from '../../../utils/html_encode_decode'
 import 'react-quill/dist/quill.snow.css'
 import './styles.css'
 
@@ -282,15 +282,6 @@ const QuillEditor = ({
     }
   }, [ template_document_url, quillRef ] )
 
-  const copyToClipboard = (data) => {
-    var textField = document.createElement('textarea')
-    textField.innerText = data
-    document.body.appendChild(textField)
-    textField.select()
-    document.execCommand('copy')
-    textField.remove()
-  }
-
   const onAttachmentOpenedFileAndEmail = useCallback(() => {    
     const bodyURL = encodeURIComponent(`\n\n\n\n${template_document_url}`)
     let url = `https://mail.google.com/mail/u/0/?fs=1&tf=cm${template_document_url != '' ? '&body='+bodyURL : ''}`
@@ -337,7 +328,11 @@ const QuillEditor = ({
          * open share url new tab
          */
         //const shareURL = data.replace('https://share.patentrack.com','http://167.172.195.92:3000')
-        window.open(data,'_BLANK')
+        
+        if(window.confirm("Copy a url of the selected items to your clipboard:")){
+          copyToClipboard(data)
+        }
+        //window.open(data,'_BLANK')
       } 
     }
   }, [ dispatch, category, selectedAssetsPatents, selectedMaintainencePatents, assetTypeAssignmentAssetsSelected, selectedAssetsTransactions ])

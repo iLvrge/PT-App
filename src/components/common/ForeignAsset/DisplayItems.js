@@ -11,12 +11,13 @@ const DisplayItems = ({items, invalidItems, updateItems}) => {
 
     
     const onChangeItem = (event, index, item) => {
+        console.log('Change', event.target.value)
         setCurrentItem(event.target.value)
     }
 
-    const onItemKeyPress = (event, index, item) => {
-        event.preventDefault()
+    const onItemKeyPress = (event, index, item) => {        
         if (event.key === 'Enter') {
+            event.preventDefault()
             const element = event.target.offsetParent.offsetParent.offsetParent
             element.querySelector('.input_item').style.display = 'none'
             element.querySelector('.MuiTypography-root').style.display = 'block'            
@@ -46,7 +47,7 @@ const DisplayItems = ({items, invalidItems, updateItems}) => {
         setCurrentItem(item)
     }
 
-    console.log('invalidItems', invalidItems)
+    console.log("invalidItems", invalidItems)
 
     return (
         <Paper className={classes.items} square>
@@ -63,9 +64,8 @@ const DisplayItems = ({items, invalidItems, updateItems}) => {
                                 index === activeItem
                                 ?
                                     <TextField 
-                                        variant="standard" 
-                                        value={currentItem}
-                                        onChange={(event) => onChangeItem(event, index, row)}
+                                        value={currentItem} 
+                                        onChange={(e) => setCurrentItem(e.target.value)}
                                         onKeyPress={(event) => onItemKeyPress(event, index, row)}
                                     />
                                 :

@@ -94,7 +94,7 @@ const Repository = () => {
             width: 200,
             minWidth: 200,
             flexGrow: 1,
-            label: 'Template Name',
+            label: 'Document Reporsitory Folder:',
             dataKey: 'name',
             imageURL: 'iconLink',
             role: 'image',
