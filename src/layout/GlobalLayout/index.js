@@ -280,16 +280,18 @@ const GlobalLayout = (props) => {
         //event.preventDefault()
         console.log('handleKeyEvent', event)
         if(event.key === 'ArrowDown' || event.key === 'ArrowUp' ) {
-            console.log('handleKeyEvent=>assetTableFocus', assetTableFocus)
             let tableContainer = document.getElementById('assets_type_assignment_all_assets'), findActiveRow = null
             if(tableContainer !== null) {
                 findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
                 if(findActiveRow === null) {
                     tableContainer = document.getElementById('assets_assignments')
-                    findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                    if(tableContainer !== null) {
+                        findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                    }
                 }
             }
 
+            console.log('handleKeyEvent=>TABLE=>findActiveRow', findActiveRow)
             if(findActiveRow !== null) {
                 const classList = findActiveRow.className.split(/\s+/);
                 const findClass = classList.filter( c => c.indexOf('rowIndex_') !== -1 ? c : '')

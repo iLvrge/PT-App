@@ -549,6 +549,11 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
     //checkCurrentDateStatus()
   }, [ timelineRawData ])
 
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyEvent)
+    return () => window.removeEventListener("keydown", handleKeyEvent)
+  }, [])
+
   /* const checkCurrentDateStatus = () => {
     setTimeout(() => {
       if( document.getElementsByClassName('vis-current-time').length == 0 ) {
@@ -560,7 +565,17 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
       }
     }, 1000)
   } */
-
+  const handleKeyEvent = (event) =>{
+    console.log('handleKeyEvent', event)
+    if(event.key === 'ArrowDown' || event.key === 'ArrowUp' ) {
+      if(event.key === 'ArrowUp' ) {
+        timelineRef.current.zoomOut(0.30)
+      } else {
+        timelineRef.current.zoomIn(0.30)
+      }
+      
+    }
+  }
   const LoadImages = () => {
       return (
         <div className={classes.defaultLoadingImages}>
