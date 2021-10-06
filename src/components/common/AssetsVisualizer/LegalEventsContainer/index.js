@@ -9,7 +9,7 @@ import Citation from './Citation'
 import useStyles from './styles'
 import { numberWithCommas, applicationFormat, capitalize } from "../../../../utils/numbers";
 
-const LegalEventsContainer = ({ events }) => {
+const LegalEventsContainer = ({ events, type }) => {
   const classes = useStyles()
   const [ selectedTab, setSelectedTab ] = useState(0)
   const [ eventsData, setEventsData ] = useState([])
@@ -30,7 +30,7 @@ const LegalEventsContainer = ({ events }) => {
   return (
     <Paper className={classes.root} square >
         {
-          selectedCompaniesAll === true || selectedCompanies.length > 0
+          selectedCompaniesAll === true || selectedCompanies.length > 0 || type === 9
           ?
           <>
             <div className={classes.graphContainer}>  

@@ -139,7 +139,7 @@ const ImportAsset = ({items, invalidItems, updateItems, updateInvalidItems, dele
         <Paper className={classes.importContainer} square id={`import_container`}>
             <Grid container className={classes.dashboard}>
                 <Grid item lg={12} md={12} sm={12} xs={12} className={classes.flexColumn}>
-                    <Typography color="inherit" variant='body2' component="div">
+                    <Typography color="inherit" variant='body2' component="div" className={classes.typography}>
                         Paste here the list of external assets: 
                         <TextField 
                             variant="standard" 

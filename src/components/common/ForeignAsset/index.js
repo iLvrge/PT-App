@@ -501,15 +501,15 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
                     }                     
                     if(requestData !== null &&  requestData.data !== null ) {
                         setIsLoading(false)         
-                        if( data.error == '') {
+                        if( requestData.data.error == '') {
                             onHandleRetrieveList()        
                             setItems([])
                             setInvalidItems([])
                             setIsLoading(false)
                             setOpen(!open)                                        
-                            alert(data.message)
-                        } else if(data.error !== ''){
-                            alert(data.error)
+                            alert(requestData.data.message)
+                        } else if(requestData.data.error !== ''){
+                            alert(requestData.data.error)
                         } else {
                             alert('Error while saving foreign assets')
                         }
@@ -535,7 +535,7 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
                 disabled={isLoading}
             >
                 {
-                    isLoading ? <CircularProgress size={14} /> :  <Save/>
+                    isLoading ? <CircularProgress size={12} /> :  <Save/>
                 }
             </Button>
         )
@@ -548,7 +548,7 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
                     onClick={onHandleClearNonUSAItems}
                     className={classes.btnClear}
                 >
-                    <Close /> Clear non-USPTO assets
+                    <Close /> Clear non-USPTO Assets
                 </Button>
                 <Button
                     onClick={onHandleClearItems}
@@ -611,6 +611,7 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
                 resizable={true}
                 resizableWidth={660}
                 resizableHeight={490} 
+                minConstraints={[630, 450]}
                 onClose={(e) => setOpen(!open)} 
                 scroll={true}
                 footerCallBack={ <FooterItems/> }

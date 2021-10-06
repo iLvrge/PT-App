@@ -16,7 +16,7 @@ import { DEFAULT_CUSTOMERS_LIMIT } from "../../../../api/patenTrack2";
 
 import useStyles from './styles'
 
-const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize}) => {
+const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type}) => {
     const classes = useStyles() 
     const dispatch = useDispatch()
     const location = useLocation()
@@ -182,7 +182,7 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize}) => {
 
     const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
     
-    if ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && (selectedAssetsTransactionLifeSpan.length === 0 || selectedCompanies.length === 0)) || ((process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') && (auth_token == null || selectedAssetsTransactionLifeSpan.length === 0)) ) return null
+    if ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && (selectedAssetsTransactionLifeSpan.length === 0 || selectedCompanies.length === 0 || type === 9)) || ((process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') && (auth_token == null || selectedAssetsTransactionLifeSpan.length === 0)) ) return null
 
     return (
         <Paper className={classes.root} square>  

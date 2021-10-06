@@ -14,7 +14,8 @@ export default makeStyles(theme => ({
             }
         },
         '& .MuiInputBase-multiline':{
-            padding: 0  
+            padding: 0,
+            fontSize: '0.875rem'  
         }       
     },    
     modal: {
@@ -32,7 +33,7 @@ export default makeStyles(theme => ({
         boxShadow: 'none'
     },
     rows: {
-        marginTop: 8,
+        marginTop: 25,
         display: 'flex'
     },
     columns: {
@@ -47,11 +48,15 @@ export default makeStyles(theme => ({
     textarea: {
         width: '100%',
     },
+    typography: {
+        marginTop: 10
+    },
     txtField: {
         width: 100,
         marginLeft: 10,
         '& input':{
-            padding: '6px 0 0'
+            padding: '6px 0 0',
+            fontSize: '0.875rem'
         }
     },
     button: {
@@ -60,6 +65,7 @@ export default makeStyles(theme => ({
         textTransform: 'initial',
         padding: '3px 5px',
         minWidth: 'auto',
+        height: 27,
         '& .MuiButton-label':{
             whiteSpace: 'nowrap'
         },
@@ -93,7 +99,7 @@ export default makeStyles(theme => ({
         background: '#292929',
         border: '1px solid #5c5c5c',
         padding: '0 3px',
-        margin: '0 5px 5px',
+        margin: '0 10px 5px 0',
         "&:hover": {
             background: '#303030',
             '& .closeBtn': {
@@ -143,14 +149,19 @@ export default makeStyles(theme => ({
     },
     btnClear:{
         padding: '0 8px',
-        textTransform: 'initial'
+        textTransform: 'initial',
+        marginRight: 20,
+        '&:last':{
+            margin: 0
+        }
     },
     footer: {
         display: 'flex',
         flex: '1 1 auto',
         whiteSpace: 'nowrap',
         alignItems: 'center',
-        justifyContent: 'flex-end',
+        justifyContent: 'flex-start',
+        marginLeft: 30,
         paddingRight: 50,
         '& .MuiTypography-root':{
             marginLeft: 10

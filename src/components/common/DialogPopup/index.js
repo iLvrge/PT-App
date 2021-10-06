@@ -10,6 +10,8 @@ import useStyles from './styles'
 
 const DialogPopup = (props) => {
     const classes = useStyles()
+    const [minConstraints, setMinConstraints] = useState(typeof props.minConstraints !== 'undefined' ? props.minConstraints : [420, 350])
+    const [maxConstraints, setMaxConstraints] = useState(typeof props.maxConstraints !== 'undefined' ? props.maxConstraints : [1500, 800])
     const [ filterDrag, setFilterDrag ] =  useState([0, 0])
     const [ resizableWidthHeight, setResizableWidthHeight ] = useState([typeof props.resizableWidth !== 'undefined' ? props.resizableWidth  : 665, typeof props.resizableHeight !== 'undefined' ? props.resizableHeight : 350])
 
@@ -33,13 +35,12 @@ const DialogPopup = (props) => {
                 <ResizableBox
                     height={resizableWidthHeight[1]}
                     width={resizableWidthHeight[0]}
-                    minConstraints={[420, 350]} 
-                    maxConstraints={[1500, 800]}
+                    minConstraints={minConstraints} 
+                    maxConstraints={maxConstraints}
                     className={classes.resizable}
                     onResizeStop={handleResize}
                 >
-                    <Paper square={true} {...props} />
-                    
+                    <Paper square={true} {...props} />                    
                 </ResizableBox>                
             </Draggable>
         );

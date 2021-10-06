@@ -34,7 +34,7 @@ import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
 var newRange = [1,2]
 
-const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone }) => {
+const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, type }) => {
     
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -252,8 +252,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         const getChartData = async () => {
             setGraphRawData([])
             setGraphRawGroupData([])      
-            setShowContainer(true)      
-            if (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0){
+            setShowContainer(true)   
+            console.log('TONTANG')   
+            if (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0 && type !== 9){
                 setShowContainer(false)
                 return null
             } else if ((process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') && auth_token === null){
@@ -319,7 +320,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                       selectedCategory == '' ? '' : selectedCategory,
                                       companies,
                                       tabs,
-                                      customers,
+                                      customers,   
                                       assignments,
                                       false,
                                     )

@@ -42,7 +42,8 @@ const AssetDetailsContainer = ({
   commentBar,
   illustrationBar,
   customerBarSize,
-  companyBarSize
+  companyBarSize,
+  type
 }) => { 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -225,7 +226,7 @@ const AssetDetailsContainer = ({
               cls={classes.btnLeft}
             /> */}
             {
-              selectedCompanies.length > 0
+              selectedCompanies.length > 0 || type === 9
               ?
                 chartBar == true ?
                   pdfView === true && !connectionBoxView ? (
@@ -247,7 +248,8 @@ const AssetDetailsContainer = ({
                             commentBar={commentBar} 
                             illustrationBar={illustrationBar} 
                             customerBarSize={customerBarSize} 
-                            companyBarSize={companyBarSize} />
+                            companyBarSize={companyBarSize}
+                            type={type} />
                       ) : familyItemMode === true ? (
                           <FamilyItemContainer 
                             item={selectedAssetsFamilyItem} 
@@ -256,6 +258,7 @@ const AssetDetailsContainer = ({
                             chartBar={chartBar} 
                             illustrationBar={illustrationBar}
                             visualizerBarSize={visualizerBarSize} 
+                            type={type}
                           />
                       ) : (
                         <InventionVisualizer 
@@ -267,7 +270,8 @@ const AssetDetailsContainer = ({
                             commentBar={commentBar} 
                             illustrationBar={illustrationBar} 
                             customerBarSize={customerBarSize} 
-                            companyBarSize={companyBarSize} />
+                            companyBarSize={companyBarSize}
+                            type={type} />
                       )
                   )
                 :
@@ -284,11 +288,11 @@ const AssetDetailsContainer = ({
             onMouseLeave={event => handleIllustrationButton(event, false)} */
           >
             {
-              selectedCompanies.length > 0
+              selectedCompanies.length > 0 || type === 9
               ?
                 analyticsBar === true ? (
                     connectionBoxView === true ? (
-                      <ConnectionBox display={"false"} assets={illustrationData} />
+                      <ConnectionBox display={"false"} assets={illustrationData} type={type}/>
                     ) : openIllustrationBar === true ? (
                         <>
                             {                
@@ -296,17 +300,20 @@ const AssetDetailsContainer = ({
                                     <USPTOContainer
                                     asset={assetIllustration} 
                                     onClose={onCloseUspto} 
+                                    type={type}
                                     />
                                 ) : 
                                 lifeSpanMode === true ? (
                                   <LifeSpanContainer 
                                     chartBar={chartBar} 
                                     openCustomerBar={openCustomerBar} 
-                                    visualizerBarSize={visualizerBarSize}/>
+                                    visualizerBarSize={visualizerBarSize}
+                                    type={type}/>
                                 ) :
                                 familyMode && (
                                     <LegalEventsContainer
-                                      events={selectedAssetsLegalEvents} />
+                                      events={selectedAssetsLegalEvents} 
+                                      type={type}/>
                                 ) 
                             }
                         </>
@@ -314,13 +321,15 @@ const AssetDetailsContainer = ({
                       <LifeSpanContainer 
                         chartBar={chartBar} 
                         openCustomerBar={openCustomerBar} 
-                        visualizerBarSize={visualizerBarSize}/>
+                        visualizerBarSize={visualizerBarSize}
+                        type={type}/>
                     )
                 ) : (
                   <LifeSpanContainer 
                     chartBar={chartBar} 
                     openCustomerBar={openCustomerBar} 
-                    visualizerBarSize={visualizerBarSize}/>
+                    visualizerBarSize={visualizerBarSize}
+                    type={type}/>
                 )
               : ''
             }
@@ -330,7 +339,7 @@ const AssetDetailsContainer = ({
         ""
       )}
     </div>
-  );
+  ); 
 };
 
 export default AssetDetailsContainer;

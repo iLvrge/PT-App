@@ -127,10 +127,12 @@ const GlobalLayout = (props) => {
     }, [])
 
     useEffect(() => {
-        if(props.type !== 9) {
+        /* if(props.type !== 9) {
             window.addEventListener('keydown', handleKeyEvent)
             return () => window.removeEventListener("keydown", handleKeyEvent)
-        }
+        } */
+        window.addEventListener('keydown', handleKeyEvent)
+        return () => window.removeEventListener("keydown", handleKeyEvent)
     }, [])
 
     useEffect(() => {
@@ -635,9 +637,7 @@ const GlobalLayout = (props) => {
 
     const handleAlertPop = () => {
         alert('Message....')
-    }
-
-    
+    }    
 
     const topToolBar = [
         {

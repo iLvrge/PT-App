@@ -13,7 +13,7 @@ import { numberWithCommas, applicationFormat, capitalize } from "../../../../uti
 
 import useStyles from './styles'
 
-const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrationBar, visualizerBarSize }) => {
+const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrationBar, visualizerBarSize, type }) => {
 
     const classes = useStyles()
     const [ selectedTab, setSelectedTab ] = useState(0)
@@ -111,7 +111,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
         <Paper className={classes.root} square>
 
             {
-                selectedCompaniesAll === true || selectedCompanies.length > 0
+                selectedCompaniesAll === true || selectedCompanies.length > 0 || type === 9
                 ?
                     <>
                         <div className={classes.graphContainer}>        
