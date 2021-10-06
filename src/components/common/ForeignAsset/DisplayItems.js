@@ -4,7 +4,7 @@ import { Paper, Grid, Typography, TextField, Button, CircularProgress  } from  '
 import { Close } from "@material-ui/icons"
 import useStyles from "./styles"
 
-const DisplayItems = ({items, invalidItems, updateItems}) => {
+const DisplayItems = ({items, invalidItems, updateItems, callbackDeleteItem, handlePatchItem}) => {
     const classes = useStyles()
     const [activeItem, setActiveItem] = useState(null)
     const [currentItem, setCurrentItem] = useState(null)
@@ -19,13 +19,17 @@ const DisplayItems = ({items, invalidItems, updateItems}) => {
         if (event.key === 'Enter') {
             event.preventDefault()
             const element = event.target.offsetParent.offsetParent.offsetParent
-            element.querySelector('.input_item').style.display = 'none'
-            element.querySelector('.MuiTypography-root').style.display = 'block'            
-            const oldItems = [...items]
-            oldItems[activeItem] = currentItem
-            updateItems(oldItems)
-            setActiveItem(null)
-            setCurrentItem(null)         
+            if(element.querySelector('.input_item') !== null) {
+                element.querySelector('.input_item').style.display = 'none'
+                element.querySelector('.MuiTypography-root').style.display = 'block'            
+                const oldItems = [...items]
+                const oldItem = oldItems[activeItem]
+                handlePatchItem(oldItem, currentItem)
+                oldItems[activeItem] = currentItem
+                updateItems(oldItems)
+                setActiveItem(null)
+                setCurrentItem(null)      
+            }
         }
     }
 
@@ -34,7 +38,8 @@ const DisplayItems = ({items, invalidItems, updateItems}) => {
         const confirm = window.confirm("Delete the item?")
         if(confirm) {
             const oldItems = [...items]
-            oldItems.splice(index, 1)
+            callbackDeleteItem(item)
+            oldItems.splice(index, 1)            
             updateItems(oldItems)
         }        
     }

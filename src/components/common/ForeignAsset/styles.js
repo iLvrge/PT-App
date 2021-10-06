@@ -12,6 +12,9 @@ export default makeStyles(theme => ({
                 /* visibility: 'hidden' */
                 display: 'none'
             }
+        },
+        '& .MuiInputBase-multiline':{
+            padding: 0  
         }       
     },    
     modal: {
@@ -46,11 +49,14 @@ export default makeStyles(theme => ({
     },
     txtField: {
         width: 100,
-        marginLeft: 10
+        marginLeft: 10,
+        '& input':{
+            padding: '6px 0 0'
+        }
     },
     button: {
-        border:'1px solid #5a5a5a !important',
-        marginLeft: 15,
+        /* border:'1px solid #5a5a5a !important', */
+        marginLeft: 10,
         textTransform: 'initial',
         padding: '3px 5px',
         minWidth: 'auto',
@@ -58,7 +64,7 @@ export default makeStyles(theme => ({
             whiteSpace: 'nowrap'
         },
         '&:hover':{
-            border:'1px solid #e60000 !important',
+            /* border:'1px solid #e60000 !important', */
             color: '#e60000 !important'
         },
         '&:first':{
@@ -136,9 +142,17 @@ export default makeStyles(theme => ({
         cursor: 'pointer'
     },
     btnClear:{
-        position: 'absolute',
-        right: 35,
-        bottom: 0,
-        width: 120
+        padding: '0 8px'
+    },
+    footer: {
+        display: 'flex',
+        flex: '1 1 auto',
+        whiteSpace: 'nowrap',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        paddingRight: 50,
+        '& .MuiTypography-root':{
+            marginLeft: 10
+        }
     }
 }))

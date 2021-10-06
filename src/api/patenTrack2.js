@@ -320,7 +320,20 @@ class PatenTrackApi {
   }
 
   static saveForeignAssets(form) { 
-    return axios.post(`${base_new_api_url}/assets/save_foreign_assets/`, form, getFormUrlHeader())
+    return axios.post(`${base_new_api_url}/assets/external_assets/`, form, getFormUrlHeader())
+  }
+
+  static deleteItemFromExternalSheet(form) { 
+    const header = getHeader()
+    return axios.delete(`${base_new_api_url}/assets/external_assets/`,  {headers: header.headers, data: form} )
+  }
+
+  static updateItemFromExternalSheet(form) { 
+    return axios.patch(`${base_new_api_url}/assets/external_assets/`,  form, getFormUrlHeader() )
+  }
+ 
+  static appendItemFromExternalSheet(form) { 
+    return axios.put(`${base_new_api_url}/assets/external_assets/`, form, getFormUrlHeader())
   }
 
   static getForeignAssetsSheets(form) {  
@@ -328,10 +341,10 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelForeignAssetsSheet = c
     })
-    return axios.post(`${base_new_api_url}/assets/foreign_assets/sheets`, form, header)
+    return axios.post(`${base_new_api_url}/assets/external_assets/sheets`, form, header)
   }
 
-  static cancelForeignAssetsSheet() {
+  static cancelForeignAssetsSheet() { 
     if (cancelForeignAssetsSheet !== undefined) {
       try{
         throw cancelForeignAssetsSheet('Operation canceled by the user.') 
@@ -346,7 +359,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelForeignAssetsBySheet = c
     })
-    return axios.post(`${base_new_api_url}/assets/foreign_assets/sheets/assets`, form, header)
+    return axios.post(`${base_new_api_url}/assets/external_assets/sheets/assets`, form, header)
   } 
 
   static cancelForeignAssetsBySheet() {
@@ -364,7 +377,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelForeignAssetTimeline = c
     })
-    return axios.post(`${base_new_api_url}/assets/foreign_assets/sheets/timeline`, form, header)
+    return axios.post(`${base_new_api_url}/assets/external_assets/sheets/timeline`, form, header)
   } 
 
   static cancelForeignAssetTimeline() {

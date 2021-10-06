@@ -4,9 +4,12 @@ import {
     Paper, 
     Button, 
     Modal,
-    Backdrop 
+    Backdrop,
+    CircularProgress,
+    Typography,
+    TextField
 } from "@material-ui/core"
-import { Add, Delete } from "@material-ui/icons"
+import { Add, Delete, Close, Save } from "@material-ui/icons"
 import CloseIcon from '@material-ui/icons/Close'
 import ImportAsset from './ImportAsset'
 import Googlelogin from '../Googlelogin'
@@ -58,16 +61,46 @@ import { DEFAULT_CUSTOMERS_LIMIT } from '../../../api/patenTrack2'
 import { getTokenStorage } from '../../../utils/tokenStorage'
 
 
-const ForeignAsset = () => {
+const ForeignAsset = ({sheetName, handleSheetName}) => {
     const classes = useStyles()
     const dispatch = useDispatch()
+    const textFiledRef = useRef(null)
+    const selectedRef = useRef()
+    const sheetsRef = useRef()
     const [ open, setOpen] = useState( false)
     const [ items, setItems] = useState([])
     const [ invalidItems, setInvalidItems] = useState([])
+    const [ isLoading, setIsLoading ] = useState(false)
     const googleLoginRef = useRef(null)
+    const [ googleToken, setGoogleToken ] = useState('')
+    const [ width, setWidth ] = useState( 1900 )
+    const [ offset, setOffset ] = useState(0)
+    const [ totalRecords, setTotalRecords ] = useState(0)
+    const [ headerRowHeight, setHeaderRowHeight ] = useState(47)
+    const [ rowHeight, setRowHeight ] = useState(40)
+    const [ selectItems, setSelectItems] = useState( [] )
+    const [ selectNames, setSelectNames] = useState( [] )
+    const [ selectedRow, setSelectedRow] = useState( [] )
+    const [ isLoadingSheets, setIsLoadingSheets] = useState( false)
+    const [ currentSelection, setCurrentSelection ] = useState(null) 
+    const [ sendRequest, setSendRequest] = useState(false)
+    const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
+    const [ sheets, setSheets ] = useState([])
 
     const onHandleImport = (event) => {
-        setOpen(!open)
+        setOpen(!open)        
+        if(selectedRef.current.length > 0) {
+            const selectedSheetID = selectedRef.current[selectedRef.current.length - 1]
+            if(selectedSheetID !== '') {
+                const sheetItems = sheetsRef.current
+                const filterSheet = sheetItems.filter( sheet => sheet.sheet_id === selectedSheetID )
+                if(filterSheet.length > 0) {
+                    handleSheetName(filterSheet[0].sheet_name)
+                    getItemsFromSheet(filterSheet[0].sheet_name)
+                    //textFiledRef.current.value = filterSheet[0].sheet_name
+                }                
+            }            
+        }
     }
 
     const COLUMNS = [
@@ -91,25 +124,10 @@ const ForeignAsset = () => {
             align: "left", 
             badge: true,
             show_button: true,
-            button: <Button onClick={onHandleImport}> <Add/> <span className={classes.headerButton}>Add List</span></Button>
+            button: <Button onClick={onHandleImport}> <Add/> <span className={classes.headerButton}>New / Edit List</span></Button>
         }
     ]
-    const [headerColumns, setHeaderColumns] = useState(COLUMNS)
-    const [ googleToken, setGoogleToken ] = useState('')
-    const [ width, setWidth ] = useState( 1900 )
-    const [ offset, setOffset ] = useState(0)
-    const [ totalRecords, setTotalRecords ] = useState(0)
-    const [ headerRowHeight, setHeaderRowHeight ] = useState(47)
-    const [ rowHeight, setRowHeight ] = useState(40)
-    const [ selectItems, setSelectItems] = useState( [] )
-    const [ selectNames, setSelectNames] = useState( [] )
-    const [ selectedRow, setSelectedRow] = useState( [] )
-    const [ isLoadingSheets, setIsLoadingSheets] = useState( false)
-    const [ currentSelection, setCurrentSelection ] = useState(null) 
-    const [ sendRequest, setSendRequest] = useState(false)
-    const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
-    const [ sheets, setSheets ] = useState([])
-
+    const [headerColumns, setHeaderColumns] = useState(COLUMNS)  
     const google_profile = useSelector(state => state.patenTrack2.google_profile)
 
     const TIMER_OPEN = 3000
@@ -128,24 +146,28 @@ const ForeignAsset = () => {
         console.log("invalidItems", invalidItems)
     }, [invalidItems])
 
+    useEffect(() => {
+        selectedRef.current = selectItems
+    }, [selectItems])
+
+    useEffect(() => {
+        sheetsRef.current = sheets
+    }, [sheets])
+
     useEffect(() => {   
         const googleToken = getTokenStorage( 'google_auth_token_info' )
         console.log('google_profile', google_profile, googleToken)
         if(google_profile !== null && google_profile.hasOwnProperty('email') && googleToken && googleToken !== '' && googleToken !== null ) { 
-            console.log('TOKEEEEENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN')
             const token = JSON.parse(googleToken)  
             const { access_token } = token  
             if(access_token && access_token !== null) {
                 //
                 getForeignAssetsSheets(google_profile.email, access_token)
-                console.log('Retreive sheets list')
             } else {
                 setTimeout(openGoogleWindow, TIMER_OPEN)
             }
         } else {
-            console.log('TAP')
             if(googleToken && googleToken !== '' && googleToken !== null && google_profile == null) {
-                console.log('TAP1')
                 const token = JSON.parse(googleToken)  
                 const { access_token } = token  
                 if(access_token && access_token !== null) {
@@ -155,11 +177,94 @@ const ForeignAsset = () => {
                     setTimeout(openGoogleWindow, TIMER_OPEN)
                 }
             } else {
-                console.log('TAP2')
                 setTimeout(openGoogleWindow, TIMER_OPEN)
             }
         }
     }, [dispatch, google_profile, googleToken])
+
+    const getItemsFromSheet = async (sheetName) => {
+        const googleToken = getTokenStorage( 'google_auth_token_info' )
+        const googleProfile = getTokenStorage('google_profile_info')
+        const token = JSON.parse(googleToken)  
+        const profile = JSON.parse(googleProfile)
+        console.log('token', token, profile)
+        if( token !== null && profile !== null) {
+            const { access_token } = token  
+            const form = new FormData()
+            form.append('account', profile.email)
+            form.append('token', access_token)
+            form.append('sheet_names', JSON.stringify([sheetName]))
+            const {data} = await PatenTrackApi.getForeignAssetsBySheet(form)
+            if(data !== null && data.list.length > 0) {
+                const list = [];
+                data.list.forEach( item => list.push(item.asset))
+                setItems(list)
+            }
+        } else {
+            openGoogleWindow()
+        }
+    }
+
+    const handleDeleteItem = async( deleteItem ) => {
+        if( deleteItem != '') {
+            if(selectedRef.current.length > 0) {
+                const selectedSheetID = selectedRef.current[selectedRef.current.length - 1]
+                if(selectedSheetID !== '') {
+                    const sheetItems = sheetsRef.current
+                    const filterSheet = sheetItems.filter( sheet => sheet.sheet_id === selectedSheetID )
+                    if(filterSheet.length > 0) {
+                        const googleToken = getTokenStorage( 'google_auth_token_info' )
+                        const googleProfile = getTokenStorage('google_profile_info')
+                        const token = JSON.parse(googleToken)  
+                        const profile = JSON.parse(googleProfile)
+                        if( token !== null && profile !== null) {
+                            const { access_token } = token  
+                            const form = {
+                                user_account: profile.email,
+                                item_type: 'delete',
+                                access_token: access_token,
+                                sheet_name: filterSheet[0].sheet_name,
+                                sheet_id: filterSheet[0].sheet_id,
+                                delete_item: deleteItem
+                            }
+                            const {data} = await PatenTrackApi.deleteItemFromExternalSheet(form)
+                            console.log('Return Delete Item', data)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    const handleUpdateItem = async( updateItem, newItem ) => {
+        if( updateItem !== '' && newItem !== '') {
+            if(selectedRef.current.length > 0) {
+                const selectedSheetID = selectedRef.current[selectedRef.current.length - 1]
+                if(selectedSheetID !== '') {
+                    const sheetItems = sheetsRef.current
+                    const filterSheet = sheetItems.filter( sheet => sheet.sheet_id === selectedSheetID )
+                    if(filterSheet.length > 0) {
+                        const googleToken = getTokenStorage( 'google_auth_token_info' )
+                        const googleProfile = getTokenStorage('google_profile_info')
+                        const token = JSON.parse(googleToken)  
+                        const profile = JSON.parse(googleProfile)
+                        if( token !== null && profile !== null) {
+                            const { access_token } = token  
+                            const form = new FormData();
+                            form.append('user_account', profile.email)
+                            form.append('access_token', access_token)
+                            form.append('sheet_name', filterSheet[0].sheet_name)
+                            form.append('sheet_id', filterSheet[0].sheet_id)
+                            form.append('update_item', updateItem)
+                            form.append('new_item', newItem)
+                            const {data} = await PatenTrackApi.updateItemFromExternalSheet(form)
+                            console.log('Return Update Item', data)
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     const checkGoogleToken = () => {
         const googleToken = getTokenStorage( 'google_auth_token_info' )
@@ -206,7 +311,7 @@ const ForeignAsset = () => {
             const token = JSON.parse(googleToken)      
             const { access_token } = token  
             if(access_token && google_profile !== null) {
-                getForeignAssetsSheets(google_profile.email, access_token)
+                getForeignAssetsSheets(google_profile.email, access_token, true)
             } else {
                 dispatch(getGoogleProfile(token))
             }
@@ -215,8 +320,8 @@ const ForeignAsset = () => {
         }
     }
 
-    const getForeignAssetsSheets = async(email, token) => {
-        if(sendRequest === false) {
+    const getForeignAssetsSheets = async(email, token, t) => {
+        if(sendRequest === false || (typeof t !== 'undefined' && t === true)) {
             const form = new FormData()
             form.append('account', email)
             form.append('token', token)
@@ -234,8 +339,7 @@ const ForeignAsset = () => {
             } else {                
                 setSendRequest( true )
             }
-        }
-        
+        }        
     }
   
     /**
@@ -351,7 +455,114 @@ const ForeignAsset = () => {
         setItems([])
         setInvalidItems([])
     }
+
+
+    const handleImport = async() => {  
+        const sheetName = textFiledRef.current.value
+        if(sheetName === '') {
+            alert("Please enter sheet name.")
+        } else {
+            const googleToken = getTokenStorage( 'google_auth_token_info' )
+            const token = JSON.parse(googleToken)  
+            if(token !== null) {
+                setSendRequest( false )
+                const form = new FormData()
+                form.append('foreign_assets', JSON.stringify(items))
+                const { data } = await PatenTrackApi.validateForeignAssets(form)
+                if(data.length === 0) {
+                    setIsLoading(true)    
+                    const { access_token } = token  
+                    const form = new FormData()                    
+                    form.append('foreign_assets', JSON.stringify(items))
+                    form.append('user_account', google_profile.email)
+                    form.append('access_token', access_token)
+                    let requestData = null
+                    if(selectedRef.current.length > 0) {
+                        const selectedSheetID = selectedRef.current[selectedRef.current.length - 1]
+                        if(selectedSheetID !== '') {
+                            const sheetItems = sheetsRef.current
+                            const filterSheet = sheetItems.filter( sheet => sheet.sheet_id === selectedSheetID )
+                            if(filterSheet.length > 0) {
+                                form.append('sheet_name', filterSheet[0].sheet_name)
+                                form.append('sheet_id', filterSheet[0].sheet_id)
+                                requestData = await PatenTrackApi.appendItemFromExternalSheet(form)
+                            }
+                        }
+                    } else {
+                        form.append('sheet_name', sheetName)
+                        requestData = await PatenTrackApi.saveForeignAssets(form)                        
+                    }                     
+                    if(requestData !== null &&  requestData.data !== null ) {
+                        setIsLoading(false)         
+                        if( data.error == '') {
+                            onHandleRetrieveList()        
+                            setItems([])
+                            setInvalidItems([])
+                            setIsLoading(false)
+                            setOpen(!open)                                        
+                            alert(data.message)
+                        } else if(data.error !== ''){
+                            alert(data.error)
+                        } else {
+                            alert('Error while saving foreign assets')
+                        }
+                    } else{      
+                        setIsLoading(false)      
+                        alert('Error while saving foreign assets')
+                    }
+                } else {
+                    setInvalidItems(data)
+                    alert(`The following items were not found in the USPTO database and should be removed from the list: \n ${data.join(", ")}`)
+                }
+            } else {
+                openGoogleWindow()
+            }            
+        }       
+    }
+
+    const LoadingImportButton = () => {
+        return(
+            <Button 
+                className={classes.button}
+                onClick={handleImport}
+                disabled={isLoading}
+            >
+                {
+                    isLoading ? <CircularProgress size={14} /> :  <Save/>
+                }
+            </Button>
+        )
+    }
     
+    const FooterItems = () => {
+        return (
+            <div className={classes.footer}>
+                <Button
+                    onClick={onHandleClearItems}
+                    className={classes.btnClear}
+                >
+                    <Close /> Clear non-USPTO assets
+                </Button>
+                <Button
+                    onClick={onHandleClearItems}
+                    className={classes.btnClear}
+                >
+                    <Delete /> Clear List
+                </Button>
+                <Typography color="inherit" variant='body2' component="div">
+                    Save As: 
+                    <TextField  
+                        variant="standard" 
+                        className={classes.txtField}
+                        inputRef={textFiledRef}
+                        defaultValue={sheetName}
+                        /* onChange={handleSheetName} */
+                    /> 
+                    <LoadingImportButton />
+                </Typography>  
+            </div>
+        )
+    }
 
     if (isLoadingSheets && sheets.length == 0) return <Loader />
     return (
@@ -395,25 +606,18 @@ const ForeignAsset = () => {
                 resizableHeight={490} 
                 onClose={(e) => setOpen(!open)} 
                 scroll={true}
-                footerCallBack={
-                                <Button
-                                    onClick={onHandleClearItems}
-                                    className={classes.btnClear}
-                                >
-                                <Delete/> Clear Items
-                                </Button>
-                            }
+                footerCallBack={ <FooterItems/> }
             >
                 <CloseIcon 
                     onClick={(e) => setOpen(!open)} 
                     className={classes.close}/>
                 <ImportAsset 
-                    closeModal={setOpen} 
-                    callback={onHandleRetrieveList} 
                     updateItems={setItems} 
                     updateInvalidItems={setInvalidItems} 
                     items={items} 
-                    invalidItems={invalidItems}/>   
+                    invalidItems={invalidItems}
+                    deleteItem={handleDeleteItem}
+                    handlePatchItem={handleUpdateItem}/>   
             </DialogPopup>
         </Paper>   
     )

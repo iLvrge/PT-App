@@ -135,6 +135,7 @@ const GlobalScreen = ({
     const assetFileRef = useRef()
     const fileBarRef = useRef()
     const templateFileRef = useRef()
+    const [sheetName, setSheetName] = useState('')
     const [ gap, setGap ] = useState( { x: '14.1rem', y: '7.5rem'} )
     const [ isDragging, setIsDragging] = useState(false)
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false)
@@ -301,6 +302,10 @@ const GlobalScreen = ({
     }
     console.log('GlobalScreen=>type', type)
 
+    const handleTextChange = (name) => {
+        setSheetName(name);
+    }
+
     return (
         <SplitPane
             className={classes.splitPane}
@@ -323,7 +328,7 @@ const GlobalScreen = ({
                             {
                                 type == 9 
                                 ? 
-                                    <ForeignAsset />
+                                    <ForeignAsset sheetName={sheetName} handleSheetName={handleTextChange}/>
                                 :
                                     <MainCompaniesSelector 
                                         selectAll={false} 

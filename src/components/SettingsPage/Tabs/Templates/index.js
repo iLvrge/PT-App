@@ -93,7 +93,7 @@ const Templates = () => {
         {
             width: 200,
             minWidth: 200,
-            flexGrow: 1,
+            flexGrow: 1,   
             label: 'Template Name',
             dataKey: 'name',
             imageURL: 'iconLink',
@@ -496,7 +496,7 @@ const Templates = () => {
                                :
                                <LockOpenIcon onClick={(event) => unLockTemplateFolder(event, 1)}/>
                             }
-                            </span> Templates:  <BreadCrumbs type={1} click={repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('template_container_id') && templates_folder_lock === 1 ? true : false}/>
+                            </span> Layout Templates:  <BreadCrumbs type={1} click={repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('template_container_id') && templates_folder_lock === 1 ? true : false}/>
                         </Typography>
                     </div>
                     <div className={classes.drive}>

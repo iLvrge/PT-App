@@ -45,6 +45,9 @@ const Repository = () => {
     const [ selectedRow, setSelectedRow] = useState( [] )
     const [ selectedAll, setSelectedAll ] = useState(false)
     const [ isDrag, setIsDrag ] = useState(false)
+    const [ clicked, setClicked] = useState( false )
+    const clickedRef = useRef()
+    const repoFolderBreadcrumbsRef = useRef()
 
     const [ selectedDriveItems, setSelectedDriveItems ] = useState( [] )
     const [ selectDriveRow, setSelectedDriveRow ] = useState( [] )
@@ -169,6 +172,27 @@ const Repository = () => {
     useEffect(() => {
         setDriveFiles(drive_files.files)
     }, [drive_files])
+
+    useEffect(() => {
+        clickedRef.current = clicked
+    }, [clicked])
+
+    useEffect(() => {
+        repoFolderBreadcrumbsRef.current = repoBreadcrumbItems
+    }, [repoBreadcrumbItems])
+
+    useEffect(() => {
+        return () => confirmUtilityFolder()
+    }, [])
+
+    const confirmUtilityFolder = () => {
+        /* console.log('confirmUtilityFolder', clickedRef.current, repoFolderBreadcrumbsRef.current) */
+        if(clickedRef.current === true) {
+            if(window.confirm('Would you like to allocate selected folder to Document Repository Folder?')) {
+                addRepositoryFolder(repoFolderBreadcrumbsRef.current)
+            }
+        }        
+    } 
     
     const getRepoFolder = useCallback(async(userAccount, token) => {
         const {data} = await PatenTrackApi.getRepoFolder(userAccount)
@@ -304,7 +328,7 @@ const Repository = () => {
     const handleClickRepositoryDriveRow = useCallback(async (event, row) => {
         event.preventDefault()
         if(row.mimeType == 'application/vnd.google-apps.folder') {
-            
+            setClicked( prevItem => prevItem === false ? true : prevItem )           
             openDriveFolder(event, row.id, row.name, 2)            
         } else {
             
@@ -319,12 +343,12 @@ const Repository = () => {
         }
     }, [ google_profile, googleToken, repoBreadcrumbItems ])
 
-    const addRepositoryFolder = useCallback(async() => {
+    const addRepositoryFolder = useCallback(async(breadCrumbs) => {
         let formData = new FormData();
-        formData.append('container_id', repoBreadcrumbItems[repoBreadcrumbItems.length - 1].id)
-        formData.append('container_name', repoBreadcrumbItems[repoBreadcrumbItems.length - 1].name)
+        formData.append('container_id', breadCrumbs[breadCrumbs.length - 1].id)
+        formData.append('container_name', breadCrumbs[breadCrumbs.length - 1].name)
         formData.append('user_account', google_profile.email)
-        formData.append('breadcrumb', JSON.stringify(repoBreadcrumbItems))
+        formData.append('breadcrumb', JSON.stringify(breadCrumbs))
         PatenTrackApi
         .addRepoFolder(formData) 
         .then(res => {
@@ -334,7 +358,7 @@ const Repository = () => {
                 setRepoBreadcrumbItems(JSON.parse(res.data.breadcrumb))
             }
         })        
-    }, [ google_profile, googleToken, repoBreadcrumbItems ])
+    }, [ google_profile, googleToken ])
 
     const addTemplateFolder = useCallback(async() => {
         let formData = new FormData();
@@ -466,7 +490,7 @@ const Repository = () => {
             <div className={classes.flexColumn}>
                 <div className={classes.heading}>
                     <Typography variant="body1" component="h2" className={classes.noWrap}>
-                        <span className={classes.relativeLockedIcon}>
+                        {/* <span className={classes.relativeLockedIcon}>
                         {
                         repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('container_id') && repo_folder_lock === 1
                         ?
@@ -474,7 +498,7 @@ const Repository = () => {
                         :
                         <LockOpenIcon onClick={(event) => unLockRepoFolder(event, 1)}/>
                         }
-                        </span> Repository: <BreadCrumbs  type={2} click={repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('container_id') && repo_folder_lock === 1 ? true : false}/>
+                        </span> */} Document Reporsitory Folder: <BreadCrumbs  type={2} click={true} /* click={repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('container_id') && repo_folder_lock === 1 ? true : false} *//>
                     </Typography>
                 </div>
                 <div className={classes.drive}>

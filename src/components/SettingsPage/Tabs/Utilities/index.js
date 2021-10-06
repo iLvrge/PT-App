@@ -31,9 +31,15 @@ const Utilities = () => {
     const drive_files = useSelector(state => state.patenTrack2.drive_files)
     const google_profile = useSelector(state => state.patenTrack2.google_profile)
     const [ googleToken, setGoogleToken ] = useState('')
+    const [ clicked, setClicked] = useState( false )
+    const clickedRef = useRef()
+        
     const [ breadcrumbItems, setBreadCrumbItems ] = useState([{id: 'undefined', name: 'My Drive'}])
     const [ repoBreadcrumbItems, setRepoBreadcrumbItems ] = useState([{id: 'undefined', name: 'My Drive'}])
+    const repoFolderBreadcrumbsRef = useRef()
+        
     const [ repoFolder, setRepoFolder] = useState('')
+    
     const [ templates_folder_lock, setTemplatesFolderLock] = useState(0)
     const [ repo_folder_lock, setRepoFolderLock] = useState(0)
     const [ folderId, setFolderId]  = useState('')
@@ -169,6 +175,27 @@ const Utilities = () => {
     useEffect(() => {
         setDriveFiles(drive_files.files)
     }, [drive_files])
+
+    useEffect(() => {
+        clickedRef.current = clicked
+    }, [clicked])
+
+    useEffect(() => {
+        repoFolderBreadcrumbsRef.current = repoBreadcrumbItems
+    }, [repoBreadcrumbItems])
+
+    useEffect(() => {
+        return () => confirmUtilityFolder()
+    }, [])
+
+    const confirmUtilityFolder = () => {
+        /* console.log('confirmUtilityFolder', clickedRef.current, repoFolderBreadcrumbsRef.current) */
+        if(clickedRef.current === true) {
+            if(window.confirm('Would you like to allocate selected folder to Utility Files Folder?')) {
+                addRepositoryFolder(repoFolderBreadcrumbsRef.current)
+            }
+        }        
+    } 
     
     const getRepoFolder = useCallback(async(userAccount, token) => {
         PatenTrackApi.cancelGetRepoFolder()
@@ -273,7 +300,7 @@ const Utilities = () => {
     }
 
     const onHandleDoubleClick = (event) => {
-        event.presist()
+        
     }
 
     const handleClickRow = useCallback(async (event, row) => {
@@ -301,8 +328,8 @@ const Utilities = () => {
     const handleClickRepositoryDriveRow = useCallback(async (event, row) => {
         event.preventDefault()
         if(row.mimeType == 'application/vnd.google-apps.folder') {
-            
-            openDriveFolder(event, row.id, row.name, 2)            
+            openDriveFolder(event, row.id, row.name, 2)
+            setClicked( prevItem => prevItem === false ? true : prevItem )           
         } else {
             
             let webViewLink = row.webViewLink
@@ -316,12 +343,12 @@ const Utilities = () => {
         }
     }, [ google_profile, googleToken, repoBreadcrumbItems ])
 
-    const addRepositoryFolder = useCallback(async() => {
+    const addRepositoryFolder = useCallback(async(breadCrumbs) => {
         let formData = new FormData();
-        formData.append('utilities_container_id', repoBreadcrumbItems[repoBreadcrumbItems.length - 1].id)
-        formData.append('utilities_name', repoBreadcrumbItems[repoBreadcrumbItems.length - 1].name)
+        formData.append('utilities_container_id', breadCrumbs[breadCrumbs.length - 1].id)
+        formData.append('utilities_name', breadCrumbs[breadCrumbs.length - 1].name)
         formData.append('user_account', google_profile.email)
-        formData.append('utilities_breadcrumb', JSON.stringify(repoBreadcrumbItems))
+        formData.append('utilities_breadcrumb', JSON.stringify(breadCrumbs))
         PatenTrackApi
         .addRepoFolder(formData) 
         .then(res => {
@@ -331,7 +358,7 @@ const Utilities = () => {
                 setRepoBreadcrumbItems(JSON.parse(res.data.utilities_breadcrumb))
             }
         })        
-    }, [ google_profile, googleToken, repoBreadcrumbItems ])
+    }, [ google_profile, googleToken,  ])
 
     const openGoogleWindow = useCallback(() => {
         if(googleLoginRef.current != null) {
@@ -373,7 +400,7 @@ const Utilities = () => {
             <div className={classes.flexColumn}>
                 <div className={classes.heading}>
                     <Typography variant="body1" component="h2" className={classes.noWrap}>
-                        <span className={classes.relativeLockedIcon}>
+                        {/* <span className={classes.relativeLockedIcon}>
                         {
                         repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('utilities_container_id') && repo_folder_lock === 1
                         ?
@@ -381,10 +408,10 @@ const Utilities = () => {
                         :
                         <LockOpenIcon onClick={(event) => unLockUtilitiesFolder(event, 1)}/>
                         }
-                        </span> Utilities: <BreadCrumbs  type={2} click={repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('utilities_container_id') && repo_folder_lock === 1 ? true : false}/>
+                        </span> */} Utility Files Folder: <BreadCrumbs  type={2} click={true} /* click={repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('utilities_container_id') && repo_folder_lock === 1 ? true : false} *//>
                     </Typography>
                 </div>
-                <div className={classes.drive}>
+                <div className={classes.drive}> 
                     <VirtualizedTable
                         classes={classes}
                         selected={selectItems}

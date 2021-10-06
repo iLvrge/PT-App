@@ -10,11 +10,13 @@ export default makeStyles(theme => ({
             maxWidth: 'inherit',
         },
         '& .MuiDialogContent-root':{
-            padding: 0,
             overflowX: 'hidden'
         },
         '& .MuiDialogTitle-root':{
             //padding: 0,
+        },
+        '& .MuiDialogContent-dividers':{
+            border: 0
         }
     },
     modalFilter: {
@@ -34,9 +36,10 @@ export default makeStyles(theme => ({
         }
     },
     filterContent: {
-        margin: '0px 40px 32px 40px',
-        padding: '0 !important',
-        overflow: 'hidden'
+        margin: '0px 40px',
+        '& .MuiInputBase-multiline': {
+            padding: 0
+        }
     },
     scroll: {
         overflowY: 'auto'

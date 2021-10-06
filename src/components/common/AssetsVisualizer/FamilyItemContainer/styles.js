@@ -486,6 +486,17 @@ export default makeStyles(theme => ({
     display: 'flex',
     height: '100%',
     width: '100%',
+    /*'& .react-viewer-list': {
+      height: 200,      
+    },
+    '& .react-viewer-list > li':{
+      height: 200,
+      width: 120
+    }, 
+    '& .react-viewer-list > li > img':{
+      width: 240,
+      height: 200
+    },*/
     '& .react-viewer-toolbar li:nth-child(4)':{
       display: 'none'
     },

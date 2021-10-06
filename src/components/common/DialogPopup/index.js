@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 
-import { Paper, Dialog, DialogContent, DialogTitle, IconButton, Typography  } from '@material-ui/core'
+import { Paper, Dialog, DialogContent, DialogTitle, DialogActions, IconButton, Typography  } from '@material-ui/core'
 import Draggable from "react-draggable"
 import CloseIcon from '@material-ui/icons/Close'
 import {ResizableBox} from "react-resizable"
@@ -51,7 +51,8 @@ const DialogPopup = (props) => {
             open={props.open}
             onClose={props.onClose}
             className={`${classes.modal} ${classes.modalFilter} `}
-            {...( props.resizable ===  true  ? {PaperComponent: PaperComponentFilter} : {})}   
+            {...( props.resizable ===  true  ? {PaperComponent: PaperComponentFilter} : {})} 
+            {...( props.scroll ===  true  ? { scroll: 'paper' } : {})}     
             
             aria-labelledby="filter-cpc"
         >                
@@ -63,10 +64,15 @@ const DialogPopup = (props) => {
                     ''
                 }
             </DialogTitle> 
-            <DialogContent className={`${classes.filterContent} ${props.scroll === true ? classes.scroll : ''}`}>
+            <DialogContent 
+                className={classes.filterContent}
+                {...( props.scroll ===  true  ? { dividers: true } : {})}   
+            >
                 {props.children}               
             </DialogContent>
-            {typeof props.footerCallBack !== 'undefined' ? props.footerCallBack : ''}
+            <DialogActions>
+                {typeof props.footerCallBack !== 'undefined' ? props.footerCallBack : ''}
+            </DialogActions>            
         </Dialog>
     )
 }
