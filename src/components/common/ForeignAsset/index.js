@@ -456,6 +456,13 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
         setInvalidItems([])
     }
 
+    const onHandleClearNonUSAItems = () => {
+        const oldItems = [...items]
+        const newItems = oldItems.filter( item => !invalidItems.includes(item) ? item : '') 
+        setItems(newItems)
+        setInvalidItems([])
+    }
+
 
     const handleImport = async() => {  
         const sheetName = textFiledRef.current.value
@@ -538,7 +545,7 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
         return (
             <div className={classes.footer}>
                 <Button
-                    onClick={onHandleClearItems}
+                    onClick={onHandleClearNonUSAItems}
                     className={classes.btnClear}
                 >
                     <Close /> Clear non-USPTO assets

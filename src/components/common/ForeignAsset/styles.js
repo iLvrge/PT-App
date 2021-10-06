@@ -142,7 +142,8 @@ export default makeStyles(theme => ({
         cursor: 'pointer'
     },
     btnClear:{
-        padding: '0 8px'
+        padding: '0 8px',
+        textTransform: 'initial'
     },
     footer: {
         display: 'flex',
