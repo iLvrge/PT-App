@@ -233,13 +233,13 @@ function SettingsPage() {
       tooltip: 'Templates',
       bar: openTemplateBar,
       click: handleTemplatesLink,
-      t: 32
+      t: 41
     }, 
     {
       tooltip: 'Documents',
       bar: openDocumentBar,
       click: handleRepositoryLink,
-      t: 32
+      t: 42 
     },
     {
       tooltip: 'Utilities',
