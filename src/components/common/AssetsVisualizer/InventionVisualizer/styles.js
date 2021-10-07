@@ -160,7 +160,7 @@ export default makeStyles(theme => ({
             fontWeight: 500,
             marginBottom: 0
         },
-        background: '#292929',
+        /* background: '#292929', */
         padding: '8px 15px'
     },
     displayFlex:{

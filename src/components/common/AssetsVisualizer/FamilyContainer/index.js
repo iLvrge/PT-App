@@ -140,8 +140,8 @@ const FamilyContainer = ({ family, onClose }) => {
 
     useEffect(() => {
         if (isLoadingTimelineRawData) return
-        let start = new moment().subtract(8, 'months')
-        let end = new moment().add(8, 'months')
+        let start = new moment().subtract(10, 'months')
+        let end = new moment().add(10, 'months')
         if(timelineContainerRef.current != null) {
             const convertedItems = timelineRawData.map(convertDataToItem)
             setTimelineItems(convertedItems)
@@ -163,8 +163,8 @@ const FamilyContainer = ({ family, onClose }) => {
                     return c
                 })
                 Promise.all(promise)
-                start = new moment(start).subtract(8, 'months') 
-                end = new moment(end).add(8, 'months')
+                start = new moment(start).subtract(10, 'months') 
+                end = new moment(end).add(10, 'months')
                 items.current.add(convertedItems)
                 setDisplay('block')
             } else {

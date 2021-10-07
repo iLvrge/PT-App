@@ -1,6 +1,7 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import SplitPane from "react-split-pane";
+import React, { useState, useCallback, useEffect, useRef } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import SplitPane from "react-split-pane"
+import { IconButton } from "@material-ui/core"
 import ConnectionBox from '../../common/ConnectionBox'
 import FamilyItemContainer from '../AssetsVisualizer/FamilyItemContainer'
 import USPTOContainer from '../AssetsVisualizer/USPTOContainer'
@@ -15,10 +16,11 @@ import {
   toggleFamilyItemMode,
   toggleFamilyMode,
   toggleUsptoMode,
-} from "../../../actions/uiActions";
-import { IconButton } from "@material-ui/core";
-import ArrowButton from "../ArrowButton";
-import useStyles from "./styles";
+} from "../../../actions/uiActions"
+import { updateResizerBar } from '../../../utils/resizeBar'
+
+import ArrowButton from "../ArrowButton"
+import useStyles from "./styles"
 
 const AssetDetailsContainer = ({
   cls,
@@ -90,7 +92,12 @@ const AssetDetailsContainer = ({
     console.log("isDrag", isDrag)
   }, [ isDrag ])
 
+  useEffect(() => {
+    updateResizerBar(chartAnalyticsContainer, analyticsBar, 1)
+  }, [ chartAnalyticsContainer, analyticsBar ])
+
   
+
   /* useEffect(() => {        
         if( chartAnalyticsContainer != null && chartAnalyticsContainer.current != null ) {            
             if( familyItemMode === true && familyMode === true && familyDataRetrieved === true && legalEventDataRetrieved === true) {
@@ -290,7 +297,9 @@ const AssetDetailsContainer = ({
             {
               selectedCompanies.length > 0 || type === 9
               ?
-                analyticsBar === true ? (
+                analyticsBar === true 
+                ? 
+                  (
                     connectionBoxView === true ? (
                       <ConnectionBox display={"false"} assets={illustrationData} type={type}/>
                     ) : openIllustrationBar === true ? (
@@ -324,14 +333,18 @@ const AssetDetailsContainer = ({
                         visualizerBarSize={visualizerBarSize}
                         type={type}/>
                     )
-                ) : (
-                  <LifeSpanContainer 
-                    chartBar={chartBar} 
-                    openCustomerBar={openCustomerBar} 
-                    visualizerBarSize={visualizerBarSize}
-                    type={type}/>
-                )
-              : ''
+                  ) 
+                : 
+                  ''
+                  /* (
+                    <LifeSpanContainer 
+                      chartBar={chartBar} 
+                      openCustomerBar={openCustomerBar} 
+                      visualizerBarSize={visualizerBarSize}
+                      type={type}/>
+                  ) */
+              : 
+                ''
             }
           </div>
         </SplitPane>

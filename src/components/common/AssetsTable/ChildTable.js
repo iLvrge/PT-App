@@ -57,7 +57,7 @@ const ChildTable = ({ asset, headerRowDisabled }) => {
 
     const COLUMNS = [ 
         {
-            width: 100,
+            width: 150,
             label: 'Assets', 
             dataKey: 'patent_number',
             validation: true,
@@ -74,6 +74,12 @@ const ChildTable = ({ asset, headerRowDisabled }) => {
             setFamilyLoading( true)        
             if( asset != '' ) {
                 const { data } = await PatenTrackApi.assetFamily(asset)
+                
+                if(data.length > 0) {
+                    data.forEach((element, index) => {
+                        data[index].patent_number = `${element.publication_country} ${element.patent_number}`
+                    });
+                }                
                 setFamilies(data)                
                 setFamilyLoading( false )
                 if( data != null && data != '' && data.length > 0 ){

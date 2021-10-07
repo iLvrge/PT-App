@@ -91,6 +91,7 @@ const AssetsTable = ({
   const dispatch = useDispatch()
   const location = useLocation()
   const tableRef = useRef()
+  const assetsAssignmentRef = useRef()
   const googleLoginRef = useRef(null)
   const [offsetWithLimit, setOffsetWithLimit] = useState([0, DEFAULT_CUSTOMERS_LIMIT])
   const [scrollPos, setScrollPos] = useState(0)
@@ -184,6 +185,10 @@ const AssetsTable = ({
       setMovedAssets([...move_assets])
     }
   }, [ move_assets ])  
+
+  useEffect(() => {
+    assetsAssignmentRef.current = assetTypeAssignmentAssets
+  }, [assetTypeAssignmentAssets])
 
   useEffect(() => {
     dispatch(setClipboardAssets(selectedAssets))
@@ -286,7 +291,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       }
   }
 
-  const onHandleDropDownlist = (event, asset, row ) => { 
+  const onHandleDropDownlist = async(event, asset, row ) => { 
     if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
       alert('Message....')
     } else {
@@ -297,55 +302,90 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         dispatch(linkWithSheetOpenPanel(true))
         dispatch(linkWithSheetSelectedAsset(type, encodeURIComponent(row.asset_type == 1 ? `US${applicationFormat(asset)}` : `US${numberWithCommas(asset)}`)))        
       } else {
+        if(type === 9 && event.target.value === 0) {
+          /***
+          * Asset remove from sreadsheet
 
-        if(event.target.value == 5) {
-          setSelectedAssets(prevItems => {
-            const findIndex = prevItems.findIndex( r => r.asset == asset)
-            if( findIndex !== -1 ) {
-              const items = [...prevItems]
-              items.splice( findIndex, 1 )
-              return items
-            } else {
-              return [...prevItems, row]
+          */
+          const googleToken = getTokenStorage( 'google_auth_token_info' )
+          const googleProfile = getTokenStorage('google_profile_info')
+          const token = JSON.parse(googleToken)  
+          const profile = JSON.parse(googleProfile)
+          if( token !== null && profile !== null) {
+            const { access_token } = token  
+            const form = {
+              user_account: profile.email,
+              item_type: 'delete',
+              access_token: access_token,
+              sheet_name: foreignAssets.selectNames[foreignAssets.selectNames.length - 1],
+              sheet_id: foreignAssets.selected[foreignAssets.selected.length - 1],
+              delete_item: asset
             }
-          })          
-        } else if (event.target.value === -1) {
-          setSelectedAssets(prevItems => {
-            const findIndex = prevItems.findIndex( r => r.asset == asset)
-            if( findIndex !== -1 ) {
-              const items = [...prevItems]
-              items.splice( findIndex, 1 )
-              return items
-            } else {
-              return [...prevItems]
+            const {data} = await PatenTrackApi.deleteItemFromExternalSheet(form)
+            console.log(data)
+            if(data !== null && typeof data.message !== 'undefined' && data.message == 'Row deleted') {
+              const oldAssets = [...assetsAssignmentRef.current]
+              const findIndex = oldAssets.findIndex( item => item.asset == asset)
+              if(findIndex !== -1) {
+                setDropOpenAsset(null)
+                oldAssets.splice(findIndex, 1)
+                dispatch(
+                  setAssetTypeAssignmentAllAssets({ list: oldAssets, total_records: oldAssets.length }),
+                );
+              }
             }
-          }) 
-        }     
-        const currentLayoutIndex = controlList.findIndex(r => r.type == 'menu' && r.category == selectedCategory )
-        if(currentLayoutIndex !== -1) {
-          setDropOpenAsset(null)
-          setMovedAssets(prevItems => {
-            const findIndex = prevItems.findIndex(row => row.asset == asset)
-            
-            if(findIndex !== -1) {
-              const items = [...prevItems]
-              items.splice( findIndex, 1 )
-              return items
-            } else {
-              if(event.target.value !== -1) {
-                return [...prevItems, {
-                  asset,
-                  move_category: event.target.value,
-                  currentLayout: controlList[currentLayoutIndex].layout_id,
-                  grant_doc_num: row.grant_doc_num,
-                  appno_doc_num: row.appno_doc_num,
-                }]
+          }
+        } else {
+          if(event.target.value == 5) {
+            setSelectedAssets(prevItems => {
+              const findIndex = prevItems.findIndex( r => r.asset == asset)
+              if( findIndex !== -1 ) {
+                const items = [...prevItems]
+                items.splice( findIndex, 1 )
+                return items
               } else {
-                return prevItems
-              }              
-            }
-          })      
+                return [...prevItems, row]
+              }
+            })          
+          } else if (event.target.value === -1) {
+            setSelectedAssets(prevItems => {
+              const findIndex = prevItems.findIndex( r => r.asset == asset)
+              if( findIndex !== -1 ) {
+                const items = [...prevItems]
+                items.splice( findIndex, 1 )
+                return items
+              } else {
+                return [...prevItems]
+              }
+            }) 
+          }     
+          const currentLayoutIndex = controlList.findIndex(r => r.type == 'menu' && r.category == selectedCategory )
+          if(currentLayoutIndex !== -1) {
+            setDropOpenAsset(null)
+            setMovedAssets(prevItems => {
+              const findIndex = prevItems.findIndex(row => row.asset == asset)
+              
+              if(findIndex !== -1) {
+                const items = [...prevItems]
+                items.splice( findIndex, 1 )
+                return items
+              } else {
+                if(event.target.value !== -1) {
+                  return [...prevItems, {
+                    asset,
+                    move_category: event.target.value,
+                    currentLayout: controlList[currentLayoutIndex].layout_id,
+                    grant_doc_num: row.grant_doc_num,
+                    appno_doc_num: row.appno_doc_num,
+                  }]
+                } else {
+                  return prevItems
+                }              
+              }
+            })      
+          }
         }
+        
       }      
     }    
   }

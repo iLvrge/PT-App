@@ -268,6 +268,7 @@ const Utilities = () => {
                 setRepoBreadcrumbItems( oldItems )
             }       
             if( type === 1 ) {
+                setClicked( prevItem => prevItem === false ? true : prevItem )
                 dispatch(getGoogleTemplates(googleToken, item.id))
             } else {
                 getRepoDriveFiles(item.id)
@@ -408,7 +409,7 @@ const Utilities = () => {
                         :
                         <LockOpenIcon onClick={(event) => unLockUtilitiesFolder(event, 1)}/>
                         }
-                        </span> */} Utility Files Folder: <BreadCrumbs  type={2} click={true} /* click={repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('utilities_container_id') && repo_folder_lock === 1 ? true : false} *//>
+                        </span> */} Utility Files Folder: <BreadCrumbs  type={2} click={false} /* click={repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('utilities_container_id') && repo_folder_lock === 1 ? true : false} *//>
                     </Typography>
                 </div>
                 <div className={classes.drive}> 

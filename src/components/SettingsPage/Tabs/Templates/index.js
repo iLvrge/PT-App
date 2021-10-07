@@ -45,6 +45,9 @@ const Templates = () => {
     const [ selectedRow, setSelectedRow] = useState( [] )
     const [ selectedAll, setSelectedAll ] = useState(false)
     const [ isDrag, setIsDrag ] = useState(false)
+    const [ clicked, setClicked] = useState( false )
+    const clickedRef = useRef()
+    const templateFolderBreadcrumbsRef = useRef()
 
     const [ selectedDriveItems, setSelectedDriveItems ] = useState( [] )
     const [ selectDriveRow, setSelectedDriveRow ] = useState( [] )
@@ -169,6 +172,27 @@ const Templates = () => {
     useEffect(() => {
         setDriveFiles(drive_files.files)
     }, [drive_files])
+
+    useEffect(() => {
+        clickedRef.current = clicked
+    }, [clicked])
+
+    useEffect(() => {
+        templateFolderBreadcrumbsRef.current = breadcrumbItems
+    }, [breadcrumbItems])
+
+    useEffect(() => {
+        return () => confirmUtilityFolder()
+    }, [])
+
+    const confirmUtilityFolder = () => {
+        /* console.log('confirmUtilityFolder', clickedRef.current, repoFolderBreadcrumbsRef.current) */
+        if(clickedRef.current === true) {
+            if(window.confirm('Would you like to allocate selected folder to Layouts Templates Folder?')) {
+                addTemplateFolder(templateFolderBreadcrumbsRef.current)
+            }
+        }        
+    } 
     
     const getRepoFolder = useCallback(async(userAccount, token) => {
         const {data} = await PatenTrackApi.getRepoFolder(userAccount)
@@ -336,7 +360,7 @@ const Templates = () => {
         })        
     }, [ google_profile, googleToken, repoBreadcrumbItems ])
 
-    const addTemplateFolder = useCallback(async() => {
+    const addTemplateFolder = useCallback(async(breadcrumbItems) => {
         let formData = new FormData();
         formData.append('template_container_id', breadcrumbItems[breadcrumbItems.length - 1].id)
         formData.append('template_container_name', breadcrumbItems[breadcrumbItems.length - 1].name)
@@ -351,12 +375,13 @@ const Templates = () => {
                 setBreadCrumbItems(JSON.parse(res.data.template_breadcrumb))
             }
         })       
-    }, [ google_profile, googleToken, breadcrumbItems ])
+    }, [ google_profile, googleToken ])
 
     const handleClickDriveRow = useCallback(async (event, row) => {
         event.preventDefault()
         if(row.mimeType == 'application/vnd.google-apps.folder') {
             console.log('handleClickDriveRow=>openDriveFolder', googleToken)
+            setClicked( prevItem => prevItem === false ? true : prevItem )
             openDriveFolder(event, row.id, row.name, 1)
         } else {
             const { checked } = event.target;
@@ -488,7 +513,7 @@ const Templates = () => {
                 <div className={classes.flexColumn}>
                     <div className={classes.heading}>
                         <Typography variant="body1" component="h2" className={classes.noWrap}>
-                            <span className={classes.relativeLockedIcon}>
+                            {/* <span className={classes.relativeLockedIcon}>
                             {
                                repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('template_container_id') && templates_folder_lock === 1
                                ?
@@ -496,7 +521,7 @@ const Templates = () => {
                                :
                                <LockOpenIcon onClick={(event) => unLockTemplateFolder(event, 1)}/>
                             }
-                            </span> Layout Templates:  <BreadCrumbs type={1} click={repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('template_container_id') && templates_folder_lock === 1 ? true : false}/>
+                            </span> */} Layouts Templates:  <BreadCrumbs type={1} click={false} /* click={repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('template_container_id') && templates_folder_lock === 1 ? true : false} *//>
                         </Typography>
                     </div>
                     <div className={classes.drive}>

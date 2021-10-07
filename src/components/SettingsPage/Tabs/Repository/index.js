@@ -188,7 +188,7 @@ const Repository = () => {
     const confirmUtilityFolder = () => {
         /* console.log('confirmUtilityFolder', clickedRef.current, repoFolderBreadcrumbsRef.current) */
         if(clickedRef.current === true) {
-            if(window.confirm('Would you like to allocate selected folder to Document Repository Folder?')) {
+            if(window.confirm('Would you like to allocate selected folder to Documents Reporsitory Folder?')) {
                 addRepositoryFolder(repoFolderBreadcrumbsRef.current)
             }
         }        
@@ -268,6 +268,7 @@ const Repository = () => {
                 setRepoBreadcrumbItems( oldItems )
             }       
             if( type === 1 ) {
+                setClicked( prevItem => prevItem === false ? true : prevItem )
                 dispatch(getGoogleTemplates(googleToken, item.id))
             } else {
                 getRepoDriveFiles(item.id)
@@ -498,7 +499,7 @@ const Repository = () => {
                         :
                         <LockOpenIcon onClick={(event) => unLockRepoFolder(event, 1)}/>
                         }
-                        </span> */} Document Reporsitory Folder: <BreadCrumbs  type={2} click={true} /* click={repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('container_id') && repo_folder_lock === 1 ? true : false} *//>
+                        </span> */} Documents Reporsitory Folder: <BreadCrumbs  type={2} click={false} /* click={repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('container_id') && repo_folder_lock === 1 ? true : false} *//>
                     </Typography>
                 </div>
                 <div className={classes.drive}>
