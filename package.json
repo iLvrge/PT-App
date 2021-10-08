@@ -66,7 +66,7 @@
     "vis-data": "7.0.0",
     "vis-data-71": "npm:vis-data@7.1",
     "vis-graph3d": "5.9.1",
-    "vis-timeline": "^7.4.6",
+    "vis-timeline": "^7.4.9",
     "vis-timeline-73": "npm:vis-timeline@7.3.7",
     "vis-util": "^5.0.2",
     "web-vitals": "^1.0.1",

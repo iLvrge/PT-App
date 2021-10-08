@@ -13073,10 +13073,10 @@ vis-graph3d@5.9.1:
   resolved "https://registry.yarnpkg.com/vis-timeline/-/vis-timeline-7.3.7.tgz"
   integrity sha512-1tqPdJsM6JXCBY80Ut15TCQD2VoolAabQ7mXguOH/X+HrBCv7KstkfZ3J2eVkHWevGEh2D8m+c8reyW2E6YI3Q==
 
-vis-timeline@^7.4.6:
-  version "7.4.6"
-  resolved "https://registry.yarnpkg.com/vis-timeline/-/vis-timeline-7.4.6.tgz"
-  integrity sha512-U4InXbpSaSH8Ag91RRnrjsC4Mf6SXNfdeCqVI3E2G1UrEM890otLS14/VpRYBYJkwSrFCVS2lPntEJHnU2XwTQ==
+vis-timeline@^7.4.9:
+  version "7.4.9"
+  resolved "https://registry.yarnpkg.com/vis-timeline/-/vis-timeline-7.4.9.tgz#7ed225a04b521cb6c2d603e498953b1222650806"
+  integrity sha512-+Mb829u4Jq9qPhh6EHAa7DRBEwXW0AclaXndxAC7e772oI5pMSAbhbKsQXsPYRPkf9vtac3/US+WPHJQYjGsRA==
 
 vis-util@^5.0.2:
   version "5.0.2"

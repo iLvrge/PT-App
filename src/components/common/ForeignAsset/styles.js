@@ -78,7 +78,13 @@ export default makeStyles(theme => ({
         },
     },
     headerButton: {
-        textTransform: 'initial'
+        textTransform: 'initial',
+    },
+    btnHeader: {
+        position: 'absolute',
+        top: 13,
+        left: 35,
+        padding: 0
     },
     items: {
         display: 'flex',

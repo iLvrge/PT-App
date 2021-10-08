@@ -89,18 +89,7 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
 
     const onHandleImport = (event) => {
         setOpen(!open)        
-        if(selectedRef.current.length > 0) {
-            const selectedSheetID = selectedRef.current[selectedRef.current.length - 1]
-            if(selectedSheetID !== '') {
-                const sheetItems = sheetsRef.current
-                const filterSheet = sheetItems.filter( sheet => sheet.sheet_id === selectedSheetID )
-                if(filterSheet.length > 0) {
-                    handleSheetName(filterSheet[0].sheet_name)
-                    getItemsFromSheet(filterSheet[0].sheet_name)
-                    //textFiledRef.current.value = filterSheet[0].sheet_name
-                }                
-            }            
-        }
+        
     }
 
     const COLUMNS = [
@@ -124,7 +113,7 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
             align: "left", 
             badge: true,
             show_button: true,
-            button: <Button onClick={onHandleImport}> <Add/> <span className={classes.headerButton}>New / Edit List</span></Button>
+            button: <Button onClick={onHandleImport} className={classes.btnHeader}> <Add/> <span className={classes.headerButton}>New List</span></Button>
         }
     ]
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)  
@@ -147,8 +136,8 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
     }, [invalidItems])
 
     useEffect(() => {
-        selectedRef.current = selectItems
-    }, [selectItems])
+        selectedRef.current = selectedRow
+    }, [selectedRow])
 
     useEffect(() => {
         sheetsRef.current = sheets
@@ -332,7 +321,7 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
                 if(data.list.length > 0) {
                     setSendRequest( true )
                     setSheets(data.list)
-                    setTotalRecords(data.total_Records)
+                    setTotalRecords(data.total_records)
                 } else if(data.message === 'Unable to retreive list, Please login again') {
                     setTimeout(openGoogleWindow, TIMER_OPEN) //open google login popup
                 }
@@ -366,9 +355,23 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
             dispatch(updateForeightAssetsSheetSelections(updateSelected, updateSelectedNames))
             resetAll()
             clearOtherItems()
-        } 
-        
-    }, [ dispatch, selectItems, selectNames])
+        } else {
+            const element = event.target.closest('div.ReactVirtualized__Table__rowColumn')
+            if( element != null ) {
+                const index = element.getAttribute('aria-colindex')
+                if(index == 2) {                    
+                    if(!selectedRow.includes(row.sheet_id)) {
+                        setSelectedRow([row.sheet_id])
+                        setOpen(!open)     
+                        handleSheetName(row.sheet_name)
+                        getItemsFromSheet(row.sheet_name)
+                    } else { 
+                        setSelectedRow([])
+                    }
+                }
+            }
+        }        
+    }, [ dispatch, selectItems, selectNames, selectedRow])
 
     /**
      * Select / Unselect All checkbox
@@ -612,12 +615,18 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
                 resizableWidth={660}
                 resizableHeight={490} 
                 minConstraints={[630, 450]}
-                onClose={(e) => setOpen(!open)} 
+                onClose={(e) => { 
+                    setOpen(!open)
+                    setSelectedRow([])
+                }} 
                 scroll={true}
                 footerCallBack={ <FooterItems/> }
             >
                 <CloseIcon 
-                    onClick={(e) => setOpen(!open)} 
+                    onClick={(e) => { 
+                    setOpen(!open)
+                    setSelectedRow([])
+                }}  
                     className={classes.close}/>
                 <ImportAsset 
                     updateItems={setItems} 

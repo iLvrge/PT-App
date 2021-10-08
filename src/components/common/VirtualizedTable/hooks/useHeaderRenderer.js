@@ -262,6 +262,7 @@ const HeadCell = ({
                     {badge === true && totalRows > 0 ? <Badge color='primary' max={9999999} className={classes.badge} badgeContent={`${numberWithCommas(totalRows)} ${ secondLabel !== undefined ? secondLabel : ''}`} showZero></Badge> : ''}
                     {showGrandTotal === true && ( grandTotal > 0 || rows.length > 0 && rows[rows.length - 1].grand_total > 0 ) ? <Badge color='primary' max={9999999} className={classes.badge} badgeContent={`${numberWithCommas(grandTotal > 0 ? grandTotal : rows.length > 0 && rows[rows.length - 1].grand_total ? rows[rows.length - 1].grand_total : 0)} ${ secondLabel !== undefined ? secondLabel : ''}`} showZero></Badge> : ''}
                     { badge === false && showGrandTotal === false &&  secondLabel !== undefined ? <div className={classes.labelPos}>{secondLabel}</div> : ''}
+                    { show_button === true ? button : '' }
                 </TableSortLabel>
               )
             }
@@ -307,9 +308,7 @@ const HeadCell = ({
           </>
         )
       }
-      {
-        show_button === true ? button : ''
-      }
+      
       {
         draggable === true ?
         <Draggable
