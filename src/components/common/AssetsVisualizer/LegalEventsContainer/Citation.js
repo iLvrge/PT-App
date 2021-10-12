@@ -78,7 +78,7 @@ const Citation = ({ number }) => {
 
     const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
 
-    /**
+   /**
    * on Itemover for the tooltip data
    */
 
@@ -166,19 +166,19 @@ const Citation = ({ number }) => {
         }          
     }, [])
 
-     /**
-   * Intial timline items dataset and ref setup
-   */
-  useEffect(() => {
-    timelineRef.current.setOptions(options) 
-    timelineRef.current.on('itemover', onItemover)
-    timelineRef.current.on('itemout', onItemout)
-    return () => {
-      timelineRef.current.off('itemover', onItemover) 
-      timelineRef.current.off('itemout', onItemout)
-      resetTooltipContainer()
-    } 
-  }, [ onItemover, onItemout ]) 
+    /**
+    * Intial timline items dataset and ref setup
+    */
+    useEffect(() => {
+        timelineRef.current.setOptions(options) 
+        timelineRef.current.on('itemover', onItemover)
+        timelineRef.current.on('itemout', onItemout)
+        return () => {
+            timelineRef.current.off('itemover', onItemover) 
+            timelineRef.current.off('itemout', onItemout)
+            resetTooltipContainer()
+        } 
+    }, [ onItemover, onItemout ]) 
 
 
     useEffect(() => {

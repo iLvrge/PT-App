@@ -224,6 +224,19 @@ export default makeStyles(theme => ({
   timelinePtab: {
     height: '100%', 
     width: '100%',
+    '& .custom_tooltip':{
+      position:'absolute',  
+      width:'150px',
+      /* height:'150px', */
+      background:'#222222',
+      border:'1px solid #545454',
+      color:'#BDBDBD',
+      padding: '5px 10px' ,
+      '& h4':{
+        margin: 0 
+      },
+      overflow: 'hidden'
+    },
     '& .vis-panel.vis-center':{
       borderTop: 0
     },

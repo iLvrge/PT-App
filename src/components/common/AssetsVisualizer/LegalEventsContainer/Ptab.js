@@ -5,6 +5,8 @@ import { DataSet } from 'vis-data/esnext'
 import { Timeline } from 'vis-timeline-73/esnext'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import moment from 'moment'
+import { numberWithCommas, toTitleCase } from '../../../../utils/numbers'
+
 import PatenTrackApi from '../../../../api/patenTrack2'
 import useStyles from './styles'
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
@@ -46,7 +48,8 @@ const convertDataToItem = (item) => {
       showTooltip: false
     })
 }
-
+var tootlTip = ''
+const TIME_INTERVAL = 1000
 
 const Ptab = ({ number }) => {
     const classes = useStyles()
@@ -58,8 +61,80 @@ const Ptab = ({ number }) => {
     const [ timelineItems, setTimelineItems ] = useState([])
     const [ isLoadingTimelineData, setIsLoadingTimelineData ] = useState(false)
     const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(true)
+    const [ tooltipItem, setToolTipItem] = useState([])
+    const [ timeInterval, setTimeInterval] = useState(null)
 
     const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
+
+    /**
+    * on Itemover for the tooltip data
+    */
+
+    const onItemover = ({item, event}) => {
+        const overItem = items.current.get(item)    
+        if(overItem != null) {
+            onItemout()
+            tootlTip = overItem.rawData.id
+            showTooltip(overItem.rawData, event)
+        }
+    }
+
+    /**
+    * on onItemout for the remove tooltip
+    */
+
+    const onItemout = () => {
+        tootlTip = ''
+        resetTooltipContainer()
+        setToolTipItem([])
+        
+        /* clearInterval(timeInterval) */
+    }
+
+    const resetTooltipContainer = () => {  
+        const findOldToolTip = document.getElementsByClassName('custom_tooltip')
+        if( findOldToolTip.length > 0 ) {
+            findOldToolTip[0].parentNode.removeChild(findOldToolTip[0])      
+        } 
+    }
+
+
+    // Custom ToolTip
+  
+    const showTooltip = (item, event) => {     
+        setTimeout(() => {
+            if(tootlTip === item.id) {      
+                const color = '#fff'   
+                const height = window.innerHeight|| document.documentElement.clientHeight || document.body.clientHeight;   
+                let tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.clientY - 400 }px;left:${event.clientX + 20 }px;'>`
+                const { otherInfo } = item
+                Object.keys(otherInfo).map(key => {
+                    if(Array.isArray(otherInfo[key])) {
+                        otherInfo[key].forEach( arrItem => {
+                            Object.keys(arrItem).map(arrKey => {
+                                tootltipTemplate += `<div>
+                                    <h4 style='display:inline'>${toTitleCase(arrKey)}: </h4>${arrKey.toLowerCase().indexOf('date') !== -1 ?  moment(new Date(arrItem[arrKey])).format(DATE_FORMAT) : arrItem[arrKey]}
+                                </div>`
+                            })
+                        })
+                    } else {
+                        tootltipTemplate += `<div>
+                            <h4 style='display:inline'>${toTitleCase(key)}: </h4>${key.toLowerCase().indexOf('date') !== -1 ?  moment(new Date(otherInfo[key])).format(DATE_FORMAT) : otherInfo[key]}
+                        </div>`
+                    }                    
+                })
+
+                tootltipTemplate += `</div>`
+                resetTooltipContainer() 
+                if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
+                    document.body.insertAdjacentHTML('beforeend',tootltipTemplate)                
+                }
+            } else {
+                resetTooltipContainer()
+            }                
+        }, TIME_INTERVAL) 
+    }
+
 
 
     useEffect(() => {
@@ -125,7 +200,19 @@ const Ptab = ({ number }) => {
         timelineRef.current.setOptions({ ...options, start, end, min: start, max: end })
     }, [ timelineRawData, isLoadingTimelineRawData, timelineContainerRef ])
 
-
+    /**
+    * Intial timline items dataset and ref setup
+    */
+    useEffect(() => {
+        timelineRef.current.setOptions(options) 
+        timelineRef.current.on('itemover', onItemover)
+        timelineRef.current.on('itemout', onItemout)
+        return () => {
+        timelineRef.current.off('itemover', onItemover) 
+        timelineRef.current.off('itemout', onItemout)
+        resetTooltipContainer()
+        } 
+    }, [ onItemover, onItemout ]) 
 
     return(
         <Paper className={classes.root}>   
