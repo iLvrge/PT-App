@@ -289,6 +289,19 @@ export default makeStyles(theme => ({
     //   overflowY: 'auto',
     //   overflowX: 'hidden',
     // },
+    '& .custom_tooltip':{
+      position:'absolute',  
+      width:'150px',
+      /* height:'150px', */
+      background:'#222222',
+      border:'1px solid #545454',
+      color:'#BDBDBD',
+      padding: '5px 10px' ,
+      '& h4':{
+        margin: 0 
+      },
+      overflow: 'hidden'
+    },
     '& .vis-timeline':{
       border: '0 !important',
       /* backgroundColor: '#424242 !important', */
@@ -337,7 +350,7 @@ export default makeStyles(theme => ({
         border: 0,
         width: '9.6rem',
         borderRadius: '3px',
-        height: '5.4rem',
+        height: '4.4rem',
         '&.vis-selected':{
           '& .vis-item-content':{
             border: '1px solid #e60000 !important',
@@ -386,10 +399,10 @@ export default makeStyles(theme => ({
             '& img':{
               /*width: '5rem',*/
               height: '3.5rem',
-              opacity: '0.75',
+              /* opacity: '0.75',
               '&:hover':{
                 opacity: 1
-              }
+              } */
               /* maxHeight: '2.5rem' */
             },
             '& img.no-image':{
@@ -418,6 +431,7 @@ export default makeStyles(theme => ({
             },
             '& .textColumn':{
               display: 'flex',
+              lineHeight: '1.1',
               '& .absolute':{
                 position: 'absolute',
                 bottom: 0

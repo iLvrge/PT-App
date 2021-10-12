@@ -42,7 +42,8 @@ const convertDataToItem = (item) => {
       number: item.name,
       country: 'US',
       className: `asset-type-${assetType}`,
-      collection: []
+      collection: [],
+      showTooltip: false
     })
 }
 

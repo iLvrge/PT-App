@@ -7,7 +7,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import moment from 'moment'
 import PatenTrackApi from '../../../../api/patenTrack2'
 
-import { numberWithCommas } from '../../../../utils/numbers'
+import { numberWithCommas, toTitleCase } from '../../../../utils/numbers'
 
 import useStyles from './styles'
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
@@ -17,7 +17,8 @@ const CDN_PATH_LOGO = process.env.REACT_APP_COMPANY_PATH
 const NO_IMAGE_AVAILABLE = 'no_image_available.jpg'
 
 
-
+var tootlTip = ''
+const TIME_INTERVAL = 1000
 const options = {  
     height: '100%',
     autoResize: true,
@@ -29,17 +30,11 @@ const options = {
     verticalScroll: true,
     zoomFriction: 30,
     zoomMin: 1000 * 60 * 60 * 24 * 7,  
-    tooltip:{
-        template: function(item) {
-          return `<span>Number: ${item.number}<br/>Assignee: ${item.rawData.assignee}<br/>Grant Date: ${moment(new Date(item.start)).format(DATE_FORMAT)}<br/>Commbined: ${item.rawData.combined}</span>`
-        } 
-    },  
     template: function(item, element, data) { 
-        
       return `<div class="first">
                 <div class="flexMain">
                     <div class="textColumn">${numberWithCommas(data.number)}</div>
-                    <div class="textColumn text-height" >${data.rawData.assignee}</div>
+                    <div class="textColumn text-height" >${toTitleCase(data.rawData.assignee)}</div>
                     <div class="textColumn small-font">${moment(new Date(data.rawData.start)).format(DATE_FORMAT)}</div>
                 </div>
             </div>
@@ -62,7 +57,8 @@ const convertDataToItem = (item) => {
       number: item.number,
       country: 'US',
       className: `asset-type-${assetType}`,
-      collection: []
+      collection: [],
+      showTooltips: false, 
     })
 }
 
@@ -77,8 +73,74 @@ const Citation = ({ number }) => {
     const [ timelineItems, setTimelineItems ] = useState([])
     const [ isLoadingTimelineData, setIsLoadingTimelineData ] = useState(false)
     const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(true)
-    
+    const [ tooltipItem, setToolTipItem] = useState([])
+    const [ timeInterval, setTimeInterval] = useState(null)
+
     const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
+
+    /**
+   * on Itemover for the tooltip data
+   */
+
+    const onItemover = ({item, event}) => {
+        const overItem = items.current.get(item)    
+        if(overItem != null) {
+            onItemout()
+            tootlTip = overItem.rawData.id
+            showTooltip(overItem.rawData, event)
+        }
+    }
+
+  /**
+   * on onItemout for the remove tooltip
+   */
+
+    const onItemout = () => {
+        tootlTip = ''
+        resetTooltipContainer()
+        setToolTipItem([])
+        
+        /* clearInterval(timeInterval) */
+    }
+
+    const resetTooltipContainer = () => {  
+        /* const findOldToolTip = document.getElementsByClassName('custom_tooltip')
+        if( findOldToolTip.length > 0 ) {
+            findOldToolTip[0].parentNode.removeChild(findOldToolTip[0])      
+        } */ 
+    }
+
+    // Custom ToolTip
+  
+    const showTooltip = (item, event) => {    
+        setTimeout(() => {
+            if(tootlTip === item.id) {      
+                const color = '#fff'      
+                const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.clientY}px;left:${event.clientX + 20 }px;'>
+                                            <h4 style='color:${color};text-align:left;margin:0'>${item.number}</h4>
+                                            <div>
+                                                <h4 style='display:inline'>Grant Date: </h4>${moment(new Date(item.start)).format(DATE_FORMAT)}
+                                            </div>
+                                            <div>
+                                                <h4>Assignees:</h4>
+                                                ${item.all_assignee.map(name => (
+                                                    '<div>'+ toTitleCase(name.assignee_organization) +'</div>'
+                                                )).join('')}
+                                            </div>
+                                            <div>
+                                                <h4 style='display:inline'>Combined Citations: </h4>
+                                                ${item.combined}
+                                            </div>
+                                        </div>` 
+                resetTooltipContainer() 
+                if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
+                    document.body.insertAdjacentHTML('beforeend',tootltipTemplate)                
+                }
+            } else {
+                resetTooltipContainer()
+            }                
+        }, TIME_INTERVAL) 
+    }
 
     useEffect(() => {
         const getPtabData = async() => {
@@ -103,6 +165,20 @@ const Citation = ({ number }) => {
             timelineRef.current = new Timeline(timelineContainerRef.current, [], options)    
         }          
     }, [])
+
+     /**
+   * Intial timline items dataset and ref setup
+   */
+  useEffect(() => {
+    timelineRef.current.setOptions(options) 
+    timelineRef.current.on('itemover', onItemover)
+    timelineRef.current.on('itemout', onItemout)
+    return () => {
+      timelineRef.current.off('itemover', onItemover) 
+      timelineRef.current.off('itemout', onItemout)
+      resetTooltipContainer()
+    } 
+  }, [ onItemover, onItemout ]) 
 
 
     useEffect(() => {

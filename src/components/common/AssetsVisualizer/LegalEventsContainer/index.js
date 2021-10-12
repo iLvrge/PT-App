@@ -35,17 +35,18 @@ const LegalEventsContainer = ({ events, type }) => {
           <>
             <div className={classes.graphContainer}>  
               {selectedTab === 0 && <Fees events={events} number={selectedNumber} />}
-              {selectedTab === 1 && <Events data={eventsData} number={selectedNumber} />}
-              {selectedTab === 2 && <Litigation data={litigationData} number={selectedNumber} />}  
-              {selectedTab === 3 && <Ptab data={ptabData} number={selectedNumber}/>}                                  
-              {selectedTab === 4 && <Citation data={citationData} number={selectedNumber} />}   
+              {selectedTab === 1 && <Citation data={citationData} number={selectedNumber} />}   
+              {selectedTab === 2 && <Ptab data={ptabData} number={selectedNumber}/>}   
+              {selectedTab === 3 && <Litigation data={litigationData} number={selectedNumber} />}   
+              {selectedTab === 4 && <Events data={eventsData} number={selectedNumber} />}                             
+              
             </div>
             <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
               {
-                ['Fees', 'Events', 'Litigation', 'PTAB', 'Citations'].map( (item, index) => (
+                ['M.Fees', 'F.Citations', /* 'Events',  */'PTAB', 'Litigation'].map( (item, index) => (
                   <Tab
                     key={index}
-                    className={classes.tab}
+                    className={classes.tab} 
                     label={item}
                   />
                 ))
