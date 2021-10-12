@@ -384,7 +384,8 @@ export default makeStyles(theme => ({
               marginLeft: '5px'
             },
             '& img':{
-              width: '5rem',
+              /*width: '5rem',*/
+              height: '4rem',
               opacity: '0.75',
               '&:hover':{
                 opacity: 1
