@@ -349,7 +349,7 @@ export default makeStyles(theme => ({
           border: '1px solid #545454',
           height:'100%',          
           display: 'flex',
-          padding: '5px 5px 0 0',
+          padding: 5,
           overflow: 'hidden',
           flexWrap: 'wrap',   
           borderRadius: 3,       
@@ -385,7 +385,7 @@ export default makeStyles(theme => ({
             },
             '& img':{
               /*width: '5rem',*/
-              height: '4rem',
+              height: '3.5rem',
               opacity: '0.75',
               '&:hover':{
                 opacity: 1
@@ -393,7 +393,7 @@ export default makeStyles(theme => ({
               /* maxHeight: '2.5rem' */
             },
             '& img.no-image':{
-              height: '4rem',
+              /* height: '4rem', */
               /* maxHeight: '2.5rem' */
             }
           },
@@ -417,17 +417,13 @@ export default makeStyles(theme => ({
               width: '4.3rem'
             },
             '& .textColumn':{
-              height: '100%',
               display: 'flex',
-              position: 'relative',            
-              paddingLeft: 5,
-              flexDirection: 'column',
               '& .absolute':{
                 position: 'absolute',
                 bottom: 0
               }
             },
-            '& .small-font':{              
+            '& .small-font':{                
               fontSize: '0.65rem',  
             },
             '& .text-height':{
