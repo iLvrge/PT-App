@@ -74,7 +74,7 @@ const getMultiFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelPtab
 
 class PatenTrackApi {
   static getSiteLogo() {
@@ -1085,6 +1085,41 @@ class PatenTrackApi {
       }
     } 
   }
+  static getPtabData( asset ) {
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelPtab = c
+    })
+    return axios.get(`${base_new_api_url}/ptab/${asset}`,  header)
+  } 
+  
+  static cancelPtab () {
+    if (cancelPtab !== undefined) {
+      try{
+        throw cancelPtab('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+  static getCitationData( asset ) {
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelCitationData = c
+    })
+    return axios.get(`${base_new_api_url}/citation/${asset}`,  header)
+  } 
+  
+  static cancelCitationData () {
+    if (cancelCitationData !== undefined) {
+      try{
+        throw cancelCitationData('Operation canceled by the user.')  
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }  
 }
+
 
 export default PatenTrackApi

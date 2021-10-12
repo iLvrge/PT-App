@@ -220,5 +220,229 @@ export default makeStyles(theme => ({
         opacity: '0.5',
       } 
     }
-  }
+  },
+  timelinePtab: {
+    height: '100%', 
+    width: '100%',
+    '& .vis-panel.vis-center':{
+      borderTop: 0
+    },
+    '& .vis-timeline':{
+      border: '0 !important',
+      backgroundColor: '#222222 !important',
+      '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground':{
+        /* backgroundColor: '#424242 !important', */
+      }
+    },
+    '& .vis-left.vis-panel.vis-vertical-scroll, .vis-right.vis-panel.vis-vertical-scroll':{
+      overflowY: 'hidden'
+    },
+    '& .vis-itemset .vis-background':{
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      overflow: 'visible',
+    },
+    '& .vis-item': {
+      '&.vis-line':{
+        border: 0,
+        backgroundColor: 'unset'
+      }
+    },
+    '& .vis-dot': {
+      background: 'none !important',
+      border: 'none !important',
+    },
+    '& .vis-item.vis-background.negative': {
+      background: 'linear-gradient(to right,  #FFFF00 0%,#FFFF00 50%,#E60000 50%,#E60000 100%)',
+      opacity: '0.5',
+    },
+    '& .vis-item.vis-range': {
+      '&.asset-type-yellow': {
+        background: 'linear-gradient(to right,  #FFFF00 0%,#FFFF00 50%,#E60000 50%,#E60000 100%)',
+        opacity: '0.5',
+      } 
+    },
+    '& .vis-item.vis-box': {      
+      '&.asset-type-default': {
+        backgroundColor: 'rgba(34,34,34, 0.75)',
+        border: 0,
+        borderRadius: 3,
+        '& .vis-item-content':{
+          border: '1px solid #9d9d9d',
+          borderRadius: 3, 
+          padding: 4,
+          color: '#BDBDBD',
+        }
+      }
+    }
+  },
+  timelineCitation: {
+    height: '100%',
+    width: '100%',
+    // '& .vis-center .vis-content': {
+    //   transform: 'translateY(0px) !important',
+    //   height: '100% !important',
+    // },
+    // '& .vis-center .vis-itemset': {
+    //   height: '329px !important',
+    //   overflowY: 'auto',
+    //   overflowX: 'hidden',
+    // },
+    '& .vis-timeline':{
+      border: '0 !important',
+      /* backgroundColor: '#424242 !important', */
+      '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground':{
+        /* backgroundColor: '#424242 !important', */
+      }
+    },
+    '& .vis-left.vis-panel.vis-vertical-scroll, & .vis-right.vis-panel.vis-vertical-scroll': {
+      overflowY: 'hidden',
+    },
+    '& .vis-item': {
+      fontSize: 12,
+      /* backgroundColor: '#222', */
+      color: '#fff',
+      borderRadius: '3px',
+      '&.vis-point':{
+        maxWidth:'125px',
+        overflow:'hidden',
+        maxHeight: '160px',
+        /* minHeight: '125px' */
+      },
+      '& img':{
+        /*height: '100%',
+        width: '100%'*/ 
+      },
+      '& .vis-item-content':{
+        margin:'0px !important'
+      },
+      '&.vis-line':{
+        border: 0,
+        backgroundColor: 'unset'
+      },      
+    },
+    '& .vis-cluster': {
+      backgroundColor: '#3f51b547',
+    },
+    '& .vis-dot': {
+      background: 'none !important',
+      border: 'none !important',
+    },
+    '& .vis-item.vis-box': {
+      borderColor: indigo[500],
+      backgroundColor: indigo[500],
+      '&.asset-type-default': {
+        backgroundColor: '#222222',
+        border: 0,
+        width: '9.6rem',
+        borderRadius: '3px',
+        height: '5.4rem',
+        '&.vis-selected':{
+          '& .vis-item-content':{
+            border: '1px solid #e60000 !important',
+          }
+        },
+        '& .vis-item-content':{
+          color: '#BDBDBD',
+          width:'100%',
+          border: '1px solid #545454',
+          height:'100%',          
+          display: 'flex',
+          padding: '5px 5px 0 0',
+          overflow: 'hidden',
+          flexWrap: 'wrap',   
+          borderRadius: 3,       
+          justifyContent: 'flex-start',
+          flexDirection: 'column',           
+          '& .maxHeight':{
+            maxHeight: '51px',
+            overflow: 'hidden',
+            justifyContent: 'flex-start',
+            paddingBottom: '0.15rem'
+          },
+          '& .first':{
+            display: 'flex',
+            fontSize: '0.875rem',
+            fontWeight: 500,
+            overflow: 'hidden',
+            height: '100%',
+            width:'55%',
+            marginRight: 3
+          },
+          '& .second':{
+            display:'flex',
+            flexDirection: 'column',  
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '0.65rem',
+            fontWeight: 400,
+            height: '100%',
+            width: '45%',
+            overflow: 'hidden',
+            '& div':{
+              marginLeft: '5px'
+            },
+            '& img':{
+              width: '5rem',
+              opacity: '0.75',
+              '&:hover':{
+                opacity: 1
+              }
+              /* maxHeight: '2.5rem' */
+            },
+            '& img.no-image':{
+              height: '4rem',
+              /* maxHeight: '2.5rem' */
+            }
+          },
+          '& .flexMain':{
+              display: 'flex',
+              overflow: 'hidden',
+              flexGrow: 1,
+              alignItems: 'flex-start',
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
+              height: '100%',
+              '&.alignBaseline':{
+                alignItems: 'baseline',
+                '& .textColumn':{
+                  '& .absolute':{
+                    bottom: 7
+                  }
+                }
+              },
+            '& img':{
+              width: '4.3rem'
+            },
+            '& .textColumn':{
+              height: '100%',
+              display: 'flex',
+              position: 'relative',            
+              paddingLeft: 5,
+              flexDirection: 'column',
+              '& .absolute':{
+                position: 'absolute',
+                bottom: 0
+              }
+            },
+            '& .small-font':{              
+              fontSize: '0.65rem',  
+            },
+            '& .text-height':{
+              whiteSpace: 'initial',
+              textAlign: 'left',
+              height: 140,
+              overflow: 'hidden'
+            }
+          }
+        }
+      } 
+    },
+    '& .vis-item.vis-point.vis-selected': {
+      backgroundColor: 'none !important',
+      color: '#e60000',
+      /* fontWeight: 'bold', */
+    },
+  },
 }))
