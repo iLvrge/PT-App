@@ -104,10 +104,10 @@ const Citation = ({ number }) => {
     }
 
     const resetTooltipContainer = () => {  
-        /* const findOldToolTip = document.getElementsByClassName('custom_tooltip')
+        const findOldToolTip = document.getElementsByClassName('custom_tooltip')
         if( findOldToolTip.length > 0 ) {
             findOldToolTip[0].parentNode.removeChild(findOldToolTip[0])      
-        } */ 
+        } 
     }
 
     // Custom ToolTip
