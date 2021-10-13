@@ -485,7 +485,8 @@ export default makeStyles(theme => ({
               textAlign: 'left',
               marginTop: 2,
               lineHeight: '1.05',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              height: 140
             }
           }
         }
