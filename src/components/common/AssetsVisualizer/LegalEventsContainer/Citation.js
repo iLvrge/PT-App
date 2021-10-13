@@ -117,9 +117,9 @@ const Citation = ({ number }) => {
             if(tootlTip === item.id) {      
                 const color = '#fff'      
                 const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.clientY}px;left:${event.clientX + 20 }px;'>
-                                            <h4 style='color:${color};text-align:left;margin:0'>${item.number}</h4>
+                                            <h4 style='color:${color};text-align:left;margin:0'>${numberWithCommas(item.number)}</h4>
                                             <div>
-                                                <h4 style='display:inline'>Grant Date: </h4>${moment(new Date(item.start)).format(DATE_FORMAT)}
+                                                <h4>Grant Date: </h4>${moment(new Date(item.start)).format(DATE_FORMAT)}
                                             </div>
                                             <div>
                                                 <h4>Assignees:</h4>
@@ -128,8 +128,8 @@ const Citation = ({ number }) => {
                                                 )).join('')}
                                             </div>
                                             <div>
-                                                <h4 style='display:inline'>Combined Citations: </h4>
-                                                ${item.combined}
+                                                <h4>Cited total of: </h4>
+                                                ${item.combined} patent assets
                                             </div>
                                         </div>` 
                 resetTooltipContainer() 
@@ -183,8 +183,8 @@ const Citation = ({ number }) => {
 
     useEffect(() => {
         if (isLoadingTimelineRawData) return
-        let start = new moment().subtract(10, 'months')
-        let end = new moment().add(10, 'months')
+        let start = new moment().subtract(20, 'months')
+        let end = new moment().add(20, 'months')
         if(timelineContainerRef.current != null) {
             const convertedItems = timelineRawData.map(convertDataToItem)
             setTimelineItems(convertedItems)
@@ -206,8 +206,8 @@ const Citation = ({ number }) => {
                     return c
                 })
                 Promise.all(promise)
-                start = new moment(start).subtract(10, 'months') 
-                end = new moment(end).add(10, 'months')
+                start = new moment(start).subtract(20, 'months') 
+                end = new moment(end).add(20, 'months')
                 items.current.add(convertedItems)
                 setDisplay('block')
             } else {

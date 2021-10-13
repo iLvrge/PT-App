@@ -478,11 +478,13 @@ export default makeStyles(theme => ({
             },
             '& .small-font':{                
               fontSize: '0.65rem',  
+              marginTop: 2,
             },
             '& .text-height':{
               whiteSpace: 'initial',
               textAlign: 'left',
-              height: 140,
+              marginTop: 2,
+              lineHeight: '1.05',
               overflow: 'hidden'
             }
           }
