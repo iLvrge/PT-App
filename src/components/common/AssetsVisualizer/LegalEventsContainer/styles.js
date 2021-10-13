@@ -308,10 +308,19 @@ export default makeStyles(theme => ({
         padding: 4,
         color: '#BDBDBD',
         height: '100%',
+        width: '100%',
         '& .first':{
           display: 'flex',
           fontSize: '0.875rem',
           fontWeight: 500,
+          flexDirection: 'column',
+          '& .textColumn':{
+            display: 'flex',
+            '& h4':{
+              display: 'contents',
+              margin: 0
+            }
+          }
         }
       }
     }
@@ -479,14 +488,15 @@ export default makeStyles(theme => ({
             '& .small-font':{                
               fontSize: '0.65rem',  
               marginTop: 2,
+              lineHeight: '0.81'
             },
             '& .text-height':{
               whiteSpace: 'initial',
               textAlign: 'left',
-              marginTop: 2,
-              lineHeight: '1.05',
+              marginTop: 1,
+              lineHeight: '1.025',
               overflow: 'hidden',
-              height: 140
+              height: '130px !important'
             }
           }
         }

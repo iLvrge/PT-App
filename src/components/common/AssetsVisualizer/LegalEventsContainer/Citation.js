@@ -128,7 +128,7 @@ const Citation = ({ number }) => {
                                                 )).join('')}
                                             </div>
                                             <div>
-                                                <h4>Cited total of: </h4>
+                                                <h4>Cited a Total of: </h4>
                                                 ${item.combined} patent assets
                                             </div>
                                         </div>` 

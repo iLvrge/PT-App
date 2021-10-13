@@ -26,9 +26,9 @@ const options = {
     zoomFriction: 30,
     zoomMin: 1000 * 60 * 60 * 24 * 7,    
     template: function(item, element, data) { 
-      return `<div class='first'>${data.rawData.name}<br/>Filed: ${moment(new Date(data.rawData.start)).format(DATE_FORMAT)} Status: ${data.rawData.status}, ${moment(new Date(data.rawData.end)).format(DATE_FORMAT)}</div>`
+      return `<div class='first'><div class='textColumn'><h4>${data.rawData.name} (${data.rawData.otherInfo.proceedingNumber})</h4></div><div class='textColumn'><h4>Filed: </h4> ${moment(new Date(data.rawData.start)).format(DATE_FORMAT)}</div><div class='textColumn'><h4>Status: </h4> ${data.rawData.status} (${moment(new Date(data.rawData.end)).format(DATE_FORMAT)})</div></div>`
     },  
-}
+} 
 
 const convertDataToItem = (item) => {
     const assetType = 'default'
