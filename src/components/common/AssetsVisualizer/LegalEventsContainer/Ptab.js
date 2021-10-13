@@ -190,7 +190,7 @@ const Ptab = ({ number }) => {
                 items.current.add(convertedItems)
                 setDisplay('block')
             } else {
-                setDisplay('none')
+                /* setDisplay('none') */
             }
         }
         /* console.log(items.current, start, end) */

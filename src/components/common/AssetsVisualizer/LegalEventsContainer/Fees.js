@@ -208,7 +208,7 @@ const Fees = ({ events }) => {
       items.current.add(convertedItems)
       setDisplay('block')      
     } else {
-      setDisplay('none')
+      /* setDisplay('none') */
     }
     timelineRef.current.setItems(items.current)
     
