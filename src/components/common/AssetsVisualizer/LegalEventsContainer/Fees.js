@@ -23,15 +23,7 @@ const options = {
     verticalScroll: true,
     zoomFriction: 30,
     zoomMin: 1000 * 60 * 60 * 24 * 7,  
-    tooltip:{
-      template: function(originalItemData) {
-        let text = originalItemData.description.split(',');
-        const firstText = text[0];
-        text.splice(0,1);
-        text = firstText+'<br/>'+text.join(',');
-        return `<span>${text}</span>`
-      }
-    } 
+    
 }
 const DATE_FORMAT = 'MMM DD, YYYY'
  
@@ -55,6 +47,7 @@ const convertDataToItem = (eventItem, index, type, cls, icons) => {
     className: type === 1 ? 'negative' : 'asset-type-default',
     description: type == 0 ? eventItem.maintainence_code.event_description : 'Payment Due / Grace Period',
     collection: [], 
+    showTooltip: false
   } 
 
   if(type === 1) {
@@ -64,6 +57,9 @@ const convertDataToItem = (eventItem, index, type, cls, icons) => {
 
   return (item)
 }
+
+var tootlTip = ''
+const TIME_INTERVAL = 1000
 
 const Fees = ({ events }) => {
   const classes = useStyles()
@@ -75,9 +71,11 @@ const Fees = ({ events }) => {
   const [ legalEvents, setLegalEvents ] = useState([])
   const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(true)
   const [ isLoadingTimelineData, setIsLoadingTimelineData ] = useState(false)
+  const [ tooltipItem, setToolTipItem] = useState([])
+  const [ timeInterval, setTimeInterval] = useState(null)
   
   const legalEventDataRetrieved = useSelector(state => state.patenTrack.legalEventDataRetrieved)
-  
+
   useEffect(() => {
       timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
   }, [])
@@ -97,6 +95,80 @@ const Fees = ({ events }) => {
     }
     getLegalEventListFunction()
   }, [ events ])
+
+  /**
+  * on Itemover for the tooltip data
+  */
+
+  const onItemover = ({item, event}) => {
+    const overItem = items.current.get(item)    
+    console.log('onItemover=>overItem', overItem, event, item)
+    if(overItem != null) {
+        onItemout()
+        tootlTip = overItem.rawData.id
+        showTooltip(overItem.rawData, event)
+    }
+  }
+
+  /**
+  * on onItemout for the remove tooltip
+  */
+
+  const onItemout = () => {
+      tootlTip = ''
+      resetTooltipContainer()
+      setToolTipItem([])
+      
+      /* clearInterval(timeInterval) */
+  }
+
+  const resetTooltipContainer = () => {  
+    const findOldToolTip = document.getElementsByClassName('custom_tooltip')
+    if( findOldToolTip.length > 0 ) {
+      findOldToolTip[0].parentNode.removeChild(findOldToolTip[0])      
+    } 
+  }
+
+
+  // Custom ToolTip
+
+  const showTooltip = (item, event) => {     
+    setTimeout(() => {
+      if(tootlTip === item.id) {      
+        const color = '#fff'   
+        const height = window.innerHeight|| document.documentElement.clientHeight || document.body.clientHeight;  
+        
+        let text = item.maintainence_code.event_description.split(',');
+        const firstText = text[0];
+        text.splice(0,1);
+        text = firstText+'<br/>'+text.join(',');
+
+        let tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.clientY }px;left:${event.clientX + 20 }px;'><h4 style='color:${color};text-align:left;margin:0'>${text}</h4></div>`
+        resetTooltipContainer() 
+        if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
+            document.body.insertAdjacentHTML('beforeend',tootltipTemplate)                
+        }
+      } else {
+          resetTooltipContainer()
+      }                
+    }, TIME_INTERVAL) 
+  }
+
+
+  /**
+  * Intial timline items dataset and ref setup
+  */
+  useEffect(() => {
+    timelineRef.current.setOptions(options) 
+    timelineRef.current.on('itemover', onItemover)
+    timelineRef.current.on('itemout', onItemout)
+    return () => {
+      timelineRef.current.off('itemover', onItemover) 
+      timelineRef.current.off('itemout', onItemout)
+      resetTooltipContainer()
+    } 
+  }, [ onItemover, onItemout ]) 
+
 
   useEffect(() => {
     if (isLoadingTimelineRawData) return 
@@ -134,8 +206,7 @@ const Fees = ({ events }) => {
       min = start
       max = end
       items.current.add(convertedItems)
-      setDisplay('block')
-      
+      setDisplay('block')      
     } else {
       setDisplay('none')
     }

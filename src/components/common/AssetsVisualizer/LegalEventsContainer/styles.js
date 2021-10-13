@@ -74,6 +74,19 @@ export default makeStyles(theme => ({
   timeline: { 
     height: '100%', 
     width: '100%',
+    '& .custom_tooltip':{
+      position:'absolute',  
+      width:'150px',
+      /* height:'150px', */
+      background:'#222222',
+      border:'1px solid #545454',
+      color:'#BDBDBD',
+      padding: '5px 10px' ,
+      '& h4':{
+        margin: 0 
+      },
+      overflow: 'hidden'
+    },
     '& .vis-panel.vis-center':{
       borderTop: 0
     },
@@ -121,7 +134,7 @@ export default makeStyles(theme => ({
           flexWrap: 'wrap',          
           justifyContent: 'flex-start',
           alignItems: 'flex-start',
-          border: '1px solid #9d9d9d',
+          border: '1px solid #545454',
           borderRadius: '3px', 
           padding: '4px 0px 2px 4px',
           overflow: 'hidden',
@@ -276,16 +289,29 @@ export default makeStyles(theme => ({
         opacity: '0.5',
       } 
     },
-    '& .vis-item.vis-box': {      
+    '& .vis-item.vis-range': {   
+      height: '4.4rem',   
       '&.asset-type-default': {
         backgroundColor: 'rgba(34,34,34, 0.75)',
         border: 0,
         borderRadius: 3,
         '& .vis-item-content':{
-          border: '1px solid #9d9d9d',
+          border: '1px solid #545454',
           borderRadius: 3, 
           padding: 4,
           color: '#BDBDBD',
+        }
+      },
+      '& .vis-item-content':{
+        border: '1px solid #545454',
+        borderRadius: 3, 
+        padding: 4,
+        color: '#BDBDBD',
+        height: '100%',
+        '& .first':{
+          display: 'flex',
+          fontSize: '0.875rem',
+          fontWeight: 500,
         }
       }
     }

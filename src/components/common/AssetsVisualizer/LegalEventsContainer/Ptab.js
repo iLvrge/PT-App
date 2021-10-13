@@ -5,7 +5,7 @@ import { DataSet } from 'vis-data/esnext'
 import { Timeline } from 'vis-timeline-73/esnext'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import moment from 'moment'
-import { numberWithCommas, toTitleCase } from '../../../../utils/numbers'
+import { numberWithCommas, toTitleCase, ptabHeadings } from '../../../../utils/numbers'
 
 import PatenTrackApi from '../../../../api/patenTrack2'
 import useStyles from './styles'
@@ -26,7 +26,7 @@ const options = {
     zoomFriction: 30,
     zoomMin: 1000 * 60 * 60 * 24 * 7,    
     template: function(item, element, data) { 
-      return `<div class='first'>${data.rawData.name}, Filed: ${moment(new Date(data.rawData.start)).format(DATE_FORMAT)} Status: ${data.rawData.status}, ${moment(new Date(data.rawData.end)).format(DATE_FORMAT)}</div>`
+      return `<div class='first'>${data.rawData.name}<br/>Filed: ${moment(new Date(data.rawData.start)).format(DATE_FORMAT)} Status: ${data.rawData.status}, ${moment(new Date(data.rawData.end)).format(DATE_FORMAT)}</div>`
     },  
 }
 
@@ -35,7 +35,6 @@ const convertDataToItem = (item) => {
     return ({
       id: item.id,
       content: '',
-      type: 'box',
       start: new Date(item.start),
       end: new Date(item.end),
       assetType,
@@ -113,13 +112,13 @@ const Ptab = ({ number }) => {
                         otherInfo[key].forEach( arrItem => {
                             Object.keys(arrItem).map(arrKey => {
                                 tootltipTemplate += `<div>
-                                    <h4 style='display:inline'>${toTitleCase(arrKey)}: </h4>${arrKey.toLowerCase().indexOf('date') !== -1 ?  moment(new Date(arrItem[arrKey])).format(DATE_FORMAT) : arrItem[arrKey]}
+                                    <h4 style='display:inline'>${ptabHeadings[arrKey]}: </h4>${arrKey.toLowerCase().indexOf('date') !== -1 ?  moment(new Date(arrItem[arrKey])).format(DATE_FORMAT) : arrItem[arrKey]}
                                 </div>`
                             })
                         })
                     } else {
                         tootltipTemplate += `<div>
-                            <h4 style='display:inline'>${toTitleCase(key)}: </h4>${key.toLowerCase().indexOf('date') !== -1 ?  moment(new Date(otherInfo[key])).format(DATE_FORMAT) : otherInfo[key]}
+                            <h4 style='display:inline'>${ptabHeadings[key]}: </h4>${key.toLowerCase().indexOf('date') !== -1 ?  moment(new Date(otherInfo[key])).format(DATE_FORMAT) : otherInfo[key]}
                         </div>`
                     }                    
                 })
@@ -163,8 +162,8 @@ const Ptab = ({ number }) => {
 
     useEffect(() => {
         if (isLoadingTimelineRawData) return
-        let start = new moment().subtract(10, 'months')
-        let end = new moment().add(10, 'months')
+        let start = new moment().subtract(24, 'months')
+        let end = new moment().add(24, 'months')
         if(timelineContainerRef.current != null) {
             const convertedItems = timelineRawData.map(convertDataToItem)
             setTimelineItems(convertedItems)
@@ -186,8 +185,8 @@ const Ptab = ({ number }) => {
                     return c
                 })
                 Promise.all(promise)
-                start = new moment(start).subtract(10, 'months') 
-                end = new moment(end).add(10, 'months')
+                start = new moment(start).subtract(24, 'months') 
+                end = new moment(end).add(24, 'months')
                 items.current.add(convertedItems)
                 setDisplay('block')
             } else {
