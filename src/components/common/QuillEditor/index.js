@@ -55,11 +55,13 @@ const QuillEditor = ({
   const quillRef = useRef(null)
   const dispatch = useDispatch()
   const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
+  const maintainencePatentsList = useSelector(state => state.patenTrack2.maintainenceAssetsList.list)
   const selectedAssetsTransactions = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
   const maintainence_fee_file_name = useSelector(state => state.patenTrack2.maintainence_fee_file_name)
   const assetTypeAddressSelected = useSelector(state => state.patenTrack2.assetTypeAddress.selected)
   const assetTypeNamesSelected = useSelector(state => state.patenTrack2.assetTypeNames.selected)
   const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
+  const assetTypeAssignmentAssetsList = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list)
   const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
   const google_profile = useSelector(state => state.patenTrack2.google_profile)
   const category = useSelector(state => state.patenTrack2.selectedCategory)
@@ -294,22 +296,40 @@ const QuillEditor = ({
 
   const onShare = useCallback(async () => {
     let selectAssetsList = [], selectedTransactions = []
-    
-    if(display_clipboard === true) {
-      selectAssetsList =  selectedMaintainencePatents.length > 0 ? [...selectedMaintainencePatents] : [...assetTypeAssignmentAssetsSelected]
+
+    if(category == 'correct_details') {
+      selectedTransactions = [...selectedAssetsTransactions]
+    } else if(category == "pay_maintainence_fee") {
+      let selectedItems = [...selectedMaintainencePatents]
+      selectedItems.forEach( item => {
+        const findIndex = maintainencePatentsList.findIndex( row => row.asset == item)
+        if(findIndex !== -1) {
+          selectAssetsList.push({asset: item, flag: maintainencePatentsList[findIndex].grant_doc_num !== '' && maintainencePatentsList[findIndex].grant_doc_num !== null ? 4 : 5})
+        }
+      })
+    } else if(display_clipboard === true) {
+      let selectedItems = selectedMaintainencePatents.length > 0 ? [...selectedMaintainencePatents] : [...assetTypeAssignmentAssetsSelected]
+      let list = maintainencePatentsList.length > 0 ? [...maintainencePatentsList] : [...assetTypeAssignmentAssetsList]
+
+      selectedItems.forEach( item => {
+        const findIndex = list.findIndex( row => row.asset == item)
+        if(findIndex !== -1) {
+          selectAssetsList.push({asset: item, flag: list[findIndex].grant_doc_num !== '' && list[findIndex].grant_doc_num !== null ? 4 : 5})
+        }
+      }) 
     } else {
-      if(category == "pay_maintainence_fee") {
-        selectAssetsList = [...selectedMaintainencePatents]
-      } else if (category == 'correct_details') {
-        selectedTransactions = [...selectedAssetsTransactions]
-      } else {
-        selectAssetsList = [...assetTypeAssignmentAssetsSelected]
-      }
+      let selectedItems = [...assetTypeAssignmentAssetsSelected]
+      selectedItems.forEach( item => {
+        const findIndex = assetTypeAssignmentAssetsList.findIndex( row => row.asset == item)
+        if(findIndex !== -1) {
+          selectAssetsList.push({asset: item, flag: assetTypeAssignmentAssetsList[findIndex].grant_doc_num !== '' && assetTypeAssignmentAssetsList[findIndex].grant_doc_num !== null ? 4 : 5})
+        }
+      })
     } 
 
     if(selectAssetsList.length == 0) {
       if(selectedAssetsPatents.length  == 2) {
-        selectAssetsList.push(selectedAssetsPatents[0] != "" ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString())
+        selectAssetsList.push({asset: selectedAssetsPatents[0] != "" ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString(), flag: selectedAssetsPatents[0] != "" ? 4 : 5})
       }
     }
 

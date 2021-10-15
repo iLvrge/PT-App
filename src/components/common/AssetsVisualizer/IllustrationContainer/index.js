@@ -30,13 +30,14 @@ const IllustrationContainer = ({
   const dispatch = useDispatch()
   const [ illustrationData, setIllustrationData ] = useState()
   const targetRef = useRef()
+  const [ parent_width, setParentWidth ] = useState(0)
+  const [ bottomToolbarPosition, setBottomToolbarPosition ] = useState(0)
+  const [ topPosition, setTopPosition ] = useState(0)  
+  const screenHeight = useSelector(state => state.patenTrack.screenHeight)
   const pdfViewModal = useSelector(state => state.patenTrack.pdfViewModal)
   const showThirdParties = useSelector(state => state.ui.showThirdParties)  
   const isLoadingAssetIllustration = useSelector(state => state.patenTrack2.loadingAssetIllustration)
-  const screenHeight = useSelector(state => state.patenTrack.screenHeight)
-  const [ parent_width, setParentWidth ] = useState(0)
-  const [ bottomToolbarPosition, setBottomToolbarPosition ] = useState(0)
-  const [ topPosition, setTopPosition ] = useState(0)   
+  
   
   const updateContainerWidth = useCallback(() => {
     if (targetRef.current) {
@@ -161,7 +162,8 @@ const IllustrationContainer = ({
   const handleShare = async (obj) => {
     if (obj != null && typeof obj.original_number != undefined && obj.original_number != null) {
       let form = new FormData()
-      form.append('assets', JSON.stringify([obj.original_number]))
+      const flag = illustrationData.asset_type === 4 ? 1 : illustrationData.asset_type === 5 ? 0 : ''
+      form.append('assets', JSON.stringify([{asset: obj.original_number, flag}]))
       form.append('type', 1)
 
       const res = await PatenTrackApi.shareIllustration(form)

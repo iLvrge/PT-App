@@ -199,10 +199,10 @@ export const getAssetsPatents = (assetType, companyId, customerId, transactionId
   }
 }
 
-export const getAssetsUSPTO = (type, patentNumber) => {
+export const getAssetsUSPTO = (type, patentNumber, flag) => {
   return dispatch => {
     dispatch(setAssetsUSPTOLoading(true))
-    PatenTrackApi.geteAssetUSPTOByPatentNumber(type, patentNumber)
+    PatenTrackApi.geteAssetUSPTOByPatentNumber(type, patentNumber, flag)
       .then(({ data }) => {
         dispatch(setAssetsUSPTO(data));
       })

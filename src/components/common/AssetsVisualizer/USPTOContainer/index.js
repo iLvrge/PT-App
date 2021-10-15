@@ -21,7 +21,7 @@ const USPTOContainer = ({ asset, onClose }) => {
   useEffect(() => {
     if( asset != null ) {
       if (asset.type === 'patent') {
-        dispatch(getAssetsUSPTO(1, asset.id));
+        dispatch(getAssetsUSPTO(1, asset.id, asset.flag));
       } else if (asset.type === 'transaction') {
         dispatch(getAssetsUSPTO(0, asset.id));
       }

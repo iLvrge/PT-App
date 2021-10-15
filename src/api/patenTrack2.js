@@ -589,9 +589,9 @@ class PatenTrackApi {
     )
   }
 
-  static geteAssetUSPTOByPatentNumber(type, patentNumber) {
+  static geteAssetUSPTOByPatentNumber(type, patentNumber, flag) {
     return axios.get(
-      `${base_new_api_url}/assets/${patentNumber}/${type}/outsource`,
+      `${base_new_api_url}/assets/${patentNumber}/${type}/outsource?flag=${flag}`,
       getHeader()
     )
   }
