@@ -575,9 +575,9 @@ class PatenTrackApi {
   //   return axios.get(`${base_new_api_url}/customers/portfolios?portfolio=${JSON.stringify(selectedCompaniesIds)}&tab_id=${tabId}&limit=100&offset=${offset}`, getHeader());
   // }
 
-  static getAssetsByPatentNumber(patentNumber) {
+  static getAssetsByPatentNumber(patentNumber, flag) {
     return axios.get(
-      `${base_new_api_url}/assets/${patentNumber}`,
+      `${base_new_api_url}/assets/${patentNumber}?flag=${flag}`,
       getHeader()
     )
   }

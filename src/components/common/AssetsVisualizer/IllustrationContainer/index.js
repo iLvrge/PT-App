@@ -67,7 +67,7 @@ const IllustrationContainer = ({
       dispatch(setAssetsIllustrationLoading(true))
       if (asset.type === 'patent') {
         try {
-          const { data } = await PatenTrackApi.getAssetsByPatentNumber(asset.id, axiosCancelToken.token)
+          const { data } = await PatenTrackApi.getAssetsByPatentNumber(asset.id, asset.flag)
           setIllustrationData(data != '' ? data : null)
           dispatch(setAssetsIllustrationData(data != '' ? data : null))
           if(setIllustrationRecord) { setIllustrationRecord(data) }
@@ -168,7 +168,7 @@ const IllustrationContainer = ({
       if (typeof res == 'object') {
         let shareURL = res.data
         if (shareURL.indexOf('share') >= 0) {
-            if(window.confirm("Copy a url of the selected item to your clipboard:")){
+            if(window.confirm("Copy a sharing link to your clipboard.")){
               copyToClipboard(shareURL)
             }
             

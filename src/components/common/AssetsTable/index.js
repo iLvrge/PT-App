@@ -801,6 +801,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         setAssetsIllustration({
             type: "patent",
             id: grant_doc_num || appno_doc_num,
+            flag: grant_doc_num !== '' && grant_doc_num !== null ? 1 : 0
         }),
         );
         dispatch(

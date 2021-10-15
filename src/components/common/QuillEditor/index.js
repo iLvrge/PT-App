@@ -329,7 +329,7 @@ const QuillEditor = ({
          */
         //const shareURL = data.replace('https://share.patentrack.com','http://167.172.195.92:3000')
         
-        if(window.confirm("Copy a url of the selected items to your clipboard:")){
+        if(window.confirm("Copy a sharing link to your clipboard.")){
           copyToClipboard(data)
         }
         //window.open(data,'_BLANK')
