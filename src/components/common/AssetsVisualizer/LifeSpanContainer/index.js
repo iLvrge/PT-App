@@ -110,7 +110,7 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
                           selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
 
                         if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-                            /* if( auth_token != null ) {
+                             if( auth_token != null ) {
                                 dispatch(
                                     process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
                                     getCustomerAssets(
@@ -124,7 +124,7 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
                                     : 
                                     getCustomerSelectedAssets(location.pathname.replace('/', ''))
                                 );
-                            } */
+                            } 
                         } else {
                             if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
                                 dispatch(
@@ -181,8 +181,10 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
 
 
     const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
+
     
-    if ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && (selectedAssetsTransactionLifeSpan.length === 0 || selectedCompanies.length === 0 || type === 9)) || ((process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') && (auth_token == null || selectedAssetsTransactionLifeSpan.length === 0)) ) return null
+    
+    if ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && (selectedAssetsTransactionLifeSpan.length === 0 || selectedCompanies.length === 0 || type === 9)) || ((process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') && (auth_token == null /* || selectedAssetsTransactionLifeSpan.length === 0 */)) ) return null
 
     return (
         <Paper className={classes.root} square>  

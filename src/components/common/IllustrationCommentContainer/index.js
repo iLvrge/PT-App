@@ -76,6 +76,7 @@ const IllustrationCommentContainer = ({
     const link_assets_sheet_display = useSelector(state => state.patenTrack2.link_assets_sheet_display)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const link_assets_sheet_type = useSelector(state => state.patenTrack2.link_assets_sheet_type)
+    const auth_token = useSelector(state => state.patenTrack2.auth_token)
     
     useEffect(() => {
         updateResizerBar(illustrationRef, commentBar, 1)
@@ -182,7 +183,7 @@ const IllustrationCommentContainer = ({
                     ''
                 }                                 
                 {  
-                    selectedCompanies.length > 0 || type === 9
+                    selectedCompanies.length > 0 || type === 9 || ((process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') && auth_token !== null)
                     ?
                         showManualComponent === true && menuComponent.length > 0
                         ?                        

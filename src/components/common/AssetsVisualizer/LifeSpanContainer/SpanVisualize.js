@@ -121,6 +121,7 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
 
 
     const DisplayChart = () => {
+        if(chart.length === 0) return null
         return (
             <Chart
                 width={'100%'}

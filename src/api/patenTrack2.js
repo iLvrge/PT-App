@@ -74,7 +74,7 @@ const getMultiFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelPtab
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelPtab, cancelShareTimeline
 
 class PatenTrackApi {
   static getSiteLogo() {
@@ -250,11 +250,28 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/share/${shareCode}/2`, header)
   }
 
-
   static cancelAssets() {
     if (cancelAssets !== undefined) {
       try{
         throw cancelAssets('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
+  static getShareTimelineList(shareCode) { 
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelShareTimeline = c
+    })
+    return axios.get(`${base_new_api_url}/share/timeline/list/${shareCode}`, header)
+  }
+
+  static cancelShareTimeline() {
+    if (cancelShareTimeline !== undefined) {
+      try{
+        throw cancelShareTimeline('Operation canceled by the user.')
       } catch (e){
         console.log('cancelRequest->', e)
       }

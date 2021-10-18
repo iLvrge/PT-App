@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useHistory } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import routes from "../../../../routeList"; 
 import moment from 'moment'
 import _debounce from 'lodash/debounce'
@@ -92,7 +92,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
   
   const classes = useStyles()
   const dispatch = useDispatch()
-
+  const location = useLocation()
   const history = useHistory()
   const timelineRef = useRef() //timeline Object ref
   const timelineContainerRef = useRef() //div container ref
@@ -459,9 +459,16 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
             setTimelineRawData(data.list)
           } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
             //setIsLoadingTimelineData(true)
-            const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, [], selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
-            //setIsLoadingTimelineData(false)
-            setTimelineRawData(data.list) 
+            if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+              if(auth_token !== null) {
+                const { data } = await PatenTrackApi.getShareTimelineList(location.pathname.replace('/', ''))
+                setTimelineRawData(data.list) 
+              }
+            } else if(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ) {
+              const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, [], selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
+              setTimelineRawData(data.list) 
+            }            
+            //setIsLoadingTimelineData(false)            
           }
         }
       } 
@@ -471,7 +478,6 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
   }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors, auth_token, switch_button_assets ])
 
   useEffect(() => {
-    console.log('Timeline=>', foreignAssets, assetTypeAssignmentAssets)
     const getForeignAssetTimelineData = async(foreignAssets, assetTypeAssignmentAssets) => {
       if(foreignAssets.selected.length > 0 && assetTypeAssignmentAssets.length > 0) {
         const assets = []

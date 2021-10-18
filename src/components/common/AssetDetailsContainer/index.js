@@ -194,7 +194,7 @@ const AssetDetailsContainer = ({
       }
     }
   };
-  
+  console.log('Assets Details container analyticsBar', analyticsBar, connectionBoxView, openIllustrationBar, usptoMode, lifeSpanMode, familyMode)
   return (
     <div style={{ height: "100%" }} className={classes.root}>
       {bar === true ? (
@@ -233,7 +233,7 @@ const AssetDetailsContainer = ({
               cls={classes.btnLeft}
             /> */}
             {
-              selectedCompanies.length > 0 || type === 9
+              selectedCompanies.length > 0 || type === 9 || (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE')
               ?
                 chartBar == true ?
                   pdfView === true && !connectionBoxView ? (
@@ -295,7 +295,7 @@ const AssetDetailsContainer = ({
             onMouseLeave={event => handleIllustrationButton(event, false)} */
           >
             {
-              selectedCompanies.length > 0 || type === 9
+              selectedCompanies.length > 0 || type === 9 || (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE')
               ?
                 analyticsBar === true 
                 ? 

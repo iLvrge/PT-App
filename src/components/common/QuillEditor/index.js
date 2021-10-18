@@ -297,7 +297,23 @@ const QuillEditor = ({
   const onShare = useCallback(async () => {
     let selectAssetsList = [], selectedTransactions = []
 
-    if(category == 'correct_details') {
+    let list = maintainencePatentsList.length > 0 ? [...maintainencePatentsList] : [...assetTypeAssignmentAssetsList]
+
+    let selectedItems = selectedMaintainencePatents.length > 0 ? [...selectedMaintainencePatents] : [...assetTypeAssignmentAssetsSelected]
+
+    if(selectedItems.length > 0) {
+      selectedItems.forEach( item => {
+        const findIndex = list.findIndex( row => row.asset == item)
+        if(findIndex !== -1) {
+          selectAssetsList.push({asset: item, flag: list[findIndex].grant_doc_num !== '' && list[findIndex].grant_doc_num !== null ? 4 : 5})
+        }
+      }) 
+    } else {
+      selectedTransactions = [...selectedAssetsTransactions]
+    }
+
+
+    /* if(category == 'correct_details') {
       selectedTransactions = [...selectedAssetsTransactions]
     } else if(category == "pay_maintainence_fee") {
       let selectedItems = [...selectedMaintainencePatents]
@@ -331,10 +347,10 @@ const QuillEditor = ({
       if(selectedAssetsPatents.length  == 2) {
         selectAssetsList.push({asset: selectedAssetsPatents[0] != "" ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString(), flag: selectedAssetsPatents[0] != "" ? 4 : 5})
       }
-    }
+    } */
 
-    if( (category == 'correct_details' && selectedTransactions.length == 0) || (category != 'correct_details' && selectAssetsList.length == 0)) {
-      alert(category == 'correct_details' ? 'Please select a transaction' : 'Please select a asset')
+    if( selectedTransactions.length == 0 &&  selectAssetsList.length == 0 ) {
+      alert('Please select a asset')
     } else {
       // Share list of assets and create share link 
       let form = new FormData()
