@@ -295,82 +295,49 @@ const QuillEditor = ({
   }, [ template_document_url, quillRef ] )  
 
   const onShare = useCallback(async () => {
-    let selectAssetsList = [], selectedTransactions = []
-
-    let list = maintainencePatentsList.length > 0 ? [...maintainencePatentsList] : [...assetTypeAssignmentAssetsList]
-
-    let selectedItems = selectedMaintainencePatents.length > 0 ? [...selectedMaintainencePatents] : [...assetTypeAssignmentAssetsSelected]
-
-    if(selectedItems.length > 0) {
-      selectedItems.forEach( item => {
-        const findIndex = list.findIndex( row => row.asset == item)
-        if(findIndex !== -1) {
-          selectAssetsList.push({asset: item, flag: list[findIndex].grant_doc_num !== '' && list[findIndex].grant_doc_num !== null ? 4 : 5})
-        }
-      }) 
+    if (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'){
+      alert('Message..')
     } else {
-      selectedTransactions = [...selectedAssetsTransactions]
-    }
+      let selectAssetsList = [], selectedTransactions = []
 
-
-    /* if(category == 'correct_details') {
-      selectedTransactions = [...selectedAssetsTransactions]
-    } else if(category == "pay_maintainence_fee") {
-      let selectedItems = [...selectedMaintainencePatents]
-      selectedItems.forEach( item => {
-        const findIndex = maintainencePatentsList.findIndex( row => row.asset == item)
-        if(findIndex !== -1) {
-          selectAssetsList.push({asset: item, flag: maintainencePatentsList[findIndex].grant_doc_num !== '' && maintainencePatentsList[findIndex].grant_doc_num !== null ? 4 : 5})
-        }
-      })
-    } else if(display_clipboard === true) {
-      let selectedItems = selectedMaintainencePatents.length > 0 ? [...selectedMaintainencePatents] : [...assetTypeAssignmentAssetsSelected]
       let list = maintainencePatentsList.length > 0 ? [...maintainencePatentsList] : [...assetTypeAssignmentAssetsList]
 
-      selectedItems.forEach( item => {
-        const findIndex = list.findIndex( row => row.asset == item)
-        if(findIndex !== -1) {
-          selectAssetsList.push({asset: item, flag: list[findIndex].grant_doc_num !== '' && list[findIndex].grant_doc_num !== null ? 4 : 5})
-        }
-      }) 
-    } else {
-      let selectedItems = [...assetTypeAssignmentAssetsSelected]
-      selectedItems.forEach( item => {
-        const findIndex = assetTypeAssignmentAssetsList.findIndex( row => row.asset == item)
-        if(findIndex !== -1) {
-          selectAssetsList.push({asset: item, flag: assetTypeAssignmentAssetsList[findIndex].grant_doc_num !== '' && assetTypeAssignmentAssetsList[findIndex].grant_doc_num !== null ? 4 : 5})
-        }
-      })
-    } 
+      let selectedItems = selectedMaintainencePatents.length > 0 ? [...selectedMaintainencePatents] : [...assetTypeAssignmentAssetsSelected]
 
-    if(selectAssetsList.length == 0) {
-      if(selectedAssetsPatents.length  == 2) {
-        selectAssetsList.push({asset: selectedAssetsPatents[0] != "" ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString(), flag: selectedAssetsPatents[0] != "" ? 4 : 5})
+      if(selectedItems.length > 0) {
+        selectedItems.forEach( item => {
+          const findIndex = list.findIndex( row => row.asset == item)
+          if(findIndex !== -1) {
+            selectAssetsList.push({asset: item, flag: list[findIndex].grant_doc_num !== '' && list[findIndex].grant_doc_num !== null ? 4 : 5})
+          }
+        }) 
+      } else {
+        selectedTransactions = [...selectedAssetsTransactions]
       }
-    } */
-
-    if( selectedTransactions.length == 0 &&  selectAssetsList.length == 0 ) {
-      alert('Please select a asset')
-    } else {
-      // Share list of assets and create share link 
-      let form = new FormData()
-      form.append('assets', JSON.stringify(selectAssetsList))
-      form.append('transactions', JSON.stringify(selectedTransactions))
-      form.append('type', 2)      
-      const {data} = await PatenTrackApi.shareIllustration(form)
-      if (data.indexOf('sample') >= 0) {
-        /**
-         * just for temporary replacing
-         * open share url new tab
-         */
-        //const shareURL = data.replace('https://share.patentrack.com','http://167.172.195.92:3000')
-        
-        if(window.confirm("Copy a sharing link to your clipboard.")){
-          copyToClipboard(data)
-        }
-        //window.open(data,'_BLANK')
-      } 
+      if( selectedTransactions.length == 0 &&  selectAssetsList.length == 0 ) {
+        alert('Please select a asset')
+      } else {
+        // Share list of assets and create share link 
+        let form = new FormData()
+        form.append('assets', JSON.stringify(selectAssetsList))
+        form.append('transactions', JSON.stringify(selectedTransactions))
+        form.append('type', 2)      
+        const {data} = await PatenTrackApi.shareIllustration(form)
+        if (data.indexOf('sample') >= 0) {
+          /**
+           * just for temporary replacing
+           * open share url new tab
+           */
+          //const shareURL = data.replace('https://share.patentrack.com','http://167.172.195.92:3000')
+          
+          if(window.confirm("Copy a sharing link to your clipboard.")){
+            copyToClipboard(data)
+          }
+          //window.open(data,'_BLANK')
+        } 
+      }
     }
+    
   }, [ dispatch, category, selectedAssetsPatents, selectedMaintainencePatents, assetTypeAssignmentAssetsSelected, selectedAssetsTransactions ])
 
   const onHandleCorrectAddress = useCallback(() => {

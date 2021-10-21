@@ -160,26 +160,30 @@ const IllustrationContainer = ({
   }, [chartsBar] )
 
   const handleShare = async (obj) => {
-    if (obj != null && typeof obj.original_number != undefined && obj.original_number != null) {
-      let form = new FormData()
-      const flag = illustrationData.asset_type === 4 ? 1 : illustrationData.asset_type === 5 ? 0 : ''
-      form.append('assets', JSON.stringify([{asset: obj.original_number, flag}]))
-      form.append('type', 1)
+    if (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'){
+      alert('Message..')
+    } else {
+      if (obj != null && typeof obj.original_number != undefined && obj.original_number != null) {
+        let form = new FormData()
+        const flag = illustrationData.asset_type === 4 ? 1 : illustrationData.asset_type === 5 ? 0 : ''
+        form.append('assets', JSON.stringify([{asset: obj.original_number, flag}]))
+        form.append('type', 1)
 
-      const res = await PatenTrackApi.shareIllustration(form)
-      if (typeof res == 'object') {
-        let shareURL = res.data
-        if (shareURL.indexOf('share') >= 0) {
-            if(window.confirm("Copy a sharing link to your clipboard.")){
-              copyToClipboard(shareURL)
-            }
-            
-          /**
-           * just for temporary replacing
-           */
-          //shareURL = shareURL.replace('https://share.patentrack.com','http://167.172.195.92:3000')
-          //window.open(shareURL,'_BLANK')
-          //dispatch(setAssetShareURL(shareURL));
+        const res = await PatenTrackApi.shareIllustration(form)
+        if (typeof res == 'object') {
+          let shareURL = res.data
+          if (shareURL.indexOf('share') >= 0) {
+              if(window.confirm("Copy a sharing link to your clipboard.")){
+                copyToClipboard(shareURL)
+              }
+              
+            /**
+             * just for temporary replacing
+             */
+            //shareURL = shareURL.replace('https://share.patentrack.com','http://167.172.195.92:3000')
+            //window.open(shareURL,'_BLANK')
+            //dispatch(setAssetShareURL(shareURL));
+          }
         }
       }
     }
