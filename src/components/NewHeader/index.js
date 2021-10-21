@@ -448,16 +448,20 @@ const clearOtherItems = () => {
 }
 
 const onHandleForeignAssets = (event) => {
-  const path = location.pathname
-  toggleDrawer(event, false)
-  resetAll()
-  clearOtherItems()
-  console.log("path.indexOf('/review_foreign_assets')", path.indexOf('/review_foreign_assets'))
-  if(path.indexOf('/review_foreign_assets') !== -1) {
-    history.push('/') 
+  if(process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ) {
+    alert('Message')
   } else {
-    history.push('/review_foreign_assets') 
-  }
+    const path = location.pathname
+    toggleDrawer(event, false)
+    resetAll()
+    clearOtherItems()
+    console.log("path.indexOf('/review_foreign_assets')", path.indexOf('/review_foreign_assets'))
+    if(path.indexOf('/review_foreign_assets') !== -1) {
+      history.push('/') 
+    } else {
+      history.push('/review_foreign_assets') 
+    }
+  }  
 }
 
   return (
@@ -482,9 +486,15 @@ const onHandleForeignAssets = (event) => {
           <div className={classes.breadcrumbs} style={{marginLeft: 100, fontSize: '1rem'}}>Version: {process.env.REACT_APP_ENVIROMENT_MODE}</div>   
         </div> */} 
         <div className={`${classes.grow_buttons} ${classes.alignItemCenter}`}>
-          <Button className={classes.calendly} onClick={handleChangeLayout}>
-            {selectedCategory == 'due_dilligence' ? 'Broken Chain' : 'All Assets'}
-          </Button> 
+          {
+            process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' 
+            ?
+              <Button className={classes.calendly} onClick={handleChangeLayout}>
+                {selectedCategory == 'due_dilligence' ? 'Broken Chain' : 'All Assets'}
+              </Button> 
+            :
+            ''
+          }          
         </div>
         <div className={classes.rightPanel}>  
             <Button className={classes.calendly} onClick={handleScheduleViaHubspot}>
@@ -652,15 +662,23 @@ const onHandleForeignAssets = (event) => {
                       <svg width="18" height="18" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-import" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" ><path fill="currentColor" d="M16 288c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h112v-64zm489-183L407.1 7c-4.5-4.5-10.6-7-17-7H384v128h128v-6.1c0-6.3-2.5-12.4-7-16.9zm-153 31V0H152c-13.3 0-24 10.7-24 24v264h128v-65.2c0-14.3 17.3-21.4 27.4-11.3L379 308c6.6 6.7 6.6 17.4 0 24l-95.7 96.4c-10.1 10.1-27.4 3-27.4-11.3V352H128v136c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H376c-13.2 0-24-10.8-24-24z" class=""></path></svg>
                     </ListItemIcon>
                     <ListItemText primary={`Review External Assets`} />
-                  </ListItem>            
-                  <ListItem className={`children`} button style={{marginTop: '50px'}}>
-                    <ListItemIcon aria-label='Account Scope' color='inherit' className={`children`}>
-                        <BusinessIcon className={`children`}/>
-                    </ListItemIcon>
-                    <ListItemText primary={`Account Scope`} className={`children`}/>                                            
                   </ListItem>   
-                  <Divider />   
-                  <CompanySummary />
+                  {
+                    process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' 
+                    ?
+                      <>
+                        <ListItem className={`children`} button style={{marginTop: '50px'}}>
+                          <ListItemIcon aria-label='Account Scope' color='inherit' className={`children`}>
+                              <BusinessIcon className={`children`}/>
+                          </ListItemIcon>
+                          <ListItemText primary={`Account Scope`} className={`children`}/>                                            
+                        </ListItem>   
+                        <Divider />   
+                        <CompanySummary />
+                      </>
+                    :
+                    ''
+                  }
                 </List>    
               </div>
             </Drawer>

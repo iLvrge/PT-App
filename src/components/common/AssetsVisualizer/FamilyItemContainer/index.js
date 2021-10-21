@@ -32,7 +32,8 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
     const familyDataRetrieved = useSelector( state => state.patenTrack.familyDataRetrieved  )
-    const selectedAssetsFamily = useSelector(state => state.patenTrack.assetFamily);
+    const selectedAssetsFamily = useSelector(state => state.patenTrack.assetFamily)    
+    const auth_token = useSelector(state => state.patenTrack2.auth_token)
     
     useEffect(() => {
         console.log('FamilyItemContainer', item, familyDataRetrieved)
@@ -66,7 +67,17 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                     publication_kind: item.publication_kind
                 })
                 console.log("ITEM", item)
-                setSelectedNumber(item.publication_kind.toString().toLowerCase().indexOf('a') !== -1 ? `${item.publication_country}${applicationFormat(item.application_number)}${item.publication_kind}` : item.publication_country.toLowerCase().indexOf('us') !== -1 && item.application_number !== '' ? `${item.publication_country}${applicationFormat(item.application_number)}` :  `${item.publication_country}${numberWithCommas(item.patent_number)}${item.publication_kind}`)
+                let number = item.publication_kind.toString().toLowerCase().indexOf('a') !== -1 
+                            ? 
+                                `${item.publication_country}${applicationFormat(item.application_number)}${item.publication_kind}` 
+                            : 
+                                item.publication_country.toLowerCase().indexOf('us') !== -1 && item.application_number !== '' 
+                                ? 
+                                    `${item.publication_country}${applicationFormat(item.application_number)}` 
+                                :  
+                                    `${item.publication_country}${numberWithCommas(item.patent_number)}${item.publication_kind}`
+                
+                setSelectedNumber(number)
                 setAbsractData(item.abstracts)
                 setClaimsData(item.claims)
                 setClaimsData(item.specification)
@@ -111,7 +122,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
         <Paper className={classes.root} square>
 
             {
-                selectedCompaniesAll === true || selectedCompanies.length > 0 || type === 9
+                selectedCompaniesAll === true || selectedCompanies.length > 0 || type === 9 || ((process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') && auth_token !== null)
                 ?
                     <>
                         <div className={classes.graphContainer}>        

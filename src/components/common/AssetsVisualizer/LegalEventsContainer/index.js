@@ -20,7 +20,8 @@ const LegalEventsContainer = ({ events, type }) => {
   const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
   const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
   const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
-
+  const auth_token = useSelector(state => state.patenTrack2.auth_token)
+  
   useEffect(() => {
     setSelectedNumber(selectedAssetsPatents[1] !== '' ? `US${numberWithCommas(selectedAssetsPatents[1])}` : `US${applicationFormat(selectedAssetsPatents[0])}`)
   }, [])
@@ -30,7 +31,7 @@ const LegalEventsContainer = ({ events, type }) => {
   return (
     <Paper className={classes.root} square >
         {
-          selectedCompaniesAll === true || selectedCompanies.length > 0 || type === 9
+          selectedCompaniesAll === true || selectedCompanies.length > 0 || type === 9 || ((process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') && auth_token !== null)
           ?
           <>
             <div className={classes.graphContainer}>  

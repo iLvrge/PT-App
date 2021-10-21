@@ -122,7 +122,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const connectionBoxView = useSelector( state => state.patenTrack.connectionBoxView)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
     const [ graphRawData, setGraphRawData ] = useState([])
-    const [ graphRawGroupData, setGraphRawGroupData ] = useState([])
+    const [ graphRawGroupData, setGraphRawGroupData ] = useState([])  
     let interval;
     
     let options = {
@@ -253,7 +253,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             setGraphRawData([])
             setGraphRawGroupData([])      
             setShowContainer(true)   
-            console.log('TONTANG')   
             if (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0 && type !== 9){
                 setShowContainer(false)
                 return null

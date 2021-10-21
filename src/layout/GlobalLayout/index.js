@@ -690,7 +690,7 @@ const GlobalLayout = (props) => {
         {
             tooltip: 'Recorded Documents',
             bar: assetFilesBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleAssetFileBarOpen,
+            click: handleAssetFileBarOpen,
             t: 10
         },
         {
