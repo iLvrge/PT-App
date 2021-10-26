@@ -172,9 +172,9 @@ const Ptab = ({ number }) => {
                 start = new Date()
                 end = new Date()
                 const promise = convertedItems.map( (c, index) => {
-                    let newDate = new Date(c.start);
+                    let newDate = new Date(c.start), endDate = new Date(c.end);
                     if(index === 0) {
-                        end = newDate
+                        end = endDate
                     }
                     if(newDate.getTime() < start.getTime()) {
                         start = newDate
@@ -193,7 +193,7 @@ const Ptab = ({ number }) => {
                 /* setDisplay('none') */
             }
         }
-        /* console.log(items.current, start, end) */
+        /*console.log(items.current, start, end) */
         
         timelineRef.current.setItems(items.current)
         timelineRef.current.setOptions({ ...options, start, end, min: start, max: end })

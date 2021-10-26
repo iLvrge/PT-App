@@ -124,7 +124,7 @@ let pages = [
   }
 ] 
 
-if(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') {
+if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') {
   pages = [  
     {
       exact: true,
@@ -135,6 +135,7 @@ if(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP
     },
   ] 
 }
+
 
 export default (
   <Switch>
@@ -154,14 +155,14 @@ export default (
         />
       )
     )}
+    <Route path="/slack" component={AuthSlack} />
     {
       process.env.REACT_APP_ENVIROMENT_MODE === 'PRO'
       ?
         <>
         <Route path="/settings" component={Settings} />
         <Route path="/reset/:token" component={Auth} />
-        <Route path="/auth" component={Auth} />
-        <Route path="/slack" component={AuthSlack} />
+        <Route path="/auth" component={Auth} />        
         </>
       :
       ''

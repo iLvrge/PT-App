@@ -15,7 +15,7 @@ import {
     updateHashLocation
 } from '../../../utils/hashLocation'
 
-import { numberWithCommas } from '../../../utils/numbers'
+import { numberWithCommas, applicationFormat } from '../../../utils/numbers'
 
 import PatenTrackApi from '../../../api/patenTrack' 
 
@@ -63,7 +63,7 @@ const ChildTable = ({ asset, headerRowDisabled }) => {
             validation: true,
             validationKey: 'empty',
             optionalKey: 'application_number',
-            staticIcon: '',
+            staticIcon: "",
             format: numberWithCommas,
             align: 'left'           
         }
@@ -77,7 +77,8 @@ const ChildTable = ({ asset, headerRowDisabled }) => {
                 
                 if(data.length > 0) {
                     data.forEach((element, index) => {
-                        data[index].patent_number = `${element.publication_country} ${element.patent_number}`
+                        data[index].patent_number = element.patent_number !== null ? `${element.publication_country} ${numberWithCommas(element.patent_number)}` : ''
+                        data[index].application_number = element.application_number !== null ? `${element.publication_country} ${applicationFormat(element.application_number)}` : ''
                     });
                 }                
                 setFamilies(data)                

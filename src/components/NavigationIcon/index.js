@@ -54,7 +54,7 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight}) => {
                     <IconButton  
                         {...(disabled == undefined && { onClick: click })} 
                         className = {
-                            process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'
+                            process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'
                                 ?
                                     t != 5 && bar === true 
                                         ? 'active'

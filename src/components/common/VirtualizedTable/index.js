@@ -263,7 +263,7 @@ const VirtualizedTable = ({
               faIcon = faFile
               break;
           }
-        }
+        } 
       }
       let showDropValue = ''
       if(role == 'static_dropdown') {
@@ -272,9 +272,10 @@ const VirtualizedTable = ({
           showDropValue =  dropdownSelections[index].move_category
         }
       }
+      
       cellData =
         validation === true
-          ? validationKey == "empty" && cellData == ""
+          ? validationKey == "empty" && cellData == "" && cellData != null 
             ? rowData[optionalKey]
             : cellData
           : cellData; 
@@ -583,7 +584,7 @@ const VirtualizedTable = ({
             ref={rowRef}
             style={{
               marginRight: "auto",
-              marginLeft: 60,
+              marginLeft: 20,
               height:
                 disableRow === true
                   ? rowData[disableRowKey] * rowHeight < childHeight
@@ -600,7 +601,7 @@ const VirtualizedTable = ({
               top: style.top + rowHeight + "px",
               width: "100%",
               overflow: "auto",
-            }}
+            }} 
           >
             {renderCollapsableComponent}
           </div>

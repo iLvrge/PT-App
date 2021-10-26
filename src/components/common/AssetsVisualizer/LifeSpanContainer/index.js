@@ -57,11 +57,9 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
 
     useEffect(() => {
         const getChartData = async () => {
-            if (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0){
+            if ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0) || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token === null)){
                 return null
-            } else if ((process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') && auth_token === null){
-                return null
-            }
+            } 
             const list = [];
             
             if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {  
@@ -184,7 +182,7 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
 
     
     
-    if ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && (selectedAssetsTransactionLifeSpan.length === 0 || selectedCompanies.length === 0 || type === 9)) || ((process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') && (auth_token == null /* || selectedAssetsTransactionLifeSpan.length === 0 */)) ) return null
+    if ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && (selectedAssetsTransactionLifeSpan.length === 0 || selectedCompanies.length === 0 || type === 9)) || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token == null /* || selectedAssetsTransactionLifeSpan.length === 0 */) ) return null
 
     return (
         <Paper className={classes.root} square>  

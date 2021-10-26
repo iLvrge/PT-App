@@ -295,7 +295,7 @@ const QuillEditor = ({
   }, [ template_document_url, quillRef ] )  
 
   const onShare = useCallback(async () => {
-    if (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'){
+    if (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'){
       alert('Message..')
     } else {
       let selectAssetsList = [], selectedTransactions = []

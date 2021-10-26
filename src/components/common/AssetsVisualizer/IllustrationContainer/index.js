@@ -160,7 +160,7 @@ const IllustrationContainer = ({
   }, [chartsBar] )
 
   const handleShare = async (obj) => {
-    if (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'){
+    if (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'){
       alert('Message..')
     } else {
       if (obj != null && typeof obj.original_number != undefined && obj.original_number != null) {

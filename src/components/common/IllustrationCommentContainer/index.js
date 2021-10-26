@@ -183,7 +183,7 @@ const IllustrationCommentContainer = ({
                     ''
                 }                                 
                 {  
-                    selectedCompanies.length > 0 || type === 9 || ((process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') && auth_token !== null)
+                    selectedCompanies.length > 0 || type === 9 || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)
                     ?
                         showManualComponent === true && menuComponent.length > 0
                         ?                        

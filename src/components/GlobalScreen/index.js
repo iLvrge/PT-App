@@ -300,7 +300,7 @@ const GlobalScreen = ({
             }
         }
     }
-    console.log('GlobalScreen=>type', type)
+    //console.log('GlobalScreen=>type', type)
 
     const handleTextChange = (name) => {
         setSheetName(name);
@@ -536,7 +536,7 @@ const GlobalScreen = ({
                             >
                                 <div id={`assets_files_container`} style={{ height: '100%'}}>
                                     <SplitPane
-                                        className={classes.splitPane}
+                                        className={classes.splitPane} 
                                         split={`horizontal`}
                                         size={driveBarSize}
                                         ref={fileBarRef}

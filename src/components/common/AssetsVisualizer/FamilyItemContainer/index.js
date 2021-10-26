@@ -34,7 +34,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
     const familyDataRetrieved = useSelector( state => state.patenTrack.familyDataRetrieved  )
     const selectedAssetsFamily = useSelector(state => state.patenTrack.assetFamily)    
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
-    
+
     useEffect(() => {
         console.log('FamilyItemContainer', item, familyDataRetrieved)
         if( familyDataRetrieved === true ) {
@@ -122,7 +122,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
         <Paper className={classes.root} square>
 
             {
-                selectedCompaniesAll === true || selectedCompanies.length > 0 || type === 9 || ((process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') && auth_token !== null)
+                selectedCompaniesAll === true || selectedCompanies.length > 0 || type === 9 || ( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)
                 ?
                     <>
                         <div className={classes.graphContainer}>        

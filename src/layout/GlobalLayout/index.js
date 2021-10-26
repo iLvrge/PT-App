@@ -24,7 +24,10 @@ import {
     setSearchRfIDs,
     setAssetTypeAssignmentAllAssets,
     setMaintainenceAssetsList,
-    setAssetTypeInventor
+    setAssetTypeInventor,
+    setAssetTypeCompanies,
+    setAllAssetTypes,
+    setAssetTypesSelect
 } from '../../actions/patentTrackActions2'
 
 import { 
@@ -40,7 +43,7 @@ const GlobalLayout = (props) => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
-    const [ openBar, setOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? false : true)
+    const [ openBar, setOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? false : true)
     const [ openTypeBar, setTypeOpenBar ] = useState(false)
     const [ openOtherPartyBar, setOtherPartyOpenBar ] = useState(false)
     const [ openInventorBar, setInventorOpenBar ] = useState(false)
@@ -48,9 +51,9 @@ const GlobalLayout = (props) => {
     const [ openCustomerBar, setCustomerOpenBar ] = useState(true)
     const [ openIllustrationBar, setIllustrationBar ] = useState(true)
     const [ openCommentBar, setCommentBar ] = useState(true)
-    const [ openChartBar, setChartBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
-    const [ openAnalyticsBar, setAnalyticsBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
-    const [ openVisualizerBar, setVisualizeOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
+    const [ openChartBar, setChartBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
+    const [ openAnalyticsBar, setAnalyticsBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
+    const [ openVisualizerBar, setVisualizeOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
 
     const [ toggleButtonType, setToggleButtonType ] = useState(true)
     const [ toggleTypeButtonType, setToggleTypeButtonType ] = useState(true)
@@ -72,7 +75,7 @@ const GlobalLayout = (props) => {
         bar50: '50%'
     }
 
-    const [ companyBarSize, setCompanyBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? 0 : 200) 
+    const [ companyBarSize, setCompanyBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? 0 : 200) 
     const [ typeBarSize, setTypeBarSize ] = useState(0) 
     const [ otherPartyBarSize, setOtherPartyBarSize ] = useState(0)
     const [ partyBarSize, setPartyBarSize ] = useState('50%')
@@ -82,7 +85,7 @@ const GlobalLayout = (props) => {
     const [ customerBarSize, setCustomerBarSize ] = useState(160)
     const [ commentBarSize , setCommentBarSize ] = useState('30%')
     const [ illustrationBarSize , setIllustrationBarSize ] = useState('50%')
-    const [ visualizerBarSize , setVisualizerBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? '30%' : '0%')
+    const [ visualizerBarSize , setVisualizerBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? '30%' : '0%')
 
     const [ assetTableFocus, setAssetTableFocus ] = useState( false )
     const [ companyButtonVisible, setCompanyButtonVisible ] = useState(false)
@@ -121,7 +124,7 @@ const GlobalLayout = (props) => {
     }, [])
 
     useEffect(() => {
-        if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+        if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
             dispatch(toggleLifeSpanMode(true))
         }
     }, [])
@@ -365,12 +368,19 @@ const GlobalLayout = (props) => {
         editorBar()
     }
 
+    const updateAssetTypeSelected = async(activityID) => {
+        const form = new FormData();
+        form.append('activity_id', activityID)
+
+        const { status } = await PatenTrackApi.updateAssetTypeSelected(form)
+    }
+
     const handleInventorBarOpen = (event) => {
         setToggleOtherPartyButtonType( !toggleOtherPartyButtonType )
         setInventorOpenBar( !openInventorBar )
         if(!openInventorBar === false && openOtherPartyBar === false) {
             setOtherPartyBarSize(0)
-            dispatch(setAssetTypeInventor({list: [], total_records: 0}))
+            dispatch( setAssetTypeInventor({list: [], total_records: 0}))
         } else {
             setOtherPartyBarSize(120)
             if(openOtherPartyBar === false) {
@@ -380,6 +390,12 @@ const GlobalLayout = (props) => {
             } else {
                 setPartyBarSize('50%')
             }
+            dispatch( setAssetTypeInventor({list: [], total_records: 0}))
+            dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
+            dispatch( setAssetTypeCompanies({ list: [], total_records: 0 }) )
+            dispatch( setAllAssetTypes( false ) )
+            dispatch( setAssetTypesSelect([10]) )  
+            updateAssetTypeSelected( 10 )  
         }
         editorBar()
     }
@@ -649,42 +665,42 @@ const GlobalLayout = (props) => {
         {
             tooltip: 'Filter by Companies',
             bar: props.type === 9 ? false : openBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleCompanyBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleCompanyBarOpen,
             t: 1,
             ...(props.type === 9 && {highlight: false})
         },
         {
             tooltip: 'Filter by Activities',
             bar: openTypeBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleTypeBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleTypeBarOpen,
             t: 2,
             ...(props.type === 9 && {disabled: true})
         },
         {
             tooltip: 'Filter by Parties',
             bar: openOtherPartyBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleOtherPartyBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleOtherPartyBarOpen,
             t: 3,
             ...(props.type === 9 && {disabled: true})
         },
         {
             tooltip: 'Filter by Employees',
             bar: openInventorBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleInventorBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleInventorBarOpen,
             t: 11,
             ...(props.type === 9 && {disabled: true})
         },
         {
             tooltip: 'Filter by Transactions',
             bar: openAssignmentBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleAssignmentBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleAssignmentBarOpen,
             t: 4,
             ...(props.type === 9 && {disabled: true})
         },
         {
             tooltip: 'Assets',
             bar: openCustomerBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleCustomersBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleCustomersBarOpen,
             t: 5
         },
         {
@@ -696,7 +712,7 @@ const GlobalLayout = (props) => {
         {
             tooltip: 'Initiated Documents',
             bar: openGoogleDriveBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleGoogleDriveBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleGoogleDriveBarOpen,
             t: 12
         },
     ]

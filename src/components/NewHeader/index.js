@@ -264,7 +264,7 @@ const NewHeader = () => {
    */
 
   const hideMenu = useCallback((e, item) => {
-    if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+    if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
       alert('Message.....')
     } else {
       dispatch(setResetAll(1, item))    
@@ -362,6 +362,9 @@ const NewHeader = () => {
       if( !display_clipboard === false ) {
         dispatch(setAssetsIllustration(null))
         dispatch(setSelectedAssetsPatents([]))
+        if(process.env.REACT_APP_ENVIROMENT_MODE === 'PRO') {
+          dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
+        }
         dispatch(setAssetFamily([]))
         dispatch(setFamilyItemDisplay({}))
         dispatch(setChannelID(''))
@@ -664,7 +667,7 @@ const onHandleForeignAssets = (event) => {
                     <ListItemText primary={`Review External Assets`} />
                   </ListItem>   
                   {
-                    process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' 
+                    process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' 
                     ?
                       <>
                         <ListItem className={`children`} button style={{marginTop: '50px'}}>

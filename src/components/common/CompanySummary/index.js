@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import PatenTrackApi from '../../../api/patenTrack2'
 import { capitalize, numberWithCommas } from '../../../utils/numbers'
 import { getTokenStorage } from '../../../utils/tokenStorage'
-
+import { copyToClipboard } from '../../../utils/html_encode_decode'
 import { 
     getGoogleProfile,
 } from '../../../actions/patentTrackActions2'
@@ -18,6 +18,7 @@ import useStyles from './styles'
 const CompanySummary = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
+    const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
     const COLUMNS = [        
         {
             width: 110,  
@@ -108,7 +109,29 @@ const CompanySummary = () => {
         }  
     }
 
-    const handleClickRow = () => {
+    const handleClickRow =async(event, row) => {
+        if(process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && row.name == "Employees") {
+            console.log('clipboard_assets', clipboard_assets.length)
+            if(clipboard_assets.length > 0) {
+                const list = []
+                clipboard_assets.forEach( item => {
+                    list.push({
+                        asset: item.asset,
+                        flag: item.asset_type === 0 ? 4 : 5
+                    })
+                })
+                let form = new FormData()
+                form.append('assets', JSON.stringify(list))
+                form.append('transactions', JSON.stringify([]))
+                form.append('type', 0)      
+                const {data} = await PatenTrackApi.shareIllustration(form)
+                if (data.indexOf('standard') >= 0) {
+                    if(window.confirm("Copy a sharing link to your clipboard.")){
+                        copyToClipboard(data)
+                    }
+                }
+            }
+        }
     }
 
     const handleSelectAll = () => {        

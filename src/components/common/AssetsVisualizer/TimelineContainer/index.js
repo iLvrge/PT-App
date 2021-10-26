@@ -452,22 +452,15 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
           tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
           customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected;
   
-          if( process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
+          if( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
             //setIsLoadingTimelineData(true)
             const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, [], selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
             //setIsLoadingTimelineData(false)
             setTimelineRawData(data.list)
-          } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+          } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null ) {
             //setIsLoadingTimelineData(true)
-            if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-              if(auth_token !== null) {
-                const { data } = await PatenTrackApi.getShareTimelineList(location.pathname.replace('/', ''))
-                setTimelineRawData(data.list) 
-              }
-            } else if(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ) {
-              const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, [], selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
-              setTimelineRawData(data.list) 
-            }            
+            const { data } = await PatenTrackApi.getShareTimelineList(location.pathname.replace('/', ''))
+            setTimelineRawData(data.list)           
             //setIsLoadingTimelineData(false)            
           }
         }

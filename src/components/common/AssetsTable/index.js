@@ -292,7 +292,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   }
 
   const onHandleDropDownlist = async(event, asset, row ) => { 
-    if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+    if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
       alert('Message....')
     } else {
       if(event.target.value >= 6 && event.target.value <= 8) {
@@ -423,6 +423,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       width: 85,  
       minWidth: 85,    
       label: "Assets",      
+      /* dataKey: "format_asset", */
       dataKey: "asset",
       staticIcon: "US",
       format: numberWithCommas,
@@ -483,18 +484,6 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
                 if (auth_token != null) {
                   
                   dispatch(
-                    process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
-                    getCustomerAssets(
-                      selectedCategory == '' ? '' : selectedCategory,
-                      companies,
-                      tabs,
-                      customers,
-                      assignments,
-                      false,
-                      offsetWithLimit[0],
-                      offsetWithLimit[1]
-                    )
-                    : 
                     getCustomerSelectedAssets(location.pathname.replace('/', ''))
                   );
                   
