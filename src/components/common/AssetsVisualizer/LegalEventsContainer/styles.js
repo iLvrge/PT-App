@@ -117,8 +117,8 @@ export default makeStyles(theme => ({
       border: 'none !important',
     },
     '& .vis-item.vis-background.negative': {
-      background: 'linear-gradient(to right,  #FFFF00 0%,#FFFF00 50%,#E60000 50%,#E60000 100%)',
-      opacity: '0.5',
+      background: 'linear-gradient(to right,  #FFAA00 0%,#FFAA00 50%,#E60000 50%,#E60000 100%)',
+      opacity: '1',
     },
     '& .vis-item.vis-box': {      
       '&.asset-type-default': {

@@ -64,7 +64,12 @@ const MobileScreen = (props) => {
                         '' 
                     }
             </div>
-            <div></div>
+            <div
+                className={classes.companyBar}>
+                {
+                    props.openIllustrationBar === true
+                }
+            </div>
         </SplitPane>
     )
 }

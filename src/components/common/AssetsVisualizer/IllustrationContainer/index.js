@@ -165,8 +165,7 @@ const IllustrationContainer = ({
     } else {
       if (obj != null && typeof obj.original_number != undefined && obj.original_number != null) {
         let form = new FormData()
-        const flag = illustrationData.asset_type === 4 ? 1 : illustrationData.asset_type === 5 ? 0 : ''
-        form.append('assets', JSON.stringify([{asset: obj.original_number, flag}]))
+        form.append('assets', JSON.stringify([{asset: obj.original_number, flag: illustrationData.asset_type}]))
         form.append('type', 1)
 
         const res = await PatenTrackApi.shareIllustration(form)
