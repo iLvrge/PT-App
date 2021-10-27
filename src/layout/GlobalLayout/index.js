@@ -6,7 +6,9 @@ import {
     useHistory,
   } from 'react-router-dom'
 
-import { Grid } from '@material-ui/core'
+import { Grid} from '@material-ui/core'
+
+import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
 
 import useStyles from './styles'
 
@@ -137,6 +139,8 @@ const GlobalLayout = (props) => {
         window.addEventListener('keydown', handleKeyEvent)
         return () => window.removeEventListener("keydown", handleKeyEvent)
     }, [])
+
+    console.log('material answering to is mobile:',isMobile)
 
     useEffect(() => {
         if( openIllustrationBar === false && openCommentBar === false && openChartBar === false && openAnalyticsBar === false ) {
@@ -837,25 +841,31 @@ const GlobalLayout = (props) => {
     return (
         <div className={classes.root} id='main'>
             <NewHeader />
+
             <Grid container className={classes.dashboardWarapper}>
                 <Grid container className={classes.dashboard}>
-                    <div className={classes.filterToolbar}> 
-                        <div className={classes.flex}>                            
-                            {
-                                topToolBar.map( (item, index) => (
-                                    <NavigationIcon key={index} {...item} />
-                                ))
-                            }
+                    <BrowserView className={classes.view}>
+                        <div className={classes.filterToolbar}> 
+                            <div className={classes.flex}>                            
+                                {
+                                    topToolBar.map( (item, index) => (
+                                        <NavigationIcon key={index} {...item} />
+                                    ))
+                                }
+                            </div>
+                            <div className={`${classes.flex} ${classes.bottom}`}>
+                                {
+                                    bottomToolBar.map( (item, index) => (
+                                        <NavigationIcon key={index} {...item}/>
+                                    ))
+                                }
+                            </div>
                         </div>
-                        <div className={`${classes.flex} ${classes.bottom}`}>
-                            {
-                                bottomToolBar.map( (item, index) => (
-                                    <NavigationIcon key={index} {...item}/>
-                                ))
-                            }
-                        </div>
-                    </div>
-                    {childrenWithProps}
+                        {childrenWithProps}
+                    </BrowserView>
+                    <MobileView>
+                        <h1>This is rendered only on mobile</h1>
+                    </MobileView>
                 </Grid>
             </Grid>
         </div>

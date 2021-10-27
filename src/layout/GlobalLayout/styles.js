@@ -46,6 +46,11 @@ export default makeStyles(theme => ({
     bottom: {
         bottom: 0
     },
+    view: {
+        display: 'flex',
+        flex: '1 1 0%',
+        position: 'relative'
+    },
     showIcon: {
         /* padding: '10px', */
         fontSize: '1.1rem',
