@@ -9,11 +9,13 @@ import {
 import { Grid} from '@material-ui/core'
 
 import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
-
+import clsx from 'clsx'
 import useStyles from './styles'
 
 import NewHeader from '../../components/NewHeader'
 import Loader from '../../components/common/Loader'
+
+import MobileScreen from '../../components/MobileScreen'
 
 import NavigationIcon from '../../components/NavigationIcon'
 
@@ -76,7 +78,7 @@ const GlobalLayout = (props) => {
         bar100: '100%',
         bar50: '50%'
     }
-
+    
     const [ companyBarSize, setCompanyBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? 0 : 200) 
     const [ typeBarSize, setTypeBarSize ] = useState(0) 
     const [ otherPartyBarSize, setOtherPartyBarSize ] = useState(0)
@@ -748,13 +750,89 @@ const GlobalLayout = (props) => {
         }
     ]
 
+    const mobileWrapper = [{
+        component: MobileScreen,
+        type: props.type,
+        companyBarSize,
+        setCompanyBarSize,
+        handleCompanyButton,
+        handleCompanyBarOpen,
+        toggleButtonType,
+        companyButtonVisible,
+        visualizerBarSize,
+        setVisualizerBarSize,
+        setVisualizeOpenBar,
+        openBar,
+        openTypeBar,
+        typeBarSize,
+        setTypeBarSize,
+        handleTypeButton,
+        handleTypeBarOpen,
+        toggleTypeButtonType,
+        typeButtonVisible,
+        openOtherPartyBar,
+        openInventorBar,
+        openGoogleDriveBar,
+        otherPartyBarSize,
+        setOtherPartyBarSize,
+        handleOtherPartyButton,
+        handleOtherPartyBarOpen,
+        partyBarSize,
+        driveBarSize,
+        toggleOtherPartyButtonType,
+        otherPartyButtonVisible,
+        assignmentBarSize,
+        setAssignmentBarSize,
+        addressBarSize,
+        setAddressBarSize,
+        handleAssignmentButton,
+        openAssignmentBar,
+        handleAssignmentBarOpen,
+        toggleAssignmentButtonType,
+        assignmentButtonVisible,
+        customerBarSize,
+        setCustomerBarSize,
+        handleCustomerButton,
+        openCustomerBar,
+        handleCustomersBarOpen,
+        toggleCustomerButtonType,
+        customerButtonVisible,
+        commentBarSize,
+        setCommentBarSize,
+        openCommentBar,
+        openIllustrationBar,
+        handleChartBarOpen,
+        handleAnalyticsBarOpen,
+        setIsDrag,
+        isDrag,
+        setSize,
+        size,
+        illustrationRecord,
+        setIllustrationRecord,
+        illustrationBarSize,
+        setIllustrationBarSize,
+        openChartBar,
+        openAnalyticsBar,
+        openVisualizerBar,
+        setAnalyticsBar,
+        setChartBar,
+        openAnalyticsAndCharBar,
+        closeAnalyticsAndCharBar,
+        checkChartAnalytics,
+        setAssetFilesBarSize,
+        assetFilesBarSize,
+        assetFilesBar,
+        driveTemplateBarSize,
+        driveTemplateFrameMode,
+        driveTemplateMode
+    }]
+
     useEffect(()=>{
         if(process.env.REACT_APP_ENVIROMENT_MODE === 'PRO') {
             loginRedirect(authenticated)
         }        
         // Fetch data for logged in user using token
     },[authenticated]);
-
     
     const childrenWithProps = React.Children.map(props.children, child => {
         if (React.isValidElement(child)) {
@@ -843,33 +921,39 @@ const GlobalLayout = (props) => {
             <NewHeader />
 
             <Grid container className={classes.dashboardWarapper}>
-                <Grid container className={classes.dashboard}>
-                    <BrowserView className={classes.view}>
-                        <div className={classes.filterToolbar}> 
-                            <div className={classes.flex}>                            
-                                {
-                                    topToolBar.map( (item, index) => (
-                                        <NavigationIcon key={index} {...item} />
-                                    ))
-                                }
-                            </div>
-                            <div className={`${classes.flex} ${classes.bottom}`}>
-                                {
-                                    bottomToolBar.map( (item, index) => (
-                                        <NavigationIcon key={index} {...item}/>
-                                    ))
-                                }
-                            </div>
+                <Grid container className={classes.dashboard}>                    
+                    <div className={clsx(classes.filterToolbar, {[classes.mobileToolbar]: !isMobile})}> 
+                        <div className={clsx(classes.flex, {[classes.mobileFlex]: !isMobile})}>                            
+                            {
+                                topToolBar.map( (item, index) => (
+                                    <NavigationIcon key={index} {...item} />
+                                ))
+                            }
                         </div>
-                        {childrenWithProps}
-                    </BrowserView>
-                    <MobileView>
-                        <h1>This is rendered only on mobile</h1>
-                    </MobileView>
+                        <div className={clsx(classes.flex, classes.bottom, {[classes.mobileFlex]: !isMobile})}>
+                            {
+                                bottomToolBar.map( (item, index) => (
+                                    <NavigationIcon key={index} {...item}/>
+                                ))
+                            }
+                        </div>
+                    </div>
+                    {
+                        !isMobile                        
+                        ?
+                            mobileWrapper.map(
+                                ({component: Component, ...props }, index) => (
+                                    <Component key={index} {...props} />
+                                )
+                            )
+                        :
+
+                            childrenWithProps
+                    }
                 </Grid>
             </Grid>
         </div>
     )
 }
 
-export default GlobalLayout
+export default GlobalLayout;

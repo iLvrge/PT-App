@@ -43,6 +43,10 @@ export default makeStyles(theme => ({
         width: '3.5rem',
         position: 'absolute'
     },
+    mobileFlex: {
+        width: '5.5rem',
+        position: 'absolute'
+    },
     bottom: {
         bottom: 0
     },
@@ -50,6 +54,10 @@ export default makeStyles(theme => ({
         display: 'flex',
         flex: '1 1 0%',
         position: 'relative'
+    },
+    mobileToolbar: {
+        width: '5.5rem',
+        borderRight: 0,
     },
     showIcon: {
         /* padding: '10px', */
