@@ -52,9 +52,9 @@ const GlobalLayout = (props) => {
     const [ openOtherPartyBar, setOtherPartyOpenBar ] = useState(false)
     const [ openInventorBar, setInventorOpenBar ] = useState(false)
     const [ openAssignmentBar, setAssignmentOpenBar ] = useState(false)
-    const [ openCustomerBar, setCustomerOpenBar ] = useState(!isMobile ? false : true)
+    const [ openCustomerBar, setCustomerOpenBar ] = useState(isMobile ? false : true)
     const [ openIllustrationBar, setIllustrationBar ] = useState(true)
-    const [ openCommentBar, setCommentBar ] = useState(!isMobile ? false : true)
+    const [ openCommentBar, setCommentBar ] = useState(isMobile ? false : true)
     const [ openChartBar, setChartBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
     const [ openAnalyticsBar, setAnalyticsBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
     const [ openVisualizerBar, setVisualizeOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
@@ -339,7 +339,7 @@ const GlobalLayout = (props) => {
             setCompanyBarSize(0)  
         } else {
             setCompanyBarSize(200)
-            if(!isMobile){
+            if(isMobile){
                 setTypeOpenBar( false )
                 setOtherPartyOpenBar( false )
                 setInventorOpenBar( false )
@@ -360,14 +360,16 @@ const GlobalLayout = (props) => {
             setTypeBarSize(0)
         } else {
             setTypeBarSize(120)
-            setOpenBar( false )
-            setOtherPartyOpenBar( false )
-            setInventorOpenBar( false )
-            setAssignmentOpenBar( false )
-            setCustomerOpenBar( false )
-            setAssetFilesBar( false )
-            setGoogleDriveBar( false )
-
+            if(isMobile){
+                setOpenBar( false )
+                setOtherPartyOpenBar( false )
+                setInventorOpenBar( false )
+                setAssignmentOpenBar( false )
+                setCustomerOpenBar( false )
+                setAssetFilesBar( false )
+                setGoogleDriveBar( false )
+                
+            }
         }
         editorBar()
     }
@@ -938,15 +940,15 @@ const GlobalLayout = (props) => {
 
             <Grid container className={classes.dashboardWarapper}>
                 <Grid container className={classes.dashboard}>                    
-                    <div className={clsx(classes.filterToolbar, {[classes.mobileToolbar]: !isMobile})}> 
-                        <div className={clsx(classes.flex, {[classes.mobileFlex]: !isMobile})}>                            
+                    <div className={clsx(classes.filterToolbar, {[classes.mobileToolbar]: isMobile})}> 
+                        <div className={clsx(classes.flex, {[classes.mobileFlex]: isMobile})}>                            
                             {
                                 topToolBar.map( (item, index) => (
                                     <NavigationIcon key={index} {...item} />
                                 ))
                             }
                         </div>
-                        <div className={clsx(classes.flex, classes.bottom, {[classes.mobileFlex]: !isMobile})}>
+                        <div className={clsx(classes.flex, classes.bottom, {[classes.mobileFlex]: isMobile})}>
                             {
                                 bottomToolBar.map( (item, index) => (
                                     <NavigationIcon key={index} {...item}/>
@@ -955,7 +957,7 @@ const GlobalLayout = (props) => {
                         </div>
                     </div>
                     {
-                        !isMobile                          
+                        isMobile                          
                         ?
                             mobileWrapper.map(
                                 ({component: Component, ...props }, index) => (
