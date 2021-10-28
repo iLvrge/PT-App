@@ -48,5 +48,6 @@ export default makeStyles(theme => ({
     },
     companyBar:{
         height: '100%',
+        width: '100%'  
     },
 }))

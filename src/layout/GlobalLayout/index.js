@@ -922,15 +922,15 @@ const GlobalLayout = (props) => {
 
             <Grid container className={classes.dashboardWarapper}>
                 <Grid container className={classes.dashboard}>                    
-                    <div className={clsx(classes.filterToolbar, {[classes.mobileToolbar]: isMobile})}> 
-                        <div className={clsx(classes.flex, {[classes.mobileFlex]: isMobile})}>                            
+                    <div className={clsx(classes.filterToolbar, {[classes.mobileToolbar]: !isMobile})}> 
+                        <div className={clsx(classes.flex, {[classes.mobileFlex]: !isMobile})}>                            
                             {
                                 topToolBar.map( (item, index) => (
                                     <NavigationIcon key={index} {...item} />
                                 ))
                             }
                         </div>
-                        <div className={clsx(classes.flex, classes.bottom, {[classes.mobileFlex]: isMobile})}>
+                        <div className={clsx(classes.flex, classes.bottom, {[classes.mobileFlex]: !isMobile})}>
                             {
                                 bottomToolBar.map( (item, index) => (
                                     <NavigationIcon key={index} {...item}/>
@@ -939,7 +939,7 @@ const GlobalLayout = (props) => {
                         </div>
                     </div>
                     {
-                        isMobile                          
+                        !isMobile                          
                         ?
                             mobileWrapper.map(
                                 ({component: Component, ...props }, index) => (
