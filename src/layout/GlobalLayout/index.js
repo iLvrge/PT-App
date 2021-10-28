@@ -939,7 +939,7 @@ const GlobalLayout = (props) => {
                         </div>
                     </div>
                     {
-                        isMobile                        
+                        isMobile                          
                         ?
                             mobileWrapper.map(
                                 ({component: Component, ...props }, index) => (

@@ -35,7 +35,8 @@ import {
   getChannels,
   setMaintainenceAssetsList,
   setAssetTypeAssignmentAllAssets,
-  setAssetsIllustrationData
+  setAssetsIllustrationData,
+  setDocumentTransaction
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -548,6 +549,7 @@ const onHandleClickRow = useCallback(
             dispatch(setDriveTemplateFrameMode(false));
             dispatch(setDriveTemplateFile(null));
             dispatch(setTemplateDocument(null));
+            dispatch(setDocumentTransaction([]));
             //dispatch(getChannelIDTransaction(row.rf_id));
           } else {
             dispatch(setChannelID(''))
@@ -562,11 +564,11 @@ const onHandleClickRow = useCallback(
                   document: '',  
                   form: '', 
                   agreement: '' 
-                }
+                } 
               )
             )
             dispatch(
-              setPDFView(true)
+              setPDFView(false)
             )
             dispatch(toggleLifeSpanMode(true));
             dispatch(toggleFamilyMode(false));

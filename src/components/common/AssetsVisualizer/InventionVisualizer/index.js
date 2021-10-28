@@ -457,88 +457,92 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
 
     const generateChart = async () => {
+        try {
         if (isLoadingCharts || graphRawData.length == 0 || graphRawGroupData.length == 0) return null
-        
-        items.current = new DataSet()
-        const colors = ['#70A800', '#00a9e6', '#E69800', '#ff0000'], codeList = []
-        let xMin = 0, xMax = 0, years=[];
-        /* console.log('valueScope', valueScope)
-        const codePromise = graphRawGroupData.map( group => {
-            if((valueScope.length == 1 && valueScope.includes(group.id)) || (valueScope.length == 2 && group.id >= valueScope[0] &&  group.id <= valueScope[1])){
-                codeList.push(group.cpc_code)
-            }
-        })
-        await Promise.all(codePromise)
-        console.log('codeList', codeList) */
-        let tap = 0;
-        const promises = graphRawData.map( (data, index) => {
-            /*if(codeList.includes(data.cpc_code)) {
                 
-            }*/
-            const findIndex = graphRawGroupData.findIndex( row => row.cpc_code == data.cpc_code )
-            if(findIndex !== -1) {
-                const year = parseInt(data.fillingYear)
-                if(xMin == 0) {
-                    xMin = year     
+            items.current = new DataSet()
+            const colors = ['#70A800', '#00a9e6', '#E69800', '#ff0000'], codeList = []
+            let xMin = 0, xMax = 0, years=[];
+            /* console.log('valueScope', valueScope)
+            const codePromise = graphRawGroupData.map( group => {
+                if((valueScope.length == 1 && valueScope.includes(group.id)) || (valueScope.length == 2 && group.id >= valueScope[0] &&  group.id <= valueScope[1])){
+                    codeList.push(group.cpc_code)
                 }
-                if(xMax == 0) {
-                    xMax = year
-                }
-                if(!years.includes(year)){
-                    years.push(year)
-                }
+            })
+            await Promise.all(codePromise)
+            console.log('codeList', codeList) */
+            let tap = 0;
+            const promises = graphRawData.map( (data, index) => {
+                /*if(codeList.includes(data.cpc_code)) {
+                    
+                }*/
+                const findIndex = graphRawGroupData.findIndex( row => row.cpc_code == data.cpc_code )
+                if(findIndex !== -1) {
+                    const year = parseInt(data.fillingYear)
+                    if(xMin == 0) {
+                        xMin = year     
+                    }
+                    if(xMax == 0) {
+                        xMax = year
+                    }
+                    if(!years.includes(year)){
+                        years.push(year)
+                    }
 
-                if(year < xMin){
-                    xMin = year
-                } else  if(year > xMax){
-                    xMax = year
-                }
-                //const col = colors[Math.floor((Math.random()*colors.length))]
-                items.current.add({
-                    x: year,
-                    y: graphRawGroupData[findIndex].id,
-                    z: data.countAssets,
-                    style: {
-                        stroke: '#50719C',
-                        fill: '#395270'
-                    },
-                    patent: data.patent_number,
-                    application_number: data.application_number,   
-                    origin: data.group_name
-                })
-
-                if( tap === 0 ) {
+                    if(year < xMin){
+                        xMin = year
+                    } else  if(year > xMax){
+                        xMax = year
+                    }
+                    //const col = colors[Math.floor((Math.random()*colors.length))]
                     items.current.add({
                         x: year,
                         y: graphRawGroupData[findIndex].id,
-                        z: 0,
+                        z: data.countAssets,
                         style: {
                             stroke: '#50719C',
                             fill: '#395270'
-                        }, 
+                        },
                         patent: data.patent_number,
                         application_number: data.application_number,   
                         origin: data.group_name
                     })
-                    tap = 1
-                }
-            }                
-        })
 
-        await Promise.all(promises)            
-        const height = graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0 ? graphContainerRef.current.parentNode !== null && graphContainerRef.current.parentNode.parentNode !== null ? `${graphContainerRef.current.parentNode.parentNode.clientHeight - 50 }px` : `${graphContainerRef.current.clientHeight - 50 }px` : '100%'
-        //TODO height 100% not working well, created allot of isues when we resize pane, 
-        if(graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0) {
-           options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight - 50 }px`, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1, zStep: graphRawData.length > 2 ? 3 : 1 }
-        }     
+                    if( tap === 0 ) {
+                        items.current.add({
+                            x: year,
+                            y: graphRawGroupData[findIndex].id,
+                            z: 0,
+                            style: {
+                                stroke: '#50719C',
+                                fill: '#395270'
+                            }, 
+                            patent: data.patent_number,
+                            application_number: data.application_number,   
+                            origin: data.group_name
+                        })
+                        tap = 1
+                    }
+                }                
+            })
 
-        graphRef.current = new Graph3d(graphContainerRef.current, items.current, options)
-        graphRef.current.on('click', graphClickHandler)      
-        graphRef.current.on('cameraPositionChange', onCameraPositionChange)
-        if(graphContainerRef.current != null ) {
-            graphContainerRef.current.removeEventListener('mouseover', onHandleMouseOver)
-            graphContainerRef.current.addEventListener('mouseout', onHandleMouseOut)
-            graphContainerRef.current.addEventListener('mouseover', onHandleMouseOver)            
+            await Promise.all(promises)            
+            const height = graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0 ? graphContainerRef.current.parentNode !== null && graphContainerRef.current.parentNode.parentNode !== null ? `${graphContainerRef.current.parentNode.parentNode.clientHeight - 50 }px` : `${graphContainerRef.current.clientHeight - 50 }px` : '100%'
+            //TODO height 100% not working well, created allot of isues when we resize pane, 
+            if(graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0) {
+            options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight - 50 }px`, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1, zStep: graphRawData.length > 2 ? 3 : 1 }
+            }     
+
+            graphRef.current = new Graph3d(graphContainerRef.current, items.current, options)
+            graphRef.current.on('click', graphClickHandler)      
+            graphRef.current.on('cameraPositionChange', onCameraPositionChange)
+            if(graphContainerRef.current != null ) {
+                graphContainerRef.current.removeEventListener('mouseover', onHandleMouseOver)
+                graphContainerRef.current.addEventListener('mouseout', onHandleMouseOut)
+                graphContainerRef.current.addEventListener('mouseover', onHandleMouseOver)            
+            }
+        } catch (err) {
+            console.log(err)
         }
     }
 

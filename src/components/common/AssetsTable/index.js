@@ -31,6 +31,7 @@ import {
   setSlackMessages,
   setChildSelectedAssetsPatents,
   setSelectedAssetsTransactions,
+  setDocumentTransaction,
   setMainCompaniesRowSelect,
   setAssetTypeSelectedRow,
   setAssetTypeCustomerSelectedRow,
@@ -762,6 +763,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         callSelectedAssets({ grant_doc_num, appno_doc_num, asset });
         dispatch(setChildSelectedAssetsPatents([]));
         dispatch(setSelectedAssetsTransactions([]));
+        dispatch(setDocumentTransaction([]));
         dispatch(setMainCompaniesRowSelect([]));
         dispatch(setAssetTypeSelectedRow([]));
         dispatch(setAssetTypeCustomerSelectedRow([]));

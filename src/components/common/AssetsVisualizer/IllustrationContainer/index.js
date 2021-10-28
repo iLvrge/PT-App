@@ -80,6 +80,10 @@ const IllustrationContainer = ({
           setIllustrationData(data != '' ? data : null)
           dispatch(setAssetsIllustrationData(data != '' ? data : null))
           if(setIllustrationRecord) { setIllustrationRecord(data) }
+          if(data.line[0].document1.indexOf('legacy-assignments.uspto.gov') !== -1) {
+            data.line[0].rf_id =  data.line[0].ref_id
+            retrievePDFFromServer(data.line[0])
+          }
           dispatch(setConnectionData(data.line[0]))
           /*dispatch(
             setPDFView(true)

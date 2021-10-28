@@ -18,6 +18,8 @@ import { capitalize } from '../../../utils/numbers'
 import { 
     setTemplateDocument,
     setDocumentTransaction,
+    setSelectedAssetsPatents,
+    setSelectedAssetsTransactions,
     getGoogleProfile,
 } from '../../../actions/patentTrackActions2'
 
@@ -184,6 +186,7 @@ const FilesTemplates = ({type}) => {
     useEffect(() => {
         if(selectedRow.length != document_transaction.length ) {
             setSelectedRow(document_transaction)
+            setCurrentSelection(document_transaction[0])
         }
     }, [document_transaction, selectedRow])
 
@@ -339,38 +342,42 @@ const FilesTemplates = ({type}) => {
                 ? prevItems.filter(row => item.id !== row)
                 : [...prevItems, item.id],
             ); 
-        }
-        if(selectedRow.includes(item.id)) {
-            dispatch(setDocumentTransaction([]))     
-            dispatch(setDriveTemplateFrameMode(false))
-            dispatch(setTemplateDocument(null))
-            setSelectedRow([])
-            setCurrentSelection(null)
-        } else {            
-            if(item.external_type == 'gdrive' || item.external_type == 'usptodrive') {
-                dispatch(setDriveTemplateFrameMode(true))
-                let webLink = item.url_private
-                if(webLink.toString().indexOf('legacy-assignments')) {
-                    dowloadPDFUrl(item)
-                }
-                dispatch(setTemplateDocument(webLink))
-            } else {
-                if(typeof item.webViewLink !== 'undefined') {
+        } else {
+            if(selectedRow.includes(item.id)) {
+                dispatch(setDocumentTransaction([]))     
+                dispatch(setSelectedAssetsTransactions([]))     
+                dispatch(setSelectedAssetsPatents([]))     
+                dispatch(setDriveTemplateFrameMode(false))
+                dispatch(setTemplateDocument(null))
+                setSelectedRow([])
+                setCurrentSelection(null)
+            } else {            
+                if(item.external_type == 'gdrive' || item.external_type == 'usptodrive') {
                     dispatch(setDriveTemplateFrameMode(true))
-                    let webLink = item.mimeType == "application/pdf" ? item.webViewLink.toString().replace('view?usp=drivesdk', 'preview')  : item.webViewLink
+                    let webLink = item.url_private
                     if(webLink.toString().indexOf('legacy-assignments')) {
-                        //webLink = `https://drive.google.com/viewerng/viewer?url=${webLink}&embedded=true`
+                        webLink = ''
                         dowloadPDFUrl(item)
                     }
                     dispatch(setTemplateDocument(webLink))
                 } else {
-                    window.open(item.url_private)
+                    if(typeof item.webViewLink !== 'undefined') {
+                        dispatch(setDriveTemplateFrameMode(true))
+                        let webLink = item.mimeType == "application/pdf" ? item.webViewLink.toString().replace('view?usp=drivesdk', 'preview')  : item.webViewLink
+                        if(webLink.toString().indexOf('legacy-assignments')) {
+                            webLink = ''
+                            dowloadPDFUrl(item)
+                        }
+                        dispatch(setTemplateDocument(webLink))
+                    } else {
+                        window.open(item.url_private)
+                    }                
                 }                
-            }
-            setSelectedRow([item.id])
-            setCurrentSelection(item.id) 
-            dispatch(setDocumentTransaction([item.id]))     
-        }                   
+                setSelectedRow([item.id])
+                setCurrentSelection(item.id) 
+                dispatch(setDocumentTransaction([item.id]))     
+            } 
+        }                         
     }, [ dispatch, selectedRow ]) 
 
     const onHandleDocumentSelectAll = () => { 
@@ -387,7 +394,9 @@ const FilesTemplates = ({type}) => {
             );
         }        
         if(selectedDocumentRow.includes(item.id)) {
-            dispatch(setDocumentTransaction([]))     
+            dispatch(setDocumentTransaction([]))
+            dispatch(setSelectedAssetsTransactions([]))     
+            dispatch(setSelectedAssetsPatents([]))     
             dispatch(setDriveTemplateFrameMode(false))
             dispatch(setTemplateDocument(null))
             setSelectedDocumentRow([])
@@ -399,6 +408,7 @@ const FilesTemplates = ({type}) => {
                 let webLink = item.url_private
                 if(webLink.toString().indexOf('legacy-assignments')) {
                    // webLink = `https://drive.google.com/viewerng/viewer?url=${webLink}&embedded=true`
+                   webLink=''
                    dowloadPDFUrl(item)
                 }
                 dispatch(setTemplateDocument(webLink))
@@ -409,6 +419,7 @@ const FilesTemplates = ({type}) => {
                     if(webLink.toString().indexOf('legacy-assignments')) {
                         //webLink = `https://drive.google.com/viewerng/viewer?url=${webLink}&embedded=true`
                         dowloadPDFUrl(item)
+                        webLink=''
                     }
                     dispatch(setTemplateDocument(webLink))
                 } else {

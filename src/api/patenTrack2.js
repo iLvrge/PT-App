@@ -247,7 +247,9 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelAssets = c
     })
-    return axios.get(`${base_new_api_url}/share/${shareCode}/2`, header)
+    let type =   process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 0 : process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? 2 : 1
+
+    return axios.get(`${base_new_api_url}/share/${shareCode}/${type}`, header)
   }
 
   static cancelAssets() {
