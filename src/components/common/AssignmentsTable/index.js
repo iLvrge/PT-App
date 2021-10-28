@@ -549,7 +549,7 @@ const onHandleClickRow = useCallback(
             dispatch(setDriveTemplateFrameMode(false));
             dispatch(setDriveTemplateFile(null));
             dispatch(setTemplateDocument(null));
-            dispatch(setDocumentTransaction([]));
+            //dispatch(setDocumentTransaction([]));
             //dispatch(getChannelIDTransaction(row.rf_id));
           } else {
             dispatch(setChannelID(''))

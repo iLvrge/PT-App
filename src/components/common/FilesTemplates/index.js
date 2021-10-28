@@ -345,8 +345,8 @@ const FilesTemplates = ({type}) => {
         } else {
             if(selectedRow.includes(item.id)) {
                 dispatch(setDocumentTransaction([]))     
-                dispatch(setSelectedAssetsTransactions([]))     
-                dispatch(setSelectedAssetsPatents([]))     
+                //dispatch(setSelectedAssetsTransactions([]))     
+                //dispatch(setSelectedAssetsPatents([]))     
                 dispatch(setDriveTemplateFrameMode(false))
                 dispatch(setTemplateDocument(null))
                 setSelectedRow([])
@@ -356,8 +356,8 @@ const FilesTemplates = ({type}) => {
                     dispatch(setDriveTemplateFrameMode(true))
                     let webLink = item.url_private
                     if(webLink.toString().indexOf('legacy-assignments')) {
-                        webLink = ''
-                        dowloadPDFUrl(item)
+                        webLink = '' 
+                        dowloadPDFUrl(item) 
                     }
                     dispatch(setTemplateDocument(webLink))
                 } else {
@@ -395,8 +395,8 @@ const FilesTemplates = ({type}) => {
         }        
         if(selectedDocumentRow.includes(item.id)) {
             dispatch(setDocumentTransaction([]))
-            dispatch(setSelectedAssetsTransactions([]))     
-            dispatch(setSelectedAssetsPatents([]))     
+            //dispatch(setSelectedAssetsTransactions([]))     
+            //dispatch(setSelectedAssetsPatents([]))     
             dispatch(setDriveTemplateFrameMode(false))
             dispatch(setTemplateDocument(null))
             setSelectedDocumentRow([])
