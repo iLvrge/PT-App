@@ -52,9 +52,9 @@ const GlobalLayout = (props) => {
     const [ openOtherPartyBar, setOtherPartyOpenBar ] = useState(false)
     const [ openInventorBar, setInventorOpenBar ] = useState(false)
     const [ openAssignmentBar, setAssignmentOpenBar ] = useState(false)
-    const [ openCustomerBar, setCustomerOpenBar ] = useState(true)
+    const [ openCustomerBar, setCustomerOpenBar ] = useState(!isMobile ? false : true)
     const [ openIllustrationBar, setIllustrationBar ] = useState(true)
-    const [ openCommentBar, setCommentBar ] = useState(true)
+    const [ openCommentBar, setCommentBar ] = useState(!isMobile ? false : true)
     const [ openChartBar, setChartBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
     const [ openAnalyticsBar, setAnalyticsBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
     const [ openVisualizerBar, setVisualizeOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
@@ -339,7 +339,16 @@ const GlobalLayout = (props) => {
             setCompanyBarSize(0)  
         } else {
             setCompanyBarSize(200)
+            if(!isMobile){
+                setTypeOpenBar( false )
+                setOtherPartyOpenBar( false )
+                setInventorOpenBar( false )
+                setAssignmentOpenBar( false )
+                setCustomerOpenBar( false )
+                setAssetFilesBar( false )
+                setGoogleDriveBar( false )
 
+            }
         }
         editorBar()
     }
@@ -351,6 +360,13 @@ const GlobalLayout = (props) => {
             setTypeBarSize(0)
         } else {
             setTypeBarSize(120)
+            setOpenBar( false )
+            setOtherPartyOpenBar( false )
+            setInventorOpenBar( false )
+            setAssignmentOpenBar( false )
+            setCustomerOpenBar( false )
+            setAssetFilesBar( false )
+            setGoogleDriveBar( false )
 
         }
         editorBar()

@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import SplitPane from 'react-split-pane'
 
 import MainCompaniesSelector from '../common/MainCompaniesSelector'
+import AssignmentsType from '../common/AssignmentsType'
 import ForeignAsset from '../common/ForeignAsset'
 import IllustrationContainer from '../common/AssetsVisualizer/IllustrationContainer'
 import TimelineContainer from '../common/AssetsVisualizer/TimelineContainer'
@@ -39,7 +40,7 @@ const MobileScreen = (props) => {
         () => (!selectedAssetsPatents.length &&  !assetIllustration),
         [ selectedAssetsPatents, selectedAssetAssignments, assetIllustration ],
     )
-
+    
     return (
         <SplitPane
             className={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPane1OverflowUnset, classes.paneHeightZero)}
@@ -79,7 +80,16 @@ const MobileScreen = (props) => {
                                         parentBar={props.setVisualizeOpenBar}                                
                                     />
                         :
-                        '' 
+                        props.openTypeBar === true
+                        ?
+                            <AssignmentsType
+                                parentBarDrag={props.setVisualizerBarSize}
+                                parentBar={props.setVisualizeOpenBar}
+                                type={props.type}
+                                {...(props.type === 2 && {defaultLoad: false})}
+                            />
+                        :
+                            ''
                     }
             </div>
             <div

@@ -123,7 +123,7 @@ export default makeStyles(theme => ({
          /* left: 10, */
         border: 0,       
         backgroundRepeat: 'no-repeat',
-        backgroundSize: 17
+        backgroundSize: 15
       },
       '& .vis-dot.asset-type-default': {
         borderColor: indigo[500],
