@@ -51,7 +51,7 @@ export default makeStyles(theme => ({
     companyLogoCon: {
         display: 'flex',
         alignItems: 'center',
-        width: '18.5rem', 
+        width: '15rem', 
         justifyContent: 'flex-start', 
         cursor: 'pointer',
         '@media (max-width: 70em)': {
