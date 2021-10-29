@@ -51,9 +51,8 @@ export default makeStyles(theme => ({
     companyLogoCon: {
         display: 'flex',
         alignItems: 'center',
-        marginLeft: 50,
-        width: '12%', 
-        justifyContent: 'flex-end', 
+        width: '18.5rem', 
+        justifyContent: 'flex-start', 
         cursor: 'pointer',
         '@media (max-width: 70em)': {
         //paddingLeft: 15
@@ -67,6 +66,9 @@ export default makeStyles(theme => ({
         '& .fa-tasks':{
             width: 20
         }
+    },
+    logoContainer: {
+        width: '18.5rem',
     },
     siteLogo: {
         /* width: LOGO_WIDTH,
@@ -83,7 +85,7 @@ export default makeStyles(theme => ({
     userLogoOfficial: {
         height: '2rem', /*28px */
         maxWidth: '100%',
-        marginRight: '20px'
+        marginRight: 15
     }, 
     organizationName: {
         marginLeft: 5,
@@ -422,7 +424,7 @@ export default makeStyles(theme => ({
     },
     calendly: {
         border:'1px solid #5a5a5a !important',
-        marginLeft: 15,
+        margin: '0 4px',
         textTransform: 'initial',
         padding: '3px 5px',
         '&:hover':{

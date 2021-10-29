@@ -470,7 +470,7 @@ const onHandleForeignAssets = (event) => {
   return (
     <AppBar className={classes.root} color='transparent' position='relative'>
       <Toolbar className={classes.toolbar}>
-        <img src={siteLogo} className={classes.siteLogo} alt={''} />
+        <span className={classes.logoContainer}><img src={siteLogo} className={classes.siteLogo} alt={''} /></span>
         <span onClick={(e) => handleControlModal( e, !controlModal )} className={classes.companyLogoCon}>
           {
             user.organisation 
@@ -482,7 +482,7 @@ const onHandleForeignAssets = (event) => {
                   <span className={classes.organizationName}>{user.organisation.name}</span>
             :
             ''
-          }
+          } 
         </span>
         {/* <div className={classes.grow} style={{position: 'relative'}}>  
           <div className={classes.breadcrumbs}>{layoutName}</div>   
