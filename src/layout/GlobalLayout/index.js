@@ -58,11 +58,11 @@ const GlobalLayout = (props) => {
     const [ toggleAssignmentButtonType, setToggleAssignmentButtonType ] = useState(true)
     const [ toggleCustomerButtonType, setToggleCustomerButtonType ] = useState(true)
     const DEFAULT_SCREEN_SIZE = {
-        companyBar: 200,
+        companyBar: 210,
         typeBar: 0,
         otherPartyBar: 0,
         assignmentBar: 0,
-        customerBar: 160,
+        customerBar: 210,
         driveTemplateBar: 200,
         assetFileBar: 0,
         commentBar: '30%',
@@ -72,14 +72,14 @@ const GlobalLayout = (props) => {
         bar50: '50%'
     }
 
-    const [ companyBarSize, setCompanyBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? 0 : 200) 
+    const [ companyBarSize, setCompanyBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? 0 : 210) 
     const [ typeBarSize, setTypeBarSize ] = useState(0) 
     const [ otherPartyBarSize, setOtherPartyBarSize ] = useState(0)
     const [ partyBarSize, setPartyBarSize ] = useState('50%')
     const [ driveBarSize, setDriveBarSize ] = useState('50%')
     const [ assignmentBarSize, setAssignmentBarSize ] = useState(0)  
     const [ addressBarSize, setAddressBarSize ] = useState(450)
-    const [ customerBarSize, setCustomerBarSize ] = useState(160)
+    const [ customerBarSize, setCustomerBarSize ] = useState(210)
     const [ commentBarSize , setCommentBarSize ] = useState('30%')
     const [ illustrationBarSize , setIllustrationBarSize ] = useState('50%')
     const [ visualizerBarSize , setVisualizerBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? '30%' : '0%')
@@ -141,7 +141,7 @@ const GlobalLayout = (props) => {
             if( openGoogleDriveBar === true || assetFilesBar === true ) {
                 setAssetFilesBarSize('100%')
                 if(openCustomerBar === true && customerBarSize === '100%') {
-                    setCustomerBarSize(160)
+                    setCustomerBarSize(210)
                 }
                 if(openAssignmentBar === true && assignmentBarSize === '100%') {
                     setAssignmentBarSize(120)
@@ -153,7 +153,7 @@ const GlobalLayout = (props) => {
                     setTypeBarSize(120)
                 }
                 if (openBar === true && companyBarSize === '100%') {
-                    setCompanyBarSize(120)
+                    setCompanyBarSize(210)
                 }
             } else if (openCustomerBar === true) {
                 setCustomerBarSize('100%')
@@ -167,7 +167,7 @@ const GlobalLayout = (props) => {
                     setTypeBarSize(120)
                 }
                 if (openBar === true && companyBarSize === '100%') {
-                    setCompanyBarSize(120)
+                    setCompanyBarSize(210)
                 }
             } else if (openAssignmentBar === true) {
                 setAssignmentBarSize('100%')
@@ -178,7 +178,7 @@ const GlobalLayout = (props) => {
                     setTypeBarSize(120)
                 }
                 if (openBar === true && companyBarSize === '100%') {
-                    setCompanyBarSize(120)
+                    setCompanyBarSize(210)
                 }
             } else if (openOtherPartyBar === true || openInventorBar === true) {
                 setOtherPartyBarSize('100%')
@@ -186,12 +186,12 @@ const GlobalLayout = (props) => {
                     setTypeBarSize(120)
                 }
                 if (openBar === true && companyBarSize === '100%') {
-                    setCompanyBarSize(120)
+                    setCompanyBarSize(210)
                 }
             } else if (openTypeBar === true ) {
                 setTypeBarSize('100%')
                 if (openBar === true && companyBarSize === '100%') {
-                    setCompanyBarSize(120)
+                    setCompanyBarSize(210)
                 }
             } else if(selectedCategory == 'correct_names' || selectedCategory == 'correct_address') {
                 setAddressBarSize('100%')
@@ -202,7 +202,7 @@ const GlobalLayout = (props) => {
             if(assetFilesBarSize === '100%' && (openGoogleDriveBar === true || assetFilesBar === true)){
                 setAssetFilesBarSize(200)
             } else if(customerBarSize === '100%') {
-                setCustomerBarSize(160)
+                setCustomerBarSize(210)
             } else if(assignmentBarSize === '100%') {
                 setAssignmentBarSize(120)
             } else if(otherPartyBarSize === '100%') {
@@ -212,7 +212,7 @@ const GlobalLayout = (props) => {
             } else if(addressBarSize === '100%' && (selectedCategory == 'correct_names' || selectedCategory == 'correct_address')) {
                 setAddressBarSize(450)
             } else if(companyBarSize === '100%') {
-                setCompanyBarSize(120)
+                setCompanyBarSize(210)
             }
         }
     }, [ openIllustrationBar, openCommentBar, openChartBar, openAnalyticsBar, openGoogleDriveBar, assetFilesBar, openCustomerBar, openAssignmentBar, openOtherPartyBar, openInventorBar, openTypeBar, openBar  ])
@@ -232,7 +232,7 @@ const GlobalLayout = (props) => {
             setChartBar(true)
             setAnalyticsBar(true)
             setCompanyBarSize(0) // company bar size
-            setCustomerBarSize(160)
+            setCustomerBarSize(210)
             setAssignmentBarSize(120)
 
 
@@ -404,7 +404,7 @@ const GlobalLayout = (props) => {
             /* dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))
             dispatch(setMaintainenceAssetsList({list: [], total_records: 0}, false)) */
         } else {
-            setCustomerBarSize(160)
+            setCustomerBarSize(210)
         }
         editorBar()
     }
