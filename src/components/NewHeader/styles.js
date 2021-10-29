@@ -84,7 +84,6 @@ export default makeStyles(theme => ({
     },
     userLogoOfficial: {
         height: '2rem', /*28px */
-        maxWidth: '100%',
         marginRight: 15
     }, 
     organizationName: {
