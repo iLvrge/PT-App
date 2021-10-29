@@ -233,7 +233,7 @@ const AssetDetailsContainer = ({
               cls={classes.btnLeft}
             /> */}
             {
-              selectedCompanies.length > 0 || type === 9 || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE')
+              selectedCompanies.length > 0 || type === 9 || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE')
               ?
                 chartBar == true ?
                   pdfView === true && !connectionBoxView ? (

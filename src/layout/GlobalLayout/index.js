@@ -367,8 +367,7 @@ const GlobalLayout = (props) => {
                 setAssignmentOpenBar( false )
                 setCustomerOpenBar( false )
                 setAssetFilesBar( false )
-                setGoogleDriveBar( false )
-                
+                setGoogleDriveBar( false )                
             }
         }
         editorBar()
@@ -387,6 +386,15 @@ const GlobalLayout = (props) => {
                 setPartyBarSize('0%')
             } else {
                 setPartyBarSize('50%')
+            }
+            if(isMobile){
+                setOpenBar( false )
+                setTypeOpenBar( false )
+                setInventorOpenBar( false )
+                setAssignmentOpenBar( false )
+                setCustomerOpenBar( false )
+                setAssetFilesBar( false )
+                setGoogleDriveBar( false )                
             }
         }
         editorBar()
@@ -414,6 +422,15 @@ const GlobalLayout = (props) => {
             } else {
                 setPartyBarSize('50%')
             }
+            if(isMobile){
+                setOpenBar( false )
+                setTypeOpenBar( false )
+                setOtherPartyOpenBar( false )
+                setAssignmentOpenBar( false )
+                setCustomerOpenBar( false )
+                setAssetFilesBar( false )
+                setGoogleDriveBar( false )                
+            }
             dispatch( setAssetTypeInventor({list: [], total_records: 0}))
             dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
             dispatch( setAssetTypeCompanies({ list: [], total_records: 0 }) )
@@ -431,7 +448,15 @@ const GlobalLayout = (props) => {
             setAssignmentBarSize(0)
         } else {
             setAssignmentBarSize(120)
-
+            if(isMobile){
+                setOpenBar( false )
+                setTypeOpenBar( false )
+                setOtherPartyOpenBar( false )
+                setInventorOpenBar( false )
+                setCustomerOpenBar( false )
+                setAssetFilesBar( false )
+                setGoogleDriveBar( false )                
+            }
         }
         editorBar()
     }
@@ -445,6 +470,15 @@ const GlobalLayout = (props) => {
             dispatch(setMaintainenceAssetsList({list: [], total_records: 0}, false)) */
         } else {
             setCustomerBarSize(160)
+            if(isMobile){
+                setOpenBar( false )
+                setTypeOpenBar( false )
+                setOtherPartyOpenBar( false )
+                setInventorOpenBar( false )
+                setAssignmentOpenBar( false )
+                setAssetFilesBar( false )
+                setGoogleDriveBar( false )                
+            }
         }
         editorBar()
     }
@@ -463,7 +497,15 @@ const GlobalLayout = (props) => {
             } else {
                 setDriveBarSize('50%')
             }
-
+            if(isMobile){
+                setOpenBar( false )
+                setTypeOpenBar( false )
+                setOtherPartyOpenBar( false )
+                setInventorOpenBar( false )
+                setAssignmentOpenBar( false )
+                setCustomerOpenBar( false )
+                setGoogleDriveBar( false )                
+            }
         }
         editorBar()
     }
@@ -481,6 +523,15 @@ const GlobalLayout = (props) => {
                 setDriveBarSize('100%')
             } else {
                 setDriveBarSize('50%')
+            }
+            if(isMobile){
+                setOpenBar( false )
+                setTypeOpenBar( false )
+                setOtherPartyOpenBar( false )
+                setInventorOpenBar( false )
+                setAssignmentOpenBar( false )
+                setCustomerOpenBar( false )
+                setAssetFilesBar( false )                
             }
         }
         editorBar()
@@ -516,7 +567,14 @@ const GlobalLayout = (props) => {
 
         } else if((!bar === false && openCommentBar === false) || (!bar === true && openCommentBar === false)) {
             barSize = 0  
-
+            
+        }
+        if(!bar === true) {
+            if(isMobile) {
+                setCommentBar(false)
+                setChartBar(false)
+                setAnalyticsBar(false)
+            }            
         }
         setCommentBarSize(barSize)
         changeVisualBar(openChartBar, openAnalyticsBar, openCommentBar, !bar)
@@ -532,11 +590,18 @@ const GlobalLayout = (props) => {
             barSize = '100%'
 
         }
+        if(!bar === true) {
+            if(isMobile) {
+                setIllustrationBar(false)
+                setChartBar(false)
+                setAnalyticsBar(false)
+            }            
+        }
         setCommentBarSize(barSize)
         changeVisualBar(openChartBar, openAnalyticsBar, !bar, openIllustrationBar)
     }
 
-    const handleChartBarOpen = () => {
+    const handleChartBarOpen = () => { 
         let bar = openChartBar, barSize = '50%'
         setChartBar( !bar )
         if(!bar === false && openAnalyticsBar === true) {
@@ -544,7 +609,13 @@ const GlobalLayout = (props) => {
         } else if((!bar === true && openAnalyticsBar === false) || ( !bar === false && openAnalyticsBar === false )) {
             barSize = 0      
         }
-        
+        if(!bar === true) {
+            if(isMobile) {
+                setIllustrationBar(false)
+                setCommentBar(false)
+                setAnalyticsBar(false)
+            }            
+        }
         setIllustrationBarSize(barSize)  
         if(usptoMode === false && lifeSpanMode === false && familyItemMode === false && pdfView === false && !bar === true) {
             dispatch( toggleLifeSpanMode( true ) )
@@ -562,7 +633,13 @@ const GlobalLayout = (props) => {
             barSize = '100%'
 
         }   
-        
+        if(!bar === true) {
+            if(isMobile) {
+                setIllustrationBar(false)
+                setCommentBar(false)
+                setChartBar(false)
+            }            
+        }
         if(usptoMode === false && lifeSpanMode === false && familyMode === false && pdfView === false && !bar === true) {
             dispatch( toggleLifeSpanMode( true ) )
         }    
