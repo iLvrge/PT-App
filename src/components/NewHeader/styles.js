@@ -16,9 +16,9 @@ export default makeStyles(theme => ({
         background: '#222222',
         width: 'initial',
         border: '1px solid #363636',
-        marginBottom: '5px'
+        marginBottom: '5px',
         //padding: `0px ${HEADER_PADDING}px`,
-       
+        overflow: 'hidden'
     },
     headerClassAction1: {
       lineHeight: "1.2em",
