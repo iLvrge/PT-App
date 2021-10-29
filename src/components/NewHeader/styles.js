@@ -425,6 +425,7 @@ export default makeStyles(theme => ({
         border:'1px solid #5a5a5a !important',
         margin: '0 4px',
         textTransform: 'initial',
+        overflow: 'auto',
         padding: '3px 5px',
         '&:hover':{
             border:'1px solid #e60000 !important',
