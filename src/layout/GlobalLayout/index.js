@@ -52,9 +52,9 @@ const GlobalLayout = (props) => {
     const [ openOtherPartyBar, setOtherPartyOpenBar ] = useState(false)
     const [ openInventorBar, setInventorOpenBar ] = useState(false)
     const [ openAssignmentBar, setAssignmentOpenBar ] = useState(false)
-    const [ openCustomerBar, setCustomerOpenBar ] = useState(!!isMobile ? false : true)
+    const [ openCustomerBar, setCustomerOpenBar ] = useState(!isMobile ? false : true)
     const [ openIllustrationBar, setIllustrationBar ] = useState(true)
-    const [ openCommentBar, setCommentBar ] = useState(!!isMobile ? false : true)
+    const [ openCommentBar, setCommentBar ] = useState(!isMobile ? false : true)
     const [ openChartBar, setChartBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
     const [ openAnalyticsBar, setAnalyticsBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
     const [ openVisualizerBar, setVisualizeOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
@@ -142,7 +142,7 @@ const GlobalLayout = (props) => {
         return () => window.removeEventListener("keydown", handleKeyEvent)
     }, [])
 
-    console.log('material answering to is mobile:',!!isMobile)
+    console.log('material answering to is mobile:',!isMobile)
 
     useEffect(() => {
         if( openIllustrationBar === false && openCommentBar === false && openChartBar === false && openAnalyticsBar === false ) {
@@ -339,7 +339,7 @@ const GlobalLayout = (props) => {
             setCompanyBarSize(0)  
         } else {
             setCompanyBarSize(210)
-            if(!!isMobile){
+            if(!isMobile){
                 setTypeOpenBar( false )
                 setOtherPartyOpenBar( false )
                 setInventorOpenBar( false )
@@ -360,7 +360,7 @@ const GlobalLayout = (props) => {
             setTypeBarSize(0)
         } else {
             setTypeBarSize(120)
-            if(!!isMobile){
+            if(!isMobile){
                 setOpenBar( false )
                 setOtherPartyOpenBar( false )
                 setInventorOpenBar( false )
@@ -387,7 +387,7 @@ const GlobalLayout = (props) => {
             } else {
                 setPartyBarSize('50%')
             }
-            if(!!isMobile){
+            if(!isMobile){
                 setOpenBar( false )
                 setTypeOpenBar( false )
                 setInventorOpenBar( false )
@@ -422,7 +422,7 @@ const GlobalLayout = (props) => {
             } else {
                 setPartyBarSize('50%')
             }
-            if(!!isMobile){
+            if(!isMobile){
                 setOpenBar( false )
                 setTypeOpenBar( false )
                 setOtherPartyOpenBar( false )
@@ -448,7 +448,7 @@ const GlobalLayout = (props) => {
             setAssignmentBarSize(0)
         } else {
             setAssignmentBarSize(120)
-            if(!!isMobile){
+            if(!isMobile){
                 setOpenBar( false )
                 setTypeOpenBar( false )
                 setOtherPartyOpenBar( false )
@@ -470,7 +470,7 @@ const GlobalLayout = (props) => {
             dispatch(setMaintainenceAssetsList({list: [], total_records: 0}, false)) */
         } else {
             setCustomerBarSize(210)
-            if(!!isMobile){
+            if(!isMobile){
                 setOpenBar( false )
                 setTypeOpenBar( false )
                 setOtherPartyOpenBar( false )
@@ -497,7 +497,7 @@ const GlobalLayout = (props) => {
             } else {
                 setDriveBarSize('50%')
             }
-            if(!!isMobile){
+            if(!isMobile){
                 setOpenBar( false )
                 setTypeOpenBar( false )
                 setOtherPartyOpenBar( false )
@@ -524,7 +524,7 @@ const GlobalLayout = (props) => {
             } else {
                 setDriveBarSize('50%')
             }
-            if(!!isMobile){
+            if(!isMobile){
                 setOpenBar( false )
                 setTypeOpenBar( false )
                 setOtherPartyOpenBar( false )
@@ -570,7 +570,7 @@ const GlobalLayout = (props) => {
             
         }
         if(!bar === true) {
-            if(!!isMobile) {
+            if(!isMobile) {
                 setCommentBar(false)
                 setChartBar(false)
                 setAnalyticsBar(false)
@@ -591,7 +591,7 @@ const GlobalLayout = (props) => {
 
         }
         if(!bar === true) {
-            if(!!isMobile) {
+            if(!isMobile) {
                 setIllustrationBar(false)
                 setChartBar(false)
                 setAnalyticsBar(false)
@@ -610,7 +610,7 @@ const GlobalLayout = (props) => {
             barSize = 0      
         }
         if(!bar === true) {
-            if(!!isMobile) {
+            if(!isMobile) {
                 setIllustrationBar(false)
                 setCommentBar(false)
                 setAnalyticsBar(false)
@@ -634,7 +634,7 @@ const GlobalLayout = (props) => {
 
         }   
         if(!bar === true) {
-            if(!!isMobile) {
+            if(!isMobile) {
                 setIllustrationBar(false)
                 setCommentBar(false)
                 setChartBar(false)
@@ -1017,15 +1017,15 @@ const GlobalLayout = (props) => {
 
             <Grid container className={classes.dashboardWarapper}>
                 <Grid container className={classes.dashboard}>                    
-                    <div className={clsx(classes.filterToolbar, {[classes.mobileToolbar]: !!isMobile})}> 
-                        <div className={clsx(classes.flex, {[classes.mobileFlex]: !!isMobile})}>                            
+                    <div className={clsx(classes.filterToolbar, {[classes.mobileToolbar]: !isMobile})}> 
+                        <div className={clsx(classes.flex, {[classes.mobileFlex]: !isMobile})}>                            
                             {
                                 topToolBar.map( (item, index) => (
                                     <NavigationIcon key={index} {...item} />
                                 ))
                             }
                         </div>
-                        <div className={clsx(classes.flex, classes.bottom, {[classes.mobileFlex]: !!isMobile})}>
+                        <div className={clsx(classes.flex, classes.bottom, {[classes.mobileFlex]: !isMobile})}>
                             {
                                 bottomToolBar.map( (item, index) => (
                                     <NavigationIcon key={index} {...item}/>
@@ -1034,7 +1034,7 @@ const GlobalLayout = (props) => {
                         </div>
                     </div>
                     {
-                        !!isMobile                          
+                        !isMobile                          
                         ?
                             mobileWrapper.map(
                                 ({component: Component, ...props }, index) => (
