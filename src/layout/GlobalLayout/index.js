@@ -8,7 +8,7 @@ import {
 
 import { Grid} from '@material-ui/core'
 
-import { BrowserView, MobileView, isBrowser, !isMobile } from 'react-device-detect';
+import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
 import clsx from 'clsx'
 import useStyles from './styles'
 
