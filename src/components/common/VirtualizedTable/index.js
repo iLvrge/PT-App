@@ -719,7 +719,7 @@ const VirtualizedTable = ({
   }
 
   return (
-    <div ref={containerRef} style={{display: 'flex', position: 'relative', height: '100%', width: '100%'}}>
+    <div ref={containerRef} className={classes.tableRootContainer}>
       <InfiniteLoader
         isRowLoaded={isRowLoaded}
         loadMoreRows={loadMoreRows}  
@@ -732,7 +732,7 @@ const VirtualizedTable = ({
           {({ height, width: tableWidth }) => (
             <Table
               size={"small"}            
-              ref={tableRef}
+              ref={tableRef}  
               height={height}
               width={responsive === false ? width : tableWidth}            
               rowHeight={getRowHeight}

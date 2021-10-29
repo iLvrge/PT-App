@@ -80,6 +80,22 @@ const MobileScreen = (props) => {
     const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
     const connectionBoxView = useSelector( state => state.patenTrack.connectionBoxView)
 
+    useEffect(() => {
+        if(props.openIllustrationBar === false && props.openCommentBar === false && props.openChartBar === false && props.openAnalyticsBar === false && (props.openBar === true || props.openTypeBar === true || props.openOtherPartyBar === true || props.openInventorBar === true || props.openAssignmentBar === true || props.openCustomerBar === true || props.assetFilesBar === true || props.openGoogleDriveBar === true || props.driveTemplateMode === true) ) {
+            setDefaultSize('100%')
+        } else {
+            setDefaultSize('50%')
+        }
+    }, [props.openIllustrationBar, props.openCommentBar, props.openChartBar, props.openAnalyticsBar])
+
+    useEffect(() => {
+        if(props.openBar === false && props.openTypeBar === false && props.openOtherPartyBar === false && props.openInventorBar === false && props.openAssignmentBar === false && props.openCustomerBar === false && props.assetFilesBar === false && props.openGoogleDriveBar === false && props.driveTemplateMode === false && (props.openIllustrationBar === true && props.openCommentBar === true && props.openChartBar === true && props.openAnalyticsBar === true)) {
+            setDefaultSize('0%')
+        } else {
+            setDefaultSize('50%')
+        }
+    }, [props.openBar, props.openTypeBar, props.openOtherPartyBar, props.openInventorBar, props.openAssignmentBar, props.openCustomerBar, props.assetFilesBar, props.openGoogleDriveBar, props.driveTemplateMode])
+
     const handleTextChange = (name) => {
         setSheetName(name);
     }

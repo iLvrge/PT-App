@@ -1,6 +1,17 @@
 import { makeStyles } from '@material-ui/core/styles'
 
 const styles = makeStyles((theme) => ({
+  tableRootContainer:{
+    display: 'flex',
+    position: 'relative', 
+    height: '100%', 
+    width: '100%',
+    '& .MuiTableCell-root':{
+      [theme.breakpoints.down('sm')]:{
+        fontSize: '1.87rem'
+      }
+    }  
+  },
   td: {
     display: 'flex',
   },
@@ -36,7 +47,10 @@ const styles = makeStyles((theme) => ({
         fontSize: '1rem'
       },
       '& .MuiTableCell-head':{
-        fontSize: '1rem'
+        fontSize: '1rem',
+        [theme.breakpoints.down('sm')]:{
+          fontSize: '2rem'
+        }
       }
     },
     '& .MuiTableRow-root.Mui-selected, .MuiTableRow-root.Mui-selected:hover':{

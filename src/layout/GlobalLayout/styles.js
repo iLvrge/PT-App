@@ -8,7 +8,11 @@ export default makeStyles(theme => ({
         flexWrap: 'nowrap !important',
         overflowX: 'hidden',
         overflowY: 'hidden',
-        padding: '5px'
+        padding: '5px',
+        [theme.breakpoints.down('sm')]:{
+            fontSize: '1.87rem !important'
+        },
+        
     },
     dashboard: {
         position: 'absolute',
