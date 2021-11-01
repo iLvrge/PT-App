@@ -8,7 +8,13 @@ export default makeStyles(theme => ({
         flexWrap: 'nowrap !important',
         overflowX: 'hidden',
         overflowY: 'hidden',
-        padding: '5px'        
+        padding: '5px' ,
+        '& .MuiIconButton-root':{
+            '& svg':{
+                width: '1.5rem',
+                height: '1.5rem'
+            }
+        }      
     },
     dashboard: {
         position: 'absolute',

@@ -624,7 +624,6 @@ const onHandleForeignAssets = (event) => {
                 <Avatar className={classes.buttonIcon} alt={`${user ? user.first_name + ' ' + user.last_name : ''}`} src={user && user.logo != '' ? user.logo : user.first_name.toString().substring(0,1).toLocaleUpperCase() } />
             }
             <IconButton
-              edge='start'
               className={`${classes.buttonIcon} ${classes.menuButton}`}
               color='inherit'
               aria-label='open drawer'

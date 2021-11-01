@@ -18,7 +18,8 @@ export default makeStyles(theme => ({
         border: '1px solid #363636',
         marginBottom: '5px',
         //padding: `0px ${HEADER_PADDING}px`,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        padding: '0 10px'
     },
     headerClassAction1: {
       lineHeight: "1.2em",
@@ -74,7 +75,7 @@ export default makeStyles(theme => ({
         /* width: LOGO_WIDTH,
         maxWidth: 'calc(100% - 30px)', */
         height: '2rem',
-        margin: '0px 15px 0 10px' 
+        marginRight: 15    
     }, 
 
     userLogo: {
@@ -93,8 +94,7 @@ export default makeStyles(theme => ({
 
     toolbar: {
         padding: 0,
-        height: 30,
-        minHeight: 30,
+        minHeight: 40,
         position: 'relative',
     },
     headerIcon: {
@@ -128,7 +128,8 @@ export default makeStyles(theme => ({
         },
         '& .MuiBadge-anchorOriginTopRightRectangle.MuiBadge-invisible': {
             transform: 'scale(0) translate(50%, -50%)'
-        }
+        },
+        minWidth: '21%'
     },
     breadcrumbs: {
         display: 'flex',
@@ -199,7 +200,7 @@ export default makeStyles(theme => ({
         '&:hover': {
           backgroundColor: fade(theme.palette.common.white, 0.25),
         },
-        margin: '0 4px !important',
+        /* margin: '0 4px !important', */
         height: 26,
         width: '100%', 
         [theme.breakpoints.up('sm')]: {
@@ -374,10 +375,10 @@ export default makeStyles(theme => ({
         height: 30,
         borderRadius: 0 ,
         padding: 0,
-        margin: '0 4px',
+        /* margin: '0 4px', */
         '& svg':{
-            width: '2rem',
-            height: '2rem',
+            /* width: '2rem',
+            height: '2rem', */
             fill: '#5a5a5a',
             stroke: '#5a5a5a'
         },
@@ -423,7 +424,7 @@ export default makeStyles(theme => ({
     },
     calendly: {
         border:'1px solid #5a5a5a !important',
-        margin: '0 4px',
+        /* margin: '0 4px', */
         textTransform: 'initial',
         overflow: 'auto',
         padding: '3px 5px',

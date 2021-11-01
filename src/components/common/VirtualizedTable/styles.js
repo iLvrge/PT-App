@@ -40,10 +40,24 @@ const styles = makeStyles((theme) => ({
     '&.ReactVirtualized__Table__headerRow': {
       backgroundColor: '#292929',
       '& .MuiSvgIcon-root':{
-        fontSize: '1rem'
+        fontSize: '1rem',
+        width: '1rem',
+        height: '1rem'
       },
       '& .MuiTableCell-head':{
-        fontSize: '1rem'
+        fontSize: '1rem',
+        width: '1rem',
+        height: '1rem'
+      }
+    },
+    '& .ReactVirtualized__Table__rowColumn':{
+      '& .MuiSvgIcon-root':{
+        fontSize: '1rem',
+        width: '1rem',
+        height: '1rem'
+      },
+      '& svg.MuiSelect-icon': {
+        top: 8
       }
     },
     '& .MuiTableRow-root.Mui-selected, .MuiTableRow-root.Mui-selected:hover':{

@@ -6,10 +6,9 @@ label {  cursor: pointer; padding: 2px 4px 2px 4px; }
 label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle; bottom: 2px; }
 
 #topTitle {
-    position: sticky;
-    top: 0;
-    padding: 10px 30px 11px 16px;
-    font-size: 1.0rem;
+    display: flex;
+    padding: 0 16px;
+    font-size: 1rem;
     color: #FFFFFF;
     height: 47px;
     min-height: 47px;
@@ -31,29 +30,6 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
-}
-
- .topTitle {
-    position: sticky;
-    top: 0;
-    background-color: #111111;
-    padding: 10px 4px 4px 16px;
-    font-size: 1.0rem;
-    color: #FFFFFF;
-    opacity: 0.85;
-    text-align: left; 
-    vertical-align: middle; 
-    justify-content: flex-start; 
-    align-items: center; 
-    
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Edge, Opera and Firefox */
-
 }
 
 #bottomUIToolbarContainer {

@@ -5,7 +5,7 @@ export default makeStyles(theme => ({
         fontSize: '1.1rem',
         display: 'flex',
         justifyContent: 'center',
-        paddingTop: 7,
+        /* paddingTop: 7, */
        /*  paddingBottom: 17, */
         '& .MuiIconButton-root':{
             padding: 8,
@@ -20,8 +20,8 @@ export default makeStyles(theme => ({
             '& svg':{
                 fill: '#5a5a5a',
                 stroke: '#5a5a5a',
-                width: '2rem',
-                height: '2rem'
+                /* width: '2rem',
+                height: '2rem' */
             },
             '& svg.noStroke':{
                 stroke: 'none !important'
