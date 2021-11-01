@@ -91,6 +91,8 @@ const VirtualizedTable = ({
   onScrollTable,
   scrollTop,
   selectItemWithArrowKey,
+  sortMultiple,
+  sortMultipleConditionColumn,
   ...tableProps
 }) => {
   const classes = useStyles();
@@ -642,18 +644,53 @@ const VirtualizedTable = ({
           filter.filters.includes(row[filter.dataKey]),
       );
     });
-    
-    return filteredRows.sort((a, b) => {
-      const sortA = !isNaN(Number(a[sortBy])) ? Number(a[sortBy]) :  sortBy == 'date' ? new Date(a[sortBy]).getTime() : a[sortBy]
-      const sortB = !isNaN(Number(b[sortBy])) ? Number(b[sortBy]) :  sortBy == 'date' ? new Date(b[sortBy]).getTime() : b[sortBy]
-      if (sortA < sortB) {
-        return sortDirection === SortDirection.ASC ? -1 : 1;
-      }
-      if (sortA > sortB) {
-        return sortDirection === SortDirection.ASC ? 1 : -1;
-      }
-      return 0;
-    });
+    if(typeof sortMultiple !== 'undefined' && typeof sortMultipleConditionColumn !== 'undefined' && sortMultiple === true && sortBy === sortMultipleConditionColumn[0]) {
+      filteredRows.sort(function (a, b) {
+        if(a['asset_type'] == 0 && b['asset_type'] == 0) {
+          const sortA = !isNaN(Number(a[sortBy])) ? Number(a[sortBy]) :  sortBy == 'date' ? new Date(a[sortBy]).getTime() : a[sortBy]
+          const sortB = !isNaN(Number(b[sortBy])) ? Number(b[sortBy]) :  sortBy == 'date' ? new Date(b[sortBy]).getTime() : b[sortBy]
+          
+          if (sortA < sortB) {
+            return sortDirection === SortDirection.ASC ? -1 : 1;
+          }
+          if (sortA > sortB) {
+            return sortDirection === SortDirection.ASC ? 1 : -1;
+          }
+          return 0;
+        } else {
+          return 0
+        }
+      });
+      return filteredRows.sort(function (a, b) {
+        if(a['asset_type'] == 1 && b['asset_type'] == 1) {
+          const sortA = !isNaN(Number(a[sortBy])) ? Number(a[sortBy]) :  sortBy == 'date' ? new Date(a[sortBy]).getTime() : a[sortBy]
+          const sortB = !isNaN(Number(b[sortBy])) ? Number(b[sortBy]) :  sortBy == 'date' ? new Date(b[sortBy]).getTime() : b[sortBy]
+          
+          if (sortA < sortB) {
+            return sortDirection === SortDirection.ASC ? -1 : 1;
+          }
+          if (sortA > sortB) {
+            return sortDirection === SortDirection.ASC ? 1 : -1;
+          }
+          return 0;
+        } else {
+          return 0
+        }
+      });
+    } else {
+      return filteredRows.sort((a, b) => {
+        const sortA = !isNaN(Number(a[sortBy])) ? Number(a[sortBy]) :  sortBy == 'date' ? new Date(a[sortBy]).getTime() : a[sortBy]
+        const sortB = !isNaN(Number(b[sortBy])) ? Number(b[sortBy]) :  sortBy == 'date' ? new Date(b[sortBy]).getTime() : b[sortBy]
+        
+        if (sortA < sortB) {
+          return sortDirection === SortDirection.ASC ? -1 : 1;
+        }
+        if (sortA > sortB) {
+          return sortDirection === SortDirection.ASC ? 1 : -1;
+        }
+        return 0;
+      });
+    }    
   }, [rows, sortBy, sortDirection, filters]);
 
 
@@ -706,7 +743,6 @@ const VirtualizedTable = ({
   } 
 
   const loadMoreRows = ({ startIndex, stopIndex }) => { 
-    console.log("loadMoreRows => startIndex, stopIndex", startIndex, stopIndex)
     if(typeof getMoreRows !== 'undefined') {
       getMoreRows(startIndex, stopIndex)
     }    

@@ -1062,6 +1062,8 @@ const resetAll = () => {
         renderCollapsableComponent={
           <ChildTable asset={asset} headerRowDisabled={true} />
         }
+        sortMultiple={true}
+        sortMultipleConditionColumn={['asset', 'asset_type']}
         forceChildWaitCall={true}
         totalRows={totalRecords}
         getMoreRows={loadMoreRows}
