@@ -23,6 +23,9 @@ export default makeStyles(theme => ({
         },
         '& .MuiInputBase-input':{
             height: 21
+        },
+        '& iframe': {
+            border: 0
         }
     },
     container: {
@@ -57,9 +60,10 @@ export default makeStyles(theme => ({
         display: 'flex',
     },
     fullscreenCharts: {
-        margin: 35,
+        margin: '53px 35px',
         flex: 1,
-        display: 'flex'
+        display: 'flex',
+        position: 'relative'
     },
     fullscreenBtn: {
         position: 'absolute',
@@ -75,9 +79,10 @@ export default makeStyles(theme => ({
     },
     right:{
         position: 'absolute',
-        right: '35px',
-        width: '20px',
-        height: '20px',
+        right: 5,
+        top: 5,
+        width: 20,
+        height: 20,
         zIndex: 1
     },
     templateFrame:{

@@ -6,7 +6,11 @@ const styles = makeStyles((theme) => ({
     position: 'relative', 
     height: '100%', 
     width: '100%',
-     
+    '& .headingIcon':{
+      width: '1.2rem',
+      height: '1.2rem',
+      padding: 0
+    }
   },
   td: {
     display: 'flex',

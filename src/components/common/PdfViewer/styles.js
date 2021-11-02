@@ -15,6 +15,9 @@ export default makeStyles(theme => ({
     '& .MuiTab-root':{
       minWidth: 'inherit',
     },
+    '& iframe': {
+      border: 0
+    }
   },
   pdfWrapper: {
     display: 'flex',

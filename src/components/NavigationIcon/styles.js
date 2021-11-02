@@ -53,6 +53,9 @@ export default makeStyles(theme => ({
             }
         }
     },
+    marginBottom25: {
+        marginBottom: 25
+    },
     tooltip:{
         fontSize: '1rem'
     },

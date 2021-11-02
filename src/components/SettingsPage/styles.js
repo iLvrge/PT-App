@@ -8,7 +8,13 @@ export default makeStyles(theme => ({
     flexWrap: 'nowrap !important',
     overflowX: 'hidden',
     overflowY: 'hidden',
-    padding: 5
+    padding: 5,
+    '& .MuiIconButton-root':{
+      '& svg':{
+          width: '1.5rem',
+          height: '1.5rem'
+      }
+    }
   },
   settings: {
     flex: 1,

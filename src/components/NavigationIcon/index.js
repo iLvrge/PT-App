@@ -17,7 +17,7 @@ import {
 import useStyles from './styles'
 
 {/* <IconButton onClick={click} className={(( bar === true ) || (bar === false && data.length > 0 && (selected.length > 0 || selectAll === true))) ? cl.filterButtonActive : ''}></IconButton> */}
-const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight}) => {
+const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin}) => {
     const classes = useStyles() 
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
@@ -40,7 +40,7 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight}) => {
     const new_drive_template_file = useSelector(state => state.patenTrack2.new_drive_template_file)
 
     return (
-        <div className={classes.showIcon}>
+        <div className={`${classes.showIcon} ${typeof margin !== 'undefined' && margin === true ? classes.marginBottom25 : ''}`}>
             <Tooltip 
                 title={
                     <Typography color="inherit" variant='body2'>{tooltip}</Typography>
@@ -98,7 +98,7 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight}) => {
                             :
                             t === 4
                             ?
-                                <svg xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 24 24" viewBox="0 0 24 24" className={`noStroke`}><g><rect fill="none" height="24" width="24" x="0" y="0"/></g><g><g><path d="M9,21h9c0.83,0,1.54-0.5,1.84-1.22l3.02-7.05C22.95,12.5,23,12.26,23,12v-2c0-1.1-0.9-2-2-2h-6.31l0.95-4.57l0.03-0.32 c0-0.41-0.17-0.79-0.44-1.06L14.17,1L7.58,7.59C7.22,7.95,7,8.45,7,9v10C7,20.1,7.9,21,9,21z M9,9l4.34-4.34L12,10h9v2l-3,7H9V9z M1,9h4v12H1V9z"/></g></g></svg>
+                                <svg id="icons" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" className={`noStroke`}><path d="M52,7H12a6,6,0,0,0-6,6V51a6,6,0,0,0,6,6H52a6,6,0,0,0,6-6V13A6,6,0,0,0,52,7Zm2,44a2,2,0,0,1-2,2H12a2,2,0,0,1-2-2V13a2,2,0,0,1,2-2H52a2,2,0,0,1,2,2Z"/><path d="M45,29a2,2,0,0,0,0-4H22.83l2.58-2.59a2,2,0,0,0-2.82-2.82l-6,6a2,2,0,0,0-.44,2.18A2,2,0,0,0,18,29Z"/><path d="M47,36H20a2,2,0,0,0,0,4H42.17l-2.58,2.59a2,2,0,1,0,2.82,2.82l6-6a2,2,0,0,0,.44-2.18A2,2,0,0,0,47,36Z"/></svg>
                             :
                             t === 5
                             ?
