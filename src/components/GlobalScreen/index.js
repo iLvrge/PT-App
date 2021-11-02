@@ -287,17 +287,15 @@ const GlobalScreen = ({
     const onHandleIllustrationSize = (size) => {
         if(mainContainerRef.current != null ) {
             const containerSize = mainContainerRef.current.pane2.clientWidth
-            const illustrationSize = size != undefined ? containerSize - size - 3 : mainContainerRef.current.pane1.querySelector('#patentrackDiagramDiv').clientWidth
-            const width = 620
-            if( illustrationSize > width ) {
-                const constantX = 14.1, constantValue = parseFloat(constantX / width).toFixed(4)
-                let calc = (illustrationSize * constantValue) - 1.4
-                if(calc > 14.1) {
-                    setGap({...gap, x: `${parseFloat(calc).toFixed(1)}rem`}) 
-                }
-            } else {
-                setGap({...gap, x: '14.1rem'})
-            }
+            const windowWidth = size != undefined ? containerSize - size - 3 : mainContainerRef.current.pane1.querySelector('#patentrackDiagramDiv').clientWidth
+            const width = 620, 
+                 constantX = 14.1, 
+                 constantValue = parseFloat(constantX / width).toFixed(4),
+                 xGap = (windowWidth * constantValue) - 3 
+            setGap({
+                ...gap, 
+                x: `${parseFloat(xGap).toFixed(1)}rem`
+            })
         }
     }
     //console.log('GlobalScreen=>type', type)
