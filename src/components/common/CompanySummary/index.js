@@ -46,7 +46,7 @@ const CompanySummary = () => {
     const google_profile = useSelector(state => state.patenTrack2.google_profile)
     const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
 
-
+    
     useEffect(() => {
         const findSummary = async() => {
             const googleToken = getTokenStorage( 'google_auth_token_info' )
@@ -109,7 +109,9 @@ const CompanySummary = () => {
         }  
     }
 
-    const handleClickRow =async(event, row) => {
+    const handleClickRow = async(event, row) => {
+        console.log('adssadsadsad')
+        console.log('process.env.REACT_APP_ENVIROMENT_MODE === "PRO" && row.name == "Employees"', process.env.REACT_APP_ENVIROMENT_MODE, row.name)
         if(process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && row.name == "Employees") {
             console.log('clipboard_assets', clipboard_assets.length)
             if(clipboard_assets.length > 0) {
