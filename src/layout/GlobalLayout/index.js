@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { 
     useHistory,
-  } from 'react-router-dom'
+  } from 'react-router-dom'  
 
 import { Grid} from '@material-ui/core'
 
@@ -26,8 +26,6 @@ import {
     setAssetTypesAssignmentsLoading,
     setAssetTypeAssignments,
     setSearchRfIDs,
-    setAssetTypeAssignmentAllAssets,
-    setMaintainenceAssetsList,
     setAssetTypeInventor,
     setAssetTypeCompanies,
     setAllAssetTypes,
