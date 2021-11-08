@@ -6,7 +6,10 @@ export default makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         flex:1,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        '& .font12Rem':{
+          fontSize: '1rem'
+        }
     },
     topBar: {
         padding: 10,

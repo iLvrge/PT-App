@@ -91,6 +91,8 @@ const COLUMNS = [
         draggable: true,
         label: 'Companies',        
         dataKey: 'original_name',
+        classCol: 'font12Rem',
+        showOnCondition: '0',
         align: "left", 
         badge: true,
     },
@@ -626,6 +628,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         defaultSortField={`original_name`}
         defaultSortDirection={`desc`}
         responsive={true}
+        noBorderLines={true}
         width={width} 
         containerStyle={{ 
             width: '100%',

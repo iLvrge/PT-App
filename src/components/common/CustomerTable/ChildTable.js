@@ -158,6 +158,7 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
             onSelectAll={onHandleSelectAll}
             disableHeader={headerRowDisabled} 
             responsive={false}
+            noBorderLines={true}
             width={width}
             containerStyle={{ 
                 width: '100%',

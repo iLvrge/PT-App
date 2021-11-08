@@ -747,6 +747,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state,
           switch_button_assets: action.value  
         }
+      case types.SET_ASSET_TABLE_SCROLL_POSITION:
+        return { 
+          ...state, 
+          assetTableScrollPosition: action.pos  
+        }
       default:  
       return state
   } 

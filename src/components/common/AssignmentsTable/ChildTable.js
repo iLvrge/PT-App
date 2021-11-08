@@ -288,6 +288,7 @@ const ChildTable = ({ transactionId, headerRowDisabled }) => {
         defaultSelectAll={selectedAll}
         disableHeader={headerRowDisabled}
         responsive={false}
+        noBorderLines={true}
         width={width}
         containerStyle={{
           width: "100%",

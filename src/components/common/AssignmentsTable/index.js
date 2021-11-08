@@ -681,6 +681,7 @@ const findChannelID = useCallback((rfID) => {
         defaultSortDirection={`desc`}
         totalRows={totalRecords}
         grandTotal={grandTotal}
+        noBorderLines={true}
         width={width}
         containerStyle={{
           width: "100%",

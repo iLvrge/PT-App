@@ -118,6 +118,10 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
                                       customers,
                                       assignments,
                                       false,
+                                      0,
+                                      0,
+                                      'assets',
+                                      'DESC'
                                     )
                                     : 
                                     getCustomerSelectedAssets(location.pathname.replace('/', ''))
@@ -134,7 +138,9 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
                                       assignments,
                                       false,
                                       0,
-                                      0
+                                      0, 
+                                      'assets',
+                                      'DESC',
                                     ),
                                 );
                             }

@@ -98,6 +98,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
           dataKey: 'tab_id',
           role: 'radio',
           disableSort: true,
+          enable: false
         },
         {
             width: 20,
@@ -110,14 +111,14 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
             disableSort: true,
             extension: false
         },
-        {
+        /* {
             width: 15,
             minWidth: 15,
             label: '',
             dataKey: 'tab_id',
             role: 'arrow',
             disableSort: true
-        },
+        }, */
         {
             width: 100,
             minWidth: 100,
@@ -277,7 +278,9 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
         event.preventDefault()
         dispatch( setAssetTypesSelect([]) )
         setSelectAll(true)
-        setSelectItems([])    
+        setSelectItems([])  
+        setSelectedRow([])  
+        setCurrentSelection(null)
         dispatch( setAllAssetTypes( true ) )    
         dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
         dispatch( setAssetTypeCompanies({ list: [], total_records: 0 }) )
@@ -291,7 +294,33 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
         const { checked } = e.target;
         //let oldSelection = [...selectItems]
         if(row.customer_count > 0) {
-            if( checked !== undefined) {
+            if(display_clipboard === false) {
+                dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
+                dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+            }
+            dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
+            dispatch( setAssetTypeCompanies({ list: [], total_records: 0 }) )
+            dispatch( setAssetTypeInventor({ list: [], total_records: 0 }) )
+            history.push({
+                hash: updateHashLocation(location, 'activities', [row.tab_id]).join('&')
+            })
+            if(!selectItems.includes(row.tab_id)) {
+                setSelectItems([row.tab_id])
+                setSelectedRow([row.tab_id])
+                setSelectAll(false)
+                dispatch( setAllAssetTypes( false ) )
+                dispatch( setAssetTypesSelect([row.tab_id]) )
+                updateAssetTypeSelected( row.tab_id )
+                setCurrentSelection(row.tab_id)
+            } else {
+                setSelectItems([])
+                setSelectedRow([])
+                dispatch( setAssetTypesSelect([]) )
+                deleteAssetTypeSelected( row.tab_id )
+                setCurrentSelection(null)
+            }
+
+            /* if( checked !== undefined) {
                 if(display_clipboard === false) {
                     dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
                     dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
@@ -322,10 +351,8 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
                     } else { 
                         setCurrentSelection(null)
                     }
-                } /* else {                    
-                    getTimelineData(dispatch, row.tab_id) 
-                } */
-            }
+                } 
+            } */
         }
     }, [ dispatch, selectItems, currentSelection, display_clipboard ]) 
 
@@ -387,12 +414,13 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
             totalRows={assetTypes.length}
             grandTotal={grandTotal}
             responsive={true}
-            collapsable={true}
+            /* collapsable={true}
             childHeight={childHeight}
             childSelect={childSelected}
             childRows={assetTypeCompaniesList}
             showIsIndeterminate={true}
-            renderCollapsableComponent={<ChildTable assetType={currentSelection} headerRowDisabled={true} parentBarDrag={parentBarDrag} parentBar={parentBar}/>}
+            renderCollapsableComponent={<ChildTable assetType={currentSelection} headerRowDisabled={true} parentBarDrag={parentBarDrag} parentBar={parentBar}/>} */
+            noBorderLines={true}
             width={width}
             containerStyle={{ 
                 width: '100%',

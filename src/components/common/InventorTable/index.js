@@ -294,6 +294,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             totalRows={totalInventorRecords}
             grandTotal={grandTotal}
             responsive={false} 
+            noBorderLines={true}
             width={width}
             containerStyle={{ 
                 width: '100%', 

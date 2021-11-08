@@ -122,7 +122,7 @@ const ChildTable = ({ asset, headerRowDisabled }) => {
     if (familyLoading) return <Loader />
 
     return (
-        <Paper className={classes.root} square id={`assets_family`}>
+        <Paper className={classes.root} square id={`assets_family`} elevation={0}>
             <VirtualizedTable
             classes={classes}
             selected={selectItems}
@@ -137,10 +137,11 @@ const ChildTable = ({ asset, headerRowDisabled }) => {
             onSelectAll={onHandleSelectAll}
             disableHeader={headerRowDisabled}
             responsive={false}
+            noBorderLines={true}
             width={width}
             containerStyle={{ 
                 width: '100%',
-                maxWidth: '100%'
+                maxWidth: '100%' 
             }}
             style={{ 
                 width: '100%'

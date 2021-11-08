@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {useLocation} from 'react-router-dom'
-import { Paper } from "@material-ui/core";
+import { Paper, Modal } from "@material-ui/core";
 import { Clear, NotInterested } from '@material-ui/icons';
 import Loader from "../Loader";
 import useStyles from "./styles";
@@ -47,7 +47,8 @@ import {
   linkWithSheetOpenPanel,
   setLinkAssetListSelected,
   setLinkAssetData,
-  getForeignAssetsBySheet
+  getForeignAssetsBySheet,
+  setAssetTableScrollPos
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -88,6 +89,8 @@ const AssetsTable = ({
     openAnalyticsAndCharBar,
     closeAnalyticsAndCharBar,
     headerRowDisabled }) => {
+  let hoverTimer = null
+  let hoverAsset = null
   const classes = useStyles()
   const dispatch = useDispatch()
   const location = useLocation()
@@ -95,11 +98,14 @@ const AssetsTable = ({
   const assetsAssignmentRef = useRef()
   const googleLoginRef = useRef(null)
   const [offsetWithLimit, setOffsetWithLimit] = useState([0, DEFAULT_CUSTOMERS_LIMIT])
-  const [scrollPos, setScrollPos] = useState(0)
+  
   const [rowHeight, setRowHeight] = useState(40)
   const [headerRowHeight, setHeaderRowHeight] = useState(47)
   const [width, setWidth] = useState(1500) 
   const [counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
+  const [sortField, setSortField] = useState(`asset`)
+  const [sortOrder, setSortOrder] = useState(`DESC`)
+
   const [childHeight, setChildHeight] = useState(500)
   const [childSelected, setCheckedSelected] = useState(0);
   const [currentSelection, setCurrentSelection] = useState(null);
@@ -111,11 +117,16 @@ const AssetsTable = ({
   const [movedAssets, setMovedAssets] = useState([])  
   const [ dropOpenAsset, setDropOpenAsset ] = useState(null)
   const [ callByAuthLogin, setCallByAuth ] = useState(false)
+  const [ openModal, setOpenModal ] = useState(false)
+  const [ clientEvent, setClientEvent] = useState({x: 0, y: 0})
   const [data, setData] = useState([])
   const [assetRows, setAssetRows] = useState([])
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState(true)
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
   const google_profile = useSelector(state => state.patenTrack2.google_profile)
+  const assetTableScrollPosition = useSelector(
+    state => state.patenTrack2.assetTableScrollPosition,
+  );
   const assetTypesSelected = useSelector(
     state => state.patenTrack2.assetTypes.selected,
   );
@@ -393,6 +404,16 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
 
   const COLUMNS = [
     {
+      width: 29,
+      minWidth: 29,
+      label: "", 
+      dataKey: "asset",
+      role: "checkbox",
+      disableSort: true,
+      show_selection_count: true,
+      enable: false
+    },
+    {
       width: 25,
       minWidth: 25,
       disableSort: true,
@@ -403,15 +424,6 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       onClick: onHandleDropDownlist
     },
     {
-      width: 29,
-      minWidth: 29,
-      label: "", 
-      dataKey: "asset",
-      role: "checkbox",
-      disableSort: true,
-      show_selection_count: true
-    },
-    {
       width: 20,
       minWidth: 20,
       label: "",
@@ -419,7 +431,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       role: "arrow",
       disableSort: true,
       headingIcon: 'assets',
-    },
+    }, 
     {
       width: 85,  
       minWidth: 85,    
@@ -474,59 +486,17 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
           }          
         }  else {
-          const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-          tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-          customers =
-            selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
-          assignments =
-            selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
-            if(assetTypeAssignmentAssets.length === 0 ) {
-              if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-                if (auth_token != null) {
-                  
-                  dispatch(
-                    getCustomerSelectedAssets(location.pathname.replace('/', ''))
-                  );
-                  
-                  setWidth(1900)
-                } else {
-                  dispatch(
-                    setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
-                  );
-                  dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
-                }
-              } else {
-                if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
-                  dispatch(
-                    getCustomerAssets(
-                      selectedCategory == '' ? '' : selectedCategory,
-                      companies,
-                      tabs,
-                      customers,
-                      assignments,
-                      false,
-                      offsetWithLimit[0],
-                      offsetWithLimit[1]
-                    ),
-                  );
-                  setWidth(1900)
-                } else {
-                  PatenTrackApi.cancelAssets()
-                  dispatch(
-                    setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
-                  );
-                  dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) ) 
-                }
-              }
-            }
-            
-            if(selectedCategory == 'restore_ownership') {    
-              let cols = [...COLUMNS]
-              /* cols[1].role = 'radio'
-              delete cols[1].show_selection_count  */
-              cols.splice(1,1)
-              setTableColumns(cols)
-            }
+          console.log('loadDataFromServer', sortField, sortOrder)
+          if(assetTypeAssignmentAssets.length === 0 ) {
+            loadDataFromServer(offsetWithLimit[0], offsetWithLimit[1], sortField, sortOrder)   
+          }         
+          if(selectedCategory == 'restore_ownership') {    
+            let cols = [...COLUMNS]
+            /* cols[1].role = 'radio'
+            delete cols[1].show_selection_count  */
+            cols.splice(1,1)
+            setTableColumns(cols)
+          }
         }
         
       } else {
@@ -730,8 +700,71 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     }
   }, [ assetTypeAssignmentAssets ]) 
 
-  
+  useEffect(() => {
+    console.log('assetTableScrollPosition', assetTableScrollPosition)
+  }, [assetTableScrollPosition])
+
+
  
+  
+  const loadDataFromServer = (startIndex, endIndex, column, direction) => {
+    const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+          tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+          customers = selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
+          assignments = selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;    
+    if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+      if (auth_token != null) {          
+        dispatch(
+          process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD'
+          ? 
+            getCustomerAssets(
+              selectedCategory == '' ? '' : selectedCategory,
+              companies,
+              tabs,
+              customers,
+              assignments,
+              true,
+              startIndex,
+              endIndex,
+              column,
+              direction
+            )
+          :
+          getCustomerSelectedAssets(location.pathname.replace('/', ''))
+        );          
+        setWidth(1900)
+      } else {
+        dispatch(
+          setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
+        );
+        dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
+      }
+    } else {
+      if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
+        dispatch(
+          getCustomerAssets(
+            selectedCategory == '' ? '' : selectedCategory,
+            companies,
+            tabs,
+            customers,
+            assignments,
+            false,
+            startIndex,
+            endIndex,
+            column,
+            direction
+          ),
+        );
+        setWidth(1900)
+      } else {
+        PatenTrackApi.cancelAssets()
+        dispatch(
+          setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
+        );
+        dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) ) 
+      }
+    }
+  }
   
 
 
@@ -851,6 +884,47 @@ const resetAll = () => {
     } */
 }
 
+const onDoubleClick = (e, row, flag) => {
+  console.log("onDoubleClick", e)
+  setCurrentSelection(row.asset) 
+  setAsset(row.appno_doc_num)
+  setClientEvent({x: e.clientX, y: e.clientY})    
+}
+
+/**
+ * On Mouseover open Child list on Modal
+ */
+const onMouseOver = (e, row, flag) => {
+  setCurrentSelection(row.asset) 
+  setAsset(row.appno_doc_num)
+  if(row.asset !== hoverAsset) {
+    console.log(row.asset, e)
+    hoverAsset = row.asset
+    if(hoverTimer !== null) {
+      clearTimeout(hoverTimer)
+    }    
+    hoverTimer = setTimeout(() => {
+      checkStillHover(e)
+    }, 3000)  
+  }  
+}
+
+const onMouseOut =  (e, row, flag) => {
+  setCurrentSelection(null) 
+  setAsset(null)
+  hoverAsset = null
+  clearTimeout(hoverTimer)
+}
+
+
+const checkStillHover = (e) => {
+  console.log(hoverAsset)
+  if(hoverAsset !== null) {
+    setOpenModal(!openModal)
+    setClientEvent({x: e.clientX, y: e.clientY})
+  }  
+}
+
   /**
    * Click checkbox
    */
@@ -858,7 +932,10 @@ const resetAll = () => {
     (e, row) => {
         e.preventDefault()
         const { checked } = e.target
-        if(checked !== undefined) {
+        let cntrlKey = e.ctrlKey ? e.ctrlKey : undefined;
+
+
+        if(cntrlKey !== undefined) {
           if(selectedCategory == 'restore_ownership' && display_clipboard === false) {
             dispatch(setAssetTypesPatentsSelected([row.asset]))
             setSelectItems([row.asset])
@@ -886,11 +963,25 @@ const resetAll = () => {
             if(element != null) {
               let index = element.getAttribute('aria-colindex')   
               const findElement = element.querySelector('div.MuiSelect-select')
-               
-                if( index == 1 && findElement != null ) {
+               console.log('index', index)
+                if( index == 2 && findElement != null ) {
                   setDropOpenAsset(row.asset)
                 } else {
-                  if(( index == 3 && selectedCategory != 'restore_ownership' ) || (index == 2 && selectedCategory == 'restore_ownership')) {
+                  if(index == 3) {
+                    if(currentSelection != row.asset) {
+                      setClientEvent({x: e.clientX, y: e.clientY})
+                      setOpenModal(true)
+                      setCurrentSelection(row.asset) 
+                      setAsset(row.appno_doc_num)
+                    } else { 
+                      setCurrentSelection(null)
+                      setAsset(null)
+                    }
+                  } else {
+                    handleOnClick(row)
+                  }
+                  
+                  /* if(( index == 3 && selectedCategory != 'restore_ownership' ) || (index == 2 && selectedCategory == 'restore_ownership')) {
                     if(currentSelection != row.asset) {
                         setCurrentSelection(row.asset) 
                         setAsset(row.appno_doc_num)
@@ -900,7 +991,7 @@ const resetAll = () => {
                     }
                   } else {                    
                     handleOnClick(row)                    
-                  }
+                  } */
                 }
             } else {
               if( row.asset == dropOpenAsset ) {
@@ -977,6 +1068,7 @@ const resetAll = () => {
   }, [ tableColumns ] )
 
   const loadMoreRows =  (startIndex, endIndex) => {
+    setOffsetWithLimit([startIndex, endIndex])
     const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
           tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
           customers =
@@ -995,7 +1087,10 @@ const resetAll = () => {
             assignments,
             true,
             startIndex,
-            endIndex
+            endIndex,
+            sortField,
+            sortOrder,
+            assetTableScrollPosition
           )
           : 
           getCustomerSelectedAssets(location.pathname.replace('/', ''))
@@ -1012,7 +1107,62 @@ const resetAll = () => {
             assignments,
             true,
             startIndex,
-            endIndex
+            endIndex,
+            sortField,
+            sortOrder,
+            assetTableScrollPosition
+          ),
+        );
+      }
+    }
+  }
+
+  const handleSortData = (direction, column) => {
+    setSortField(column)
+    setSortOrder(direction)
+    setOffsetWithLimit([0, DEFAULT_CUSTOMERS_LIMIT])
+    dispatch(setAssetTableScrollPos(0))
+    
+    const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+          tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+          customers =
+            selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
+          assignments =
+            selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
+    if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+      if (auth_token != null) {
+        dispatch(
+          process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
+          getCustomerAssets(
+            selectedCategory == '' ? '' : selectedCategory,
+            companies,
+            tabs,
+            customers,
+            assignments,
+            false,
+            0,
+            DEFAULT_CUSTOMERS_LIMIT,
+            column,
+            direction
+          )
+          : 
+          getCustomerSelectedAssets(location.pathname.replace('/', ''))
+        );
+      }
+    } else {
+      if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
+        dispatch(
+          getCustomerAssets(
+            selectedCategory == '' ? '' : selectedCategory,
+            companies,
+            tabs,
+            customers,
+            assignments,
+            false,
+            0,
+            DEFAULT_CUSTOMERS_LIMIT,
+            column,
+            direction
           ),
         );
       }
@@ -1020,7 +1170,14 @@ const resetAll = () => {
   }
 
   const onScrollTable = (scrollPos) => {
-    setScrollPos(scrollPos)
+    dispatch(setAssetTableScrollPos(scrollPos))   
+  }
+
+  const handleModalClose = () => {
+    console.log('handleModalClose', 'asdsadsad')
+    setOpenModal(false)
+    setCurrentSelection(null)
+    setAsset(null)
   }
 
   if (
@@ -1037,7 +1194,7 @@ const resetAll = () => {
     >
       <VirtualizedTable
         classes={classes}
-        scrollTop={scrollPos}
+        scrollTop={assetTableScrollPosition}
         openDropAsset={dropOpenAsset}
         selected={selectItems}
         rowSelected={selectedRow}
@@ -1052,27 +1209,27 @@ const resetAll = () => {
         onSelectAll={onHandleSelectAll}
         defaultSelectAll={selectedAll}
         resizeColumnsWidth={resizeColumnsWidth}
-        resizeColumnsStop={resizeColumnsStop}
-        collapsable={true}
-        childHeight={childHeight}
-        childSelect={childSelected}
-        childRows={data}
-        childCounterColumn={`child_count`}
+        resizeColumnsStop={resizeColumnsStop}        
         showIsIndeterminate={false}
-        renderCollapsableComponent={
+        /* hover={true}
+        onMouseOver={onMouseOver}
+        onMouseOut={onMouseOut} */
+        onDoubleClick={onDoubleClick}
+        /* renderCollapsableComponent={
           <ChildTable asset={asset} headerRowDisabled={true} />
-        }
-        sortMultiple={true}
-        sortMultipleConditionColumn={['asset', 'asset_type']}
+        } */
+        sortDataLocal={false}
+        sortDataFn={handleSortData}
         forceChildWaitCall={true}
         totalRows={totalRecords}
         getMoreRows={loadMoreRows}
         onScrollTable={onScrollTable}
-        defaultSortField={`asset`}
-        defaultSortDirection={`desc`}
+        defaultSortField={sortField}
+        defaultSortDirection={sortOrder}
         selectItemWithArrowKey={true}
         /* columnTextBoldList={slack_channel_list} */
         responsive={true}
+        noBorderLines={true}
         width={width}
         containerStyle={{
           width: "100%",
@@ -1085,9 +1242,31 @@ const resetAll = () => {
       {
         googleAuthLogin && (
           <span ref={googleLoginRef}>
-            <Googlelogin/>
+            <Googlelogin/> 
           </span>)
       }
+      {
+        asset !== null 
+        ?
+        <Modal
+          open={openModal}
+          onClose={handleModalClose}
+          aria-labelledby="Assets Families"
+          aria-describedby="Assets Families"
+          BackdropProps={{
+            style: {
+              backgroundColor: 'transparent',
+              boxShadow: 'none',
+            },
+          }}
+        >
+          <div style={{width: 250, height: 300, position: 'absolute', overflow: 'hidden auto', background: '#424242', padding: 10, left: `${clientEvent.x + 100}px`, top: `${clientEvent.y - 22 }px`}}>
+            <ChildTable asset={asset} headerRowDisabled={true} />
+          </div>        
+        </Modal>
+        :
+        ''
+      }      
     </Paper>
   );
 };

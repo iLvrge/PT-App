@@ -49,10 +49,13 @@ const styles = makeStyles((theme) => ({
         height: '1rem'
       },
       '& .MuiTableCell-head':{
-        fontSize: '1rem',
+        fontSize: '1.1rem',
         width: '1rem',
         height: '1rem'
       }
+    },
+    '&.noBorderLines':{
+      border: 0
     },
     '& .ReactVirtualized__Table__rowColumn':{
       '& .MuiSvgIcon-root':{

@@ -20,7 +20,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
-import { TableCell, Avatar } from '@material-ui/core'
+import { TableCell, Avatar, Modal } from '@material-ui/core'
 import {
   ArrowKeyStepper,
   AutoSizer,
@@ -57,6 +57,7 @@ const VirtualizedTable = ({
   selectedKey,
   defaultSelectAll,
   collapsable,
+  childInModal,
   renderCollapsableComponent,
   width,
   disableRow,
@@ -77,7 +78,9 @@ const VirtualizedTable = ({
   defaultSortDirection,
   columnTextBoldList,
   hover,
+  handleModalClose,
   onMouseOver,
+  onMouseOut,
   onDoubleClick,
   openDropAsset,
   dropdownSelections,
@@ -93,6 +96,9 @@ const VirtualizedTable = ({
   selectItemWithArrowKey,
   sortMultiple,
   sortMultipleConditionColumn,
+  sortDataLocal,
+  sortDataFn,
+  noBorderLines,
   ...tableProps
 }) => {
   const classes = useStyles();
@@ -120,7 +126,7 @@ const VirtualizedTable = ({
   useEffect(() => {
     if( defaultSortField != undefined && defaultSortDirection != undefined ) {
       setSortBy(defaultSortField)
-      setSortDirection(defaultSortDirection == 'desc' ? SortDirection.DESC : SortDirection.ASC)
+      setSortDirection(defaultSortDirection == 'DESC' ? SortDirection.DESC : SortDirection.ASC)
     }
   }, [defaultSortField, defaultSortDirection])
 
@@ -131,9 +137,13 @@ const VirtualizedTable = ({
   const createSortHandler = useCallback(
     property => () => {
       /* console.log("createSortHandler", property, sortBy, sortDirection) */
-      const isAsc = sortBy === property && sortDirection === SortDirection.ASC;
-      setSortDirection(isAsc ? SortDirection.DESC : SortDirection.ASC);
-      setSortBy(property);
+      const isAsc = sortBy === property && sortDirection === SortDirection.ASC
+      if(typeof sortDataLocal !== 'undefined' && typeof sortDataFn !== 'undefined') {
+        sortDataFn(isAsc ? SortDirection.DESC : SortDirection.ASC, property)
+      } else {
+        setSortDirection(isAsc ? SortDirection.DESC : SortDirection.ASC);
+        setSortBy(property);
+      }
     },
     [sortBy, sortDirection],
   ); 
@@ -220,7 +230,10 @@ const VirtualizedTable = ({
         width,
         style,
         justifyContent,
-        selectedFromChild
+        fontSize,
+        selectedFromChild,
+        classCol,
+        enable
       } = columns[columnIndex];
       
       let extensionIcon = '', faIcon = ''
@@ -315,7 +328,8 @@ const VirtualizedTable = ({
               : "",
             textBold === true && columnTextBoldList.length > 0 && columnTextBoldList.includes(cellData) 
               ? classes.textBold 
-              : ''
+              : '',
+            typeof showOnCondition == 'string' && typeof classCol !== 'undefined' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition ? '' : classCol
           )}
           variant="body"
           align={align}
@@ -324,98 +338,101 @@ const VirtualizedTable = ({
             paddingLeft: paddingLeft != undefined ? paddingLeft : "inherit",
             justifyContent: typeof style !== 'undefined' && style === true ? justifyContent : "inherit",
             paddingRight: typeof paddingRight !== 'undefined' ? paddingRight : "inherit",
-            textDecoration: typeof rowData['underline'] !== 'undefined' && rowData['underline'] === true ? 'underline' : 'inherit'
+            textDecoration: typeof rowData['underline'] !== 'undefined' && rowData['underline'] === true ? 'underline' : 'inherit',
           }}
         >
           {
-            
-          role == 'slack_image' && cellData == rowData[formatCondition] ?
-          (<svg version="1.1" width="24px" height="24px" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 270 270"><g><g><path fill="#E01E5A" d="M99.4,151.2c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h12.9V151.2z"></path><path fill="#E01E5A" d="M105.9,151.2c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v32.3c0,7.1-5.8,12.9-12.9,12.9s-12.9-5.8-12.9-12.9V151.2z"></path></g><g><path fill="#36C5F0" d="M118.8,99.4c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v12.9H118.8z"></path><path fill="#36C5F0" d="M118.8,105.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9H86.5c-7.1,0-12.9-5.8-12.9-12.9s5.8-12.9,12.9-12.9H118.8z"></path></g><g><path fill="#2EB67D" d="M170.6,118.8c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9h-12.9V118.8z"></path><path fill="#2EB67D" d="M164.1,118.8c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9V86.5c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9V118.8z"></path></g><g><path fill="#ECB22E" d="M151.2,170.6c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9v-12.9H151.2z"></path><path fill="#ECB22E" d="M151.2,164.1c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h32.3c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9H151.2z"></path></g></g></svg>)
-          :
-          role === 'rating' ?
-          (
-            <Rating
-              name="virtual-rating"
-              value={cellData}
-              onChange={(event, newValue) => onHandleRating(event, onClick, newValue, cellData, rowData) }
-            />
-          )
-          :
-          role === 'static_dropdown' ?
-          (
-            <Select
-              labelId='dropdown-open-select-label'
-              id='dropdown-open-select'
-              IconComponent={(props) => (
-                <ExpandMoreOutlinedIcon {...props}/>
-              )}
-              open={ openDropAsset == cellData ? true : false }
-              onClose={handleDropdownClose}
-              onOpen={handleDropdownOpen} 
-              value={showDropValue}
-              onChange={(event) =>  onHandleDropDown(event, onClick, cellData, rowData) }
-              renderValue={(value) => getDropValue(value, list, width)}
-            >
-              {
-                list.map( (c, idx) => (
-                  <MenuItem key={idx} value={c.id}>
-                    {
-                      c.icon != '' ? c.icon : c.image != '' ? <img src={c.image} style={{width: '21px'}}/> : ''
-                    }
-                    <Typography variant="inherit" className={'heading'}> {c.name}</Typography> 
-                  </MenuItem> 
-                ))
-              }  
-            </Select>
-          )
-          :
-          role === "checkbox" ? (typeof showOnCondition == 'string' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition) ? '' : (
-            <Checkbox
-              checked={checkedIsInderminateCheckbox === true ? checkedIsInderminateCheckbox : selected.includes(cellData) }
-              disabled={
-                disableRow === true && rowData[disableRowKey] === 0
-                  ? true
-                  : false
-              } 
-              indeterminate={isIndeterminate}
-            />
-          )
-          :
-          role === "radio" ? (typeof showOnCondition == 'string' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition) ? '' : 
-                (
-                  <Radio
-                    checked={selected.includes(cellData)}
-                    disabled={
-                      disableRow === true && rowData[disableRowKey] === 0
-                        ? true
-                        : false
-                    } 
-                  />
-                )     
-          : role === "arrow" ? (typeof showOnCondition == 'string' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition) ? '' :(
-            selectedIndex !== cellData ? (
-              <ChevronRightIcon className={"arrow"} />
-            ) : (
-              <ExpandMoreIcon className={"arrow"} />
+            typeof enable !== 'undefined' && enable === false
+            ?
+              ''
+            :
+            role == 'slack_image' && cellData == rowData[formatCondition] ?
+            (<svg version="1.1" width="24px" height="24px" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 270 270"><g><g><path fill="#E01E5A" d="M99.4,151.2c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h12.9V151.2z"></path><path fill="#E01E5A" d="M105.9,151.2c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v32.3c0,7.1-5.8,12.9-12.9,12.9s-12.9-5.8-12.9-12.9V151.2z"></path></g><g><path fill="#36C5F0" d="M118.8,99.4c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v12.9H118.8z"></path><path fill="#36C5F0" d="M118.8,105.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9H86.5c-7.1,0-12.9-5.8-12.9-12.9s5.8-12.9,12.9-12.9H118.8z"></path></g><g><path fill="#2EB67D" d="M170.6,118.8c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9h-12.9V118.8z"></path><path fill="#2EB67D" d="M164.1,118.8c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9V86.5c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9V118.8z"></path></g><g><path fill="#ECB22E" d="M151.2,170.6c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9v-12.9H151.2z"></path><path fill="#ECB22E" d="M151.2,164.1c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h32.3c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9H151.2z"></path></g></g></svg>)
+            :
+            role === 'rating' ?
+            (
+              <Rating
+                name="virtual-rating"
+                value={cellData}
+                onChange={(event, newValue) => onHandleRating(event, onClick, newValue, cellData, rowData) }
+              />
             )
-          ) : role === 'image'  ?  
-              extensionIcon != '' ?
-              <span className={classes.flexImageContainer}>
-                <span className={classes.flexImage}><img src={extensionIcon} className={classes.smallImg}/></span><span className={classes.flexData}>{(cellData == '' || cellData == null || cellData == undefined) && rowData[secondaryKey] != undefined && rowData[secondaryKey] != null ? rowData[secondaryKey] :  cellData }</span>
-              </span>  
-              :
-              faIcon != ''
-              ?
-              <span><FontAwesomeIcon icon={faIcon}/><span className={classes.marginLeft}>{cellData}</span></span> 
-              :
-              rowData[imageURL] ? 
-              <span className={classes.flexImageContainer}>
-                <span className={classes.flex}><img src={rowData[imageURL]} className={classes.imgIcon}/></span>{/* <Avatar src={rowData[imageURL]} /> */}<span className={`${classes.marginLeft} ${classes.flex}`}>{cellData}</span>
-              </span> 
-              :  imageIcon != '' && imageIcon != undefined ? <span><FontAwesomeIcon icon={imageIcon}/><span className={classes.marginLeft}>{cellData}</span></span> : (
-                cellData
+            :
+            role === 'static_dropdown' ?
+            (
+              <Select
+                labelId='dropdown-open-select-label'
+                id='dropdown-open-select'
+                IconComponent={(props) => (
+                  <ExpandMoreOutlinedIcon {...props}/>
+                )}
+                open={ openDropAsset == cellData ? true : false }
+                onClose={handleDropdownClose}
+                onOpen={handleDropdownOpen} 
+                value={showDropValue}
+                onChange={(event) =>  onHandleDropDown(event, onClick, cellData, rowData) }
+                renderValue={(value) => getDropValue(value, list, width)}
+              >
+                {
+                  list.map( (c, idx) => (
+                    <MenuItem key={idx} value={c.id}>
+                      {
+                        c.icon != '' ? c.icon : c.image != '' ? <img src={c.image} style={{width: '21px'}}/> : ''
+                      }
+                      <Typography variant="inherit" className={'heading'}> {c.name}</Typography> 
+                    </MenuItem> 
+                  ))
+                }  
+              </Select>
+            )
+            :
+            role === "checkbox" ? (typeof showOnCondition == 'string' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition) ? '' : (
+              <Checkbox
+                checked={checkedIsInderminateCheckbox === true ? checkedIsInderminateCheckbox : selected.includes(cellData) }
+                disabled={
+                  disableRow === true && rowData[disableRowKey] === 0
+                    ? true
+                    : false
+                } 
+                indeterminate={isIndeterminate}
+              />
+            )
+            :
+            role === "radio" ? (typeof showOnCondition == 'string' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition) ? '' : 
+                  (
+                    <Radio
+                      checked={selected.includes(cellData)}
+                      disabled={
+                        disableRow === true && rowData[disableRowKey] === 0
+                          ? true
+                          : false
+                      } 
+                    />
+                  )     
+            : role === "arrow" ? (typeof showOnCondition == 'string' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition) ? '' :(
+              selectedIndex !== cellData ? (
+                <ChevronRightIcon className={"arrow"} />
+              ) : (
+                <ExpandMoreIcon className={"arrow"} />
               )
-            : format != undefined ? 
+            ) : role === 'image'  ?  
+                extensionIcon != '' ?
+                <span className={classes.flexImageContainer}>
+                  <span className={classes.flexImage}><img src={extensionIcon} className={classes.smallImg}/></span><span className={classes.flexData}>{(cellData == '' || cellData == null || cellData == undefined) && rowData[secondaryKey] != undefined && rowData[secondaryKey] != null ? rowData[secondaryKey] :  cellData }</span>
+                </span>  
+                :
+                faIcon != ''
+                ?
+                  <span><FontAwesomeIcon icon={faIcon}/><span className={classes.marginLeft}>{cellData}</span></span> 
+                :
+                rowData[imageURL] ? 
+                <span className={classes.flexImageContainer}>
+                  <span className={classes.flex}><img src={rowData[imageURL]} className={classes.imgIcon}/></span>{/* <Avatar src={rowData[imageURL]} /> */}<span className={`${classes.marginLeft} ${classes.flex}`}>{cellData}</span>
+                </span> 
+                :  imageIcon != '' && imageIcon != undefined ? <span><FontAwesomeIcon icon={imageIcon}/><span className={classes.marginLeft}>{cellData}</span></span> : (
+                  cellData
+                )
+              : format != undefined ? 
                 formatCondition != undefined && rowData[formatCondition] != formatDefaultValue 
                 ? 
                   cellData != '' && cellData != undefined && cellData != 'undefined' ? staticIcon + secondaryFormat(cellData) : ''
@@ -424,7 +441,7 @@ const VirtualizedTable = ({
                 ) : (
                   cellData
                 )
-          }   
+          }
         </TableCell>
       );
     },
@@ -473,8 +490,8 @@ const VirtualizedTable = ({
     noOfSelectedItems,
     selectedGroup
   );
-  const checkRowCollapse = (collapsable, index, rowData, tableRef) => { 
-    if (collapsable) { 
+  const checkRowCollapse = (childInModal, collapsable, index, rowData, tableRef) => { 
+    if (collapsable && typeof childInModal === 'undefined') { 
       console.log('tableRef.current', tableRef.current)
       tableRef.current.recomputeRowHeights();
       tableRef.current.forceUpdate(); 
@@ -513,17 +530,65 @@ const VirtualizedTable = ({
       }
     }, time);
   };
-  const waitAndCall = (collapsable, index, rowData, tableRef) => {
+  const waitAndCall = (childInModal, collapsable, index, rowData, tableRef) => {
     setTimeout(() => {
-      checkRowCollapse(collapsable, index, rowData, tableRef);
+      checkRowCollapse(childInModal, collapsable, index, rowData, tableRef);
     }, 2000);
   };
   const rowRenderer = useCallback(
-    ({ className, columns, index, key, rowData, style }) => (
-      <>
+    ({ className, columns, index, key, rowData, style }) => { 
+      let childComponent = ''
+      if(collapsable === true && selectedIndex == rowData[selectedKey]) {
+        const positions = tableRef.current.Grid._scrollingContainer.parentElement.getBoundingClientRect()
+        
+        childComponent = (
+          <div
+            key={`child_${key}`}
+            ref={rowRef}
+            style={{
+              marginRight: "auto",
+              marginLeft: typeof childInModal === 'undefined' ? 20 : 0,
+              height:
+                disableRow === true
+                  ? rowData[disableRowKey] * rowHeight < childHeight
+                    ? rowData[disableRowKey] * rowHeight + rowHeight
+                    : childHeight + rowHeight
+                  : childCounterColumn != undefined
+                  ? typeof childCounterColumn == 'string' ? rowData[childCounterColumn] * rowHeight < childHeight
+                    ? rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0)
+                    : childHeight 
+                    : childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
+                  : collapseRowHeight,
+              display: "flex",
+              position: "absolute",
+              top: typeof childInModal === 'undefined' ? style.top + rowHeight + "px" : '0px',
+              width: "100%",
+              overflow: "auto",
+            }} 
+          >
+            {renderCollapsableComponent}
+          </div>
+        )
+        if(typeof childInModal !== 'undefined' && childInModal === true) {
+          childComponent =  (
+            <Modal
+              open={true}
+              onClose={handleModalClose}
+            >
+              <div style={{width: 250, height: 300, position: 'absolute', top: positions.top + headerHeight + style.top + "px", left: positions.left + style.width + "px", overflow: 'hidden auto', background: '#424242', padding: 10}}>
+                {
+                  childComponent
+                }
+              </div>
+            </Modal>
+          )
+        }
+      } 
+      return (      
+        <>
         <TableRow
           key={key}
-          className={`${className} rowIndex_${index}`}
+          className={`${className} rowIndex_${index} ${typeof noBorderLines !== 'undefined' ? 'noBorderLines' : ''}`}
           style={{
             ...style,
             height:
@@ -544,7 +609,8 @@ const VirtualizedTable = ({
                 ? "flex-start"
                 : "center",
             backgroundColor:  
-              backgroundRow === true ? rowData[backgroundRowKey] : 'transparent'
+              backgroundRow === true ? rowData[backgroundRowKey] : 'transparent',
+           
           }}
           component={"div"}
           role={rowData.role}
@@ -553,6 +619,11 @@ const VirtualizedTable = ({
               hover && onMouseOver(event, rowData, 0)
             }
           } 
+          onMouseOut = {
+            event => {
+              hover && onMouseOut(event, rowData, 0)
+            }
+          }
           onDoubleClick = { event => {
             typeof onDoubleClick === 'function' && onDoubleClick(event, rowData)
           }}
@@ -565,7 +636,7 @@ const VirtualizedTable = ({
                 ? 1
                 : 0,
             );
-            checkRowCollapse(collapsable, index, rowData, tableRef)
+            checkRowCollapse(childInModal, collapsable, index, rowData, tableRef)
             if(forceChildWaitCall != undefined && forceChildWaitCall === true) {
               updateNewHeight(2000)
             }            
@@ -580,48 +651,24 @@ const VirtualizedTable = ({
         >
           {columns}
         </TableRow>
-        {collapsable === true && selectedIndex == rowData[selectedKey] ? (
-          <div
-            key={`child_${key}`}
-            ref={rowRef}
-            style={{
-              marginRight: "auto",
-              marginLeft: 20,
-              height:
-                disableRow === true
-                  ? rowData[disableRowKey] * rowHeight < childHeight
-                    ? rowData[disableRowKey] * rowHeight + rowHeight
-                    : childHeight + rowHeight
-                  : childCounterColumn != undefined
-                  ? typeof childCounterColumn == 'string' ? rowData[childCounterColumn] * rowHeight < childHeight
-                    ? rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0)
-                    : childHeight 
-                    : childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
-                  : collapseRowHeight,
-              display: "flex",
-              position: "absolute",
-              top: style.top + rowHeight + "px",
-              width: "100%",
-              overflow: "auto",
-            }} 
-          >
-            {renderCollapsableComponent}
-          </div>
-        ) : (
-          ""
-        )}
+        {
+          childComponent
+        }
       </>
-    ),
+    )
+  },
     [
       selected,
       hover,
       onMouseOver,
+      onMouseOut,
       onDoubleClick,
       onSelect,
       rowSelected,
       selectedIndex,
       selectedKey,
       collapsable,
+      childInModal,
       renderCollapsableComponent,
       collapseRowHeight,
       optionalKey,
@@ -701,7 +748,7 @@ const VirtualizedTable = ({
     () => ({ index }) => {
       const rowData = items[index];
       let height = rowHeight
-      if (collapsable === true && selectedIndex == rowData[selectedKey]) {
+      if (collapsable === true && selectedIndex == rowData[selectedKey] && typeof childInModal === 'undefined') {
         height = disableRow === true
           ? rowData[disableRowKey] * rowHeight < childHeight
             ? rowData[disableRowKey] * rowHeight + rowHeight
@@ -717,6 +764,7 @@ const VirtualizedTable = ({
     [
       items,
       collapsable,
+      childInModal,
       selectedKey,
       selectedIndex,
       rowSelected,
@@ -753,7 +801,6 @@ const VirtualizedTable = ({
       onScrollTable(scrollTop)
     }
   }
-
   return (
     <div ref={containerRef} className={classes.tableRootContainer}>
       <InfiniteLoader

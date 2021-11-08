@@ -289,6 +289,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             totalRows={totalRecords}
             grandTotal={grandTotal}
             responsive={false} 
+            noBorderLines={true}
             width={width}
             containerStyle={{ 
                 width: '100%', 

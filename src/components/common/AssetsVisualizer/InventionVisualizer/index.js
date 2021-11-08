@@ -339,7 +339,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                       assignments,
                                       false,
                                       0,
-                                      0
+                                      0,
+                                      'assets',
+                                      'DESC'
                                     ),
                                 );
                             }

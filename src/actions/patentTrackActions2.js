@@ -1033,15 +1033,19 @@ export const getForeignAssetsBySheet = ( form ) => {
  * @param {*} append 
  */
 
-export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, append = false, startIndex, endIndex ) => {
+export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, append = false, startIndex, endIndex, column, direction, assetTableScrollPosition ) => {
   return async dispatch => {
     if(append === false) {
       dispatch( setAssetTypesAssignmentsAllAssetsLoading( true ) )
     }
     PatenTrackApi.cancelAssets()
-    const { data } = await PatenTrackApi.getCustomerAssets( type, companies, tabs, customers, rfIDs, startIndex, endIndex )    
+    const { data } = await PatenTrackApi.getCustomerAssets( type, companies, tabs, customers, rfIDs, startIndex, endIndex, column, direction )    
     dispatch( setAssetTypeAssignmentAllAssets(data, append) )
-    dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
+    if(append === false) {
+      dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
+    } else if(append === true && typeof assetTableScrollPosition !== 'undefined') {
+      dispatch( setAssetTableScrollPos( assetTableScrollPosition ) )
+    }
   } 
 }
 
@@ -1500,3 +1504,10 @@ export const setSwitchAssetButton = (value) => {
     value
   }
 }
+
+export const setAssetTableScrollPos = (pos) => {
+  return {
+    type: types.SET_ASSET_TABLE_SCROLL_POSITION,
+    pos
+  }
+} 
