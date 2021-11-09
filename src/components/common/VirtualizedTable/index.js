@@ -99,6 +99,7 @@ const VirtualizedTable = ({
   sortDataLocal,
   sortDataFn,
   noBorderLines,
+  highlightRow,
   ...tableProps
 }) => {
   const classes = useStyles();
@@ -537,7 +538,7 @@ const VirtualizedTable = ({
   };
   const rowRenderer = useCallback(
     ({ className, columns, index, key, rowData, style }) => { 
-      let childComponent = ''
+      let childComponent = '', selectedRow = false
       if(collapsable === true && selectedIndex == rowData[selectedKey]) {
         const positions = tableRef.current.Grid._scrollingContainer.parentElement.getBoundingClientRect()
         
@@ -583,12 +584,15 @@ const VirtualizedTable = ({
             </Modal>
           )
         }
-      } 
+      }
+      if((optionalKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[optionalKey])) || (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey])) || (selected !== undefined && selectedKey !== undefined && highlightRow !== undefined && highlightRow === true && selected.includes(rowData[selectedKey])) || selected.includes(rowData.id)) {
+        selectedRow = true
+		  }
       return (      
         <>
         <TableRow
           key={key}
-          className={`${className} rowIndex_${index} ${typeof noBorderLines !== 'undefined' ? 'noBorderLines' : ''}`}
+          className={`${className} rowIndex_${index} ${typeof noBorderLines !== 'undefined' ? 'noBorderLines' : ''} ${highlightRow !== undefined && highlightRow === true && selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey]) ? 'highlightRow' : '' }`}
           style={{
             ...style,
             height:
@@ -609,7 +613,7 @@ const VirtualizedTable = ({
                 ? "flex-start"
                 : "center",
             backgroundColor:  
-              backgroundRow === true ? rowData[backgroundRowKey] : 'transparent',
+              backgroundRow === true ? rowData[backgroundRowKey] : '',
            
           }}
           component={"div"}
@@ -641,13 +645,7 @@ const VirtualizedTable = ({
               updateNewHeight(2000)
             }            
           }}          
-          selected={
-            optionalKey != undefined
-              ? rowSelected.includes(rowData[optionalKey])
-              : rowSelected != undefined
-              ? rowSelected.includes(rowData[selectedKey])
-              : selected.includes(rowData.id) 
-          }
+          selected={selectedRow}
         >
           {columns}
         </TableRow>

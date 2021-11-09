@@ -57,6 +57,12 @@ const styles = makeStyles((theme) => ({
     '&.noBorderLines':{
       border: 0
     },
+    '&.highlightRow.Mui-selected':{
+      backgroundColor: '#121212 !important',
+      '&:hover':{
+        backgroundColor: '#252525 !important'
+      }
+    },
     '& .ReactVirtualized__Table__rowColumn':{
       '& .MuiSvgIcon-root':{
         fontSize: '1rem',
@@ -86,6 +92,7 @@ const styles = makeStyles((theme) => ({
       fontSize: '1rem'
     }
   },
+  
   disableColumn:{
     color: 'rgba(255, 255, 255, 0.3)'
   },

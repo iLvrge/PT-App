@@ -34,7 +34,7 @@
         "rightOffset": "0.5rem",
         "topOffset": "5.75rem",
         "bottomOffset": "1.0rem",
-        "gap": { "x": "1rem", "y": "7.5rem" },
+        "gap": { "x": "14.1rem", "y": "7.5rem" },
         "pdf": { "x": "0.5rem", "y": "3rem", "size": "1.5rem" },
         "border": "#545454", 
         "background": "#222222",

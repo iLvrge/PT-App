@@ -1230,6 +1230,7 @@ const checkStillHover = (e) => {
         /* columnTextBoldList={slack_channel_list} */
         responsive={true}
         noBorderLines={true}
+        highlightRow={true} 
         width={width}
         containerStyle={{
           width: "100%",

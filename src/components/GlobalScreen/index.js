@@ -19,7 +19,7 @@ import FilesTemplates from '../common/FilesTemplates'
 import ForeignAsset from '../common/ForeignAsset'
 import { resizePane, resizePane2, editorBar } from '../../utils/splitpane'
 import { updateResizerBar } from '../../utils/resizeBar'
-
+import config from "../common/PatentrackDiagram/config.json";
 
 import { 
     assetLegalEvents, 
@@ -286,18 +286,40 @@ const GlobalScreen = ({
 
     const onHandleIllustrationSize = (size) => {
         if(mainContainerRef.current != null ) {
+            
             const containerSize = mainContainerRef.current.pane2.clientWidth
-            const windowWidth = size != undefined ? containerSize - size - 3 : mainContainerRef.current.pane1.querySelector('#patentrackDiagramDiv').clientWidth
-            const width = 620, 
-                 constantX = 14.1, 
-                 constantValue = parseFloat(constantX / width).toFixed(4),
-                 xGap = (windowWidth * constantValue) - 3 
-            setGap({
+            const windowWidth = size != undefined ? containerSize - size - 3 : mainContainerRef.current.pane1.querySelector('#patentrackDiagramDiv').clientWidth, pixelSize = 14, totalColumn = 4,  totalGap = 3
+            console.log(windowWidth, config.node, ((windowWidth - parseFloat(config.node.leftOffset) - ( totalColumn * parseFloat(config.node.width))) / totalGap))
+
+
+            const xGap = (windowWidth - parseFloat(config.node.leftOffset) - ( totalColumn * parseFloat(config.node.width))) / totalGap            
+            /* setGap({
                 ...gap, 
-                x: `${parseFloat(xGap).toFixed(1)}rem`
-            })
+                x: `${parseFloat(xGap / pixelSize).toFixed(2)}rem`  
+            }) */
+
+            setGap({...gap, x: '14.1rem'}) 
         }
-    }
+    } 
+
+    /* const onHandleIllustrationSize = (size) => {
+        if(mainContainerRef.current != null ) {
+            const containerSize = mainContainerRef.current.pane2.clientWidth
+            const illustrationSize = mainContainerRef.current.pane1.querySelector('#patentrackDiagramDiv').clientWidth
+            const width = 620
+            if( illustrationSize > width ) {
+                const constantX = 14.1, constantValue = parseFloat(constantX / width).toFixed(4)
+                let calc = ((illustrationSize / 14 ) - 1.4 ) * constantValue
+                if(calc > 14.1) {
+                    setGap({...gap, x: `${parseFloat(calc).toFixed(1)}rem`}) 
+                }
+            } else {
+                setGap({...gap, x: '14.1rem'}) 
+            }
+        }
+    } */
+
+
     //console.log('GlobalScreen=>type', type)
 
     const handleTextChange = (name) => {
