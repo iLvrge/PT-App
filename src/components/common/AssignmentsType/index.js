@@ -254,6 +254,7 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
                             dispatch( setAssetTypeInventor({ list: [], total_records: 0 }) )
                             dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
                             setSelectItems([data.activity_id])
+                            setSelectedRow([data.activity_id])
                             dispatch( setAssetTypesSelect([data.activity_id]) )
                         } else {
                             setSelectItems([])

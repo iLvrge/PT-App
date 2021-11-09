@@ -100,6 +100,7 @@ const VirtualizedTable = ({
   sortDataFn,
   noBorderLines,
   highlightRow,
+  higlightColums,
   ...tableProps
 }) => {
   const classes = useStyles();
@@ -237,7 +238,7 @@ const VirtualizedTable = ({
         enable
       } = columns[columnIndex];
       
-      let extensionIcon = '', faIcon = ''
+      let extensionIcon = '', faIcon = '', selectedRow = false
       if(role === 'image' && extension === true ) {
         const urlLink = rowData['url_private'] ? rowData['url_private'] : rowData['webViewLink']
         const urlExplode = urlLink != null && urlLink != 'undefined' ? urlLink.split(/[#?]/)[0].split('.').pop().trim() : ''
@@ -317,6 +318,12 @@ const VirtualizedTable = ({
           }
         }
       }
+
+      if(((selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey])) || selected.includes(rowData.id))  && highlightRow !== undefined && highlightRow === true  && higlightColums.includes(columnIndex)) {
+        console.log('higlightColums', higlightColums, columnIndex, selectedRow)
+        selectedRow = true
+        console.log('higlightColums', higlightColums, columnIndex, selectedRow)
+      }
       return (
         <TableCell
           component={"div"}
@@ -330,7 +337,8 @@ const VirtualizedTable = ({
             textBold === true && columnTextBoldList.length > 0 && columnTextBoldList.includes(cellData) 
               ? classes.textBold 
               : '',
-            typeof showOnCondition == 'string' && typeof classCol !== 'undefined' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition ? '' : classCol
+            typeof showOnCondition == 'string' && typeof classCol !== 'undefined' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition ? '' : classCol,
+            selectedRow === true ? 'highlightColumn' : ''
           )}
           variant="body"
           align={align}

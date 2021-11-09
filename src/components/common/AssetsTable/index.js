@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {useLocation} from 'react-router-dom'
-import { Paper, Modal } from "@material-ui/core";
+import { Paper, Popover } from "@material-ui/core";
 import { Clear, NotInterested } from '@material-ui/icons';
 import Loader from "../Loader";
 import useStyles from "./styles";
@@ -80,6 +80,8 @@ import PatenTrackApi from '../../../api/patenTrack2'
 
 import ChildTable from "./ChildTable";
 
+var applicationNumber = null, assetNumber = null, hoverTimer = null
+
 const AssetsTable = ({ 
     type,
     transactionId, 
@@ -89,8 +91,6 @@ const AssetsTable = ({
     openAnalyticsAndCharBar,
     closeAnalyticsAndCharBar,
     headerRowDisabled }) => {
-  let hoverTimer = null
-  let hoverAsset = null
   const classes = useStyles()
   const dispatch = useDispatch()
   const location = useLocation()
@@ -117,13 +117,13 @@ const AssetsTable = ({
   const [movedAssets, setMovedAssets] = useState([])  
   const [ dropOpenAsset, setDropOpenAsset ] = useState(null)
   const [ callByAuthLogin, setCallByAuth ] = useState(false)
-  const [ openModal, setOpenModal ] = useState(false)
-  const [ clientEvent, setClientEvent] = useState({x: 0, y: 0})
+  const [ anchorEl, setAnchorEl ] = useState(null)
   const [data, setData] = useState([])
   const [assetRows, setAssetRows] = useState([])
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState(true)
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
   const google_profile = useSelector(state => state.patenTrack2.google_profile)
+  const openModal = Boolean(anchorEl);
   const assetTableScrollPosition = useSelector(
     state => state.patenTrack2.assetTableScrollPosition,
   );
@@ -207,7 +207,6 @@ const AssetsTable = ({
   }, [selectedAssets])
 
   useEffect(() => {
-    console.log('movedAssets', movedAssets)
     dispatch(setMoveAssets(movedAssets))
   }, [movedAssets])
 
@@ -404,8 +403,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
 
   const COLUMNS = [
     {
-      width: 29,
-      minWidth: 29,
+      width: 20,
+      minWidth: 20,
       label: "", 
       dataKey: "asset",
       role: "checkbox",
@@ -414,8 +413,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       enable: false
     },
     {
-      width: 25,
-      minWidth: 25,
+      width: 35,
+      minWidth: 35,
       disableSort: true,
       label: "",
       dataKey: "asset",
@@ -423,7 +422,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       list: dropdownList,
       onClick: onHandleDropDownlist
     },
-    {
+    /* {
       width: 20,
       minWidth: 20,
       label: "",
@@ -431,7 +430,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       role: "arrow",
       disableSort: true,
       headingIcon: 'assets',
-    }, 
+    },  */
     {
       width: 85,  
       minWidth: 85,    
@@ -443,8 +442,10 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       formatCondition: 'asset_type',
       formatDefaultValue: 0,
       secondaryFormat: applicationFormat,
-      align: "left",
+      align: "center",
       badge: true,
+      style: true,
+      justifyContent: 'center'
       /* textBold: true */
     },
     {
@@ -684,7 +685,6 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   }, [ assetTypeAssignmentAssetsSelected, selectItems ])
 
   useEffect(() => {
-    console.log("assetTypeAssignmentAssetsSelectedAll", assetTypeAssignmentAssetsSelectedAll, selectedAll)
     if(assetTypeAssignmentAssetsSelectedAll !== selectedAll) {
       setSelectAll(assetTypeAssignmentAssetsSelectedAll)
     }
@@ -700,13 +700,6 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     }
   }, [ assetTypeAssignmentAssets ]) 
 
-  useEffect(() => {
-    console.log('assetTableScrollPosition', assetTableScrollPosition)
-  }, [assetTableScrollPosition])
-
-
- 
-  
   const loadDataFromServer = (startIndex, endIndex, column, direction) => {
     const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
           tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
@@ -766,8 +759,6 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     }
   }
   
-
-
   const callSelectedAssets = useCallback(({ grant_doc_num, appno_doc_num, asset }) => {
     /* const selectedItems = [];
     if (grant_doc_num != "") {
@@ -781,8 +772,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   }, [dispatch] );
 
   const handleOnClick = useCallback(
-    ({ grant_doc_num, appno_doc_num, asset }) => {
-      console.log("grant_doc_num, appno_doc_num, asset", grant_doc_num, appno_doc_num, asset, selectedRow )
+    ({ grant_doc_num, appno_doc_num, asset }) => {      
       /*TV, Comment, Family, FamilyItem, getChannelID Legal Events */
       if(!selectedRow.includes(asset)) {
         if(selectedCategory == 'restore_ownership') {
@@ -884,44 +874,42 @@ const resetAll = () => {
     } */
 }
 
-const onDoubleClick = (e, row, flag) => {
+/* const onDoubleClick = (e, row, flag) => {
   console.log("onDoubleClick", e)
   setCurrentSelection(row.asset) 
   setAsset(row.appno_doc_num)
   setClientEvent({x: e.clientX, y: e.clientY})    
-}
+} */
 
 /**
  * On Mouseover open Child list on Modal
  */
 const onMouseOver = (e, row, flag) => {
-  setCurrentSelection(row.asset) 
-  setAsset(row.appno_doc_num)
-  if(row.asset !== hoverAsset) {
-    console.log(row.asset, e)
-    hoverAsset = row.asset
-    if(hoverTimer !== null) {
-      clearTimeout(hoverTimer)
-    }    
-    hoverTimer = setTimeout(() => {
-      checkStillHover(e)
-    }, 3000)  
-  }  
+  applicationNumber = row.appno_doc_num
+  setAnchorEl(e.currentTarget);
+  assetNumber = row.asset 
+  if(hoverTimer !== null) {
+    clearTimeout(hoverTimer)
+  }    
+  hoverTimer = setTimeout(() => {
+    checkMouseStillOnHover(e, assetNumber)
+  }, 3000)   
 }
 
 const onMouseOut =  (e, row, flag) => {
   setCurrentSelection(null) 
   setAsset(null)
-  hoverAsset = null
+  setAnchorEl(null)
+  applicationNumber = null
+  assetNumber = null
   clearTimeout(hoverTimer)
 }
 
 
-const checkStillHover = (e) => {
-  console.log(hoverAsset)
-  if(hoverAsset !== null) {
-    setOpenModal(!openModal)
-    setClientEvent({x: e.clientX, y: e.clientY})
+const checkMouseStillOnHover = (e, number) => {
+  if(number === assetNumber) {
+    setCurrentSelection(applicationNumber) 
+    setAsset(assetNumber)
   }  
 }
 
@@ -963,35 +951,10 @@ const checkStillHover = (e) => {
             if(element != null) {
               let index = element.getAttribute('aria-colindex')   
               const findElement = element.querySelector('div.MuiSelect-select')
-               console.log('index', index)
                 if( index == 2 && findElement != null ) {
                   setDropOpenAsset(row.asset)
                 } else {
-                  if(index == 3) {
-                    if(currentSelection != row.asset) {
-                      setClientEvent({x: e.clientX, y: e.clientY})
-                      setOpenModal(true)
-                      setCurrentSelection(row.asset) 
-                      setAsset(row.appno_doc_num)
-                    } else { 
-                      setCurrentSelection(null)
-                      setAsset(null)
-                    }
-                  } else {
-                    handleOnClick(row)
-                  }
-                  
-                  /* if(( index == 3 && selectedCategory != 'restore_ownership' ) || (index == 2 && selectedCategory == 'restore_ownership')) {
-                    if(currentSelection != row.asset) {
-                        setCurrentSelection(row.asset) 
-                        setAsset(row.appno_doc_num)
-                    } else { 
-                        setCurrentSelection(null)
-                        setAsset(null)
-                    }
-                  } else {                    
-                    handleOnClick(row)                    
-                  } */
+                  handleOnClick(row)
                 }
             } else {
               if( row.asset == dropOpenAsset ) {
@@ -1174,8 +1137,7 @@ const checkStillHover = (e) => {
   }
 
   const handleModalClose = () => {
-    console.log('handleModalClose', 'asdsadsad')
-    setOpenModal(false)
+    setAnchorEl(null)
     setCurrentSelection(null)
     setAsset(null)
   }
@@ -1211,10 +1173,10 @@ const checkStillHover = (e) => {
         resizeColumnsWidth={resizeColumnsWidth}
         resizeColumnsStop={resizeColumnsStop}        
         showIsIndeterminate={false}
-        /* hover={true}
+        hover={true}
         onMouseOver={onMouseOver}
-        onMouseOut={onMouseOut} */
-        onDoubleClick={onDoubleClick}
+        onMouseOut={onMouseOut} 
+        /*onDoubleClick={onDoubleClick}*/
         /* renderCollapsableComponent={
           <ChildTable asset={asset} headerRowDisabled={true} />
         } */
@@ -1231,6 +1193,7 @@ const checkStillHover = (e) => {
         responsive={true}
         noBorderLines={true}
         highlightRow={true} 
+        higlightColums={[2]}
         width={width}
         containerStyle={{
           width: "100%",
@@ -1249,22 +1212,19 @@ const checkStillHover = (e) => {
       {
         asset !== null 
         ?
-        <Modal
+        <Popover
           open={openModal}
+          anchorEl={anchorEl}
           onClose={handleModalClose}
-          aria-labelledby="Assets Families"
-          aria-describedby="Assets Families"
-          BackdropProps={{
-            style: {
-              backgroundColor: 'transparent',
-              boxShadow: 'none',
-            },
-          }}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }} 
         >
-          <div style={{width: 250, height: 300, position: 'absolute', overflow: 'hidden auto', background: '#424242', padding: 10, left: `${clientEvent.x + 100}px`, top: `${clientEvent.y - 22 }px`}}>
+          <div style={{width: 200, height: 200, overflow: 'hidden auto', background: '#424242', padding: 10}}>
             <ChildTable asset={asset} headerRowDisabled={true} />
           </div>        
-        </Modal>
+        </Popover>
         :
         ''
       }      

@@ -58,9 +58,13 @@ const styles = makeStyles((theme) => ({
       border: 0
     },
     '&.highlightRow.Mui-selected':{
-      backgroundColor: '#121212 !important',
-      '&:hover':{
-        backgroundColor: '#252525 !important'
+      '& .MuiTableCell-root.highlightColumn': {
+        color: '#fff',
+        backgroundColor: '#252525 !important',
+        borderRadius: 16,
+        '&:hover':{
+          backgroundColor: '#282828 !important'
+        }
       }
     },
     '& .ReactVirtualized__Table__rowColumn':{
@@ -70,7 +74,9 @@ const styles = makeStyles((theme) => ({
         height: '1rem'
       },
       '& svg.MuiSelect-icon': {
-        top: 8
+        top: 8,
+        width: '1.5rem',
+        height: '1.5rem'
       }
     },
     '& .MuiTableRow-root.Mui-selected, .MuiTableRow-root.Mui-selected:hover':{

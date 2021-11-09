@@ -44,7 +44,7 @@ const convertDataToItem = (eventItem, index, type, cls, icons) => {
     type: assetType,
     rawData: eventItem,
     number: eventItem.event_code,
-    className: type === 1 ? 'negative' : 'asset-type-default',
+    className: type === 1 ? `${eventItem.type} negative` : 'asset-type-default',
     description: type == 0 ? eventItem.maintainence_code.event_description : 'Payment Due / Grace Period',
     collection: [], 
     showTooltip: false

@@ -298,7 +298,7 @@ const GlobalScreen = ({
                 x: `${parseFloat(xGap / pixelSize).toFixed(2)}rem`  
             }) */
 
-            setGap({...gap, x: '14.1rem'}) 
+            setGap({...gap, x: '14.1rem'})    
         }
     } 
 
