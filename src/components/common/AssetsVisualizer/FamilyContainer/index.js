@@ -118,12 +118,12 @@ const FamilyContainer = ({ family, onClose }) => {
         const getTimelineRawDataFunction = async () => {            
             setTimelineRawData(family)
             setIsLoadingTimelineRawData(false)
-            const findIndex = family.findIndex(item => selectedAsset.includes(item.application_number) || selectedAsset.includes(item.patent_number))
+            /* const findIndex = family.findIndex(item => selectedAsset.includes(item.application_number) || selectedAsset.includes(item.patent_number))
             
             if(findIndex !== -1 ) { 
                 dispatch(setFamilyItemDisplay(family[findIndex]))
                 dispatch(toggleFamilyItemMode(true))
-            }
+            } */
         }        
         getTimelineRawDataFunction()
     }, [ dispatch, family, selectedAsset ])
