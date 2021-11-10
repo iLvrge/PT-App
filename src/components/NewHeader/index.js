@@ -55,7 +55,6 @@ import useStyles from './styles'
 
 import Home from '../Home'
 import CompanySummary from '../common/CompanySummary'
-import AssetSwitchButton from './AssetSwitchButton'
 import ActionMenu from './ActionMenu'
 /* import ClipboardAssets from './ClipboardAssets' */
 import { signOut } from '../../actions/authActions'
@@ -487,12 +486,12 @@ const onHandleForeignAssets = (event) => {
           } 
         </span>
 
-        <AssetSwitchButton
-          click={handleChangeLayout}
-          category={selectedCategory}
-        />  
+         
         
-        <ActionMenu/>
+        <ActionMenu
+          onhandleBrokenChain={handleChangeLayout}
+          category={selectedCategory}
+        />
         
               
         <div className={classes.rightPanel}>  

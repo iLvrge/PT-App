@@ -84,7 +84,7 @@ const GlobalLayout = (props) => {
     const [ driveBarSize, setDriveBarSize ] = useState('50%')
     const [ assignmentBarSize, setAssignmentBarSize ] = useState(0)  
     const [ addressBarSize, setAddressBarSize ] = useState(450)
-    const [ customerBarSize, setCustomerBarSize ] = useState(210)
+    const [ customerBarSize, setCustomerBarSize ] = useState(180)
     const [ commentBarSize , setCommentBarSize ] = useState('30%')
     const [ illustrationBarSize , setIllustrationBarSize ] = useState('50%')
     const [ visualizerBarSize , setVisualizerBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? '30%' : '0%')
@@ -148,7 +148,7 @@ const GlobalLayout = (props) => {
             if( openGoogleDriveBar === true || assetFilesBar === true ) {
                 setAssetFilesBarSize('100%')
                 if(openCustomerBar === true && customerBarSize === '100%') {
-                    setCustomerBarSize(210)
+                    setCustomerBarSize(180)
                 }
                 if(openAssignmentBar === true && assignmentBarSize === '100%') {
                     setAssignmentBarSize(120)
@@ -209,7 +209,7 @@ const GlobalLayout = (props) => {
             if(assetFilesBarSize === '100%' && (openGoogleDriveBar === true || assetFilesBar === true)){
                 setAssetFilesBarSize(200)
             } else if(customerBarSize === '100%') {
-                setCustomerBarSize(210)
+                setCustomerBarSize(180)
             } else if(assignmentBarSize === '100%') {
                 setAssignmentBarSize(120)
             } else if(otherPartyBarSize === '100%') {
@@ -239,7 +239,7 @@ const GlobalLayout = (props) => {
             setChartBar(true)
             setAnalyticsBar(true)
             setCompanyBarSize(0) // company bar size
-            setCustomerBarSize(210)
+            setCustomerBarSize(180)
             setAssignmentBarSize(120)
 
 
@@ -467,7 +467,7 @@ const GlobalLayout = (props) => {
             /* dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))
             dispatch(setMaintainenceAssetsList({list: [], total_records: 0}, false)) */
         } else {
-            setCustomerBarSize(210)
+            setCustomerBarSize(180)
             if(isMobile){
                 setOpenBar( false )
                 setTypeOpenBar( false )

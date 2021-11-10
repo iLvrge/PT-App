@@ -10,6 +10,18 @@ export default makeStyles((theme) => ({
         '& .MuiTableCell-root .MuiSelect-select.MuiSelect-select':{
             paddingRight: 0 
         },
+        '& .ReactVirtualized__Table__rowColumn':{
+            '& .MuiSvgIcon-root':{
+                fontSize: 20,
+                width: '1em',
+                height: '1em' ,
+                position: 'absolute',
+                top: 5
+            },
+            '& .MuiTableCell-root span':{
+                padding: 6
+            }
+        },
         '& .MuiSelect-select:focus':{
          background: 'none'
         },

@@ -30,6 +30,7 @@ import {
 
 import useStyles from './styles'
 
+import AssetSwitchButton from './AssetSwitchButton'
 import UserInputForm from '../common/QuillEditor/UserInputForm'
 import CustomerAddress from '../common/CustomerAddress'
 import { controlList } from "../../utils/controlList"
@@ -57,7 +58,7 @@ import {
 } from '../../actions/patentTrackActions2'
 import PatenTrackApi from '../../api/patenTrack2'
 
-const ActionMenu = () => {
+const ActionMenu = (props) => {
     const classes = useStyles()
     const googleLoginRef = useRef(null)
     const [anchorEl, setAnchorEl] = useState(null)
@@ -660,7 +661,7 @@ const ActionMenu = () => {
                 variant="contained"
                 disableElevation
                 onClick={handleClick}
-                endIcon={<KeyboardArrowDown />}
+                startIcon={<KeyboardArrowDown />}
                 className={classes.btnActionMenu}
             >
                 Action
@@ -752,7 +753,10 @@ const ActionMenu = () => {
                     </MenuItem>
                     <Divider />
                     <MenuItem>
-                        <ListItemText>Broken Chain </ListItemText>
+                        <AssetSwitchButton
+                            click={props.handleChangeLayout}
+                            category={category}
+                        /> 
                     </MenuItem>
                     <MenuItem>
                         <ListItemText>Correct Address</ListItemText>

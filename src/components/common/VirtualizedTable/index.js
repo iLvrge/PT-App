@@ -20,6 +20,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
 import { TableCell, Avatar, Modal } from '@material-ui/core'
 import {
@@ -203,7 +204,7 @@ const VirtualizedTable = ({
       )
     } else {
       return (
-        <FontAwesomeIcon icon={faChevronDown}/>
+        <KeyboardArrowDown />
       )
     }    
   }
@@ -377,11 +378,23 @@ const VirtualizedTable = ({
                   <ExpandMoreOutlinedIcon {...props}/>
                 )}
                 open={ openDropAsset == cellData ? true : false }
+                MenuProps={{
+                  anchorOrigin: {
+                    vertical: "bottom",
+                    horizontal: "left"
+                  },
+                  transformOrigin: {
+                    vertical: "top",
+                    horizontal: "left"
+                  },
+                  getContentAnchorEl: null
+                }}
                 onClose={handleDropdownClose}
                 onOpen={handleDropdownOpen} 
                 value={showDropValue}
                 onChange={(event) =>  onHandleDropDown(event, onClick, cellData, rowData) }
                 renderValue={(value) => getDropValue(value, list, width)}
+
               >
                 {
                   list.map( (c, idx) => (
