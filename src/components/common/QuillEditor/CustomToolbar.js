@@ -146,7 +146,7 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
           <SendIcon />   
         </IconButton> 
       </Tooltip>     
-      <span className={classes.seperator}></span>     
+      {/* <span className={classes.seperator}></span>     
       <Tooltip 
         title={
           <Typography color="inherit" variant='body2'>Attach the open document and send email</Typography>
@@ -220,13 +220,6 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
         :
         category == 'correct_names' 
         ?
-          /* nameQueuesDisplay === true
-          ?
-          <>
-            <Button className={classes.review} onClick={onHandleSubmitNamesUSPTO}>Submit to USPTO</Button>
-            <Button className={classes.review} onClick={onHandleNamesCancel}>Cancel</Button>
-          </>
-          : */
           <>
             <Button className={classes.review} onClick={onHandleSubmitNamesUSPTO}>Submit to USPTO</Button>
             <Button className={classes.review} onClick={onChangeName}>Change Name</Button>
@@ -238,7 +231,7 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
         :
         <Button className={`${classes.review} ${driveTemplateMode === true ? classes.active : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
       }      
-      </div>
+      </div> */}
                
     </div> 
   )
