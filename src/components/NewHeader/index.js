@@ -55,6 +55,8 @@ import useStyles from './styles'
 
 import Home from '../Home'
 import CompanySummary from '../common/CompanySummary'
+import AssetSwitchButton from './AssetSwitchButton'
+import ActionMenu from './ActionMenu'
 /* import ClipboardAssets from './ClipboardAssets' */
 import { signOut } from '../../actions/authActions'
 import { getTokenStorage, removeTokenStorage } from '../../utils/tokenStorage'
@@ -484,21 +486,15 @@ const onHandleForeignAssets = (event) => {
             ''
           } 
         </span>
-        {/* <div className={classes.grow} style={{position: 'relative'}}>  
-          <div className={classes.breadcrumbs}>{layoutName}</div>   
-          <div className={classes.breadcrumbs} style={{marginLeft: 100, fontSize: '1rem'}}>Version: {process.env.REACT_APP_ENVIROMENT_MODE}</div>   
-        </div> */} 
-        <div className={`${classes.grow_buttons} ${classes.alignItemCenter}`}>
-          {
-            process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' 
-            ?
-              <Button className={classes.calendly} onClick={handleChangeLayout}>
-                {selectedCategory == 'due_dilligence' ? 'Broken Chain' : 'All Assets'}
-              </Button> 
-            :
-            ''
-          }          
-        </div>
+
+        <AssetSwitchButton
+          click={handleChangeLayout}
+          category={selectedCategory}
+        />  
+        
+        <ActionMenu/>
+        
+              
         <div className={classes.rightPanel}>  
             <Button className={classes.calendly} onClick={handleScheduleViaHubspot}>
               Schedule a {process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'd' : 'D' }emo {process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'for Pro version' : '' }

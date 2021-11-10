@@ -15,6 +15,7 @@ import {
   faFileWord,  
   faFilePowerpoint,
   faFileExcel,
+  faChevronDown
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -191,17 +192,19 @@ const VirtualizedTable = ({
   };
 
   const getDropValue = (showDropValue, list, width) => {
-    const listIndex = list.findIndex( row => row.id == showDropValue )
+    const listIndex = list.findIndex( row => row.id == showDropValue )    
     if(listIndex !== -1) {
       return (
-        <div style={{width: `${width + 10}px`}} className={'selectedIcon'}>
+        <div /* style={{width: `${width + 10}px`}} */ className={'selectedIcon'}>
           {
-            list[listIndex].icon != '' ? list[listIndex].icon : list[listIndex].image != '' ? <img src={list[listIndex].image} style={{width: '17px', position: 'absolute', left: '7px'}}/> : showDropValue
+            list[listIndex].icon != '' ? list[listIndex].icon : list[listIndex].image != '' ? <img src={list[listIndex].image} style={{width: '1.3rem', position: 'absolute', left: '0px'}}/> : showDropValue
           }
         </div>
       )
     } else {
-      return '' 
+      return (
+        <FontAwesomeIcon icon={faChevronDown}/>
+      )
     }    
   }
 
@@ -282,7 +285,7 @@ const VirtualizedTable = ({
           }
         } 
       }
-      let showDropValue = ''
+      let showDropValue = -2
       if(role == 'static_dropdown') {
         const index = dropdownSelections.findIndex( r => r.asset == rowData['asset'] )
         if( index !== -1 ) {
@@ -320,9 +323,7 @@ const VirtualizedTable = ({
       }
 
       if(((selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey])) || selected.includes(rowData.id))  && highlightRow !== undefined && highlightRow === true  && higlightColums.includes(columnIndex)) {
-        console.log('higlightColums', higlightColums, columnIndex, selectedRow)
         selectedRow = true
-        console.log('higlightColums', higlightColums, columnIndex, selectedRow)
       }
       return (
         <TableCell
@@ -441,17 +442,19 @@ const VirtualizedTable = ({
                 :  imageIcon != '' && imageIcon != undefined ? <span><FontAwesomeIcon icon={imageIcon}/><span className={classes.marginLeft}>{cellData}</span></span> : (
                   cellData
                 )
-              : format != undefined ? 
+              : format != undefined 
+              ? 
                 formatCondition != undefined && rowData[formatCondition] != formatDefaultValue 
                 ? 
-                  cellData != '' && cellData != undefined && cellData != 'undefined' ? staticIcon + secondaryFormat(cellData) : ''
+                  <span>{cellData != '' && cellData != undefined && cellData != 'undefined' ? staticIcon + secondaryFormat(cellData) : ''}</span>
                 : (
-                    cellData != '' && cellData != undefined && cellData != 'undefined' ? staticIcon + format(cellData) : ''
-                ) : (
-                  cellData
+                  <span>{cellData != '' && cellData != undefined && cellData != 'undefined' ? staticIcon + format(cellData) : ''}</span>
+                ) 
+              : (
+                  <span>{cellData}</span>
                 )
           }
-        </TableCell>
+        </TableCell> 
       );
     },
     [

@@ -59,11 +59,14 @@ const styles = makeStyles((theme) => ({
     },
     '&.highlightRow.Mui-selected':{
       '& .MuiTableCell-root.highlightColumn': {
-        color: '#fff',
-        backgroundColor: '#252525 !important',
-        borderRadius: 16,
-        '&:hover':{
-          backgroundColor: '#282828 !important'
+        '& span': {
+          color: '#fff',
+          backgroundColor: '#2a2a2a !important',
+          borderRadius: 12,
+          padding: 6,
+          '&:hover':{
+            backgroundColor: '#2b2b2b !important'
+          }
         }
       }
     },
@@ -74,9 +77,13 @@ const styles = makeStyles((theme) => ({
         height: '1rem'
       },
       '& svg.MuiSelect-icon': {
-        top: 8,
+        top: 3,
         width: '1.5rem',
         height: '1.5rem'
+      },
+      '& .fa-chevron-down':{
+        top: 7,
+        position: 'absolute'
       }
     },
     '& .MuiTableRow-root.Mui-selected, .MuiTableRow-root.Mui-selected:hover':{

@@ -403,8 +403,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
 
   const COLUMNS = [
     {
-      width: 20,
-      minWidth: 20,
+      width: 4,
+      minWidth: 4,
       label: "", 
       dataKey: "asset",
       role: "checkbox",
@@ -413,8 +413,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       enable: false
     },
     {
-      width: 35,
-      minWidth: 35,
+      width: 20,
+      minWidth: 20,
       disableSort: true,
       label: "",
       dataKey: "asset",
@@ -444,8 +444,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       secondaryFormat: applicationFormat,
       align: "center",
       badge: true,
-      style: true,
-      justifyContent: 'center'
+      /* style: true,
+      justifyContent: 'center' */
       /* textBold: true */
     },
     {

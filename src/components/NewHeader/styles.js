@@ -155,7 +155,7 @@ export default makeStyles(theme => ({
         }
     },
     grow_buttons: {
-        flexGrow: 1,
+        /* flexGrow: 1, */
         display: 'flex',
         justifyContent: 'flex-start',
         alignItems: 'flex-end',
@@ -456,5 +456,25 @@ export default makeStyles(theme => ({
                 fill: '#ef0000'
             }
         } */
+    },
+    btnActionMenu:{
+        backgroundColor: 'transparent',
+        color: '#FFF',
+        '&:hover':{
+            color: '#E60000',
+            backgroundColor: 'transparent', 
+        }        
+    },
+    actionMenuList: {
+        '& .MuiListItemIcon-root':{
+            minWidth: 'inherit',
+            marginRight: 5
+        },
+        '& .fa-share-alt': { 
+            width: '1rem'
+        },
+        '& .MuiButton-root': {
+            textTransform: 'initial'
+        }
     }
 }))
