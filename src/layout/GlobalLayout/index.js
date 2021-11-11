@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react"
-
+ 
 import { useDispatch, useSelector } from 'react-redux'
 
 import { 
@@ -1028,11 +1028,30 @@ const GlobalLayout = (props) => {
                     {
                         isMobile
                         ?
-                            mobileWrapper.map(
+                            /* mobileWrapper.map(
                                 ({component: Component, ...props }, index) => (
                                     <Component key={index} {...props} />
                                 )
-                            )
+                            ) */
+                            <span>
+                                asdasd
+
+                                asd
+                                asd
+                                asd
+                                as
+                                das
+                                d
+                                asd
+                                asd
+                                ad
+                                asd
+                                d
+
+                                ad
+                                ad
+
+                            </span>
                         :
                             <>
                                 <div className={clsx(classes.filterToolbar)}> 
