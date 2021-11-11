@@ -13,6 +13,9 @@ export default makeStyles(theme => ({
         },
         '& .MuiBottomNavigation-root':{
             height: 45
+        },
+        '& .MuiFab-root':{
+            width: 48
         }
     },
     swipeButtons: {
@@ -25,6 +28,8 @@ export default makeStyles(theme => ({
         },
         '& .MuiIconButton-root':{
             color: '#FFF',
+            marginLeft: 10,
+            marginTop: 10,
             '& span.text':{
                 marginLeft: 5
             }
