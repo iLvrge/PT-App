@@ -11,7 +11,7 @@ body {
   margin: 0 auto;
   scroll-behavior: smooth;
   background-color: #121212 !important;
-  min-width: 800px;
+  /* min-width: 800px; */
   overflow: hidden; 
 }
 

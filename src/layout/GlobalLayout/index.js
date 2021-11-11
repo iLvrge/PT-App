@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react"
- 
+
 import { useDispatch, useSelector } from 'react-redux'
 
 import { 
@@ -1016,27 +1016,23 @@ const GlobalLayout = (props) => {
 
     return (
         <div className={classes.root} id='main'>
-            {/* {
+            {
                 isMobile
                 ?
                     <MobileHeader/>
                 :
                     <NewHeader />
-            } */}
+            }
             <Grid container className={classes.dashboardWarapper}>
                 <Grid container className={classes.dashboard}>       
                     {
                         isMobile
                         ?
-                            /* mobileWrapper.map(
+                            mobileWrapper.map(
                                 ({component: Component, ...props }, index) => (
                                     <Component key={index} {...props} />
                                 )
-                            ) */
-                            <span>
-                                 adasd asdas d asd asd asd as dsa dsa das d asd as das das d sad as d asd asd as d asd asd as das d asd asd asd as das d asd asd as das das das d asd asd as das d asd asd as dsa das d asdasd 
-
-                            </span>
+                            )
                         :
                             <>
                                 <div className={clsx(classes.filterToolbar)}> 
@@ -1063,12 +1059,12 @@ const GlobalLayout = (props) => {
                 </Grid>
             </Grid>
             {
-                /* isMobile && (
+                isMobile && (
                     <MobileFooter
                         bottomToolBar={bottomToolBar}
                         topToolBar={topToolBar}
                     />
-                ) */
+                )
             }
         </div>
     )
