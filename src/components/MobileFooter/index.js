@@ -127,39 +127,27 @@ const MobileFooter = (props) => {
                             open={state[drawer.name]}
                             onClose={(event) => toggleDrawer(event, drawer.name, false)}
                             onOpen={(event) => toggleDrawer(event, drawer.name, true)}
-                        >                            
-                            {
-                                drawer.name === 'dashboard'
-                                ?                                
-                                    props.bottomToolBar.map( (item, index) => (
-                                        <Box
-                                            className={classes.swipeButtons}
-                                            key={index} 
-                                        >
-                                            <NavigationIcon {...item} showLabel={true}/>
-                                        </Box>
-                                        
-                                    ))
-                                :
-                                    drawer.name === "filter"
-                                    ?
-                                        props.topToolBar.map((item, index) => (
-                                            item.t === 1 || item.t === 2 || item.t === 3 || item.t === 11
-                                            ? (
-                                                <Box
-                                                    className={classes.swipeButtons}
-                                                    key={index} 
-                                                >
-                                                    <NavigationIcon {...item} showLabel={true}/>
-                                                </Box>
-                                            )
-                                            : null
-                                        ))                                       
+                        >     
+                            <Box
+                                classNmae={classes.drawerContainer}
+                            >
+                                {
+                                    drawer.name === 'dashboard'
+                                    ?                                
+                                        props.bottomToolBar.map( (item, index) => (
+                                            <Box
+                                                className={classes.swipeButtons}
+                                                key={index} 
+                                            >
+                                                <NavigationIcon {...item} showLabel={true}/>
+                                            </Box>
+                                            
+                                        ))
                                     :
-                                        drawer.name === "transaction_assets"
+                                        drawer.name === "filter"
                                         ?
-                                            props.topToolBar.map( (item, index) => (
-                                                item.t === 4 || item.t === 5 
+                                            props.topToolBar.map((item, index) => (
+                                                item.t === 1 || item.t === 2 || item.t === 3 || item.t === 11
                                                 ? (
                                                     <Box
                                                         className={classes.swipeButtons}
@@ -167,27 +155,43 @@ const MobileFooter = (props) => {
                                                     >
                                                         <NavigationIcon {...item} showLabel={true}/>
                                                     </Box>
-                                                ) 
-                                                : null                                           
-                                            ))
+                                                )
+                                                : null
+                                            ))                                       
                                         :
-                                            drawer.name === "documents"
+                                            drawer.name === "transaction_assets"
                                             ?
-                                                props.topToolBar.map( (item, index) =>  (
-                                                    item.t === 10 || item.t === 12 
-                                                    ?  (
+                                                props.topToolBar.map( (item, index) => (
+                                                    item.t === 4 || item.t === 5 
+                                                    ? (
                                                         <Box
                                                             className={classes.swipeButtons}
                                                             key={index} 
                                                         >
                                                             <NavigationIcon {...item} showLabel={true}/>
                                                         </Box>
-                                                    )  
-                                                    : null                                          
+                                                    ) 
+                                                    : null                                           
                                                 ))
                                             :
-                                                ''
-                            }
+                                                drawer.name === "documents"
+                                                ?
+                                                    props.topToolBar.map( (item, index) =>  (
+                                                        item.t === 10 || item.t === 12 
+                                                        ?  (
+                                                            <Box
+                                                                className={classes.swipeButtons}
+                                                                key={index} 
+                                                            >
+                                                                <NavigationIcon {...item} showLabel={true}/>
+                                                            </Box>
+                                                        )  
+                                                        : null                                          
+                                                    ))
+                                                :
+                                                    ''
+                                }
+                            </Box>
                         </SwipeableDrawer>
                     </React.Fragment>
                 ))

@@ -17,6 +17,9 @@ export default makeStyles(theme => ({
         '& .MuiFab-root':{
             width: 48
         }
+    }, 
+    drawerContainer: {
+        margin: '2rem 0 0 2rem',
     },
     swipeButtons: {
         display: 'flex',    
@@ -28,8 +31,6 @@ export default makeStyles(theme => ({
         },
         '& .MuiIconButton-root':{
             color: '#FFF',
-            marginLeft: 10,
-            marginTop: 10,
             '& span.text':{
                 marginLeft: 5
             }

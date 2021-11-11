@@ -1173,9 +1173,9 @@ const checkMouseStillOnHover = (e, number) => {
         resizeColumnsWidth={resizeColumnsWidth}
         resizeColumnsStop={resizeColumnsStop}        
         showIsIndeterminate={false}
-        hover={true}
+        /* hover={true}
         onMouseOver={onMouseOver}
-        onMouseOut={onMouseOut} 
+        onMouseOut={onMouseOut}  */
         /*onDoubleClick={onDoubleClick}*/
         /* renderCollapsableComponent={
           <ChildTable asset={asset} headerRowDisabled={true} />
