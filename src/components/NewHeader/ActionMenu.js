@@ -15,9 +15,11 @@ import {
     Backdrop,
     TextField, 
     CircularProgress,
+    Fab, 
 } from '@material-ui/core'
 
 import {
+    CheckCircleOutline as CheckCircleOutlineIcon,
     KeyboardArrowDown,
     Check
 } from '@material-ui/icons'
@@ -36,13 +38,27 @@ import CustomerAddress from '../common/CustomerAddress'
 import { controlList } from "../../utils/controlList"
 import { downloadFile, copyToClipboard } from '../../utils/html_encode_decode'
 import { setTokenStorage, getTokenStorage } from '../../utils/tokenStorage'
-import {
-  setMaintainenceFeeFrameMode,
-  setDriveTemplateFrameMode,
-  setDriveTemplateMode,
-  setDriveButtonActive
-} from '../../actions/uiActions'
-import { 
+
+import { setAssetTypeAssignments, 
+    setSelectedAssetsTransactions, 
+    setSelectedAssetsPatents, 
+    setAssetsIllustration, 
+    setBreadCrumbsAndCategory,  
+    setAssetTypeAssignmentAllAssets,
+    setSwitchAssetButton,
+    setAssetTypes,
+    setAssetTypeInventor,
+    setAssetTypeCompanies,
+    setAssetsIllustrationData,
+    setAllAssetTypes,
+    setAssetTypesSelect,
+    setAllAssignmentCustomers,
+    setSelectAssignmentCustomers,
+    setAssetTypesPatentsSelected,
+    setAssetTypesPatentsSelectAll,
+    setAllAssignments, 
+    setSelectAssignments,
+    setSlackMessages,
     setMoveAssets, 
     getMaintainenceAssetsList,
     setAddressQueueDisplay,
@@ -56,6 +72,23 @@ import {
     getNameQueue,
     getLayoutTemplatesByID
 } from '../../actions/patentTrackActions2'
+  
+import {  
+    setPDFView,
+    setPDFFile
+} from '../../actions/patenTrackActions'
+  
+import { 
+    setMaintainenceFeeFrameMode,
+    setDriveTemplateFrameMode,
+    setDriveTemplateMode,
+    setDriveButtonActive,
+    toggleFamilyMode,
+    toggleFamilyItemMode,
+    toggleUsptoMode,
+    toggleLifeSpanMode,
+} from '../../actions/uiActions'
+
 import PatenTrackApi from '../../api/patenTrack2'
 
 const ActionMenu = (props) => {
@@ -101,7 +134,6 @@ const ActionMenu = (props) => {
     const assetTypeAddressGroups = useSelector(state => state.patenTrack2.assetTypeAddress.all_groups)
     const assetTypeNamesGroups = useSelector(state => state.patenTrack2.assetTypeNames.all_groups)
     const assetTypeNamesSelected = useSelector(state => state.patenTrack2.assetTypeNames.selected)
-
     const google_profile = useSelector(state => state.patenTrack2.google_profile)
 
     /**
@@ -651,23 +683,83 @@ const ActionMenu = (props) => {
         }
     }, [ newCompanyName, assetTypeNamesGroups, mainCompaniesSelected ] )
 
+    const handleChangeLayout = (event) => {
+        let findIndex = -1
+        if(category == 'due_dilligence') {
+          findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
+        } else {
+          findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'due_dilligence')
+        }
+        if( findIndex !== -1 ) {
+            //hideMenu(event, controlList[findIndex])
+            resetAll()
+            clearOtherItems()
+            dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))      
+            dispatch(setSwitchAssetButton(controlList[findIndex].category == 'due_dilligence' ? 0 : 1))
+        }
+    }
+    const resetAll = () => {
+        dispatch(setAssetTypes([]))
+        dispatch(setAssetTypeCompanies({ list: [], total_records: 0 }))
+        dispatch(setAssetTypeInventor({ list: [], total_records: 0 }))
+        dispatch(setAssetTypeAssignments({ list: [], total_records: 0 }))
+        dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
+        dispatch(setAssetTypesPatentsSelected([]))
+        dispatch(setAssetTypesPatentsSelectAll(false))
+        dispatch(setAllAssignments(false))
+        dispatch(setSelectAssignments([]))	
+        dispatch(setSelectAssignmentCustomers([]))
+        dispatch(setAllAssignmentCustomers(false))
+    }
+
+    const clearOtherItems = () => {
+        dispatch(setAssetsIllustration(null))
+        dispatch(setAssetsIllustrationData(null))
+        dispatch(setSelectedAssetsTransactions([]))
+        dispatch(setSelectedAssetsPatents([]))
+        dispatch(setSlackMessages([]))
+        dispatch(
+            setPDFFile(
+            { 
+                document: '',  
+                form: '', 
+                agreement: '' 
+            }
+            )
+        )
+        dispatch(
+            setPDFView(false)
+        )
+        dispatch(setAssetsIllustrationData(null))
+        dispatch(setAssetsIllustration(null)) 
+        dispatch(toggleLifeSpanMode(true))
+        dispatch(toggleFamilyMode(false))
+        dispatch(toggleUsptoMode(false))
+        dispatch(toggleFamilyItemMode(false))	
+        dispatch( setAllAssetTypes( false ) )
+        dispatch( setAssetTypesSelect([]))	
+        dispatch( setAllAssignmentCustomers( false ))
+        dispatch( setSelectAssignmentCustomers([]))														
+    }
+
     return (
         <div>
-            <Button
+            <Fab 
+                style={{backgroundColor: '#e60000', color: '#fff'}}  
+                aria-label="Action"
                 id="action-menu"
-                aria-controls="app-patentrack-action-menu"
+                aria-controls={props.t == 0 ? "app-patentrack-action-menu" : "app-patentrack-action-mobile-menu"}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
                 variant="contained"
                 disableElevation
                 onClick={handleClick}
-                startIcon={<KeyboardArrowDown />}
                 className={classes.btnActionMenu}
             >
-                Action
-            </Button>
+                <CheckCircleOutlineIcon />
+            </Fab>
             <Menu       
-                id="app-patentrack-action-menu"     
+                id={props.t == 0 ? "app-patentrack-action-menu" : "app-patentrack-action-mobile-menu"}
                 keepMounted
                 anchorEl={anchorEl} 
                 open={open}
@@ -678,14 +770,14 @@ const ActionMenu = (props) => {
                 className={classes.actionMenuList}
             >   
                 <MenuList dense>
-                    <MenuItem>
-                        <ListItemIcon onClick={onAttachmentOpenedFileAndEmail}>
+                    <MenuItem  onClick={onAttachmentOpenedFileAndEmail}>
+                        <ListItemIcon>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="MuiSvgIcon-root"><path d="M11 20H2.5A2.503 2.503 0 0 1 0 17.5v-13C0 3.122 1.122 2 2.5 2h19C22.878 2 24 3.122 24 4.5V18c0 .275-.225.5-.5.5s-.5-.225-.5-.5V4.5c0-.827-.673-1.5-1.5-1.5h-19C1.673 3 1 3.673 1 4.5v13c0 .827.673 1.5 1.5 1.5H11a.5.5 0 0 1 0 1z"/><path d="M12 14.03c-1.014 0-1.962-.425-2.67-1.194L3.122 6.048a.5.5 0 0 1 .739-.675l6.207 6.787c1.03 1.12 2.834 1.121 3.866-.001l6.195-6.777a.5.5 0 0 1 .739.675l-6.196 6.778c-.71.77-1.658 1.195-2.672 1.195z"/><path d="M3.492 17.215a.5.5 0 01-.337-.87l5.458-4.982a.499.499 0 11.675.738L3.83 17.084a.506.506 0 01-.338.131zM19.168 16a.495.495 0 01-.337-.131l-4.127-3.771a.5.5 0 11.675-.738l4.127 3.77a.5.5 0 01-.338.87z"/><path d="M20.542 22h-7.147A2.398 2.398 0 0 1 11 19.605v-.211a2.399 2.399 0 0 1 2.395-2.396h7.147A1.46 1.46 0 0 1 22 18.456c0 .887-.654 1.542-1.458 1.542H15a.5.5 0 0 1 0-1h5.542A.46.46 0 0 0 21 18.54c0-.336-.206-.542-.458-.542h-7.147c-.769 0-1.395.626-1.395 1.396v.211c0 .769.625 1.395 1.395 1.395h7.147A2.463 2.463 0 0 0 23 18.542C23 17.104 21.896 16 20.542 16H15c-.275 0-.5-.225-.5-.5s.225-.5.5-.5h5.542A3.462 3.462 0 0 1 24 18.458C24 20.449 22.449 22 20.542 22z"/></svg>
                         </ListItemIcon>
                         <ListItemText>Attach the open document and send email</ListItemText>
                     </MenuItem>
-                    <MenuItem>
-                        <ListItemIcon onClick={onShare}>
+                    <MenuItem  onClick={onShare}>
+                        <ListItemIcon>
                             <FontAwesomeIcon
                                 icon={faShareAlt}
                             />
@@ -754,7 +846,7 @@ const ActionMenu = (props) => {
                     <Divider />
                     <MenuItem>
                         <AssetSwitchButton
-                            click={props.handleChangeLayout}
+                            click={handleChangeLayout}
                             category={category}
                         /> 
                     </MenuItem>

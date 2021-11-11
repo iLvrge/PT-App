@@ -1079,6 +1079,11 @@ a.maintain svg.clean_encumbrances path{
   top: 35px !important;
 }
 
+#app-patentrack-action-mobile-menu .MuiPopover-paper{
+  bottom: 64px !important;
+  top: unset !important;
+}
+
 /* @media only screen and (max-width: 736px) {
   html {
     font-size: 18px;

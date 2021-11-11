@@ -488,10 +488,7 @@ const onHandleForeignAssets = (event) => {
 
          
         
-        <ActionMenu
-          onhandleBrokenChain={handleChangeLayout}
-          category={selectedCategory}
-        />
+        <ActionMenu t={0}/>
         
               
         <div className={classes.rightPanel}>  
