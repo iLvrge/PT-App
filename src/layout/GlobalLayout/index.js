@@ -32,7 +32,7 @@ import {
     setAssetTypeCompanies,
     setAllAssetTypes,
     setAssetTypesSelect
-} from '../../actions/patentTrackActions2'
+} from '../../actions/patentTrackActions2' 
 
 import { 
     setConnectionBoxView,

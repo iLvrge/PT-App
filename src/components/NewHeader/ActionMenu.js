@@ -743,7 +743,7 @@ const ActionMenu = (props) => {
     }
 
     return (
-        <div>
+        <>
             <Fab 
                 style={{backgroundColor: '#e60000', color: '#fff'}}  
                 aria-label="Action"
@@ -899,7 +899,7 @@ const ActionMenu = (props) => {
                     </Button>
                 </div>
             </Modal>
-        </div>
+        </>
     )
 }
 

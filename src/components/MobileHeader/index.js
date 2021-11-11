@@ -26,12 +26,12 @@ const MobileHeader = () => {
         {
             name: 'notification'
         },
-        {
+        /* {
             name: 'clipboard'
         },
         {
             name: 'calendar'
-        }
+        } */
     ]
     
     return(
@@ -55,7 +55,7 @@ const MobileHeader = () => {
                 <div 
                     className={classes.rightPanel}
                 > 
-                    <SearchBar/>       
+                    {/* <SearchBar/>    */}    
                     <HeaderIcons 
                         icons={iconsList}
                     />  

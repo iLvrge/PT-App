@@ -18,16 +18,14 @@ export default makeStyles(theme => ({
     },
     userLogoOfficial: {
         height: '2rem', /*28px */
-        marginRight: 15
+        marginRight: 15,
+        [theme.breakpoints.down('md')]: {
+            height: '1.5rem',
+        }
     }, 
     organizationName: {
         marginLeft: 5,
         fontSize: 15,
-    },
-    userLogo: {
-        display: 'flex',
-        alignItems: 'center',
-        marginLeft: `calc(${LEFT_PANEL_WIDTH}% - ${LOGO_WIDTH + ((HEADER_MARGIN + HEADER_PADDING) / 2)}px)`,
     },
     buttonIcon: {
         width: 30,
@@ -46,6 +44,10 @@ export default makeStyles(theme => ({
                 fill: 'rgb(230, 0, 0)',
                 stroke: 'rgb(230, 0, 0)',
             }
+        },
+        [theme.breakpoints.down('md')]: {
+            width: 25,
+            height: 25,
         }
     }
 }))

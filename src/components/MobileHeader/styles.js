@@ -28,7 +28,7 @@ export default makeStyles(theme => ({
     siteLogo: {
         /* width: LOGO_WIDTH,
         maxWidth: 'calc(100% - 30px)', */
-        height: '2rem',
+        height: '1.5rem',
         marginRight: 15    
     }, 
     rightPanel: {

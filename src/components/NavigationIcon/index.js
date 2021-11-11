@@ -17,7 +17,7 @@ import {
 import useStyles from './styles'
 
 {/* <IconButton onClick={click} className={(( bar === true ) || (bar === false && data.length > 0 && (selected.length > 0 || selectAll === true))) ? cl.filterButtonActive : ''}></IconButton> */}
-const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin}) => {
+const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, showLabel}) => {
     const classes = useStyles() 
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
@@ -176,6 +176,11 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin}) =
                                 <HomeIcon />
                             :
                             ''
+                        }
+                        { 
+                            showLabel === true && (
+                                <span className='text'>{tooltip}</span>
+                            )
                         }
                     </IconButton>
                 </span>
