@@ -1016,13 +1016,13 @@ const GlobalLayout = (props) => {
 
     return (
         <div className={classes.root} id='main'>
-            {
+            {/* {
                 isMobile
                 ?
                     <MobileHeader/>
                 :
                     <NewHeader />
-            }
+            } */}
             <Grid container className={classes.dashboardWarapper}>
                 <Grid container className={classes.dashboard}>       
                     {
@@ -1034,22 +1034,7 @@ const GlobalLayout = (props) => {
                                 )
                             ) */
                             <span>
-                                asdasd
-
-                                asd
-                                asd
-                                asd
-                                as
-                                das
-                                d
-                                asd
-                                asd
-                                ad
-                                asd
-                                d
-
-                                ad
-                                ad
+                                 adasd asdas d asd asd asd as dsa dsa das d asd as das das d sad as d asd asd as d asd asd as das d asd asd asd as das d asd asd as das das das d asd asd as das d asd asd as dsa das d asdasd 
 
                             </span>
                         :
@@ -1078,12 +1063,12 @@ const GlobalLayout = (props) => {
                 </Grid>
             </Grid>
             {
-                isMobile && (
+                /* isMobile && (
                     <MobileFooter
                         bottomToolBar={bottomToolBar}
                         topToolBar={topToolBar}
                     />
-                )
+                ) */
             }
         </div>
     )
