@@ -129,7 +129,7 @@ const MobileFooter = (props) => {
                             onOpen={(event) => toggleDrawer(event, drawer.name, true)}
                         >     
                             <Box
-                                classNmae={classes.drawerContainer}
+                                className={classes.drawerContainer}
                             >
                                 {
                                     drawer.name === 'dashboard'
