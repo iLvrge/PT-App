@@ -20,8 +20,8 @@ export default makeStyles(theme => ({
     }, 
     alignRight: {
         '& .MuiBox-root':{
-            width: 'calc(100vw - 2rem)',
-            flex: 1,
+            width: '100%',
+            flex: '1 1 100%',
             alignItems: 'center',
             textAlign: 'left',
             justifyContent: 'flex-start',
@@ -32,6 +32,7 @@ export default makeStyles(theme => ({
     },
     swipeButtons: {
         display: 'flex',    
+
         '&  .MuiIconButton-label svg':{
             width: '2rem',
             height: '2rem',
@@ -41,6 +42,9 @@ export default makeStyles(theme => ({
         '& .MuiIconButton-root':{
             color: '#FFF',
             borderRadius: 'unset',
+            width: '100%',
+            minWidth: '100%',
+            justifyContent: 'flex-start',
             '& span.text':{
                 marginLeft: 20
             }

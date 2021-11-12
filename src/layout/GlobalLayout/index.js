@@ -352,7 +352,7 @@ const GlobalLayout = (props) => {
         editorBar()
     }
 
-    const handleTypeBarOpen = (event) => {
+    const handleTypeBarOpen = (event) => { 
         setToggleTypeButtonType( !toggleTypeButtonType )
         setTypeOpenBar( !openTypeBar )
         if(!openTypeBar === false) {
@@ -1084,5 +1084,4 @@ const GlobalLayout = (props) => {
         </div>
     )
 }
-
 export default GlobalLayout;

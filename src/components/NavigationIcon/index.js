@@ -15,9 +15,10 @@ import {
   } from '@material-ui/icons'
 
 import useStyles from './styles'
+import clsx from 'clsx'
 
 {/* <IconButton onClick={click} className={(( bar === true ) || (bar === false && data.length > 0 && (selected.length > 0 || selectAll === true))) ? cl.filterButtonActive : ''}></IconButton> */}
-const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, showLabel, label}) => {
+const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, showLabel, label, isMobile}) => {
     const classes = useStyles() 
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
@@ -40,12 +41,12 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
     const new_drive_template_file = useSelector(state => state.patenTrack2.new_drive_template_file)
    
     return (
-        <div className={`${classes.showIcon} ${typeof margin !== 'undefined' && margin === true ? classes.marginBottom25 : ''}`}>
+        <div className={clsx(classes.showIcon, {[classes.marginBottom25]: typeof margin !== 'undefined' && margin === true, [classes.mobile]: typeof isMobile !== 'undefined' && isMobile === true})}> 
             <Tooltip 
                 title={
                     <Typography color="inherit" variant='body2'>{tooltip}</Typography>
                 } 
-                className={classes.tooltip}  
+                className={clsx(classes.tooltip, {[classes.mobileTooltip]: typeof isMobile !== 'undefined' && isMobile === true})}  
                 placement='right'
                 enterDelay={0}
                 TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 

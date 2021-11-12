@@ -140,7 +140,7 @@ const MobileFooter = (props) => {
                                                 className={classes.swipeButtons}
                                                 key={index} 
                                             >
-                                                <NavigationIcon {...item} showLabel={true}/>
+                                                <NavigationIcon {...item} showLabel={true} isMobile={true}/>
                                             </Box>
                                             
                                         ))
@@ -154,7 +154,7 @@ const MobileFooter = (props) => {
                                                         className={classes.swipeButtons}
                                                         key={index} 
                                                     >
-                                                        <NavigationIcon {...item} showLabel={true}/>
+                                                        <NavigationIcon {...item} showLabel={true} isMobile={true}/>
                                                     </Box>
                                                 )
                                                 : null
@@ -169,7 +169,7 @@ const MobileFooter = (props) => {
                                                             className={classes.swipeButtons}
                                                             key={index} 
                                                         >
-                                                            <NavigationIcon {...item} showLabel={true}/>
+                                                            <NavigationIcon {...item} showLabel={true} isMobile={true}/>
                                                         </Box>
                                                     ) 
                                                     : null                                           
@@ -184,10 +184,10 @@ const MobileFooter = (props) => {
                                                                 className={classes.swipeButtons}
                                                                 key={index} 
                                                             >
-                                                                <NavigationIcon {...item} showLabel={true}/>
+                                                                <NavigationIcon {...item} showLabel={true} isMobile={true}/>
                                                             </Box>
                                                         )  
-                                                        : null                                          
+                                                        : null
                                                     ))
                                                 :
                                                     ''

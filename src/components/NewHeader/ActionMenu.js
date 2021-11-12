@@ -747,20 +747,38 @@ const ActionMenu = (props) => {
 
     return (
         <>
-            <Fab 
-                style={{backgroundColor: '#e60000', color: '#fff'}}  
-                aria-label="Action"
-                id="action-menu"
-                aria-controls={props.t == 0 ? "app-patentrack-action-menu" : "app-patentrack-action-mobile-menu"}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                variant="contained"
-                disableElevation
-                onClick={handleClick}
-                className={clsx(classes.btnActionMenu, {[classes.mBtn]: props.t === 1})}
-            >
-                <CheckCircleOutlineIcon />
-            </Fab>
+            {
+                props.t == 1
+                ?
+                    <Fab 
+                        style={{backgroundColor: '#e60000', color: '#fff'}}  
+                        aria-label="Action"
+                        id="action-menu"
+                        aria-controls={props.t == 0 ? "app-patentrack-action-menu" : "app-patentrack-action-mobile-menu"}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        variant="contained"
+                        disableElevation
+                        onClick={handleClick}
+                        className={classes.mBtn}
+                    >
+                        <CheckCircleOutlineIcon />
+                    </Fab>
+                :
+                    <Button
+                        id="action-menu"
+                        aria-controls="app-patentrack-action-menu"
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        variant="contained"
+                        disableElevation
+                        onClick={handleClick}
+                        startIcon={<KeyboardArrowDown />}
+                        className={classes.btnActionMenu}
+                    >
+                        Action
+                    </Button>
+            }            
             <Menu       
                 id={props.t == 0 ? "app-patentrack-action-menu" : "app-patentrack-action-mobile-menu"}
                 keepMounted

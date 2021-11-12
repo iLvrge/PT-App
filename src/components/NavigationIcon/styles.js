@@ -52,6 +52,13 @@ export default makeStyles(theme => ({
                 }
             }
         }
+    },    
+    mobile: {
+        justifyContent: 'left',
+        flex: '1 1 100%'
+    },
+    mobileTooltip: {
+        flex: '1 1 100%'
     },
     marginBottom25: {
         marginBottom: 25
@@ -61,5 +68,5 @@ export default makeStyles(theme => ({
     },
     noStroke: {
         stroke: 'none !important'
-    }
+    },
 }))
