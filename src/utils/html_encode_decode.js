@@ -62,10 +62,14 @@ export const downloadFile = (data) => {
 }
 
 export const copyToClipboard = (data) => {
-    var textField = document.createElement('textarea')
+    //console.log('IN copyToClipboard', data)
+    navigator.clipboard.writeText(data)
+    /* var textField = document.createElement('textarea')
     textField.innerText = data
     document.body.appendChild(textField)
     textField.select()
     document.execCommand('copy')
-    textField.remove()
+    setTimeout(() => {
+        textField.remove()
+    }, 1) */
 }
