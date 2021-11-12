@@ -133,6 +133,7 @@ const GlobalLayout = (props) => {
         }
     }, [])
 
+
     useEffect(() => {
         /* if(props.type !== 9) {
             window.addEventListener('keydown', handleKeyEvent)
@@ -142,7 +143,6 @@ const GlobalLayout = (props) => {
         return () => window.removeEventListener("keydown", handleKeyEvent)
     }, [])
 
-    
 
     useEffect(() => {
         if( openIllustrationBar === false && openCommentBar === false && openChartBar === false && openAnalyticsBar === false ) {
@@ -304,7 +304,6 @@ const GlobalLayout = (props) => {
                 }
             }
 
-            console.log('handleKeyEvent=>TABLE=>findActiveRow', findActiveRow)
             if(findActiveRow !== null) {
                 const classList = findActiveRow.className.split(/\s+/);
                 const findClass = classList.filter( c => c.indexOf('rowIndex_') !== -1 ? c : '')
@@ -339,7 +338,7 @@ const GlobalLayout = (props) => {
             setCompanyBarSize(0)  
         } else {
             setCompanyBarSize(210)
-            if(!isMobile){
+            if(!isMobile){ 
                 setTypeOpenBar( false )
                 setOtherPartyOpenBar( false )
                 setInventorOpenBar( false )
@@ -447,7 +446,7 @@ const GlobalLayout = (props) => {
         if(!openAssignmentBar === false) {
             setAssignmentBarSize(0)
         } else {
-            setAssignmentBarSize(120)
+            setAssignmentBarSize(120) 
             if(!isMobile){
                 setOpenBar( false )
                 setTypeOpenBar( false )
@@ -503,13 +502,13 @@ const GlobalLayout = (props) => {
                 setOtherPartyOpenBar( false )
                 setInventorOpenBar( false )
                 setAssignmentOpenBar( false )
-                setCustomerOpenBar( false )
+                //setCustomerOpenBar( false )
                 setGoogleDriveBar( false )                
             }
         }
         editorBar()
-    }
-
+    }   
+ 
     const handleGoogleDriveBarOpen = (event) => {
         setToggleAssetFileButtonType( !toggleAssetFileButtonType )
         setGoogleDriveBar( !openGoogleDriveBar )
@@ -530,7 +529,7 @@ const GlobalLayout = (props) => {
                 setOtherPartyOpenBar( false )
                 setInventorOpenBar( false )
                 setAssignmentOpenBar( false )
-                setCustomerOpenBar( false )
+                //setCustomerOpenBar( false )
                 setAssetFilesBar( false )                
             }
         }
@@ -762,6 +761,7 @@ const GlobalLayout = (props) => {
             bar: false,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleOpenSettings,
             t: 0,
+            label: 'Settings',
             margin: true,
         },
         {
@@ -769,6 +769,7 @@ const GlobalLayout = (props) => {
             bar: props.type === 9 ? false : openBar,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleCompanyBarOpen,
             t: 1,
+            label: 'Companies',
             ...(props.type === 9 && {highlight: false})
         },
         {
@@ -776,6 +777,7 @@ const GlobalLayout = (props) => {
             bar: openTypeBar,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleTypeBarOpen,
             t: 2,
+            label: 'Filter by Activities',
             ...(props.type === 9 && {disabled: true})
         },
         {
@@ -783,14 +785,16 @@ const GlobalLayout = (props) => {
             bar: openOtherPartyBar,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleOtherPartyBarOpen,
             t: 3,
+            label: 'Select Parties',
             ...(props.type === 9 && {disabled: true})
         },
         {
-            tooltip: 'Filter by Employees',
+            tooltip: 'Filter by Employees', 
             bar: openInventorBar,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleInventorBarOpen,
             t: 11,
             margin: true,
+            label: 'Employees',
             ...(props.type === 9 && {disabled: true})
         },
         {
@@ -798,26 +802,32 @@ const GlobalLayout = (props) => {
             bar: openAssignmentBar,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleAssignmentBarOpen,
             t: 4,
+            label: 'Transactions',
             ...(props.type === 9 && {disabled: true})
         },
         {
             tooltip: 'Assets',
             bar: openCustomerBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleCustomersBarOpen,
+            click: handleCustomersBarOpen,
             t: 5,
             margin: true,
+            label: 'Assets' 
         },
         {
             tooltip: 'Recorded Documents',
             bar: assetFilesBar,
-            click: handleAssetFileBarOpen,
-            t: 10
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleAssetFileBarOpen,
+            t: 10,
+            label: 'Recorded Documents',
+            ...(props.type === 9 && {disabled: true})
         },
         {
             tooltip: 'Initiated Documents',
             bar: openGoogleDriveBar,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleGoogleDriveBarOpen,
-            t: 12
+            t: 12,
+            label: 'Initiated Documents',
+            ...(props.type === 9 && {disabled: true})
         },
     ]
 
@@ -826,31 +836,36 @@ const GlobalLayout = (props) => {
             tooltip: 'Illustration',
             bar: openIllustrationBar,
             click: handleIllustrationBarOpen,
-            t: 6
+            t: 6,
+            label: 'Illustration'
         },
         {
-            tooltip: 'Slack bar',
+            tooltip: 'Team Discussion',
             bar: openCommentBar,
             click: handleCommentBarOpen,
-            t: 7
+            t: 7,
+            label: 'Team Discussion'
         },
         {
             tooltip: 'Charts',
             bar: openChartBar,
             click: handleChartBarOpen,
-            t: 8
+            t: 8,
+            label: 'Charts'
         },
         {
             tooltip: 'Analytics',
             bar: openAnalyticsBar,
             click: handleAnalyticsBarOpen,
-            t: 9
+            t: 9,
+            label: 'Analytics'
         }
     ]
 
     const mobileWrapper = [{
         component: MobileScreen,
         type: props.type,
+        isMobile: !isMobile,
         companyBarSize,
         setCompanyBarSize,
         handleCompanyButton,
@@ -1013,7 +1028,7 @@ const GlobalLayout = (props) => {
         return child
     })
  
-
+    console.log("isMobile", !isMobile, isBrowser)
     return (
         <div className={classes.root} id='main'>
             {
@@ -1026,7 +1041,7 @@ const GlobalLayout = (props) => {
             <Grid container className={classes.dashboardWarapper}>
                 <Grid container className={classes.dashboard}>       
                     {
-                        !isMobile
+                        !isMobile 
                         ?
                             mobileWrapper.map(
                                 ({component: Component, ...props }, index) => (
@@ -1062,7 +1077,7 @@ const GlobalLayout = (props) => {
                 !isMobile && (
                     <MobileFooter
                         bottomToolBar={bottomToolBar}
-                        topToolBar={topToolBar}
+                        topToolBar={topToolBar}   
                     />
                 )
             }

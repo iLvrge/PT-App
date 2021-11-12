@@ -79,6 +79,7 @@ import { getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
 import PatenTrackApi from '../../../api/patenTrack2'
 
 import ChildTable from "./ChildTable";
+import clsx from "clsx";
 
 var applicationNumber = null, assetNumber = null, hoverTimer = null
 
@@ -90,7 +91,11 @@ const AssetsTable = ({
     openAnalyticsBar,
     openAnalyticsAndCharBar,
     closeAnalyticsAndCharBar,
-    headerRowDisabled }) => {
+    headerRowDisabled,
+    isMobile,
+    fileBar,
+    driveBar
+  }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const location = useLocation()
@@ -432,8 +437,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       headingIcon: 'assets',
     },  */
     {
-      width: 100,  
-      minWidth: 100,    
+      width: isMobile === true ? 150 : 100,  
+      minWidth: isMobile === true ? 150 : 100,  
       label: "Assets",      
       /* dataKey: "format_asset", */
       dataKey: "asset",
@@ -449,8 +454,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       /* textBold: true */
     },
     {
-      width: 40,
-      minWidth: 40,
+      width: isMobile === true ? 60 : 40,
+      minWidth: isMobile === true ? 60 : 40,
       label: "",
       dataKey: "channel", 
       formatCondition: 'asset',
@@ -1147,14 +1152,14 @@ const checkMouseStillOnHover = (e, number) => {
     (standalone && assetTypeAssignmentAssetsLoading)
   )
     return <Loader />;
-
+    console.log('assetBar', driveBar, fileBar, isMobile)
   return (
     <Paper
-      className={classes.root}
+      className={clsx(classes.root, {[classes.mobile]: isMobile === true && (fileBar === true || driveBar === true)})}
       square
       id={`assets_type_assignment_all_assets`}
     >
-      <VirtualizedTable
+      <VirtualizedTable 
         classes={classes}
         scrollTop={assetTableScrollPosition}
         openDropAsset={dropOpenAsset}

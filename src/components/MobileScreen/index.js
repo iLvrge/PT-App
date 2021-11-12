@@ -111,12 +111,11 @@ const MobileScreen = (props) => {
 
     const onCloseFamilyItemMode = useCallback(() => {
         dispatch(toggleFamilyItemMode(false));
-      }, [dispatch]);
+    }, [dispatch]);
 
-      const onCloseUspto = useCallback(() => {
+    const onCloseUspto = useCallback(() => {
         dispatch(toggleUsptoMode());
-      }, [dispatch]);
-    
+    }, [dispatch]);
     return (
         <SplitPane
             className={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPane1OverflowUnset, classes.paneHeightZero)}
@@ -137,7 +136,7 @@ const MobileScreen = (props) => {
             }}
         >
             <div 
-                className={classes.companyBar}>
+                className={clsx(classes.companyBar, classes.mobileTable)}>
                     {
                         props.openBar === true 
                         ? 
@@ -153,7 +152,8 @@ const MobileScreen = (props) => {
                                         defaultSelect={''} 
                                         addUrl={true} 
                                         parentBarDrag={props.setVisualizerBarSize}
-                                        parentBar={props.setVisualizeOpenBar}                                
+                                        parentBar={props.setVisualizeOpenBar}     
+                                        isMobile={props.isMobile}                           
                                     />
                         :
                         props.openTypeBar === true
@@ -162,6 +162,7 @@ const MobileScreen = (props) => {
                                 parentBarDrag={props.setVisualizerBarSize}
                                 parentBar={props.setVisualizeOpenBar}
                                 type={props.type}
+                                isMobile={props.isMobile}        
                                 {...(props.type === 2 && {defaultLoad: false})}
                             />
                         :
@@ -172,6 +173,7 @@ const MobileScreen = (props) => {
                                 parentBarDrag={props.setVisualizerBarSize}
                                 parentBar={props.setVisualizeOpenBar}
                                 type={props.type}
+                                isMobile={props.isMobile}        
                                 customerType={0}
                             />
                         :
@@ -182,6 +184,7 @@ const MobileScreen = (props) => {
                                 parentBarDrag={props.setVisualizerBarSize}
                                 parentBar={props.setVisualizeOpenBar}
                                 type={props.type}
+                                isMobile={props.isMobile}        
                                 customerType={1}
                             />
                         :
@@ -189,56 +192,77 @@ const MobileScreen = (props) => {
                         ?
                             <AssignmentsTable 
                                 type={props.type} 
+                                isMobile={props.isMobile}        
                                 defaultLoad={props.type === 2 ? false : true} 
                             />
                         :
-                        props.openCustomerBar === true
+                        props.openCustomerBar === true || props.assetFilesBar === true || props.openGoogleDriveBar === true
                         ?
-                            
-                            props.type === 0 ? (
-                                <MaintainenceAssetsList 
-                                    assets={maintainenceAssetsList} 
-                                    isLoading={maintainenceAssetsLoadingMore} 
-                                    loadMore={getMaintainenceAssetsList} 
-                                    toggleLifeSpanMode={toggleLifeSpanMode}
-                                    setAssetsIllustration={setAssetsIllustration}
-                                    setSelectedAssetsPatents={setSelectedAssetsPatents} 
-                                    setCommentsEntity={setCommentsEntity}
-                                    assetLegalEvents={assetLegalEvents}
-                                    assetFamily={assetFamily}
-                                    setSelectedMaintainenceAssetsList={setSelectedMaintainenceAssetsList}
-                                    selectedMaintainencePatents={selectedMaintainencePatents}
-                                    channel_id={channel_id}
-                                    getChannelID={getChannelID}
-                                    selectedAssetsPatents={selectedAssetsPatents}
-                                    getSlackMessages={getSlackMessages}
-                                    openChartBar={props.openChartBar}
-                                    openAnalyticsBar={props.openAnalyticsBar}
-                                    openAnalyticsAndCharBar={props.openAnalyticsAndCharBar}
-                                    closeAnalyticsAndCharBar={props.closeAnalyticsAndCharBar}
-                                />
-                            )
-                            :
-                            props.type === 5 ? 
-                                <></>
-                            :
-                                <AssetsTable 
-                                    standalone={true} 
-                                    type={props.type} 
-                                    openChartBar={props.openChartBar}
-                                    openAnalyticsBar={props.openAnalyticsBar}
-                                    openAnalyticsAndCharBar={props.openAnalyticsAndCharBar}
-                                    closeAnalyticsAndCharBar={props.closeAnalyticsAndCharBar}
-                                />
+                            <>
+                                {
+                                    props.type === 0 && props.openCustomerBar === true  ? (
+                                        <MaintainenceAssetsList 
+                                            assets={maintainenceAssetsList} 
+                                            isLoading={maintainenceAssetsLoadingMore} 
+                                            loadMore={getMaintainenceAssetsList} 
+                                            toggleLifeSpanMode={toggleLifeSpanMode}
+                                            setAssetsIllustration={setAssetsIllustration}
+                                            setSelectedAssetsPatents={setSelectedAssetsPatents} 
+                                            setCommentsEntity={setCommentsEntity}
+                                            assetLegalEvents={assetLegalEvents}
+                                            assetFamily={assetFamily}
+                                            setSelectedMaintainenceAssetsList={setSelectedMaintainenceAssetsList}
+                                            selectedMaintainencePatents={selectedMaintainencePatents}
+                                            channel_id={channel_id}
+                                            getChannelID={getChannelID}
+                                            selectedAssetsPatents={selectedAssetsPatents}
+                                            getSlackMessages={getSlackMessages}
+                                            openChartBar={props.openChartBar}
+                                            openAnalyticsBar={props.openAnalyticsBar}
+                                            openAnalyticsAndCharBar={props.openAnalyticsAndCharBar}
+                                            closeAnalyticsAndCharBar={props.closeAnalyticsAndCharBar}
+                                            isMobile={props.isMobile}   
+                                            fileBar={props.assetFilesBar}           
+                                            driveBar={props.openGoogleDriveBar}           
+                                        />
+                                    )
+                                    :
+                                    props.type === 5 && props.openCustomerBar === true ? 
+                                        <></>
+                                    :
+                                        props.openCustomerBar === true && (
+                                            <AssetsTable 
+                                                standalone={true} 
+                                                type={props.type} 
+                                                openChartBar={props.openChartBar}
+                                                openAnalyticsBar={props.openAnalyticsBar}
+                                                openAnalyticsAndCharBar={props.openAnalyticsAndCharBar}
+                                                closeAnalyticsAndCharBar={props.closeAnalyticsAndCharBar}
+                                                isMobile={props.isMobile}
+                                                fileBar={props.assetFilesBar}           
+                                                driveBar={props.openGoogleDriveBar}           
+                                            />
+                                        )
+                                }
+                                { 
+                                    props.assetFilesBar === true
+                                    ?
+                                        <FilesTemplates 
+                                            type={0}
+                                            isMobile={props.isMobile}  
+                                            assetBar={props.openCustomerBar}   
+                                        />
+                                    :
+                                        props.openGoogleDriveBar === true && (
+                                            <FilesTemplates                                             
+                                                type={1}
+                                                isMobile={props.isMobile}
+                                                assetBar={props.openCustomerBar}   
+                                            />     
+                                        )  
+                                }
+                            </>
                         :
-                        props.assetFilesBar === true
-                        ?
-                            <FilesTemplates type={0}/>
-                        :
-                        props.openGoogleDriveBar === true
-                        ?
-                            <FilesTemplates type={1}/>     
-                        :   
                         props.driveTemplateMode === true
                         ?
                             <LayoutTemplates />        
@@ -247,7 +271,7 @@ const MobileScreen = (props) => {
                     }
             </div>
             <div
-                className={classes.companyBar}>
+                className={clsx(classes.companyBar, classes.mobileTable)}>
                 {
                     props.openIllustrationBar === true && (   search_string != '' || 
                         assetCompaniesRowSelect.length > 0 || 
@@ -262,6 +286,7 @@ const MobileScreen = (props) => {
                                 assignmentBar={props.assignmentBar} 
                                 assignmentBarToggle={props.assignmentBarToggle} 
                                 type={props.type}
+                                isMobile={props.isMobile}     
                             />
                         :                            
                             <IllustrationContainer 

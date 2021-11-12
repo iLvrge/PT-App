@@ -164,7 +164,7 @@ const COLUMNS = [
     }
 ] 
 
-const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag, parentBar}) => {
+const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag, parentBar, isMobile}) => {
 
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -230,7 +230,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                     const parseChild = JSON.parse(row.child)
                     if(parseChild.length > 0) {
                         counter += parseChild.length
-                    }
+                    } 
                 }  else {
                     counter++;
                 }
@@ -239,6 +239,14 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }
     }, [ companies.list ])
 
+    useEffect(() => {
+        if(isMobile) {
+            let headerColumns = [...COLUMNS]
+            headerColumns[2].width =  250
+            headerColumns[2].minWidth =  250
+            setHeaderColumns(headerColumns)
+        }
+    }, [isMobile])
     /**
      * if category is correct names then row should show radio button instead of checkboxes
      */

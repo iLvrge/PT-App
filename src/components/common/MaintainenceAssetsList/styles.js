@@ -32,6 +32,9 @@ export default makeStyles((theme) => ({
           width: 19
         }
     },
+    mobile: {
+      flex: '1 1 50%'
+    },
     topBar: {
         padding: 10,
     },

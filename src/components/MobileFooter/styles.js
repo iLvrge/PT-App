@@ -18,7 +18,16 @@ export default makeStyles(theme => ({
             width: 48
         }
     }, 
-    drawerContainer: {
+    alignRight: {
+        '& .MuiBox-root':{
+            width: 'calc(100vw - 2rem)',
+            flex: 1,
+            alignItems: 'center',
+            textAlign: 'left',
+            justifyContent: 'flex-start',
+        } 
+    },
+    drawerContainer: { 
         margin: '2rem 0 0 2rem',
     },
     swipeButtons: {
@@ -31,8 +40,9 @@ export default makeStyles(theme => ({
         },
         '& .MuiIconButton-root':{
             color: '#FFF',
+            borderRadius: 'unset',
             '& span.text':{
-                marginLeft: 5
+                marginLeft: 20
             }
         },
         '& .MuiIconButton-root.active':{

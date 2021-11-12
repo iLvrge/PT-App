@@ -44,6 +44,9 @@ export default makeStyles((theme) => ({
             width: '1.3rem',
         }
     },
+    mobile: {
+        flex: '1 1 50%'
+    },
     td: {
         display: 'flex',
     },

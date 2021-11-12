@@ -17,7 +17,7 @@ import {
 import useStyles from './styles'
 
 {/* <IconButton onClick={click} className={(( bar === true ) || (bar === false && data.length > 0 && (selected.length > 0 || selectAll === true))) ? cl.filterButtonActive : ''}></IconButton> */}
-const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, showLabel}) => {
+const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, showLabel, label}) => {
     const classes = useStyles() 
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
@@ -38,7 +38,7 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
     const template_document_url = useSelector(state => state.patenTrack2.template_document_url)
     const driveTemplateFrameMode = useSelector(state => state.ui.driveTemplateFrameMode)
     const new_drive_template_file = useSelector(state => state.patenTrack2.new_drive_template_file)
-
+   
     return (
         <div className={`${classes.showIcon} ${typeof margin !== 'undefined' && margin === true ? classes.marginBottom25 : ''}`}>
             <Tooltip 
@@ -179,8 +179,8 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
                         }
                         { 
                             showLabel === true && (
-                                <span className='text'>{tooltip}</span>
-                            )
+                                <span className='text'>{label}</span> 
+                            ) 
                         }
                     </IconButton>
                 </span>

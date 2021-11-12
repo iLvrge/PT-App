@@ -55,6 +55,7 @@ import { getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
 import Loader from "../Loader";
 
 import  { controlList } from '../../../utils/controlList'
+import clsx from "clsx";
 
 const MaintainenceAssetsList = ({
   assets,
@@ -69,7 +70,10 @@ const MaintainenceAssetsList = ({
   selectedMaintainencePatents,
   getChannelID,
   channel_id,
-  getSlackMessages
+  getSlackMessages,
+  isMobile,
+  fileBar,
+  driveBar
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -238,8 +242,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       show_selection_count: true
     },
     {
-      width: 80,  
-      minWidth: 80,    
+      width: isMobile === true ? 150 : 100,  
+      minWidth: isMobile === true ? 150 : 100,  
       label: "Assets",
       headingIcon: 'assets',
       dataKey: "asset",
@@ -622,7 +626,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   if (isLoading && assets.list.length == 0) return <Loader />;
 
   return (
-    <Paper className={classes.root} square id={`maintainence_assets`}>
+    <Paper className={clsx(classes.root, {[classes.mobile]: isMobile === true && (fileBar === true || driveBar)})} square id={`maintainence_assets`}>
       <VirtualizedTable
         classes={classes}
         openDropAsset={dropOpenAsset}
@@ -632,7 +636,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         rows={assetsList.list}
         dropdownSelections={move_assets}
         rowHeight={rowHeight}
-        headerHeight={headerRowHeight}
+        headerHeight={headerRowHeight} 
         columns={tableColumns}
         onSelect={handleClickSelectCheckbox}
         onSelectAll={handleSelectAll}

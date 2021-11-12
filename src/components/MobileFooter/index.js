@@ -14,7 +14,7 @@ import {
 
 import ActionMenu from '../NewHeader/ActionMenu'
 import NavigationIcon from '../NavigationIcon'
-
+import clsx from 'clsx'
 import useStyles from './styles'
 
 const MobileFooter = (props) => {
@@ -86,7 +86,7 @@ const MobileFooter = (props) => {
             name: 'transaction_assets',
             anchor: 'bottom'
         },
-        {
+        { 
             name: 'documents',
             anchor: 'bottom'
         }
@@ -105,7 +105,8 @@ const MobileFooter = (props) => {
                             showLabel={false}
                         />
                     ))
-                }        
+                }    
+                <BottomNavigationAction style={{visibility: 'hidden'}}/>    
                 <ActionMenu t={1}/>
                 {
                     rightButtons.map( (button, index) => (
@@ -129,7 +130,7 @@ const MobileFooter = (props) => {
                             onOpen={(event) => toggleDrawer(event, drawer.name, true)}
                         >     
                             <Box
-                                className={classes.drawerContainer}
+                                className={clsx(classes.drawerContainer, {[classes.alignRight]: drawer.anchor === 'top'})}
                             >
                                 {
                                     drawer.name === 'dashboard'

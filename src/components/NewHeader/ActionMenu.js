@@ -16,6 +16,7 @@ import {
     TextField, 
     CircularProgress,
     Fab, 
+    IconButton
 } from '@material-ui/core'
 
 import {
@@ -23,6 +24,7 @@ import {
     KeyboardArrowDown,
     Check
 } from '@material-ui/icons'
+
 
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -90,6 +92,7 @@ import {
 } from '../../actions/uiActions'
 
 import PatenTrackApi from '../../api/patenTrack2'
+import clsx from 'clsx'
 
 const ActionMenu = (props) => {
     const classes = useStyles()
@@ -754,7 +757,7 @@ const ActionMenu = (props) => {
                 variant="contained"
                 disableElevation
                 onClick={handleClick}
-                className={classes.btnActionMenu}
+                className={clsx(classes.btnActionMenu, {[classes.mBtn]: props.t === 1})}
             >
                 <CheckCircleOutlineIcon />
             </Fab>
@@ -769,7 +772,6 @@ const ActionMenu = (props) => {
                 onClose={handleClose}
                 className={classes.actionMenuList}
             >   
-                <MenuList dense>
                     <MenuItem  onClick={onAttachmentOpenedFileAndEmail}>
                         <ListItemIcon>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="MuiSvgIcon-root"><path d="M11 20H2.5A2.503 2.503 0 0 1 0 17.5v-13C0 3.122 1.122 2 2.5 2h19C22.878 2 24 3.122 24 4.5V18c0 .275-.225.5-.5.5s-.5-.225-.5-.5V4.5c0-.827-.673-1.5-1.5-1.5h-19C1.673 3 1 3.673 1 4.5v13c0 .827.673 1.5 1.5 1.5H11a.5.5 0 0 1 0 1z"/><path d="M12 14.03c-1.014 0-1.962-.425-2.67-1.194L3.122 6.048a.5.5 0 0 1 .739-.675l6.207 6.787c1.03 1.12 2.834 1.121 3.866-.001l6.195-6.777a.5.5 0 0 1 .739.675l-6.196 6.778c-.71.77-1.658 1.195-2.672 1.195z"/><path d="M3.492 17.215a.5.5 0 01-.337-.87l5.458-4.982a.499.499 0 11.675.738L3.83 17.084a.506.506 0 01-.338.131zM19.168 16a.495.495 0 01-.337-.131l-4.127-3.771a.5.5 0 11.675-.738l4.127 3.77a.5.5 0 01-.338.87z"/><path d="M20.542 22h-7.147A2.398 2.398 0 0 1 11 19.605v-.211a2.399 2.399 0 0 1 2.395-2.396h7.147A1.46 1.46 0 0 1 22 18.456c0 .887-.654 1.542-1.458 1.542H15a.5.5 0 0 1 0-1h5.542A.46.46 0 0 0 21 18.54c0-.336-.206-.542-.458-.542h-7.147c-.769 0-1.395.626-1.395 1.396v.211c0 .769.625 1.395 1.395 1.395h7.147A2.463 2.463 0 0 0 23 18.542C23 17.104 21.896 16 20.542 16H15c-.275 0-.5-.225-.5-.5s.225-.5.5-.5h5.542A3.462 3.462 0 0 1 24 18.458C24 20.449 22.449 22 20.542 22z"/></svg>
@@ -811,7 +813,7 @@ const ActionMenu = (props) => {
                                 category == 'restore_ownership' || category == 'correct_details'
                                 ?
                                     <>
-                                        <Button className={`${classes.review} ${driveTemplateMode === true ? classes.active : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
+                                        <Button className={clsx(classes.review, {[classes.active]: driveTemplateMode === true} )} onClick={createTemplate}> <svg viewBox="0 0 24 24" className="MuiSvgIcon-root"><g><rect fill="none" height="24" width="24" x="0"/></g><g><g><path d="M19,11c0.17,0,0.33,0.01,0.49,0.02L15,3H9l5.68,9.84C15.77,11.71,17.3,11,19,11z"/><polygon points="8.15,4.52 2,15.5 5,21 11.33,10.03"/><path d="M13.2,15.5H9.9L6.73,21h7.81C13.58,19.94,13,18.54,13,17C13,16.48,13.07,15.98,13.2,15.5z"/><polygon points="20,16 20,13 18,13 18,16 15,16 15,18 18,18 18,21 19,21 20,21 20,18 23,18 23,16"/></g></g></svg> {driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
                                         <Button className={classes.review} onClick={onHandleSubmitToUSPTO} disabled={loadingUSPTO}>Submit to USPTO</Button>
                                     </>
                                 :
@@ -840,7 +842,8 @@ const ActionMenu = (props) => {
                                     ?
                                         <Button className={classes.review} onClick={onSalesAssets}>Select Assets and Click Here</Button>
                                     :
-                                        <Button className={`${classes.review} ${driveTemplateMode === true ? classes.active : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
+                                        <Button className={clsx(classes.review, {[classes.active]: driveTemplateMode === true} )} onClick={createTemplate}>
+                                            <svg viewBox="0 0 24 24" className="MuiSvgIcon-root"><g><rect fill="none" height="24" width="24" x="0"/></g><g><g><path d="M19,11c0.17,0,0.33,0.01,0.49,0.02L15,3H9l5.68,9.84C15.77,11.71,17.3,11,19,11z"/><polygon points="8.15,4.52 2,15.5 5,21 11.33,10.03"/><path d="M13.2,15.5H9.9L6.73,21h7.81C13.58,19.94,13,18.54,13,17C13,16.48,13.07,15.98,13.2,15.5z"/><polygon points="20,16 20,13 18,13 18,16 15,16 15,18 18,18 18,21 19,21 20,21 20,18 23,18 23,16"/></g></g></svg> {driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
                         }
                     </MenuItem>
                     <Divider />
@@ -857,7 +860,6 @@ const ActionMenu = (props) => {
                         <ListItemText>Correct Correspondence</ListItemText>
                     </MenuItem>
                     <Divider />
-                </MenuList>  
             </Menu>
             <Modal
                 disableBackdropClick={false}

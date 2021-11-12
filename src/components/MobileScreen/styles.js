@@ -48,6 +48,29 @@ export default makeStyles(theme => ({
     },
     companyBar:{
         height: '100%',
-        width: '100%'  
+        width: '100%',  
+        display: 'flex'
     },
+    mobileTable: {
+        '& .ReactVirtualized__Table .ReactVirtualized__Table__headerColumn, .ReactVirtualized__Table .ReactVirtualized__Table__rowColumn':{
+            fontSize: '20px',
+            '& .MuiTableCell-root':{
+                fontSize: '0.875em'
+            }
+        },
+        '& .vis-timeline': {
+            fontSize: 20,
+            '& .vis-item': {
+                fontSize: '0.875em !important'
+            }
+        },
+        '& .timeline .vis-item .vis-item-content': {
+            width: 125
+        },
+        '& .ReactVirtualized__Table  .slackIcon,  .ReactVirtualized__Table  .slackIcon svg': {
+            width: '32px !important',
+            height: '32px !important',
+        }
+    } 
+
 }))

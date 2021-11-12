@@ -28,8 +28,9 @@ import {
 } from '../../../actions/uiActions.js'
 
 import useStyles from "./styles"
+import clsx from 'clsx'
 
-const FilesTemplates = ({type}) => {
+const FilesTemplates = ({type, isMobile, assetBar}) => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const googleLoginRef = useRef(null)
@@ -473,10 +474,9 @@ const FilesTemplates = ({type}) => {
         }
         setDocumentHeaderColumns(previousColumns)
     }, [ documentHeaderColumns ] )
-
     return (
-        <Paper className={classes.root} square id={`layout_templates`}>
-            {
+        <Paper className={clsx(classes.root, {[classes.mobile]: isMobile === true && assetBar === true})} square id={`layout_templates`}>
+            {  
               googleAuthLogin && (
                 <span ref={googleLoginRef}>
                   <Googlelogin/>
@@ -484,7 +484,7 @@ const FilesTemplates = ({type}) => {
             }
             {
                 type === 0
-                ?
+                ? 
                     loading === true
                 ?
                     <Loader />

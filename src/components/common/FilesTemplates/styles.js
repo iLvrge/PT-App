@@ -13,5 +13,8 @@ export default makeStyles(theme => ({
                 display: 'none'
             }
         }       
-    }    
+    } ,
+    mobile: {
+        flex: '1 1 50%'
+    }   
 }))

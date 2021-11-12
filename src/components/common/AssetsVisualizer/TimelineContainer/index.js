@@ -43,6 +43,7 @@ import { numberWithCommas, capitalize } from '../../../../utils/numbers'
 
 import useStyles from './styles'
 import { setTimelineSelectedItem, setTimelineSelectedAsset } from '../../../../actions/uiActions'
+import clsx from 'clsx';
 
 /**
  * Default options parameter for the Timeline
@@ -599,7 +600,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
             filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
           }}
           ref={timelineContainerRef}
-          className={classes.timeline}
+          className={clsx(classes.timeline, 'timeline')}
         />
         {
           isLoadingTimelineData &&
@@ -607,7 +608,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
         }
         { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> }
       </div>
-  )
+  ) 
 }
 
 export default TimelineContainer

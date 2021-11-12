@@ -55,7 +55,7 @@ import {
 import Loader from '../Loader'
 import ChildTable from './ChildTable' 
 
-const AssignmentsType = ({parentBarDrag, parentBar }) => {
+const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
 
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -114,14 +114,14 @@ const AssignmentsType = ({parentBarDrag, parentBar }) => {
         /* {
             width: 15,
             minWidth: 15,
-            label: '',
+            label: '', 
             dataKey: 'tab_id',
             role: 'arrow',
             disableSort: true
         }, */
         {
-            width: 100,
-            minWidth: 100,
+            width: isMobile === true ? 150 : 100,
+            minWidth: isMobile === true ? 150 : 100,
             label: 'Activities',            
             dataKey: 'tab_name', 
             badge: true,              

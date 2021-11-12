@@ -1081,7 +1081,21 @@ a.maintain svg.clean_encumbrances path{
 
 #app-patentrack-action-mobile-menu .MuiPopover-paper{
   bottom: 64px !important;
-  top: unset !important;
+  top: unset !important; 
+}
+#app-patentrack-action-mobile-menu .MuiPopover-paper .MuiTypography-body2 {
+  font-size: 1rem;
+}
+#app-patentrack-action-mobile-menu .MuiPopover-paper button{
+  padding: 0;
+  font-size: 1rem;  
+}
+#app-patentrack-action-mobile-menu .MuiPopover-paper button svg.MuiSvgIcon-root{
+  margin-right: 5px;
+}
+#app-patentrack-action-mobile-menu .MuiPopover-paper .MuiSvgIcon-root, #app-patentrack-action-mobile-menu .MuiPopover-paper .fa-share-alt{
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 @media only screen and (max-width: 736px) {

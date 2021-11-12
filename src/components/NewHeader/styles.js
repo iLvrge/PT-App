@@ -458,12 +458,12 @@ export default makeStyles(theme => ({
         } */
     },
     btnActionMenu:{
-        backgroundColor: 'transparent',
+        /* backgroundColor: 'transparent',
         color: '#FFF',
         '&:hover':{
             color: '#E60000',
             backgroundColor: 'transparent', 
-        }        
+        }  */       
     },
     actionMenuList: {
         '& .MuiListItemIcon-root':{
@@ -476,5 +476,8 @@ export default makeStyles(theme => ({
         '& .MuiButton-root': {
             textTransform: 'initial'
         }
-    }
+    },
+    mBtn: {
+        position: 'absolute'
+    } 
 }))
