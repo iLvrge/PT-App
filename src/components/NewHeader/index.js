@@ -486,10 +486,7 @@ const onHandleForeignAssets = (event) => {
           } 
         </span>
 
-         
-        
-        <ActionMenu t={0}/>
-        
+        <ActionMenu t={0}/>       
               
         <div className={classes.rightPanel}>  
             <Button className={classes.calendly} onClick={handleScheduleViaHubspot}>

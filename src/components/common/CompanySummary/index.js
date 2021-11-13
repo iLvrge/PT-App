@@ -21,16 +21,16 @@ const CompanySummary = () => {
     const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
     const COLUMNS = [        
         {
-            width: 110,  
-            minWidth: 110,
+            width: 130,  
+            minWidth: 130,
             label: '',
             dataKey: 'name',
             imageURL: 'iconLink',
             role: 'image'
         },
-		{
-            width: 50,  
-            minWidth: 50,
+		{  
+            width: 60,  
+            minWidth: 60,
             label: '',
             dataKey: 'number', 
             style: true,
@@ -110,10 +110,7 @@ const CompanySummary = () => {
     }
 
     const handleClickRow = async(event, row) => {
-        console.log('adssadsadsad')
-        console.log('process.env.REACT_APP_ENVIROMENT_MODE === "PRO" && row.name == "Employees"', process.env.REACT_APP_ENVIROMENT_MODE, row.name)
         if(process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && row.name == "Employees") {
-            console.log('clipboard_assets', clipboard_assets.length)
             if(clipboard_assets.length > 0) {
                 const list = []
                 clipboard_assets.forEach( item => {

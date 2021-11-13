@@ -70,6 +70,9 @@ export default makeStyles(theme => ({
         '& .ReactVirtualized__Table  .slackIcon,  .ReactVirtualized__Table  .slackIcon svg': {
             width: '32px !important',
             height: '32px !important',
+        },
+        '& iframe':{
+            width: '100%'
         }
     } 
 

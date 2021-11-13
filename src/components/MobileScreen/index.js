@@ -45,7 +45,7 @@ import {
     getSlackMessages
 } from '../../actions/patentTrackActions2'
 
-import { toggleFamilyItemMode, toggleLifeSpanMode, toggleUsptoMode } from '../../actions/uiActions'
+import { toggleFamilyItemMode, toggleLifeSpanMode, toggleUsptoMode, setDriveTemplateFrameMode } from '../../actions/uiActions'
 
 import useStyles from './styles'
 import clsx from 'clsx'
@@ -54,8 +54,9 @@ const MobileScreen = (props) => {
     const classes = useStyles()
     const dispatch = useDispatch();
     const illustrationRef = useRef()
+    const [ templateURL, setTemplateURL] = useState('about:blank')
     const [defaultSize, setDefaultSize] = useState('50%')
-    const [isDrag, setIsDrag] = useState(false)
+    const [isDrag, setIsDrag] = useState(false)  
     const [sheetName, setSheetName] = useState('')
     const [ isFullscreenOpen, setIsFullscreenOpen ] = useState(false)
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false)
@@ -79,6 +80,28 @@ const MobileScreen = (props) => {
     const lifeSpanMode = useSelector(state => state.ui.lifeSpanMode)
     const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
     const connectionBoxView = useSelector( state => state.patenTrack.connectionBoxView)
+    const driveTemplateFrameMode = useSelector(state => state.ui.driveTemplateFrameMode)
+    const new_drive_template_file = useSelector(state => state.patenTrack2.new_drive_template_file)
+    const template_document_url = useSelector(state => state.patenTrack2.template_document_url)
+
+    useEffect(() => {        
+        if(new_drive_template_file != null && Object.keys(new_drive_template_file).length > 0 && new_drive_template_file.hasOwnProperty('id')) {
+            setTemplateURL(`https://docs.google.com/document/d/${new_drive_template_file.id}/edit`)
+        }
+    }, [new_drive_template_file])
+
+    useEffect(() => {
+        if( templateURL != template_document_url ) {
+            setTemplateURL(template_document_url)
+        }        
+    }, [ templateURL,  template_document_url ])
+
+    useEffect(() => {
+        if(props.assetFilesBar === false || props.openGoogleDriveBar === false) {
+            setTemplateURL('about:blank')
+            dispatch(setDriveTemplateFrameMode(false))
+        }
+    }, [props.assetFilesBar, props.openGoogleDriveBar])
 
     useEffect(() => {
         if(props.openIllustrationBar === false && props.openCommentBar === false && props.openChartBar === false && props.openAnalyticsBar === false && (props.openBar === true || props.openTypeBar === true || props.openOtherPartyBar === true || props.openInventorBar === true || props.openAssignmentBar === true || props.openCustomerBar === true || props.assetFilesBar === true || props.openGoogleDriveBar === true || props.driveTemplateMode === true) ) {
@@ -273,6 +296,10 @@ const MobileScreen = (props) => {
             <div
                 className={clsx(classes.companyBar, classes.mobileTable)}>
                 {
+                    driveTemplateFrameMode === true && (templateURL != 'about:blank' && templateURL != null)
+                    ?
+                        <iframe src={templateURL} className={classes.templateFrame}></iframe>
+                    : 
                     props.openIllustrationBar === true && (   search_string != '' || 
                         assetCompaniesRowSelect.length > 0 || 
                         selectedCompaniesAll === true || 
