@@ -145,8 +145,8 @@ const GlobalLayout = (props) => {
     }, [])
 
     useEffect(() => {
-        window.addEventListener('load', handleLoadEvent)
-        return () => window.removeEventListener("load", handleLoadEvent)
+        window.addEventListener('click', handleLoadEvent)
+        return () => window.removeEventListener("click", handleLoadEvent) 
     }, [])
 
 
