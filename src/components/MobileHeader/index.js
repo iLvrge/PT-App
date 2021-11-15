@@ -34,13 +34,7 @@ const MobileHeader = () => {
         } */
     ]
 
-    /* useEffect(() => {
-        const confirmFullScreen = window.confirm('Open app in full screen mode')
-
-        if(confirmFullScreen) {
-            document.documentElement.webkitRequestFullScreen();
-        }
-    }, []) */
+    /* document.documentElement.webkitRequestFullScreen(); */  
     
     return(
         <AppBar 
