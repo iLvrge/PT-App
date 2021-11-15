@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 export default makeStyles(theme => ({
     root: {
         position: 'fixed', 
-        bottom: 4, 
+        bottom: 0, 
         left: 0, 
         right: 0,
         zIndex: 999,
@@ -20,7 +20,8 @@ export default makeStyles(theme => ({
             height: 45
         },
         '& .MuiFab-root':{
-            width: 48
+            width: 48,
+            bottom: 2
         }
     }, 
     alignRight: {
