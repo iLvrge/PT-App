@@ -105,5 +105,13 @@ export default makeStyles(theme => ({
                 }
             }
         }
+    },
+    dialogRoot: {
+        '& .MuiDialogContent-root':{
+            padding: '10px !important',
+            '& .MuiDialogContentText-root':{
+                margin: '0px !important'
+            }
+        }
     }
 }))

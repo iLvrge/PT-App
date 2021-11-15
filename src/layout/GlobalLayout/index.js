@@ -9,7 +9,7 @@ import {
 import { Grid} from '@material-ui/core'
 
 import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect'
-import screenfull from 'screenfull';
+
 import clsx from 'clsx'
 import useStyles from './styles'
 
@@ -21,6 +21,7 @@ import MobileScreen from '../../components/MobileScreen'
 import NavigationIcon from '../../components/NavigationIcon'
 import MobileHeader from '../../components/MobileHeader'
 import MobileFooter from '../../components/MobileFooter'
+import ConfirmaDialogBox from './ConfirmaDialogBox'
 
 import { loginRedirect } from  '../../utils/tokenStorage'
 import { editorBar } from  '../../utils/splitpane'
@@ -143,12 +144,6 @@ const GlobalLayout = (props) => {
         window.addEventListener('keydown', handleKeyEvent)
         return () => window.removeEventListener("keydown", handleKeyEvent)
     }, [])
-
-    useEffect(() => {
-        window.addEventListener('click', handleLoadEvent)
-        return () => window.removeEventListener("click", handleLoadEvent) 
-    }, [])
-
 
     useEffect(() => {
         if( openIllustrationBar === false && openCommentBar === false && openChartBar === false && openAnalyticsBar === false ) {
@@ -294,17 +289,6 @@ const GlobalLayout = (props) => {
         setDriveTemplateBarSize( driveTemplateMode === true ? 200 : 0)
         editorBar()
     }, [ driveTemplateMode ])
-
-    const handleLoadEvent = () => {
-         console.log('handleLoadEvent')
-        if(isMobile && screenfull.isEnabled) {
-            const confirmFullScreen = window.confirm('Open app in full screen mode')
-
-            if(confirmFullScreen) {
-                screenfull.request();
-            }
-        } 
-    }
 
     const handleKeyEvent = (event) => {
         //event.preventDefault()
@@ -1044,7 +1028,6 @@ const GlobalLayout = (props) => {
         return child
     })
  
-    console.log("isMobile", isMobile, isBrowser)
     return (
         <div className={classes.root} id='main'>
             {
@@ -1095,6 +1078,11 @@ const GlobalLayout = (props) => {
                         bottomToolBar={bottomToolBar}
                         topToolBar={topToolBar}   
                     />
+                )
+            }
+            {
+                isMobile && (
+                    <ConfirmaDialogBox/>
                 )
             }
         </div>
