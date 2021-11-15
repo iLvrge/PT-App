@@ -34,7 +34,6 @@ const MobileHeader = () => {
         } */
     ]
 
-    /* document.documentElement.webkitRequestFullScreen(); */  
     
     return(
         <AppBar 

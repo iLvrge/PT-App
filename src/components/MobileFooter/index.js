@@ -94,7 +94,7 @@ const MobileFooter = (props) => {
     ]
 
     return(
-        <Paper className={classes.root} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+        <Box className={classes.root}>
             <BottomNavigation value={value} onChange={handleChange}>
                 {
                     leftButtons.map( (button, index) => (
@@ -198,7 +198,7 @@ const MobileFooter = (props) => {
                     </React.Fragment>
                 ))
             }
-        </Paper>
+        </Box>
     )
 }
 

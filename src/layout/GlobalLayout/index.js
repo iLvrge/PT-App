@@ -8,7 +8,8 @@ import {
 
 import { Grid} from '@material-ui/core'
 
-import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
+import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect'
+import screenfull from 'screenfull';
 import clsx from 'clsx'
 import useStyles from './styles'
 
@@ -141,6 +142,11 @@ const GlobalLayout = (props) => {
         } */
         window.addEventListener('keydown', handleKeyEvent)
         return () => window.removeEventListener("keydown", handleKeyEvent)
+    }, [])
+
+    useEffect(() => {
+        window.addEventListener('load', handleLoadEvent)
+        return () => window.removeEventListener("load", handleLoadEvent)
     }, [])
 
 
@@ -289,9 +295,19 @@ const GlobalLayout = (props) => {
         editorBar()
     }, [ driveTemplateMode ])
 
+    const handleLoadEvent = () => {
+         console.log('handleLoadEvent')
+        if(isMobile && screenfull.isEnabled) {
+            const confirmFullScreen = window.confirm('Open app in full screen mode')
+
+            if(confirmFullScreen) {
+                screenfull.request();
+            }
+        } 
+    }
+
     const handleKeyEvent = (event) => {
         //event.preventDefault()
-        console.log('handleKeyEvent', event)
         if(event.key === 'ArrowDown' || event.key === 'ArrowUp' ) {
             let tableContainer = document.getElementById('assets_type_assignment_all_assets'), findActiveRow = null
             if(tableContainer !== null) {
@@ -1039,7 +1055,7 @@ const GlobalLayout = (props) => {
                     <NewHeader />
             }
             <Grid container className={classes.dashboardWarapper}>
-                <Grid container className={classes.dashboard}>       
+                <Grid container className={clsx(classes.dashboard, {[classes.mobileDashboardWrapper]: isMobile})}>       
                     {
                         isMobile 
                         ?
@@ -1047,7 +1063,7 @@ const GlobalLayout = (props) => {
                                 ({component: Component, ...props }, index) => (
                                     <Component key={index} {...props} />
                                 )
-                            )
+                            ) 
                         :
                             <>
                                 <div className={clsx(classes.filterToolbar)}> 

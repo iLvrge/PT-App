@@ -34,7 +34,13 @@ export default makeStyles(theme => ({
         alignItems: 'center',
         width: '100%',
         zIndex: 1,
-    }, 
+    },
+    mobileDashboardWrapper: {
+        height: 'calc(100vh - 98px)',
+        '& .timeline .vis-panel.vis-top':{
+            display: 'none'
+        }
+    },
     flexColumn: {
         display: 'flex',
         flexDirection: 'column',

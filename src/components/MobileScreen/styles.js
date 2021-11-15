@@ -58,6 +58,11 @@ export default makeStyles(theme => ({
                 fontSize: '0.875em'
             }
         },
+        '& .ReactVirtualized__Table .ReactVirtualized__Table__headerColumn':{
+            '& .MuiTableCell-root':{
+                fontSize: '1.1em !important'
+            }
+        },
         '& .vis-timeline': {
             fontSize: 20,
             '& .vis-item': {

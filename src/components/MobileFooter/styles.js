@@ -3,11 +3,6 @@ import { makeStyles } from '@material-ui/core/styles'
 
 export default makeStyles(theme => ({
     root: {
-        position: 'fixed', 
-        bottom: 0, 
-        left: 0, 
-        right: 0,
-        zIndex: 999,
         '& svg.MuiSvgIcon-root': {
             width: '2rem',
             height: '2rem'
@@ -20,8 +15,8 @@ export default makeStyles(theme => ({
             height: 45
         },
         '& .MuiFab-root':{
-            width: 48,
-            bottom: 2
+            width: 48, 
+            zIndex: 999
         }
     }, 
     alignRight: {
@@ -34,10 +29,11 @@ export default makeStyles(theme => ({
         } 
     },
     drawerContainer: { 
-        margin: '2rem 0 0 2rem',
+        margin: '1rem 0 0 1.5rem',
     },
     swipeButtons: {
         display: 'flex',    
+        fontSize: 20,
         '&  .MuiIconButton-label svg':{
             width: '2rem',
             height: '2rem',
@@ -45,6 +41,8 @@ export default makeStyles(theme => ({
             stroke: '#fff',
         },
         '& .MuiIconButton-root':{
+            padding: 12,
+            fontSize: '1.1em',
             color: '#FFF',
             borderRadius: 'unset',
             width: '100%',

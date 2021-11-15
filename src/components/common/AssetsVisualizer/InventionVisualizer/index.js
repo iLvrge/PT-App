@@ -135,6 +135,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         yStep: 1,
         zStep: 3,
         yCenter: '30%',
+        xCenter: '30%',
         showPerspective: false,
         showGrid: true,
         axisColor: '#fff',

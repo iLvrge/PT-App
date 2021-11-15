@@ -58,7 +58,8 @@ export default makeStyles(theme => ({
         flex: '1 1 100%'
     },
     mobileTooltip: {
-        flex: '1 1 100%'
+        flex: '1 1 100%',
+        fontSize: '20px !important'
     },
     marginBottom25: {
         marginBottom: 25
