@@ -36,7 +36,7 @@ export default makeStyles(theme => ({
         zIndex: 1,
     },
     mobileDashboardWrapper: {
-        height: 'calc(100vh - 98px)',
+        height: 'calc(100vh - 120px)',
         '& .timeline .vis-panel.vis-top':{
             display: 'none'
         }
