@@ -3,6 +3,11 @@ import { makeStyles } from '@material-ui/core/styles'
 
 export default makeStyles(theme => ({
     root: {
+        position: 'fixed', 
+        bottom: 4, 
+        left: 0, 
+        right: 0,
+        zIndex: 999,
         '& svg.MuiSvgIcon-root': {
             width: '2rem',
             height: '2rem'
@@ -32,7 +37,6 @@ export default makeStyles(theme => ({
     },
     swipeButtons: {
         display: 'flex',    
-
         '&  .MuiIconButton-label svg':{
             width: '2rem',
             height: '2rem',
