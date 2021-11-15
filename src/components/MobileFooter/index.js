@@ -3,7 +3,8 @@ import {
         BottomNavigation,
         BottomNavigationAction,
         Box,
-        SwipeableDrawer
+        SwipeableDrawer,
+        Paper
     } from '@material-ui/core'
 
 import { 
@@ -93,7 +94,7 @@ const MobileFooter = (props) => {
     ]
 
     return(
-        <Box className={classes.root}>
+        <Paper className={classes.root} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
             <BottomNavigation value={value} onChange={handleChange}>
                 {
                     leftButtons.map( (button, index) => (
@@ -197,7 +198,7 @@ const MobileFooter = (props) => {
                     </React.Fragment>
                 ))
             }
-        </Box>
+        </Paper>
     )
 }
 
