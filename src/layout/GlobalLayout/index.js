@@ -149,14 +149,14 @@ const GlobalLayout = (props) => {
         return () => window.removeEventListener("resize", handleResize)
     }, [])
     */
-   useEffect(() => {
+   /* useEffect(() => {
         window.addEventListener('scroll', scrollInitial)
         return () => window.removeEventListener("load", scrollInitial)
     }, [])
     useEffect(() => {
         window.addEventListener('load', scrollInitial)
         return () => window.removeEventListener("load", scrollInitial)
-    }, [])
+    }, []) */
 
     useEffect(() => {
         if( openIllustrationBar === false && openCommentBar === false && openChartBar === false && openAnalyticsBar === false ) {
