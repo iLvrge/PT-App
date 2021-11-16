@@ -36,8 +36,8 @@ export default makeStyles(theme => ({
         zIndex: 1,
     },
     mobileDashboardWrapper: {
-        flexGrow: 'unset',
-        height: 'calc(100vh - 120px)', 
+        flexGrow: 'inherit',
+        maxHeight: '-webkit-fill-available',
         '& .timeline .vis-panel.vis-top':{
             display: 'none'
         }

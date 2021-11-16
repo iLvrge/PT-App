@@ -143,6 +143,16 @@ const GlobalLayout = (props) => {
         window.addEventListener('keydown', handleKeyEvent)
         return () => window.removeEventListener("keydown", handleKeyEvent)
     }, [])
+    /*
+    useEffect(() => {
+        window.addEventListener('resize', handleResize)
+        return () => window.removeEventListener("resize", handleResize)
+    }, [])
+    */
+    useEffect(() => {
+        window.addEventListener('load', scrollInitial)
+        return () => window.removeEventListener("load", scrollInitial)
+    }, [])
 
     useEffect(() => {
         if( openIllustrationBar === false && openCommentBar === false && openChartBar === false && openAnalyticsBar === false ) {
@@ -289,7 +299,22 @@ const GlobalLayout = (props) => {
         editorBar()
     }, [ driveTemplateMode ])
 
-    const handleKeyEvent = (event) => {
+    const scrollInitial = () => {
+        if(isMobile) {
+            window.scroll(0,1)
+        }
+    }
+
+    /* const handleResize = () => {
+        if(isMobile) {
+            
+            let vh = window.innerHeight * 0.01;
+            console.log('Resize', vh)
+            document.getElementById('mainContainer').style.setProperty('--vh', `${vh}px`);
+        }        
+    } */
+
+    const handleKeyEvent = (event) => {  
         //event.preventDefault()
         if(event.key === 'ArrowDown' || event.key === 'ArrowUp' ) {
             let tableContainer = document.getElementById('assets_type_assignment_all_assets'), findActiveRow = null
@@ -1036,8 +1061,8 @@ const GlobalLayout = (props) => {
                 :
                     <NewHeader />
             }
-            <Grid container className={classes.dashboardWarapper}>
-                <Grid container className={clsx(classes.dashboard, {[classes.mobileDashboardWrapper]: isMobile})}>       
+            <Grid container className={clsx(classes.dashboardWarapper, {[classes.mobileDashboardWrapper]: isMobile})} id="mainContainer">
+                <Grid container className={clsx(classes.dashboard)}>       
                     {
                         isMobile 
                         ?

@@ -12,7 +12,8 @@ export default makeStyles(theme => ({
         },
         '& .MuiBottomNavigationAction-root.MuiBottomNavigationAction-iconOnly':{
             paddingTop: 0,
-            paddingBottom: 0
+            paddingBottom: 0,
+            minWidth: 'auto'
         },
         '& .MuiBottomNavigation-root':{
             height: '100%',
