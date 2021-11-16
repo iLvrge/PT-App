@@ -149,6 +149,10 @@ const GlobalLayout = (props) => {
         return () => window.removeEventListener("resize", handleResize)
     }, [])
     */
+   useEffect(() => {
+        window.addEventListener('scroll', scrollInitial)
+        return () => window.removeEventListener("load", scrollInitial)
+    }, [])
     useEffect(() => {
         window.addEventListener('load', scrollInitial)
         return () => window.removeEventListener("load", scrollInitial)
@@ -299,9 +303,9 @@ const GlobalLayout = (props) => {
         editorBar()
     }, [ driveTemplateMode ])
 
-    const scrollInitial = () => {
+    const scrollInitial = () => {  
         if(isMobile) {
-            window.scroll(0,1)
+            alert(window.innerHeight)
         }
     }
 
