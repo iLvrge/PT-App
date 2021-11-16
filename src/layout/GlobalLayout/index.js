@@ -21,7 +21,6 @@ import MobileScreen from '../../components/MobileScreen'
 import NavigationIcon from '../../components/NavigationIcon'
 import MobileHeader from '../../components/MobileHeader'
 import MobileFooter from '../../components/MobileFooter'
-import ConfirmaDialogBox from './ConfirmaDialogBox'
 
 import { loginRedirect } from  '../../utils/tokenStorage'
 import { editorBar } from  '../../utils/splitpane'
@@ -1078,11 +1077,6 @@ const GlobalLayout = (props) => {
                         bottomToolBar={bottomToolBar}
                         topToolBar={topToolBar}   
                     />
-                )
-            }
-            {
-                isMobile && (
-                    <ConfirmaDialogBox/>
                 )
             }
         </div>

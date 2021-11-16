@@ -41,7 +41,7 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
     const new_drive_template_file = useSelector(state => state.patenTrack2.new_drive_template_file)
    
     return (
-        <div className={clsx(classes.showIcon, {[classes.marginBottom25]: typeof margin !== 'undefined' && margin === true, [classes.mobile]: typeof isMobile !== 'undefined' && isMobile === true})}> 
+        <div className={clsx(classes.showIcon, {[classes.marginBottom25]: typeof margin !== 'undefined' && margin === true && typeof isMobile !== 'undefined' && isMobile === false, [classes.mobile]: typeof isMobile !== 'undefined' && isMobile === true})}> 
             <Tooltip 
                 title={
                     <Typography color="inherit" variant='body2'>{tooltip}</Typography>

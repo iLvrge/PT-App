@@ -3,6 +3,9 @@ import { makeStyles } from '@material-ui/core/styles'
 
 export default makeStyles(theme => ({
     root: {
+        display: 'flex',
+        height: 45,
+        width: 'initial',
         '& svg.MuiSvgIcon-root': {
             width: '2rem',
             height: '2rem'
@@ -12,10 +15,14 @@ export default makeStyles(theme => ({
             paddingBottom: 0
         },
         '& .MuiBottomNavigation-root':{
-            height: 45
+            height: '100%',
+            width: '100%'
         },
         '& .MuiFab-root':{
-            width: 48, 
+            width: 45,
+            minWidth: 45,
+            height: 45,
+            borderRadius: '50%', 
             zIndex: 999
         }
     }, 
@@ -29,7 +36,7 @@ export default makeStyles(theme => ({
         } 
     },
     drawerContainer: { 
-        margin: '1rem 0 0 1.5rem',
+        margin: '1rem 1.5rem',
     },
     swipeButtons: {
         display: 'flex',    
