@@ -303,11 +303,11 @@ const GlobalLayout = (props) => {
         editorBar()
     }, [ driveTemplateMode ])
 
-    const scrollInitial = () => {  
+    /* const scrollInitial = () => {  
         if(isMobile) {
             alert(window.innerHeight)
         }
-    }
+    } */
 
     /* const handleResize = () => {
         if(isMobile) {
