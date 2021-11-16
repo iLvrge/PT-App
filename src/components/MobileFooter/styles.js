@@ -5,11 +5,11 @@ export default makeStyles(theme => ({
     root: {
         display: 'flex',
         height: 45,
-        width: 'initial',
+        /* width: 'initial',
         position: 'absolute',
         left: 0,
         right: 0,
-        bottom: 0,
+        bottom: 0, */
         zIndex: 999,
         '& svg.MuiSvgIcon-root': {
             width: '2rem',
