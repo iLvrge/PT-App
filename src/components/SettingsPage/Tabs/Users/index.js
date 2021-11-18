@@ -4,6 +4,7 @@ import { addUser, deleteUser, fetchUsers, updateUser } from '../../../../actions
 import { ROLES, ROLES_INV } from './contants'
 import UserForm from './UserForm'
 import Page from '../../components/Page'
+import Checkbox from '@material-ui/core/Checkbox'
 
 import { setBreadCrumbs } from  '../../../../actions/patentTrackActions2'
 
@@ -44,10 +45,26 @@ const Users = () => {
       </>
     )
   }, [])
+
+  const SlackRender = useMemo(() => (slack, row) => {  
+    return (
+      <>
+        {
+          slack !== 0 ? <Checkbox checked={true} onClick={() => {removeFromWorkSpace(row)}}/>  : ''
+        }
+      </>
+    )
+  }, [])
+
+  const removeFromWorkSpace = (row) => {
+    console.log('removeFromWorkSpace', row)
+  }
+
   
   const COLUMNS = [
     { id: 'first_name', label: 'First Name' },
     { id: 'last_name', label: 'Last Name' },
+    { id: 'slack', label: 'Slack', render: SlackRender },
     { id: 'job_title', label: 'Title' },
     { id: 'email_address', label: 'Email' },
     { id: 'logo', label: 'Profile Pic', render: FileRender, alignCenter: true, width: 150 },

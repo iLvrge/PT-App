@@ -72,9 +72,9 @@ export default function Row({
               padding={padding}
               align={alignCenter ? 'center' : (numeric ? 'right' : 'left')}
               component={row.component}
-              onClick={onClick && onClick(row[id])}>
+              onClick={onClick && onClick(row[id], row)}> 
               {
-                render ? render(row[id]) : row[id]
+                render ? render(row[id], row) : row[id]
               }
             </TableCell>
           ))

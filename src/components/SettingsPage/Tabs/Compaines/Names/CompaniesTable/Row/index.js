@@ -11,6 +11,7 @@ import TableBody from '@material-ui/core/TableBody'
 import clsx from 'clsx'
 import useStyles from './styles'
 import Box from '@material-ui/core/Box'
+import SlackImage from '../../../../../../common/SlackImage'
 
 function Row({ onSelect, isSelected, isChildSelected, row }) {
   const [ open, setOpen ] = React.useState(false)
@@ -19,6 +20,10 @@ function Row({ onSelect, isSelected, isChildSelected, row }) {
     e.stopPropagation()
     setOpen(open => !open)
   }, [])
+
+  const removeFromSlack = (companyID) => {
+
+  }
 
   return (
     <React.Fragment>
@@ -47,6 +52,19 @@ function Row({ onSelect, isSelected, isChildSelected, row }) {
         </TableCell>
 
         <TableCell>
+          {row.slack !== ''
+            ? 
+              <a onClick={() => removeFromSlack(row.id)}>
+                <span className={`MuiButtonBase-root MuiIconButton-root headingIcon slackIcon`}>
+                  <span className={`MuiIconButton-label`}>
+                    <svg style={{width: '24px', height: '24px'}} version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 270 270"><g><g><path fill="#E01E5A" d="M99.4,151.2c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h12.9V151.2z"></path><path fill="#E01E5A" d="M105.9,151.2c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v32.3c0,7.1-5.8,12.9-12.9,12.9s-12.9-5.8-12.9-12.9V151.2z"></path></g><g><path fill="#36C5F0" d="M118.8,99.4c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v12.9H118.8z"></path><path fill="#36C5F0" d="M118.8,105.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9H86.5c-7.1,0-12.9-5.8-12.9-12.9s5.8-12.9,12.9-12.9H118.8z"></path></g><g><path fill="#2EB67D" d="M170.6,118.8c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9h-12.9V118.8z"></path><path fill="#2EB67D" d="M164.1,118.8c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9V86.5c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9V118.8z"></path></g><g><path fill="#ECB22E" d="M151.2,170.6c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9v-12.9H151.2z"></path><path fill="#ECB22E" d="M151.2,164.1c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h32.3c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9H151.2z"></path></g></g></svg>
+                  </span>
+                </span>
+              </a>
+            : ''}
+        </TableCell>
+
+        <TableCell className={classes.padLR0}>
           {row.representative_name === null
             ? row.original_name
             : row.representative_name} {row.children.length > 0 ? `(${row.children.length})` : ''}
@@ -85,8 +103,8 @@ function Row({ onSelect, isSelected, isChildSelected, row }) {
                               disabled={isSelected(row.id)}
                             />
                           </TableCell>
-
-                          <TableCell>
+                          <TableCell></TableCell>      
+                          <TableCell className={classes.padLR0}>
                             {company.original_name}
                           </TableCell>
 

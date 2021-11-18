@@ -32,7 +32,7 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
     setOpenDialog(false)
     onDelete()
   }, [ onDelete ])
-  console.log(`typeof childComponent !== 'undefined' && childComponent.length > 0`, typeof childComponent, childComponent )
+  
   return (
     <Fragment>
       <Dialog open={openDialog} onClose={onCloseDialog}>

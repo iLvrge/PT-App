@@ -1,22 +1,42 @@
-import React, {useMemo, useEffect, useState} from 'react'
+import React, {useMemo, useCallback, useEffect, useState} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Paper, TextField, FormControl, FormLabel } from "@material-ui/core"
-import useStyles from "./styles"
-
+import useStyles from './styles'
+import CompaniesTable from '../Compaines/Names/CompaniesTable'
+import Header from '../../components/Header'
 import { setBreadCrumbs } from  '../../../../actions/patentTrackActions2'
+
+import AddPeople from './AddPeople'
 
 const Slacks = () => {
   const dispatch = useDispatch()
   const classes = useStyles()
-  const [slackTeamID, setSlackTeamID] = useState('')
+  const [ open, setOpen ] = useState(true)
+  const [ search, setSearch ] = useState('')
+  const [ companiesSelected, setCompaniesSelected ] = useState([])
+  const [ childCompaniesSelected, setChildCompaniesSelected ] = useState([])
+  
+  const [ searchSelected, setSearchSelected ] = useState([])
+  const toggleOpen = useCallback(() => setOpen(open => !open), [])
+  const [ childComponentList, setChildComponentList ] = useState([])
+  /* const [slackTeamID, setSlackTeamID] = useState('') */
   useEffect(() => {
     dispatch(setBreadCrumbs('Settings > Slacks'))
   }, [ dispatch ])
 
+  useEffect(() => {
+    setChildComponentList([{
+      component: AddPeople,      
+    }])
+  }, [])
+
+  const onDeleteCompanies = () => {
+
+  }
   
   return (
     <Paper className={classes.root} square id={`layout_templates`}>
-        <FormControl>
+        {/* <FormControl>
           <FormLabel>Slack TeamID:</FormLabel> 
           <TextField id="slack_team_id" variant="standard" defaultValue={slackTeamID}/>
         </FormControl>
@@ -31,7 +51,24 @@ const Slacks = () => {
         <FormControl>
           <FormLabel>Add or Remove people to a client workspace:</FormLabel> 
           <TextField id="slack_team_id" variant="standard" defaultValue={slackTeamID}/>
-        </FormControl>
+        </FormControl> */}
+          <Header
+            title={'Companies'}
+            onDelete={onDeleteCompanies}
+            numSelected={companiesSelected.length + childCompaniesSelected.length}
+            search={search}
+            setSearch={setSearch} 
+            childComponent={childComponentList}
+          />
+
+          <CompaniesTable
+            search={search}
+            selected={companiesSelected}
+            setSelected={setCompaniesSelected}
+            childCompaniesSelected={childCompaniesSelected}
+            setChildCompaniesSelected={setChildCompaniesSelected}
+            showUsers={true}
+          />
     </Paper>
   )
 }

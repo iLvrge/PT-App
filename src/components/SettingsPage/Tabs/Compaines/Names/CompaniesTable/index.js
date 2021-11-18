@@ -16,6 +16,8 @@ import IconButton from '@material-ui/core/IconButton'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 
+import SlackImage from '../../../../../common/SlackImage'
+
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1
@@ -61,6 +63,15 @@ function filterSearch(array, search) {
 }
 
 const HEAD_CELLS = [
+  {
+    id: 'slack',
+    numeric: false,
+    disablePadding: true,
+    label: 'Slack',
+    align: 'left',
+    class: '',
+    width: 35
+  },
   {
     id: 'original_name',
     numeric: false,
@@ -132,7 +143,6 @@ function CompaniesTable({
   const onSelectAll = useCallback(() => {
     setSelected(isAllSelected ? [] : _map(rows, 'id'))
   }, [ setSelected, isAllSelected, rows ])
-
   return (
     <Fragment>
       {
@@ -171,15 +181,22 @@ function CompaniesTable({
                     >
                       <TableSortLabel
                         active={orderBy === headCell.id}
-                        direction={orderBy === headCell.id ? order : 'asc'}
+                        direction={orderBy === headCell.id ? order : 'asc'}   
                         onClick={createSortHandler(headCell.id)}
                       >
-                        {headCell.label}
+                        
+                        {
+                          headCell.id === 'slack'
+                          ?
+                            <SlackImage/>
+                          :
+                            headCell.label
+                        }
                         {orderBy === headCell.id ? (
                           <span className={classes.visuallyHidden}>
                               {order === 'desc'
                                 ? 'sorted descending'
-                                : 'sorted ascending'}
+                                : 'sorted ascending'} 
                             </span>
                         ) : null}
                       </TableSortLabel>

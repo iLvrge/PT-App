@@ -10,6 +10,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 import useStyles from './styles'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Row from './Row'
+import SlackImage from '../../../common/SlackImage'
 import IconButton from '@material-ui/core/IconButton'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
@@ -183,7 +184,13 @@ export default function BaseTable({
                       direction={orderBy === column.id ? order : 'asc'}
                       onClick={createSortHandler(column.id)}
                     >
-                      {column.label}
+                      {
+                        column.id === 'slack'
+                        ?
+                          <SlackImage/>
+                        :
+                          column.label
+                      }
                       {orderBy === column.id ? (
                         <span className={classes.visuallyHidden}>
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}

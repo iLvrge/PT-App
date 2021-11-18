@@ -19,4 +19,8 @@ export default makeStyles(() => ({
     width: 20,
     padding: 8
   },
+  padLR0:{
+    paddingLeft: 0,
+    padingRight: 0
+  },
 }))

@@ -23,6 +23,10 @@ export default makeStyles(theme => ({
       },
     }
   },
+  padLR0:{
+    paddingLeft: 0,
+    padingRight: 0
+  },
   visuallyHidden: {
     border: 0,
     clip: 'rect(0 0 0 0)',
