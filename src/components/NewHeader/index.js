@@ -225,7 +225,10 @@ const NewHeader = () => {
 
   useEffect(() => {
     if (!profile) {
-      dispatch(getProfile(true))
+      let token = process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' ?  getTokenStorage( 'token' ) :  getTokenStorage( 'auth_signature' )
+      if(token !== '' || token !== null) {
+        dispatch(getProfile(true))
+      }     
     }
   }, [ dispatch, profile ])
 
