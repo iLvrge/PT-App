@@ -90,7 +90,7 @@ const GlobalLayout = (props) => {
     const [ customerBarSize, setCustomerBarSize ] = useState(180)
     const [ commentBarSize , setCommentBarSize ] = useState('30%')
     const [ illustrationBarSize , setIllustrationBarSize ] = useState('50%')
-    const [ visualizerBarSize , setVisualizerBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? '30%' : '0%')
+    const [ visualizerBarSize , setVisualizerBarSize ] = useState('0%')
 
     const [ assetTableFocus, setAssetTableFocus ] = useState( false )
     const [ companyButtonVisible, setCompanyButtonVisible ] = useState(false)
