@@ -56,9 +56,9 @@ const GlobalLayout = (props) => {
     const [ openCustomerBar, setCustomerOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
     const [ openIllustrationBar, setIllustrationBar ] = useState(true)
     const [ openCommentBar, setCommentBar ] = useState(isMobile ? false : true)
-    const [ openChartBar, setChartBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? isMobile ? false : true : false)
-    const [ openAnalyticsBar, setAnalyticsBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? isMobile ? false : true : false)
-    const [ openVisualizerBar, setVisualizeOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? isMobile ? false : true : false)
+    const [ openChartBar, setChartBar ] = useState(false)
+    const [ openAnalyticsBar, setAnalyticsBar ] = useState(false)
+    const [ openVisualizerBar, setVisualizeOpenBar ] = useState(false)
 
     const [ toggleButtonType, setToggleButtonType ] = useState(true)
     const [ toggleTypeButtonType, setToggleTypeButtonType ] = useState(true)
