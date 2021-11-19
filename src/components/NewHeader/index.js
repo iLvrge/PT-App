@@ -109,6 +109,7 @@ import {
   toggleUsptoMode,
   toggleLifeSpanMode,
 } from '../../actions/uiActions'
+import Scheduling from './Scheduling'
 
 const NewHeader = () => {
   const classes = useStyles()
@@ -130,6 +131,7 @@ const NewHeader = () => {
   const [ isCompanyMenuOpen, setCompanyMenuOpen ] = useState(false)
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState( true )
   const [ slackAuthLogin, setSlackAuthLogin ] = useState( true )
+  const [ scheduling, setScheduling ] = useState( false )
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
   const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
   const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
@@ -384,14 +386,15 @@ const NewHeader = () => {
   }, [ dispatch, clipboard_assets, display_clipboard ])
 
   const handleScheduleViaHubspot = () => {
-    const elementContainer = document.getElementById('bookMeeting')
+    setScheduling(!scheduling);
+    /* const elementContainer = document.getElementById('bookMeeting')
     elementContainer.querySelector('.MuiBackdrop-root').addEventListener('click', function() {
       if(this.parentElement.style.visibility == 'visible') {
         this.parentElement.style.visibility = 'hidden'
       }
     })
     elementContainer.style.visibility = elementContainer.style.visibility === 'hidden' ? 'visible' : 'hidden'
-    elementContainer.style.top = '42px'
+    elementContainer.style.top = '42px' */
   }
 
   const handleChangeLayout = (event) => {
@@ -691,6 +694,22 @@ const onHandleForeignAssets = (event) => {
       >
         <>
           <Home click={hideMenu} closeModal={handleControlModal}/> 
+        </>
+      </Modal>
+
+      <Modal 
+        open={scheduling}
+        disableBackdropClick={false}
+        onClose={handleScheduleViaHubspot}
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+        className={classes.modal}
+        style={{backgroundColor: 'rgba(0, 0, 0, 0.8)'}}
+      >
+        <>
+          <Scheduling/>
         </>
       </Modal>
     </AppBar>
