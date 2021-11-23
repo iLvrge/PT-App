@@ -898,7 +898,7 @@ a.maintain svg.clean_encumbrances path{
 }
 
 .react-viewer-inline {
-  min-height: inherit
+  min-height: auto !important;
 }
 
 .scopeTooltip{
