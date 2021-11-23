@@ -39,5 +39,13 @@ export default makeStyles(theme => ({
     },      
     isInteractive: {
         pointerEvents: 'auto'
+    },    
+    fullscreenChartsModal: {
+        display: 'flex',
+    },
+    fullscreenCharts: {
+        margin: 35,
+        flex: 1,
+        display: 'flex'
     },
 })) 

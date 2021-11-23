@@ -12,6 +12,7 @@ import {
 import useStyles from './styles'
 import CustomToolbar from './CustomToolbar'
 import UserInputForm from './UserInputForm'
+import copy from 'copy-to-clipboard'
 import PatenTrackApi from '../../../api/patenTrack2'
 import { setMaintainenceFeeFrameMode } from '../../../actions/uiActions'
 import { 
@@ -331,7 +332,7 @@ const QuillEditor = ({
           //const shareURL = data.replace('https://share.patentrack.com','http://167.172.195.92:3000')
           
           if(window.confirm("Copy a sharing link to your clipboard.")){
-            copyToClipboard(data)
+            copy(data)
           }
           //window.open(data,'_BLANK')
         } 

@@ -616,7 +616,7 @@ const VirtualizedTable = ({
         <>
         <TableRow
           key={key}
-          className={`${className} rowIndex_${index} ${typeof noBorderLines !== 'undefined' ? 'noBorderLines' : ''} ${highlightRow !== undefined && highlightRow === true && selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey]) ? 'highlightRow' : '' }`}
+          className={clsx(className, `rowIndex_${index}`, {['noBorderLines']: typeof noBorderLines !== 'undefined' ? true : false}, { ['highlightRow']: highlightRow !== undefined && highlightRow === true && selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey]) ? true : false }, {['highlightWithCol']: highlightRow !== undefined && highlightRow === true && ( (optionalKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[optionalKey])) || (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey]))) ? true : false }) }
           style={{
             ...style,
             height:

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { Paper, Modal } from '@material-ui/core'
-
+import copy from 'copy-to-clipboard'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import PatentrackDiagram from '../../PatentrackDiagram'
 import { toggleUsptoMode, toggleFamilyMode } from "../../../../actions/uiActions";
@@ -34,7 +34,7 @@ const IllustrationContainer = ({
   const [ bottomToolbarPosition, setBottomToolbarPosition ] = useState(0)
   const [ topPosition, setTopPosition ] = useState(0)  
   const screenHeight = useSelector(state => state.patenTrack.screenHeight)
-  const pdfViewModal = useSelector(state => state.patenTrack.pdfViewModal)
+  
   const showThirdParties = useSelector(state => state.ui.showThirdParties)  
   const isLoadingAssetIllustration = useSelector(state => state.patenTrack2.loadingAssetIllustration)
   
@@ -177,7 +177,7 @@ const IllustrationContainer = ({
           let shareURL = res.data
           if (shareURL.indexOf('share') >= 0) {
               if(window.confirm("Copy a sharing link to your clipboard.")){
-                copyToClipboard(shareURL)
+                copy(shareURL)
               }
               
             /**
@@ -274,15 +274,7 @@ const IllustrationContainer = ({
   }, [ dispatch ])
 
   return (
-    <div className={classes.root}>
-      {
-        pdfViewModal &&
-        <Modal open={pdfViewModal} className={classes.fullscreenChartsModal} >
-          <Paper className={classes.fullscreenCharts} square>
-            <PdfViewer display={'true'} />
-          </Paper>
-        </Modal>
-      }      
+    <div className={classes.root}>           
       <div className={classes.forceStrech} ref={targetRef}>
         {
           isLoadingAssetIllustration ?

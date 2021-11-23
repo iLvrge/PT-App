@@ -57,7 +57,7 @@ const styles = makeStyles((theme) => ({
     '&.noBorderLines':{
       border: 0
     },
-    '&.highlightRow.Mui-selected':{
+    '&.highlightRow':{
       '& .MuiTableCell-root.highlightColumn': {
         '& span': {
           color: '#fff',
@@ -67,6 +67,13 @@ const styles = makeStyles((theme) => ({
           '&:hover':{
             backgroundColor: '#2b2b2b !important'
           }
+        }
+      }      
+    },
+    '&.highlightWithCol.Mui-selected':{
+      '& .MuiTableCell-root.highlightColumn': {
+        '& span': {
+          color: '#e60000',
         }
       }
     },
@@ -89,7 +96,10 @@ const styles = makeStyles((theme) => ({
     '& .MuiTableRow-root.Mui-selected, .MuiTableRow-root.Mui-selected:hover':{
       backgroundColor: 'inherit',
       '& .MuiTableCell-root':{
-        color: '#e60000'
+        color: '#e60000',
+        '& span':{
+          color: '#e60000',
+        }
       }
     }
   },

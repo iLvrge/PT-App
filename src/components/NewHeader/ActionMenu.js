@@ -31,7 +31,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faShareAlt,
 } from "@fortawesome/free-solid-svg-icons"
-
+import copy from 'copy-to-clipboard'
 import useStyles from './styles'
 
 import AssetSwitchButton from './AssetSwitchButton'
@@ -313,7 +313,7 @@ const ActionMenu = (props) => {
                 //const shareURL = data.replace('https://share.patentrack.com','http://167.172.195.92:3000')
                 
                 if(window.confirm("Copy a sharing link to your clipboard.")){
-                    copyToClipboard(data)
+                    copy(data)
                 }
                 //window.open(data,'_BLANK')
                 } 

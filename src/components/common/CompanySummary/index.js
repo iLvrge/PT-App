@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-
+import copy from 'copy-to-clipboard'
 import PatenTrackApi from '../../../api/patenTrack2'
 import { capitalize, numberWithCommas } from '../../../utils/numbers'
 import { getTokenStorage } from '../../../utils/tokenStorage'
@@ -126,7 +126,7 @@ const CompanySummary = () => {
                 const {data} = await PatenTrackApi.shareIllustration(form)
                 if (data.indexOf('standard') >= 0) {
                     if(window.confirm("Copy a sharing link to your clipboard.")){
-                        copyToClipboard(data)
+                        copy(data)
                     }
                 }
             }

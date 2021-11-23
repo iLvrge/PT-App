@@ -92,8 +92,9 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
 
     const COLUMNS = [        
         {
-          width: 29,
-          minWidth: 29,
+          width: 12,
+          minWidth: 12,
+          headerWidth: 20,
           label: '',
           dataKey: 'tab_id',
           role: 'radio',
@@ -101,14 +102,13 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
           enable: false
         },
         {
-            width: 20,
-            minWidth: 20,
+            width: 30,
+            minWidth: 30,
             label: '',
             dataKey: 'icon',
             role: 'image',
             imageURL: 'imageURL',
-            headingIcon: 'activities',
-            disableSort: true,
+            disableSort: true, 
             extension: false
         },
         /* {
@@ -122,7 +122,8 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
         {
             width: isMobile === true ? 150 : 100,
             minWidth: isMobile === true ? 150 : 100,
-            label: 'Activities',            
+            label: 'Activities',  
+            headingIcon: 'activities', 
             dataKey: 'tab_name', 
             badge: true,              
         },

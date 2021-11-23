@@ -439,7 +439,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     {
       width: isMobile === true ? 150 : 100,  
       minWidth: isMobile === true ? 150 : 100,  
-      label: "Assets",      
+      label: "Assets", 
+      headingIcon: 'assets',   
       /* dataKey: "format_asset", */
       dataKey: "asset",
       staticIcon: "US",
@@ -1152,7 +1153,7 @@ const checkMouseStillOnHover = (e, number) => {
     (standalone && assetTypeAssignmentAssetsLoading)
   )
     return <Loader />;
-    console.log('assetBar', driveBar, fileBar, isMobile)
+
   return (
     <Paper
       className={clsx(classes.root, {[classes.mobile]: isMobile === true && (fileBar === true || driveBar === true)})}

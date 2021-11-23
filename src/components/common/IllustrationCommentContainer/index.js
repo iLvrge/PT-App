@@ -52,7 +52,7 @@ const IllustrationCommentContainer = ({
     const [ openCommentBar, setCommentOpenBar ] = useState(true)
     const [ commentButtonVisible, setCommentButtonVisible ] = useState(false)
     const [ isDrag, setIsDrag ] = useState(false)
-    const [ templateURL, settemplateURL] = useState('about:blank')
+    const [ templateURL, setTemplateURL] = useState('about:blank')
     const [ isFullscreenOpen, setIsFullscreenOpen ] = useState(false)
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false)
     const [ menuComponent, setMenuComponent ] = useState([])
@@ -84,13 +84,13 @@ const IllustrationCommentContainer = ({
 
     useEffect(() => {        
         if(new_drive_template_file != null && Object.keys(new_drive_template_file).length > 0 && new_drive_template_file.hasOwnProperty('id')) {
-            settemplateURL(`https://docs.google.com/document/d/${new_drive_template_file.id}/edit`)
+            setTemplateURL(`https://docs.google.com/document/d/${new_drive_template_file.id}/edit`)
         }
     }, [new_drive_template_file])
 
     useEffect(() => {
         if( templateURL != template_document_url ) {
-            settemplateURL(template_document_url)
+            setTemplateURL(template_document_url)
         }        
     }, [ templateURL,  template_document_url ])
 

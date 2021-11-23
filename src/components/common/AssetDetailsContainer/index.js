@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import SplitPane from "react-split-pane"
-import { IconButton } from "@material-ui/core"
+import { IconButton, Modal, Paper } from "@material-ui/core"
 import ConnectionBox from '../../common/ConnectionBox'
 import FamilyItemContainer from '../AssetsVisualizer/FamilyItemContainer'
 import USPTOContainer from '../AssetsVisualizer/USPTOContainer'
@@ -80,7 +80,7 @@ const AssetDetailsContainer = ({
   );
   
   const pdfView = useSelector(state => state.patenTrack.pdfView);
-
+  const pdfViewModal = useSelector(state => state.patenTrack.pdfViewModal)
   const usptoMode = useSelector(state => state.ui.usptoMode);
   const familyMode = useSelector(state => state.ui.familyMode);
   const familyItemMode = useSelector(state => state.ui.familyItemMode);
@@ -232,6 +232,15 @@ const AssetDetailsContainer = ({
               arrow={3}
               cls={classes.btnLeft}
             /> */}
+
+            {
+              pdfViewModal &&
+              <Modal open={pdfViewModal} className={classes.fullscreenChartsModal} >
+                <Paper className={classes.fullscreenCharts} square>
+                  <PdfViewer display={'true'} />
+                </Paper>
+              </Modal>
+            } 
             {
               selectedCompanies.length > 0 || type === 9 || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE')
               ?

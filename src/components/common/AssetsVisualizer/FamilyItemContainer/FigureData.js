@@ -48,6 +48,7 @@ const FigureData = ( { analyticsBar, illustrationBar, visualizerBarSize, data, n
     }
 
     if(loading) return <Loader/> 
+    console.log('figure')
 
     return (
         <div className={classes.container}>    

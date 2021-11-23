@@ -10,12 +10,15 @@ import { Fullscreen, Close } from '@material-ui/icons'
 import Modal from '@material-ui/core/Modal'
 
 
-const FullScreen = ({componentItems}) => {
+const FullScreen = ({componentItems, setScreen}) => {
 
     const classes = useStyles()
     const [ isFullscreenOpen, setIsFullscreenOpen ] = useState(false)
 
     const handleClickOpenCloseFullscreen = () => {
+        if(typeof setScreen !== 'undefined') {
+            setScreen(!isFullscreenOpen === true ? true : false)
+        }
         setIsFullscreenOpen(!isFullscreenOpen)
     }
 
