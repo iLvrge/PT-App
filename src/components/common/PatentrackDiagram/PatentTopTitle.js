@@ -93,7 +93,7 @@ class PatentTopTitle extends React.Component {
    return (
           <React.Fragment>
             <div id='topTitle'>
-              {this.props.title}
+              <span title={this.props.title}>{this.props.title}</span>
               <div id="topUIToolbarExpanded">
                 <div
                   id="toolbarUIGap12"
@@ -116,8 +116,7 @@ class PatentTopTitle extends React.Component {
                       />
                     </div>
                   </Tooltip>
-                </div>
-                <div id="toolbarUIGap5" className="toolbarUIGap"></div>
+                </div>                
                 <div
                   id="toolbarUIGap7"
                   className="toolbarUIGap" /* style={{ marginLeft: 'auto' }} */
@@ -139,12 +138,6 @@ class PatentTopTitle extends React.Component {
                     </div>
                   </Tooltip>
                 </div>
-                
-                {/* <div id='commentDiagram' className='toolbarUIElement'><FontAwesomeIcon title='comment diagram'
-                                                                                        icon={faComment}
-                                                                                        onClick={() => this.props.comment(this.props.commentContent)} />
-                  </div>  */}
-                <div id="toolbarUIGap4" className="toolbarUIGap"></div>
                 <div id="shareDiagram" className="toolbarUIElement">
                   <Tooltip 
                   className='tooltip'
@@ -163,8 +156,8 @@ class PatentTopTitle extends React.Component {
                     </div>
                   </Tooltip>
                 </div>
-                <div id="toolbarUIGap8" className="toolbarUIGap"></div>
               </div>
+              
             </div>
             <Menu
               open={open}
@@ -174,7 +167,7 @@ class PatentTopTitle extends React.Component {
               PaperProps={{    
                 style: {
                   left: '50%',
-                  transform: 'translateX(-77%) translateY(9%)',
+                  transform: 'translateX(-35%) translateY(9%)',
                 }
               }}
               MenuListProps={{

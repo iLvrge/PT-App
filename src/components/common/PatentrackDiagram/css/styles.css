@@ -7,7 +7,7 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
 
 #topTitle {
     display: flex;
-    padding: 0 16px;
+    padding: 0 37px 0 16px;
     font-size: 1rem;
     color: #FFFFFF;
     height: 47px;
@@ -15,14 +15,11 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
     background-color: #292929;
     border-bottom: 1px solid #5c5c5c;
     box-shadow: 0 0px 5px 0 #2b2b2b;
-    opacity: 0.85;
+    /* opacity: 0.85; */
     text-align: left; 
     vertical-align: middle; 
     justify-content: flex-start; 
     align-items: center; 
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
      -khtml-user-select: none; /* Konqueror HTML */
@@ -31,12 +28,22 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
 }
+#topTitle span{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 #topUIToolbarExpanded{
-    display: flex;
+    /* display: flex;
     align-items: center;
     justify-content: flex-end;
-    flex-grow: 1;
+    flex-grow: 1; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 9%;
+    margin-left: auto;
 }
 
 #bottomUIToolbarContainer {

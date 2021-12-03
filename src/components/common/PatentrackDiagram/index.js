@@ -1690,7 +1690,7 @@ class PatentrackDiagram extends React.Component {
             <g id="patentNodesGroup">{nodes}</g>
           </svg>
         </div>
-        <PatentBottomUI
+        {/* <PatentBottomUI
           width={this.props.parentWidth}
           update={this.updateDiagram}
           uspto={this.props.uspto}
@@ -1716,7 +1716,7 @@ class PatentrackDiagram extends React.Component {
               total: this.state.limits.assignees,
             },
           }}
-        />
+        /> */}
       </div>
     );
   }
