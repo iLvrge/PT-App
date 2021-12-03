@@ -22,7 +22,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
-import { TableCell, Avatar, Modal } from '@material-ui/core'
+import { TableCell, Avatar, Modal, ListItemText, ListItemIcon } from '@material-ui/core'
 import {
   ArrowKeyStepper,
   AutoSizer,
@@ -398,11 +398,13 @@ const VirtualizedTable = ({
               >
                 {
                   list.map( (c, idx) => (
-                    <MenuItem key={idx} value={c.id}>
-                      {
-                        c.icon != '' ? c.icon : c.image != '' ? <img src={c.image} style={{width: '21px'}}/> : ''
-                      }
-                      <Typography variant="inherit" className={'heading'}> {c.name}</Typography> 
+                    <MenuItem key={idx} value={c.id} className={`iconItem`}>
+                      <ListItemIcon>
+                        {
+                          c.icon != '' ? c.icon : c.image != '' ? <img src={c.image} style={{width: '21px'}}/> : ''
+                        }
+                      </ListItemIcon>
+                      <ListItemText className={'heading'}>{c.name}</ListItemText>
                     </MenuItem> 
                   ))
                 }  

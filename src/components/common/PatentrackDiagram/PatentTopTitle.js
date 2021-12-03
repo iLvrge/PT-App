@@ -15,7 +15,7 @@ import {
   faCheckSquare,
   faSquare,
 } from "@fortawesome/free-solid-svg-icons";
-import { Tooltip, Typography, Zoom, Drawer, Menu, MenuItem } from "@material-ui/core";
+import { Tooltip, Typography, Zoom, Drawer, Menu, MenuItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import { FaLightbulb } from "react-icons/fa";
 import { withStyles } from "@material-ui/styles";
 import { toggleShow3rdParities } from "../../../actions/uiActions";
@@ -74,17 +74,17 @@ class PatentTopTitle extends React.Component {
       return (
         <MenuItem
           key={"PatentrackDiagramFilterElement_" + i_}
-          style={{ textAlign: "left", color: hex }}
+          className={`iconItem`}
         >
-          <label title={filterElement + " filter is on"}>
+          <ListItemIcon>
             <input
               type="checkbox"
               id={filterElement}
               onChange={this.props.update}
               defaultChecked="true"
             />
-            <span>{filterElement}</span>
-          </label>
+          </ListItemIcon>
+          <ListItemText style={{ color: hex }}>{filterElement}</ListItemText>
         </MenuItem>
       );
     });
@@ -167,137 +167,67 @@ class PatentTopTitle extends React.Component {
               PaperProps={{    
                 style: {
                   left: '50%',
-                  transform: 'translateX(-35%) translateY(9%)',
+                  transform: 'translateX(-29%) translateY(9%)',
                 }
               }}
-              MenuListProps={{
-                style: {
-                  padding: 0,
-                },
-              }}
             >
-              <MenuItem>
-                <div id="fastBackward" className="toolbarUIElement">
-                  <Tooltip 
-                  className='tooltip'
-                    title={
-                      <Typography color="inherit" variant='body2'>{'Go to start'}</Typography>
-                    }
-                    placement='top'
-                    enterDelay={0}
-                    TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
-                  >
-                    <div className="tooltipContainer">
-                      <FontAwesomeIcon
-                        icon={faFastBackward}
-                        onClick={this.props.update}
-                      />
-                    </div>
-                  </Tooltip>
-                </div>
-                <div id="fastForward" className="toolbarUIElement">
-                  <Tooltip 
-                  className='tooltip'
-                  title={
-                    <Typography color="inherit" variant='body2'>{'Go to end'}</Typography>
-                  }
-                  placement='top'
-                  enterDelay={0}
-                  TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
-                  >
-                    <div className="tooltipContainer">
-                      <FontAwesomeIcon
-                        icon={faFastForward}
-                        onClick={this.props.update}
-                      />
-                    </div>
-                  </Tooltip>
-                </div>
+              <MenuItem className={`iconItem`}>
+                <ListItemIcon id="fastBackward">
+                  <FontAwesomeIcon
+                    icon={faFastBackward}
+                    onClick={this.props.update}
+                  />
+                </ListItemIcon>
+                <ListItemText><span style={{visibility: 'hidden'}}>
+                  {this.props.quantatives.assignment.current} /{" "}
+                  {this.props.quantatives.assignment.total}</span>
+                </ListItemText>
+                <ListItemIcon id="fastForward">
+                  <FontAwesomeIcon
+                    icon={faFastForward}
+                    onClick={this.props.update}
+                  />
+                </ListItemIcon>
+                <ListItemText></ListItemText>
               </MenuItem>
-              <MenuItem>
-                <div id="prevAssignment" className="toolbarUIElement">
-                  <Tooltip 
-                  className='tooltip'
-                    title={
-                      <Typography color="inherit" variant='body2'>{'Go to previous assignment'}</Typography>
-                    }
-                    placement='top'
-                    enterDelay={0}
-                    TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
-                    >
-                    <div className="tooltipContainer">
-                      <FontAwesomeIcon
-                        icon={faAngleDoubleLeft}
-                        onClick={this.props.update}
-                      />
-                    </div>
-                  </Tooltip>
-                </div>
-                <div id="assignmentQuantative" className="toolbarUIQuantative">
+              <MenuItem className={`iconItem`}>
+                <ListItemIcon id="prevAssignment">
+                  <FontAwesomeIcon
+                    icon={faAngleDoubleLeft}
+                    onClick={this.props.update}
+                  />
+                </ListItemIcon>
+                <ListItemText>
                   {this.props.quantatives.assignment.current} /{" "}
                   {this.props.quantatives.assignment.total}
-                </div>
-                <div id="nextAssignment" className="toolbarUIElement">
-                  <Tooltip 
-                  className='tooltip'
-                  title={
-                    <Typography color="inherit" variant='body2'>{'Go to next assignment'}</Typography>
-                  }
-                  placement='top'
-                  enterDelay={0}
-                  TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
-                  >
-                    <div className="tooltipContainer">
-                      <FontAwesomeIcon
-                        icon={faAngleDoubleRight}
-                        onClick={this.props.update}
-                      />
-                    </div>
-                  </Tooltip>
-                </div>
+                </ListItemText>
+                <ListItemIcon id="nextAssignment">
+                  <FontAwesomeIcon
+                    icon={faAngleDoubleRight}
+                    onClick={this.props.update}
+                  />
+                </ListItemIcon>   
+                <ListItemText></ListItemText>             
               </MenuItem>
-              <MenuItem>
-                <div id="prevAssignee" className="toolbarUIElement">
-                  <Tooltip 
-                  className='tooltip'
-                  title={
-                    <Typography color="inherit" variant='body2'>{'Go to previous assignee'}</Typography>
-                  }
-                  placement='top'
-                  enterDelay={0}
-                  TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
-                  >
-                    <div className="tooltipContainer">
-                      <FontAwesomeIcon
-                        icon={faAngleLeft}
-                        onClick={this.props.update}
-                      />
-                    </div>
-                  </Tooltip>
-                </div>
-                <div id="assigneeQuantative" className="toolbarUIQuantative">
+              <MenuItem className={`iconItem`}>
+                <ListItemIcon id="prevAssignee">
+                  <FontAwesomeIcon
+                    icon={faAngleLeft}
+                    onClick={this.props.update}
+                  />
+                </ListItemIcon>
+                <ListItemText>
                   {this.props.quantatives.assignee.current} /{" "}
                   {this.props.quantatives.assignee.total}
-                </div>
-                <div id="nextAssignee" className="toolbarUIElement">
-                  <Tooltip 
-                  className='tooltip'
-                  title={
-                    <Typography color="inherit" variant='body2'>{'Go to next assignee'}</Typography>
-                  }
-                  placement='top'
-                  enterDelay={0}
-                  TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
-                  >
-                    <div className="tooltipContainer">
-                      <FontAwesomeIcon
-                        icon={faAngleRight}
-                        onClick={this.props.update}
-                      />
-                    </div>
-                  </Tooltip>
-                </div>
-              </MenuItem>
+                </ListItemText>
+                <ListItemIcon id="nextAssignee">
+                  <FontAwesomeIcon
+                    icon={faAngleRight}
+                    onClick={this.props.update}
+                  />
+                </ListItemIcon>   
+                <ListItemText></ListItemText>             
+              </MenuItem>              
               {filters}
             </Menu>      
           </React.Fragment>

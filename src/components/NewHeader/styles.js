@@ -467,8 +467,6 @@ export default makeStyles(theme => ({
     },
     actionMenuList: {
         '& .MuiListItemIcon-root':{
-            minWidth: 'inherit',
-            marginRight: 5
         },
         '& .fa-share-alt': { 
             width: '1rem'
