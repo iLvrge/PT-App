@@ -71,10 +71,10 @@ export default makeStyles(theme => ({
   },
   tab: {
     minWidth: '25%',
-    minHeight: 35,
+    minHeight: 47,
   },
   tabs: {
-    minHeight: 35,
+    minHeight: 47,
     display: 'flex',
     '& .MuiTab-root': {
       fontSize: '1rem'

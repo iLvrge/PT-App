@@ -77,6 +77,7 @@ class PatentBottomUI extends React.Component {
       showThirdParties,
       toggleShow3rdParities,
     } = this.props;
+    console.log('render', classes, this.props) 
     let showFilters = this.state.filters
       ? {
           display: "inline-block",
@@ -284,56 +285,7 @@ class PatentBottomUI extends React.Component {
             >
               <ul>{filters}</ul>
             </div>
-          </div>
-          <div id="toolbarUIGap5" className="toolbarUIGap"></div>
-          {/* <div id='horizontalExtenderA' className='toolbarUIElement'></div>
-            <div id='horizontallExtenderB' className='toolbarUIElement'></div>
-            <div id='zoomDiagram' className='toolbarUIElement'></div> */}
-          <div
-            id="toolbarUIGap7"
-            className="toolbarUIGap" /* style={{ marginLeft: 'auto' }} */
-          >
-            <Tooltip 
-            className='tooltip'
-            title={
-              <Typography color="inherit" variant='body2'>{'USPTO'}</Typography>
-            }
-            placement='top'
-            enterDelay={0}
-            TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
-            >
-              <div className="tooltipContainer">
-                <FaLightbulb
-                  className={clsx({ [classes.active]: usptoMode })}
-                  onClick={() => this.props.uspto(!usptoMode)}
-                />
-              </div>
-            </Tooltip>
-          </div>
-          {/* <div id='commentDiagram' className='toolbarUIElement'><FontAwesomeIcon title='comment diagram'
-                                                                                   icon={faComment}
-                                                                                   onClick={() => this.props.comment(this.props.commentContent)} />
-            </div>  */}
-          <div id="toolbarUIGap4" className="toolbarUIGap"></div>
-          <div id="shareDiagram" className="toolbarUIElement">
-            <Tooltip 
-            className='tooltip'
-            title={
-              <Typography color="inherit" variant='body2'>{'Share a diagram'}</Typography>
-            }
-            placement='top'
-            enterDelay={0}
-            TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
-            >
-              <div className="tooltipContainer">
-                <FontAwesomeIcon
-                  icon={faShareAlt}
-                  onClick={() => this.props.share(this.props.patent)}
-                />
-              </div>
-            </Tooltip>
-          </div>
-          <div id="toolbarUIGap8" className="toolbarUIGap"></div>
+          </div>        
         </div>
       </div>
     ) : (

@@ -7,9 +7,13 @@ export default makeStyles((theme) => ({
     justifyContent: 'space-between',
     display: 'flex',
     '& .MuiFormControl-root': {
-      width: 'calc(50% - 10px)',
-      margin: '10px 0',
+      width: 'calc(50% - 20px)',
+      margin: '10px',
     },
+  },
+  dialogActions: {
+    margin: 20,
+    boxShadow: 'none'
   },
   loaderContainer: {
     width: '100%',

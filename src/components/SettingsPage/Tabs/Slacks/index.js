@@ -4,7 +4,8 @@ import { Paper, TextField, FormControl, FormLabel } from "@material-ui/core"
 import useStyles from './styles'
 import CompaniesTable from '../Compaines/Names/CompaniesTable'
 import Header from '../../components/Header'
-import { setBreadCrumbs } from  '../../../../actions/patentTrackActions2'
+
+import { setBreadCrumbs, fetchCompaniesList } from  '../../../../actions/patentTrackActions2'
 
 import AddPeople from './AddPeople'
 
@@ -19,16 +20,24 @@ const Slacks = () => {
   const [ searchSelected, setSearchSelected ] = useState([])
   const toggleOpen = useCallback(() => setOpen(open => !open), [])
   const [ childComponentList, setChildComponentList ] = useState([])
+  const companiesList = useSelector(state => state.patenTrack.companiesList)
   /* const [slackTeamID, setSlackTeamID] = useState('') */
   useEffect(() => {
     dispatch(setBreadCrumbs('Settings > Slacks'))
+    if(companiesList.length === 0) {
+      dispatch(fetchCompaniesList())
+    }    
   }, [ dispatch ])
 
   useEffect(() => {
-    setChildComponentList([{
-      component: AddPeople,      
-    }])
-  }, [])
+    if(companiesSelected.length === 1) {
+      setChildComponentList([{
+        component: AddPeople,      
+        rows: companiesSelected
+      }])
+    }
+    
+  }, [companiesSelected])
 
   const onDeleteCompanies = () => {
 

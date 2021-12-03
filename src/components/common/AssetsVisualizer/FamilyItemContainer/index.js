@@ -125,6 +125,20 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                 selectedCompaniesAll === true || selectedCompanies.length > 0 || type === 9 || ( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)
                 ?
                     <>
+                        
+                        <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
+                            {
+                                ['Family', 'Abstract', 'Specifications', 'Claims', 'Figures'].map( (item, index) => (
+                                    <Tab
+                                        key={index}
+                                        className={classes.tab}
+                                        label={item}
+                                        disableFocusRipple={true}
+                                        disableRipple={true}
+                                    />
+                                ))
+                            }                            
+                        </Tabs>
                         <div className={classes.graphContainer}>        
                         {/* <Typography variant='body2' className={classes.heading}>{selectedNumber}</Typography> */}
                         {selectedTab === 0 && <FamilyContainer
@@ -152,19 +166,6 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                             '' 
                         }
                         </div>
-                        <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
-                            {
-                                ['Family', 'Abstract', 'Specifications', 'Claims', 'Figures'].map( (item, index) => (
-                                    <Tab
-                                        key={index}
-                                        className={classes.tab}
-                                        label={item}
-                                        disableFocusRipple={true}
-                                        disableRipple={true}
-                                    />
-                                ))
-                            }                            
-                        </Tabs>
                     </>
                 :
                 ''

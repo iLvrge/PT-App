@@ -32,6 +32,13 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
                                   supported by Chrome, Edge, Opera and Firefox */
 }
 
+#topUIToolbarExpanded{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-grow: 1;
+}
+
 #bottomUIToolbarContainer {
     width: 100%;
     height: 32px;
@@ -39,6 +46,8 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
     bottom: 0;
     min-width: 100vw;
 }
+
+
 
 #bottomUIToolbarExpanded {
     display: flex;

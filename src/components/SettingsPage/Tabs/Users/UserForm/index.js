@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useCallback } from 'react'
+import Box from '@material-ui/core/Box'
 import TextField from '@material-ui/core/TextField'
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -29,7 +30,7 @@ const UserForm = ({ onChangeField, edited }) => {
     onChangeField('file')({ target: { value: files.length ? files[0] : null } })
   }, [ onChangeField ])
   return (
-  <Fragment>
+  <Box style={{ padding: 10 }}>
     <TextField
       size={'small'}
       variant="outlined"
@@ -52,7 +53,6 @@ const UserForm = ({ onChangeField, edited }) => {
       size={'small'}
       variant="outlined"
       color={'secondary'}
-      required
       label="Title"
       value={edited.job_title || ''}
       onChange={onChangeField('job_title')} />
@@ -70,7 +70,6 @@ const UserForm = ({ onChangeField, edited }) => {
       size={'small'}
       variant="outlined"
       color={'secondary'}
-      required
       label="Telephone"
       value={edited.telephone || ''}
       onChange={onChangeField('telephone')} />
@@ -79,7 +78,6 @@ const UserForm = ({ onChangeField, edited }) => {
       size={'small'}
       variant="outlined"
       color={'secondary'}
-      required
       label="Telephone2"
       value={edited.telephone1 || ''}
       onChange={onChangeField('telephone1')} />
@@ -117,11 +115,12 @@ const UserForm = ({ onChangeField, edited }) => {
       <DropzoneArea
         classes={{ root: classes.dropzoneArea }}
         showFileNames
+        dropzoneText='Upload user picture'
         filesLimit={1}
         onChange={onChangeFile}
       />
     </FormControl>
-  </Fragment>
+  </Box>
   )
 }
 

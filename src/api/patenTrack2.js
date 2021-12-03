@@ -119,6 +119,10 @@ class PatenTrackApi {
     )
   }
 
+  static getCompaniesUserList(companyID) {
+    return axios.get(`${base_new_api_url}/companies${companyID}/users`, getHeader())
+  }
+
   static linkWithSheet( type, form ) {
     let header = getFormUrlHeader()
     header['cancelToken'] = new CancelToken(function executor(c) {
@@ -1011,6 +1015,10 @@ class PatenTrackApi {
   static addGroup( form ) {
     return axios.post(`${base_new_api_url}/companies/group`,  form, getFormUrlHeader())
   } 
+
+  static inviteUserToWorkspace (form) {
+    return axios.post(`${base_new_api_url}/users/invite`,  form, getFormUrlHeader())
+  }  
 
   static searchEntity( searchString, type ) {
     if (cancel !== undefined) {

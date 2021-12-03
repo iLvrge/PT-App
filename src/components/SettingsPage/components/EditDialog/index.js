@@ -61,7 +61,7 @@ const EditDialog = ({ setEditedRow, editedRow, onSubmit, fieldsComponent: Fields
           { entered && <FieldsComponent onChangeField={onChangeField} edited={edited} idKey={idKey} />}
         </DialogContent>
 
-        <DialogActions>
+        <DialogActions className={classes.dialogActions}>
           <Button onClick={onClose} color="default" type={'button'}>
             Close
           </Button>

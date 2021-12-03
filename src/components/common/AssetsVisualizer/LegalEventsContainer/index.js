@@ -34,14 +34,6 @@ const LegalEventsContainer = ({ events, type }) => {
           selectedCompaniesAll === true || selectedCompanies.length > 0 || type === 9 || ( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)
           ?
           <>
-            <div className={classes.graphContainer}>  
-              {selectedTab === 0 && <Fees events={events} number={selectedNumber} />}
-              {selectedTab === 1 && <Citation data={citationData} number={selectedNumber} />}   
-              {selectedTab === 2 && <Ptab data={ptabData} number={selectedNumber}/>}   
-              {selectedTab === 3 && <Litigation data={litigationData} number={selectedNumber} />}   
-              {selectedTab === 4 && <Events data={eventsData} number={selectedNumber} />}                             
-              
-            </div>
             <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
               {
                 ['M.Fees', 'F.Citations', /* 'Events',  */'PTAB', 'Litigation'].map( (item, index) => (
@@ -53,6 +45,13 @@ const LegalEventsContainer = ({ events, type }) => {
                 ))
               }                            
             </Tabs>
+            <div className={classes.graphContainer}>  
+              {selectedTab === 0 && <Fees events={events} number={selectedNumber} />}
+              {selectedTab === 1 && <Citation data={citationData} number={selectedNumber} />}   
+              {selectedTab === 2 && <Ptab data={ptabData} number={selectedNumber}/>}   
+              {selectedTab === 3 && <Litigation data={litigationData} number={selectedNumber} />}   
+              {selectedTab === 4 && <Events data={eventsData} number={selectedNumber} />}  
+            </div>            
           </>
           :
           ''

@@ -318,7 +318,7 @@ class PatentrackDiagram extends React.Component {
     this.convertConfigValuesToPixels();
     this.getTitleDivHeight();
   }
-
+  
   getTitleDivHeight() {
     const dummyDiv = document.createElement("div");
 
@@ -392,7 +392,7 @@ class PatentrackDiagram extends React.Component {
 
     return Object.keys(assignments).length;
   }
-
+  
   parseData() {
     let dWidth = 0,
       dheight = 0,
@@ -1428,7 +1428,6 @@ class PatentrackDiagram extends React.Component {
       indices: [],
       assignments: {},
     };
-
     const { showThirdParties } = this.props;
 
     this.parseData();
@@ -1645,6 +1644,30 @@ class PatentrackDiagram extends React.Component {
           width={this.props.parentWidth}
           titleTop={this.props.titleTop}
           title={this.parseTitle()}
+          update={this.updateDiagram}
+          uspto={this.props.uspto}
+          comment={this.props.comment}
+          commentContent={this.props.data.comment}
+          share={this.props.share}
+          patent={this.props.data.general}
+          colorScheme={config.colors}
+          toolbarBottom={this.props.toolbarBottom}
+          quantatives={{
+            assignment: {
+              current:
+                this.state.assignments.length == 0
+                  ? 0
+                  : this.state.assignments[this.state.assignments.length - 1],
+              total: this.state.limits.assignments,
+            },
+            assignee: {
+              current:
+                this.state.assignees.length == 0
+                  ? 0
+                  : this.state.assignees[this.state.assignees.length - 1] + 1,
+              total: this.state.limits.assignees,
+            },
+          }}
         />
         <div style={{ overflow: "auto", minHeight: "95%" }}>
           <svg
