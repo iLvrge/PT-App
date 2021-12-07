@@ -19,12 +19,12 @@ export default makeStyles(theme => ({
         }
     },
     tabs: {
-        minHeight: 35,
+        minHeight: 47,
     },
     tab: {
         flex: 1,
         minWidth: '25%',
-        minHeight: 35,
+        minHeight: 47,                            
     },
     graphContainer: {
         flex: 1,

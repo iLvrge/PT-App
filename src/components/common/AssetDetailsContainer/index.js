@@ -194,9 +194,18 @@ const AssetDetailsContainer = ({
       }
     }
   };
-  console.log('Assets Details container analyticsBar', analyticsBar, connectionBoxView, openIllustrationBar, usptoMode, lifeSpanMode, familyMode)
+  
   return (
     <div style={{ height: "100%" }} className={classes.root}>
+      {
+        usptoMode === true && (
+          <USPTOContainer
+            asset={assetIllustration} 
+            onClose={onCloseUspto} 
+            type={type}
+          />
+        )
+      } 
       {bar === true ? (
         <SplitPane
           className={cls}
@@ -278,16 +287,16 @@ const AssetDetailsContainer = ({
                           />
                       ) : (
                         <InventionVisualizer 
-                            defaultSize={defaultSize} 
-                            illustrationBar={openIllustrationBar} 
-                            visualizerBarSize={visualizerBarSize} 
-                            analyticsBar={analyticsBar} 
-                            openCustomerBar={openCustomerBar} 
-                            commentBar={commentBar} 
-                            illustrationBar={illustrationBar} 
-                            customerBarSize={customerBarSize} 
-                            companyBarSize={companyBarSize}
-                            type={type} />
+                          defaultSize={defaultSize} 
+                          illustrationBar={openIllustrationBar} 
+                          visualizerBarSize={visualizerBarSize} 
+                          analyticsBar={analyticsBar} 
+                          openCustomerBar={openCustomerBar} 
+                          commentBar={commentBar} 
+                          illustrationBar={illustrationBar} 
+                          customerBarSize={customerBarSize} 
+                          companyBarSize={companyBarSize}
+                          type={type} />
                       )
                   )
                 :
@@ -313,26 +322,19 @@ const AssetDetailsContainer = ({
                       <ConnectionBox display={"false"} assets={illustrationData} type={type}/>
                     ) : openIllustrationBar === true ? (
                         <>
-                            {                
-                                usptoMode === true ? (
-                                    <USPTOContainer
-                                    asset={assetIllustration} 
-                                    onClose={onCloseUspto} 
-                                    type={type}
-                                    />
-                                ) : 
-                                lifeSpanMode === true ? (
-                                  <LifeSpanContainer 
-                                    chartBar={chartBar} 
-                                    openCustomerBar={openCustomerBar} 
-                                    visualizerBarSize={visualizerBarSize}
+                            {      
+                              lifeSpanMode === true ? (
+                                <LifeSpanContainer 
+                                  chartBar={chartBar} 
+                                  openCustomerBar={openCustomerBar} 
+                                  visualizerBarSize={visualizerBarSize}
+                                  type={type}/>
+                              ) :
+                              familyMode && (
+                                  <LegalEventsContainer
+                                    events={selectedAssetsLegalEvents} 
                                     type={type}/>
-                                ) :
-                                familyMode && (
-                                    <LegalEventsContainer
-                                      events={selectedAssetsLegalEvents} 
-                                      type={type}/>
-                                ) 
+                              ) 
                             }
                         </>
                     ) : (
@@ -359,7 +361,7 @@ const AssetDetailsContainer = ({
         </SplitPane>
       ) : (
         ""
-      )}
+      )}      
     </div>
   ); 
 };

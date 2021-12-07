@@ -50,7 +50,8 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
             setLifeSpanTabs(['Lifespan'])
             setSelectedTab(0)
         } else if( connectionBoxView === true || selectedRow.length > 0 ) {
-            setLifeSpanTabs([ 'Lifespan', 'Assignment', 'USPTO' ])
+            /*setLifeSpanTabs([ 'Lifespan', 'Assignment', 'USPTO' ])*/
+            setLifeSpanTabs([ 'Lifespan', 'Assignment'])
             setSelectedTab(1)
         }
     }, [ connectionBoxView, selectedRow ])
@@ -192,9 +193,6 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
 
     return (
         <Paper className={classes.root} square>  
-            {selectedTab === 0 && <SpanVisualize chart={selectedAssetsTransactionLifeSpan} chartBar={chartBar} visualizerBarSize={visualizerBarSize}/>}
-            {selectedTab === 1 && <ConnectionBox display={"false"} assets={assets}/>}
-            {selectedTab === 2 && <USPTOContainer assets={assets}/>}
             <Tabs
                 value={selectedTab}
                 variant="scrollable"
@@ -214,6 +212,9 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
                     )) 
                 }
             </Tabs>
+            {selectedTab === 0 && <SpanVisualize chart={selectedAssetsTransactionLifeSpan} chartBar={chartBar} visualizerBarSize={visualizerBarSize}/>}
+            {selectedTab === 1 && <ConnectionBox display={"false"} assets={assets}/>}
+            {selectedTab === 2 && <USPTOContainer assets={assets}/>}            
         </Paper> 
     )
 }

@@ -21,11 +21,11 @@ import {
 
 import {
     CheckCircleOutline as CheckCircleOutlineIcon,
+    Contacts as ContactsIcon,
+    LocationCity as LocationCityIcon,
     KeyboardArrowDown,
     Check
 } from '@material-ui/icons'
-
-
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -899,16 +899,20 @@ const ActionMenu = (props) => {
                                 </MenuItem>
                 }
                 <Divider />
-                <MenuItem>
-                    <AssetSwitchButton
-                        click={handleChangeLayout}
-                        category={category}
-                    /> 
-                </MenuItem>
-                <MenuItem>
+                <AssetSwitchButton
+                    click={handleChangeLayout}
+                    category={category}
+                />                
+                <MenuItem className={`iconItem`}>
+                    <ListItemIcon>
+                        <ContactsIcon/>
+                    </ListItemIcon>
                     <ListItemText>Correct Address</ListItemText>
                 </MenuItem>                    
-                <MenuItem>
+                <MenuItem className={`iconItem`}>
+                    <ListItemIcon>
+                        <LocationCityIcon/>
+                    </ListItemIcon>
                     <ListItemText>Correct Correspondence</ListItemText>
                 </MenuItem>
                 <Divider />

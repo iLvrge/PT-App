@@ -1,24 +1,24 @@
 import React from 'react'
-import { 
-    Button,
-  } from '@material-ui/core'
 
+import LinkIcon from '@material-ui/icons/Link';
 import useStyles from './styles'
+import { MenuItem, ListItemIcon, ListItemText } from '@material-ui/core';
 
 const AssetSwitchButton = (props) => {
-    const classes = useStyles()
+    
     return(
-        <div className={`${classes.grow_buttons} ${classes.alignItemCenter}`}>
-          {
-            process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' 
-            ?
-              <Button className={classes.calendly} onClick={props.click}>
-                {props.category == 'due_dilligence' ? 'Broken Chain' : 'All Assets'}
-              </Button> 
-            :
-            ''
-          }          
-        </div>
+      <React.Fragment>
+        {
+          process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && (
+            <MenuItem onClick={props.click} className={`iconItem`}>
+              <ListItemIcon>
+                <LinkIcon/>
+              </ListItemIcon>   
+              <ListItemText>{props.category == 'due_dilligence' ? 'Broken Chain' : 'All Assets'}</ListItemText>      
+            </MenuItem>
+          )
+        }
+      </React.Fragment>
     )
 }
 

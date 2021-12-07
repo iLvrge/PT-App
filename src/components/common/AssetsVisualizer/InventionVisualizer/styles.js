@@ -63,25 +63,17 @@ export default makeStyles(theme => ({
         }
     },
     tabs: {
-        minHeight: 35,
+        minHeight: 47,
     },
     tab: {
         flex: 1,
         minWidth: '25%',
-        minHeight: 35,
+        minHeight: 47,
     },
     clipboard: {
-        fill: '#fff',
+        fill: '#fff',  
         width: 24,
         height: 24
-    },
-    tabs: {
-        minHeight: 35,
-    },
-    tab: {
-        flex: 1,
-        minWidth: '25%',
-        minHeight: 35,
     },
     graphContainer: {
         flex: 1,

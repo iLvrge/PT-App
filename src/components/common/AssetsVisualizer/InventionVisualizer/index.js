@@ -134,8 +134,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         xStep: 1,
         yStep: 1,
         zStep: 3,
-        yCenter: '30%',
-        xCenter: '30%',
+        yCenter: '50%',
+        xCenter: '50%',
         showPerspective: false,
         showGrid: true,
         axisColor: '#fff',
@@ -530,10 +530,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             })
 
             await Promise.all(promises)            
-            const height = graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0 ? graphContainerRef.current.parentNode !== null && graphContainerRef.current.parentNode.parentNode !== null ? `${graphContainerRef.current.parentNode.parentNode.clientHeight - 50 }px` : `${graphContainerRef.current.clientHeight - 50 }px` : '100%'
             //TODO height 100% not working well, created allot of isues when we resize pane, 
             if(graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0) {
-            options = {...options, height: `${graphContainerRef.current.parentNode.parentNode.clientHeight - 50 }px`, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1, zStep: graphRawData.length > 2 ? 3 : 1 }
+                options = {...options, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1, zStep: graphRawData.length > 2 ? 3 : 1 }
             }     
 
             graphRef.current = new Graph3d(graphContainerRef.current, items.current, options)
@@ -757,6 +756,23 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
     return (
         <Paper className={classes.root} square>  
+            <Tabs
+                value={selectedTab}
+                variant="scrollable"
+                scrollButtons="auto"
+                onChange={handleChangeTab}
+                className={classes.tabs}
+            >
+                {
+                    inventionTabs.map((tab) => (
+                        <Tab
+                            key={tab}
+                            label={tab}
+                            classes={{ root: classes.tab }}
+                        />
+                    )) 
+                }
+            </Tabs> 
             <div className={classes.graphContainer}>                
                 {
                     selectedTab === 0
@@ -803,23 +819,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     ''
                 }                           
             </div> 
-            <Tabs
-                value={selectedTab}
-                variant="scrollable"
-                scrollButtons="auto"
-                onChange={handleChangeTab}
-                className={classes.tabs}
-            >
-                {
-                    inventionTabs.map((tab) => (
-                        <Tab
-                            key={tab}
-                            label={tab}
-                            classes={{ root: classes.tab }}
-                        />
-                    )) 
-                }
-            </Tabs> 
             <Dialog
                 open={openModal}
                 onClose={handleClose}

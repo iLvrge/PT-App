@@ -879,6 +879,12 @@ a.maintain svg.clean_encumbrances path{
 /* .editor{
   min-width: 387px;
 } */
+.claim{
+  display: inline-grid;
+}
+.claim-text{
+  display: grid;
+}
 
 .claim-dependent{
   margin-left: 40px;

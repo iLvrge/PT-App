@@ -149,8 +149,8 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       disableSort: true,
     },
     {
-      width: 90,
-      minWidth: 90,
+      width: 110,
+      minWidth: 110,
       label: "Transactions",
       dataKey: "date",
       align: "left",

@@ -50,8 +50,9 @@ const styles = makeStyles((theme) => ({
       },
       '& .MuiTableCell-head':{
         fontSize: '1.1rem',
-        width: '1rem',
-        height: '1rem'
+        fontWeight: 400,
+        /* width: '1rem',
+        height: '1rem' */
       }
     },
     '&.noBorderLines':{

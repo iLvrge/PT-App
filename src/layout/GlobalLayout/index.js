@@ -615,7 +615,6 @@ const GlobalLayout = (props) => {
 
         } else if(!bar === true && openIllustrationBar === false) {
             barSize = '100%'
-
         }
         if(!bar === true) {
             if(isMobile) {
@@ -626,7 +625,7 @@ const GlobalLayout = (props) => {
         }
         setCommentBarSize(barSize)
         changeVisualBar(openChartBar, openAnalyticsBar, !bar, openIllustrationBar)
-    }
+    }  
 
     const handleChartBarOpen = () => { 
         let bar = openChartBar, barSize = '50%'
@@ -634,7 +633,9 @@ const GlobalLayout = (props) => {
         if(!bar === false && openAnalyticsBar === true) {
             barSize = '100%'
         } else if((!bar === true && openAnalyticsBar === false) || ( !bar === false && openAnalyticsBar === false )) {
-            barSize = 0      
+            if(usptoMode === false) {
+                barSize = 0     
+            }             
         }
         if(!bar === true) {
             if(isMobile) {
@@ -654,11 +655,11 @@ const GlobalLayout = (props) => {
         let bar = openAnalyticsBar, barSize = '50%'
         setAnalyticsBar( !bar )
         if((!bar === false && openChartBar === false) || (openChartBar === true && !bar === false)) {
-            barSize = 0 
-
+            if(usptoMode === false) {
+                barSize = 0     
+            } 
         } else if((!bar === false && openChartBar === true) || (!bar === true && openChartBar === false ) ) {
             barSize = '100%'
-
         }   
         if(!bar === true) {
             if(isMobile) {
@@ -670,7 +671,6 @@ const GlobalLayout = (props) => {
         if(usptoMode === false && lifeSpanMode === false && familyMode === false && pdfView === false && !bar === true) {
             dispatch( toggleLifeSpanMode( true ) )
         }    
-
         setIllustrationBarSize(barSize)
         changeVisualBar(openChartBar, !bar, openCommentBar, openIllustrationBar)
     }
@@ -766,12 +766,20 @@ const GlobalLayout = (props) => {
                     return prevItem
                 }
             })
-            setAnalyticsBar( true ) 
+            //setAnalyticsBar( true ) 
             if(openChartBar === false) {
                 setIllustrationBarSize('100%')
             } else {
                 setIllustrationBarSize('50%')
             }
+        } else if( typeof usptoMode != undefined && usptoMode === false ) {
+            let barSize = '30%'
+            if(openChartBar === false && openAnalyticsBar === false && (openCommentBar === true || openIllustrationBar === true)){
+                barSize = '0%'
+            } else if (openCommentBar === false && openIllustrationBar === false && ( openChartBar === true ||  openAnalyticsBar === true )) {
+                barSize = '100%'
+            }
+            setVisualizerBarSize(barSize)
         }
     }
 
