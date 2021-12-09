@@ -6,17 +6,17 @@ import { IconButton, Paper, Modal, Table, TableHead, TableBody, TableRow, TableC
 import { Draggable } from 'react-drag-and-drop'
 
 import { Close, Fullscreen } from '@material-ui/icons'
-import IllustrationContainer from '../AssetsVisualizer/IllustrationContainer'
-import TimelineContainer from '../AssetsVisualizer/TimelineContainer'
-import AssetsCommentsTimeline from '../AssetsCommentsTimeline'
+import IllustrationContainer from '../src/components/common/AssetsVisualizer/IllustrationContainer'
+import TimelineContainer from '../src/components/common/AssetsVisualizer/TimelineContainer'
+import AssetsCommentsTimeline from '../src/components/common/AssetsCommentsTimeline'
 import LoadMaintainenceAssets from './LoadMaintainenceAssets'
 import LoadTransactionQueues from './LoadTransactionQueues'
 import LoadTransactionNameQueues from './LoadTransactionNameQueues'
 import LoadLinkAssets from './LoadLinkAssets'
-import AllComponentsMenu from '../AllComponentsMenu'
-import ArrowButton from '../ArrowButton'
-import { updateResizerBar } from '../../../utils/resizeBar'
-import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/numbers";
+import AllComponentsMenu from '../src/components/common/AllComponentsMenu'
+import ArrowButton from '../src/components/common/ArrowButton' 
+import { updateResizerBar } from '../src/utils/resizeBar'
+import { numberWithCommas, applicationFormat, capitalize } from "../src/utils/numbers";
 import useStyles from './styles'
 
 const IllustrationCommentContainer = ({ 
@@ -44,8 +44,6 @@ const IllustrationCommentContainer = ({
     onHandleGapSize,
     assignmentBar,
     assignmentBarToggle,
-    setChartBar,
-    setAnalyticsBar,
     type }) => {
     const classes = useStyles() 
     const iframeRef = useRef()
@@ -54,7 +52,7 @@ const IllustrationCommentContainer = ({
     const [ openCommentBar, setCommentOpenBar ] = useState(true)
     const [ commentButtonVisible, setCommentButtonVisible ] = useState(false)
     const [ isDrag, setIsDrag ] = useState(false)
-    const [ templateURL, setTemplateURL] = useState('about:blank')
+    const [ templateURL, settemplateURL] = useState('about:blank')
     const [ isFullscreenOpen, setIsFullscreenOpen ] = useState(false)
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false)
     const [ menuComponent, setMenuComponent ] = useState([])
@@ -86,13 +84,13 @@ const IllustrationCommentContainer = ({
 
     useEffect(() => {        
         if(new_drive_template_file != null && Object.keys(new_drive_template_file).length > 0 && new_drive_template_file.hasOwnProperty('id')) {
-            setTemplateURL(`https://docs.google.com/document/d/${new_drive_template_file.id}/edit`)
+            settemplateURL(`https://docs.google.com/document/d/${new_drive_template_file.id}/edit`)
         }
     }, [new_drive_template_file])
 
     useEffect(() => {
         if( templateURL != template_document_url ) {
-            setTemplateURL(template_document_url)
+            settemplateURL(template_document_url)
         }        
     }, [ templateURL,  template_document_url ])
 
@@ -237,8 +235,6 @@ const IllustrationCommentContainer = ({
                                     chartsBar={chartsBar}
                                     chartsBarToggle={chartsBarToggle}
                                     checkChartAnalytics={checkChartAnalytics}
-                                    setAnalyticsBar={setAnalyticsBar}
-                                    setChartBar={setChartBar}
                                     gap={gap}
                                 />
                         :
@@ -274,8 +270,6 @@ const IllustrationCommentContainer = ({
                                         chartsBar={chartsBar}
                                         chartsBarToggle={chartsBarToggle}
                                         checkChartAnalytics={checkChartAnalytics}
-                                        setAnalyticsBar={setAnalyticsBar}
-                                        setChartBar={setChartBar}
                                     />
                                 )
                                 :

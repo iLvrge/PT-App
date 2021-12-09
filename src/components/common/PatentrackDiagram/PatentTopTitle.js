@@ -15,7 +15,7 @@ import {
   faCheckSquare,
   faSquare,
 } from "@fortawesome/free-solid-svg-icons";
-import { Tooltip, Typography, Zoom, Drawer, Menu, MenuItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import { Tooltip, Typography, Zoom, Drawer, Menu, MenuItem, ListItemIcon, ListItemText, Checkbox, Divider } from "@material-ui/core";
 import { FaLightbulb } from "react-icons/fa";
 import { withStyles } from "@material-ui/styles";
 import { toggleShow3rdParities } from "../../../actions/uiActions";
@@ -77,11 +77,10 @@ class PatentTopTitle extends React.Component {
           className={`iconItem`}
         >
           <ListItemIcon>
-            <input
-              type="checkbox"
+            <Checkbox
+              defaultChecked={true}
               id={filterElement}
               onChange={this.props.update}
-              defaultChecked="true"
             />
           </ListItemIcon>
           <ListItemText style={{ color: hex }}>{filterElement}</ListItemText>
@@ -135,6 +134,7 @@ class PatentTopTitle extends React.Component {
                         className={clsx({ [classes.active]: usptoMode })}
                         onClick={() => this.props.uspto(!usptoMode)}
                       />
+                      <span className={`uspto_logo`}><img src={'/assets/images/logo-micro.png'}/></span>
                     </div>
                   </Tooltip>
                 </div>
@@ -197,7 +197,7 @@ class PatentTopTitle extends React.Component {
                     onClick={this.props.update}
                   />
                 </ListItemIcon>
-                <ListItemText>
+                <ListItemText id="assignmentQuantative">
                   {this.props.quantatives.assignment.current} /{" "}
                   {this.props.quantatives.assignment.total}
                 </ListItemText>
@@ -216,7 +216,7 @@ class PatentTopTitle extends React.Component {
                     onClick={this.props.update}
                   />
                 </ListItemIcon>
-                <ListItemText>
+                <ListItemText id="assigneeQuantative">
                   {this.props.quantatives.assignee.current} /{" "}
                   {this.props.quantatives.assignee.total}
                 </ListItemText>
@@ -227,7 +227,8 @@ class PatentTopTitle extends React.Component {
                   />
                 </ListItemIcon>   
                 <ListItemText></ListItemText>             
-              </MenuItem>              
+              </MenuItem>       
+              <Divider />       
               {filters}
             </Menu>      
           </React.Fragment>

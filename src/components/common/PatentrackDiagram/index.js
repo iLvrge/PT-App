@@ -1081,11 +1081,10 @@ class PatentrackDiagram extends React.Component {
            event_.currentTarget.checked ? event_.currentTarget.parentNode.setAttribute('title', event_.currentTarget.getAttribute('id') + ' filter is on') : event_.currentTarget.parentNode.setAttribute('title', event_.currentTarget.getAttribute('id') + ' filter is off');
 
         } else {
-            const ID = event_.currentTarget.parentNode.parentNode.getAttribute('id')
+            
+            const ID = event_.currentTarget.parentNode.getAttribute('id')
             if(ID == 'fastBackward'){
-        
-                this.state.assignments = this.state.assignees = [];
-        
+              this.state.assignments = this.state.assignees = [];
             }
             
             if(ID == 'fastForward'){
@@ -1206,7 +1205,6 @@ class PatentrackDiagram extends React.Component {
         }
       
         d3.selectAll('.PatentrackLink').nodes().map(node_ =>{
-                console.log("node_.attributes.class", node_.attributes.class, this.state.filters)
             let id = Number(node_.attributes.id.value.replace('PatentrackLink_', ''));
             let category = null;
 

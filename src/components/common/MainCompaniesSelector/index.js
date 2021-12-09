@@ -186,6 +186,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const [ currentSelection, setCurrentSelection ] = useState(null)   
     const [ intialization, setInitialization ] = useState( false ) 
     const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
+    const [sortField, setSortField] = useState(`original_name`)
+    const [sortOrder, setSortOrder] = useState(`ASC`)
     const [ companiesList, setCompaniesList ] = useState([])
     const [ selectedGroup, setSelectGroups ] = useState([])
     const companies = useSelector( state => state.patenTrack2.mainCompaniesList )
@@ -197,21 +199,13 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
 
-    useEffect(() => {
-        console.log('selectedGroup', selectedGroup)
-    }, [selectedGroup]) 
-
-    useEffect(() => {
-        console.log('selectItems', selectItems)
-    }, [selectItems]) 
-
     /**
      * Intialise company list
      */
 
     useEffect(() => {
         const initCompanies = async () => {
-            dispatch(fetchParentCompanies( offset ) )
+            dispatch(fetchParentCompanies( offset, sortField, sortOrder ) )
         } 
         initCompanies()  
     }, []) 
@@ -567,7 +561,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     }, [ dispatch, companies ]) 
 
     const handleOnClickLoadMore = useCallback(() => {
-        dispatch(fetchParentCompanies( offset + DEFAULT_CUSTOMERS_LIMIT))
+        dispatch(fetchParentCompanies( offset + DEFAULT_CUSTOMERS_LIMIT, sortField, sortOrder ))
         setOffset(currOffset => (currOffset + DEFAULT_CUSTOMERS_LIMIT))
     }, [ dispatch, offset])
 
@@ -602,6 +596,12 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }
     }, [dispatch, selectedGroups])
 
+    const handleSortData = (direction, column) => {
+        setSortField(column)
+        setSortOrder(direction)
+
+    }
+
     if (isLoadingCompanies && companies.list.length == 0) return <Loader />
 
   return (
@@ -624,6 +624,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         defaultSelectAll={selectedCompaniesAll}
         resizeColumnsWidth={resizeColumnsWidth}
         resizeColumnsStop={resizeColumnsStop}
+        /* sortDataLocal={false}
+        sortDataFn={handleSortData} */
         collapsable={true}
         childHeight={childHeight}
         childSelect={childSelected}

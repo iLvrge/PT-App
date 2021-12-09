@@ -148,6 +148,9 @@ const VirtualizedTable = ({
         setSortDirection(isAsc ? SortDirection.DESC : SortDirection.ASC);
         setSortBy(property);
       }
+      if(collapsable === true && selectedIndex !== null) {
+        updateNewHeight(100)
+      }
     },
     [sortBy, sortDirection],
   ); 
@@ -658,7 +661,7 @@ const VirtualizedTable = ({
             typeof onDoubleClick === 'function' && onDoubleClick(event, rowData)
           }}
           onClick={event => {
-            currentScrollIndex = index
+            currentScrollIndex = index            
             onSelect(
               event,
               rowData,

@@ -219,6 +219,15 @@ div.tooltip_title {
     font-size: 1rem;
     border-radius: 0;
 }
+.uspto_logo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 5px;
+}
+.uspto_logo img{
+    width: 40px;
+}
 /*
 #toobarUIGap0 { grid-area: 1 / 1 / 2 / 2; text-align: center; justify-content: center; align-items: center; }
 #expandOnOff { grid-area: 1 / 2 / 2 / 3; text-align: center; justify-content: center; align-items: center; }

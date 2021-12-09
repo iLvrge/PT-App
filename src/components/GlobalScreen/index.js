@@ -655,6 +655,8 @@ const GlobalScreen = ({
                                                 type={type}
                                                 assignmentBar={openAssignmentBar}
                                                 assignmentBarToggle={handleAssignmentBarOpen}
+                                                setAnalyticsBar={setAnalyticsBar}
+                                                setChartBar={setChartBar}
                                             /> 
                                         </div>
                                         <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>

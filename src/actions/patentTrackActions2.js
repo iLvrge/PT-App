@@ -429,10 +429,10 @@ export const setActiveMenuButton = (index) => {
  * New Design
  */
 
-export const fetchParentCompanies = ( offset = 0 ) => {
+export const fetchParentCompanies = ( offset = 0, sortFiled = 'original_ompany', sortorder = 'ASC' ) => {
   return async dispatch => {
     dispatch(setMainCompaniesLoadingMore(true))
-    const { data } = await PatenTrackApi.getParentCompanies(offset)
+    const { data } = await PatenTrackApi.getParentCompanies(offset, sortFiled, sortorder)
     //dispatch(getChannels())
     dispatch(setMainCompaniesLoadingMore(false))
     dispatch(setMainCompanies(data, { append: true }))
@@ -1041,7 +1041,7 @@ export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, appe
     PatenTrackApi.cancelAssets()
     const { data } = await PatenTrackApi.getCustomerAssets( type, companies, tabs, customers, rfIDs, startIndex, endIndex, column, direction )    
     dispatch( setAssetTypeAssignmentAllAssets(data, append) )
-    if(append === false) {
+    if(append === false) { 
       dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
     } else if(append === true && typeof assetTableScrollPosition !== 'undefined') {
       dispatch( setAssetTableScrollPos( assetTableScrollPosition ) )

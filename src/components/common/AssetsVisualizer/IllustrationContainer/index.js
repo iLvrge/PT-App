@@ -24,11 +24,16 @@ const IllustrationContainer = ({
   chartsBar,
   chartsBarToggle,
   checkChartAnalytics,
+  setAnalyticsBar,
+  setChartBar,
   onHandleChartBarSize
  }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const [ illustrationData, setIllustrationData ] = useState()
+  const [ click, setClick ] = useState(0) 
+  const [ lineId, setLineId ] = useState(0)
+  const [ linkId, setLinkId ] = useState(null)
   const targetRef = useRef()
   const [ parent_width, setParentWidth ] = useState(0)
   const [ bottomToolbarPosition, setBottomToolbarPosition ] = useState(0)
@@ -80,7 +85,7 @@ const IllustrationContainer = ({
           setIllustrationData(data != '' ? data : null)
           dispatch(setAssetsIllustrationData(data != '' ? data : null))
           if(setIllustrationRecord) { setIllustrationRecord(data) }
-          if(data.line[0].document1.indexOf('legacy-assignments.uspto.gov') !== -1) {
+          if(data.line[0].document1.indexOf('legacy-assignments.uspto.gov') !== -1 || (data.line[0].document1 == "" && data.line[0].ref_id > 0)) {
             data.line[0].rf_id =  data.line[0].ref_id
             retrievePDFFromServer(data.line[0])
           }
@@ -116,7 +121,7 @@ const IllustrationContainer = ({
       dispatch(
         setPDFView(true)
       )
-      if(obj.document_file.indexOf('legacy-assignments.uspto.gov') !== -1) {
+      if(obj.document_file.indexOf('legacy-assignments.uspto.gov') !== -1 || (obj.document_file == "" && obj.ref_id > 0)) {
         retrievePDFFromServer(obj)
       } else {
         dispatch(
@@ -202,7 +207,7 @@ const IllustrationContainer = ({
 
     if(data != null && typeof data.link !== 'undefined') {
         dispatch(
-          setPDFFile(
+          setPDFFile(    
             { 
               document: data.link, 
               form: data.link, 
@@ -219,42 +224,67 @@ const IllustrationContainer = ({
   const handleConnectionBox = useCallback((obj) => {
     console.log('ONCLICK HANDLE handleConnectionBox', obj)
     if (typeof obj.popup != 'undefined') {
-      dispatch(
-        toggleUsptoMode(false)
-      )
-      dispatch(
-        setPDFView(true)
-      )
-      if(obj.document1.indexOf('legacy-assignments.uspto.gov') !== -1) {
-        retrievePDFFromServer(obj)
-      } else {
+      setLineId(obj.id)
+      if(linkId != obj.popuptop) {
+        setLinkId(obj.popuptop)
+        setClick(1)
         dispatch(
-          setPDFFile(
-            { 
-              document: obj.document1, 
-              form: obj.document1_form, 
-              agreement: obj.document1_agreement 
-            }
-          )
+          toggleUsptoMode(false)
         )
+        dispatch(
+          setPDFView(true)
+        )
+        if(obj.document1.indexOf('legacy-assignments.uspto.gov') !== -1 || (obj.document1 == "" && obj.rf_id > 0) ) {          
+          retrievePDFFromServer(obj)
+        } else {
+          dispatch(
+            setPDFFile(
+              { 
+                document: obj.document1, 
+                form: obj.document1_form, 
+                agreement: obj.document1_agreement 
+              }
+            )
+          )
+        }
+        
+        dispatch(
+          setPdfTabIndex(0)
+        )
+        dispatch(
+          setConnectionData(obj)
+        )
+        dispatch(
+          setConnectionBoxView(true)
+        )
+        checkChartAnalytics({ 
+          document: obj.document1, 
+          form: obj.document1_form, 
+          agreement: obj.document1_agreement 
+        }, obj)  
+      } else {
+        if(click == 1) {
+          setClick(2)
+          setConnectionBoxView(false)
+          setPDFView(true)
+          setChartBar(false)
+          setAnalyticsBar(true)
+        } else if(click == 2) {
+          setClick(3)
+          setConnectionBoxView(true)
+          setPDFView(false)
+          setChartBar(true)
+          setAnalyticsBar(false)
+        } else {
+          setClick(1)
+          setAnalyticsBar(true)
+          setChartBar(true)
+          setConnectionBoxView(true)
+          setPDFView(true)
+        }
       }
-      
-      dispatch(
-        setPdfTabIndex(0)
-      )
-      dispatch(
-        setConnectionData(obj)
-      )
-      dispatch(
-        setConnectionBoxView(true)
-      )
-      checkChartAnalytics({ 
-        document: obj.document1, 
-        form: obj.document1_form, 
-        agreement: obj.document1_agreement 
-      }, obj)  
     }
-  }, [ dispatch ])
+  }, [ linkId, click, dispatch ])
 
   const handleUSPTO = useCallback((usptoMode) => {
     dispatch(
@@ -294,7 +324,7 @@ const IllustrationContainer = ({
                 key={illustrationData + '_' + Math.random()} 
                 gap={gap}
                 showThirdParties={showThirdParties}
-                />             
+              />             
             )
           )
         }
