@@ -26,6 +26,7 @@ const IllustrationContainer = ({
   checkChartAnalytics,
   setAnalyticsBar,
   setChartBar,
+  fullScreen,
   onHandleChartBarSize
  }) => {
   const classes = useStyles()
@@ -318,6 +319,8 @@ const IllustrationContainer = ({
                 share={handleShare} 
                 pdfView={handlePdfView} 
                 uspto={handleUSPTO}
+                fullScreen={fullScreen}
+                isFullscreenOpen={isFullscreenOpen}
                 titleTop={topPosition} 
                 toolbarBottom={bottomToolbarPosition} 
                 parentWidth={parseInt(parent_width)} 

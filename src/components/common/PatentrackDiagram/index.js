@@ -1650,6 +1650,8 @@ class PatentrackDiagram extends React.Component {
           patent={this.props.data.general}
           colorScheme={config.colors}
           toolbarBottom={this.props.toolbarBottom}
+          fullScreen={this.props.fullScreen}
+          isFullscreenOpen={this.props.isFullscreenOpen}
           quantatives={{
             assignment: {
               current:

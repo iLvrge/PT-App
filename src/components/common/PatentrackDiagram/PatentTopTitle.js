@@ -15,7 +15,8 @@ import {
   faCheckSquare,
   faSquare,
 } from "@fortawesome/free-solid-svg-icons";
-import { Tooltip, Typography, Zoom, Drawer, Menu, MenuItem, ListItemIcon, ListItemText, Checkbox, Divider } from "@material-ui/core";
+import { Tooltip, Typography, Zoom, Drawer, Menu, MenuItem, ListItemIcon, ListItemText, Checkbox, Divider, IconButton, Badge } from "@material-ui/core";
+import { Fullscreen } from '@material-ui/icons'
 import { FaLightbulb } from "react-icons/fa";
 import { withStyles } from "@material-ui/styles";
 import { toggleShow3rdParities } from "../../../actions/uiActions";
@@ -94,31 +95,28 @@ class PatentTopTitle extends React.Component {
             <div id='topTitle'>
               <span title={this.props.title}>{this.props.title}</span>
               <div id="topUIToolbarExpanded">
-                <div
-                  id="toolbarUIGap12"
-                  className="toolbarUIGap" /* style={{ marginLeft: 'auto' }} */
+                <IconButton
+                  onClick={(event) => {this.toggleDrawer(event, true)}}
                 >
                   <Tooltip 
-                  className='tooltip'
-                  title={
-                    <Typography color="inherit" variant='body2'>{'Toolbar'}</Typography>
-                  }
-                  placement='top'
-                  enterDelay={0}
-                  TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
-                  >
-                    <div className="tooltipContainer">
-                      <FontAwesomeIcon
-                        icon={faEllipsisV}
-                        /* onMouseEnter={(event) => {this.toggleDrawer(event, true)}}  */
-                        onClick={(event) => {this.toggleDrawer(event, true)}} 
-                      />
-                    </div>
-                  </Tooltip>
-                </div>                
-                <div
-                  id="toolbarUIGap7"
-                  className="toolbarUIGap" /* style={{ marginLeft: 'auto' }} */
+                      className='tooltip'
+                      title={
+                        <Typography color="inherit" variant='body2'>{'Toolbar'}</Typography>
+                      }
+                      placement='top'
+                      enterDelay={0}
+                      TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+                      > 
+                      <Badge badgeContent={0} color="secondary"> 
+                        <FontAwesomeIcon
+                          icon={faEllipsisV}
+                        />
+                      </Badge>   
+                  </Tooltip>                     
+                </IconButton>     
+                <IconButton
+                  onClick={() => this.props.uspto(!usptoMode)}
+                  className={'uspto_logo'}
                 >
                   <Tooltip 
                   className='tooltip'
@@ -129,16 +127,17 @@ class PatentTopTitle extends React.Component {
                   enterDelay={0}
                   TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
                   >
-                    <div className="tooltipContainer">
+                    <Badge badgeContent={0} color="secondary">   
                       <FaLightbulb
                         className={clsx({ [classes.active]: usptoMode })}
-                        onClick={() => this.props.uspto(!usptoMode)}
                       />
-                      <span className={`uspto_logo`}><img src={'/assets/images/logo-micro.png'}/></span>
-                    </div>
+                      <span className={'uspto_logo_container'}><img src={'/assets/images/logo-micro.png'}/></span>
+                    </Badge>
                   </Tooltip>
-                </div>
-                <div id="shareDiagram" className="toolbarUIElement">
+                </IconButton>
+                <IconButton
+                  onClick={() => this.props.share(this.props.patent)}
+                >
                   <Tooltip 
                   className='tooltip'
                   title={
@@ -148,16 +147,35 @@ class PatentTopTitle extends React.Component {
                   enterDelay={0}
                   TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
                   >
-                    <div className="tooltipContainer">
+                    <Badge badgeContent={0} color="secondary"> 
                       <FontAwesomeIcon
-                        icon={faShareAlt}
-                        onClick={() => this.props.share(this.props.patent)}
+                        icon={faShareAlt}                          
                       />
-                    </div>
+                    </Badge>
                   </Tooltip>
-                </div>
-              </div>
-              
+                </IconButton>
+                {
+                  !this.props.isFullscreenOpen && (
+                    <IconButton
+                      onClick={() => this.props.fullScreen()}
+                    >
+                      <Tooltip 
+                      className='tooltip'
+                      title={
+                        <Typography color="inherit" variant='body2'>{'Full Screen'}</Typography>
+                      }
+                      placement='top'
+                      enterDelay={0}
+                      TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+                      >
+                        <Badge badgeContent={0} color="secondary"> 
+                          <Fullscreen />
+                        </Badge>
+                      </Tooltip>
+                    </IconButton>
+                  )
+                }                
+              </div>              
             </div>
             <Menu
               open={open}

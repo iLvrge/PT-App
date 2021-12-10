@@ -7,7 +7,7 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
 
 #topTitle {
     display: flex;
-    padding: 0 37px 0 16px;
+    padding: 0 9px 0 16px;
     font-size: 1rem;
     color: #FFFFFF;
     height: 47px;
@@ -42,8 +42,22 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-width: 9%;
     margin-left: auto;
+}
+
+#topUIToolbarExpanded .MuiIconButton-root{
+    border-radius: 0;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+}
+#topUIToolbarExpanded .uspto_logo{
+    width: 75px;
+}
+
+.uspto_logo_container{
+    display: flex;
+    align-items: center;
 }
 
 #bottomUIToolbarContainer {
@@ -114,11 +128,9 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
     line-height: 32px; 
     justify-content: center; 
     align-items: center; 
-    width: 2rem;
 }
 .toolbarUIElement svg {    position: unset !important;  }
 .toolbarUIGap { 
-  width: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -212,8 +224,8 @@ div.tooltip_title {
     justify-content: center;
 }
 .tooltipContainer  .svg-inline--fa.fa-w-14{
-    width: 1rem;
-    height: 1rem;
+    /* width: 1rem;
+    height: 1rem; */
 }
 .tooltip {
     font-size: 1rem;

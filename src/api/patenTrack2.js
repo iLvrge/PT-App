@@ -240,7 +240,7 @@ class PatenTrackApi {
 
   static getCustomerAssets(type, companies, tabs, customers, rfIDs, startIndex, endIndex, column, direction) { 
     let header = getHeader()
-    header['cancelToken'] = new CancelToken(function executor(c) {
+    header['cancelToken'] = new CancelToken(function executor(c) { 
       cancelAssets = c
     })
     return axios.get(`${base_new_api_url}/customers/${type}/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}&offset=${startIndex}&limit=${endIndex}&column=${column}&direction=${direction}`, header)

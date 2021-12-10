@@ -167,7 +167,7 @@ const IllustrationCommentContainer = ({
                 {
                     selectedCompanies.length > 0
                      && !isFullscreenOpen && 
-                        illustrationBar === true && 
+                        illustrationBar === true &&  shouldShowTimeline === true &&
                         ( search_string != '' || assetCompaniesRowSelect.length > 0 || 
                             selectedCompaniesAll === true || 
                             selectedCompanies.length > 0 ||
@@ -239,6 +239,7 @@ const IllustrationCommentContainer = ({
                                     checkChartAnalytics={checkChartAnalytics}
                                     setAnalyticsBar={setAnalyticsBar}
                                     setChartBar={setChartBar}
+                                    fullScreen={handleClickOpenFullscreen}
                                     gap={gap}
                                 />
                         :
