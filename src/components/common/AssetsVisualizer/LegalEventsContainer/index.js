@@ -21,6 +21,7 @@ const LegalEventsContainer = ({ events, type }) => {
   const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
   const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
   const auth_token = useSelector(state => state.patenTrack2.auth_token)
+  const asset_details = useSelector(state => state.patenTrack2.asset_details)
 
   useEffect(() => {
     setSelectedNumber(selectedAssetsPatents[1] !== '' ? `US${numberWithCommas(selectedAssetsPatents[1])}` : `US${applicationFormat(selectedAssetsPatents[0])}`)
@@ -36,7 +37,7 @@ const LegalEventsContainer = ({ events, type }) => {
           <>
             <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
               {
-                ['M.Fees', 'F.Citations', /* 'Events',  */'PTAB', 'Litigation'].map( (item, index) => (
+                [`M.Fees(${asset_details.fees})`, `F.Citations(${asset_details.citations})`, /* 'Events',  */`PTAB(${asset_details.ptab})`, `Litigation(${asset_details.litigation})`].map( (item, index) => (
                   <Tab
                     key={index}
                     className={classes.tab} 

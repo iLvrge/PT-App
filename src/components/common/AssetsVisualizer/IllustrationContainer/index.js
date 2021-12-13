@@ -5,7 +5,7 @@ import { Paper, Modal } from '@material-ui/core'
 import copy from 'copy-to-clipboard'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import PatentrackDiagram from '../../PatentrackDiagram'
-import { toggleUsptoMode, toggleFamilyMode } from "../../../../actions/uiActions";
+import { toggleUsptoMode, toggleFamilyMode, toggleShow3rdParities } from "../../../../actions/uiActions";
 import { setAssetsIllustrationLoading, setAssetsIllustrationData } from '../../../../actions/patentTrackActions2' 
 import { setPDFFile, setPDFView, setPdfTabIndex, setConnectionData, setConnectionBoxView } from '../../../../actions/patenTrackActions' 
 import { copyToClipboard } from '../../../../utils/html_encode_decode'
@@ -40,8 +40,8 @@ const IllustrationContainer = ({
   const [ bottomToolbarPosition, setBottomToolbarPosition ] = useState(0)
   const [ topPosition, setTopPosition ] = useState(0)  
   const screenHeight = useSelector(state => state.patenTrack.screenHeight)
-  
-  const showThirdParties = useSelector(state => state.ui.showThirdParties)  
+  const usptoMode = useSelector(state => state.ui.usptoMode)
+  const showThirdParties = useSelector(state => state.ui.showThirdParties)
   const isLoadingAssetIllustration = useSelector(state => state.patenTrack2.loadingAssetIllustration)
   
   
@@ -304,6 +304,12 @@ const IllustrationContainer = ({
     }
   }, [ dispatch ])
 
+  const handleToggleParties = useCallback((flag) => {
+    dispatch(
+      toggleShow3rdParities(flag)
+    )
+  },[ dispatch ])
+
   return (
     <div className={classes.root}>           
       <div className={classes.forceStrech} ref={targetRef}>
@@ -319,14 +325,18 @@ const IllustrationContainer = ({
                 share={handleShare} 
                 pdfView={handlePdfView} 
                 uspto={handleUSPTO}
-                fullScreen={fullScreen}
-                isFullscreenOpen={isFullscreenOpen}
                 titleTop={topPosition} 
                 toolbarBottom={bottomToolbarPosition} 
                 parentWidth={parseInt(parent_width)} 
-                key={illustrationData + '_' + Math.random()} 
-                gap={gap}
+                key={illustrationData + '_' + Math.random()}
+                gap={gap}                
                 showThirdParties={showThirdParties}
+                toggleShow3rdParities={handleToggleParties}
+                usptoMode={usptoMode}
+                lineId={lineId}
+                fullScreen={fullScreen}
+                isFullscreenOpen={isFullscreenOpen} 
+                copyrights={true}
               />             
             )
           )

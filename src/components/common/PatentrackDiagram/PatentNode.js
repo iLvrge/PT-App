@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useSelector, useDispatch } from 'react-redux'
 import moment from "moment";
 import * as d3 from "d3";
 
@@ -52,7 +51,6 @@ function wrapText(str, width, lines, node) {
 
 export default function PatentNode(props) {
   const { node, data, config, childrenLinks, parent, pdfView } = props;
-  const pdfFile = useSelector(state => state.patenTrack.pdfFile)
   function unsetAllActiveLink() {
     const element = document.querySelector(
       "g#patentLinksGroup",

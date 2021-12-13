@@ -8,7 +8,6 @@ import PatentLink from "./PatentLink";
 import PatentTimeline from "./PatentTimeline";
 
 import PatentTopTitle from "./PatentTopTitle";
-import PatentBottomUI from "./PatentBottomUI";
 
 import "./css/styles.css";
 import config from "./config.json";
@@ -1532,6 +1531,7 @@ class PatentrackDiagram extends React.Component {
           parent={"patentLinksGroup"}
           data={linkData}
           config={config}
+          lineId={this.props.lineId}  
         />
       );
     });
@@ -1652,6 +1652,9 @@ class PatentrackDiagram extends React.Component {
           toolbarBottom={this.props.toolbarBottom}
           fullScreen={this.props.fullScreen}
           isFullscreenOpen={this.props.isFullscreenOpen}
+          toggleShow3rdParities={this.props.toggleShow3rdParities}
+          showThirdParties={this.props.showThirdParties}
+          usptoMode={this.props.usptoMode}
           quantatives={{
             assignment: {
               current:
@@ -1688,35 +1691,15 @@ class PatentrackDiagram extends React.Component {
             </g>
             <g id="patentLinksGroup">{links}</g>
             <g id="patentNodesGroup">{nodes}</g>
+            {
+              this.props.copyrights && (
+                <g transform={`translate(16,${svgParams.height ? svgParams.height - 20 : this.height })`}>
+                  <text fill="#BDBDBD"><tspan>The illustrations, and the systems and methods by which they were created, are copyright</tspan> <tspan x="0" dy="14.25">protected and covered by several pending patent applications.</tspan></text>
+                </g>
+              )  
+            }  
           </svg>
         </div>
-        {/* <PatentBottomUI
-          width={this.props.parentWidth}
-          update={this.updateDiagram}
-          uspto={this.props.uspto}
-          comment={this.props.comment}
-          commentContent={this.props.data.comment}
-          share={this.props.share}
-          patent={this.props.data.general}
-          colorScheme={config.colors}
-          toolbarBottom={this.props.toolbarBottom}
-          quantatives={{
-            assignment: {
-              current:
-                this.state.assignments.length == 0
-                  ? 0
-                  : this.state.assignments[this.state.assignments.length - 1],
-              total: this.state.limits.assignments,
-            },
-            assignee: {
-              current:
-                this.state.assignees.length == 0
-                  ? 0
-                  : this.state.assignees[this.state.assignees.length - 1] + 1,
-              total: this.state.limits.assignees,
-            },
-          }}
-        /> */}
       </div>
     );
   }

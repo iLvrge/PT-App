@@ -74,7 +74,7 @@ const getMultiFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelPtab, cancelShareTimeline
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelPtab, cancelShareTimeline, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelFamilyCounter, cancelFeesCounter
 
 class PatenTrackApi {
   static getSiteLogo() {
@@ -1077,6 +1077,24 @@ class PatenTrackApi {
     } 
   }
 
+  static getClaimsCounter( applicationNumber ) {
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelClaimsCounter = c
+    })
+    return axios.get(`${base_new_api_url}/family/claims/${applicationNumber}?counter=true`,  header)
+  } 
+
+  static cancelClaimsCounter () {
+    if (cancelClaimsCounter !== undefined) {
+      try{
+        throw cancelClaimsCounter('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
   static getSpecificationData( applicationNumber ) {
     let header = getHeader()
     header['cancelToken'] = new CancelToken(function executor(c) {
@@ -1112,6 +1130,25 @@ class PatenTrackApi {
       }
     } 
   }
+
+  static getFiguresCounter( applicationNumber ) {
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelFiguresCounter = c
+    })
+    return axios.get(`${base_new_api_url}/family/images/${applicationNumber}?counter=true`,  header)
+  }
+
+  static cancelFiguresCounter() {
+    if (cancelFiguresCounter !== undefined) {
+      try{
+        throw cancelFiguresCounter('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
   static getPtabData( asset ) {
     let header = getHeader()
     header['cancelToken'] = new CancelToken(function executor(c) {
@@ -1129,6 +1166,25 @@ class PatenTrackApi {
       }
     } 
   }
+
+  static getPtabCounter( asset ) {
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelPtabCounter = c
+    })
+    return axios.get(`${base_new_api_url}/ptab/${asset}?counter=true`,  header)
+  } 
+  
+  static cancelPtabCounter () {
+    if (cancelPtabCounter !== undefined) {
+      try{
+        throw cancelPtabCounter('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
   static getCitationData( asset ) {
     let header = getHeader()
     header['cancelToken'] = new CancelToken(function executor(c) {
@@ -1146,6 +1202,60 @@ class PatenTrackApi {
       }
     } 
   }  
+
+  static getCitationCounter( asset ) {
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelCitationCounter = c
+    })
+    return axios.get(`${base_new_api_url}/citation/${asset}?counter=true`,  header)
+  } 
+  
+  static cancelCitationCounter () {
+    if (cancelCitationCounter !== undefined) {
+      try{
+        throw cancelCitationCounter('Operation canceled by the user.')  
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
+  static getFamilyCounter(applicationNumber) { 
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelFamilyCounter = c
+    })
+    return axios.get(`${base_new_api_url}/family/${applicationNumber}?counter=true`, getHeader())
+  }
+
+  static cancelFamilyCounter () {
+    if (cancelFamilyCounter !== undefined) {
+      try{
+        throw cancelFamilyCounter('Operation canceled by the user.')  
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
+  static getFeesCounter(applicationNumber, patentNumber) { 
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelFeesCounter = c
+    })
+    return axios.get(`${base_new_api_url}/events/${applicationNumber}/${patentNumber != '' ? patentNumber : applicationNumber}?counter=true`, header)
+  }
+
+  static cancelFeesCounter () {
+    if (cancelFeesCounter !== undefined) {
+      try{
+        throw cancelFeesCounter('Operation canceled by the user.')  
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
 }
 
 

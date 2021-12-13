@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { connect } from "react-redux"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -14,14 +13,13 @@ import {
   faFastForward,
   faCheckSquare,
   faSquare,
+  faExpand
 } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip, Typography, Zoom, Drawer, Menu, MenuItem, ListItemIcon, ListItemText, Checkbox, Divider, IconButton, Badge } from "@material-ui/core";
 import { Fullscreen } from '@material-ui/icons'
 import { FaLightbulb } from "react-icons/fa";
-import { withStyles } from "@material-ui/styles";
-import { toggleShow3rdParities } from "../../../actions/uiActions";
-import clsx from "clsx";
 import * as d3 from 'd3'
+import clsx from 'clsx';
 
 class PatentTopTitle extends React.Component {
     
@@ -31,7 +29,6 @@ class PatentTopTitle extends React.Component {
       
     this.state = { expand: true,  right: false, anchorEl: null}
     this.update = this.update.bind(this)
-         
   }
     
   update () {    
@@ -45,18 +42,13 @@ class PatentTopTitle extends React.Component {
     console.log(event.currentTarget)
     this.setState({
       anchorEl: open === true ? event.currentTarget : null
-    })
+    }) 
   }
-    
+  
   render () {
-    const {
-      classes,
-      usptoMode,
-      showThirdParties,
-      toggleShow3rdParities,
-    } = this.props;
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
+    
     let showFilters = this.state.filters
       ? {
           display: "inline-block",
@@ -75,9 +67,9 @@ class PatentTopTitle extends React.Component {
       return (
         <MenuItem
           key={"PatentrackDiagramFilterElement_" + i_}
-          className={`iconItem`}
+          className={clsx(`iconItem checkboxItems `)}
         >
-          <ListItemIcon>
+          <ListItemIcon className={'checkbox'}>
             <Checkbox
               defaultChecked={true}
               id={filterElement}
@@ -93,7 +85,7 @@ class PatentTopTitle extends React.Component {
    return (
           <React.Fragment>
             <div id='topTitle'>
-              <span title={this.props.title}>{this.props.title}</span>
+              <span className={'title'} title={this.props.title}>{this.props.title}</span>
               <div id="topUIToolbarExpanded">
                 <IconButton
                   onClick={(event) => {this.toggleDrawer(event, true)}}
@@ -115,8 +107,27 @@ class PatentTopTitle extends React.Component {
                   </Tooltip>                     
                 </IconButton>     
                 <IconButton
-                  onClick={() => this.props.uspto(!usptoMode)}
-                  className={'uspto_logo'}
+                  onClick={() => this.props.toggleShow3rdParities(!this.props.showThirdParties)}
+                >
+                  <Tooltip 
+                      className='tooltip'
+                      title={
+                        <Typography color="inherit" variant='body2'>{'Show/Hide 3rd Parties'}</Typography>
+                      }
+                      placement='top'
+                      enterDelay={0}
+                      TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+                      > 
+                      <Badge badgeContent={0} color="secondary"> 
+                        <FontAwesomeIcon
+                          icon={this.props.showThirdParties ? faCheckSquare : faSquare}
+                        />
+                      </Badge>   
+                  </Tooltip>                     
+                </IconButton> 
+                <IconButton
+                  onClick={() => this.props.uspto(!this.props.usptoMode)}
+                  /* className={'uspto_logo'} */
                 >
                   <Tooltip 
                   className='tooltip'
@@ -129,9 +140,9 @@ class PatentTopTitle extends React.Component {
                   >
                     <Badge badgeContent={0} color="secondary">   
                       <FaLightbulb
-                        className={clsx({ [classes.active]: usptoMode })}
+                        className={this.props.usptoMode === true ? 'active' : '' }
                       />
-                      <span className={'uspto_logo_container'}><img src={'/assets/images/logo-micro.png'}/></span>
+                      {/* <span className={'uspto_logo_container'}><img src={'/assets/images/logo-micro.png'}/></span> */}
                     </Badge>
                   </Tooltip>
                 </IconButton>
@@ -155,7 +166,8 @@ class PatentTopTitle extends React.Component {
                   </Tooltip>
                 </IconButton>
                 {
-                  !this.props.isFullscreenOpen && (
+                  !this.props.isFullscreenOpen 
+                  ?
                     <IconButton
                       onClick={() => this.props.fullScreen()}
                     >
@@ -169,11 +181,14 @@ class PatentTopTitle extends React.Component {
                       TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
                       >
                         <Badge badgeContent={0} color="secondary"> 
-                          <Fullscreen />
+                          <FontAwesomeIcon
+                            icon={faExpand}                          
+                          />
                         </Badge>
                       </Tooltip>
                     </IconButton>
-                  )
+                  :
+                  <IconButton className={'empty'}>&nbsp;</IconButton>
                 }                
               </div>              
             </div>
@@ -184,8 +199,9 @@ class PatentTopTitle extends React.Component {
               disableAutoFocusItem
               PaperProps={{    
                 style: {
+                  width: 250,  
                   left: '50%',
-                  transform: 'translateX(-29%) translateY(9%)',
+                  transform: 'translateX(-29%) translateY(11%)',
                 }
               }}
             >
@@ -196,9 +212,11 @@ class PatentTopTitle extends React.Component {
                     onClick={this.props.update}
                   />
                 </ListItemIcon>
-                <ListItemText><span style={{visibility: 'hidden'}}>
-                  {this.props.quantatives.assignment.current} /{" "}
-                  {this.props.quantatives.assignment.total}</span>
+                <ListItemText className={'show_counters custom-width'}>
+                  <span style={{visibility: 'hidden'}}>
+                    {this.props.quantatives.assignment.current} /{" "}
+                    {this.props.quantatives.assignment.total}
+                  </span>
                 </ListItemText>
                 <ListItemIcon id="fastForward">
                   <FontAwesomeIcon
@@ -206,7 +224,7 @@ class PatentTopTitle extends React.Component {
                     onClick={this.props.update}
                   />
                 </ListItemIcon>
-                <ListItemText></ListItemText>
+                <ListItemText className={'show_label'}>Start / End</ListItemText>
               </MenuItem>
               <MenuItem className={`iconItem`}>
                 <ListItemIcon id="prevAssignment">
@@ -215,7 +233,7 @@ class PatentTopTitle extends React.Component {
                     onClick={this.props.update}
                   />
                 </ListItemIcon>
-                <ListItemText id="assignmentQuantative">
+                <ListItemText id="assignmentQuantative"  className={'show_counters'}>
                   {this.props.quantatives.assignment.current} /{" "}
                   {this.props.quantatives.assignment.total}
                 </ListItemText>
@@ -225,7 +243,7 @@ class PatentTopTitle extends React.Component {
                     onClick={this.props.update}
                   />
                 </ListItemIcon>   
-                <ListItemText></ListItemText>             
+                <ListItemText className={'show_label'}>Transactions</ListItemText>             
               </MenuItem>
               <MenuItem className={`iconItem`}>
                 <ListItemIcon id="prevAssignee">
@@ -234,7 +252,7 @@ class PatentTopTitle extends React.Component {
                     onClick={this.props.update}
                   />
                 </ListItemIcon>
-                <ListItemText id="assigneeQuantative">
+                <ListItemText id="assigneeQuantative"  className={'show_counters'}>
                   {this.props.quantatives.assignee.current} /{" "}
                   {this.props.quantatives.assignee.total}
                 </ListItemText>
@@ -244,9 +262,12 @@ class PatentTopTitle extends React.Component {
                     onClick={this.props.update}
                   />
                 </ListItemIcon>   
-                <ListItemText></ListItemText>             
+                <ListItemText className={'show_label'}>Right Steps</ListItemText>             
               </MenuItem>       
-              <Divider />       
+              <Divider />   
+              <MenuItem className={`iconItem`}>
+                <ListItemText>Filter Transaction Types</ListItemText>    
+              </MenuItem>    
               {filters}
             </Menu>      
           </React.Fragment>
@@ -255,25 +276,4 @@ class PatentTopTitle extends React.Component {
   }
     
 }
-
-
-const styles = theme => ({
-  active: {
-    color: theme.palette.secondary.main,
-  },
-});
-
-const mapStateToProps = state => ({
-  usptoMode: state.ui.usptoMode,
-  showThirdParties: state.ui.showThirdParties,
-});
-
-const mapDispatchToProps = {
-  toggleShow3rdParities,
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(withStyles(styles)(PatentTopTitle));
-
+export default PatentTopTitle;

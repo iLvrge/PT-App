@@ -26,6 +26,7 @@ const styles = makeStyles((theme) => ({
     boxSizing: 'border-box',
     '&.MuiTableCell-head':{
       minWidth: '35px',
+      
     },
     '& .ReactVirtualized__Table__headerColumn':{
       position: 'relative',
@@ -53,6 +54,16 @@ const styles = makeStyles((theme) => ({
         fontWeight: 400,
         /* width: '1rem',
         height: '1rem' */
+        '& .slackIcon':{
+          '& span.MuiIconButton-label':{
+            width: 32,
+            height: 32,
+            '& svg':{
+              width: 32,
+              height: 32
+            }
+          }
+        }
       }
     },
     '&.noBorderLines':{

@@ -752,7 +752,12 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state, 
           assetTableScrollPosition: action.pos  
         }
-      default:  
+      case types.SET_ASSET_DETAILS:
+        return { 
+          ...state, 
+          asset_details: {...state.asset_details, ...action.assetData}
+        }
+      default:   
       return state
   } 
 }

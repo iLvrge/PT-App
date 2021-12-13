@@ -48,7 +48,9 @@ import {
   setLinkAssetListSelected,
   setLinkAssetData,
   getForeignAssetsBySheet,
-  setAssetTableScrollPos
+  setAssetTableScrollPos,
+  resetAssetDetails,
+  getAssetDetails
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -803,10 +805,17 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         dispatch(setTemplateDocument(null));
         dispatch(setConnectionBoxView(false));
         dispatch(setPDFView(false));        
-        //dispatch(toggleUsptoMode(false));
+        //dispatch(toggleUsptoMode(false));  
         dispatch(toggleLifeSpanMode(false));
         dispatch(toggleFamilyMode(true));
         dispatch(toggleFamilyItemMode(true));
+        PatenTrackApi.cancelFamilyCounter()
+        PatenTrackApi.cancelClaimsCounter()
+        PatenTrackApi.cancelFiguresCounter()
+        PatenTrackApi.cancelPtabCounter()
+        PatenTrackApi.cancelCitationCounter()
+        PatenTrackApi.cancelFeesCounter()
+        dispatch(getAssetDetails(appno_doc_num, grant_doc_num))
         dispatch(
           setPDFFile(
             { 
@@ -875,6 +884,7 @@ const resetAll = () => {
     dispatch(linkWithSheetSelectedAsset(null, null))
     dispatch(setLinkAssetData([]))
     dispatch(setLinkAssetListSelected([]))
+    dispatch(resetAssetDetails())
     /* if(openChartBar === true || openAnalyticsBar === true) {
       closeAnalyticsAndCharBar()
     } */

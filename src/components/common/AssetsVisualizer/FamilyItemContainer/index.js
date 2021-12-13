@@ -34,6 +34,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
     const familyDataRetrieved = useSelector( state => state.patenTrack.familyDataRetrieved  )
     const selectedAssetsFamily = useSelector(state => state.patenTrack.assetFamily)    
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
+    const asset_details = useSelector(state => state.patenTrack2.asset_details)
 
     useEffect(() => {
         console.log('FamilyItemContainer', item, familyDataRetrieved)
@@ -128,7 +129,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                         
                         <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
                             {
-                                ['Family', 'Abstract', 'Specifications', 'Claims', 'Figures'].map( (item, index) => (
+                                [`Family(${asset_details.family})`, `Abstract`, `Specifications`, `Claims(${asset_details.claims})`, `Figures(${asset_details.figures})`].map( (item, index) => (
                                     <Tab
                                         key={index}
                                         className={classes.tab}

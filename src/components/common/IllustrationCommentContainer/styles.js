@@ -80,10 +80,11 @@ export default makeStyles(theme => ({
     right:{
         position: 'absolute',
         right: 5,
-        top: 5,
+        top: 11,
         width: 20,
         height: 20,
-        zIndex: 1
+        zIndex: 1,
+        borderRadius: 0
     },
     templateFrame:{
         width: '100%',

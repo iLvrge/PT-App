@@ -1511,3 +1511,60 @@ export const setAssetTableScrollPos = (pos) => {
     pos
   }
 } 
+
+
+export const getAssetDetails = (applicationNumber, patentNumber) => {
+  const asset = `US${applicationNumber}`
+  return async dispatch => {
+    dispatch( setAssetDetails( {asset, family: 0, claims: 0, figures: 0, fees: 0, citations: 0, ptab: 0, litigation: 0 } ) )
+    
+    const family = await PatenTrackApi.getFamilyCounter( applicationNumber )    
+    if(family !== null && family.data !== null) {
+      dispatch( setAssetDetails( { family: family.data } ) )
+    }
+
+    const claims = await PatenTrackApi.getClaimsCounter( asset )    
+    if(claims !== null && claims.data !== null) {
+      dispatch( setAssetDetails( { claims: claims.data } ) )
+    }
+
+    const figures = await PatenTrackApi.getFiguresCounter( asset )    
+    if(figures !== null && figures.data !== null) {
+      dispatch( setAssetDetails( { figures: figures.data } ) )
+    }
+
+    const fees = await PatenTrackApi.getFeesCounter( applicationNumber, patentNumber )    
+    if(fees !== null && fees.data !== null) {
+      dispatch( setAssetDetails( { fees: fees.data } ) )
+    }
+
+    const citation = await PatenTrackApi.getCitationCounter( asset )    
+    if(citation !== null && citation.data !== null) {
+      dispatch( setAssetDetails( { citations: citation.data } ) )
+    }
+
+    const ptab = await PatenTrackApi.getPtabCounter( asset )    
+    if(ptab !== null && ptab.data !== null) {
+      dispatch( setAssetDetails( { ptab: ptab.data } ) )
+    }
+
+    /* const litigation = await PatenTrackApi.getLitigationCounter( asset )    
+    if(litigation !== null && litigation.data !== null) {
+      dispatch( setAssetDetails( { litigation: litigation.data } ) )  
+    } */
+  }
+} 
+
+export const setAssetDetails = (assetData) => {
+  return {
+    type: types.SET_ASSET_DETAILS,
+    assetData
+  }
+} 
+
+export const resetAssetDetails = () => {
+  return {
+    type: types.SET_ASSET_DETAILS,
+    assetData: {asset: null, family: 0, claims: 0, figures: 0, fees: 0, citations: 0, ptab: 0, litigation: 0}
+  }
+} 

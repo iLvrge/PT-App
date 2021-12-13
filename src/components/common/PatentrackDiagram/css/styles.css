@@ -28,7 +28,7 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
 }
-#topTitle span{
+#topTitle span.title{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -50,11 +50,49 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
     width: 30px;
     height: 30px;
     padding: 0;
+    color: #fff;
+}
+#topUIToolbarExpanded .MuiIconButton-root svg{
+    width: 1.2rem;
+    height: 1.2rem;
+}
+.checkboxItems {
+    padding-bottom: 0px !important;
+    padding-top: 0px !important;
+}
+.iconItem .MuiListItemIcon-root{
+    min-width: auto !important;
+}
+.checkbox{
+    min-width: auto !important;
+}
+.checkbox .MuiIconButton-root {
+    padding: 0 5px 0 0;
+}
+.checkbox svg.MuiSvgIcon-root{
+    width: 1rem;
+    height: 1rem;
+    font-size: 1rem;
+}
+.show_counters{
+    display: flex;
+    align-items: center;    
+    justify-content: center;
+    flex-basis: 100px !important;
+}
+.show_counters.custom-width{
+    flex-basis: 88px !important;
+}
+.show_label{
+    margin-left: 10px;
+    margin-right: 10px;
 }
 #topUIToolbarExpanded .uspto_logo{
     width: 75px;
 }
-
+.empty:hover{
+    background: none !important;
+}
 .uspto_logo_container{
     display: flex;
     align-items: center;
