@@ -53,15 +53,40 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
     color: #fff;
 }
 #topUIToolbarExpanded .MuiIconButton-root svg{
-    width: 1.2rem;
-    height: 1.2rem;
+    width: 1em;
+    height: 1em;
 }
+
+#topUIToolbarExpanded .MuiIconButton-root{
+    background-color: transparent;
+    color: #FFF;
+}
+
+#topUIToolbarExpanded .MuiIconButton-root:hover{
+    color: #E60000;
+    background-color: transparent;
+}      
 .checkboxItems {
     padding-bottom: 0px !important;
     padding-top: 0px !important;
 }
 .listIconItem .MuiListItemIcon-root{
     min-width: auto !important;
+}
+
+.listIconItem .MuiListItemIcon-root:hover{
+    color: #E60000;
+}
+
+.listIconItem.heading{
+    padding-bottom: 0;
+    cursor: text;
+}
+.listIconItem.heading:hover{
+    background: none;
+}
+.listIconItem.heading .MuiListItemText-root{
+    margin-bottom: 0;
 }
 .checkbox{
     min-width: auto !important;
@@ -78,10 +103,10 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
     display: flex;
     align-items: center;    
     justify-content: center;
-    flex-basis: 100px !important;
+    flex-basis: 45px !important;
 }
 .show_counters.custom-width{
-    flex-basis: 88px !important;
+    flex-basis: 30px !important;
 }
 .show_label{
     margin-left: 10px;

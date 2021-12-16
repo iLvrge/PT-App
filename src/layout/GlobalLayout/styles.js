@@ -49,11 +49,11 @@ export default makeStyles(theme => ({
         justifyContent: 'space-between',
     },
     filterToolbar: {
-        width: '3.5rem',
+        width: '57px',   
         borderRight: 0,
     },
     flex:{
-        width: '3.5rem',
+        width: '57px',
         position: 'absolute'
     },
     mobileFlex: {

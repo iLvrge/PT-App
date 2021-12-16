@@ -8,7 +8,8 @@ export default makeStyles(theme => ({
         /* paddingTop: 7, */
        /*  paddingBottom: 17, */
         '& .MuiIconButton-root':{
-            padding: 8,
+            padding: '11px 8px',
+            borderRadius: 0,
             color: '#5a5a5a',
             '&:hover':{
                 color: 'rgb(230, 0, 0)' ,
@@ -21,14 +22,14 @@ export default makeStyles(theme => ({
                 fill: '#5a5a5a',
                 stroke: '#5a5a5a',
                 /* width: '2rem',
-                height: '2rem' */
+                height: '2rem' */  
             },
             '& svg.noStroke':{
                 stroke: 'none !important'
             },
             '&.active':{
                 color: '#fff !important' ,
-                '& svg':{
+                '& svg':{ 
                     fill: '#fff !important',
                     stroke: '#fff !important',
                 },

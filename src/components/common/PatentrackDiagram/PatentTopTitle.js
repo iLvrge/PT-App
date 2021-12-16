@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-
+import Slider from '@material-ui/core/Slider'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faShareAlt, 
@@ -27,7 +27,7 @@ class PatentTopTitle extends React.Component {
        
     super(props_)
       
-    this.state = { expand: true,  right: false, anchorEl: null}
+    this.state = { expand: true,  right: false, anchorEl: null, sliderValue: 30}
     this.update = this.update.bind(this)
   }
     
@@ -44,9 +44,15 @@ class PatentTopTitle extends React.Component {
       anchorEl: open === true ? event.currentTarget : null
     }) 
   }
+
+  handleSliderChange = (event, newValue) => {
+    this.setState({
+      sliderValue: newValue
+    })
+  }
   
   render () {
-    const { anchorEl } = this.state;
+    const { anchorEl, sliderValue } = this.state;
     const open = Boolean(anchorEl);
     
     let showFilters = this.state.filters
@@ -213,10 +219,7 @@ class PatentTopTitle extends React.Component {
                   />
                 </ListItemIcon>
                 <ListItemText className={'show_counters custom-width'}>
-                  <span style={{visibility: 'hidden'}}>
-                    {this.props.quantatives.assignment.current} /{" "}
-                    {this.props.quantatives.assignment.total}
-                  </span>
+                  <span style={{visibility: 'hidden'}}></span>
                 </ListItemText>
                 <ListItemIcon id="fastForward">
                   <FontAwesomeIcon
@@ -264,8 +267,10 @@ class PatentTopTitle extends React.Component {
                 </ListItemIcon>   
                 <ListItemText className={'show_label'}>Right Steps</ListItemText>             
               </MenuItem>       
-              <Divider />   
-              <MenuItem className={`listIconItem`}>
+              <Divider />  
+                <Slider value={sliderValue} onChange={this.handleSliderChange} aria-labelledby="continuous-slider" />
+              <Divider />  
+              <MenuItem className={`listIconItem heading`}>
                 <ListItemText>Filter Transaction Types</ListItemText>    
               </MenuItem>    
               {filters}
