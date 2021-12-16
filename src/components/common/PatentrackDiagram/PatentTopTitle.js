@@ -67,7 +67,7 @@ class PatentTopTitle extends React.Component {
       return (
         <MenuItem
           key={"PatentrackDiagramFilterElement_" + i_}
-          className={clsx(`iconItem checkboxItems `)}
+          className={clsx(`listIconItem checkboxItems `)}
         >
           <ListItemIcon className={'checkbox'}>
             <Checkbox
@@ -205,7 +205,7 @@ class PatentTopTitle extends React.Component {
                 }
               }}
             >
-              <MenuItem className={`iconItem`}>
+              <MenuItem className={`listIconItem`}>
                 <ListItemIcon id="fastBackward">
                   <FontAwesomeIcon
                     icon={faFastBackward}
@@ -226,7 +226,7 @@ class PatentTopTitle extends React.Component {
                 </ListItemIcon>
                 <ListItemText className={'show_label'}>Start / End</ListItemText>
               </MenuItem>
-              <MenuItem className={`iconItem`}>
+              <MenuItem className={`listIconItem`}>
                 <ListItemIcon id="prevAssignment">
                   <FontAwesomeIcon
                     icon={faAngleDoubleLeft}
@@ -245,7 +245,7 @@ class PatentTopTitle extends React.Component {
                 </ListItemIcon>   
                 <ListItemText className={'show_label'}>Transactions</ListItemText>             
               </MenuItem>
-              <MenuItem className={`iconItem`}>
+              <MenuItem className={`listIconItem`}>
                 <ListItemIcon id="prevAssignee">
                   <FontAwesomeIcon
                     icon={faAngleLeft}
@@ -265,7 +265,7 @@ class PatentTopTitle extends React.Component {
                 <ListItemText className={'show_label'}>Right Steps</ListItemText>             
               </MenuItem>       
               <Divider />   
-              <MenuItem className={`iconItem`}>
+              <MenuItem className={`listIconItem`}>
                 <ListItemText>Filter Transaction Types</ListItemText>    
               </MenuItem>    
               {filters}
