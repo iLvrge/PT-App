@@ -15,7 +15,7 @@ import Button from '@material-ui/core/Button'
 import StyledSearch from '../../../common/StyledSearch'
 import clsx from 'clsx'
 
-const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setSearch, childComponent }) => {
+const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setSearch, childComponent, selectedType }) => {
   const classes = useStyles()
 
   const [ openDialog, setOpenDialog ] = useState(false)
@@ -35,13 +35,13 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
   
   return (
     <Fragment>
-      <Dialog open={openDialog} onClose={onCloseDialog}>
+      <Dialog open={openDialog} onClose={onCloseDialog} className={classes.dialog}>
         <DialogTitle id="alert-dialog-title">Remove Items</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to remove {numSelected} {title.toLowerCase()}?
+            Are you sure you want to remove {numSelected} {typeof selectedType !== 'undefined' ? selectedType.toLowerCase() : title.toLowerCase()}?
           </DialogContentText>
-        </DialogContent>
+        </DialogContent> 
 
         <DialogActions>
           <Button onClick={onCloseDialog} color="default">

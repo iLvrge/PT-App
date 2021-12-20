@@ -175,9 +175,10 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
     }, [ dispatch, controlList, move_assets, display_clipboard, selectItems, selectedAssets, clipboard_assets ])
     
     const COLUMNS = [
+        
         {
-            width: 24,
-            minWidth: 24,
+            width: 20,
+            minWidth: 20,
             disableSort: true,
             label: "",
             dataKey: "asset",

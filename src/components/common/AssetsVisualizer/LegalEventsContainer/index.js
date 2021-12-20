@@ -28,6 +28,29 @@ const LegalEventsContainer = ({ events, type }) => {
   }, [])
 
   const handleChangeTab = (event, newTab) => setSelectedTab(newTab)
+
+  const ItemLabel = ({label}) =>  {
+    return (
+        label === 'M.Fees'
+        ?
+          <span className={classes.containerRelative}>{label}<span className={classes.counter}>{asset_details.fees}</span></span>
+        :
+            label === 'F.Citations'
+            ?
+              <span className={classes.containerRelative}>{label}<span className={classes.counter}>{asset_details.citations}</span></span>
+            :
+                label === 'PTAB'
+                ?
+                  <span className={classes.containerRelative}>{label}<span className={classes.counter}>{asset_details.ptab}</span></span>
+                :
+                  label == 'Litigation'
+                  ?
+                    <span className={classes.containerRelative}>{label}<span className={classes.counter}>{asset_details.litigation}</span></span>
+                  :
+                  label
+    )
+}
+
   
   return (
     <Paper className={classes.root} square >
@@ -37,11 +60,11 @@ const LegalEventsContainer = ({ events, type }) => {
           <>
             <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
               {
-                [`M.Fees(${asset_details.fees})`, `F.Citations(${asset_details.citations})`, /* 'Events',  */`PTAB(${asset_details.ptab})`, `Litigation(${asset_details.litigation})`].map( (item, index) => (
+                [`M.Fees`, `F.Citations`, /* 'Events',  */`PTAB`, `Litigation`].map( (item, index) => (
                   <Tab
                     key={index}
                     className={classes.tab} 
-                    label={item}
+                    label={<ItemLabel label={item}/>}
                   />
                 ))
               }                            

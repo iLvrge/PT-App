@@ -208,6 +208,7 @@ class PatentTopTitle extends React.Component {
                   width: 250,  
                   left: '50%',
                   transform: 'translateX(-29%) translateY(11%)',
+                  backgroundColor: 'rgba(66,66,66, 0.7)'   
                 }
               }}
             >
@@ -267,8 +268,14 @@ class PatentTopTitle extends React.Component {
                 </ListItemIcon>   
                 <ListItemText className={'show_label'}>Right Steps</ListItemText>             
               </MenuItem>       
-              <Divider />  
-                <Slider value={sliderValue} onChange={this.handleSliderChange} aria-labelledby="continuous-slider" />
+              <Divider /> 
+                <MenuItem> 
+                  <ListItemIcon>
+                    <Slider value={sliderValue} onChange={this.handleSliderChange} aria-labelledby="continuous-slider" />
+                  </ListItemIcon>
+                  <ListItemIcon style={{minWidth: 20 }}></ListItemIcon>
+                  <ListItemText className={'show_label'}>Zoom</ListItemText>    
+                </MenuItem>    
               <Divider />  
               <MenuItem className={`listIconItem heading`}>
                 <ListItemText>Filter Transaction Types</ListItemText>    

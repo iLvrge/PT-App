@@ -50,6 +50,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const [ showContainer, setShowContainer ] = useState(true)
     const [ assets, setAssets ] = useState([])
     const [ filterList, setFilterList ] = useState([])
+    const [ filterTotal, setFilterTotal ] = useState(0)
     const [ filterYear, setFilterYear ] = useState([])
     const [ selectedTab, setSelectedTab ] = useState(0)
     const [ resizableWidthHeight, setResizableWidthHeight ] = useState([665, 350])
@@ -106,7 +107,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected ) //companies
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll )
     const assetsList = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list) //Assets List
+    const assetsTotal = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.total_records) //Assets records
     const maintainenceAssetsList = useSelector( state => state.patenTrack2.maintainenceAssetsList.list )
+    const maintainenceAssetsTotal = useSelector(state => state.patenTrack2.maintainenceAssetsList.total_records) //Assets records
     const selectedMaintainencePatents = useSelector( state => state.patenTrack2.selectedMaintainencePatents )
     const assetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected) //Assets Selected
     const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected )
@@ -134,7 +137,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         xStep: 1,
         yStep: 1,
         zStep: 3,
-        yCenter: '50%',
+        yCenter: '45%',
         xCenter: '50%',
         showPerspective: false,
         showGrid: true,
@@ -202,6 +205,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             setAssetsLoading(true)
             const form = new FormData()
             form.append("list", JSON.stringify(filterList))
+            form.append("total", maintainenceAssetsList.length > 0 ? maintainenceAssetsTotal : assetsTotal)
+            form.append('selectedCompanies', JSON.stringify(selectedCompanies))
+            form.append('type', selectedCategory)
             form.append(`range`, valueRange)
             const {data} = await PatenTrackApi.getAssetsByCPCCode(point.x, encodeURIComponent(code), form) 
             setAssetsLoading(false)
@@ -263,6 +269,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             }
             setIsLoadingCharts(true)   
             const list = [];
+            let totalRecords = 0;
             
             if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {
                 
@@ -273,9 +280,10 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                             if( assetsList[findIndex].appno_doc_num != '' ) {
                                 list.push(assetsList[findIndex].appno_doc_num.toString())
                             }
-                        }
+                        }                        
                     })
                     await Promise.all(promise)
+                    totalRecords = list.length
                 } else {
                     const promise = selectedMaintainencePatents.map(asset => {
                         const findIndex = maintainenceAssetsList.findIndex( row => row.appno_doc_num.toString() == asset[1].toString() || row.grant_doc_num.toString() == asset[0].toString() )
@@ -284,8 +292,10 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                 list.push(maintainenceAssetsList[findIndex].appno_doc_num.toString())
                             }
                         }
+
                     })
                     await Promise.all(promise)
+                    totalRecords = list.length
                 }                
             } else {
                 
@@ -293,9 +303,11 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     if( assetsList.length > 0 ) {
                         const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
                         await Promise.all(promise)
+                        totalRecords = assetsTotal
                     } else if ( maintainenceAssetsList.length > 0 ) {
                         const promise = maintainenceAssetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
                         await Promise.all(promise)
+                        totalRecords = maintainenceAssetsTotal
                     }
                 } else {
                     
@@ -353,7 +365,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
             if( list.length > 0 ) {
                 setFilterList(list)
-                findCPCList([...scopeRange], list)
+                setFilterTotal(totalRecords)
+                findCPCList([...scopeRange], list, totalRecords)
             }
         }
         getChartData()
@@ -361,9 +374,12 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     }, [selectedCategory, selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_clipboard ]) 
 
 
-    const findCPCList = async(oldScopeRange, list, year, range, scope) => {       
+    const findCPCList = async(oldScopeRange, list, totalRecords, year, range, scope) => {       
         const form = new FormData()
         form.append("list", JSON.stringify(list))
+        form.append("total", totalRecords)
+        form.append('selectedCompanies', JSON.stringify(selectedCompanies))
+        form.append('type', selectedCategory)
         if(typeof range !== 'undefined') {
             form.append("range", range)
         }
@@ -451,7 +467,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         }
                     })
                     await Promise.all(promise)
-                    findCPCList(oldScopeRange, list, year, range, scopeList)
+                    findCPCList(oldScopeRange, list, totalRecords, year, range, scopeList)
                 }
             }
         }
@@ -715,8 +731,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 yearList.push(parseInt(r.label))
             }
         })
-        findCPCList([...scopeRange], filterList, yearList, range)      
-    }, [filterList, filterYear])
+        findCPCList([...scopeRange], filterList, filterTotal, yearList, range)      
+    }, [filterList, filterTotal, filterYear])
 
     const onChangeRangeSlider = useCallback(async (year, range) => {
         // Depth
@@ -729,8 +745,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 yearList.push(parseInt(r.label))
             }
         })
-        findCPCList([...scopeRange], filterList, yearList, range)      
-    }, [ filterList, scopeRange, valueRange ] )
+        findCPCList([...scopeRange], filterList, filterTotal, yearList, range)      
+    }, [ filterList, filterTotal, scopeRange, valueRange ] )
 
     
     const onChangeScopeSlider = useCallback(async (year, range, scope) => {
@@ -749,8 +765,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 yearList.push(parseInt(r.label))
             }
         })
-        findCPCList([...scopeRange], filterList, yearList, range, scopeList)        
-    }, [ filterList, scopeRange ] )
+        findCPCList([...scopeRange], filterList, filterTotal, yearList, range, scopeList)        
+    }, [ filterList, filterTotal, scopeRange ] )
 
     if(showContainer === false) return null 
 

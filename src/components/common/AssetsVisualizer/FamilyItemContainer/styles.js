@@ -514,5 +514,18 @@ export default makeStyles(theme => ({
     display: 'flex',
     height: '100%',
     width: '100%',
+  },
+  containerRelative: {
+    position: 'relative',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  counter: {
+    display: 'flex',
+    position: 'absolute',
+    lineHeight: 1,
+    bottom: '-8px',
+    alignItems: 'center',
+    color: '#E60000',
   }
 }))

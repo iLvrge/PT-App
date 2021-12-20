@@ -12,4 +12,13 @@ export default makeStyles((theme) => ({
   title: {
     flex: '1 1 100%',
   },
+  dialog: {
+    '& .MuiDialogContent-root':{
+      padding: '8px 24px'
+    },
+    '& .MuiDialogActions-root':{
+      padding: 8
+    }
+
+  }
 }))

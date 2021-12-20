@@ -117,7 +117,24 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
     const onCloseFamilyMode = useCallback(() => {
         //dispatch(toggleFamilyMode());
       }, [/*dispatch*/]);
-
+    
+    const ItemLabel = ({label}) =>  {
+        return (
+            label === 'Family'
+            ?
+                <span className={classes.containerRelative}>{label}<span className={classes.counter}>{asset_details.family}</span></span>
+            :
+                label === 'Claims'
+                ?
+                    <span className={classes.containerRelative}>{label}<span className={classes.counter}>{asset_details.claims}</span></span>
+                :
+                    label === 'Figures'
+                    ?
+                        <span className={classes.containerRelative}>{label}<span className={classes.counter}>{asset_details.figures}</span></span>
+                    :
+                    label
+        )
+    }
 
     return(
         <Paper className={classes.root} square>
@@ -129,11 +146,11 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                         
                         <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
                             {
-                                [`Family(${asset_details.family})`, `Abstract`, `Specifications`, `Claims(${asset_details.claims})`, `Figures(${asset_details.figures})`].map( (item, index) => (
+                                [`Family`, `Abstract`, `Specifications`, `Claims`, `Figures`].map( (item, index) => (
                                     <Tab
                                         key={index}
                                         className={classes.tab}
-                                        label={item}
+                                        label={<ItemLabel label={item}/>}
                                         disableFocusRipple={true}
                                         disableRipple={true}
                                     />

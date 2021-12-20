@@ -1517,35 +1517,54 @@ export const getAssetDetails = (applicationNumber, patentNumber) => {
   const asset = `US${applicationNumber}`
   return async dispatch => {
     dispatch( setAssetDetails( {asset, family: 0, claims: 0, figures: 0, fees: 0, citations: 0, ptab: 0, litigation: 0 } ) )
+    try{
+      const family = await PatenTrackApi.getFamilyCounter( applicationNumber )    
+      if(family !== null && family.data !== null) {
+        dispatch( setAssetDetails( { family: family.data } ) )
+      }
+    } catch (err) {
+      console.log('counterError Family', err)
+    }
     
-    const family = await PatenTrackApi.getFamilyCounter( applicationNumber )    
-    if(family !== null && family.data !== null) {
-      dispatch( setAssetDetails( { family: family.data } ) )
+    try{
+      const claims = await PatenTrackApi.getClaimsCounter( asset )    
+      if(claims !== null && claims.data !== null) {
+        dispatch( setAssetDetails( { claims: claims.data } ) )
+      }
+    } catch (err) {
+      console.log('counterError claims', err)
     }
-
-    const claims = await PatenTrackApi.getClaimsCounter( asset )    
-    if(claims !== null && claims.data !== null) {
-      dispatch( setAssetDetails( { claims: claims.data } ) )
+    try{
+      const figures = await PatenTrackApi.getFiguresCounter( asset )    
+      if(figures !== null && figures.data !== null) {
+        dispatch( setAssetDetails( { figures: figures.data } ) )
+      }
+    } catch (err) {
+      console.log('counterError figures', err)
     }
-
-    const figures = await PatenTrackApi.getFiguresCounter( asset )    
-    if(figures !== null && figures.data !== null) {
-      dispatch( setAssetDetails( { figures: figures.data } ) )
+    try{
+      const fees = await PatenTrackApi.getFeesCounter( applicationNumber, patentNumber )    
+      if(fees !== null && fees.data !== null) {
+        dispatch( setAssetDetails( { fees: fees.data } ) )
+      }
+    } catch (err) {
+      console.log('counterError fees', err)
     }
-
-    const fees = await PatenTrackApi.getFeesCounter( applicationNumber, patentNumber )    
-    if(fees !== null && fees.data !== null) {
-      dispatch( setAssetDetails( { fees: fees.data } ) )
+    try{
+      const citation = await PatenTrackApi.getCitationCounter( asset )    
+      if(citation !== null && citation.data !== null) {
+        dispatch( setAssetDetails( { citations: citation.data } ) )
+      }
+    } catch (err) {
+      console.log('counterError citation', err)
     }
-
-    const citation = await PatenTrackApi.getCitationCounter( asset )    
-    if(citation !== null && citation.data !== null) {
-      dispatch( setAssetDetails( { citations: citation.data } ) )
-    }
-
-    const ptab = await PatenTrackApi.getPtabCounter( asset )    
-    if(ptab !== null && ptab.data !== null) {
-      dispatch( setAssetDetails( { ptab: ptab.data } ) )
+    try{
+      const ptab = await PatenTrackApi.getPtabCounter( asset )    
+      if(ptab !== null && ptab.data !== null) {
+        dispatch( setAssetDetails( { ptab: ptab.data } ) )
+      }
+    } catch (err) {
+      console.log('counterError ptab', err)
     }
 
     /* const litigation = await PatenTrackApi.getLitigationCounter( asset )    

@@ -1,5 +1,5 @@
 import React, { Fragment, useCallback, useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import useStyles from './styles'
 import { fetchCompaniesList, setBreadCrumbs } from '../../../../../actions/patentTrackActions2'
 import CompaniesTable from './CompaniesTable'
@@ -16,13 +16,14 @@ function Companies() {
   const dispatch = useDispatch()
   const [ open, setOpen ] = useState(true)
   const [ search, setSearch ] = useState('')
+  const [ selectedType, setSelectedType] = useState('companies')
   const [ companiesSelected, setCompaniesSelected ] = useState([])
   const [ childCompaniesSelected, setChildCompaniesSelected ] = useState([])
   
   const [ searchSelected, setSearchSelected ] = useState([])
   const toggleOpen = useCallback(() => setOpen(open => !open), [])
   const [ childComponentList, setChildComponentList ] = useState([])
-
+  const companiesList = useSelector(state => state.patenTrack.companiesList)
 
 
   useEffect(() => {
@@ -62,7 +63,24 @@ function Companies() {
     }])
   }, [])
 
-  
+  useEffect(() => {
+    if(companiesSelected.length > 0) {
+      let type = ''
+      const promises = companiesSelected.map( row => {
+        companiesList.forEach(company => {
+          if(company.id === row && company.type == 1) {
+            type = type === 'companies' ?  'companies and groups' : 'groups'
+            return 
+          } else if(company.id === row && company.type == 0 ) {
+            type = type === 'groups' ? 'groups and companies' : 'companies'
+            return
+          } 
+        });
+      })
+      Promise.all(promises)
+      setSelectedType(type === '' ? 'companies' : type)
+    }
+  }, [companiesSelected])
 
   return (
     <SplitPaneDrawer
@@ -79,6 +97,7 @@ function Companies() {
             numSelected={companiesSelected.length + childCompaniesSelected.length}
             search={search}
             setSearch={setSearch} 
+            selectedType={selectedType}
             childComponent={childComponentList}
           />
 

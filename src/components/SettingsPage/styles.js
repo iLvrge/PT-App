@@ -66,14 +66,14 @@ export default makeStyles(theme => ({
     zIndex: 1, 
   }, 
   filterToolbar: {
-    width: '3.5rem',
+    width: 57,
     borderRight: 0,
   },
   flex:{
-    width: '3.5rem',
+    width: 57,
     position: 'absolute'
   },
-  navigationHome:{
+  navigationHome:{  
     height: 40,
     display: 'flex',
     justifyContent: 'center',

@@ -50,25 +50,33 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
     width: 30px;
     height: 30px;
     padding: 0;
-    color: #fff;
+    color: #5a5a5a;
+    background-color: transparent;
 }
 #topUIToolbarExpanded .MuiIconButton-root svg{
     width: 1em;
     height: 1em;
+    fill: #5a5a5a;
+    stroke: #5a5a5a;
 }
 
-#topUIToolbarExpanded .MuiIconButton-root{
-    background-color: transparent;
-    color: #FFF;
-}
-
-#topUIToolbarExpanded .MuiIconButton-root:hover{
+#topUIToolbarExpanded .MuiIconButton-root:hover, #topUIToolbarExpanded .MuiIconButton-root svg:hover{
     color: #E60000;
     background-color: transparent;
+    fill: #E60000;
+    stroke: #E60000;
 }      
+#topUIToolbarExpanded .MuiIconButton-root svg.active {
+    color: #E60000;
+    fill: #E60000;
+    stroke: #E60000;
+}
 .checkboxItems {
     padding-bottom: 0px !important;
     padding-top: 0px !important;
+}
+.MuiSlider-rail, .MuiSlider-track{
+    background-color: #fff !important;
 }
 .listIconItem .MuiListItemIcon-root{
     min-width: auto !important;
@@ -103,10 +111,10 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
     display: flex;
     align-items: center;    
     justify-content: center;
-    flex-basis: 45px !important;
+    flex-basis: 10px !important;
 }
 .show_counters.custom-width{
-    flex-basis: 30px !important;
+    flex-basis: 0px !important;
 }
 .show_label{
     margin-left: 10px;

@@ -293,11 +293,11 @@ function SettingsPage() {
           <Grid container className={classes.dashboard}>
             <div className={classes.filterToolbar}> 
               <div className={classes.flex}>
-                {
+                { 
                   topToolBar.map( (item, index) => (
                     <NavigationIcon key={index} {...item}/>
                   ))
-                }              
+                } 
               </div>
             </div>
             <div className={classes.tabPanel}>
