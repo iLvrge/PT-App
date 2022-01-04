@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Paper } from '@material-ui/core'
 
-import { Clear, NotInterested } from '@material-ui/icons';
+import { Clear, NotInterested, KeyboardArrowDown } from '@material-ui/icons';
 
 import useStyles from './styles' 
 import VirtualizedTable from '../../VirtualizedTable'
@@ -58,10 +58,16 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
 
     const dropdownList = [
         {
-          id: -1,
-          name: 'No action' ,
-          icon: <NotInterested />,
-          image: ''
+            id: 99,
+            name: 'No action' ,
+            icon: <NotInterested />,
+            image: ''
+        },
+        {
+            id: -1,
+            name: '', 
+            icon: <KeyboardArrowDown />,
+            image: ''
         },
         {
           id: 0,
@@ -112,7 +118,7 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
                 if(findIndex !== -1) {
                     oldMoveAssets.splice(findIndex, 1)
                 }
-                if( event.target.value != -1 ) {
+                if( event.target.value !== 99 ) {
                     oldMoveAssets.push({
                         asset: row.asset,
                         move_category: event.target.value,
@@ -160,7 +166,7 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
             if(findIndex !== -1) {
                 oldMoveAssets.splice(findIndex, 1)
             }
-            if( event.target.value != -1 ) {
+            if( event.target.value !== 99 ) {
                 oldMoveAssets.push({
                     asset,
                     move_category: event.target.value,
@@ -175,7 +181,16 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
     }, [ dispatch, controlList, move_assets, display_clipboard, selectItems, selectedAssets, clipboard_assets ])
     
     const COLUMNS = [
-        
+        {
+            width: 10,
+            minWidth: 10,
+            label: "", 
+            dataKey: "asset",
+            role: "checkbox",
+            disableSort: true,
+            show_selection_count: true,
+            enable: false
+        },
         {
             width: 20,
             minWidth: 20,
@@ -320,8 +335,6 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
                 columns={COLUMNS}
                 onSelect={handleClickSelectCheckbox}
                 onSelectAll={onHandleSelectAll}
-                icon={<ClipIcon/>}
-                checkedIcon={<ClipCheckedIcon/>}
                 defaultSelectAll={selectedAll}
                 totalRows={assets.length}
                 responsive={false}

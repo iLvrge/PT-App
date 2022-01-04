@@ -135,7 +135,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       minWidth: 29,
       label: "",
       dataKey: "rf_id",
-      role: "checkbox",
+      role: "radio",
       disableSort: true,
       show_selection_count: true
     },
@@ -506,24 +506,26 @@ const onHandleClickRow = useCallback(
           //dispatch(getChannelIDTransaction(row.rf_id));
         } else {
           if (!oldSelection.includes(row.rf_id)) {
-            oldSelection.push(row.rf_id);
+            //oldSelection.push(row.rf_id);
+            oldSelection = [row.rf_id]
           } else {
-            oldSelection = oldSelection.filter(
+            /* oldSelection = oldSelection.filter(
                 customer => customer !== parseInt(row.rf_id),
-            );
+            ); */
+            oldSelection = []
           }
-          // setSelectItems(oldSelection);
+          setSelectItems(oldSelection);
           setSelectAll(false);
           history.push({
             hash: updateHashLocation(location, "assignments", oldSelection).join(
                 "&",
             ),
           });
-          setSelectItems(prevItems =>
+          /* setSelectItems(prevItems =>
               prevItems.includes(row.rf_id)
               ? prevItems.filter(item => item !== row.rf_id)
               : [...prevItems, row.rf_id],
-          );
+          ); */
         }        
         dispatch(setAllAssignments(false));
         dispatch(setSelectAssignments(oldSelection));

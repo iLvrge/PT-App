@@ -527,5 +527,15 @@ export default makeStyles(theme => ({
     bottom: '-8px',
     alignItems: 'center',
     color: '#E60000',
+  },
+  badge: {
+    position: 'absolute',
+    left: -4, 
+    '& .MuiBadge-colorPrimary': {
+      top: 16,
+      backgroundColor: 'inherit',
+      right: 'inherit',
+      transform: 'none'
+    }    
   }
 }))

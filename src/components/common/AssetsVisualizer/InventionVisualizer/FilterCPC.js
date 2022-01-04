@@ -50,7 +50,7 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, yearRange, yearRangeText, 
                         if(element !== null) {
                             element.remove()
                         } 
-                    }
+                    } 
                 })
                 const containerElement = document.body.querySelector('.selContainer'), activeRange = containerElement.querySelectorAll('.MuiSlider-markLabelActive')
                 containerElement.scrollTo(0, activeRange[activeRange.length - 1].offsetTop + 23)

@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Paper } from "@material-ui/core";
-import { Clear, NotInterested } from '@material-ui/icons';
+import { Clear, NotInterested, KeyboardArrowDown } from '@material-ui/icons';
 import moment from "moment";
 
 import useStyles from "./styles";
@@ -140,9 +140,15 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
 
   const dropdownList = [
     {
-      id: -1,
+      id: 99,
       name: 'No action' ,
       icon: <NotInterested />,
+      image: ''
+    },
+    {
+      id: -1,
+      name: '', 
+      icon: <KeyboardArrowDown />,
       image: ''
     },
     {
@@ -183,7 +189,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           return [...prevItems, row]
         }
       })          
-    } else if (event.target.value === -1) {
+    } else if (event.target.value === 99) {
       setSelectedAssets(prevItems => {
         const findIndex = prevItems.findIndex( r => r.asset == asset)
         if( findIndex !== -1 ) {
@@ -205,7 +211,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           items.splice( findIndex, 1 )
           return items
         } else {
-          if(event.target.value !== -1) {
+          if(event.target.value !== 99) {
             return [...prevItems, { 
               asset,
               move_category: event.target.value,

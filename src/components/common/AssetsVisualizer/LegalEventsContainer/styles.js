@@ -520,9 +520,19 @@ export default makeStyles(theme => ({
   counter: {
     display: 'flex',
     position: 'absolute',
-    lineHeight: 1,
+    lineHeight: 1, 
     bottom: '-8px',
     alignItems: 'center',
     color: '#E60000',
+  },
+  badge: {
+    position: 'absolute',
+    left: -4, 
+    '& .MuiBadge-colorPrimary': {
+      top: 16,
+      backgroundColor: 'inherit',
+      right: 'inherit',
+      transform: 'none'
+    }    
   }
 }))

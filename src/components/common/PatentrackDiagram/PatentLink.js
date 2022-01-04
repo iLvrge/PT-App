@@ -1,322 +1,89 @@
-import { useEffect } from "react";
-import moment from "moment";
-import * as d3 from "d3";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import * as d3 from 'd3';
 
-function getStraightMedianPoints(propData) {
-  let out = [];
-  let multiplicators = [0, 0, 0, 0]; //x1, x2, y1, y2
+class PatentLink extends React.Component {
+  constructor(props_) {
+    super(props_);
+    this.node = props_.config.node;
+    this.path = 'M0,0';
+    this.comment = 'type any comment here';
+    this.dateFormat = d3.timeFormat('%m/%d/%Y');
+    this.types = [
+      d3.curveLinear,
+      d3.curveBasis,
+      d3.curveBasisClosed,
+      d3.curveBundle.beta(0),
+      d3.curveBundle.beta(0.5),
+      d3.curveBundle.beta(1.0),
+      d3.curveCardinal.tension(0),
+      d3.curveCardinal.tension(0.5),
+      d3.curveCardinal.tension(1.0),
+      d3.curveCatmullRom.alpha(0),
+      d3.curveCatmullRom.alpha(0.5),
+      d3.curveCatmullRom.alpha(1.0),
+      d3.curveMonotoneX,
+      d3.curveMonotoneY,
+      d3.curveNatural,
+      d3.curveStep,
+      d3.curveStepBefore,
+      d3.curveStepAfter,
+    ];
 
-  if (!propData.direction.includes("straight")) {
-    if (propData.terminals[0] == "right") {
-      multiplicators[0] = 1;
-    } else if (propData.terminals[0] == "left") {
-      multiplicators[0] = -1;
-    } else if (propData.terminals[0] == "up") {
-      multiplicators[2] = -1;
-    } else if (propData.terminals[0] == "down") {
-      multiplicators[2] = 1;
-    }
-
-    if (propData.terminals[1] == "right") {
-      multiplicators[1] = 1;
-    } else if (propData.terminals[1] == "left") {
-      multiplicators[1] = -1;
-    } else if (propData.terminals[1] == "up") {
-      multiplicators[3] = -1;
-    } else if (propData.terminals[1] == "down") {
-      multiplicators[3] = 1;
-    }
-  }
-
-  let d = "";
-
-  out.push({ x: propData.x1, y: propData.y1 });
-  out.push({
-    x: propData.x1 + propData.indent * multiplicators[0],
-    y: propData.y1 + propData.indent * multiplicators[2],
-  });
-
-  out.push({
-    x: propData.x2 + propData.indent * multiplicators[1],
-    y: propData.y2 + propData.indent * multiplicators[3],
-  });
-  out.push({ x: propData.x2, y: propData.y2 });
-
-  d = "M" + out[0].x + "," + out[0].y;
-  for (let i = 1; i < out.length; i++) {
-    d += " L" + out[i].x + "," + out[i].y;
-  }
-
-  return d;
-}
-
-function remapFloat(v_, min0_, max0_, min1_, max1_) {
-  return min1_ + ((v_ - min0_) / (max0_ - min0_)) * (max1_ - min1_);
-}
-
-
-
-const time2String = dateStr => moment(dateStr).format("MM/DD/YYYY");
-
-export default function PatentLink(props) {
-  const { data, config, parent, svg, comment, connectionBox, lineId } = props;
-
-  function resetAllActivePDF() {
-    const element = document.querySelector(
-      "g#patentNodesGroup",
-    )
-    const images = element.querySelectorAll('image')
-    
-    if(images != null && images.length > 0) {
-      [].forEach.call(images, function(el) {
-        el.setAttribute('href',config.pdfIcon)
+    this.curve = d3
+      .line()
+      .x(function(d_) {
+        return d_.x;
       })
-    }
+      .y(function(d_) {
+        return d_.y;
+      })
+      .curve(this.types[1]);
   }
-  useEffect(() => {
-    let straightPath = "M0, 0";
-    function updatePositions() {
-      let range = 0.35,
-        dx0,
-        dx1,
-        dy0,
-        dy1;
-      let boxOffset = { x1: 0, y1: 0, x2: 0, y2: 0 };
 
-      if (data.terminals[1].includes("up")) {
-        range = 0.2;
-      }
+  componentDidMount() {
+    this.drawLink();
+  }
 
-      if (data.startIndex[1] > 1) {
-        if (data.terminals[0] == "right" || data.terminals[0] == "left") {
-          data.y1 = data.y1;
-          boxOffset.y1 =
-            remapFloat(
-              data.startIndex[0],
-              0,
-              data.startIndex[1] - 1,
-              -range,
-              range,
-            ) * config.node.height;
-        } else {
-          data.x1 = data.x1;
-          boxOffset.x1 =
-            remapFloat(
-              data.startIndex[0],
-              0,
-              data.startIndex[1] - 1,
-              -range,
-              range,
-            ) * config.node.width;
-        }
-      }
+  drawLink() {
+    this.updatePositions();
 
-      if (data.endIndex[1] > 1) {
-        if (data.terminals[1] == "right" || data.terminals[1] == "left") {
-          data.y2 = data.y2;
-          boxOffset.y2 =
-            remapFloat(
-              data.endIndex[0],
-              0,
-              data.endIndex[1] - 1,
-              -range,
-              range,
-            ) * config.node.height;
-        } else {
-          data.x2 = data.x2;
-          boxOffset.x2 =
-            remapFloat(
-              data.endIndex[0],
-              0,
-              data.endIndex[1] - 1,
-              -range,
-              range,
-            ) * config.node.width;
-        }
-      }
-
-      if (data.direction == "straight-down") {
-        data.y1 =
-          config.node.topOffset +
-          data.y1 * config.node.gap.y +
-          config.node.height +
-          boxOffset.y1;
-        data.x2 =
-          config.node.leftOffset +
-          data.x2 * config.node.gap.x +
-          config.node.width / 2 +
-          boxOffset.x2;
-        data.y2 =
-          config.node.topOffset + data.y2 * config.node.gap.y + boxOffset.y2;
-        if ((data.startIndex[1] = 1)) {
-          data.x1 = data.x2;
-        } else {
-          data.x1 =
-            config.node.leftOffset +
-            data.x1 * config.node.gap.x +
-            config.node.width / 2;
-        }
-      } else if (data.direction == "straight-up") {
-        data.y1 =
-          config.node.topOffset + data.y1 * config.node.gap.y + boxOffset.y1;
-        data.x2 =
-          config.node.leftOffset +
-          data.x1 * config.node.gap.x +
-          config.node.width / 2 +
-          boxOffset.x2;
-        data.y2 =
-          config.node.topOffset +
-          data.y2 * config.node.gap.y +
-          config.node.height +
-          boxOffset.y2;
-        if ((data.startIndex[1] = 1)) {
-          data.x1 = data.x2;
-        } else {
-          data.x1 =
-            config.node.leftOffset +
-            data.x1 * config.node.gap.x +
-            config.node.width / 2;
-        }
-      } else if (data.direction == "straight-right") {
-        data.x1 =
-          config.node.leftOffset +
-          data.x1 * config.node.gap.x +
-          config.node.width +
-          boxOffset.x1;
-        data.x2 =
-          config.node.leftOffset + data.x2 * config.node.gap.x + boxOffset.x2;
-        data.y2 =
-          config.node.topOffset +
-          data.y2 * config.node.gap.y +
-          config.node.height / 2 +
-          boxOffset.y2;
-        if (data.startIndex[1] == 1) {
-          data.y1 = data.y2;
-        } else {
-          data.y1 =
-            config.node.topOffset +
-            data.y1 * config.node.gap.y +
-            config.node.height / 2;
-        }
-      } else if (data.direction == "straight-left") {
-        data.x1 =
-          config.node.leftOffset + data.x1 * config.node.gap.x + boxOffset.x1;
-        data.x2 =
-          config.node.leftOffset +
-          data.x2 * config.node.gap.x +
-          config.node.width +
-          boxOffset.x2;
-        data.y2 =
-          config.node.topOffset +
-          data.y2 * config.node.gap.y +
-          config.node.height / 2 +
-          boxOffset.y2;
-        if (data.startIndex[1] == 1) {
-          data.y1 = data.y2;
-        } else {
-          data.y1 =
-            config.node.topOffset +
-            data.y1 * config.node.gap.y +
-            config.node.height / 2;
-        }
-      } else {
-        if (data.terminals[0] == "down" || data.terminals[0] == "up") {
-          data.terminals[0] == "up" ? (dy0 = 0) : (dy0 = 1);
-          data.x1 =
-            config.node.leftOffset +
-            data.x1 * config.node.gap.x +
-            config.node.width / 2 +
-            boxOffset.x1;
-          data.y1 =
-            config.node.topOffset +
-            data.y1 * config.node.gap.y +
-            config.node.height * dy0 +
-            boxOffset.y1;
-        }
-
-        if (data.terminals[0] == "right" || data.terminals[0] == "left") {
-          data.terminals[0] == "right" ? (dx0 = 1) : (dx0 = 0);
-          data.y1 =
-            config.node.topOffset +
-            data.y1 * config.node.gap.y +
-            config.node.height / 2 +
-            boxOffset.y1;
-          data.x1 =
-            config.node.leftOffset +
-            data.x1 * config.node.gap.x +
-            config.node.width * dx0 +
-            boxOffset.x1;
-        }
-
-        if (data.terminals[1] == "down" || data.terminals[1] == "up") {
-          let dy1;
-          data.terminals[1] == "up" ? (dy1 = 0) : (dy1 = 1);
-          data.x2 =
-            config.node.leftOffset +
-            data.x2 * config.node.gap.x +
-            config.node.width / 2 +
-            boxOffset.x2;
-          data.y2 =
-            config.node.topOffset +
-            data.y2 * config.node.gap.y +
-            config.node.height * dy1 +
-            boxOffset.y2;
-        }
-
-        if (data.terminals[1] == "right" || data.terminals[1] == "left") {
-          data.terminals[1] == "right" ? (dx1 = 1) : (dx1 = 0);
-          data.y2 =
-            config.node.topOffset +
-            data.y2 * config.node.gap.y +
-            config.node.height / 2 +
-            boxOffset.y2;
-          data.x2 =
-            config.node.leftOffset +
-            data.x2 * config.node.gap.x +
-            config.node.width * dx1 +
-            boxOffset.x2;
-        }
-      }
-
-      straightPath = getStraightMedianPoints(data);
-    }
-    updatePositions();    
     //set CSS classes for filters and playback
     let g = d3
-      .select("#" + parent)
-      .append("g")
-      .attr("id", "PatentrackLink_" + data.id)
-      .attr("class", () => {
+      .select('#' + this.props.parent)
+      .append('g')
+      .attr('id', 'PatentrackLink_' + this.props.data.id)
+      .attr('class', () => {
         return (
-          "PatentrackLink " +
-          data.category.replace(" ", "") +
-          " " +
-          "assignment_no_" +
-          data.assignment_no
+          'PatentrackLink ' +
+          this.props.data.category.replace(' ', '') +
+          ' ' +
+          'assignment_no_' +
+          this.props.data.assignment_no
         );
       })
-      .attr("visibility", "visible");
+      .attr('visibility', 'visible');
 
     //backkground hitarea
-    g.append("path")
-      .attr("d", straightPath)
-      .attr("stroke-width", config.link.hitArea * 2)
-      .attr("stroke", "transparent")      
-      .attr("fill", "none")
-      .attr("cursor", "pointer")
-      .on("mouseover", () => {
-        let dx = d3.event.offsetX + config.link.tooltip.x,
-          dy = d3.event.offsetY + config.link.tooltip.y;
-        d3.select("#" + parent)
+    g.append('path')
+      .attr('d', this.path)
+      .attr('stroke-width', this.props.config.link.hitArea * 2)
+      .attr('stroke', 'transparent')
+      .attr('fill', 'none')
+      .attr('cursor', 'pointer')
+      .on('mouseover', () => {
+        let dx = d3.event.offsetX + this.props.config.link.tooltip.x,
+          dy = d3.event.offsetY + this.props.config.link.tooltip.y;
+        d3.select("#" + this.props.parent)
           .append("text")
           .attr("id", "dummy")
-          .attr("font-size", config.link.tooltip.fontSize)
+          .attr("font-size", this.props.config.link.tooltip.fontSize)
           /* .text(data.category); */
-          .html("<tspan dx='0rem' dy='1.1rem'>"+ data.category + "</tspan><tspan dx='-2.9rem' dy='1.1rem'>Execution: " +
-                  time2String(data.line.date) +
+          .html("<tspan dx='0rem' dy='1.1rem'>"+ this.props.data.category + "</tspan><tspan dx='-2.9rem' dy='1.1rem'>Execution: " +
+                  this.dateFormat(new Date(this.props.data.line.date)) +
                   '</tspan><tspan dx="-8.2rem" dy="1.1rem">' +
                   "Recorded: " +
-                  time2String(data.line.recorded) +
+                  this.dateFormat(new Date(this.props.data.line.recorded)) +
                   "</tspan>",
           )
         let bbox = d3
@@ -324,24 +91,24 @@ export default function PatentLink(props) {
           .node()
           .getBBox();
         d3.selectAll("#dummy").remove();
-        let gtooltip = d3.select("#" + svg)
+        let gtooltip = d3.select("#" + this.props.svg)
                         .append('g')
                         .attr("class", "link-tooltip")
                         .attr("visibility", "visible")
                         .attr("transform", `translate(${dx + 70}, ${dy})`)
           gtooltip
           .append("rect")
-          .attr("rx", config.link.tooltip.corners)
-          .attr("ry", config.link.tooltip.corners)
+          .attr("rx", this.props.config.link.tooltip.corners)
+          .attr("ry", this.props.config.link.tooltip.corners)
           .attr("class", "link-tooltip")
           .attr("width", '135')
           .attr("height", '63')
-          .attr("fill", config.node.background)
-          .attr("stroke", config.colors[
-            data.category.charAt(0).toLowerCase() +
-              data.category.slice(1).replace(" ", "")
+          .attr("fill", this.props.config.node.background)
+          .attr("stroke", this.props.config.colors[
+            this.props.data.category.charAt(0).toLowerCase() +
+              this.props.data.category.slice(1).replace(" ", "")
           ])
-          .attr("fill-opacity", config.node.opacity);
+          .attr("fill-opacity", this.props.config.node.opacity);
         let offsetX = "0.6rem";
 
         gtooltip.append("text")
@@ -349,37 +116,36 @@ export default function PatentLink(props) {
           .attr("dy", "1.1rem")
           .attr("class", "link-tooltip")   
           .attr("fill", '#fff')       
-          .attr("font-size", config.link.tooltip.fontSize)
+          .attr("font-size", this.props.config.link.tooltip.fontSize)
           .attr("text-rendering", "geometricPrecision")
-          .text(data.category) 
+          .text(this.props.data.category) 
         gtooltip.append("text")
           .attr("dx", offsetX)
           .attr("dy", "3.05rem")
           .attr("class", "link-tooltip")   
-          .attr("font-size", config.link.tooltip.fontSize)
+          .attr("font-size", this.props.config.link.tooltip.fontSize)
           .attr("fill", '#fff')       
           .html(
             "<tspan>Execution: " +
-              time2String(data.line.date) +
+              this.dateFormat(new Date(this.props.data.line.date)) +
                   '</tspan><tspan x="' +
                   offsetX +
                   '" dy="1.1rem">' +
                   "Recorded: " +
-                  time2String(data.line.recorded) +
+                  this.dateFormat(new Date(this.props.data.line.recorded)) +
                   "</tspan>"
-            );         
+            ); 
       })
-      .on("mouseout", () => {
-        d3.selectAll(".link-tooltip").remove();
+      .on('mouseout', () => {  
+        d3.selectAll('.link-tooltip').remove(); 
       })
-      .on("click", () => {
+      .on('click', () => {
         //passing referenced data from json.popup and handleComment
-        //comment is a handler
-        //commentContent is the comment content (string or HTML (have to be parsed))
-        resetAllActivePDF()
+        //this.props.comment is a handler
+        //this.props.commentContent is the comment content (string or HTML (have to be parsed))
         const targetElement = d3.event.target.parentNode.querySelector(`[id*="link_"]`)
         
-        targetElement.setAttribute('stroke-width',config.link.active.width)
+        targetElement.setAttribute('stroke-width',this.props.config.link.active.width)
         const element = d3.event.target.closest(
           "g#patentLinksGroup",
         )
@@ -388,115 +154,404 @@ export default function PatentLink(props) {
         if(allLinks != null && allLinks.length > 0) {
           [].forEach.call(allLinks, function(el) {
             if(el != targetElement) {
-              el.setAttribute('stroke-width',config.link.width)
+              el.setAttribute('stroke-width',this.props.config.link.width)
             }
           })
         }
-
-        connectionBox(data.line, comment);
+        this.props.connectionBox(this.props.data.line, this.props.comment);
       });
 
-    g.append("path")
-      .attr("d", straightPath)
-      .attr("id", "link_" + data.id)
-      .attr("pointer-events", "none")
-      .attr("stroke-width", lineId == data.line.id ? config.link.active.width : config.link.width)
-      .attr("stroke", data.color)
-      .attr("stroke-dasharray", data.line.type_line == "Dashed" ? '5,5' : '')
-      .attr("fill", "none");
+    g.append('path')
+      .attr('d', this.path)
+      .attr('id', 'link_' + this.props.data.id)
+      .attr('pointer-events', 'none')
+      .attr('stroke-width', this.props.config.link.width)
+      .attr('stroke', this.props.data.color)
+      .attr('fill', 'none');
 
-    g.append("path")
-      .attr("transform", () => {
-        if (data.terminals[1] == "up") {
+    g.append('path')
+      .attr('transform', () => {
+        if (this.props.data.terminals[1] == 'up') {
           let increments = { x: 0, y: -4 },
             theta = 180;
           let total = d3
-            .select("#" + "link_" + data.id)
+            .select('#' + 'link_' + this.props.data.id)
             .node()
             .getTotalLength();
           let p = d3
-            .select("#" + "link_" + data.id)
+            .select('#' + 'link_' + this.props.data.id)
             .node()
             .getPointAtLength(total);
           return (
-            "translate(" +
+            'translate(' +
             (p.x + increments.x) +
-            "," +
+            ',' +
             (p.y + increments.y) +
-            "),rotate(" +
+            '),rotate(' +
             theta +
-            ")"
+            ')'
           );
-        } else if (data.terminals[1] == "right") {
+        } else if (this.props.data.terminals[1] == 'right') {
           let increments = { x: 4, y: 0 },
             theta = -90;
           let total = d3
-            .select("#" + "link_" + data.id)
+            .select('#' + 'link_' + this.props.data.id)
             .node()
             .getTotalLength();
           let p = d3
-            .select("#" + "link_" + data.id)
+            .select('#' + 'link_' + this.props.data.id)
             .node()
             .getPointAtLength(total);
           return (
-            "translate(" +
+            'translate(' +
             (p.x + increments.x) +
-            "," +
+            ',' +
             (p.y + increments.y) +
-            "),rotate(" +
+            '),rotate(' +
             theta +
-            ")"
+            ')'
           );
-        } else if (data.terminals[1] == "left") {
+        } else if (this.props.data.terminals[1] == 'left') {
           let increments = { x: -4, y: 0 },
             theta = 90;
           let total = d3
-            .select("#" + "link_" + data.id)
+            .select('#' + 'link_' + this.props.data.id)
             .node()
             .getTotalLength();
           let p = d3
-            .select("#" + "link_" + data.id)
+            .select('#' + 'link_' + this.props.data.id)
             .node()
             .getPointAtLength(total);
           return (
-            "translate(" +
+            'translate(' +
             (p.x + increments.x) +
-            "," +
+            ',' +
             (p.y + increments.y) +
-            "),rotate(" +
+            '),rotate(' +
             theta +
-            ")"
+            ')'
           );
-        } else if (data.terminals[1] == "down") {
+        } else if (this.props.data.terminals[1] == 'down') {
           let increments = { x: 0, y: 4 },
             theta = 0;
           let total = d3
-            .select("#" + "link_" + data.id)
+            .select('#' + 'link_' + this.props.data.id)
             .node()
             .getTotalLength();
           let p = d3
-            .select("#" + "link_" + data.id)
+            .select('#' + 'link_' + this.props.data.id)
             .node()
             .getPointAtLength(total);
           return (
-            "translate(" +
+            'translate(' +
             (p.x + increments.x) +
-            "," +
+            ',' +
             (p.y + increments.y) +
-            "),rotate(" +
+            '),rotate(' +
             theta +
-            ")"
+            ')'
           );
         }
       })
       .attr(
-        "d",
+        'd',
         d3
           .symbol()
           .type(d3.symbolTriangle)
           .size(18),
       )
-      .attr("fill", data.color);
-  }, []);
-  return null;
+      .attr('fill', this.props.data.color);
+  }
+
+  updatePositions() {
+    let range = 0.35,
+      dx0,
+      dx1,
+      dy0,
+      dy1;
+    let boxOffset = { x1: 0, y1: 0, x2: 0, y2: 0 };
+
+    if (this.props.data.terminals[1].includes('up')) {
+      range = 0.2;
+    }
+
+    if (this.props.data.startIndex[1] > 1) {
+      if (
+        this.props.data.terminals[0] == 'right' ||
+        this.props.data.terminals[0] == 'left'
+      ) {
+        this.props.data.y1 = this.props.data.y1;
+        boxOffset.y1 =
+          this.remapFloat(
+            this.props.data.startIndex[0],
+            0,
+            this.props.data.startIndex[1] - 1,
+            -range,
+            range,
+          ) * this.node.height;
+      } else {
+        this.props.data.x1 = this.props.data.x1;
+        boxOffset.x1 =
+          this.remapFloat(
+            this.props.data.startIndex[0],
+            0,
+            this.props.data.startIndex[1] - 1,
+            -range,
+            range,
+          ) * this.node.width;
+      }
+    }
+
+    if (this.props.data.endIndex[1] > 1) {
+      if (
+        this.props.data.terminals[1] == 'right' ||
+        this.props.data.terminals[1] == 'left'
+      ) {
+        this.props.data.y2 = this.props.data.y2;
+        boxOffset.y2 =
+          this.remapFloat(
+            this.props.data.endIndex[0],
+            0,
+            this.props.data.endIndex[1] - 1,
+            -range,
+            range,
+          ) * this.node.height;
+      } else {
+        this.props.data.x2 = this.props.data.x2;
+        boxOffset.x2 =
+          this.remapFloat(
+            this.props.data.endIndex[0],
+            0,
+            this.props.data.endIndex[1] - 1,
+            -range,
+            range,
+          ) * this.node.width;
+      }
+    }
+
+    if (this.props.data.direction == 'straight-down') {
+      this.props.data.y1 =
+        this.node.topOffset +
+        this.props.data.y1 * (this.node.height + this.node.gap.y) +
+        this.node.height +
+        boxOffset.y1;
+      this.props.data.x2 =
+        this.node.leftOffset +
+        this.props.data.x2 * (this.node.width + this.node.gap.x) +
+        this.node.width / 2 +
+        boxOffset.x2;
+      this.props.data.y2 =
+        this.node.topOffset +
+        this.props.data.y2 * (this.node.height + this.node.gap.y) +
+        boxOffset.y2;
+      if ((this.props.data.startIndex[1] = 1)) {
+        this.props.data.x1 = this.props.data.x2;
+      } else {
+        this.props.data.x1 =
+          this.node.leftOffset +
+          this.props.data.x1 * (this.node.width + this.node.gap.x) +
+          this.node.width / 2;
+      }
+    } else if (this.props.data.direction == 'straight-up') {
+      this.props.data.y1 =
+        this.node.topOffset +
+        this.props.data.y1 * (this.node.height + this.node.gap.y) +
+        boxOffset.y1;
+      this.props.data.x2 =
+        this.node.leftOffset +
+        this.props.data.x1 * (this.node.width + this.node.gap.x) +
+        this.node.width / 2 +
+        boxOffset.x2;
+      this.props.data.y2 =
+        this.node.topOffset +
+        this.props.data.y2 * (this.node.height + this.node.gap.y) +
+        this.node.height +
+        boxOffset.y2;
+      if ((this.props.data.startIndex[1] = 1)) {
+        this.props.data.x1 = this.props.data.x2;
+      } else {
+        this.props.data.x1 =
+          this.node.leftOffset +
+          this.props.data.x1 * (this.node.width + this.node.gap.x) +
+          this.node.width / 2;
+      }
+    } else if (this.props.data.direction == 'straight-right') {
+      this.props.data.x1 =
+        this.node.leftOffset +
+        this.props.data.x1 * (this.node.width + this.node.gap.x) +
+        this.node.width +
+        boxOffset.x1;
+      this.props.data.x2 =
+        this.node.leftOffset +
+        this.props.data.x2 * (this.node.width + this.node.gap.x) +
+        boxOffset.x2;
+      this.props.data.y2 =
+        this.node.topOffset +
+        this.props.data.y2 * (this.node.height + this.node.gap.y) +
+        this.node.height / 2 +
+        boxOffset.y2;
+      if (this.props.data.startIndex[1] == 1) {
+        this.props.data.y1 = this.props.data.y2;
+      } else {
+        this.props.data.y1 =
+          this.node.topOffset +
+          this.props.data.y1 * (this.node.height + this.node.gap.y) +
+          this.node.height / 2;
+      }
+    } else if (this.props.data.direction == 'straight-left') {
+      this.props.data.x1 =
+        this.node.leftOffset +
+        this.props.data.x1 * (this.node.width + this.node.gap.x) +
+        boxOffset.x1;
+      this.props.data.x2 =
+        this.node.leftOffset +
+        this.props.data.x2 * (this.node.width + this.node.gap.x) +
+        this.node.width +
+        boxOffset.x2;
+      this.props.data.y2 =
+        this.node.topOffset +
+        this.props.data.y2 * (this.node.height + this.node.gap.y) +
+        this.node.height / 2 +
+        boxOffset.y2;
+      if (this.props.data.startIndex[1] == 1) {
+        this.props.data.y1 = this.props.data.y2;
+      } else {
+        this.props.data.y1 =
+          this.node.topOffset +
+          this.props.data.y1 * (this.node.height + this.node.gap.y) +
+          this.node.height / 2;
+      }
+    } else {
+      if (
+        this.props.data.terminals[0] == 'down' ||
+        this.props.data.terminals[0] == 'up'
+      ) {
+        this.props.data.terminals[0] == 'up' ? (dy0 = 0) : (dy0 = 1);
+        this.props.data.x1 =
+          this.node.leftOffset +
+          this.props.data.x1 * (this.node.width + this.node.gap.x) +
+          this.node.width / 2 +
+          boxOffset.x1;
+        this.props.data.y1 =
+          this.node.topOffset +
+          this.props.data.y1 * (this.node.height + this.node.gap.y) +
+          this.node.height * dy0 +
+          boxOffset.y1;
+      }
+
+      if (
+        this.props.data.terminals[0] == 'right' ||
+        this.props.data.terminals[0] == 'left'
+      ) {
+        this.props.data.terminals[0] == 'right' ? (dx0 = 1) : (dx0 = 0);
+        this.props.data.y1 =
+          this.node.topOffset +
+          this.props.data.y1 * (this.node.height + this.node.gap.y) +
+          this.node.height / 2 +
+          boxOffset.y1;
+        this.props.data.x1 =
+          this.node.leftOffset +
+          this.props.data.x1 * (this.node.width + this.node.gap.x) +
+          this.node.width * dx0 +
+          boxOffset.x1;
+      }
+
+      if (
+        this.props.data.terminals[1] == 'down' ||
+        this.props.data.terminals[1] == 'up'
+      ) {
+        let dy1;
+        this.props.data.terminals[1] == 'up' ? (dy1 = 0) : (dy1 = 1);
+        this.props.data.x2 =
+          this.node.leftOffset +
+          this.props.data.x2 * (this.node.width + this.node.gap.x) +
+          this.node.width / 2 +
+          boxOffset.x2;
+        this.props.data.y2 =
+          this.node.topOffset +
+          this.props.data.y2 * (this.node.height + this.node.gap.y) +
+          this.node.height * dy1 +
+          boxOffset.y2;
+      }
+
+      if (
+        this.props.data.terminals[1] == 'right' ||
+        this.props.data.terminals[1] == 'left'
+      ) {
+        this.props.data.terminals[1] == 'right' ? (dx1 = 1) : (dx1 = 0);
+        this.props.data.y2 =
+          this.node.topOffset +
+          this.props.data.y2 * (this.node.height + this.node.gap.y) +
+          this.node.height / 2 +
+          boxOffset.y2;
+        this.props.data.x2 =
+          this.node.leftOffset +
+          this.props.data.x2 * (this.node.width + this.node.gap.x) +
+          this.node.width * dx1 +
+          boxOffset.x2;
+      }
+    }
+
+    this.path = this.getStraightMedianPoints();
+  }
+
+  getStraightMedianPoints() {
+    let out = [];
+    let multiplicators = [0, 0, 0, 0]; //x1, x2, y1, y2
+
+    if (!this.props.data.direction.includes('straight')) {
+      if (this.props.data.terminals[0] == 'right') {
+        multiplicators[0] = 1;
+      } else if (this.props.data.terminals[0] == 'left') {
+        multiplicators[0] = -1;
+      } else if (this.props.data.terminals[0] == 'up') {
+        multiplicators[2] = -1;
+      } else if (this.props.data.terminals[0] == 'down') {
+        multiplicators[2] = 1;
+      }
+
+      if (this.props.data.terminals[1] == 'right') {
+        multiplicators[1] = 1;
+      } else if (this.props.data.terminals[1] == 'left') {
+        multiplicators[1] = -1;
+      } else if (this.props.data.terminals[1] == 'up') {
+        multiplicators[3] = -1;
+      } else if (this.props.data.terminals[1] == 'down') {
+        multiplicators[3] = 1;
+      }
+    }
+
+    let d = '';
+
+    out.push({ x: this.props.data.x1, y: this.props.data.y1 });
+    out.push({
+      x: this.props.data.x1 + this.props.data.indent * multiplicators[0],
+      y: this.props.data.y1 + this.props.data.indent * multiplicators[2],
+    });
+
+    out.push({
+      x: this.props.data.x2 + this.props.data.indent * multiplicators[1],
+      y: this.props.data.y2 + this.props.data.indent * multiplicators[3],
+    });
+    out.push({ x: this.props.data.x2, y: this.props.data.y2 });
+
+    d = 'M' + out[0].x + ',' + out[0].y;
+    for (let i = 1; i < out.length; i++) {
+      d += ' L' + out[i].x + ',' + out[i].y;
+    }
+
+    return d;
+  }
+
+  lerpFloat(a_, b_, t_) {
+    return a_ + t_ * (b_ - a_);
+  }
+  remapFloat(v_, min0_, max0_, min1_, max1_) {
+    return min1_ + ((v_ - min0_) / (max0_ - min0_)) * (max1_ - min1_);
+  }
+  render() {
+    return null;
+  }
 }
+
+export default PatentLink;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
-import { Tab, Tabs, Paper } from '@material-ui/core'
+import { Tab, Tabs, Paper, Badge } from '@material-ui/core'
 import Fees from './Fees'
 import Events from './Events'
 import Litigation from './Litigation'
@@ -33,19 +33,19 @@ const LegalEventsContainer = ({ events, type }) => {
     return (
         label === 'M.Fees'
         ?
-          <span className={classes.containerRelative}>{label}<span className={classes.counter}>{asset_details.fees}</span></span>
+          <span className={classes.containerRelative}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.fees)} showZero={false}></Badge></span>
         :
             label === 'F.Citations'
             ?
-              <span className={classes.containerRelative}>{label}<span className={classes.counter}>{asset_details.citations}</span></span>
+              <span className={classes.containerRelative}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.citations)} showZero={false}></Badge></span>
             :
                 label === 'PTAB'
                 ?
-                  <span className={classes.containerRelative}>{label}<span className={classes.counter}>{asset_details.ptab}</span></span>
+                  <span className={classes.containerRelative}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.ptab)} showZero={false}></Badge></span>
                 :
                   label == 'Litigation'
                   ?
-                    <span className={classes.containerRelative}>{label}<span className={classes.counter}>{asset_details.litigation}</span></span>
+                    <span className={classes.containerRelative}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.litigation)} showZero={false}></Badge></span>
                   :
                   label
     )
@@ -65,7 +65,7 @@ const LegalEventsContainer = ({ events, type }) => {
                     key={index}
                     className={classes.tab} 
                     label={<ItemLabel label={item}/>}
-                  />
+                  /> 
                 ))
               }                            
             </Tabs>

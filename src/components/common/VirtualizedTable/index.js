@@ -289,7 +289,7 @@ const VirtualizedTable = ({
           }
         } 
       }
-      let showDropValue = -2
+      let showDropValue = -1
       if(role == 'static_dropdown') {
         const index = dropdownSelections.findIndex( r => r.asset == rowData['asset'] )
         if( index !== -1 ) {

@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react'
 
 import { useSelector } from 'react-redux'
-import { Tab, Tabs, Paper, Grid, Typography } from '@material-ui/core'
+import { Tab, Tabs, Paper, Grid, Badge } from '@material-ui/core'
 import FamilyContainer from '../FamilyContainer'
 import LegalEventsContainer from '../LegalEventsContainer'
 import ItemData from './ItemData'
@@ -122,15 +122,15 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
         return (
             label === 'Family'
             ?
-                <span className={classes.containerRelative}>{label}<span className={classes.counter}>{asset_details.family}</span></span>
+                <span className={classes.containerRelative}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.family)} showZero={false}></Badge></span>
             :
                 label === 'Claims'
                 ?
-                    <span className={classes.containerRelative}>{label}<span className={classes.counter}>{asset_details.claims}</span></span>
+                    <span className={classes.containerRelative}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.claims)} showZero={false}></Badge></span>
                 :
                     label === 'Figures'
                     ?
-                        <span className={classes.containerRelative}>{label}<span className={classes.counter}>{asset_details.figures}</span></span>
+                        <span className={classes.containerRelative}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.figures)} showZero={false}></Badge></span>
                     :
                     label
         )

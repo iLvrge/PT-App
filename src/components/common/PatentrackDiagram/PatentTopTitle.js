@@ -133,7 +133,7 @@ class PatentTopTitle extends React.Component {
                 </IconButton> 
                 <IconButton
                   onClick={() => this.props.uspto(!this.props.usptoMode)}
-                  /* className={'uspto_logo'} */
+                  /* className={'uspto_logo'} */  
                 >
                   <Tooltip 
                   className='tooltip'
