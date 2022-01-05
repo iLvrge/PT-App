@@ -37,7 +37,9 @@ import {
 
 import {
     setPDFView,
-    setPDFFile
+    setPDFFile,
+    setConnectionData,
+    setConnectionBoxView
   } from "../../../actions/patenTrackActions";
 
 import {
@@ -400,6 +402,12 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         )
         dispatch(
             setPDFView(false)
+        )
+        dispatch(
+            setConnectionBoxView(false)
+        )
+        dispatch(
+            setConnectionData({})
         )
         dispatch(setAssetsIllustrationData(null))
 	    dispatch(setAssetsIllustration(null)) 

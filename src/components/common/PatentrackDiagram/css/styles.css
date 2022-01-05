@@ -78,6 +78,11 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
 .MuiSlider-rail, .MuiSlider-track{
     background-color: #fff !important;
 }
+.floatItem {
+    float: left;
+    max-width: 50% !important;
+    min-width: 47%;
+}
 .listIconItem .MuiListItemIcon-root{
     min-width: auto !important;
 }

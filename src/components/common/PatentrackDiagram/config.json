@@ -62,16 +62,14 @@
     
     "inventors_per_row": 4,
     
-    "colors": {
-        
+    "colors": {        
         "ownership": "#E60000",
         "nameChange": "#228DE8",
         "security": "#FFAA00",
-        "license": "#C0C000",
         "release": "#70A800",
+        "license": "#C0C000",        
         "licenseEnd": "#CA7C46",
-        "correct": "#FFFFFF"
-        
-    }
+        "correct": "#FFFFFF"        
+    } 
     
 }

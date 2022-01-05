@@ -353,7 +353,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                       false,
                                       0,
                                       0,
-                                      'assets',
+                                      'asset',
                                       'DESC'
                                     ),
                                 );
@@ -589,10 +589,14 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 fontSize = 18
                 step = 7
             }
-            const height = graphContainerRef.current.parentNode !== null ? graphContainerRef.current.parentNode.parentNode !== null ? `${graphContainerRef.current.parentNode.parentNode.clientHeight - 50 }px` : `${graphContainerRef.current.parentNode.clientHeight - 50 }px` : '100%'
-            options = { ...options, axisFontSize: fontSize, height, yStep: step, verticalRatio }
-            graphRef.current.setOptions(options)
-            graphRef.current.redraw()
+            try {
+                const height = graphContainerRef.current.parentNode !== null ? graphContainerRef.current.parentNode.parentNode !== null ? `${graphContainerRef.current.parentNode.parentNode.clientHeight - 50 }px` : `${graphContainerRef.current.parentNode.clientHeight - 50 }px` : '100%'
+                options = { ...options, axisFontSize: fontSize, height, yStep: step, verticalRatio }
+                graphRef.current.setOptions(options)
+                graphRef.current.redraw()
+            } catch (e) {
+                console.log(`error container ${e}`)
+            }
         }
     }, [ visualizerBarSize, analyticsBar, defaultSize, commentBar, illustrationBar, customerBarSize, companyBarSize ]) 
 

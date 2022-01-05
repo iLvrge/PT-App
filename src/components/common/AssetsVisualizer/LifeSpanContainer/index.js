@@ -121,7 +121,7 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
                                       false,
                                       0,
                                       0,
-                                      'assets',
+                                      'asset',
                                       'DESC'
                                     )
                                     : 
@@ -140,7 +140,7 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
                                       false,
                                       0,
                                       0, 
-                                      'assets',
+                                      'asset',
                                       'DESC',
                                     ),
                                 );

@@ -31,6 +31,7 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
 
     const assetsTransactionsSelected = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
     const assetsTransactionsSelectedAll = useSelector(state => state.patenTrack2.assetTypeAssignments.selectAll)
+    const selectedTransaction = useSelector(state => state.patenTrack2.selectedAssetsTransactions)
 
     const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
     const assetTypeAssignmentAssetsSelectedAll = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selectAll)
@@ -71,7 +72,7 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
                             :
                             t === 3 && (assetTypeCompaniesSelected.length > 0 || assetTypeCompaniesSelectedAll === true) ? 'selection_indicator'
                             :
-                            t === 4 && (assetsTransactionsSelected.length > 0 || assetsTransactionsSelectedAll === true) ? 'selection_indicator'
+                            t === 4 && (selectedTransaction.length > 0 || assetsTransactionsSelected.length > 0 || assetsTransactionsSelectedAll === true) ? 'selection_indicator'
                             :
                             t === 5 && (selectedAssetsPatents.length > 0 || assetTypeAssignmentAssetsSelected.length > 0 || assetTypeAssignmentAssetsSelectedAll === true) ? 'selection_indicator'
                             :
