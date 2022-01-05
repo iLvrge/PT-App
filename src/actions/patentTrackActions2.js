@@ -1551,7 +1551,7 @@ export const getAssetDetails = (applicationNumber, patentNumber) => {
       console.log('counterError fees', err)
     }
     try{
-      const citation = await PatenTrackApi.getCitationCounter( asset )    
+      const citation = await PatenTrackApi.getCitationCounter( patentNumber !== '' && patentNumber !== null ? patentNumber : applicationNumber )    
       if(citation !== null && citation.data !== null) {
         dispatch( setAssetDetails( { citations: citation.data } ) )
       }

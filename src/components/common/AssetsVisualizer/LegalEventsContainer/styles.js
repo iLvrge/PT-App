@@ -532,7 +532,8 @@ export default makeStyles(theme => ({
       top: 16,
       backgroundColor: 'inherit',
       right: 'inherit',
-      transform: 'none'
+      transform: 'none',
+      wordBreak: 'keep-all'
     }    
   }
 }))
