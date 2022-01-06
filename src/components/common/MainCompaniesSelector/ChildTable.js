@@ -8,6 +8,7 @@ import { DEFAULT_CUSTOMERS_LIMIT } from '../../../api/patenTrack2'
 
 import PatenTrackApi from '../../../api/patenTrack2'
 import {
+    setMainChildCompanies,
     setMainCompaniesSelected,
     setMainCompaniesRowSelect,
     setMaintainenceAssetsList,
@@ -22,7 +23,7 @@ import {
     setSelectedAssetsPatents,
     setAllAssetTypes,
     setAssetTypesSelect,
-    setAllAssignmentCustomers,
+    setAllAssignmentCustomers, 
     setSelectAssignmentCustomers,
     setNamesTransactionsSelectAll,
     setSelectedNamesTransactions
@@ -153,6 +154,8 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, itemCallback, groups }
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const mainCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.list )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
+    const oldChildCompany = useSelector( state => state.patenTrack2.mainCompaniesList.childID )
+    const oldChildList = useSelector( state => state.patenTrack2.mainCompaniesList.child_list )
 
     useEffect(() => {
         if(selectedCategory === 'correct_names') {
@@ -175,20 +178,31 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, itemCallback, groups }
     useEffect(() => {
         const getChildCompanies = async () => {            
             if( parentCompanyId > 0 ) { 
-                setChildCompaniesLoading( true )
-                PatenTrackApi.cancelChildCompanies()
-                const { data } = await PatenTrackApi.getChildCompanies(parentCompanyId)
-                setChildCompanies(data.list)
-                setChildCompaniesLoading( false )
-                if(selected.includes(parentCompanyId)){
-                    checkedAllChildCompanies(data.list)
-                } 
+                if( oldChildCompany !== parentCompanyId || (parentCompanyId === oldChildCompany && oldChildList.length === 0) ) {
+                    setChildCompaniesLoading( true )
+                    PatenTrackApi.cancelChildCompanies()
+                    const { data } = await PatenTrackApi.getChildCompanies(parentCompanyId)
+                    dispatch(
+                        setMainChildCompanies(parentCompanyId, data.list)
+                    )
+                    setChildCompanies(data.list)
+                    if(selected.includes(parentCompanyId)){
+                        checkedAllChildCompanies(data.list)
+                    }
+                    setChildCompaniesLoading( false )                    
+                } else {  
+                    setChildCompaniesLoading( false )              
+                    setChildCompanies(oldChildList)
+                    if(selected.includes(parentCompanyId)){
+                        checkedAllChildCompanies(oldChildList)
+                    }
+                }                
             } else {
                 setChildCompaniesLoading( false )
             }
         }
         getChildCompanies()
-    }, [ dispatch, parentCompanyId ])
+    }, [ dispatch, parentCompanyId, oldChildList,  oldChildCompany])
 
     useEffect(() => {
         if(selectItems.length != selected.length) {

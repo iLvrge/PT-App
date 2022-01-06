@@ -484,6 +484,14 @@ export const setMainCompaniesRowSelect = (data) => {
   }
 }
 
+export const setMainChildCompanies = (companyID, data) => {
+  return {
+    type: types.SET_MAIN_CHILD_COMPANIES,
+    companyID,
+    data,
+  }
+}
+
 export const getMaintainenceAssetsList = ( selectedCompanies, offset = 0, append = false) => {
   return async dispatch => {
     dispatch(setMaintainenceAssetsLoadingMore(true))

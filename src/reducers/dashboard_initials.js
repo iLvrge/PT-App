@@ -55,7 +55,7 @@ export default {
     driveButtonActive: false,
     maintainenceAssetsLoadingMore: false,
     maintainenceAssetsList: {list: [], total_records: 0}, 
-    mainCompaniesList: { list: [], total_records: 0, row_select: [], selected: [], selectedWithName: [], selectedGroups: [], selectAll: false },
+    mainCompaniesList: { list: [], total_records: 0, row_select: [], selected: [], selectedWithName: [], selectedGroups: [], selectAll: false, childID: 0, child_list: [] },
     mainCompaniesLoadingMore: false,
     selectedMaintainencePatents: [],
     companiesList: [], 
