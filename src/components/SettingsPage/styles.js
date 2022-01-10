@@ -52,7 +52,8 @@ export default makeStyles(theme => ({
     left: 0,
     right: 0,
     bottom: 0,
-    border: '1px solid #363636' 
+    border: '1px solid #363636',
+    overflowY: 'auto' 
   },
   dashboardWarapper: {
     position: 'relative',
@@ -77,6 +78,6 @@ export default makeStyles(theme => ({
     height: 40,
     display: 'flex',
     justifyContent: 'center',
-    marginTop: 10
+    marginTop: 10  
   }
 }))

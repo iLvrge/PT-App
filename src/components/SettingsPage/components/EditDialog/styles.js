@@ -10,6 +10,9 @@ export default makeStyles((theme) => ({
       width: 'calc(50% - 20px)',
       margin: '10px',
     },
+    '& .MuiDialogContent-root':{
+      padding: '8px 24px !important'
+    },
   },
   dialogActions: {
     margin: 20,

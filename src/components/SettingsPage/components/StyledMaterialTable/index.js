@@ -90,7 +90,7 @@ const StyledMaterialTable = (props) => {
             aria-describedby="help-modal-description"
           >
             <div>
-              Modal
+              Company Address
             </div>
           </Modal>
           :

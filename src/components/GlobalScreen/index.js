@@ -154,7 +154,7 @@ const GlobalScreen = ({
 
     const channel_id = useSelector( state => state.patenTrack2.channel_id )   
     const checkContainer = () => {
-        setTimeout(() => {
+        /* setTimeout(() => {
             if( mainContainerRef.current != null  && mainContainerRef.current != undefined) {                
                 const mainWidth = mainContainerRef.current.pane2.clientWidth, illustrationContainer = mainContainerRef.current.pane1.querySelector('#patentrackDiagramDiv')
                 if( illustrationContainer != null && illustrationContainer != undefined ) {
@@ -166,7 +166,7 @@ const GlobalScreen = ({
             } else {
                 checkContainer()
             }            
-        }, 1000)
+        }, 1000) */
     }
 
     useEffect(() => {

@@ -2,7 +2,7 @@ import React, { Fragment, useCallback, useEffect, useState, useRef } from 'react
 
 import { useDispatch } from 'react-redux'
 
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core'
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, CircularProgress } from '@material-ui/core'
 
 import AddIcon from '@material-ui/icons/Add'
 
@@ -17,17 +17,22 @@ function Groups() {
     const classes = useStyles()
     const dispatch = useDispatch()
     const [openDialog, setOpenDialog] = useState(false);
+    const [loading, setLoading] = useState(false);
     const inputGroup = useRef(null)
 
     const handleAddGroup = async() => {
-        let name = inputGroup.current.querySelector("#group_name").value;
-        const form = new FormData()
-        form.append('group_name', name)
-        const {data} = await PatenTrackApi.addGroup(form)
-        setOpenDialog(false);
-        if(data != null) {
-            dispatch(fetchCompaniesList())
-        }       
+        if(!loading) {
+            setLoading(true)
+            let name = inputGroup.current.querySelector("#group_name").value;
+            const form = new FormData()
+            form.append('group_name', name)
+            const {data} = await PatenTrackApi.addGroup(form)
+            setOpenDialog(false);
+            setLoading(false)
+            if(data !== null) {
+                dispatch(fetchCompaniesList())
+            }    
+        }           
     };
 
     const handleClickOpen = () => {
@@ -49,27 +54,28 @@ function Groups() {
             >
                 Add a new Group
             </Button>
-          <Dialog open={openDialog} onClose={handleClose} aria-labelledby="form-dialog-title">
-            <DialogContent>
-                <TextField
-                    autoFocus
-                    ref={inputGroup}
-                    margin="dense"
-                    id="group_name"
-                    label="Group Name"
-                    color='secondary'
-                    fullWidth
-                />     
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="inherit">
-                Cancel
-              </Button>
-              <Button onClick={handleAddGroup} color="inherit">
-                Create
-              </Button>
-            </DialogActions>
-          </Dialog>
+            <Dialog open={openDialog} onClose={handleClose} aria-labelledby="form-dialog-title" className={classes.dialog}>
+                <DialogContent>
+                    <TextField
+                        autoFocus
+                        ref={inputGroup}
+                        margin="dense"
+                        id="group_name"
+                        label="Group Name"
+                        color='secondary'
+                        fullWidth
+                    />     
+                </DialogContent>
+                <DialogActions>
+                <Button onClick={handleClose} color="inherit">
+                    Cancel
+                </Button>
+                <Button onClick={handleAddGroup} color="inherit">
+                    {loading && <CircularProgress size={14} />}
+                    {!loading && 'Create'}
+                </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     )
 }
