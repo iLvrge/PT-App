@@ -7,6 +7,8 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
 
 #topTitle {
     display: flex;
+    position: absolute;
+    width: 100%;
     padding: 0 9px 0 16px;
     font-size: 1rem;
     color: #FFFFFF;
@@ -70,6 +72,9 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
     color: #E60000;
     fill: #E60000;
     stroke: #E60000;
+}
+.svg_diagram{
+    margin-top: 45px;
 }
 .checkboxItems {
     padding-bottom: 0px !important;
@@ -263,6 +268,7 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
     height: 100%;
     display: flex;
     flex-direction: column;
+    overflow: auto;
 }
 
 #patentrackDiagramDiv svg { 
