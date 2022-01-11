@@ -1,98 +1,129 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import * as d3 from 'd3';
+import { useEffect } from "react";
+import moment from "moment";
+import * as d3 from "d3";
 
-import pdfIcon from './assets/pdf.svg';
+const time2String = dateStr => moment(dateStr).format("MM/DD/YYYY")
 
-class PatentNode extends React.Component {
-  constructor(props_) {
-    super(props_);
+function wrapText(str, width, lines, node) {
+  let lineCount = 0;
+  
+  str.each(function() {
+    let text = d3.select(this),
+      words = text
+        .text()
+        .split(/\s+/)
+        .reverse(),
+      word,
+      line = [],
+      lineHeight = node.headerSize,
+      y = text.attr("y"),
+      tspan = text
+        .text(null)
+        .append("tspan")
+        .attr("x", 0)
+        .attr("y", y)
+        .attr("dy", text.attr("dy"));
+    while ((word = words.pop())) {
+      line.push(word);
+      tspan.text(line.join(" "));
+      if (tspan.node().getComputedTextLength() > width) {
+        
+        line.pop();
+        tspan.text(line.join(" "));
+        line = [word];
+        tspan = text
+            .append("tspan")
+            .attr("x", str.attr("dx"))
+            .attr("y", y)
+            .attr("dy", lineHeight + 1)
+            .text(word);
+        /* if (lineCount < lines - 1) { 
+          
+        } */
 
-    this.dateFormat = d3.timeFormat('%m/%d/%Y');
+        lineCount++;
+      }
+    }
+  });
+}
+
+
+
+export default function PatentNode(props) {
+  const { node, data, config, childrenLinks, parent, pdfView } = props;
+  function unsetAllActiveLink() {
+    const element = document.querySelector(
+      "g#patentLinksGroup",
+    )
+    const allLink = element.querySelectorAll(`[id*="link_"]`)
+      
+    if(allLink != null && allLink.length > 0) {
+      [].forEach.call(allLink, function(el) {
+        el.setAttribute('stroke-width',config.link.width)
+      })
+    }
   }
-
-  componentDidMount() {
-    this.drawNode();
-  }
-
-  drawNode() {
-    let dx =
-      this.props.node.leftOffset +
-      this.props.data.x * (this.props.node.width + this.props.node.gap.x);
-    let dy =
-      this.props.node.topOffset +
-      this.props.data.y * (this.props.node.height + this.props.node.gap.y);
-    let offsetX = '0.6rem';
-    let datesOffsetX = '2.2rem';
+  
+  useEffect(() => {
+    let dx = node.leftOffset + data.x * node.gap.x;
+    let dy = node.topOffset + data.y * node.gap.y;
+    let offsetX = "0.6rem";
+    let datesOffsetX = "2.2rem";
 
     //set CSS classes for filters and playback
     let assignment_no = Array.from(
-      new Set([
-        ...this.props.data.up,
-        ...this.props.data.right,
-        ...this.props.data.down,
-        ...this.props.data.left,
-      ]),
-    ).map(n_ => {
-      return 'assignment_no_' + n_;
-    });
+      new Set([...data.up, ...data.right, ...data.down, ...data.left]),
+    ).map(n_ => "assignment_no_" + n_);
     let categories = Array.from(
       new Set(
-        this.props.childrenLinks.map(link_ => {
-          return link_.props.data.category.replace(' ', '');
-        }),
+        childrenLinks.map(link_ => link_.props.data.category.replace(" ", "")),
       ),
     );
 
     let g = d3
-      .select('#' + this.props.parent)
-      .append('g')
-      .attr('class', () => {
-        return (
-          'PatentrackNode ' +
-          categories.join(' ') +
-          ' ' +
-          assignment_no.join(' ')
-        );
-      })
-      .attr('id', () => {
-        return 'PatentrackNode_' + this.props.data.id;
-      })
-      .attr('transform', 'translate(' + dx + ',' + dy + ')')
-      .attr('visibility', 'visible')
-      .attr('type', this.props.data.typeID.type)
+      .select("#" + parent)
+      .append("g")
       .attr(
-        'children',
+        "class",
+        () =>
+          "PatentrackNode " +
+          categories.join(" ") +
+          " " +
+          assignment_no.join(" "),
+      )
+      .attr("id", "PatentrackNode_" + data.id)
+      .attr("transform", "translate(" + dx + "," + dy + ")")
+      .attr("visibility", "visible")
+      .attr("type", data.typeID.type)
+      .attr(
+        "children",
         Array.from(
           new Set(
-            this.props.childrenLinks.map(link_ => {
-              return link_.props.data.id + '|' + link_.props.data.category;
-            }),
+            childrenLinks.map(
+              link_ => link_.props.data.id + "|" + link_.props.data.category,
+            ),
           ),
         ),
-      )
-      .on('click', () => {
-        console.log(this.props.data);
-      });
+      );
 
-    g.append('rect')
-      .attr('width', this.props.node.width)
-      .attr('height', this.props.node.height)
-      .attr('rx', this.props.data.rounded)
-      .attr('ry', this.props.data.rounded)
-      .attr('fill-opacity', this.props.node.opacity)
-      .attr('fill', this.props.node.background)
-      .attr('stroke', this.props.node.border);
+    g.append("rect")
+      .attr("width", node.width)
+      .attr("height", node.height)
+      .attr("rx", data.rounded)
+      .attr("ry", data.rounded)
+      .attr("fill-opacity", node.opacity)
+      .attr("fill", node.background)
+      .attr("stroke", node.border);
 
-    g.append('text')
-      .attr('dx', offsetX)
-      .attr('dy', '1.1rem')
-      .attr('font-size', this.props.node.headerSize)
-      .attr('font-weight', this.props.node.fontWeight)
-      .attr('fill', this.props.node.fontColor)
-      .attr('text-rendering', 'geometricPrecision')
+    g.append("text")
+      .attr("dx", offsetX)
+      .attr("dy", "1.1rem")
+      .attr("font-size", node.headerSize)
+      .attr("font-weight", node.fontWeight)
+      .attr("fill", node.fontColor)
+      .attr("text-rendering", "geometricPrecision")
       .attr('class', 'wrapText')
-      .attr('title', typeof this.props.data.json != 'undefined' && typeof this.props.data.json.original_name !== 'undefined' && this.props.data.json.original_name != '' && this.props.data.json.original_name !== null ? this.props.data.json.original_name : this.props.data.name)
+      .attr('title', typeof data.json != 'undefined' && typeof data.json.original_name !== 'undefined' && data.json.original_name != '' && data.json.original_name !== null ? data.json.original_name : data.name)
       .on("mouseover", () => {
         //let dx = d3.event.offsetX, dy = d3.event.offsetY
         /* let fromElement = d3.event.fromElement
@@ -111,7 +142,7 @@ class PatentNode extends React.Component {
         d3.select("#patentrackDiagramDiv")
           .append("div")	
           .attr("class", "tooltip_title MuiTooltip-tooltip")	
-          .html(typeof this.props.data.json != 'undefined' && typeof this.props.data.json.original_name !== 'undefined' && this.props.data.json.original_name != '' && this.props.data.json.original_name !== null ? this.props.data.json.original_name : this.props.data.name)
+          .html(typeof data.json != 'undefined' && typeof data.json.original_name !== 'undefined' && data.json.original_name != '' && data.json.original_name !== null ? data.json.original_name : data.name)
           /* .style('left', `${pos['x']}px`)
           .style('top', `${(window.pageYOffset  + pos['y'] - 100)}px`); */
           /* .style("left", `${d3.event.pageX }px`)		
@@ -122,12 +153,12 @@ class PatentNode extends React.Component {
       .on("mouseout", () => {
         d3.selectAll(".tooltip_title").remove();
       })
-      .text(this.props.data.name)
+      .text(data.name) 
       .call(
-        this.multiline,
-        this.props.node.width * this.props.node.maxLineLength,
-        this.props.node.numberOfLines,
-        this,
+        wrapText,
+        node.width * node.maxLineLength,
+        node.numberOfLines,
+        node,
       );
 
     /* if (data.document != null && data.document != "") {
@@ -169,111 +200,52 @@ class PatentNode extends React.Component {
     } */
 
     let executionDate =
-      this.props.data.executionDate != ''
-        ? this.dateFormat(new Date(this.props.data.executionDate))
-        : 'N/A';
+      data.executionDate != "" ? time2String(data.executionDate) : "N/A";
     let recordedDate =
-      this.props.data.recordedDate != ''
-        ? this.dateFormat(new Date(this.props.data.recordedDate))
-        : 'N/A';
+      data.recordedDate != "" ? time2String(data.recordedDate) : "N/A";
+
+    let executionHTML =
+      data.flag == "0" ? "Execution: " + executionDate : "&nbsp;";
 
     let filledDate =
-      this.props.data.filledDate != undefined &&
-      this.props.data.filledDate != ''
-        ? this.dateFormat(new Date(this.props.data.filledDate))
-        : 'N/A';
+      data.filledDate != undefined && data.filledDate != ""
+        ? time2String(data.filledDate)
+        : "N/A";
     let grantedDate =
-      this.props.data.grantedDate != undefined &&
-      this.props.data.grantedDate != ''
-        ? this.dateFormat(new Date(this.props.data.grantedDate))
-        : 'N/A';
+      data.grantedDate != undefined && data.grantedDate != ""
+        ? time2String(data.grantedDate)
+        : "N/A";
 
-    if (this.props.data.type < 3) {
-      g.append('text')
-        .attr('dx', datesOffsetX)
-        .attr('dy', '3.05rem')
-        .attr('font-size', this.props.node.datesSize)
-        .attr('fill', this.props.node.fontColor)
+    if (data.type < 3) {
+      g.append("text")
+        .attr("dx", offsetX)
+        .attr("dy", "3.05rem")
+        .attr("font-size", node.datesSize)
+        .attr("fill", node.fontColor)
         .html(
-          this.props.data.type == 0
-            ? '<tspan>Filled: ' +
+          data.type == 0
+            ? "<tspan>Filled: " +
                 filledDate +
                 '</tspan><tspan x="' +
-                datesOffsetX +
+                offsetX +
                 '" dy="' +
-                this.props.node.height * 2e-1 +
+                node.height * 2e-1 +
                 '">' +
-                'Granted: ' +
+                "Granted: " +
                 grantedDate +
-                '</tspan>'
-            : '<tspan>Execution: ' +
-                executionDate +
+                "</tspan>"
+            : "<tspan>" +
+                executionHTML +
                 '</tspan><tspan x="' +
-                datesOffsetX +
+                offsetX +
                 '" dy="' +
-                this.props.node.height * 2e-1 +
+                node.height * 2e-1 +
                 '">' +
-                'Recorded: ' +
+                "Recorded: " +
                 recordedDate +
-                '</tspan>',
+                "</tspan>",
         );
     }
-  }
-
-  multiline(text_, width_, lines_, parent_) {
-    let lineCount = 0;
-
-    text_.each(function() {
-      let text = d3.select(this),
-        words = text
-          .text()
-          .split(/\s+/)
-          .reverse(),
-        word,
-        line = [],
-        lineNumber = 0,
-        lineHeight = parent_.props.node.headerSize,
-        y = text.attr('y'),
-        dy = parseFloat(text.attr('dy')),
-        tspan = text
-          .text(null)
-          .append('tspan')
-          .attr('x', 0)
-          .attr('y', y)
-          .attr('dy', text.attr('dy'));
-
-      while ((word = words.pop())) {
-        line.push(word);
-        tspan.text(line.join(' '));
-
-        if (tspan.node().getComputedTextLength() > width_) {
-          line.pop();
-          tspan.text(line.join(' '));
-          line = [word];
-          /* if (lineCount < lines_ - 1) {
-            tspan = text
-              .append('tspan')
-              .attr('x', text_.attr('dx'))
-              .attr('y', y)
-              .attr('dy', lineHeight)
-              .text(word);
-          } */
-          tspan = text
-            .append("tspan")
-            .attr("x", text_.attr("dx"))
-            .attr("y", y)
-            .attr("dy", lineHeight + 1)
-            .text(word);
-
-          lineCount++;
-        }
-      }
-    });
-  }
-
-  render() {
-    return null;
-  }
+  }, []);
+  return null;
 }
-
-export default PatentNode;

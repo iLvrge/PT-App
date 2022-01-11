@@ -277,6 +277,7 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
 }
 
 .diagram-container {
+    margin-top: 45px;
 }
 
 #patentrackDiagramDiv .toolbarUIPopup ui,#patentrackDiagramDiv li {  

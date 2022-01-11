@@ -73,7 +73,7 @@ class PatentTopTitle extends React.Component {
       return (
         <MenuItem
           key={"PatentrackDiagramFilterElement_" + i_}
-          className={clsx(`listIconItem checkboxItems ${i_< 7 ? 'floatItem' : ''}`)}
+          className={clsx(`listIconItem checkboxItems `)}
         >
           <ListItemIcon className={'checkbox'}>
             <Checkbox
@@ -133,7 +133,7 @@ class PatentTopTitle extends React.Component {
                 </IconButton> 
                 <IconButton
                   onClick={() => this.props.uspto(!this.props.usptoMode)}
-                  /* className={'uspto_logo'} */  
+                  /* className={'uspto_logo'} */
                 >
                   <Tooltip 
                   className='tooltip'

@@ -11,6 +11,7 @@ import { setPDFFile, setPDFView, setPdfTabIndex, setConnectionData, setConnectio
 import { copyToClipboard } from '../../../../utils/html_encode_decode'
 
 import PdfViewer from '../../../common/PdfViewer'
+import ErrorBoundary from '../../ErrorBoundary'
 
 import axios from 'axios' 
 
@@ -318,24 +319,26 @@ const IllustrationContainer = ({
           <CircularProgress /> :
           (
             illustrationData != null && (
-              <PatentrackDiagram 
-                data={illustrationData} 
-                connectionBox={handleConnectionBox} 
-                comment={handleComment} 
-                share={handleShare} 
-                pdfView={handlePdfView} 
-                uspto={handleUSPTO}
-                titleTop={topPosition} 
-                toolbarBottom={bottomToolbarPosition} 
-                gap={gap}                
-                showThirdParties={showThirdParties}
-                toggleShow3rdParities={handleToggleParties}
-                usptoMode={usptoMode}
-                lineId={lineId}
-                fullScreen={fullScreen}
-                isFullscreenOpen={isFullscreenOpen} 
-                copyrights={true}
-              />             
+              <ErrorBoundary>
+                <PatentrackDiagram 
+                  data={illustrationData} 
+                  connectionBox={handleConnectionBox} 
+                  comment={handleComment} 
+                  share={handleShare} 
+                  pdfView={handlePdfView} 
+                  uspto={handleUSPTO}
+                  titleTop={topPosition} 
+                  toolbarBottom={bottomToolbarPosition} 
+                  gap={gap}                
+                  showThirdParties={showThirdParties}
+                  toggleShow3rdParities={handleToggleParties}
+                  usptoMode={usptoMode}
+                  lineId={lineId}
+                  fullScreen={fullScreen}
+                  isFullscreenOpen={isFullscreenOpen} 
+                  copyrights={true} 
+                /> 
+              </ErrorBoundary>                          
             )
           )
         }

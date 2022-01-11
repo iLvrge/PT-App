@@ -1,15 +1,16 @@
-import './css/styles.css';
+import React from "react";
+import ReactDOM from "react-dom";
 
-import * as d3 from 'd3';
+import * as d3 from "d3";
 
-import PatentLink from './PatentLink';
-import PatentNode from './PatentNode';
-import PatentTimeline from './PatentTimeline';
-import PatentTopTitle from './PatentTopTitle';
-import React, { createRef } from 'react';
-import ReactDOM from 'react-dom';
-import config from './config.json';
-import { cloneDeep } from 'lodash';
+import PatentNode from "./PatentNode";
+import PatentLink from "./PatentLink";
+import PatentTimeline from "./PatentTimeline";
+
+import PatentTopTitle from "./PatentTopTitle";
+
+import "./css/styles.css";
+import config from "./config.json";
 
 /*
 
@@ -275,15 +276,14 @@ in Style.css remove SVG style completely
 class PatentrackDiagram extends React.Component {
   constructor(props_) {
     super(props_);
-
-    this.config = cloneDeep(config);
-
-    this.resizeObserver = null;
-    this.resizeElement = createRef();
-
-    this.width = this.height = this.config.defaultWidth;
-    this.patent = props_.data.box[0].patent_number;
-    this.prefix = `patentrackDiagram_${props_.data.box[0].patent_number}`;
+    this.width = this.height = config.defaultWidth;
+    this.patent =
+      this.props.data.box != undefined && this.props.data.box.length > 0
+        ? this.props.data.box[0].patent_number
+        : "";
+    config.node.gap =
+      this.props.gap != undefined ? this.props.gap : config.node.gap;
+    this.prefix = "patentrackDiagram_" + this.patent;
     this.data = {
       inventors: [],
       owners: [],
@@ -309,8 +309,6 @@ class PatentrackDiagram extends React.Component {
         NameChange: true,
         Correct: true
       },
-      parentWidth: null,
-      previousParentWidth: null,
     };
     this.updateDiagram = this.updateDiagram.bind(this);
     this.structure = [];
@@ -318,90 +316,65 @@ class PatentrackDiagram extends React.Component {
 
     this.convertConfigValuesToPixels();
     this.getTitleDivHeight();
-
-    console.log(
-      '%cPatentrack Diagram by Vladimir V. KUCHINOV, v. 0.99',
-      'color: #494949; font-size: 12px; font-family: sans-serif;',
-    );
   }
-
-  componentDidMount() {
-    this.resizeObserver = new ResizeObserver(entries => {
-      const { width } = entries[0].contentRect;
-      this.setState({ parentWidth: width });
-    });
-
-    this.resizeObserver.observe(this.resizeElement.current);
-  }
-
-  componentDidUpdate() {
-    if (this.state.parentWidth !== this.state.previousParentWidth) {
-      this.setState({ previousParentWidth: this.state.parentWidth });
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.resizeObserver) {
-      this.resizeObserver.disconnect();
-    }
-  }
-
+  
   getTitleDivHeight() {
-    const dummyDiv = document.createElement('div');
+    const dummyDiv = document.createElement("div");
 
-    dummyDiv.className = 'topTitle';
+    dummyDiv.className = "topTitle";
     dummyDiv.innerHTML = this.parseTitle();
-    dummyDiv.style.width = `${this.props.parentWidth - 20}px`;
+    dummyDiv.style.width = this.props.parentWidth - 20 + "px";
     document.body.appendChild(dummyDiv);
-    this.config.node.topOffset = dummyDiv.offsetHeight + 16;
+    config.node.topOffset = dummyDiv.offsetHeight + 16;
     document.body.removeChild(dummyDiv);
   }
 
   convertConfigValuesToPixels() {
-    const defaultFontSize = Number(
+    let defaultFontSize = Number(
       window
         .getComputedStyle(document.body)
-        .getPropertyValue('font-size')
-        .replace('px', ''),
+        .getPropertyValue("font-size")
+        .replace("px", ""),
     );
     this.parseConfig(config, defaultFontSize);
-    this.parseConfig(this.config, defaultFontSize);
   }
 
   parseConfig(object_, fontSize_) {
-    const keys = Object.keys(object_);
+    var keys = Object.keys(object_);
 
-    for (let i = 0; i < keys.length; i++) {
-      if (typeof object_[keys[i]] === 'object') {
+    for (var i = 0; i < keys.length; i++) {
+      if (typeof object_[keys[i]] == "object") {
         this.parseConfig(object_[keys[i]], fontSize_);
-      } else if (
-        typeof object_[keys[i]] === 'string' &&
-        object_[keys[i]].includes('rem')
-      ) {
-        object_[keys[i]] = this.convertUnits(
-          object_[keys[i]],
-          parseFloat(fontSize_),
-          'rem',
-        );
-      } else if (
-        typeof object_[keys[i]] === 'string' &&
-        object_[keys[i]].includes('pct')
-      ) {
-        object_[keys[i]] = this.convertUnits(
-          object_[keys[i]],
-          parseFloat(this.props.parentWidth),
-          'pct',
-        );
+      } else {
+        if (
+          typeof object_[keys[i]] == "string" &&
+          object_[keys[i]].includes("rem")
+        ) {
+          object_[keys[i]] = this.convertUnits(
+            object_[keys[i]],
+            parseFloat(fontSize_),
+            "rem",
+          );
+        } else if (
+          typeof object_[keys[i]] == "string" &&
+          object_[keys[i]].includes("pct")
+        ) {
+          object_[keys[i]] = this.convertUnits(
+            object_[keys[i]],
+            parseFloat(this.props.parentWidth),
+            "pct",
+          );
+        }
       }
     }
   }
 
   convertUnits(value_, multiplier_, suffix_) {
-    value_ = value_.replace(suffix_, '');
+    value_ = value_.replace(suffix_, "");
 
-    if (suffix_ == 'rem') {
+    if (suffix_ == "rem") {
       value_ = parseFloat(value_) * multiplier_;
-    } else if (suffix_ == 'pct') {
+    } else if (suffix_ == "pct") {
       value_ = (parseFloat(value_) * multiplier_) / 100.0;
     }
 
@@ -409,7 +382,7 @@ class PatentrackDiagram extends React.Component {
   }
 
   getAssignmentsTotal(connections_) {
-    const assignments = {};
+    let assignments = {};
     connections_.forEach(connection_ => {
       if (!assignments.hasOwnProperty(connection_.assignment_no1)) {
         assignments[connection_.assignment_no1] = true;
@@ -418,59 +391,60 @@ class PatentrackDiagram extends React.Component {
 
     return Object.keys(assignments).length;
   }
-
+  
   parseData() {
-    let dWidth = 0;
-    let dheight = 0;
-    const this_ = this;
-    const nodes = { inventors: [], owners: [], banks: [], thirdParties: [] };
+    let dWidth = 0,
+      dheight = 0,
+      this_ = this;
+    let nodes = { inventors: [], owners: [], banks: [], thirdParties: [] };
 
     this.props.data.box.forEach((box_, i_) => {
       if (Number(box_.segment) == 0) {
         nodes.inventors.push(box_);
         this.data.indices[box_.id] = {
-          type: 'inventors',
+          type: "inventors",
           i: nodes.inventors.length - 1,
         };
       } else if (box_.segment == 1) {
         nodes.owners.push(box_);
         this.data.indices[box_.id] = {
-          type: 'owners',
+          type: "owners",
           i: nodes.owners.length - 1,
         };
       } else if (box_.segment == 2) {
         nodes.banks.push(box_);
         this.data.indices[box_.id] = {
-          type: 'banks',
+          type: "banks",
           i: nodes.banks.length - 1,
         };
       } else if (box_.segment == 3) {
-        box_.description = 'ThirdParty';
+        box_.description = "ThirdParty";
         nodes.thirdParties.push(box_);
         this.data.indices[box_.id] = {
-          type: 'thirdParties',
+          type: "thirdParties",
           i: nodes.thirdParties.length - 1,
         };
       }
     });
 
-    const offsets = { owners: 0, banks: 1, thirdParties: 3 };
+    let offsets = { owners: 0, banks: 1, thirdParties: 3 };
 
     nodes.inventors.forEach((inventor_, i_) => {
       this.data.inventors.push({
         id: inventor_.id,
-        typeID: { type: 'inventors', i: i_ },
+        typeID: { type: "inventors", i: i_ },
         assignment_no: inventor_.assignment_no,
         name: inventor_.name,
         x:
-          Math.floor(i_ / this.config.inventors_per_row) == 0
-            ? i_ % this.config.inventors_per_row
-            : 3 - (i_ % this.config.inventors_per_row),
-        y: Math.floor(i_ / this.config.inventors_per_row),
+          Math.floor(i_ / config.inventors_per_row) == 0
+            ? i_ % config.inventors_per_row
+            : 3 - (i_ % config.inventors_per_row),
+        y: Math.floor(i_ / config.inventors_per_row),
         date: inventor_.date_1,
         filledDate: inventor_.execution_date,
         grantedDate: inventor_.recorded_date,
         document: null,
+        flag: inventor_.flag,
         type: 0,
         left: [],
         right: [],
@@ -488,18 +462,21 @@ class PatentrackDiagram extends React.Component {
 
     let dx = offsets.owners;
 
-    nodes.owners.sort((a_, b_) => new Date(a_.date_1) - new Date(b_.date_1));
+    nodes.owners.sort((a_, b_) => {
+      return new Date(a_.date_1) - new Date(b_.date_1);
+    });
 
-    // owners
+    //owners
     nodes.owners.forEach((owner_, i_) => {
       this.data.owners.push({
         id: owner_.id,
-        typeID: { type: 'owners', i: i_ },
+        typeID: { type: "owners", i: i_ },
         assignment_no: owner_.assignment_no,
         name: owner_.name,
         x: dx,
         y: 0,
         date: owner_.date_1,
+        flag: owner_.flag,
         executionDate: owner_.execution_date,
         recordedDate: owner_.recorded_date,
         document: owner_.document,
@@ -508,7 +485,7 @@ class PatentrackDiagram extends React.Component {
         right: [],
         up: [],
         down: [],
-        rounded: this.config.node.rounded,
+        rounded: config.node.rounded,
         json: owner_,
       });
 
@@ -530,18 +507,19 @@ class PatentrackDiagram extends React.Component {
 
     dx = offsets.banks;
 
-    // banks
-    // nodes.banks.sort((a_, b_) => { return new Date(a_.date_1) - new Date(b_.date_1); })
+    //banks
+    //nodes.banks.sort((a_, b_) => { return new Date(a_.date_1) - new Date(b_.date_1); })
 
     nodes.banks.forEach((bank_, i_) => {
       this.data.banks.push({
         id: bank_.id,
-        typeID: { type: 'banks', i: i_ },
+        typeID: { type: "banks", i: i_ },
         assignment_no: bank_.assignment_no,
         name: bank_.name,
         x: dx,
         y: 0,
         date: bank_.date_1,
+        flag: bank_.flag,
         executionDate: bank_.execution_date,
         recordedDate: bank_.recorded_date,
         document: bank_.document,
@@ -550,7 +528,7 @@ class PatentrackDiagram extends React.Component {
         right: [],
         up: [],
         down: [],
-        rounded: this.config.node.rounded,
+        rounded: config.node.rounded,
         json: bank_,
       });
 
@@ -569,9 +547,9 @@ class PatentrackDiagram extends React.Component {
       }
     });
 
-    const mixed = [...this.data.owners, ...this.data.banks].sort(
-      (a_, b_) => new Date(a_.date) - new Date(b_.date),
-    );
+    let mixed = [...this.data.owners, ...this.data.banks].sort((a_, b_) => {
+      return new Date(a_.date) - new Date(b_.date);
+    });
 
     mixed.forEach((node_, i_) => {
       if (i_ > 0) {
@@ -600,18 +578,19 @@ class PatentrackDiagram extends React.Component {
         ? this.data.inventors[this.data.inventors.length - 1].y + 1
         : 0;
 
-    // third party
+    //third party
     nodes.thirdParties.forEach((thirdParty_, i_) => {
       dheight = Math.max(dheight, dy);
 
       this.data.thirdParties.push({
         id: thirdParty_.id,
-        typeID: { type: 'thirdParties', i: i_ },
+        typeID: { type: "thirdParties", i: i_ },
         assignment_no: thirdParty_.assignment_no,
         name: thirdParty_.name,
         x: dx,
         y: dy,
         date: thirdParty_.date_1,
+        flag: thirdParty_.flag,
         executionDate: null,
         recordedDate: null,
         document: null,
@@ -620,7 +599,7 @@ class PatentrackDiagram extends React.Component {
         right: [],
         up: [],
         down: [],
-        rounded: this.config.node.rounded,
+        rounded: config.node.rounded,
         json: thirdParty_,
       });
 
@@ -631,7 +610,7 @@ class PatentrackDiagram extends React.Component {
       dy++;
     });
 
-    // connections
+    //connections
     this.props.data.connection.forEach((connection_, i_) => {
       this.data.connections.push({
         id: i_,
@@ -652,111 +631,91 @@ class PatentrackDiagram extends React.Component {
       this.data.popups[popup_.id] = popup_;
     });
 
-    const width =
-      this.config.node.leftOffset +
-      this.config.node.rightOffset +
-      dWidth * (this.config.node.width + config.node.gap.x) +
-      this.config.node.width;
-
-    // Responsive diagram on increasing container size or diagram already
-    // responsive.
-    // Make diagram width responsive if parent is increasing or decreasing and
-    // its width is bigger than the original diagram width.
-    if (
-      (this.state.parentWidth &&
-        this.state.previousParentWidth &&
-        this.state.parentWidth > this.state.previousParentWidth &&
-        this.state.parentWidth > width) ||
-      (this.state.parentWidth && this.width > width)
-    ) {
-      this.config.node.gap.x =
-        (this.state.parentWidth -
-          (this.config.node.leftOffset +
-            this.config.node.rightOffset +
-            dWidth * this.config.node.width +
-            this.config.node.width)) /
-        dWidth;
-
-      this.width = this.state.parentWidth;
-    } else {
-      this.width = width;
-    }
+    this.width =
+      config.node.leftOffset +
+      config.node.rightOffset +
+      dWidth * config.node.gap.x +
+      config.node.width;
 
     this.height =
-      (dheight + 1) * (this.config.node.height + this.config.node.gap.y) +
-      this.config.node.topOffset +
-      this.config.node.bottomOffset;
+      (dheight + 1) * config.node.gap.y +
+      config.node.topOffset +
+      config.node.bottomOffset;
   }
 
   parseTitle() {
-    if (!config.title.attr.includes('.')) {
+    if (!config.title.attr.includes(".")) {
       return this.props.data[config.title.attr];
+    } else {
+      return config.title.attr.split(".").reduce(function(a_, b_) {
+        return a_[b_];
+      }, this.props.data);
     }
-    return this.config.title.attr.split('.').reduce(function(a_, b_) {
-      return a_[b_];
-    }, this.props.data);
-
-    return 'title';
   }
 
   extendLineParameters(startType_, x1_, y1_, x2_, y2_) {
-    let direction;
-    let terminals = [];
+    let direction,
+      terminals = [];
 
-    if (startType_ == 'inventors') {
+    if (startType_ == "inventors") {
       if (x1_ == x2_) {
-        direction = 'straight-down';
-        terminals = ['down', 'up'];
-      } else if (x1_ < x2_) {
-        direction = 'down-firstRight';
-        terminals = ['down', 'up'];
+        direction = "straight-down";
+        terminals = ["down", "up"];
       } else {
-        direction = 'down-firstLeft';
-        terminals = ['down', 'up'];
+        if (x1_ < x2_) {
+          direction = "down-firstRight";
+          terminals = ["down", "up"];
+        } else {
+          direction = "down-firstLeft";
+          terminals = ["down", "up"];
+        }
       }
     } else if (x1_ == x2_) {
       if (y1_ < y2_) {
-        direction = 'straight-down';
-        terminals = ['down', 'up'];
+        direction = "straight-down";
+        terminals = ["down", "up"];
       } else {
-        direction = 'straight-up';
-        terminals = ['up', 'down'];
+        direction = "straight-up";
+        terminals = ["up", "down"];
       }
     } else if (y1_ == y2_) {
       if (x1_ < x2_) {
-        direction = 'complex-right';
-        terminals = ['right', 'left'];
+        direction = "complex-right";
+        terminals = ["right", "left"];
       } else {
-        direction = 'complex-left';
-        terminals = ['left', 'right'];
+        direction = "complex-left";
+        terminals = ["left", "right"];
       }
-    } else if (x1_ < x2_) {
-      direction = 'complex-right';
-      terminals = ['right', 'left'];
     } else {
-      direction = 'complex-left';
-      terminals = ['left', 'right'];
+      if (x1_ < x2_) {
+        direction = "complex-right";
+        terminals = ["right", "left"];
+      } else {
+        direction = "complex-left";
+        terminals = ["left", "right"];
+      }
     }
 
     return {
-      direction,
+      direction: direction,
       startIndex: [0, 0],
       endIndex: [0, 0],
-      terminals,
+      terminals: terminals,
     };
   }
 
   rearrangeByLeftOpposites(node_, links_) {
-    const { left } = node_.props.data;
+    let left = node_.props.data.left;
 
-    left.sort(
-      (a_, b_) =>
-        this.getOppositeY(links_, a_, 'left') -
-        this.getOppositeY(links_, b_, 'left'),
-    );
+    left.sort((a_, b_) => {
+      return (
+        this.getOppositeY(links_, a_, "left") -
+        this.getOppositeY(links_, b_, "left")
+      );
+    });
 
     left.forEach((index_, i_) => {
-      if (links_[index_].props.data.direction == 'right') {
+      if (links_[index_].props.data.direction == "right") {
         links_[index_].props.data.startIndex[0] = i_;
       } else {
         links_[index_].props.data.endIndex[0] = i_;
@@ -765,15 +724,16 @@ class PatentrackDiagram extends React.Component {
   }
 
   rearrangeByLeftTheta(node_, links_, indent_) {
-    const { left } = node_.props.data;
+    let left = node_.props.data.left;
 
-    left.sort(
-      (a_, b_) =>
-        this.getTheta(links_, a_, indent_) - this.getTheta(links_, b_, indent_),
-    );
+    left.sort((a_, b_) => {
+      return (
+        this.getTheta(links_, a_, indent_) - this.getTheta(links_, b_, indent_)
+      );
+    });
 
     left.forEach((index_, i_) => {
-      if (links_[index_].props.data.direction == 'right') {
+      if (links_[index_].props.data.direction == "right") {
         links_[index_].props.data.startIndex[0] = i_;
       } else {
         links_[index_].props.data.endIndex[0] = i_;
@@ -782,70 +742,72 @@ class PatentrackDiagram extends React.Component {
   }
 
   getTheta(links_, index_, indent_) {
-    if (links_[index_].props.data.direction == 'right') {
-      const a = {
+    if (links_[index_].props.data.direction == "right") {
+      let a = {
         x: links_[index_].props.data.x1,
         y: links_[index_].props.data.y1,
       };
-      const c = {
+      let c = {
         x: links_[index_].props.data.x1 + indent_,
         y: links_[index_].props.data.y1,
       };
-      const b = {
+      let b = {
         x: links_[index_].props.data.x2 - indent_,
         y: links_[index_].props.data.y2,
       };
 
-      const dx = c.x - b.x;
-      const dy = c.y - b.y;
+      let dx = c.x - b.x;
+      let dy = c.y - b.y;
 
-      const theta = (Math.atan2(dy, dx) * 180.0) / Math.PI;
+      let theta = (Math.atan2(dy, dx) * 180.0) / Math.PI;
       return theta > 0 ? theta : theta + 360.0;
+    } else {
+      let a = {
+        x: links_[index_].props.data.x2,
+        y: links_[index_].props.data.y2,
+      };
+      let c = {
+        x: links_[index_].props.data.x2 + indent_,
+        y: links_[index_].props.data.y2,
+      };
+      let b = {
+        x: links_[index_].props.data.x1 - indent_,
+        y: links_[index_].props.data.y1,
+      };
+
+      let dx = c.x - b.x;
+      let dy = c.y - b.y;
+
+      let theta = (Math.atan2(dy, dx) * 180.0) / Math.PI;
+      return theta >= 0 ? theta : theta + 360.0;
     }
-    const a = {
-      x: links_[index_].props.data.x2,
-      y: links_[index_].props.data.y2,
-    };
-    const c = {
-      x: links_[index_].props.data.x2 + indent_,
-      y: links_[index_].props.data.y2,
-    };
-    const b = {
-      x: links_[index_].props.data.x1 - indent_,
-      y: links_[index_].props.data.y1,
-    };
-
-    const dx = c.x - b.x;
-    const dy = c.y - b.y;
-
-    const theta = (Math.atan2(dy, dx) * 180.0) / Math.PI;
-    return theta >= 0 ? theta : theta + 360.0;
   }
 
   getOppositeY(links_, index_, direction_) {
     if (links_[index_].props.data.direction == direction_) {
       return links_[index_].props.data.y1;
+    } else {
+      return links_[index_].props.data.y2;
     }
-    return links_[index_].props.data.y2;
   }
 
   getLinkMedianSegment(link_) {
-    let x1;
-    let y1;
-    let x2;
-    let y2;
-    let startRange = 1.0;
-    let endRange = 1.0;
-    let startInc = 0.0;
-    let endInc = 0.0;
+    let x1,
+      y1,
+      x2,
+      y2,
+      startRange = 1.0,
+      endRange = 1.0,
+      startInc = 0.0,
+      endInc = 0.0;
 
     if (link_.startIndex[1] > 1) {
       startRange = this.remapFloat(
         link_.startIndex[1],
         1.0,
         16.0,
-        this.config.node.range.min,
-        this.config.node.range.max,
+        config.node.range.min,
+        config.node.range.max,
       );
       startInc = this.remapFloat(
         link_.startIndex[0],
@@ -860,8 +822,8 @@ class PatentrackDiagram extends React.Component {
         link_.endIndex[1],
         1.0,
         16.0,
-        this.config.node.range.min,
-        this.config.node.range.max,
+        config.node.range.min,
+        config.node.range.max,
       );
       endInc = this.remapFloat(
         link_.endIndex[0],
@@ -872,50 +834,42 @@ class PatentrackDiagram extends React.Component {
       );
     }
 
-    if (link_.direction == 'right') {
+    if (link_.direction == "right") {
       x1 =
-        this.config.node.leftOffset +
-        link_.x1 * (this.config.node.width + this.config.node.gap.x) +
-        this.config.node.width;
+        config.node.leftOffset +
+        link_.x1 * config.node.gap.x +
+        config.node.width;
       y1 =
-        this.config.node.topOffset +
-        (link_.y1 + startInc) *
-          (this.config.node.height + this.config.node.gap.y) +
-        this.config.node.height / 2;
-      x2 =
-        this.config.node.leftOffset +
-        link_.x2 * (this.config.node.width + this.config.node.gap.x);
+        config.node.topOffset +
+        (link_.y1 + startInc) * config.node.gap.y +
+        config.node.height / 2;
+      x2 = config.node.leftOffset + link_.x2 * config.node.gap.x;
       y2 =
-        this.config.node.topOffset +
-        (link_.y2 + endInc) *
-          (this.config.node.height + this.config.node.gap.y) +
-        this.config.node.height / 2;
+        config.node.topOffset +
+        (link_.y2 + endInc) * config.node.gap.y +
+        config.node.height / 2;
     } else {
-      x1 =
-        this.config.node.leftOffset +
-        link_.x1 * (this.config.node.width + this.config.node.gap.x);
+      x1 = config.node.leftOffset + link_.x1 * config.node.gap.x;
       y1 =
-        this.config.node.topOffset +
-        (link_.y1 + startInc) *
-          (this.config.node.height + this.config.node.gap.y) +
-        this.config.node.height / 2;
+        config.node.topOffset +
+        (link_.y1 + startInc) * config.node.gap.y +
+        config.node.height / 2;
       x2 =
-        this.config.node.leftOffset +
-        link_.x2 * (this.config.node.width + this.config.node.gap.x) +
-        this.config.node.width;
+        config.node.leftOffset +
+        link_.x2 * config.node.gap.x +
+        config.node.width;
       y2 =
-        this.config.node.topOffset +
-        (link_.y2 + endInc) *
-          (this.config.node.height + this.config.node.gap.y) +
-        this.config.node.height / 2;
+        config.node.topOffset +
+        (link_.y2 + endInc) * config.node.gap.y +
+        config.node.height / 2;
     }
 
-    return { x1, y1, x2, y2 };
+    return { x1: x1, y1: y1, x2: x2, y2: y2 };
   }
 
   checkIntersectionsNode(node_, links_, direction_) {
-    const segments = node_.props.data[direction_].map((index_, i_) => {
-      const link = links_[index_].props.data;
+    let segments = node_.props.data[direction_].map((index_, i_) => {
+      let link = links_[index_].props.data;
 
       return this.getLinkMedianSegment(link);
     });
@@ -925,7 +879,6 @@ class PatentrackDiagram extends React.Component {
         if (i != j) {
           if (this.twoLinesIntersection(segments[i], segments[j])) {
             return true;
-            break;
           }
         }
       }
@@ -935,29 +888,29 @@ class PatentrackDiagram extends React.Component {
   }
 
   twoLinesIntersection(segment0_, segment1_) {
-    const s10x = segment0_.x2 - segment0_.x1;
-    const s10y = segment0_.y2 - segment0_.y1;
-    const s32x = segment1_.x2 - segment1_.x1;
-    const s32y = segment1_.y2 - segment1_.y1;
+    let s10x = segment0_.x2 - segment0_.x1,
+      s10y = segment0_.y2 - segment0_.y1,
+      s32x = segment1_.x2 - segment1_.x1,
+      s32y = segment1_.y2 - segment1_.y1;
 
-    const denom = s10x * s32y - s32x * s10y;
+    let denom = s10x * s32y - s32x * s10y;
 
     if (denom == 0) {
       return false;
     }
 
-    const denom_positive = denom > 0;
+    let denom_positive = denom > 0;
 
-    const s02x = segment0_.x1 - segment0_.x2;
-    const s02y = segment0_.y1 - segment0_.y2;
+    let s02x = segment0_.x1 - segment0_.x2,
+      s02y = segment0_.y1 - segment0_.y2;
 
-    const s_numer = s10x * s02y - s10y * s02x;
+    let s_numer = s10x * s02y - s10y * s02x;
 
     if (s_numer < 0 == denom_positive) {
       return false;
     }
 
-    const t_numer = s32x * s02y - s32y * s02x;
+    let t_numer = s32x * s02y - s32y * s02x;
 
     if (t_numer < 0 == denom_positive) {
       return false;
@@ -1017,7 +970,7 @@ class PatentrackDiagram extends React.Component {
   }
 
   findAssignmentLinks(links_, assignment_no_, dir_) {
-    const out = [];
+    let out = [];
 
     links_.forEach(link_ => {
       if (link_.props.data.assignment_no == assignment_no_) {
@@ -1029,33 +982,28 @@ class PatentrackDiagram extends React.Component {
   }
 
   sortLeftByAtan2(node_, links_) {
-    const { left } = node_.props.data;
+    let left = node_.props.data.left;
 
     left.sort((a_, b_) => {
-      const alink = this.getLinkMedianSegment(links_[a_].props.data);
-      const blink = this.getLinkMedianSegment(links_[b_].props.data);
+      let alink = this.getLinkMedianSegment(links_[a_].props.data);
+      let blink = this.getLinkMedianSegment(links_[b_].props.data);
 
-      let ac;
-      let ab;
-      let bc;
-      let bb;
-      let atheta;
-      let btheta;
+      let ac, ab, bc, bb, atheta, btheta;
 
-      if (links_[a_].props.data.direction == 'right') {
-        ac = { x: alink.x1 + this.config.link.indent, y: alink.y1 };
-        ab = { x: alink.x2 - this.config.link.indent, y: alink.y2 };
+      if (links_[a_].props.data.direction == "right") {
+        ac = { x: alink.x1 + config.link.indent, y: alink.y1 };
+        ab = { x: alink.x2 - config.link.indent, y: alink.y2 };
       } else {
-        ac = { x: alink.x2 + this.config.link.indent, y: alink.y2 };
-        ab = { x: alink.x1 - this.config.link.indent, y: alink.y1 };
+        ac = { x: alink.x2 + config.link.indent, y: alink.y2 };
+        ab = { x: alink.x1 - config.link.indent, y: alink.y1 };
       }
 
-      if (links_[b_].props.data.direction == 'right') {
-        bc = { x: blink.x1 + this.config.link.indent, y: blink.y1 };
-        bb = { x: blink.x2 - this.config.link.indent, y: blink.y2 };
+      if (links_[b_].props.data.direction == "right") {
+        bc = { x: blink.x1 + config.link.indent, y: blink.y1 };
+        bb = { x: blink.x2 - config.link.indent, y: blink.y2 };
       } else {
-        bc = { x: blink.x2 + this.config.link.indent, y: blink.y2 };
-        bb = { x: blink.x1 - this.config.link.indent, y: blink.y1 };
+        bc = { x: blink.x2 + config.link.indent, y: blink.y2 };
+        bb = { x: blink.x1 - config.link.indent, y: blink.y1 };
       }
 
       atheta = (Math.atan2(ab.y - ac.y, ab.x - ac.x) * 180) / Math.PI;
@@ -1065,7 +1013,7 @@ class PatentrackDiagram extends React.Component {
     });
 
     left.forEach((link_, i_) => {
-      if (links_[link_].props.data.direction == 'right') {
+      if (links_[link_].props.data.direction == "right") {
         links_[link_].props.data.startIndex[0] = i_;
       } else {
         links_[link_].props.data.endIndex[0] = i_;
@@ -1074,13 +1022,13 @@ class PatentrackDiagram extends React.Component {
   }
 
   arrangingVerticalConnections(links_) {
-    const short = [];
-    const long = [];
+    let short = [],
+      long = [];
 
     links_.forEach((link_, i_) => {
       if (
-        link_.props.data.direction.includes('straight') ||
-        link_.props.data.direction.includes('first')
+        link_.props.data.direction.includes("straight") ||
+        link_.props.data.direction.includes("first")
       ) {
         link_.props.data.y2 - link_.props.data.y1 == 1
           ? short.push(i_)
@@ -1124,187 +1072,167 @@ class PatentrackDiagram extends React.Component {
   }
 
   updateDiagram(event_) {
-    const this_ = this;
+    let this_ = this;
+      
+        if(event_.currentTarget.getAttribute('type') == 'checkbox'){
+        
+           this.state.filters[event_.currentTarget.getAttribute('id').replace(' ', '')] = event_.currentTarget.checked;
+           event_.currentTarget.checked ? event_.currentTarget.parentNode.setAttribute('title', event_.currentTarget.getAttribute('id') + ' filter is on') : event_.currentTarget.parentNode.setAttribute('title', event_.currentTarget.getAttribute('id') + ' filter is off');
 
-    if (event_.currentTarget.getAttribute('type') == 'checkbox') {
-      this.state.filters[
-        event_.currentTarget.getAttribute('id').replace(' ', '')
-      ] = event_.currentTarget.checked;
-      event_.currentTarget.checked
-        ? event_.currentTarget.parentNode.setAttribute(
-            'title',
-            `${event_.currentTarget.getAttribute('id')} filter is on`,
-          )
-        : event_.currentTarget.parentNode.setAttribute(
-            'title',
-            `${event_.currentTarget.getAttribute('id')} filter is off`,
-          );
-    } else {
-      if (
-        event_.currentTarget.parentNode.getAttribute('id') == 'fastBackward'
-      ) {
-        this.state.assignments = this.state.assignees = [];
-      }
-
-      if (event_.currentTarget.parentNode.getAttribute('id') == 'fastForward') {
-        const assignments = [];
-        const assignees = [];
-        Object.keys(this.structure).forEach(key_ => {
-          assignments.push(Number(key_));
-          this.structure[key_].forEach(assignee_ => {
-            assignees.push(assignee_);
-          });
-        });
-
-        this.state.assignments = assignments;
-        this.state.assignees = assignees;
-      }
-
-      if (
-        event_.currentTarget.parentNode.getAttribute('id') == 'prevAssignment'
-      ) {
-        const { assignments } = this.state;
-        const assignees = [];
-
-        if (assignments.length > 0) {
-          assignments.pop();
-          assignments.forEach(assignment_ => {
-            this.structure[assignment_].forEach(k_ => assignees.push(k_));
-          });
-
-          this.state.assignments = assignments;
-          this.state.assignees = assignees;
-        }
-      }
-
-      if (
-        event_.currentTarget.parentNode.getAttribute('id') == 'nextAssignment'
-      ) {
-        const { assignments } = this.state;
-        const assignees = [];
-        if (assignments.length < this.state.limits.assignments) {
-          assignments.push(
-            Number(Object.keys(this.structure)[assignments.length]),
-          );
-
-          assignments.forEach(assignment_ => {
-            this.structure[assignment_].forEach(k_ => assignees.push(k_));
-          });
-
-          this.state.assignments = assignments;
-          this.state.assignees = assignees;
-        }
-      }
-
-      if (
-        event_.currentTarget.parentNode.getAttribute('id') == 'prevAssignee'
-      ) {
-        const assignments = [];
-        const { assignees } = this.state;
-
-        if (assignees.length > 0) {
-          assignees.pop();
-        }
-
-        if (assignees.length > 0) {
-          for (let i = 0; i < Object.keys(this.structure).length; i++) {
-            const key = Object.keys(this.structure)[i];
-            if (!this.assigmentIncludes(assignees[assignees.length - 1], key)) {
-              assignments.push(key);
-            } else {
-              assignments.push(key);
-              break;
-            }
-          }
-        }
-
-        this.state.assignments = assignments;
-        this.state.assignees = assignees;
-      }
-
-      if (
-        event_.currentTarget.parentNode.getAttribute('id') == 'nextAssignee'
-      ) {
-        const assignments = [];
-        const { assignees } = this.state;
-
-        if (assignees.length == 0) {
-          assignees.push(this.structure[Object.keys(this.structure)[0]][0]);
-          assignments.push(Object.keys(this.structure)[0]);
         } else {
-          const everyAssignee = Object.keys(this.structure).reduce(
-            (r_, k_) => r_.concat(this.structure[k_]),
-            [],
-          );
-
-          for (let i = 0; i < everyAssignee.length; i++) {
-            if (assignees[assignees.length - 1] == everyAssignee[i]) {
-              if (i < this.state.limits.assignees - 1) {
-                assignees.push(everyAssignee[i + 1]);
-              }
-              break;
+            
+            const ID = event_.currentTarget.parentNode.getAttribute('id')
+            if(ID == 'fastBackward'){
+              this.state.assignments = this.state.assignees = [];
             }
-          }
+            
+            if(ID == 'fastForward'){
+        
+                let assignments = [], assignees = [];
+                Object.keys(this.structure).forEach((key_) =>{ 
+                    
+                        assignments.push(Number(key_)); 
+                        this.structure[key_].forEach(assignee_ => { assignees.push(assignee_); })
+
+
+                });
+                                
+                this.state.assignments = assignments;
+                this.state.assignees = assignees;
+            
+            }
+            
+            if(ID == 'prevAssignment'){
+        
+                let assignments = this.state.assignments, assignees = [];
+                
+                if(assignments.length > 0){
+                
+                    assignments.pop();
+                    assignments.forEach(assignment_ => {
+                
+                        this.structure[assignment_].forEach(k_ => assignees.push(k_));
+                
+                    })
+                
+                    this.state.assignments = assignments;
+                    this.state.assignees = assignees;
+                
+                }
+        
+            }
+            
+            if(ID == 'nextAssignment'){
+        
+                let assignments = this.state.assignments, assignees = [];
+                if(assignments.length < this.state.limits.assignments){
+                
+                    assignments.push(Number(Object.keys(this.structure)[assignments.length]));
+                    
+                    assignments.forEach(assignment_ => {
+                
+                        this.structure[assignment_].forEach(k_ => assignees.push(k_));
+                
+                    })
+                
+                    this.state.assignments = assignments;
+                    this.state.assignees = assignees;
+
+                
+                }
+
+            }
+            
+            if(ID == 'prevAssignee'){
+        
+                let assignments = [], assignees = this.state.assignees;
+        
+                if(assignees.length > 0){ assignees.pop(); }
+      
+                if(assignees.length > 0){
+                   
+                    for(let i = 0; i < Object.keys(this.structure).length; i++){
+
+                        let key = Object.keys(this.structure)[i];
+                        if(!this.assigmentIncludes(assignees[assignees.length - 1], key)){ assignments.push(key); }
+                        else { assignments.push(key); break; }
+
+
+                    }
+                
+                }
+                
+                this.state.assignments = assignments;
+                this.state.assignees = assignees;
+
+            }
+            
+            if(ID == 'nextAssignee'){
+        
+                let assignments = [], assignees = this.state.assignees;
+                
+                if(assignees.length == 0) { 
+                    
+                    assignees.push(this.structure[Object.keys(this.structure)[0]][0]); 
+                    assignments.push(Object.keys(this.structure)[0]);
+                }
+                else{
+                
+                    var everyAssignee =  Object.keys(this.structure).reduce((r_, k_) => { return r_.concat(this.structure[k_]); }, []);
+                    
+                    for(let i = 0; i < everyAssignee.length; i++){
+                        
+                        if(assignees[assignees.length - 1] == everyAssignee[i]){
+                            
+                            if(i < this.state.limits.assignees - 1) { assignees.push(everyAssignee[i + 1]); }
+                            break;
+                            
+                        }
+                        
+                    }
+
+                }
+                
+                this.state.assignments = assignments;
+                this.state.assignees = assignees;
+                
+            }
+            
+            document.getElementById('assignmentQuantative').innerHTML = this.state.assignments.length + ' / ' + (this.state.limits.assignments);
+            document.getElementById('assigneeQuantative').innerHTML = this.state.assignees.length + ' / ' + (this.state.limits.assignees);
+    
         }
+      
+        d3.selectAll('.PatentrackLink').nodes().map(node_ =>{
+            let id = Number(node_.attributes.id.value.replace('PatentrackLink_', ''));
+            let category = null;
 
-        this.state.assignments = assignments;
-        this.state.assignees = assignees;
-      }
-
-      document.getElementById('assignmentQuantative').innerHTML = `${
-        this.state.assignments.length
-      } / ${this.state.limits.assignments}`;
-      document.getElementById('assigneeQuantative').innerHTML = `${
-        this.state.assignees.length
-      } / ${this.state.limits.assignees}`;
-    }
-
-    d3.selectAll('.PatentrackLink')
-      .nodes()
-      .map(node_ => {
-        const id = Number(
-          node_.attributes.id.value.replace('PatentrackLink_', ''),
-        );
-        let category = null;
-
-        Object.keys(this.state.filters).forEach(key_ => {
-          if (node_.attributes.class.value.includes(key_)) {
-            return (category = key_);
-          }
+            Object.keys(this.state.filters).forEach(key_ => { if(node_.attributes.class.value.includes(key_)) { return category = key_ } });
+          
+            node_.attributes.visibility.value = (id < this.state.assignees.length && this.state.filters[category]) ? 'visible' : 'hidden';
+                
         });
-
-        node_.attributes.visibility.value =
-          id < this.state.assignees.length && this.state.filters[category]
-            ? 'visible'
-            : 'hidden';
-      });
-
-    d3.selectAll('.PatentrackNode')
-      .nodes()
-      .map(node_ => {
-        const children = [];
-
-        node_.attributes.children.value.split(',').forEach(link_ => {
-          const parsed = link_.split('|');
-
-          if (parsed.length > 1) {
-            if (
-              Number(parsed[0]) < this.state.assignees.length &&
-              this.state.filters[parsed[1].replace(' ', '')]
-            ) {
-              children.push(Number(parsed[0]));
-            }
-          }
+      
+        d3.selectAll('.PatentrackNode').nodes().map(node_ =>{
+                
+            let children = [];
+            
+            node_.attributes.children.value.split(',').forEach(link_ => {
+                
+                let parsed = link_.split('|');
+                 
+                if(parsed.length > 1){
+                    
+                    if(Number(parsed[0]) < this.state.assignees.length && this.state.filters[parsed[1].replace(' ', '')]) { children.push(Number(parsed[0])); } 
+                    
+                }
+                   
+            })
+        
+            node_.attributes.visibility.value = (node_.attributes.type.value == 'inventors' || children.length > 0) ? 'visible' : 'hidden';
+            d3.select('#PatentrackTimelineElement' + node_.id.replace('PatentrackNode', '')).attr('visibility', node_.attributes.visibility.value);
+            
         });
-
-        node_.attributes.visibility.value =
-          node_.attributes.type.value == 'inventors' || children.length > 0
-            ? 'visible'
-            : 'hidden';
-        d3.select(
-          `#PatentrackTimelineElement${node_.id.replace('PatentrackNode', '')}`,
-        ).attr('visibility', node_.attributes.visibility.value);
-      });
   }
 
   assigmentIncludes(assignee_, assignment_) {
@@ -1323,6 +1251,7 @@ class PatentrackDiagram extends React.Component {
     let found = false;
 
     for (let i = 0; i < assignments_.length; i++) {
+      // eslint-disable-next-line no-loop-func
       this.data.assignments[assignments_[i]][type_].forEach(object_ => {
         if (object_ == id_) {
           found = true;
@@ -1336,21 +1265,21 @@ class PatentrackDiagram extends React.Component {
   filterAssignees(assignees_, type_, object_, connections_) {
     let found = false;
 
-    if (type_ == 'connections') {
+    if (type_ == "connections") {
       for (let i = 0; i < assignees_.length; i++) {
         if (Number(object_.id) == Number(assignees_[i])) {
           found = true;
         }
       }
     } else {
-      const connections = {};
-      const sides = ['up', 'right', 'down', 'left'];
+      let connections = {},
+        sides = ["up", "right", "down", "left"];
       assignees_.forEach(key_ => {
         connections[key_] = true;
       });
       sides.forEach(side_ => {
         object_[side_].forEach(id_ => {
-          const assignedConnections = this.findConnectionByAssignmentNoAndNodeSide(
+          let assignedConnections = this.findConnectionByAssignmentNoAndNodeSide(
             connections_,
             object_.typeID,
             side_,
@@ -1359,7 +1288,7 @@ class PatentrackDiagram extends React.Component {
           assignedConnections.forEach(assigned_ => {
             if (
               connections.hasOwnProperty(assigned_.props.data.id) ||
-              object_.typeID.type == 'inventors'
+              object_.typeID.type == "inventors"
             ) {
               found = true;
             }
@@ -1377,11 +1306,10 @@ class PatentrackDiagram extends React.Component {
     side_,
     assignment_no_,
   ) {
-    const out = [];
+    let out = [];
 
     connections_.forEach(connection_ => {
-      const end =
-        connection_.props.data.terminals[0] == side_ ? 'start' : 'end';
+      let end = connection_.props.data.terminals[0] == side_ ? "start" : "end";
       if (
         connection_.props.data.terminalIDs[end].type == node_.type &&
         connection_.props.data.terminalIDs[end].i == node_.i
@@ -1398,23 +1326,23 @@ class PatentrackDiagram extends React.Component {
   filterCategories(categories_, type_, object_, connections_) {
     let found = false;
 
-    if (type_ == 'connections') {
+    if (type_ == "connections") {
       if (categories_[object_.category]) {
         found = true;
       }
     } else {
-      const filters = {};
-      const sides = ['up', 'right', 'down', 'left'];
+      let filters = {},
+        sides = ["up", "right", "down", "left"];
       sides.forEach(side_ => {
         object_[side_].forEach(id_ => {
-          const assignedConnections = this.findConnectionByAssignmentNoAndNodeSide(
+          let assignedConnections = this.findConnectionByAssignmentNoAndNodeSide(
             connections_,
             object_.typeID,
             side_,
             id_,
           );
           assignedConnections.forEach(assigned_ => {
-            const { category } = assigned_.props.data;
+            let category = assigned_.props.data.category;
             if (!filters.hasOwnProperty(category)) {
               filters[category] = 1;
             } else {
@@ -1424,7 +1352,7 @@ class PatentrackDiagram extends React.Component {
         });
       });
 
-      const keys = Object.keys(this.state.filters);
+      let keys = Object.keys(this.state.filters);
       keys.forEach(key_ => {
         if (filters.hasOwnProperty(key_)) {
           if (!this.state.filters[key_]) {
@@ -1442,7 +1370,7 @@ class PatentrackDiagram extends React.Component {
   }
 
   setAssignmentStructure(connections_) {
-    const structure = {};
+    let structure = {};
 
     connections_.sort((a_, b_) => {
       return a_.props.data.assignment_no - b_.props.data.assignment_no;
@@ -1465,10 +1393,10 @@ class PatentrackDiagram extends React.Component {
   }
 
   generateHashhKet() {
-    let out = '';
-    const characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
+    let out = "",
+      characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
+      charactersLength = characters.length;
 
     for (let i = 0; i < 16; i++) {
       out += characters.charAt(Math.floor(Math.random() * charactersLength));
@@ -1480,11 +1408,9 @@ class PatentrackDiagram extends React.Component {
   lerpFloat(a_, b_, t_) {
     return a_ + t_ * (b_ - a_);
   }
-
   remapFloat(v_, min0_, max0_, min1_, max1_) {
     return min1_ + ((v_ - min0_) / (max0_ - min0_)) * (max1_ - min1_);
   }
-
   between(v_, min_, max_) {
     return v_ >= min_ && v_ <= max_;
   }
@@ -1499,25 +1425,24 @@ class PatentrackDiagram extends React.Component {
       indices: [],
       assignments: {},
     };
-
     const { showThirdParties } = this.props;
 
     this.parseData();
 
-    const this_ = this;
-    const timelines = [];
+    let this_ = this;
+    let timelines = [];
 
-    const svgParams = this.config.responsive
+    const svgParams = config.responsive
       ? {
-          viewBox: `0 0 ${this.width} ${this.height}`,
-          preserveAspectRatio: 'xMidYMid meet',
+          viewBox: "0 0 " + this.width + " " + this.height,
+          preserveAspectRatio: "xMidYMid meet",
         }
       : { width: this.width, height: this.height };
 
-    const params = {
+    let params = {
       width: this.width,
       height: this.height,
-      margin: this.config.margin,
+      margin: config.margin,
     };
 
     let links = !showThirdParties
@@ -1529,7 +1454,7 @@ class PatentrackDiagram extends React.Component {
       : this.data.connections;
 
     links = links.map((link_, i_) => {
-      const extention = this.extendLineParameters(
+      let extention = this.extendLineParameters(
         link_.start_id.type,
         this.data[link_.start_id.type][link_.start_id.i].x,
         this.data[link_.start_id.type][link_.start_id.i].y,
@@ -1568,7 +1493,7 @@ class PatentrackDiagram extends React.Component {
             .length - 1;
       }
 
-      const linkData = {
+      let linkData = {
         id: i_,
         x1: this.data[link_.start_id.type][link_.start_id.i].x,
         y1: this.data[link_.start_id.type][link_.start_id.i].y,
@@ -1582,7 +1507,7 @@ class PatentrackDiagram extends React.Component {
         category: link_.category,
         direction: extention.direction,
         color: link_.color,
-        indent: this.config.link.indent,
+        indent: config.link.indent,
         popup: this.data.popups[link_.popup],
         line: link_.line,
       };
@@ -1599,18 +1524,20 @@ class PatentrackDiagram extends React.Component {
 
       return (
         <PatentLink
-          id={`PatentrackLink_${link_.id}`}
-          key={`Link_${i_}`}
-          svg={`svg_${this.prefix}`}
+          id={"PatentrackLink_" + link_.id}
+          key={"Link_" + i_}
+          svg={"svg_" + this.prefix}
           connectionBox={this.props.connectionBox}
-          parent="patentLinksGroup"
+          parent={"patentLinksGroup"}
           data={linkData}
-          config={this.config}
+          config={config}
+          lineId={this.props.lineId}  
         />
       );
     });
 
     let nodes = [];
+
     if (showThirdParties) {
       nodes = [
         ...this.data.inventors,
@@ -1621,13 +1548,12 @@ class PatentrackDiagram extends React.Component {
     } else {
       nodes = [...this.data.inventors, ...this.data.owners, ...this.data.banks];
     }
-
     nodes = nodes.map((node_, i_) => {
-      const children = [];
+      let children = [];
 
-      ['left', 'right', 'up', 'down'].forEach(dir_ => {
+      ["left", "right", "up", "down"].forEach(dir_ => {
         node_[dir_].forEach((assignment_, i_) => {
-          const assignmentLinks = this.findAssignmentLinks(
+          let assignmentLinks = this.findAssignmentLinks(
             links,
             assignment_,
             dir_,
@@ -1663,16 +1589,16 @@ class PatentrackDiagram extends React.Component {
         };
       }
       this.data.assignments[node_.assignment_no].nodes.push(node_.id);
-
       return (
         <PatentNode
-          id={`PatentrackNode_${node_.id}`}
-          key={`${node_.type}_${i_}`}
-          parent="patentNodesGroup"
+          id={"PatentrackNode_" + node_.id}
+          key={node_.type + "_" + i_}
+          parent={"patentNodesGroup"}
           data={node_}
-          node={this.config.node}
+          node={config.node}
           childrenLinks={children}
           pdfView={this.props.pdfView}
+          config={config}
         />
       );
     });
@@ -1689,20 +1615,18 @@ class PatentrackDiagram extends React.Component {
     }
 
     nodes.forEach(node_ => {
-      if (node_.props.data.type != 3) {
-        const timelineEntry = {
+      if (node_.props?.data?.type != 3) {
+        let timelineEntry = {
           nodeID: node_.props.data.id,
           time: node_.props.data.date,
           x2:
-            this.config.node.leftOffset +
-            node_.props.data.x *
-              (this.config.node.width + this.config.node.gap.x) -
-            this.config.margin.left,
+            config.node.leftOffset +
+            node_.props.data.x * config.node.gap.x -
+            config.margin.left,
           y:
-            this.config.node.topOffset +
-            node_.props.data.y *
-              (this.config.node.height + this.config.node.gap.y) +
-            this.config.node.height / 2,
+            config.node.topOffset +
+            node_.props.data.y * config.node.gap.y +
+            config.node.height / 2,
         };
 
         this.checkForSimilarTimelineEntries(timelines, timelineEntry);
@@ -1710,7 +1634,10 @@ class PatentrackDiagram extends React.Component {
     });
 
     return (
-      <div id="patentrackDiagramDiv" ref={this.resizeElement}>
+      <div
+        id={"patentrackDiagramDiv"}
+        ref={divElement => (this.divElement = divElement)}
+      >
         <PatentTopTitle
           width={this.props.parentWidth}
           titleTop={this.props.titleTop}
@@ -1745,35 +1672,38 @@ class PatentrackDiagram extends React.Component {
             },
           }}
         />
-        <svg
-          id={`svg_${this.prefix}`}
-          {...svgParams}
-          key={this.generateHashhKet()}
-          mlndes="http://www.w3.org/2000/svg"
-          xmlnsXlink="http://www.w3.org/1999/xlink"
-          className={`svg_diagram`}
-        >
-          <g id="parentTimelineGrid">
-            <PatentTimeline
-              parent="parentTimelineGrid"
-              params={params}
-              dates={timelines}
-              timeline={config.timeline}
-            />
-          </g>
-          <g id="patentLinksGroup">{links}</g>
-          <g id="patentNodesGroup">{nodes}</g>
-          {
-            this.props.copyrights && (
-              <g transform={`translate(16,${svgParams.height ? svgParams.height - 20 : this.height })`}>
-                <text fill="#BDBDBD"><tspan>The illustrations, and the systems and methods by which they were created, are copyright</tspan> <tspan x="0" dy="14.25">protected and covered by several pending patent applications.</tspan></text>
-              </g>
-            )  
-          } 
-        </svg>
+        <div style={{ overflow: "auto", minHeight: "95%" }}>
+          <svg
+            className="diagram-container"
+            id={"svg_" + this.prefix}
+            {...svgParams}
+            key={this.generateHashhKet()}
+            mlndes="http://www.w3.org/2000/svg"
+            xmlnsXlink="http://www.w3.org/1999/xlink"
+          >
+            <g id="parentTimelineGrid">
+              <PatentTimeline
+                parent="parentTimelineGrid"
+                params={params}
+                dates={timelines}
+                timeline={config.timeline}
+              />
+            </g>
+            <g id="patentLinksGroup">{links}</g>
+            <g id="patentNodesGroup">{nodes}</g>
+            {
+              this.props.copyrights && (
+                <g transform={`translate(16,${svgParams.height ? svgParams.height - 20 : this.height })`}>
+                  <text fill="#BDBDBD"><tspan>The illustrations, and the systems and methods by which they were created, are copyright</tspan> <tspan x="0" dy="14.25">protected and covered by several pending patent applications.</tspan></text>
+                </g>
+              )  
+            }  
+          </svg>
+        </div>
       </div>
     );
   }
 }
 
-export default PatentrackDiagram;
+
+export default React.memo(PatentrackDiagram);
