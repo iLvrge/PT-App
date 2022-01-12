@@ -91,6 +91,37 @@ class PatentNode extends React.Component {
       .attr('font-weight', this.props.node.fontWeight)
       .attr('fill', this.props.node.fontColor)
       .attr('text-rendering', 'geometricPrecision')
+      .attr('class', 'wrapText')
+      .attr('title', typeof this.props.data.json != 'undefined' && typeof this.props.data.json.original_name !== 'undefined' && this.props.data.json.original_name != '' && this.props.data.json.original_name !== null ? this.props.data.json.original_name : this.props.data.name)
+      .on("mouseover", () => {
+        //let dx = d3.event.offsetX, dy = d3.event.offsetY
+        /* let fromElement = d3.event.fromElement
+        if(fromElement != null && fromElement.nodeName != 'rect') {
+          const path =  d3.event.path
+          if(path.length > 0) {
+            const findIndex = path.findIndex( r => r.nodeName == 'g' && r.id.indexOf('PatentrackNode') !== -1)
+            if(findIndex !== 1) {
+              fromElement = path[findIndex].querySelector('rect')
+            }
+          } 
+        }
+        const getBoundElementRec = fromElement.getBoundingClientRect() */
+        //let pos = d3.select(d3.event.fromElement).node().getBoundingClientRect();
+
+        d3.select("#patentrackDiagramDiv")
+          .append("div")	
+          .attr("class", "tooltip_title MuiTooltip-tooltip")	
+          .html(typeof this.props.data.json != 'undefined' && typeof this.props.data.json.original_name !== 'undefined' && this.props.data.json.original_name != '' && this.props.data.json.original_name !== null ? this.props.data.json.original_name : this.props.data.name)
+          /* .style('left', `${pos['x']}px`)
+          .style('top', `${(window.pageYOffset  + pos['y'] - 100)}px`); */
+          /* .style("left", `${d3.event.pageX }px`)		
+          .style("top", `${d3.event.pageY }px`);	  */
+          .style("left", `${d3.event.offsetX + 30}px`)		
+          .style("top", `${(d3.event.offsetY)}px`);	  
+      })
+      .on("mouseout", () => {
+        d3.selectAll(".tooltip_title").remove();
+      })
       .text(this.props.data.name)
       .call(
         this.multiline,
@@ -99,31 +130,43 @@ class PatentNode extends React.Component {
         this,
       );
 
-    if (this.props.data.document != null) {
-      g.append('svg:image')
-        .attr('xlink:href', pdfIcon)
-        .attr('width', this.props.node.pdf.size)
-        .attr('height', this.props.node.pdf.size)
-        .attr('x', this.props.node.pdf.x)
-        .attr('y', this.props.node.pdf.y)
-        .attr('cursor', 'pointer')
-        .on('click', () => {
-          //pdfView
-
-          /*
-                    
-                    I can pass any data you want, by now
-                    it's just json.box[i].document
-                    
-                    Please delete handlePdfView() function at App/index.js
-                    I have used it just for mockup
-                    
-                    */
-
-          this.props.pdfView(this.props.data.document, this.props.data.json);
+    /* if (data.document != null && data.document != "") {
+      g.append("svg:image")
+        .attr("xlink:href", Object.keys(pdfFile).length > 0 && pdfFile.document == data.document ?  config.pdfIconActive  : config.pdfIcon)
+        .attr("width", node.pdf.size)
+        .attr("height", node.pdf.size)
+        .attr("x", node.pdf.x)
+        .attr("y", node.pdf.y)
+        .attr("cursor", "pointer")
+        .on("click", () => {
+          unsetAllActiveLink()
+          const targetElement = d3.event.target
+          const togglePDF = targetElement.getAttribute('href')
+          console.log('togglePDF', togglePDF, targetElement)
+          if( togglePDF == '' || togglePDF  == config.pdfIcon ) {
+            targetElement.setAttribute('href',config.pdfIconActive)
+            console.log('SET IMAGE')
+            const element = d3.event.target.closest(
+              "g#patentNodesGroup",
+            )
+            const images = element.querySelectorAll('image')
+            
+            if(images != null && images.length > 0) {
+              [].forEach.call(images, function(el) {
+                if(el != targetElement) {
+                  el.setAttribute('href',config.pdfIcon)
+                }
+              })
+            }
+            //pdfView
+            
+            pdfView(data.json);
+          } else {
+            targetElement.setAttribute('href',config.pdfIcon)
+            pdfView({})
+          }
         });
-    }
-
+    } */
     let executionDate =
       this.props.data.executionDate != ''
         ? this.dateFormat(new Date(this.props.data.executionDate))
