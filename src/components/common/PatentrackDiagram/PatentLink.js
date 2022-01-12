@@ -8,7 +8,7 @@ class PatentLink extends React.Component {
     this.node = props_.config.node;
     this.path = 'M0,0';
     this.comment = 'type any comment here';
-
+    this.dateFormat = d3.timeFormat('%m/%d/%Y');
     this.types = [
       d3.curveLinear,
       d3.curveBasis,
@@ -74,47 +74,67 @@ class PatentLink extends React.Component {
       .on('mouseover', () => {
         let dx = d3.event.offsetX + this.props.config.link.tooltip.x,
           dy = d3.event.offsetY + this.props.config.link.tooltip.y;
-
-        d3.select('#' + this.props.parent)
-          .append('text')
-          .attr('id', 'dummy')
-          .attr('font-size', this.props.config.link.tooltip.fontSize)
-          .text(this.props.data.category);
+        d3.select("#" + this.props.parent)
+          .append("text")
+          .attr("id", "dummy")
+          .attr("font-size", this.props.config.link.tooltip.fontSize)
+          /* .text(data.category); */
+          .html("<tspan dx='0rem' dy='1.1rem'>"+ this.props.data.category + "</tspan><tspan dx='-2.9rem' dy='1.1rem'>Execution: " +
+                  this.dateFormat(new Date(this.props.data.line.date)) +
+                  '</tspan><tspan dx="-8.2rem" dy="1.1rem">' +
+                  "Recorded: " +
+                  this.dateFormat(new Date(this.props.data.line.recorded)) +
+                  "</tspan>",
+          )
         let bbox = d3
-          .select('#dummy')
+          .select("#dummy")
           .node()
           .getBBox();
-        d3.selectAll('#dummy').remove();
+        d3.selectAll("#dummy").remove();
+        let gtooltip = d3.select("#" + this.props.svg)
+                        .append('g')
+                        .attr("class", "link-tooltip")
+                        .attr("visibility", "visible")
+                        .attr("transform", `translate(${dx + 70}, ${dy})`)
+          gtooltip
+          .append("rect")
+          .attr("rx", this.props.config.link.tooltip.corners)
+          .attr("ry", this.props.config.link.tooltip.corners)
+          .attr("class", "link-tooltip")
+          .attr("width", '135')
+          .attr("height", '63')
+          .attr("fill", this.props.config.node.background)
+          .attr("stroke", this.props.config.colors[
+            this.props.data.category.charAt(0).toLowerCase() +
+              this.props.data.category.slice(1).replace(" ", "")
+          ])
+          .attr("fill-opacity", this.props.config.node.opacity);
+        let offsetX = "0.6rem";
 
-        d3.select('#' + this.props.svg)
-          .append('rect')
-          .attr('x', dx)
-          .attr('y', dy)
-          .attr('rx', this.props.config.link.tooltip.corners)
-          .attr('ry', this.props.config.link.tooltip.corners)
-          .attr('class', 'link-tooltip')
-          .attr('width', bbox.width * 1.4)
-          .attr('height', bbox.height * 1.4)
-          .attr('fill', this.props.config.node.background)
-          .attr('stroke', this.props.config.node.border)
-          .attr('opacity', this.props.config.node.opacity);
-
-        d3.select('#' + this.props.svg)
-          .append('text')
-          .attr('x', dx + (bbox.width * 1.4) / 2)
-          .attr('y', dy + (bbox.height * 1.4) / 2)
-          .attr('class', 'link-tooltip')
-          .attr(
-            'fill',
-            this.props.config.colors[
-              this.props.data.category.charAt(0).toLowerCase() +
-                this.props.data.category.slice(1).replace(' ', '')
-            ],
-          )
-          .attr('font-size', this.props.config.link.tooltip.fontSize)
-          .attr('text-anchor', 'middle')
-          .attr('alignment-baseline', 'middle')
-          .text(this.props.data.category);
+        gtooltip.append("text")
+          .attr("dx", offsetX)
+          .attr("dy", "1.1rem")
+          .attr("class", "link-tooltip")   
+          .attr("fill", '#fff')       
+          .attr("font-size", this.props.config.link.tooltip.fontSize)
+          .attr("text-rendering", "geometricPrecision")
+          .text(this.props.data.category) 
+        gtooltip.append("text")
+          .attr("dx", offsetX)
+          .attr("dy", "3.05rem")
+          .attr("class", "link-tooltip")   
+          .attr("font-size", this.props.config.link.tooltip.fontSize)
+          .attr("fill", '#fff')       
+          .html(
+            "<tspan>Execution: " +
+              this.dateFormat(new Date(this.props.data.line.date)) +
+                  '</tspan><tspan x="' +
+                  offsetX +
+                  '" dy="1.1rem">' +
+                  "Recorded: " +
+                  this.dateFormat(new Date(this.props.data.line.recorded)) +
+                  "</tspan>"
+            ); 
       })
       .on('mouseout', () => {
         d3.selectAll('.link-tooltip').remove();

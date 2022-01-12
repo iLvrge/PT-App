@@ -73,7 +73,7 @@ class PatentTopTitle extends React.Component {
       return (
         <MenuItem
           key={"PatentrackDiagramFilterElement_" + i_}
-          className={clsx(`listIconItem checkboxItems `)}
+          className={clsx(`listIconItem checkboxItems ${i_< 7 ? 'floatItem' : ''}`)}
         >
           <ListItemIcon className={'checkbox'}>
             <Checkbox
