@@ -1446,7 +1446,7 @@ class PatentrackDiagram extends React.Component {
     const structure = {};
 
     connections_.sort((a_, b_) => {
-      a_.props.data.assignment_no - b_.props.data.assignment_no;
+      return a_.props.data.assignment_no - b_.props.data.assignment_no;
     });
     connections_.forEach((connection_, i_) => {
       if (
@@ -1623,8 +1623,8 @@ class PatentrackDiagram extends React.Component {
               link_.props.data.terminalIDs.start.type == node_.typeID.type &&
               link_.props.data.terminalIDs.start.i == node_.typeID.i
             ) {
-              (link_.props.data.startIndex[0] = i_),
-                (link_.props.data.startIndex[1] = node_[dir_].length);
+              link_.props.data.startIndex[0] = i_;
+              link_.props.data.startIndex[1] = node_[dir_].length;
               children.push(link_);
             }
             if (
@@ -1632,8 +1632,8 @@ class PatentrackDiagram extends React.Component {
               link_.props.data.terminalIDs.end.type == node_.typeID.type &&
               link_.props.data.terminalIDs.end.i == node_.typeID.i
             ) {
-              (link_.props.data.endIndex[0] = i_),
-                (link_.props.data.endIndex[1] = node_[dir_].length);
+              link_.props.data.endIndex[0] = i_;
+              link_.props.data.endIndex[1] = node_[dir_].length;
               children.push(link_);
             }
           });
