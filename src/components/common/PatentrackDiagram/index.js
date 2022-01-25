@@ -307,6 +307,7 @@ class PatentrackDiagram extends React.Component {
         License: true,
         LicenseEnd: true,
         NameChange: true,
+        Correct: true
       },
       parentWidth: null,
       previousParentWidth: null,
@@ -1501,8 +1502,8 @@ class PatentrackDiagram extends React.Component {
       assignments: {},
     };
 
+    const { showThirdParties } = this.props;
     this.parseData();
-
     const this_ = this;
     const timelines = [];
 
@@ -1519,7 +1520,15 @@ class PatentrackDiagram extends React.Component {
       margin: this.config.margin,
     };
 
-    const links = this.data.connections.map((link_, i_) => {
+    let links = !showThirdParties
+      ? this.data.connections.filter(
+          link_ =>
+            !link_.start_id?.type?.includes("thirdParties") &&
+            !link_.end_id?.type?.includes("thirdParties"),
+        )
+      : this.data.connections;
+
+    links = links.map((link_, i_) => {
       const extention = this.extendLineParameters(
         link_.start_id.type,
         this.data[link_.start_id.type][link_.start_id.i].x,
@@ -1601,12 +1610,20 @@ class PatentrackDiagram extends React.Component {
       );
     });
 
-    const nodes = [
-      ...this.data.inventors,
-      ...this.data.owners,
-      ...this.data.banks,
-      ...this.data.thirdParties,
-    ].map((node_, i_) => {
+    let nodes = [];
+
+    if (showThirdParties) {
+      nodes = [
+        ...this.data.inventors,
+        ...this.data.owners,
+        ...this.data.banks,
+        ...this.data.thirdParties,
+      ];
+    } else {
+      nodes = [...this.data.inventors, ...this.data.owners, ...this.data.banks];
+    }
+
+    nodes = nodes.map((node_, i_) => {
       const children = [];
 
       ['left', 'right', 'up', 'down'].forEach(dir_ => {
