@@ -15,7 +15,8 @@ import {
   faSquare,
   faExpand
 } from "@fortawesome/free-solid-svg-icons";
-import { Tooltip, Typography, Zoom, Drawer, Menu, MenuItem, ListItemIcon, ListItemText, Checkbox, Divider, IconButton, Badge } from "@material-ui/core";
+import { Tooltip, Typography, Zoom, Drawer, Menu, MenuItem, ListItemIcon, ListItemText, Checkbox, Divider, IconButton, Badge, Paper } from "@material-ui/core";
+import Draggable from "react-draggable"
 import { Fullscreen } from '@material-ui/icons'
 import { FaLightbulb } from "react-icons/fa";
 import * as d3 from 'd3'
@@ -27,7 +28,7 @@ class PatentTopTitle extends React.Component {
        
     super(props_)
       
-    this.state = { expand: true,  right: false, anchorEl: null, sliderValue: 30}
+    this.state = { expand: true,  right: false, anchorEl: null, sliderValue: 30, x: '-85px', y: '35px'}
     this.update = this.update.bind(this)
   }
     
@@ -50,9 +51,14 @@ class PatentTopTitle extends React.Component {
       sliderValue: newValue
     })
   }
+
+  handleDragStop = (e, position) => {
+    const {x, y} = position;
+    this.setState({x,y})
+  }
   
   render () {
-    const { anchorEl, sliderValue } = this.state;
+    const { anchorEl, sliderValue, x, y } = this.state;
     const open = Boolean(anchorEl);
     
     let showFilters = this.state.filters
@@ -86,6 +92,7 @@ class PatentTopTitle extends React.Component {
         </MenuItem>
       );
     });
+    
     
     
    return (
@@ -198,90 +205,98 @@ class PatentTopTitle extends React.Component {
                 }                
               </div>              
             </div>
-            <Menu
-              open={open}
-              anchorEl={anchorEl}
-              onClose={(event) => {this.toggleDrawer(event, false)}}              
-              disableAutoFocusItem
-              PaperProps={{    
-                style: {
-                  width: 250,  
-                  left: '50%',
-                  transform: 'translateX(-29%) translateY(11%)',
-                  backgroundColor: 'rgba(66,66,66, 0.7)'   
-                }
-              }}
-            >
-              <MenuItem className={`listIconItem`}>
-                <ListItemIcon id="fastBackward">
-                  <FontAwesomeIcon
-                    icon={faFastBackward}
-                    onClick={this.props.update}
-                  />
-                </ListItemIcon>
-                <ListItemText className={'show_counters custom-width'}>
-                  <span style={{visibility: 'hidden'}}></span>
-                </ListItemText>
-                <ListItemIcon id="fastForward">
-                  <FontAwesomeIcon
-                    icon={faFastForward}
-                    onClick={this.props.update}
-                  />
-                </ListItemIcon>
-                <ListItemText className={'show_label'}>Start / End</ListItemText>
-              </MenuItem>
-              <MenuItem className={`listIconItem`}>
-                <ListItemIcon id="prevAssignment">
-                  <FontAwesomeIcon
-                    icon={faAngleDoubleLeft}
-                    onClick={this.props.update}
-                  />
-                </ListItemIcon>
-                <ListItemText id="assignmentQuantative"  className={'show_counters'}>
-                  {this.props.quantatives.assignment.current} /{" "}
-                  {this.props.quantatives.assignment.total}
-                </ListItemText>
-                <ListItemIcon id="nextAssignment">
-                  <FontAwesomeIcon
-                    icon={faAngleDoubleRight}
-                    onClick={this.props.update}
-                  />
-                </ListItemIcon>   
-                <ListItemText className={'show_label'}>Transactions</ListItemText>             
-              </MenuItem>
-              <MenuItem className={`listIconItem`}>
-                <ListItemIcon id="prevAssignee">
-                  <FontAwesomeIcon
-                    icon={faAngleLeft}
-                    onClick={this.props.update}
-                  />
-                </ListItemIcon>
-                <ListItemText id="assigneeQuantative"  className={'show_counters'}>
-                  {this.props.quantatives.assignee.current} /{" "}
-                  {this.props.quantatives.assignee.total}
-                </ListItemText>
-                <ListItemIcon id="nextAssignee">
-                  <FontAwesomeIcon
-                    icon={faAngleRight}
-                    onClick={this.props.update}
-                  />
-                </ListItemIcon>   
-                <ListItemText className={'show_label'}>Right</ListItemText>             
-              </MenuItem>       
-              <Divider /> 
-                <MenuItem> 
-                  <ListItemIcon>
-                    <Slider value={sliderValue} onChange={this.handleSliderChange} aria-labelledby="continuous-slider" />
-                  </ListItemIcon>
-                  <ListItemIcon style={{minWidth: 20 }}></ListItemIcon>
-                  <ListItemText className={'show_label'}>Zoom</ListItemText>    
-                </MenuItem>    
-              <Divider />  
-              <MenuItem className={`listIconItem heading`}>
-                <ListItemText>Filter Transaction Types</ListItemText>    
-              </MenuItem>    
-              {filters}
-            </Menu>      
+            <Draggable 
+              handle="#draggable-illustration-menu-item" 
+              cancel={'[class*="MuiDialogContent-root"]'}
+              onStop={this.handleDragStop}
+            >              
+                  <Menu
+                  id='draggable-illustration-menu-item'
+                  open={open}
+                  anchorEl={anchorEl}
+                  onClose={(event) => {this.toggleDrawer(event, false)}}              
+                  disableAutoFocusItem
+                  PaperProps={{    
+                    style: {
+                      width: 250,  
+                      left: '50%',
+                      transform: `translateX(${x}) translateY(${y})`,
+                      backgroundColor: 'rgba(66,66,66, 0.7)'   
+                    }
+                  }}
+                >              
+                  <MenuItem className={`listIconItem`}>
+                    <ListItemIcon id="fastBackward">
+                      <FontAwesomeIcon
+                        icon={faFastBackward}
+                        onClick={this.props.update}
+                      />
+                    </ListItemIcon>
+                    <ListItemText className={'show_counters custom-width'}>
+                      <span style={{visibility: 'hidden'}}></span>
+                    </ListItemText>
+                    <ListItemIcon id="fastForward">
+                      <FontAwesomeIcon
+                        icon={faFastForward}
+                        onClick={this.props.update}
+                      />
+                    </ListItemIcon>
+                    <ListItemText className={'show_label'}>Start / End</ListItemText>
+                  </MenuItem>
+                  <MenuItem className={`listIconItem`}>
+                    <ListItemIcon id="prevAssignment">
+                      <FontAwesomeIcon
+                        icon={faAngleDoubleLeft}
+                        onClick={this.props.update}
+                      />
+                    </ListItemIcon>
+                    <ListItemText id="assignmentQuantative"  className={'show_counters'}>
+                      {this.props.quantatives.assignment.current} /{" "}
+                      {this.props.quantatives.assignment.total}
+                    </ListItemText>
+                    <ListItemIcon id="nextAssignment">
+                      <FontAwesomeIcon
+                        icon={faAngleDoubleRight}
+                        onClick={this.props.update}
+                      />
+                    </ListItemIcon>   
+                    <ListItemText className={'show_label'}>Transactions</ListItemText>             
+                  </MenuItem>
+                  <MenuItem className={`listIconItem`}>
+                    <ListItemIcon id="prevAssignee">
+                      <FontAwesomeIcon
+                        icon={faAngleLeft}
+                        onClick={this.props.update}
+                      />
+                    </ListItemIcon>
+                    <ListItemText id="assigneeQuantative"  className={'show_counters'}>
+                      {this.props.quantatives.assignee.current} /{" "}
+                      {this.props.quantatives.assignee.total}
+                    </ListItemText>
+                    <ListItemIcon id="nextAssignee">
+                      <FontAwesomeIcon
+                        icon={faAngleRight}
+                        onClick={this.props.update}
+                      />
+                    </ListItemIcon>   
+                    <ListItemText className={'show_label'}>Right</ListItemText>             
+                  </MenuItem>       
+                  <Divider /> 
+                    <MenuItem> 
+                      <ListItemIcon>
+                        <Slider value={sliderValue} onChange={this.handleSliderChange} aria-labelledby="continuous-slider" />
+                      </ListItemIcon>
+                      <ListItemIcon style={{minWidth: 20 }}></ListItemIcon>
+                      <ListItemText className={'show_label'}>Zoom</ListItemText>    
+                    </MenuItem>    
+                  <Divider />  
+                  <MenuItem className={`listIconItem heading`}>
+                    <ListItemText>Filter Transaction Types</ListItemText>    
+                  </MenuItem>    
+                  {filters}
+                </Menu>  
+            </Draggable>
+                
           </React.Fragment>
        )
         

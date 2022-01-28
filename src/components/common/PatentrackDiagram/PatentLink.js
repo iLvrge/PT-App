@@ -118,7 +118,7 @@ class PatentLink extends React.Component {
           .attr("fill", '#fff')       
           .attr("font-size", this.props.config.link.tooltip.fontSize)
           .attr("text-rendering", "geometricPrecision")
-          .text(this.props.data.category) 
+          .text(this.props.data.category == 'Correct' ? 'Correction' : this.props.data.category) 
         gtooltip.append("text")
           .attr("dx", offsetX)
           .attr("dy", "3.05rem")

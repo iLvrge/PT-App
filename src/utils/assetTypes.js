@@ -31,7 +31,7 @@ export const assetsTypesWithKey = [
   {type: 'borrowing', name: 'Borrowing', counter: 0},
   {type: 'releaseOut', name: 'Release Out', counter: 0},
   {type: 'releaseIn', name: 'Release In', counter: 0},
-  {type: 'correct', name: 'Correct', counter: 0},
+  {type: 'correct', name: 'Correction', counter: 0},
   {type: 'other', name: 'Other', counter: 0}
 ]
   

@@ -600,7 +600,7 @@ class PatenTrackApi {
 
   static getAssetsByPatentNumber(patentNumber, flag) {
     return axios.get(
-      `${base_new_api_url}/assets/${patentNumber}?flag=${flag}`,
+      `${base_new_api_url}/assets/${encodeURIComponent(patentNumber)}?flag=${flag}`,
       getHeader()
     )
   }
@@ -614,7 +614,7 @@ class PatenTrackApi {
 
   static geteAssetUSPTOByPatentNumber(type, patentNumber, flag) {
     return axios.get(
-      `${base_new_api_url}/assets/${patentNumber}/${type}/outsource?flag=${flag}`,
+      `${base_new_api_url}/assets/${encodeURIComponent(patentNumber)}/${type}/outsource?flag=${flag}`,
       getHeader()
     )
   }
@@ -1046,7 +1046,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelAbstract = c
     })
-    return axios.get(`${base_new_api_url}/family/abstract/${applicationNumber}`,  header)
+    return axios.get(`${base_new_api_url}/family/abstract/${encodeURIComponent(applicationNumber)}`,  header)
   }
 
   static cancelAbstractData () {
@@ -1064,7 +1064,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelClaims = c
     })
-    return axios.get(`${base_new_api_url}/family/claims/${applicationNumber}`,  header)
+    return axios.get(`${base_new_api_url}/family/claims/${encodeURIComponent(applicationNumber)}`,  header)
   } 
 
   static cancelClaimsData () {
@@ -1082,7 +1082,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelClaimsCounter = c
     })
-    return axios.get(`${base_new_api_url}/family/claims/${applicationNumber}?counter=true`,  header)
+    return axios.get(`${base_new_api_url}/family/claims/${encodeURIComponent(applicationNumber)}?counter=true`,  header)
   } 
 
   static cancelClaimsCounter () {
@@ -1100,7 +1100,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelSpecifications = c
     })
-    return axios.get(`${base_new_api_url}/family/specifications/${applicationNumber}`,  header)
+    return axios.get(`${base_new_api_url}/family/specifications/${encodeURIComponent(applicationNumber)}`,  header)
   }
 
   static cancelSpecificationData () {
@@ -1118,7 +1118,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelFamily = c
     })
-    return axios.get(`${base_new_api_url}/family/images/${applicationNumber}`,  header)
+    return axios.get(`${base_new_api_url}/family/images/${encodeURIComponent(applicationNumber)}`,  header)
   }
 
   static cancelFamilyData() {
@@ -1136,7 +1136,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelFiguresCounter = c
     })
-    return axios.get(`${base_new_api_url}/family/images/${applicationNumber}?counter=true`,  header)
+    return axios.get(`${base_new_api_url}/family/images/${encodeURIComponent(applicationNumber)}?counter=true`,  header)
   }
 
   static cancelFiguresCounter() {
@@ -1172,7 +1172,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelPtabCounter = c
     })
-    return axios.get(`${base_new_api_url}/ptab/${asset}?counter=true`,  header)
+    return axios.get(`${base_new_api_url}/ptab/${encodeURIComponent(asset)}?counter=true`,  header)
   } 
   
   static cancelPtabCounter () {
@@ -1190,7 +1190,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelCitationData = c
     })
-    return axios.get(`${base_new_api_url}/citation/${asset}`,  header)
+    return axios.get(`${base_new_api_url}/citation/${encodeURIComponent(asset)}`,  header)
   } 
   
   static cancelCitationData () {
@@ -1208,7 +1208,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelCitationCounter = c
     })
-    return axios.get(`${base_new_api_url}/citation/${asset}?counter=true`,  header)
+    return axios.get(`${base_new_api_url}/citation/${encodeURIComponent(asset)}?counter=true`,  header)
   } 
   
   static cancelCitationCounter () {
@@ -1226,7 +1226,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelFamilyCounter = c
     })
-    return axios.get(`${base_new_api_url}/family/${applicationNumber}?counter=true`, getHeader())
+    return axios.get(`${base_new_api_url}/family/${encodeURIComponent(applicationNumber)}?counter=true`, getHeader())
   }
 
   static cancelFamilyCounter () {
@@ -1244,7 +1244,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelFeesCounter = c
     })
-    return axios.get(`${base_new_api_url}/events/${applicationNumber}/${patentNumber != '' ? patentNumber : applicationNumber}?counter=true`, header)
+    return axios.get(`${base_new_api_url}/events/${applicationNumber}/${patentNumber != '' ? encodeURIComponent(patentNumber) : applicationNumber}?counter=true`, header)
   }
 
   static cancelFeesCounter () {

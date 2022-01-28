@@ -96,6 +96,7 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
     ]
 
     const onHandleHeadDropDownlist = useCallback(async(event) => { 
+        console.log("adad")
         if(event.target.value == 5) {
             let oldItems = [...clipboard_assets, ...assets]
             dispatch(setClipboardAssets(oldItems))
@@ -133,6 +134,7 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
         }
     })
     const onHandleDropDownlist = useCallback(async(event, asset, row ) => { 
+        console.log("onHandleDropDownlist", event.target.value)
         if(event.target.value == 5) {
            
             /* setSelectItems(prevItems =>
@@ -199,9 +201,7 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
             dataKey: "asset",
             role: "static_dropdown",
             list: dropdownList,
-            onClick: onHandleDropDownlist,
-            showDropdown: true,
-            onClickHeadDropdown: onHandleHeadDropDownlist
+            onClick: onHandleDropDownlist
         },
         {
           width: 120,
@@ -251,7 +251,7 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
             if(element != null) {
                 const index = element.getAttribute('aria-colindex')
                 const findElement = element.querySelector('div.MuiSelect-select')
-                if( index == 1 && findElement != null ) {
+                if( index == 2 && findElement != null ) {
                     setDropOpenAsset(row.asset)
                 }
             } else {

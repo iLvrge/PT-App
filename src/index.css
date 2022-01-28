@@ -986,6 +986,9 @@ a.maintain svg.clean_encumbrances path{
 .iconItem.MuiListItem-button:hover, .iconItem.MuiListItem-button:hover .MuiListItemIcon-root {
   color: #E60000;
 }
+.visibilityHidden{
+  display: none !important;
+}
 
 @media(min-width:1200px){.pricing .lab_item:hover h4{display:none}.pricing .lab_item:hover p.font-16{display:block}}
 @media(min-width:992px){.pricing .lab_item{width:202.93px;height:234.15px}}

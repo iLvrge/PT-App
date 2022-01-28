@@ -371,7 +371,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
                 return [...prevItems, row]
               }
             })          
-          } else if (event.target.value === 99) {
+          } else if (event.target.value === 0) {
             setSelectedAssets(prevItems => {
               const findIndex = prevItems.findIndex( r => r.asset == asset)
               if( findIndex !== -1 ) {
@@ -1204,7 +1204,7 @@ const checkMouseStillOnHover = (e, number) => {
         sortDataLocal={false}
         sortDataFn={handleSortData}
         forceChildWaitCall={true}
-        totalRows={totalRecords}
+        totalRows={totalRecords} 
         getMoreRows={loadMoreRows}
         onScrollTable={onScrollTable}
         defaultSortField={sortField}
