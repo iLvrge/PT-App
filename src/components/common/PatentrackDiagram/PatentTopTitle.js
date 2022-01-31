@@ -94,7 +94,6 @@ class PatentTopTitle extends React.Component {
     });
     
     
-    
    return (
           <React.Fragment>
             <div id='topTitle'>
@@ -140,7 +139,7 @@ class PatentTopTitle extends React.Component {
                 </IconButton> 
                 <IconButton
                   onClick={() => this.props.uspto(!this.props.usptoMode)}
-                  /* className={'uspto_logo'} */
+                  /* className={'uspto_logo'} */  
                 >
                   <Tooltip 
                   className='tooltip'
@@ -209,94 +208,93 @@ class PatentTopTitle extends React.Component {
               handle="#draggable-illustration-menu-item" 
               cancel={'[class*="MuiDialogContent-root"]'}
               onStop={this.handleDragStop}
-            >              
-                  <Menu
-                  id='draggable-illustration-menu-item'
-                  open={open}
-                  anchorEl={anchorEl}
-                  onClose={(event) => {this.toggleDrawer(event, false)}}              
-                  disableAutoFocusItem
-                  PaperProps={{    
-                    style: {
-                      width: 250,  
-                      left: '50%',
-                      transform: `translateX(${x}) translateY(${y})`,
-                      backgroundColor: 'rgba(66,66,66, 0.7)'   
-                    }
-                  }}
-                >              
-                  <MenuItem className={`listIconItem`}>
-                    <ListItemIcon id="fastBackward">
-                      <FontAwesomeIcon
-                        icon={faFastBackward}
-                        onClick={this.props.update}
-                      />
+            > 
+              <Menu
+                id='draggable-illustration-menu-item'
+                open={open}
+                anchorEl={anchorEl}
+                onClose={(event) => {this.toggleDrawer(event, false)}}              
+                disableAutoFocusItem
+                PaperProps={{    
+                  style: {
+                    width: 250,  
+                    left: '50%',
+                    transform: `translateX(${x}) translateY(${y})`,
+                    backgroundColor: 'rgba(66,66,66, 0.7)'   
+                  }
+                }}
+              >
+                <MenuItem className={`listIconItem`}>
+                  <ListItemIcon id="fastBackward">
+                    <FontAwesomeIcon
+                      icon={faFastBackward}
+                      onClick={this.props.update}
+                    />
+                  </ListItemIcon>
+                  <ListItemText className={'show_counters custom-width'}>
+                    <span style={{visibility: 'hidden'}}></span>
+                  </ListItemText>
+                  <ListItemIcon id="fastForward">
+                    <FontAwesomeIcon
+                      icon={faFastForward}
+                      onClick={this.props.update}
+                    />
+                  </ListItemIcon>
+                  <ListItemText className={'show_label'}>Start / End</ListItemText>
+                </MenuItem>
+                <MenuItem className={`listIconItem`}>
+                  <ListItemIcon id="prevAssignment">
+                    <FontAwesomeIcon
+                      icon={faAngleDoubleLeft}
+                      onClick={this.props.update}
+                    />
+                  </ListItemIcon>
+                  <ListItemText id="assignmentQuantative"  className={'show_counters'}>
+                    {this.props.quantatives.assignment.current} /{" "}
+                    {this.props.quantatives.assignment.total}
+                  </ListItemText>
+                  <ListItemIcon id="nextAssignment">
+                    <FontAwesomeIcon
+                      icon={faAngleDoubleRight}
+                      onClick={this.props.update}
+                    />
+                  </ListItemIcon>   
+                  <ListItemText className={'show_label'}>Transactions</ListItemText>             
+                </MenuItem>
+                <MenuItem className={`listIconItem`}>
+                  <ListItemIcon id="prevAssignee">
+                    <FontAwesomeIcon
+                      icon={faAngleLeft}
+                      onClick={this.props.update}
+                    />
+                  </ListItemIcon>
+                  <ListItemText id="assigneeQuantative"  className={'show_counters'}>
+                    {this.props.quantatives.assignee.current} /{" "}
+                    {this.props.quantatives.assignee.total}
+                  </ListItemText>
+                  <ListItemIcon id="nextAssignee">
+                    <FontAwesomeIcon
+                      icon={faAngleRight}
+                      onClick={this.props.update}
+                    />
+                  </ListItemIcon>   
+                  <ListItemText className={'show_label'}>Right Steps</ListItemText>             
+                </MenuItem>       
+                <Divider /> 
+                  <MenuItem> 
+                    <ListItemIcon>
+                      <Slider value={sliderValue} onChange={this.handleSliderChange} aria-labelledby="continuous-slider" />
                     </ListItemIcon>
-                    <ListItemText className={'show_counters custom-width'}>
-                      <span style={{visibility: 'hidden'}}></span>
-                    </ListItemText>
-                    <ListItemIcon id="fastForward">
-                      <FontAwesomeIcon
-                        icon={faFastForward}
-                        onClick={this.props.update}
-                      />
-                    </ListItemIcon>
-                    <ListItemText className={'show_label'}>Start / End</ListItemText>
-                  </MenuItem>
-                  <MenuItem className={`listIconItem`}>
-                    <ListItemIcon id="prevAssignment">
-                      <FontAwesomeIcon
-                        icon={faAngleDoubleLeft}
-                        onClick={this.props.update}
-                      />
-                    </ListItemIcon>
-                    <ListItemText id="assignmentQuantative"  className={'show_counters'}>
-                      {this.props.quantatives.assignment.current} /{" "}
-                      {this.props.quantatives.assignment.total}
-                    </ListItemText>
-                    <ListItemIcon id="nextAssignment">
-                      <FontAwesomeIcon
-                        icon={faAngleDoubleRight}
-                        onClick={this.props.update}
-                      />
-                    </ListItemIcon>   
-                    <ListItemText className={'show_label'}>Transactions</ListItemText>             
-                  </MenuItem>
-                  <MenuItem className={`listIconItem`}>
-                    <ListItemIcon id="prevAssignee">
-                      <FontAwesomeIcon
-                        icon={faAngleLeft}
-                        onClick={this.props.update}
-                      />
-                    </ListItemIcon>
-                    <ListItemText id="assigneeQuantative"  className={'show_counters'}>
-                      {this.props.quantatives.assignee.current} /{" "}
-                      {this.props.quantatives.assignee.total}
-                    </ListItemText>
-                    <ListItemIcon id="nextAssignee">
-                      <FontAwesomeIcon
-                        icon={faAngleRight}
-                        onClick={this.props.update}
-                      />
-                    </ListItemIcon>   
-                    <ListItemText className={'show_label'}>Right</ListItemText>             
-                  </MenuItem>       
-                  <Divider /> 
-                    <MenuItem> 
-                      <ListItemIcon>
-                        <Slider value={sliderValue} onChange={this.handleSliderChange} aria-labelledby="continuous-slider" />
-                      </ListItemIcon>
-                      <ListItemIcon style={{minWidth: 20 }}></ListItemIcon>
-                      <ListItemText className={'show_label'}>Zoom</ListItemText>    
-                    </MenuItem>    
-                  <Divider />  
-                  <MenuItem className={`listIconItem heading`}>
-                    <ListItemText>Filter Transaction Types</ListItemText>    
+                    <ListItemIcon style={{minWidth: 20 }}></ListItemIcon>
+                    <ListItemText className={'show_label'}>Zoom</ListItemText>    
                   </MenuItem>    
-                  {filters}
-                </Menu>  
-            </Draggable>
-                
+                <Divider />  
+                <MenuItem className={`listIconItem heading`}>
+                  <ListItemText>Filter Transaction Types</ListItemText>    
+                </MenuItem>    
+                {filters}
+              </Menu>     
+            </Draggable> 
           </React.Fragment>
        )
         

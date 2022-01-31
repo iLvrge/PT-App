@@ -118,7 +118,7 @@ class PatentLink extends React.Component {
           .attr("fill", '#fff')       
           .attr("font-size", this.props.config.link.tooltip.fontSize)
           .attr("text-rendering", "geometricPrecision")
-          .text(this.props.data.category == 'Correct' ? 'Correction' : this.props.data.category) 
+          .text(this.props.data.category) 
         gtooltip.append("text")
           .attr("dx", offsetX)
           .attr("dy", "3.05rem")
@@ -136,15 +136,28 @@ class PatentLink extends React.Component {
                   "</tspan>"
             ); 
       })
-      .on('mouseout', () => {
-        d3.selectAll('.link-tooltip').remove();
+      .on('mouseout', () => {  
+        d3.selectAll('.link-tooltip').remove(); 
       })
       .on('click', () => {
         //passing referenced data from json.popup and handleComment
         //this.props.comment is a handler
         //this.props.commentContent is the comment content (string or HTML (have to be parsed))
-
-        console.log(this.props.data);
+        const targetElement = d3.event.target.parentNode.querySelector(`[id*="link_"]`)
+        
+        targetElement.setAttribute('stroke-width',this.props.config.link.active.width)
+        const element = d3.event.target.closest(
+          "g#patentLinksGroup",
+        )
+        const allLinks = element.querySelectorAll(`[id*="link_"]`)
+          
+        if(allLinks != null && allLinks.length > 0) {
+          [].forEach.call(allLinks, function(el) {
+            if(el != targetElement) {
+              el.setAttribute('stroke-width',this.props.config.link.width)
+            }
+          })
+        }
         this.props.connectionBox(this.props.data.line, this.props.comment);
       });
 
@@ -154,6 +167,7 @@ class PatentLink extends React.Component {
       .attr('pointer-events', 'none')
       .attr('stroke-width', this.props.config.link.width)
       .attr('stroke', this.props.data.color)
+      .attr("stroke-dasharray", this.props.data.line.type_line == "Dashed" ? '5,5' : '')
       .attr('fill', 'none');
 
     g.append('path')

@@ -331,20 +331,12 @@ class PatentrackDiagram extends React.Component {
       this.setState({ parentWidth: width });
     });
 
-    this.resizeObserver.observe(this.resizeElement.current);    
+    this.resizeObserver.observe(this.resizeElement.current);
   }
 
   componentDidUpdate() {
     if (this.state.parentWidth !== this.state.previousParentWidth) {
       this.setState({ previousParentWidth: this.state.parentWidth });
-    }
-    console.log("componentDidUpdate Illustration", this.state.limits.assignees, this.state.assignees.length, this.state.limits.assignments, this.state.assignments.length)
-    if((this.state.limits.assignees !== this.state.assignees.length) || (this.state.limits.assignments !== this.state.assignments.length)) {
-      try{
-        this.updateDiagram(null, true)
-      } catch (e) {
-        console.log("illustration", e)
-      }
     }
   }
 
@@ -1133,155 +1125,141 @@ class PatentrackDiagram extends React.Component {
     }
   }
 
-  updateDiagram(event_, t) {
+  updateDiagram(event_) {
     const this_ = this;
-    if(typeof t !== 'undefined') {
-      const { assignments } = this.state;
-      const assignees = [];
-      if (assignments.length > 0) {
-        assignments.pop();
-        assignments.forEach(assignment_ => {
-          this.structure[assignment_].forEach(k_ => assignees.push(k_));
+
+    if (event_.currentTarget.getAttribute('type') == 'checkbox') {
+      this.state.filters[
+        event_.currentTarget.getAttribute('id').replace(' ', '')
+      ] = event_.currentTarget.checked;
+      event_.currentTarget.checked
+        ? event_.currentTarget.parentNode.setAttribute(
+            'title',
+            `${event_.currentTarget.getAttribute('id')} filter is on`,
+          )
+        : event_.currentTarget.parentNode.setAttribute(
+            'title',
+            `${event_.currentTarget.getAttribute('id')} filter is off`,
+          );
+    } else {
+      if (
+        event_.currentTarget.parentNode.getAttribute('id') == 'fastBackward'
+      ) {
+        this.state.assignments = this.state.assignees = [];
+      }
+
+      if (event_.currentTarget.parentNode.getAttribute('id') == 'fastForward') {
+        const assignments = [];
+        const assignees = [];
+        Object.keys(this.structure).forEach(key_ => {
+          assignments.push(Number(key_));
+          this.structure[key_].forEach(assignee_ => {
+            assignees.push(assignee_);
+          });
         });
 
         this.state.assignments = assignments;
         this.state.assignees = assignees;
       }
-    } else {
-      if (event_.currentTarget.getAttribute('type') == 'checkbox') {
-        this.state.filters[
-          event_.currentTarget.getAttribute('id').replace(' ', '')
-        ] = event_.currentTarget.checked;
-        event_.currentTarget.checked
-          ? event_.currentTarget.parentNode.setAttribute(
-              'title',
-              `${event_.currentTarget.getAttribute('id')} filter is on`,
-            )
-          : event_.currentTarget.parentNode.setAttribute(
-              'title',
-              `${event_.currentTarget.getAttribute('id')} filter is off`,
-            );
-      } else {
-        if (
-          event_.currentTarget.parentNode.getAttribute('id') == 'fastBackward'
-        ) {
-          this.state.assignments = this.state.assignees = [];
-        }
-  
-        if (event_.currentTarget.parentNode.getAttribute('id') == 'fastForward') {
-          const assignments = [];
-          const assignees = [];
-          Object.keys(this.structure).forEach(key_ => {
-            assignments.push(Number(key_));
-            this.structure[key_].forEach(assignee_ => {
-              assignees.push(assignee_);
-            });
+
+      if (
+        event_.currentTarget.parentNode.getAttribute('id') == 'prevAssignment'
+      ) {
+        const { assignments } = this.state;
+        const assignees = [];
+
+        if (assignments.length > 0) {
+          assignments.pop();
+          assignments.forEach(assignment_ => {
+            this.structure[assignment_].forEach(k_ => assignees.push(k_));
           });
-  
+
           this.state.assignments = assignments;
           this.state.assignees = assignees;
         }
-  
-        if (
-          event_.currentTarget.parentNode.getAttribute('id') == 'prevAssignment'
-        ) {
-          const { assignments } = this.state;
-          const assignees = [];
-  
-          if (assignments.length > 0) {
-            assignments.pop();
-            assignments.forEach(assignment_ => {
-              this.structure[assignment_].forEach(k_ => assignees.push(k_));
-            });
-  
-            this.state.assignments = assignments;
-            this.state.assignees = assignees;
-          }
-        }
-  
-        if (
-          event_.currentTarget.parentNode.getAttribute('id') == 'nextAssignment'
-        ) {
-          const { assignments } = this.state;
-          const assignees = [];
-          if (assignments.length < this.state.limits.assignments) {
-            assignments.push(
-              Number(Object.keys(this.structure)[assignments.length]),
-            );
-  
-            assignments.forEach(assignment_ => {
-              this.structure[assignment_].forEach(k_ => assignees.push(k_));
-            });
-  
-            this.state.assignments = assignments;
-            this.state.assignees = assignees;
-          }
-        }
-  
-        if (
-          event_.currentTarget.parentNode.getAttribute('id') == 'prevAssignee'
-        ) {
-          const assignments = [];
-          const { assignees } = this.state;
-  
-          if (assignees.length > 0) {
-            assignees.pop();
-          }
-  
-          if (assignees.length > 0) {
-            for (let i = 0; i < Object.keys(this.structure).length; i++) {
-              const key = Object.keys(this.structure)[i];
-              if (!this.assigmentIncludes(assignees[assignees.length - 1], key)) {
-                assignments.push(key);
-              } else {
-                assignments.push(key);
-                break;
-              }
-            }
-          }
-  
-          this.state.assignments = assignments;
-          this.state.assignees = assignees;
-        }
-  
-        if (
-          event_.currentTarget.parentNode.getAttribute('id') == 'nextAssignee'
-        ) {
-          const assignments = [];
-          const { assignees } = this.state;
-  
-          if (assignees.length == 0) {
-            assignees.push(this.structure[Object.keys(this.structure)[0]][0]);
-            assignments.push(Object.keys(this.structure)[0]);
-          } else {
-            const everyAssignee = Object.keys(this.structure).reduce(
-              (r_, k_) => r_.concat(this.structure[k_]),
-              [],
-            );
-  
-            for (let i = 0; i < everyAssignee.length; i++) {
-              if (assignees[assignees.length - 1] == everyAssignee[i]) {
-                if (i < this.state.limits.assignees - 1) {
-                  assignees.push(everyAssignee[i + 1]);
-                }
-                break;
-              }
-            }
-          }
-  
-          this.state.assignments = assignments;
-          this.state.assignees = assignees;
-        }
-        this.setState({assignments:  this.state.assignments, assignees: this.state.assignees})
-        document.getElementById('assignmentQuantative').innerHTML = `${
-          this.state.assignments.length
-        } / ${this.state.limits.assignments}`;
-        document.getElementById('assigneeQuantative').innerHTML = `${
-          this.state.assignees.length
-        } / ${this.state.limits.assignees}`;
       }
+
+      if (
+        event_.currentTarget.parentNode.getAttribute('id') == 'nextAssignment'
+      ) {
+        const { assignments } = this.state;
+        const assignees = [];
+        if (assignments.length < this.state.limits.assignments) {
+          assignments.push(
+            Number(Object.keys(this.structure)[assignments.length]),
+          );
+
+          assignments.forEach(assignment_ => {
+            this.structure[assignment_].forEach(k_ => assignees.push(k_));
+          });
+
+          this.state.assignments = assignments;
+          this.state.assignees = assignees;
+        }
+      }
+
+      if (
+        event_.currentTarget.parentNode.getAttribute('id') == 'prevAssignee'
+      ) {
+        const assignments = [];
+        const { assignees } = this.state;
+
+        if (assignees.length > 0) {
+          assignees.pop();
+        }
+
+        if (assignees.length > 0) {
+          for (let i = 0; i < Object.keys(this.structure).length; i++) {
+            const key = Object.keys(this.structure)[i];
+            if (!this.assigmentIncludes(assignees[assignees.length - 1], key)) {
+              assignments.push(key);
+            } else {
+              assignments.push(key);
+              break;
+            }
+          }
+        }
+
+        this.state.assignments = assignments;
+        this.state.assignees = assignees;
+      }
+
+      if (
+        event_.currentTarget.parentNode.getAttribute('id') == 'nextAssignee'
+      ) {
+        const assignments = [];
+        const { assignees } = this.state;
+
+        if (assignees.length == 0) {
+          assignees.push(this.structure[Object.keys(this.structure)[0]][0]);
+          assignments.push(Object.keys(this.structure)[0]);
+        } else {
+          const everyAssignee = Object.keys(this.structure).reduce(
+            (r_, k_) => r_.concat(this.structure[k_]),
+            [],
+          );
+
+          for (let i = 0; i < everyAssignee.length; i++) {
+            if (assignees[assignees.length - 1] == everyAssignee[i]) {
+              if (i < this.state.limits.assignees - 1) {
+                assignees.push(everyAssignee[i + 1]);
+              }
+              break;
+            }
+          }
+        }
+
+        this.state.assignments = assignments;
+        this.state.assignees = assignees;
+      }
+
+      document.getElementById('assignmentQuantative').innerHTML = `${
+        this.state.assignments.length
+      } / ${this.state.limits.assignments}`;
+      document.getElementById('assigneeQuantative').innerHTML = `${
+        this.state.assignees.length
+      } / ${this.state.limits.assignees}`;
     }
-    
 
     d3.selectAll('.PatentrackLink')
       .nodes()
@@ -1525,7 +1503,9 @@ class PatentrackDiagram extends React.Component {
     };
 
     const { showThirdParties } = this.props;
+
     this.parseData();
+
     const this_ = this;
     const timelines = [];
 
@@ -1633,7 +1613,6 @@ class PatentrackDiagram extends React.Component {
     });
 
     let nodes = [];
-
     if (showThirdParties) {
       nodes = [
         ...this.data.inventors,
@@ -1769,12 +1748,12 @@ class PatentrackDiagram extends React.Component {
           }}
         />
         <svg
-          className="diagram-container"
           id={`svg_${this.prefix}`}
           {...svgParams}
           key={this.generateHashhKet()}
           mlndes="http://www.w3.org/2000/svg"
           xmlnsXlink="http://www.w3.org/1999/xlink"
+          className={`svg_diagram`}
         >
           <g id="parentTimelineGrid">
             <PatentTimeline

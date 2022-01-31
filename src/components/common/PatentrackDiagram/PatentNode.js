@@ -167,6 +167,7 @@ class PatentNode extends React.Component {
           }
         });
     } */
+
     let executionDate =
       this.props.data.executionDate != ''
         ? this.dateFormat(new Date(this.props.data.executionDate))
@@ -249,14 +250,20 @@ class PatentNode extends React.Component {
           line.pop();
           tspan.text(line.join(' '));
           line = [word];
-          if (lineCount < lines_ - 1) {
+          /* if (lineCount < lines_ - 1) {
             tspan = text
               .append('tspan')
               .attr('x', text_.attr('dx'))
               .attr('y', y)
               .attr('dy', lineHeight)
               .text(word);
-          }
+          } */
+          tspan = text
+            .append("tspan")
+            .attr("x", text_.attr("dx"))
+            .attr("y", y)
+            .attr("dy", lineHeight + 1)
+            .text(word);
 
           lineCount++;
         }
