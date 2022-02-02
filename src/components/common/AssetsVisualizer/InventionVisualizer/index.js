@@ -482,7 +482,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 
             items.current = new DataSet()
             const colors = ['#70A800', '#00a9e6', '#E69800', '#ff0000'], codeList = []
-            let xMin = 0, xMax = 0, years=[];
+            let xMin = 0, xMax = 0, years = [], zMax = [];
             /* console.log('valueScope', valueScope)
             const codePromise = graphRawGroupData.map( group => {
                 if((valueScope.length == 1 && valueScope.includes(group.id)) || (valueScope.length == 2 && group.id >= valueScope[0] &&  group.id <= valueScope[1])){
@@ -491,11 +491,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             })
             await Promise.all(codePromise)
             console.log('codeList', codeList) */
-            let tap = 0;
             const promises = graphRawData.map( (data, index) => {
-                /*if(codeList.includes(data.cpc_code)) {
-                    
-                }*/
                 const findIndex = graphRawGroupData.findIndex( row => row.cpc_code == data.cpc_code )
                 if(findIndex !== -1) {
                     const year = parseInt(data.fillingYear)
@@ -514,6 +510,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     } else  if(year > xMax){
                         xMax = year
                     }
+                    zMax.push(data.countAssets)
                     //const col = colors[Math.floor((Math.random()*colors.length))]
                     items.current.add({
                         x: year,
@@ -528,7 +525,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         origin: data.group_name
                     })
 
-                    if( tap === 0 ) {
+                    if( index === 0 ) {
                         items.current.add({
                             x: year,
                             y: graphRawGroupData[findIndex].id,
@@ -541,7 +538,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                             application_number: data.application_number,   
                             origin: data.group_name
                         })
-                        tap = 1
                     }
                 }                
             })
@@ -549,7 +545,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             await Promise.all(promises)            
             //TODO height 100% not working well, created allot of isues when we resize pane, 
             if(graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0) {
-                options = {...options, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1, zStep: graphRawData.length > 2 ? 3 : 1 }
+                options = {...options, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1, zStep: graphRawData.length > 2 ? 3 : 1, zMax: Math.max(...zMax) }
             }     
 
             graphRef.current = new Graph3d(graphContainerRef.current, items.current, options)
