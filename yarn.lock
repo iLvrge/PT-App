@@ -13120,20 +13120,20 @@ vis-data@7.0.0:
   resolved "https://registry.yarnpkg.com/vis-data/-/vis-data-7.0.0.tgz"
   integrity sha512-qKpyAQ9UMT0QygLbCulgabKkgfo8aVkuWSqhvEiaah/iy/Dvj17iMFChUU+UIioorWlweXcp5ziXoMLIl7hTAg==
 
-vis-graph3d@5.9.1:
-  version "5.9.1"
-  resolved "https://registry.yarnpkg.com/vis-graph3d/-/vis-graph3d-5.9.1.tgz"
-  integrity sha512-YVIrm5uuaoFKtUoTFrn64phJhenQn4ad3H9Dpw/HRnWQ9peR6RI+v1EgNGyLZCezqDAk0IrZV5EXgVgpfuY9pg==
+vis-graph3d@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/vis-graph3d/-/vis-graph3d-6.0.2.tgz#4433f1d83fd643612c7982830f97b6993fccea52"
+  integrity sha512-AASWP7tlyVgmcsJc9XIW6FeMVZkTW3ZM76lFC+nhr4FEGFZW3YiQyapUY0ck7yfhIq6tfTqXcMT9elhiEfNQKw==
 
 "vis-timeline-73@npm:vis-timeline@7.3.7":
   version "7.3.7"
   resolved "https://registry.yarnpkg.com/vis-timeline/-/vis-timeline-7.3.7.tgz"
   integrity sha512-1tqPdJsM6JXCBY80Ut15TCQD2VoolAabQ7mXguOH/X+HrBCv7KstkfZ3J2eVkHWevGEh2D8m+c8reyW2E6YI3Q==
 
-vis-timeline@^7.4.9:
-  version "7.4.9"
-  resolved "https://registry.yarnpkg.com/vis-timeline/-/vis-timeline-7.4.9.tgz#7ed225a04b521cb6c2d603e498953b1222650806"
-  integrity sha512-+Mb829u4Jq9qPhh6EHAa7DRBEwXW0AclaXndxAC7e772oI5pMSAbhbKsQXsPYRPkf9vtac3/US+WPHJQYjGsRA==
+vis-timeline@^7.5.0:
+  version "7.5.0"
+  resolved "https://registry.yarnpkg.com/vis-timeline/-/vis-timeline-7.5.0.tgz#d2fc2b84d0c32769fd287cd17616541229e55be3"
+  integrity sha512-h5V2tuwKuiznhZ+5dgx5qYmi/kwsrHeYxT1rPUTyCzhVwI3uggpsE4Gjd2sbFoP4zjPCRz6blKbR0N4JuU92+w==
 
 vis-util@^5.0.2:
   version "5.0.2"

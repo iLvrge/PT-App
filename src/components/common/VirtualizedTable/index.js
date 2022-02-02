@@ -325,7 +325,7 @@ const VirtualizedTable = ({
           }
         }
       }
-
+      
       if(((selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey])) || selected.includes(rowData.id))  && highlightRow !== undefined && highlightRow === true  && higlightColums.includes(columnIndex)) {
         selectedRow = true
       }
@@ -614,7 +614,7 @@ const VirtualizedTable = ({
           )
         }
       }
-      if((optionalKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[optionalKey])) || (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey])) || (selected !== undefined && selectedKey !== undefined && highlightRow !== undefined && highlightRow === true && selected.includes(rowData[selectedKey])) || selected.includes(rowData.id)) {
+      if((optionalKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[optionalKey])) || (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey])) || (selected !== undefined && selectedKey !== undefined && highlightRow !== undefined && highlightRow === true && selected.includes(rowData[selectedKey]))) {
         selectedRow = true
 		  }
       return (      

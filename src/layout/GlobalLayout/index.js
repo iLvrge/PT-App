@@ -458,12 +458,12 @@ const GlobalLayout = (props) => {
                 setAssetFilesBar( false )
                 setGoogleDriveBar( false )                
             }
-            dispatch( setAssetTypeInventor({list: [], total_records: 0}))
+            /*dispatch( setAssetTypeInventor({list: [], total_records: 0}))
             dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
             dispatch( setAssetTypeCompanies({ list: [], total_records: 0 }) )
             dispatch( setAllAssetTypes( false ) )
             dispatch( setAssetTypesSelect([10]) )  
-            updateAssetTypeSelected( 10 )  
+            updateAssetTypeSelected( 10 )  */
         }
         editorBar()
     }

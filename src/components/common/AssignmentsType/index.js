@@ -87,8 +87,8 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
     const assetTypeCompaniesList = useSelector(state => state.patenTrack2.assetTypeCompanies.list)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
-    /*const tabs = [1,2,6,7,3,4,5,11,12,13,10,8,9,15,14] */
-    const tabs = [1,2,6,7,3,4,5,11,12,13,8,9,15,14] 
+    const tabs = [1,2,6,7,3,4,5,11,12,13,10,8,9,15,14] 
+    /*const tabs = [1,2,6,7,3,4,5,11,12,13,8,9,15,14]*/
 
     const COLUMNS = [        
         {
@@ -148,6 +148,7 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
             )
         } else if(selectedCompaniesAll === false && selectedCompanies.length == 0 ) {
             dispatch( setAssetTypes([]) )
+
         }
     }, [ dispatch, selectedCompaniesAll, selectedCompanies ])
 
@@ -261,8 +262,16 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
                             setSelectItems([])
                             setSelectedRow([])
                             dispatch( setAssetTypesSelect([]) )
+                            setSelectAll(true)
+                            dispatch( setAllAssetTypes( true ) )
                         }
-                    } 
+                    } else {
+                        setSelectItems([])
+                        setSelectedRow([])
+                        dispatch( setAssetTypesSelect([]) )
+                        setSelectAll(true)
+                        dispatch( setAllAssetTypes( true ) )
+                    }
                 }
                 getUserSelection();   
             } else {

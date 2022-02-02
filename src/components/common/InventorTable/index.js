@@ -127,7 +127,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     }, [ assetTypeInventors ]) 
 
     useEffect(() => {
-        if(assetTypeCompaniesSelected.length > 0 && (selectItems.length == 0 || selectItems.length != assetTypeCompaniesSelected.length) ){
+        if(assetTypeCompaniesSelected.length > 0 && assetTypesSelected.length > 0 && assetTypesSelected.includes(10) && (selectItems.length == 0 || selectItems.length != assetTypeCompaniesSelected.length) ){
             setSelectItems(assetTypeCompaniesSelected)
         }
     }, [ assetTypeCompaniesSelected, selectItems ]) 
@@ -136,7 +136,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         if(standalone) {         
             const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
                 tabs = assetTypesSelectAll === true ? [] : assetTypesSelected
-            if(selectedCompaniesAll === true || selectedCompanies.length > 0) {
+            if((selectedCompaniesAll === true || selectedCompanies.length > 0) && tabs.includes(10)) {
                 dispatch(
                     getCustomerParties(
                         selectedCategory == '' ? '' : selectedCategory,

@@ -70,7 +70,9 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
                             :
                             t === 2 && (assetTypesSelected.length > 0 || assetTypesSelectedAll === true) ? 'selection_indicator'
                             :
-                            t === 3 && (assetTypeCompaniesSelected.length > 0 || assetTypeCompaniesSelectedAll === true) ? 'selection_indicator'
+                            t === 3 && ((assetTypeCompaniesSelected.length > 0 || assetTypeCompaniesSelectedAll === true) && (assetTypesSelected.length > 0 && !assetTypesSelected.includes(10))) ? 'selection_indicator'
+                            :
+                            t === 11 && ((assetTypeCompaniesSelected.length > 0 || assetTypeCompaniesSelectedAll === true) && (assetTypesSelected.length > 0 && assetTypesSelected.includes(10))) ? 'selection_indicator'
                             :
                             t === 4 && (selectedTransaction.length > 0 || assetsTransactionsSelected.length > 0 || assetsTransactionsSelectedAll === true) ? 'selection_indicator'
                             :

@@ -139,7 +139,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         zStep: 3,
         yCenter: '45%',
         xCenter: '50%',
-        showPerspective: false,
+        showPerspective: true,
         showGrid: true,
         axisColor: '#fff',
         keepAspectRatio: false,
@@ -160,7 +160,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 origin = origin.split('@@').join('<br/>') 
             }
 
-            return `<div class="graphTooltip"><ul class="tootlip_data"><li><strong>Filling Year</strong>: ${point.x}</li><li><strong>Patents</strong>: ${point.data.patent}</li>${point.data.application_number > 0 ? '<li><strong>Applications</strong>: '+ point.data.application_number +'</li>' : ''}<li><strong>Origin</strong>: ${origin != null ? origin : ''}</li><li><div class='noWrapText'><strong>Subject Matter</strong>: ${capitalize(defination)}</div></li></div>`
+            return `<div class="graphTooltip"><ul class="tootlip_data"><li><strong>Filling Year</strong>: ${point.x}</li>${point.data.patent > 0 ? '<li><strong>Patents</strong>: '+ point.data.patent +'</li>' : ''}${point.data.application_number > 0 ? '<li><strong>Applications</strong>: '+ point.data.application_number +'</li>' : ''}<li><strong>Origin</strong>: ${origin != null ? origin : ''}</li><li><div class='noWrapText'><strong>Subject Matter</strong>: ${capitalize(defination)}</div></li></div>`
         },
         yValueLabel: function(value) {
             const findIndex = graphRawGroupData.findIndex( row => row.id == value)

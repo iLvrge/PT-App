@@ -123,7 +123,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     
 
     useEffect(() => {
-        if(assetTypeCompaniesSelected.length > 0 && (selectItems.length == 0 || selectItems.length != assetTypeCompaniesSelected.length) ){
+        if(assetTypeCompaniesSelected.length > 0  && assetTypesSelected.length > 0 && !assetTypesSelected.includes(10) && (selectItems.length == 0 || selectItems.length != assetTypeCompaniesSelected.length) ){
             setSelectItems(assetTypeCompaniesSelected)
         }
     }, [ assetTypeCompaniesSelected, selectItems ]) 
