@@ -15,6 +15,7 @@ export const assetsTypes = [
     'releaseIn',
     'correct',
     'other',
+    'ownership'
   ]
 
 export const assetsTypesWithKey = [
@@ -32,7 +33,8 @@ export const assetsTypesWithKey = [
   {type: 'releaseOut', name: 'Release Out', counter: 0},
   {type: 'releaseIn', name: 'Release In', counter: 0},
   {type: 'correct', name: 'Correction', counter: 0},
-  {type: 'other', name: 'Other', counter: 0}
+  {type: 'other', name: 'Other', counter: 0},
+  {type: 'ownership', name: 'Ownership', counter: 0}
 ]
   
   export const defaultAssetsCountByTypeCounter = assetsTypes.reduce((result, assetType) => {
@@ -70,6 +72,8 @@ export const assetsTypesWithKey = [
         return 'releaseIn'
       case 15:
         return 'correct'
+      case 16:
+        return 'ownership'
       case 10:
       default:
         return 'other'
@@ -106,6 +110,8 @@ export const assetsTypesWithKey = [
         return 'releaseIn'
       case 15:
         return 'correct'
+      case 16:
+        return 'ownership'
       case 14:
       default:
         return 'other'
@@ -142,6 +148,8 @@ export const assetsTypesWithKey = [
         return 13
       case 'correct':
         return 15
+      case 'ownership':
+        return 16
       case 'other':
       default:
         return 14

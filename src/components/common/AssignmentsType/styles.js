@@ -12,6 +12,9 @@ export default makeStyles((theme) => ({
                 /* visibility: 'hidden' */
                 display: 'none'
             }
+        },
+        '& .rowIndex_14':{
+            borderTop: '1px solid #f50057'
         }
     },
     topBar: {

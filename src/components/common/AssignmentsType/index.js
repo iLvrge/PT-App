@@ -87,7 +87,7 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
     const assetTypeCompaniesList = useSelector(state => state.patenTrack2.assetTypeCompanies.list)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
-    const tabs = [1,2,6,7,3,4,5,11,12,13,10,8,9,15,14] 
+    const tabs = [1,2,6,7,3,4,5,11,12,13,8,9,15,14,10,16] 
     /*const tabs = [1,2,6,7,3,4,5,11,12,13,8,9,15,14]*/
 
     const COLUMNS = [        
@@ -329,6 +329,8 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
                 dispatch( setAssetTypesSelect([]) )
                 deleteAssetTypeSelected( row.tab_id )
                 setCurrentSelection(null)
+                setSelectAll(true)
+                dispatch( setAllAssetTypes( true ) )
             }
 
             /* if( checked !== undefined) {
