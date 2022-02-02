@@ -137,7 +137,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         xStep: 1,
         yStep: 1,
         zStep: 3,
-        yCenter: '45%',
+        yCenter: '25%',
         xCenter: '50%',
         showPerspective: true,
         showGrid: true,
@@ -208,6 +208,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             form.append("list", JSON.stringify(filterList))
             form.append("total", maintainenceAssetsList.length > 0 ? maintainenceAssetsTotal : assetsTotal)
             form.append('selectedCompanies', JSON.stringify(selectedCompanies))
+            form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
+            form.append('customers', JSON.stringify(selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies))
+            form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
             form.append('type', selectedCategory)
             form.append(`range`, valueRange)
             const {data} = await PatenTrackApi.getAssetsByCPCCode(point.x, encodeURIComponent(code), form) 
@@ -380,6 +383,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         form.append("list", JSON.stringify(list))
         form.append("total", totalRecords)
         form.append('selectedCompanies', JSON.stringify(selectedCompanies))
+        form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
+        form.append('customers', JSON.stringify(selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies))
+        form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
         form.append('type', selectedCategory)
         if(typeof range !== 'undefined') {
             form.append("range", range)
