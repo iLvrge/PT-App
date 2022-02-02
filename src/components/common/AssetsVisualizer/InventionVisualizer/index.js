@@ -157,10 +157,11 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 defination = graphRawGroupData[findIndex].defination
             }
             if( origin != null ) {
-                origin = origin.split('@@').join('<br/>') 
+                origin = origin.split('@@')
+                origin = Array.from(new Set(origin)).join('<br/>')  
             }
 
-            return `<div class="graphTooltip"><ul class="tootlip_data"><li><strong>Filling Year</strong>: ${point.x}</li>${point.data.patent > 0 ? '<li><strong>Patents</strong>: '+ point.data.patent +'</li>' : ''}${point.data.application_number > 0 ? '<li><strong>Applications</strong>: '+ point.data.application_number +'</li>' : ''}<li><strong>Origin</strong>: ${origin != null ? origin : ''}</li><li><div class='noWrapText'><strong>Subject Matter</strong>: ${capitalize(defination)}</div></li></div>`
+            return `<div class="graphTooltip"><table class="tooltip_data"><tr><th>Filling Year:</th><td>${point.x}</td></tr>${point.data.patent > 0 ? '<tr><th>Patents:</th><td>'+ point.data.patent +'</td></tr>' : ''}${point.data.application_number > 0 ? '<tr><th>Applications:</th><td>'+ point.data.application_number +'</td></tr>' : ''}<tr><th>Origin:</th><td>${origin != null ? origin : ''}</td></tr><tr><th>Subject Matter:</th><td class='noWrapText'>${capitalize(defination)}</td></tr></table></div>`
         },
         yValueLabel: function(value) {
             const findIndex = graphRawGroupData.findIndex( row => row.id == value)

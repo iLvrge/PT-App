@@ -950,17 +950,17 @@ a.maintain svg.clean_encumbrances path{
   z-index: 9999;
 }
 
-.tootlip_data{
-  list-style: none;
+.tooltip_data{
+  margin: 0;
   padding: 0;
   width: 100%;
 }
-.tootlip_data li {
-  margin-top: 5px;
+.tooltip_data th{
+  width: 100px;
 }
-
-.tootlip_data li:first-child{
-  margin-top: 0;
+.tooltip_data th, .tooltip_data td {
+  vertical-align: top;
+  text-align: left;
 }
 
 .noWrapText{
