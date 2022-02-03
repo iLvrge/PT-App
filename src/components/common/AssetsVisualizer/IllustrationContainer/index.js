@@ -23,6 +23,7 @@ const IllustrationContainer = ({
   isFullscreenOpen, 
   gap,
   chartsBar,
+  analyticsBar,
   chartsBarToggle,
   checkChartAnalytics,
   setAnalyticsBar,
@@ -322,6 +323,8 @@ const IllustrationContainer = ({
               <ErrorBoundary>
                 <PatentrackDiagram 
                   data={illustrationData} 
+                  chartsBar={chartsBar}
+                  analyticsBar={analyticsBar}
                   connectionBox={handleConnectionBox} 
                   comment={handleComment} 
                   share={handleShare} 

@@ -34,7 +34,9 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll )
     const assetsList = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list) //Assets List
+    const assetsTotal = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.total_records) //Assets records
     const maintainenceAssetsList = useSelector( state => state.patenTrack2.maintainenceAssetsList.list )
+    const maintainenceAssetsTotal = useSelector(state => state.patenTrack2.maintainenceAssetsList.total_records) //Assets records
     const selectedMaintainencePatents = useSelector( state => state.patenTrack2.selectedMaintainencePatents )
     const assetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected) //Assets Selected
     const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected )
@@ -154,6 +156,12 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
                 setFilterList(list)
                 const form = new FormData()
                 form.append("list", JSON.stringify(list)) 
+                form.append("total", maintainenceAssetsList.length > 0 ? maintainenceAssetsTotal : assetsTotal)
+                form.append('selectedCompanies', JSON.stringify(selectedCompanies))
+                form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
+                form.append('customers', JSON.stringify(selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies))
+                form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
+                form.append('type', selectedCategory)
                 PatenTrackApi.cancelLifeSpanRequest()
                 const {data} = await PatenTrackApi.getAssetLifeSpan(form) 
                 dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, data))

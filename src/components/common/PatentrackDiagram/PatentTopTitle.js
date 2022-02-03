@@ -28,7 +28,7 @@ class PatentTopTitle extends React.Component {
        
     super(props_)
       
-    this.state = { expand: true,  right: false, anchorEl: null, sliderValue: 30, x: '-85px', y: '35px'}
+    this.state = { expand: true,  right: false, anchorEl: null, sliderValue: 0, x: '-85px', y: '35px'}
     this.update = this.update.bind(this)
   }
     
@@ -50,6 +50,7 @@ class PatentTopTitle extends React.Component {
     this.setState({
       sliderValue: newValue
     })
+    this.props.changeParentWidth(newValue)
   }
 
   handleDragStop = (e, position) => {
@@ -206,7 +207,7 @@ class PatentTopTitle extends React.Component {
             </div>
             <Draggable 
               handle="#draggable-illustration-menu-item" 
-              cancel={'[class*="MuiDialogContent-root"]'}
+              cancel={'[class*="zoom_slider"]'}
               onStop={this.handleDragStop}
             > 
               <Menu
@@ -283,7 +284,7 @@ class PatentTopTitle extends React.Component {
                 <Divider /> 
                   <MenuItem> 
                     <ListItemIcon>
-                      <Slider value={sliderValue} onChange={this.handleSliderChange} aria-labelledby="continuous-slider" />
+                      <Slider className={'zoom_slider'} value={sliderValue} onChange={this.handleSliderChange} aria-labelledby="continuous-slider" />
                     </ListItemIcon>
                     <ListItemIcon style={{minWidth: 20 }}></ListItemIcon>
                     <ListItemText className={'show_label'}>Zoom</ListItemText>    

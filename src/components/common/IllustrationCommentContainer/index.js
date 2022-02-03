@@ -39,6 +39,7 @@ const IllustrationCommentContainer = ({
     setMaintainenceFileName, 
     gap, 
     chartsBar,
+    analyticsBar,
     chartsBarToggle, 
     checkChartAnalytics,
     onHandleGapSize,
@@ -235,6 +236,7 @@ const IllustrationCommentContainer = ({
                                     asset={assetIllustration} 
                                     setIllustrationRecord={illustrationRecord} 
                                     chartsBar={chartsBar}
+                                    analyticsBar={analyticsBar}
                                     chartsBarToggle={chartsBarToggle}
                                     checkChartAnalytics={checkChartAnalytics}
                                     setAnalyticsBar={setAnalyticsBar}
@@ -273,6 +275,7 @@ const IllustrationCommentContainer = ({
                                         asset={assetIllustration} 
                                         setIllustrationRecord={illustrationRecord} 
                                         chartsBar={chartsBar}
+                                        analyticsBar={analyticsBar}
                                         chartsBarToggle={chartsBarToggle}
                                         checkChartAnalytics={checkChartAnalytics}
                                         setAnalyticsBar={setAnalyticsBar}

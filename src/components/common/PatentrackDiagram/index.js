@@ -310,6 +310,7 @@ class PatentrackDiagram extends React.Component {
         Correct: true
       },
       parentWidth: null,
+      originalWidth: null,
       previousParentWidth: null,
     };
     this.updateDiagram = this.updateDiagram.bind(this);
@@ -318,17 +319,15 @@ class PatentrackDiagram extends React.Component {
 
     this.convertConfigValuesToPixels();
     this.getTitleDivHeight();
-
-    console.log(
-      '%cPatentrack Diagram by Vladimir V. KUCHINOV, v. 0.99',
-      'color: #494949; font-size: 12px; font-family: sans-serif;',
-    );
+    this.changeParentWidth = this.changeParentWidth.bind(this);
   }
 
   componentDidMount() {
     this.resizeObserver = new ResizeObserver(entries => {
-      const { width } = entries[0].contentRect;
-      this.setState({ parentWidth: width });
+      if(this.props.chartsBar === true || this.props.analyticsBar === true) {
+        const { width } = entries[0].contentRect;
+        this.setState({ parentWidth: width, originalWidth:  width});
+      }
     });
 
     this.resizeObserver.observe(this.resizeElement.current);
@@ -336,7 +335,7 @@ class PatentrackDiagram extends React.Component {
 
   componentDidUpdate() {
     if (this.state.parentWidth !== this.state.previousParentWidth) {
-      this.setState({ previousParentWidth: this.state.parentWidth });
+      this.setState({ previousParentWidth: this.state.parentWidth, originalWidth: this.state.parentWidth });
     }
   }
 
@@ -344,6 +343,10 @@ class PatentrackDiagram extends React.Component {
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
+  }
+
+  changeParentWidth(percentage) {
+    //this.setState({parentWidth : this.state.originalWidth + ((this.state.originalWidth * percentage) / 100)})
   }
 
   getTitleDivHeight() {
@@ -1718,6 +1721,7 @@ class PatentrackDiagram extends React.Component {
           titleTop={this.props.titleTop}
           title={this.parseTitle()}
           update={this.updateDiagram}
+          changeParentWidth={this.changeParentWidth}
           uspto={this.props.uspto}
           comment={this.props.comment}
           commentContent={this.props.data.comment}

@@ -24,7 +24,7 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
     const [option, setOption] = useState({
         legend: { position: 'none' },
         bar: { groupWidth: '98%' },
-        isStacked: true,
+        isStacked: false,
         colors: ['#395270'],
         backgroundColor: '#222222',
         hAxis: {

@@ -650,6 +650,7 @@ const GlobalScreen = ({
                                                 templateButton={false}
                                                 maintainenceButton={false}
                                                 chartsBar={openChartBar}
+                                                analyticsBar={openAnalyticsBar}
                                                 chartsBarToggle={handleChartBarOpen}
                                                 checkChartAnalytics={checkChartAnalytics}
                                                 type={type}

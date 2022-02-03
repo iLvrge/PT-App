@@ -949,7 +949,12 @@ a.maintain svg.clean_encumbrances path{
   font-size: 0.875rem;
   z-index: 9999;
 }
-
+#draggable-illustration-menu-item:hover, #draggable-illustration-menu-item .MuiListItem-root:hover{
+  cursor: move;
+}
+#draggable-illustration-menu-item .MuiListItemIcon-root:hover{
+  cursor: pointer;
+}
 .tooltip_data{
   margin: 0;
   padding: 0;
