@@ -39,7 +39,7 @@ const options = {
                 </div>
             </div>
             <div class="second">
-                <img class="${data.rawData.logo == '' || data.rawData.logo == null ? 'no-image' : ''}" src='${data.rawData.logo !== '' && data.rawData.logo !== null ?  CDN_PATH_LOGO + data.rawData.logo : CDN_PATH_LOGO + NO_IMAGE_AVAILABLE}' />
+                <img class="${data.rawData.logo == '' || data.rawData.logo == null ? 'no-image' : ''}" src='${data.rawData.logo !== '' && data.rawData.logo !== null ?  data.rawData.logo : CDN_PATH_LOGO + NO_IMAGE_AVAILABLE}' />
             </div>`
     },  
 }
