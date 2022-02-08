@@ -7,6 +7,7 @@ class PatentLink extends React.Component {
     super(props_);
     this.node = props_.config.node;
     this.path = 'M0,0';
+    this.config = props_.config;
     this.comment = 'type any comment here';
     this.dateFormat = d3.timeFormat('%m/%d/%Y');
     this.types = [
@@ -143,21 +144,26 @@ class PatentLink extends React.Component {
         //passing referenced data from json.popup and handleComment
         //this.props.comment is a handler
         //this.props.commentContent is the comment content (string or HTML (have to be parsed))
-        const targetElement = d3.event.target.parentNode.querySelector(`[id*="link_"]`)
-        
-        targetElement.setAttribute('stroke-width',this.props.config.link.active.width)
+        const targetElement = d3.event.target.parentNode.querySelector(`[id*="link_"]`)        
+        const widthLink = this.config.link.width, activeLinkWidth = this.config.link.active.width;
+        targetElement.setAttribute('stroke-width', activeLinkWidth)
         const element = d3.event.target.closest(
           "g#patentLinksGroup",
         )
         const allLinks = element.querySelectorAll(`[id*="link_"]`)
-          
-        if(allLinks != null && allLinks.length > 0) {
-          [].forEach.call(allLinks, function(el) {
-            if(el != targetElement) {
-              el.setAttribute('stroke-width',this.props.config.link.width)
-            }
-          })
+        try{
+           if(allLinks != null && allLinks.length > 0) {
+            [].forEach.call(allLinks, function(el, index) {
+              console.log(index, el)
+              if(el != targetElement) {
+                el.setAttribute('stroke-width', widthLink)
+              }
+            })
+          }
+        }  catch (e) {
+          console.error(e)
         }
+        
         this.props.connectionBox(this.props.data.line, this.props.comment);
       });
 

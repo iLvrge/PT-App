@@ -48,6 +48,7 @@
   
     "link": {
       "width": 1.5,
+      "active": { "width": 3 },
       "hitArea": 5,
       "indent": "1.2rem",
       "dynamicIndent": false,
@@ -60,8 +61,8 @@
       "ownership": "#E60000",
       "nameChange": "#228DE8",
       "security": "#FFAA00",
-      "license": "#C0C000",
       "release": "#70A800",
+      "license": "#C0C000",      
       "licenseEnd": "#CA7C46",
       "correct": "#FFFFFF" 
     }
