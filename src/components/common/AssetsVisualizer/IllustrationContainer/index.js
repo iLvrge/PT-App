@@ -226,9 +226,10 @@ const IllustrationContainer = ({
 
   const handleConnectionBox = useCallback((obj) => {
     console.log('ONCLICK HANDLE handleConnectionBox', obj)
-    if (typeof obj.popup != 'undefined') {
-      setLineId(obj.id)
-      if(linkId != obj.popuptop) {
+    setLineId(obj.id)
+    if (typeof obj.popup != 'undefined') { 
+      console.log("linkId", linkId, obj.popuptop)     
+      if((linkId != obj.popuptop) || (obj.id != lineId && linkId == obj.popuptop) ) {
         setLinkId(obj.popuptop)
         setClick(1)
         dispatch(
@@ -266,6 +267,8 @@ const IllustrationContainer = ({
           agreement: obj.document1_agreement 
         }, obj)  
       } else {
+        console.log("COMES in NULL")
+        setLinkId(null)
         dispatch(
           setConnectionBoxView(false)
         )

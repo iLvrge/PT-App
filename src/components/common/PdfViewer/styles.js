@@ -48,7 +48,7 @@ export default makeStyles(theme => ({
     position: 'absolute',
     zIndex: 11,
     right: 0,
-    top: '1px',
+    top: 16,
     cursor: 'pointer',
   }, 
   tabs: {
@@ -67,7 +67,7 @@ export default makeStyles(theme => ({
   },
   fullscreenBtn: {
     position: 'absolute',
-    top: '8px',
+    top: 16,
     right: 0,
     zIndex: 1
   }
