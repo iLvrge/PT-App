@@ -186,6 +186,7 @@ const AssetsTable = ({
   const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
 
   const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
+  const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
   const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
   const auth_token = useSelector(state => state.patenTrack2.auth_token)
   const link_assets_sheet_type = useSelector(state => state.patenTrack2.link_assets_sheet_type)
@@ -371,6 +372,14 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
                 return [...prevItems, row]
               }
             })          
+          } else if (event.target.value == 2) {
+            const formData = new FormData()
+            formData.append('appno_doc_num', row.appno_doc_num)
+            formData.append('grant_doc_num', row.grant_doc_num)
+            const { data } = await PatenTrackApi.moveAssetForSale(formData)
+            if( data  !== null) {
+              console.log(data)
+            }
           } else if (event.target.value === 0) {
             setSelectedAssets(prevItems => {
               const findIndex = prevItems.findIndex( r => r.asset == asset)
@@ -530,6 +539,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     selectedAssetAssignmentsAll,
     selectedAssetAssignments,
     display_clipboard,
+    display_sales_assets,
     auth_token,
     switch_button_assets        
   ]);
@@ -758,7 +768,9 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             startIndex,
             endIndex,
             column,
-            direction
+            direction,
+            0,
+            display_sales_assets
           ),
         );
         setWidth(1900)
@@ -1094,7 +1106,8 @@ const checkMouseStillOnHover = (e, number) => {
             endIndex,
             sortField,
             sortOrder,
-            assetTableScrollPosition
+            assetTableScrollPosition,
+            display_sales_assets
           ),
         );
       }
@@ -1146,7 +1159,9 @@ const checkMouseStillOnHover = (e, number) => {
             0,
             DEFAULT_CUSTOMERS_LIMIT,
             column,
-            direction
+            direction,
+            0,
+            display_sales_assets
           ),
         );
       }

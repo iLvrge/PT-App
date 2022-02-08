@@ -266,7 +266,25 @@ const IllustrationContainer = ({
           agreement: obj.document1_agreement 
         }, obj)  
       } else {
-        if(click == 1) {
+        dispatch(
+          setConnectionBoxView(false)
+        )
+        dispatch(
+          setConnectionData({})
+        )
+        dispatch(
+          setPDFView(false)
+        )
+        dispatch(
+          setPDFFile(
+            { 
+              document: '', 
+              form: '', 
+              agreement: ''
+            }
+          )
+        )
+        /* if(click == 1) {
           setClick(2)
           setConnectionBoxView(false)
           setPDFView(true)
@@ -284,7 +302,7 @@ const IllustrationContainer = ({
           setChartBar(true)
           setConnectionBoxView(true)
           setPDFView(true)
-        }
+        } */
       }
     }
   }, [ linkId, click, dispatch ])

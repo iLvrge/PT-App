@@ -46,6 +46,7 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
     const selectedAssetAssignments = useSelector( state => state.patenTrack2.assetTypeAssignments.selected )
     const selectedAssetAssignmentsAll = useSelector( state => state.patenTrack2.assetTypeAssignments.selectAll )
     const connectionBoxView = useSelector( state => state.patenTrack.connectionBoxView)
+    const display_sales_assets = useSelector( state => state.patenTrack.display_sales_assets)
 
     useEffect(() => {
         if(selectedRow.length  === 0) {
@@ -144,6 +145,8 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
                                       0, 
                                       'asset',
                                       'DESC',
+                                      -1, 
+                                      display_sales_assets
                                     ),
                                 );
                             }

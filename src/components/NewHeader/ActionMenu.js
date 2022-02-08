@@ -16,7 +16,8 @@ import {
     TextField, 
     CircularProgress,
     Fab, 
-    IconButton
+    IconButton,
+    Avatar
 } from '@material-ui/core'
 
 import {
@@ -138,6 +139,7 @@ const ActionMenu = (props) => {
     const assetTypeNamesGroups = useSelector(state => state.patenTrack2.assetTypeNames.all_groups)
     const assetTypeNamesSelected = useSelector(state => state.patenTrack2.assetTypeNames.selected)
     const google_profile = useSelector(state => state.patenTrack2.google_profile)
+    const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
 
     /**
      * Open Menu
@@ -320,7 +322,6 @@ const ActionMenu = (props) => {
             }
         }        
     }, [ dispatch, category, selectedMaintainencePatents, assetTypeAssignmentAssetsSelected, selectedAssetsTransactions ])
-
     /**
      * Add / Update assets list on google spreadsheet
      */
@@ -803,6 +804,12 @@ const ActionMenu = (props) => {
                         />
                     </ListItemIcon>
                     <ListItemText>Share Selected Assets</ListItemText>
+                </MenuItem>
+                <MenuItem  onClick={props.onClickSale} className={`iconItem ${display_sales_assets === true ? 'active' : ''}`}>
+                    <ListItemIcon>
+                        <Avatar  src="https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png" variant="square" style={{width: 21, height: 21}}/>
+                    </ListItemIcon>
+                    <ListItemText>Assets for Sale</ListItemText>
                 </MenuItem>
                 {
                     loadingUSPTO && (

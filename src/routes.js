@@ -1,18 +1,9 @@
 import React, { Fragment } from 'react'
 
 import { Switch, Route } from 'react-router-dom'
-import DashBoard from './components/DashBoard/DashBoard'
-import DashBoard2 from './components/DashBoard2'
 import Settings from './components/SettingsPage'
 
-import Review from './components/Review'
-import Correct from './components/Correct'
-import InProgress from './components/InProgress'
-import InSight from './components/InSight'
-import Resources from './components/Resources'
-import Record from './components/Record'
-import BigScreen from './components/BigScreen'
-import DueDilligence from './components/DueDilligence'
+
 import Search from './components/Search'
 import GlobalScreen from './components/GlobalScreen'
 import CorrectLayout from './components/CorrectLayout' 
@@ -21,24 +12,11 @@ import Auth from './components/auth'
 import AuthSlack from './components/AuthSlack'
 
 import routeList from './routeList'
-import MainLayout from './layout/MainLayout'
-import BlankLayout from './layout/BlankLayout'
 import GlobalLayout from './layout/GlobalLayout'
 
 let pages = [
   //Authenticated  pages   
-  {
-    exact: true,
-    path: routeList.insights,
-    component: InSight,
-    layout: BlankLayout
-  }, 
-  {
-    exact: true,
-    path: routeList.resources,
-    component: Resources,
-    layout: BlankLayout
-  },
+  
   {
     exact: false,
     path: routeList.maintainence,
@@ -50,7 +28,7 @@ let pages = [
     exact: false,
     path: routeList.duedilligence,
     component: GlobalScreen,
-    layout: GlobalLayout,
+    layout: GlobalLayout, 
     type: 1
   },
   {

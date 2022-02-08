@@ -1041,17 +1041,18 @@ export const getForeignAssetsBySheet = ( form ) => {
  * @param {*} append 
  */
 
-export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, append = false, startIndex, endIndex, column, direction, assetTableScrollPosition ) => {
+export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, append = false, startIndex, endIndex, column, direction, assetTableScrollPosition, salesAssets = false ) => {
   return async dispatch => {
     if(append === false) {
       dispatch( setAssetTypesAssignmentsAllAssetsLoading( true ) )
     }
     PatenTrackApi.cancelAssets()
-    const { data } = await PatenTrackApi.getCustomerAssets( type, companies, tabs, customers, rfIDs, startIndex, endIndex, column, direction )    
+    console.log('salesAssets', salesAssets)
+    const { data } = await PatenTrackApi.getCustomerAssets( type, companies, tabs, customers, rfIDs, startIndex, endIndex, column, direction, salesAssets )    
     dispatch( setAssetTypeAssignmentAllAssets(data, append) )
     if(append === false) { 
       dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
-    } else if(append === true && typeof assetTableScrollPosition !== 'undefined') {
+    } else if(append === true && typeof assetTableScrollPosition !== 'undefined' && assetTableScrollPosition !== -1) {
       dispatch( setAssetTableScrollPos( assetTableScrollPosition ) )
     }
   } 
@@ -1505,6 +1506,13 @@ export const setClipboardAssetsDisplay = (flag) => {
     flag
   } 
 } 
+
+export const setIsSalesAssetsDisplay = (flag) => {  
+  return {
+    type: types.SET_SALES_ASSETS_DISPLAY, 
+    flag
+  } 
+}
 
 export const setSwitchAssetButton = (value) => {
   return {

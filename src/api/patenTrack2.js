@@ -238,13 +238,13 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/customers/restore_ownership/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
   }
 
-  static getCustomerAssets(type, companies, tabs, customers, rfIDs, startIndex, endIndex, column, direction) { 
+  static getCustomerAssets(type, companies, tabs, customers, rfIDs, startIndex, endIndex, column, direction, salesAssets) { 
     let header = getHeader()
     header['cancelToken'] = new CancelToken(function executor(c) { 
       cancelAssets = c
     })
-    return axios.get(`${base_new_api_url}/customers/${type}/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}&offset=${startIndex}&limit=${endIndex}&column=${column}&direction=${direction}`, header)
-  }
+    return axios.get(`${base_new_api_url}/customers/${type}/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}&offset=${startIndex}&limit=${endIndex}&column=${column}&direction=${direction}&other_mode=${salesAssets}`, header)
+  } 
 
   static getCustomerSelectedAssets(shareCode) { 
     let header = getHeader()
@@ -340,6 +340,10 @@ class PatenTrackApi {
 
   static validateForeignAssets(form) {  
     return axios.post(`${base_new_api_url}/assets/validate/`, form, getFormUrlHeader())
+  }
+
+  static moveAssetForSale(form) { 
+    return axios.post(`${base_new_api_url}/assets/assets_for_sale/`, form, getFormUrlHeader())
   }
 
   static saveForeignAssets(form) { 

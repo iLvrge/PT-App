@@ -312,6 +312,7 @@ class PatentrackDiagram extends React.Component {
       parentWidth: null,
       originalWidth: null,
       previousParentWidth: null,
+      activeLine: null
     };
     this.updateDiagram = this.updateDiagram.bind(this);
     this.structure = [];
@@ -319,7 +320,8 @@ class PatentrackDiagram extends React.Component {
 
     this.convertConfigValuesToPixels();
     this.getTitleDivHeight();
-    this.changeParentWidth = this.changeParentWidth.bind(this);
+    this.changeParentWidth = this.changeParentWidth.bind(this);   
+    this.onClickConnectionLine = this.onClickConnectionLine.bind(this) 
   }
 
   componentDidMount() {
@@ -343,6 +345,7 @@ class PatentrackDiagram extends React.Component {
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
+    
   }
 
   changeParentWidth(percentage) {
@@ -421,6 +424,7 @@ class PatentrackDiagram extends React.Component {
 
     return Object.keys(assignments).length;
   }
+
 
   parseData() {
     let dWidth = 0;
@@ -1494,6 +1498,15 @@ class PatentrackDiagram extends React.Component {
     return v_ >= min_ && v_ <= max_;
   }
 
+  onClickConnectionLine(data) {
+    if(data.id !== this.state.activeLine) {
+      this.setState({activeLine: data.id})
+    } else {
+      this.setState({activeLine: null})
+    }
+    this.props.connectionBox(data.line);
+  }
+
   render() {
     this.data = {
       inventors: [],
@@ -1511,6 +1524,8 @@ class PatentrackDiagram extends React.Component {
 
     const this_ = this;
     const timelines = [];
+
+    
 
     const svgParams = this.config.responsive
       ? {
@@ -1607,7 +1622,8 @@ class PatentrackDiagram extends React.Component {
           id={`PatentrackLink_${link_.id}`}
           key={`Link_${i_}`}
           svg={`svg_${this.prefix}`}
-          connectionBox={this.props.connectionBox}
+          onClickConnectionLine={this.onClickConnectionLine}
+          activeLine={this.state.activeLine}
           parent="patentLinksGroup"
           data={linkData}
           config={this.config}

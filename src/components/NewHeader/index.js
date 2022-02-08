@@ -73,6 +73,7 @@ import { setAssetTypeAssignments,
   getSlackProfile,
   setGoogleProfile,
   setClipboardAssetsDisplay,  
+  setIsSalesAssetsDisplay,
   setChannelID,
   setAssetTypeAssignmentAllAssets,
   setSwitchAssetButton,
@@ -134,6 +135,7 @@ const NewHeader = () => {
   const [ scheduling, setScheduling ] = useState( false )
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
   const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
+  const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
   const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
 
   const [ openDrawer, setDrawerState] = useState({
@@ -360,6 +362,24 @@ const NewHeader = () => {
     }
   }
 
+  const onHandleSaleAssets = useCallback(() => {
+    if(process.env.REACT_APP_ENVIROMENT_MODE === 'PRO') {
+      dispatch(setIsSalesAssetsDisplay(!display_sales_assets))
+      dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
+      dispatch(setSelectedAssetsPatents([]))
+      dispatch(setAssetFamily([]))
+      dispatch(setFamilyItemDisplay({}))
+      dispatch(setChannelID(''))
+      dispatch(setConnectionBoxView(false))
+      dispatch(setPDFView(false))
+      dispatch(toggleUsptoMode(false))
+      dispatch(toggleLifeSpanMode(false))
+      dispatch(toggleFamilyMode(false))
+      dispatch(toggleFamilyItemMode(false))
+      dispatch(setDriveTemplateFrameMode(false))
+    }
+  }, [dispatch, display_sales_assets])
+
   const handleClipboard = useCallback(() => {
     if( clipboard_assets.length > 0 ) {
       setIsClipboardActive(true)
@@ -492,7 +512,7 @@ const onHandleForeignAssets = (event) => {
           } 
         </span>
 
-        <ActionMenu t={0}/>       
+        <ActionMenu t={0} onClickSale={onHandleSaleAssets}/>       
               
         <div className={classes.rightPanel}>  
             <Button className={classes.calendly} onClick={handleScheduleViaHubspot}>

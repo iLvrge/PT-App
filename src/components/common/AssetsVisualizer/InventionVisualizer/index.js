@@ -124,7 +124,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const selectedRow = useSelector( state => state.patenTrack2.selectedAssetsTransactions )
     const connectionBoxView = useSelector( state => state.patenTrack.connectionBoxView)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
+    const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
     const [ graphRawData, setGraphRawData ] = useState([])
+    const [ salesData, setSalesData ] = useState([])
     const [ graphRawGroupData, setGraphRawGroupData ] = useState([])  
     let interval;
     
@@ -211,6 +213,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
             form.append('customers', JSON.stringify(selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies))
             form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
+            form.append('other_mode', display_sales_assets)
             form.append('type', selectedCategory)
             form.append(`range`, valueRange)
             const {data} = await PatenTrackApi.getAssetsByCPCCode(point.x, encodeURIComponent(code), form) 
@@ -358,7 +361,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                       0,
                                       0,
                                       'asset',
-                                      'DESC'
+                                      'DESC',
+                                        -1, 
+                                      display_sales_assets
                                     ),
                                 );
                             }
@@ -386,6 +391,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
         form.append('customers', JSON.stringify(selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies))
         form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
+        form.append('other_mode', display_sales_assets)
         form.append('type', selectedCategory)
         if(typeof range !== 'undefined') {
             form.append("range", range)
@@ -404,6 +410,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         setIsLoadingCharts(false)
         setGraphRawData(data.list)
         setGraphRawGroupData(data.group)
+        setSalesData(data.sales)
 
         if( typeof year === 'undefined' &&  data.list.length > 0 ) {
             let yearList = [], yearLabelList = []
@@ -517,15 +524,33 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         xMax = year
                     }
                     zMax.push(data.countAssets)
+                    const appNums = data.appNum;
+                    let style = {
+                            stroke: '#50719C',
+                            fill: '#395270'
+                        };
+                    if(data.appNum !== null && data.appNum !== '') {
+                        const appList = data.appNum.toString().split(',')
+                        let salesFind = false
+                        if(salesData.length > 0) {
+                            appList.map( number => {
+                                if(salesData.includes(number) && salesFind === false) {
+                                    salesFind = true;
+                                    style = {
+                                        stroke: '#8EB93B',
+                                        fill: '#8EB93B'
+                                    };
+                                }
+                            })
+                        }                       
+                    }
+                    
                     //const col = colors[Math.floor((Math.random()*colors.length))]
                     items.current.add({
                         x: year,
                         y: graphRawGroupData[findIndex].id,
                         z: data.countAssets,
-                        style: {
-                            stroke: '#50719C',
-                            fill: '#395270'
-                        },
+                        style: style,
                         patent: data.patent_number,
                         application_number: data.application_number,   
                         origin: data.group_name

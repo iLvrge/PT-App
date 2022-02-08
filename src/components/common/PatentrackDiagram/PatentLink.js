@@ -30,7 +30,7 @@ class PatentLink extends React.Component {
       d3.curveStepBefore,
       d3.curveStepAfter,
     ];
-
+    
     this.curve = d3
       .line()
       .x(function(d_) {
@@ -144,34 +144,14 @@ class PatentLink extends React.Component {
         //passing referenced data from json.popup and handleComment
         //this.props.comment is a handler
         //this.props.commentContent is the comment content (string or HTML (have to be parsed))
-        const targetElement = d3.event.target.parentNode.querySelector(`[id*="link_"]`)        
-        const widthLink = this.config.link.width, activeLinkWidth = this.config.link.active.width;
-        targetElement.setAttribute('stroke-width', activeLinkWidth)
-        const element = d3.event.target.closest(
-          "g#patentLinksGroup",
-        )
-        const allLinks = element.querySelectorAll(`[id*="link_"]`)
-        try{
-           if(allLinks != null && allLinks.length > 0) {
-            [].forEach.call(allLinks, function(el, index) {
-              console.log(index, el)
-              if(el != targetElement) {
-                el.setAttribute('stroke-width', widthLink)
-              }
-            })
-          }
-        }  catch (e) {
-          console.error(e)
-        }
-        
-        this.props.connectionBox(this.props.data.line, this.props.comment);
+        this.props.onClickConnectionLine(this.props.data)
       });
-
+    
     g.append('path')
       .attr('d', this.path)
       .attr('id', 'link_' + this.props.data.id)
       .attr('pointer-events', 'none')
-      .attr('stroke-width', this.props.config.link.width)
+      .attr('stroke-width', this.props.activeLine === this.props.data.id ? this.props.config.link.active.width : this.props.config.link.width)
       .attr('stroke', this.props.data.color)
       .attr("stroke-dasharray", this.props.data.line.type_line == "Dashed" ? '5,5' : '')
       .attr('fill', 'none');

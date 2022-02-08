@@ -14,6 +14,8 @@ import { capitalize, numberWithCommas } from '../../../../utils/numbers'
 
 import { setClipboardAssets, setMoveAssets } from '../../../../actions/patentTrackActions2'
 
+import PatenTrackApi from '../../../../api/patenTrack2'
+
 import Loader from '../../Loader'
 
 const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
@@ -151,6 +153,14 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
                 oldItems = oldItems.filter( item => item.asset !== row.asset)
             }
             dispatch(setClipboardAssets(oldItems))
+        } else if (event.target.value == 2) {
+            const formData = new FormData()
+            formData.append('appno_doc_num', row.appno_doc_num)
+            formData.append('grant_doc_num', row.grant_doc_num)
+            const { data } = await PatenTrackApi.moveAssetForSale(formData)
+            if( data  !== null) {
+              console.log(data)
+            }
         } else if( event.target.value == 0 ) {
             if(clipboard_assets.length > 0) {
                 const remAssets = clipboard_assets.filter( r => r.asset != row.asset)

@@ -967,7 +967,9 @@ a.maintain svg.clean_encumbrances path{
   vertical-align: top;
   text-align: left;
 }
-
+.iconItem.active {
+  color: #E60000
+}
 .noWrapText{
   overflow: hidden;
   /* text-overflow: ellipsis;
