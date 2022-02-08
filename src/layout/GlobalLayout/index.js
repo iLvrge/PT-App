@@ -250,7 +250,7 @@ const GlobalLayout = (props) => {
             setOtherPartyOpenBar( false ) // parties
             setCustomerOpenBar( true ) //assets
             setAssignmentOpenBar( true ) //transactions
-            setVisualizerBarSize('49%')
+            setVisualizerBarSize('48%')
 
             setChartBar(true)
             setAnalyticsBar(true)
@@ -565,20 +565,20 @@ const GlobalLayout = (props) => {
     }
 
     const changeVisualBar = (chart, analytics, comment, illustration) => {
-        let barOpen = true, barSize = '49%'        
+        let barOpen = true, barSize = '48%'        
         if(chart === false && analytics === false && (comment === true || illustration === true)){
             barSize = '0%'
             barOpen = false
         } else if (comment === false && illustration === false && ( chart === true ||  analytics === true )) {
             barSize = '100%'
         }
-        if(barSize === '49%' && ((comment === true || illustration === true) || (chart === true || analytics === true)) ){
-            if( visualizerBarSize !== '0%' &&  visualizerBarSize !== '49%' &&  visualizerBarSize !== '100%' ) {
+        if(barSize === '48%' && ((comment === true || illustration === true) || (chart === true || analytics === true)) ){
+            if( visualizerBarSize !== '0%' &&  visualizerBarSize !== '48%' &&  visualizerBarSize !== '100%' ) {
                 barSize = visualizerBarSize
             }
         }
         
-        if(chart === true && barOpen === true && barSize == '49%') {
+        if(chart === true && barOpen === true && barSize == '48%') {
             checkPDFHeight()
         }    
         editorBar()
@@ -734,7 +734,7 @@ const GlobalLayout = (props) => {
             setVisualizeOpenBar( true )
             setVisualizerBarSize(prevItem =>{
                 if(prevItem == '0%') {
-                    return  '49%'
+                    return  '48%'
                 } else {
                     return prevItem
                 }
@@ -745,7 +745,7 @@ const GlobalLayout = (props) => {
             setVisualizeOpenBar( true )
             setVisualizerBarSize(prevItem =>{
                 if(prevItem == '0%') {
-                    return  '49%'
+                    return  '48%'
                 } else {
                     return prevItem
                 }
@@ -761,7 +761,7 @@ const GlobalLayout = (props) => {
             setVisualizeOpenBar( true )
             setVisualizerBarSize(prevItem =>{
                 if(prevItem == '0%') {
-                    return  '49%'
+                    return  '48%'
                 } else {
                     return prevItem
                 }
@@ -773,7 +773,7 @@ const GlobalLayout = (props) => {
                 setIllustrationBarSize('50%')
             }
         } else if( typeof usptoMode != undefined && usptoMode === false ) {
-            let barSize = '49%'
+            let barSize = '48%'
             if(openChartBar === false && openAnalyticsBar === false && (openCommentBar === true || openIllustrationBar === true)){
                 barSize = '0%'
             } else if (openCommentBar === false && openIllustrationBar === false && ( openChartBar === true ||  openAnalyticsBar === true )) {
