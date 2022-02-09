@@ -96,7 +96,13 @@ const AssetDetailsContainer = ({
     updateResizerBar(chartAnalyticsContainer, analyticsBar, 1)
   }, [ chartAnalyticsContainer, analyticsBar ])
 
-  
+  console.log('chartAnalyticsContainer=>defaultSize', defaultSize)
+
+  useEffect(() => {
+    if(chartBar === true && analyticsBar === true && defaultSize == '100%') {
+      fnParams('50%')
+    }
+  }, [chartBar, analyticsBar, defaultSize])
 
   /* useEffect(() => {        
         if( chartAnalyticsContainer != null && chartAnalyticsContainer.current != null ) {            
@@ -205,87 +211,98 @@ const AssetDetailsContainer = ({
             type={type}
           />
         )
-      } 
-      {bar === true ? (
-        <SplitPane
-          className={cls}
-          split={split}
-          minSize={minSize}
-          maxSize={-100}
-          defaultSize={defaultSize}
-         /*  onChange={() => changeContainer()} */
-          onDragStarted={() => {
-            dragStart(true);
-            setIsDrag(true);
-          }}
-          onDragFinished={size => {
-            dragFinished(false);
-            fn(fnVarName, size, fnParams);
-            setIsDrag(false);
-          }}
-          pane1Style={{
-            pointerEvents: isDrag ? 'none' : 'auto',
-          }}
-          primary={primary}
-          ref={chartAnalyticsContainer}
-        >
-          <div
-            id={`charts_container`}
-            style={{ height: "100%" }}
-          > 
-            {/* <ArrowButton
-              arrowId={`arrow_charts`}
-              handleClick={handleDetailsBarOpen}
-              buttonType={toggleDetailsButtonType}
-              buttonVisible={detailsButtonVisible}
-              arrow={3}
-              cls={classes.btnLeft}
-            /> */}
+      }
+      {
+        connectionBoxView === true  &&
+        (  
+          <SplitPane
+            className={cls}
+            split={split}
+            minSize={10}
+            maxSize={-100}
+            defaultSize={'50%'}
+            pane1Style={{
+              pointerEvents: isDrag ? 'none' : 'auto',
+            }}
+            primary={primary}
+            ref={chartAnalyticsContainer}
+          >
+            <div
+              id={`charts_container`}
+              style={{ height: "100%" }}
+            >
+              <PdfViewer
+                display={"false"}
+                fullScreen={false}
+                resize={resizeFrame}
+              />
+            </div>
+            <div
+              className={`${classes.commentContainer} ${
+                isDrag === true ? classes.notInteractive : classes.isInteractive
+              }`}
+            >
+              <ConnectionBox display={"false"} assets={illustrationData} type={type}/>
+            </div>
+        </SplitPane>
+        )
+      }
+      {
+        bar === true && (
+          <SplitPane
+            className={cls}
+            split={split}
+            minSize={minSize}
+            maxSize={-100}
+            defaultSize={defaultSize}
+          /*  onChange={() => changeContainer()} */
+            onDragStarted={() => {
+              dragStart(true);
+              setIsDrag(true);
+            }}
+            onDragFinished={size => {
+              dragFinished(false);
+              fn(fnVarName, size, fnParams);
+              setIsDrag(false);
+            }}
+            pane1Style={{
+              pointerEvents: isDrag ? 'none' : 'auto',
+            }}
+            primary={primary}
+            ref={chartAnalyticsContainer}
+          >
+            <div
+              id={`charts_container`}
+              style={{ height: "100%" }}
+            > 
+              {/* <ArrowButton
+                arrowId={`arrow_charts`}
+                handleClick={handleDetailsBarOpen}
+                buttonType={toggleDetailsButtonType}
+                buttonVisible={detailsButtonVisible}
+                arrow={3}
+                cls={classes.btnLeft}
+              /> */}
 
-            {
-              pdfViewModal &&
-              <Modal open={pdfViewModal} className={classes.fullscreenChartsModal} >
-                <Paper className={classes.fullscreenCharts} square>
-                  <PdfViewer display={'true'} />
-                </Paper>
-              </Modal>
-            } 
-            {
-              selectedCompanies.length > 0 || type === 9 || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE')
-              ?
-                chartBar == true ?
-                  pdfView === true && !connectionBoxView ? (
-                      <PdfViewer display={"false"} resize={resizeFrame} />
-                  ) :  (
-                      connectionBoxView === true ? (
-                          <PdfViewer
-                            display={"false"}
-                            fullScreen={false}
-                            resize={resizeFrame}
-                          />  
-                      ) : lifeSpanMode === true ? (
-                          <InventionVisualizer 
-                            defaultSize={defaultSize} 
-                            illustrationBar={openIllustrationBar} 
-                            visualizerBarSize={visualizerBarSize} 
-                            analyticsBar={analyticsBar} 
-                            openCustomerBar={openCustomerBar} 
-                            commentBar={commentBar} 
-                            illustrationBar={illustrationBar} 
-                            customerBarSize={customerBarSize} 
-                            companyBarSize={companyBarSize}
-                            type={type} />
-                      ) : familyItemMode === true ? (
-                          <FamilyItemContainer 
-                            item={selectedAssetsFamilyItem} 
-                            onClose={onCloseFamilyItemMode} 
-                            analyticsBar={analyticsBar} 
-                            chartBar={chartBar} 
-                            illustrationBar={illustrationBar}
-                            visualizerBarSize={visualizerBarSize} 
-                            type={type}
-                          />
-                      ) : (
+              {
+                pdfViewModal &&
+                <Modal open={pdfViewModal} className={classes.fullscreenChartsModal} >
+                  <Paper className={classes.fullscreenCharts} square>
+                    <PdfViewer display={'true'} />
+                  </Paper>
+                </Modal>
+              } 
+              {
+                selectedCompanies.length > 0 || type === 9 || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE')
+                ?
+                  chartBar == true ? (
+                    connectionBoxView === true ? (
+                        <PdfViewer
+                          display={"false"}
+                          fullScreen={false}
+                          resize={resizeFrame}
+                        />  
+                    ) : lifeSpanMode === true ? (
                         <InventionVisualizer 
                           defaultSize={defaultSize} 
                           illustrationBar={openIllustrationBar} 
@@ -297,46 +314,65 @@ const AssetDetailsContainer = ({
                           customerBarSize={customerBarSize} 
                           companyBarSize={companyBarSize}
                           type={type} />
-                      )
+                    ) : familyItemMode === true ? (
+                        <FamilyItemContainer 
+                          item={selectedAssetsFamilyItem} 
+                          onClose={onCloseFamilyItemMode} 
+                          analyticsBar={analyticsBar} 
+                          chartBar={chartBar} 
+                          illustrationBar={illustrationBar}
+                          visualizerBarSize={visualizerBarSize} 
+                          type={type}
+                        />
+                    ) : (
+                      <InventionVisualizer 
+                        defaultSize={defaultSize} 
+                        illustrationBar={openIllustrationBar} 
+                        visualizerBarSize={visualizerBarSize} 
+                        analyticsBar={analyticsBar} 
+                        openCustomerBar={openCustomerBar} 
+                        commentBar={commentBar} 
+                        illustrationBar={illustrationBar} 
+                        customerBarSize={customerBarSize} 
+                        companyBarSize={companyBarSize}
+                        type={type} />
+                    )
                   )
+                  :
+                  '' 
                 :
-                '' 
-              :
-                '' 
-            }
-          </div>
-          <div
-            className={`${classes.commentContainer} ${
-              isDrag === true ? classes.notInteractive : classes.isInteractive
-            }`}
-            /* onMouseOver={event => handleIllustrationButton(event, true)}
-            onMouseLeave={event => handleIllustrationButton(event, false)} */
-          >
-            {
-              selectedCompanies.length > 0 || type === 9 || (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE')
-              ?
-                analyticsBar === true 
-                ? 
-                  (
-                    connectionBoxView === true ? (
-                      <ConnectionBox display={"false"} assets={illustrationData} type={type}/>
-                    ) : openIllustrationBar === true ? (
-                        <>
-                            {      
-                              lifeSpanMode === true ? (
-                                <LifeSpanContainer 
-                                  chartBar={chartBar} 
-                                  openCustomerBar={openCustomerBar} 
-                                  visualizerBarSize={visualizerBarSize}
-                                  type={type}/>
-                              ) :
-                              familyMode && (
-                                  <LegalEventsContainer
-                                    events={selectedAssetsLegalEvents} 
-                                    type={type}/>
-                              ) 
-                            }
-                        </>
+                  '' 
+              }
+            </div>
+            <div
+              className={`${classes.commentContainer} ${
+                isDrag === true ? classes.notInteractive : classes.isInteractive
+              }`}
+              /* onMouseOver={event => handleIllustrationButton(event, true)}
+              onMouseLeave={event => handleIllustrationButton(event, false)} */
+            >
+              {
+                selectedCompanies.length > 0 || type === 9 || (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE')
+                ?
+                  analyticsBar === true 
+                  ? 
+                    openIllustrationBar === true ? (
+                      <>
+                        {      
+                          lifeSpanMode === true ? (
+                            <LifeSpanContainer 
+                              chartBar={chartBar} 
+                              openCustomerBar={openCustomerBar} 
+                              visualizerBarSize={visualizerBarSize}
+                              type={type}/>
+                          ) :
+                          familyMode && (
+                              <LegalEventsContainer
+                                events={selectedAssetsLegalEvents} 
+                                type={type}/>
+                          ) 
+                        }
+                      </>
                     ) : (
                       <LifeSpanContainer 
                         chartBar={chartBar} 
@@ -344,24 +380,15 @@ const AssetDetailsContainer = ({
                         visualizerBarSize={visualizerBarSize}
                         type={type}/>
                     )
-                  ) 
+                  : 
+                    ''
                 : 
                   ''
-                  /* (
-                    <LifeSpanContainer 
-                      chartBar={chartBar} 
-                      openCustomerBar={openCustomerBar} 
-                      visualizerBarSize={visualizerBarSize}
-                      type={type}/>
-                  ) */
-              : 
-                ''
-            }
-          </div>
-        </SplitPane>
-      ) : (
-        ""
-      )}      
+              }
+            </div>
+          </SplitPane>
+        ) 
+      }    
     </div>
   ); 
 };

@@ -805,12 +805,6 @@ const ActionMenu = (props) => {
                     </ListItemIcon>
                     <ListItemText>Share Selected Assets</ListItemText>
                 </MenuItem>
-                <MenuItem  onClick={props.onClickSale} className={`iconItem ${display_sales_assets === true ? 'active' : ''}`}>
-                    <ListItemIcon>
-                        <Avatar  src="https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png" variant="square" style={{width: 21, height: 21}}/>
-                    </ListItemIcon>
-                    <ListItemText>Assets for Sale</ListItemText>
-                </MenuItem>
                 {
                     loadingUSPTO && (
                         <MenuItem className={`iconItem`}>
@@ -904,7 +898,7 @@ const ActionMenu = (props) => {
                                     </ListItemIcon>
                                     <ListItemText>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</ListItemText>
                                 </MenuItem>
-                }
+                }                
                 <Divider />
                 <AssetSwitchButton
                     click={handleChangeLayout}
@@ -923,6 +917,19 @@ const ActionMenu = (props) => {
                     <ListItemText>Correct Correspondence</ListItemText>
                 </MenuItem>
                 <Divider />
+                <MenuItem  onClick={() => props.onClickSale(1)} className={`iconItem ${display_sales_assets === true ? 'active' : ''}`}>
+                    <ListItemIcon>
+                        <Avatar  src="https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png" variant="square" style={{width: 21, height: 21}}/>
+                    </ListItemIcon>
+                    <ListItemText>Our Assets for Sale</ListItemText>
+                </MenuItem>                
+                <Divider />
+                <MenuItem  onClick={() => props.onClickSale(2)} className={`iconItem ${display_sales_assets === true ? 'active' : ''}`}>
+                    <ListItemIcon>
+                        <Avatar  src="https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png" variant="square" style={{width: 21, height: 21}}/>
+                    </ListItemIcon>
+                    <ListItemText>Other Assets Available for Purchase</ListItemText>
+                </MenuItem>
             </Menu>
             <Modal
                 disableBackdropClick={false}

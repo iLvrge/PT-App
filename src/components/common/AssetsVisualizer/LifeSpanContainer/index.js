@@ -46,7 +46,7 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
     const selectedAssetAssignments = useSelector( state => state.patenTrack2.assetTypeAssignments.selected )
     const selectedAssetAssignmentsAll = useSelector( state => state.patenTrack2.assetTypeAssignments.selectAll )
     const connectionBoxView = useSelector( state => state.patenTrack.connectionBoxView)
-    const display_sales_assets = useSelector( state => state.patenTrack.display_sales_assets)
+    const display_sales_assets = useSelector( state => state.patenTrack2.display_sales_assets)
 
     useEffect(() => {
         if(selectedRow.length  === 0) {
@@ -109,7 +109,7 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
                         customers =
                           selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
                         assignments =
-                          selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
+                          selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;  
 
                         if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
                              if( auth_token != null ) {
@@ -165,13 +165,14 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
                 form.append('customers', JSON.stringify(selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies))
                 form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
                 form.append('type', selectedCategory)
+                form.append('other_mode', display_sales_assets)
                 PatenTrackApi.cancelLifeSpanRequest()
                 const {data} = await PatenTrackApi.getAssetLifeSpan(form) 
                 dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, data))
             } 
         }
         getChartData()
-    }, [selectedCategory,  selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token ])
+    }, [selectedCategory,  selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_sales_assets ])
 
     useEffect(() => {
         if(assetIllustration != null && Object.keys(assetIllustration).length > 0) {

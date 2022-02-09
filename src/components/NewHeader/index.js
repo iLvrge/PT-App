@@ -362,9 +362,10 @@ const NewHeader = () => {
     }
   }
 
-  const onHandleSaleAssets = useCallback(() => {
+  const onHandleSaleAssets = useCallback((type) => {
     if(process.env.REACT_APP_ENVIROMENT_MODE === 'PRO') {
       dispatch(setIsSalesAssetsDisplay(!display_sales_assets))
+      /* dispatch(setSalesAssetsType(type)) */
       dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
       dispatch(setSelectedAssetsPatents([]))
       dispatch(setAssetFamily([]))

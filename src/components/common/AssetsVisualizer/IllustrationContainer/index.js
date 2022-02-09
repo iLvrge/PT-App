@@ -225,10 +225,8 @@ const IllustrationContainer = ({
   }
 
   const handleConnectionBox = useCallback((obj) => {
-    console.log('ONCLICK HANDLE handleConnectionBox', obj)
     setLineId(obj.id)
     if (typeof obj.popup != 'undefined') { 
-      console.log("linkId", linkId, obj.popuptop)     
       if((linkId != obj.popuptop) || (obj.id != lineId && linkId == obj.popuptop) ) {
         setLinkId(obj.popuptop)
         setClick(1)
@@ -261,13 +259,13 @@ const IllustrationContainer = ({
         dispatch(
           setConnectionBoxView(true)
         )
-        checkChartAnalytics({ 
+        /* checkChartAnalytics({ 
           document: obj.document1, 
           form: obj.document1_form, 
           agreement: obj.document1_agreement 
-        }, obj)  
+        }, obj)  */ 
+        checkChartAnalytics(null, null, true)
       } else {
-        console.log("COMES in NULL")
         setLinkId(null)
         dispatch(
           setConnectionBoxView(false)
@@ -287,6 +285,7 @@ const IllustrationContainer = ({
             }
           )
         )
+        checkChartAnalytics(null, null, false)
         /* if(click == 1) {
           setClick(2)
           setConnectionBoxView(false)

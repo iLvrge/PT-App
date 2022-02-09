@@ -250,7 +250,7 @@ const GlobalLayout = (props) => {
             setOtherPartyOpenBar( false ) // parties
             setCustomerOpenBar( true ) //assets
             setAssignmentOpenBar( true ) //transactions
-            setVisualizerBarSize('48%')
+            setVisualizerBarSize('48.7%')
 
             setChartBar(true)
             setAnalyticsBar(true)
@@ -295,6 +295,7 @@ const GlobalLayout = (props) => {
         } else if((openChartBar === true && openAnalyticsBar === false) || ( openChartBar === false && openAnalyticsBar === false )) {
             barSize = 0         
         }
+        console.log('setIllustrationBarSize', openChartBar, openAnalyticsBar)
         setIllustrationBarSize(barSize) 
     }, [ openChartBar, openAnalyticsBar ])
 
@@ -565,20 +566,20 @@ const GlobalLayout = (props) => {
     }
 
     const changeVisualBar = (chart, analytics, comment, illustration) => {
-        let barOpen = true, barSize = '48%'        
+        let barOpen = true, barSize = '48.7%'        
         if(chart === false && analytics === false && (comment === true || illustration === true)){
             barSize = '0%'
             barOpen = false
         } else if (comment === false && illustration === false && ( chart === true ||  analytics === true )) {
             barSize = '100%'
         }
-        if(barSize === '48%' && ((comment === true || illustration === true) || (chart === true || analytics === true)) ){
-            if( visualizerBarSize !== '0%' &&  visualizerBarSize !== '48%' &&  visualizerBarSize !== '100%' ) {
+        if(barSize === '48.7%' && ((comment === true || illustration === true) || (chart === true || analytics === true)) ){
+            if( visualizerBarSize !== '0%' &&  visualizerBarSize !== '48.7%' &&  visualizerBarSize !== '100%' ) {
                 barSize = visualizerBarSize
             }
         }
         
-        if(chart === true && barOpen === true && barSize == '48%') {
+        if(chart === true && barOpen === true && barSize == '48.7%') {
             checkPDFHeight()
         }    
         editorBar()
@@ -734,7 +735,7 @@ const GlobalLayout = (props) => {
             setVisualizeOpenBar( true )
             setVisualizerBarSize(prevItem =>{
                 if(prevItem == '0%') {
-                    return  '48%'
+                    return  '48.7%'
                 } else {
                     return prevItem
                 }
@@ -745,7 +746,7 @@ const GlobalLayout = (props) => {
             setVisualizeOpenBar( true )
             setVisualizerBarSize(prevItem =>{
                 if(prevItem == '0%') {
-                    return  '48%'
+                    return  '48.7%'
                 } else {
                     return prevItem
                 }
@@ -761,7 +762,7 @@ const GlobalLayout = (props) => {
             setVisualizeOpenBar( true )
             setVisualizerBarSize(prevItem =>{
                 if(prevItem == '0%') {
-                    return  '48%'
+                    return  '48.7%'
                 } else {
                     return prevItem
                 }
@@ -773,19 +774,20 @@ const GlobalLayout = (props) => {
                 setIllustrationBarSize('50%')
             }
         } else if( typeof usptoMode != undefined && usptoMode === false ) {
-            let barSize = '48%'
-            if(openChartBar === false && openAnalyticsBar === false && (openCommentBar === true || openIllustrationBar === true)){
-                barSize = '0%'
+            console.log('usptoMode', usptoMode, openChartBar, openAnalyticsBar, openCommentBar, openIllustrationBar, illustrationBarSize)
+            let barSize = '0%'
+            if((openChartBar === true || openAnalyticsBar === true) && (openCommentBar === true || openIllustrationBar === true)){
+                barSize = '48.7%'
             } else if (openCommentBar === false && openIllustrationBar === false && ( openChartBar === true ||  openAnalyticsBar === true )) {
                 barSize = '100%'
+            }
+            if(barSize === '0%') {
+                setVisualizeOpenBar( false )
             }
             setVisualizerBarSize(barSize)
         }
     }
 
-    const changeBarSizeOnFly = (size) => {
-        
-    }
 
     const handleOpenSettings = useCallback(() => {
         history.push('/settings/templates')

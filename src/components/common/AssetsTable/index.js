@@ -192,44 +192,6 @@ const AssetsTable = ({
   const link_assets_sheet_type = useSelector(state => state.patenTrack2.link_assets_sheet_type)
   const switch_button_assets = useSelector(state => state.patenTrack2.switch_button_assets)
   const foreignAssets = useSelector(state => state.patenTrack2.foreignAssets)
-  
-  useEffect(() => {
-    
-    if(clipboard_assets.length > 0 && clipboard_assets.length != selectedAssets.length ) {      
-      setSelectedAssets([...clipboard_assets])
-    }
-  }, [ clipboard_assets ])  
-
-  useEffect(() => {
-    if(move_assets.length > 0 && move_assets.length != movedAssets.length ) {      
-      setMovedAssets([...move_assets])
-    }
-  }, [ move_assets ])  
-
-  useEffect(() => {
-    assetsAssignmentRef.current = assetTypeAssignmentAssets
-  }, [assetTypeAssignmentAssets])
-
-  useEffect(() => {
-    dispatch(setClipboardAssets(selectedAssets))
-  }, [selectedAssets])
-
-  useEffect(() => {
-    dispatch(setMoveAssets(movedAssets))
-  }, [movedAssets])
-
-  useEffect(() => {
-    if(callByAuthLogin === true) {
-      if(google_auth_token !== null && google_auth_token != '' && google_profile !== null && google_profile != '' && link_assets_sheet_type.type !== null && link_assets_sheet_type.asset !== null){
-        setCallByAuth(false)
-        const form = new FormData()
-        form.append('access_token', google_auth_token.access_token)
-        form.append('user_account', google_profile.email)
-        dispatch(linkWithSheet(link_assets_sheet_type.type, form))
-      }
-    }
-  }, [callByAuthLogin, google_auth_token, google_profile])
-
 
   const Clipboard = () => {
     return (
@@ -246,7 +208,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     )
   }
 
-  const dropdownList = [
+  const actionList = [
     {
       id: 99,
       name: 'No action' ,
@@ -302,6 +264,56 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       icon: <Clipboard />
     } */
   ]
+
+  let dropdownList = [...actionList]
+
+  useEffect(() => {
+    if(display_sales_assets === true) {
+      dropdownList.splice(3,2)
+    } else {
+      dropdownList = [...actionList]
+    }
+  }, [display_sales_assets])
+    
+  useEffect(() => {
+    
+    if(clipboard_assets.length > 0 && clipboard_assets.length != selectedAssets.length ) {      
+      setSelectedAssets([...clipboard_assets])
+    }
+  }, [ clipboard_assets ])  
+
+  useEffect(() => {
+    if(move_assets.length > 0 && move_assets.length != movedAssets.length ) {      
+      setMovedAssets([...move_assets])
+    }
+  }, [ move_assets ])  
+
+  useEffect(() => {
+    assetsAssignmentRef.current = assetTypeAssignmentAssets
+  }, [assetTypeAssignmentAssets])
+
+  useEffect(() => {
+    dispatch(setClipboardAssets(selectedAssets))
+  }, [selectedAssets])
+
+  useEffect(() => {
+    dispatch(setMoveAssets(movedAssets))
+  }, [movedAssets])
+
+  useEffect(() => {
+    if(callByAuthLogin === true) {
+      if(google_auth_token !== null && google_auth_token != '' && google_profile !== null && google_profile != '' && link_assets_sheet_type.type !== null && link_assets_sheet_type.asset !== null){
+        setCallByAuth(false)
+        const form = new FormData()
+        form.append('access_token', google_auth_token.access_token)
+        form.append('user_account', google_profile.email)
+        dispatch(linkWithSheet(link_assets_sheet_type.type, form))
+      }
+    }
+  }, [callByAuthLogin, google_auth_token, google_profile])
+
+
+  
 
   const openGoogleWindow = () => {
       if(googleLoginRef.current != null) {
