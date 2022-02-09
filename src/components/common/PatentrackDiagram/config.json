@@ -39,7 +39,7 @@
       "opacity": 0.75,
       "fontColor": "#BDBDBD",
       "fontWeight": 700,
-      "headerSize": "0.9rem",
+      "headerSize": "1rem",
       "datesSize": "0.75rem",
       "maxLineLength": 0.9,
       "numberOfLines": 2,

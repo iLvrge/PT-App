@@ -40,7 +40,6 @@ class PatentTopTitle extends React.Component {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift') ) {
       return;
     }
-    console.log(event.currentTarget)
     this.setState({
       anchorEl: open === true ? event.currentTarget : null
     }) 

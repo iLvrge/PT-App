@@ -448,6 +448,12 @@ export default makeStyles(theme => ({
             '& div':{
               marginLeft: '5px'
             },
+            '& .img-holder': {
+              display: 'inline-block',
+              width: 50,
+              height: 50,
+              backgroundColor: '#fff'
+            },
             '& img':{
               width: '3.5rem',
               /*width: '5rem',

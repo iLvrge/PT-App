@@ -38,8 +38,8 @@ const options = {
                     <div class="textColumn small-font">${moment(new Date(data.rawData.start)).format(DATE_FORMAT)}</div>
                 </div>
             </div>
-            <div class="second">
-                <img class="${data.rawData.logo == '' || data.rawData.logo == null ? 'no-image' : ''}" src='${data.rawData.logo !== '' && data.rawData.logo !== null ?  data.rawData.logo : CDN_PATH_LOGO + NO_IMAGE_AVAILABLE}' />
+            <div class="second"><span class="img-holder">
+                <img class="${data.rawData.logo == '' || data.rawData.logo == null ? 'no-image' : ''}" src='${data.rawData.logo !== '' && data.rawData.logo !== null ?  data.rawData.logo : CDN_PATH_LOGO + NO_IMAGE_AVAILABLE}' /></span>
             </div>`
     },  
 }

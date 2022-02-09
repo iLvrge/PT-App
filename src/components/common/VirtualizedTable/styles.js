@@ -73,11 +73,12 @@ const styles = makeStyles((theme) => ({
       '& .MuiTableCell-root.highlightColumn': {
         '& span': {
           color: '#fff',
-          backgroundColor: '#2a2a2a !important',
-          borderRadius: 12,
-          padding: 6,
+          backgroundColor: '#228de8 !important',
+          borderRadius: 10,
+          padding: '5px 10px',
+          lineHeight: 1,
           '&:hover':{
-            backgroundColor: '#2b2b2b !important'
+            backgroundColor: '#228de8 !important'
           }
         }
       }      
@@ -85,7 +86,7 @@ const styles = makeStyles((theme) => ({
     '&.highlightWithCol.Mui-selected':{
       '& .MuiTableCell-root.highlightColumn': {
         '& span': {
-          color: '#e60000',
+          color: '#ffaa00',
         }
       }
     },

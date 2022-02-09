@@ -35,7 +35,7 @@ const LegalEventsContainer = ({ events, type }) => {
         ?
           <span className={classes.containerRelative}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.fees)} showZero={false}></Badge></span>
         :
-            label === 'F.Citations'
+            label === 'Acknowledged By'
             ?
               <span className={classes.containerRelative}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.citations)} showZero={false}></Badge></span>
             :
@@ -60,7 +60,7 @@ const LegalEventsContainer = ({ events, type }) => {
           <>
             <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
               {
-                [`M.Fees`, `F.Citations`, /* 'Events',  */`PTAB`, `Litigation`].map( (item, index) => (
+                [`M.Fees`, `Acknowledged By`, /* 'Events',  */`PTAB`, `Litigation`].map( (item, index) => (
                   <Tab
                     key={index}
                     className={classes.tab} 

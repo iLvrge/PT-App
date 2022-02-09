@@ -6,6 +6,7 @@ export default makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         flex:1,
+        backgroundColor: '#25272B',
         overflow: 'hidden auto',
         '& .MuiTableCell-root .MuiSelect-select.MuiSelect-select':{
             paddingRight: 0 

@@ -309,6 +309,7 @@ class PatentrackDiagram extends React.Component {
         NameChange: true,
         Correct: true
       },
+      sliderUpdate: false,
       parentWidth: null,
       originalWidth: null,
       previousParentWidth: null,
@@ -337,7 +338,7 @@ class PatentrackDiagram extends React.Component {
 
   componentDidUpdate() {
     if (this.state.parentWidth !== this.state.previousParentWidth) {
-      this.setState({ previousParentWidth: this.state.parentWidth, originalWidth: this.state.parentWidth });
+      this.setState({ previousParentWidth: this.state.parentWidth});
     }
   }
 
@@ -349,7 +350,7 @@ class PatentrackDiagram extends React.Component {
   }
 
   changeParentWidth(percentage) {
-    //this.setState({parentWidth : this.state.originalWidth + ((this.state.originalWidth * percentage) / 100)})
+    this.setState({sliderUpdate: true, parentWidth : parseFloat(this.state.originalWidth) + parseFloat(this.state.originalWidth * percentage / 100)})
   }
 
   getTitleDivHeight() {
@@ -674,7 +675,8 @@ class PatentrackDiagram extends React.Component {
         this.state.previousParentWidth &&
         this.state.parentWidth > this.state.previousParentWidth &&
         this.state.parentWidth > width) ||
-      (this.state.parentWidth && this.width > width)
+      (this.state.parentWidth && this.width > width) || 
+        this.state.sliderUpdate === true
     ) {
       this.config.node.gap.x = Math.max(
         config.node.gap.x,
@@ -690,7 +692,9 @@ class PatentrackDiagram extends React.Component {
     } else {
       this.width = width;
     }
-
+    if(this.state.originalWidth === null) {
+      this.setState({originalWidth: this.width})
+    }
     this.height =
       (dheight + 1) * (this.config.node.height + this.config.node.gap.y) +
       this.config.node.topOffset +
@@ -704,8 +708,6 @@ class PatentrackDiagram extends React.Component {
     return this.config.title.attr.split('.').reduce(function(a_, b_) {
       return a_[b_];
     }, this.props.data);
-
-    return 'title';
   }
 
   extendLineParameters(startType_, x1_, y1_, x2_, y2_) {
