@@ -170,19 +170,19 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
             let image = '';
             switch(parseInt(tab)) {
                 case 1:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/acquisition.png'
+                    image =  'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/acquisition.svg'
                     break;
                 case 2:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png'
+                    image =  'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/sales.svg'
                     break;
                 case 3:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licensein.png'
+                    image =  'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licensein.svg'
                     break;
                 case 4:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licenseout.png'
+                    image =  'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licenseout.svg'
                     break;
                 case 5:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+                    image =  'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/secure.svg'
                     break;
                 case 6:
                     image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png'
@@ -191,25 +191,25 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
                     image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png'
                     break;
                 case 8:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/options.png'
+                    image =  'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/options.svg'
                     break;
                 case 9:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/courtorder.png'
+                    image =  'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/courtorder.svg'
                     break;
                 case 10:
                     image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png'
                     break;
                 case 11:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/release.png'
+                    image =  'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/release.svg'
                     break;
                 case 12:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+                    image =  'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/secure.svg'
                     break;
                 case 13:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+                    image =  'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/secure.svg'
                     break;
                 case 15:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png'
+                    image =  'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/correction.svg'
                     break;
                 case 14:
                 default:

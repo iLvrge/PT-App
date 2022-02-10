@@ -129,19 +129,19 @@ export default makeStyles(theme => ({
         borderColor: indigo[500],
       },
       '& .vis-dot.asset-type-acquisitions,  .cluster-acquisitions': {
-        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/acquisition.png)',
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/acquisition.svg)',
       },
       '& .vis-dot.asset-type-sales, .cluster-sales': {
-        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png)',
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/sales.svg)',
       },
       '& .vis-dot.asset-type-licenseIn, .cluster-licenseIn': {
-        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licensein.png)',
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licensein.svg)',
       },
       '& .vis-dot.asset-type-licenseOut, .cluster-licenseOut': {
-        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licenseout.png)',
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licenseout.svg)',
       },
       '& .vis-dot.asset-type-lending, .vis-dot.asset-type-borrowing, .asset-type-securitiesOut, .asset-type-securitiesIn, .cluster-lending, .cluster-borrowing, .cluster-securitiesIn, .cluster-securitiesOut': {
-        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png)',
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/secure.svg)',
       },
       '& .vis-dot.asset-type-mergersIn, .cluster-mergersIn': { 
         backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png)',
@@ -149,14 +149,17 @@ export default makeStyles(theme => ({
       '& .vis-dot.asset-type-mergersOut, .cluster-mergersOut': {
         backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png)',
       },
+      '& .vis-dot.asset-type-correct, .cluster-correct': {
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/correction.svg)',
+      },
       '& .vis-dot.asset-type-options, .cluster-options': {
-        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/options.png)',
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/options.svg)',
       },
       '& .vis-dot.asset-type-courtOrders, .cluster-courtOrders': {
-        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/courtorder.png)',
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/courtorder.svg)',
       },
       '& .vis-dot.asset-type-releaseOut, .vis-dot.asset-type-releaseIn, .cluster-releaseIn, .cluster-releaseOut': {
-        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/release.png)',
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/release.svg)',
       },
       '& .vis-dot.asset-type-employees, .cluster-employees': {
         backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png)',
