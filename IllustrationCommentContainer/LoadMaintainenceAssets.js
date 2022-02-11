@@ -2,10 +2,10 @@ import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
 import { Paper, TextField, InputLabel } from "@material-ui/core";
-import Loader from "../Loader";
+import Loader from "../src/components/common/Loader";
 import useStyles from "./styles";
-import VirtualizedTable from "../VirtualizedTable";
-import { numberWithCommas, applicationFormat } from "../../../utils/numbers";
+import VirtualizedTable from "../src/components/common/VirtualizedTable";
+import { numberWithCommas, applicationFormat } from "../src/utils/numbers";
 
 const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
     const classes = useStyles();

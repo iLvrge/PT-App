@@ -96,7 +96,8 @@ const AssetsTable = ({
     headerRowDisabled,
     isMobile,
     fileBar,
-    driveBar
+    driveBar,
+    changeVisualBar
   }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -478,7 +479,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       secondaryFormat: applicationFormat,
       align: "center",
       badge: true,
-      /* style: true,
+      /* styleCss: true,
       justifyContent: 'center' */
       /* textBold: true */
     },
@@ -821,6 +822,12 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           dispatch(linkWithSheetSelectedAsset('products', encodeURIComponent(grant_doc_num  == '' ? `US${applicationFormat(appno_doc_num)}` : `US${numberWithCommas(grant_doc_num)}`)))     
         }
         callSelectedAssets({ grant_doc_num, appno_doc_num, asset });
+        if(openChartBar === false && openAnalyticsBar === false) {
+          /**
+           * Change Visualbarwidth
+           */
+          changeVisualBar('0%')
+        }
         dispatch(setChildSelectedAssetsPatents([]));
         dispatch(setSelectedAssetsTransactions([]));
         //dispatch(setDocumentTransaction([]));
@@ -872,8 +879,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         dispatch(assetLegalEvents(appno_doc_num, grant_doc_num));
         dispatch(assetFamily(appno_doc_num));
         dispatch(setSlackMessages({ messages: [], users: [] }));
-        const channelID = findChannelID(grant_doc_num != '' ? grant_doc_num : appno_doc_num)
-        console.log("channelID", channelID)
+        const channelID = findChannelID(grant_doc_num != '' ? grant_doc_num : appno_doc_num)        
         if( channelID != '') {
           dispatch(setChannelID({channel_id: channelID}))
         }
@@ -914,9 +920,12 @@ const resetAll = () => {
     dispatch(setLinkAssetData([]))
     dispatch(setLinkAssetListSelected([]))
     dispatch(resetAssetDetails())
-    /* if(openChartBar === true || openAnalyticsBar === true) {
-      closeAnalyticsAndCharBar()
-    } */
+    if(openChartBar === false && openAnalyticsBar === false) {
+      /**
+       * Change Visualbarwidth
+       */
+      changeVisualBar('0%')
+    }
 }
 
 /* const onDoubleClick = (e, row, flag) => {

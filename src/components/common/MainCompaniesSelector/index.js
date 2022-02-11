@@ -105,7 +105,7 @@ const COLUMNS = [
         staticIcon: '',
         dataKey: 'no_of_activities',
         format: numberWithCommas,
-        style: true,
+        styleCss: true,
         headerAlign: 'right',
         justifyContent: 'flex-end'
     },
@@ -117,7 +117,7 @@ const COLUMNS = [
         dataKey: 'no_of_parties',
         format: numberWithCommas,
         headerAlign: 'right',
-        style: true,
+        styleCss: true,
         justifyContent: 'flex-end'
     },
     {
@@ -128,7 +128,7 @@ const COLUMNS = [
         dataKey: 'no_of_inventor',
         format: numberWithCommas,
         headerAlign: 'right',
-        style: true,
+        styleCss: true,
         justifyContent: 'flex-end'
     },
     {
@@ -139,7 +139,7 @@ const COLUMNS = [
         dataKey: 'no_of_transactions',
         format: numberWithCommas,
         headerAlign: 'right',
-        style: true,
+        styleCss: true,
         justifyContent: 'flex-end'
     },
     {
@@ -150,7 +150,7 @@ const COLUMNS = [
         dataKey: 'no_of_assets',
         format: numberWithCommas,
         headerAlign: 'right',
-        style: true,
+        styleCss: true,
         justifyContent: 'flex-end'   
     },
     {
@@ -161,7 +161,7 @@ const COLUMNS = [
         staticIcon: '',
         format: numberWithCommas,
         headerAlign: 'right',
-        style: true,
+        styleCss: true,
         justifyContent: 'flex-end'
     }
 ] 

@@ -66,9 +66,9 @@ function ConnectionBox(props) {
     const info = assetData.popup && assetData.popup.filter(p => {
       return p.id == props.popup.id
     })
-    const index = assetData.popup && assetData.popup.findIndex(x => x.id === props.popup.id)
+    
     return(
-      <div key={`${props.keyIndex}_${props.key}`} className={classes.rootContainer}>
+      <div className={classes.rootContainer}>
       {
         info && info != null && info.length > 0 && Object.keys(info[0]).length > 0 
         ?
@@ -103,7 +103,7 @@ function ConnectionBox(props) {
                   <ShowText classes={classes.red} data={`Assignee's Address`}/>
                   {
                     info[0].patAssigneeName.map( (assignee, index) => (
-                      <div className={index > 0 && index < info[0].patAssigneeName.length ? classes.marginBottom : ''}>
+                      <div  key={`address-${index}`}className={index > 0 && index < info[0].patAssigneeName.length ? classes.marginBottom : ''}>
                         <ShowText data={info[0].patAssigneeAddress1[index]}/>
                         <ShowText data={`${info[0].patAssigneeCity[index]} ${info[0].patAssigneeState[index]} ${info[0].patAssigneePostcode[index]}`}/>
                       </div>
@@ -183,7 +183,7 @@ function ConnectionBox(props) {
     <div className={classes.container}>
       {
         Object.keys(boxData).length > 0 &&
-        boxData.popup.map((pop, index) => <RetreieveBoxData key={index} keyIndex={pop} popup={pop}/>)
+        boxData.popup.map((popup, index) => <RetreieveBoxData key={`${index} - ${popup.id}`} popup={popup}/>)
       }                 
     </div>
   )

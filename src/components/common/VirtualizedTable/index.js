@@ -237,7 +237,7 @@ const VirtualizedTable = ({
         onClick,
         list,
         width,
-        style,
+        styleCss,
         justifyContent,
         fontSize,
         selectedFromChild,
@@ -350,7 +350,7 @@ const VirtualizedTable = ({
           style={{
             height: rowHeight,
             paddingLeft: paddingLeft != undefined ? paddingLeft : "inherit",
-            justifyContent: typeof style !== 'undefined' && style === true ? justifyContent : "inherit",
+            justifyContent: typeof styleCss !== 'undefined' && styleCss === true ? justifyContent : "inherit",
             paddingRight: typeof paddingRight !== 'undefined' ? paddingRight : "inherit",
             textDecoration: typeof rowData['underline'] !== 'undefined' && rowData['underline'] === true ? 'underline' : 'inherit',
           }}
@@ -618,9 +618,8 @@ const VirtualizedTable = ({
         selectedRow = true
 		  }
       return (      
-        <>
+        <React.Fragment key={key}>
         <TableRow
-          key={key}
           className={clsx(className, `rowIndex_${index}`, {['noBorderLines']: typeof noBorderLines !== 'undefined' ? true : false}, { ['highlightRow']: highlightRow !== undefined && highlightRow === true && selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey]) ? true : false }, {['highlightWithCol']: highlightRow !== undefined && highlightRow === true && ( (optionalKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[optionalKey])) || (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey]))) ? true : false }) }
           style={{
             ...style,
@@ -681,7 +680,7 @@ const VirtualizedTable = ({
         {
           childComponent
         }
-      </>
+      </React.Fragment>
     )
   },
     [
@@ -866,7 +865,7 @@ const VirtualizedTable = ({
               rowClassName={getRowClassName}
               onScroll={onScroll}
             >
-              {columns.map(({ dataKey, fullWidth, ...other }, index) => {
+              {columns.map(({ dataKey, fullWidth, style, ...other }, index) => {
                 return (
                   <Column
                     key={dataKey}

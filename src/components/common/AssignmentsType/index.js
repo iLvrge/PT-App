@@ -277,6 +277,7 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
             } else {
                 if( assetTypesSelected.length > 0 ) {
                     setSelectItems(assetTypesSelected)
+                    setSelectedRow(assetTypesSelected) /**Only one row selection in this component */
                 } else if (assetTypesSelectAll === true) {
                     setSelectAll(true)
                 }

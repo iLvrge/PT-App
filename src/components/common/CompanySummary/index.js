@@ -33,7 +33,7 @@ const CompanySummary = () => {
             minWidth: 60,
             label: '',
             dataKey: 'number', 
-            style: true,
+            styleCss: true,
             justifyContent: 'flex-end' 
         }
     ]

@@ -530,6 +530,7 @@ const GlobalScreen = ({
                                                     openAnalyticsBar={openAnalyticsBar}
                                                     openAnalyticsAndCharBar={openAnalyticsAndCharBar}
                                                     closeAnalyticsAndCharBar={closeAnalyticsAndCharBar}
+                                                    changeVisualBar={setVisualizerBarSize}
                                                 />
                                             } 
                                             
