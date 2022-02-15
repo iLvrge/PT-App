@@ -52,7 +52,7 @@ function Groups() {
                 startIcon={<AddIcon className={classes.icon} />}
                 className={classes.btnGroup}
             >
-                Add a new Group
+                Add a New Group
             </Button>
             <Dialog open={openDialog} onClose={handleClose} aria-labelledby="form-dialog-title" className={classes.dialog}>
                 <DialogContent>

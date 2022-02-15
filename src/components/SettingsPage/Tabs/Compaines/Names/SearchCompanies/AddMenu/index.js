@@ -32,14 +32,14 @@ const AddMenu = ({ anchorEl, onClose, createParent, associateToParent }) => {
 
       <MenuItem onClick={onAction(createParent)}>
         <AddIcon className={classes.icon} />
-          Import outside a Group
+          Import Outside a Group
       </MenuItem>
 
       <NestedMenuItem
         label={
           <Fragment>
             <LayersIcon className={classes.icon} />
-            Import into Group
+            Import Into Group
           </Fragment>
         }
         parentMenuOpen={!!anchorEl}

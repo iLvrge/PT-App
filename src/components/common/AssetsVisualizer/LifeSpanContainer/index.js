@@ -6,6 +6,7 @@ import Tabs from '@material-ui/core/Tabs'
 import Paper from '@material-ui/core/Paper'
 
 import SpanVisualize from './SpanVisualize'
+import Acknowledgements from './Acknowledgements'
 import ConnectionBox from '../../ConnectionBox'
 import USPTOContainer from '../USPTOContainer'
 
@@ -50,11 +51,11 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
 
     useEffect(() => {
         if(selectedRow.length  === 0) {
-            setLifeSpanTabs(['Lifespan'])
+            setLifeSpanTabs(['Lifespan', 'Acknowledgements'])
             setSelectedTab(0)
         } else if( connectionBoxView === true || selectedRow.length > 0 ) {
             /*setLifeSpanTabs([ 'Lifespan', 'Assignment', 'USPTO' ])*/
-            setLifeSpanTabs([ 'Lifespan', 'Assignment'])
+            setLifeSpanTabs([ 'Lifespan', 'Acknowledgements', 'Assignment'])
             setSelectedTab(1)
         }
     }, [ connectionBoxView, selectedRow ])
@@ -225,8 +226,9 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
                 }
             </Tabs>
             {selectedTab === 0 && <SpanVisualize chart={selectedAssetsTransactionLifeSpan} chartBar={chartBar} visualizerBarSize={visualizerBarSize}/>}
-            {selectedTab === 1 && <ConnectionBox display={"false"} assets={assets}/>}
-            {selectedTab === 2 && <USPTOContainer assets={assets}/>}            
+            {selectedTab === 1 && <Acknowledgements/>}
+            {selectedTab === 2 && <ConnectionBox display={"false"} assets={assets}/>}
+            {selectedTab === 3 && <USPTOContainer assets={assets}/>}            
         </Paper> 
     )
 }

@@ -12,7 +12,7 @@ export default makeStyles(theme => ({
         },
         '& .MuiTab-root':{
             minWidth: 'inherit',
-            maxWidth: '100px'
+            maxWidth:  125
         },
         '& .MuiTab-wrapper':{
             whiteSpace: 'nowrap'
