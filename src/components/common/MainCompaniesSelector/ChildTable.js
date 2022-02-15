@@ -131,7 +131,7 @@ const COLUMNS = [
     }
 ]
 
-const ChildTable = ({ parentCompanyId, headerRowDisabled, itemCallback, groups }) => {
+const ChildTable = ({ parentCompanyId, headerRowDisabled, itemCallback, groups, companyColWidth }) => {
 
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -168,6 +168,16 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, itemCallback, groups }
             setHeaderColumns(headerColumns)
         }
     }, [selectedCategory])
+
+    useEffect(() => {
+        if(companyColWidth !== 171) {
+            let headerCol = [...headerColumns]
+            headerCol[1].width = companyColWidth
+            headerCol[1].minWidth = companyColWidth
+            headerCol[1].oldWidth = companyColWidth
+            setHeaderColumns(headerCol)
+        }
+    }, [companyColWidth])
 
     useEffect(() => {
         if(selectedCompaniesAll === false) {
@@ -298,7 +308,6 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, itemCallback, groups }
     const updateCompanySelection = (event, dispatch, row, checked, selected) => {
         if(checked != undefined) {
             let updateSelected = [...selected]
-            console.log('updateSelected=>child', updateSelected)
             if(!updateSelected.includes(parseInt( row.representative_id ))) {
                 if(selectedCategory === 'correct_names') {
                     updateSelected = [parseInt(row.representative_id)]
@@ -335,14 +344,10 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, itemCallback, groups }
                 //updateSelected.push(parseInt(parentCompanyId))
                 group.push(parseInt(parentCompanyId))
             } else {
-                console.log('ENTER')
                 if(updateSelected.includes(parseInt(parentCompanyId))){
-                    console.log('ENTER1')
-                    if(group.includes(parseInt(parentCompanyId))){    
-                        console.log('ENTER2')                    
+                    if(group.includes(parseInt(parentCompanyId))){ 
                         const findIndex = group.findIndex( item => parseInt(item) === parseInt(parentCompanyId))
                         if(findIndex !== -1) {
-                            console.log('ENTER3')
                             group.splice(findIndex, 1)
                         }
                     }                    
@@ -405,7 +410,7 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, itemCallback, groups }
             rows={companies}
             rowHeight={rowHeight}
             headerHeight={rowHeight} 
-            columns={COLUMNS}
+            columns={headerColumns}
             defaultSelectAll={selectedAll}
             onSelect={handleClickRow}
             onSelectAll={onHandleSelectAll}

@@ -185,6 +185,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const [ selectItems, setSelectItems] = useState( [] )
     const [ selectNames, setSelectNames] = useState( [] )
     const [ selectedRow, setSelectedRow] = useState( [] )   
+    const [ companyColWidth, setCompanyColWidth] = useState( COLUMNS[2].width )   
     const [ currentSelection, setCurrentSelection ] = useState(null)   
     const [ intialization, setInitialization ] = useState( false ) 
     const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
@@ -581,8 +582,11 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         let previousColumns = [...headerColumns]
         const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
         if( findIndex !== -1 ) {
-          previousColumns[findIndex].width =  previousColumns[findIndex].oldWidth + data.x
-          previousColumns[findIndex].minWidth = previousColumns[findIndex].oldWidth + data.x
+            previousColumns[findIndex].width =  previousColumns[findIndex].oldWidth + data.x
+            previousColumns[findIndex].minWidth = previousColumns[findIndex].oldWidth + data.x
+            if(findIndex === 2) {
+                setCompanyColWidth(previousColumns[findIndex].width)
+            }
         }
         setHeaderColumns(previousColumns)
     }, [ headerColumns ] )
@@ -591,7 +595,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         let previousColumns = [...headerColumns]
         const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
         if( findIndex !== -1 ) {
-          previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width 
+            previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width 
+            if(findIndex === 2) {
+                setCompanyColWidth(previousColumns[findIndex].width)
+            }
         }
         setHeaderColumns(previousColumns)
     }, [ headerColumns ] )
@@ -641,7 +648,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         childCounterColumn={`child_total`}
         forceChildWaitCall={true}
         renderCollapsableComponent={
-            <ChildTable parentCompanyId={currentSelection} headerRowDisabled={true} itemCallback={handleChildCallback} groups={selectedGroup}/>
+            <ChildTable parentCompanyId={currentSelection} headerRowDisabled={true} itemCallback={handleChildCallback} groups={selectedGroup} companyColWidth={companyColWidth}/>
         }
         defaultSortField={`original_name`}
         defaultSortDirection={`desc`}
