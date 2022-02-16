@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react"
+import React, { useEffect, useState, useCallback, createContext  } from "react"
 
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -48,6 +48,7 @@ const GlobalLayout = (props) => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
+    const BarContext = createContext()
     const [ openBar, setOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? false : true)
     const [ openTypeBar, setTypeOpenBar ] = useState(false)
     const [ openOtherPartyBar, setOtherPartyOpenBar ] = useState(false)
@@ -288,16 +289,16 @@ const GlobalLayout = (props) => {
 
 
 
-    useEffect(() => {
+    /* useEffect(() => {
         let barSize = '50%';
-        if(openChartBar === false && openAnalyticsBar === true) {
-            barSize = '100%'
-        } else if((openChartBar === true && openAnalyticsBar === false) || ( openChartBar === false && openAnalyticsBar === false )) {
+        if((openIllustrationBar === true || openCommentBar === true) && (openChartBar === false && openAnalyticsBar === false)) {
+            barSize = 0
+        } else if((openIllustrationBar === false && openCommentBar === false) || ( openChartBar === true || openAnalyticsBar === true )) {
             barSize = 0         
         }
-        console.log('setIllustrationBarSize', openChartBar, openAnalyticsBar)
+        console.log('setIllustrationBarSize', openChartBar, openAnalyticsBar, openIllustrationBar, openCommentBar, barSize)
         setIllustrationBarSize(barSize) 
-    }, [ openChartBar, openAnalyticsBar ])
+    }, [ openChartBar, openAnalyticsBar, openIllustrationBar, openCommentBar ]) */
 
     useEffect(() => {
         setDriveTemplateBarSize( driveTemplateMode === true ? 200 : 0)
