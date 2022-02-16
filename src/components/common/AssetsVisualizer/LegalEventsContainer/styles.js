@@ -452,10 +452,15 @@ export default makeStyles(theme => ({
               display: 'inline-block',
               width: 50,
               height: 50,
-              backgroundColor: '#fff'
+              backgroundColor: '#fff',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center'
             },
             '& img':{
-              width: '3.5rem',
+              width: 50,
+              display: 'flex'
+              /* width: '3.5rem', */
               /*width: '5rem',
               height: '3.5rem',*/
               /* opacity: '0.75',

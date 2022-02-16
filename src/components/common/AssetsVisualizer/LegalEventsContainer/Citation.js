@@ -30,7 +30,15 @@ const options = {
     verticalScroll: true,
     zoomFriction: 30,
     zoomMin: 1000 * 60 * 60 * 24 * 7,  
-    template: function(item, element, data) { 
+    template: function(item, element, data) {
+        let image = data.rawData.logo
+        if(data.rawData.logo !== '' && data.rawData.logo !== null) {
+            if( data.rawData.logo.indexOf('http') === -1 ) {
+                image = CDN_PATH_LOGO + data.rawData.logo
+            } 
+        } else {
+            image = CDN_PATH_LOGO + NO_IMAGE_AVAILABLE
+        }
       return `<div class="first">
                 <div class="flexMain">
                     <div class="textColumn">${numberWithCommas(data.number)}</div>
@@ -39,7 +47,7 @@ const options = {
                 </div>
             </div>
             <div class="second"><span class="img-holder">
-                <img class="${data.rawData.logo == '' || data.rawData.logo == null ? 'no-image' : ''}" src='${data.rawData.logo !== '' && data.rawData.logo !== null ?  data.rawData.logo : CDN_PATH_LOGO + NO_IMAGE_AVAILABLE}' /></span>
+                <img class="${data.rawData.logo == '' || data.rawData.logo == null ? 'no-image' : ''}" src='${image}' /></span>
             </div>`
     },  
 }
