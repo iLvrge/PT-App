@@ -74,7 +74,7 @@ const getMultiFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelPtab, cancelShareTimeline, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelFamilyCounter, cancelFeesCounter
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelFamilyCounter, cancelFeesCounter
 
 class PatenTrackApi {
   static getSiteLogo() {
@@ -1206,6 +1206,24 @@ class PatenTrackApi {
       }
     } 
   }  
+
+  static getAllAssetsCitationData( form ) {
+    let header = getFormUrlHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelAllAssetsCitationData = c
+    })
+    return axios.post(`${base_new_api_url}/citation`,  form, header)
+  }  
+  
+  static cancelAllAssetsCitationData () {
+    if (cancelAllAssetsCitationData !== undefined) {
+      try{
+        throw cancelAllAssetsCitationData('Cancelled old request.')  
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
 
   static getCitationCounter( asset ) {
     let header = getHeader()

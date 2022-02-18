@@ -225,10 +225,18 @@ const AssetDetailsContainer = ({
               pointerEvents: isDrag ? 'none' : 'auto',
             }}
             primary={primary}
+            onDragStarted={() => {
+              dragStart(true);
+              setIsDrag(true);
+            }}
+            onDragFinished={size => {
+              dragFinished(false);
+              setIsDrag(false);
+            }}
             ref={chartAnalyticsContainer}
           >
             <div
-              id={`charts_container`}
+              id={`assets_`}
               style={{ height: "100%" }}
             >
               <PdfViewer

@@ -28,7 +28,7 @@ class PatentTopTitle extends React.Component {
        
     super(props_)
       
-    this.state = { expand: true,  right: false, anchorEl: null, sliderValue: 0, x: '-85px', y: '35px'}
+    this.state = { expand: true,  right: false, anchorEl: null, sliderValue: 50, x: '-85px', y: '35px'}
     this.update = this.update.bind(this)
   }
     

@@ -313,7 +313,9 @@ class PatentrackDiagram extends React.Component {
       parentWidth: null,
       originalWidth: null,
       previousParentWidth: null,
-      activeLine: null
+      activeLine: null,
+      originalGap: this.config.node.gap.x,
+      calcGap: null
     };
     this.updateDiagram = this.updateDiagram.bind(this);
     this.structure = [];
@@ -350,7 +352,26 @@ class PatentrackDiagram extends React.Component {
   }
 
   changeParentWidth(percentage) {
-    this.setState({sliderUpdate: true, parentWidth : parseFloat(this.state.originalWidth) + parseFloat(this.state.originalWidth * percentage / 100)})
+    if(percentage > 50) {
+      this.setState({
+        sliderUpdate: true, 
+        parentWidth : percentage > 50 ? parseFloat(this.state.originalWidth) + parseFloat(this.state.originalWidth * ((percentage - 50)*2) / 100) : this.state.parentWidth,
+        calcGap: null
+      })
+    } else if(percentage < 50) {
+      this.setState({
+        sliderUpdate: true, 
+        parentWidth : this.state.parentWidth,
+        calcGap: this.state.originalGap - parseFloat(this.state.originalGap * ((50 - percentage)*2) / 100) 
+      })
+    } else {
+      this.setState({
+        sliderUpdate: false, 
+        parentWidth : this.state.originalWidth,
+        calcGap: null
+      })
+    }
+    
   }
 
   getTitleDivHeight() {
@@ -689,6 +710,11 @@ class PatentrackDiagram extends React.Component {
       );
 
       this.width = this.state.parentWidth;
+
+      if(this.state.calcGap !== null) {
+        this.config.node.gap.x = this.state.calcGap
+      }
+      
     } else {
       this.width = width;
     }
