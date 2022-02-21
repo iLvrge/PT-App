@@ -88,15 +88,12 @@ const AssetDetailsContainer = ({
   const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
   const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
 
-  useEffect(() => {
-    console.log("isDrag", isDrag)
-  }, [ isDrag ])
+  
 
   useEffect(() => {
     updateResizerBar(chartAnalyticsContainer, analyticsBar, 1)
   }, [ chartAnalyticsContainer, analyticsBar ])
 
-  console.log('chartAnalyticsContainer=>defaultSize', defaultSize)
 
   useEffect(() => {
     if(chartBar === true && analyticsBar === true && defaultSize == '100%') {

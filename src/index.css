@@ -961,6 +961,12 @@ a.maintain svg.clean_encumbrances path{
 #draggable-illustration-menu-item:hover .MuiTypography-root {
   cursor: text;
 }
+div#draggable-illustration-menu-item{
+  width: 300px;
+}
+div#draggable-illustration-menu-item div[aria-hidden='true']{
+  display: none;
+}
 .tooltip_data{
   margin: 0;
   padding: 0;
