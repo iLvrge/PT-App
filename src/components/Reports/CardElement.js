@@ -1,0 +1,27 @@
+import React from 'react'
+import { Card, CardContent, CardActions, Typography, Button }  from '@material-ui/core'
+
+
+const CardElement = ({card}) => {
+    return (
+        <Card variant="outlined">
+            <CardContent>
+                <Typography variant="h4" component="div">
+                    {card.title}
+                </Typography>
+                <Typography variant="body2">
+                    {card.sub_heading}
+                </Typography>
+                <Typography variant="h4" component="div" align="center">
+                    {card.number}
+                </Typography>
+            </CardContent>
+            <CardActions align="center" style={{justifyContent: 'center'}}>
+                <Button size="small">See Example</Button>
+            </CardActions>
+        </Card>
+    )
+}
+
+
+export default CardElement;

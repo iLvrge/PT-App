@@ -5,6 +5,7 @@ import Settings from './components/SettingsPage'
 
 
 import Search from './components/Search'
+import Reports from './components/Reports'
 import GlobalScreen from './components/GlobalScreen'
 import CorrectLayout from './components/CorrectLayout' 
 
@@ -33,10 +34,17 @@ let pages = [
   },
   {
     exact: true,
+    path: routeList.reports,
+    component: Reports,
+    layout: GlobalLayout,
+    type: 2
+  },
+  {
+    exact: true,
     path: routeList.search,
     component: GlobalScreen,
     layout: GlobalLayout,
-    type: 2
+    type: 3
   },
   {
     exact: true,

@@ -12,6 +12,7 @@ export default {
   invent: '/ownership/invent',
   duedilligence: '/due' ,
   search: '/search',
+  reports: '/reports',
   global: '/global',
   default: '/',
   standard_default: '/:code'
