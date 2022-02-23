@@ -26,7 +26,7 @@ class PatentTimeline extends React.Component {
       .attr("y1", this.props.dates[0].y - this.props.timeline.upperTail)
       .attr("x2", this.props.params.margin.left)
       .attr("y2", this.props.params.height - this.props.params.margin.bottom)
-      .attr("stroke", "#FFFFFF")
+      .attr("stroke", this.props.timeline.fontColor)
       .attr("stroke-width", this.props.timeline.vertical)
       .style("stroke-dasharray", "3, 3");
     let dates = g
@@ -50,7 +50,7 @@ class PatentTimeline extends React.Component {
       .attr("y1", 0)
       .attr("x2", d_ => d_.x2)
       .attr("y2", 0)
-      .attr("stroke", "#FFFFFF")
+      .attr("stroke", this.props.timeline.fontColor)
       .style("stroke-width", this.props.timeline.horizontal)
       .style("stroke-dasharray", "3, 3");
     dates

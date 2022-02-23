@@ -1816,7 +1816,7 @@ class PatentrackDiagram extends React.Component {
           {
             this.props.copyrights && (
               <g transform={`translate(16,${svgParams.height ? svgParams.height - 20 : this.height })`}>
-                <text fill="#BDBDBD"><tspan>The illustrations, and the systems and methods by which they were created, are copyright</tspan> <tspan x="0" dy="14.25">protected and covered by several pending patent applications.</tspan></text>
+                <text fill={this.config.timeline.fontColor}><tspan>The illustrations, and the systems and methods by which they were created, are copyright</tspan> <tspan x="0" dy="14.25">protected and covered by several pending patent applications.</tspan></text>
               </g>
             )  
           } 

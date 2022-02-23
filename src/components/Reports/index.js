@@ -96,7 +96,7 @@ const Reports = () => {
             </Grid>
             <Grid
                 item lg={10} md={10} sm={10} xs={10}  
-                style={{height: '100%'}}
+                style={{height: '100%', overflowY: 'auto'}}
             >
                 <Grid
                     container
@@ -108,7 +108,7 @@ const Reports = () => {
                     {
                         cardsList.map( (card, index) => (
                             <Grid
-                                item lg={3} md={3} sm={3} xs={3}  
+                                item lg={3} md={4} sm={6} 
                                 className={classes.flexColumn}
                             >
                                 <CardElement 
