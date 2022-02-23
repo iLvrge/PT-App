@@ -2,7 +2,7 @@
     "fixedWidth": "66.25rem",
     "responsive": false,
     "defaultWidth": 2060,
-  
+    "background": "#1D2025",
     "title": {
       "attr": "general.patent_number",
       "x": "6.25rem",
@@ -18,9 +18,9 @@
     },
     "timeline": {
       "upperTail": 32,
-      "vertical": 0.25,
-      "horizontal": 0.25,
-      "fontColor": "#3E5060",
+      "vertical": 1,
+      "horizontal": 1,
+      "fontColor": "#E5E7EF",
       "fontSize": "0.75rem",
       "dateOffset": { "x": 3, "y": -5 }
     },
@@ -34,15 +34,19 @@
       "bottomOffset": "1.0rem",
       "gap": { "x": "3.1rem", "y": "2.5rem" },
       "pdf": { "x": "0.75rem", "y": "2.75rem", "size": "1.0rem" },
-      "border": "#9e9e9e",
-      "background": "#1E2B31",
+      "border": "#2E445B",
+      "background": "#152D49",
       "opacity": 0.75,
-      "fontColor": "#FFF",
-      "fontWeight": 700,
+      "fontColor": "#E5E7EF",
+      "fontWeight": 500,
       "headerSize": "1rem",
       "datesSize": "0.75rem",
       "maxLineLength": 0.9,
       "numberOfLines": 2,
+      "inventor": {
+        "fontColor": "#1E2125",
+        "background": "#B9E0B4"
+      },
       "range": { "min": 1.0e-1, "max": 2.7e-1 }
     },
   

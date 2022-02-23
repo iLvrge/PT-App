@@ -81,7 +81,7 @@ class PatentNode extends React.Component {
       .attr('rx', this.props.data.rounded)
       .attr('ry', this.props.data.rounded)
       .attr('fill-opacity', this.props.node.opacity)
-      .attr('fill', this.props.node.background)
+      .attr('fill', this.props.data.typeID.type == "inventors" ? this.props.node.inventor.background : this.props.node.background)
       .attr('stroke', this.props.node.border);
 
     g.append('text')
@@ -89,7 +89,7 @@ class PatentNode extends React.Component {
       .attr('dy', '1.1rem')
       .attr('font-size', this.props.node.headerSize)
       .attr('font-weight', this.props.node.fontWeight)
-      .attr('fill', this.props.node.fontColor)
+      .attr('fill', this.props.data.typeID.type == "inventors" ? this.props.node.inventor.fontColor : this.props.node.fontColor)
       .attr('text-rendering', 'geometricPrecision')
       .attr('class', 'wrapText')
       .attr('title', typeof this.props.data.json != 'undefined' && typeof this.props.data.json.original_name !== 'undefined' && this.props.data.json.original_name != '' && this.props.data.json.original_name !== null ? this.props.data.json.original_name : this.props.data.name)
@@ -193,7 +193,7 @@ class PatentNode extends React.Component {
         .attr('dx', datesOffsetX)
         .attr('dy', '3.05rem')
         .attr('font-size', this.props.node.datesSize)
-        .attr('fill', this.props.node.fontColor)
+        .attr('fill', this.props.data.typeID.type == "inventors" ? this.props.node.inventor.fontColor : this.props.node.fontColor)
         .html(
           this.props.data.type == 0
             ? '<tspan>Filled: ' +
