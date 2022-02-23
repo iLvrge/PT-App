@@ -27,7 +27,7 @@ class PatentTopTitle extends React.Component {
   constructor(props_) {
        
     super(props_)
-      
+    this.config = props_.config;  
     this.state = { expand: true,  right: false, anchorEl: null, sliderValue: 50, x: '-85px', y: '35px'}
     this.update = this.update.bind(this)
   }
@@ -96,7 +96,7 @@ class PatentTopTitle extends React.Component {
     
    return (
           <React.Fragment>
-            <div id='topTitle'>
+            <div id='topTitle' style={{backgroundColor: this.config.title.background, border: `1px solid ${this.config.title.border}`, boxShadow: `0 0px 5px 0 ${this.config.title.boxShadow}`, color: this.config.title.color}}>
               <span className={'title'} title={this.props.title}>{this.props.title}</span>
               <div id="topUIToolbarExpanded">
                 <IconButton

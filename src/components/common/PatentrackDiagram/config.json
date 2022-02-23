@@ -7,7 +7,11 @@
       "attr": "general.patent_number",
       "x": "6.25rem",
       "y": "4.25rem",
-      "fontSize": "1.2rem"
+      "fontSize": "1.2rem",
+      "background": "#323232",
+      "border": "#5C5C5C",
+      "boxShadow": "#2B2B2B",
+      "color": "#FFFFFF"
     },
   
     "margin": {

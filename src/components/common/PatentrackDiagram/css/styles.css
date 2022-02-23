@@ -11,12 +11,8 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
     width: 100%;
     padding: 0 9px 0 16px;
     font-size: 1rem;
-    color: #FFFFFF;
     height: 47px;
     min-height: 47px;
-    background-color: #292929;
-    border-bottom: 1px solid #5c5c5c;
-    box-shadow: 0 0px 5px 0 #2b2b2b;
     /* opacity: 0.85; */
     text-align: left; 
     vertical-align: middle; 

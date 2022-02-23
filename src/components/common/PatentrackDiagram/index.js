@@ -1778,6 +1778,7 @@ class PatentrackDiagram extends React.Component {
           toggleShow3rdParities={this.props.toggleShow3rdParities}
           showThirdParties={this.props.showThirdParties}
           usptoMode={this.props.usptoMode}
+          config={this.config}
           quantatives={{
             assignment: {
               current:
