@@ -36,7 +36,7 @@
       "pdf": { "x": "0.75rem", "y": "2.75rem", "size": "1.0rem" },
       "border": "#71898C",
       "background": "#1D2025",
-      "opacity": 0.75,
+      "opacity": 0.1,
       "fontColor": "#FFF",
       "fontWeight": 500,
       "headerSize": "1rem",
@@ -46,7 +46,7 @@
       "inventor": {
         "fontColor": "#FFF",
         "background": "#1D2025",
-        "border": "#1DCAB8"
+        "border": "#B9E0B4"
       },
       "range": { "min": 1.0e-1, "max": 2.7e-1 }
     },
