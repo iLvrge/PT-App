@@ -17,7 +17,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip, Typography, Zoom, Drawer, Menu, MenuItem, ListItemIcon, ListItemText, Checkbox, Divider, IconButton, Badge, Paper } from "@material-ui/core";
 import Draggable from "react-draggable"
-import { Fullscreen } from '@material-ui/icons'
+import { Fullscreen, Close } from '@material-ui/icons'
 import { FaLightbulb } from "react-icons/fa";
 import * as d3 from 'd3'
 import clsx from 'clsx';
@@ -224,7 +224,12 @@ class PatentTopTitle extends React.Component {
                   }
                 }}
               >
-                <MenuItem className={`listIconItem`}>
+                <MenuItem className={`listIconItem illustration_menu_close_btn`}>
+                  <ListItemIcon onClick={(event) => {this.toggleDrawer(event, false)}}>
+                    <Close/>
+                  </ListItemIcon>
+                </MenuItem>
+                <MenuItem className={`listIconItem`} style={{marginTop: 8}}>
                   <ListItemIcon id="fastBackward">
                     <FontAwesomeIcon
                       icon={faFastBackward}
@@ -282,10 +287,9 @@ class PatentTopTitle extends React.Component {
                 </MenuItem>       
                 <Divider /> 
                   <MenuItem> 
-                    <ListItemIcon>
+                    <ListItemIcon className={'zoom_container'}>
                       <Slider className={'zoom_slider'} value={sliderValue} onChange={this.handleSliderChange} aria-labelledby="continuous-slider" />
                     </ListItemIcon>
-                    <ListItemIcon style={{minWidth: 20 }}></ListItemIcon>
                     <ListItemText className={'show_label'}>Zoom</ListItemText>    
                   </MenuItem>    
                 <Divider />  

@@ -319,6 +319,9 @@ div.tooltip_title {
 .uspto_logo img{
     width: 40px;
 }
+.zoom_container{
+    min-width: 76px !important; 
+}
 /*
 #toobarUIGap0 { grid-area: 1 / 1 / 2 / 2; text-align: center; justify-content: center; align-items: center; }
 #expandOnOff { grid-area: 1 / 2 / 2 / 3; text-align: center; justify-content: center; align-items: center; }

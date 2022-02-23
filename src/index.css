@@ -957,9 +957,15 @@ a.maintain svg.clean_encumbrances path{
 }
 #draggable-illustration-menu-item .MuiListItemIcon-root:hover{
   cursor: pointer;
-}
+}/* 
 #draggable-illustration-menu-item:hover .MuiTypography-root {
   cursor: text;
+} */
+.illustration_menu_close_btn{
+  position: absolute !important;
+  right: 0px;
+  top: 0px;
+  padding: 0px !important;
 }
 div#draggable-illustration-menu-item{
   width: 300px;

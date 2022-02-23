@@ -40,7 +40,7 @@
       "pdf": { "x": "0.75rem", "y": "2.75rem", "size": "1.0rem" },
       "border": "#71898C",
       "background": "#1D2025",
-      "opacity": 0.1,
+      "opacity": 0.8,
       "fontColor": "#FFF",
       "fontWeight": 500,
       "headerSize": "1rem",
