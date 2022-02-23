@@ -18,8 +18,8 @@
     },
     "timeline": {
       "upperTail": 32,
-      "vertical": 1,
-      "horizontal": 1,
+      "vertical": 0.5,
+      "horizontal": 0.5,
       "fontColor": "#E5E7EF",
       "fontSize": "0.75rem",
       "dateOffset": { "x": 3, "y": -5 }
@@ -34,18 +34,19 @@
       "bottomOffset": "1.0rem",
       "gap": { "x": "3.1rem", "y": "2.5rem" },
       "pdf": { "x": "0.75rem", "y": "2.75rem", "size": "1.0rem" },
-      "border": "#2E445B",
-      "background": "#152D49",
+      "border": "#71898C",
+      "background": "#1D2025",
       "opacity": 0.75,
-      "fontColor": "#E5E7EF",
+      "fontColor": "#FFF",
       "fontWeight": 500,
       "headerSize": "1rem",
       "datesSize": "0.75rem",
       "maxLineLength": 0.9,
       "numberOfLines": 2,
       "inventor": {
-        "fontColor": "#1E2125",
-        "background": "#B9E0B4"
+        "fontColor": "#FFF",
+        "background": "#1D2025",
+        "border": "#1DCAB8"
       },
       "range": { "min": 1.0e-1, "max": 2.7e-1 }
     },

@@ -82,7 +82,7 @@ class PatentNode extends React.Component {
       .attr('ry', this.props.data.rounded)
       .attr('fill-opacity', this.props.node.opacity)
       .attr('fill', this.props.data.typeID.type == "inventors" ? this.props.node.inventor.background : this.props.node.background)
-      .attr('stroke', this.props.node.border);
+      .attr('stroke', this.props.data.typeID.type == "inventors" ? this.props.node.inventor.border : this.props.node.border);
 
     g.append('text')
       .attr('dx', offsetX)
