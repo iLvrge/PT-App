@@ -1,10 +1,10 @@
 import React, { Fragment, useCallback, useEffect, useMemo } from 'react'
-import TextField from '@material-ui/core/TextField'
-import FormControl from '@material-ui/core/FormControl'
+import TextField from '@mui/material/TextField'
+import FormControl from '@mui/material/FormControl'
 import Select, { components } from 'react-select'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchLawFirms } from '../../../../../actions/settingsActions'
-import MenuItem from '@material-ui/core/MenuItem'
+import MenuItem from '@mui/material/MenuItem'
 import _find from 'lodash/find'
 
 const SelectFirm = ({ edited, onChangeField }) => {

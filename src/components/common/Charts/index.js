@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import moment from 'moment'
 
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@mui/material'
 import { DataSet, Graph3d } from 'vis-graph3d/standalone'
 import { Bar as BarChart } from 'react-chartjs-2'
 

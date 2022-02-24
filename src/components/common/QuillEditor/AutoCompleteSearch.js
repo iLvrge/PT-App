@@ -5,12 +5,12 @@ import {
     CircularProgress,
     Checkbox,
     Radio
-} from '@material-ui/core'
+} from '@mui/material'
 
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
-import CheckBoxIcon from '@material-ui/icons/CheckBox'
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
+import CheckBoxIcon from '@mui/icons-material/CheckBox'
 
-import Autocomplete from '@material-ui/lab/Autocomplete'
+import Autocomplete from '@mui/material/Autocomplete'
 
 const AutoCompleteSearch = ({
         value,
@@ -30,7 +30,7 @@ const AutoCompleteSearch = ({
     const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
     const checkedIcon = <CheckBoxIcon fontSize="small" />
 
-    return(
+    return (
         <Autocomplete
             id={id}
             open={open}     
@@ -46,7 +46,7 @@ const AutoCompleteSearch = ({
                 console.log("ONCLOSE")
             }}
             onChange={onHandleChange}
-            getOptionSelected={(option, value) => option.name === value.name}
+            isOptionEqualToValue={(option, value) => option.name === value.name}
             getOptionLabel={(option) => option.name}
             options={options}
             loading={loading}
@@ -90,7 +90,7 @@ const AutoCompleteSearch = ({
                 />
             )}
         />
-    )
+    );
 }
 
 

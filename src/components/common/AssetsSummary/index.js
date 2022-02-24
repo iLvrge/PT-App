@@ -2,10 +2,10 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import PatenTrackApi from '../../../api/patenTrack2'
 import { numberWithCommas } from '../../../utils/numbers'
-import Grid from '@material-ui/core/Grid'
+import Grid from '@mui/material/Grid'
 
 import useStyles from './styles'
-import Typography from '@material-ui/core/Typography'
+import Typography from '@mui/material/Typography'
 
 import axios from 'axios'
 

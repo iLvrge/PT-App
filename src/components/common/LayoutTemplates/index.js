@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react'
 import { useSelector, useDispatch } from "react-redux"
 import moment from 'moment'
-import { Paper } from "@material-ui/core"
+import { Paper } from "@mui/material"
 import VirtualizedTable from "../VirtualizedTable"
 
 import { 

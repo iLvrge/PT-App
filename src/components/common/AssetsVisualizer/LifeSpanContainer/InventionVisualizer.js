@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useSelector } from 'react-redux'
 
-import Paper from '@material-ui/core/Paper'
+import Paper from '@mui/material/Paper'
 
 import { DataSet } from 'vis-data/esnext'
 import { Graph3d } from 'vis-graph3d/esnext'

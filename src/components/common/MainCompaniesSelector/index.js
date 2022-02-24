@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, useRef} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {  useHistory, useLocation  } from 'react-router-dom'
-import { Paper } from '@material-ui/core'
+import { Paper } from '@mui/material'
 import useStyles from './styles' 
 import _orderBy from 'lodash/orderBy' 
 import VirtualizedTable from '../VirtualizedTable'
@@ -77,8 +77,8 @@ const COLUMNS = [
         /* showOnCondition: '1' */ 
     },
     {
-        width: 20,
-        minWidth: 20,
+        width: 25,
+        minWidth: 25,
         label: '',
         dataKey: 'representative_id',
         headingIcon: 'company',

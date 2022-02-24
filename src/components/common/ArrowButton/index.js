@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Fab } from '@material-ui/core'
-import { KeyboardArrowRightOutlined as KeyboardArrowRightOutlinedIcon, KeyboardArrowLeftOutlined as KeyboardArrowLeftOutlinedIcon, KeyboardArrowDownOutlined as KeyboardArrowDownOutlinedIcon } from '@material-ui/icons'
+import { Fab } from '@mui/material'
+import { KeyboardArrowRightOutlined as KeyboardArrowRightOutlinedIcon, KeyboardArrowLeftOutlined as KeyboardArrowLeftOutlinedIcon, KeyboardArrowDownOutlined as KeyboardArrowDownOutlinedIcon } from '@mui/icons-material'
 
 import useStyles from './styles'
 

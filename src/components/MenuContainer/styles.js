@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from '@mui/styles/makeStyles';
 
 export default makeStyles(theme => ({    
     root: {
@@ -49,7 +49,7 @@ export default makeStyles(theme => ({
             lineHeight: 1.1,
             wordBreak: 'break-word',
             marginBottom: '0.7vw',
-            [theme.breakpoints.down('md')]: {
+            [theme.breakpoints.down('lg')]: {
                 fontSize: '1vw',
             }
         }
@@ -146,7 +146,7 @@ export default makeStyles(theme => ({
                 border: '1px solid rgb(255,255,255)'
             },
         },
-        [theme.breakpoints.down('lg')]: {
+        [theme.breakpoints.down('xl')]: {
             padding: '1vw',
         },
         '& .MuiLink-root': {

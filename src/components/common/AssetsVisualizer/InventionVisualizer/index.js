@@ -1,16 +1,16 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {useLocation} from 'react-router-dom'
-import { Paper, Dialog, DialogContent, DialogTitle, IconButton  } from '@material-ui/core'
+import { Paper, Dialog, DialogContent, DialogTitle, IconButton  } from '@mui/material'
 import Draggable from "react-draggable"
-import CloseIcon from '@material-ui/icons/Close'
+import CloseIcon from '@mui/icons-material/Close'
 import {ResizableBox} from "react-resizable"
 import { DataSet } from 'vis-data/esnext'
 import { Graph3d } from 'vis-graph3d/esnext'
 
-import FilterListIcon from '@material-ui/icons/FilterList'
-import Tab from '@material-ui/core/Tab'
-import Tabs from '@material-ui/core/Tabs'
+import FilterListIcon from '@mui/icons-material/FilterList'
+import Tab from '@mui/material/Tab'
+import Tabs from '@mui/material/Tabs'
 import FilterCPC from './FilterCPC'
 import AssetsList from './AssetsList'
 import PdfViewer from '../../PdfViewer'
@@ -835,7 +835,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                         )
                                     }
                                     
-                                    <IconButton onClick={handleOpenFilter} className={classes.settingBtn}>
+                                    <IconButton onClick={handleOpenFilter} className={classes.settingBtn} size="large">
                                         <svg style={{width: '24px', fill: '#fff'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M5 11.86V29a1 1 0 0 0 2 0V11.86A4 4 0 0 0 7 4.14V3A1 1 0 0 0 5 3V4.14a4 4 0 0 0 0 7.72zM6 6A2 2 0 1 1 4 8 2 2 0 0 1 6 6zM27 12.14V3a1 1 0 0 0-2 0v9.14a4 4 0 0 0 0 7.72V29a1 1 0 0 0 2 0V19.86a4 4 0 0 0 0-7.72zM26 18a2 2 0 1 1 2-2A2 2 0 0 1 26 18zM16 30a1 1 0 0 0 1-1V23.86a4 4 0 0 0 0-7.72V3a1 1 0 0 0-2 0V16.14a4 4 0 0 0 0 7.72V29A1 1 0 0 0 16 30zM14 20a2 2 0 1 1 2 2A2 2 0 0 1 14 20z" /></svg> 
                                     </IconButton>                                    
                                 </div>
@@ -894,8 +894,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     <FilterCPC onClose={handleClose} depthRange={depthRange} scopeRange={scopeRange} yearRange={filterYear} yearRangeText={yearRangeText} depthRangeText={depthRangeText} scopeRangeText={scopeRangeText} valueScope={valueScope} valueRange={valueRange} valueYear={valueYear} onChangeRangeSlider={onChangeRangeSlider} onChangeScopeSlider={onChangeScopeSlider} onChangeYearSlider={onChangeYearSlider}/>
                 </DialogContent>
             </Dialog>   
-        </Paper> 
-    )
+        </Paper>
+    );
 }
 
 

@@ -6,7 +6,7 @@ import React, {
   useMemo,
 } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Paper } from "@material-ui/core";
+import { Paper } from "@mui/material";
 import Loader from "../Loader";
 import useStyles from "./styles";
 import VirtualizedTable from "../VirtualizedTable";

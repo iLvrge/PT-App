@@ -1,15 +1,15 @@
 import React, { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
-import Paper from '@material-ui/core/Paper'
+import Paper from '@mui/material/Paper'
 import useStyles from './styles'
 
 import TimelineContainer from './TimelineContainer'
 import IllustrationContainer from './IllustrationContainer'
-import IconButton from '@material-ui/core/IconButton'
-import FullscreenIcon from '@material-ui/icons/Fullscreen'
-import { ExpandLess, Close } from '@material-ui/icons'
-import Modal from '@material-ui/core/Modal'
-import Tooltip from '@material-ui/core/Tooltip'
+import IconButton from '@mui/material/IconButton'
+import FullscreenIcon from '@mui/icons-material/Fullscreen'
+import { ExpandLess, Close } from '@mui/icons-material'
+import Modal from '@mui/material/Modal'
+import Tooltip from '@mui/material/Tooltip'
 
 const AssetsVisualizer = ({ toggleMinimize, isMinimized, setIllustrationRecord }) => {
   const classes = useStyles()
@@ -60,7 +60,7 @@ const AssetsVisualizer = ({ toggleMinimize, isMinimized, setIllustrationRecord }
       {
         isMinimized && (
           <Tooltip title={'Shop Assets Timeline'}>
-            <IconButton className={classes.undoMinimize} onClick={toggleMinimize}>
+            <IconButton className={classes.undoMinimize} onClick={toggleMinimize} size="large">
               <ExpandLess />
             </IconButton>
           </Tooltip>
@@ -72,7 +72,7 @@ const AssetsVisualizer = ({ toggleMinimize, isMinimized, setIllustrationRecord }
         open={isFullscreenOpen}
       > 
         <Paper className={classes.fullscreenCharts} square>
-          <IconButton onClick={handleCloseFullscreen} className={classes.right}>
+          <IconButton onClick={handleCloseFullscreen} className={classes.right} size="large">
             <Close />
           </IconButton>
           {renderComponent('fromModal')}
@@ -81,7 +81,7 @@ const AssetsVisualizer = ({ toggleMinimize, isMinimized, setIllustrationRecord }
 
 
     </Paper>
-  )
+  );
 }
 
 export default AssetsVisualizer

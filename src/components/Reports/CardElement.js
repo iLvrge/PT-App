@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardContent, CardActions, Typography, Button }  from '@material-ui/core'
+import { Card, CardContent, CardActions, Typography, Button }  from '@mui/material'
 
 
 const CardElement = ({card}) => {

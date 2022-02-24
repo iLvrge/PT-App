@@ -6,10 +6,10 @@ import FullWidthSwitcher from '../FullWidthSwitcher'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import Loader from '../Loader'
 import { getComments, updateComment } from '../../../actions/patenTrackActions'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableRow from '@material-ui/core/TableRow'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableRow from '@mui/material/TableRow'
 
 function CommentComponents(props) {
   const classes = useStyles()

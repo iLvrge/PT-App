@@ -1,15 +1,15 @@
-import TableRow from '@material-ui/core/TableRow'
+import TableRow from '@mui/material/TableRow'
 import clsx from 'clsx'
-import TableCell from '@material-ui/core/TableCell'
-import IconButton from '@material-ui/core/IconButton'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import ChevronRightIcon from '@material-ui/icons/ChevronRight'
-import Checkbox from '@material-ui/core/Checkbox'
-import EditIcon from '@material-ui/icons/Edit'
+import TableCell from '@mui/material/TableCell'
+import IconButton from '@mui/material/IconButton'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import Checkbox from '@mui/material/Checkbox'
+import EditIcon from '@mui/icons-material/Edit'
 import React, { Fragment } from 'react'
 import useStyles from './styles'
-import Collapse from '@material-ui/core/Collapse'
-import Box from '@material-ui/core/Box'
+import Collapse from '@mui/material/Collapse'
+import Box from '@mui/material/Box'
 
 export default function Row({
   childComponent: ChildComponent,
@@ -58,7 +58,7 @@ export default function Row({
         {
           editable && (
             <TableCell padding="none">
-              <IconButton onClick={onEdit(row)}>
+              <IconButton onClick={onEdit(row)} size="large">
                 <EditIcon />
               </IconButton>
             </TableCell>
@@ -94,5 +94,5 @@ export default function Row({
         )
       }
     </Fragment>
-  )
+  );
 }

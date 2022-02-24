@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Paper, Button, Typography } from "@material-ui/core";
+import { Paper, Button, Typography } from "@mui/material";
 import Loader from "../Loader";
 import Googlelogin from '../Googlelogin' 
 import useStyles from "./styles";

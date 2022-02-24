@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from '@mui/styles/makeStyles';
 
 export default makeStyles(theme => ({
   userItemsContainer: {
@@ -20,7 +20,7 @@ export default makeStyles(theme => ({
     left: 5,
     right: 5,
     bottom: 0,
-    '& .MuiCollapse-container': {
+    '& .MuiCollapse-root': {
       position: 'absolute',
       zIndex: 9,
       color: '#000',

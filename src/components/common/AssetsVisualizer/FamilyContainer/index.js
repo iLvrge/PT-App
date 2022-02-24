@@ -2,12 +2,12 @@ import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
 import _debounce from 'lodash/debounce'
-import Paper from '@material-ui/core/Paper'
+import Paper from '@mui/material/Paper'
 import { DataSet } from 'vis-data/esnext'
 import { Timeline } from 'vis-timeline-73/esnext'
 
-import CircularProgress from '@material-ui/core/CircularProgress'
-import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import CircularProgress from '@mui/material/CircularProgress'
+import ClickAwayListener from '@mui/base'
 
 import { 
     setFamilyItemDisplay,

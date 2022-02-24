@@ -1,15 +1,15 @@
 import React, { useState, useEffect, forwardRef, useRef  } from 'react'
 import { connect } from 'react-redux'
 import useStyles from './styles'
-import Grid from '@material-ui/core/Grid'
-import Alert from '@material-ui/lab/Alert'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
+import Grid from '@mui/material/Grid'
+import Alert from '@mui/material/Alert'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemText from '@mui/material/ListItemText'
 import PerfectScrollbar from 'react-perfect-scrollbar'
-import { AddBox } from '@material-ui/icons'
+import { AddBox } from '@mui/icons-material'
 
-import { Collapse, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, TextField } from '@material-ui/core'
+import { Collapse, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, TextField } from '@mui/material'
 
 import { addAddress, addCompanyLawyer, addTelephone } from '../../../actions/patenTrackActions'
 

@@ -29,7 +29,7 @@ import {
         Tooltip,
         Zoom,
         Badge 
-      } from '@material-ui/core'
+      } from '@mui/material'
 
 import { Menu as MenuIcon, 
         Search as SearchIcon, 
@@ -47,7 +47,7 @@ import { Menu as MenuIcon,
         ExpandLess,
         ExpandMore,
         Close
-      } from '@material-ui/icons'
+      } from '@mui/icons-material'
 
   import { controlList } from '../../utils/controlList'
 
@@ -519,7 +519,10 @@ const onHandleForeignAssets = (event) => {
             <Button className={classes.calendly} onClick={handleScheduleViaHubspot}>
               Schedule a {process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'd' : 'D' }emo {process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'for Pro version' : '' }
             </Button>    
-            <IconButton className={`${classes.buttonIcon} ${clipboard_assets.length > 0 ? classes.clipIconActive : ''} ${ display_clipboard === true ? classes.clipIconIsActive : ''}`} onClick={handleClipboard}>
+            <IconButton
+              className={`${classes.buttonIcon} ${clipboard_assets.length > 0 ? classes.clipIconActive : ''} ${ display_clipboard === true ? classes.clipIconIsActive : ''}`}
+              onClick={handleClipboard}
+              size="large">
               <Badge badgeContent={clipboard_assets.length} color="secondary">    
                 <svg xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 80 80" viewBox="0 0 80 80"><path d="M40,5c-3.3085938,0-6,2.6914062-6,6v3h-5c-0.4199219,0-0.7949219,0.262207-0.9394531,0.6567383l-0.880188,2.4077148	h-9.0836792C16.9404297,17.0644531,16,18.0048828,16,19.1611328v53.7421875C16,74.0595703,16.9404297,75,18.0966797,75h43.8066406
       C63.0595703,75,64,74.0595703,64,72.9033203V19.1611328c0-1.15625-0.9404297-2.0966797-2.0966797-2.0966797H52.755188
@@ -549,7 +552,7 @@ const onHandleForeignAssets = (event) => {
               onKeyDown={handleKeyDown}
             />
           </div>
-          <IconButton className={classes.buttonIcon}>
+          <IconButton className={classes.buttonIcon} size="large">
             <Badge badgeContent={0} color="secondary"> 
               <NotificationsIcon/>
             </Badge>         
@@ -558,7 +561,12 @@ const onHandleForeignAssets = (event) => {
             {
               !googleAuthLogin
               ?
-                <IconButton className={`${classes.padding0}`} aria-label="Google Logout" component="span" onClick={onHandleGoogleSignout}>
+                <IconButton
+                  className={`${classes.padding0}`}
+                  aria-label="Google Logout"
+                  component="span"
+                  onClick={onHandleGoogleSignout}
+                  size="large">
                   <Tooltip 
                     title={
                       <Typography color="inherit" variant='body2'>
@@ -589,7 +597,13 @@ const onHandleForeignAssets = (event) => {
             {
               !slackAuthLogin
               ?
-              <IconButton className={`${classes.buttonIcon} ${classes.padding0}`} aria-label="Slack Logout" component="span" onClick={onHandleSlackSignout} style={{marginRight: 6}}>
+              <IconButton
+                className={`${classes.buttonIcon} ${classes.padding0}`}
+                aria-label="Slack Logout"
+                component="span"
+                onClick={onHandleSlackSignout}
+                style={{marginRight: 6}}
+                size="large">
                 <Tooltip 
                   title={
                     <Typography color="inherit" variant='body2'>
@@ -644,7 +658,7 @@ const onHandleForeignAssets = (event) => {
               color='inherit'
               aria-label='open drawer'
               onClick={(event) => {toggleDrawer(event, true)}}
-            >
+              size="large">
               <MenuIcon />
             </IconButton>
             <Drawer anchor={'right'} open={openDrawer['right']} onClose={(event) => {toggleDrawer(event, false)}} className={classes.drawer}>
@@ -702,39 +716,37 @@ const onHandleForeignAssets = (event) => {
             </Drawer>
         </div>
       </Toolbar>
-      <Modal 
+      <Modal// `disableBackdropClick` is removed by codemod.
+// You can find more details about this breaking change in [the migration guide](https://mui.com/guides/migration-v4/#modal)
+
         open={controlModal}
-        disableBackdropClick={false}
         onClose={(e) => handleControlModal( e, false )}
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}
         className={classes.modal}
-        style={{backgroundColor: 'rgba(0, 0, 0, 0.8)'}}
-      >
+        style={{backgroundColor: 'rgba(0, 0, 0, 0.8)'}}>
         <>
           <Home click={hideMenu} closeModal={handleControlModal}/> 
         </>
       </Modal>
 
-      <Modal 
+      <Modal
         open={scheduling}
-        disableBackdropClick={false}
         onClose={handleScheduleViaHubspot}
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}
         className={classes.modal}
-        style={{backgroundColor: 'rgba(0, 0, 0, 0.8)'}}
-      >
+        style={{backgroundColor: 'rgba(0, 0, 0, 0.8)'}}>
         <>
           <Scheduling/>
         </>
       </Modal>
     </AppBar>
-  ) 
+  ); 
 }
 
 export default NewHeader

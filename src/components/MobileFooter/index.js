@@ -5,13 +5,13 @@ import {
         Box,
         SwipeableDrawer,
         Paper
-    } from '@material-ui/core'
+    } from '@mui/material'
 
 import { 
     Dashboard as DashboardIcon,
     Class as ClassIcon,
     Description as DescriptionIcon,
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 
 import ActionMenu from '../NewHeader/ActionMenu'
 import NavigationIcon from '../NavigationIcon'

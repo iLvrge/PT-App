@@ -9,7 +9,7 @@ import { useDispatch,
 import { 
     AppBar, 
     Toolbar, 
-  } from '@material-ui/core'
+  } from '@mui/material'
 
 import CustomerLogo from '../CustomerLogo'
 import HeaderIcons from '../HeaderIcons'

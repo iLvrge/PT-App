@@ -1,5 +1,5 @@
-import { makeStyles } from '@material-ui/core/styles'
-import { fade } from '@material-ui/core'
+import makeStyles from '@mui/styles/makeStyles';
+import { alpha } from '@mui/material'
 
 export default makeStyles((theme) => ({
   dialogContent: {
@@ -26,7 +26,7 @@ export default makeStyles((theme) => ({
     alignItems: 'center',
     position: 'absolute',
     zIndex: 2,
-    backgroundColor: fade(theme.palette.common.black, 0.5),
+    backgroundColor: alpha(theme.palette.common.black, 0.5),
   },
   paper: {
     minWidth: 320,

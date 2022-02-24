@@ -6,9 +6,9 @@ import _debounce from 'lodash/debounce'
 import { useDispatch, useSelector } from 'react-redux'
 import { DataSet } from 'vis-data-71/esnext'
 import { Timeline } from 'vis-timeline/esnext'
-import Paper from '@material-ui/core/Paper'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import Paper from '@mui/material/Paper'
+import CircularProgress from '@mui/material/CircularProgress'
+import ClickAwayListener from '@mui/base'
 
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import { 

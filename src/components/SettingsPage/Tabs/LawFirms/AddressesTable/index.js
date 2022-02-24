@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import StyledMaterialTable from '../../../components/StyledMaterialTable'
 import { useDispatch } from 'react-redux'
 import { addLawFirmAddress, deleteLawFirmAddress, updateLawFirmAddress } from '../../../../../actions/settingsActions'
-import { MTableAction } from 'material-table'
+import { MTableAction } from '@material-table/core'
 
 const COLUMNS = [
   { field: 'street_address', title: 'Street Address' },

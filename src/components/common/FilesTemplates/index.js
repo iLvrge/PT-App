@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import { useSelector, useDispatch } from "react-redux"
 
-import { Paper } from "@material-ui/core"
+import { Paper } from "@mui/material"
 
 import Googlelogin from '../Googlelogin' 
 

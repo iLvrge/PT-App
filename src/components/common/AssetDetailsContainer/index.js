@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import SplitPane from "react-split-pane"
-import { IconButton, Modal, Paper } from "@material-ui/core"
+import { IconButton, Modal, Paper } from "@mui/material"
 import ConnectionBox from '../../common/ConnectionBox'
 import FamilyItemContainer from '../AssetsVisualizer/FamilyItemContainer'
 import USPTOContainer from '../AssetsVisualizer/USPTOContainer'

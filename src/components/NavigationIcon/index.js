@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { IconButton, Tooltip, Typography, Zoom } from '@material-ui/core'
+import { IconButton, Tooltip, Typography, Zoom } from '@mui/material'
 
 import {
     Person as PersonIcon, 
@@ -12,7 +12,7 @@ import {
     Description as DescriptionIcon,
     Settings as SettingsIcon,
     Home as HomeIcon,
-  } from '@material-ui/icons'
+  } from '@mui/icons-material'
 
 import useStyles from './styles'
 import clsx from 'clsx'
@@ -53,8 +53,8 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
                 TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
             >
                 <span> 
-                    <IconButton  
-                        {...(disabled == undefined && { onClick: click })} 
+                    <IconButton
+                        {...(disabled == undefined && { onClick: click })}
                         className = {
                             process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'
                                 ?
@@ -81,8 +81,9 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
                             t === 10 && (driveTemplateFrameMode === true && ( template_document_url != null || new_drive_template_file != null )) ? 'selection_indicator'
                             :
                             ''
-                        } 
-                        {...(disabled && {disabled: true})} >
+                        }
+                        {...(disabled && {disabled: true})}
+                        size="large">
                         {
                             t === 0 
                             ?
@@ -190,7 +191,7 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
                 </span>
             </Tooltip>
         </div>
-    )
+    );
 }
 
 export default NavigationIcon

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
-import { Tab, Tabs, Paper, Badge } from '@material-ui/core'
+import { Tab, Tabs, Paper, Badge } from '@mui/material'
 import Fees from './Fees'
 import Events from './Events'
 import Litigation from './Litigation'

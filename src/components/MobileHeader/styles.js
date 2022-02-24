@@ -1,4 +1,7 @@
-import { fade, makeStyles } from '@material-ui/core/styles'
+import { alpha } from '@mui/material/styles';
+
+
+import makeStyles from '@mui/styles/makeStyles';
 
 
 export default makeStyles(theme => ({
@@ -37,13 +40,13 @@ export default makeStyles(theme => ({
         justifyContent: 'flex-end',
         alignItems: 'center',
         flex: 1,
-        '& .MuiBadge-anchorOriginTopRightRectangle': {
+        '& .MuiBadge-anchorOriginTopRightRectangular': {
             transform: 'scale(1) translate(27%, 0%)',
             padding: '0 3px',
             minWidth: 15,
             height: 15
         },
-        '& .MuiBadge-anchorOriginTopRightRectangle.MuiBadge-invisible': {
+        '& .MuiBadge-anchorOriginTopRightRectangular.MuiBadge-invisible': {
             transform: 'scale(0) translate(50%, -50%)'
         },     
         '& .MuiBox-root':{

@@ -2,10 +2,10 @@ import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
 import SplitPane from 'react-split-pane'
-import { IconButton, Paper, Modal, Table, TableHead, TableBody, TableRow, TableCell, TableContainer, TextField } from '@material-ui/core'
+import { IconButton, Paper, Modal, Table, TableHead, TableBody, TableRow, TableCell, TableContainer, TextField } from '@mui/material'
 import { Draggable } from 'react-drag-and-drop'
 
-import { Close, Fullscreen } from '@material-ui/icons'
+import { Close, Fullscreen } from '@mui/icons-material'
 import IllustrationContainer from '../AssetsVisualizer/IllustrationContainer'
 import TimelineContainer from '../AssetsVisualizer/TimelineContainer'
 import AssetsCommentsTimeline from '../AssetsCommentsTimeline'
@@ -258,10 +258,7 @@ const IllustrationCommentContainer = ({
                         className={classes.fullscreenCharts} 
                         square
                     >
-                        <IconButton 
-                            onClick={handleCloseFullscreen} 
-                            className={classes.right}
-                        >
+                        <IconButton onClick={handleCloseFullscreen} className={classes.right} size="large">
                             <Close /> 
                         </IconButton> 
                         {
@@ -308,7 +305,7 @@ const IllustrationCommentContainer = ({
                 }
             </div>
         </SplitPane>
-    )
+    );
 }
  
 export default IllustrationCommentContainer

@@ -1,7 +1,7 @@
 import React, {useRef, useEffect, useState} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Paper, Grid, Typography, TextField, Button, CircularProgress  } from  '@material-ui/core'
-import { Close } from "@material-ui/icons"
+import { Paper, Grid, Typography, TextField, Button, CircularProgress  } from  '@mui/material'
+import { Close } from "@mui/icons-material"
 import useStyles from "./styles"
 
 const DisplayItems = ({items, invalidItems, updateItems, callbackDeleteItem, handlePatchItem}) => {

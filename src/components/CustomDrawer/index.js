@@ -1,4 +1,4 @@
-import Drawer from '@material-ui/core/Drawer'
+import Drawer from '@mui/material/Drawer'
 import clsx from 'clsx'
 import React from 'react'
 import useStyles from './styles'

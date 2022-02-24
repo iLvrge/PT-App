@@ -5,13 +5,13 @@ import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 
 import { BrowserRouter as Router } from 'react-router-dom'
-import { createMuiTheme } from '@material-ui/core'
+import { createTheme, adaptV4Theme } from '@mui/material';
 import { Provider } from 'react-redux'
 
 import * as serviceWorker from './serviceWorker'
 import App from './components/App'
-import { ThemeProvider } from '@material-ui/core/styles'
-import CssBaseline from '@material-ui/core/CssBaseline'
+import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline'
 
 import store from './reducers/store/configureStore'
 import './index.css'
@@ -31,26 +31,28 @@ import { SnackbarProvider } from 'notistack'
 const AppWrapper = () => {
   const theme = useMemo(
     () =>
-      createMuiTheme({
+      createTheme(adaptV4Theme({
         palette: {
-          type: 'dark',
+          mode: 'dark',
         },
-      }),
+      })),
     [],
   )
 
   return (
     <Provider store={store}>
       <Router>
-        <ThemeProvider theme={theme}>
-          <SnackbarProvider maxSnack={3}>
-            <CssBaseline />
-            <App />
-          </SnackbarProvider>
-        </ThemeProvider>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={theme}>
+            <SnackbarProvider maxSnack={3}>
+              <CssBaseline />
+              <App />
+            </SnackbarProvider>
+          </ThemeProvider>
+        </StyledEngineProvider>
       </Router>
     </Provider>
-  )
+  );
 }
 
 ReactDOM.render(<AppWrapper />, document.getElementById('root'))

@@ -1,17 +1,17 @@
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
+import Toolbar from '@mui/material/Toolbar'
+import Typography from '@mui/material/Typography'
 import React, { Fragment, useCallback, useState } from 'react'
-import Tooltip from '@material-ui/core/Tooltip'
-import IconButton from '@material-ui/core/IconButton'
-import DeleteIcon from '@material-ui/icons/Delete'
-import AddIcon from '@material-ui/icons/Add'
+import Tooltip from '@mui/material/Tooltip'
+import IconButton from '@mui/material/IconButton'
+import DeleteIcon from '@mui/icons-material/Delete'
+import AddIcon from '@mui/icons-material/Add'
 import useStyles from './styles'
-import Dialog from '@material-ui/core/Dialog'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText'
-import DialogActions from '@material-ui/core/DialogActions'
-import Button from '@material-ui/core/Button'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogActions from '@mui/material/DialogActions'
+import Button from '@mui/material/Button'
 import StyledSearch from '../../../common/StyledSearch'
 import clsx from 'clsx'
 
@@ -44,7 +44,7 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
         </DialogContent> 
 
         <DialogActions>
-          <Button onClick={onCloseDialog} color="default">
+          <Button onClick={onCloseDialog}>
             CANCEL
           </Button>
           <Button onClick={onConfirmDelete} color="primary" variant={'contained'} autoFocus>
@@ -72,7 +72,7 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
         {
           !onCheckable && numSelected > 0 ? (
             <Tooltip title="Delete">
-              <IconButton aria-label="delete" onClick={deleteHandled}>
+              <IconButton aria-label="delete" onClick={deleteHandled} size="large">
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
@@ -85,7 +85,7 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
               {
                 onAdd && (
                   <Tooltip title="Add">
-                    <IconButton onClick={onAdd}>
+                    <IconButton onClick={onAdd} size="large">
                       <AddIcon />
                     </IconButton>
                   </Tooltip>
@@ -96,7 +96,7 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
         }
       </Toolbar>
     </Fragment>
-  )
+  );
 }
 
 export default Header

@@ -1,13 +1,13 @@
 import React, { Fragment, useState, useCallback } from 'react'
-import Box from '@material-ui/core/Box'
-import TextField from '@material-ui/core/TextField'
-import Select from '@material-ui/core/Select'
-import MenuItem from '@material-ui/core/MenuItem'
-import FormControl from '@material-ui/core/FormControl'
-import Button from '@material-ui/core/Button'
-import { DropzoneArea } from 'material-ui-dropzone'
+import Box from '@mui/material/Box'
+import TextField from '@mui/material/TextField'
+import Select from '@mui/material/Select'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Button from '@mui/material/Button'
+import { DropzoneArea } from 'react-mui-dropzone'
 import { ROLES } from '../contants'
-import InputLabel from '@material-ui/core/InputLabel'
+import InputLabel from '@mui/material/InputLabel'
 
 import useSytles from './styles'
 
@@ -112,13 +112,13 @@ const UserForm = ({ onChangeField, edited }) => {
       {
         profilePicture != null && <img src={profilePicture} width={40}/>
       } */}
-      <DropzoneArea
+     {/*  <DropzoneArea
         classes={{ root: classes.dropzoneArea }}
         showFileNames
         dropzoneText='Upload user picture'
         filesLimit={1}
         onChange={onChangeFile}
-      />
+      /> */}
     </FormControl>
   </Box>
   )

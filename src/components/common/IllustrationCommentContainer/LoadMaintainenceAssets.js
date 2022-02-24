@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
-import { Paper, TextField, InputLabel } from "@material-ui/core";
+import { Paper, TextField, InputLabel } from "@mui/material";
 import Loader from "../Loader";
 import useStyles from "./styles";
 import VirtualizedTable from "../VirtualizedTable";

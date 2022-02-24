@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import PerfectScrollbar from 'react-perfect-scrollbar'
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import IconButton from '@material-ui/core/IconButton'
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
-import { Add, Remove } from '@material-ui/icons'
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import IconButton from '@mui/material/IconButton'
+import Paper from '@mui/material/Paper'
+import Typography from '@mui/material/Typography'
+import { Add, Remove } from '@mui/icons-material'
 import moment from 'moment'
 import useStyles from './styles'
 import FullWidthSwitcher from '../FullWidthSwitcher'
@@ -67,7 +67,7 @@ function ConnectionBox(props) {
       return p.id == props.popup.id
     })
     
-    return(
+    return (
       <div className={classes.rootContainer}>
       {
         info && info != null && info.length > 0 && Object.keys(info[0]).length > 0 
@@ -139,7 +139,7 @@ function ConnectionBox(props) {
               <TableRow>
                 <TableCell>
                   <Typography variant="body2"> 
-                    <IconButton onClick={() => setVisibility(!visibility)}>{visibility === false ? <Add /> : <Remove />}</IconButton>  <span className={classes.red}>Properties ({info[0].inventionTitle.length})</span>
+                    <IconButton onClick={() => setVisibility(!visibility)} size="large">{visibility === false ? <Add /> : <Remove />}</IconButton>  <span className={classes.red}>Properties ({info[0].inventionTitle.length})</span>
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -177,7 +177,7 @@ function ConnectionBox(props) {
         ''
       }
       </div>
-    )
+    );
   } 
   return (
     <div className={classes.container}>

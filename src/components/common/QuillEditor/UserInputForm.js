@@ -4,8 +4,8 @@ import {
     Paper,
     Grid,
     Button 
-} from '@material-ui/core'
-import CloseIcon from '@material-ui/icons/Close'
+} from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
 import PatenTrackApi from '../../../api/patenTrack2'   
 
 import {downloadFile} from '../../../utils/html_encode_decode'

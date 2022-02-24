@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react'
 
 import { useSelector } from 'react-redux'
-import { Tab, Tabs, Paper, Grid, Badge } from '@material-ui/core'
+import { Tab, Tabs, Paper, Grid, Badge } from '@mui/material'
 import FamilyContainer from '../FamilyContainer'
 import LegalEventsContainer from '../LegalEventsContainer'
 import ItemData from './ItemData'

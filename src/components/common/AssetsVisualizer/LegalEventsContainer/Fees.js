@@ -2,13 +2,13 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
 
-import Paper from '@material-ui/core/Paper'
+import Paper from '@mui/material/Paper'
 
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
 import { DataSet } from 'vis-data/esnext'
 import { Timeline } from 'vis-timeline-73/esnext'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import CircularProgress from '@mui/material/CircularProgress'
 import Loader from '../../Loader'
 
 import useStyles from './styles'

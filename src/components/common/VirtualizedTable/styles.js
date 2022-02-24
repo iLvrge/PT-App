@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from '@mui/styles/makeStyles';
 
 const styles = makeStyles((theme) => ({
   tableRootContainer:{
@@ -9,7 +9,8 @@ const styles = makeStyles((theme) => ({
     '& .headingIcon':{
       width: '1.2rem',
       height: '1.2rem',
-      padding: 0
+      padding: 0,
+      marginRight: 5
     }
   },
   td: {
@@ -48,7 +49,7 @@ const styles = makeStyles((theme) => ({
         fontSize: '1rem',
         width: '1rem',
         height: '1rem'
-      },
+      },      
       '& .MuiTableCell-head':{
         fontSize: '1.1rem',
         fontWeight: 400,
@@ -63,7 +64,7 @@ const styles = makeStyles((theme) => ({
               height: 32
             }
           }
-        }
+        },
       }
     },
     '&.noBorderLines':{
@@ -126,6 +127,9 @@ const styles = makeStyles((theme) => ({
     /* margin: '0 10px', */
     '& .MuiSvgIcon-root':{
       fontSize: '1rem'
+    },
+    '& fieldset':{
+      border: 0
     }
   },
   

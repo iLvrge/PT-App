@@ -1,5 +1,6 @@
-import makeStyles from '@material-ui/core/styles/makeStyles'
-import { darken } from '@material-ui/core/styles'
+import { darken } from '@mui/material/styles';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 export default makeStyles((theme) => ({
   root: {

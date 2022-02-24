@@ -1,9 +1,9 @@
 import React, { Fragment, useCallback } from 'react'
-import { Menu, MenuItem } from '@material-ui/core'
-import NestedMenuItem from 'material-ui-nested-menu-item'
+import { Menu, MenuItem } from '@mui/material'
+import { NestedMenuItem } from 'mui-nested-menu'
 import { useSelector } from 'react-redux'
-import AddIcon from '@material-ui/icons/Add'
-import LayersIcon from '@material-ui/icons/Layers'
+import AddIcon from '@mui/icons-material/Add'
+import LayersIcon from '@mui/icons-material/Layers'
 import useStyles from './styles'
 
 const AddMenu = ({ anchorEl, onClose, createParent, associateToParent }) => {

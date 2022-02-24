@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from '@mui/styles/makeStyles';
 
 export default makeStyles(theme => ({
   container: {
@@ -19,10 +19,10 @@ export default makeStyles(theme => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       width: '50%',
     },
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       display: 'none',
     },
   },
@@ -34,7 +34,7 @@ export default makeStyles(theme => ({
     color: 'white',
     fontWeight: 500,
     fontSize: 84,
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       fontSize: 48,
     },
   },
@@ -45,7 +45,7 @@ export default makeStyles(theme => ({
     flexDirection: 'column',
     justifyContent: 'space-around',
     alignItems: 'center',
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       width: '50%',
     },
   },

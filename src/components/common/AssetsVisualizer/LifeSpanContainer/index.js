@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {useLocation} from 'react-router-dom'
-import Tab from '@material-ui/core/Tab'
-import Tabs from '@material-ui/core/Tabs'
-import Paper from '@material-ui/core/Paper'
+import Tab from '@mui/material/Tab'
+import Tabs from '@mui/material/Tabs'
+import Paper from '@mui/material/Paper'
 
 import SpanVisualize from './SpanVisualize'
 import Acknowledgements from './Acknowledgements'

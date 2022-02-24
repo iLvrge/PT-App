@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useSelector } from "react-redux";
 
 import LoadLinkAssets from '../IllustrationCommentContainer/LoadLinkAssets'
-import { InputLabel, MenuItem, FormControl, Select } from '@material-ui/core'
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import { InputLabel, MenuItem, FormControl, Select } from '@mui/material'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/numbers";
 import { getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
 import PatenTrackApi from '../../../api/patenTrack2'

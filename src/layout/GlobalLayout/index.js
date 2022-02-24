@@ -6,7 +6,7 @@ import {
     useHistory,
   } from 'react-router-dom'  
 
-import { Grid} from '@material-ui/core'
+import { Grid} from '@mui/material'
 
 import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect'
 

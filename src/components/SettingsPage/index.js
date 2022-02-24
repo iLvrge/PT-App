@@ -16,7 +16,7 @@ import Utilities from './Tabs/Utilities'
 import Documents from './Tabs/Documents/index'
 import Professionals from './Tabs/Professionals'
 import LawFirms from './Tabs/LawFirms'
-import Grid from '@material-ui/core/Grid'
+import Grid from '@mui/material/Grid'
 
 
 import { setBreadCrumbs } from  '../../actions/patentTrackActions2' 

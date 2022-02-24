@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from '@mui/styles/makeStyles';
 
 const LOGO_WIDTH = 120
 const HEADER_MARGIN = 5

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {  useHistory, useLocation  } from 'react-router-dom'
-import { Paper, Button } from '@material-ui/core'
+import { Paper, Button } from '@mui/material'
 import useStyles from './styles' 
 import VirtualizedTable from '../VirtualizedTable'
 import { DEFAULT_CUSTOMERS_LIMIT } from '../../../api/patenTrack2'

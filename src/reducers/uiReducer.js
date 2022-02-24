@@ -82,7 +82,6 @@ const uiReducer = (state = initialState.ui, action) => {
       }
     }
     case types.SET_RESET_UI_ALL: { 
-      console.log('SET_RESET_UI_ALL', {...state, ...uiInitial})
       return {
         ...state,
         ...uiInitial

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import Paper from '@material-ui/core/Paper'
+import Paper from '@mui/material/Paper'
 import { DragDropProvider, Grid, TableColumnReordering, TableHeaderRow, TableSelection, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
 import { FilteringState, IntegratedFiltering, IntegratedSorting, SelectionState, SortingState } from '@devexpress/dx-react-grid'
 import _last from 'lodash/last'

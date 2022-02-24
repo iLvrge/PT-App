@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
-import Paper from '@material-ui/core/Paper'
+import Paper from '@mui/material/Paper'
 import { DataSet } from 'vis-data/esnext'
 import { Timeline } from 'vis-timeline-73/esnext'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import CircularProgress from '@mui/material/CircularProgress'
 import moment from 'moment'
 import PatenTrackApi from '../../../../api/patenTrack2'
 

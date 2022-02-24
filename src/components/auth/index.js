@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import Loader from '../common/Loader'
 
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@mui/material'
 
 import useStyles from './styles'
 import logo from './logo.svg'

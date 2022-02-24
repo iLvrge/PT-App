@@ -1,5 +1,5 @@
 import React, {} from 'react'
-import { Grid }  from '@material-ui/core'
+import { Grid }  from '@mui/material'
 
 import useStyles from './styles'
 
@@ -73,12 +73,12 @@ const Reports = () => {
             rf_id: ''
         }
     ]
-    return(
+    return (
         <Grid
             container
             className={classes.container}
             spacing={2}
-            justify="flex-start"
+            justifyContent="flex-start"
             alignItems="flex-start"
         >
             <Grid
@@ -102,7 +102,7 @@ const Reports = () => {
                     container
                     spacing={2}
                     direction="row"
-                    justify="flex-start"
+                    justifyContent="flex-start"
                     alignItems="flex-start"
                 >
                     {
@@ -121,7 +121,7 @@ const Reports = () => {
                 </Grid>                
             </Grid>
         </Grid>
-    )
+    );
 }
 
 export default Reports;

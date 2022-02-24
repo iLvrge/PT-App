@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Paper } from '@material-ui/core'
+import { Paper } from '@mui/material'
 import useStyles from './styles' 
 import VirtualizedTable from '../common/VirtualizedTable'
 

@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import IconButton from '@material-ui/core/IconButton'
-import Tooltip from '@material-ui/core/Tooltip'
-import Avatar from '@material-ui/core/Avatar'
-import Button from '@material-ui/core/Button'
-// import NotificationsIcon from "@material-ui/icons/NotificationsNone";
-import SettingsIcon from '@material-ui/icons/Settings'
-import DashboardIcon from '@material-ui/icons/Dashboard'
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
+import Avatar from '@mui/material/Avatar'
+import Button from '@mui/material/Button'
+// import NotificationsIcon from "@mui/icons-material/NotificationsNone";
+import SettingsIcon from '@mui/icons-material/Settings'
+import DashboardIcon from '@mui/icons-material/Dashboard'
 
 import useStyles from './styles'
 
@@ -19,7 +19,7 @@ import { getProfile, setCurrentWidget, setSettingText } from '../../actions/pate
 
 import Select from 'react-select'
 import { setSelectedPortfolio } from '../../actions/settingsActions'
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 
 const Header = (callback, deps) => {
   const classes = useStyles()
@@ -71,7 +71,6 @@ const Header = (callback, deps) => {
   }), [])
 
   return (
-
     <AppBar className={classes.root} color='transparent' position='relative' title={<img src={siteLogo} />}>
       <Toolbar className={classes.toolbar}>
         <Grid item sm={2} className={classes.siteLogoCon}>
@@ -107,7 +106,7 @@ const Header = (callback, deps) => {
         <div className={classes.rightPanel}>
           <Link to={isDashboardView ? '/settings' : '/'}>
             <Tooltip title={isDashboardView ? 'settings' : 'dashboard'}>
-              <IconButton classes={{ root: classes.headerIcon }}>
+              <IconButton classes={{ root: classes.headerIcon }} size="large">
                 {
                   isDashboardView ?
                     <SettingsIcon  /> :
@@ -132,7 +131,7 @@ const Header = (callback, deps) => {
 
       </Toolbar>
     </AppBar>
-  )
+  );
 }
 
 export default Header

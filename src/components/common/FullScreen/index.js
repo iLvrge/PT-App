@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 
 
-import Paper from '@material-ui/core/Paper'
+import Paper from '@mui/material/Paper'
 
 import useStyles from './styles'
 
-import IconButton from '@material-ui/core/IconButton'
-import { Fullscreen, Close } from '@material-ui/icons'
-import Modal from '@material-ui/core/Modal'
+import IconButton from '@mui/material/IconButton'
+import { Fullscreen, Close } from '@mui/icons-material'
+import Modal from '@mui/material/Modal'
 
 
 const FullScreen = ({componentItems, setScreen}) => {
@@ -22,7 +22,7 @@ const FullScreen = ({componentItems, setScreen}) => {
         setIsFullscreenOpen(!isFullscreenOpen)
     }
 
-    return(
+    return (
         <Paper className={classes.root} square>
             {
                 !isFullscreenOpen  && (
@@ -36,7 +36,10 @@ const FullScreen = ({componentItems, setScreen}) => {
                 open={isFullscreenOpen}
             > 
                 <Paper className={classes.fullscreenCharts} square>
-                    <IconButton onClick={handleClickOpenCloseFullscreen} className={classes.right}>
+                    <IconButton
+                        onClick={handleClickOpenCloseFullscreen}
+                        className={classes.right}
+                        size="large">
                         <Close />
                     </IconButton>
                     {
@@ -49,7 +52,7 @@ const FullScreen = ({componentItems, setScreen}) => {
                 </Paper>
             </Modal>
         </Paper>
-    ) 
+    ); 
 }
 
 export default FullScreen

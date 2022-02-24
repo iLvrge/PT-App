@@ -1,6 +1,6 @@
 import React, {useRef, useEffect, useState} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Paper, Grid, Typography, TextField } from  '@material-ui/core'
+import { Paper, Grid, Typography, TextField } from  '@mui/material'
 import DisplayItems from './DisplayItems'
 import PatenTrackApi from '../../../api/patenTrack2'
 

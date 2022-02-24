@@ -1,5 +1,5 @@
 import React from 'react'
-import AttachFileIcon from '@material-ui/icons/AttachFile';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 const AttachButton = () => (
   <AttachFileIcon />

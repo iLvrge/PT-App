@@ -1,11 +1,13 @@
-import { fade, makeStyles } from '@material-ui/core/styles'
+import { alpha } from '@mui/material/styles';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 export default makeStyles(theme => ({
   tableRoot: {
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: fade(theme.palette.common.white, 0.05),
+    backgroundColor: alpha(theme.palette.common.white, 0.05),
   },
   dialogButton: {
     flex: '1 1 100%',

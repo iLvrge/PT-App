@@ -1,5 +1,5 @@
-import { makeStyles } from '@material-ui/core/styles'
-import { indigo } from '@material-ui/core/colors'
+import makeStyles from '@mui/styles/makeStyles';
+import { indigo } from '@mui/material/colors'
 export default makeStyles(theme => ({
     root: {
         height: '100%',

@@ -1,5 +1,5 @@
 import _last from 'lodash/last'
-import Dialog from '@material-ui/core/Dialog'
+import Dialog from '@mui/material/Dialog'
 import FileViewer from 'react-file-viewer'
 import React from 'react'
 import useStyles from './styles'

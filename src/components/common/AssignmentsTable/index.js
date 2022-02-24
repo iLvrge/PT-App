@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
-import { Paper } from "@material-ui/core";
+import { Paper } from "@mui/material";
 import useStyles from "./styles";
 import VirtualizedTable from "../VirtualizedTable";
 import ChildTable from "./ChildTable";

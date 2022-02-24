@@ -9,12 +9,12 @@ import { Link,
 } from 'react-router-dom'
 import { 
     Avatar, Box, Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, 
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { 
     Business as BusinessIcon, 
     LockOpen as LockOpenIcon, 
-  } from '@material-ui/icons'
+  } from '@mui/icons-material'
 
 import useStyles from './styles' 
 

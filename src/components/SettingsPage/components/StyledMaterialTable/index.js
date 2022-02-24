@@ -1,7 +1,7 @@
-import MaterialTable, {MTableToolbar} from 'material-table'
+import MaterialTable, {MTableToolbar} from '@material-table/core'
 import React, { forwardRef, useRef, useState } from 'react'
-import { AddBox, ArrowDownward, Check, ChevronLeft, ChevronRight, Clear, DeleteOutline, Edit, FilterList, FirstPage, LastPage, Remove, SaveAlt, Search, ViewColumn, HelpOutline } from '@material-ui/icons'
-import Modal from '@material-ui/core/Modal'
+import { AddBox, ArrowDownward, Check, ChevronLeft, ChevronRight, Clear, DeleteOutline, Edit, FilterList, FirstPage, LastPage, Remove, SaveAlt, Search, ViewColumn, HelpOutline } from '@mui/icons-material'
+import Modal from '@mui/material/Modal'
 import useStyles from './styles'
 
 const TABLE_ICONS = {

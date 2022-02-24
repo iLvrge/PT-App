@@ -1,7 +1,7 @@
 import React, { useState, useEffect, forwardRef } from 'react'
 import { connect } from 'react-redux'
 import useStyles from './styles'
-import MaterialTable from 'material-table'
+import MaterialTable from '@material-table/core'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import {
   AddBox,
@@ -19,7 +19,7 @@ import {
   SaveAlt,
   Search,
   ViewColumn,
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 
 import {
   getLawyers,

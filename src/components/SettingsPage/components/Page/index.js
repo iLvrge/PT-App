@@ -1,6 +1,6 @@
 import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import useStyles from './styles'
-import Paper from '@material-ui/core/Paper'
+import Paper from '@mui/material/Paper'
 import Header from '../Header'
 import EditDialog from '../EditDialog'
 import { useSnackbar } from 'notistack'

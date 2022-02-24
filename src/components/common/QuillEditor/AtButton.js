@@ -1,5 +1,5 @@
 import React from 'react'
-import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 
 const AtButton = () => (
   <AlternateEmailIcon />

@@ -2,9 +2,9 @@ import React, { Fragment, useCallback, useEffect, useState, useRef } from 'react
 
 import { useDispatch } from 'react-redux'
 
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, CircularProgress } from '@material-ui/core'
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, CircularProgress } from '@mui/material'
 
-import AddIcon from '@material-ui/icons/Add'
+import AddIcon from '@mui/icons-material/Add'
 
 import { fetchCompaniesList } from '../../../../../actions/patentTrackActions2'
 

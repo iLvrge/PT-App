@@ -8,9 +8,9 @@ import {
     CircularProgress,
     Typography,
     TextField
-} from "@material-ui/core"
-import { Add, Delete, Close, Save } from "@material-ui/icons"
-import CloseIcon from '@material-ui/icons/Close'
+} from "@mui/material"
+import { Add, Delete, Close, Save } from "@mui/icons-material"
+import CloseIcon from '@mui/icons-material/Close'
 import ImportAsset from './ImportAsset'
 import Googlelogin from '../Googlelogin'
 import VirtualizedTable from '../VirtualizedTable'

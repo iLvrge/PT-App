@@ -18,11 +18,11 @@ import {
   faChevronDown
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
-import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
-import { TableCell, Avatar, Modal, ListItemText, ListItemIcon } from '@material-ui/core'
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
+import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
+import { TableCell, Avatar, Modal, ListItemText, ListItemIcon } from '@mui/material'
 import {
   ArrowKeyStepper,
   AutoSizer,
@@ -31,15 +31,15 @@ import {
   Table,
   InfiniteLoader
 } from "react-virtualized";
-import TableRow from "@material-ui/core/TableRow";
-import Select from '@material-ui/core/Select'; 
-import MenuItem from '@material-ui/core/MenuItem';
-import Typography from '@material-ui/core/Typography';
+import TableRow from "@mui/material/TableRow";
+import Select from '@mui/material/Select'; 
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
 import useStyles from "./styles";
-import Tooltip from "@material-ui/core/Tooltip";
-import Checkbox from "@material-ui/core/Checkbox";
-import Radio from "@material-ui/core/Radio";
-import Rating from '@material-ui/lab/Rating';
+import Tooltip from "@mui/material/Tooltip";
+import Checkbox from "@mui/material/Checkbox";
+import Radio from "@mui/material/Radio";
+import Rating from '@mui/material/Rating';
 import _orderBy  from "lodash/orderBy";
 import _sortBy  from "lodash/sortBy";
 import useHeaderRenderer from "./hooks/useHeaderRenderer";

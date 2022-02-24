@@ -1,5 +1,6 @@
-import makeStyles from '@material-ui/core/styles/makeStyles'
-import { lighten, fade } from '@material-ui/core/styles'
+import { lighten, alpha } from '@mui/material/styles';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 export default makeStyles((theme) => ({
   childrenTable: {

@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react'
 
-import { Paper, Dialog, DialogContent, DialogTitle, DialogActions, IconButton, Typography  } from '@material-ui/core'
+import { Paper, Dialog, DialogContent, DialogTitle, DialogActions, IconButton, Typography  } from '@mui/material'
 import Draggable from "react-draggable"
-import CloseIcon from '@material-ui/icons/Close'
+import CloseIcon from '@mui/icons-material/Close'
 import {ResizableBox} from "react-resizable"
 import useStyles from './styles'
 

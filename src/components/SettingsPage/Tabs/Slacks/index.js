@@ -1,6 +1,6 @@
 import React, {useMemo, useCallback, useEffect, useState} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Paper, TextField, FormControl, FormLabel } from "@material-ui/core"
+import { Paper, TextField, FormControl, FormLabel } from "@mui/material"
 import useStyles from './styles'
 import CompaniesTable from '../Compaines/Names/CompaniesTable'
 import Header from '../../components/Header'

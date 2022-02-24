@@ -7,9 +7,9 @@ import {
         Link,
         Select,
         MenuItem,
-    } from '@material-ui/core'
-import LockIcon from '@material-ui/icons/Lock'
-import LockOpenIcon from '@material-ui/icons/LockOpen'
+    } from '@mui/material'
+import LockIcon from '@mui/icons-material/Lock'
+import LockOpenIcon from '@mui/icons-material/LockOpen'
 import SplitPane from 'react-split-pane'
 import VirtualizedTable from '../../../common/VirtualizedTable'
 import useStyles from './styles'

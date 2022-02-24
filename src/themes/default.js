@@ -14,7 +14,7 @@ export default {
     green: 'rgb(112, 168, 0 )'
   },
   palette: {
-    type: 'dark',
+    mode: 'dark',
     primary: {
       main: primary,
       light: tinycolor(primary)

@@ -15,13 +15,13 @@ import { Paper,
   TextField,
   Tooltip,
   Zoom
-} from '@material-ui/core'
+} from '@mui/material'
 import { 
   Folder as FolderIcon,
   Close as CloseIcon,
   InsertDriveFileOutlined as InsertDriveFileOutlinedIcon,
   InsertDriveFile as InsertDriveFileIcon
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 
 import { Droppable } from 'react-drag-and-drop'
 import { Timeline, TimelineEvent } from 'react-event-timeline'

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Fade, TextField, Typography } from '@material-ui/core'
+import { Button, Fade, TextField, Typography } from '@mui/material'
 import useStyles from './styles'
 import { withRouter } from 'react-router-dom'
 

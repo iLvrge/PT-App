@@ -7,8 +7,8 @@ import React, {
 } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {useLocation} from 'react-router-dom'
-import { Paper, Popover } from "@material-ui/core";
-import { Clear, NotInterested, KeyboardArrowDown } from '@material-ui/icons';
+import { Paper, Popover } from "@mui/material";
+import { Clear, NotInterested, KeyboardArrowDown } from '@mui/icons-material';
 import Loader from "../Loader";
 import useStyles from "./styles";
 import VirtualizedTable from "../VirtualizedTable";

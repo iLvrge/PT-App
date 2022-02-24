@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { Grid, Paper, Typography, Link, List,
     ListItem,
     ListItemIcon,
-    ListItemText,} from '@material-ui/core'
+    ListItemText,} from '@mui/material'
 import { menuControlList } from '../../utils/controlList'
 import { setControlModal } from '../../actions/uiActions'
 import useStyles from './styles'

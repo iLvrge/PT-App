@@ -4,7 +4,7 @@ import { addUser, deleteUser, fetchUsers, updateUser } from '../../../../actions
 import { ROLES, ROLES_INV } from './contants'
 import UserForm from './UserForm'
 import Page from '../../components/Page'
-import Checkbox from '@material-ui/core/Checkbox'
+import Checkbox from '@mui/material/Checkbox'
 
 import { setBreadCrumbs } from  '../../../../actions/patentTrackActions2'
 

@@ -7,7 +7,7 @@ import {
   Modal,
   Backdrop,
   DialogContent
-} from '@material-ui/core'
+} from '@mui/material'
 
 import useStyles from './styles'
 import CustomToolbar from './CustomToolbar'
@@ -494,8 +494,9 @@ const QuillEditor = ({
         />   
         {GetMenuComponent}
       </div>
-      <Modal
-        disableBackdropClick={false}
+      <Modal// `disableBackdropClick` is removed by codemod.
+// You can find more details about this breaking change in [the migration guide](https://mui.com/guides/migration-v4/#modal)
+
         open={modalOpen}
         onClose={onHandleModalClose}
         BackdropComponent={Backdrop}
@@ -503,14 +504,13 @@ const QuillEditor = ({
           timeout: 500,
         }}
         aria-labelledby="assignor-assignee"
-        aria-describedby=""
-      >
+        aria-describedby="">
         <>
           <UserInputForm />
         </>
       </Modal> 
     </div>
-  )
+  );
 }
 
 export default QuillEditor

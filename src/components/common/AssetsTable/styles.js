@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/styles'
+import makeStyles from '@mui/styles/makeStyles';
 
 export default makeStyles((theme) => ({
     root: {
@@ -43,6 +43,8 @@ export default makeStyles((theme) => ({
             fontSize: '1.3rem',
             color: '#fff',
             width: '1.3rem',
+            left: 2,
+            top: '17px  !important'
         }
     },
     mobile: {

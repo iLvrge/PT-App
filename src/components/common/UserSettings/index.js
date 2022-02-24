@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 
 import { connect } from 'react-redux'
 import useStyles from './styles'
-import { Grid } from '@material-ui/core'
+import { Grid } from '@mui/material'
 import Loader from '../Loader'
 import SearchCompanies from '../SearchCompanies'
 import Companies from '../Companies'

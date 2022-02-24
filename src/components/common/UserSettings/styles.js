@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from '@mui/styles/makeStyles';
 
 export default makeStyles(theme => ({
   container: {
@@ -8,7 +8,7 @@ export default makeStyles(theme => ({
     flexWrap: 'nowrap',
     overflowX: 'hidden',
     overflowY: 'hidden',
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('lg')]: {
       height: 'auto',
     },
   },

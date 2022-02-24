@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {  useHistory, useLocation  } from 'react-router-dom'
-import { Paper } from '@material-ui/core'
+import { Paper } from '@mui/material'
 import moment from  'moment'
 import clsx from 'clsx'
 import useStyles from './styles' 

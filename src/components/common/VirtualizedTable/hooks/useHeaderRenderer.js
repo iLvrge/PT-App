@@ -1,23 +1,23 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import TableCell from '@material-ui/core/TableCell'
+import TableCell from '@mui/material/TableCell'
 import clsx from 'clsx'
-import Checkbox from '@material-ui/core/Checkbox'
-import Radio from '@material-ui/core/Radio'
-import { FilterList } from '@material-ui/icons'
-import Badge from '@material-ui/core/Badge'
-import TableSortLabel from '@material-ui/core/TableSortLabel'
-import Menu from '@material-ui/core/Menu'
-import Fade from '@material-ui/core/Fade'
-import Typography from '@material-ui/core/Typography'
-import Select from '@material-ui/core/Select'
-import MenuItem from '@material-ui/core/MenuItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
+import Checkbox from '@mui/material/Checkbox'
+import Radio from '@mui/material/Radio'
+import { FilterList } from '@mui/icons-material'
+import Badge from '@mui/material/Badge'
+import TableSortLabel from '@mui/material/TableSortLabel'
+import Menu from '@mui/material/Menu'
+import Fade from '@mui/material/Fade'
+import Typography from '@mui/material/Typography'
+import Select from '@mui/material/Select'
+import MenuItem from '@mui/material/MenuItem'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
 import Draggable from "react-draggable"
 import _groupBy from 'lodash/groupBy'
-import { makeStyles } from '@material-ui/core/styles'
-import Chip from '@material-ui/core/Chip'
-import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined'
+import makeStyles from '@mui/styles/makeStyles';
+import Chip from '@mui/material/Chip'
+import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined'
 
 import { numberWithCommas } from '../../../../utils/numbers'
 
@@ -54,19 +54,21 @@ const useStyles = makeStyles(() => ({
   },
   badge: {
     position: 'absolute',
-    left: '-4px', 
+    left: -4, 
+    bottom: 9,
     '& .MuiBadge-colorPrimary': {
-      top: '4px',
+      top: 4,
       backgroundColor: 'inherit',
       right: 'inherit',
-      transform: 'none'
+      transform: 'none',
+      color: '#fff'
     }    
   },
   badgeSelection: {
     position: 'absolute',
     left: 'calc(100% - 83%)', 
     '& .MuiBadge-colorPrimary': {
-      top: '4px',
+      top: 4,
       backgroundColor: 'inherit',
       right: 'inherit',
       transform: 'none',

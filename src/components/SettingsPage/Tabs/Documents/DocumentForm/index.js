@@ -1,6 +1,6 @@
 import React, { Fragment, useCallback } from 'react'
-import TextField from '@material-ui/core/TextField'
-import { DropzoneArea } from 'material-ui-dropzone'
+import TextField from '@mui/material/TextField'
+import { DropzoneArea } from 'react-mui-dropzone'
 import useSytles from './styles'
 
 const DocumentForm = ({ edited, onChangeField }) => {
@@ -37,7 +37,7 @@ const DocumentForm = ({ edited, onChangeField }) => {
         showFileNames
         filesLimit={1}
         onChange={onChangeFile}
-      />
+      /> 
 
     </Fragment>
   )

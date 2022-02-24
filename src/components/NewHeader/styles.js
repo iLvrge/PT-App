@@ -1,4 +1,6 @@
-import { fade, makeStyles } from '@material-ui/core/styles'
+import { alpha } from '@mui/material/styles';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 const LOGO_WIDTH = 120
 const HEADER_MARGIN = 5
@@ -120,13 +122,13 @@ export default makeStyles(theme => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        '& .MuiBadge-anchorOriginTopRightRectangle': {
+        '& .MuiBadge-anchorOriginTopRightRectangular': {
             transform: 'scale(1) translate(27%, 0%)',
             padding: '0 3px',
             minWidth: 15,
             height: 15
         },
-        '& .MuiBadge-anchorOriginTopRightRectangle.MuiBadge-invisible': {
+        '& .MuiBadge-anchorOriginTopRightRectangular.MuiBadge-invisible': {
             transform: 'scale(0) translate(50%, -50%)'
         },
         minWidth: '21%'
@@ -196,9 +198,9 @@ export default makeStyles(theme => ({
     search: {
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
-        backgroundColor: fade(theme.palette.common.white, 0.15),
+        backgroundColor: alpha(theme.palette.common.white, 0.15),
         '&:hover': {
-          backgroundColor: fade(theme.palette.common.white, 0.25),
+          backgroundColor: alpha(theme.palette.common.white, 0.25),
         },
         /* margin: '0 4px !important', */
         height: 26,
@@ -223,7 +225,7 @@ export default makeStyles(theme => ({
         padding: 0,
         height: 26,
         // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
         transition: theme.transitions.create('width'),
         width: '100%',
         [theme.breakpoints.up('sm')]: {
@@ -314,7 +316,7 @@ export default makeStyles(theme => ({
                 border: '1px solid rgb(255,255,255)'
             },
         },
-        [theme.breakpoints.down('lg')]: {
+        [theme.breakpoints.down('xl')]: {
             padding: '1vw',
         },
         '& .MuiLink-root': {

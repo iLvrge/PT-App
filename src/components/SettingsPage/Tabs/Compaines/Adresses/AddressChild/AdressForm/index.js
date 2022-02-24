@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import TextField from '@material-ui/core/TextField'
+import TextField from '@mui/material/TextField'
 
 const AddressesForm = ({ edited, onChangeField, companyName }) => (
   <Fragment>

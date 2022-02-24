@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react'
-import { Typography, Slider } from '@material-ui/core'
+import { Typography, Slider } from '@mui/material'
 import Loader from '../../Loader'
 import useStyles from './styles'
 

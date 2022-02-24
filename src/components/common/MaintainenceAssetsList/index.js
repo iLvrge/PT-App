@@ -6,8 +6,8 @@ import React, {
   useMemo,
 } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Paper } from "@material-ui/core";
-import { Clear, NotInterested, KeyboardArrowDown } from '@material-ui/icons';
+import { Paper } from "@mui/material";
+import { Clear, NotInterested, KeyboardArrowDown } from '@mui/icons-material';
 import moment from "moment";
 
 import useStyles from "./styles";

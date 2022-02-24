@@ -1,7 +1,7 @@
 import React from 'react'
-import InputBase from '@material-ui/core/InputBase'
+import InputBase from '@mui/material/InputBase'
 import useStyles from './styles'
-import SearchIcon from '@material-ui/icons/Search'
+import SearchIcon from '@mui/icons-material/Search'
 
 const StyledSearch = (props) => {
   const classes = useStyles()

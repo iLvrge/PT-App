@@ -5,14 +5,14 @@ import {
     Box,
     IconButton,
     Badge
-} from '@material-ui/core'
+} from '@mui/material'
 import { useDispatch, 
     useSelector 
 } from 'react-redux'
 import { 
     NotificationsNone as NotificationsIcon,
     PermContactCalendar as PermContactCalendarIcon
-  } from '@material-ui/icons'
+  } from '@mui/icons-material'
 
  
 import useStyles from './styles'
@@ -79,10 +79,10 @@ const HeaderIcons = (props) => {
         >
             {
                 props.icons.map( icon => (
-                    <IconButton 
+                    <IconButton
                         className={clsx(classes.buttonIcon, { [classes.clipIconIsActive]: icon.name === 'clipboard' && display_clipboard === true }, { [classes.clipIconActive]: icon.name === 'clipboard' && clipboard_assets.length > 0 })}
-                        {...(icon.name === 'clipboard' && { onClick: handleClipboard })} 
-                    >
+                        {...(icon.name === 'clipboard' && { onClick: handleClipboard })}
+                        size="large">
                         {
                             icon.name === 'notification'
                             ?                        
@@ -118,7 +118,7 @@ const HeaderIcons = (props) => {
                 ))
             }
         </Box>
-    )
+    );
 
 }
 

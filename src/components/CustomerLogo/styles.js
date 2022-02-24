@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from '@mui/styles/makeStyles';
 
 const LOGO_WIDTH = 120
 const HEADER_MARGIN = 5
@@ -42,7 +42,7 @@ export default makeStyles(theme => ({
                 stroke: 'rgb(230, 0, 0)',
             }
         },
-        [theme.breakpoints.down('md')]: {
+        [theme.breakpoints.down('lg')]: {
             width: 25,
             height: 25,
         }

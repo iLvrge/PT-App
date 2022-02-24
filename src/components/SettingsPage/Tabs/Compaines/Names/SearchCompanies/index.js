@@ -3,15 +3,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import useStyles from './styles'
 import Loader from '../../../../../common/Loader'
 import { addCompany, setSearchCompanies } from '../../../../../../actions/patenTrackActions'
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import StyledSearch from '../../../../../common/StyledSearch'
-import { Toolbar, IconButton, Tooltip, Typography, Zoom } from '@material-ui/core'
+import { Toolbar, IconButton, Tooltip, Typography, Zoom } from '@mui/material'
 import { DebounceInput } from 'react-debounce-input'
 import VirtualizedTable from '../../../../../common/VirtualizedTable'
 import PatenTrackApi from '../../../../../../api/patenTrack'
-import SendIcon from '@material-ui/icons/Send'
+import SendIcon from '@mui/icons-material/Send'
 import AddMenu from './AddMenu'
-import Chip from '@material-ui/core/Chip'
+import Chip from '@mui/material/Chip'
 
 const COLUMNS = [
   {
@@ -158,7 +158,6 @@ const resizeColumnsStop = useCallback((dataKey, data) => {
           {
             searchCompanies.length > 0 && (
               <Chip
-                variant='default'
                 color='default'
                 size="small"
                 label={`${selected.length ? `${selected.length}/` : ''}${searchCompanies.length.toLocaleString()}`} />
@@ -183,16 +182,17 @@ const resizeColumnsStop = useCallback((dataKey, data) => {
           >
             <div>
               <IconButton
-                disabled={!selected.length}                
+                disabled={!selected.length}
                 color={'primary'}
-                onClick={openAddMenu}>
+                onClick={openAddMenu}
+                size="large">
                 <SendIcon />
               </IconButton>
             </div>
           </Tooltip>          
         </Fragment>
 
-        <IconButton onClick={onClose} style={{ display: 'none' }}>
+        <IconButton onClick={onClose} style={{ display: 'none' }} size="large">
           <ChevronLeftIcon />
         </IconButton>
       </Toolbar>
@@ -219,7 +219,7 @@ const resizeColumnsStop = useCallback((dataKey, data) => {
         }
       </div>
     </Fragment>
-  )
+  );
 }
 
 export default SearchCompanies
