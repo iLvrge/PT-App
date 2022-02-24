@@ -80,6 +80,7 @@ export default makeStyles(theme => ({
     },
     tabs: {
         minHeight: 47, 
+        fontSize: '1.1rem'
     },
     tab: {
         flex: 1,

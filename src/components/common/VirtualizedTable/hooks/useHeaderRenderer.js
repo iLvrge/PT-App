@@ -95,6 +95,7 @@ const HeadCell = ({
   rows,
   totalRows,
   grandTotal,
+  grandTotalAssets,
   onChangeColumnFilters,
   resizeColumnsWidth,
   resizeColumnsStop,
@@ -108,7 +109,7 @@ const HeadCell = ({
     console.log('LIBRARY1', selectedItems, selectedGroup, typeof selectedGroup, typeof selectedGroup !== 'undefined')
   } */
   const classes = useStyles()
-  const { align, headerAlign, role, disableSort, filterable, paddingLeft, badge, showGrandTotal, draggable, headingIcon, show_selection_count, secondLabel, show, showDropdown, list, onClickHeadDropdown, show_button, button } = columns[columnIndex]
+  const { align, headerAlign, role, disableSort, filterable, paddingLeft, badge, showGrandTotal, grandTotalField, draggable, headingIcon, show_selection_count, secondLabel, show, showDropdown, list, onClickHeadDropdown, show_button, button } = columns[columnIndex]
   const [ anchorEl, setAnchorEl ] = useState(null)
   const [ columnFilters, setColumnFilters ] = useState([])
   const [dropdownOpen, setDropdownOpen] = useState(false)
@@ -134,7 +135,7 @@ const HeadCell = ({
   const handleDropdownOpen = () => {
     setDropdownOpen(true);
   };
-
+  
   /* console.log('useHEaderRenderer=>', allSelected, selectedItems.length, totalRows, (selectedItems.length > 0 && selectedItems.length < totalRows) ) */
   return ( 
     <TableCell
@@ -296,7 +297,7 @@ const HeadCell = ({
                   direction={sortDirection.toLowerCase()}>                    
                     { label }                    
                     {badge === true && totalRows > 0 ? <Badge color='primary' max={9999999} className={classes.badge} badgeContent={`${numberWithCommas(totalRows)} ${ secondLabel !== undefined ? secondLabel : ''}`} showZero></Badge> : ''}
-                    {showGrandTotal === true && ( grandTotal > 0 || rows.length > 0 && rows[rows.length - 1].grand_total > 0 ) ? <Badge color='primary' max={9999999} className={classes.badge} badgeContent={`${numberWithCommas(grandTotal > 0 ? grandTotal : rows.length > 0 && rows[rows.length - 1].grand_total ? rows[rows.length - 1].grand_total : 0)} ${ secondLabel !== undefined ? secondLabel : ''}`} showZero></Badge> : ''}
+                    {showGrandTotal === true && ( grandTotal > 0 || rows.length > 0 && rows[rows.length - 1].grand_total > 0 || (typeof grandTotalAssets !== 'undefined' && grandTotalAssets > 0 && grandTotalField == 'grandTotalAssets')) ? <Badge color='primary' max={9999999} className={classes.badge} badgeContent={`${numberWithCommas((typeof grandTotalAssets !== 'undefined' && grandTotalField == 'grandTotalAssets' && grandTotalAssets > 0) ? grandTotalAssets : grandTotal > 0 ? grandTotal : rows.length > 0 && rows[rows.length - 1].grand_total ? rows[rows.length - 1].grand_total : 0)} ${ secondLabel !== undefined ? secondLabel : ''}`} showZero></Badge> : ''}
                     { badge === false && showGrandTotal === false &&  secondLabel !== undefined ? <div className={classes.labelPos}>{secondLabel}</div> : ''}
                     { show_button === true ? button : '' }
                 </TableSortLabel>
@@ -375,7 +376,7 @@ const HeadCell = ({
   )
 }
 
-function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSelectAll, allSelected, isIndeterminate, totalRows, grandTotal, onChangeColumnFilters, resizeColumnsWidth, resizeColumnsStop, icon, checkedIcon, selectedItems, selectedGroup) {
+function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSelectAll, allSelected, isIndeterminate, totalRows, grandTotal, grandTotalAssets, onChangeColumnFilters, resizeColumnsWidth, resizeColumnsStop, icon, checkedIcon, selectedItems, selectedGroup) {
   
   return useCallback(({ sortBy, dataKey, sortDirection, label, columnIndex }) => {
     return (
@@ -398,6 +399,7 @@ function useHeaderRenderer(rows, headerHeight, columns, createSortHandler, onSel
         rows={rows}
         totalRows={totalRows}
         grandTotal={grandTotal}
+        grandTotalAssets={grandTotalAssets}
         onChangeColumnFilters={onChangeColumnFilters}
         resizeColumnsWidth={resizeColumnsWidth}
         resizeColumnsStop={resizeColumnsStop}

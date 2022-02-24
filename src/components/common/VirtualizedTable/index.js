@@ -73,6 +73,7 @@ const VirtualizedTable = ({
   optionalKey,
   totalRows,
   grandTotal,
+  grandTotalAssets,
   forceChildWaitCall,
   backgroundRow,
   backgroundRowKey,
@@ -468,9 +469,10 @@ const VirtualizedTable = ({
                 : (
                   <span>{cellData != '' && cellData != undefined && cellData != 'undefined' ? staticIcon + format(cellData) : ''}</span>
                 ) 
-              : (
+              : cellData != '' ? (
                   <span>{cellData}</span>
                 )
+              : ''
           }
         </TableCell> 
       );
@@ -512,6 +514,7 @@ const VirtualizedTable = ({
     isIndeterminate,
     totalRows,
     grandTotal,
+    grandTotalAssets,
     onChangeColumnFilters,
     resizeColumnsWidth,
     resizeColumnsStop,

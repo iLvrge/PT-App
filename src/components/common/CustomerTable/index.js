@@ -53,6 +53,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     const tableRef = useRef()
     const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
     const [ grandTotal, setGrandTotal ] = useState( 0 )
+    const [ grandTotalAssets, setGrandTotalAssets ] = useState( 0 )
     const [ childSelected, setCheckedSelected] = useState( 0 )
     const [ currentSelection, setCurrentSelection] = useState(null)    
     const [ selectedRow, setSelectedRow] = useState( [] )
@@ -104,20 +105,31 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             align: 'left'         
         },
         {
-            width: 70,
-            minWidth: 70,
+            width: 100,
+            minWidth: 100,
             label: 'Assignments',
             dataKey: 'totalTransactions', 
             showGrandTotal: true,  
             align: 'center'             
+        },     
+        {
+            width: 70,
+            minWidth: 70,
+            label: 'Assets',
+            dataKey: 'totalAssets', 
+            showGrandTotal: true, 
+            grandTotalField: 'grandTotalAssets' ,
+            align: 'center' 
         }
     ]
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)
     useEffect(() => {
         if( assetTypeCompanies.length > 0 ) {
             setGrandTotal(assetTypeCompanies[assetTypeCompanies.length - 1].grand_total)
+            setGrandTotalAssets(assetTypeCompanies[assetTypeCompanies.length - 1].grand_total_assets)
         } else {
             setGrandTotal(0)
+            setGrandTotalAssets(0)
         }
     }, [ assetTypeCompanies ]) 
     
@@ -288,6 +300,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             defaultSortDirection={`asc`}
             totalRows={totalRecords}
             grandTotal={grandTotal}
+            grandTotalAssets={grandTotalAssets} 
             responsive={false} 
             noBorderLines={true}
             width={width}

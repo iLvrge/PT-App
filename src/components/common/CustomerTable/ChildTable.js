@@ -92,7 +92,6 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
                 if( data.list != null && data != '' && data.list.length > 0 ){
                     let companiesList = [...assetTypeCompanies.list] 
                     const promise = companiesList.map( (row, index) => {
-                        console.log(row.id, partiesId)
                         if( row.id == partiesId){                            
                             companiesList[index].totalTransactions = data.list.length
                         }
@@ -120,7 +119,7 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
 
     const onHandleClickRow = useCallback((e,  row) => {
         e.preventDefault()
-        getTransactionData(dispatch, row.rf_id)
+        /* getTransactionData(dispatch, row.rf_id) */
     }, [ dispatch, selectItems, currentSelection ])
 
     const getTransactionData = (dispatch, rf_id) => {
@@ -143,7 +142,7 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
     if (assignmentLoading) return <Loader />
 
     return (
-        <Paper className={classes.root} square id={`assets_assignments`}>
+        <Paper className={classes.root} square id={`assets_assignments`} style={{paddingLeft: 30}}>
             <VirtualizedTable
             classes={classes}
             selected={selectItems}
@@ -164,7 +163,7 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
                 width: '100%',
                 maxWidth: '100%'
             }}
-            style={{ 
+            style={{  
                 width: '100%'
             }}/>
         </Paper>

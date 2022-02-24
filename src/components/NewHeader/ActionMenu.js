@@ -17,7 +17,8 @@ import {
     CircularProgress,
     Fab, 
     IconButton,
-    Avatar
+    Avatar,
+    Checkbox
 } from '@material-ui/core'
 
 import {
@@ -919,16 +920,44 @@ const ActionMenu = (props) => {
                 <Divider />
                 <MenuItem  onClick={() => props.onClickSale(1)} className={`iconItem ${display_sales_assets === true ? 'active' : ''}`}>
                     <ListItemIcon>
-                        <Avatar  src="https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png" variant="square" style={{width: 21, height: 21}}/>
+                        <Avatar  src="https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/sales.svg" variant="square" style={{width: 21, height: 21}}/>
                     </ListItemIcon>
                     <ListItemText>Our Assets for Sale</ListItemText>
                 </MenuItem>                
                 <Divider />
                 <MenuItem  onClick={() => props.onClickSale(2)} className={`iconItem ${display_sales_assets === true ? 'active' : ''}`}>
                     <ListItemIcon>
-                        <Avatar  src="https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png" variant="square" style={{width: 21, height: 21}}/>
+                        <Avatar  src="https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/acquisition.svg" variant="square" style={{width: 21, height: 21}}/>
                     </ListItemIcon>
                     <ListItemText>Other Assets Available for Purchase</ListItemText>
+                </MenuItem>
+                <Divider />
+                <MenuItem style={{height: 100}}>
+                </MenuItem>
+                <Divider />
+                <MenuItem>
+                    <ListItemIcon>
+                        <Checkbox/>
+                    </ListItemIcon>
+                    <ListItemText>Lenders</ListItemText>
+                </MenuItem>
+                <MenuItem>
+                    <ListItemIcon>
+                        <Checkbox/>
+                    </ListItemIcon>
+                    <ListItemText>Lawyers</ListItemText>
+                </MenuItem>
+                <MenuItem>
+                    <ListItemIcon>
+                        <Checkbox/>
+                    </ListItemIcon>
+                    <ListItemText>The Patent Marketplace</ListItemText>
+                </MenuItem>
+                <MenuItem>
+                    <ListItemIcon>
+                        <Checkbox/>
+                    </ListItemIcon>
+                    <ListItemText>Inventors</ListItemText>
                 </MenuItem>
             </Menu>
             <Modal

@@ -314,6 +314,7 @@ class PatentrackDiagram extends React.Component {
       originalWidth: null,
       previousParentWidth: null,
       activeLine: null,
+      prevLineData: null,
       originalGap: this.config.node.gap.x,
       calcGap: null
     };
@@ -334,21 +335,23 @@ class PatentrackDiagram extends React.Component {
         this.setState({ parentWidth: width, originalWidth:  width});
       }
     });
-
+    
     this.resizeObserver.observe(this.resizeElement.current);
   }
 
   componentDidUpdate() {
-    if (this.state.parentWidth !== this.state.previousParentWidth) {
-      this.setState({ previousParentWidth: this.state.parentWidth});
-    }
+    if (this.state.parentWidth !== null && this.state.previousParentWidth !== null && this.state.parentWidth !== this.state.previousParentWidth) {
+      this.setState({ previousParentWidth: this.state.parentWidth}); 
+    } 
+    if(this.state.assignments.length !== this.state.limits.assignments || this.state.assignees.length !== this.state.limits.assignees) {
+      this.domUpdateNodes()
+    }    
   }
 
   componentWillUnmount() {
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
-    }
-    
+    }    
   }
 
   changeParentWidth(percentage) {
@@ -1162,8 +1165,13 @@ class PatentrackDiagram extends React.Component {
 
   updateDiagram(event_) {
     const this_ = this;
-
+    if(this.state.prevLineData !== null) {
+      this.props.connectionBox(this.state.prevLineData);
+      this.setState({prevLineData: null, activeLine: null})
+    }
+    
     if (event_.currentTarget.getAttribute('type') == 'checkbox') {
+      
       this.state.filters[
         event_.currentTarget.getAttribute('id').replace(' ', '')
       ] = event_.currentTarget.checked;
@@ -1295,7 +1303,10 @@ class PatentrackDiagram extends React.Component {
         this.state.assignees.length
       } / ${this.state.limits.assignees}`;
     }
+    this.domUpdateNodes()
+  }
 
+  domUpdateNodes(){
     d3.selectAll('.PatentrackLink')
       .nodes()
       .map(node_ => {
@@ -1528,13 +1539,13 @@ class PatentrackDiagram extends React.Component {
 
   onClickConnectionLine(data) {
     if(data.id !== this.state.activeLine) {
-      this.setState({activeLine: data.id})
+      this.setState({activeLine: data.id, prevLineData: data.line})      
     } else {
-      this.setState({activeLine: null})
-    }
-    this.props.connectionBox(data.line);
+      this.setState({activeLine: null, prevLineData: null}); 
+    }    
+     this.props.connectionBox(data.line); 
   }
-
+  
   render() {
     this.data = {
       inventors: [],

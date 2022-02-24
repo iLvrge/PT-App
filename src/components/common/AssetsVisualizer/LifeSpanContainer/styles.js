@@ -12,7 +12,7 @@ export default makeStyles(theme => ({
         },
         '& .MuiTab-root':{
             minWidth: 'inherit',
-            maxWidth:  125
+            maxWidth:  150
         },
         '& .MuiTab-wrapper':{
             whiteSpace: 'nowrap'
@@ -24,7 +24,8 @@ export default makeStyles(theme => ({
     tab: {
         flex: 1,
         minWidth: '25%',
-        minHeight: 47,                            
+        minHeight: 47,  
+        fontSize: '1.1rem'                          
     },
     graphContainer: {
         flex: 1,

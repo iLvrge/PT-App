@@ -55,8 +55,8 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
             setSelectedTab(0)
         } else if( connectionBoxView === true || selectedRow.length > 0 ) {
             /*setLifeSpanTabs([ 'Lifespan', 'Assignment', 'USPTO' ])*/
-            setLifeSpanTabs([ 'Lifespan', 'Acknowledgements', 'Assignment'])
-            setSelectedTab(1)
+            setLifeSpanTabs([ 'Lifespan', 'Assignment'])
+            setSelectedTab(0)
         }
     }, [ connectionBoxView, selectedRow ])
 
