@@ -112,13 +112,13 @@ const UserForm = ({ onChangeField, edited }) => {
       {
         profilePicture != null && <img src={profilePicture} width={40}/>
       } */}
-     {/*  <DropzoneArea
+      <DropzoneArea
         classes={{ root: classes.dropzoneArea }}
         showFileNames
         dropzoneText='Upload user picture'
         filesLimit={1}
         onChange={onChangeFile}
-      /> */}
+      />
     </FormControl>
   </Box>
   )
