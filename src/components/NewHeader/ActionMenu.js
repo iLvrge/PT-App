@@ -771,7 +771,7 @@ const ActionMenu = (props) => {
                     aria-controls="app-patentrack-action-menu"
                     aria-haspopup="true"
                     aria-expanded={open ? 'true' : undefined}
-                    variant="contained"
+                    variant="text"
                     disableElevation
                     onClick={handleClick}
                     startIcon={<KeyboardArrowDown />}

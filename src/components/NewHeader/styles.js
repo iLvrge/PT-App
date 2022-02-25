@@ -10,18 +10,19 @@ const LEFT_PANEL_WIDTH = 2 * 100 / 12 // Grid size of 2 out of 12 parts
 export default makeStyles(theme => ({
     root: {
         zIndex: theme.zIndex.drawer + 6,
-        transition: theme.transitions.create([ 'margin' ], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-        }),
+        /* transition: theme.transitions.create([ 'margin' ], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }), */
         position: 'initial',
         /* background: '#222222', */
         width: 'initial',
-        border: `1px solid ${theme.palette.divider}`,
+        /* border: `1px solid ${theme.palette.divider}`, */
         marginBottom: '5px',
         //padding: `0px ${HEADER_PADDING}px`,
         overflow: 'hidden',
-        padding: '0 10px'
+        padding: '0 10px',
+        boxShadow: 'none'
     },
     headerClassAction1: {
       lineHeight: "1.2em",
@@ -460,12 +461,12 @@ export default makeStyles(theme => ({
         } */
     },
     btnActionMenu:{
-        backgroundColor: 'transparent',
+        /* backgroundColor: 'transparent',
         color: '#FFF',
         '&:hover':{
             color: '#E60000',
             backgroundColor: 'transparent', 
-        }      
+        } */      
     },
     actionMenuList: {
         '& .MuiListItemIcon-root':{
