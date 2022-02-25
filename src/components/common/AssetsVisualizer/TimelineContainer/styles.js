@@ -6,6 +6,9 @@ export default makeStyles(theme => ({
     height: '100%',
     width: '100%',
     position: 'relative',
+    '& .vis-time-axis .vis-text, .vis-item, .vis-y-axis':{
+      color: theme.palette.text.primary,
+    }
   },
   loader: {
     position: 'absolute',
@@ -29,9 +32,9 @@ export default makeStyles(theme => ({
       position:'absolute',  
       width:'150px',
       /* height:'150px', */
-      background:'#222222',
-      border:'1px solid #545454',
-      color:'#BDBDBD',
+      background: theme.palette.divider,
+      border:`1px solid ${theme.palette.action.disabled}`,
+      color: theme.palette.text.primary,
       padding: '5px 10px' ,
       '& h4':{
         margin: '5px 0 0 0' 
@@ -78,7 +81,7 @@ export default makeStyles(theme => ({
     '& .vis-item': {
       fontSize: 12,
       backgroundColor: 'transparent',      
-      color: '#d6d6d6',
+      color: theme.palette.text.primary,
       '& .vis-item-content':{
         width: '95px',
         whiteSpace: 'normal',
@@ -222,7 +225,7 @@ export default makeStyles(theme => ({
     },
     '& .vis-item.vis-point.vis-selected': {
       backgroundColor: 'inherit',
-      color: '#e60000',
+      color: pink[500],
       fontWeight: 'bold',
     },
     '& .vis-top':{

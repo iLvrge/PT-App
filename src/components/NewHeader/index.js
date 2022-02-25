@@ -28,7 +28,8 @@ import {
         Typography,
         Tooltip,
         Zoom,
-        Badge 
+        Badge,
+        Switch 
       } from '@mui/material'
 
 import { Menu as MenuIcon, 
@@ -49,8 +50,8 @@ import { Menu as MenuIcon,
         Close
       } from '@mui/icons-material'
 
-  import { controlList } from '../../utils/controlList'
-
+import { controlList } from '../../utils/controlList'
+import { useDarkMode } from '../../useDarkMode';
 import useStyles from './styles'
 
 import Home from '../Home'
@@ -109,6 +110,7 @@ import {
   toggleFamilyItemMode,
   toggleUsptoMode,
   toggleLifeSpanMode,
+  toggleThemeMode
 } from '../../actions/uiActions'
 import Scheduling from './Scheduling'
 
@@ -117,6 +119,7 @@ const NewHeader = () => {
   const dispatch = useDispatch()
   const history = useHistory()
   const location = useLocation();
+  const isDarkTheme = useSelector( state => state.ui.isDarkTheme )
   const slack_profile_data = useSelector( state => state.patenTrack2.slack_profile_data )
   const google_profile = useSelector( state => state.patenTrack2.google_profile )
   const slack_auth_token = useSelector(state => state.patenTrack2.slack_auth_token)
@@ -299,7 +302,9 @@ const NewHeader = () => {
 
   const handleControlModal = useCallback((e, flag) => { 
     e.stopPropagation()
-    dispatch(setControlModal( flag )) 
+    if (flag !== 'backdropClick') {
+      dispatch(setControlModal( flag )) 
+    }
   }, [ dispatch ]) 
 
 
@@ -495,6 +500,10 @@ const onHandleForeignAssets = (event) => {
   }  
 }
 
+const handleThemeMode = useCallback(event => {
+  dispatch(toggleThemeMode(!isDarkTheme))
+},[dispatch, isDarkTheme])
+
   return (
     <AppBar className={classes.root} color='transparent' position='relative'>
       <Toolbar className={classes.toolbar}>
@@ -516,6 +525,11 @@ const onHandleForeignAssets = (event) => {
         <ActionMenu t={0} onClickSale={onHandleSaleAssets}/>       
               
         <div className={classes.rightPanel}>  
+            <Switch  
+              color="secondary" 
+              {...( isDarkTheme == 'dark' ? {checked: true} : {})} 
+              onChange={handleThemeMode}
+            />
             <Button className={classes.calendly} onClick={handleScheduleViaHubspot}>
               Schedule a {process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'd' : 'D' }emo {process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'for Pro version' : '' }
             </Button>    
@@ -716,9 +730,7 @@ const onHandleForeignAssets = (event) => {
             </Drawer>
         </div>
       </Toolbar>
-      <Modal// `disableBackdropClick` is removed by codemod.
-// You can find more details about this breaking change in [the migration guide](https://mui.com/guides/migration-v4/#modal)
-
+      <Modal
         open={controlModal}
         onClose={(e) => handleControlModal( e, false )}
         BackdropComponent={Backdrop}
@@ -727,9 +739,9 @@ const onHandleForeignAssets = (event) => {
         }}
         className={classes.modal}
         style={{backgroundColor: 'rgba(0, 0, 0, 0.8)'}}>
-        <>
+        <React.Fragment>
           <Home click={hideMenu} closeModal={handleControlModal}/> 
-        </>
+        </React.Fragment>
       </Modal>
 
       <Modal

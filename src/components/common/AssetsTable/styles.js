@@ -6,7 +6,7 @@ export default makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         flex:1,
-        backgroundColor: '#25272B',
+        /* backgroundColor: '#25272B', */
         overflow: 'hidden auto',
         '& .MuiTableCell-root .MuiSelect-select.MuiSelect-select':{
             paddingRight: 0 
@@ -29,7 +29,7 @@ export default makeStyles((theme) => ({
         '& svg.MuiSelect-icon':{
             fontSize: '1.7rem',
             top: 3,
-            color: 'rgba(255,255,255,0.7)',
+            /* color: 'rgba(255,255,255,0.7)', */
             opacity: 0
         },
         '& .MuiInput-underline':{
@@ -41,7 +41,7 @@ export default makeStyles((theme) => ({
         '& .selectedIcon svg':{          
             position: 'absolute',
             fontSize: '1.3rem',
-            color: '#fff',
+            /* color: '#fff', */
             width: '1.3rem',
             left: 2,
             top: '17px  !important'
@@ -68,9 +68,9 @@ export default makeStyles((theme) => ({
     },
     tableRow: {
         cursor: 'pointer',
-        borderBottom: '1px solid #5c5c5c',
+        /* borderBottom: '1px solid #5c5c5c', */
         '&.ReactVirtualized__Table__headerRow': {
-          backgroundColor: '#292929',
+          /* backgroundColor: '#292929', */
           '& .MuiSvgIcon-root':{
             fontSize: '1rem'
           }

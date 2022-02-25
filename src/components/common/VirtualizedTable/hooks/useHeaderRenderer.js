@@ -18,10 +18,10 @@ import _groupBy from 'lodash/groupBy'
 import makeStyles from '@mui/styles/makeStyles';
 import Chip from '@mui/material/Chip'
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined'
-
+import { pink } from '@mui/material/colors';
 import { numberWithCommas } from '../../../../utils/numbers'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   listItemIcon: {
     minWidth: 0,
   },
@@ -61,7 +61,7 @@ const useStyles = makeStyles(() => ({
       backgroundColor: 'inherit',
       right: 'inherit',
       transform: 'none',
-      color: '#fff'
+      color: theme.palette.text.primary
     }    
   },
   badgeSelection: {
@@ -72,7 +72,7 @@ const useStyles = makeStyles(() => ({
       backgroundColor: 'inherit',
       right: 'inherit',
       transform: 'none',
-      color: '#E60000'
+      color: pink[500]
     }   
   },
   labelPos: {

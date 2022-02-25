@@ -1,4 +1,5 @@
 export default {
+  isDarkTheme: false,
   maintainenceFrameMode: false,
   driveTemplateFrameMode: false,
   driveTemplateMode: false,

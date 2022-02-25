@@ -1,5 +1,5 @@
 import makeStyles from '@mui/styles/makeStyles';
-
+import { pink } from '@mui/material/colors';
 export default makeStyles(theme => ({
     showIcon: {
         fontSize: '1.1rem',
@@ -10,17 +10,17 @@ export default makeStyles(theme => ({
         '& .MuiIconButton-root':{
             padding: '11px 8px',
             borderRadius: 0,
-            color: '#5a5a5a',
+            color: theme.palette.text.disabled,
             '&:hover':{
-                color: 'rgb(230, 0, 0)' ,
+                color: pink['A400'] ,
                 '& svg':{
-                    fill: 'rgb(230, 0, 0)',
-                    stroke: 'rgb(230, 0, 0)',
+                    fill: pink['A400'],
+                    stroke: pink['A400'],
                 }
             },
             '& svg':{
-                fill: '#5a5a5a',
-                stroke: '#5a5a5a',
+                fill: theme.palette.text.disabled,
+                stroke: theme.palette.text.disabled,
                 /* width: '2rem',
                 height: '2rem' */  
             },
@@ -28,19 +28,19 @@ export default makeStyles(theme => ({
                 stroke: 'none !important'
             },
             '&.active':{
-                color: '#fff !important' ,
+                color: `${pink['500']} !important` ,
                 '& svg':{ 
-                    fill: '#fff !important',
-                    stroke: '#fff !important',
+                    fill: `${pink['500']} !important` ,
+                    stroke: `${pink['500']} !important` ,
                 },
                 '& svg.noStroke':{
                     stroke: 'none !important'
                 },
                 '&:hover':{
-                    color: 'rgb(230, 0, 0) !important' ,
+                    color: pink['A400'] ,
                     '& svg':{
-                        fill: 'rgb(230, 0, 0) !important',
-                        stroke: 'rgb(230, 0, 0)  !important',
+                        fill: pink['A400'],
+                        stroke: pink['A400'],
                     },
                     '& svg.noStroke':{
                         stroke: 'none !important'
@@ -49,7 +49,7 @@ export default makeStyles(theme => ({
             },
             '&.selection_indicator':{
                 '& svg':{
-                    fill: '#f48fb1 !important' ,
+                    fill: pink['100'] ,
                 }
             }
         }

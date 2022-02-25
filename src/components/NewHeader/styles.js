@@ -15,9 +15,9 @@ export default makeStyles(theme => ({
         duration: theme.transitions.duration.leavingScreen,
         }),
         position: 'initial',
-        background: '#222222',
+        /* background: '#222222', */
         width: 'initial',
-        border: '1px solid #363636',
+        border: `1px solid ${theme.palette.divider}`,
         marginBottom: '5px',
         //padding: `0px ${HEADER_PADDING}px`,
         overflow: 'hidden',

@@ -1,5 +1,5 @@
 import makeStyles from '@mui/styles/makeStyles';
-
+import { pink } from '@mui/material/colors';
 export default makeStyles(theme => ({
     flexColumn: {
         display: 'flex',
@@ -27,9 +27,9 @@ export default makeStyles(theme => ({
             boxSizing: 'border-box',
             cursor: 'col-resize',
             backgroundClip: 'padding-box',
-            background:'#000',
+            background: theme.palette.action.disabled,
             '&:hover':{
-                background:'#f50057',
+              background: pink[500],
             },
             '&.horizontal': {
                 height: '3px',
@@ -97,7 +97,7 @@ export default makeStyles(theme => ({
         width: '100%',
         zIndex: 111,
         fontSize: 9,
-        backgroundColor: '#303030',
+        backgroundColor: theme.palette.action.hover,
         transition: 'opacity 0.1s',
         padding: '9px',
         position: 'relative'
@@ -123,7 +123,7 @@ export default makeStyles(theme => ({
             /*maxHeight: '85%',*/
         },
         '& .MuiListSubheader-root':{
-          backgroundColor: '#303030'
+          backgroundColor: theme.palette.action.hover
         }
     },
     assetSummary: {

@@ -1,8 +1,17 @@
 import makeStyles from '@mui/styles/makeStyles';
-
+import { toggleThemeMode } from '../../../actions/uiActions';
+import { pink } from '@mui/material/colors';
 export default makeStyles(theme => ({
+  root: {
+    '& .ql-container': {
+      background: theme.palette.action.hover
+    },
+    '& .ql-toolbar':{
+      background: theme.palette.action.disabledBackground
+    }
+  },
   textEditor: {
-    color: '#000',
+    color: theme.palette.text.primary,
     margin: 0,
     overflow: 'hidden',
     '& .ql-attachDriveButton':{
@@ -19,7 +28,7 @@ export default makeStyles(theme => ({
     display: 'flex',
     width: 1,
     height: 20,
-    borderLeft: '1px solid #494949',
+    borderLeft: `1px solid ${theme.palette.divider}`,
     marginRight: 6
   },
   secondaryGroup: {
@@ -28,14 +37,14 @@ export default makeStyles(theme => ({
     flexGrow: 1
   },
   review: {
-    border:'1px solid #5a5a5a !important',
+    border:`1px solid ${theme.palette.divider} !important`,
     borderRadius: 4,
     textTransform: 'initial',
     width: 'auto !important',
     padding: '3px 5px !important',
     '&:hover':{
-      border:'1px solid #e60000 !important',
-      color: '#e60000 !important'
+      border:`1px solid ${pink['500']} !important`,
+      color: `${pink['500']} !important`
     },
     '&:first-child':{
       /* marginLeft: 20,
@@ -46,16 +55,16 @@ export default makeStyles(theme => ({
     }
   }, 
   active: {
-    border:'1px solid #e60000 !important',
+    border:`1px solid ${pink['500']} !important`,
     '& .MuiButton-label': {
-      color: '#e60000'
+      color: pink['500']
     }    
   },
   buttonProgress: {
     position: 'absolute',
     bottom: '10px',
     right: '5vw',
-    color: '#fff' 
+    color: theme.palette.text.primary,
   },
   formContainer:{
     display: 'flex',
@@ -65,7 +74,7 @@ export default makeStyles(theme => ({
     width: '50vw',
     margin: '50px auto',
     height: '60vh',
-    border: '1px solid #363636' 
+    border: `1px solid ${theme.palette.divider}` 
   },
   formWrapper: {
     position: 'relative',

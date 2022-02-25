@@ -42,9 +42,9 @@ const styles = makeStyles((theme) => ({
   },
   tableRow: {
     cursor: 'pointer',
-    borderBottom: '1px solid #5c5c5c',
+    borderBottom: `1px solid ${theme.palette.divider}`,
     '&.ReactVirtualized__Table__headerRow': {
-      backgroundColor: '#292929',
+      /* backgroundColor: '#292929', */
       '& .MuiSvgIcon-root':{
         fontSize: '1rem',
         width: '1rem',
@@ -73,13 +73,13 @@ const styles = makeStyles((theme) => ({
     '&.highlightRow':{
       '& .MuiTableCell-root.highlightColumn': {
         '& span': {
-          color: '#fff',
-          backgroundColor: '#228de8 !important',
+          /* color: '#fff', */
+          /* backgroundColor: '#228de8 !important', */
           borderRadius: 10,
           padding: '5px 10px',
           lineHeight: 1,
           '&:hover':{
-            backgroundColor: '#228de8 !important'
+            /* backgroundColor: '#228de8 !important' */
           }
         }
       }      
@@ -87,7 +87,7 @@ const styles = makeStyles((theme) => ({
     '&.highlightWithCol.Mui-selected':{
       '& .MuiTableCell-root.highlightColumn': {
         '& span': {
-          color: '#ffaa00',
+         /*  color: '#ffaa00', */
         }
       }
     },
@@ -110,9 +110,9 @@ const styles = makeStyles((theme) => ({
     '& .MuiTableRow-root.Mui-selected, .MuiTableRow-root.Mui-selected:hover':{
       backgroundColor: 'inherit',
       '& .MuiTableCell-root':{
-        color: '#e60000',
+        /* color: '#e60000', */
         '& span':{
-          color: '#e60000',
+          /* color: '#e60000', */
         }
       }
     }
@@ -134,7 +134,7 @@ const styles = makeStyles((theme) => ({
   },
   
   disableColumn:{
-    color: 'rgba(255, 255, 255, 0.3)'
+    color: theme.palette.mode == 'light' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.3)'
   },
   textBold: {
     /*fontWeight: 900*/

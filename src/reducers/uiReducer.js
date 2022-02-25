@@ -4,6 +4,12 @@ import uiInitial from './uiInitial'
 
 const uiReducer = (state = initialState.ui, action) => {
   switch (action.type) {
+    case types.SET_THEME_MODE: {
+      return { 
+        ...state,
+        isDarkTheme: action.flag 
+      }
+    }
     case types.SET_SELECTED_TIMELINE_ITEM: {
       return {
         ...state,

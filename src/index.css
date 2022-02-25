@@ -29,7 +29,6 @@ body {
   font-family: "Roboto", "Helvetica", "Arial", sans-serif !important;
   margin: 0 auto;
   scroll-behavior: smooth;
-  background-color: #121212 !important;
   /* min-width: 800px; */
   overflow: hidden; 
 }
@@ -76,8 +75,8 @@ span {
   width: 33.333333%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  /* background-color: rgb(0, 0, 0); 
+  background-color: rgba(0, 0, 0, 0.4);  */
 }
 
 #illustration_modal.show {
@@ -184,8 +183,8 @@ span {
   position: absolute;
   right: 10px;
   top: 68px;
-  background: #000;
-  color: #bdbdbd;
+  /* background: #000; 
+  color: #bdbdbd;*/
 }
 
 .d-none {
@@ -255,7 +254,7 @@ span {
 
 .modal-header {
   padding: 2px 16px;
-  background-color: #5cb85c;
+  /* background-color: #5cb85c; */
 }
 
 .modal-body {
@@ -264,7 +263,7 @@ span {
 
 .modal-footer {
   padding: 2px 16px;
-  background-color: #5cb85c;
+  /* background-color: #5cb85c; */
 }
 
 #pdfViewer {
@@ -285,17 +284,17 @@ span {
 .vis-label.vis-nested-group.vis-group-level-1,
 .vis-itemset .vis-background,
 .vis-itemset .vis-foreground {
-  background-color: #222222 !important;
+  /* background-color: #222222 !important; */
 }
 
 .vis-labelset .vis-label,
 .vis-timeline {
-  color: #d6d6d6 !important;
-  border-bottom: 1px solid #5c5c5c !important;
+  /* color: #d6d6d6 !important;
+  border-bottom: 1px solid #5c5c5c !important; */
 }
 
 .vis-timeline {
-  border: 1px solid #5c5c5c !important;
+  /* border: 1px solid #5c5c5c !important; */
 }
 
 .vis-labelset .vis-label {
@@ -304,11 +303,11 @@ span {
 
 .vis-time-axis .vis-text,
 .vis-item, .vis-y-axis {
-  color: #d6d6d6 !important;
+  /* color: #d6d6d6 !important; */
 } 
 
 .vis-timeline {
-  background-color: #222222 !important;
+  /* background-color: #222222 !important; */
 }
 .vis-tooltip p {
   margin: 5px 0 0 0;
@@ -366,7 +365,7 @@ div.vis-tooltip {
   line-height: 1.5rem !important;
   box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12) !important;
 	border-radius: 4px !important;
-  background-color: #424242 !important;
+  /* background-color: #424242 !important; */
   border:0px !important;
 }
 
@@ -678,9 +677,9 @@ div.vis-tooltip span{
 .custom_tooltip {
   position: absolute;  
   max-width: 500px;
-  background:#222222;
+  /* background:#222222;
   border: 1px solid #545454;
-  color: #BDBDBD;
+  color: #BDBDBD; */
   padding: 5px 10px;
   overflow: hidden;
   z-index: 9999;
@@ -706,23 +705,23 @@ div.vis-tooltip span{
   margin: 0 8px !important;
   border-radius: 0 !important;
   opacity: 1 !important;
-  background-color: #121212 !important;
+  /* background-color: #121212 !important; */
   transition: none !important;
 } 
 
 .google-visualization-tooltip, .google-visualization-tooltip path{
-  background-color: #121212 !important; 
-  border-color:  #121212 !important; 
+  /* background-color: #121212 !important; 
+  border-color:  #121212 !important;  */
   border-radius: 0 !important;
 }
 
 .google-visualization-tooltip path{
-  fill: #121212 !important; 
-  stroke: #121212 !important; 
+  /* fill: #121212 !important; 
+  stroke: #121212 !important;  */
 }
 
 .google-visualization-tooltip text{
-  fill: #fff !important; 
+  /* fill: #fff !important;  */
   font-family: Roboto;
   font-size: 0.875rem;
 }
@@ -804,7 +803,7 @@ div.vis-tooltip span{
 .pricing a{text-decoration: none; width: 100%}
 .pricing .lab_item p.font-16{display:none;} 
 .pricing .hex-wrapper{margin:10px auto}
-.pricing .hexagon-in2:hover{background-color:#222;}
+.pricing .hexagon-in2:hover{/* background-color:#222; */}
 
 /* .pricing .category{ display: flex; flex-direction: column;  flex-basis: 300px;}
 .pricing .category ul {display: flex; font-size: 20px; flex-direction: column; list-style: none;}
@@ -931,20 +930,20 @@ a.maintain svg.clean_encumbrances path{
   z-index: 9999;
   padding: 10px;
   width: 500px;
-  background: #000;
+  /* background: #000; */
   color: #fff;
   position: absolute;   
 }
 .MuiTooltip-tooltip{
-  background-color: #000 !important;
+  /* background-color: #000 !important; */
   border-radius: 0px;
 }
 
 .depth .MuiSlider-rail {
-  color: #Ef0000
+  /* color: #Ef0000 */
 }
 .MuiSlider-thumb,  .scope .MuiSlider-track, .year .MuiSlider-track, .MuiSlider-markActive{
-  background-color: #Ef0000 !important
+  /* background-color: #Ef0000 !important */
 }
 
 .MuiSlider-thumb.Mui-focusVisible, .MuiSlider-thumb:hover {
@@ -1068,7 +1067,7 @@ div#draggable-illustration-menu-item div[aria-hidden='true']{
 }
 .pricing .hexagon{overflow:hidden;visibility:hidden;-webkit-transform:rotate(120deg);transform:rotate(120deg);/* cursor:pointer */}
 .pricing .hexagon-in1{overflow:hidden;width:100%;height:100%;-webkit-transform:rotate(-60deg);transform:rotate(-60deg)}
-.pricing .hexagon-in2{background-color:#424242;padding:0 10px;overflow:hidden;width:100%;height:100%;background-repeat:no-repeat;background-position:50%;background-size:125%;visibility:visible;-webkit-transform:rotate(-60deg);transform:rotate(-60deg);display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column}
+.pricing .hexagon-in2{/* background-color:#424242; */padding:0 10px;overflow:hidden;width:100%;height:100%;background-repeat:no-repeat;background-position:50%;background-size:125%;visibility:visible;-webkit-transform:rotate(-60deg);transform:rotate(-60deg);display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column}
 .pricing .hexagon-in2 svg{max-width:40px;min-width: 40px; height: 40px;}
 @media(min-width:768px){
   .pricing .hexagon-in2 svg{max-width:40px}

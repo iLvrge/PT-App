@@ -22,7 +22,7 @@ export default makeStyles(theme => ({
         left: 0,
         right: 0,
         bottom: 0,
-        border: '1px solid #363636' 
+        border: `1px solid ${theme.palette.divider}` 
     },
     dashboardWarapper: {
         position: 'relative',
@@ -51,6 +51,7 @@ export default makeStyles(theme => ({
     filterToolbar: {
         width: '57px',   
         borderRight: 0,
+        background: theme.palette.action.hover
     },
     flex:{
         width: '57px',
@@ -94,7 +95,7 @@ export default makeStyles(theme => ({
                 height: '2rem'
             },
             '&.active':{
-                color: '#fff !important' ,
+                color: `${theme.palette.action.active} !important` ,
                 '& svg':{
                   fill: '#fff !important' 
                 },
@@ -102,7 +103,7 @@ export default makeStyles(theme => ({
                   color: 'rgb(230, 0, 0) !important' ,
                   '& svg':{
                     fill: 'rgb(230, 0, 0) !important',
-                  }
+                  }  
                 }
             }
         }

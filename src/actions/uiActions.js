@@ -1,5 +1,11 @@
 import * as types from './uiTypes'
 
+
+export const toggleThemeMode = flag => ({
+  type: types.SET_THEME_MODE,
+  flag
+})
+
 export const toggleUsptoMode = flag => ({
   type: types.TOGGLE_USPTO_MODE,
   flag
