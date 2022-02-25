@@ -344,7 +344,7 @@ const GlobalScreen = ({
                     openBar === true 
                     ? 
                         <>
-                            <ArrowButton arrowId={`arrow_company`} handleClick={handleCompanyBarOpen} buttonType={toggleButtonType} buttonVisible={companyButtonVisible}/>
+                            {/* <ArrowButton arrowId={`arrow_company`} handleClick={handleCompanyBarOpen} buttonType={toggleButtonType} buttonVisible={companyButtonVisible}/> */}
                             {
                                 type == 9 
                                 ? 
@@ -378,7 +378,7 @@ const GlobalScreen = ({
                         openTypeBar === true 
                         ? 
                             <>
-                                <ArrowButton arrowId={`arrow_activity`} handleClick={handleTypeBarOpen} buttonType={toggleTypeButtonType} buttonVisible={typeButtonVisible}/>
+                                {/* <ArrowButton arrowId={`arrow_activity`} handleClick={handleTypeBarOpen} buttonType={toggleTypeButtonType} buttonVisible={typeButtonVisible}/> */}
                                 <AssignmentsType
                                     parentBarDrag={setVisualizerBarSize}
                                     parentBar={setVisualizeOpenBar}
@@ -405,7 +405,7 @@ const GlobalScreen = ({
                             openOtherPartyBar === true || openInventorBar === true
                             ? 
                                 <>
-                                    <ArrowButton arrowId={`arrow_parties`} handleClick={handleOtherPartyBarOpen} buttonType={toggleOtherPartyButtonType} buttonVisible={otherPartyButtonVisible}/>
+                                    {/* <ArrowButton arrowId={`arrow_parties`} handleClick={handleOtherPartyBarOpen} buttonType={toggleOtherPartyButtonType} buttonVisible={otherPartyButtonVisible}/> */}
                                     <SplitPane
                                         className={classes.splitPane}
                                         split={`horizontal`}
@@ -462,11 +462,11 @@ const GlobalScreen = ({
                                 openAssignmentBar === true 
                                 ? 
                                     <>
-                                        <ArrowButton 
+                                        {/* <ArrowButton 
                                             arrowId={`arrow_transactions`} 
                                             handleClick={handleAssignmentBarOpen} 
                                             buttonType={toggleAssignmentButtonType} 
-                                            buttonVisible={assignmentButtonVisible}/>
+                                            buttonVisible={assignmentButtonVisible}/> */}
                                         <AssignmentsTable 
                                             type={type} 
                                             defaultLoad={type === 2 ? false : true} />
@@ -490,11 +490,11 @@ const GlobalScreen = ({
                                     openCustomerBar === true 
                                     ? 
                                         <>
-                                            <ArrowButton 
+                                            {/* <ArrowButton 
                                                 arrowId={`arrow_assets`} 
                                                 handleClick={handleCustomersBarOpen} 
                                                 buttonType={toggleCustomerButtonType} 
-                                                buttonVisible={customerButtonVisible}/>
+                                                buttonVisible={customerButtonVisible}/> */}
                                             {
                                                 type == 0 ? (
                                                     <MaintainenceAssetsList 

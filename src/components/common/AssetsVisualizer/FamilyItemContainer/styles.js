@@ -42,8 +42,8 @@ export default makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    background: '#222222 !important',
-    border: '1px solid #5c5c5c !important',
+    /* background: '#222222 !important',
+    border: '1px solid #5c5c5c !important', */
     overflow: 'hidden'
   },  
   dashboard: {
@@ -180,8 +180,10 @@ export default makeStyles(theme => ({
       borderTop: 0
     },
     '& .vis-timeline':{
-      border: '0 !important',
-      backgroundColor: '#424242 !important',
+      border: 0,
+      borderTop:`1px solid ${theme.palette.divider}`, 
+      borderBottom:`1px solid ${theme.palette.divider}`, 
+      backgroundColor: `${theme.palette.background.default}!important`,
       '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground':{
         backgroundColor: '#424242 !important',
       }
@@ -527,7 +529,7 @@ export default makeStyles(theme => ({
     lineHeight: 1,
     bottom: '-8px',
     alignItems: 'center',
-    color: '#E60000',
+    /* color: '#E60000', */
   },
   badge: {
     position: 'absolute',
@@ -537,7 +539,8 @@ export default makeStyles(theme => ({
       backgroundColor: 'inherit',
       right: 'inherit',
       transform: 'none',
-      wordBreak: 'keep-all'
+      wordBreak: 'keep-all',
+      color: theme.palette.text.secondary 
     }    
   }
 }))
