@@ -9,7 +9,7 @@ import { Timeline } from 'vis-timeline/esnext'
 import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 import ClickAwayListener from '@mui/base'
-
+import themeMode from '../../../../themes/themeMode';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import { 
   setSelectedAssetsPatents, 
@@ -99,7 +99,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
   const timelineContainerRef = useRef() //div container ref
   const items = useRef(new DataSet()) // timeline items dataset
   const groups = useRef(new DataSet()) // timeline groups dataset
-  
+  const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
   const assetTypesSelectAll = useSelector(state => state.patenTrack2.assetTypes.selectAll)
   const companies = useSelector( state => state.patenTrack2.mainCompaniesList.list )
   const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
@@ -270,7 +270,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
                   color = '#FFFFFF'
                   break;
               }
-              const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.clientY}px;left:${event.clientX + 20 }px;'>
+              const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.clientY}px;left:${event.clientX + 20 }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
                                           <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
                                           <div>
                                             ${ executionDate != '' ? moment(executionDate).format('ll') : ''}

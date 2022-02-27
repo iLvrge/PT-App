@@ -1,12 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react'
+import { useSelector } from 'react-redux'
 import useStyles from './styles'
-
+import { pink } from '@mui/material/colors'
 
 import FullScreen from '../../FullScreen'
 import { Chart } from "react-google-charts";
+import themeMode from '../../../../themes/themeMode';
 
 const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
     const containerRef = useRef(null)
+    const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const classes = useStyles() 
     const menuItems = [
         {
@@ -25,18 +28,17 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
         legend: { position: 'none' },
         bar: { groupWidth: '98%' },
         isStacked: false,
-        colors: ['#395270'],
-        backgroundColor: '#222222',
+        backgroundColor: 'transparent',
         hAxis: {
-            baselineColor: '#fff',
+            baselineColor: isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider,
             format: '0',
             textStyle: {
-                color: '#fff',
+                color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
                 fontSize: 12,
                 fontFamily: 'Roboto'
             },
             titleTextStyle: {
-                color: '#fff',
+                color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
                 fontSize: 12,
                 fontFamily: 'Roboto'
             },
@@ -49,20 +51,20 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
             },
         },
         vAxis: {
-            baselineColor: '#fff',
+            baselineColor: isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider,
             format: '0',
             textStyle: {
-                color: '#fff',
+                color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
                 fontSize: 12,
                 fontFamily: 'Roboto'
             },
             titleTextStyle: {
-                color: '#fff',
+                color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
                 fontSize: 12,
                 fontFamily: 'Roboto'
             },
             gridlines: {
-                color: '#5c5c5c'
+                color: isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider,
             },
             minorGridlines:{
                 color:'transparent' 
@@ -71,7 +73,7 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
         annotations: {
             style: 'line',
             stem: {
-                color: 'red',
+                color: pink[500],
                 length: 50
             }
         },
@@ -88,6 +90,19 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
             setMinMax([chart[1][0], chart[chart.length - 1][0]])
         }
     }, [ chart ])
+
+    useEffect(() => {
+        const opt = {...option}
+        opt.hAxis.baselineColor = isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider
+        opt.hAxis.textStyle.color = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
+        opt.hAxis.titleTextStyle.color = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
+        opt.vAxis.baselineColor = isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider
+        opt.vAxis.textStyle.color = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
+        opt.vAxis.titleTextStyle.color = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
+        opt.vAxis.gridlines.color = isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider
+        console.log("opt", opt)
+        setOption(opt)
+    }, [isDarkTheme])
 
     useEffect(() => {    
         if(chartBar === false) {

@@ -98,14 +98,6 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
     }, [ item, familyDataRetrieved ])
 
     useEffect(() => {
-        console.log('FamilyItemContainer_selectedAssetsPatents', selectedAssetsPatents)
-    }, [selectedAssetsPatents])
-
-    useEffect(() => {
-        console.log('FamilyItemContainer_selectedNumber', selectedNumber)
-    }, [])
-
-    useEffect(() => {
         if(selectedTab === 4) {
             setSelectedTab(-1)
             setTimeout(() => {

@@ -6,8 +6,21 @@ export default makeStyles(theme => ({
     height: '100%',
     width: '100%',
     position: 'relative',
+    backgroundColor: theme.palette.background.default,
     '& .vis-time-axis .vis-text, .vis-item, .vis-y-axis':{
       color: theme.palette.text.primary,
+    },
+    '& .vis-timeline, .vis-panel.vis-center':{
+      border: `1px solid ${theme.palette.divider}`
+    },
+    '& .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom': {
+      borderBottomColor: theme.palette.divider,
+      borderTopColor: theme.palette.divider,
+      borderLeftColor: theme.palette.divider,
+      borderRightColor: theme.palette.divider,
+    },
+    '&.vis-panel .vis-shadow':{
+      /*height: 0*/
     }
   },
   loader: {
@@ -32,7 +45,7 @@ export default makeStyles(theme => ({
       position:'absolute',  
       width:'150px',
       /* height:'150px', */
-      background: theme.palette.divider,
+      background: theme.palette.background.paper,
       border:`1px solid ${theme.palette.action.disabled}`,
       color: theme.palette.text.primary,
       padding: '5px 10px' ,

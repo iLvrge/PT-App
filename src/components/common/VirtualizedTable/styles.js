@@ -43,6 +43,9 @@ const styles = makeStyles((theme) => ({
   tableRow: {
     cursor: 'pointer',
     borderBottom: `1px solid ${theme.palette.divider}`,
+    '&:hover':{
+      backgroundColor: theme.palette.action.hover
+    },
     '&.ReactVirtualized__Table__headerRow': {
       /* backgroundColor: '#292929', */
       '& .MuiSvgIcon-root':{
@@ -73,8 +76,8 @@ const styles = makeStyles((theme) => ({
     '&.highlightRow':{
       '& .MuiTableCell-root.highlightColumn': {
         '& span': {
-          /* color: '#fff', */
-          /* backgroundColor: '#228de8 !important', */
+          color: '#fff',
+          backgroundColor: '#228de8 !important',
           borderRadius: 10,
           padding: '5px 10px',
           lineHeight: 1,

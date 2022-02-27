@@ -8,7 +8,7 @@ export default makeStyles(theme => ({
     position: 'relative',
     width: '100%',
     height: '100%',
-    display: 'flex',
+    display: 'flex',    
     flexDirection: 'column',
     '& .MuiTab-root':{
       minWidth: 'inherit',
@@ -42,8 +42,8 @@ export default makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    /* background: '#222222 !important',
-    border: '1px solid #5c5c5c !important', */
+    background: theme.palette.background.paper,
+    borderTop: `1px solid ${theme.palette.divider}`,
     overflow: 'hidden'
   },  
   dashboard: {
@@ -59,7 +59,7 @@ export default makeStyles(theme => ({
     display: 'flex',
     alignItems: 'flex-end',
     overflow: 'hidden auto',
-    background: '#222222 !important' 
+    
   },
   flexColumn: {
     display: 'flex',
@@ -510,7 +510,7 @@ export default makeStyles(theme => ({
       background: 'none'
     },
     '& .react-viewer-navbar': {
-      backgroundColor: '#424242'
+      backgroundColor: theme.palette.background.default
     }
   },
   container: {

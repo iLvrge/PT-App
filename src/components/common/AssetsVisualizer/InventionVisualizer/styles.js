@@ -98,8 +98,7 @@ export default makeStyles(theme => ({
         justifyContent: 'center',
         alignItems: 'center',
         fontSize: 16,
-        background: '#222222 !important',
-        border: '1px solid #5c5c5c !important',
+        borderTop: `1px solid ${theme.palette.divider} !important`,
         overflow: 'hidden'
     },
     loadingIndicator: {
@@ -134,6 +133,7 @@ export default makeStyles(theme => ({
         },
         '& .MuiDialogTitle-root':{
             //padding: 0,
+            background: 'transparent'
         }
     },
     modalFilter: {

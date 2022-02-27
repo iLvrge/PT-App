@@ -7,7 +7,13 @@ export default makeStyles(theme => ({
     position: 'relative',
     width: '100%',
     height: '100%',
-    backgroundColor: '#424242',
+    /* backgroundColor: '#424242', */
+    '& #topTitle':{
+      backgroundColor: theme.palette.background.paper, 
+      border: `1px solid ${theme.palette.divider}`, 
+      /* boxShadow: `0 0px 5px 0 ${this.config.title.boxShadow}`,  */
+      color: theme.palette.text.primary
+    }
   },
   forceStrech: {
     top: 0,

@@ -29,7 +29,7 @@ import { DEFAULT_CUSTOMERS_LIMIT } from "../../../../api/patenTrack2";
 import useStyles from './styles'
 
 import { capitalize } from "../../../../utils/numbers";
-
+import themeMode from '../../../../themes/themeMode';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
 var newRange = [1,2]
@@ -101,7 +101,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     ]
 
     const [ inventionTabs, setInventionTabs ] = useState(['Innovation'])
-
+    const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const selectedAssetsTransactionLifeSpan = useSelector( state => state.patenTrack2.transaction_life_span )
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected ) //companies
@@ -526,8 +526,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     zMax.push(data.countAssets)
                     const appNums = data.appNum;
                     let style = {
-                            stroke: '#50719C',
-                            fill: '#395270'
+                            stroke: isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider,
+                            fill: isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default
                         };
                     if(data.appNum !== null && data.appNum !== '') {
                         const appList = data.appNum.toString().split(',')
@@ -578,7 +578,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             if(graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0) {
                 options = {...options, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1, zStep: graphRawData.length > 2 ? 3 : 1, zMax: Math.max(...zMax) }
             }     
-
+            options.axisColor = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
             graphRef.current = new Graph3d(graphContainerRef.current, items.current, options)
             graphRef.current.on('click', graphClickHandler)      
             graphRef.current.on('cameraPositionChange', onCameraPositionChange)
@@ -594,7 +594,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
     useEffect(() => { 
         generateChart()
-    }, [ isLoadingCharts, graphRawData, graphRawGroupData, graphContainerRef, defaultSize, valueScope ])
+    }, [ isLoadingCharts, graphRawData, graphRawGroupData, graphContainerRef, defaultSize, valueScope, isDarkTheme ])
 
 
     useEffect(() => {

@@ -14,7 +14,10 @@ export default makeStyles(theme => ({
                 width: '1.5rem',
                 height: '1.5rem'
             }
-        }      
+        } ,
+        '& .MuiPaper-root':{
+            backgroundImage: 'none'
+        }
     },
     dashboard: {
         position: 'absolute',

@@ -96,7 +96,7 @@ class PatentTopTitle extends React.Component {
     
    return (
      <React.Fragment>
-       <div id='topTitle' style={{backgroundColor: this.config.title.background, border: `1px solid ${this.config.title.border}`, boxShadow: `0 0px 5px 0 ${this.config.title.boxShadow}`, color: this.config.title.color}}>
+       <div id='topTitle'>
          <span className={'title'} title={this.props.title}>{this.props.title}</span>
          <div id="topUIToolbarExpanded">
            <IconButton onClick={(event) => {this.toggleDrawer(event, true)}} size="large">
@@ -214,7 +214,6 @@ class PatentTopTitle extends React.Component {
                width: 250,  
                left: '50%',
                transform: `translateX(${x}) translateY(${y})`,
-               backgroundColor: 'rgba(66,66,66, 0.7)'   
              }
            }}
          >

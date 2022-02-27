@@ -95,7 +95,7 @@ export default makeStyles(theme => ({
       border: 0,
       borderTop:`1px solid ${theme.palette.divider}`, 
       borderBottom:`1px solid ${theme.palette.divider}`, 
-      backgroundColor: `${theme.palette.background.default}!important`,
+      backgroundColor: `${theme.palette.background.paper}!important`,
       '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground':{
         /* backgroundColor: '#424242 !important', */
       }
@@ -248,9 +248,9 @@ export default makeStyles(theme => ({
       position:'absolute',  
       width:'150px',
       /* height:'150px', */
-      background:'#222222',
-      border:'1px solid #545454',
-      color:'#BDBDBD',
+      background: theme.palette.background.default,
+      border:`1px solid ${theme.palette.divider}`, 
+      color: theme.palette.text.primary,
       padding: '5px 10px' ,
       '& h4':{
         margin: 0 
@@ -261,8 +261,10 @@ export default makeStyles(theme => ({
       borderTop: 0
     },
     '& .vis-timeline':{
-      border: '0 !important',
-      backgroundColor: '#222222 !important',
+      border: 0,
+      borderTop:`1px solid ${theme.palette.divider}`, 
+      borderBottom:`1px solid ${theme.palette.divider}`, 
+      backgroundColor: `${theme.palette.background.paper}!important`,
       '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground':{
         /* backgroundColor: '#424242 !important', */
       }
@@ -299,11 +301,11 @@ export default makeStyles(theme => ({
     '& .vis-item.vis-range': {   
       height: '4.4rem',   
       '&.asset-type-default': {
-        backgroundColor: 'rgba(34,34,34, 0.75)',
+        backgroundColor: theme.palette.background.default,
         border: 0,
         borderRadius: 3,
         '& .vis-item-content':{
-          border: '1px solid #545454',
+          border: '1px solid #545454',   
           borderRadius: 3, 
           padding: 4,
           color: '#BDBDBD',
@@ -401,7 +403,7 @@ export default makeStyles(theme => ({
       borderColor: indigo[500],
       backgroundColor: indigo[500],
       '&.asset-type-default': {
-        backgroundColor: '#222222',
+        backgroundColor: theme.palette.background.default,
         border: 0,
         width: '9.6rem',
         borderRadius: '3px',

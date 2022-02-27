@@ -27,7 +27,7 @@ export default makeStyles(theme => ({
             boxSizing: 'border-box',
             cursor: 'col-resize',
             backgroundClip: 'padding-box',
-            background: theme.palette.action.disabled,
+            /* background: theme.palette.action.disabled, */
             '&:hover':{
               background: pink[500],
             },

@@ -1770,7 +1770,7 @@ class PatentrackDiagram extends React.Component {
     });
 
     return (
-      <div id="patentrackDiagramDiv" ref={this.resizeElement} style={{backgroundColor: this.config.background}}>
+      <div id="patentrackDiagramDiv" ref={this.resizeElement}>
         <PatentTopTitle
           width={this.props.parentWidth}
           titleTop={this.props.titleTop}
