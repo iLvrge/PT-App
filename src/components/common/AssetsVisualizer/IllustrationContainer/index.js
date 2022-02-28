@@ -331,7 +331,7 @@ const IllustrationContainer = ({
   },[ dispatch ])
 
   return (
-    <div className={classes.root}>           
+    <Paper className={classes.root}>           
       <div className={classes.forceStrech} ref={targetRef}>
         {
           isLoadingAssetIllustration ?
@@ -366,7 +366,7 @@ const IllustrationContainer = ({
           )
         }
       </div>
-    </div>
+    </Paper>
   )
 }
 

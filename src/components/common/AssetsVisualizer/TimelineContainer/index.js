@@ -569,7 +569,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
    */    
 
   return (
-      <div className={classes.root}>        
+      <Paper className={classes.root}>        
         <div
           style={{ 
             filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
@@ -582,7 +582,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
           <CircularProgress size={15} color={'secondary'} className={classes.timelineProcessingIndicator} />
         }
         { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> }
-      </div>
+      </Paper>
   ) 
 }
 
