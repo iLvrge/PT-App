@@ -1,5 +1,5 @@
 import makeStyles from '@mui/styles/makeStyles';
-
+import { pink } from '@mui/material/colors';
 const styles = makeStyles((theme) => ({
   tableRootContainer:{
     display: 'flex',
@@ -76,22 +76,21 @@ const styles = makeStyles((theme) => ({
     '&.highlightRow':{
       '& .MuiTableCell-root.highlightColumn': {
         '& span': {
-          color: '#fff',
-          backgroundColor: '#228de8 !important',
-          borderRadius: 10,
-          padding: '5px 10px',
-          lineHeight: 1,
-          '&:hover':{
-            /* backgroundColor: '#228de8 !important' */
-          }
+          color: pink[500]
         }
       }      
     },
     '&.highlightWithCol.Mui-selected':{
+      backgroundColor: 'inherit !important',
+      '& .MuiTableCell-root': {
+        '& span': {
+          color: pink[500]
+        }  
+      },
       '& .MuiTableCell-root.highlightColumn': {
         '& span': {
-         /*  color: '#ffaa00', */
-        }
+          color: pink[500]
+        }  
       }
     },
     '& .ReactVirtualized__Table__rowColumn':{
@@ -111,7 +110,7 @@ const styles = makeStyles((theme) => ({
       }
     },
     '& .MuiTableRow-root.Mui-selected, .MuiTableRow-root.Mui-selected:hover':{
-      backgroundColor: 'inherit',
+      /* backgroundColor: 'inherit', */
       '& .MuiTableCell-root':{
         /* color: '#e60000', */
         '& span':{

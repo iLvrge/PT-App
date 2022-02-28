@@ -62,9 +62,9 @@ export default makeStyles(theme => ({
   tabs: {
     minHeight: 47,
     display: 'flex',
-    '& .MuiTab-root': {
+    /* '& .MuiTab-root': {
       fontSize: '1.1rem'
-    }
+    } */
   },
   loader: {
     position: 'absolute',

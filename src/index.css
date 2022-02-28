@@ -358,14 +358,6 @@ div.vis-tooltip span{
   border-bottom: 1px solid #5c5c5c !important;
 }
 
-.MuiTableRow-root.Mui-selected, .MuiTableRow-root.Mui-selected:hover{
-  background-color: inherit !important;
-}
-
-.MuiTableRow-root.Mui-selected .MuiTableCell-root, .MuiTableRow-root.Mui-selected:hover .MuiTableCell-root{
-  color: #e60000;
-}
-
 .MuiFormControl-root {
   width: 100%;
 }

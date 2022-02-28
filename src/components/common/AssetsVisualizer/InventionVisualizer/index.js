@@ -526,8 +526,10 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     zMax.push(data.countAssets)
                     const appNums = data.appNum;
                     let style = {
-                            stroke: isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider,
-                            fill: isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default
+                            /* stroke: isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider,
+                            fill: isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default */
+                            fill: '#42a5f5',
+                            stroke: '#90caf9'
                         };
                     if(data.appNum !== null && data.appNum !== '') {
                         const appList = data.appNum.toString().split(',')
@@ -562,8 +564,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                             y: graphRawGroupData[findIndex].id,
                             z: 0,
                             style: {
-                                stroke: '#50719C',
-                                fill: '#395270'
+                                fill: '#42a5f5',
+                                stroke: '#90caf9'
                             }, 
                             patent: data.patent_number,
                             application_number: data.application_number,   

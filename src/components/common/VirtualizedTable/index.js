@@ -344,7 +344,7 @@ const VirtualizedTable = ({
               ? classes.textBold 
               : '',
             typeof showOnCondition == 'string' && typeof classCol !== 'undefined' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition ? '' : classCol,
-            selectedRow === true ? 'highlightColumn' : ''
+            selectedRow === true && (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey])) ? 'highlightColumn' : ''
           )}
           variant="body"
           align={align}
@@ -482,6 +482,7 @@ const VirtualizedTable = ({
       rowHeight,
       selected,
       selectedIndex,
+      rowSelected,
       columns,
       disableRow,
       disableRowKey,
@@ -617,13 +618,14 @@ const VirtualizedTable = ({
           )
         }
       }
-      if((optionalKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[optionalKey])) || (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey])) || (selected !== undefined && selectedKey !== undefined && highlightRow !== undefined && highlightRow === true && selected.includes(rowData[selectedKey]))) {
+      if((optionalKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[optionalKey])) || (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey])) || (selected !== undefined && selectedKey !== undefined && highlightRow !== undefined && highlightRow === true && selected.includes(rowData[selectedKey])) || (selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey]))) {
         selectedRow = true
-		  }
+      }  
+      /* console.log("selectedRow", selected, selectedKey, rowData) */
       return (      
         <React.Fragment key={key}>
         <TableRow
-          className={clsx(className, `rowIndex_${index}`, {['noBorderLines']: typeof noBorderLines !== 'undefined' ? true : false}, { ['highlightRow']: highlightRow !== undefined && highlightRow === true && selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey]) ? true : false }, {['highlightWithCol']: highlightRow !== undefined && highlightRow === true && ( (optionalKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[optionalKey])) || (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey]))) ? true : false }) }
+          className={clsx(className, `rowIndex_${index}`, {['noBorderLines']: typeof noBorderLines !== 'undefined' ? true : false}, { ['highlightRow']: highlightRow !== undefined && highlightRow === true && selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey]) ? true : false }, {['highlightWithCol']: highlightRow !== undefined && highlightRow === true &&  !selected.includes(rowData[selectedKey]) && ( (optionalKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[optionalKey])) || (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey]))) ? true : false }) }
           style={{
             ...style,
             height:

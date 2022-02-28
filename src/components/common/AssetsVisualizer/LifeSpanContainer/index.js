@@ -66,7 +66,7 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
                 return null
             } 
             const list = [];
-            
+            let totalRecords = 0;
             if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {  
                 if( assetsSelected.length > 0 ) {
                     const promise = assetsSelected.map(asset => {
@@ -78,6 +78,7 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
                         }
                     })
                     await Promise.all(promise)
+                    totalRecords = list.length
                 } else {
                     const promise = selectedMaintainencePatents.map(asset => {
                         const findIndex = maintainenceAssetsList.findIndex( row => row.appno_doc_num.toString() == asset[1].toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset[0].toString() )
@@ -88,15 +89,18 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
                         }
                     })
                     await Promise.all(promise)
+                    totalRecords = list.length
                 }                
             } else {
                 if( assetsList.length > 0 || maintainenceAssetsList.length > 0 ) {
                     if( assetsList.length > 0 ) {
                         const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
                         await Promise.all(promise)
+                        totalRecords = assetsTotal
                     } else if ( maintainenceAssetsList.length > 0 ) {
                         const promise = maintainenceAssetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
                         await Promise.all(promise)
+                        totalRecords = maintainenceAssetsTotal
                     }
                 } else {
                     /**
@@ -160,7 +164,7 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
                 setFilterList(list)
                 const form = new FormData()
                 form.append("list", JSON.stringify(list)) 
-                form.append("total", maintainenceAssetsList.length > 0 ? maintainenceAssetsTotal : assetsTotal)
+                form.append("total", totalRecords)
                 form.append('selectedCompanies', JSON.stringify(selectedCompanies))
                 form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
                 form.append('customers', JSON.stringify(selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies))
