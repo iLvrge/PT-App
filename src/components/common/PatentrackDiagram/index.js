@@ -1557,7 +1557,7 @@ class PatentrackDiagram extends React.Component {
       assignments: {},
     };
 
-    const { showThirdParties } = this.props;
+    const { showThirdParties, isDarkTheme, themeMode } = this.props;
 
     this.parseData();
 
@@ -1733,6 +1733,8 @@ class PatentrackDiagram extends React.Component {
           node={this.config.node}
           childrenLinks={children}
           pdfView={this.props.pdfView}
+          themeMode={themeMode}
+          isDarkTheme={isDarkTheme}
         />
       );
     });
@@ -1768,7 +1770,7 @@ class PatentrackDiagram extends React.Component {
         this.checkForSimilarTimelineEntries(timelines, timelineEntry);
       }
     });
-
+    console.log('isDarkTheme', isDarkTheme, themeMode)
     return (
       <div id="patentrackDiagramDiv" ref={this.resizeElement}>
         <PatentTopTitle
@@ -1821,6 +1823,8 @@ class PatentrackDiagram extends React.Component {
               params={params}
               dates={timelines}
               timeline={config.timeline}
+              themeMode={themeMode}
+              isDarkTheme={isDarkTheme}
             />
           </g>
           <g id="patentLinksGroup">{links}</g>
@@ -1828,7 +1832,7 @@ class PatentrackDiagram extends React.Component {
           {
             this.props.copyrights && (
               <g transform={`translate(16,${svgParams.height ? svgParams.height - 20 : this.height })`}>
-                <text fill={this.config.timeline.fontColor}><tspan>The illustrations, and the systems and methods by which they were created, are copyright</tspan> <tspan x="0" dy="14.25">protected and covered by several pending patent applications.</tspan></text>
+                <text fill={isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}><tspan>The illustrations, and the systems and methods by which they were created, are copyright</tspan> <tspan x="0" dy="14.25">protected and covered by several pending patent applications.</tspan></text>
               </g>
             )  
           } 

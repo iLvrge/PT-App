@@ -26,7 +26,7 @@ class PatentTimeline extends React.Component {
       .attr("y1", this.props.dates[0].y - this.props.timeline.upperTail)
       .attr("x2", this.props.params.margin.left)
       .attr("y2", this.props.params.height - this.props.params.margin.bottom)
-      .attr("stroke", this.props.timeline.fontColor)
+      .attr("stroke",  this.props.isDarkTheme ? this.props.themeMode.dark.palette.action.disabled : this.props.themeMode.light.palette.action.disabled/* this.props.timeline.fontColor */)
       .attr("stroke-width", this.props.timeline.vertical)
       .style("stroke-dasharray", "3, 3");
     let dates = g
@@ -50,14 +50,14 @@ class PatentTimeline extends React.Component {
       .attr("y1", 0)
       .attr("x2", d_ => d_.x2)
       .attr("y2", 0)
-      .attr("stroke", this.props.timeline.fontColor)
+      .attr("stroke", this.props.isDarkTheme ? this.props.themeMode.dark.palette.action.disabled : this.props.themeMode.light.palette.action.disabled/* this.props.timeline.fontColor */)
       .style("stroke-width", this.props.timeline.horizontal)
       .style("stroke-dasharray", "3, 3");
     dates
       .append("text")
       .attr("font-size", this.props.timeline.fontSize)
       .attr("font-weight", 400)
-      .attr("fill", this.props.timeline.fontColor)
+      .attr("fill", this.props.isDarkTheme ? this.props.themeMode.dark.palette.text.primary : this.props.themeMode.light.palette.text.primary/* this.props.timeline.fontColor */)
       .attr("dx", this.props.timeline.dateOffset.x)
       .attr("dy", this.props.timeline.dateOffset.y)
       .text(d_ => time2String(d_.time));

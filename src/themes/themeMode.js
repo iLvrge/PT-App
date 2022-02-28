@@ -9,6 +9,9 @@ const themeMode = {
             text: {
                 primary: 'rgba(0, 0, 0, 0.87)'
             },
+            action: {
+                disabled: 'rgba(0, 0, 0, 0.26)'
+            },
             divider: 'rgba(0, 0, 0, 0.12)'
         },
     },
@@ -16,8 +19,11 @@ const themeMode = {
         palette: {
             mode: "dark",
             background:{
-                default: '#1d2025',
-                paper: '#233044'
+                default: '#0B0C0E',
+                paper: '#1D2025'
+            },
+            action: {
+                disabled: 'rgba(255, 255, 255, 0.3)'
             },
             text: {
                 primary: '#fff'

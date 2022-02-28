@@ -12,7 +12,7 @@ import { copyToClipboard } from '../../../../utils/html_encode_decode'
 
 import PdfViewer from '../../../common/PdfViewer'
 import ErrorBoundary from '../../ErrorBoundary'
-
+import themeMode from '../../../../themes/themeMode';
 import axios from 'axios' 
 
 import useStyles from './styles'
@@ -45,7 +45,7 @@ const IllustrationContainer = ({
   const usptoMode = useSelector(state => state.ui.usptoMode)
   const showThirdParties = useSelector(state => state.ui.showThirdParties)
   const isLoadingAssetIllustration = useSelector(state => state.patenTrack2.loadingAssetIllustration)
-  
+  const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
   
   const updateContainerWidth = useCallback(() => {
     if (targetRef.current) {
@@ -67,7 +67,6 @@ const IllustrationContainer = ({
       updateContainerWidth()
     }
     const getIllustration = async () => {
-      console.log("getIllustration")
       if ( !asset || asset === null ) {
         setIllustrationData( null )
         return null
@@ -116,7 +115,6 @@ const IllustrationContainer = ({
   }, [ asset, dispatch])
 
   const handlePdfView = useCallback((obj) => {
-    console.log('ONCLICK HANDLE handlePdfView', obj)
     if (Object.keys(obj).length > 0 && typeof obj.document_file != 'undefined') {
       /* if( chartsBar === false ) {
         chartsBarToggle(!chartsBar)
@@ -359,7 +357,9 @@ const IllustrationContainer = ({
                   lineId={lineId}
                   fullScreen={fullScreen}
                   isFullscreenOpen={isFullscreenOpen} 
-                  copyrights={true} 
+                  isDarkTheme={isDarkTheme}
+                  themeMode={themeMode}
+                  copyrights={true}   
                 /> 
               </ErrorBoundary>                          
             )
