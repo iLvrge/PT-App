@@ -113,10 +113,10 @@ const Reports = () => {
             rowSpacing={2} 
             justifyContent="flex-start"
             alignItems="flex-start"
+            sx={{pt: 1, pr: 2}}
         >
             <Grid
                 item lg={2} md={2} sm={2} xs={2}  
-                spacing={2}
                 style={{height: '100%'}}
             >
                 <div 
@@ -128,7 +128,7 @@ const Reports = () => {
                 </div>
             </Grid>
             <Grid
-                item lg={10} md={10} sm={10} xs={10}  p={2}
+                item lg={10} md={10} sm={10} xs={10} 
                 style={{height: '100%', overflowY: 'auto' }}
             >
                 <Grid

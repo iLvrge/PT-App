@@ -5,7 +5,7 @@ import GaugeChart from 'react-gauge-chart'
 const Chart = (props) => {
     const [arcs, setArcs] = useState([0.5, 0.3, 0.2])
     const chartStyle = {
-		height: 150
+		/* height: '10vh' */
 	}
     return (
         <GaugeChart

@@ -11,15 +11,6 @@ import {
 const ClientList = () => {
     const COLUMNS = [
         {
-            width: 10,
-            minWidth: 10,
-            label: '',   
-            dataKey: 'representative_id',
-            /* role: "arrow", */
-            disableSort: true,
-            enable: false
-        },
-        {
             width: 25,
             minWidth: 25,
             label: '',
@@ -30,13 +21,13 @@ const ClientList = () => {
             enable: false
         },
         {
-            width: 250,  
-            minWidth: 250,
-            oldWidth: 250,
+            width: 200,  
+            minWidth: 200,
+            oldWidth: 200,
             label: 'Companies',  
             dataKey: 'original_name',
-            align: "left", 
-        }
+            align: "left",   
+        },
     ]
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -106,7 +97,7 @@ const ClientList = () => {
     if (isLoadingCompanies && companies.list.length == 0) return <Loader />
 
     return (
-        <Paper className={classes.root} square id={`main_companies`}>
+        <Paper className={classes.root} square id={`main_companies`} sx={{ px: 1 }}> 
             <VirtualizedTable
             classes={classes}
             selected={selectItems}

@@ -17,7 +17,8 @@ export default makeStyles(theme => ({
     fullscreenCharts: {
         margin: 35,
         flex: 1,
-        display: 'flex'
+        display: 'flex',
+        backgroundColor: theme.palette.background.default
     },
     right:{
         position: 'absolute',
