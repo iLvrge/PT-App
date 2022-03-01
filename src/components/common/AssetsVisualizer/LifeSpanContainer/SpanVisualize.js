@@ -64,7 +64,8 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
                 fontFamily: 'Roboto'
             },
             gridlines: {
-                color: isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider,
+                /* color: isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider, */
+                color: '#292a2b',
             },
             minorGridlines:{
                 color:'transparent' 
@@ -99,8 +100,7 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
         opt.vAxis.baselineColor = isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider
         opt.vAxis.textStyle.color = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
         opt.vAxis.titleTextStyle.color = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
-        opt.vAxis.gridlines.color = isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider
-        console.log("opt", opt)
+        /* opt.vAxis.gridlines.color = isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider */
         setOption(opt)
     }, [isDarkTheme])
 
