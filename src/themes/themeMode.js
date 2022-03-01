@@ -14,7 +14,12 @@ const themeMode = {
             },
             divider: 'rgba(0, 0, 0, 0.12)'
         },
-    },
+        typography: {
+            h6: {
+                fontSize: '1.1rem'
+            }
+        }
+    }, 
     dark:{
         palette: {
             mode: "dark",
@@ -30,6 +35,11 @@ const themeMode = {
             },
             divider: 'rgba(255, 255, 255, 0.12)'
         },
+        typography: {
+            h6: {
+                fontSize: '1.1rem'
+            }
+        }
     }
 }
 

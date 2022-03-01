@@ -70,7 +70,7 @@ export default makeStyles(theme => ({
       borderColor: indigo[500],
       backgroundColor: indigo[500],
       '&.asset-type-default': {
-        backgroundColor: '#222222',
+        backgroundColor: 'transparent',
         border: 0,
         width: '9.6rem',
         borderRadius: '3px',
@@ -86,12 +86,12 @@ export default makeStyles(theme => ({
           display: 'flex',
           flexWrap: 'wrap',          
           justifyContent: 'flex-start',
-          border: '1px solid #545454',
+          border: `1px solid ${theme.palette.divider}`,
           borderRadius: '3px',
           /* padding: '0rem 0.4rem', */
           padding: '0px 0px 0px 7px',
           overflow: 'hidden',
-          color: '#BDBDBD',
+          color: theme.palette.text.primary,
           '& .maxHeight':{
             maxHeight: '51px',
             overflow: 'hidden',

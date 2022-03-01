@@ -185,7 +185,8 @@ export default makeStyles(theme => ({
       borderBottom:`1px solid ${theme.palette.divider}`, 
       backgroundColor: `${theme.palette.background.default}!important`,
       '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground':{
-        backgroundColor: '#424242 !important',
+        backgroundColor: 'transparent',
+        color: theme.palette.text.primary,
       }
     },
     '& .vis-left.vis-panel.vis-vertical-scroll, .vis-right.vis-panel.vis-vertical-scroll':{
@@ -213,11 +214,12 @@ export default makeStyles(theme => ({
     },
     '& .vis-item.vis-box': {      
       '&.asset-type-default': {
-        backgroundColor: 'rgba(34,34,34, 0.75)',
+        backgroundColor: 'transparent',
         border: 0,
         borderRadius: '3px',
         width: '9.6rem',
         height: '4.4rem',
+        color: theme.palette.text.primary,
         '& .vis-item-content':{
           width:'100%',
           height:'100%',
@@ -225,11 +227,11 @@ export default makeStyles(theme => ({
           flexWrap: 'wrap',          
           justifyContent: 'flex-start',
           alignItems: 'flex-start',
-          border: '1px solid #9d9d9d',
+          border: `1px solid ${theme.palette.divider}`,
           borderRadius: '3px', 
           padding: '4px 0px 2px 4px',
           overflow: 'hidden',
-          color: '#BDBDBD',
+          color: theme.palette.text.primary,
           '& .first':{
             fontWeight: 500,
             fontSize: '0.875rem',
@@ -363,7 +365,7 @@ export default makeStyles(theme => ({
       borderColor: indigo[500],
       backgroundColor: indigo[500],
       '&.asset-type-default': {
-        backgroundColor: '#222222',
+        backgroundColor: 'transparent',
         border: 0,
         width: '9.6rem',
         borderRadius: '3px',
@@ -384,7 +386,7 @@ export default makeStyles(theme => ({
           /* padding: '0rem 0.4rem', */
           padding: '0px 0px 0px 7px',
           overflow: 'hidden',
-          color: '#BDBDBD',
+          color: theme.palette.text.primary,
           '& .maxHeight':{
             maxHeight: '51px',
             overflow: 'hidden',

@@ -232,7 +232,7 @@ const ActionMenu = (props) => {
                         layoutID = item[0].layout_id
                     }
                 }
-                console.log("openTemplateDriveFiles",profileInfo)
+                
                 if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
                     //dispatch(setDriveButtonActive( true )) // it will set when user click on drive file link
                     dispatch( 
@@ -798,9 +798,9 @@ const ActionMenu = (props) => {
             anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
             transformOrigin={{vertical: 'bottom', horizontal: 'left'}}
             onClose={handleClose}
-            className={classes.actionMenuList}
+            className={classes.actionMenuList} 
         >   
-            <MenuItem  onClick={onHandleDashbord} className={`iconItem`}>
+            <MenuItem  onClick={() => props.setDashboardScreen(!props.dashboardScreen)} className={`iconItem`}>
                 <ListItemText>Dashboard</ListItemText>
             </MenuItem>
             <MenuItem  onClick={onAttachmentOpenedFileAndEmail}  className={`iconItem`}>

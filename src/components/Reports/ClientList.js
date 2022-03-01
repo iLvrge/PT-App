@@ -11,20 +11,29 @@ import {
 const ClientList = () => {
     const COLUMNS = [
         {
-            width: 20,
-            minWidth: 20,
-            label: '',
+            width: 10,
+            minWidth: 10,
+            label: '',   
             dataKey: 'representative_id',
-            headingIcon: 'company',
-            role: "arrow",
+            /* role: "arrow", */
             disableSort: true,
-            showOnCondition: '0'
+            enable: false
         },
         {
-            width: 200,  
-            minWidth: 200,
-            oldWidth: 200,
-            label: 'Clients',        
+            width: 25,
+            minWidth: 25,
+            label: '',
+            headingIcon: 'company',       
+            dataKey: 'representative_id',
+            /* role: "arrow", */
+            disableSort: true,
+            enable: false
+        },
+        {
+            width: 250,  
+            minWidth: 250,
+            oldWidth: 250,
+            label: 'Companies',  
             dataKey: 'original_name',
             align: "left", 
         }

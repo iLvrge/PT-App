@@ -14,7 +14,7 @@ export default makeStyles(theme => ({
         minHeight: 60
     },
     flexColumn: {
-        height: 225,
+        height: 'calc((100vh - 87px) / 3)',
         '& .MuiCard-root': {
             height: '100%'
         }

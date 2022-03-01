@@ -58,6 +58,8 @@ import Home from '../Home'
 import CompanySummary from '../common/CompanySummary'
 import ActionMenu from './ActionMenu'
 /* import ClipboardAssets from './ClipboardAssets' */
+import FullScreen from '../common/FullScreen'
+import Reports from '../Reports'
 import { signOut } from '../../actions/authActions'
 import { getTokenStorage, removeTokenStorage } from '../../utils/tokenStorage'
 import { 
@@ -136,6 +138,15 @@ const NewHeader = () => {
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState( true )
   const [ slackAuthLogin, setSlackAuthLogin ] = useState( true )
   const [ scheduling, setScheduling ] = useState( false )
+  const menuItems = [
+    {
+        id: 1,
+        label: 'Dashboard',
+        component: Reports,
+        standalone: true,
+    }
+  ] 
+  const [ dashboardScreen, setDashboardScreen ] = useState( false )
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
   const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
   const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
@@ -522,7 +533,7 @@ const handleThemeMode = useCallback(event => {
           } 
         </span>
 
-        <ActionMenu t={0} onClickSale={onHandleSaleAssets}/>       
+        <ActionMenu t={0} onClickSale={onHandleSaleAssets} dashboardScreen={dashboardScreen} setDashboardScreen={setDashboardScreen}/>       
               
         <div className={classes.rightPanel}>  
             <Switch  
@@ -730,6 +741,11 @@ const handleThemeMode = useCallback(event => {
             </Drawer>
         </div>
       </Toolbar>
+      {
+        dashboardScreen === true && (
+          <FullScreen componentItems={menuItems} showScreen={dashboardScreen} setScreen={setDashboardScreen}/>
+        )
+      }
       <Modal
         open={controlModal}
         onClose={(e) => handleControlModal( e, false )}
@@ -743,7 +759,6 @@ const handleThemeMode = useCallback(event => {
           <Home click={hideMenu} closeModal={handleControlModal}/> 
         </React.Fragment>
       </Modal>
-
       <Modal
         open={scheduling}
         onClose={handleScheduleViaHubspot}

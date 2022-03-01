@@ -188,6 +188,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
               background    : 'rgba(0, 0, 0, 0.8)',
               boxShadow     : 'none',    
               bottom        : '0px',
+              width         : '100%',
+              left          : '0px'
               /* maxWidth      : '40%' */
             },
             line: {

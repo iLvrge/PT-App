@@ -71,6 +71,38 @@ const Reports = () => {
             patent: '',
             application: '',
             rf_id: ''
+        },
+        {
+            title: 'Wrong Lawyer',
+            sub_heading: 'typo in the name of lawyer, wrong lawyer addres, no longer works with that lawyer',
+            number: 72,
+            patent: '',
+            application: '',
+            rf_id: ''
+        },
+        {
+            title: 'Maintained Unecessary Patents',
+            sub_heading: 'patents',
+            number: 72,
+            patent: '',
+            application: '',
+            rf_id: ''
+        },
+        {
+            title: 'Missed monetization opportunities',
+            sub_heading: 'abandoned patents',
+            number: 72,
+            patent: '',
+            application: '',
+            rf_id: ''
+        },
+        {
+            title: 'Maintainance Late',
+            sub_heading: 'Surcharge payments  number of the maintainance actvities',
+            number: 72,
+            patent: '',
+            application: '',
+            rf_id: ''
         }
     ]
     return (
@@ -78,6 +110,7 @@ const Reports = () => {
             container
             className={classes.container}
             spacing={2}
+            rowSpacing={2} 
             justifyContent="flex-start"
             alignItems="flex-start"
         >
@@ -95,8 +128,8 @@ const Reports = () => {
                 </div>
             </Grid>
             <Grid
-                item lg={10} md={10} sm={10} xs={10}  
-                style={{height: '100%', overflowY: 'auto'}}
+                item lg={10} md={10} sm={10} xs={10}  p={2}
+                style={{height: '100%', overflowY: 'auto' }}
             >
                 <Grid
                     container
@@ -114,6 +147,7 @@ const Reports = () => {
                                 <CardElement 
                                     key={index} 
                                     card={card}
+                                    id={index}
                                 />
                             </Grid>
                         ))
