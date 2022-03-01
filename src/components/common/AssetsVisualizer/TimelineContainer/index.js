@@ -573,7 +573,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
         <div
           style={{ 
             filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
-          }}
+          }}  
           ref={timelineContainerRef}
           className={clsx(classes.timeline, 'timeline')}
         />

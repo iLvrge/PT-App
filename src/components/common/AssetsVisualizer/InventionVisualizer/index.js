@@ -186,7 +186,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
               borderRadius  : '0px',
               color         : '#fff',
               background    : 'rgba(0, 0, 0, 0.8)',
-              boxShadow     : 'none',              
+              boxShadow     : 'none',    
+              bottom        : '0px',
               /* maxWidth      : '40%' */
             },
             line: {
@@ -238,7 +239,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             }
 
             if(top !== '' && parseInt(top) < 0) {
-                parentElement.style.top = '0px'
+                parentElement.style.top = 'unset'
             }
         }
     }
