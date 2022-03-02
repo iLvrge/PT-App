@@ -477,6 +477,13 @@ export default makeStyles(theme => ({
         },
         '& .MuiButton-root': {
             textTransform: 'initial'
+        },
+        '& .customSVG': {
+            width: '1.5em',
+            height: '1.5em',
+            '& path, polygon': {
+                fill: "currentcolor"
+            }
         }
     },
     mBtn: {

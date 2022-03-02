@@ -1770,7 +1770,6 @@ class PatentrackDiagram extends React.Component {
         this.checkForSimilarTimelineEntries(timelines, timelineEntry);
       }
     });
-    console.log('isDarkTheme', isDarkTheme, themeMode)
     return (
       <div id="patentrackDiagramDiv" ref={this.resizeElement}>
         <PatentTopTitle

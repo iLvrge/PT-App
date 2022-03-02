@@ -252,7 +252,7 @@ const GlobalLayout = (props) => {
             setCustomerOpenBar( true ) //assets
             setAssignmentOpenBar( true ) //transactions
             setVisualizerBarSize('48.7%')
-
+            console.log("useEffect type 255")
             setChartBar(true)
             setAnalyticsBar(true)
             setCompanyBarSize(0) // company bar size
@@ -287,7 +287,9 @@ const GlobalLayout = (props) => {
         searchData()
     }, [ search_string ])
 
-
+    useEffect(() => {
+        console.log("USE EFFECT", openChartBar, openAnalyticsBar)
+    }, [openChartBar, openAnalyticsBar])
 
     /* useEffect(() => {
         let barSize = '50%';
@@ -567,6 +569,7 @@ const GlobalLayout = (props) => {
     }
 
     const changeVisualBar = (chart, analytics, comment, illustration) => {
+        console.log("changeVisualBar")
         let barOpen = true, barSize = '48.7%'        
         if(chart === false && analytics === false && (comment === true || illustration === true)){
             barSize = '0%'
@@ -599,6 +602,7 @@ const GlobalLayout = (props) => {
             
         }
         if(!bar === true) {
+            console.log("handleIllustrationBarOpen => index 604")
             if(isMobile) {
                 setCommentBar(false)
                 setChartBar(false)
@@ -620,6 +624,7 @@ const GlobalLayout = (props) => {
         }
         if(!bar === true) {
             if(isMobile) {
+                console.log("handleCommentBarOpen => index 626")
                 setIllustrationBar(false)
                 setChartBar(false)
                 setAnalyticsBar(false)
@@ -631,6 +636,7 @@ const GlobalLayout = (props) => {
 
     const handleChartBarOpen = () => { 
         let bar = openChartBar, barSize = '50%'
+        console.log("handleChartBarOpen => index 638")
         setChartBar( !bar )
         if(!bar === false && openAnalyticsBar === true) {
             barSize = '100%'
@@ -665,6 +671,7 @@ const GlobalLayout = (props) => {
         }   
         if(!bar === true) {
             if(isMobile) {
+                console.log("handleAnalyticsBarOpen => index 673")
                 setIllustrationBar(false)
                 setCommentBar(false)
                 setChartBar(false)
@@ -692,6 +699,7 @@ const GlobalLayout = (props) => {
     } 
 
     const openAnalyticsAndCharBar = () => {
+        console.log("openAnalyticsAndCharBar => index 701")
         setChartBar( true )
         setAnalyticsBar( true )
         setIllustrationBarSize( '50%' )
@@ -699,6 +707,7 @@ const GlobalLayout = (props) => {
     }
 
     const closeAnalyticsAndCharBar = () => {  
+        console.log("closeAnalyticsAndCharBar => index 709")
         setChartBar( false )
         setAnalyticsBar( false )
         setIllustrationBarSize( '50%' )
@@ -730,8 +739,9 @@ const GlobalLayout = (props) => {
         setCustomerButtonVisible( flag )
     }
 
-    const checkChartAnalytics = (pdfFile, connectionBoxData, usptoMode) => {
+    const checkChartAnalytics = useCallback(async (pdfFile, connectionBoxData, usptoMode) => {
         if( pdfFile != null && Object.keys(pdfFile).length > 0 ) {
+            console.log("PDF 743")
             setChartBar( true )
             setVisualizeOpenBar( true )
             setVisualizerBarSize(prevItem =>{
@@ -744,6 +754,7 @@ const GlobalLayout = (props) => {
         }
 
         if( connectionBoxData != null && Object.keys(connectionBoxData).length > 0 ) {  
+            console.log("connectionBoxData => 758")
             setVisualizeOpenBar( true )
             setVisualizerBarSize(prevItem =>{
                 if(prevItem == '0%') {
@@ -759,7 +770,7 @@ const GlobalLayout = (props) => {
 
         }
 
-        if( typeof usptoMode != undefined && usptoMode === true ) {
+        if( typeof usptoMode !== 'undefined' && usptoMode === true ) {
             setVisualizeOpenBar( true )
             setVisualizerBarSize(prevItem =>{
                 if(prevItem == '0%') {
@@ -774,20 +785,37 @@ const GlobalLayout = (props) => {
             } else {
                 setIllustrationBarSize('50%')
             }
-        } else if( typeof usptoMode != undefined && usptoMode === false ) {
+        } else if( typeof usptoMode !== 'undefined' && usptoMode === false ) {
             console.log('usptoMode', usptoMode, openChartBar, openAnalyticsBar, openCommentBar, openIllustrationBar, illustrationBarSize)
-            let barSize = '0%'
-            if((openChartBar === true || openAnalyticsBar === true) && (openCommentBar === true || openIllustrationBar === true)){
+            let barSize = '0%', chartPrevItem = false, analyticsPrevItem = false
+            await setChartBar(prevItem => {
+                console.log('setChartBar', prevItem)
+                chartPrevItem = prevItem
+                return prevItem
+            })
+            await setAnalyticsBar(prevItem => {
+                console.log('setAnalyticsBar', prevItem)
+                analyticsPrevItem = prevItem
+                return prevItem
+            })
+            if((chartPrevItem === true || analyticsPrevItem === true) && (openCommentBar === true || openIllustrationBar === true)){
                 barSize = '48.7%'
-            } else if (openCommentBar === false && openIllustrationBar === false && ( openChartBar === true ||  openAnalyticsBar === true )) {
+            } else if (openCommentBar === false && openIllustrationBar === false && ( chartPrevItem === true ||  analyticsPrevItem === true )) {
                 barSize = '100%'
             }
             if(barSize === '0%') {
                 setVisualizeOpenBar( false )
             }
             setVisualizerBarSize(barSize)
-        }
-    }
+            if(chartPrevItem !== openChartBar ) {
+                setChartBar(chartPrevItem)
+            }
+            if(analyticsPrevItem !== openAnalyticsBar ) {
+                setAnalyticsBar(analyticsPrevItem)
+            }
+            console.log("barSize", barSize, chartPrevItem, analyticsPrevItem)            
+        } 
+    }, [openChartBar, openAnalyticsBar, openCommentBar, openIllustrationBar])
 
 
     const handleOpenSettings = useCallback(() => {

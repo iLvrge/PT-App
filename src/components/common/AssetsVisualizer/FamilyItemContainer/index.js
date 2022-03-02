@@ -37,7 +37,6 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
     const asset_details = useSelector(state => state.patenTrack2.asset_details)
 
     useEffect(() => {
-        console.log('FamilyItemContainer', item, familyDataRetrieved)
         if( familyDataRetrieved === true ) {
             if(item == undefined || item == null || Object.keys(item).length === 0){
                 setAbsractData('')
@@ -67,7 +66,6 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                     publication_country: item.publication_country,
                     publication_kind: item.publication_kind
                 })
-                console.log("ITEM", item)
                 let number = item.publication_kind.toString().toLowerCase().indexOf('a') !== -1 
                             ? 
                                 `${item.publication_country}${applicationFormat(item.application_number)}${item.publication_kind}` 
