@@ -140,12 +140,20 @@ const NewHeader = () => {
   const [ scheduling, setScheduling ] = useState( false )
   const menuItems = [
     {
-        id: 1,
-        label: 'Dashboard',
-        component: Reports,
-        standalone: true,
+      id: 1,
+      label: 'Dashboard',
+      component: Reports,
+      standalone: true,
     }
   ] 
+  const schedulingMenuItems = [
+    {
+      id: 2,
+      label: 'Scheduling',
+      component: Scheduling,
+      standalone: true,
+    }
+  ]
   const [ dashboardScreen, setDashboardScreen ] = useState( false )
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
   const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
@@ -422,18 +430,6 @@ const NewHeader = () => {
     }
   }, [ dispatch, clipboard_assets, display_clipboard ])
 
-  const handleScheduleViaHubspot = () => {
-    setScheduling(!scheduling);
-    /* const elementContainer = document.getElementById('bookMeeting')
-    elementContainer.querySelector('.MuiBackdrop-root').addEventListener('click', function() {
-      if(this.parentElement.style.visibility == 'visible') {
-        this.parentElement.style.visibility = 'hidden'
-      }
-    })
-    elementContainer.style.visibility = elementContainer.style.visibility === 'hidden' ? 'visible' : 'hidden'
-    elementContainer.style.top = '42px' */
-  }
-
   const handleChangeLayout = (event) => {
     let findIndex = -1
     if(selectedCategory == 'due_dilligence') {
@@ -541,7 +537,7 @@ const handleThemeMode = useCallback(event => {
               {...( isDarkTheme == 'dark' ? {checked: true} : {})} 
               onChange={handleThemeMode}
             />
-            <Button className={classes.calendly} onClick={handleScheduleViaHubspot}>
+            <Button className={classes.calendly} onClick={() => {setScheduling(!scheduling)}}>
               Schedule a {process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'd' : 'D' }emo {process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'for Pro version' : '' }
             </Button>    
             <IconButton
@@ -746,6 +742,16 @@ const handleThemeMode = useCallback(event => {
           <FullScreen componentItems={menuItems} showScreen={dashboardScreen} setScreen={setDashboardScreen}/>
         )
       }
+      {  
+        scheduling === true && (
+          <FullScreen 
+            componentItems={schedulingMenuItems} 
+            showScreen={scheduling} 
+            setScreen={setScheduling}
+            paper={false} 
+          />
+        )
+      }
       <Modal
         open={controlModal}
         onClose={(e) => handleControlModal( e, false )}
@@ -759,19 +765,7 @@ const handleThemeMode = useCallback(event => {
           <Home click={hideMenu} closeModal={handleControlModal}/> 
         </React.Fragment>
       </Modal>
-      <Modal
-        open={scheduling}
-        onClose={handleScheduleViaHubspot}
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-        className={classes.modal}
-        style={{backgroundColor: 'rgba(0, 0, 0, 0.8)'}}>
-        <>
-          <Scheduling/>
-        </>
-      </Modal>
+      
     </AppBar>
   ); 
 }

@@ -73,6 +73,7 @@ export default makeStyles(theme => ({
     },
     logoContainer: {
         width: '18.5rem',
+        display: 'flex'
     },
     siteLogo: {
         /* width: LOGO_WIDTH,

@@ -20,8 +20,11 @@ export default makeStyles(theme => ({
         display: 'flex',
         backgroundColor: theme.palette.background.default
     },
+    noBackground: {
+        background: 'none'
+    },
     right:{
-        position: 'absolute',
+        position: 'absolute', 
         right: '35px',
         width: '20px',
         height: '20px',

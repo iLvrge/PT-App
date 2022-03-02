@@ -201,7 +201,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const selectedGroups = useSelector( state => state.patenTrack2.mainCompaniesList.selectedGroups)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
-
+    const assetTypesSelected = useSelector(state => state.patenTrack2.assetTypes.selected)
+    const assetTypesSelectAll = useSelector(state => state.patenTrack2.assetTypes.selectAll)
     /**
      * Intialise company list
      */
@@ -310,6 +311,28 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }  
         getSelectedCompanies()
     }, [ companies.list ])
+
+    useEffect(() => {
+        if((selectedCompaniesAll === true || selected.length > 0 )) {
+            if( assetTypesSelected.length === 0 && assetTypesSelectAll === false ) {
+                const getUserSelection = async () => {
+                    const { data } = await PatenTrackApi.getUserActivitySelection()
+                    if(data != null && Object.keys(data).length > 0) {
+                        dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
+                        dispatch( setAssetTypeCompanies({ list: [], total_records: 0 }) )
+                        dispatch( setAssetTypeInventor({ list: [], total_records: 0 }) )
+                        dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+                        dispatch( setAssetTypesSelect([data.activity_id]) )
+                        dispatch( setAllAssetTypes( false ) )
+                    } else {
+                        dispatch( setAssetTypesSelect([]) )
+                        dispatch( setAllAssetTypes( true ) )
+                    }
+                }
+                getUserSelection();   
+            }
+        }
+    }, [ dispatch, selectedCompaniesAll, selected])
 
     useEffect(() => {
         if( selectAll != undefined && selectAll === true && companies.list.length > 0 && intialization === false) {

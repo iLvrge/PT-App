@@ -30,8 +30,10 @@ import {
     Contacts as ContactsIcon,
     LocationCity as LocationCityIcon,
     KeyboardArrowDown,
+    Speed as SpeedIcon,
     Check
 } from '@mui/icons-material'
+
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -801,6 +803,9 @@ const ActionMenu = (props) => {
             className={classes.actionMenuList} 
         >   
             <MenuItem  onClick={() => props.setDashboardScreen(!props.dashboardScreen)} className={`iconItem`}>
+                <ListItemIcon>
+                    <SpeedIcon/>
+                </ListItemIcon>
                 <ListItemText>Dashboard</ListItemText>
             </MenuItem>
             <MenuItem  onClick={onAttachmentOpenedFileAndEmail}  className={`iconItem`}>
