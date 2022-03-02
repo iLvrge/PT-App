@@ -151,17 +151,17 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
 
     return (
         <>
-            {
+            {/* {
                 typeof standalone === 'undefined' && (
                     <div className={classes.fullScreenContainer}>
                         <FullScreen componentItems={menuItems}/>
                     </div>
                 )
-            } 
+            } */} 
             <div className={classes.graphContainer} ref={containerRef}>  
                 <DisplayChart />
             </div> 
-        </>
+        </>  
     )
 }
 

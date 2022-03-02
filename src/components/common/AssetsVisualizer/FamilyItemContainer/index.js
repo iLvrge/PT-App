@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react'
 
 import { useSelector } from 'react-redux'
-import { Tab, Tabs, Paper, Grid, Badge } from '@mui/material'
+import { Tab, Tabs, Paper, Grid, Badge, IconButton } from '@mui/material'
+import { Fullscreen as FullscreenIcon } from '@mui/icons-material'
 import FamilyContainer from '../FamilyContainer'
 import LegalEventsContainer from '../LegalEventsContainer'
 import ItemData from './ItemData'
@@ -9,13 +10,15 @@ import AbstractData from './AbstractData'
 import ClaimData from './ClaimData'
 import SpecificationData from './SpecificationData'
 import FigureData from './FigureData'
+import FullScreen from '../../FullScreen'
 import { numberWithCommas, applicationFormat, capitalize } from "../../../../utils/numbers";
 
 import useStyles from './styles'
 
-const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrationBar, visualizerBarSize, type }) => {
+const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrationBar, visualizerBarSize, type, standalone }) => {
 
     const classes = useStyles()
+    const [ fullScreen, setFullScreen ] = useState(false)
     const [ selectedTab, setSelectedTab ] = useState(0)
     const [ familyItemData, setfamilyItemData ] = useState({})
     const [ abstractData, setAbsractData ] = useState('')
@@ -35,7 +38,21 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
     const selectedAssetsFamily = useSelector(state => state.patenTrack.assetFamily)    
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
     const asset_details = useSelector(state => state.patenTrack2.asset_details)
-
+    const fullScreenItems = [
+        {
+          id: 1,
+          label: '',
+          component: FamilyItemContainer,
+          item,
+          onClose,
+          analyticsBar,
+          chartBar,
+          illustrationBar, 
+          visualizerBarSize, 
+          type,
+          standalone: true,
+        }
+    ]
     useEffect(() => {
         if( familyDataRetrieved === true ) {
             if(item == undefined || item == null || Object.keys(item).length === 0){
@@ -87,7 +104,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                     console.log(err)
                 }
             }
-            getFamilyItemDataFunction()  
+            getFamilyItemDataFunction()     
         } else {
             if(selectedAssetsPatents.length > 0) {
                 setSelectedNumber(selectedAssetsPatents[1] !== '' ? `US${numberWithCommas(selectedAssetsPatents[1])}` : `US${applicationFormat(selectedAssetsPatents[0])}`)
@@ -133,7 +150,13 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                 selectedCompaniesAll === true || selectedCompanies.length > 0 || type === 9 || ( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)
                 ?
                     <>
-                        
+                        {
+                            fullScreen === false && typeof standalone === 'undefined' && (
+                                <IconButton size="small" className={classes.fullscreenBtn} onClick={() => setFullScreen(!fullScreen)}>
+                                    <FullscreenIcon />
+                                </IconButton>
+                            )
+                        }
                         <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
                             {
                                 [`Family`, `Abstract`, `Specifications`, `Claims`, `Figures`].map( (item, index) => (
@@ -174,6 +197,15 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                             '' 
                         }
                         </div>
+                        {  
+                            fullScreen === true && (
+                                <FullScreen 
+                                    componentItems={fullScreenItems} 
+                                    showScreen={fullScreen} 
+                                    setScreen={setFullScreen}
+                                />
+                            )
+                        }
                     </>
                 :
                 ''

@@ -42,8 +42,9 @@ export default makeStyles(theme => ({
     },
     fullscreenBtn: {
         position: 'absolute',
-        top: 0,
+        top: 5,
         right: 0,
+        zIndex: 999
     },
     fullscreenChartsModal: {
         display: 'flex',
@@ -76,9 +77,9 @@ export default makeStyles(theme => ({
           position:'absolute',  
           width:'150px',
           /* height:'150px', */
-          background:'#222222',
-          border:'1px solid #545454',
-          color:'#BDBDBD',
+          background: theme.palette.background.paper,
+          border:`1px solid ${theme.palette.action.disabled}`,
+          color: theme.palette.text.primary,
           padding: '5px 10px' ,
           '& h4':{
             margin: 0 

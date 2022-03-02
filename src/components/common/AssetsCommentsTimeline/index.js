@@ -14,13 +14,15 @@ import { Paper,
   Typography,
   TextField,
   Tooltip,
-  Zoom
+  Zoom,
+  IconButton
 } from '@mui/material'
 import { 
   Folder as FolderIcon,
   Close as CloseIcon,
   InsertDriveFileOutlined as InsertDriveFileOutlinedIcon,
-  InsertDriveFile as InsertDriveFileIcon
+  InsertDriveFile as InsertDriveFileIcon,
+  Fullscreen as FullscreenIcon
 } from '@mui/icons-material'
 
 import { Droppable } from 'react-drag-and-drop'
@@ -31,6 +33,7 @@ import { controlList } from "../../../utils/controlList"
 import QuillEditor from '../QuillEditor'
 import CustomerAddress from '../CustomerAddress'
 import Googlelogin from '../Googlelogin' 
+import FullScreen from '../FullScreen'
 import useStyles from './styles'
 import { FaChevronCircleDown } from 'react-icons/fa'
 import {
@@ -66,7 +69,7 @@ import { html } from '../../../utils/html_encode_decode'
 
 import { capitalizeEachWord } from '../../../utils/numbers'
 
-const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, illustrationBar }) => {
+const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, illustrationBar, standalone }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const googleLoginRef = useRef(null)
@@ -74,6 +77,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   const timelineRef = useRef(null)
   const frameRef = useRef( null )
   const editorContainerRef = useRef(null)
+  const [ fullScreen, setFullScreen ] = useState(false)
   const [ isLoadingcomments, setIsLoadingcomments ] = useState(false)
   const [ commentsData, setCommentsData ] = useState({messages: [], users: []})
   const [ editData, setEditData ] = useState(null)
@@ -118,7 +122,19 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   const [ selectedDriveFile, setSelectedDriveFile] = useState(null)
   const [ activeBtn, setActiveBtn] = useState({display: false})  
   const type = useMemo(() => selectedCommentsEntity && selectedCommentsEntity.type, [ selectedCommentsEntity ])
-
+  const fullScreenItems = [
+    {
+      id: 1,
+      label: '',
+      component: AssetsCommentsTimeline,
+      toggleMinimize,
+      size, 
+      setChannel, 
+      channel_id, 
+      illustrationBar,
+      standalone: true,
+    }
+  ] 
   useEffect(() => {
     checkButtons()
   }, [])
@@ -976,13 +992,20 @@ const handleDriveModalClose = (event) => {
     <Paper className={classes.root} square>
       <div className={classes.content}>
         {
+          fullScreen === false && typeof standalone === 'undefined' && (
+            <IconButton size="small" className={classes.fullscreenBtn} onClick={() => setFullScreen(!fullScreen)}>
+              <FullscreenIcon />
+            </IconButton>
+          )
+        } 
+        {
           displayButton === true
           ?
           <div className={classes.button}>
             {
               slackAuthLogin && (<Tooltip 
                 title={
-                  <Typography color="inherit" variant='body2'>Once you sign in to your Slack Workspace, we will create for you a dedicated channel in your Workspace for each of the patents and application in the Assets list. Just select an asset and start writing to your Workspace members in the text bar below.<br/>Whatever you write will be saved only in your Slack Workspace.</Typography>
+                  <Typography color="inherit" variant='body2'>{/* Once you sign in to your Slack Workspace, we will create for you a dedicated channel in your Workspace for each of the patents and application in the Assets list. Just select an asset and start writing to your Workspace members in the text bar below.<br/>Whatever you write will be saved only in your Slack Workspace. */}Sign in  to your Slack account</Typography>
                 } 
                 className={classes.tooltip}  
                 placement='left'
@@ -1015,6 +1038,15 @@ const handleDriveModalClose = (event) => {
         }
         { renderCommentsTimeline }  
         { renderCommentEditor }
+        {  
+          fullScreen === true && (
+            <FullScreen 
+              componentItems={fullScreenItems} 
+              showScreen={fullScreen} 
+              setScreen={setFullScreen}
+            />
+          )
+        }
       </div>  
       <Modal
         open={driveModal}

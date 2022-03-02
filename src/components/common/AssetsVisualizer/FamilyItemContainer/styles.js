@@ -68,6 +68,12 @@ export default makeStyles(theme => ({
     justifyContent: 'space-between',
     flexGrow: 1,
     overflow: 'auto'
+  },  
+  fullscreenBtn: {
+    position: 'absolute',
+    top: 9,
+    right: 0,
+    zIndex: 999
   },
   tab: {
     minWidth: '25%',
@@ -75,7 +81,7 @@ export default makeStyles(theme => ({
     fontSize: '1.1rem'
   },
   tabs: {
-    minHeight: 47,
+    minHeight: 47, 
     display: 'flex',
     '& .MuiTab-root': {
       fontSize: '1.1rem'

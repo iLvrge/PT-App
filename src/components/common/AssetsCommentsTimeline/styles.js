@@ -34,6 +34,12 @@ export default makeStyles(theme => ({
       width: '100%',
       /* paddingRight: 40, */
     },
+  },  
+  fullscreenBtn: {
+    position: 'absolute',
+    top: 5,
+    right: 0,
+    zIndex: 999
   },
   commentEditor: {
     /* paddingLeft: 40, */

@@ -53,6 +53,12 @@ export default makeStyles(theme => ({
     position: 'relative',
     flex: 1,
     display: 'flex',
+  },  
+  fullscreenBtn: {
+    position: 'absolute',
+    top: 9,
+    right: 0,
+    zIndex: 999
   },
   tab: {
     minWidth: '25%',

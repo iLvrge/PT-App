@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {useLocation} from 'react-router-dom'
-import Tab from '@mui/material/Tab'
-import Tabs from '@mui/material/Tabs'
-import Paper from '@mui/material/Paper'
-
+import {Tab, Tabs, Paper, IconButton} from '@mui/material'
+import { Fullscreen as FullscreenIcon } from '@mui/icons-material'
 import SpanVisualize from './SpanVisualize'
 import Acknowledgements from './Acknowledgements'
 import ConnectionBox from '../../ConnectionBox'
 import USPTOContainer from '../USPTOContainer'
-
+import FullScreen from '../../FullScreen'
 import { setConnectionData } from '../../../../actions/patenTrackActions' 
 import { setAssetsIllustrationData, setAssetsTransactionsLifeSpan, getCustomerAssets, getCustomerSelectedAssets } from '../../../../actions/patentTrackActions2' 
 import PatenTrackApi from '../../../../api/patenTrack2'
@@ -17,13 +15,14 @@ import { DEFAULT_CUSTOMERS_LIMIT } from "../../../../api/patenTrack2";
 
 import useStyles from './styles'
 
-const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type}) => {
+const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, standalone}) => {
     const classes = useStyles() 
     const dispatch = useDispatch()
     const location = useLocation()
     const [offsetWithLimit, setOffsetWithLimit] = useState([0, DEFAULT_CUSTOMERS_LIMIT])
     const [ selectedTab, setSelectedTab ] = useState(0)
     const [ assets, setAssets ] = useState(null)
+    const [ fullScreen, setFullScreen ] = useState(false)
     const [ filterList, setFilterList ] = useState([])
     const [ lifeSpanTabs, setLifeSpanTabs ] = useState(['Lifespan'])
     const selectedAssetsTransactionLifeSpan = useSelector(state => state.patenTrack2.transaction_life_span)
@@ -48,6 +47,19 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
     const selectedAssetAssignmentsAll = useSelector( state => state.patenTrack2.assetTypeAssignments.selectAll )
     const connectionBoxView = useSelector( state => state.patenTrack.connectionBoxView)
     const display_sales_assets = useSelector( state => state.patenTrack2.display_sales_assets)
+    const fullScreenItems = [
+        {
+          id: 1,
+          label: '',
+          component: LifeSpanContainer,
+          chartBar,
+          openCustomerBar,
+          visualizerBarSize,
+          type,
+          standalone: true,
+        }
+    ]
+
 
     useEffect(() => {
         if(selectedRow.length  === 0) {
@@ -210,6 +222,13 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
 
     return (
         <Paper className={classes.root} square>  
+            {
+                fullScreen === false && typeof standalone === 'undefined' && (
+                    <IconButton size="small" className={classes.fullscreenBtn} onClick={() => setFullScreen(!fullScreen)}>
+                        <FullscreenIcon />
+                    </IconButton>
+                )
+            }            
             <Tabs
                 value={selectedTab}
                 variant="scrollable"
@@ -232,7 +251,16 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type})
             {selectedTab === 0 && <SpanVisualize chart={selectedAssetsTransactionLifeSpan} chartBar={chartBar} visualizerBarSize={visualizerBarSize}/>}
             {selectedTab === 1 && <Acknowledgements/>}
             {selectedTab === 2 && <ConnectionBox display={"false"} assets={assets}/>}
-            {selectedTab === 3 && <USPTOContainer assets={assets}/>}            
+            {selectedTab === 3 && <USPTOContainer assets={assets}/>}    
+            {  
+                fullScreen === true && (
+                    <FullScreen 
+                        componentItems={fullScreenItems} 
+                        showScreen={fullScreen} 
+                        setScreen={setFullScreen}
+                    />
+                )
+            }
         </Paper> 
     )
 }

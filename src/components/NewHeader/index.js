@@ -532,11 +532,11 @@ const handleThemeMode = useCallback(event => {
         <ActionMenu t={0} onClickSale={onHandleSaleAssets} dashboardScreen={dashboardScreen} setDashboardScreen={setDashboardScreen}/>       
               
         <div className={classes.rightPanel}>  
-            <Switch  
+            {/* <Switch  
               color="secondary" 
               {...( isDarkTheme == 'dark' ? {checked: true} : {})} 
               onChange={handleThemeMode}
-            />
+            /> */}
             <Button className={classes.calendly} onClick={() => {setScheduling(!scheduling)}}>
               Schedule a {process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'd' : 'D' }emo {process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'for Pro version' : '' }
             </Button>    

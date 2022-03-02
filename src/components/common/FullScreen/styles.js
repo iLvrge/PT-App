@@ -25,9 +25,9 @@ export default makeStyles(theme => ({
     },
     right:{
         position: 'absolute', 
-        right: '35px',
-        width: '20px',
-        height: '20px',
-        zIndex: 1
+        right: 35,
+        width: 20,
+        height: 20,
+        zIndex: 999999
     },
 }))
