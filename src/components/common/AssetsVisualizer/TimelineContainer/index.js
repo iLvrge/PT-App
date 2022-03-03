@@ -455,7 +455,9 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
       } 
     }
     getTimelineRawDataFunction()
-    
+    return () => {
+      setTimelineRawData([])
+    };
   }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors, auth_token, switch_button_assets ])
 
   useEffect(() => {
@@ -474,6 +476,9 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
       }
     }
     getForeignAssetTimelineData(foreignAssets, assetTypeAssignmentAssets)
+    return () => {
+      setTimelineRawData([])
+    };
     
   }, [foreignAssets, assetTypeAssignmentAssets])
 

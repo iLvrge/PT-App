@@ -326,6 +326,7 @@ class PatentrackDiagram extends React.Component {
     this.getTitleDivHeight();
     this.changeParentWidth = this.changeParentWidth.bind(this);   
     this.onClickConnectionLine = this.onClickConnectionLine.bind(this) 
+    this.openUSPTOWeb = this.openUSPTOWeb.bind(this)
   }
 
   componentDidMount() {
@@ -375,6 +376,11 @@ class PatentrackDiagram extends React.Component {
       })
     }
     
+  }
+
+  openUSPTOWeb(usptoMode){
+    this.setState({activeLine: null, prevLineData: null}); 
+    this.props.uspto(usptoMode)
   }
 
   getTitleDivHeight() {
@@ -1543,7 +1549,7 @@ class PatentrackDiagram extends React.Component {
     } else {
       this.setState({activeLine: null, prevLineData: null}); 
     }    
-     this.props.connectionBox(data.line); 
+    this.props.connectionBox(data.line); 
   }
   
   render() {
@@ -1778,7 +1784,7 @@ class PatentrackDiagram extends React.Component {
           title={this.parseTitle()}
           update={this.updateDiagram}
           changeParentWidth={this.changeParentWidth}
-          uspto={this.props.uspto}
+          uspto={this.openUSPTOWeb}
           comment={this.props.comment}
           commentContent={this.props.data.comment}
           share={this.props.share}

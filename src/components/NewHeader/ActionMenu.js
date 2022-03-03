@@ -796,7 +796,6 @@ const ActionMenu = (props) => {
             keepMounted
             anchorEl={anchorEl} 
             open={open}
-            getContentAnchorEl={null}
             anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
             transformOrigin={{vertical: 'bottom', horizontal: 'left'}}
             onClose={handleClose}
@@ -976,20 +975,14 @@ const ActionMenu = (props) => {
                 <ListItemText>Inventors</ListItemText>
             </MenuItem>
         </Menu>
-        <Modal// `disableBackdropClick` is removed by codemod.
-// You can find more details about this breaking change in [the migration guide](https://mui.com/guides/migration-v4/#modal)
-
+        <Modal
             open={modalOpen}
             onClose={onHandleModalClose}
-            BackdropComponent={Backdrop}
-            BackdropProps={{
-            timeout: 500,
-            }}
             aria-labelledby="assignor-assignee"
             aria-describedby="">
-            <>
+            <React.Fragment>
                 <UserInputForm />
-            </>
+            </React.Fragment>
         </Modal> 
         <Modal
             open={correctAddressModal}

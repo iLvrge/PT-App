@@ -121,6 +121,7 @@ const GlobalLayout = (props) => {
     const familyItemMode = useSelector(state => state.ui.familyItemMode)
     const lifeSpanMode = useSelector(state => state.ui.lifeSpanMode)
     const pdfView = useSelector(state => state.patenTrack.pdfView)
+    const connectionBoxView = useSelector(state => state.patenTrack.connectionBoxView)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
 
     useEffect(() => {
@@ -571,7 +572,7 @@ const GlobalLayout = (props) => {
     const changeVisualBar = (chart, analytics, comment, illustration) => {
         console.log("changeVisualBar")
         let barOpen = true, barSize = '48.7%'        
-        if(chart === false && analytics === false && (comment === true || illustration === true)){
+        if(chart === false && analytics === false && (comment === true || illustration === true) && usptoMode === false && connectionBoxView === false){
             barSize = '0%'
             barOpen = false
         } else if (comment === false && illustration === false && ( chart === true ||  analytics === true )) {
@@ -789,12 +790,10 @@ const GlobalLayout = (props) => {
             console.log('usptoMode', usptoMode, openChartBar, openAnalyticsBar, openCommentBar, openIllustrationBar, illustrationBarSize)
             let barSize = '0%', chartPrevItem = false, analyticsPrevItem = false
             await setChartBar(prevItem => {
-                console.log('setChartBar', prevItem)
                 chartPrevItem = prevItem
                 return prevItem
             })
             await setAnalyticsBar(prevItem => {
-                console.log('setAnalyticsBar', prevItem)
                 analyticsPrevItem = prevItem
                 return prevItem
             })
@@ -806,13 +805,16 @@ const GlobalLayout = (props) => {
             if(barSize === '0%') {
                 setVisualizeOpenBar( false )
             }
-            setVisualizerBarSize(barSize)
-            if(chartPrevItem !== openChartBar ) {
+            setVisualizerBarSize(barSize) 
+            
+            /* if(chartPrevItem !== openChartBar ) {
+                console.log("Tap")
                 setChartBar(chartPrevItem)
             }
             if(analyticsPrevItem !== openAnalyticsBar ) {
-                setAnalyticsBar(analyticsPrevItem)
-            }
+                console.log("Tap")
+                setAnalyticsBar(analyticsPrevItem)  
+            }  */
             console.log("barSize", barSize, chartPrevItem, analyticsPrevItem)            
         } 
     }, [openChartBar, openAnalyticsBar, openCommentBar, openIllustrationBar])

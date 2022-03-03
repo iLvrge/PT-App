@@ -102,7 +102,7 @@ class PatentLink extends React.Component {
           .attr("rx", this.props.config.link.tooltip.corners)
           .attr("ry", this.props.config.link.tooltip.corners)
           .attr("class", "link-tooltip")
-          .attr("width", '135')
+          .attr("width", '145')
           .attr("height", '63')
           .attr("fill", this.props.config.node.background)
           .attr("stroke", this.props.config.colors[

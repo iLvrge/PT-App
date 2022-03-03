@@ -284,25 +284,6 @@ const IllustrationContainer = ({
           )
         )
         checkChartAnalytics(null, null, false)
-        /* if(click == 1) {
-          setClick(2)
-          setConnectionBoxView(false)
-          setPDFView(true)
-          setChartBar(false)
-          setAnalyticsBar(true)
-        } else if(click == 2) {
-          setClick(3)
-          setConnectionBoxView(true)
-          setPDFView(false)
-          setChartBar(true)
-          setAnalyticsBar(false)
-        } else {
-          setClick(1)
-          setAnalyticsBar(true)
-          setChartBar(true)
-          setConnectionBoxView(true)
-          setPDFView(true)
-        } */
       }
     }
   }, [ linkId, click, dispatch ])
@@ -312,6 +293,8 @@ const IllustrationContainer = ({
       toggleUsptoMode(usptoMode)
     )
     if(usptoMode === true) {
+      setLinkId(null)
+      setLineId(0)
       dispatch(
         setConnectionBoxView(false)
       )
@@ -322,7 +305,7 @@ const IllustrationContainer = ({
     } else {
       checkChartAnalytics(null, null, false)
     }
-  }, [ dispatch ])
+  }, [ chartsBar, analyticsBar, dispatch ])
 
   const handleToggleParties = useCallback((flag) => {
     dispatch(

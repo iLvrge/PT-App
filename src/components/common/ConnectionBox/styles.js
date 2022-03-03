@@ -6,13 +6,8 @@ export default makeStyles(theme => ({
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
-    background: '#424242',
-    color: '#fff',
-    '& .MuiTableCell-body, .MuiTableCell-root, .MuiTableCell-head, .MuiButtonBase-root':{
-      color: '#fff',
-    },
     '& .MuiTableCell-root':{
-      borderBottom: '1px solid #5c5c5c'
+      borderBottom: `1px solid ${theme.palette.divider}`
     }
   },
   pdfContainer: {
@@ -72,7 +67,6 @@ export default makeStyles(theme => ({
     whiteSpace: 'nowrap',
     /* padding: '19px 19px 17px 19px',  */
     padding: '13px 19px', 
-    background: '#292929', 
     '& .MuiTypography-body2':{
       fontSize: '1rem',
       overflow: 'hidden'

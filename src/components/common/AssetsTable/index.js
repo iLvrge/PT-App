@@ -889,6 +889,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             openAnalyticsAndCharBar()
         } */
       } else {
+        setCheckBar(!checkBar)
         resetAll()
         if(selectedCategory == 'restore_ownership') {
           dispatch(setAssetTypesPatentsSelected([]))
@@ -899,7 +900,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     [ dispatch, selectedAssetsPatents, selectedRow, openAnalyticsBar, openChartBar ],
   );
 
-const resetAll = () => {
+const resetAll = useCallback(() => {
     setSelectedRow([])
     dispatch(setAssetsIllustration(null))
     dispatch(setSelectedAssetsPatents([]))
@@ -921,13 +922,8 @@ const resetAll = () => {
     dispatch(setLinkAssetData([]))
     dispatch(setLinkAssetListSelected([]))
     dispatch(resetAssetDetails())
-    if(openChartBar === false && openAnalyticsBar === false) {
-      /**
-       * Change Visualbarwidth
-       */
-      changeVisualBar('0%')
-    }
-}
+    
+}, [dispatch, openChartBar, openAnalyticsBar])
 
 /* const onDoubleClick = (e, row, flag) => {
   setCurrentSelection(row.asset) 

@@ -68,7 +68,7 @@ function ConnectionBox(props) {
     })
     
     return (
-      <div className={classes.rootContainer}>
+      <Paper className={classes.rootContainer} square>
       {
         info && info != null && info.length > 0 && Object.keys(info[0]).length > 0 
         ?
@@ -176,7 +176,7 @@ function ConnectionBox(props) {
         :
         ''
       }
-      </div>
+      </Paper>
     );
   } 
   return (
