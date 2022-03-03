@@ -24,10 +24,7 @@ import './index.css'
 
 
 
-const AppWrapper = () => {
-  
-
-  
+const AppWrapper = () => { 
   return (
     <Provider store={store}>
       <Router>

@@ -11,16 +11,6 @@ import {
 const ClientList = () => {
     const COLUMNS = [
         {
-            width: 25,
-            minWidth: 25,
-            label: '',
-            headingIcon: 'company',       
-            dataKey: 'representative_id',
-            /* role: "arrow", */
-            disableSort: true,
-            enable: false
-        },
-        {
             width: 200,  
             minWidth: 200,
             oldWidth: 200,

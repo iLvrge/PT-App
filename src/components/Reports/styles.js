@@ -15,8 +15,21 @@ export default makeStyles(theme => ({
     },
     flexColumn: {
         height: 'calc((100vh - 78px) / 3)',
+        '& .gauge':{
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            height: 'calc(((100vh - 78px) / 3)/1.57)',
+            '& svg': {
+                display: 'flex',
+                height: '70%'
+            }
+        },
         [theme.breakpoints.down('md')]: {
             height: 'calc((100vh - 78px) / 4)',
+            '& .gauge':{
+                height: 'calc(((100vh - 78px) / 4)/1.7)', 
+            }
         },
         '& .MuiCard-root': {
             height: '100%'
@@ -52,6 +65,9 @@ export default makeStyles(theme => ({
     card: {
         position: 'relative',
         border: 0,
-        boxShadow: 'none'
+        boxShadow: 'none',
+        '& .MuiCardContent-root':{
+            paddingBottom: 0
+        }
     }
 }));
