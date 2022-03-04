@@ -14,7 +14,7 @@ const AssetSwitchButton = (props) => {
               <ListItemIcon>
                 <LinkIcon/>
               </ListItemIcon>   
-              <ListItemText>{props.category == 'due_dilligence' ? 'Broken Chain' : 'All Assets'}</ListItemText>      
+              <ListItemText>{props.category == 'due_dilligence' ? 'Broken Chain-of-Title' : 'All Assets'}</ListItemText>      
             </MenuItem>
           )
         }

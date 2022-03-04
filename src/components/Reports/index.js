@@ -49,7 +49,7 @@ const Reports = () => {
             rf_id: ''
         },
         {
-            title: 'Maintained Unecessary Patents',
+            title: 'Unecessary Patents',
             sub_heading: 'patents',
             number: 72,
             patent: '',
@@ -65,7 +65,7 @@ const Reports = () => {
             rf_id: ''
         },
         {
-            title: 'Maintainance Late',
+            title: 'Late Maintainance',
             sub_heading: 'Surcharge payments  number of the maintainance actvities',
             number: 72,
             patent: '',
@@ -73,7 +73,7 @@ const Reports = () => {
             rf_id: ''
         },
         {
-            title: 'Wrong Lawyer',
+            title: 'Corrections',
             sub_heading: 'typo in the name of lawyer, wrong lawyer addres, no longer works with that lawyer',
             number: 72,
             patent: '',
@@ -81,7 +81,7 @@ const Reports = () => {
             rf_id: ''
         },
         {
-            title: 'Maintained Unecessary Patents',
+            title: 'Late recordings',
             sub_heading: 'patents',
             number: 72,
             patent: '',
@@ -89,7 +89,7 @@ const Reports = () => {
             rf_id: ''
         },
         {
-            title: 'Missed monetization opportunities',
+            title: 'Deflated Collateral',
             sub_heading: 'abandoned patents',
             number: 72,
             patent: '',
@@ -97,7 +97,7 @@ const Reports = () => {
             rf_id: ''
         },
         {
-            title: 'Maintainance Late',
+            title: 'Challenged',
             sub_heading: 'Surcharge payments  number of the maintainance actvities',
             number: 72,
             patent: '',
