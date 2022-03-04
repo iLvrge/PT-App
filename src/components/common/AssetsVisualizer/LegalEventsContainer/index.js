@@ -11,7 +11,7 @@ import useStyles from './styles'
 import FullScreen from '../../FullScreen'
 import { numberWithCommas, applicationFormat, capitalize } from "../../../../utils/numbers";
 
-const LegalEventsContainer = ({ events, type }) => {
+const LegalEventsContainer = ({ events, type, standalone }) => {
   const classes = useStyles()
   const [ fullScreen, setFullScreen ] = useState(false)
   const [ selectedTab, setSelectedTab ] = useState(0)
