@@ -126,7 +126,7 @@ const AssetsTable = ({
   const [ dropOpenAsset, setDropOpenAsset ] = useState(null)
   const [ callByAuthLogin, setCallByAuth ] = useState(false)
   const [ anchorEl, setAnchorEl ] = useState(null)
-  const [data, setData] = useState([])
+  const [optionType, setOptionType] = useState('multiple')
   const [assetRows, setAssetRows] = useState([])
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState(true)
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
@@ -278,6 +278,14 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   }, [checkBar])
 
   useEffect(() => {
+    if(selectedCategory == 'restore_ownership') {
+      setOptionType(prevItem => 
+        prevItem !== 'single' ? 'single' : prevItem
+      )
+    }
+  }, [selectedCategory])
+
+  useEffect(() => {
     if(display_sales_assets === true) {
       dropdownList.splice(3,2)
     } else {
@@ -323,8 +331,6 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   }, [callByAuthLogin, google_auth_token, google_profile])
 
 
-  
-
   const openGoogleWindow = () => {
       if(googleLoginRef.current != null) {
           if(googleLoginRef.current.querySelector('button') !== null) {
@@ -352,7 +358,6 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         if(type === 9 && event.target.value === 0) {
           /***
           * Asset remove from sreadsheet
-
           */
           const googleToken = getTokenStorage( 'google_auth_token_info' )
           const googleProfile = getTokenStorage('google_profile_info')
@@ -533,11 +538,11 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             loadDataFromServer(offsetWithLimit[0], offsetWithLimit[1], sortField, sortOrder)   
           }         
           if(selectedCategory == 'restore_ownership') {    
-            let cols = [...COLUMNS]
+            /* let cols = [...COLUMNS] */
             /* cols[1].role = 'radio'
             delete cols[1].show_selection_count  */
-            cols.splice(1,1)
-            setTableColumns(cols)
+            /* cols.splice(1,1)
+            setTableColumns(cols) */
           }
         }
         
@@ -607,7 +612,6 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         dataKey: "title",
         staticIcon: "",
         format: capitalize
-
       }, {
         width: 80,
         minWidth: 80,
@@ -718,8 +722,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     }
   }, [selectedAssetsPatents, selectedRow])
 
-  useEffect(() => {
-    
+  useEffect(() => {    
     if(assetTypeAssignmentAssetsSelected.length > 0 && (selectItems.length == 0 || selectItems.length != assetTypeAssignmentAssetsSelected.length) ){
       setSelectItems(assetTypeAssignmentAssetsSelected)
     }
@@ -827,8 +830,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           dispatch(linkWithSheetSelectedAsset('products', encodeURIComponent(grant_doc_num  == '' ? `US${applicationFormat(appno_doc_num)}` : `US${numberWithCommas(grant_doc_num)}`)))     
         }
         callSelectedAssets({ grant_doc_num, appno_doc_num, asset });
-        setCheckBar(!checkBar)
-        
+        setCheckBar(!checkBar)        
         dispatch(setChildSelectedAssetsPatents([]));
         dispatch(setSelectedAssetsTransactions([]));
         //dispatch(setDocumentTransaction([]));
@@ -1206,6 +1208,7 @@ const checkMouseStillOnHover = (e, number) => {
       className={clsx(classes.root, {[classes.mobile]: isMobile === true && (fileBar === true || driveBar === true)})}
       square
       id={`assets_type_assignment_all_assets`}
+      data_option={optionType}
     >
       <VirtualizedTable 
         classes={classes}

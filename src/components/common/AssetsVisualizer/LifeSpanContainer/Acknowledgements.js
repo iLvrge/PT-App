@@ -174,6 +174,8 @@ const Acknowledgements = () => {
             setIsLoadingTimelineRawData(true)
             PatenTrackApi.cancelAllAssetsCitationData()   
             if ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0) || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token === null)){
+                setIsLoadingTimelineRawData(false)
+                setTimelineRawData([])
                 return null
             }  
             const list = [];

@@ -129,8 +129,13 @@ const IllustrationCommentContainer = ({
     }, [ setMaintainenceFileName ])
 
 
-    const shouldShowTimeline = useMemo(
+    /* const shouldShowTimeline = useMemo(
         () => (!selectedAssetsPatents.length &&  !assetIllustration),
+        [ selectedAssetsPatents, selectedAssetAssignments, assetIllustration ],
+    ) */
+
+    const shouldShowTimeline = useMemo(
+        () => (assetIllustration === null),
         [ selectedAssetsPatents, selectedAssetAssignments, assetIllustration ],
     )
 
@@ -138,7 +143,6 @@ const IllustrationCommentContainer = ({
         setShowManualComponent(true)     
         setMenuComponent(item)
     }
-
 
     return (
         <SplitPane
@@ -169,9 +173,9 @@ const IllustrationCommentContainer = ({
                     selectedCompanies.length > 0
                      && !isFullscreenOpen && 
                         illustrationBar === true &&  shouldShowTimeline === true &&
-                        ( search_string != '' || assetCompaniesRowSelect.length > 0 || 
+                        ( search_string != '' || /* assetCompaniesRowSelect.length > 0 || 
                             selectedCompaniesAll === true || 
-                            selectedCompanies.length > 0 ||
+                            selectedCompanies.length > 0 || */
                             type === 9
                         )
                     ?
@@ -186,7 +190,7 @@ const IllustrationCommentContainer = ({
                     ''
                 }                                 
                 {  
-                    selectedCompanies.length > 0 || type === 9 || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)
+                    /* selectedCompanies.length > 0 || */ process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' ||  type === 9 || ((process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && auth_token !== null)
                     ?
                         showManualComponent === true && menuComponent.length > 0
                         ?                        
@@ -220,9 +224,9 @@ const IllustrationCommentContainer = ({
                         !isFullscreenOpen && 
                             illustrationBar === true && 
                             (   search_string != '' || 
-                                assetCompaniesRowSelect.length > 0 || 
+                                /*assetCompaniesRowSelect.length > 0 || 
                                 selectedCompaniesAll === true || 
-                                selectedCompanies.length > 0 ||
+                                selectedCompanies.length > 0 || */
                                 type === 9
                             ) 
                         ?

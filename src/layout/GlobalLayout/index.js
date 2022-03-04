@@ -330,10 +330,14 @@ const GlobalLayout = (props) => {
             if(tableContainer !== null) {
                 findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightWithCol.Mui-selected')
                 if(findActiveRow === null) {
-                    tableContainer = document.getElementById('assets_assignments')
-                    if(tableContainer !== null) {
-                        findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightWithCol.Mui-selected')
-                    }
+                    if(tableContainer.getAttribute('data_option') !== null && tableContainer.getAttribute('data_option') == 'single') {
+                        findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightRow.Mui-selected')
+                    } else {
+                        tableContainer = document.getElementById('assets_assignments')
+                        if(tableContainer !== null) {
+                            findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightWithCol.Mui-selected')
+                        }  
+                    }                                      
                 }
             }
 

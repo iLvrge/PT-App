@@ -529,7 +529,7 @@ const handleThemeMode = useCallback(event => {
           } 
         </span>
 
-        <ActionMenu t={0} onClickSale={onHandleSaleAssets} dashboardScreen={dashboardScreen} setDashboardScreen={setDashboardScreen}/>       
+        <ActionMenu t={0} onClickSale={onHandleSaleAssets} dashboardScreen={dashboardScreen} setDashboardScreen={setDashboardScreen}/>
               
         <div className={classes.rightPanel}>  
             {/* <Switch  

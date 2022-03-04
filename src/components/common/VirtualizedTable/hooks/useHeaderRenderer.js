@@ -343,7 +343,7 @@ const HeadCell = ({
                   }
                 </Menu>
               )
-            }
+            } 
           </>
         )
       }

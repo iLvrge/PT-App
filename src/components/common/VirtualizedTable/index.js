@@ -347,7 +347,7 @@ const VirtualizedTable = ({
             selectedRow === true && (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey])) ? 'highlightColumn' : ''
           )}
           variant="body"
-          align={align}
+          align={align}  
           style={{
             height: rowHeight,
             paddingLeft: paddingLeft != undefined ? paddingLeft : "inherit",

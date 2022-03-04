@@ -486,6 +486,9 @@ export default makeStyles(theme => ({
             }
         }
     },
+    uspto_logo: {
+        width: 30
+    },
     mBtn: {
         position: 'absolute'
     } 

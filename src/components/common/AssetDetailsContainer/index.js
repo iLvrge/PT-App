@@ -298,38 +298,14 @@ const AssetDetailsContainer = ({
                 </Modal>
               } 
               {
-                selectedCompanies.length > 0 || type === 9 || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE')
-                ?
-                  chartBar == true ? (
-                    connectionBoxView === true ? (
-                        <PdfViewer
-                          display={"false"}
-                          fullScreen={false}
-                          resize={resizeFrame}
-                        />  
-                    ) : lifeSpanMode === true ? (
-                        <InventionVisualizer 
-                          defaultSize={defaultSize} 
-                          illustrationBar={openIllustrationBar} 
-                          visualizerBarSize={visualizerBarSize} 
-                          analyticsBar={analyticsBar} 
-                          openCustomerBar={openCustomerBar} 
-                          commentBar={commentBar} 
-                          illustrationBar={illustrationBar} 
-                          customerBarSize={customerBarSize} 
-                          companyBarSize={companyBarSize}
-                          type={type} />
-                    ) : familyItemMode === true ? (
-                        <FamilyItemContainer 
-                          item={selectedAssetsFamilyItem} 
-                          onClose={onCloseFamilyItemMode} 
-                          analyticsBar={analyticsBar} 
-                          chartBar={chartBar} 
-                          illustrationBar={illustrationBar}
-                          visualizerBarSize={visualizerBarSize} 
-                          type={type}
-                        />
-                    ) : (
+                chartBar == true ? (
+                  connectionBoxView === true ? (
+                      <PdfViewer
+                        display={"false"}
+                        fullScreen={false}
+                        resize={resizeFrame}
+                      />  
+                  ) : lifeSpanMode === true ? (
                       <InventionVisualizer 
                         defaultSize={defaultSize} 
                         illustrationBar={openIllustrationBar} 
@@ -341,10 +317,30 @@ const AssetDetailsContainer = ({
                         customerBarSize={customerBarSize} 
                         companyBarSize={companyBarSize}
                         type={type} />
-                    )
+                  ) : familyItemMode === true ? (
+                      <FamilyItemContainer 
+                        item={selectedAssetsFamilyItem} 
+                        onClose={onCloseFamilyItemMode} 
+                        analyticsBar={analyticsBar} 
+                        chartBar={chartBar} 
+                        illustrationBar={illustrationBar}
+                        visualizerBarSize={visualizerBarSize} 
+                        type={type}
+                      />
+                  ) : (
+                    <InventionVisualizer 
+                      defaultSize={defaultSize} 
+                      illustrationBar={openIllustrationBar} 
+                      visualizerBarSize={visualizerBarSize} 
+                      analyticsBar={analyticsBar} 
+                      openCustomerBar={openCustomerBar} 
+                      commentBar={commentBar} 
+                      illustrationBar={illustrationBar} 
+                      customerBarSize={customerBarSize} 
+                      companyBarSize={companyBarSize}
+                      type={type} />
                   )
-                  :
-                  '' 
+                )
                 :
                   '' 
               }
@@ -357,9 +353,7 @@ const AssetDetailsContainer = ({
               onMouseLeave={event => handleIllustrationButton(event, false)} */
             >
               {
-                selectedCompanies.length > 0 || type === 9 || (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE')
-                ?
-                  analyticsBar === true 
+                analyticsBar === true 
                   ? 
                     openIllustrationBar === true ? (
                       <>
@@ -387,8 +381,6 @@ const AssetDetailsContainer = ({
                     )
                   : 
                     ''
-                : 
-                  ''
               }
             </div>
           </SplitPane>

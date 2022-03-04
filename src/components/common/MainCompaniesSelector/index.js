@@ -574,13 +574,16 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                         
                         if( parseInt(company.type) === 1 ) {
                             //groups.push(company.representative_id)
-                            const parseChild = JSON.parse(company.child)
+                            let parseChild = JSON.parse(company.child)                            
                             if(parseChild.length > 0) {                                
+                                parseChild = parseChild.filter(child => child.status === 1 ? child : '')
                                 items = [...items, ...parseChild]                               
                                 items = [...new Set(items)]       
                             }
                         } else {
-                            items.push(parseInt(company.representative_id))
+                            if(company.status === 1) {
+                                items.push(parseInt(company.representative_id))
+                            }
                         }
                     })
                     setSelectItems(items)
@@ -673,6 +676,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         renderCollapsableComponent={
             <ChildTable parentCompanyId={currentSelection} headerRowDisabled={true} itemCallback={handleChildCallback} groups={selectedGroup} companyColWidth={companyColWidth}/>
         }
+        disableRow={true}
+        disableRowKey={'status'}  
         defaultSortField={`original_name`}
         defaultSortDirection={`desc`}
         responsive={true}

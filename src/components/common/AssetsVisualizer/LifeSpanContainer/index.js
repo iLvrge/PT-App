@@ -75,6 +75,7 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
     useEffect(() => {
         const getChartData = async () => {
             if ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0) || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token === null)){
+                dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, []))
                 return null
             } 
             const list = [];
@@ -215,20 +216,16 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
 
 
     const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
-
     
-    
-    if ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && (selectedAssetsTransactionLifeSpan.length === 0 || selectedCompanies.length === 0 || type === 9)) || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token == null /* || selectedAssetsTransactionLifeSpan.length === 0 */) ) return null
-
     return (
         <Paper className={classes.root} square>  
             {
-                fullScreen === false && typeof standalone === 'undefined' && (
+                (selectedAssetsTransactionLifeSpan.length > 0 && (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) && fullScreen === false && typeof standalone === 'undefined' && (
                     <IconButton size="small" className={classes.fullscreenBtn} onClick={() => setFullScreen(!fullScreen)}>
                         <FullscreenIcon />
                     </IconButton>
                 )
-            }            
+            }             
             <Tabs
                 value={selectedTab}
                 variant="scrollable"
@@ -247,20 +244,35 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
                         />
                     )) 
                 }
-            </Tabs>
-            {selectedTab === 0 && <SpanVisualize chart={selectedAssetsTransactionLifeSpan} chartBar={chartBar} visualizerBarSize={visualizerBarSize}/>}
-            {selectedTab === 1 && <Acknowledgements/>}
-            {selectedTab === 2 && <ConnectionBox display={"false"} assets={assets}/>}
-            {selectedTab === 3 && <USPTOContainer assets={assets}/>}    
+            </Tabs> 
+            {
+                (selectedAssetsTransactionLifeSpan.length > 0 && (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) 
+                ?
+                    selectedTab === 0 ?
+                        <SpanVisualize chart={selectedAssetsTransactionLifeSpan} chartBar={chartBar} visualizerBarSize={visualizerBarSize}/>
+                        :
+                        selectedTab === 1  ?
+                            <Acknowledgements/>
+                            :
+                                selectedTab === 2 ? 
+                                    <ConnectionBox display={"false"} assets={assets}/>
+                                :
+                                    selectedTab === 3 ?
+                                    <USPTOContainer assets={assets}/>
+                                :
+                                ''     
+                :
+                    ''
+            }
             {  
-                fullScreen === true && (
+                (selectedAssetsTransactionLifeSpan.length > 0 && (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) )  && fullScreen === true && (
                     <FullScreen 
                         componentItems={fullScreenItems} 
                         showScreen={fullScreen} 
                         setScreen={setFullScreen}
                     />
                 )
-            }
+            }            
         </Paper> 
     )
 }
