@@ -189,7 +189,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
               boxShadow     : 'none',    
               /* bottom        : '0px', */
               width         : '100%',
-              left          : '0px'
+              /* left          : '0px' */
               /* maxWidth      : '40%' */
             },
             line: {
@@ -230,7 +230,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     })
 
     const checkToolTip = () => {
-        const elementFound = document.getElementsByClassName('graphTooltip')
+        /* const elementFound = document.getElementsByClassName('graphTooltip')
         if(elementFound !== null && elementFound.length > 0) {
             const parentElement = elementFound[0].parentElement,
             computedStyle = window.getComputedStyle(parentElement),
@@ -243,7 +243,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             if(top !== '' && parseInt(top) < 0) {
                 parentElement.style.top = '0px'
             }
-        }
+        } */
     }
 
     const onHandleMouseOver = (event) => {
