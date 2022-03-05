@@ -6,7 +6,19 @@ export default makeStyles(theme => ({
     height: '100%',
     width: '100%',
     position: 'relative',
-    background: 'inherit !important'
+    background: 'inherit !important',
+    '& .vis-time-axis .vis-text, .vis-item, .vis-y-axis':{
+      color: theme.palette.text.primary,
+    },
+    '& .vis-timeline, .vis-panel.vis-center':{
+      border: `1px solid ${theme.palette.divider}`
+    },
+    '& .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom': {
+      borderBottomColor: theme.palette.divider,
+      borderTopColor: theme.palette.divider,
+      borderLeftColor: theme.palette.divider,
+      borderRightColor: theme.palette.divider,
+    },
   },
   loader: {
     position: 'absolute',

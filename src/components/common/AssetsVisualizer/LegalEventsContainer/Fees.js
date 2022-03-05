@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import moment from 'moment'
 
 import Paper from '@mui/material/Paper'
-
+import themeMode from '../../../../themes/themeMode'
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
 import { DataSet } from 'vis-data/esnext'
@@ -73,7 +73,7 @@ const Fees = ({ events }) => {
   const [ isLoadingTimelineData, setIsLoadingTimelineData ] = useState(false)
   const [ tooltipItem, setToolTipItem] = useState([])
   const [ timeInterval, setTimeInterval] = useState(null)
-  
+  const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
   const legalEventDataRetrieved = useSelector(state => state.patenTrack.legalEventDataRetrieved)
 
   useEffect(() => {
@@ -135,7 +135,7 @@ const Fees = ({ events }) => {
   const showTooltip = (item, event) => {     
     setTimeout(() => {
       if(tootlTip === item.id) {      
-        const color = '#fff'   
+        const color = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
         const height = window.innerHeight|| document.documentElement.clientHeight || document.body.clientHeight;  
         
         let text = item.maintainence_code.event_description.split(',');
@@ -143,7 +143,7 @@ const Fees = ({ events }) => {
         text.splice(0,1);
         text = firstText+'<br/>'+text.join(',');
 
-        let tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.clientY }px;left:${event.clientX + 20 }px;'><h4 style='color:${color};text-align:left;margin:0'>${text}</h4></div>`
+        let tootltipTemplate = `<div class='custom_tooltip' style='background:${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default} ;top:${event.clientY }px;left:${event.clientX + 20 }px;'><h4 style='color:${color};text-align:left;margin:0'>${text}</h4></div>`
         resetTooltipContainer() 
         if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
             document.body.insertAdjacentHTML('beforeend',tootltipTemplate)                

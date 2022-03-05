@@ -6,7 +6,7 @@ import { Timeline } from 'vis-timeline-73/esnext'
 import CircularProgress from '@mui/material/CircularProgress'
 import moment from 'moment'
 import PatenTrackApi from '../../../../api/patenTrack2'
-
+import themeMode from '../../../../themes/themeMode'
 import { numberWithCommas, toTitleCase } from '../../../../utils/numbers'
 
 import useStyles from './styles'
@@ -83,7 +83,7 @@ const Citation = ({ number }) => {
     const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(true)
     const [ tooltipItem, setToolTipItem] = useState([])
     const [ timeInterval, setTimeInterval] = useState(null)
-
+    const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
 
    /**
@@ -123,8 +123,8 @@ const Citation = ({ number }) => {
     const showTooltip = (item, event) => {    
         setTimeout(() => {
             if(tootlTip === item.id) {      
-                const color = '#fff'      
-                const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.clientY}px;left:${event.clientX + 20 }px;'>
+                const color = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
+                const tootltipTemplate = `<div class='custom_tooltip' style='background:${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default} ;top:${event.clientY}px;left:${event.clientX + 20 }px;'>
                                             <h4 style='color:${color};text-align:left;margin:0'>${numberWithCommas(item.number)}</h4>
                                             <div>
                                                 <h4>Grant Date: </h4>${moment(new Date(item.start)).format(DATE_FORMAT)}

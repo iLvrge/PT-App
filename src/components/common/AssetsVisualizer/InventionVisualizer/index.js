@@ -187,7 +187,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
               color         : '#fff',
               background    : 'rgba(0, 0, 0, 0.8)',
               boxShadow     : 'none',    
-              bottom        : '0px',
+              /* bottom        : '0px', */
               width         : '100%',
               left          : '0px'
               /* maxWidth      : '40%' */
@@ -241,7 +241,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             }
 
             if(top !== '' && parseInt(top) < 0) {
-                parentElement.style.top = 'unset'
+                parentElement.style.top = '0px'
             }
         }
     }
@@ -531,8 +531,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     let style = {
                             /* stroke: isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider,
                             fill: isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default */
-                            fill: '#132F4C',
-                            stroke: 'rgba(51,153,255,0.24)'
+                            fill: '#1565C0',
+                            stroke: '#2196F3'
                         };
                     if(data.appNum !== null && data.appNum !== '') {
                         const appList = data.appNum.toString().split(',')
@@ -567,8 +567,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                             y: graphRawGroupData[findIndex].id,
                             z: 0,
                             style: {
-                                fill: '#132F4C',
-                                stroke: 'rgba(51,153,255,0.24)'
+                                fill: '#1565C0',
+                                stroke: '#2196F3'
                             }, 
                             patent: data.patent_number,
                             application_number: data.application_number,   

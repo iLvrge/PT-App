@@ -111,6 +111,7 @@ class PatentNode extends React.Component {
         d3.select("#patentrackDiagramDiv")
           .append("div")	
           .attr("class", "tooltip_title MuiTooltip-tooltip")	
+          .attr("style", `background: ${this.props.isDarkTheme ? this.props.themeMode.dark.palette.background.default : this.props.themeMode.light.palette.background.default};`)
           .html(typeof this.props.data.json != 'undefined' && typeof this.props.data.json.original_name !== 'undefined' && this.props.data.json.original_name != '' && this.props.data.json.original_name !== null ? this.props.data.json.original_name : this.props.data.name)
           /* .style('left', `${pos['x']}px`)
           .style('top', `${(window.pageYOffset  + pos['y'] - 100)}px`); */
