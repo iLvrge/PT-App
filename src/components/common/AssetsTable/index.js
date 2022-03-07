@@ -185,7 +185,7 @@ const AssetsTable = ({
   const channel_id = useSelector(state => state.patenTrack2.channel_id)
   const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
   const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
-
+  const usptoMode = useSelector(state => state.ui.usptoMode)
   const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
   const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
   const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
@@ -269,13 +269,13 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
 
 
   useEffect(() => {
-    if(openChartBar === false && openAnalyticsBar === false) {
+    if(openChartBar === false && openAnalyticsBar === false && usptoMode === false) {
       /**
        * Change Visualbarwidth
        */
       changeVisualBar('0%')
     }
-  }, [checkBar])
+  }, [checkBar, usptoMode])
 
   useEffect(() => {
     if(selectedCategory == 'restore_ownership') {
