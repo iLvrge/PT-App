@@ -88,9 +88,9 @@ const COLUMNS = [
         disableColumnKey:'type'
     },
     {
-        width: 171,  
-        minWidth: 171,
-        oldWidth: 171,
+        width: 700,  
+        minWidth: 700,
+        oldWidth: 700,
         draggable: true,
         label: 'Companies',        
         dataKey: 'original_name',
