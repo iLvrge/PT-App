@@ -22,7 +22,16 @@ export default makeStyles(theme => ({
         //padding: `0px ${HEADER_PADDING}px`,
         overflow: 'hidden',
         padding: '0 10px',
-        boxShadow: 'none'
+        boxShadow: 'none',
+        '& .iconItem':{
+            width: 90,
+            '& .MuiListItemIcon-root':{
+                '& svg' :{
+                    fill: 'currentColor',
+                    stroke: 'currentColor',
+                }
+            }            
+        }
     },
     headerClassAction1: {
       lineHeight: "1.2em",
@@ -491,5 +500,10 @@ export default makeStyles(theme => ({
     },
     mBtn: {
         position: 'absolute'
+    },
+    disableHover: {
+        '&:hover': {
+            backgroundColor: 'transparent'
+        }
     } 
 }))
