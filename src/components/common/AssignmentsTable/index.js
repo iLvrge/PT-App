@@ -130,7 +130,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   
 
   const COLUMNS = [
-    {
+    /* {
       width: 29,
       minWidth: 29,
       label: "",
@@ -138,7 +138,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       role: "radio",
       disableSort: true,
       show_selection_count: true
-    },
+    }, */
     {
       width: 20,
       minWidth: 20,
@@ -312,7 +312,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   useEffect(() => {
     if(selectedCategory == 'correct_details') {
       const cols = [...COLUMNS]
-      cols[0].role = 'radio'
+      /* cols[0].role = 'radio' */
       cols.push(
         {
           width: 250,
@@ -488,99 +488,79 @@ const onHandleClickRow = useCallback(
     e.preventDefault();
     const { checked } = e.target;
     let oldSelection = [...selectItems]
-    if (checked !== undefined) {
-        if(display_clipboard === false) {
-          dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
-          dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
-        }
-        if(selectedCategory == 'correct_details') {
-          oldSelection = [row.rf_id]
-          setSelectAll(false);
-          setSelectItems(oldSelection)
-          dispatch(setChannelID(''))
-          dispatch(setSelectedAssetsPatents([]))
-          getTransactionData(dispatch, row.rf_id, defaultLoad, search_string)                    
-          dispatch(setDriveTemplateFrameMode(false));
-          dispatch(setDriveTemplateFile(null));
-          dispatch(setTemplateDocument(null));
-          //dispatch(getChannelIDTransaction(row.rf_id));
-        } else {
-          if (!oldSelection.includes(row.rf_id)) {
-            //oldSelection.push(row.rf_id);
-            oldSelection = [row.rf_id]
-          } else {
-            /* oldSelection = oldSelection.filter(
-                customer => customer !== parseInt(row.rf_id),
-            ); */
-            oldSelection = []
-          }
-          setSelectItems(oldSelection);
-          setSelectAll(false);
-          history.push({
-            hash: updateHashLocation(location, "assignments", oldSelection).join(
-                "&",
-            ),
-          });
-          /* setSelectItems(prevItems =>
-              prevItems.includes(row.rf_id)
-              ? prevItems.filter(item => item !== row.rf_id)
-              : [...prevItems, row.rf_id],
-          ); */
-        }        
-        dispatch(setAllAssignments(false));
-        dispatch(setSelectAssignments(oldSelection));
+    if(display_clipboard === false) {
+      dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
+      dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+    }
+    if (!oldSelection.includes(row.rf_id)) {
+      oldSelection = [row.rf_id]     
+      dispatch(setChannelID(''))
+      dispatch(setSelectedAssetsPatents([]))
+      getTransactionData(dispatch, row.rf_id, defaultLoad, search_string)                    
+      dispatch(setDriveTemplateFrameMode(false));
+      dispatch(setDriveTemplateFile(null));
+      dispatch(setTemplateDocument(null));
     } else {
-        const element = e.target.closest(
-        "div.ReactVirtualized__Table__rowColumn",
-        );
-        let index = -1
-        if(element !== null ) {
-          index = element.getAttribute("aria-colindex");
-        }        
-        if (index == 2) {
-            if (currentSelection != row.rf_id) {
-              setCurrentSelection(row.rf_id);
-            } else {
-              setCurrentSelection(null);
-            }
-        } else {
-          //toggle to show illustration or timeline
-          if(!selectedRow.includes(row.rf_id)){
-            dispatch(setChannelID(''))
-            getTransactionData(dispatch, row.rf_id, defaultLoad, search_string)
-            dispatch(setDriveTemplateFrameMode(false));
-            dispatch(setDriveTemplateFile(null));
-            dispatch(setTemplateDocument(null));
-            //dispatch(setDocumentTransaction([]));
-            //dispatch(getChannelIDTransaction(row.rf_id));
-          } else {
-            dispatch(setChannelID(''))
-            setSelectedRow([])
-            dispatch(setAssetsIllustration(null))
-            dispatch(setAssetsIllustrationData(null))
-            dispatch(setSelectedAssetsTransactions([]))
-            dispatch(setSelectedAssetsPatents([]))
-            dispatch(
-              setPDFFile(
-                { 
-                  document: '',  
-                  form: '', 
-                  agreement: '' 
-                } 
-              )
-            )
-            dispatch(
-              setPDFView(false)
-            )
-            dispatch(toggleLifeSpanMode(true));
-            dispatch(toggleFamilyMode(false));
-            dispatch(toggleFamilyItemMode(false));
-            //dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, []))
-            //dispatch(toggleLifeSpanMode(false))
-            //dispatch(toggleFamilyItemMode(false))
-          }
-        }
-    }      
+      oldSelection = []
+    }
+    setSelectAll(false);
+    setSelectItems(oldSelection)
+    dispatch(setSelectAssignments(oldSelection));
+    history.push({
+      hash: updateHashLocation(location, "assignments", oldSelection).join(
+          "&",
+      ),
+    });
+    const element = e.target.closest(
+      "div.ReactVirtualized__Table__rowColumn",
+      );
+    let index = -1
+    if(element !== null ) {
+      index = element.getAttribute("aria-colindex");
+    }        
+    if (index == 1) {
+      if (currentSelection != row.rf_id) {
+        setCurrentSelection(row.rf_id);
+      } else {
+        setCurrentSelection(null);
+      }
+    } else {
+      //toggle to show illustration or timeline
+      if(!selectedRow.includes(row.rf_id)){
+        dispatch(setChannelID(''))
+        getTransactionData(dispatch, row.rf_id, defaultLoad, search_string)
+        dispatch(setDriveTemplateFrameMode(false));
+        dispatch(setDriveTemplateFile(null));
+        dispatch(setTemplateDocument(null));
+        //dispatch(setDocumentTransaction([]));   
+        //dispatch(getChannelIDTransaction(row.rf_id));
+      } else {
+        dispatch(setChannelID(''))
+        setSelectedRow([])
+        dispatch(setAssetsIllustration(null))
+        dispatch(setAssetsIllustrationData(null))
+        dispatch(setSelectedAssetsTransactions([]))
+        dispatch(setSelectedAssetsPatents([]))
+        dispatch(
+          setPDFFile(
+            { 
+              document: '',  
+              form: '', 
+              agreement: '' 
+            } 
+          )
+        )
+        dispatch(
+          setPDFView(false)
+        )
+        dispatch(toggleLifeSpanMode(true));
+        dispatch(toggleFamilyMode(false));
+        dispatch(toggleFamilyItemMode(false));
+        //dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, []))
+        //dispatch(toggleLifeSpanMode(false))
+        //dispatch(toggleFamilyItemMode(false))
+      }
+    }
   },
   [dispatch, selectedCategory, selectItems, currentSelection, selectedRow, defaultLoad, search_string, display_clipboard],
 );

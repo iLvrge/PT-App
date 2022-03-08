@@ -832,7 +832,7 @@ const ActionMenu = (props) => {
                 }    
                 <Divider />
                 <MenuItem className={classes.disableHover}>
-                    <ListItemText>Pro: {parseInt(profile?.user?.organisation?.subscribtion) === 1 ? <Button variant="text">Upgrade</Button> : '' }</ListItemText>
+                    <ListItemText><span className={classes.disabled}>Pro:</span> {parseInt(profile?.user?.organisation?.subscribtion) === 1 ? <Button variant="text">Upgrade</Button> : '' }</ListItemText>
                 </MenuItem>
                 {
                     parseInt(profile?.user?.organisation?.subscribtion) === 2
@@ -906,8 +906,8 @@ const ActionMenu = (props) => {
                             ''
                 }
                 <Divider />
-                <MenuItem className={classes.disableHover}>
-                    <ListItemText>Enterprise:  {parseInt(profile?.user?.organisation?.subscribtion) < 3 ? <Button variant="text">Upgrade</Button> : '' }</ListItemText>
+                <MenuItem className={classes.disableHover} >
+                    <ListItemText><span className={classes.disabled}>Enterprise:</span> {parseInt(profile?.user?.organisation?.subscribtion) < 3 ? <Button variant="text">Upgrade</Button> : '' }</ListItemText>
                 </MenuItem>
                 {
                     parseInt(profile?.user?.organisation?.subscribtion) == 3 && link_assets_sheet_display === true && link_assets_selected.length > 0  && (

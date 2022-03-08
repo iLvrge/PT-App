@@ -582,7 +582,7 @@ const VirtualizedTable = ({
             ref={rowRef}
             style={{
               marginRight: "auto",
-              marginLeft: typeof childInModal === 'undefined' ? 20 : 0,
+              marginLeft: typeof childInModal === 'undefined' ? 45 : 0,
               height:
                 disableRow === true
                   ? rowData[disableRowKey] * rowHeight < childHeight

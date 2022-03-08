@@ -64,11 +64,11 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
     useEffect(() => {
         if(selectedRow.length  === 0) {
             setLifeSpanTabs(['Lifespan', 'Acknowledgements'])
-            setSelectedTab(0)
+            setSelectedTab(typeof activeTab !== 'undefined' ? activeTab : 0)
         } else if( connectionBoxView === true || selectedRow.length > 0 ) {
             /*setLifeSpanTabs([ 'Lifespan', 'Assignment', 'USPTO' ])*/
             setLifeSpanTabs([ 'Lifespan', 'Assignment'])
-            setSelectedTab(0)
+            setSelectedTab(typeof activeTab !== 'undefined' ? activeTab : 0)
         }
     }, [ connectionBoxView, selectedRow ])
 

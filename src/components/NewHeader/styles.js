@@ -481,8 +481,14 @@ export default makeStyles(theme => ({
     actionMenuList: {
         '& .MuiPaper-root':{
             backgroundImage: 'none',
-            padding: '10px 15px',
+            padding: '15px 30px',
             boxShadow: `${theme.palette.action.active} 0px 0px 7px 0px`
+        },
+        '& .MuiPopover-paper':{
+            top: '50px !important'  
+        },
+        '& .MuiMenuItem-root':{
+            padding: '8px 16px'
         },
         '& .MuiListItemIcon-root':{
         },
@@ -515,5 +521,8 @@ export default makeStyles(theme => ({
             backgroundColor: 'transparent',
             cursor: 'text',
         }
+    },
+    disabled: {
+        opacity: 0.38
     } 
 }))

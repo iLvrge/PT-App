@@ -357,6 +357,14 @@ div.vis-tooltip span{
 .todo-list .MuiTableCell-root {
   border-bottom: 1px solid #5c5c5c !important;
 }
+/* 
+.MuiTableRow-root.Mui-selected, .MuiTableRow-root.Mui-selected:hover{
+  background-color: inherit !important;
+}
+
+.MuiTableRow-root.Mui-selected .MuiTableCell-root, .MuiTableRow-root.Mui-selected:hover .MuiTableCell-root{
+  color: #e60000;
+} */
 
 .MuiFormControl-root {
   width: 100%;
@@ -1106,10 +1114,6 @@ div#draggable-illustration-menu-item div[aria-hidden='true']{
 }
 .vis-item {
   font-size: 0.85rem !important;
-}
-
-#app-patentrack-action-menu .MuiPopover-paper{
-  top: 35px !important;
 }
 
 #app-patentrack-action-mobile-menu .MuiPopover-paper{
