@@ -138,6 +138,7 @@ const NewHeader = () => {
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState( true )
   const [ slackAuthLogin, setSlackAuthLogin ] = useState( true )
   const [ scheduling, setScheduling ] = useState( false )
+  
   const menuItems = [
     {
       id: 1,
@@ -511,6 +512,10 @@ const handleThemeMode = useCallback(event => {
   dispatch(toggleThemeMode(!isDarkTheme))
 },[dispatch, isDarkTheme])
 
+const shareDashboard = () => {
+  console.log("shareDashboard")
+}
+
   return (
     <AppBar className={classes.root} color='transparent' position='relative'>
       <Toolbar className={classes.toolbar}>
@@ -739,14 +744,20 @@ const handleThemeMode = useCallback(event => {
       </Toolbar>
       {
         dashboardScreen === true && (
-          <FullScreen componentItems={menuItems} showScreen={dashboardScreen} setScreen={setDashboardScreen}/>
+          <FullScreen 
+            componentItems={menuItems} 
+            showScreen={dashboardScreen} 
+            setScreen={setDashboardScreen} 
+            share={true}
+            handleShare={shareDashboard}
+          />
         )
       }
       {  
         scheduling === true && (
           <FullScreen 
             componentItems={schedulingMenuItems} 
-            showScreen={scheduling} 
+            showScreen={scheduling}  
             setScreen={setScheduling}
             paper={false} 
           />

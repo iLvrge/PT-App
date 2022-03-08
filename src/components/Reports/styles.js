@@ -68,6 +68,9 @@ export default makeStyles(theme => ({
         boxShadow: 'none',
         '& .MuiCardContent-root':{
             paddingBottom: 0
+        },
+        '& .MuiTypography-h6':{
+            textTransform: 'capitalize'
         }
     }
 }));

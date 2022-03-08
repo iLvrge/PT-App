@@ -5,12 +5,15 @@ import Paper from '@mui/material/Paper'
 
 import useStyles from './styles'
 import clsx from "clsx";
-import IconButton from '@mui/material/IconButton'
-import { Fullscreen, Close } from '@mui/icons-material'
+import {IconButton, Tooltip, Typography, Zoom} from '@mui/material'
+import { Fullscreen, Close,  } from '@mui/icons-material'
 import Modal from '@mui/material/Modal'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {
+  faShareAlt,
+} from "@fortawesome/free-solid-svg-icons"
 
-
-const FullScreen = ({componentItems, setScreen, showScreen, paper}) => {
+const FullScreen = ({componentItems, setScreen, showScreen, paper, share, handleShare}) => {
 
     const classes = useStyles()
     const [ isFullscreenOpen, setIsFullscreenOpen ] = useState(typeof showScreen !== 'undefined' ? showScreen : false)
@@ -41,6 +44,29 @@ const FullScreen = ({componentItems, setScreen, showScreen, paper}) => {
                         size="large">
                         <Close />
                     </IconButton>
+                    {
+                        share === true && (
+                            <IconButton
+                                onClick={handleShare}
+                                className={clsx(classes.right, classes.shareIcon)}   
+                            >
+                                <Tooltip 
+                                    title={
+                                        <Typography color="inherit" variant='body2'>Share Dashboard</Typography>
+                                    } 
+                                    className={clsx(classes.tooltip)}  
+                                    placement='right'
+                                    enterDelay={0}
+                                    TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
+                                >
+                                    <FontAwesomeIcon  
+                                        icon={faShareAlt}  
+                                    />
+                                </Tooltip>
+                                
+                            </IconButton>
+                        )
+                    }
                     {
                         componentItems.map(
                             ({component: Component, ...props }, index) => (

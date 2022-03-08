@@ -759,7 +759,7 @@ const ActionMenu = (props) => {
     const onHandleDashbord = useCallback(() => {
         history.push('/reports')
     }, [ history ])
-    console.log("parseInt(profile?.user?.organisation?.subscribtion)", parseInt(profile?.user?.organisation?.subscribtion))
+    
     return (
         <div>
             {
@@ -804,7 +804,7 @@ const ActionMenu = (props) => {
                 onClose={handleClose}
                 className={classes.actionMenuList} 
             >   
-                <MenuItem>
+                <MenuItem className={classes.disableHover}>
                     <ListItemText>Analyst:</ListItemText>
                 </MenuItem>
                 <MenuItem  onClick={() => props.setDashboardScreen(!props.dashboardScreen)} className={`iconItem`}>

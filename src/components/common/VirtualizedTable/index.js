@@ -235,6 +235,7 @@ const VirtualizedTable = ({
         imageIcon,
         extension,
         showOnCondition,
+        disableColumnKey,
         onClick,
         list,
         width,
@@ -438,7 +439,7 @@ const VirtualizedTable = ({
                       } 
                     />
                   )     
-            : role === "arrow" ? (typeof showOnCondition == 'string' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition) ? '' :(
+            : role === "arrow" ? (typeof showOnCondition == 'string' && typeof disableRowKey == 'string' && (rowData[disableColumnKey] == showOnCondition) /* rowData[disableRowKey] == showOnCondition */) ? '' :(
               selectedIndex !== cellData ? (
                 <ChevronRightIcon className={"arrow"} />
               ) : (

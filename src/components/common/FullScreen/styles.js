@@ -18,16 +18,24 @@ export default makeStyles(theme => ({
         margin: 35,
         flex: 1,
         display: 'flex',
-        backgroundColor: theme.palette.background.default
+        backgroundColor: theme.palette.background.default,
+        position: 'relative'
     },
     noBackground: {
         background: 'none'
     },
     right:{
         position: 'absolute', 
-        right: 35,
+        right: 0,
         width: 20,
         height: 20,
         zIndex: 999999
+    },  
+    shareIcon: {  
+        right: 30,
+        top: 2
+    },
+    tooltip:{
+        fontSize: '1rem'
     },
 }))

@@ -479,6 +479,10 @@ export default makeStyles(theme => ({
         } */      
     },
     actionMenuList: {
+        '& .MuiPaper-root':{
+            backgroundImage: 'none',
+            padding: '10px 15px'
+        },
         '& .MuiListItemIcon-root':{
         },
         '& .fa-share-alt': { 
@@ -502,8 +506,10 @@ export default makeStyles(theme => ({
         position: 'absolute'
     },
     disableHover: {
+        cursor: 'text',
         '&:hover': {
-            backgroundColor: 'transparent'
+            backgroundColor: 'transparent',
+            cursor: 'text',
         }
     } 
 }))

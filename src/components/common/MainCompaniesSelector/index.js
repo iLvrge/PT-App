@@ -77,14 +77,15 @@ const COLUMNS = [
         /* showOnCondition: '1' */ 
     },
     {
-        width: 25,
+        width: 25, 
         minWidth: 25,
         label: '',
         dataKey: 'representative_id',
         headingIcon: 'company',
         role: "arrow",
         disableSort: true,
-        showOnCondition: '0'
+        showOnCondition: '0',
+        disableColumnKey:'type'
     },
     {
         width: 171,  
@@ -653,8 +654,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         rowSelected={selectedRow}
         selectedIndex={currentSelection}
         selectedKey={'representative_id'} 
-        selectedGroup={selectedGroup}
-        disableRowKey={'type'}
+        selectedGroup={selectedGroup}        
         rows={companiesList}
         rowHeight={rowHeight}
         headerHeight={headerRowHeight}
