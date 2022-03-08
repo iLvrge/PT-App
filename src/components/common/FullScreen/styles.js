@@ -22,7 +22,11 @@ export default makeStyles(theme => ({
         position: 'relative'
     },
     noBackground: {
-        background: 'none'
+        background: 'none'  
+    },
+    noFullScreen: {
+        flex: 'none',
+        margin: '50px auto'
     },
     right:{
         position: 'absolute', 

@@ -99,7 +99,7 @@ const COLUMNS = [
         align: "left", 
         badge: true,
     },
-    {
+    /* {
         width: 80,  
         minWidth: 80, 
         label: 'Acitivites',
@@ -164,7 +164,7 @@ const COLUMNS = [
         headerAlign: 'right',
         styleCss: true,
         justifyContent: 'flex-end'
-    }
+    } */
 ] 
 
 const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag, parentBar, isMobile}) => {

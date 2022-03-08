@@ -13,7 +13,7 @@ import {
   faShareAlt,
 } from "@fortawesome/free-solid-svg-icons"
 
-const FullScreen = ({componentItems, setScreen, showScreen, paper, share, handleShare}) => {
+const FullScreen = ({componentItems, setScreen, showScreen, paper, share, handleShare, full}) => {
 
     const classes = useStyles()
     const [ isFullscreenOpen, setIsFullscreenOpen ] = useState(typeof showScreen !== 'undefined' ? showScreen : false)
@@ -37,7 +37,7 @@ const FullScreen = ({componentItems, setScreen, showScreen, paper, share, handle
                 className={classes.fullscreenChartsModal}
                 open={isFullscreenOpen}
             > 
-                <Paper className={clsx(classes.fullscreenCharts, typeof paper !== 'undefined' && paper === false ? classes.noBackground : '')} square   >
+                <Paper className={clsx(classes.fullscreenCharts, typeof paper !== 'undefined' && paper === false ? classes.noBackground : '', typeof full !== 'undefined' && full === false ? classes.noFullScreen : '')} square   >
                     <IconButton
                         onClick={handleClickOpenCloseFullscreen}
                         className={classes.right}
@@ -45,7 +45,7 @@ const FullScreen = ({componentItems, setScreen, showScreen, paper, share, handle
                         <Close />
                     </IconButton>
                     {
-                        share === true && (
+                        share === true && (  
                             <IconButton
                                 onClick={handleShare}
                                 className={clsx(classes.right, classes.shareIcon)}   

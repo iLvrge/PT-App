@@ -481,7 +481,8 @@ export default makeStyles(theme => ({
     actionMenuList: {
         '& .MuiPaper-root':{
             backgroundImage: 'none',
-            padding: '10px 15px'
+            padding: '10px 15px',
+            boxShadow: `${theme.palette.action.active} 0px 0px 7px 0px`
         },
         '& .MuiListItemIcon-root':{
         },
@@ -497,6 +498,9 @@ export default makeStyles(theme => ({
             '& path, polygon': {
                 fill: "currentcolor"
             }
+        },
+        '& .MuiMenuItem-root.Mui-disabled':{ 
+            pointerEvents: 'all'
         }
     },
     uspto_logo: {

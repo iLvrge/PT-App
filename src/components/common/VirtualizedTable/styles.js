@@ -126,6 +126,7 @@ const styles = makeStyles((theme) => ({
     alignItems: 'center',
     padding: '0',
     overflow: 'hidden',
+    whiteSpace: 'nowrap',
     /* margin: '0 10px', */
     '& .MuiSvgIcon-root':{
       fontSize: '1rem'

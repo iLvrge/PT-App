@@ -774,6 +774,7 @@ const shareDashboard = () => {
             showScreen={scheduling}  
             setScreen={setScheduling}
             paper={false} 
+            full={false}   
           />
         )
       }

@@ -15,11 +15,11 @@ import { numberWithCommas, applicationFormat, capitalize } from "../../../../uti
 
 import useStyles from './styles'
 
-const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrationBar, visualizerBarSize, type, standalone }) => {
+const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrationBar, visualizerBarSize, type, standalone, activeTab }) => {
 
     const classes = useStyles()
     const [ fullScreen, setFullScreen ] = useState(false)
-    const [ selectedTab, setSelectedTab ] = useState(0)
+    const [ selectedTab, setSelectedTab ] = useState(typeof activeTab !== 'undefined' ? activeTab : 0)
     const [ familyItemData, setfamilyItemData ] = useState({})
     const [ abstractData, setAbsractData ] = useState('')
     const [ claimsData, setClaimsData ] = useState('')
@@ -51,6 +51,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
           visualizerBarSize, 
           type,
           standalone: true,
+          activeTab: selectedTab
         }
     ]
     useEffect(() => {
@@ -202,7 +203,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                                 <FullScreen 
                                     componentItems={fullScreenItems} 
                                     showScreen={fullScreen} 
-                                    setScreen={setFullScreen}
+                                    setScreen={setFullScreen}                                    
                                 />
                             )
                         }

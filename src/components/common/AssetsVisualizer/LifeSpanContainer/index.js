@@ -15,12 +15,12 @@ import { DEFAULT_CUSTOMERS_LIMIT } from "../../../../api/patenTrack2";
 
 import useStyles from './styles'
 
-const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, standalone}) => {
+const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, standalone, activeTab}) => {
     const classes = useStyles() 
     const dispatch = useDispatch()
     const location = useLocation()
     const [offsetWithLimit, setOffsetWithLimit] = useState([0, DEFAULT_CUSTOMERS_LIMIT])
-    const [ selectedTab, setSelectedTab ] = useState(0)
+    const [ selectedTab, setSelectedTab ] = useState(typeof activeTab !== 'undefined' ? activeTab : 0)
     const [ assets, setAssets ] = useState(null)
     const [ fullScreen, setFullScreen ] = useState(false)
     const [ filterList, setFilterList ] = useState([])
@@ -57,9 +57,9 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
           visualizerBarSize,
           type,
           standalone: true,
+          activeTab: selectedTab
         }
     ]
-
 
     useEffect(() => {
         if(selectedRow.length  === 0) {
@@ -275,6 +275,6 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
             }            
         </Paper> 
     )
-}
+}  
 
 export default LifeSpanContainer

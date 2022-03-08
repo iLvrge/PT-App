@@ -11,10 +11,10 @@ import useStyles from './styles'
 import FullScreen from '../../FullScreen'
 import { numberWithCommas, applicationFormat, capitalize } from "../../../../utils/numbers";
 
-const LegalEventsContainer = ({ events, type, standalone }) => {
+const LegalEventsContainer = ({ events, type, standalone, activeTab }) => {
   const classes = useStyles()
   const [ fullScreen, setFullScreen ] = useState(false)
-  const [ selectedTab, setSelectedTab ] = useState(0)
+  const [ selectedTab, setSelectedTab ] = useState(typeof activeTab !== 'undefined' ? activeTab : 0)
   const [ eventsData, setEventsData ] = useState([])
   const [ litigationData, setLitigationData ] = useState([])
   const [ ptabData, setPtabData ] = useState([])
@@ -33,6 +33,7 @@ const LegalEventsContainer = ({ events, type, standalone }) => {
       events,
       type,
       standalone: true,
+      activeTab: selectedTab
     }
   ]
   useEffect(() => {
