@@ -10,10 +10,10 @@ export default makeStyles(theme => ({
     height: 'calc(100vh - 113px)'
   },
   table: {
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.background.paper,
     '& th': {
       '&.MuiTableCell-stickyHeader': {
-        backgroundColor: '#292929',
+        /* backgroundColor: '#292929', */
       },
       '&:first-child': {
         paddingLeft: 16
@@ -44,7 +44,7 @@ export default makeStyles(theme => ({
     flexGrow: 1,
     overflow: 'hidden',
     height: '100%',
-    border: '1px solid #363636',
+    border: `1px solid ${theme.palette.divider}`,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -59,7 +59,7 @@ export default makeStyles(theme => ({
     display: 'block',
     color: 'inherit',
     padding: '23px 10px 3px 23px',
-    borderBottom: '1px solid #000',
+    borderBottom: `1px solid ${theme.palette.divider}`,
   },
   list: {
     height: '100%',
@@ -71,7 +71,7 @@ export default makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    color: '#d6d6d6',
+    /* color: '#d6d6d6', */
     padding: '0.375rem 0 0 0.375rem !important',
     margin: 0,
     fontStyle: 'normal',

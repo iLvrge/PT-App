@@ -7,7 +7,7 @@ export default makeStyles(theme => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: alpha(theme.palette.common.white, 0.05),
+    
   },
   dialogButton: {
     flex: '1 1 100%',

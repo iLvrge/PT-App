@@ -1,7 +1,7 @@
 import makeStyles from '@mui/styles/makeStyles';
 
 export default makeStyles(theme => ({
-    dashboard: {
+    /* dashboard: {
         position: 'absolute',
         top: 43,
         left: 0,
@@ -20,7 +20,7 @@ export default makeStyles(theme => ({
         alignItems: 'center',
         width: '100%',
         zIndex: 1,
-    },
+    }, */
     flexColumn: {
       display: 'flex',
       flexDirection: 'column',
@@ -29,7 +29,6 @@ export default makeStyles(theme => ({
         display: 'flex', 
         height: '100vh',
         overflow: 'auto',
-        background: '#292929',
         '& .MuiTableCell-root':{
             whiteSpace: 'nowrap'
         },
@@ -54,18 +53,18 @@ export default makeStyles(theme => ({
         '& .MuiTreeView-root':{
             width: '100%',
             '& .MuiTreeItem-root':{
-                borderBottom: '1px solid #5c5c5c'
+                borderBottom: `1px solid ${theme.palette.divider}`
             }
         },
         '& li.MuiListItem-root':{
-            borderBottom: '1px solid #5c5c5c',
+            borderBottom: `1px solid ${theme.palette.divider}`,
             paddingTop: 0,
             paddingBottom: 0,
             height: 40
         }
     },
     dropItem: {
-        backgroundColor: 'rgba(255, 255, 255, 0.08)'
+        backgroundColor: theme.palette.background.paper
     },
     frame: {
         width: '100%',
@@ -73,18 +72,18 @@ export default makeStyles(theme => ({
     },
     dropFolder: {
         height: '30px',
-        color: 'rgba(255, 255, 255, 0.3)',
-        border: '1px solid #363636',
-        background: '#222222',
+        color: theme.palette.text.primary,
+        border: `1px solid ${theme.palette.divider}`,
+        background: theme.palette.background.paper,
         padding: '5px 10px 10px 10px',
         marginBottom: '5px',
         textAlign: 'center'
     },
     dropFolder1: {
         height: '30px',
-        color: 'rgba(255, 255, 255, 0.3)',
-        border: '1px solid #363636',
-        background: '#222222',
+        color: theme.palette.text.primary,
+        border: `1px solid ${theme.palette.divider}`,
+        background: theme.palette.background.paper,
         marginBottom: '5px',
         textAlign: 'center'
     },
@@ -119,9 +118,8 @@ export default makeStyles(theme => ({
     },
     heading: {
         height: 40,
-        backgroundColor: '#292929',
         overflow: 'hidden',
-        borderBottom: '1px solid #5c5c5c',
+        borderBottom: `1px solid ${theme.palette.divider}`,
         display: 'flex',
         alignItems: 'center',
         paddingLeft: 25,

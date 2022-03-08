@@ -7,6 +7,7 @@ import {
         Link,
         Select,
         MenuItem,
+        Paper,
     } from '@mui/material'
 import LockIcon from '@mui/icons-material/Lock'
 import LockOpenIcon from '@mui/icons-material/LockOpen'
@@ -479,7 +480,7 @@ const Templates = () => {
             split="vertical"
             size={200}
         >
-            <div className={classes.flexColumn}> 
+            <Paper className={classes.flexColumn} square> 
                 <div className={classes.drive}  style={{height: '100vh'}}>
                     <VirtualizedTable
                         classes={classes}
@@ -504,13 +505,13 @@ const Templates = () => {
                         }}
                     />
                 </div>                
-            </div>
+            </Paper>
             <SplitPane
             className={classes.splitPane}
             split="vertical"
             size={300}	
             >
-                <div className={classes.flexColumn}>
+                <Paper className={classes.flexColumn} square>
                     <div className={classes.heading}>
                         <Typography variant="body1" component="h2" className={classes.noWrap}>
                             {/* <span className={classes.relativeLockedIcon}>
@@ -551,8 +552,8 @@ const Templates = () => {
                             }}
                         /> 
                     </div>   
-                </div>         
-                <div>
+                </Paper>         
+                <Paper square>
                     {
                         selected != null 
                         ?
@@ -563,7 +564,7 @@ const Templates = () => {
                     <span ref={googleLoginRef}>
                         <Googlelogin/>
                     </span>
-                </div>
+                </Paper>
             </SplitPane>
         </SplitPane>
     ) 

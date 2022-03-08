@@ -11,9 +11,9 @@ import {
 const ClientList = () => {
     const COLUMNS = [
         {
-            width: 200,  
-            minWidth: 200,
-            oldWidth: 200,
+            width: '100%',  
+            minWidth: '100%',  
+            oldWidth: '100%',  
             label: 'Companies',  
             dataKey: 'original_name',
             align: "left",   

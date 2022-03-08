@@ -31,7 +31,7 @@ export default makeStyles(theme => ({
   subTabs: {
     display: 'flex',
     flexDirection: 'column',
-    background: '#222222'
+    /* background: '#222222' */
   },
   hideIndicator: {
     display: 'none',
@@ -52,7 +52,7 @@ export default makeStyles(theme => ({
     left: 0,
     right: 0,
     bottom: 0,
-    border: '1px solid #363636',
+    /* border: '1px solid #363636', */
     overflowY: 'auto' 
   },
   dashboardWarapper: {

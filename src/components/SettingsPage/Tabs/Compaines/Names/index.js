@@ -8,6 +8,7 @@ import SearchCompanies from './SearchCompanies'
 import SplitPaneDrawer from '../../../../SplitPaneDrawer'
 import Header from '../../../components/Header'
 import Group from './Group'
+import { Paper } from '@mui/material'
 
 
 
@@ -90,7 +91,7 @@ function Companies() {
         <SearchCompanies onClose={toggleOpen} selected={searchSelected} setSelected={setSearchSelected} />
       }
       mainChildren={
-        <div className={classes.tableRoot}>
+        <Paper className={classes.tableRoot}>
           <Header
             title={'Companies'}
             onDelete={onDeleteCompanies}
@@ -108,7 +109,7 @@ function Companies() {
             childCompaniesSelected={childCompaniesSelected}
             setChildCompaniesSelected={setChildCompaniesSelected}
           />
-        </div>
+        </Paper>
       }
     />
   )
