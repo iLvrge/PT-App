@@ -75,12 +75,13 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
             dataKey: 'id',
             role: 'checkbox',
             disableSort: true,
-            show_selection_count: true
+            show_selection_count: true,   
+            enable: false
         },
         {
-            width: 120,
-            minWidth: 120,
-            oldWidth: 120,
+            width: 130,
+            minWidth: 130,
+            oldWidth: 130,
             draggable: true,
             label: 'Recorded',
             headingIcon: 'recorded',
@@ -337,7 +338,9 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
     const onHandleClickRow = useCallback((e, item) => {
         e.preventDefault()
         const { checked } = e.target;
-        if( checked !== undefined) {           
+        let cntrlKey = e.ctrlKey ? e.ctrlKey : undefined;
+        
+        if(cntrlKey !== undefined) {   
              setSelectItems(prevItems =>
                 prevItems.includes(item.id)
                 ? prevItems.filter(row => item.id !== row)

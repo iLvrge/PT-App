@@ -10,7 +10,10 @@ export default makeStyles(theme => ({
     '& .vis-time-axis .vis-text, .vis-item, .vis-y-axis':{
       color: theme.palette.text.primary,
     },
-    '& .vis-timeline, .vis-panel.vis-center':{
+    '& .vis-timeline':{
+      border: 0
+    },
+    '&.vis-panel.vis-center':{
       border: `1px solid ${theme.palette.divider}`
     },
     '& .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom': {

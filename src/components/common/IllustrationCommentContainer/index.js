@@ -183,6 +183,7 @@ const IllustrationCommentContainer = ({
                             size="small" 
                             className={classes.fullscreenBtn} 
                             onClick={handleClickOpenFullscreen}
+                            style={{...(typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null ? {top: 17} : {})}}
                         >
                             <Fullscreen />
                         </IconButton>

@@ -97,7 +97,7 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
           headerWidth: 20,
           label: '',
           dataKey: 'tab_id',
-          role: 'radio',
+          role: 'checkbox',
           disableSort: true,
           enable: false
         },
@@ -259,18 +259,10 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
                             setSelectedRow([data.activity_id])
                             dispatch( setAssetTypesSelect([data.activity_id]) )
                         } else {
-                            setSelectItems([])
-                            setSelectedRow([])
-                            dispatch( setAssetTypesSelect([]) )
-                            setSelectAll(true)
-                            dispatch( setAllAssetTypes( true ) )
+                            selectedAllActiveItems()
                         }
                     } else {
-                        setSelectItems([])
-                        setSelectedRow([])
-                        dispatch( setAssetTypesSelect([]) )
-                        setSelectAll(true)
-                        dispatch( setAllAssetTypes( true ) )
+                        selectedAllActiveItems()
                     }
                 }
                 getUserSelection();   
@@ -279,21 +271,39 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
                     setSelectItems(assetTypesSelected)
                     setSelectedRow(assetTypesSelected) /**Only one row selection in this component */
                 } else if (assetTypesSelectAll === true) {
-                    setSelectAll(true)
+                    selectedAllActiveItems()
                 }
             }                     
         } 
         setTypeData(list)
     }   
 
+    const selectedAllActiveItems = useCallback(async() => {
+        console.log("selectedAllActiveItems", assetTypesSelectAll)
+        if (assetTypesSelectAll === false || assetTypesSelected.length == 0) {
+            setSelectAll(true)
+            dispatch( setAllAssetTypes( true ) )
+            setSelectedRow([])
+            setCurrentSelection(null)
+            const selectedItems = []
+            const promise = assetTypes.map(row => row.tab_id !== 10 ? selectedItems.push(row.tab_id) : '')
+            await Promise.all(promise)
+            setSelectItems(selectedItems)
+            dispatch( setAssetTypesSelect(selectedItems) )
+        }
+    },[dispatch, assetTypesSelectAll, assetTypes, assetTypesSelected])
+
     const onHandleSelectAll = useCallback((event, row) => {
         event.preventDefault()
-        dispatch( setAssetTypesSelect([]) )
-        setSelectAll(true)
-        setSelectItems([])  
-        setSelectedRow([])  
-        setCurrentSelection(null)
-        dispatch( setAllAssetTypes( true ) )    
+        if (assetTypesSelectAll === false) {
+            selectedAllActiveItems()
+        } else {
+            setSelectAll(false)
+            setSelectItems([])  
+            setSelectedRow([])  
+            setCurrentSelection(null)
+            dispatch( setAllAssetTypes( false ) )    
+        }
         dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
         dispatch( setAssetTypeCompanies({ list: [], total_records: 0 }) )
         dispatch( setAssetTypeInventor({ list: [], total_records: 0 }) )
@@ -316,7 +326,7 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
             history.push({
                 hash: updateHashLocation(location, 'activities', [row.tab_id]).join('&')
             })
-            if(!selectItems.includes(row.tab_id)) {
+            if(!selectItems.includes(row.tab_id) || assetTypesSelectAll === true) {
                 setSelectItems([row.tab_id])
                 setSelectedRow([row.tab_id])
                 setSelectAll(false)
@@ -325,13 +335,8 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
                 updateAssetTypeSelected( row.tab_id )
                 setCurrentSelection(row.tab_id)
             } else {
-                setSelectItems([])
-                setSelectedRow([])
-                dispatch( setAssetTypesSelect([]) )
                 deleteAssetTypeSelected( row.tab_id )
-                setCurrentSelection(null)
-                setSelectAll(true)
-                dispatch( setAllAssetTypes( true ) )
+                selectedAllActiveItems()
             }
 
             /* if( checked !== undefined) {

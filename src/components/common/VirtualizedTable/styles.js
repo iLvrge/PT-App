@@ -58,8 +58,11 @@ const styles = makeStyles((theme) => ({
         fontWeight: 400,
         /* width: '1rem',
         height: '1rem' */
+        '& .headingIcon':{
+          width: '1.35rem',
+        },
         '& .slackIcon':{
-          '& span.MuiIconButton-label':{
+          '& span.MuiIconButton-label':{  
             width: 32,
             height: 32,
             '& svg':{

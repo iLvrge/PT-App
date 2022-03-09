@@ -441,9 +441,9 @@ const VirtualizedTable = ({
                   )     
             : role === "arrow" ? (typeof showOnCondition == 'string' && typeof disableRowKey == 'string' && (rowData[disableColumnKey] == showOnCondition) /* rowData[disableRowKey] == showOnCondition */) ? '' :(
               selectedIndex !== cellData ? (
-                <ChevronRightIcon className={"arrow"} />
+                <ChevronRightIcon className={"arrow"}  style={{width: '1.5rem'}} />
               ) : (
-                <ExpandMoreIcon className={"arrow"} />
+                <ExpandMoreIcon className={"arrow"} style={{width: '1.5rem'}} />
               )
             ) : role === 'image'  ?  
                 extensionIcon != '' ?
@@ -582,7 +582,7 @@ const VirtualizedTable = ({
             ref={rowRef}
             style={{
               marginRight: "auto",
-              marginLeft: typeof childInModal === 'undefined' ? 25 : 0,
+              marginLeft: typeof childInModal === 'undefined' ? 18 : 0,
               height:
                 disableRow === true
                   ? rowData[disableRowKey] * rowHeight < childHeight

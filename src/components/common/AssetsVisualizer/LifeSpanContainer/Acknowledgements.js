@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {useLocation} from 'react-router-dom'
+import _debounce from 'lodash/debounce'
 import Paper from '@mui/material/Paper'
 import { DataSet } from 'vis-data/esnext'
 import { Timeline } from 'vis-timeline-73/esnext'
@@ -29,26 +30,35 @@ const options = {
     zoomable: true,
     horizontalScroll: true,
     verticalScroll: true,
+    /* cluster: {
+  //   titleTemplate: 'Cluster containing {count} events.<br/> Zoom in to see the individual events.',
+    showStipes: false,
+    clusterCriteria: (firstItem, secondItem) => {
+      return ( firstItem.rawData.assignee === secondItem.rawData.assignee)
+    }
+    },  */
     zoomFriction: 30,
     zoomMin: 1000 * 60 * 60 * 24 * 7,  
     template: function(item, element, data) {
-        let image = data.rawData.logo
-        if(data.rawData.logo !== '' && data.rawData.logo !== null) {
-            if( data.rawData.logo.indexOf('http') === -1 ) {
-                image = CDN_PATH_LOGO + data.rawData.logo
+        let itemRaw = data.isCluster ? data.items[0] : data
+        let image = itemRaw.rawData.logo
+        
+        if(itemRaw.rawData.logo !== '' && itemRaw.rawData.logo !== null) {
+            if( itemRaw.rawData.logo.indexOf('http') === -1 ) {
+                image = CDN_PATH_LOGO + itemRaw.rawData.logo
             } 
         } else {
             image = CDN_PATH_LOGO + NO_IMAGE_AVAILABLE
         }
       return `<div class="first">
                 <div class="flexMain">
-                    <div class="textColumn">${numberWithCommas(data.number)}</div>
-                    <div class="textColumn text-height" >${toTitleCase(data.rawData.assignee)}</div>
-                    <div class="textColumn small-font">${moment(new Date(data.rawData.start)).format(DATE_FORMAT)}</div>
+                    <div class="textColumn">${numberWithCommas(itemRaw.number)}</div>
+                    <div class="textColumn text-height" >${toTitleCase(itemRaw.rawData.assignee)}</div>
+                    <div class="textColumn small-font">${moment(new Date(itemRaw.rawData.start)).format(DATE_FORMAT)}</div>
                 </div>
             </div>
             <div class="second"><span class="img-holder">
-                <img class="${data.rawData.logo == '' || data.rawData.logo == null ? 'no-image' : ''}" src='${image}' /></span>
+                <img class="${itemRaw.rawData.logo == '' || itemRaw.rawData.logo == null ? 'no-image' : ''}" src='${image}' /></span>
             </div>`
     },  
 }
@@ -131,6 +141,36 @@ const Acknowledgements = () => {
         
         /* clearInterval(timeInterval) */
     }
+
+    const onRangeChange = useCallback(_debounce((properties) => {
+        setIsLoadingTimelineData(true)
+        
+        const updatedItems = timelineItems.filter((item) => (new Date(item.start + '00:00:00') >= properties.start && new Date(item.start + '00:00:00') <= properties.end))
+        items.current = new DataSet()
+        items.current.add(updatedItems)
+        console.log('onRangeChange', timelineItems.length, updatedItems)
+        timelineRef.current.setItems(items.current)
+        setIsLoadingTimelineData(false)
+      }, 100), [ timelineItems ])
+    
+    
+      /**
+       * this call when Timeline rangechanged
+       */
+    
+      const onRangeChanged = useCallback(_debounce((properties) => {
+        console.log('onRangeChanged', properties)
+        setIsLoadingTimelineData(true)
+        const updatedItems = timelineItems.filter((item) => {
+            console.log(new Date(item.start + ' 00:00:00'), properties)
+            return (new Date(item.start + ' 00:00:00') >= properties.start && new Date(item.start + ' 00:00:00') <= properties.end)
+        })
+        items.current = new DataSet()
+        items.current.add(updatedItems)
+        console.log('onRangeChanged', timelineItems.length, updatedItems)
+        timelineRef.current.setItems(items.current)
+        setIsLoadingTimelineData(false)
+      }, 1000), [ timelineItems ])
 
     const resetTooltipContainer = () => {  
         const findOldToolTip = document.getElementsByClassName('custom_tooltip')
@@ -307,9 +347,13 @@ const Acknowledgements = () => {
         timelineRef.current.setOptions(options) 
         timelineRef.current.on('itemover', onItemover)
         timelineRef.current.on('itemout', onItemout)
+        /* timelineRef.current.on('rangechanged', onRangeChanged)
+        timelineRef.current.on('rangechange', onRangeChange)     */
         return () => {
             timelineRef.current.off('itemover', onItemover) 
             timelineRef.current.off('itemout', onItemout)
+            /* timelineRef.current.on('rangechanged', onRangeChanged)
+            timelineRef.current.on('rangechange', onRangeChange)     */
             resetTooltipContainer()
         } 
     }, [ onItemover, onItemout ]) 
@@ -323,6 +367,7 @@ const Acknowledgements = () => {
             const convertedItems = timelineRawData.map(convertDataToItem)
             setTimelineItems(convertedItems)
             items.current = new DataSet()
+            
             if (convertedItems.length > 0) {
                 start = new Date()
                 end = new Date()
@@ -342,6 +387,8 @@ const Acknowledgements = () => {
                 Promise.all(promise)
                 start = new moment(start).subtract(20, 'months') 
                 end = new moment(end).add(20, 'months')
+                /* const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
+                items.current.add(convertedItems.slice(0, startIndex))   */
                 items.current.add(convertedItems)
                 setDisplay('block')
             } else {
@@ -358,21 +405,19 @@ const Acknowledgements = () => {
 
 
     return(
-        <Paper className={classes.root}>   
-            <div className={classes.root}>
-                <div
-                    id={`citationTimeline`}
-                    style={{ 
-                        display: display,
-                        filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`,
-                    }}
-                    ref={timelineContainerRef}
-                    className={classes.timelineCitation}
-                />
-                { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> } 
-            </div>
-        </Paper>
+        <React.Fragment>   
+            <div
+                id={`citationTimeline`}
+                style={{ 
+                    display: display,
+                    filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`,
+                }}
+                ref={timelineContainerRef}
+                className={classes.timelineCitation}
+            />
+            { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> } 
+        </React.Fragment>
     )
 }
 
-export default Acknowledgements;
+export default Acknowledgements;  

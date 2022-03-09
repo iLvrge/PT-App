@@ -81,22 +81,22 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
 
     const COLUMNS = [
         {
-          width: 29, 
-          minWidth: 29,
-          label: '',
-          dataKey: 'id',
-          role: 'checkbox',
-          disableSort: true,
-          show_selection_count: true 
+            width: 12, 
+            minWidth: 12, 
+            label: '',
+            dataKey: 'id',
+            role: 'checkbox',
+            disableSort: true,
+            show_selection_count: true,   
+            enable: false
         },
         {
             width: 20,
             minWidth: 20,
-            label: "",
-            dataKey: "id",
-            role: "arrow",
-            disableSort: true,
-            headingIcon: 'inventors',
+            label: '',
+            dataKey: 'id',
+            role: 'arrow',
+            disableSort: true 
         },
         {
             width: 200,
@@ -212,8 +212,17 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     const onHandleClickRow = useCallback((e,  row) => {
         e.preventDefault()
         const { checked } = e.target;
+        const element = e.target.closest('div.ReactVirtualized__Table__rowColumn')
         let oldSelection = [...selectItems]
-        if( checked !== undefined) {
+        if( element != null ) {
+            const index = element.getAttribute('aria-colindex')
+            if(index == 2) {
+                if(currentSelection != row.id) {
+                    setCurrentSelection(row.id)
+                } else { 
+                    setCurrentSelection(null)
+                }
+            }
             if(display_clipboard === false) {
                 dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
                 dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
@@ -221,7 +230,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
             if( !oldSelection.includes(row.id) ){
                 oldSelection.push(row.id)
-            } else {
+            } else if(index != 2) {
                 oldSelection = oldSelection.filter(
                     customer => customer !== parseInt( row.id ),
                 )
@@ -233,22 +242,6 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             setSelectAll(false)
             dispatch( setAllAssignmentCustomers(assetTypeCompanies.length == oldSelection.length ||  data.length == oldSelection.length ? true : false ) )
             dispatch( setSelectAssignmentCustomers(oldSelection) )
-        }  else {
-            
-            const element = e.target.closest('div.ReactVirtualized__Table__rowColumn')
-            if( element != null ) {
-                const index = element.getAttribute('aria-colindex')
-                if(index == 2) {
-                    if(currentSelection != row.id) {
-                        setCurrentSelection(row.id)
-                    } else { 
-                        setCurrentSelection(null)
-                    }
-                }
-            }
-            /*  else {                    
-                getTimelineData(dispatch, row.id) 
-            } */
         } 
     }, [ dispatch, currentSelection, selectItems, display_clipboard ])
 

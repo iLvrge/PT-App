@@ -77,19 +77,19 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
 
     const COLUMNS = [
         {
-          width: 29, 
-          minWidth: 29,
+          width: 12, 
+          minWidth: 12, 
           label: '',
           dataKey: 'id',
           role: 'checkbox',
           disableSort: true,
-          show_selection_count: true
+          show_selection_count: true,   
+          enable: false
         },
         {
             width: 20,
             minWidth: 20,
             label: '',
-            headingIcon: 'parties',
             dataKey: 'id',
             role: 'arrow',
             disableSort: true 
@@ -98,7 +98,8 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             width: 200,
             minWidth: 200,
             oldWidth: 200,
-            draggable: true,            
+            draggable: true,      
+            headingIcon: 'parties',     
             label: 'Parties',
             dataKey: 'entityName', 
             badge: true,   
@@ -208,7 +209,17 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         e.preventDefault()
         const { checked } = e.target;
         let oldSelection = [...selectItems]
-        if( checked !== undefined) {
+        
+        const element = e.target.closest('div.ReactVirtualized__Table__rowColumn')
+        if( element != null ) {
+            const index = element.getAttribute('aria-colindex')
+            if(index == 2) {
+                if(currentSelection != row.id) {
+                    setCurrentSelection(row.id)
+                } else { 
+                    setCurrentSelection(null)
+                }
+            }
             if(display_clipboard === false) {
                 dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
                 dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
@@ -216,7 +227,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
             if( !oldSelection.includes(row.id) ){
                 oldSelection.push(row.id)
-            } else {
+            } else if(index != 2) {
                 oldSelection = oldSelection.filter(
                     customer => customer !== parseInt( row.id ),
                 )
@@ -228,23 +239,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             setSelectAll(false)
             dispatch( setAllAssignmentCustomers(assetTypeCompanies.length == oldSelection.length ||  data.length == oldSelection.length ? true : false ) )
             dispatch( setSelectAssignmentCustomers(oldSelection) )
-        }  else {
-            
-            const element = e.target.closest('div.ReactVirtualized__Table__rowColumn')
-            if( element != null ) {
-                const index = element.getAttribute('aria-colindex')
-                if(index == 2) {
-                    if(currentSelection != row.id) {
-                        setCurrentSelection(row.id)
-                    } else { 
-                        setCurrentSelection(null)
-                    }
-                }
-            }
-            /*  else {                    
-                getTimelineData(dispatch, row.id) 
-            } */
-        } 
+        }
     }, [ dispatch, currentSelection, selectItems, display_clipboard ])
 
     const getTimelineData = (dispatch, id) => {
