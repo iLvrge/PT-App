@@ -481,14 +481,14 @@ export default makeStyles(theme => ({
     actionMenuList: {
         '& .MuiPaper-root':{
             backgroundImage: 'none',
-            padding: '15px 30px',
+            width: 320,
             boxShadow: `${theme.palette.action.active} 0px 0px 7px 0px`
         },
         '& .MuiPopover-paper':{
             top: '50px !important'  
         },
         '& .MuiMenuItem-root':{
-            padding: '8px 16px'
+            padding: '8px 20px'
         },
         '& .MuiListItemIcon-root':{
         },

@@ -143,7 +143,6 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       width: 20,
       minWidth: 20,
       label: "",
-      align: 'center',
       dataKey: "rf_id",
       role: "arrow",
       headingIcon: 'transactions',
@@ -501,12 +500,14 @@ const onHandleClickRow = useCallback(
       dispatch(setDriveTemplateFrameMode(false));
       dispatch(setDriveTemplateFile(null));
       dispatch(setTemplateDocument(null));
+       
     } else {
       oldSelection = []
     }
     setSelectAll(false);
     setSelectItems(oldSelection)
     dispatch(setSelectAssignments(oldSelection));
+    
     history.push({
       hash: updateHashLocation(location, "assignments", oldSelection).join(
           "&",
@@ -527,6 +528,7 @@ const onHandleClickRow = useCallback(
       }
     } else {
       //toggle to show illustration or timeline
+      dispatch(setDocumentTransaction([]))    
       if(!selectedRow.includes(row.rf_id)){
         dispatch(setChannelID(''))
         getTransactionData(dispatch, row.rf_id, defaultLoad, search_string)
@@ -541,7 +543,7 @@ const onHandleClickRow = useCallback(
         dispatch(setAssetsIllustration(null))
         dispatch(setAssetsIllustrationData(null))
         dispatch(setSelectedAssetsTransactions([]))
-        dispatch(setSelectedAssetsPatents([]))
+        dispatch(setSelectedAssetsPatents([]))   
         dispatch(
           setPDFFile(
             { 

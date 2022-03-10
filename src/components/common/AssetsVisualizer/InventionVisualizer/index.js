@@ -494,7 +494,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
     const generateChart = async () => {
         try {
-        if (isLoadingCharts || graphRawData.length == 0 || graphRawGroupData.length == 0) return null
+            if (isLoadingCharts || graphRawData.length == 0 || graphRawGroupData.length == 0) return null
                 
             items.current = new DataSet()
             const colors = ['#70A800', '#00a9e6', '#E69800', '#ff0000'], codeList = []
@@ -593,7 +593,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 graphContainerRef.current.addEventListener('mouseover', onHandleMouseOver)            
             }
         } catch (err) {
-            console.log(err)
+            //console.log(err)
         }
     }
 
