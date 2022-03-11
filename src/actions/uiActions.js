@@ -71,3 +71,13 @@ export const toggleShow3rdParities = flag => ({
 export const resetUiStates = () => ({
   type: types.SET_RESET_UI_ALL
 }) 
+
+export const setTimelineScreen = flag => ({
+  type: types.SET_TIMELINE_SCREEN,
+  flag,
+})
+
+export const setDashboardScreen = flag => ({
+  type: types.SET_DASHBOARD_SCREEN,
+  flag,
+})  

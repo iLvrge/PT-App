@@ -10,6 +10,18 @@ const uiReducer = (state = initialState.ui, action) => {
         isDarkTheme: action.flag 
       }
     }
+    case types.SET_TIMELINE_SCREEN: {
+      return { 
+        ...state,
+        timelineScreen: action.flag 
+      }
+    }
+    case types.SET_DASHBOARD_SCREEN: {
+      return { 
+        ...state,
+        dashboardScreen: action.flag 
+      }
+    }
     case types.SET_SELECTED_TIMELINE_ITEM: {
       return {
         ...state,

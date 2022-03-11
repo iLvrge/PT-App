@@ -114,7 +114,9 @@ import {
   toggleFamilyItemMode,
   toggleUsptoMode,
   toggleLifeSpanMode,
-  toggleThemeMode
+  toggleThemeMode,
+  setTimelineScreen,
+  setDashboardScreen
 } from '../../actions/uiActions'
 import Scheduling from './Scheduling'
 
@@ -134,6 +136,8 @@ const NewHeader = () => {
   const breadcrumbs = useSelector(state =>  state.patenTrack2.breadcrumbs )
   const selectedCategory = useSelector(state =>  state.patenTrack2.selectedCategory )
   const search_string = useSelector(state => state.patenTrack2.search_string)
+  const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
+  const timelineScreen = useSelector(state => state.ui.timelineScreen)
   const [layoutName, setLayoutName] = useState(null)
   const [ isClipboardActive, setIsClipboardActive ] = useState(false)
   const [ isCompanyMenuOpen, setCompanyMenuOpen ] = useState(false)
@@ -157,7 +161,6 @@ const NewHeader = () => {
       standalone: true,
     }
   ]
-  const [ dashboardScreen, setDashboardScreen ] = useState( false )
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
   const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
   const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
@@ -518,6 +521,16 @@ const shareDashboard = () => {
   console.log("shareDashboard")
 }
 
+const onHandleDashboardScreen = () => {
+  dispatch(setTimelineScreen(false))
+  dispatch(setDashboardScreen(true))
+}
+
+const onHandleTimelineScreen = () => {
+  dispatch(setTimelineScreen(true))
+  dispatch(setDashboardScreen(false))
+}
+
   return (
     <AppBar className={classes.root} color='transparent' position='relative'>
       <Toolbar className={classes.toolbar}>
@@ -536,7 +549,14 @@ const shareDashboard = () => {
           } 
         </span>
 
-        <ActionMenu t={0} onClickSale={onHandleSaleAssets} dashboardScreen={dashboardScreen} setDashboardScreen={setDashboardScreen}/>
+        <ActionMenu 
+          t={0} 
+          onClickSale={onHandleSaleAssets} 
+          dashboardScreen={dashboardScreen}
+          setDashboardScreen={onHandleDashboardScreen}
+          seActivityTimeline={onHandleTimelineScreen}
+          timelineScreen={timelineScreen} 
+        />
               
         <div className={classes.rightPanel}>  
             {/* <Switch  

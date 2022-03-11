@@ -15,6 +15,7 @@ import useStyles from './styles'
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
 const DATE_FORMAT = 'MMM DD, YYYY'
+const DATE_FORMAT_YEAR = 'YYYY'
 const CDN_PATH_LOGO = process.env.REACT_APP_COMPANY_PATH
 const NO_IMAGE_AVAILABLE = 'no_image_available.jpg'
 
@@ -30,12 +31,13 @@ const options = {
     zoomable: true,
     horizontalScroll: true,
     verticalScroll: true,
+    limitSize: true,
     /* cluster: {
   //   titleTemplate: 'Cluster containing {count} events.<br/> Zoom in to see the individual events.',
-    showStipes: false,
-    clusterCriteria: (firstItem, secondItem) => {
-      return ( firstItem.rawData.assignee === secondItem.rawData.assignee)
-    }
+        showStipes: false,
+        clusterCriteria: (firstItem, secondItem) => {
+            return ( (firstItem.rawData.assignee === secondItem.rawData.assignee) && moment(new Date(firstItem.rawData.start)).format(DATE_FORMAT_YEAR) == moment(new Date(secondItem.rawData.start)).format(DATE_FORMAT_YEAR))
+        }
     },  */
     zoomFriction: 30,
     zoomMin: 1000 * 60 * 60 * 24 * 7,  
@@ -76,7 +78,6 @@ const convertDataToItem = (item) => {
       number: item.number,
       country: 'US',
       className: `asset-type-${assetType}`,
-      collection: [],
       showTooltips: false, 
     })
 }

@@ -249,7 +249,7 @@ const IllustrationContainer = ({
         }
         
         dispatch(
-          setPdfTabIndex(0)
+          setPdfTabIndex(2)
         )
         dispatch(
           setConnectionData(obj)

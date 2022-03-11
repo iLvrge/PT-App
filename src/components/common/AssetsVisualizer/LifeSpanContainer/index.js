@@ -63,11 +63,12 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
 
     useEffect(() => {
         if(selectedRow.length  === 0) {
-            setLifeSpanTabs(['Lifespan', 'Acknowledgements'])
+            /* setLifeSpanTabs(['Lifespan', 'Acknowledgements']) */
+            setLifeSpanTabs(['Lifespan'])
             setSelectedTab(typeof activeTab !== 'undefined' ? activeTab : 0)
         } else if( connectionBoxView === true || selectedRow.length > 0 ) {
             /*setLifeSpanTabs([ 'Lifespan', 'Assignment', 'USPTO' ])*/
-            setLifeSpanTabs([ 'Lifespan'])
+            setLifeSpanTabs([ 'Lifespan', 'Assignment'])
             setSelectedTab(typeof activeTab !== 'undefined' ? activeTab : 0)
         }
     }, [ connectionBoxView, selectedRow ])
@@ -251,13 +252,13 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
                     selectedTab === 0 ?
                         <SpanVisualize chart={selectedAssetsTransactionLifeSpan} chartBar={chartBar} visualizerBarSize={visualizerBarSize}/>
                         :
-                        selectedTab === 1  ?
+                       /*  selectedTab === 1  ?
                             <Acknowledgements/>
-                            :
-                                selectedTab === 2 ? 
+                            : */
+                                selectedTab === 1 ? 
                                     <ConnectionBox display={"false"} assets={assets}/>
                                 :
-                                    selectedTab === 3 ?
+                                    selectedTab === 2 ?
                                     <USPTOContainer assets={assets}/>
                                 :
                                 ''     

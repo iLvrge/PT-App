@@ -34,9 +34,9 @@ import {
     MailOutline as MailOutlineIcon,
     FindInPage as FindInPageIcon,
     Link as LinkIcon,
+    Tv as TvIcon,
     Check
 } from '@mui/icons-material'
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faShareAlt,
@@ -778,7 +778,7 @@ const ActionMenu = (props) => {
                         className={classes.mBtn}
                     >
                         <CheckCircleOutlineIcon />
-                    </Fab>
+                    </Fab>  
                 :
                     <Button
                         id="action-menu"
@@ -807,7 +807,13 @@ const ActionMenu = (props) => {
                 <MenuItem className={classes.disableHover}>
                     <ListItemText>Analyst:</ListItemText>
                 </MenuItem>
-                <MenuItem  onClick={() => props.setDashboardScreen(!props.dashboardScreen)} className={`iconItem`}>
+                <MenuItem onClick={props.seActivityTimeline} className={`iconItem`} selected={props.timelineScreen}>
+                    <ListItemIcon>
+                        <TvIcon/>
+                    </ListItemIcon>
+                    <ListItemText>Activity Timeline</ListItemText>
+                </MenuItem>
+                <MenuItem  onClick={props.setDashboardScreen} className={`iconItem`} selected={props.dashboardScreen}>
                     <ListItemIcon>
                         <SpeedIcon/>
                     </ListItemIcon>
@@ -1008,7 +1014,14 @@ const ActionMenu = (props) => {
                     parseInt(profile?.user?.organisation?.subscribtion) === 3
                     ?
                                
-                        [        
+                        [   
+
+                            <MenuItem className={`iconItem`}>
+                                <ListItemIcon>
+                                    <Avatar src="https://patentrack.com/wp-content/uploads/2022/01/MaintenanceFee.svg" variant="square" style={{width: 21, height: 21}}/>
+                                </ListItemIcon>
+                                <ListItemText>Pay Maintaince Fee</ListItemText>  
+                            </MenuItem> ,    
                             <MenuItem className={`iconItem`}>
                                 <ListItemIcon>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="MuiSvgIcon-root customSVG" style={{width: 21, height: 21}} enableBackground="new 0 0 80 80" viewBox="0 0 80 80"><path d="M72,22H47V8c0-0.55-0.45-1-1-1H34c-0.55,0-1,0.45-1,1v14H8c-0.55,0-1,0.45-1,1v49c0,0.55,0.45,1,1,1h64c0.55,0,1-0.45,1-1
@@ -1057,6 +1070,12 @@ const ActionMenu = (props) => {
                         ]
                     :
                         [            
+                            <MenuItem className={`iconItem`} disabled>
+                                <ListItemIcon>
+                                    <Avatar src="https://patentrack.com/wp-content/uploads/2022/01/MaintenanceFee.svg" variant="square" style={{width: 21, height: 21}}/>
+                                </ListItemIcon>
+                                <ListItemText>Pay Maintaince Fee</ListItemText>
+                            </MenuItem>     ,
                             <MenuItem className={`iconItem`} disabled>
                                 <ListItemIcon>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="MuiSvgIcon-root customSVG" style={{width: 21, height: 21}} enableBackground="new 0 0 80 80" viewBox="0 0 80 80"><path d="M72,22H47V8c0-0.55-0.45-1-1-1H34c-0.55,0-1,0.45-1,1v14H8c-0.55,0-1,0.45-1,1v49c0,0.55,0.45,1,1,1h64c0.55,0,1-0.45,1-1

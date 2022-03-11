@@ -12,6 +12,8 @@ export default {
     selectedItem: null,
     selectedAsset: null,
   },
+  timelineScreen: true,
+  dashboardScreen: false,
   controlModal: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? false : false, 
   driveButtonActive: false
 }

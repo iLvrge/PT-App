@@ -42,14 +42,14 @@ function PdfViewer(props) {
       parentElement.style.height = '100%'
     }    
   } 
-
+  
   useEffect(() => {
     if(typeof props.show_tab != undefined) {
       setShowTabs(props.show_tab)
     }
   }, [ props ])
 
-  useEffect(()=> {
+  useEffect(()=> {     
     if(props.pdfView == 'true') {
       setFullView(classes.fullView) 
     }
