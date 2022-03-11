@@ -82,13 +82,14 @@ export default makeStyles(theme => ({
     },
     logoContainer: {
         width: '18.5rem',
-        display: 'flex'
+        display: 'flex' 
     },
     siteLogo: {
         /* width: LOGO_WIDTH,
         maxWidth: 'calc(100% - 30px)', */
-        height: '2rem',
-        marginRight: 15    
+        height: '2.7rem',
+        marginRight: 15,
+        fill: theme.palette.text.primary,
     }, 
 
     userLogo: {
