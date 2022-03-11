@@ -756,9 +756,17 @@ const ActionMenu = (props) => {
         dispatch( setSelectAssignmentCustomers([]))														
     }
 
-    const onHandleDashbord = useCallback(() => {
-        history.push('/reports')
-    }, [ history ])
+    const onHandleTimeline = () => {
+        setAnchorEl(null)
+        props.seActivityTimeline()
+    }
+
+    const onHandleDashboard = () => {
+        setAnchorEl(null)
+        props.setDashboardScreen()
+    }
+
+
     
     return (
         <div>
@@ -807,13 +815,13 @@ const ActionMenu = (props) => {
                 <MenuItem className={classes.disableHover}>
                     <ListItemText>Analyst:</ListItemText>
                 </MenuItem>
-                <MenuItem onClick={props.seActivityTimeline} className={`iconItem`} selected={props.timelineScreen}>
+                <MenuItem onClick={onHandleTimeline} className={`iconItem`} selected={props.timelineScreen}>
                     <ListItemIcon>
                         <TvIcon/>
                     </ListItemIcon>
                     <ListItemText>Activity Timeline</ListItemText>
                 </MenuItem>
-                <MenuItem  onClick={props.setDashboardScreen} className={`iconItem`} selected={props.dashboardScreen}>
+                <MenuItem  onClick={onHandleDashboard} className={`iconItem`} selected={props.dashboardScreen}>
                     <ListItemIcon>
                         <SpeedIcon/>
                     </ListItemIcon>

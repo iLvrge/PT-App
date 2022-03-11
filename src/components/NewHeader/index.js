@@ -145,14 +145,6 @@ const NewHeader = () => {
   const [ slackAuthLogin, setSlackAuthLogin ] = useState( true )
   const [ scheduling, setScheduling ] = useState( false )
   
-  const menuItems = [
-    {
-      id: 1,
-      label: 'Dashboard',
-      component: Reports,
-      standalone: true,
-    }
-  ] 
   const schedulingMenuItems = [
     {
       id: 2,
@@ -776,17 +768,6 @@ const onHandleTimelineScreen = () => {
             </Drawer>
         </div>
       </Toolbar>
-      {
-        dashboardScreen === true && (
-          <FullScreen 
-            componentItems={menuItems} 
-            showScreen={dashboardScreen} 
-            setScreen={setDashboardScreen} 
-            share={true}
-            handleShare={shareDashboard}
-          />
-        )
-      }
       {  
         scheduling === true && (
           <FullScreen 

@@ -18,6 +18,8 @@ import ArrowButton from '../ArrowButton'
 import { updateResizerBar } from '../../../utils/resizeBar'
 import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/numbers";
 import useStyles from './styles'
+import Reports from '../../Reports'
+import FullScreen from '../FullScreen'
 
 const IllustrationCommentContainer = ({ 
     cls, 
@@ -51,6 +53,7 @@ const IllustrationCommentContainer = ({
     const classes = useStyles() 
     const iframeRef = useRef()
     const illustrationRef = useRef()
+    const [ dashboardFullScreen, setDashboardFullScreen ] = useState( false )
     const [ toggleCommentButtonType , setToggleCommentButtonType ] = useState(true)
     const [ openCommentBar, setCommentOpenBar ] = useState(true)
     const [ commentButtonVisible, setCommentButtonVisible ] = useState(false)
@@ -64,6 +67,7 @@ const IllustrationCommentContainer = ({
     const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
     const maintainenceFrameMode = useSelector(state => state.ui.maintainenceFrameMode)
     const driveTemplateFrameMode = useSelector(state => state.ui.driveTemplateFrameMode)
+    const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
     const new_drive_template_file = useSelector(state => state.patenTrack2.new_drive_template_file)
     const template_document_url = useSelector(state => state.patenTrack2.template_document_url)
     const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
@@ -81,6 +85,17 @@ const IllustrationCommentContainer = ({
     const link_assets_sheet_type = useSelector(state => state.patenTrack2.link_assets_sheet_type)
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
     
+  
+    const menuItems = [
+        {
+            id: 1,
+            label: 'Dashboard',
+            component: Reports,
+            standalone: true,   
+            fullScreen: dashboardFullScreen,
+            handleFullScreen: setDashboardFullScreen
+        }
+    ] 
     useEffect(() => {
         updateResizerBar(illustrationRef, commentBar, 1)
     }, [ illustrationRef, commentBar ])
@@ -172,7 +187,7 @@ const IllustrationCommentContainer = ({
                 {
                     selectedCompanies.length > 0
                      && !isFullscreenOpen && 
-                        illustrationBar === true &&  shouldShowTimeline === true &&
+                        dashboardScreen === false && illustrationBar === true &&  shouldShowTimeline === true &&
                         ( search_string != '' || /* assetCompaniesRowSelect.length > 0 || 
                             selectedCompaniesAll === true || 
                             selectedCompanies.length > 0 || */
@@ -193,6 +208,13 @@ const IllustrationCommentContainer = ({
                 {  
                     /* selectedCompanies.length > 0 || */ process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' ||  type === 9 || ((process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && auth_token !== null)
                     ?
+                        dashboardScreen === true
+                        ?
+                            <Reports
+                                fullScreen={dashboardFullScreen}
+                                handleFullScreen={setDashboardFullScreen}
+                            />
+                        :
                         showManualComponent === true && menuComponent.length > 0
                         ?                        
                             menuComponent.map(
@@ -289,6 +311,16 @@ const IllustrationCommentContainer = ({
                         }
                     </Paper>
                 </Modal>
+                {
+                    dashboardFullScreen === true && (
+                    <FullScreen 
+                        componentItems={menuItems} 
+                        showScreen={dashboardFullScreen} 
+                        setScreen={setDashboardFullScreen} 
+                        showClose={false}
+                    />
+                    )
+                }
             </div>
 
             <div 

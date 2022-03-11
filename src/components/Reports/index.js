@@ -1,12 +1,19 @@
-import React, {} from 'react'
-import { Grid }  from '@mui/material'
-
+import React, {useMemo} from 'react'
+import { Grid, Typography, IconButton, Paper, Tooltip, Zoom }  from '@mui/material'
+import { useSelector } from 'react-redux'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faShareAlt,
+    faExpand
+  } from "@fortawesome/free-solid-svg-icons";
 import useStyles from './styles'
-
+import moment from 'moment'
 import CardElement from './CardElement'
 import ClientList from './ClientList'
-const Reports = () => {
+import { Fullscreen, Close } from '@mui/icons-material';
+const Reports = (props) => {
     const classes = useStyles();
+    const DATE_FORMAT = 'MMM DD, YYYY'
     const cardsList = [
         {
             title: 'Broken Chain of Title',
@@ -105,17 +112,20 @@ const Reports = () => {
             rf_id: ''
         }
     ]
+    const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
+    const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
+
+    const companyname = useMemo(() => {
+        return selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])
+    }, [selectedCompanies, companiesList])
     return (
         <Grid
             container
             className={classes.container}
-            spacing={2}
-            rowSpacing={2} 
             justifyContent="flex-start"
             alignItems="flex-start"
-            sx={{pt: 1, pr: 2}}
         >
-            <Grid
+            {/* <Grid
                 item lg={2} md={2} sm={2} xs={2}  
                 style={{height: '100%'}}
             >
@@ -126,10 +136,40 @@ const Reports = () => {
                         <ClientList />
                     }
                 </div>
+            </Grid> */}
+            <Grid
+                item lg={12} md={12} sm={12} xs={12} 
+            >
+                <Paper className={classes.titleContainer} square>
+                    <span className={'title'}>{ moment(new Date()).format(DATE_FORMAT)}  <span  style={{marginLeft: 24}}>{companyname.length > 0 ? companyname[0].original_name : ''}</span></span>
+                    <div className={classes.toolbar}>
+                        <IconButton  size="small" >
+                            <Tooltip 
+                                title={
+                                    <Typography color="inherit" variant='body2'>Share Dashboard</Typography>
+                                } 
+                                className={classes.tooltip}  
+                                placement='right'
+                                enterDelay={0}
+                                TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
+                            >
+                                <FontAwesomeIcon
+                                    icon={faShareAlt}                          
+                                />
+                            </Tooltip>
+                        </IconButton>                            
+                        <IconButton size="small"
+                            onClick={() => {props.handleFullScreen(!props.fullScreen)}}
+                        >
+                            { typeof props.standalone !== 'undefined' ? <Close/> : <Fullscreen /> }
+                        </IconButton>                        
+                    </div>
+                </Paper>
             </Grid>
             <Grid
-                item lg={10} md={10} sm={10} xs={10} 
-                style={{height: '100%', overflowY: 'auto' }}
+                item lg={12} md={12} sm={12} xs={12} 
+                className={classes.list}
+                sx={{pt: 1}}
             >
                 <Grid
                     container

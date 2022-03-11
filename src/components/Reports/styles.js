@@ -1,5 +1,5 @@
 import makeStyles from '@mui/styles/makeStyles';
-
+import { pink } from '@mui/material/colors';
 export default makeStyles(theme => ({
     container: {
         height: '100%',
@@ -72,5 +72,63 @@ export default makeStyles(theme => ({
         '& .MuiTypography-h6':{
             textTransform: 'capitalize'
         }
+    },
+    titleContainer:{
+        display: 'flex',
+        width: '100%',
+        padding: '0 9px 0 16px',
+        fontSize: '1rem',
+        height: 47,
+        minHeight: 47,
+        textAlign: 'left',
+        verticalAlign: 'middle',
+        justifyContent: 'flex-start;',
+        alignItems: 'center',
+        backgroundImage: 'none',
+        borderBottom: `1px solid ${theme.palette.divider}`,
+        '& span.title':{
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+        }
+    },    
+    toolbar:{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginLeft: 'auto',
+        '& .MuiIconButton-root':{
+            borderRadius: 0,
+            width: 30,
+            height: 30,
+            padding: 0,
+            color: theme.palette.text.primary,
+            backgroundColor: 'transparent',
+            '&:hover':{
+                color: pink[500],
+                backgroundColor: 'transparent',
+                fill: pink[500],
+                stroke: pink[500],
+            },
+            '& svg':{
+                width: '1em !important',
+                height: '1em !important',
+                fill: theme.palette.text.primary,
+                stroke: theme.palette.text.primary,
+                '&:hover':{
+                    color: pink[500],
+                    backgroundColor: 'transparent',
+                    fill: pink[500],
+                    stroke: pink[500],
+                }
+            }
+        }
+    },    
+    tooltip:{
+        fontSize: '1rem'
+    },
+    list: {
+        height: 'calc(100% - 47px)',
+        overflowY: 'auto'
     }
 }));

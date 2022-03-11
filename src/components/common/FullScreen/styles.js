@@ -5,6 +5,9 @@ export default makeStyles(theme => ({
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
+        '& .MuiPaper-root': {
+            backgroundImage: 'none'
+        }
     },  
     fullscreenBtn: {
         position: 'absolute',
