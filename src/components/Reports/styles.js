@@ -14,23 +14,23 @@ export default makeStyles(theme => ({
         minHeight: 60
     },  
     flexColumn: {
-        height: 'calc((100vh - 97px) / 3)',
+        height: 'calc((100vh - 78px) / 3)',
         paddingLeft:3,
         paddingTop: 3,
         '& .gauge':{
             display: 'flex',
             justifyContent: 'center',
             flexDirection: 'column',
-            height: 'calc(((100vh - 97px) / 3)/1.5)',
+            height: 'calc(((100vh - 78px) / 3)/1.5)',
             '& svg': {
                 display: 'flex',
                 height: '70%'
             }
         }, 
         [theme.breakpoints.down('md')]: {
-            height: 'calc((100vh - 97px) / 4)',
+            height: 'calc((100vh - 78px) / 4)',
             '& .gauge':{
-                height: 'calc(((100vh - 97px) / 4)/1.6)', 
+                height: 'calc(((100vh - 78px) / 4)/1.6)', 
             }
         },
         '& .MuiCard-root': {
