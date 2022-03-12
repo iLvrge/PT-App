@@ -12,23 +12,25 @@ export default makeStyles(theme => ({
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: 60
-    },
+    },  
     flexColumn: {
-        height: 'calc((100vh - 78px) / 3)',
+        height: 'calc((100vh - 97px) / 3)',
+        paddingLeft:3,
+        paddingTop: 3,
         '& .gauge':{
             display: 'flex',
             justifyContent: 'center',
             flexDirection: 'column',
-            height: 'calc(((100vh - 78px) / 3)/1.57)',
+            height: 'calc(((100vh - 97px) / 3)/1.5)',
             '& svg': {
                 display: 'flex',
                 height: '70%'
             }
-        },
+        }, 
         [theme.breakpoints.down('md')]: {
-            height: 'calc((100vh - 78px) / 4)',
+            height: 'calc((100vh - 97px) / 4)',
             '& .gauge':{
-                height: 'calc(((100vh - 78px) / 4)/1.7)', 
+                height: 'calc(((100vh - 97px) / 4)/1.6)', 
             }
         },
         '& .MuiCard-root': {
@@ -45,7 +47,7 @@ export default makeStyles(theme => ({
         '& .font12Rem':{
           fontSize: '1rem'
         },
-        backgroundImage: 'none'
+        
     },
     companyBar:{
         height: '100%',
@@ -57,26 +59,43 @@ export default makeStyles(theme => ({
         textOverflow: 'ellipsis',
         padding: '0 10px 14px',
     },
-    onFly: {
-        position: 'absolute',
-        right: 0,
-        top: 5
-    },
-    card: {
+    card: {        
         position: 'relative',
         border: 0,
         boxShadow: 'none',
+        background: 'none',
+        '& .tooltip':{
+            position: 'absolute',
+            right: 0,
+            top: 5,
+            display: 'none',    
+            borderRadius: 'inherit',       
+            '&.MuiIconButton-root svg':{
+                width: '1.2rem',
+                height: '1.2rem',
+            } 
+        },
+        '&:hover':{
+            '& .tooltip':{
+                display: 'block'
+            }
+        },
         '& .MuiCardContent-root':{
-            paddingBottom: 0
+            position: 'relative',
+            paddingBottom: 0,
+            marginBottom: 1,
         },
         '& .MuiTypography-h6':{
             textTransform: 'capitalize'
+        },
+        '& .MuiCardActions-root, .MuiCardContent-root':{
+            backgroundColor: theme.palette.background.paper,
         }
     },
     titleContainer:{
         display: 'flex',
         width: '100%',
-        padding: '0 9px 0 16px',
+        paddingLeft: 16,
         fontSize: '1rem',
         height: 47,
         minHeight: 47,
@@ -89,7 +108,11 @@ export default makeStyles(theme => ({
         '& span.title':{
             whiteSpace: 'nowrap',
             overflow: 'hidden',
-            textOverflow: 'ellipsis'
+            textOverflow: 'ellipsis',
+            '& span':{
+                textTransform:'uppercase',
+                marginLeft: 24
+            }
         }
     },    
     toolbar:{
@@ -97,38 +120,26 @@ export default makeStyles(theme => ({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginLeft: 'auto',
-        '& .MuiIconButton-root':{
-            borderRadius: 0,
-            width: 30,
-            height: 30,
-            padding: 0,
-            color: theme.palette.text.primary,
-            backgroundColor: 'transparent',
-            '&:hover':{
-                color: pink[500],
-                backgroundColor: 'transparent',
-                fill: pink[500],
-                stroke: pink[500],
-            },
+        /* '& .MuiIconButton-root':{
             '& svg':{
                 width: '1em !important',
                 height: '1em !important',
-                fill: theme.palette.text.primary,
-                stroke: theme.palette.text.primary,
-                '&:hover':{
-                    color: pink[500],
-                    backgroundColor: 'transparent',
-                    fill: pink[500],
-                    stroke: pink[500],
-                }
             }
-        }
+        } */
     },    
     tooltip:{
         fontSize: '1rem'
     },
+    active: {
+        color: pink[500]
+    },
     list: {
         height: 'calc(100% - 47px)',
         overflowY: 'auto'
+    },
+    exampleButton: {
+        position: 'absolute',
+        bottom: 0,
+        left: 'calc(50% - 45px)'
     }
 }));

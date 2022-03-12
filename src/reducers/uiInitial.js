@@ -14,6 +14,7 @@ export default {
   },
   timelineScreen: true,
   dashboardScreen: false,
+  dashboardPanel: false,
   controlModal: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? false : false, 
   driveButtonActive: false
 }

@@ -22,6 +22,12 @@ const uiReducer = (state = initialState.ui, action) => {
         dashboardScreen: action.flag 
       }
     }
+    case types.SET_DASHBOARD_PANEL: {
+      return { 
+        ...state,
+        dashboardPanel: action.flag 
+      }
+    }
     case types.SET_SELECTED_TIMELINE_ITEM: {
       return {
         ...state,

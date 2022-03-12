@@ -120,7 +120,7 @@ import {
 } from '../../actions/uiActions'
 import Scheduling from './Scheduling'
 
-const NewHeader = () => {
+const NewHeader = (props) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const history = useHistory()
@@ -513,14 +513,20 @@ const shareDashboard = () => {
   console.log("shareDashboard")
 }
 
-const onHandleDashboardScreen = () => {
+const onHandleDashboardScreen = (event) => {
   dispatch(setTimelineScreen(false))
   dispatch(setDashboardScreen(true))
+  if(props.openCustomerBar === true){
+    props.handleCustomersBarOpen(event)
+  }  
 }
 
-const onHandleTimelineScreen = () => {
+const onHandleTimelineScreen = (event) => {
   dispatch(setTimelineScreen(true))
   dispatch(setDashboardScreen(false))
+  if(props.openCustomerBar === false){
+    props.handleCustomersBarOpen(event)
+  }
 }
 
   return (

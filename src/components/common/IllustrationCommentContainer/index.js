@@ -93,7 +93,10 @@ const IllustrationCommentContainer = ({
             component: Reports,
             standalone: true,   
             fullScreen: dashboardFullScreen,
-            handleFullScreen: setDashboardFullScreen
+            handleFullScreen: setDashboardFullScreen,
+            chartsBar: chartsBar,
+            analyticsBar: analyticsBar,
+            checkChartAnalytics: checkChartAnalytics  
         }
     ] 
     useEffect(() => {
@@ -213,7 +216,10 @@ const IllustrationCommentContainer = ({
                             <Reports
                                 fullScreen={dashboardFullScreen}
                                 handleFullScreen={setDashboardFullScreen}
-                            />
+                                chartsBar={chartsBar}
+                                analyticsBar={analyticsBar}
+                                checkChartAnalytics={checkChartAnalytics}
+                            /> 
                         :
                         showManualComponent === true && menuComponent.length > 0
                         ?                        

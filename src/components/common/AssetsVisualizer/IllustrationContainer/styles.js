@@ -10,7 +10,7 @@ export default makeStyles(theme => ({
     /* backgroundColor: '#424242', */
     '& #topTitle':{
       backgroundColor: theme.palette.background.paper, 
-      border: `1px solid ${theme.palette.divider}`, 
+      borderBottom: `1px solid ${theme.palette.divider}`, 
       /* boxShadow: `0 0px 5px 0 ${this.config.title.boxShadow}`,  */
       color: theme.palette.text.primary
     }

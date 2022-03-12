@@ -1112,7 +1112,10 @@ const GlobalLayout = (props) => {
                 ?
                     <MobileHeader/>
                 :
-                    <NewHeader />
+                    <NewHeader 
+                        handleCustomersBarOpen={handleCustomersBarOpen}
+                        openCustomerBar={openCustomerBar}
+                    />
             }
             <Grid container className={clsx(classes.dashboardWarapper, {[classes.mobileDashboardWrapper]: isMobile})} id="mainContainer">
                 <Grid container className={clsx(classes.dashboard)}>       

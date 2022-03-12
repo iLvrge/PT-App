@@ -29,7 +29,8 @@ const IllustrationContainer = ({
   setAnalyticsBar,
   setChartBar,
   fullScreen,
-  onHandleChartBarSize
+  onHandleChartBarSize,
+  viewOnly
  }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -173,7 +174,7 @@ const IllustrationContainer = ({
     if (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'){
       alert('Message..')
     } else {
-      if (obj != null && typeof obj.original_number != undefined && obj.original_number != null) {
+      if (typeof viewOnly == 'undefined' && obj != null && typeof obj.original_number != undefined && obj.original_number != null) {
         let form = new FormData()
         form.append('assets', JSON.stringify([{asset: obj.original_number, flag: illustrationData.asset_type}]))
         form.append('type', 1)
@@ -222,9 +223,9 @@ const IllustrationContainer = ({
     }
   }
 
-  const handleConnectionBox = useCallback((obj) => {
-    setLineId(obj.id)
-    if (typeof obj.popup != 'undefined') { 
+  const handleConnectionBox = useCallback((obj) => {    
+    if (typeof viewOnly == 'undefined' && typeof obj.popup != 'undefined' ) { 
+      setLineId(obj.id)
       if((linkId != obj.popuptop) || (obj.id != lineId && linkId == obj.popuptop) ) {
         setLinkId(obj.popuptop)
         setClick(1)
@@ -289,22 +290,24 @@ const IllustrationContainer = ({
   }, [ linkId, click, dispatch ])
 
   const handleUSPTO = useCallback((usptoMode) => {
-    dispatch(
-      toggleUsptoMode(usptoMode)
-    )
-    if(usptoMode === true) {
-      setLinkId(null)
-      setLineId(0)
+    if(typeof viewOnly == 'undefined') {
       dispatch(
-        setConnectionBoxView(false)
+        toggleUsptoMode(usptoMode)
       )
-      dispatch(
-        setConnectionData({})
-      )
-      checkChartAnalytics(null, null, true)
-    } else {
-      checkChartAnalytics(null, null, false)
-    }
+      if(usptoMode === true) {
+        setLinkId(null)
+        setLineId(0)
+        dispatch(
+          setConnectionBoxView(false)
+        )
+        dispatch(
+          setConnectionData({})
+        )
+        checkChartAnalytics(null, null, true)
+      } else {
+        checkChartAnalytics(null, null, false)
+      }
+    }    
   }, [ chartsBar, analyticsBar, dispatch ])
 
   const handleToggleParties = useCallback((flag) => {

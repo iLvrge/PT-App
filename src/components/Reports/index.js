@@ -1,19 +1,18 @@
-import React, {useMemo} from 'react'
+import React, {useMemo, useState, useCallback, useEffect} from 'react'
 import { Grid, Typography, IconButton, Paper, Tooltip, Zoom }  from '@mui/material'
-import { useSelector } from 'react-redux'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faShareAlt,
-    faExpand
-  } from "@fortawesome/free-solid-svg-icons";
+import { useSelector, useDispatch } from 'react-redux'
 import useStyles from './styles'
 import moment from 'moment'
 import CardElement from './CardElement'
 import ClientList from './ClientList'
-import { Fullscreen, Close } from '@mui/icons-material';
+import { Fullscreen, Close, Share } from '@mui/icons-material';
+import { setDashboardPanel } from '../../actions/uiActions'
+import { setAssetsIllustration } from '../../actions/patentTrackActions2'
 const Reports = (props) => {
     const classes = useStyles();
+    const dispatch = useDispatch();
     const DATE_FORMAT = 'MMM DD, YYYY'
+    const [activeId, setActiveId] = useState(-1)
     const cardsList = [
         {
             title: 'Broken Chain of Title',
@@ -114,10 +113,32 @@ const Reports = (props) => {
     ]
     const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
-
+    useEffect(() => {
+        console.log("activeId", activeId)
+    }, [activeId])
     const companyname = useMemo(() => {
         return selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])
     }, [selectedCompanies, companiesList])
+
+    const onHandleClick = useCallback((id) => {
+        let showItem = id != activeId ? true : false
+        console.log("showItem", id, activeId, showItem)
+        setActiveId(id != activeId ? id : -1)
+        dispatch(setDashboardPanel( showItem ))        
+        props.checkChartAnalytics(null, null, showItem)
+        if(showItem === true) {
+            dispatch(
+                setAssetsIllustration({
+                    type: "patent",
+                    id: "8735067",
+                    flag: 1
+                }),
+            );
+        } else {
+            dispatch(setAssetsIllustration(null))
+        }
+        
+    }, [dispatch, props.chartsBar, props.analyticsBar, props.checkChartAnalytics])
     return (
         <Grid
             container
@@ -141,7 +162,7 @@ const Reports = (props) => {
                 item lg={12} md={12} sm={12} xs={12} 
             >
                 <Paper className={classes.titleContainer} square>
-                    <span className={'title'}>{ moment(new Date()).format(DATE_FORMAT)}  <span  style={{marginLeft: 24}}>{companyname.length > 0 ? companyname[0].original_name : ''}</span></span>
+                    <span className={'title'}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{companyname.length > 0 ? companyname[0].original_name : ''}</span></span>
                     <div className={classes.toolbar}>
                         <IconButton  size="small" >
                             <Tooltip 
@@ -153,15 +174,23 @@ const Reports = (props) => {
                                 enterDelay={0}
                                 TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
                             >
-                                <FontAwesomeIcon
-                                    icon={faShareAlt}                          
-                                />
+                                <Share/>
                             </Tooltip>
                         </IconButton>                            
                         <IconButton size="small"
                             onClick={() => {props.handleFullScreen(!props.fullScreen)}}
                         >
-                            { typeof props.standalone !== 'undefined' ? <Close/> : <Fullscreen /> }
+                            <Tooltip 
+                                title={
+                                    <Typography color="inherit" variant='body2'> { typeof props.standalone !== 'undefined' ? 'Close' : 'Fullscreen' }</Typography>
+                                } 
+                                className={classes.tooltip}  
+                                placement='right'
+                                enterDelay={0}
+                                TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
+                            >
+                                { typeof props.standalone !== 'undefined' ? <Close/> : <Fullscreen /> }
+                            </Tooltip>                            
                         </IconButton>                        
                     </div>
                 </Paper>
@@ -169,11 +198,9 @@ const Reports = (props) => {
             <Grid
                 item lg={12} md={12} sm={12} xs={12} 
                 className={classes.list}
-                sx={{pt: 1}}
             >
                 <Grid
                     container
-                    spacing={2}
                     direction="row"
                     justifyContent="flex-start"
                     alignItems="flex-start"
@@ -185,9 +212,11 @@ const Reports = (props) => {
                                 className={classes.flexColumn}
                             >
                                 <CardElement 
-                                    key={index} 
+                                    key={`card_${index}`}
                                     card={card}
                                     id={index}
+                                    active={activeId}
+                                    handleClick={onHandleClick}
                                 />
                             </Grid>
                         ))

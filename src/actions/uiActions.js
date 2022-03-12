@@ -81,3 +81,8 @@ export const setDashboardScreen = flag => ({
   type: types.SET_DASHBOARD_SCREEN,
   flag,
 })  
+
+export const setDashboardPanel = flag => ({
+  type: types.SET_DASHBOARD_PANEL,
+  flag,
+})  

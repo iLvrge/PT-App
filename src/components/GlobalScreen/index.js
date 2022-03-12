@@ -50,6 +50,7 @@ import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpan
 
 import useStyles from './styles'
 import clsx from 'clsx'
+import IllustrationContainer from '../common/AssetsVisualizer/IllustrationContainer'
 
 const GlobalScreen = ({
     type,
@@ -138,8 +139,10 @@ const GlobalScreen = ({
     const [sheetName, setSheetName] = useState('')
     const [ gap, setGap ] = useState( { x: '14.1rem', y: '7.5rem'} )
     const [ isDragging, setIsDragging] = useState(false)
+    const [ isFullscreenOpen, setIsFullscreenOpen] = useState(false)
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false)
-
+    const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
+    const dashboardPanel = useSelector(state => state.ui.dashboardPanel)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const selectedMainCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
@@ -151,7 +154,7 @@ const GlobalScreen = ({
     const maintainenceAssetsList = useSelector( state => state.patenTrack2.maintainenceAssetsList )
     const maintainenceAssetsLoadingMore = useSelector( state => state.patenTrack2.maintainenceAssetsLoadingMore )
     const selectedMaintainencePatents = useSelector( state => state.patenTrack2.selectedMaintainencePatents )
-
+    const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
     const channel_id = useSelector( state => state.patenTrack2.channel_id )   
     const checkContainer = () => {
         /* setTimeout(() => {
@@ -325,6 +328,11 @@ const GlobalScreen = ({
     const handleTextChange = (name) => {
         setSheetName(name);
     }
+
+    const handleClickOpenFullscreen = () => {
+        setIsFullscreenOpen(true)
+    }
+
 
     return (
         <SplitPane
@@ -662,6 +670,23 @@ const GlobalScreen = ({
                                             /> 
                                         </div>
                                         <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
+                                        {
+                                            dashboardScreen === true && (dashboardPanel === true) ? 
+                                                <IllustrationContainer 
+                                                    isFullscreenOpen={isFullscreenOpen} 
+                                                    asset={assetIllustration} 
+                                                    setIllustrationRecord={setIllustrationRecord} 
+                                                    chartsBar={openChartBar}
+                                                    analyticsBar={openAnalyticsBar}
+                                                    chartsBarToggle={handleChartBarOpen}
+                                                    checkChartAnalytics={checkChartAnalytics}
+                                                    setAnalyticsBar={setAnalyticsBar}
+                                                    setChartBar={setChartBar}
+                                                    fullScreen={handleClickOpenFullscreen}
+                                                    gap={gap}
+                                                    viewOnly={true}
+                                                />
+                                            :
                                             <AssetDetailsContainer 
                                                 cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPaneMainOverflowUnset, { [classes.minimized]: assetsCommentsTimelineMinimized })}
                                                 split={`horizontal`}
@@ -688,6 +713,7 @@ const GlobalScreen = ({
                                                 isDragging={isDragging}
                                                 type={type}
                                             />
+                                        }                                            
                                         </div>
                                     </SplitPane>
                                 </SplitPane>
