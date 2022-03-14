@@ -519,6 +519,9 @@ const onHandleDashboardScreen = (event) => {
   if(props.openCustomerBar === true){
     props.handleCustomersBarOpen(event)
   }  
+  if(props.openCommentBar === true){
+    props.handleCommentBarOpen(event)
+  }
 }
 
 const onHandleTimelineScreen = (event) => {
@@ -526,6 +529,9 @@ const onHandleTimelineScreen = (event) => {
   dispatch(setDashboardScreen(false))
   if(props.openCustomerBar === false){
     props.handleCustomersBarOpen(event)
+  }
+  if(props.openCommentBar === false){
+    props.handleCommentBarOpen(event)
   }
 }
 

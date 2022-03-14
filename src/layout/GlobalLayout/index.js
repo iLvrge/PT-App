@@ -607,7 +607,6 @@ const GlobalLayout = (props) => {
             
         }
         if(!bar === true) {
-            console.log("handleIllustrationBarOpen => index 604")
             if(isMobile) {
                 setCommentBar(false)
                 setChartBar(false)
@@ -629,7 +628,6 @@ const GlobalLayout = (props) => {
         }
         if(!bar === true) {
             if(isMobile) {
-                console.log("handleCommentBarOpen => index 626")
                 setIllustrationBar(false)
                 setChartBar(false)
                 setAnalyticsBar(false)
@@ -641,7 +639,6 @@ const GlobalLayout = (props) => {
 
     const handleChartBarOpen = () => { 
         let bar = openChartBar, barSize = '50%'
-        console.log("handleChartBarOpen => index 638")
         setChartBar( !bar )
         if(!bar === false && openAnalyticsBar === true) {
             barSize = '100%'
@@ -704,7 +701,6 @@ const GlobalLayout = (props) => {
     } 
 
     const openAnalyticsAndCharBar = () => {
-        console.log("openAnalyticsAndCharBar => index 701")
         setChartBar( true )
         setAnalyticsBar( true )
         setIllustrationBarSize( '50%' )
@@ -712,7 +708,6 @@ const GlobalLayout = (props) => {
     }
 
     const closeAnalyticsAndCharBar = () => {  
-        console.log("closeAnalyticsAndCharBar => index 709")
         setChartBar( false )
         setAnalyticsBar( false )
         setIllustrationBarSize( '50%' )
@@ -746,7 +741,6 @@ const GlobalLayout = (props) => {
 
     const checkChartAnalytics = useCallback(async (pdfFile, connectionBoxData, usptoMode) => {
         if( pdfFile != null && Object.keys(pdfFile).length > 0 ) {
-            console.log("PDF 743")
             setChartBar( true )
             setVisualizeOpenBar( true )
             setVisualizerBarSize(prevItem =>{
@@ -758,8 +752,7 @@ const GlobalLayout = (props) => {
             })
         }
 
-        if( connectionBoxData != null && Object.keys(connectionBoxData).length > 0 ) {  
-            console.log("connectionBoxData => 758")
+        if( connectionBoxData != null && Object.keys(connectionBoxData).length > 0 ) {
             setVisualizeOpenBar( true )
             setVisualizerBarSize(prevItem =>{
                 if(prevItem == '0%') {
@@ -1113,8 +1106,10 @@ const GlobalLayout = (props) => {
                     <MobileHeader/>
                 :
                     <NewHeader 
-                        handleCustomersBarOpen={handleCustomersBarOpen}
+                        openCommentBar={openCommentBar}
                         openCustomerBar={openCustomerBar}
+                        handleCommentBarOpen={handleCommentBarOpen}
+                        handleCustomersBarOpen={handleCustomersBarOpen}
                     />
             }
             <Grid container className={clsx(classes.dashboardWarapper, {[classes.mobileDashboardWrapper]: isMobile})} id="mainContainer">

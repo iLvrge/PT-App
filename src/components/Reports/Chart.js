@@ -25,7 +25,7 @@ const Chart = (props) => {
                 marginInPercent={0.03}
                 className={'gauge'}
             />    
-            <Button size="small" variant="outlined" className={clsx(classes.actionButton)}>Lets Fix it</Button>   
+            <Button size="small" variant="outlined" className={clsx(classes.actionButton)}>Lets Fix it!</Button>   
         </div>
     )
 }

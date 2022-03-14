@@ -14,7 +14,7 @@ export default makeStyles(theme => ({
         minHeight: 60
     },  
     flexColumn: {
-        height: 'calc((100vh - 90px) / 3)',
+        height: 'calc((100vh - 102px) / 3)',
         alignContent: 'start',
         paddingLeft:3,
         paddingTop: 3,
@@ -39,7 +39,7 @@ export default makeStyles(theme => ({
             }
         }, 
         [theme.breakpoints.down('md')]: {
-            height: 'calc((100vh - 90px) / 4)',
+            height: 'calc((100vh - 102px) / 4)',
             '& .gauge':{
                 height: 'calc((100vh - 220px) / 4)', 
             },
@@ -94,7 +94,7 @@ export default makeStyles(theme => ({
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
-        padding: '0 10px 14px',
+        padding: '5px 10px 10px',
     },
     card: {        
         position: 'relative',
@@ -181,14 +181,15 @@ export default makeStyles(theme => ({
     },
     exampleButton: {
         position: 'absolute',
-        top: 0,
+        top: 10,
         /* left: 'calc(50% - 45px)' */
         right: 0
     },
     actionButton: {
         position: 'absolute',
-        bottom: 0,
-        left: 'calc(50% - 40px)'
+        bottom: 10,
+        left: 'calc(50% - 40px)',
+        textTransform: 'initial'
     },
     shareIcon:{
         '& svg':{
