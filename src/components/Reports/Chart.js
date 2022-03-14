@@ -1,14 +1,14 @@
 import React, {useState} from 'react'
 import GaugeChart from 'react-gauge-chart'
 import useStyles from './styles'
-import { IconButton } from '@mui/material';
+import { IconButton, Button } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import clsx from 'clsx'
 const Chart = (props) => {
     const [arcs, setArcs] = useState([0.5, 0.3, 0.2])
     const classes = useStyles();
     return (
-        <React.Fragment>
+        <div className={classes.chartContainer}>
             <IconButton 
                 size="small" 
                 onClick={() => props.handleClick(props.id)} 
@@ -24,8 +24,9 @@ const Chart = (props) => {
                 arcPadding={0.02}
                 marginInPercent={0.03}
                 className={'gauge'}
-            />       
-        </React.Fragment>
+            />    
+            <Button size="small" variant="outlined" className={clsx(classes.actionButton)}>Lets Fix it</Button>   
+        </div>
     )
 }
 

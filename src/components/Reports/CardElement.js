@@ -21,9 +21,6 @@ const CardElement = ({card, id, active, handleClick}) => {
                     active={active}
                 />  
             </CardContent>  
-            <CardActions align="center" style={{justifyContent: 'center'}}>
-                <Button size="small" variant="outlined">Lets Fix it</Button>
-            </CardActions>  
         </Card>
     )
 }

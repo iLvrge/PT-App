@@ -32,7 +32,7 @@ export default makeStyles(theme => ({
             justifyContent: 'center',
             flexDirection: 'column',
             alignContent: 'start',
-            height: 'calc(((100vh - 40px) / 3)/1.5)', 
+            height: 'calc((100vh - 220px) / 3)', 
             '& svg': {
                 display: 'flex',
                 height: '70%'
@@ -41,7 +41,7 @@ export default makeStyles(theme => ({
         [theme.breakpoints.down('md')]: {
             height: 'calc((100vh - 90px) / 4)',
             '& .gauge':{
-                height: 'calc(((100vh - 40px) / 4)/1.6)', 
+                height: 'calc((100vh - 220px) / 4)', 
             },
             '&:nth-child(4)':{
                 paddingLeft:0,
@@ -120,7 +120,7 @@ export default makeStyles(theme => ({
         '& .MuiCardContent-root':{
             position: 'relative',
             paddingBottom: 0,
-            marginBottom: 1,
+            marginBottom: 0,
         },
         '& .MuiTypography-h6':{
             textTransform: 'capitalize'
@@ -175,6 +175,10 @@ export default makeStyles(theme => ({
         height: 'calc(100% - 47px)',
         overflowY: 'auto'
     },
+    chartContainer: {
+        position: 'relative',
+        display: 'flex'
+    },
     exampleButton: {
         position: 'absolute',
         top: 0,
@@ -184,7 +188,7 @@ export default makeStyles(theme => ({
     actionButton: {
         position: 'absolute',
         bottom: 0,
-        left: 'calc(50% - 45px)'
+        left: 'calc(50% - 40px)'
     },
     shareIcon:{
         '& svg':{
