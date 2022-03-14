@@ -19,7 +19,7 @@ const Reports = (props) => {
     const [activeId, setActiveId] = useState(-1)
     const cardsList = [
         {
-            title: 'Broken Chain of Title',
+            title: 'Chain-of-Title',
             sub_heading: 'patents ad ad d ad ad ad',
             number: 72,
             patent: '',
@@ -43,7 +43,7 @@ const Reports = (props) => {
             rf_id: ''
         },
         {
-            title: 'Wrong address',
+            title: 'Wrong addresses',
             sub_heading: 'adress',
             number: 124,
             patent: '',
@@ -51,7 +51,7 @@ const Reports = (props) => {
             rf_id: ''
         },
         {
-            title: 'Wrong Lawyer',
+            title: 'Wrong Lawyers',
             sub_heading: 'typo in the name of lawyer, wrong lawyer addres, no longer works with that lawyer',
             number: 72,
             patent: '',
@@ -67,7 +67,7 @@ const Reports = (props) => {
             rf_id: ''
         },
         {
-            title: 'Missed monetization opportunities',
+            title: 'Missed monetization',
             sub_heading: 'abandoned patents',
             number: 72,
             patent: '',
@@ -83,7 +83,7 @@ const Reports = (props) => {
             rf_id: ''
         },
         {
-            title: 'Corrections',
+            title: 'Incorrect Recordings',
             sub_heading: 'typo in the name of lawyer, wrong lawyer addres, no longer works with that lawyer',
             number: 72,
             patent: '',
@@ -142,7 +142,7 @@ const Reports = (props) => {
             dispatch(setAssetsIllustration(null))
         }
         
-    }, [dispatch, props.chartsBar, props.analyticsBar, props.checkChartAnalytics])
+    }, [dispatch, activeId, props.chartsBar, props.analyticsBar, props.checkChartAnalytics])
     return (
         <Grid
             container
