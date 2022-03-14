@@ -476,7 +476,6 @@ const clearOtherItems = () => {
   dispatch(
       setPDFView(false)
   )
-  dispatch(setAssetsIllustrationData(null))
   dispatch(setAssetsIllustration(null)) 
   dispatch(toggleLifeSpanMode(true))
   dispatch(toggleFamilyMode(false))
@@ -516,6 +515,8 @@ const shareDashboard = () => {
 const onHandleDashboardScreen = (event) => {
   dispatch(setTimelineScreen(false))
   dispatch(setDashboardScreen(true))
+  dispatch(setAssetsIllustration(null))
+  dispatch(setAssetsIllustrationData(null))
   if(props.openCustomerBar === true){
     props.handleCustomersBarOpen(event)
   }  
@@ -527,6 +528,8 @@ const onHandleDashboardScreen = (event) => {
 const onHandleTimelineScreen = (event) => {
   dispatch(setTimelineScreen(true))
   dispatch(setDashboardScreen(false))
+  dispatch(setAssetsIllustration(null))
+  dispatch(setAssetsIllustrationData(null))
   if(props.openCustomerBar === false){
     props.handleCustomersBarOpen(event)
   }
