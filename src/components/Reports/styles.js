@@ -14,24 +14,61 @@ export default makeStyles(theme => ({
         minHeight: 60
     },  
     flexColumn: {
-        height: 'calc((100vh - 78px) / 3)',
+        height: 'calc((100vh - 90px) / 3)',
+        alignContent: 'start',
         paddingLeft:3,
         paddingTop: 3,
+        '&:nth-child(1)':{
+            paddingLeft:0,
+        },
+        '&:nth-child(5)':{
+            paddingLeft:0,
+        },
+        '&:nth-child(9)':{
+            paddingLeft:0,
+        },
         '& .gauge':{
             display: 'flex',
             justifyContent: 'center',
             flexDirection: 'column',
-            height: 'calc(((100vh - 78px) / 3)/1.5)',
+            alignContent: 'start',
+            height: 'calc(((100vh - 40px) / 3)/1.5)', 
             '& svg': {
                 display: 'flex',
                 height: '70%'
             }
         }, 
         [theme.breakpoints.down('md')]: {
-            height: 'calc((100vh - 78px) / 4)',
+            height: 'calc((100vh - 90px) / 4)',
             '& .gauge':{
-                height: 'calc(((100vh - 78px) / 4)/1.6)', 
-            }
+                height: 'calc(((100vh - 40px) / 4)/1.6)', 
+            },
+            '&:nth-child(4)':{
+                paddingLeft:0,
+            },
+            '&:nth-child(7)':{
+                paddingLeft:0,
+            },
+            '&:nth-child(10)':{
+                paddingLeft:0,
+            },
+        },
+        [theme.breakpoints.down('sm')]: {
+            '&:nth-child(3)':{
+                paddingLeft:0,
+            },
+            '&:nth-child(5)':{
+                paddingLeft:0,
+            },
+            '&:nth-child(7)':{
+                paddingLeft:0,
+            },
+            '&:nth-child(9)':{
+                paddingLeft:0,
+            },
+            '&:nth-child(11)':{
+                paddingLeft:0,
+            },
         },
         '& .MuiCard-root': {
             height: '100%'
@@ -90,6 +127,7 @@ export default makeStyles(theme => ({
         },
         '& .MuiCardActions-root, .MuiCardContent-root':{
             backgroundColor: theme.palette.background.paper,
+            padding: '5px 8px'
         }
     },
     titleContainer:{
@@ -139,7 +177,19 @@ export default makeStyles(theme => ({
     },
     exampleButton: {
         position: 'absolute',
+        top: 0,
+        /* left: 'calc(50% - 45px)' */
+        right: 0
+    },
+    actionButton: {
+        position: 'absolute',
         bottom: 0,
         left: 'calc(50% - 45px)'
+    },
+    shareIcon:{
+        '& svg':{
+            width: '1rem',
+            height: '1rem'
+        }
     }
 }));

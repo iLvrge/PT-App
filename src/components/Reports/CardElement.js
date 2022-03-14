@@ -9,20 +9,17 @@ const CardElement = ({card, id, active, handleClick}) => {
     const classes = useStyles();
     return (
         <Card variant="outlined" className={classes.card} square={true}>
-            <CardContent>
-                <IconButton className={'tooltip'}>
-                    <Tooltip title="Tooltip" placement="right">
-                        <ErrorOutlineIcon/> 
-                    </Tooltip>
-                </IconButton>                
-                <Typography variant="h6" component="div" align="center" className={classes.border}>
-                    {card.title}
-                </Typography>
+            <CardContent>           
+                <Tooltip title="Tooltip" placement="right">
+                    <Typography variant="h6" component="div" align="center" className={classes.border}>
+                        {card.title}
+                    </Typography>
+                </Tooltip>
                 <Chart 
                     id={id}
                     handleClick={handleClick}
                     active={active}
-                />
+                />  
             </CardContent>  
             <CardActions align="center" style={{justifyContent: 'center'}}>
                 <Button size="small" variant="outlined">Lets Fix it</Button>

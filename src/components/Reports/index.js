@@ -1,5 +1,9 @@
 import React, {useMemo, useState, useCallback, useEffect} from 'react'
 import { Grid, Typography, IconButton, Paper, Tooltip, Zoom }  from '@mui/material'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {
+  faShareAlt,
+} from "@fortawesome/free-solid-svg-icons"
 import { useSelector, useDispatch } from 'react-redux'
 import useStyles from './styles'
 import moment from 'moment'
@@ -164,7 +168,7 @@ const Reports = (props) => {
                 <Paper className={classes.titleContainer} square>
                     <span className={'title'}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{companyname.length > 0 ? companyname[0].original_name : ''}</span></span>
                     <div className={classes.toolbar}>
-                        <IconButton  size="small" >
+                        <IconButton  size="small" className={classes.shareIcon}>
                             <Tooltip 
                                 title={
                                     <Typography color="inherit" variant='body2'>Share Dashboard</Typography>
@@ -174,7 +178,9 @@ const Reports = (props) => {
                                 enterDelay={0}
                                 TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
                             >
-                                <Share/>
+                                <FontAwesomeIcon
+                                    icon={faShareAlt}
+                                />
                             </Tooltip>
                         </IconButton>                            
                         <IconButton size="small"
