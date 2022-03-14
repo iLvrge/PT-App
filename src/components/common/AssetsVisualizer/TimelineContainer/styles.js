@@ -24,8 +24,11 @@ export default makeStyles(theme => ({
     },
     '&.vis-panel .vis-shadow':{
       /*height: 0*/
+    },
+    '& .vis-time-axis .vis-text':{
+      padding: '1px 3px'
     }
-  },
+  },  
   loader: {
     position: 'absolute',
     zIndex: 100,
