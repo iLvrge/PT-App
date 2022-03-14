@@ -196,5 +196,18 @@ export default makeStyles(theme => ({
             width: '1rem !important',
             height: '1rem !important'
         }
+    },
+    actionIcon: {
+        '& svg':{
+            width: '1rem !important',
+            height: '1rem !important'
+        }
+    },
+    fontStandalone: {
+        fontSize: '1em !important',
+        '& svg':{
+            width: '1.5rem !important',
+            height: '1.5rem !important'
+        }
     }
 }));

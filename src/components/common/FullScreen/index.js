@@ -13,7 +13,7 @@ import {
   faShareAlt,
 } from "@fortawesome/free-solid-svg-icons"
 
-const FullScreen = ({componentItems, setScreen, showScreen, paper, share, handleShare, full, showClose}) => {
+const FullScreen = ({componentItems, setScreen, showScreen, paper, share, handleShare, full, showClose, outside}) => {
 
     const classes = useStyles()
     const [ isFullscreenOpen, setIsFullscreenOpen ] = useState(typeof showScreen !== 'undefined' ? showScreen : false)

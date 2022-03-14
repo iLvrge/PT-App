@@ -6,6 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 import { useSelector, useDispatch } from 'react-redux'
 import useStyles from './styles'
+import clsx from 'clsx'
 import moment from 'moment'
 import CardElement from './CardElement'
 import ClientList from './ClientList'
@@ -185,12 +186,13 @@ const Reports = (props) => {
                         </IconButton>                            
                         <IconButton size="small"
                             onClick={() => {props.handleFullScreen(!props.fullScreen)}}
+                            className={clsx(classes.actionIcon, typeof props.standalone !== 'undefined' ? classes.fontStandalone : '' )}
                         >
                             <Tooltip 
                                 title={
                                     <Typography color="inherit" variant='body2'> { typeof props.standalone !== 'undefined' ? 'Close' : 'Fullscreen' }</Typography>
                                 } 
-                                className={classes.tooltip}  
+                                className={classes.tooltip}      
                                 placement='right'
                                 enterDelay={0}
                                 TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
