@@ -193,8 +193,8 @@ export default makeStyles(theme => ({
     },
     shareIcon:{
         '& svg':{
-            width: '1rem',
-            height: '1rem'
+            width: '1rem !important',
+            height: '1rem !important'
         }
     }
 }));
