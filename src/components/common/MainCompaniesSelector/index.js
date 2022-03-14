@@ -678,8 +678,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }
         disableRow={true}
         disableRowKey={'status'}  
-        defaultSortField={`original_name`}
-        defaultSortDirection={`desc`}
+        /* defaultSortField={`original_name`}
+        defaultSortDirection={`desc`} */
         responsive={true}
         noBorderLines={true}
         width={width} 
