@@ -97,7 +97,7 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
           headerWidth: 20,
           label: '',
           dataKey: 'tab_id',
-          role: 'checkbox',
+          role: 'none',
           disableSort: true,
           enable: false
         },
