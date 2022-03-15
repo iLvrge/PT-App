@@ -21,6 +21,7 @@ const CardElement = ({card, id, active, type, handleList, handleClick}) => {
                     handleList={handleList} 
                     active={active}
                     type={type}
+                    card={card}  
                 />  
             </CardContent>  
         </Card>

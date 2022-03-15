@@ -188,8 +188,12 @@ export default makeStyles(theme => ({
     actionButton: {
         position: 'absolute',
         bottom: 10,
-        left: 'calc(50% - 40px)',
-        textTransform: 'initial'
+        left: 0,
+        right: 0,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        width: 'fit-content',
+        textTransform: 'initial'  
     },
     shareIcon:{
         '& svg':{

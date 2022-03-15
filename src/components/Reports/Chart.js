@@ -17,7 +17,9 @@ const Chart = (props) => {
             <IconButton 
                 size="small" 
                 onClick={() => props.handleClick(props.id)} 
-                className={clsx(classes.exampleButton, props.active === props.id ? classes.active : '')}>
+                className={clsx(classes.exampleButton, props.active === props.id ? classes.active : '')}
+                disabled={parseInt(props.card?.number) == 0 ? true : false}
+            >
                 <AutoAwesomeIcon />
             </IconButton>
             <GaugeChart
@@ -25,7 +27,7 @@ const Chart = (props) => {
                 nrOfLevels={420}
                 arcsLength={arcs}
                 colors={['#5BE12C', '#F5CD19', '#EA4228']}
-                percent={0.37}
+                percent={parseFloat(parseFloat(props.card.number / 100).toFixed(2))}
                 arcPadding={0.02}
                 marginInPercent={0.03}
                 className={'gauge'}

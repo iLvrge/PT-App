@@ -18,151 +18,174 @@ import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton 
 import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar'
 import { controlList } from "../../utils/controlList"
 
+import PatenTrackApi from '../../api/patenTrack2'
+
+const LIST = [
+    {
+        title: 'Chain-of-Title',
+        sub_heading: 'patents ad ad d ad ad ad',
+        number: 0,
+        patent: '',
+        application: '',
+        rf_id: '',
+        type: 1
+    },
+    {
+        title: 'Lost Patents',
+        sub_heading: 'assignee has a typo',
+        number: 0,
+        patent: '',
+        application: '',
+        rf_id: '',
+        type: 2
+    },
+    {
+        title: 'Encumbrances',
+        sub_heading: 'irrelevant assignee recorded on your patents',
+        number: 0,
+        patent: '',
+        application: '',
+        rf_id: '',
+        type: 3
+    },
+    {
+        title: 'Wrong addresses',
+        sub_heading: 'adress',
+        number: 0,
+        patent: '',
+        application: '',
+        rf_id: '',
+        type: 4
+    },
+    {
+        title: 'Wrong Lawyers',
+        sub_heading: 'typo in the name of lawyer, wrong lawyer addres, no longer works with that lawyer',
+        number: 0,
+        patent: '',
+        application: '',
+        rf_id: '',
+        type: 5
+    },
+    {
+        title: 'Unecessary Patents',
+        sub_heading: 'patents',
+        number: 0,
+        patent: '',
+        application: '',
+        rf_id: '',
+        type: 6
+    },
+    {
+        title: 'Missed monetization',
+        sub_heading: 'abandoned patents',
+        number: 0,
+        patent: '',
+        application: '',
+        rf_id: '',
+        type: 7
+    },
+    {
+        title: 'Late Maintainance',
+        sub_heading: 'Surcharge payments  number of the maintainance actvities',
+        number: 0,
+        patent: '',
+        application: '',
+        rf_id: '',
+        type: 8
+    },
+    {
+        title: 'Incorrect Recordings',
+        sub_heading: 'typo in the name of lawyer, wrong lawyer addres, no longer works with that lawyer',
+        number: 0,
+        patent: '',
+        application: '',
+        rf_id: '',
+        type: 9
+    },
+    {
+        title: 'Late recordings',
+        sub_heading: 'patents',
+        number: 0,
+        patent: '',
+        application: '',
+        rf_id: '',
+        type: 10
+    },
+    {
+        title: 'Deflated Collateral',
+        sub_heading: 'abandoned patents',
+        number: 0,
+        patent: '',
+        application: '',
+        rf_id: '',
+        type: 11
+    },
+    {
+        title: 'Challenged',
+        sub_heading: 'Surcharge payments  number of the maintainance actvities',
+        number: 0,
+        patent: '',
+        application: '',
+        rf_id: '',
+        type: 12
+    }
+]
 
 const Reports = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const DATE_FORMAT = 'MMM DD, YYYY'
     const [activeId, setActiveId] = useState(-1)
-    const profile = useSelector(store => (store.patenTrack.profile))
-    const cardsList = [
-        {
-            title: 'Chain-of-Title',
-            sub_heading: 'patents ad ad d ad ad ad',
-            number: 72,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 1
-        },
-        {
-            title: 'Lost Patents',
-            sub_heading: 'assignee has a typo',
-            number: 20,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 2
-        },
-        {
-            title: 'Encumbrances',
-            sub_heading: 'irrelevant assignee recorded on your patents',
-            number: 72,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 3
-        },
-        {
-            title: 'Wrong addresses',
-            sub_heading: 'adress',
-            number: 124,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 4
-        },
-        {
-            title: 'Wrong Lawyers',
-            sub_heading: 'typo in the name of lawyer, wrong lawyer addres, no longer works with that lawyer',
-            number: 72,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 5
-        },
-        {
-            title: 'Unecessary Patents',
-            sub_heading: 'patents',
-            number: 72,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 6
-        },
-        {
-            title: 'Missed monetization',
-            sub_heading: 'abandoned patents',
-            number: 72,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 7
-        },
-        {
-            title: 'Late Maintainance',
-            sub_heading: 'Surcharge payments  number of the maintainance actvities',
-            number: 72,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 8
-        },
-        {
-            title: 'Incorrect Recordings',
-            sub_heading: 'typo in the name of lawyer, wrong lawyer addres, no longer works with that lawyer',
-            number: 72,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 9
-        },
-        {
-            title: 'Late recordings',
-            sub_heading: 'patents',
-            number: 72,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 10
-        },
-        {
-            title: 'Deflated Collateral',
-            sub_heading: 'abandoned patents',
-            number: 72,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 11
-        },
-        {
-            title: 'Challenged',
-            sub_heading: 'Surcharge payments  number of the maintainance actvities',
-            number: 72,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 12
-        }
-    ]
+    const profile = useSelector(store => (store.patenTrack.profile))    
+    const [cardList, setCardList] = useState(LIST)
     const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
+    
+
     useEffect(() => {
-        console.log("activeId", activeId)
-    }, [activeId])
+        if(selectedCompanies.length > 0) {
+            const findDashboardData = async() => {
+                const {data} = await PatenTrackApi.getDashboardData(selectedCompanies)
+                if(data !== null && data.length > 0) {
+                    setCardList(data)
+                } else {
+                    setCardList(LIST)
+                }
+            }
+            findDashboardData()
+        } else {   
+            setCardList(LIST)
+        }
+    }, [selectedCompanies])
+
     const companyname = useMemo(() => {
         return selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])
     }, [selectedCompanies, companiesList])
 
     const onHandleClick = useCallback((id) => {
-        let showItem = id != activeId ? true : false
-        console.log("showItem", id, activeId, showItem)
-        setActiveId(id != activeId ? id : -1)
-        dispatch(setDashboardPanel( showItem ))        
-        props.checkChartAnalytics(null, null, showItem)
-        if(showItem === true) {
-            dispatch(
-                setAssetsIllustration({
-                    type: "patent",
-                    id: "8735067",
-                    flag: 1
-                }),
-            );
-        } else {
-            dispatch(setAssetsIllustration(null))
+        const card = cardList[id]
+        console.log("showcard", card)
+        if(card.number > 0) {
+            let showItem = id != activeId ? true : false
+            console.log("showItem", id, activeId, showItem)
+            setActiveId(id != activeId ? id : -1)
+            dispatch(setDashboardPanel( showItem ))        
+            props.checkChartAnalytics(null, null, showItem)
+            if(showItem === true) {
+                if(card.type == 1) {
+                    dispatch(
+                        setAssetsIllustration({
+                            type: "patent",
+                            id: card.patent !== '' ? card.patent : card.application,
+                            flag: card.patent !== '' ? 1 : 0
+                        }),
+                    );
+                }       
+            } else {
+                dispatch(setAssetsIllustration(null))
+            }
         }
-        
-    }, [dispatch, activeId, props.chartsBar, props.analyticsBar, props.checkChartAnalytics])
+    }, [dispatch, activeId, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, cardList])
 
     const onHandleList = useCallback((id) => {
         console.log("onHandleList", id) 
@@ -191,10 +214,7 @@ const Reports = (props) => {
                 }
                 resetAllRowSelect(dispatch, resetItemList.resetAll)
                 resetAllRowSelect(dispatch, resetItemList.clearOtherItems)
-                setTimeout(() => {
-                    dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))      
-                }, 100)
-                
+                dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))                
                 if(id === 0) {
                     dispatch(setSwitchAssetButton(1))
                 }
@@ -271,20 +291,20 @@ const Reports = (props) => {
                     alignItems="flex-start"
                 >
                     {
-                        cardsList.map( (card, index) => (
+                        cardList.map( (card, index) => (
                             <Grid
                                 item lg={3} md={4} sm={6} 
                                 className={classes.flexColumn}
+                                key={`card_${index}`}
                             >
                                 <CardElement 
-                                    key={`card_${index}`}
                                     card={card}
                                     id={index}
                                     active={activeId}
                                     handleClick={onHandleClick}
                                     handleList={onHandleList}
                                     type={card.type}  
-                                />
+                                />  
                             </Grid>
                         ))
                     }

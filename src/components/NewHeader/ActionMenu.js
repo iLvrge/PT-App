@@ -706,55 +706,13 @@ const ActionMenu = (props) => {
         }
         if( findIndex !== -1 ) {
             //hideMenu(event, controlList[findIndex])
-            resetAll()
-            clearOtherItems()
+            props.resetAll()
+            props.clearOtherItems()
             dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))      
             dispatch(setSwitchAssetButton(controlList[findIndex].category == 'due_dilligence' ? 0 : 1))
         }
     }
-    const resetAll = () => {
-        dispatch(setAssetTypes([]))
-        dispatch(setAssetTypeCompanies({ list: [], total_records: 0 }))
-        dispatch(setAssetTypeInventor({ list: [], total_records: 0 }))
-        dispatch(setAssetTypeAssignments({ list: [], total_records: 0 }))
-        dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
-        dispatch(setAssetTypesPatentsSelected([]))
-        dispatch(setAssetTypesPatentsSelectAll(false))
-        dispatch(setAllAssignments(false))
-        dispatch(setSelectAssignments([]))	
-        dispatch(setSelectAssignmentCustomers([]))
-        dispatch(setAllAssignmentCustomers(false))
-    }
-
-    const clearOtherItems = () => {
-        dispatch(setAssetsIllustration(null))
-        dispatch(setAssetsIllustrationData(null))
-        dispatch(setSelectedAssetsTransactions([]))
-        dispatch(setSelectedAssetsPatents([]))
-        dispatch(setSlackMessages([]))
-        dispatch(
-            setPDFFile(
-            { 
-                document: '',  
-                form: '', 
-                agreement: '' 
-            }
-            )
-        )
-        dispatch(
-            setPDFView(false)
-        )
-        dispatch(setAssetsIllustrationData(null))
-        dispatch(setAssetsIllustration(null)) 
-        dispatch(toggleLifeSpanMode(true))
-        dispatch(toggleFamilyMode(false))
-        dispatch(toggleUsptoMode(false))
-        dispatch(toggleFamilyItemMode(false))	
-        dispatch( setAllAssetTypes( false ) )
-        dispatch( setAssetTypesSelect([]))	
-        dispatch( setAllAssignmentCustomers( false ))
-        dispatch( setSelectAssignmentCustomers([]))														
-    }
+    
 
     const onHandleTimeline = () => {
         setAnchorEl(null)
@@ -846,10 +804,10 @@ const ActionMenu = (props) => {
                 }    
                 <Divider />
                 <MenuItem className={classes.disableHover}>
-                    <ListItemText><span className={classes.disabled}>Pro:</span> {parseInt(profile?.user?.organisation?.subscribtion) === 1 ? <Button variant="text">Upgrade</Button> : '' }</ListItemText>
+                    <ListItemText><span className={clsx(parseInt(profile?.user?.organisation?.subscribtion) < 2 ? classes.disabled : '')}>Pro:</span> {parseInt(profile?.user?.organisation?.subscribtion) === 1 ? <Button variant="text">Upgrade</Button> : '' }</ListItemText>
                 </MenuItem>
                 {
-                    parseInt(profile?.user?.organisation?.subscribtion) === 2
+                    parseInt(profile?.user?.organisation?.subscribtion) === 2 
                     ?   
                         [                            
                             <AssetSwitchButton
@@ -921,7 +879,7 @@ const ActionMenu = (props) => {
                 }
                 <Divider />
                 <MenuItem className={classes.disableHover} >
-                    <ListItemText><span className={classes.disabled}>Enterprise:</span> {parseInt(profile?.user?.organisation?.subscribtion) < 3 ? <Button variant="text">Upgrade</Button> : '' }</ListItemText>
+                    <ListItemText><span className={clsx(parseInt(profile?.user?.organisation?.subscribtion) < 3 ? classes.disabled : '')}>Enterprise:</span> {parseInt(profile?.user?.organisation?.subscribtion) < 3 ? <Button variant="text">Upgrade</Button> : '' }</ListItemText>
                 </MenuItem>
                 {
                     parseInt(profile?.user?.organisation?.subscribtion) == 3 && link_assets_sheet_display === true && link_assets_selected.length > 0  && (

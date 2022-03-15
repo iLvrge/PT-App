@@ -508,6 +508,9 @@ export default makeStyles(theme => ({
         },
         '& .MuiMenuItem-root.Mui-disabled':{ 
             pointerEvents: 'all'
+        },
+        '& svg':{
+            fill: "currentcolor"
         }
     },
     uspto_logo: {

@@ -708,6 +708,10 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/address`, getHeader())
   }
 
+  static getDashboardData(companies) {
+    return axios.get(`${base_new_api_url}/dashboards?companies=${JSON.parse(companies)}`, getHeader())
+  }
+
   static getLawFirms() {
     return axios.get(`${base_new_api_url}/lawfirm`, getHeader())
   }
