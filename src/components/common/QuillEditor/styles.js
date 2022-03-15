@@ -7,10 +7,10 @@ export default makeStyles(theme => ({
       background: theme.palette.background.default
     },
     '& .ql-toolbar':{
-      background: theme.palette.action.hover
+      background: theme.palette.background.paper
     },
-    '& .ql-container.ql-snow, .ql-toolbar.ql-snow':{
-      border: `1px solid ${theme.palette.action.disabledBackground}`
+    '& .ql-container.ql-snow, .ql-toolbar.ql-snow':{     
+      border: `1px solid ${theme.palette.divider}`
     },
     '&.ql-snow .ql-picker, .ql-toolbar, .ql-container, .ql-picker-label, .ql-picker-label svg, .ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button, .ql-snow.ql-toolbar button svg, .ql-snow .ql-toolbar button svg, .ql-snow .ql-stroke, .ql-picker-label':{
       color: theme.palette.action.active,

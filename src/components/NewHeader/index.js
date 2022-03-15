@@ -741,12 +741,12 @@ const onHandleTimelineScreen = (event) => {
                     <ListItemIcon  color='inherit' >
                         {
                           isDarkTheme ?
-                            <DarkModeOutlinedIcon/>
+                            <LightModeOutlinedIcon/>  
                           :
-                            <LightModeOutlinedIcon/>
+                          <DarkModeOutlinedIcon/>
                         }
                     </ListItemIcon>
-                    <ListItemText primary={isDarkTheme ? `Dark Mode` : `Ligh Mode`} />
+                    <ListItemText primary={isDarkTheme ? `Light Mode` : `Dark Mode` } />
                   </ListItem>
                   
                   {

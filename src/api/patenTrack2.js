@@ -709,7 +709,7 @@ class PatenTrackApi {
   }
 
   static getDashboardData(companies) {
-    return axios.get(`${base_new_api_url}/dashboards?companies=${JSON.parse(companies)}`, getHeader())
+    return axios.get(`${base_new_api_url}/dashboards?companies=${JSON.stringify(companies)}`, getHeader())
   }
 
   static getLawFirms() {
