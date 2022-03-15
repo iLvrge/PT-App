@@ -94,6 +94,7 @@ const GlobalScreen = ({
     handleCustomerButton,
     openCustomerBar,
     handleCustomersBarOpen,
+    handleCommentBarOpen,
     toggleCustomerButtonType,
     customerButtonVisible,
     commentBarSize,
@@ -646,6 +647,7 @@ const GlobalScreen = ({
                                                 fn={resizePane}
                                                 fnParams={setCommentBarSize}
                                                 commentBar={openCommentBar}
+                                                openCustomerBar={openCustomerBar}
                                                 illustrationBar={openIllustrationBar}
                                                 fnVarName={`split5`}
                                                 fn2={resizePane2}
@@ -667,6 +669,8 @@ const GlobalScreen = ({
                                                 assignmentBarToggle={handleAssignmentBarOpen}
                                                 setAnalyticsBar={setAnalyticsBar}
                                                 setChartBar={setChartBar}
+                                                handleCommentBarOpen={handleCommentBarOpen}
+                                                handleCustomersBarOpen={handleCustomersBarOpen}
                                             /> 
                                         </div>
                                         <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>

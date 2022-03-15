@@ -11,13 +11,20 @@ import moment from 'moment'
 import CardElement from './CardElement'
 import ClientList from './ClientList'
 import { Fullscreen, Close, Share } from '@mui/icons-material';
-import { setDashboardPanel } from '../../actions/uiActions'
-import { setAssetsIllustration } from '../../actions/patentTrackActions2'
+import { setDashboardPanel,
+    setTimelineScreen,
+    setDashboardScreen } from '../../actions/uiActions'
+import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton  } from '../../actions/patentTrackActions2'
+import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar'
+import { controlList } from "../../utils/controlList"
+
+
 const Reports = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const DATE_FORMAT = 'MMM DD, YYYY'
     const [activeId, setActiveId] = useState(-1)
+    const profile = useSelector(store => (store.patenTrack.profile))
     const cardsList = [
         {
             title: 'Chain-of-Title',
@@ -25,7 +32,8 @@ const Reports = (props) => {
             number: 72,
             patent: '',
             application: '',
-            rf_id: ''
+            rf_id: '',
+            type: 1
         },
         {
             title: 'Lost Patents',
@@ -33,7 +41,8 @@ const Reports = (props) => {
             number: 20,
             patent: '',
             application: '',
-            rf_id: ''
+            rf_id: '',
+            type: 2
         },
         {
             title: 'Encumbrances',
@@ -41,7 +50,8 @@ const Reports = (props) => {
             number: 72,
             patent: '',
             application: '',
-            rf_id: ''
+            rf_id: '',
+            type: 3
         },
         {
             title: 'Wrong addresses',
@@ -49,7 +59,8 @@ const Reports = (props) => {
             number: 124,
             patent: '',
             application: '',
-            rf_id: ''
+            rf_id: '',
+            type: 4
         },
         {
             title: 'Wrong Lawyers',
@@ -57,7 +68,8 @@ const Reports = (props) => {
             number: 72,
             patent: '',
             application: '',
-            rf_id: ''
+            rf_id: '',
+            type: 5
         },
         {
             title: 'Unecessary Patents',
@@ -65,7 +77,8 @@ const Reports = (props) => {
             number: 72,
             patent: '',
             application: '',
-            rf_id: ''
+            rf_id: '',
+            type: 6
         },
         {
             title: 'Missed monetization',
@@ -73,7 +86,8 @@ const Reports = (props) => {
             number: 72,
             patent: '',
             application: '',
-            rf_id: ''
+            rf_id: '',
+            type: 7
         },
         {
             title: 'Late Maintainance',
@@ -81,7 +95,8 @@ const Reports = (props) => {
             number: 72,
             patent: '',
             application: '',
-            rf_id: ''
+            rf_id: '',
+            type: 8
         },
         {
             title: 'Incorrect Recordings',
@@ -89,7 +104,8 @@ const Reports = (props) => {
             number: 72,
             patent: '',
             application: '',
-            rf_id: ''
+            rf_id: '',
+            type: 9
         },
         {
             title: 'Late recordings',
@@ -97,7 +113,8 @@ const Reports = (props) => {
             number: 72,
             patent: '',
             application: '',
-            rf_id: ''
+            rf_id: '',
+            type: 10
         },
         {
             title: 'Deflated Collateral',
@@ -105,7 +122,8 @@ const Reports = (props) => {
             number: 72,
             patent: '',
             application: '',
-            rf_id: ''
+            rf_id: '',
+            type: 11
         },
         {
             title: 'Challenged',
@@ -113,7 +131,8 @@ const Reports = (props) => {
             number: 72,
             patent: '',
             application: '',
-            rf_id: ''
+            rf_id: '',
+            type: 12
         }
     ]
     const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
@@ -144,6 +163,44 @@ const Reports = (props) => {
         }
         
     }, [dispatch, activeId, props.chartsBar, props.analyticsBar, props.checkChartAnalytics])
+
+    const onHandleList = useCallback((id) => {
+        console.log("onHandleList", id) 
+        /* process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' */
+        let subscription = parseInt(profile?.user?.organisation?.subscribtion)
+        if( subscription === 2 || subscription === 3 ) {
+            let findIndex = -1
+            if(id === 0) {                
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
+            } else if(id === 8 && subscription > 2) {
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'pay_maintainence_fee')
+            } else if(id === 3 && subscription > 2) {
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'clear_encumbrances')
+            } else if(id === 4 && subscription > 2) {
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'correct_names')
+            }
+            console.log("findIndex", findIndex, resetItemList)
+            if( findIndex !== -1 ) {
+                dispatch(setDashboardScreen(false))
+                dispatch(setTimelineScreen(true))
+                if(props.openCustomerBar === false){
+                    props.handleCustomersBarOpen()
+                }
+                if(props.openCommentBar === false){
+                    props.handleCommentBarOpen()
+                }
+                resetAllRowSelect(dispatch, resetItemList.resetAll)
+                resetAllRowSelect(dispatch, resetItemList.clearOtherItems)
+                setTimeout(() => {
+                    dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))      
+                }, 100)
+                
+                if(id === 0) {
+                    dispatch(setSwitchAssetButton(1))
+                }
+            }
+        }
+    }, [dispatch, activeId, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, props.openCustomerBar, props.openCommentBar])
     return (
         <Grid
             container
@@ -225,6 +282,8 @@ const Reports = (props) => {
                                     id={index}
                                     active={activeId}
                                     handleClick={onHandleClick}
+                                    handleList={onHandleList}
+                                    type={card.type}  
                                 />
                             </Grid>
                         ))

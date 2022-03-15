@@ -5,7 +5,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Chart from './Chart'
 import useStyles from './styles'
 
-const CardElement = ({card, id, active, handleClick}) => {
+const CardElement = ({card, id, active, type, handleList, handleClick}) => {
     const classes = useStyles();
     return (
         <Card variant="outlined" className={classes.card} square={true}>
@@ -18,7 +18,9 @@ const CardElement = ({card, id, active, handleClick}) => {
                 <Chart 
                     id={id}
                     handleClick={handleClick}
+                    handleList={handleList} 
                     active={active}
+                    type={type}
                 />  
             </CardContent>  
         </Card>

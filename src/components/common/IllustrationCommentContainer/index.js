@@ -29,6 +29,7 @@ const IllustrationCommentContainer = ({
     fn, 
     fnParams, 
     commentBar, 
+    openCustomerBar,
     illustrationBar, 
     fnVarName, 
     fn2, 
@@ -49,7 +50,9 @@ const IllustrationCommentContainer = ({
     assignmentBarToggle,
     setChartBar,
     setAnalyticsBar,
-    type }) => {
+    type,
+    handleCommentBarOpen,
+    handleCustomersBarOpen }) => {
     const classes = useStyles() 
     const iframeRef = useRef()
     const illustrationRef = useRef()
@@ -96,7 +99,11 @@ const IllustrationCommentContainer = ({
             handleFullScreen: setDashboardFullScreen,
             chartsBar: chartsBar,
             analyticsBar: analyticsBar,
-            checkChartAnalytics: checkChartAnalytics  
+            checkChartAnalytics: checkChartAnalytics,
+            openCustomerBar: openCustomerBar,
+            openCommentBar: commentBar,
+            handleCommentBarOpen: handleCommentBarOpen,
+            handleCustomersBarOpen: handleCustomersBarOpen
         }
     ] 
     useEffect(() => {
@@ -120,7 +127,7 @@ const IllustrationCommentContainer = ({
         setCommentButtonVisible( flag )
     }
 
-    const handleCommentBarOpen = () => {
+    /* const handleCommentBarOpen = () => {
         setToggleCommentButtonType( !toggleCommentButtonType )
         setCommentOpenBar( !openCommentBar )
         if(!openCommentBar === false) {
@@ -128,7 +135,7 @@ const IllustrationCommentContainer = ({
         } else {
             fnParams('30%')
         }
-    }
+    } */
 
     const handleClickOpenFullscreen = () => {
         setIsFullscreenOpen(true)
@@ -219,6 +226,10 @@ const IllustrationCommentContainer = ({
                                 chartsBar={chartsBar}
                                 analyticsBar={analyticsBar}
                                 checkChartAnalytics={checkChartAnalytics}
+                                openCustomerBar={openCustomerBar}
+                                openCommentBar={commentBar}
+                                handleCommentBarOpen={handleCommentBarOpen}
+                                handleCustomersBarOpen={handleCustomersBarOpen}
                             /> 
                         :
                         showManualComponent === true && menuComponent.length > 0

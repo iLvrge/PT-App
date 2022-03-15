@@ -61,7 +61,7 @@ import CompanySummary from '../common/CompanySummary'
 import ActionMenu from './ActionMenu'
 /* import ClipboardAssets from './ClipboardAssets' */
 import FullScreen from '../common/FullScreen'
-import Reports from '../Reports'
+
 import { signOut } from '../../actions/authActions'
 import { getTokenStorage, removeTokenStorage } from '../../utils/tokenStorage'
 import { 
@@ -566,6 +566,8 @@ const onHandleTimelineScreen = (event) => {
           setDashboardScreen={onHandleDashboardScreen}
           seActivityTimeline={onHandleTimelineScreen}
           timelineScreen={timelineScreen} 
+          resetAll={resetAll}
+          clearOtherItems={clearOtherItems}
         />
               
         <div className={classes.rightPanel}>  

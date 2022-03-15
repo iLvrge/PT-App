@@ -1,4 +1,7 @@
 import React, {useState} from 'react'
+import { 
+    useSelector 
+} from 'react-redux'
 import GaugeChart from 'react-gauge-chart'
 import useStyles from './styles'
 import { IconButton, Button } from '@mui/material';
@@ -7,6 +10,8 @@ import clsx from 'clsx'
 const Chart = (props) => {
     const [arcs, setArcs] = useState([0.5, 0.3, 0.2])
     const classes = useStyles();
+    const profile = useSelector(store => (store.patenTrack.profile))
+    
     return (
         <div className={classes.chartContainer}>
             <IconButton 
@@ -25,7 +30,36 @@ const Chart = (props) => {
                 marginInPercent={0.03}
                 className={'gauge'}
             />    
-            <Button size="small" variant="outlined" className={clsx(classes.actionButton)}>Lets Fix it!</Button>   
+            <Button 
+                size="small" 
+                variant="outlined" 
+                className={clsx(classes.actionButton)} 
+                onClick={() => props.handleList(props.id)}
+                disabled={
+                    parseInt(profile?.user?.organisation?.subscribtion) === 1 ? 
+                        true 
+                    :
+                        parseInt(profile?.user?.organisation?.subscribtion) === 2 ? 
+                            (props.type < 3 ) ?
+                                false
+                            :
+                                true
+                        :
+                            parseInt(profile?.user?.organisation?.subscribtion) === 3 ? 
+                                false
+                            :
+                                true
+                }
+            >
+                {   parseInt(profile?.user?.organisation?.subscribtion) > 2 ? 
+                        'Lets Fix it!' 
+                        : 
+                        parseInt(profile?.user?.organisation?.subscribtion) === 2 && (props.type < 3 ) ?
+                            'Lets Fix it!'
+                        :
+                            'Upgrade and Fix it!' 
+                }
+            </Button>   
         </div>
     )
 }
