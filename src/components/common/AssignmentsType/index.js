@@ -106,6 +106,7 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
             minWidth: 30,
             label: '',
             dataKey: 'icon',
+            headingIcon: 'activities', 
             role: 'image',
             imageURL: 'imageURL',
             disableSort: true, 
@@ -122,8 +123,7 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
         {
             width: isMobile === true ? 150 : 100,
             minWidth: isMobile === true ? 150 : 100,
-            label: 'Activities',  
-            headingIcon: 'activities', 
+            label: 'Activities', 
             dataKey: 'tab_name', 
             badge: true,              
         },

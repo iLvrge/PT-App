@@ -54,10 +54,10 @@ const Chart = (props) => {
                 }
             >
                 {   parseInt(profile?.user?.organisation?.subscribtion) > 2 ? 
-                        'Lets Fix it!' 
+                        'Let\'s Fix it!' 
                         : 
                         parseInt(profile?.user?.organisation?.subscribtion) === 2 && (props.type < 3 ) ?
-                            'Lets Fix it!'
+                            'Let\'s Fix it!'
                         :
                             'Upgrade and Fix it!' 
                 }

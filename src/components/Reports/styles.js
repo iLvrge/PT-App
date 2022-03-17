@@ -18,58 +18,19 @@ export default makeStyles(theme => ({
         alignContent: 'start',
         paddingLeft:3,
         paddingTop: 3,
-        '&:nth-child(1)':{
-            paddingLeft:0,
-        },
-        '&:nth-child(5)':{
-            paddingLeft:0,
-        },
-        '&:nth-child(9)':{
-            paddingLeft:0,
-        },
         '& .gauge':{
             display: 'flex',
             justifyContent: 'center',
             flexDirection: 'column',
             alignContent: 'start',
+            alignItems: 'center',
             height: 'calc((100vh - 220px) / 3)', 
             '& svg': {
                 display: 'flex',
-                height: '70%'
+                /* height: '70%' */
             }
         }, 
-        [theme.breakpoints.down('md')]: {
-            height: 'calc((100vh - 102px) / 4)',
-            '& .gauge':{
-                height: 'calc((100vh - 220px) / 4)', 
-            },
-            '&:nth-child(4)':{
-                paddingLeft:0,
-            },
-            '&:nth-child(7)':{
-                paddingLeft:0,
-            },
-            '&:nth-child(10)':{
-                paddingLeft:0,
-            },
-        },
-        [theme.breakpoints.down('sm')]: {
-            '&:nth-child(3)':{
-                paddingLeft:0,
-            },
-            '&:nth-child(5)':{
-                paddingLeft:0,
-            },
-            '&:nth-child(7)':{
-                paddingLeft:0,
-            },
-            '&:nth-child(9)':{
-                paddingLeft:0,
-            },
-            '&:nth-child(11)':{
-                paddingLeft:0,
-            },
-        },
+        
         '& .MuiCard-root': {
             height: '100%'
         },
@@ -173,7 +134,55 @@ export default makeStyles(theme => ({
     },
     list: {
         height: 'calc(100% - 47px)',
-        overflowY: 'auto'
+        overflowY: 'auto',
+        '& .MuiGrid-grid-md-3': {  
+            '&:nth-child(1)':{
+                paddingLeft:0,
+            },
+            '&:nth-child(5)':{
+                paddingLeft:0,
+            },
+            '&:nth-child(9)':{
+                paddingLeft:0,  
+            },
+        },
+        '& .MuiGrid-grid-md-4': {  
+            '&:nth-child(1)':{
+                paddingLeft:0,
+            },     
+            '&:nth-child(4)':{
+                paddingLeft:0,
+            },
+            '&:nth-child(7)':{
+                paddingLeft:0,
+            },
+            '&:nth-child(10)':{
+                paddingLeft:0,
+            },
+        },
+        '& .MuiGrid-grid-sm-6': {
+            '&:nth-child(1)':{
+                paddingLeft:0,
+            }, 
+            '&:nth-child(3)':{
+                paddingLeft:0,
+            },
+            '&:nth-child(5)':{
+                paddingLeft:0,
+            },
+            '&:nth-child(7)':{
+                paddingLeft:0,
+            },
+            '&:nth-child(9)':{
+                paddingLeft:0,
+            },
+            '&:nth-child(11)':{
+                paddingLeft:0,
+            },
+        },
+        '& .MuiGrid-grid-sm-12': {
+            paddingLeft:0,
+        },
     },
     chartContainer: {
         position: 'relative',
@@ -193,7 +202,9 @@ export default makeStyles(theme => ({
         marginLeft: 'auto',
         marginRight: 'auto',
         width: 'fit-content',
-        textTransform: 'initial'  
+        textTransform: 'initial',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis'
     },
     shareIcon:{
         '& svg':{
