@@ -32,7 +32,8 @@ import {
     setAssetTypeInventor,
     setAssetTypeCompanies,
     setAllAssetTypes,
-    setAssetTypesSelect
+    setAssetTypesSelect,
+    setMainCompaniesSelected
 } from '../../actions/patentTrackActions2' 
 
 import { 
@@ -40,7 +41,12 @@ import {
     setPDFView,
 } from '../../actions/patenTrackActions'
 
-import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpanMode } from '../../actions/uiActions'
+import { toggleUsptoMode, 
+    toggleFamilyMode, 
+    toggleFamilyItemMode, 
+    toggleLifeSpanMode,
+    setTimelineScreen,
+    setDashboardScreen } from '../../actions/uiActions'
 
 import PatenTrackApi from '../../api/patenTrack2' 
 
@@ -123,6 +129,9 @@ const GlobalLayout = (props) => {
     const pdfView = useSelector(state => state.patenTrack.pdfView)
     const connectionBoxView = useSelector(state => state.patenTrack.connectionBoxView)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
+    const profile = useSelector(store => (store.patenTrack.profile))
+    const companies = useSelector( state => state.patenTrack2.mainCompaniesList )
+    const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
 
     useEffect(() => {
         editorBar() // run to find editor width
@@ -145,6 +154,73 @@ const GlobalLayout = (props) => {
         window.addEventListener('keydown', handleKeyEvent)
         return () => window.removeEventListener("keydown", handleKeyEvent)
     }, [])
+
+    /**
+     * Only for Account Type: bank
+     */
+
+    useEffect(() => {
+        if(profile?.user && profile.user?.organisation) {
+            if(profile.user.organisation.organisation_type == 'Bank') {
+                dispatch( setAssetTypesSelect([5]) ) // always select by default lending activity
+                setOpenBar( false ) //company
+                setTypeOpenBar( false ) //activites
+                setOtherPartyOpenBar( true ) // parties
+                setCustomerOpenBar( false ) //assets
+                setCompanyBarSize(0) //company container
+                setCustomerBarSize(0) // Assets Container
+                setOtherPartyBarSize(150) // Parties Container
+                setPartyBarSize('100%')
+                dispatch(setTimelineScreen(false)) //Disable Timeline
+                dispatch(setDashboardScreen(true)) //Show Dashboard
+                handleCommentBarOpen() //Close comment
+            }
+        }
+    }, [dispatch, profile])
+
+    useEffect(() => {
+        if(profile?.user && profile.user?.organisation) {
+            if(profile.user.organisation.organisation_type == 'Bank') {
+                if(selectedCompanies.length === 0) {
+                    const getSelectedCompanies = async() => {
+                        if( companies.list.length > 0 ) {
+                            /**
+                             * Send Request to server
+                             */
+                            const { data } = await PatenTrackApi.getUserCompanySelections();
+                            if(data != null && data.list.length > 0) {
+                                if(selectedCompanies.length == 0) {
+                                    let oldItems = [], groups = []
+                                    if(selectedCategory === 'correct_names') { 
+                                        dispatch(setMainCompaniesSelected([data.list[0].representative_id], []))
+                                    } else {
+                                        const promise =  data.list.map( representative => {
+                                            /**
+                                             * If selected item is Group then select all the companies under group
+                                             */
+                                            if(parseInt(representative.type) === 1) {
+                                                groups.push(parseInt(representative.representative_id))
+                                                const parseChild = JSON.parse(representative.child)
+                                                if(parseChild.length > 0) {
+                                                    oldItems = [...oldItems, ...parseChild]
+                                                    oldItems = [...new Set(oldItems)]
+                                                }
+                                            } else {
+                                                oldItems.push(parseInt(representative.representative_id))
+                                            }
+                                        })
+                                        await Promise.all(promise)
+                                        dispatch(setMainCompaniesSelected(oldItems, groups))
+                                    }                        
+                                }
+                            } 
+                        }            
+                    }  
+                    getSelectedCompanies()
+                }
+            }
+        }
+    }, [dispatch, companies, profile, selectedCompanies])
     /*
     useEffect(() => {
         window.addEventListener('resize', handleResize)
@@ -253,7 +329,6 @@ const GlobalLayout = (props) => {
             setCustomerOpenBar( true ) //assets
             setAssignmentOpenBar( true ) //transactions
             setVisualizerBarSize('48.7%')
-            console.log("useEffect type 255")
             setChartBar(true)
             setAnalyticsBar(true)
             setCompanyBarSize(0) // company bar size

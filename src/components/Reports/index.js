@@ -24,7 +24,7 @@ import PatenTrackApi from '../../api/patenTrack2'
 const LIST = [
     {
         title: 'Chain-of-Title',
-        sub_heading: 'patents ad ad d ad ad ad',
+        sub_heading: 'patents ad ad d ad ad ad', 
         number: 0,
         patent: '',
         application: '',
@@ -157,13 +157,13 @@ const Reports = (props) => {
             resizeObserver = new ResizeObserver(entries => {   
                 setLoading(true)             
                 const { width } = entries[0].contentRect;
-                if(width > 360 && width < 601 ) {
+                if(width > 0 && width < 601 ) {
                     setGrid({
-                        lg:6,
-                        md:6,
-                        sm:6,
-                        xs:6,
-                        xl:6
+                        lg:12,
+                        md:12,
+                        sm:12,
+                        xs:12,
+                        xl:12
                     })
                 } else if (width > 600 && width < 900) {
                     setGrid({
@@ -173,7 +173,7 @@ const Reports = (props) => {
                         xs:4,
                         xl:4
                     })
-                }  else if ( width < 361) {
+                }/*   else if ( width < 361) {
                     setGrid({
                         lg:12,
                         md:12,
@@ -181,7 +181,7 @@ const Reports = (props) => {
                         xs:12,
                         xl:12
                     })
-                } else {
+                } */ else {
                     setGrid(GRID_ITEM)
                 }
                 setLoading(false)    
@@ -200,7 +200,7 @@ const Reports = (props) => {
         if(selectedCompanies.length > 0) {
             setLoading(true)
             const findDashboardData = async() => {
-                const {data} = await PatenTrackApi.getDashboardData([selectedCompanies[selectedCompanies.length - 1]])
+                const {data} = await PatenTrackApi.getDashboardData(selectedCompanies)
                 setLoading(false)
                 if(data !== null && data.length > 0) {
                     setCardList(data)

@@ -11,6 +11,11 @@ const Chart = (props) => {
     const [arcs, setArcs] = useState([0.5, 0.3, 0.2])
     const classes = useStyles();
     const profile = useSelector(store => (store.patenTrack.profile))
+
+    const displayNumber = (value) => {
+        console.log("value", value, parseFloat(parseFloat(props.card.number / 100).toFixed(2)))
+        return props.card.number
+    }
     
     return (
         <div className={classes.chartContainer}>
@@ -31,6 +36,8 @@ const Chart = (props) => {
                 arcPadding={0.02}
                 marginInPercent={0.03}
                 className={'gauge'}
+                /* hideText={true} */
+                formatTextValue={displayNumber}
             />    
             <Button 
                 size="small" 

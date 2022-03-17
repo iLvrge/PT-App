@@ -1,7 +1,5 @@
 import React from 'react'
-import { Card, CardContent, CardActions, Typography, Button, IconButton }  from '@mui/material'
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import Tooltip from '@mui/material/Tooltip';
+import { Card, CardContent, CardActions, Typography, Button, IconButton, Tooltip }  from '@mui/material'
 import Chart from './Chart'
 import useStyles from './styles'
 
@@ -11,9 +9,11 @@ const CardElement = ({card, id, active, type, handleList, handleClick}) => {
         <Card variant="outlined" className={classes.card} square={true}>
             <CardContent>           
                 <Tooltip title="Tooltip" placement="right">
-                    <Typography variant="h6" component="div" align="center" className={classes.border}>
-                        {card.title}
-                    </Typography>
+                    <div>
+                        <Typography variant="h6" component="div" align="center" className={classes.border}>
+                            {card.title}
+                        </Typography>
+                    </div>                    
                 </Tooltip>
                 <Chart 
                     id={id}
@@ -21,7 +21,7 @@ const CardElement = ({card, id, active, type, handleList, handleClick}) => {
                     handleList={handleList} 
                     active={active}
                     type={type}
-                    card={card}  
+                    card={card}    
                 />  
             </CardContent>  
         </Card>

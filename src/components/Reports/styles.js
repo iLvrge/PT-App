@@ -23,8 +23,9 @@ export default makeStyles(theme => ({
             justifyContent: 'center',
             flexDirection: 'column',
             alignContent: 'start',
-            alignItems: 'center',
             height: 'calc((100vh - 220px) / 3)', 
+            flexBasis: 250,
+            maxWidth: 250,
             '& svg': {
                 display: 'flex',
                 /* height: '70%' */
@@ -186,7 +187,8 @@ export default makeStyles(theme => ({
     },
     chartContainer: {
         position: 'relative',
-        display: 'flex'
+        display: 'flex',
+        justifyContent: 'center'
     },
     exampleButton: {
         position: 'absolute',

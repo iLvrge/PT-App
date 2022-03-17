@@ -1385,7 +1385,6 @@ export const setPDFView = (view) => {
 }
 
 export const setPDFFile = ( file ) => {
-  console.log("setPDFFile => action", file)
   return {
     type: types.SET_PDF_FILE,
     file
