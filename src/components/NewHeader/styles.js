@@ -92,7 +92,11 @@ export default makeStyles(theme => ({
         marginRight: 15,
         fill: theme.palette.text.primary,
     }, 
-
+    siteLogoLight:{
+        height: '2rem',
+        marginRight: 15,
+        fill: theme.palette.text.primary,
+    },
     userLogo: {
         display: 'flex',
         alignItems: 'center',

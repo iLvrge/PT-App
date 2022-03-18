@@ -562,7 +562,7 @@ const onHandleTimelineScreen = useCallback((event) => {
     <AppBar className={classes.root} color='transparent' position='relative'>
       <Toolbar className={classes.toolbar}>
         <span className={classes.logoContainer}>
-          <img src={isDarkTheme ? siteLogo : siteLogoLightMode} className={classes.siteLogo} alt={''} />          
+          <img src={isDarkTheme ? siteLogo : siteLogoLightMode} className={isDarkTheme ? classes.siteLogo: classes.siteLogoLight} alt={''} />          
         </span>
         <span onClick={(e) => handleControlModal( e, !controlModal )} className={classes.companyLogoCon}>
           {
