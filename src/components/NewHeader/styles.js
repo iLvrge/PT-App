@@ -87,7 +87,8 @@ export default makeStyles(theme => ({
     siteLogo: {
         /* width: LOGO_WIDTH,
         maxWidth: 'calc(100% - 30px)', */
-        height: '2.7rem',
+        /* height: '2.7rem', */
+        height: '3.1rem',
         marginRight: 15,
         fill: theme.palette.text.primary,
     }, 

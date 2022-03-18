@@ -376,7 +376,7 @@ const GlobalLayout = (props) => {
             setOtherPartyOpenBar( false ) // parties
             setCustomerOpenBar( true ) //assets
             setAssignmentOpenBar( true ) //transactions
-            setVisualizerBarSize('48.7%')
+            setVisualizerBarSize('40.1%')
             setChartBar(true)
             setAnalyticsBar(true)
             setCompanyBarSize(0) // company bar size
@@ -698,20 +698,20 @@ const GlobalLayout = (props) => {
 
     const changeVisualBar = (chart, analytics, comment, illustration) => {
         console.log("changeVisualBar")
-        let barOpen = true, barSize = '48.7%'        
+        let barOpen = true, barSize = '40.1%'        
         if(chart === false && analytics === false && (comment === true || illustration === true) && usptoMode === false && connectionBoxView === false){
             barSize = '0%'
             barOpen = false
         } else if (comment === false && illustration === false && ( chart === true ||  analytics === true )) {
             barSize = '100%'
         }
-        if(barSize === '48.7%' && ((comment === true || illustration === true) || (chart === true || analytics === true)) ){
-            if( visualizerBarSize !== '0%' &&  visualizerBarSize !== '48.7%' &&  visualizerBarSize !== '100%' ) {
+        if(barSize === '40.1%' && ((comment === true || illustration === true) || (chart === true || analytics === true)) ){
+            if( visualizerBarSize !== '0%' &&  visualizerBarSize !== '40.1%' &&  visualizerBarSize !== '100%' ) {
                 barSize = visualizerBarSize
             }
         }
         
-        if(chart === true && barOpen === true && barSize == '48.7%') {
+        if(chart === true && barOpen === true && barSize == '40.1%') {
             checkPDFHeight()
         }    
         editorBar()
@@ -796,7 +796,6 @@ const GlobalLayout = (props) => {
         }   
         if(!bar === true) {
             if(isMobile) {
-                console.log("handleAnalyticsBarOpen => index 673")
                 setIllustrationBar(false)
                 setCommentBar(false)
                 setChartBar(false)
@@ -868,7 +867,7 @@ const GlobalLayout = (props) => {
             setVisualizeOpenBar( true )
             setVisualizerBarSize(prevItem =>{
                 if(prevItem == '0%') {
-                    return  '48.7%'
+                    return  '40.1%'
                 } else {
                     return prevItem
                 }
@@ -879,7 +878,7 @@ const GlobalLayout = (props) => {
             setVisualizeOpenBar( true )
             setVisualizerBarSize(prevItem =>{
                 if(prevItem == '0%') {
-                    return  '48.7%'
+                    return  '40.1%'
                 } else {
                     return prevItem
                 }
@@ -895,7 +894,7 @@ const GlobalLayout = (props) => {
             setVisualizeOpenBar( true )
             setVisualizerBarSize(prevItem =>{
                 if(prevItem == '0%') {
-                    return  '48.7%'
+                    return  dashboardScreen === true ? '65%' :'40.1%'
                 } else {
                     return prevItem
                 }
@@ -918,14 +917,14 @@ const GlobalLayout = (props) => {
                 return prevItem
             })
             if((chartPrevItem === true || analyticsPrevItem === true) && (openCommentBar === true || openIllustrationBar === true)){
-                barSize = '48.7%'
+                barSize = dashboardScreen === true ? '65%' :'40.1%'
             } else if (openCommentBar === false && openIllustrationBar === false && ( chartPrevItem === true ||  analyticsPrevItem === true )) {
                 barSize = '100%'
             }
             if(barSize === '0%') {
                 setVisualizeOpenBar( false )
             }
-            setVisualizerBarSize(barSize) 
+            setVisualizerBarSize(barSize)   
             
             /* if(chartPrevItem !== openChartBar ) {
                 console.log("Tap")
@@ -1233,8 +1232,13 @@ const GlobalLayout = (props) => {
                     <NewHeader 
                         openCommentBar={openCommentBar}
                         openCustomerBar={openCustomerBar}
+                        openChartBar={openChartBar}
+                        openAnalyticsBar={openAnalyticsBar}
                         handleCommentBarOpen={handleCommentBarOpen}
                         handleCustomersBarOpen={handleCustomersBarOpen}
+                        checkChartAnalytics={checkChartAnalytics}
+                        handleAnalyticsBarOpen={handleAnalyticsBarOpen}
+                        handleChartBarOpen={handleChartBarOpen}
                     />
             }
             <Grid container className={clsx(classes.dashboardWarapper, {[classes.mobileDashboardWrapper]: isMobile})} id="mainContainer">
