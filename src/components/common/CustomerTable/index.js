@@ -272,6 +272,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             rowSelected={selectedRow}
 			selectedIndex={currentSelection}
             selectedKey={'id'}
+            scrollToIndex={true}
             rows={assetTypeCompanies}
             rowHeight={rowHeight}
             headerHeight={headerRowHeight}  

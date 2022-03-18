@@ -151,7 +151,26 @@ const Reports = (props) => {
     const [cardList, setCardList] = useState(LIST)
     const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
-    
+    const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected);
+    const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected);
+    const selectedAssetCompaniesAll = useSelector(
+        state => state.patenTrack2.assetTypeCompanies.selectAll,
+    );
+    const selectedAssetAssignments = useSelector(
+        state => state.patenTrack2.assetTypeAssignments.selected,
+    );
+    const selectedAssetAssignmentsAll = useSelector(
+        state => state.patenTrack2.assetTypeAssignments.selectAll,
+    );
+
+    const assetTypeAssignmentAssets = useSelector(
+        state => state.patenTrack2.assetTypeAssignmentAssets.list,
+    ); //Assets List
+    const assetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected) //Assets Selected
+
+    const assetsTotal = useSelector(
+        state => state.patenTrack2.assetTypeAssignmentAssets.total_records,
+    );
     useEffect(() => {
         if(ref.current !== null) {
             resizeObserver = new ResizeObserver(entries => {   
@@ -159,11 +178,11 @@ const Reports = (props) => {
                 const { width } = entries[0].contentRect;
                 if(width > 0 && width < 601 ) {
                     setGrid({
-                        lg:12,
-                        md:12,
-                        sm:12,
-                        xs:12,
-                        xl:12
+                        lg:6,
+                        md:6,
+                        sm:6,
+                        xs:6,
+                        xl:6
                     })
                 } else if (width > 600 && width < 900) {
                     setGrid({
@@ -173,7 +192,7 @@ const Reports = (props) => {
                         xs:4,
                         xl:4
                     })
-                }/*   else if ( width < 361) {
+                } else if ( width < 361) {
                     setGrid({
                         lg:12,
                         md:12,
@@ -181,7 +200,7 @@ const Reports = (props) => {
                         xs:12,
                         xl:12
                     })
-                } */ else {
+                }  else {
                     setGrid(GRID_ITEM)
                 }
                 setLoading(false)    
@@ -195,24 +214,65 @@ const Reports = (props) => {
             }
         }        
     }, []) 
-
+    /**
+     * Get Dashboard data
+     */
     useEffect(() => {
         if(selectedCompanies.length > 0) {
-            setLoading(true)
-            const findDashboardData = async() => {
-                const {data} = await PatenTrackApi.getDashboardData(selectedCompanies)
-                setLoading(false)
-                if(data !== null && data.length > 0) {
-                    setCardList(data)
-                } else {
-                    setCardList(LIST)
+            if(selectedCompanies.length > 0) {
+                setLoading(true)
+                const findDashboardData = async() => {
+                    const list = [];
+                    let totalRecords = 0;
+                    if( assetsSelected.length > 0 ) {
+                        const promise = assetsSelected.map(asset => {
+                            const findIndex = assetTypeAssignmentAssets.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset.toString() )
+                            if( findIndex !== -1 ) {
+                                if( assetTypeAssignmentAssets[findIndex].appno_doc_num != '' ) {
+                                    list.push(assetTypeAssignmentAssets[findIndex].appno_doc_num.toString())
+                                }
+                            }
+                        })
+                        await Promise.all(promise)
+                        totalRecords = list.length
+                    } else if( assetTypeAssignmentAssets.length > 0 ) {
+                        const promise = assetTypeAssignmentAssets.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
+                        await Promise.all(promise)
+                        totalRecords = assetsTotal
+                    }  
+                    setLoading(false)
+                    const formData = new FormData()
+                    formData.append('list', JSON.stringify(list));
+                    formData.append('total', totalRecords);
+                    formData.append('selectedCompanies', JSON.stringify(selectedCompanies));
+                    formData.append('tabs', JSON.stringify(assetTypesSelected));
+                    formData.append('customers', JSON.stringify(selectedAssetCompanies));
+                    formData.append('assignments', JSON.stringify(selectedAssetAssignments));
+                    formData.append('type', 'restore_ownership')
+                    const brokenChain = await PatenTrackApi.getDashboardData(formData)
+                    let oldList = [...cardList]
+                    const findIndexBroken = oldList.findIndex( item => item.type === 1)
+                    if(findIndexBroken !== -1) {
+                        if( brokenChain !== null && brokenChain?.data && brokenChain?.data?.number){
+                            oldList[findIndexBroken].number = brokenChain.data.number
+                            oldList[findIndexBroken].patent = brokenChain.data.patent != '' ? brokenChain.data.patent : ''
+                            oldList[findIndexBroken].application = brokenChain.data.patent == '' && brokenChain.data.application != '' ? brokenChain.data.application : ''                            
+                        } else {
+                            oldList[findIndexBroken].number = 0
+                            oldList[findIndexBroken].patent = ''
+                            oldList[findIndexBroken].application = ''
+                        }
+                        setCardList(oldList)
+                    }
                 }
+                findDashboardData()
+            } else {   
+                setCardList(LIST)
             }
-            findDashboardData()
         } else {   
             setCardList(LIST)
         }
-    }, [selectedCompanies])
+    }, [selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssets, assetsSelected, assetsTotal])
 
     const companyname = useMemo(() => {
         return selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])

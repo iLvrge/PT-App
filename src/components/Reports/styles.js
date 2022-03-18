@@ -23,19 +23,18 @@ export default makeStyles(theme => ({
             justifyContent: 'center',
             flexDirection: 'column',
             alignContent: 'start',
-            height: 'calc((100vh - 220px) / 3)', 
-            flexBasis: 250,
-            maxWidth: 250,
+            height: 'calc((100vh - 220px) / 3)',
+            flexBasis: '250px !important',
+            maxWidth: '250px !important',
+            minWidth: '250px !important',
             '& svg': {
                 display: 'flex',
                 /* height: '70%' */
             }
-        }, 
-        
+        },
         '& .MuiCard-root': {
             height: '100%'
         },
-        
     },
     root: {
         height: '100%',

@@ -33,7 +33,8 @@ import {
     setAssetTypeCompanies,
     setAllAssetTypes,
     setAssetTypesSelect,
-    setMainCompaniesSelected
+    setMainCompaniesSelected,
+    getCustomerAssets
 } from '../../actions/patentTrackActions2' 
 
 import { 
@@ -132,7 +133,22 @@ const GlobalLayout = (props) => {
     const profile = useSelector(store => (store.patenTrack.profile))
     const companies = useSelector( state => state.patenTrack2.mainCompaniesList )
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
-
+    const assetTypesSelected = useSelector(
+        state => state.patenTrack2.assetTypes.selected,
+    );
+    const selectedAssetCompanies = useSelector(
+        state => state.patenTrack2.assetTypeCompanies.selected,
+    );
+    const selectedAssetCompaniesAll = useSelector(
+        state => state.patenTrack2.assetTypeCompanies.selectAll,
+    );
+    const selectedAssetAssignments = useSelector(
+        state => state.patenTrack2.assetTypeAssignments.selected,
+    );
+    const selectedAssetAssignmentsAll = useSelector(
+        state => state.patenTrack2.assetTypeAssignments.selectAll,
+    );
+    const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
     useEffect(() => {
         editorBar() // run to find editor width
         window.addEventListener("resize", editorBar) // add on resize window 
@@ -178,9 +194,14 @@ const GlobalLayout = (props) => {
         }
     }, [dispatch, profile])
 
+    /**
+     * Dashboard screen is true
+     * And account type is Bank
+     */
+
     useEffect(() => {
         if(profile?.user && profile.user?.organisation) {
-            if(profile.user.organisation.organisation_type == 'Bank') {
+            if(profile.user.organisation.organisation_type == 'Bank' && dashboardScreen === true) {
                 if(selectedCompanies.length === 0) {
                     const getSelectedCompanies = async() => {
                         if( companies.list.length > 0 ) {
@@ -220,7 +241,34 @@ const GlobalLayout = (props) => {
                 }
             }
         }
-    }, [dispatch, companies, profile, selectedCompanies])
+    }, [dispatch, dashboardScreen, companies, profile, selectedCompanies])
+
+    /**
+     * Dashboard screen is true
+     * Get list of assets
+     */
+
+    useEffect(() => {
+        if(dashboardScreen === true) {
+            if(selectedCompanies.length > 0) {
+                const customers = selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies;
+                const assignments = selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;    
+                dispatch(getCustomerAssets(
+                    selectedCategory == '' ? '' : selectedCategory,
+                    selectedCompanies,
+                    assetTypesSelected,
+                    customers,
+                    assignments,
+                    false,
+                    0,
+                    1000,
+                    `asset`,
+                    `DESC`
+                ))                    
+            }
+        }
+    }, [dispatch, dashboardScreen, companies, profile, selectedCompanies, selectedCategory, assetTypesSelected, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, selectedAssetCompanies, selectedAssetAssignments])
+
     /*
     useEffect(() => {
         window.addEventListener('resize', handleResize)

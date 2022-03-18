@@ -708,8 +708,8 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/address`, getHeader())
   }
 
-  static getDashboardData(companies) {
-    return axios.get(`${base_new_api_url}/dashboards?companies=${JSON.stringify(companies)}`, getHeader())
+  static getDashboardData(formData) {
+    return axios.post(`${base_new_api_url}/dashboards`, formData, getFormUrlHeader())
   }
 
   static getLawFirms() {
@@ -717,7 +717,7 @@ class PatenTrackApi {
   }
 
   static addLawFirm(lawFirm) {
-    return axios.post(`${base_new_api_url}/lawfirm`, lawFirm, getHeader())
+    return axios.post(`${base_new_api_url}/lawfirm`, lawFirm, getHeader())   
   }
 
   static addLawFirmAddress(address) {
