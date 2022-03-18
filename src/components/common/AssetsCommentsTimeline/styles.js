@@ -1,6 +1,6 @@
 import makeStyles from '@mui/styles/makeStyles';
 import autoprefixer from 'autoprefixer'
-
+import { pink } from '@mui/material/colors';
 export default makeStyles(theme => ({
   root: {
     height: 'auto',
@@ -48,7 +48,18 @@ export default makeStyles(theme => ({
     width: '95% !important' */
     position: 'sticky',
     bottom: 3,
-    width: '95% !important'
+    width: '95% !important',
+    '& .focus .ql-snow .ql-stroke, .focus .ql-snow button.ql-atButton svg, .focus .ql-snow .ql-attachButton svg, .focus .ql-snow .ql-saveButton svg,  .attach .ql-snow .ql-sendattachButton svg': {
+      color: theme.palette.action.active,
+      pointerEvents: 'all'
+    },
+    '& .focus .ql-snow .ql-stroke, .attach .ql-snow .ql-stroke':{
+      stroke: theme.palette.action.active
+    },
+	'& .focus .ql-snow.ql-toolbar button:hover, .focus .ql-snow.ql-toolbar button svg:focus, .focus .ql-snow.ql-toolbar button svg:hover, .focus .ql-snow.ql-toolbar button.ql-bold:hover svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-bold:focus svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-italic:hover svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-italic:focus svg.MuiSvgIcon-root .ql-stroke':{
+      color: pink[500],
+      stroke: pink[500]
+    },
   },
   addCommentBtn: {
     position: 'absolute',
