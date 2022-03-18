@@ -818,7 +818,7 @@ const onHandleTimelineScreen = useCallback((event) => {
           />
         )
       }
-      <Modal
+      {/* <Modal
         open={controlModal}
         onClose={(e) => handleControlModal( e, false )}
         BackdropComponent={Backdrop}
@@ -830,7 +830,7 @@ const onHandleTimelineScreen = useCallback((event) => {
         <React.Fragment>
           <Home click={hideMenu} closeModal={handleControlModal}/> 
         </React.Fragment>
-      </Modal>
+      </Modal> */}
       
     </AppBar>
   ); 

@@ -51,26 +51,9 @@ import { controlList } from "../../utils/controlList"
 import { downloadFile, copyToClipboard } from '../../utils/html_encode_decode'
 import { setTokenStorage, getTokenStorage } from '../../utils/tokenStorage'
 
-import { setAssetTypeAssignments, 
-    setSelectedAssetsTransactions, 
-    setSelectedAssetsPatents, 
-    setAssetsIllustration, 
+import { 
     setBreadCrumbsAndCategory,  
-    setAssetTypeAssignmentAllAssets,
     setSwitchAssetButton,
-    setAssetTypes,
-    setAssetTypeInventor,
-    setAssetTypeCompanies,
-    setAssetsIllustrationData,
-    setAllAssetTypes,
-    setAssetTypesSelect,
-    setAllAssignmentCustomers,
-    setSelectAssignmentCustomers,
-    setAssetTypesPatentsSelected,
-    setAssetTypesPatentsSelectAll,
-    setAllAssignments, 
-    setSelectAssignments,
-    setSlackMessages,
     setMoveAssets, 
     getMaintainenceAssetsList,
     setAddressQueueDisplay,
@@ -95,10 +78,6 @@ import {
     setDriveTemplateFrameMode,
     setDriveTemplateMode,
     setDriveButtonActive,
-    toggleFamilyMode,
-    toggleFamilyItemMode,
-    toggleUsptoMode,
-    toggleLifeSpanMode,
 } from '../../actions/uiActions'
 
 import PatenTrackApi from '../../api/patenTrack2'
