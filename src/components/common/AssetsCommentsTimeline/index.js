@@ -245,10 +245,10 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
           googleLoginButton =  false 
           dispatch(getGoogleProfile(tokenParse))  
           if(editorContainerRef.current !== null) {
-            editorContainerRef.current.classList.add('attach')
+            editorContainerRef.current.querySelector('.editor').classList.add('attach')
           }
         } else {
-          editorContainerRef.current.classList.remove('attach');
+          editorContainerRef.current.querySelector('.editor').classList.remove('attach');
         }
       }
       setSlackAuthLogin(slackLoginButton)
@@ -577,23 +577,24 @@ const handleDriveModalClose = (event) => {
   }
 
   const handleFocus = useCallback((range, source, editor) => {
+
     const getSlackUser = getTokenStorage( 'slack_auth_token_info' ), googleToken = getTokenStorage( 'google_auth_token_info' );
     if(getSlackUser &&  getSlackUser != '') {
-      editorContainerRef.current.classList.add('focus')
+      editorContainerRef.current.querySelector('.editor').classList.add('focus')
     }    
 
     if(googleToken && googleToken != '') {
       const tokenParse = JSON.parse( googleToken )
       const { access_token } = tokenParse
       if( access_token ) {
-        editorContainerRef.current.classList.add('attach')
+        editorContainerRef.current.querySelector('.editor').classList.add('attach')
       }
     }
 
   }, [ editorContainerRef ])
 
   const handleBlur = useCallback((previousRange, source, editor) => {
-    editorContainerRef.current.classList.remove('focus');
+    editorContainerRef.current.querySelector('.editor').classList.remove('focus');
   }, [ editorContainerRef ])
 
   const openDriveFolder = (event, itemID, itemName) => {
@@ -733,7 +734,7 @@ const handleDriveModalClose = (event) => {
   const renderCommentEditor = useMemo(() => {
     //if (!selectedCommentsEntity) return null
     return (
-      <div className={`${classes.commentEditor} editor`} ref={editorContainerRef}> 
+      <div className={`${classes.commentEditor}`} ref={editorContainerRef}> 
         <QuillEditor
           value={commentHtml}
           onChange={setCommentHtml}

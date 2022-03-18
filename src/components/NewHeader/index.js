@@ -514,13 +514,13 @@ const shareDashboard = () => {
   console.log("shareDashboard")
 }
 
-const onHandleDashboardScreen = useCallback((event) => {
+const onHandleDashboardScreen = /* useCallback( */(event) => {
   dispatch(setTimelineScreen(false))
   dispatch(setDashboardScreen(true))
   dispatch(setAssetsIllustration(null))
   dispatch(setAssetsIllustrationData(null))
-  resetAllRowSelect(dispatch, resetItemList.resetAll)
-  resetAllRowSelect(dispatch, resetItemList.clearOtherItems)
+  /* resetAllRowSelect(dispatch, resetItemList.resetAll)
+  resetAllRowSelect(dispatch, resetItemList.clearOtherItems) */
   props.checkChartAnalytics(null, null, false)
   if(props.openCustomerBar === true){
     props.handleCustomersBarOpen(event)
@@ -534,15 +534,15 @@ const onHandleDashboardScreen = useCallback((event) => {
   if(props.openAnalyticsBar === true){
     props.handleAnalyticsBarOpen(event)
   }
-}, [dispatch])
+}/* , [dispatch]) */
 
-const onHandleTimelineScreen = useCallback((event) => {
+const onHandleTimelineScreen = /* useCallback( */(event) => {
   dispatch(setTimelineScreen(true))
   dispatch(setDashboardScreen(false))
   dispatch(setAssetsIllustration(null))
   dispatch(setAssetsIllustrationData(null))
-  resetAllRowSelect(dispatch, resetItemList.resetAll)
-  resetAllRowSelect(dispatch, resetItemList.clearOtherItems)
+  /* resetAllRowSelect(dispatch, resetItemList.resetAll)
+  resetAllRowSelect(dispatch, resetItemList.clearOtherItems) */
   props.checkChartAnalytics(null, null, false)
   if(props.openCustomerBar === false){
     props.handleCustomersBarOpen(event)
@@ -556,7 +556,7 @@ const onHandleTimelineScreen = useCallback((event) => {
   if(props.openAnalyticsBar === true){
     props.handleAnalyticsBarOpen(event)
   }
-}, [dispatch])
+}/* , [dispatch]) */
 
   return (
     <AppBar className={classes.root} color='transparent' position='relative'>

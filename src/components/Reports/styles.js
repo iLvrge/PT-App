@@ -95,7 +95,7 @@ export default makeStyles(theme => ({
         display: 'flex',
         width: '100%',
         paddingLeft: 16,
-        fontSize: '1rem',
+        fontSize: '1.1rem',
         height: 47,
         minHeight: 47,
         textAlign: 'left',

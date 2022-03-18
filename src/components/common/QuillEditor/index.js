@@ -30,6 +30,7 @@ import { setTokenStorage, getTokenStorage } from '../../../utils/tokenStorage'
 import { downloadFile, copyToClipboard } from '../../../utils/html_encode_decode'
 import 'react-quill/dist/quill.snow.css'
 import './styles.css'
+import clsx from 'clsx'
 
 const QuillEditor = ({
   placeholder = 'Message #',
@@ -444,7 +445,7 @@ const QuillEditor = ({
   }, [link_assets_selected, link_assets_sheet_type])
 
   return (
-    <div className={classes.root}>
+    <div className={clsx(classes.root, 'editor')}>
       <div className={classes.textEditor}>
         <ReactQuill
           ref={quillRef}
@@ -494,16 +495,14 @@ const QuillEditor = ({
         />   
         {GetMenuComponent}
       </div>
-      <Modal// `disableBackdropClick` is removed by codemod.
-// You can find more details about this breaking change in [the migration guide](https://mui.com/guides/migration-v4/#modal)
-
+      <Modal
         open={modalOpen}
         onClose={onHandleModalClose}
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
-        }}
-        aria-labelledby="assignor-assignee"
+        }} 
+        aria-labelledby="slack-users"
         aria-describedby="">
         <>
           <UserInputForm />

@@ -264,10 +264,11 @@ const Reports = (props) => {
                     }
                     setCardList(oldList)
                 }
+                /* formData.delete('type')
+                formData.append('type', 'lost_patents') */
             }
             findDashboardData()
         } else {   
-            console.log("SELECTION 0", [...LIST])
             setCardList([...LIST])
         }
     }, [selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssets, assetsSelected, assetsTotal])
