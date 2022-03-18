@@ -25,6 +25,7 @@ export default makeStyles(theme => ({
     },
     '& .focus .ql-snow .ql-stroke, .focus .ql-snow button.ql-atButton svg, .focus .ql-snow .ql-attachButton svg, .focus .ql-snow .ql-saveButton svg,  .attach .ql-snow .ql-sendattachButton svg': {
       color: theme.palette.action.active,
+      fill: theme.palette.action.active,
       pointerEvents: 'all'
     },
     '& .focus .ql-snow .ql-stroke, .attach .ql-snow .ql-stroke':{
