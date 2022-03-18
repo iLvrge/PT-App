@@ -445,8 +445,8 @@ const QuillEditor = ({
   }, [link_assets_selected, link_assets_sheet_type])
 
   return (
-    <div className={clsx(classes.root, 'editor')}>
-      <div className={classes.textEditor}>
+    <div className={classes.root}>
+      <div className={clsx(classes.textEditor, 'editor')}>
         <ReactQuill
           ref={quillRef}
           theme='snow'
