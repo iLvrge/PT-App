@@ -56,6 +56,10 @@
 .ql-editor{
   max-height: calc(30vh - 80px)
 }
+.ql-editor slackusermention{
+  background-color: rgba(29, 155, 209, 0.1);
+  color: rgb(18, 100, 163)
+}
 /* .ql-snow.ql-toolbar button svg, .ql-snow .ql-toolbar button svg{
   width: 2rem;
   height: 2rem;

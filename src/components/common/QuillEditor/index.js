@@ -1,6 +1,6 @@
 import React, { useRef, useMemo, useEffect, useCallback, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import ReactQuill from 'react-quill'
+import ReactQuill, {Quill} from 'react-quill'
 import {
   Menu,
   MenuItem,
@@ -31,6 +31,12 @@ import { downloadFile, copyToClipboard } from '../../../utils/html_encode_decode
 import 'react-quill/dist/quill.snow.css'
 import './styles.css'
 import clsx from 'clsx'
+
+let Inline = Quill.import('blots/inline');
+class SlackUserMention extends Inline { }
+SlackUserMention.blotName = 'slackusermention';
+SlackUserMention.tagName = 'slackusermention';
+Quill.register(SlackUserMention);
 
 const QuillEditor = ({
   placeholder = 'Message #',
@@ -101,10 +107,7 @@ const QuillEditor = ({
     if (!quillRef.current) return null
     
     if( driveFile != null ) {
-      const editorRef = quillRef.current
-      const selectionIndex = editorRef.getEditor().getSelection().index
-      editorRef.getEditor().insertText(selectionIndex , driveFile)
-      editorRef.getEditor().setSelection(selectionIndex +  driveFile.length)
+      insertText(driveFile)
     }
   }, [ driveFile, quillRef ])
   
@@ -253,36 +256,47 @@ const QuillEditor = ({
     )
   }, [ slack_users, userListMenu ])
 
+  const getHtml = () => {
+    return quillRef.current.editor.container.querySelector('.ql-editor').innerHTML;
+  }
+
+  const insertText = (text, html = false) => {    
+    const editorRef = quillRef.current
+    const range = editorRef.getEditor().getSelection();
+    let position = range ? range.index : 0;
+    console.log(editorRef.getEditor().getContents(), editorRef.getEditor().getLength(), position)
+    if(html === false) {
+      editorRef.getEditor().insertText(position, text)
+    } else {
+      editorRef.getEditor().clipboard.dangerouslyPasteHTML(position, text) 
+    }    
+    /* setTimeout(() => editorRef.getEditor().setSelection(editorRef.getEditor().getSelection().index + 10, 0), 0) */
+    setTimeout(() => editorRef.getEditor().setSelection(getHtml().length + 1), 0)
+  }
+
   const onUserClick = useCallback((event, user) => {   
     const name = user.real_name == undefined || user.real_name == null ? user.profile.real_name : user.real_name
     if(quillRef.current  != null) {
-      const editorRef = quillRef.current
-      const selectionIndex = editorRef.getEditor().getSelection().index
-      editorRef.getEditor().insertText(selectionIndex, name) 
-      editorRef.getEditor().setSelection(selectionIndex +  name.length)
+      let insertHTMl = `&nbsp;<slackusermention data-id="${user.id}" data-label="@${name}" spellcheck="false" class="c-member_slug c-member_slug--link ts_tip_texty" dir="ltr">@${name}</slackusermention>`
+      insertText(insertHTMl, true)
     }
     onSelectUser(user.id) 
     setUserListMenu(null);
   },[ quillRef ])
 
   const onUsersList = useCallback(( event ) => {
-    if(quillRef.current  != null) {
-      const editorRef = quillRef.current
-      const selectionIndex = editorRef.getEditor().getSelection().index
-      editorRef.getEditor().insertText(selectionIndex, '@') 
-      editorRef.getEditor().setSelection(selectionIndex +  2)
-    }
-    
+    /* if(quillRef.current  != null) {
+      insertText('@')      
+    } */    
     dispatch(getSlackUsersList())
     setUserListMenu( event.currentTarget )
   }, [ dispatch, getSlackUsersList, quillRef ])
 
   const onAttachmentOpenedFile = useCallback(() => {    
     if( template_document_url != '') {
-      const editorRef = quillRef.current
-      const selectionIndex = editorRef.getEditor().getSelection().index
-      editorRef.getEditor().insertText(selectionIndex , template_document_url)
-      editorRef.getEditor().setSelection(selectionIndex +  template_document_url.length + 1)
+      if(quillRef.current  != null) {
+        insertText(template_document_url)      
+      }
     }
   }, [ template_document_url, quillRef ] )
 

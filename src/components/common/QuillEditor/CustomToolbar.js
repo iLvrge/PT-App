@@ -260,7 +260,7 @@ CustomToolbar.formats = [
   'header', 'font', 'size',
   'bold', 'italic', 'underline', 'strike', 'blockquote',
   'list', 'bullet', 'indent',
-  'link', 'image', 'color',
+  'link', 'image', 'color', 'slackusermention'
 ]
 
 export default CustomToolbar
