@@ -117,8 +117,9 @@ const QuillEditor = ({
   }, [ driveFile, quillRef ])
 
   useEffect(() => {
-    console.log('Quill selectedAssetsPatents', selectedAssetsPatents)
-    setPlaceholderMessage(`Send message to a US${selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0] : selectedAssetsPatents[1]}`)
+    if(selectedAssetsPatents.length > 0) {
+      setPlaceholderMessage(`Send message to a US${selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0] : selectedAssetsPatents[1]}`)
+    }
   }, [selectedAssetsPatents])
 
   useEffect(() => {
