@@ -153,6 +153,8 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   useEffect(() => {
     if( selectedAssetsPatents.length == 0 ) {
       setCommentsData([])
+      setCommentHtml('')
+      setEditData(null)
     }
   }, [ selectedAssetsPatents ])
 
