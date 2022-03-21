@@ -3,14 +3,11 @@ import { toggleThemeMode } from '../../../actions/uiActions';
 import { pink } from '@mui/material/colors';
 export default makeStyles(theme => ({
   root: {
-    '& .ql-container': {
-      background: theme.palette.background.default
-    },
-    '& .ql-toolbar':{
-      background: theme.palette.background.paper
+    '& .ql-container, .ql-toolbar': {
+      background: 'none !important'
     },
     '& .ql-container.ql-snow, .ql-toolbar.ql-snow':{     
-      border: `1px solid ${theme.palette.divider}`
+      border: `0px !important`,
     },
     '&.ql-snow .ql-picker, .ql-toolbar, .ql-container, .ql-picker-label, .ql-picker-label svg, .ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button, .ql-snow.ql-toolbar button svg, .ql-snow .ql-toolbar button svg, .ql-snow .ql-stroke, .ql-picker-label':{
       color: theme.palette.action.active,
@@ -50,6 +47,9 @@ export default makeStyles(theme => ({
   },
   textEditor: {
     color: theme.palette.text.primary,
+    background: theme.palette.background.default,
+    border: `1px solid ${theme.palette.divider}`,
+    borderRadius: 8,
     margin: 0,
     overflow: 'hidden',
     '& .ql-attachDriveButton':{

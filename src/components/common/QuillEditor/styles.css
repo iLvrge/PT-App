@@ -58,18 +58,25 @@
 }
 .ql-editor slackusermention{
   background-color: rgba(29, 155, 209, 0.1);
-  color: rgb(18, 100, 163)
+  color: rgba(18, 100, 163, 1);
+  padding: 0 2px 1px;
+  border-radius: 3px;
 }
+.ql-editor slackusermention:hover{
+  background-color: rgba(64 179 228, 0.1);  
+}
+
+
 /* .ql-snow.ql-toolbar button svg, .ql-snow .ql-toolbar button svg{
   width: 2rem;
   height: 2rem;
 }  */
 .ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button{
-  width: auto;
+  width: 28px;
   min-width: auto;
-  height: auto;
-  padding: 0px;
-  margin-right: 6px;
+  height: 28px;
+  padding: 2px;
+  margin: 2px 6px 2px 2px;
 }
 
 .ql-snow.ql-toolbar button svg{

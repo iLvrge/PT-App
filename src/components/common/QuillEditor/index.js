@@ -44,7 +44,6 @@ Span.tagName = 'span';
 Quill.register(Span);
 
 const QuillEditor = ({
-  placeholder = 'Message #',
   value = '',
   onSelectUser = (value) => {},
   onChange = (value) => {},
@@ -67,6 +66,7 @@ const QuillEditor = ({
   const classes = useStyles()
   const quillRef = useRef(null)
   const dispatch = useDispatch()
+  const [placeholderMessage, setPlaceholderMessage] = useState('Select a channel (an Asset or a Transaction) to send a message')
   const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
   const maintainencePatentsList = useSelector(state => state.patenTrack2.maintainenceAssetsList.list)
   const selectedAssetsTransactions = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
@@ -115,7 +115,17 @@ const QuillEditor = ({
       insertText(driveFile)
     }
   }, [ driveFile, quillRef ])
-  
+
+  useEffect(() => {
+    console.log('Quill selectedAssetsPatents', selectedAssetsPatents)
+    setPlaceholderMessage(`Send message to a US${selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0] : selectedAssetsPatents[1]}`)
+  }, [selectedAssetsPatents])
+
+  useEffect(() => {
+    if (!quillRef.current) return null
+
+    quillRef.current.editor.container.querySelector('.ql-editor').setAttribute('data-placeholder', placeholderMessage)
+  }, [quillRef, placeholderMessage])
   
   const openUSPTOWindow = (w, h) => {
     const dualScreenLeft = window.screenLeft !==  undefined ? window.screenLeft : window.screenX
@@ -283,11 +293,11 @@ const QuillEditor = ({
   const onUserClick = useCallback((event, user) => {   
     const name = user.real_name == undefined || user.real_name == null ? user.profile.real_name : user.real_name
     if(quillRef.current  != null) {
-      let insertHTMl = `<slackusermention data-id="${user.id}" data-label="@${name}" spellcheck="false" class="c-member_slug c-member_slug--link ts_tip_texty" dir="ltr">&nbsp;@${name}</slackusermention><span>&nbsp;</span>`
+      let insertHTMl = `&nbsp;<slackusermention data-id="${user.id}" data-label="@${name}" spellcheck="false" class="c-member_slug c-member_slug--link ts_tip_texty" dir="ltr">@${name}</slackusermention><span>&nbsp;</span>`
       insertText(insertHTMl, true)
     }
     onSelectUser(user.id) 
-    setUserListMenu(null);
+    setUserListMenu(null);  
   },[ quillRef ])
 
   const onUsersList = useCallback(( event ) => {
@@ -472,7 +482,7 @@ const QuillEditor = ({
           theme='snow'
           modules={CustomToolbar.modules}
           formats={CustomToolbar.formats}
-          placeholder={placeholder}
+          placeholder={placeholderMessage}
           value={value}
           onChange={onChange}
           onFocus={onFocus}

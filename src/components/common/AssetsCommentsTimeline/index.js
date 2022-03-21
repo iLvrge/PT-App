@@ -35,6 +35,7 @@ import CustomerAddress from '../CustomerAddress'
 import Googlelogin from '../Googlelogin' 
 import FullScreen from '../FullScreen'
 import useStyles from './styles'
+import themeMode from '../../../themes/themeMode'
 import { FaChevronCircleDown } from 'react-icons/fa'
 import {
   getGoogleAuthToken,
@@ -121,6 +122,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   const [ driveFilesAndFolder, setDriveFilesAndFolder ] = useState( {} )
   const [ selectedDriveFile, setSelectedDriveFile] = useState(null)
   const [ activeBtn, setActiveBtn] = useState({display: false})  
+  const isDarkTheme = useSelector( state => state.ui.isDarkTheme )
   const type = useMemo(() => selectedCommentsEntity && selectedCommentsEntity.type, [ selectedCommentsEntity ])
   const fullScreenItems = [
     {
@@ -164,6 +166,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
           if( channelID != '') {
             dispatch(setChannelID({channel_id: channelID}))
           }  
+          
         }
       }
       
@@ -172,9 +175,6 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       }
     }
   }, [ dispatch, slack_auth_token, selectedAssetsPatents, slack_channel_list, slack_channel_list_loading ] )
-
-  
-
 
   useEffect(() => {
     updateHeight(size, timelineRef)
@@ -187,6 +187,18 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       }, 2000)
     }
   }, [ commentsData ] )
+
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyEventSubmitMessage)
+    return () => window.removeEventListener("keydown", handleKeyEventSubmitMessage)
+  }, [])
+
+  const handleKeyEventSubmitMessage = (event) => {
+    if(event.key === 'Enter') {
+      handleSubmitComment()
+    }
+  }
 
   const findChannelID = useMemo(async(asset) => {
     let channelID = ''
@@ -347,10 +359,15 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
     if(selectedAssetsPatents.length > 0) {
       const formData = new FormData()
       formData.append('text',  html.encode(commentHtml) )
-      if(selectedCategory == 'correct_details') {
+      /* if(selectedCategory == 'correct_details') {
         formData.append('transaction', selectedAssetsTransactions.length == 1 ? selectedAssetsTransactions[0] : currentRowSelection )
       } else {
         formData.append('asset', selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? selectedAssetsPatents[1] : selectedAssetsPatents[0])
+      } */
+      if(selectedAssetsPatents.length > 0) {
+        formData.append('asset', selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? selectedAssetsPatents[1] : selectedAssetsPatents[0])
+      } else if(selectedAssetsTransactions.length > 0){
+        formData.append('transaction', selectedAssetsTransactions.length == 1 ? selectedAssetsTransactions[0] : currentRowSelection )
       }
       formData.append('asset_format', selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? 'us'+selectedAssetsPatents[1] : 'us'+selectedAssetsPatents[0])
       formData.append('user', selectUser == null ? '' : selectUser)
@@ -397,7 +414,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
     setEditData( true )
     setReplyId(comment.ts)
     const commentText = comment.text
-    setCommentHtml(commentText.replace(/<p><br><\/p>/g, ''))
+    setCommentHtml(commentText.replace(/<p><br><\/p>/g, "\n"))
   }, [])
 
   const onDelete = useCallback(async (event, comment) => {
@@ -579,11 +596,11 @@ const handleDriveModalClose = (event) => {
   const handleFocus = useCallback((range, source, editor) => {
 
     const getSlackUser = getTokenStorage( 'slack_auth_token_info' ), googleToken = getTokenStorage( 'google_auth_token_info' );
-    if(getSlackUser &&  getSlackUser != '') {
+    if(getSlackUser &&  getSlackUser != '' &&  selectedAssetsPatents.length > 0) {
       editorContainerRef.current.querySelector('.editor').classList.add('focus')
     }    
 
-    if(googleToken && googleToken != '') {
+    if(googleToken && googleToken != '' &&  selectedAssetsPatents.length > 0) {
       const tokenParse = JSON.parse( googleToken )
       const { access_token } = tokenParse
       if( access_token ) {
@@ -591,7 +608,7 @@ const handleDriveModalClose = (event) => {
       }
     }
 
-  }, [ editorContainerRef ])
+  }, [ editorContainerRef, selectedAssetsPatents ])
 
   const handleBlur = useCallback((previousRange, source, editor) => {
     editorContainerRef.current.querySelector('.editor').classList.remove('focus');
@@ -733,6 +750,7 @@ const handleDriveModalClose = (event) => {
 
   const renderCommentEditor = useMemo(() => {
     //if (!selectedCommentsEntity) return null
+    console.log('renderCommentEditor', selectedAssetsPatents)
     return (
       <div className={`${classes.commentEditor}`} ref={editorContainerRef}> 
         <QuillEditor
@@ -758,7 +776,7 @@ const handleDriveModalClose = (event) => {
         <input type='file' id='attach_file' ref={inputFile} style={{display: 'none'}} onChange={onHandleFile}/>
       </div> 
     )
-  }, [ selectedCommentsEntity, commentHtml, handleSubmitComment, handleCancelComment, classes ])
+  }, [ selectedAssetsPatents, selectedCommentsEntity, commentHtml, handleSubmitComment, handleCancelComment, classes ])
 
   const ShowUser = ({users, item}) => {    
     if(users.length === 0) return item.user
@@ -875,10 +893,10 @@ const handleDriveModalClose = (event) => {
     return (
       <TimelineEvent
         key={`comment-${comment.ts}`}
-        contentStyle={{ background: '#303030' }}
+        contentStyle={{ background: isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default}}
         bubbleStyle={{ 
-          background: 'rgb(48 48 48)', 
-          border: '2px solid #303030',
+          background: isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default, 
+          border: `2px solid ${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default}`,
           width: '40px', 
           height: '40px', 
         }}

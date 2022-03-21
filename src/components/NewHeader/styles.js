@@ -408,6 +408,12 @@ export default makeStyles(theme => ({
             }
         }
     },
+    slackIcon: {
+        '& svg':{
+            width: '100% !important',
+            height: '100% !important'
+        }
+    },
     clipIconActive: {
         '& svg':{
             fill: '#f48fb1',

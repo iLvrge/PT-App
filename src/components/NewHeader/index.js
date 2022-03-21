@@ -677,7 +677,7 @@ const onHandleTimelineScreen = /* useCallback( */(event) => {
               !slackAuthLogin
               ?
               <IconButton
-                className={`${classes.buttonIcon} ${classes.padding0}`}
+                className={`${classes.buttonIcon} ${classes.padding0} ${classes.slackIcon}`}
                 aria-label="Slack Logout"
                 component="span"
                 onClick={onHandleSlackSignout}

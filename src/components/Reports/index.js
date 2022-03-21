@@ -241,6 +241,7 @@ const Reports = (props) => {
                     totalRecords = assetsTotal
                 }  
                 setLoading(false)
+                props.checkChartAnalytics(null, null, false)
                 const formData = new FormData()
                 formData.append('list', JSON.stringify(list));
                 formData.append('total', totalRecords);
