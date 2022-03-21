@@ -196,7 +196,8 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
 
   const handleKeyEventSubmitMessage = (event) => {
     if(event.key === 'Enter') {
-      handleSubmitComment()
+      event.stopPropagation()
+      editorContainerRef.current.querySelector('#toolbar').querySelector('.ql-saveButton').click()
     }
   }
 
@@ -357,6 +358,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
 
   const handleSubmitComment = useCallback(async () => {
     if(selectedAssetsPatents.length > 0) {
+      
       const formData = new FormData()
       formData.append('text',  html.encode(commentHtml) )
       /* if(selectedCategory == 'correct_details') {
@@ -750,7 +752,6 @@ const handleDriveModalClose = (event) => {
 
   const renderCommentEditor = useMemo(() => {
     //if (!selectedCommentsEntity) return null
-    console.log('renderCommentEditor', selectedAssetsPatents)
     return (
       <div className={`${classes.commentEditor}`} ref={editorContainerRef}> 
         <QuillEditor
@@ -877,6 +878,7 @@ const handleDriveModalClose = (event) => {
     
     if(comment.hasOwnProperty('subtype')) return null
     let message = comment.text
+    message = message.replace(/&lt;br&gt;/g, "\n")
     if(message.indexOf('docs.google.com') !== -1) {
       const match = message.match(/<([^\s>]+)(\s|>)+/)
       if(match != null) {
