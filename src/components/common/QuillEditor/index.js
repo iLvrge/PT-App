@@ -38,6 +38,11 @@ SlackUserMention.blotName = 'slackusermention';
 SlackUserMention.tagName = 'slackusermention';
 Quill.register(SlackUserMention);
 
+class Span extends Inline { }
+Span.blotName = 'span';
+Span.tagName = 'span';
+Quill.register(Span);
+
 const QuillEditor = ({
   placeholder = 'Message #',
   value = '',
@@ -268,16 +273,17 @@ const QuillEditor = ({
     if(html === false) {
       editorRef.getEditor().insertText(position, text)
     } else {
+      console.log("text", text)
       editorRef.getEditor().clipboard.dangerouslyPasteHTML(position, text) 
     }    
     /* setTimeout(() => editorRef.getEditor().setSelection(editorRef.getEditor().getSelection().index + 10, 0), 0) */
-    setTimeout(() => editorRef.getEditor().setSelection(getHtml().length + 1), 0)
-  }
+    setTimeout(() => editorRef.getEditor().setSelection(getHtml().length + 5), 0)
+  }   
 
   const onUserClick = useCallback((event, user) => {   
     const name = user.real_name == undefined || user.real_name == null ? user.profile.real_name : user.real_name
     if(quillRef.current  != null) {
-      let insertHTMl = `&nbsp;<slackusermention data-id="${user.id}" data-label="@${name}" spellcheck="false" class="c-member_slug c-member_slug--link ts_tip_texty" dir="ltr">@${name}</slackusermention>`
+      let insertHTMl = `<slackusermention data-id="${user.id}" data-label="@${name}" spellcheck="false" class="c-member_slug c-member_slug--link ts_tip_texty" dir="ltr">&nbsp;@${name}</slackusermention><span>&nbsp;</span>`
       insertText(insertHTMl, true)
     }
     onSelectUser(user.id) 
