@@ -244,6 +244,24 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
 }
 
 CustomToolbar.modules = {
+  keyboard: {
+    bindings: {
+      shift_enter: {
+        key: 13,
+        shiftKey: true,
+        handler: (range, ctx) => {
+          console.log(range, ctx); // if you want to see the output of the binding
+          this.editor.insertText(range.index, "\n");
+        }
+      },
+      enter: {
+        key: 13,
+        handler: () => {
+          document.querySelector('.editor').querySelector('#toolbar').querySelector('.ql-saveButton').click()
+        }
+      }
+    }
+  },
   toolbar: { 
     container: '#toolbar',
     handlers: {   // Will be replaced in CustomToolbar

@@ -57,13 +57,13 @@
   max-height: calc(30vh - 80px)
 }
 .ql-editor slackusermention{
-  background-color: rgba(29, 155, 209, 0.1);
+  background-color: rgba(29, 155, 209, 0.25);
   color: rgba(18, 100, 163, 1);
   padding: 0 2px 1px;
   border-radius: 3px;
 }
 .ql-editor slackusermention:hover{
-  background-color: rgba(64 179 228, 0.1);  
+  background-color: rgba(64, 179, 228, 0.25);  
 }
 
 

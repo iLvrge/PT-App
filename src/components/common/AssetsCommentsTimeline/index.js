@@ -189,17 +189,6 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   }, [ commentsData ] )
 
 
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyEventSubmitMessage)
-    return () => window.removeEventListener("keydown", handleKeyEventSubmitMessage)
-  }, [])
-
-  const handleKeyEventSubmitMessage = (event) => {
-    if(event.key === 'Enter') {
-      event.stopPropagation()
-      editorContainerRef.current.querySelector('#toolbar').querySelector('.ql-saveButton').click()
-    }
-  }
 
   const findChannelID = useMemo(async(asset) => {
     let channelID = ''
@@ -355,6 +344,12 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
     
   }
 
+  const handleKeyDown = (event) => {
+    if(event.key === 'Enter') {
+      event.stopPropagation()
+      editorContainerRef.current.querySelector('#toolbar').querySelector('.ql-saveButton').click()
+    }
+  }
 
   const handleSubmitComment = useCallback(async () => {
     if(selectedAssetsPatents.length > 0) {
@@ -772,6 +767,7 @@ const handleDriveModalClose = (event) => {
           onSelectUser={setSelectUser}
           onFocus={handleFocus}
           onBlur={handleBlur} 
+          onKeyDown={handleKeyDown}
           driveFile={selectedDriveFile} 
         /> 
         <input type='file' id='attach_file' ref={inputFile} style={{display: 'none'}} onChange={onHandleFile}/>

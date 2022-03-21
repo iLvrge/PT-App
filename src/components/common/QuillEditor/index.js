@@ -60,13 +60,14 @@ const QuillEditor = ({
   onAttachmentFile = () => {},
   onFocus = () => {},
   onBlur = () => {},
+  onKeyDown= () => {},
   driveFile = ''
 }) => {
-
+  const PLACEHOLDER_MESSSAGE = 'Select a channel (an Asset or a Transaction) to send a message'
   const classes = useStyles()
   const quillRef = useRef(null)
   const dispatch = useDispatch()
-  const [placeholderMessage, setPlaceholderMessage] = useState('Select a channel (an Asset or a Transaction) to send a message')
+  const [placeholderMessage, setPlaceholderMessage] = useState(PLACEHOLDER_MESSSAGE)
   const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
   const maintainencePatentsList = useSelector(state => state.patenTrack2.maintainenceAssetsList.list)
   const selectedAssetsTransactions = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
@@ -119,7 +120,9 @@ const QuillEditor = ({
   useEffect(() => {
     if(selectedAssetsPatents.length > 0) {
       setPlaceholderMessage(`Send message to a US${selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0] : selectedAssetsPatents[1]}`)
-    }
+    } else {
+      setPlaceholderMessage(PLACEHOLDER_MESSSAGE)
+    }  
   }, [selectedAssetsPatents])
 
   useEffect(() => {
@@ -488,6 +491,7 @@ const QuillEditor = ({
           onChange={onChange}
           onFocus={onFocus}
           onBlur={onBlur}
+          /* onKeyDown={onKeyDown} */
         /> 
         <CustomToolbar 
           quillEditor={quillRef}
