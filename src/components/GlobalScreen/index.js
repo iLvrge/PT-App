@@ -616,6 +616,7 @@ const GlobalScreen = ({
                                         className={`${classes.splitPane} ${classes.splitPane2}  ${classes.splitPane3} ${classes.splitPane2OverflowUnset}`}
                                         split="vertical"
                                         minSize={100}
+                                        maxSize={dashboardScreen === true ? -190 : -520}  
                                         size={visualizerBarSize}
                                         onChange={(size) => { 
                                             setVisualizerBarSize(size)
@@ -635,8 +636,7 @@ const GlobalScreen = ({
                                             pointerEvents: isDragging === true ? 'none' : 'auto',
                                         }}
                                         ref={mainContainerRef}
-                                        primary={'second'}
-                                        maxSize={-520}  
+                                        primary={'second'}                                        
                                     >
                                         <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
                                             <IllustrationCommentContainer 

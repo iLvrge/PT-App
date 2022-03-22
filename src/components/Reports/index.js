@@ -177,7 +177,7 @@ const Reports = (props) => {
             resizeObserver = new ResizeObserver(entries => {   
                 setLoading(true)             
                 const { width } = entries[0].contentRect;
-                if(width > 0 && width < 601 ) {
+                if(width > 401 && width < 601 ) {
                     setGrid({
                         lg:6,
                         md:6,
@@ -193,14 +193,14 @@ const Reports = (props) => {
                         xs:4,
                         xl:4
                     })
-                } else if ( width < 361) {
+                } else if (width > 0 && width < 400) {
                     setGrid({
                         lg:12,
                         md:12,
                         sm:12,
                         xs:12,
                         xl:12
-                    })
+                    })  
                 }  else {
                     setGrid(GRID_ITEM)
                 }

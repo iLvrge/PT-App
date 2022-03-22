@@ -13,7 +13,6 @@ const Chart = (props) => {
     const profile = useSelector(store => (store.patenTrack.profile))
 
     const displayNumber = (value) => {
-        console.log("value", value, parseFloat(parseFloat(props.card.number / 100).toFixed(2)))
         return props.card.number
     }
     

@@ -151,12 +151,12 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   }, [ slack_messages, size, timelineRef ])
 
   useEffect(() => {
-    if( selectedAssetsPatents.length == 0 ) {
+    if( (selectedAssetsPatents.length == 0 && selectedAssetsTransactions.length == 0) ) {
       setCommentsData([])
       setCommentHtml('')
       setEditData(null)
     }
-  }, [ selectedAssetsPatents ])
+  }, [ selectedAssetsPatents, selectedAssetsTransactions ])
 
   useEffect(() => {
     if(slack_auth_token && slack_auth_token != null ) {
@@ -930,7 +930,7 @@ const handleDriveModalClose = (event) => {
               className={classes.timeline} 
               lineColor={'rgb(191 191 191)'}>
               {
-                commentsData.messages.map( (comment, index) => (
+                commentsData.messages.reverse().map( (comment, index) => (
                   <TimelineItem key={index} users={commentsData.users} comment={comment}/>                  
                 ))
               }            

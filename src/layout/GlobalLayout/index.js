@@ -894,7 +894,7 @@ const GlobalLayout = (props) => {
             setVisualizeOpenBar( true )
             setVisualizerBarSize(prevItem =>{
                 if(prevItem == '0%') {
-                    return  dashboardScreen === true ? '65%' :'40.1%'
+                    return  dashboardScreen === true ? '76%' :'40.1%'
                 } else {
                     return prevItem
                 }
@@ -917,7 +917,7 @@ const GlobalLayout = (props) => {
                 return prevItem
             })
             if((chartPrevItem === true || analyticsPrevItem === true) && (openCommentBar === true || openIllustrationBar === true)){
-                barSize = dashboardScreen === true ? '65%' :'40.1%'
+                barSize = dashboardScreen === true ? '76%' :'40.1%'
             } else if (openCommentBar === false && openIllustrationBar === false && ( chartPrevItem === true ||  analyticsPrevItem === true )) {
                 barSize = '100%'
             }

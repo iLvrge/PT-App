@@ -71,6 +71,7 @@ const QuillEditor = ({
   const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
   const maintainencePatentsList = useSelector(state => state.patenTrack2.maintainenceAssetsList.list)
   const selectedAssetsTransactions = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
+  const assetsTransactionsList = useSelector(state => state.patenTrack2.assetTypeAssignments.list)
   const maintainence_fee_file_name = useSelector(state => state.patenTrack2.maintainence_fee_file_name)
   const assetTypeAddressSelected = useSelector(state => state.patenTrack2.assetTypeAddress.selected)
   const assetTypeNamesSelected = useSelector(state => state.patenTrack2.assetTypeNames.selected)
@@ -118,12 +119,17 @@ const QuillEditor = ({
   }, [ driveFile, quillRef ])
 
   useEffect(() => {
+    let messagePlaceHolder = PLACEHOLDER_MESSSAGE
     if(selectedAssetsPatents.length > 0) {
-      setPlaceholderMessage(`Send message to a US${selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0] : selectedAssetsPatents[1]}`)
-    } else {
-      setPlaceholderMessage(PLACEHOLDER_MESSSAGE)
-    }  
-  }, [selectedAssetsPatents])
+      messagePlaceHolder = `Send a message to the US${selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0] : selectedAssetsPatents[1]} channel`
+    } else if (selectedAssetsTransactions.length > 0) {
+      const findIndex = assetsTransactionsList.findIndex( item => item.rf_id == selectedAssetsTransactions[0])
+      if(findIndex !== -1) {
+        messagePlaceHolder = `Send a message to the ${assetsTransactionsList[findIndex].date} ${assetsTransactionsList[findIndex].reel_no}-${assetsTransactionsList[findIndex].frame_no} channel`
+      }    
+    }
+    setPlaceholderMessage(messagePlaceHolder) 
+  }, [selectedAssetsPatents, selectedAssetsTransactions])
 
   useEffect(() => {
     if (!quillRef.current) return null

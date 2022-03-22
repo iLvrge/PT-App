@@ -42,7 +42,8 @@ export default makeStyles(theme => ({
       color: pink[500]
     },
     '& .ql-editor.ql-blank::before':{
-      color:'#5a5a5a'
+      fontStyle: 'initial',
+      color:  theme.palette.action.disabled
     }
   },
   textEditor: {

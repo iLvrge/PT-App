@@ -221,20 +221,21 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
 
     useEffect(() => {
         setCompaniesList( companies.list )
-        let counter = 0;
+        let counter = 0, items = [];
 
         if(companies.list.length > 0) {
             companies.list.map(row => {
                 if(parseInt(row.type) == 1) {
                     const parseChild = JSON.parse(row.child)
                     if(parseChild.length > 0) {
-                        counter += parseChild.length
+                        counter += parseChild.length        
                     } 
                 }  else {
                     counter++;
                 }
             })
             setTotalRecords(counter)
+            
         }
     }, [ companies.list ])
 
@@ -272,46 +273,59 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
 
     useEffect(() => {
         const getSelectedCompanies = async() => {
-            if( companies.list.length > 0 ) {
+            if( companies.list.length > 0 && selectItems.length == 0) {
                 /**
                  * Send Request to server
                  */
+                let activeItems = []
+                companies.list.map(row => {
+                    if(parseInt(row.type) === 1) {
+                        const parseChild = JSON.parse(row.child)
+                        const filters = parseChild.filter(c => c.status == 1 ? parseInt(c.representative_id) : '')
+                        activeItems = [...activeItems, ...filters]
+                    } else {
+                        if(row.status == 1) {
+                            activeItems.push(parseInt(row.representative_id))
+                        }
+                    }
+                })
                 const { data } = await PatenTrackApi.getUserCompanySelections();
                 if(data != null && data.list.length > 0) {
-                    if(selectItems.length == 0) {
-                        let insert = false, oldItems = [], groups = []
-                        if(selectedCategory === 'correct_names') { 
-                            setSelectItems([data.list[0].representative_id])
-                            dispatch(setMainCompaniesSelected([data.list[0].representative_id], []))
-                        } else {
+                    let insert = false, oldItems = [], groups = []
+                    if(selectedCategory === 'correct_names') { 
+                        setSelectItems([data.list[0].representative_id])
+                        dispatch(setMainCompaniesSelected([data.list[0].representative_id], []))
+                    } else {
+                        
+                        const promise =  data.list.map( representative => {
                             
-                            const promise =  data.list.map( representative => {
-                               
-                                /**
-                                 * If selected item is Group then select all the companies under group
-                                 */
-                                if(parseInt(representative.type) === 1) {
-                                    groups.push(parseInt(representative.representative_id))
-                                    const parseChild = JSON.parse(representative.child)
-                                    if(parseChild.length > 0) {
-                                        oldItems = [...oldItems, ...parseChild]
-                                        oldItems = [...new Set(oldItems)]
-                                    }
-                                } else {
+                            /**
+                             * If selected item is Group then select all the companies under group
+                             */
+                            if(parseInt(representative.type) === 1) {
+                                groups.push(parseInt(representative.representative_id))
+                                const parseChild = JSON.parse(representative.child)
+                                if(parseChild.length > 0) {
+                                    const filterItems = parseChild.filter(c => activeItems.includes(parseInt(c.representative_id)) ? parseInt(c.representative_id) : '')
+                                    oldItems = [...oldItems, ...filterItems]
+                                    oldItems = [...new Set(oldItems)]
+                                }
+                            } else {
+                                if(activeItems.includes(parseInt(representative.representative_id))) {
                                     oldItems.push(parseInt(representative.representative_id))
                                 }
-                            })
-                            await Promise.all(promise)
-                            //setSelectGroups(groups) 
-                            setSelectItems(oldItems)
-                            dispatch(setMainCompaniesSelected(oldItems, groups))
-                        }                        
-                    }
+                            }
+                        })
+                        await Promise.all(promise)
+                        //setSelectGroups(groups) 
+                        setSelectItems(oldItems)
+                        dispatch(setMainCompaniesSelected(oldItems, groups))
+                    } 
                 } 
             }            
         }  
         getSelectedCompanies()
-    }, [ companies.list ])
+    }, [ companies.list,  ])
 
     useEffect(() => {
         if((selectedCompaniesAll === true || selected.length > 0 )) {

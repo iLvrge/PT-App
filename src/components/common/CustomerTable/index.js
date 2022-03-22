@@ -226,11 +226,13 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             }
             dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
             if( !oldSelection.includes(row.id) ){
-                oldSelection.push(row.id)
+                //oldSelection.push(row.id)
+                oldSelection = [row.id]
             } else if(index != 2) {
-                oldSelection = oldSelection.filter(
+                /* oldSelection = oldSelection.filter(
                     customer => customer !== parseInt( row.id ),
-                )
+                ) */
+                oldSelection = []
             }
             history.push({
                 hash: updateHashLocation(location, 'otherParties', oldSelection).join('&')
