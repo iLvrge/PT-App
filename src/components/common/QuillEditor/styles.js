@@ -3,24 +3,24 @@ import { toggleThemeMode } from '../../../actions/uiActions';
 import { pink } from '@mui/material/colors';
 export default makeStyles(theme => ({
   root: {
-    '& .ql-container, .ql-toolbar': {
+    '& .ql-container, .ql-toolbar, #toolbar': {
       background: 'none !important'
     },
-    '& .ql-container.ql-snow, .ql-toolbar.ql-snow':{     
+    '& .ql-container.ql-snow, .ql-toolbar.ql-snow, #toolbar':{     
       border: `0px !important`,
     },
-    '&.ql-snow .ql-picker, .ql-toolbar, .ql-container, .ql-picker-label, .ql-picker-label svg, .ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button, .ql-snow.ql-toolbar button svg, .ql-snow .ql-toolbar button svg, .ql-snow .ql-stroke, .ql-picker-label':{
+    '&.ql-snow .ql-picker, .ql-toolbar, .ql-container, #toolbar, .ql-picker-label, .ql-picker-label svg, .ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button, .ql-snow.ql-toolbar button svg, .ql-snow .ql-toolbar button svg, .ql-snow .ql-stroke, .ql-picker-label, #toolbar button, #toolbar button svg ':{
       color: theme.palette.action.active,
       stroke: theme.palette.action.active,
       fill: theme.palette.action.disabledBackground,
     },
-    '&.ql-snow .ql-stroke, .ql-snow button.ql-bold , .ql-snow button.ql-italic , .ql-snow button.ql-atButton , .ql-snow button.ql-atButton svg, .ql-snow button.ql-attachButton , .ql-snow button.ql-attachButton svg, .ql-snow button.ql-saveButton , .ql-snow button.ql-saveButton svg, .ql-snow button.ql-sendattachButton svg': {
+    '&.ql-snow .ql-stroke, .ql-snow button.ql-bold , .ql-snow button.ql-italic , .ql-snow button.ql-atButton , .ql-snow button.ql-atButton svg, .ql-snow button.ql-attachButton , .ql-snow button.ql-attachButton svg, .ql-snow button.ql-saveButton , .ql-snow button.ql-saveButton svg, .ql-snow button.ql-sendattachButton svg, #toolbar button svg': {
       stroke: theme.palette.action.disabledBackground,
       color: theme.palette.action.disabledBackground,
       fill: theme.palette.action.disabledBackground,
       pointerEvents: 'none'  
     },
-    '& .focus .ql-snow .ql-stroke, .focus .ql-snow button.ql-atButton svg, .focus .ql-snow .ql-attachButton svg, .focus .ql-snow .ql-saveButton svg,  .attach .ql-snow .ql-sendattachButton svg': {
+    '& .focus .ql-snow .ql-stroke, .focus .ql-snow button.ql-atButton svg, .focus .ql-snow .ql-attachButton svg, .focus .ql-snow .ql-saveButton svg,  .attach .ql-snow .ql-sendattachButton svg, .focus #toolbar svg': {
       color: theme.palette.action.active,
       fill: theme.palette.action.active,
       pointerEvents: 'all'
@@ -28,7 +28,7 @@ export default makeStyles(theme => ({
     '& .focus .ql-snow .ql-stroke, .attach .ql-snow .ql-stroke':{
       stroke: theme.palette.action.active
     },
-    '& .ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow.ql-toolbar button:focus, .ql-snow .ql-toolbar button:focus, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active': {
+    '& .ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow.ql-toolbar button:focus, .ql-snow .ql-toolbar button:focus, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active, #toolbar button:hover, #toolbar button:focus': {
       color: theme.palette.action.active
     },
     '& .ql-snow .ql-picker-options .ql-picker-item, .ql-snow.ql-toolbar .ql-picker-item:hover,.ql-snow .ql-toolbar .ql-picker-item:hover, .ql-snow.ql-toolbar .ql-picker-item.ql-selected, .ql-snow .ql-toolbar .ql-picker-item.ql-selected':{

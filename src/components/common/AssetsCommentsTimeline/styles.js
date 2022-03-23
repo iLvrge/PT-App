@@ -61,6 +61,9 @@ export default makeStyles(theme => ({
       stroke: pink[500]
     },
   },
+  commentEditorStandalone:{
+    bottom: 55,
+  },
   addCommentBtn: {
     position: 'absolute',
     top: 10,

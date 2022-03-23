@@ -126,6 +126,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
   const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
+  const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
   
   
 
@@ -401,7 +402,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
 
   //incase of search
   useEffect(() => {
-    
+    console.log("Transactions", search_string, assignmentList.length, selectedRow.length, selectedAssetsPatents.length)
     if (
       defaultLoad === false &&
       assignmentList.length > 0 &&
@@ -411,13 +412,20 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       setIntialize(true)
       getTransactionData(dispatch, assignmentList[0].rf_id, defaultLoad) // select first row of transaction table
       dispatch(getAssetTypeAssignmentAssets(assignmentList[0].rf_id, false, 1, search_string)) // send request to get list of assets in the first rf_id
+    } else if (
+      (search_string == '' || search_string == null) && 
+      assignmentList.length > 0 &&
+      (selectedRow.length == 1 || selectedAssetsTransactions.length == 1) && 
+      selectedAssetsPatents.length == 0 &&
+      assetIllustration === null  
+      ) {
+        getTransactionData(dispatch, selectedAssetsTransactions.length > 0 ? selectedAssetsTransactions[0] : selectedRow[0], defaultLoad) 
     }
-  }, [dispatch, assignmentList, defaultLoad, selectedRow, initialize, search_string]);
-  
+  }, [dispatch, assignmentList, defaultLoad, selectedRow, selectedAssetsTransactions, initialize, search_string, selectedAssetsPatents, assetIllustration]);  
 
+  
   useEffect(() => {
     if (defaultLoad === true || defaultLoad === undefined) {
-      console.log('TRANSAACTION', selectedCompanies, selectedCompaniesAll)
       const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
         tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
         customers =

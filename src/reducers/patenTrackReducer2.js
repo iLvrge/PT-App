@@ -363,9 +363,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           slack_profile_data:  action.data
         }
       case types.SET_SLACK_MESSAGES:
+        let {messages, users} = action.data
+        messages = messages.reverse() 
         return {
           ...state,
-          slack_messages: action.data
+          slack_messages: {messages, users}
         }
       case types.SET_SLACK_CHANNEL_LIST:
         /* const channelList = []

@@ -69,6 +69,7 @@ import { setTokenStorage, getTokenStorage, removeTokenStorage } from '../../../u
 import { html } from '../../../utils/html_encode_decode'
 
 import { capitalizeEachWord } from '../../../utils/numbers'
+import clsx from 'clsx'
 
 const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, illustrationBar, standalone }) => {
   const classes = useStyles()
@@ -147,8 +148,13 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
 
   useEffect(() => {
     setCommentsData(slack_messages)
-    updateHeight(size, timelineRef)
-  }, [ slack_messages, size, timelineRef ])
+    updateHeight(size, timelineRef)  
+    
+  }, [ slack_messages, size, timelineRef, standalone ])
+
+  useEffect(() => {
+    scrollToLast()
+  }, [commentsData])
 
   useEffect(() => {
     if( (selectedAssetsPatents.length == 0 && selectedAssetsTransactions.length == 0) ) {
@@ -190,7 +196,15 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
     }
   }, [ commentsData ] )
 
-
+  const scrollToLast = () => {
+    setTimeout(() => {
+      if(timelineRef.current !== null) {
+        if(commentsData.messages.length > 0 && timelineRef.current.querySelector('section') !== null) {
+          timelineRef.current.scrollTop = timelineRef.current.querySelector('section').clientHeight 
+        }
+      }      
+    }, 200)
+  }
 
   const findChannelID = useMemo(async(asset) => {
     let channelID = ''
@@ -269,7 +283,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       /* if(displayButton === false) {
         calHeight = timelineRef.current.parentNode.clientHeight - 96
       } */
-      timelineRef.current.style.height = `${ calHeight }px`
+      timelineRef.current.style.height = `${ calHeight }px`      
     }    
   }
 
@@ -750,7 +764,7 @@ const handleDriveModalClose = (event) => {
   const renderCommentEditor = useMemo(() => {
     //if (!selectedCommentsEntity) return null
     return (
-      <div className={`${classes.commentEditor}`} ref={editorContainerRef}> 
+      <div className={clsx(classes.commentEditor, {[classes.commentEditorStandalone]: typeof standalone !== 'undefined' ? true : false})} ref={editorContainerRef}> 
         <QuillEditor
           value={commentHtml}
           onChange={setCommentHtml}
@@ -930,7 +944,7 @@ const handleDriveModalClose = (event) => {
               className={classes.timeline} 
               lineColor={'rgb(191 191 191)'}>
               {
-                commentsData.messages.reverse().map( (comment, index) => (
+                commentsData.messages.map( (comment, index) => (
                   <TimelineItem key={index} users={commentsData.users} comment={comment}/>                  
                 ))
               }            

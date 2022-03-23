@@ -2,13 +2,13 @@
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 } 
-.ql-toolbar {
+.ql-toolbar, #toolbar {
   /* background: rgb(48, 48, 48); */
   border-top: none;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
-.ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button{
+.ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button, #toolbar button{
   /* width: 32px;
   height: 32px; */
   width: 'auto';
@@ -37,20 +37,20 @@
 .ql-editor{
   padding: 11px 15px
 }
-.ql-toolbar.ql-snow{
+.ql-toolbar.ql-snow, #toolbar{
   border-top: 0px;
   padding: 4px;
   display: flex;
   align-items: center;
 }
-.ql-snow.ql-toolbar button svg{
+.ql-snow.ql-toolbar button svg, #toolbar button svg{
   stroke: none;
 }
 
 #toolbar button:focus{
   outline: 0;
 }
-.ql-snow.ql-toolbar button:focus, .focus .ql-snow.ql-toolbar button:focus{
+.ql-snow.ql-toolbar button:focus, .focus .ql-snow.ql-toolbar button:focus, #toolbar button:focus{
   color: inherit;
 }
 .ql-editor{
@@ -71,7 +71,7 @@
   width: 2rem;
   height: 2rem;
 }  */
-.ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button{
+.ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button, #toolbar button{
   width: 28px;
   min-width: auto;
   height: 28px;
@@ -79,7 +79,7 @@
   margin: 2px 6px 2px 2px;
 }
 
-.ql-snow.ql-toolbar button svg{
+.ql-snow.ql-toolbar button svg, #toolbar button svg{
   width: 1.5rem;
   height: 1.5rem; 
 }

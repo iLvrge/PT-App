@@ -438,11 +438,12 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
         if(type !== 9)  {
           const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
           tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-          customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected;
+          customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
+          rfIDs = selectedAssetAssignments.length > 0 ? selectedAssetAssignments : [];
   
           if( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
             //setIsLoadingTimelineData(true)
-            const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, [], selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
+            const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
             //setIsLoadingTimelineData(false)
             setTimelineRawData(data.list)
           } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null ) {
