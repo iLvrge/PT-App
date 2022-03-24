@@ -23,6 +23,8 @@ import {
   setSelectedAssetsTransactions,
   setSelectedAssetsPatents,
   setAssetsIllustration,
+  getSlackMessages,
+  setSlackMessages,
   getAssetsAllTransactionsEvents,
   setChildSelectedAssetsTransactions,
   setChildSelectedAssetsPatents,
@@ -127,7 +129,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
   const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
   const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
-  
+  const channel_id = useSelector(state => state.patenTrack2.channel_id)
   
 
   const COLUMNS = [
@@ -270,6 +272,20 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
     }
   }, [selectedRow])
 
+
+  useEffect(() => {
+    if (channel_id != "" && selectedRow.length > 0) {
+      const getSlackToken = getTokenStorage("slack_auth_token_info");
+      if (getSlackToken && getSlackToken != "") {
+        dispatch(getSlackMessages(selectedRow[0])); 
+      } else {
+        //alert to user for login with slack to retrieve messages
+      }
+    }
+  }, [dispatch, channel_id, selectedRow]);
+
+
+
   useEffect(() => {
     if(slack_channel_list.length == 0 && slack_channel_list_loading === false) {
       const slackToken = getTokenStorage( 'slack_auth_token_info' )
@@ -402,7 +418,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
 
   //incase of search
   useEffect(() => {
-    console.log("Transactions", search_string, assignmentList.length, selectedRow.length, selectedAssetsPatents.length)
+    
     if (
       defaultLoad === false &&
       assignmentList.length > 0 &&
@@ -537,6 +553,7 @@ const onHandleClickRow = useCallback(
     } else {
       //toggle to show illustration or timeline
       dispatch(setDocumentTransaction([]))    
+      dispatch(setSlackMessages({ messages: [], users: [] }));
       if(!selectedRow.includes(row.rf_id)){
         dispatch(setChannelID(''))
         getTransactionData(dispatch, row.rf_id, defaultLoad, search_string)

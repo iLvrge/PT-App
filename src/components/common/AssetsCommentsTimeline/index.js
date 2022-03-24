@@ -42,6 +42,7 @@ import {
   getLayoutTemplatesByID,
   sendMessage,
   getChannelID,
+  getChannelIDTransaction,
   getSlackMessages, 
   getSlackUsersList,  
   getGoogleProfile,
@@ -91,6 +92,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
   const selectPatents = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
   const selectedAssetsTransactions = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
+  const assetTransactions = useSelector(state => state.patenTrack2.assetTypeAssignments.list)
   const currentRowSelection = useSelector(state => state.patenTrack2.selectedAssetsTransactions)
   const slack_messages = useSelector(state => state.patenTrack2.slack_messages)
   const layout_id = useSelector(state => state.patenTrack2.layout_id)
@@ -99,6 +101,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   const assetTypeAddressGroups = useSelector(state => state.patenTrack2.assetTypeAddress.all_groups)
   const assetTypeNamesGroups = useSelector(state => state.patenTrack2.assetTypeNames.all_groups)
   const mainCompaniesSelected = useSelector(state => state.patenTrack2.mainCompaniesList.selected)
+  const mainCompaniesList = useSelector(state => state.patenTrack2.mainCompaniesList.list)
   const assetTypeNamesSelected = useSelector(state => state.patenTrack2.assetTypeNames.selected)
   const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
   const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
@@ -124,6 +127,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   const [ selectedDriveFile, setSelectedDriveFile] = useState(null)
   const [ activeBtn, setActiveBtn] = useState({display: false})  
   const isDarkTheme = useSelector( state => state.ui.isDarkTheme )
+  const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
   const type = useMemo(() => selectedCommentsEntity && selectedCommentsEntity.type, [ selectedCommentsEntity ])
   const fullScreenItems = [
     {
@@ -157,7 +161,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   }, [commentsData])
 
   useEffect(() => {
-    if( (selectedAssetsPatents.length == 0 && selectedAssetsTransactions.length == 0) ) {
+    if( (selectedAssetsPatents.length == 0 || selectedAssetsTransactions.length == 0) && (dashboardScreen == true && mainCompaniesSelected.length == 0)) {
       setCommentsData([])
       setCommentHtml('')
       setEditData(null)
@@ -174,7 +178,6 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
           if( channelID != '') {
             dispatch(setChannelID({channel_id: channelID}))
           }  
-          
         }
       }
       
@@ -199,7 +202,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   const scrollToLast = () => {
     setTimeout(() => {
       if(timelineRef.current !== null) {
-        if(commentsData.messages.length > 0 && timelineRef.current.querySelector('section') !== null) {
+        if(commentsData?.messages && commentsData.messages.length > 0 && timelineRef.current.querySelector('section') !== null) {
           timelineRef.current.scrollTop = timelineRef.current.querySelector('section').clientHeight 
         }
       }      
@@ -248,7 +251,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
           const { access_token } = token          
           if(access_token && access_token != '') {
             slackLoginButton =  false 
-            console.log("Slacklogin auth")
+            /* console.log("Slacklogin auth") */
             if( slack_channel_list.length == 0 && slack_channel_list_loading === false) {
               dispatch(getChannels(access_token))
             }
@@ -325,7 +328,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
               layoutID = item[0].layout_id
             }
           }
-          console.log("openTemplateDriveFiles",profileInfo)
+          /* console.log("openTemplateDriveFiles",profileInfo) */
           if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
             //dispatch(setDriveButtonActive( true )) // it will set when user click on drive file link
             dispatch( 
@@ -368,7 +371,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   }
 
   const handleSubmitComment = useCallback(async () => {
-    if(selectedAssetsPatents.length > 0) {
+    if(selectedAssetsPatents.length > 0 || selectedAssetsTransactions.length > 0 || (dashboardScreen === true && mainCompaniesSelected.length > 0)) {
       
       const formData = new FormData()
       formData.append('text',  html.encode(commentHtml) )
@@ -381,8 +384,30 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
         formData.append('asset', selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? selectedAssetsPatents[1] : selectedAssetsPatents[0])
       } else if(selectedAssetsTransactions.length > 0){
         formData.append('transaction', selectedAssetsTransactions.length == 1 ? selectedAssetsTransactions[0] : currentRowSelection )
+      } else if (dashboardScreen === true && mainCompaniesSelected.length > 0) {
+        formData.append( 'company', mainCompaniesSelected[0] )
       }
-      formData.append('asset_format', selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? 'us'+selectedAssetsPatents[1] : 'us'+selectedAssetsPatents[0])
+
+      let assetFormat = ''
+
+      if(selectedAssetsPatents.length == 2) {
+        assetFormat = selectedAssetsPatents[0] === '' ? 
+                                          'us'+selectedAssetsPatents[1] 
+                                          : 
+                                            'us'+selectedAssetsPatents[0]
+      } else if(selectedAssetsTransactions.length > 0) {
+        const findIndex = assetTransactions.findIndex(row => row.rf_id == selectedAssetsTransactions[0])
+        if(findIndex  !== -1) {
+          assetFormat = assetTransactions[findIndex].rf_id /* `${assetTransactions[findIndex].date}-${assetTransactions[findIndex].reel_no}-${assetTransactions[findIndex].frame_no}` */
+        }
+      } else if(mainCompaniesSelected.length > 0) {
+        const findIndex = mainCompaniesList.findIndex(row => row.representative_id == mainCompaniesSelected[0])
+        if(findIndex !== -1) {
+          assetFormat = mainCompaniesList[findIndex].representative_name.toString().replace(/ /g,'')
+        }
+      }
+      
+      formData.append('asset_format', assetFormat)
       formData.append('user', selectUser == null ? '' : selectUser)
       formData.append('reply', replyId == null ? '' : replyId)
       formData.append('edit',editData == null ? '' : editData)
@@ -415,7 +440,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
         alert("Please login first with your Slack Account")
       }    
     }    
-  }, [ dispatch, commentHtml, selectedAssetsPatents, getSlackMessages, channel_id, selectUser, replyId, editData, file, selectedAssetsTransactions, currentRowSelection, selectedCategory ])
+  }, [ dispatch, commentHtml, selectedAssetsPatents, getSlackMessages, channel_id, selectUser, replyId, editData, file, selectedAssetsTransactions, currentRowSelection, selectedCategory, assetTransactions, mainCompaniesList ])
 
   const handleCancelComment = useCallback(() => {
     setCommentHtml('')
@@ -448,7 +473,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
     form.append('team',  team )
     const { status } = await PatenTrackApi.updateSlackTeam(form)
     if (status === 200) {
-      console.log("Team updated")
+      /* console.log("Team updated") */
     }
   }
 
@@ -485,7 +510,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
 
   const checkSlackAuth = useCallback(() => {
     const slackToken = getTokenStorage( 'slack_auth_token_info' )
-		if(slackToken && slackToken!= '') {
+		if(slackToken && slackToken != '') {
       const { access_token, team, id } = JSON.parse( slackToken )
       if( access_token && access_token != null ) {
         /**
@@ -493,13 +518,20 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
          */
         onUpdateTeamID(team)
         dispatch(getSlackProfile(access_token, id))
-
-        if( selectedAssetsPatents.length > 0 ) {        
-          if( channel_id == '' || channel_id == null ) {
+        
+        if( channel_id != '' && channel_id != null && channel_id != undefined) {
+          dispatch( getSlackMessages( channel_id ) ) //getMessages for selected channel
+        } else {
+          if( selectedAssetsPatents.length > 0 ) {      
             dispatch( getChannelID( selectedAssetsPatents[0], selectedAssetsPatents[1] ) ) //get channel for selected asset
-          } else {
-            dispatch( getSlackMessages( channel_id ) ) //getMessages for selected channel
-          }  
+          } else if (selectedAssetsTransactions.length > 0) {
+            dispatch( getChannelIDTransaction( selectedAssetsTransactions[0])) //get channel for selected asset
+          }  else if(mainCompaniesSelected.length > 0) {
+            const findIndex = mainCompaniesList.findIndex(row => row.representative_id == mainCompaniesSelected[0])
+            if(findIndex !== -1) {
+              dispatch( getChannelID( mainCompaniesList[findIndex].representative_name.toString().replace(/ /g,'').toLowerCase()))
+            }
+          }
         }
       }			
 		}
@@ -609,11 +641,11 @@ const handleDriveModalClose = (event) => {
   const handleFocus = useCallback((range, source, editor) => {
 
     const getSlackUser = getTokenStorage( 'slack_auth_token_info' ), googleToken = getTokenStorage( 'google_auth_token_info' );
-    if(getSlackUser &&  getSlackUser != '' &&  selectedAssetsPatents.length > 0) {
+    if(getSlackUser &&  getSlackUser != '' &&  (selectedAssetsPatents.length > 0 || selectedAssetsTransactions.length > 0 || (dashboardScreen === true && mainCompaniesSelected.length > 0))) {
       editorContainerRef.current.querySelector('.editor').classList.add('focus')
     }    
 
-    if(googleToken && googleToken != '' &&  selectedAssetsPatents.length > 0) {
+    if(googleToken && googleToken != '' &&  (selectedAssetsPatents.length > 0 || selectedAssetsTransactions.length > 0 || (dashboardScreen === true && mainCompaniesSelected.length > 0))) {
       const tokenParse = JSON.parse( googleToken )
       const { access_token } = tokenParse
       if( access_token ) {
@@ -621,7 +653,7 @@ const handleDriveModalClose = (event) => {
       }
     }
 
-  }, [ editorContainerRef, selectedAssetsPatents ])
+  }, [ editorContainerRef, selectedAssetsPatents, mainCompaniesSelected, selectedAssetsTransactions, dashboardScreen ])
 
   const handleBlur = useCallback((previousRange, source, editor) => {
     editorContainerRef.current.querySelector('.editor').classList.remove('focus');
@@ -629,20 +661,20 @@ const handleDriveModalClose = (event) => {
 
   const openDriveFolder = (event, itemID, itemName) => {
     event.preventDefault()
-    console.log("openDriveFolder", itemID)
+    /* console.log("openDriveFolder", itemID) */
     onHandleDriveExplorer(event, itemID)
   }
 
   const onHandleSelectFile = (event, itemID) => {
     event.preventDefault()
-    console.log("onHandleSelectFile", itemID)
+    /* console.log("onHandleSelectFile", itemID) */
     //setSelectedDriveFile(`https://docs.google.com/document/d/${itemID}/edit`)
     setCommentHtml( previousContent => previousContent + `https://docs.google.com/document/d/${itemID}/edit`)
     setDriveModal( false )
   }
 
   const onDrop = (data, event) => {
-    console.log("onDrop", data)
+    /* console.log("onDrop", data) */
     setCommentHtml( previousContent => previousContent + ` ${data.template_agreement}`)
   }
 
@@ -740,7 +772,7 @@ const handleDriveModalClose = (event) => {
     if( typeof newName == undefined && mainCompaniesSelected.length > 1) {
       alert('Please select only one company')
     } else {
-      console.log("assetTypeNamesGroups", assetTypeNamesGroups)
+     /*  console.log("assetTypeNamesGroups", assetTypeNamesGroups) */
       setChangeNameModal( false )
       const form = new FormData()
       form.append( 'group_ids', JSON.stringify(assetTypeNamesGroups) )

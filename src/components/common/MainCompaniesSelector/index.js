@@ -31,7 +31,10 @@ import {
     setAssetTypesPatentsSelectAll,
     setAllAssignments, 
     setSelectAssignments,
-    setSlackMessages
+    setSlackMessages,
+    getSlackMessages,
+    setChannelID,
+    getChannels,
 } from '../../../actions/patentTrackActions2'
 
 
@@ -54,7 +57,7 @@ import { DEFAULT_CUSTOMERS_LIMIT } from '../../../api/patenTrack2'
 import PatenTrackApi from '../../../api/patenTrack2'
 
 import { numberWithCommas } from '../../../utils/numbers'
-
+import { getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
 import {
     updateHashLocation
 } from '../../../utils/hashLocation' 
@@ -64,111 +67,120 @@ import ChildTable from './ChildTable'
 import Loader from '../Loader'
 import { resetAllRowSelect } from '../../../utils/resizeBar'
 
-const COLUMNS = [
-    {
-        width: 29,
-        minWidth: 29,
-        label: '',
-        dataKey: 'representative_id',
-        role: 'checkbox',
-        selectedFromChild: true,     
-        disableSort: true,
-        show_selection_count: true,
-        /* showOnCondition: '1' */ 
-    },
-    {
-        width: 25, 
-        minWidth: 25,
-        label: '',
-        dataKey: 'representative_id',
-        headingIcon: 'company',
-        role: "arrow",
-        disableSort: true,
-        showOnCondition: '0',
-        disableColumnKey:'type'
-    },
-    {
-        width: 700,  
-        minWidth: 700,
-        oldWidth: 700,
-        draggable: true,
-        label: 'Companies',        
-        dataKey: 'original_name',
-        classCol: 'font12Rem',
-        showOnCondition: '0',
-        align: "left", 
-        badge: true,
-    },
-    /* {
-        width: 80,  
-        minWidth: 80, 
-        label: 'Acitivites',
-        staticIcon: '',
-        dataKey: 'no_of_activities',
-        format: numberWithCommas,
-        styleCss: true,
-        headerAlign: 'right',
-        justifyContent: 'flex-end'
-    },
-    {
-        width: 80,   
-        minWidth: 80,
-        label: 'Parties',
-        staticIcon: '',
-        dataKey: 'no_of_parties',
-        format: numberWithCommas,
-        headerAlign: 'right',
-        styleCss: true,
-        justifyContent: 'flex-end'
-    },
-    {
-        width: 80,  
-        minWidth: 80,
-        label: 'Inventors',
-        staticIcon: '',
-        dataKey: 'no_of_inventor',
-        format: numberWithCommas,
-        headerAlign: 'right',
-        styleCss: true,
-        justifyContent: 'flex-end'
-    },
-    {
-        width: 120,  
-        minWidth: 120,
-        label: 'Transactions',
-        staticIcon: '',
-        dataKey: 'no_of_transactions',
-        format: numberWithCommas,
-        headerAlign: 'right',
-        styleCss: true,
-        justifyContent: 'flex-end'
-    },
-    {
-        width: 80,  
-        minWidth: 80,
-        label: 'Assets',
-        staticIcon: '',
-        dataKey: 'no_of_assets',
-        format: numberWithCommas,
-        headerAlign: 'right',
-        styleCss: true,
-        justifyContent: 'flex-end'   
-    },
-    {
-        width: 80,  
-        minWidth: 80,
-        label: 'Rights',
-        dataKey: 'product',
-        staticIcon: '',
-        format: numberWithCommas,
-        headerAlign: 'right',
-        styleCss: true,
-        justifyContent: 'flex-end'
-    } */
-] 
+
 
 const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag, parentBar, isMobile}) => {
-
+    const COLUMNS = [
+        {
+            width: 29,
+            minWidth: 29,
+            label: '',
+            dataKey: 'representative_id',
+            role: 'checkbox',
+            selectedFromChild: true,     
+            disableSort: true,
+            show_selection_count: true,
+            /* showOnCondition: '1' */ 
+        },
+        {
+            width: 25, 
+            minWidth: 25,
+            label: '',
+            dataKey: 'representative_id',
+            headingIcon: 'company',
+            role: "arrow",
+            disableSort: true,
+            showOnCondition: '0',
+            disableColumnKey:'type'
+        },
+        {
+            width: 700,  
+            minWidth: 700,
+            oldWidth: 700,
+            draggable: true,
+            label: 'Companies',        
+            dataKey: 'original_name',
+            classCol: 'font12Rem',
+            showOnCondition: '0',
+            align: "left", 
+            badge: true,
+        },
+        {
+          width: isMobile === true ? 60 : 40,
+          minWidth: isMobile === true ? 60 : 40,
+          label: "",
+          dataKey: "channel", 
+          formatCondition: 'representative_name',
+          headingIcon: 'slack_image',
+          role: 'slack_image',      
+        },
+        /* {
+            width: 80,  
+            minWidth: 80, 
+            label: 'Acitivites',
+            staticIcon: '',
+            dataKey: 'no_of_activities',
+            format: numberWithCommas,
+            styleCss: true,
+            headerAlign: 'right',
+            justifyContent: 'flex-end'
+        },
+        {
+            width: 80,   
+            minWidth: 80,
+            label: 'Parties',
+            staticIcon: '',
+            dataKey: 'no_of_parties',
+            format: numberWithCommas,
+            headerAlign: 'right',
+            styleCss: true,
+            justifyContent: 'flex-end'
+        },
+        {
+            width: 80,  
+            minWidth: 80,
+            label: 'Inventors',
+            staticIcon: '',
+            dataKey: 'no_of_inventor',
+            format: numberWithCommas,
+            headerAlign: 'right',
+            styleCss: true,
+            justifyContent: 'flex-end'
+        },
+        {
+            width: 120,  
+            minWidth: 120,
+            label: 'Transactions',
+            staticIcon: '',
+            dataKey: 'no_of_transactions',
+            format: numberWithCommas,
+            headerAlign: 'right',
+            styleCss: true,
+            justifyContent: 'flex-end'
+        },
+        {
+            width: 80,  
+            minWidth: 80,
+            label: 'Assets',
+            staticIcon: '',
+            dataKey: 'no_of_assets',
+            format: numberWithCommas,
+            headerAlign: 'right',
+            styleCss: true,
+            justifyContent: 'flex-end'   
+        },
+        {
+            width: 80,  
+            minWidth: 80,
+            label: 'Rights',
+            dataKey: 'product',
+            staticIcon: '',
+            format: numberWithCommas,
+            headerAlign: 'right',
+            styleCss: true,
+            justifyContent: 'flex-end'
+        } */
+    ] 
     const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
@@ -204,6 +216,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const assetTypesSelected = useSelector(state => state.patenTrack2.assetTypes.selected)
     const assetTypesSelectAll = useSelector(state => state.patenTrack2.assetTypes.selectAll)
+    const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
+    const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
+    const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
+    const channel_id = useSelector(state => state.patenTrack2.channel_id)
     /**
      * Intialise company list
      */
@@ -247,6 +263,110 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             setHeaderColumns(headerColumns)
         }
     }, [isMobile])
+
+    useEffect(() => {
+        if(slack_channel_list.length == 0 && slack_channel_list_loading === false) {
+          const slackToken = getTokenStorage( 'slack_auth_token_info' )
+          if(slackToken && slackToken!= '') {
+            let token = JSON.parse(slackToken)
+            
+            if(typeof token === 'string') {
+              token = JSON.parse(token)
+              setTokenStorage( 'slack_auth_token_info', token )
+    
+            }
+            
+            if(typeof token === 'object') {
+              const { access_token } = token          
+              if(access_token && access_token != '') {
+                dispatch(getChannels(access_token))
+              }
+            }
+          }      
+        }
+    }, [slack_channel_list, slack_channel_list_loading])
+
+      /**
+   * Adding channel to transaction list
+   */
+
+    useEffect(() => {
+        const checkAssetChannel = async () => {
+            if(companiesList.length > 0 && slack_channel_list.length > 0) {
+                let findChannel = false, oldCompanies = [...companies.list]
+                let name = ''
+                const promises = slack_channel_list.map( channelAsset => {
+                    name = ''
+                    const findIndex = oldCompanies.findIndex(company => {
+                        if(company.type == 1) {
+                            const child = JSON.parse(company.child)
+                            if(child.length > 0) {
+                                const mapIndex = child.findIndex(childCompany => childCompany.representative_name.toString().replace(/ /g,'').toLowerCase() == channelAsset.name)
+                                if(mapIndex !== -1) {
+                                    name = channelAsset.name
+                                    return true
+                                }
+                            }
+                        } else {
+                            if(company.representative_name.toString().replace(/ /g,'').toLowerCase() == channelAsset.name){
+                                name = channelAsset.name
+                                return true
+                            }
+                        }
+                    })
+                    if(findIndex !== -1) {
+                        oldCompanies[findIndex]['channel'] = name
+                        if(findChannel === false) {
+                            findChannel = true
+                        }
+                    }
+                })
+                await Promise.all(promises)
+                if(findChannel === true){
+                    setCompaniesList(oldCompanies)
+                } 
+            }
+        }    
+        checkAssetChannel()
+    },[ slack_channel_list, companies])
+
+
+    useEffect(() => {        
+                
+        /**
+         * If company selected find ChannelID
+         */
+        console.log("asdasdasd", selected.length, slack_channel_list.length, dashboardScreen)
+        if(selected.length > 0 && slack_channel_list.length > 0  &&  dashboardScreen === true ) {
+            console.log("asdasdasd", selected.length, slack_channel_list.length, dashboardScreen)
+            let name = ''
+            const findIndex = companiesList.findIndex( company => {
+                if(company.type == 1) {
+                    const child = JSON.parse(company.child)
+                    const childIndex = child.findIndex(c => c.representative_id == selected[0] )
+                    if(childIndex !== -1) {
+                        name = child[childIndex].representative_name.toString().replace(/ /g,'').toLowerCase()
+                        return true
+                    }
+                } else {
+                    if(company.representative_id == selected[0]) {
+                        name = company.representative_name.toString().replace(/ /g,'').toLowerCase()
+                        return true
+                    }
+                }
+            })
+            
+            if(findIndex !== -1 && name != '') {
+                const channelID = findChannelID(name)
+                if( channelID != '') {
+                    dispatch(setChannelID({channel_id: channelID}))  
+                    dispatch(getSlackMessages(channelID))                          
+                }
+            }
+        }
+    }, [slack_channel_list, companiesList, selected, dashboardScreen ])
+
+
     /**
      * if category is correct names then row should show radio button instead of checkboxes
      */
@@ -307,12 +427,21 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                                 const parseChild = JSON.parse(representative.child)
                                 if(parseChild.length > 0) {
                                     const filterItems = parseChild.filter(c => activeItems.includes(parseInt(c.representative_id)) ? parseInt(c.representative_id) : '')
-                                    oldItems = [...oldItems, ...filterItems]
-                                    oldItems = [...new Set(oldItems)]
+                                    if(dashboardScreen === true) {
+                                        oldItems = filterItems.length > 0 ? [parseInt(filterItems[0])] : []
+                                    } else {                                       
+                                        oldItems = [...oldItems, ...filterItems]
+                                        oldItems = [...new Set(oldItems)]
+                                    }
+                                    
                                 }
                             } else {
                                 if(activeItems.includes(parseInt(representative.representative_id))) {
-                                    oldItems.push(parseInt(representative.representative_id))
+                                    if(dashboardScreen === true) {
+                                        oldItems = [parseInt(representative.representative_id)]
+                                    } else {
+                                        oldItems.push(parseInt(representative.representative_id))
+                                    }                                    
                                 }
                             }
                         })
@@ -389,6 +518,9 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }
     }, [ selected, selectItems ])
 
+
+    
+
     useEffect(() => {
         const getGroupItems = async() => {
             /* const groupList = companiesList.filter( company => parseInt(company.type) === 1)
@@ -405,6 +537,18 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }
         getGroupItems()
     }, [ selectItems ])
+
+    const findChannelID = useCallback((name) => {
+        let channelID = ''
+        if(slack_channel_list.length > 0) {
+          const findIndex = slack_channel_list.findIndex( channel => channel.name == name)
+      
+          if( findIndex !== -1) {
+            channelID = slack_channel_list[findIndex].id
+          }
+        }
+        return channelID
+    }, [ slack_channel_list ])
 
     /**
      * Reset all items
@@ -429,7 +573,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         dispatch(setAssetsIllustrationData(null))
         dispatch(setSelectedAssetsTransactions([]))
         dispatch(setSelectedAssetsPatents([]))
-        dispatch(setSlackMessages([]))
+        dispatch(setSlackMessages({messages: [], users: []}))
         dispatch(
             setPDFFile(
             { 
@@ -490,8 +634,12 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                     if(parseInt(row.type) === 1) {
                         if(row.child_total > 0) {
                             const parseChild = JSON.parse(row.child)
-                            updateSelected = [...updateSelected, ...parseChild]
-                            updateSelected = [...new Set(updateSelected)]
+                            if(dashboardScreen === true) {
+                                updateSelected = [parseChild[0]]
+                            } else {
+                                updateSelected = [...updateSelected, ...parseChild]
+                                updateSelected = [...new Set(updateSelected)]
+                            }                            
                         }
                     }  else {
                         updateSelected = [parseInt(row.representative_id)]
@@ -500,27 +648,42 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                     if(parseInt(row.type) === 1) {
                         if(row.child_total > 0) {
                             const parseChild = JSON.parse(row.child)
-                            if(!updateSelected.includes(parseInt(parseChild[0]))) {
-                                updateSelected = [...updateSelected, ...parseChild]
-                                updateSelected = [...new Set(updateSelected)]
+                            if(dashboardScreen === true) {
+                                updateSelected = [parseInt( parseChild[0] )]
                             } else {
-                                const childFilterPromise = parseChild.map( child => {
-                                    updateSelected = updateSelected.filter(
-                                        existingCompany => parseInt(existingCompany) !== parseInt( child )
-                                    )
-                                })
-                                await Promise.all(childFilterPromise)
-                            }                            
+                                if(!updateSelected.includes(parseInt(parseChild[0]))) {
+                                    updateSelected = [...updateSelected, ...parseChild]
+                                    updateSelected = [...new Set(updateSelected)]
+                                } else {
+                                    const childFilterPromise = parseChild.map( child => {
+                                        updateSelected = updateSelected.filter(
+                                            existingCompany => parseInt(existingCompany) !== parseInt( child )
+                                        )
+                                    })
+                                    await Promise.all(childFilterPromise)
+                                }   
+                            }
+                                                     
                         }   
                         //updateGroup.push(parseInt(row.representative_id))
                     } else {
-                        updateSelected.push(parseInt( row.representative_id ))
+                        if(dashboardScreen === true) {
+                            updateSelected = [parseInt( row.representative_id )]
+                        } else {
+                            updateSelected.push(parseInt( row.representative_id ))
+                        }
+                        
                     }
                 }                
             } else {
-                updateSelected = updateSelected.filter(
-                    existingCompany => parseInt(existingCompany) !== parseInt( row.representative_id )
-                )
+                if(dashboardScreen === true) {
+                    updateSelected = []
+                } else {
+                    updateSelected = updateSelected.filter(
+                        existingCompany => parseInt(existingCompany) !== parseInt( row.representative_id )
+                    )
+                }
+                
             }
             history.push({
                 hash: updateHashLocation(location, 'companies', updateSelected).join('&')
