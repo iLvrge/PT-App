@@ -423,6 +423,10 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
           setCommentHtml('')
   
           if(data != '' && Object.keys(data).length > 0) {
+            const editor = editorContainerRef.current.querySelector('.ql-editor')
+            if(editor.parentNode.querySelector('.editor-attachment') != null) {
+              editor.parentNode.removeChild(editor.parentNode.querySelector('.editor-attachment'))
+            }
             const { status, channel } = data;
             if(status != '' && status == 'Message sent') {
               setEditData( null )
@@ -605,7 +609,7 @@ const onHandleDriveExplorer = async( event, fileID = undefined ) => {
 
 const onHandleFile = (event) => {
   event.preventDefault()
-  setFile(event.target.value)
+  setFile(event.target.files[0])
 }
 
 const handleCompanyNameChange = (event)=>{
@@ -795,8 +799,9 @@ const handleDriveModalClose = (event) => {
 
   const renderCommentEditor = useMemo(() => {
     //if (!selectedCommentsEntity) return null
+    
     return (
-      <div className={clsx(classes.commentEditor, {[classes.commentEditorStandalone]: typeof standalone !== 'undefined' ? true : false})} ref={editorContainerRef}> 
+      <div className={clsx(classes.commentEditor, {[classes.commentEditorStandalone]: typeof standalone !== 'undefined' ? true : false}, {['editorFullScreen']: typeof standalone !== 'undefined' ? true : false})} ref={editorContainerRef}> 
         <QuillEditor
           value={commentHtml}
           onChange={setCommentHtml}
@@ -1051,7 +1056,7 @@ const handleDriveModalClose = (event) => {
       </Grid>
     )    
   }, [ driveFilesAndFolder ])
-
+  
   if (companyListLoading) return null
   return (
     <Paper className={classes.root} square>
@@ -1101,6 +1106,7 @@ const handleDriveModalClose = (event) => {
           :
           ''
         }
+        
         { renderCommentsTimeline }  
         { renderCommentEditor }
         {  

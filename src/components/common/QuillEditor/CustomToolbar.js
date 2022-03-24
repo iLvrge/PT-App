@@ -257,7 +257,9 @@ CustomToolbar.modules = {
       enter: {
         key: 13,
         handler: () => {
-          document.querySelector('.editor').querySelector('#toolbar').querySelector('.ql-saveButton').click()
+          const elementContainer = document.querySelector('.editorFullScreen') !== null ? document.querySelector('.editorFullScreen') : document.querySelector('.editor')
+          console.log("elementContainer", elementContainer)
+          elementContainer.querySelector('#toolbar').querySelector('.ql-saveButton').click()
         }
       }
     }
