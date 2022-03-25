@@ -616,7 +616,7 @@ const GlobalScreen = ({
                                         className={`${classes.splitPane} ${classes.splitPane2}  ${classes.splitPane3} ${classes.splitPane2OverflowUnset}`}
                                         split="vertical"
                                         minSize={100}
-                                        maxSize={dashboardScreen === true ? -190 : -520}  
+                                        maxSize={dashboardScreen === true ? -250 : -520}  
                                         size={visualizerBarSize}
                                         onChange={(size) => { 
                                             setVisualizerBarSize(size)
@@ -643,6 +643,7 @@ const GlobalScreen = ({
                                                 cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPane1OverflowUnset, classes.paneHeightZero, { [classes.minimized]: assetsCommentsTimelineMinimized })}
                                                 split={`horizontal`} 
                                                 minSize={50}
+                                                maxSize={-200}
                                                 defaultSize={commentBarSize}
                                                 fn={resizePane}
                                                 fnParams={setCommentBarSize}

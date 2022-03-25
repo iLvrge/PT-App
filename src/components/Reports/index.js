@@ -147,6 +147,7 @@ const Reports = (props) => {
     let resizeObserver = null
     const [loading, setLoading] = useState(true)
     const [grid, setGrid] = useState(GRID_ITEM)
+    const [smallScreen, setSmallScreen] = useState(false)
     const [activeId, setActiveId] = useState(-1)
     const profile = useSelector(store => (store.patenTrack.profile))    
     const [cardList, setCardList] = useState(LIST)
@@ -175,7 +176,8 @@ const Reports = (props) => {
     useEffect(() => {
         if(ref.current !== null) {
             resizeObserver = new ResizeObserver(entries => {   
-                setLoading(true)             
+                setLoading(true)    
+                let smallScreen = false         
                 const { width } = entries[0].contentRect;
                 if(width > 401 && width < 601 ) {
                     setGrid({
@@ -194,6 +196,7 @@ const Reports = (props) => {
                         xl:4
                     })
                 } else if (width > 0 && width < 400) {
+                    smallScreen = true
                     setGrid({
                         lg:12,
                         md:12,
@@ -204,7 +207,8 @@ const Reports = (props) => {
                 }  else {
                     setGrid(GRID_ITEM)
                 }
-                setLoading(false)    
+                setLoading(false)  
+                setSmallScreen(smallScreen)  
             })
                      
             resizeObserver.observe(ref.current)
@@ -378,7 +382,7 @@ const Reports = (props) => {
                             item lg={12} md={12} sm={12} xs={12} 
                         >
                             <Paper className={classes.titleContainer} square>
-                                <span className={'title'}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{companyname.length > 0 ? companyname[0].original_name : ''}</span></span>
+                                <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{companyname.length > 0 ? companyname[0].original_name : ''}</span></span>
                                 <div className={classes.toolbar}>
                                     <IconButton  size="small" className={classes.shareIcon}>
                                         <Tooltip 
@@ -408,7 +412,9 @@ const Reports = (props) => {
                                             enterDelay={0}
                                             TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
                                         >
-                                            { typeof props.standalone !== 'undefined' ? <Close/> : <Fullscreen /> }
+                                            <span>
+                                                { typeof props.standalone !== 'undefined' ? <Close/> : <Fullscreen /> }
+                                            </span>                                            
                                         </Tooltip>                            
                                     </IconButton>                        
                                 </div>
@@ -418,7 +424,7 @@ const Reports = (props) => {
                             item lg={12} md={12} sm={12} xs={12} 
                             className={classes.list}
                         >
-                            <Grid
+                            <Grid  
                                 container
                                 direction="row"
                                 justifyContent="flex-start"

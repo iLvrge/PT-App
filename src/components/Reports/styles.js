@@ -11,7 +11,12 @@ export default makeStyles(theme => ({
         flexGrow: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        minHeight: 60
+        minHeight: 60,              
+        '& .MuiGrid-grid-sm-12': {
+            '& span.small':{
+                maxWidth: 185
+            }
+        },
     },  
     flexColumn: {
         height: 'calc((100vh - 102px) / 3)',
@@ -24,9 +29,9 @@ export default makeStyles(theme => ({
             flexDirection: 'column',
             alignContent: 'start',
             height: 'calc((100vh - 220px) / 3)',
-            flexBasis: '250px !important',
-            maxWidth: '250px !important',
-            minWidth: '250px !important',
+            flexBasis: '220px !important',
+            maxWidth: '220px !important',
+            minWidth: '220px !important',
             '& svg': {
                 display: 'flex',
                 /* height: '70%' */
@@ -44,8 +49,7 @@ export default makeStyles(theme => ({
         overflow: 'hidden',
         '& .font12Rem':{
           fontSize: '1rem'
-        },
-        
+        },  
     },
     companyBar:{
         height: '100%',
@@ -105,7 +109,7 @@ export default makeStyles(theme => ({
         backgroundImage: 'none',
         borderBottom: `1px solid ${theme.palette.divider}`,
         '& span.title':{
-            whiteSpace: 'nowrap',
+            whiteSpace: 'nowrap', 
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             '& span':{

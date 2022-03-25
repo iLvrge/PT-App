@@ -838,7 +838,9 @@ class PatenTrackApi {
   }
 
   static sendMessage( code, data ) {
-    return axios.post(`${base_new_api_url}/slacks/conversations/message/${code}`, data, getMultiFormUrlHeader())
+    const header = getMultiFormUrlHeader()
+    console.log(header)
+    return axios.post(`${base_new_api_url}/slacks/conversations/message/${code}`, data, header)
   }
 
   static getMessages( code, channelID ) {

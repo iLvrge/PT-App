@@ -258,7 +258,6 @@ CustomToolbar.modules = {
         key: 13,
         handler: () => {
           const elementContainer = document.querySelector('.editorFullScreen') !== null ? document.querySelector('.editorFullScreen') : document.querySelector('.editor')
-          console.log("elementContainer", elementContainer)
           elementContainer.querySelector('#toolbar').querySelector('.ql-saveButton').click()
         }
       }

@@ -65,7 +65,7 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
     const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
     const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
     const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
-
+    
     const ASSET_COLUMNS = [  
         {
             width: 29, 
@@ -223,7 +223,7 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
             setDocumentsFiles([])
             setSelectedRow([])
             setCurrentSelection(null)
-
+           
             if(type == 1) {
                 await PatenTrackApi.cancelInitiated()
                 if(channel_id != '' && channel_id != null) {
