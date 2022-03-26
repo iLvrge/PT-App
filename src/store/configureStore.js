@@ -12,7 +12,8 @@ import { setTokenStorage, getTokenStorage } from '../utils/tokenStorage'
 
 import AuthApi from '../../api/authApi'
 
-const store = createStore(rootReducer, applyMiddleware(thunk, logger))
+/* const store = createStore(rootReducer, applyMiddleware(thunk, logger)) */
+const store = createStore(rootReducer, applyMiddleware(thunk))
 
 if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
   let location = window.location.pathname

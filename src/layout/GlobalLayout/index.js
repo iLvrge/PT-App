@@ -411,9 +411,9 @@ const GlobalLayout = (props) => {
         searchData()
     }, [ search_string ])
 
-    useEffect(() => {
+    /* useEffect(() => {
         console.log("USE EFFECT", openChartBar, openAnalyticsBar)
-    }, [openChartBar, openAnalyticsBar])
+    }, [openChartBar, openAnalyticsBar]) */
 
     /* useEffect(() => {
         let barSize = '50%';
@@ -697,7 +697,7 @@ const GlobalLayout = (props) => {
     }
 
     const changeVisualBar = (chart, analytics, comment, illustration) => {
-        console.log("changeVisualBar")
+        /* console.log("changeVisualBar") */
         let barOpen = true, barSize = '40.1%'        
         if(chart === false && analytics === false && (comment === true || illustration === true) && usptoMode === false && connectionBoxView === false){
             barSize = '0%'
@@ -906,7 +906,7 @@ const GlobalLayout = (props) => {
                 setIllustrationBarSize('50%')
             }
         } else if( typeof usptoMode !== 'undefined' && usptoMode === false ) {
-            console.log('usptoMode', usptoMode, openChartBar, openAnalyticsBar, openCommentBar, openIllustrationBar, illustrationBarSize)
+            /* console.log('usptoMode', usptoMode, openChartBar, openAnalyticsBar, openCommentBar, openIllustrationBar, illustrationBarSize) */
             let barSize = '0%', chartPrevItem = false, analyticsPrevItem = false
             await setChartBar(prevItem => {
                 chartPrevItem = prevItem
@@ -934,7 +934,7 @@ const GlobalLayout = (props) => {
                 console.log("Tap")
                 setAnalyticsBar(analyticsPrevItem)  
             }  */
-            console.log("barSize", barSize, chartPrevItem, analyticsPrevItem)            
+            /* console.log("barSize", barSize, chartPrevItem, analyticsPrevItem)     */        
         } 
     }, [openChartBar, openAnalyticsBar, openCommentBar, openIllustrationBar])
 

@@ -641,7 +641,7 @@ const onHandleTimelineScreen = /* useCallback( */(event) => {
               !googleAuthLogin
               ?
                 <IconButton
-                  className={`${classes.padding0}`}
+                  className={`${classes.buttonIcon} ${classes.padding0} ${classes.slackIcon}`}
                   aria-label="Google Logout"
                   component="span"
                   onClick={onHandleGoogleSignout}

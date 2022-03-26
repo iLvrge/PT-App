@@ -157,6 +157,10 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   }, [ slack_messages, size, timelineRef, standalone ])
 
   useEffect(() => {
+    updateHeight(0, timelineRef)  
+  }, [timelineRef ])
+
+  useEffect(() => {
     scrollToLast()
   }, [commentsData])
 
@@ -282,12 +286,17 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   const updateHeight = ( size, timelineRef ) => {
     if( timelineRef.current != null ) {
       //console.log('updateHeight=>height', timelineRef.current.parentNode.clientHeight)
-      let calHeight = timelineRef.current.parentNode.clientHeight - 96
+      
       /* if(displayButton === false) {
         calHeight = timelineRef.current.parentNode.clientHeight - 96
       } */
-      timelineRef.current.style.height = `${ calHeight }px`      
-    }    
+      setTimeout(() => {
+        const findParentContainer = timelineRef.current.closest('div.comment_root')
+        /* console.log("RESIZE updateHeight setTimeout", timelineRef, timelineRef.current.parentNode.clientHeight, editorContainerRef.current.clientHeight, findParentContainer.parentNode.clientHeight) */
+        let calHeight = findParentContainer.parentNode.clientHeight - 96
+        timelineRef.current.style.height = `${ calHeight }px`      
+      }, 50)
+    }      
   }
 
   const getLayout = useMemo(() => {
@@ -423,6 +432,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
           setCommentHtml('')
   
           if(data != '' && Object.keys(data).length > 0) {
+            inputFile.current.value = ''
             const editor = editorContainerRef.current.querySelector('.ql-editor')
             if(editor.parentNode.querySelector('.editor-attachment') != null) {
               editor.parentNode.removeChild(editor.parentNode.querySelector('.editor-attachment'))
@@ -801,7 +811,7 @@ const handleDriveModalClose = (event) => {
     //if (!selectedCommentsEntity) return null
     
     return (
-      <div className={clsx(classes.commentEditor, {[classes.commentEditorStandalone]: typeof standalone !== 'undefined' ? true : false}, {['editorFullScreen']: typeof standalone !== 'undefined' ? true : false})} ref={editorContainerRef}> 
+      <div className={clsx(classes.commentEditor, {[classes.commentEditorStandalone]: typeof standalone !== 'undefined' ? true : false}, {['editorFullScreen']: typeof standalone !== 'undefined' ? true : false}, {[classes.commentEditorActive]: (selectedAssetsPatents.length > 0 || selectedAssetsTransactions.length > 0 || (dashboardScreen === true && mainCompaniesSelected.length > 0)) ? true : false})} ref={editorContainerRef}> 
         <QuillEditor
           value={commentHtml}
           onChange={setCommentHtml}
@@ -893,17 +903,26 @@ const handleDriveModalClose = (event) => {
     let imageURL = ''
     if(fileURL.toString().indexOf('docs.google.com') !== -1 && fileURL.toString().indexOf('document') !== -1){
       imageURL = 'https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document'
-    } else if(file.hasOwnProperty('external_type') && file.hasOwnProperty('thumb_64')){
+    }/*  else if(file?.thumb_64 != ''){
       imageURL = fileURL.thumb_64
-    }
-    return(
-      <>
-      {
-        imageURL != '' && (
-          <img src={imageURL} />
-        )
+    } */ else {
+      if(file?.mimetype != '' ) {
+        switch(file.mimetype) {
+          case 'application/pdf':
+            imageURL = 'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'
+            break;
+          case 'image/png':
+          case 'image/jpeg':
+            imageURL = 'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/image_icon.png'
+            break;
+        }
       }
-      </>
+    }
+    if(imageURL == '') return null
+    return(
+      imageURL != '' && (
+        <img src={imageURL} />
+      )
     )
   }
 
@@ -914,8 +933,8 @@ const handleDriveModalClose = (event) => {
       <>
         {
           files.files.map( (file, index) => (
-            <div key={`${indexing}-${index}`}>
-              <a onClick={(event) => { openFile(event, file)}} className={classes.fileLink}><FileImage file={file}/>{file.title}</a>
+            <div key={`${indexing}-${index}`} className={classes.icon}>
+              <a onClick={(event) => { openFile(event, file)}} className={classes.fileLink}><FileImage file={file}/>{file?.name ? file.name : file.title}</a>
             </div>
           ))
         }
@@ -1059,7 +1078,7 @@ const handleDriveModalClose = (event) => {
   
   if (companyListLoading) return null
   return (
-    <Paper className={classes.root} square>
+    <Paper className={clsx(classes.root, 'comment_root')} square>
       <div className={classes.content}>
         {
           fullScreen === false && typeof standalone === 'undefined' && (

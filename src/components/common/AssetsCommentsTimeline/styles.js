@@ -40,7 +40,7 @@ export default makeStyles(theme => ({
     top: 5,
     right: 0,
     zIndex: 999
-  },
+  },  
   commentEditor: {
     /* paddingLeft: 40, */
     /* padding: '0',
@@ -49,6 +49,7 @@ export default makeStyles(theme => ({
     position: 'sticky',
     bottom: 3,
     width: '95% !important',
+    pointerEvents: 'none',
     '& .focus .ql-snow .ql-stroke, .focus .ql-snow button.ql-atButton svg, .focus .ql-snow .ql-attachButton svg, .focus .ql-snow .ql-saveButton svg,  .attach .ql-snow .ql-sendattachButton svg': {
       color: theme.palette.action.active,
       pointerEvents: 'all'
@@ -60,6 +61,9 @@ export default makeStyles(theme => ({
       color: pink[500],
       stroke: pink[500]
     },
+  },
+  commentEditorActive:{
+    pointerEvents: 'all',
   },
   commentEditorStandalone:{
     bottom: 55,
@@ -106,7 +110,8 @@ export default makeStyles(theme => ({
     '& img':{
       marginRight: 5,
       position: 'relative',
-      top: 5
+      top: 5,
+      width: 24
     }
   },
   arrowButton:{
@@ -260,4 +265,9 @@ export default makeStyles(theme => ({
   tooltip:{
       fontSize: '1rem'
   },
+  icon: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+  }
 }))

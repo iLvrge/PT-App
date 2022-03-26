@@ -293,7 +293,7 @@ const GlobalScreen = ({
             
             const containerSize = mainContainerRef.current.pane2.clientWidth
             const windowWidth = size != undefined ? containerSize - size - 3 : mainContainerRef.current.pane1.querySelector('#patentrackDiagramDiv').clientWidth, pixelSize = 14, totalColumn = 4,  totalGap = 3
-            console.log(windowWidth, config.node, ((windowWidth - parseFloat(config.node.leftOffset) - ( totalColumn * parseFloat(config.node.width))) / totalGap))
+            /* console.log(windowWidth, config.node, ((windowWidth - parseFloat(config.node.leftOffset) - ( totalColumn * parseFloat(config.node.width))) / totalGap)) */
 
 
             const xGap = (windowWidth - parseFloat(config.node.leftOffset) - ( totalColumn * parseFloat(config.node.width))) / totalGap            
