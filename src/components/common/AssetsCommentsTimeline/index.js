@@ -696,7 +696,12 @@ const handleDriveModalClose = (event) => {
 
   const openFile = useCallback((event, file) => {
     event.preventDefault()    
-    if((typeof file == 'string' && (file.indexOf('docs.google.com') !== -1 || file.indexOf('drive.google.com') !== -1)) || (typeof file == 'object' && (file.hasOwnProperty('external_url') && file.hasOwnProperty('external_type') && file.external_type == 'gdrive') || (file.hasOwnProperty('external_url') && file.external_url.indexOf('docs.google.com') !== -1))) {
+    if(event.target.classList.contains('active_link')) {
+      event.target.classList.remove("active_link");
+    } else {
+      event.target.classList.add("active_link");
+    }    
+    if((typeof file == 'string' && (file.indexOf('docs.google.com') !== -1 || file.indexOf('drive.google.com') !== -1)) || (typeof file == 'object' && (file.hasOwnProperty('external_url') && file.hasOwnProperty('external_type') && file.external_type == 'gdrive') || (file.hasOwnProperty('external_url') && file.external_url.indexOf('docs.google.com') !== -1))) {      
       let fileURL = typeof file == 'string' ? file : file.external_url;
       if(fileURL.indexOf('drive.google.com') !== -1) {
         fileURL = fileURL.replace('view', 'preview')
@@ -960,11 +965,9 @@ const handleDriveModalClose = (event) => {
     if(comment.hasOwnProperty('subtype')) return null
     let message = comment.text
     message = message.replace(/&lt;br&gt;/g, "\n")
-    if(message.indexOf('docs.google.com') !== -1) {
-      
+    if(message.indexOf('docs.google.com') !== -1) {      
       const urlRegex = /(?:(?:https?:\/\/)|(?:www\.))[^\s]+/g; 
-      const match =   message.match(urlRegex) /* message.match(/<([^\s>]+)(\s|>)+/)  */     
-     
+      const match =   message.match(urlRegex) /* message.match(/<([^\s>]+)(\s|>)+/)  */
       if(match != null) {
         let link = match[0]
         if( typeof comment.files != 'undefined' &&  comment.files.length == 1 && link != '' ) {
@@ -976,7 +979,6 @@ const handleDriveModalClose = (event) => {
           link = link.replace('>', '');
           const options = {target: '_blank'};  
           const messageCheck = `<${link}>`, messageCheck2 = `&lt;br&gt;${link}`
-          console.log("CHECCCCCKKKKK", link.length, message, messageCheck, messageCheck2, message == messageCheck, message == messageCheck2)
           if(link != '' && (message == messageCheck || message == messageCheck2)) {
             message = `<div><a href='#' class='message_link' data-link="${link}">${link}</a></div>`
           } else {

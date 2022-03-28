@@ -4,7 +4,7 @@ import moment from 'moment'
 import SplitPane from 'react-split-pane'
 import { IconButton, Paper, Modal, Table, TableHead, TableBody, TableRow, TableCell, TableContainer, TextField } from '@mui/material'
 import { Draggable } from 'react-drag-and-drop'
-
+import _debounce from 'lodash/debounce'
 import { Close, Fullscreen } from '@mui/icons-material'
 import IllustrationContainer from '../AssetsVisualizer/IllustrationContainer'
 import TimelineContainer from '../AssetsVisualizer/TimelineContainer'
@@ -20,6 +20,7 @@ import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/
 import useStyles from './styles'
 import Reports from '../../Reports'
 import FullScreen from '../FullScreen'
+import clsx from 'clsx'
 
 const IllustrationCommentContainer = ({ 
     cls, 
@@ -169,6 +170,11 @@ const IllustrationCommentContainer = ({
         setMenuComponent(item)
     }
 
+    const changePane =  useCallback(_debounce((size) => {
+        fn2(size, fn2Params)
+        fn(fnVarName, size, fnParams)   
+    }, 1), [  ])
+
     return (
         <SplitPane
             className={cls}
@@ -176,15 +182,16 @@ const IllustrationCommentContainer = ({
             minSize={minSize}
             defaultSize={defaultSize}
             onDragStarted={() => {
-                console.log('!isDrag', !isDrag)
                 setIsDrag(!isDrag)
             }}
             onDragFinished={(size) => {
-                console.log("Drag End", !isDrag)
                 setIsDrag(!isDrag)
                 fn2(size, fn2Params)
                 fn(fnVarName, size, fnParams)   
             }} 
+            onChange={(size) => {
+                changePane(size)
+            }}
             maxSize={-10} 
             primary={primary}
             ref={illustrationRef}
@@ -202,16 +209,16 @@ const IllustrationCommentContainer = ({
                             selectedCompaniesAll === true || 
                             selectedCompanies.length > 0 || */
                             type === 9
-                        )
+                        ) || (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null)
                     ?
                         <IconButton 
                             size="small" 
-                            className={classes.fullscreenBtn} 
+                            className={clsx(classes.fullscreenBtn, {[classes.frameButton]: (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null) ? true : false})} 
                             onClick={handleClickOpenFullscreen}
-                            style={{...(typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null ? {top: 17} : {})}}
+                            style={{...(typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null ? {top: 17 } : {})}}
                         >
                             <Fullscreen />
-                        </IconButton>
+                        </IconButton> 
                     :
                     ''
                 }                                 
@@ -274,20 +281,20 @@ const IllustrationCommentContainer = ({
                             ?
                                 <TimelineContainer assignmentBar={assignmentBar} assignmentBarToggle={assignmentBarToggle} type={type}/>
                             :
-
-                                <IllustrationContainer 
-                                    isFullscreenOpen={isFullscreenOpen} 
-                                    asset={assetIllustration} 
-                                    setIllustrationRecord={illustrationRecord} 
-                                    chartsBar={chartsBar}
-                                    analyticsBar={analyticsBar}
-                                    chartsBarToggle={chartsBarToggle}
-                                    checkChartAnalytics={checkChartAnalytics}
-                                    setAnalyticsBar={setAnalyticsBar}
-                                    setChartBar={setChartBar}
-                                    fullScreen={handleClickOpenFullscreen}
-                                    gap={gap}
-                                />
+                                
+                                    <IllustrationContainer 
+                                        isFullscreenOpen={isFullscreenOpen} 
+                                        asset={assetIllustration} 
+                                        setIllustrationRecord={illustrationRecord} 
+                                        chartsBar={chartsBar}
+                                        analyticsBar={analyticsBar}
+                                        chartsBarToggle={chartsBarToggle}
+                                        checkChartAnalytics={checkChartAnalytics}
+                                        setAnalyticsBar={setAnalyticsBar}
+                                        setChartBar={setChartBar}
+                                        fullScreen={handleClickOpenFullscreen}
+                                        gap={gap}
+                                    />
                         :
                         ''
                     :
@@ -302,7 +309,7 @@ const IllustrationCommentContainer = ({
                         className={classes.fullscreenCharts} 
                         square
                     >
-                        <IconButton onClick={handleCloseFullscreen} className={classes.right} size="large">
+                        <IconButton onClick={handleCloseFullscreen}  className={clsx(classes.right, {[classes.frameButton]: (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null) ? true : false})} size="large">
                             <Close /> 
                         </IconButton> 
                         {
@@ -310,18 +317,22 @@ const IllustrationCommentContainer = ({
                                 <TimelineContainer assignmentBar={assignmentBar} assignmentBarToggle={assignmentBarToggle} type={type}/>
                             )
                             :
-                                illustrationBar === true ? (
-                                    <IllustrationContainer 
-                                        isFullscreenOpen={isFullscreenOpen}  
-                                        asset={assetIllustration} 
-                                        setIllustrationRecord={illustrationRecord} 
-                                        chartsBar={chartsBar}
-                                        analyticsBar={analyticsBar}
-                                        chartsBarToggle={chartsBarToggle}
-                                        checkChartAnalytics={checkChartAnalytics}
-                                        setAnalyticsBar={setAnalyticsBar}
-                                        setChartBar={setChartBar}
-                                    />
+                                (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null)
+                                ?
+                                    <iframe src={templateURL} className={classes.templateFrame}></iframe>
+                                :
+                                    illustrationBar === true ? (
+                                        <IllustrationContainer 
+                                            isFullscreenOpen={isFullscreenOpen}  
+                                            asset={assetIllustration} 
+                                            setIllustrationRecord={illustrationRecord} 
+                                            chartsBar={chartsBar}
+                                            analyticsBar={analyticsBar}
+                                            chartsBarToggle={chartsBarToggle}
+                                            checkChartAnalytics={checkChartAnalytics}
+                                            setAnalyticsBar={setAnalyticsBar}
+                                            setChartBar={setChartBar}
+                                        />
                                 )
                                 :
                                 ''

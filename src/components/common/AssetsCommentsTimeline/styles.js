@@ -86,6 +86,12 @@ export default makeStyles(theme => ({
     },
     '& span':{
       cursor: 'inherit !important'
+    },
+    '& .message_link':{
+      color: theme.palette.text.primary
+    },
+    '& .active_link':{
+      color: pink[500]
     }
   },
   minimizeButton: {

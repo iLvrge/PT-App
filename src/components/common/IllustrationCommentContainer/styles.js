@@ -1,4 +1,5 @@
 import makeStyles from '@mui/styles/makeStyles';
+import { pink } from '@mui/material/colors';
 
 export default makeStyles(theme => ({
     root:{
@@ -27,7 +28,7 @@ export default makeStyles(theme => ({
         '& iframe': {
             border: 0
         }
-    },
+    },    
     container: {
         width: '100%',
         height: '100%'
@@ -115,5 +116,8 @@ export default makeStyles(theme => ({
     },
     active: {
         color: '#E60000'
-    }
+    },
+    frameButton: {
+        color: pink[500]
+    },
 }))
