@@ -165,12 +165,12 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   }, [commentsData])
 
   useEffect(() => {
-    if( (selectedAssetsPatents.length == 0 || selectedAssetsTransactions.length == 0) && (dashboardScreen == true && mainCompaniesSelected.length == 0)) {
+    if( (selectedAssetsPatents.length == 0 || selectedAssetsTransactions.length == 0) || (dashboardScreen == true && mainCompaniesSelected.length == 0)) {
       setCommentsData([])
       setCommentHtml('')
       setEditData(null)
     }
-  }, [ selectedAssetsPatents, selectedAssetsTransactions ])
+  }, [ selectedAssetsPatents, selectedAssetsTransactions, dashboardScreen, mainCompaniesSelected ])
 
   useEffect(() => {
     if(slack_auth_token && slack_auth_token != null ) {
@@ -210,7 +210,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
           timelineRef.current.scrollTop = timelineRef.current.querySelector('section').clientHeight 
         }
       }      
-    }, 200)
+    }, 50)
   }
 
   const findChannelID = useMemo(async(asset) => {
@@ -433,6 +433,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   
           if(data != '' && Object.keys(data).length > 0) {
             inputFile.current.value = ''
+            setFile(null)
             const editor = editorContainerRef.current.querySelector('.ql-editor')
             if(editor.parentNode.querySelector('.editor-attachment') != null) {
               editor.parentNode.removeChild(editor.parentNode.querySelector('.editor-attachment'))
@@ -694,14 +695,14 @@ const handleDriveModalClose = (event) => {
 
   const openFile = useCallback((event, file) => {
     event.preventDefault()
-    if((typeof file == 'string' && file.indexOf('docs.google.com') !== -1) || (file.hasOwnProperty('external_url') && file.hasOwnProperty('external_type') && file.external_type == 'gdrive') || (file.hasOwnProperty('external_url') && file.external_url.indexOf('docs.google.com') !== -1)) {
+    if((typeof file == 'string' && (file.indexOf('docs.google.com') !== -1) || file.indexOf('drive.google.com') !== -1) || (file.hasOwnProperty('external_url') && file.hasOwnProperty('external_type') && file.external_type == 'gdrive') || (file.hasOwnProperty('external_url') && file.external_url.indexOf('docs.google.com') !== -1)) {
       dispatch(
         setDriveTemplateFrameMode(true)
       )
       dispatch(
         setTemplateDocument( typeof file == 'string' ? file : file.external_url)
       )
-    } else {
+    } else {  
       window.open(file.permalink, '_blank')
     }
   }, [ dispatch ])
@@ -901,8 +902,13 @@ const handleDriveModalClose = (event) => {
   const FileImage = ({file}) => {
     const fileURL = file !== 'string' && file.hasOwnProperty('external_url') ? file.external_url : ''
     let imageURL = ''
-    if(fileURL.toString().indexOf('docs.google.com') !== -1 && fileURL.toString().indexOf('document') !== -1){
-      imageURL = 'https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document'
+    if(fileURL.toString().indexOf('.google.com') !== -1){
+      if(fileURL.toString().indexOf('docs.google.com') !== -1 && fileURL.toString().indexOf('document') !== -1) {
+        imageURL = 'https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document'
+      } else if(fileURL.toString().indexOf('drive.google.com') !== -1 && file.mimetype.toString().indexOf('image') ) {
+        imageURL = 'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/image_icon.png'
+      }
+      
     }/*  else if(file?.thumb_64 != ''){
       imageURL = fileURL.thumb_64
     } */ else {
@@ -913,6 +919,7 @@ const handleDriveModalClose = (event) => {
             break;
           case 'image/png':
           case 'image/jpeg':
+          case 'image/svg+xml':
             imageURL = 'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/image_icon.png'
             break;
         }

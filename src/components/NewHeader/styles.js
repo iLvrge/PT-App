@@ -399,7 +399,7 @@ export default makeStyles(theme => ({
             /* width: '2rem',
             height: '2rem', */
             fill: '#5a5a5a',
-            stroke: '#5a5a5a'
+            /* stroke: '#5a5a5a' */
         },
         '&:hover':{
             '& svg':{

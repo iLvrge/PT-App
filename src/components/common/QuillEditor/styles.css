@@ -58,7 +58,7 @@
 }
 .ql-editor slackusermention{
   background-color: rgba(29, 155, 209, 0.25);
-  color: rgba(18, 100, 163, 1);
+  color: #abcdef;
   padding: 0 2px 1px;
   border-radius: 3px;
 }
