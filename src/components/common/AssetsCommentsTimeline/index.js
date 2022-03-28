@@ -695,13 +695,18 @@ const handleDriveModalClose = (event) => {
   }
 
   const openFile = useCallback((event, file) => {
-    event.preventDefault()
-    if((typeof file == 'string' && (file.indexOf('docs.google.com') !== -1) || file.indexOf('drive.google.com') !== -1) || (file.hasOwnProperty('external_url') && file.hasOwnProperty('external_type') && file.external_type == 'gdrive') || (file.hasOwnProperty('external_url') && file.external_url.indexOf('docs.google.com') !== -1)) {
+    event.preventDefault()    
+    if((typeof file == 'string' && (file.indexOf('docs.google.com') !== -1 || file.indexOf('drive.google.com') !== -1)) || (typeof file == 'object' && (file.hasOwnProperty('external_url') && file.hasOwnProperty('external_type') && file.external_type == 'gdrive') || (file.hasOwnProperty('external_url') && file.external_url.indexOf('docs.google.com') !== -1))) {
+      let fileURL = typeof file == 'string' ? file : file.external_url;
+      if(fileURL.indexOf('drive.google.com') !== -1) {
+        fileURL = fileURL.replace('view', 'preview')
+        fileURL = fileURL.replace('edit', 'preview')
+      }
       dispatch(
         setDriveTemplateFrameMode(true)
       )
       dispatch(
-        setTemplateDocument( typeof file == 'string' ? file : file.external_url)
+        setTemplateDocument( fileURL )
       )
     } else {  
       window.open(file.permalink, '_blank')
