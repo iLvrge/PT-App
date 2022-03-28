@@ -24,7 +24,8 @@ import {
   InsertDriveFile as InsertDriveFileIcon,
   Fullscreen as FullscreenIcon
 } from '@mui/icons-material'
-
+import * as linkify from 'linkifyjs';
+import linkifyHtml from 'linkify-html';
 import { Droppable } from 'react-drag-and-drop'
 import { Timeline, TimelineEvent } from 'react-event-timeline'
 import PatenTrackApi from '../../../api/patenTrack2'
@@ -905,7 +906,7 @@ const handleDriveModalClose = (event) => {
     if(fileURL.toString().indexOf('.google.com') !== -1){
       if(fileURL.toString().indexOf('docs.google.com') !== -1 && fileURL.toString().indexOf('document') !== -1) {
         imageURL = 'https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document'
-      } else if(fileURL.toString().indexOf('drive.google.com') !== -1 && file.mimetype.toString().indexOf('image') ) {
+      } else if(fileURL.toString().indexOf('drive.google.com') !== -1 && file.mimetype.toString().indexOf('image') !== -1) {
         imageURL = 'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/image_icon.png'
       }
       
@@ -955,15 +956,21 @@ const handleDriveModalClose = (event) => {
     let message = comment.text
     message = message.replace(/&lt;br&gt;/g, "\n")
     if(message.indexOf('docs.google.com') !== -1) {
-      const match = message.match(/<([^\s>]+)(\s|>)+/)
+      
+      const urlRegex = /(?:(?:https?:\/\/)|(?:www\.))[^\s]+/g; 
+      const match =   message.match(urlRegex) /* message.match(/<([^\s>]+)(\s|>)+/)  */     
+     
       if(match != null) {
-        const link = match[1]
-        if( typeof comment.files != 'undefined' &&  comment.files.length == 1 ) {
+        const link = match[0]
+        console.log(link)
+        if( typeof comment.files != 'undefined' &&  comment.files.length == 1 && link.length > 0 ) {
           if(comment.files[0].external_type == 'gdrive' &&  link == comment.files[0].external_url ) {
             message = ''
           }
         } else {
-          message += `<div><a href='#' class='message_link' data-link="${link}">${link}</a></div>`
+          const options = {target: '_blank'};
+          message = linkifyHtml(message, options)
+          //message += `<div><a href='#' class='message_link' data-link="${link}">${link}</a></div>`
         }
       }
     } 

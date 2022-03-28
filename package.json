@@ -32,6 +32,8 @@
     "font-awesome": "^4.7.0",
     "jwt-decode": "^3.1.2",
     "keycharm": "^0.4.0",
+    "linkify-html": "^3.0.5",
+    "linkifyjs": "^3.0.5",
     "lodash": "^4.17.21",
     "material-table": "^1.69.3",
     "mui-datatables": "^3.7.6",
