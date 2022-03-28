@@ -23,7 +23,7 @@ export default makeStyles(theme => ({
   loader: {},
   content: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column-reverse',
     /* justifyContent: 'center', */
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -46,6 +46,7 @@ export default makeStyles(theme => ({
     /* padding: '0',
     margin: '0 auto',
     width: '95% !important' */
+    zIndex: 99999,
     position: 'sticky',
     bottom: 3,
     width: '95% !important',

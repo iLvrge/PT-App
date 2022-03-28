@@ -966,15 +966,22 @@ const handleDriveModalClose = (event) => {
       const match =   message.match(urlRegex) /* message.match(/<([^\s>]+)(\s|>)+/)  */     
      
       if(match != null) {
-        const link = match[0]
-        console.log(link)
-        if( typeof comment.files != 'undefined' &&  comment.files.length == 1 && link.length > 0 ) {
+        let link = match[0]
+        if( typeof comment.files != 'undefined' &&  comment.files.length == 1 && link != '' ) {
           if(comment.files[0].external_type == 'gdrive' &&  link == comment.files[0].external_url ) {
             message = ''
           }
         } else {
-          const options = {target: '_blank'};
-          message = linkifyHtml(message, options)
+          link = link.replace('<', '');
+          link = link.replace('>', '');
+          const options = {target: '_blank'};  
+          const messageCheck = `<${link}>`, messageCheck2 = `&lt;br&gt;${link}`
+          console.log("CHECCCCCKKKKK", link.length, message, messageCheck, messageCheck2, message == messageCheck, message == messageCheck2)
+          if(link != '' && (message == messageCheck || message == messageCheck2)) {
+            message = `<div><a href='#' class='message_link' data-link="${link}">${link}</a></div>`
+          } else {
+            message = linkifyHtml(message, options)
+          }         
           //message += `<div><a href='#' class='message_link' data-link="${link}">${link}</a></div>`
         }
       }
@@ -1145,8 +1152,8 @@ const handleDriveModalClose = (event) => {
           ''
         }
         
-        { renderCommentsTimeline }  
         { renderCommentEditor }
+        { renderCommentsTimeline }
         {  
           fullScreen === true && (
             <FullScreen 
