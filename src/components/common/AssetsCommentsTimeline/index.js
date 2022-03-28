@@ -294,7 +294,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       setTimeout(() => {
         const findParentContainer = timelineRef.current.closest('div.comment_root')
         /* console.log("RESIZE updateHeight setTimeout", timelineRef, timelineRef.current.parentNode.clientHeight, editorContainerRef.current.clientHeight, findParentContainer.parentNode.clientHeight) */
-        let calHeight = findParentContainer.parentNode.clientHeight - 96
+        let calHeight = findParentContainer.parentNode.clientHeight - 105
         timelineRef.current.style.height = `${ calHeight }px`      
       }, 50)
     }      
@@ -701,6 +701,7 @@ const handleDriveModalClose = (event) => {
     } else {
       event.target.classList.add("active_link");
     }    
+    console.log("openFile", file)
     if((typeof file == 'string' && (file.indexOf('docs.google.com') !== -1 || file.indexOf('drive.google.com') !== -1)) || (typeof file == 'object' && (file.hasOwnProperty('external_url') && file.hasOwnProperty('external_type') && file.external_type == 'gdrive') || (file.hasOwnProperty('external_url') && file.external_url.indexOf('docs.google.com') !== -1))) {      
       let fileURL = typeof file == 'string' ? file : file.external_url;
       if(fileURL.indexOf('drive.google.com') !== -1) {
@@ -977,7 +978,7 @@ const handleDriveModalClose = (event) => {
         } else {
           link = link.replace('<', '');
           link = link.replace('>', '');
-          const options = {target: '_blank'};  
+          const options = {target: '_blank', attributes: {'data-link': link}, className: 'message_link'};  
           const messageCheck = `<${link}>`, messageCheck2 = `&lt;br&gt;${link}`
           if(link != '' && (message == messageCheck || message == messageCheck2)) {
             message = `<div><a href='#' class='message_link' data-link="${link}">${link}</a></div>`
@@ -1115,6 +1116,9 @@ const handleDriveModalClose = (event) => {
             </IconButton>
           )
         } 
+        { renderCommentEditor }
+        { renderCommentsTimeline }
+        
         {
           displayButton === true
           ?
@@ -1153,9 +1157,6 @@ const handleDriveModalClose = (event) => {
           :
           ''
         }
-        
-        { renderCommentEditor }
-        { renderCommentsTimeline }
         {  
           fullScreen === true && (
             <FullScreen 
@@ -1165,6 +1166,7 @@ const handleDriveModalClose = (event) => {
             />
           )
         }
+        
       </div>  
       <Modal
         open={driveModal}

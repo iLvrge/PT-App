@@ -50,6 +50,7 @@ export default makeStyles(theme => ({
     color: theme.palette.text.primary,
     background: theme.palette.background.default,
     border: `1px solid ${theme.palette.divider}`,
+    boxShadow: `${theme.palette.action.active} 0px 0px 7px 0px`,
     borderRadius: 8,
     margin: 0,
     overflow: 'hidden',

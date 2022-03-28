@@ -158,6 +158,7 @@ export default makeStyles(theme => ({
     paddingTop: '5px',
     paddingRight: '30px',
     position: 'absolute',
+    top: 0,
     zIndex: 1, 
     '& button': {
       height: '42px',
