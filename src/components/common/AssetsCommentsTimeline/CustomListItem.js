@@ -25,7 +25,8 @@ const CustomListItem = (props) => {
     const openDriveFolder = async(event, fileID) => {
         event.preventDefault()  
         if(!props.selectedFolders.includes(fileID)) {
-            props.addRemoveSelectedFolder(fileID)
+            const reset = props.parent.length > 0 ? props.selectedFolders.includes(props.parent[0]) ? false : true : true
+            props.addRemoveSelectedFolder(fileID, reset)
             const googleToken = getTokenStorage( 'google_auth_token_info' )
             if(googleToken != '' && googleToken != null) {
                 const tokenParse = JSON.parse(googleToken)
@@ -71,7 +72,7 @@ const CustomListItem = (props) => {
                         <Grid item className={classes.child}>
                             <DriveFilesFolders
                                 data={data} 
-                                parent={[...props.parent, props.id]}
+                                parent={props.parent.length === 0 ? [...props.parent, props.id] : [...props.parent]}
                                 selectedFolders={props.selectedFolders}
                                 addRemoveSelectedFolder={props.addRemoveSelectedFolder}
                                 onSelectFile={props.onSelectFile}

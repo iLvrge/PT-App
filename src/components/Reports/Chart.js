@@ -49,12 +49,12 @@ const Chart = (props) => {
                     :
                         parseInt(profile?.user?.organisation?.subscribtion) === 2 ? 
                             (props.type < 3 ) ?
-                                false
+                                parseInt(props.card?.number) == 0 ? true : false
                             :
                                 true
                         :
                             parseInt(profile?.user?.organisation?.subscribtion) === 3 ? 
-                                false
+                                parseInt(props.card?.number) == 0 ? true : false                                
                             :
                                 true
                 }

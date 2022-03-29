@@ -152,7 +152,6 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   useEffect(() => {
     checkButtons() 
   }, [ google_auth_token, slack_auth_token ])
-
   useEffect(() => {
     setCommentsData(slack_messages)
     updateHeight(size, timelineRef)  
@@ -168,8 +167,8 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   }, [commentsData])
 
   useEffect(() => {
-    if( (selectedAssetsPatents.length == 0 || selectedAssetsTransactions.length == 0) || (dashboardScreen == true && mainCompaniesSelected.length == 0)) {
-      setCommentsData([])
+    if( (selectedAssetsPatents.length == 0 && selectedAssetsTransactions.length == 0) || (dashboardScreen == true && mainCompaniesSelected.length == 0)) {
+      setCommentsData({messages: [], users: []})
       setCommentHtml('')
       setEditData(null)
     }
@@ -267,7 +266,6 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
           const { access_token } = token          
           if(access_token && access_token != '') {
             slackLoginButton =  false 
-            /* console.log("Slacklogin auth") */
             if( slack_channel_list.length == 0 && slack_channel_list_loading === false) {
               dispatch(getChannels(access_token))
             }
@@ -296,15 +294,12 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   }
 
   const updateHeight = ( size, timelineRef ) => {
-    if( timelineRef.current != null ) {
-      //console.log('updateHeight=>height', timelineRef.current.parentNode.clientHeight)
-      
+    if( timelineRef.current != null ) {      
       /* if(displayButton === false) {
         calHeight = timelineRef.current.parentNode.clientHeight - 96
       } */
       setTimeout(() => {
         const findParentContainer = timelineRef.current.closest('div.comment_root')
-        /* console.log("RESIZE updateHeight setTimeout", timelineRef, timelineRef.current.parentNode.clientHeight, editorContainerRef.current.clientHeight, findParentContainer.parentNode.clientHeight) */
         let calHeight = findParentContainer.parentNode.clientHeight - 105
         timelineRef.current.style.height = `${ calHeight }px`      
       }, 50)
@@ -349,7 +344,6 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
               layoutID = item[0].layout_id
             }
           }
-          /* console.log("openTemplateDriveFiles",profileInfo) */
           if(profileInfo != null && profileInfo.hasOwnProperty('email')) {
             //dispatch(setDriveButtonActive( true )) // it will set when user click on drive file link
             dispatch( 
@@ -693,20 +687,17 @@ const handleDriveModalClose = (event) => {
 
   const openDriveFolder = (event, itemID, itemName) => {
     event.preventDefault()
-    /* console.log("openDriveFolder", itemID) */
     onHandleDriveExplorer(event, itemID)
   }
 
   const onHandleSelectFile = (event, itemID) => {
     event.preventDefault()
-    /* console.log("onHandleSelectFile", itemID) */
     //setSelectedDriveFile(`https://docs.google.com/document/d/${itemID}/edit`)
     setCommentHtml( previousContent => previousContent + `https://docs.google.com/document/d/${itemID}/edit`)
     setDriveModal( false )
   }
 
   const onDrop = (data, event) => {
-    /* console.log("onDrop", data) */
     setCommentHtml( previousContent => previousContent + ` ${data.template_agreement}`)
   }
 
@@ -718,7 +709,6 @@ const handleDriveModalClose = (event) => {
       findElementRemoveActiveLink()
       event.target.classList.add("active_link");
     }    
-    console.log("openFile", file)
     if((typeof file == 'string' && (file.indexOf('docs.google.com') !== -1 || file.indexOf('drive.google.com') !== -1)) || (typeof file == 'object' && (file.hasOwnProperty('external_url') && file.hasOwnProperty('external_type') && file.external_type == 'gdrive') || (file.hasOwnProperty('external_url') && file.external_url.indexOf('docs.google.com') !== -1))) {      
       let fileURL = typeof file == 'string' ? file : file.external_url;
       if(fileURL.indexOf('drive.google.com') !== -1) {
@@ -816,7 +806,6 @@ const handleDriveModalClose = (event) => {
     if( typeof newName == undefined && mainCompaniesSelected.length > 1) {
       alert('Please select only one company')
     } else {
-     /*  console.log("assetTypeNamesGroups", assetTypeNamesGroups) */
       setChangeNameModal( false )
       const form = new FormData()
       form.append( 'group_ids', JSON.stringify(assetTypeNamesGroups) )
@@ -837,11 +826,11 @@ const handleDriveModalClose = (event) => {
     dispatch(setAddressQueueDisplay(true))
   }, [ dispatch, assetTypeAddressGroups, mainCompaniesSelected ])
 
-  const addRemoveSelectedFolder = (ID) => {
+  const addRemoveSelectedFolder = (ID, reset) => {
     setSelectedFolders(prevItems =>
       prevItems.includes(ID)
       ? prevItems.filter(item => item !== ID)
-      : [...prevItems, ID],
+      : reset === false ? [...prevItems, ID] : [ID],
     ); 
   }
 
@@ -996,6 +985,7 @@ const handleDriveModalClose = (event) => {
       const match =   message.match(urlRegex) /* message.match(/<([^\s>]+)(\s|>)+/)  */
       if(match != null) {
         let link = match[0]
+        
         if( typeof comment.files != 'undefined' &&  comment.files.length == 1 && link != '' ) {
           if(comment.files[0].external_type == 'gdrive' &&  link == comment.files[0].external_url ) {
             message = ''
@@ -1004,8 +994,13 @@ const handleDriveModalClose = (event) => {
           link = link.replace('<', '');
           link = link.replace('>', '');
           const options = {target: '_blank', attributes: {'data-link': link}, className: 'message_link'};  
-          const messageCheck = `<${link}>`, messageCheck2 = `&lt;br&gt;${link}`
-          if(link != '' && (message == messageCheck || message == messageCheck2)) {
+          const messageCheck = `<${link}>`, messageCheck2 = `&lt;br&gt;${link}`, messageCheck3 = `\n${link}`, messageCheck4 = `\n<${link}>`
+          const matchLinkInTag =  message.match(/<([^\s>]+)(\s|>)+/);
+          if(matchLinkInTag != null) {
+            message = message.replace(/</g, '')
+            message = message.replace(/>/g, '')
+          }
+          if(link != '' && (message == messageCheck || message == messageCheck2 ||  message == messageCheck3)) {
             message = `<div><a href='#' class='message_link' data-link="${link}">${link}</a></div>`
           } else {
             message = linkifyHtml(message, options)

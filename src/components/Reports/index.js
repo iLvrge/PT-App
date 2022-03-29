@@ -319,6 +319,7 @@ const Reports = (props) => {
             } else if(id === 4 && subscription > 2) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'correct_names')
             }
+           
             if( findIndex !== -1 ) {
                 dispatch(setDashboardScreen(false))
                 dispatch(setTimelineScreen(true))
@@ -330,10 +331,12 @@ const Reports = (props) => {
                 }
                 resetAllRowSelect(dispatch, resetItemList.resetAll)
                 resetAllRowSelect(dispatch, resetItemList.clearOtherItems)
-                dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))                
-                if(id === 0) {
-                    dispatch(setSwitchAssetButton(1))
-                }
+                setTimeout(() => { 
+                    dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))                
+                    if(id === 0) {
+                        dispatch(setSwitchAssetButton(1))
+                    } 
+                })                
             }
         }
     }, [dispatch, activeId, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, props.openCustomerBar, props.openCommentBar])

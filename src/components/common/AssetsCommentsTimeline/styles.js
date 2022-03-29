@@ -67,11 +67,11 @@ export default makeStyles(theme => ({
     pointerEvents: 'all',
   },
   commentEditorStandalone:{
-    bottom: 55,
+    bottom: 44,
   },
   addCommentBtn: {
     position: 'absolute',
-    top: 10,
+    top: 10, 
     right: 10,
   },
   timeline: {    

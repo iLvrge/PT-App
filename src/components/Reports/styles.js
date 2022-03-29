@@ -19,7 +19,7 @@ export default makeStyles(theme => ({
         },
     },  
     flexColumn: {
-        height: 'calc((100vh - 102px) / 3)',
+        height: 'calc((100vh - 105px) / 3)',
         alignContent: 'start',
         paddingLeft:3,
         paddingTop: 3,
@@ -54,12 +54,12 @@ export default makeStyles(theme => ({
     companyBar:{
         height: '100%',
     },
-    border: {
-        borderBottom: `1px solid ${theme.palette.divider}`,
+    border: {  
+        borderTop: `1px solid ${theme.palette.divider}`,
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
-        padding: '5px 10px 10px',
+        padding: '7px 10px 5px',
     },
     card: {        
         position: 'relative',

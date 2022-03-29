@@ -114,7 +114,7 @@ export const resetItemList = {
             callback: setSelectedAssetsPatents([])
         },
         {
-            callback: setSlackMessages([])
+            callback: setSlackMessages({messages: [], users: []})
         },
         {
             callback: setPDFFile({ 

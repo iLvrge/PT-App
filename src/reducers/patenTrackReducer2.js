@@ -364,7 +364,7 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         }
       case types.SET_SLACK_MESSAGES:
         let {messages, users} = action.data
-        messages = messages.reverse() 
+        messages = messages.length > 0 ? messages.reverse()  : [...messages]
         return {
           ...state,
           slack_messages: {messages, users}
@@ -691,6 +691,7 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           selectedCategory: action.category
         }
       case types.SET_BREAD_CRUMBS_AND_SELECTED_CATEGORY:{
+        console.log('SET_BREAD_CRUMBS_AND_SELECTED_CATEGORY', action.item)
         return {
           ...state,
           breadcrumbs: action.item.breadCrumbs,

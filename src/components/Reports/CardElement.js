@@ -7,14 +7,7 @@ const CardElement = ({card, id, active, type, handleList, handleClick}) => {
     const classes = useStyles();
     return (
         <Card variant="outlined" className={classes.card} square={true}>
-            <CardContent>           
-                <Tooltip title="Tooltip" placement="right">
-                    <div>
-                        <Typography variant="h6" component="div" align="center" className={classes.border}>
-                            {card.title}
-                        </Typography>
-                    </div>                    
-                </Tooltip>
+            <CardContent>  
                 <Chart 
                     id={id}
                     handleClick={handleClick}
@@ -23,6 +16,13 @@ const CardElement = ({card, id, active, type, handleList, handleClick}) => {
                     type={type}
                     card={card}    
                 />  
+                <Tooltip title="Tooltip" placement="right">
+                    <div>
+                        <Typography variant="h6" component="div" align="center" className={classes.border}>
+                            {card.title}
+                        </Typography>
+                    </div>
+                </Tooltip>
             </CardContent>  
         </Card>
     )
