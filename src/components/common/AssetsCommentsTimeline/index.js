@@ -237,6 +237,15 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
     }
   }
 
+  const findElementRemoveActiveLink = () => {
+    const elements = document.getElementsByClassName('active_link');
+    if(elements.length > 0) {
+      for (let i=0; i < elements.length; i++) {
+        elements[i].classList.remove('active_link')
+      }      
+    }
+  }
+
   const checkButtons = () => {
     try{
       
@@ -699,6 +708,7 @@ const handleDriveModalClose = (event) => {
     if(event.target.classList.contains('active_link')) {
       event.target.classList.remove("active_link");
     } else {
+      findElementRemoveActiveLink()
       event.target.classList.add("active_link");
     }    
     console.log("openFile", file)
