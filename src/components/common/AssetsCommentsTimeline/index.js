@@ -33,6 +33,7 @@ import { numberWithCommas, applicationFormat } from "../../../utils/numbers"
 import { controlList } from "../../../utils/controlList"
 import QuillEditor from '../QuillEditor'
 import CustomerAddress from '../CustomerAddress'
+import DriveFilesFolders from './DriveFilesFolders'
 import Googlelogin from '../Googlelogin' 
 import FullScreen from '../FullScreen'
 import useStyles from './styles'
@@ -42,7 +43,7 @@ import {
   getGoogleAuthToken,
   getLayoutTemplatesByID,
   sendMessage,
-  getChannelID,
+  getChannelID,   
   getChannelIDTransaction,
   getSlackMessages, 
   getSlackUsersList,  
@@ -83,6 +84,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   const editorContainerRef = useRef(null)
   const [ fullScreen, setFullScreen ] = useState(false)
   const [ isLoadingcomments, setIsLoadingcomments ] = useState(false)
+  const [ selectedFolders, setSelectedFolders ] = useState([])
   const [ commentsData, setCommentsData ] = useState({messages: [], users: []})
   const [ editData, setEditData ] = useState(null)
   const companyListLoading = useSelector(state => state.patenTrack2.companyListLoading)
@@ -619,6 +621,11 @@ const onHandleDriveExplorer = async( event, fileID = undefined ) => {
       setDriveModal(true)
       const { data } = await PatenTrackApi.getGoogleTemplates(tokenParse, fileID)
       setDriveFilesAndFolder(data.list)
+      if(data.message = 'Token expired') {
+        checkButtons()
+        getDriveDocumentList()  
+        openGoogleWindow()
+      }
     }
   } else {
     alert('Token Expired, please first login with google account.')
@@ -829,6 +836,14 @@ const handleDriveModalClose = (event) => {
     dispatch(getAddressQueue(form))
     dispatch(setAddressQueueDisplay(true))
   }, [ dispatch, assetTypeAddressGroups, mainCompaniesSelected ])
+
+  const addRemoveSelectedFolder = (ID) => {
+    setSelectedFolders(prevItems =>
+      prevItems.includes(ID)
+      ? prevItems.filter(item => item !== ID)
+      : [...prevItems, ID],
+    ); 
+  }
 
   const renderCommentEditor = useMemo(() => {
     //if (!selectedCommentsEntity) return null
@@ -1184,7 +1199,18 @@ const handleDriveModalClose = (event) => {
         aria-labelledby="Drive-Files-Modal"
         aria-describedby=""
       >
-        {templateBody}
+        <Paper container className={classes.driveModal} square>
+          <Grid item className={classes.containerList}>
+            <DriveFilesFolders 
+              data={driveFilesAndFolder} 
+              depth={0} 
+              parent={[]}
+              selectedFolders={selectedFolders}
+              addRemoveSelectedFolder={addRemoveSelectedFolder}
+              onSelectFile={onHandleSelectFile}
+            />
+          </Grid>          
+        </Paper>
       </Modal>
       <Modal
         open={correctAddressModal}

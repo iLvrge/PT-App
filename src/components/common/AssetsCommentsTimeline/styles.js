@@ -226,17 +226,12 @@ export default makeStyles(theme => ({
   },
   item: {
     display: 'flex',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    flex: '1 0 20%',
-    boxSizing: 'border-box',
+    flex: 1,
     padding: '10px',
     overflow: 'hidden',
     height: '40px',
-    border: '1px solid #5c5c5c',
     position: 'relative',
-    marginRight: 15,
-    marginBottom: 10,
     cursor: 'pointer',
     '&:hover':{
       background: '#2d2d2d'
@@ -244,9 +239,9 @@ export default makeStyles(theme => ({
     '& span': {
       position: 'absolute',
       left: 35,
-      top: 7,
+      /* top: 7, */
       display: 'inline-block',
-      width: '65%',
+      width: '100%',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
@@ -254,12 +249,18 @@ export default makeStyles(theme => ({
   },
   driveModal: {
     width: 800,
+    height: '90vh',
     margin: '50px auto',
     padding: 20,
-    background: '#424242',
+    overflow: 'hidden',
     '&:focus':{
       outline: 'none'
     }
+  },
+  containerList: {
+    display: 'flex',
+    height: '100%',
+    overflow: 'hidden auto'
   },
   message_time: {
     fontSize: '0.65rem',
@@ -277,5 +278,26 @@ export default makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'center'
+  },
+  list: {
+    padding: '0.375rem !important',
+    margin: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1
+  },
+  listItem: {
+    cursor: 'pointer',
+    display: 'flex',
+    color: theme.palette.text.primary,
+    position: 'relative',
+    flexDirection: 'column',
+  },
+  child: {
+    display: 'flex',
+    marginLeft: 20
+  },
+  active: {
+    color: pink[500]
   }
 }))
