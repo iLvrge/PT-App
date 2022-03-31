@@ -438,11 +438,12 @@ const NewHeader = (props) => {
       findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'due_dilligence')
     }
     if( findIndex !== -1 ) {
-      //hideMenu(event, controlList[findIndex])
-      resetAll()
-      clearOtherItems()
-      dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))      
-      dispatch(setSwitchAssetButton(controlList[findIndex].category == 'due_dilligence' ? 0 : 1))
+      resetAllRowSelect(dispatch, resetItemList.resetAll)
+      resetAllRowSelect(dispatch, resetItemList.clearOtherItems)
+      setTimeout(() => { 
+        dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))      
+        dispatch(setSwitchAssetButton(controlList[findIndex].category == 'due_dilligence' ? 0 : 1)) 
+      })
     }
   }
 
@@ -465,7 +466,7 @@ const clearOtherItems = () => {
   dispatch(setAssetsIllustrationData(null))
   dispatch(setSelectedAssetsTransactions([]))
   dispatch(setSelectedAssetsPatents([]))
-  dispatch(setSlackMessages([]))
+  dispatch(setSlackMessages({messages: [], users: [] }))
   dispatch(
       setPDFFile(
       { 
@@ -489,22 +490,22 @@ const clearOtherItems = () => {
   dispatch( setSelectAssignmentCustomers([]))														
 }
 
-const onHandleForeignAssets = (event) => {
+const onHandleForeignAssets = useCallback((event) => {
   if(process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ) {
     alert('Message')
   } else {
     const path = location.pathname
     toggleDrawer(event, false)
-    resetAll()
-    clearOtherItems()
-    console.log("path.indexOf('/review_foreign_assets')", path.indexOf('/review_foreign_assets'))
+    resetAllRowSelect(dispatch, resetItemList.resetAll)
+    resetAllRowSelect(dispatch, resetItemList.clearOtherItems)
+    
     if(path.indexOf('/review_foreign_assets') !== -1) {
       history.push('/') 
     } else {
       history.push('/review_foreign_assets') 
     }
   }  
-}
+}, [dispatch])
 
 const handleThemeMode = useCallback(event => {
   dispatch(toggleThemeMode(!isDarkTheme))
