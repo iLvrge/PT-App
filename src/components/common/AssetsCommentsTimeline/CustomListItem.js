@@ -15,7 +15,6 @@ import { getTokenStorage} from '../../../utils/tokenStorage'
 
 
 const CustomListItem = (props) => {
-    console.log("CustomListItem", props)
     const classes = useStyle();
     const [ data, setData] = useState({})
 
@@ -60,7 +59,7 @@ const CustomListItem = (props) => {
                             </Typography>
                         </div>
                     :
-                        <div key={props.id} className={classes.item} onClick={(event) => props.onSelectFile(event, props.id)}>
+                        <div key={props.id} className={classes.item} onClick={(event) => props.onSelectFile(event, {...props})}>
                             <Typography variant="body1" component="h2">
                                 <InsertDriveFileIcon /><span>{props.name}</span>
                             </Typography>

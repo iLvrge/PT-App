@@ -116,6 +116,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   const [ selectUser, setSelectUser] = useState(null)
   const [ replyId, setReplyId ] = useState(null)
   const [ file, setFile ] = useState(null)
+  const [ fileRemote, setFileRemote ] = useState([])
   const [ displayButton, setDisplayButton] = useState( true )
   const [ commentHtml, setCommentHtml ] = useState('')
   const [ newCompanyName, setNewCompanyName] = useState('')
@@ -171,6 +172,8 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       setCommentsData({messages: [], users: []})
       setCommentHtml('')
       setEditData(null)
+      setFileRemote([])
+      setFile(null)
     }
   }, [ selectedAssetsPatents, selectedAssetsTransactions, dashboardScreen, mainCompaniesSelected ])
 
@@ -204,6 +207,40 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       }, 2000)
     }
   }, [ commentsData ] )
+
+  useEffect(() => {
+    console.log("fileRemote", fileRemote)
+    if(fileRemote.length > 0) {
+      let items = [...fileRemote]
+      fileRemote.map( (item, index) => {
+        
+        const element = document.createElement('div')
+        element.setAttribute('class', `editor-attachment item_${item.id}`) 
+        const editor = editorContainerRef.current.querySelector('.ql-editor')
+        if(editor.parentNode.querySelector(`.item_${item.id}`) != null) {
+          editor.parentNode.removeChild(editor.parentNode.querySelector(`.item_${item.id}`))
+        }
+        const itemElement = document.createElement('div')
+        itemElement.setAttribute('class', 'item') 
+        itemElement.innerHTML = `<img src="${item.iconLink}" class="attachment_image "/> ${item.name}`
+        const anchor = document.createElement('a')
+        anchor.innerHTML = `<svg aria-hidden="true" width="15" focusable="false" data-prefix="far" data-icon="times-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm101.8-262.2L295.6 256l62.2 62.2c4.7 4.7 4.7 12.3 0 17l-22.6 22.6c-4.7 4.7-12.3 4.7-17 0L256 295.6l-62.2 62.2c-4.7 4.7-12.3 4.7-17 0l-22.6-22.6c-4.7-4.7-4.7-12.3 0-17l62.2-62.2-62.2-62.2c-4.7-4.7-4.7-12.3 0-17l22.6-22.6c4.7-4.7 12.3-4.7 17 0l62.2 62.2 62.2-62.2c4.7-4.7 12.3-4.7 17 0l22.6 22.6c4.7 4.7 4.7 12.3 0 17z" class=""></path></svg>`
+        anchor.setAttribute('href','javascript://')
+        anchor.setAttribute('class','remove-attachment')
+        anchor.onclick = function() {
+          editor.parentNode.removeChild(editor.parentNode.querySelector(`.item_${item.id}`))
+          items = items.splice(index, 1)
+          setFileRemote(items) 
+        }
+        itemElement.insertBefore(anchor, itemElement.firstElementChild)
+        element.appendChild(itemElement)
+        /* if(editor.parentNode.querySelector('.editor-attachment') != null) {
+          editor.parentNode.removeChild(editor.parentNode.querySelector('.editor-attachment'))
+        }  */     
+        editor.parentNode.insertBefore(element, editor.nextSibling)
+      })
+    }
+  }, [fileRemote, editorContainerRef])
 
   const scrollToLast = () => {
     setTimeout(() => {
@@ -427,16 +464,16 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       formData.append('reply', replyId == null ? '' : replyId)
       formData.append('edit',editData == null ? '' : editData)
       formData.append('file',file == null ? '' : file)
+      formData.append('remote_file',fileRemote.length > 0 ? JSON.stringify(fileRemote) : '')
       formData.append('channel_id', channel_id)
       const slackToken = getTokenStorage( 'slack_auth_token_info' )
       if( slackToken  && slackToken != null ) {
         const { access_token } = JSON.parse(slackToken)
 
-        if( access_token != undefined) {
+        if( access_token != undefined) {  
           const { data } = await PatenTrackApi.sendMessage(access_token, formData)
-
           setCommentHtml('')
-  
+          setFileRemote([])
           if(data != '' && Object.keys(data).length > 0) {
             inputFile.current.value = ''
             setFile(null)
@@ -461,7 +498,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
         alert("Please login first with your Slack Account")
       }    
     }    
-  }, [ dispatch, commentHtml, selectedAssetsPatents, getSlackMessages, channel_id, selectUser, replyId, editData, file, selectedAssetsTransactions, currentRowSelection, selectedCategory, assetTransactions, mainCompaniesList ])
+  }, [ dispatch, commentHtml, selectedAssetsPatents, getSlackMessages, channel_id, selectUser, replyId, editData, file, fileRemote, selectedAssetsTransactions, currentRowSelection, selectedCategory, assetTransactions, mainCompaniesList ])
 
   const handleCancelComment = useCallback(() => {
     setCommentHtml('')
@@ -511,7 +548,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
     const left = (width - w) / 2 / systemZoom + dualScreenLeft
     const top = (height - h) / 2 / systemZoom + dualScreenTop
 
-    const windowOpen = window.open(`https://slack.com/oauth/v2/authorize?user_scope=${process.env.REACT_APP_SLACK_USER_SCOPE}&client_id=${process.env.REACT_APP_SLACK_CLIENTID}&redirect_uri=${process.env.REACT_APP_SLACK_REDIRECT_URL}`, 'Slack Login', `width=${w / systemZoom},height=${h / systemZoom},top=${top},left=${left}`)
+    const windowOpen = window.open(`https://slack.com/oauth/v2/authorize?scope=${process.env.REACT_APP_SLACK_SCOPE}&user_scope=${process.env.REACT_APP_SLACK_USER_SCOPE}&client_id=${process.env.REACT_APP_SLACK_CLIENTID}&redirect_uri=${process.env.REACT_APP_SLACK_REDIRECT_URL}`, 'Slack Login', `width=${w / systemZoom},height=${h / systemZoom},top=${top},left=${left}`)
 
     if(windowOpen != null) {
       checkWindowClosedStatus(windowOpen)
@@ -690,12 +727,18 @@ const handleDriveModalClose = (event) => {
     onHandleDriveExplorer(event, itemID)
   }
 
-  const onHandleSelectFile = (event, itemID) => {
+  const onHandleSelectFile = (event, item) => {
     event.preventDefault()
     //setSelectedDriveFile(`https://docs.google.com/document/d/${itemID}/edit`)
-    setCommentHtml( previousContent => previousContent + `https://docs.google.com/document/d/${itemID}/edit`)
+      /* console.log("item", item)
+      let removeFiles = [...fileRemote]
+      removeFiles.push({...item})
+      console.log("removeFiles", removeFiles)
+      setFileRemote(removeFiles); 
+      setDriveModal( false ) */
+    setCommentHtml( previousContent => previousContent + `https://docs.google.com/document/d/${item.id}/edit `)
     setDriveModal( false )
-  }
+  }  
 
   const onDrop = (data, event) => {
     setCommentHtml( previousContent => previousContent + ` ${data.template_agreement}`)

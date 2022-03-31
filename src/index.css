@@ -855,16 +855,18 @@ a.maintain svg.clean_encumbrances path{
   overflow: hidden;
   position: relative;
   padding: 0 5px;
+  display: flex;
 }
 
 .attachment_image {
-  width: 50px
+  width: 30px
 }
 
 .remove-attachment{
   position: absolute;
   right: 0px;
   display: none;
+  z-index: 99999;
 }
 
 .remove-attachment svg{
