@@ -228,7 +228,7 @@ export default makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     flex: 1,
-    padding: '10px',
+    padding: '10px 10px 0',
     overflow: 'hidden',
     height: '40px',
     position: 'relative',
@@ -280,7 +280,7 @@ export default makeStyles(theme => ({
     alignItems: 'center'
   },
   list: {
-    padding: '0.375rem !important',
+    padding: '0px !important',
     margin: 0,
     display: 'flex',
     flexDirection: 'column',
@@ -295,9 +295,17 @@ export default makeStyles(theme => ({
   },
   child: {
     display: 'flex',
-    marginLeft: 20
+    marginLeft: 17,
+    borderLeft: `1px dashed ${theme.palette.action.disabled}`
   },
   active: {
-    color: pink[500]
+    /* color: pink[500] */
+  },
+  close: {
+    opacity: 0.3,
+  },
+  icon: {
+    width: 14, 
+    height: 14 
   }
 }))
