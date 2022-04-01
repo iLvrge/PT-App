@@ -755,6 +755,17 @@ const handleDriveModalClose = (event) => {
     setCommentHtml( previousContent => previousContent + ` ${data.template_agreement}`)
   }
 
+  const onHandleFileFullScreen = useCallback(() => {
+    setFileFullScreen(false)
+    findElementRemoveActiveLink()
+    dispatch(
+      setDriveTemplateFrameMode(false)
+    )
+    dispatch(
+      setTemplateDocument( null )
+    )
+  }, [dispatch])
+
   const openFile = useCallback((event, file) => {
     event.preventDefault()    
     if(event.target.classList.contains('active_link')) {
@@ -1248,7 +1259,7 @@ const handleDriveModalClose = (event) => {
             <FullScreen 
               componentItems={fileFullScreenItems} 
               showScreen={fileFullScreen} 
-              setScreen={setFileFullScreen}
+              setScreen={onHandleFileFullScreen}
               changeColor={true}
             /> 
           )
