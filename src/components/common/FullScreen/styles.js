@@ -1,4 +1,5 @@
 import makeStyles from '@mui/styles/makeStyles';
+import { pink } from '@mui/material/colors';
 
 export default makeStyles(theme => ({
     root: {
@@ -45,4 +46,7 @@ export default makeStyles(theme => ({
     tooltip:{
         fontSize: '1rem'
     },
+    activeColor: {
+        color: pink[500]
+    }
 }))

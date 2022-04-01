@@ -15,7 +15,9 @@ import LoadTransactionNameQueues from './LoadTransactionNameQueues'
 import LoadLinkAssets from './LoadLinkAssets'
 import AllComponentsMenu from '../AllComponentsMenu'
 import ArrowButton from '../ArrowButton'
+import DisplayFile from './DisplayFile'
 import { updateResizerBar } from '../../../utils/resizeBar'
+
 import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/numbers";
 import useStyles from './styles'
 import Reports from '../../Reports'
@@ -202,28 +204,21 @@ const IllustrationCommentContainer = ({
             <div style={{display: 'unset'}}>   
                 {/* <AllComponentsMenu onClick={onHandleComponentMenuItem}/> */}
                 {
-                    selectedCompanies.length > 0
-                     && !isFullscreenOpen && 
-                        dashboardScreen === false && illustrationBar === true &&  shouldShowTimeline === true &&
-                        ( search_string != '' || /* assetCompaniesRowSelect.length > 0 || 
-                            selectedCompaniesAll === true || 
-                            selectedCompanies.length > 0 || */
-                            type === 9
-                        ) || (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null)
+                    illustrationBar === true && !isFullscreenOpen
                     ?
                         <IconButton 
                             size="small" 
                             className={clsx(classes.fullscreenBtn, {[classes.frameButton]: (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null) ? true : false})} 
                             onClick={handleClickOpenFullscreen}
-                            style={{...(typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null ? {top: 17 } : {})}}
                         >
                             <Fullscreen />
                         </IconButton> 
                     :
-                    ''
-                }                                 
+                        ''  
+                }                
+                                              
                 {  
-                    /* selectedCompanies.length > 0 || */ process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' ||  type === 9 || ((process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && auth_token !== null)
+                    illustrationBar === true && (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' ||  type === 9 || ((process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && auth_token !== null))
                     ?
                         dashboardScreen === true
                         ?
@@ -319,7 +314,9 @@ const IllustrationCommentContainer = ({
                             :
                                 (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null)
                                 ?
-                                    <iframe src={templateURL} className={classes.templateFrame}></iframe>
+                                    <DisplayFile 
+                                        templateURL={templateURL}
+                                    />
                                 :
                                     illustrationBar === true ? (
                                         <IllustrationContainer 

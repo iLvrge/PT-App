@@ -68,8 +68,8 @@ export default makeStyles(theme => ({
     },
     fullscreenBtn: {
         position: 'absolute',
-        top: 12,
-        right: 9,
+        top: 10,
+        right: 5,
         zIndex: 1,
         padding: 0
     },

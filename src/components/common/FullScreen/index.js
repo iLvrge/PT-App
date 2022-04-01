@@ -13,7 +13,7 @@ import {
   faShareAlt,
 } from "@fortawesome/free-solid-svg-icons"
 
-const FullScreen = ({componentItems, setScreen, showScreen, paper, share, handleShare, full, showClose, outside}) => {
+const FullScreen = ({componentItems, setScreen, showScreen, paper, share, handleShare, full, showClose, outside, changeColor}) => {
 
     const classes = useStyles()
     const [ isFullscreenOpen, setIsFullscreenOpen ] = useState(typeof showScreen !== 'undefined' ? showScreen : false)
@@ -42,7 +42,7 @@ const FullScreen = ({componentItems, setScreen, showScreen, paper, share, handle
                         typeof showClose == 'undefined' && (
                             <IconButton
                                 onClick={handleClickOpenCloseFullscreen}
-                                className={classes.right}
+                                className={clsx(classes.right, {[classes.activeColor]: changeColor === true ? true : false})}
                                 size="large">
                                 <Close />
                             </IconButton>

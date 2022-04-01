@@ -73,6 +73,7 @@ import { html } from '../../../utils/html_encode_decode'
 
 import { capitalizeEachWord } from '../../../utils/numbers'
 import clsx from 'clsx'
+import DisplayFile from '../IllustrationCommentContainer/DisplayFile'
 
 const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, illustrationBar, standalone }) => {
   const classes = useStyles()
@@ -83,6 +84,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   const frameRef = useRef( null )
   const editorContainerRef = useRef(null)
   const [ fullScreen, setFullScreen ] = useState(false)
+  const [ fileFullScreen, setFileFullScreen ] = useState(false)
   const [ isLoadingcomments, setIsLoadingcomments ] = useState(false)
   const [ selectedFolders, setSelectedFolders ] = useState([])
   const [ commentsData, setCommentsData ] = useState({messages: [], users: []})
@@ -146,6 +148,15 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       standalone: true,
     }
   ] 
+  const fileFullScreenItems = [
+    {
+      id: 1,
+      label: '',
+      component: DisplayFile,
+      templateURL: template_document_url
+    }
+  ]
+
   useEffect(() => {
     checkButtons()
   }, [])
@@ -240,7 +251,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
         editor.parentNode.insertBefore(element, editor.nextSibling)
       })
     }
-  }, [fileRemote, editorContainerRef])
+  }, [fileRemote, editorContainerRef])  
 
   const scrollToLast = () => {
     setTimeout(() => {
@@ -764,6 +775,9 @@ const handleDriveModalClose = (event) => {
       dispatch(
         setTemplateDocument( fileURL )
       )
+      if(illustrationBar === false) {
+        setFileFullScreen(true)
+      }
     } else {  
       window.open(file.permalink, '_blank')
     }
@@ -1227,6 +1241,16 @@ const handleDriveModalClose = (event) => {
               showScreen={fullScreen} 
               setScreen={setFullScreen}
             />
+          )
+        }
+        {
+          fileFullScreen === true && (
+            <FullScreen 
+              componentItems={fileFullScreenItems} 
+              showScreen={fileFullScreen} 
+              setScreen={setFileFullScreen}
+              changeColor={true}
+            /> 
           )
         }
         
