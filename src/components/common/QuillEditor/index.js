@@ -38,6 +38,11 @@ SlackUserMention.blotName = 'slackusermention';
 SlackUserMention.tagName = 'slackusermention';
 Quill.register(SlackUserMention);
 
+class PatenTrackLineBreak extends Inline { }
+PatenTrackLineBreak.blotName = 'patentracklinebreak';
+PatenTrackLineBreak.tagName = 'patentracklinebreak';
+Quill.register(PatenTrackLineBreak);
+
 class Span extends Inline { }
 Span.blotName = 'span';
 Span.tagName = 'span';
@@ -63,7 +68,7 @@ const QuillEditor = ({
   onKeyDown= () => {},
   driveFile = ''
 }) => {
-  const PLACEHOLDER_MESSSAGE = 'Select a channel (an Asset or a Transaction) to send a message'
+  const PLACEHOLDER_MESSSAGE = 'Select a channel (an Asset or a Transaction or the Dashboard) to send a message'
   const classes = useStyles()
   const quillRef = useRef(null)
   const dispatch = useDispatch()

@@ -425,6 +425,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
             dispatch( 
               getLayoutTemplatesByID(layoutID, profileInfo.email) 
             )
+            removeFocusAndOnSendButton()
           }
         } else {
           //alert("Please first login with google account.")
@@ -674,14 +675,17 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   }, [ inputFile ])
   
 const onAttachmentOpenedFile = useCallback(() => {    
-  if( template_document_url != 'about:blank' && template_document_url != null ) {
-    setCommentHtml( previousContent => previousContent + ' ' + template_document_url)
+  if( template_document_url != 'about:blank' && template_document_url != null ) {    
+    setCommentHtml( previousContent =>  previousContent + "<patentracklinebreak>\n</patentracklinebreak>" + template_document_url)
+
+    removeFocusAndOnSendButton()
   }
 }, [ template_document_url, editorContainerRef ] )
 
 const onHandleDriveExplorer = async( event, fileID = undefined ) => {
   event.preventDefault()  
-  const googleToken = getTokenStorage( 'google_auth_token_info' )
+  const googleToken = getTokenStorage( 'google_auth_token_info' )  
+  removeFocusAndOnSendButton()
   if(googleToken != '' && googleToken != null) {
     const tokenParse = JSON.parse(googleToken)
     const { access_token } = tokenParse
@@ -693,7 +697,7 @@ const onHandleDriveExplorer = async( event, fileID = undefined ) => {
       setDriveModal(true)
       const { data } = await PatenTrackApi.getGoogleTemplates(tokenParse, fileID)
       setDriveFilesAndFolder(data.list)
-      if(data.message = 'Token expired') {
+      if(data.message == 'Token expired') {
         checkButtons()
         getDriveDocumentList()  
         openGoogleWindow()
@@ -707,9 +711,15 @@ const onHandleDriveExplorer = async( event, fileID = undefined ) => {
   }  
 }
 
+const removeFocusAndOnSendButton = () => {
+  document.activeElement.blur() //remove focus from file
+  document.querySelector('.ql-saveButton').focus() // add focus on send button
+}
+
 const onHandleFile = (event) => {
   event.preventDefault()
   setFile(event.target.files[0])
+  removeFocusAndOnSendButton()  
 }
 
 const handleCompanyNameChange = (event)=>{
@@ -777,12 +787,14 @@ const handleDriveModalClose = (event) => {
       console.log("removeFiles", removeFiles)
       setFileRemote(removeFiles); 
       setDriveModal( false ) */
-    setCommentHtml( previousContent => previousContent + `https://docs.google.com/document/d/${item.id}/edit `)
+      console.log("SELECT FILE")
+    setCommentHtml( previousContent => previousContent.replace(/<\/?[^>]+(>|$)/g, "").trim() == '' ? `https://docs.google.com/document/d/${item.id}/edit<patentracklinebreak>\n</patentracklinebreak>` :   previousContent + `\nhttps://docs.google.com/document/d/${item.id}/edit<patentracklinebreak>\n</patentracklinebreak>`)
     setDriveModal( false )
+    removeFocusAndOnSendButton()
   }  
 
   const onDrop = (data, event) => {
-    setCommentHtml( previousContent => previousContent + ` ${data.template_agreement}`)
+    setCommentHtml( previousContent => previousContent + ` ${data.template_agreement}<patentracklinebreak>\n</patentracklinebreak>`)
   }
 
   const onHandleFileFullScreen = useCallback(() => {

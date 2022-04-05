@@ -91,7 +91,8 @@ export default makeStyles(theme => ({
       cursor: 'inherit !important'
     },
     '& .message_link':{
-      color: theme.palette.text.primary
+      color: theme.palette.text.primary,
+      display: 'block'
     },
     '& .active_link':{
       color: pink[500]
