@@ -65,6 +65,7 @@ const Chart = (props) => {
                 arcPadding={0.02}
                 marginInPercent={0.03}
                 className={'gauge'}
+                animate={false} 
                 /* hideText={true} */
                 formatTextValue={displayNumber}
             />    

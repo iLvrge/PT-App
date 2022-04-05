@@ -25,7 +25,7 @@ import PatenTrackApi from '../../api/patenTrack2'
 const Reports = (props) => {
     const LIST = [
         {
-            title: 'Chain-of-Title',
+            title: 'Broken Chain-of-Title',
             sub_heading: 'patents ad ad d ad ad ad', 
             number: 0,
             patent: '',
@@ -283,8 +283,7 @@ const Reports = (props) => {
         }
     }, [selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssets, assetsSelected, assetsTotal])
 
-    const updateList = () => {
-        
+    const updateList = () => {        
     }
 
     const companyname = useMemo(() => {
