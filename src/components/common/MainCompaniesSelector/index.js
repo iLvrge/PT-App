@@ -336,9 +336,9 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         /**
          * If company selected find ChannelID
          */
-        console.log("asdasdasd", selected.length, slack_channel_list.length, dashboardScreen)
+        /* console.log("asdasdasd", selected.length, slack_channel_list.length, dashboardScreen) */
         if(selected.length > 0 && slack_channel_list.length > 0  &&  dashboardScreen === true ) {
-            console.log("asdasdasd", selected.length, slack_channel_list.length, dashboardScreen)
+            /* console.log("asdasdasd", selected.length, slack_channel_list.length, dashboardScreen) */
             let name = ''
             const findIndex = companiesList.findIndex( company => {
                 if(company.type == 1) {

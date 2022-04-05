@@ -81,8 +81,11 @@ export default makeStyles(theme => ({
     width: '100% !important',
     margin: '0 !important',
     padding: '0 !important',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
     '& a':{
-      color: '#fff'
+      color: '#fff'  
     },
     '& span':{
       cursor: 'inherit !important'
@@ -142,7 +145,11 @@ export default makeStyles(theme => ({
     margin: '5px auto !Important',
     display: 'flex',
     '& div':{
-      width: '100%'
+      width: '100%',
+      '&:first-child':{
+        /* display: 'flex',
+        alignSelf: 'flex-end' */
+      }
     },
     /* flex: '1 100%', */
   },
@@ -236,15 +243,15 @@ export default makeStyles(theme => ({
     '&:hover':{
       background: '#2d2d2d'
     },
-    '& span': {
-      position: 'absolute',
-      left: 35,
-      /* top: 7, */
-      display: 'inline-block',
-      width: '100%',
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
+    '& h2.MuiTypography-root':{
+      display: 'flex',
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'flexStart',
+      '& span': {        
+        display: 'flex',
+        marginLeft: 11
+      }
     }
   },
   driveModal: {
@@ -291,7 +298,7 @@ export default makeStyles(theme => ({
     display: 'flex',
     color: theme.palette.text.primary,
     position: 'relative',
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
   child: {
     display: 'flex',
@@ -304,8 +311,8 @@ export default makeStyles(theme => ({
   close: {
     opacity: 0.3,
   },
-  icon: {
+  /* icon: {
     width: 14, 
     height: 14 
-  }
+  } */
 }))

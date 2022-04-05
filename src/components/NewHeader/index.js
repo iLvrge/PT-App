@@ -245,6 +245,12 @@ const NewHeader = (props) => {
     setLayoutName(breadcrumbs)
   }, [ breadcrumbs ])
 
+
+  useEffect(() => {
+    const findIndex =  controlList.findIndex( item => item.type == 'menu' && item.category == selectedCategory)
+    setLayoutName(selectedCategory != 'due_dilligence' ? findIndex !== -1 ? controlList[findIndex].mainHeading : '' : '')
+  }, [ selectedCategory ])    
+
   /**
    * Get the Loggedin User Profile data
    */
@@ -589,7 +595,7 @@ const onHandleTimelineScreen = /* useCallback( */(event) => {
           resetAll={resetAll}
           clearOtherItems={clearOtherItems}
         />
-              
+        <div className={classes.breadcrumbs}>{layoutName}</div>    
         <div className={classes.rightPanel}>  
             {/* <Switch  
               color="secondary" 

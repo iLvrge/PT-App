@@ -220,7 +220,6 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   }, [ commentsData ] )
 
   useEffect(() => {
-    console.log("fileRemote", fileRemote)
     if(fileRemote.length > 0) {
       let items = [...fileRemote]
       fileRemote.map( (item, index) => {
@@ -349,9 +348,28 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       setTimeout(() => {
         const findParentContainer = timelineRef.current.closest('div.comment_root')
         let calHeight = findParentContainer.parentNode.clientHeight - 105
-        timelineRef.current.style.height = `${ calHeight }px`      
+        timelineRef.current.style.height = `${ calHeight }px`
+        checkSectionHeight(calHeight)
       }, 50)
     }      
+  }
+
+  const checkSectionHeight = (calHeight) => {
+    setTimeout(() => {
+      const section = timelineRef.current.querySelector('section')
+      if(section !== null) {
+        const sectionHeight = section.clientHeight
+        if(sectionHeight < calHeight) {          
+          section.parentNode.style.alignSelf = 'flex-end'          
+        }
+        const lineChild = section.children[0]
+        lineChild.style.top = '15px'
+        lineChild.style.left = '19px'
+        lineChild.style.height = '97%'
+      } else {
+        checkSectionHeight(calHeight)
+      }      
+    }, 50)
   }
 
   const getLayout = useMemo(() => {
@@ -437,77 +455,80 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
     if(selectedAssetsPatents.length > 0 || selectedAssetsTransactions.length > 0 || (dashboardScreen === true && mainCompaniesSelected.length > 0)) {
       
       const formData = new FormData()
-      formData.append('text',  html.encode(commentHtml) )
-      /* if(selectedCategory == 'correct_details') {
-        formData.append('transaction', selectedAssetsTransactions.length == 1 ? selectedAssetsTransactions[0] : currentRowSelection )
-      } else {
-        formData.append('asset', selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? selectedAssetsPatents[1] : selectedAssetsPatents[0])
-      } */
-      if(selectedAssetsPatents.length > 0) {
-        formData.append('asset', selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? selectedAssetsPatents[1] : selectedAssetsPatents[0])
-      } else if(selectedAssetsTransactions.length > 0){
-        formData.append('transaction', selectedAssetsTransactions.length == 1 ? selectedAssetsTransactions[0] : currentRowSelection )
-      } else if (dashboardScreen === true && mainCompaniesSelected.length > 0) {
-        formData.append( 'company', mainCompaniesSelected[0] )
-      }
-
-      let assetFormat = ''
-
-      if(selectedAssetsPatents.length == 2) {
-        assetFormat = selectedAssetsPatents[0] === '' ? 
-                                          'us'+selectedAssetsPatents[1] 
-                                          : 
-                                            'us'+selectedAssetsPatents[0]
-      } else if(selectedAssetsTransactions.length > 0) {
-        const findIndex = assetTransactions.findIndex(row => row.rf_id == selectedAssetsTransactions[0])
-        if(findIndex  !== -1) {
-          assetFormat = assetTransactions[findIndex].rf_id /* `${assetTransactions[findIndex].date}-${assetTransactions[findIndex].reel_no}-${assetTransactions[findIndex].frame_no}` */
+      const cleanText = commentHtml.replace(/<\/?[^>]+(>|$)/g, "");
+      if(cleanText !== '' || fileRemote.length > 0 || file !== null) {
+        formData.append('text',  html.encode(commentHtml) )
+        /* if(selectedCategory == 'correct_details') {
+          formData.append('transaction', selectedAssetsTransactions.length == 1 ? selectedAssetsTransactions[0] : currentRowSelection )
+        } else {
+          formData.append('asset', selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? selectedAssetsPatents[1] : selectedAssetsPatents[0])
+        } */
+        if(selectedAssetsPatents.length > 0) {
+          formData.append('asset', selectedAssetsPatents.length == 2 &&  selectedAssetsPatents[0] === '' ? selectedAssetsPatents[1] : selectedAssetsPatents[0])
+        } else if(selectedAssetsTransactions.length > 0){
+          formData.append('transaction', selectedAssetsTransactions.length == 1 ? selectedAssetsTransactions[0] : currentRowSelection )
+        } else if (dashboardScreen === true && mainCompaniesSelected.length > 0) {
+          formData.append( 'company', mainCompaniesSelected[0] )
         }
-      } else if(mainCompaniesSelected.length > 0) {
-        const findIndex = mainCompaniesList.findIndex(row => row.representative_id == mainCompaniesSelected[0])
-        if(findIndex !== -1) {
-          assetFormat = mainCompaniesList[findIndex].representative_name.toString().replace(/ /g,'')
-        }
-      }
-      
-      formData.append('asset_format', assetFormat)
-      formData.append('user', selectUser == null ? '' : selectUser)
-      formData.append('reply', replyId == null ? '' : replyId)
-      formData.append('edit',editData == null ? '' : editData)
-      formData.append('file',file == null ? '' : file)
-      formData.append('remote_file',fileRemote.length > 0 ? JSON.stringify(fileRemote) : '')
-      formData.append('channel_id', channel_id)
-      const slackToken = getTokenStorage( 'slack_auth_token_info' )
-      if( slackToken  && slackToken != null ) {
-        const { access_token } = JSON.parse(slackToken)
 
-        if( access_token != undefined) {  
-          const { data } = await PatenTrackApi.sendMessage(access_token, formData)
-          setCommentHtml('')
-          setFileRemote([])
-          if(data != '' && Object.keys(data).length > 0) {
-            inputFile.current.value = ''
-            setFile(null)
-            const editor = editorContainerRef.current.querySelector('.ql-editor')
-            if(editor.parentNode.querySelector('.editor-attachment') != null) {
-              editor.parentNode.removeChild(editor.parentNode.querySelector('.editor-attachment'))
-            }
-            const { status, channel } = data;
-            if(status != '' && status == 'Message sent') {
-              setEditData( null )
-              if(channel_id != channel) {
-                dispatch(setChannel({channel_id}))
-                dispatch(getChannels(access_token))
+        let assetFormat = ''
+
+        if(selectedAssetsPatents.length == 2) {
+          assetFormat = selectedAssetsPatents[0] === '' ? 
+                                            'us'+selectedAssetsPatents[1] 
+                                            : 
+                                              'us'+selectedAssetsPatents[0]
+        } else if(selectedAssetsTransactions.length > 0) {
+          const findIndex = assetTransactions.findIndex(row => row.rf_id == selectedAssetsTransactions[0])
+          if(findIndex  !== -1) {
+            assetFormat = assetTransactions[findIndex].rf_id /* `${assetTransactions[findIndex].date}-${assetTransactions[findIndex].reel_no}-${assetTransactions[findIndex].frame_no}` */
+          }
+        } else if(mainCompaniesSelected.length > 0) {
+          const findIndex = mainCompaniesList.findIndex(row => row.representative_id == mainCompaniesSelected[0])
+          if(findIndex !== -1) {
+            assetFormat = mainCompaniesList[findIndex].representative_name.toString().replace(/ /g,'')
+          }
+        }
+        
+        formData.append('asset_format', assetFormat)
+        formData.append('user', selectUser == null ? '' : selectUser)
+        formData.append('reply', replyId == null ? '' : replyId)
+        formData.append('edit',editData == null ? '' : editData)
+        formData.append('file',file == null ? '' : file)
+        formData.append('remote_file',fileRemote.length > 0 ? JSON.stringify(fileRemote) : '')
+        formData.append('channel_id', channel_id)
+        const slackToken = getTokenStorage( 'slack_auth_token_info' )
+        if( slackToken  && slackToken != null ) {
+          const { access_token } = JSON.parse(slackToken)
+
+          if( access_token != undefined) {  
+            const { data } = await PatenTrackApi.sendMessage(access_token, formData)
+            setCommentHtml('')
+            setFileRemote([])
+            if(data != '' && Object.keys(data).length > 0) {
+              inputFile.current.value = ''
+              setFile(null)
+              const editor = editorContainerRef.current.querySelector('.ql-editor')
+              if(editor.parentNode.querySelector('.editor-attachment') != null) {
+                editor.parentNode.removeChild(editor.parentNode.querySelector('.editor-attachment'))
               }
-              dispatch( getSlackMessages( data.channel ) ) 
+              const { status, channel } = data;
+              if(status != '' && status == 'Message sent') {
+                setEditData( null )
+                if(channel_id != channel) {
+                  dispatch(setChannel({channel_id}))
+                  dispatch(getChannels(access_token))
+                }
+                dispatch( getSlackMessages( data.channel ) ) 
+              }
             }
+          } else {
+            alert("Please login first with your Slack Account")
           }
         } else {
           alert("Please login first with your Slack Account")
         }
-      } else {
-        alert("Please login first with your Slack Account")
-      }    
+      } 
     }    
   }, [ dispatch, commentHtml, selectedAssetsPatents, getSlackMessages, channel_id, selectUser, replyId, editData, file, fileRemote, selectedAssetsTransactions, currentRowSelection, selectedCategory, assetTransactions, mainCompaniesList ])
 

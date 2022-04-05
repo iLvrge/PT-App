@@ -88,7 +88,7 @@ const CustomListItem = (props) => {
                     :
                         <div key={props.id} className={classes.item} onClick={(event) => props.onSelectFile(event, {...props})}>
                             <Typography variant="body1" component="h2">
-                                <CloseSquare /><span>{props.name}</span>
+                                <img src={props.iconLink}/><span>{props.name}</span>
                             </Typography>
                         </div>
             }

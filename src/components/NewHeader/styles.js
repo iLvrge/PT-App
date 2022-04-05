@@ -155,7 +155,9 @@ export default makeStyles(theme => ({
         height: '100%',
         alignItems: 'flex-end',
         color: '#FFFFFF',
-        whiteSpace: 'nowrap'
+        whiteSpace: 'nowrap',
+        marginLeft: 'auto',
+        marginRight: 'auto'
     },
     grow: {
         flexGrow: 1,

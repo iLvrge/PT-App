@@ -55,11 +55,18 @@ export default makeStyles(theme => ({
         height: '100%',
     },
     border: {  
-        borderTop: `1px solid ${theme.palette.divider}`,
+        /* borderTop: `1px solid ${theme.palette.divider}`, */
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
-        padding: '7px 10px 5px',
+        padding: '7px 10px 5px',      
+        position: 'absolute',
+        bottom: 10,
+        left: 0,
+        right: 0,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        width: 'fit-content',
     },
     card: {        
         position: 'relative',
@@ -92,7 +99,8 @@ export default makeStyles(theme => ({
         },
         '& .MuiCardActions-root, .MuiCardContent-root':{
             backgroundColor: theme.palette.background.paper,
-            padding: '5px 8px'
+            padding: '5px 8px',
+            height: '100%'
         }
     },
     titleContainer:{
@@ -191,7 +199,11 @@ export default makeStyles(theme => ({
     chartContainer: {
         position: 'relative',
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        width: 220,
+        maxWidth: 220
     },
     exampleButton: {
         position: 'absolute',
@@ -201,15 +213,11 @@ export default makeStyles(theme => ({
     },
     actionButton: {
         position: 'absolute',
-        bottom: 10,
         left: 0,
-        right: 0,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        width: 'fit-content',
+        top: 10,
         textTransform: 'initial',
         whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis'
+        textOverflow: 'ellipsis'  
     },
     shareIcon:{
         '& svg':{

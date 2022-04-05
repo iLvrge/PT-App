@@ -255,6 +255,9 @@ const Reports = (props) => {
                 formData.append('assignments', JSON.stringify(selectedAssetAssignments));
                 formData.append('type', 'restore_ownership')
                 const brokenChain = await PatenTrackApi.getDashboardData(formData)
+                if( brokenChain !== null && brokenChain?.data && brokenChain?.data?.number){
+                    updateList(brokenChain.data, 1)
+                }
                 let oldList = [...cardList]
                 const findIndexBroken = oldList.findIndex( item => item.type === 1)
                 if(findIndexBroken !== -1) {
@@ -269,14 +272,20 @@ const Reports = (props) => {
                     }
                     setCardList(oldList)
                 }
-                /* formData.delete('type')
-                formData.append('type', 'lost_patents') */
+                formData.delete('type')
+                formData.append('type', 'lost_patents')
+                const lostPatents = await PatenTrackApi.getDashboardData(formData)
+                console.log("lostPatents", lostPatents)
             }
             findDashboardData()
         } else {   
             setCardList([...LIST])
         }
     }, [selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssets, assetsSelected, assetsTotal])
+
+    const updateList = () => {
+        
+    }
 
     const companyname = useMemo(() => {
         return selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])

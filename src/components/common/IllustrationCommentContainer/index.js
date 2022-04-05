@@ -204,7 +204,7 @@ const IllustrationCommentContainer = ({
             <div style={{display: 'unset'}}>   
                 {/* <AllComponentsMenu onClick={onHandleComponentMenuItem}/> */}
                 {
-                    illustrationBar === true && !isFullscreenOpen
+                    illustrationBar === true && !isFullscreenOpen && shouldShowTimeline
                     ?
                         <IconButton 
                             size="small" 
