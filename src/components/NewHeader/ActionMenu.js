@@ -677,6 +677,23 @@ const ActionMenu = (props) => {
     }, [ newCompanyName, assetTypeNamesGroups, mainCompaniesSelected ] )
 
     const handleChangeLayout = (event) => {
+        resetAllActivity(category)
+    }
+    
+
+    const onHandleTimeline = () => {
+        setAnchorEl(null)
+        resetAllActivity('')
+        props.seActivityTimeline()
+    }
+
+    const onHandleDashboard = () => {
+        setAnchorEl(null)
+        resetAllActivity('')
+        props.setDashboardScreen()
+    }
+
+    const resetAllActivity = (category) => {
         let findIndex = -1
         if(category == 'due_dilligence') {
           findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
@@ -690,17 +707,6 @@ const ActionMenu = (props) => {
             dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))      
             dispatch(setSwitchAssetButton(controlList[findIndex].category == 'due_dilligence' ? 0 : 1))
         }
-    }
-    
-
-    const onHandleTimeline = () => {
-        setAnchorEl(null)
-        props.seActivityTimeline()
-    }
-
-    const onHandleDashboard = () => {
-        setAnchorEl(null)
-        props.setDashboardScreen()
     }
 
 
@@ -780,7 +786,7 @@ const ActionMenu = (props) => {
                             </ListItemIcon>
                         </MenuItem>
                     )
-                }    
+                }
                 <Divider />
                 <MenuItem className={classes.disableHover}>
                     <ListItemText><span className={clsx(parseInt(profile?.user?.organisation?.subscribtion) < 2 ? classes.disabled : '')}>Pro:</span> {parseInt(profile?.user?.organisation?.subscribtion) === 1 ? <Button variant="text">Upgrade</Button> : '' }</ListItemText>

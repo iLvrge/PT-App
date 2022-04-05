@@ -595,7 +595,7 @@ const onHandleTimelineScreen = /* useCallback( */(event) => {
           resetAll={resetAll}
           clearOtherItems={clearOtherItems}
         />
-        <div className={classes.breadcrumbs}>{layoutName}</div>    
+        <div className={classes.breadcrumbs}>{selectedCategory !== 'due_dilligence' ? layoutName : ''}</div>    
         <div className={classes.rightPanel}>  
             {/* <Switch  
               color="secondary" 

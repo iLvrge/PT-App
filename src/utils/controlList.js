@@ -9,7 +9,7 @@ export const controlList = [
     },
     {
         type: 'menu',
-        mainHeading: 'Restore Ownership',			
+        mainHeading: 'Broken Chain-Of-Title',			
         subHeading: 'Get a list of all patents with broken chain of title, investigate with your team, and automatically correct the records.',
         svg: ``,
         image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/restore_ownership.png',

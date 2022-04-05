@@ -100,7 +100,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             draggable: true,
             label: 'Companies',        
             dataKey: 'original_name',
-            classCol: 'font12Rem',
+            /* classCol: 'font12Rem', */
             showOnCondition: '0',
             align: "left", 
             badge: true,

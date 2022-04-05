@@ -190,7 +190,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
 
   useEffect(() => {    
     if(!slack_auth_token && slack_auth_token == null )  return
-    
+
     const { access_token } = slack_auth_token;
     if( access_token && access_token != null && (channel_id == '' || channel_id == null) && selectedAssetsPatents.length > 0) {
       //dispatch( getChannelID( selectedAssetsPatents[0], selectedAssetsPatents[1] ) )
@@ -361,6 +361,8 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
 
   const checkSectionHeight = (calHeight) => {
     setTimeout(() => {
+      if(timelineRef.current === null) return
+      
       const section = timelineRef.current.querySelector('section')
       if(section !== null) {
         const sectionHeight = section.clientHeight
