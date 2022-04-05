@@ -153,7 +153,7 @@ export default makeStyles(theme => ({
     breadcrumbs: {
         display: 'flex',
         height: '100%',
-        alignItems: 'flex-end',
+        alignItems: 'center',
         color: '#FFFFFF',
         whiteSpace: 'nowrap',
         marginLeft: 'auto',
