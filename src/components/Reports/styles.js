@@ -28,10 +28,10 @@ export default makeStyles(theme => ({
             justifyContent: 'center',
             flexDirection: 'column',
             alignContent: 'start',
-            height: 'calc((100vh - 220px) / 3)',
-            flexBasis: '220px !important',
-            maxWidth: '220px !important',
-            minWidth: '220px !important',
+            height: 'calc((100vh - 190px) / 3)',
+            flexBasis: '190px !important',
+            maxWidth: '190px !important',
+            minWidth: '190px !important',
             '& svg': {
                 display: 'flex',
                 /* height: '70%' */
@@ -61,13 +61,13 @@ export default makeStyles(theme => ({
         textOverflow: 'ellipsis',
         padding: '7px 10px 5px',      
         position: 'absolute',
-        bottom: 10,
+        bottom: 40,
         left: 0,
         right: 0,
         marginLeft: 'auto',
         marginRight: 'auto',
         width: 'fit-content',
-    },
+    },  
     card: {        
         position: 'relative',
         border: 0,
@@ -202,19 +202,19 @@ export default makeStyles(theme => ({
         justifyContent: 'center',
         marginLeft: 'auto',
         marginRight: 'auto',
-        width: 220,
-        maxWidth: 220
+        width: 190,
+        maxWidth: 190
     },
     exampleButton: {
         position: 'absolute',
-        top: 10,
+        top: 30,
         /* left: 'calc(50% - 45px)' */
         right: 0
     },
     actionButton: {
         position: 'absolute',
         left: 0,
-        top: 10,
+        top: 30,
         textTransform: 'initial',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis'  

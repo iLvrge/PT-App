@@ -220,6 +220,12 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   }, [ commentsData ] )
 
   useEffect(() => {
+    if(channel_id !== '' && channel_id !== null) {
+      checkSlackAuth()
+    }
+  }, [dispatch, channel_id])
+
+  useEffect(() => {
     if(fileRemote.length > 0) {
       let items = [...fileRemote]
       fileRemote.map( (item, index) => {
@@ -299,7 +305,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       
       const slackToken = getTokenStorage( 'slack_auth_token_info' ), googleToken = getTokenStorage( 'google_auth_token_info' )
       let slackLoginButton = true, googleLoginButton = true
-      if(slackToken && slackToken!= '') {
+      if(slackToken && slackToken != '') {
         let token = JSON.parse(slackToken)
         
         if(typeof token === 'string') {
@@ -359,9 +365,9 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       const section = timelineRef.current.querySelector('section')
       if(section !== null) {
         const sectionHeight = section.clientHeight
-        if(sectionHeight < calHeight) {          
+        /* if(sectionHeight < calHeight) {          
           section.parentNode.style.alignSelf = 'flex-end'          
-        }
+        } */
         const lineChild = section.children[0]
         lineChild.style.top = '15px'
         lineChild.style.left = '19px'
@@ -617,7 +623,9 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
           } else if (selectedAssetsTransactions.length > 0) {
             dispatch( getChannelIDTransaction( selectedAssetsTransactions[0])) //get channel for selected asset
           }  else if(mainCompaniesSelected.length > 0) {
+            
             const findIndex = mainCompaniesList.findIndex(row => row.representative_id == mainCompaniesSelected[0])
+            console.log("GET CHANNEL ID", findIndex)
             if(findIndex !== -1) {
               dispatch( getChannelID( mainCompaniesList[findIndex].representative_name.toString().replace(/ /g,'').toLowerCase()))
             }
