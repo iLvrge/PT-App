@@ -1036,7 +1036,7 @@ const handleDriveModalClose = (event) => {
     const fileURL = file !== 'string' && file.hasOwnProperty('external_url') ? file.external_url : ''
     let imageURL = ''
     if(fileURL.toString().indexOf('.google.com') !== -1){
-      if(fileURL.toString().indexOf('docs.google.com') !== -1 && fileURL.toString().indexOf('document') !== -1) {
+      /* if(fileURL.toString().indexOf('docs.google.com') !== -1 && fileURL.toString().indexOf('document') !== -1) {
         imageURL = 'https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document'
       } else if(fileURL.toString().indexOf('docs.google.com') !== -1 && fileURL.toString().indexOf('spreadsheets') !== -1) {
         imageURL = 'https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.spreadsheet'
@@ -1044,7 +1044,7 @@ const handleDriveModalClose = (event) => {
         imageURL = 'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/image_icon.png'
       } else {
         imageURL = 'https://a.slack-edge.com/bv1-9/generic-99ae615.svg'
-      }     
+      } */     
     }/*  else if(file?.thumb_64 != ''){
       imageURL = fileURL.thumb_64
     } */ else {
