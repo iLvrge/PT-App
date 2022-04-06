@@ -249,7 +249,7 @@ const QuillEditor = ({
 
   const onHandleSubmitToUSPTO =  useCallback( async () => {      
     if( (category == 'correct_details' && selectedAssetsTransactions.length == 0) || (category != 'correct_details' && selectedAssetsPatents.length == 0)) {
-      alert(category == 'correct_details' ? 'Please select a transaction' : 'Please select a asset') 
+      alert(category == 'correct_details' ? 'Please select a transaction' : 'Please select an asset first') 
     } else {
       /**
        * Open model
@@ -362,7 +362,7 @@ const QuillEditor = ({
         selectedTransactions = [...selectedAssetsTransactions]
       }
       if( selectedTransactions.length == 0 &&  selectAssetsList.length == 0 ) {
-        alert('Please select a asset')
+        alert('Please select an asset first')
       } else {
         // Share list of assets and create share link 
         let form = new FormData()

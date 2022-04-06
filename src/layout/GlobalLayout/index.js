@@ -47,6 +47,7 @@ import { toggleUsptoMode,
     toggleFamilyItemMode, 
     toggleLifeSpanMode,
     setTimelineScreen,
+    setDriveTemplateMode,
     setDashboardScreen } from '../../actions/uiActions'
 
 import PatenTrackApi from '../../api/patenTrack2' 
@@ -250,6 +251,8 @@ const GlobalLayout = (props) => {
 
     useEffect(() => {
         if(dashboardScreen === true) {
+            
+
             if(selectedCompanies.length > 0) {
                 const customers = selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies;
                 const assignments = selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;    
@@ -266,7 +269,7 @@ const GlobalLayout = (props) => {
                     `DESC`
                 ))                    
             }
-        }
+        }  
     }, [dispatch, dashboardScreen, companies, profile, selectedCompanies, selectedCategory, assetTypesSelected, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, selectedAssetCompanies, selectedAssetAssignments])
 
     /*
@@ -621,6 +624,7 @@ const GlobalLayout = (props) => {
     }
 
     const handleCustomersBarOpen = (event) => {
+        console.log("CURRENT=>handleCustomersBarOpen", openCustomerBar)
         setToggleCustomerButtonType( !toggleCustomerButtonType )
         setCustomerOpenBar( !openCustomerBar )
         if(!openCustomerBar === false) {
@@ -947,6 +951,76 @@ const GlobalLayout = (props) => {
         alert('Message....')
     }    
 
+    const handleResetScreen = (type, event) => {
+        if(type == 'Dashboard') {
+            if(openCustomerBar === true){
+                handleCustomersBarOpen(event)
+            }  
+            if(openTypeBar === true){
+                handleTypeBarOpen(event)
+            }
+            if(openAssignmentBar === true){
+                handleAssignmentBarOpen(event)
+            }
+            if(openOtherPartyBar === true && openInventorBar === true){
+                setOtherPartyBarSize(0)
+                setPartyBarSize('50%')
+                setOtherPartyOpenBar( false )
+                setInventorOpenBar( false ) 
+                editorBar()               
+            } else {
+                if(openOtherPartyBar === true){
+                    handleOtherPartyBarOpen(event)
+                }
+                if(openInventorBar === true){
+                    handleInventorBarOpen(event)
+                }
+            }
+            if(assetFilesBar === true && openGoogleDriveBar === true){
+                setGoogleDriveBar(false)
+                setAssetFilesBar(false)
+                setDriveBarSize('50%')
+                setAssetFilesBarSize('0')
+                editorBar()             
+            } else {
+                if(assetFilesBar === true){
+                    handleAssetFileBarOpen(event)
+                }
+                if(openGoogleDriveBar === true){
+                    handleGoogleDriveBarOpen(event)
+                }
+            }
+            
+            if(driveTemplateMode === true){
+                dispatch(setDriveTemplateMode(false))
+                setDriveTemplateBarSize(0)
+            }
+            if(openCommentBar === true){
+                handleCommentBarOpen(event)
+            }
+            if(openChartBar === true){
+                handleChartBarOpen(event)
+            }
+            if(openAnalyticsBar === true){
+                handleAnalyticsBarOpen(event)
+            }
+
+        } else {
+            if(openCustomerBar === false){
+                handleCustomersBarOpen(event)
+            }
+            if(openCommentBar === false){
+                handleCommentBarOpen(event)
+            }
+            if(openChartBar === true){
+                handleChartBarOpen(event)
+            }
+            if(openAnalyticsBar === true){
+                handleAnalyticsBarOpen(event)
+            }
+        }
+    }
+
     const topToolBar = [
         {
             tooltip: 'Settings',
@@ -1239,6 +1313,7 @@ const GlobalLayout = (props) => {
                         checkChartAnalytics={checkChartAnalytics}
                         handleAnalyticsBarOpen={handleAnalyticsBarOpen}
                         handleChartBarOpen={handleChartBarOpen}
+                        resetScreen={handleResetScreen}
                     />
             }
             <Grid container className={clsx(classes.dashboardWarapper, {[classes.mobileDashboardWrapper]: isMobile})} id="mainContainer">

@@ -529,18 +529,7 @@ const onHandleDashboardScreen = /* useCallback( */(event) => {
   /* resetAllRowSelect(dispatch, resetItemList.resetAll)
   resetAllRowSelect(dispatch, resetItemList.clearOtherItems) */
   props.checkChartAnalytics(null, null, false)
-  if(props.openCustomerBar === true){
-    props.handleCustomersBarOpen(event)
-  }  
-  if(props.openCommentBar === true){
-    props.handleCommentBarOpen(event)
-  }
-  if(props.openChartBar === true){
-    props.handleChartBarOpen()
-  }
-  if(props.openAnalyticsBar === true){
-    props.handleAnalyticsBarOpen(event)
-  }
+  props.resetScreen('Dashboard', event)
 }/* , [dispatch]) */
 
 const onHandleTimelineScreen = /* useCallback( */(event) => {
@@ -551,18 +540,8 @@ const onHandleTimelineScreen = /* useCallback( */(event) => {
   /* resetAllRowSelect(dispatch, resetItemList.resetAll)
   resetAllRowSelect(dispatch, resetItemList.clearOtherItems) */
   props.checkChartAnalytics(null, null, false)
-  if(props.openCustomerBar === false){
-    props.handleCustomersBarOpen(event)
-  }
-  if(props.openCommentBar === false){
-    props.handleCommentBarOpen(event)
-  }
-  if(props.openChartBar === true){
-    props.handleChartBarOpen()
-  }
-  if(props.openAnalyticsBar === true){
-    props.handleAnalyticsBarOpen(event)
-  }
+  props.resetScreen('Timeline', event)
+  
 }/* , [dispatch]) */
 
   return (

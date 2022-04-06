@@ -185,7 +185,7 @@ const GlobalScreen = ({
             if(openAssignmentBar === true) {
                 handleAssignmentBarOpen()
             }
-            if(openCustomerBar === false) {
+            if(openCustomerBar === false && dashboardScreen === false) {
                 handleCustomersBarOpen()
             }
         }
