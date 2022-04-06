@@ -162,7 +162,7 @@ const GlobalLayout = (props) => {
         }
     }, [])
 
-
+    
     useEffect(() => {
         /* if(props.type !== 9) {
             window.addEventListener('keydown', handleKeyEvent)
@@ -753,6 +753,7 @@ const GlobalLayout = (props) => {
         } else if(!bar === true && openIllustrationBar === false) {
             barSize = '100%'
         }
+        
         if(!bar === true) {
             if(isMobile) {
                 setIllustrationBar(false)
@@ -990,7 +991,7 @@ const GlobalLayout = (props) => {
                     handleGoogleDriveBarOpen(event)
                 }
             }
-            
+            setCommentBarSize('0%')
             if(driveTemplateMode === true){
                 dispatch(setDriveTemplateMode(false))
                 setDriveTemplateBarSize(0)

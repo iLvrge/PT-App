@@ -28,7 +28,7 @@ export default makeStyles(theme => ({
             justifyContent: 'center',
             flexDirection: 'column',
             alignContent: 'start',
-            height: 'calc((100vh - 190px) / 3)',
+            height: /* 'calc((100vh - 190px) / 3)', */220,
             flexBasis: '190px !important',
             maxWidth: '190px !important',
             minWidth: '190px !important',

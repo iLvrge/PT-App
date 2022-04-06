@@ -198,7 +198,7 @@ const ChildTable = ({ transactionId, headerRowDisabled }) => {
   const handleClickSelectCheckbox = useCallback(
     (e, row) => {
       e.preventDefault();
-      const { checked } = e.target;
+      /* const { checked } = e.target;
       let updateSelected = [...childSelectedAssetsPatents],
         oldSelection = [...selectItems];
       if (checked !== undefined) {
@@ -238,7 +238,7 @@ const ChildTable = ({ transactionId, headerRowDisabled }) => {
         );
       } else {
         handleOnClick(row);
-      }      
+      }   */    
     },
     [dispatch, selectItems],
   );
