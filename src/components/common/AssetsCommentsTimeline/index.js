@@ -507,9 +507,11 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
         formData.append('channel_id', channel_id)
         const slackToken = getTokenStorage( 'slack_auth_token_info' )
         if( slackToken  && slackToken != null ) {
-          const { access_token } = JSON.parse(slackToken)
+          const { access_token, bot_token, bot_user_id } = JSON.parse(slackToken)
 
           if( access_token != undefined) {  
+            formData.append('auth', bot_token)
+            formData.append('auth_id', bot_user_id)
             const { data } = await PatenTrackApi.sendMessage(access_token, formData)
             setCommentHtml('')
             setFileRemote([])
@@ -627,7 +629,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
           }  else if(mainCompaniesSelected.length > 0) {
             
             const findIndex = mainCompaniesList.findIndex(row => row.representative_id == mainCompaniesSelected[0])
-            console.log("GET CHANNEL ID", findIndex)
+            
             if(findIndex !== -1) {
               dispatch( getChannelID( mainCompaniesList[findIndex].representative_name.toString().replace(/ /g,'').toLowerCase()))
             }
@@ -781,15 +783,13 @@ const handleDriveModalClose = (event) => {
   const onHandleSelectFile = (event, item) => {
     event.preventDefault()
     //setSelectedDriveFile(`https://docs.google.com/document/d/${itemID}/edit`)
-      /* console.log("item", item)
+      
       let removeFiles = [...fileRemote]
       removeFiles.push({...item})
-      console.log("removeFiles", removeFiles)
       setFileRemote(removeFiles); 
-      setDriveModal( false ) */
-      console.log("SELECT FILE")
-    setCommentHtml( previousContent => previousContent.replace(/<\/?[^>]+(>|$)/g, "").trim() == '' ? `https://docs.google.com/document/d/${item.id}/edit<patentracklinebreak>\n</patentracklinebreak>` :   previousContent + `\nhttps://docs.google.com/document/d/${item.id}/edit<patentracklinebreak>\n</patentracklinebreak>`)
-    setDriveModal( false )
+      setDriveModal( false )
+    /* setCommentHtml( previousContent => previousContent.replace(/<\/?[^>]+(>|$)/g, "").trim() == '' ? `https://docs.google.com/document/d/${item.id}/edit<patentracklinebreak>\n</patentracklinebreak>` :   previousContent + `\nhttps://docs.google.com/document/d/${item.id}/edit<patentracklinebreak>\n</patentracklinebreak>`)
+    setDriveModal( false ) */
     removeFocusAndOnSendButton()
   }  
 
@@ -1041,10 +1041,13 @@ const handleDriveModalClose = (event) => {
     if(fileURL.toString().indexOf('.google.com') !== -1){
       if(fileURL.toString().indexOf('docs.google.com') !== -1 && fileURL.toString().indexOf('document') !== -1) {
         imageURL = 'https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document'
+      } else if(fileURL.toString().indexOf('docs.google.com') !== -1 && fileURL.toString().indexOf('spreadsheets') !== -1) {
+        imageURL = 'https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.spreadsheet'
       } else if(fileURL.toString().indexOf('drive.google.com') !== -1 && file.mimetype.toString().indexOf('image') !== -1) {
         imageURL = 'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/image_icon.png'
-      }
-      
+      } else {
+        imageURL = 'https://a.slack-edge.com/bv1-9/generic-99ae615.svg'
+      }     
     }/*  else if(file?.thumb_64 != ''){
       imageURL = fileURL.thumb_64
     } */ else {
@@ -1058,6 +1061,9 @@ const handleDriveModalClose = (event) => {
           case 'image/svg+xml':
             imageURL = 'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/image_icon.png'
             break;
+          default: 
+            imageURL = 'https://a.slack-edge.com/bv1-9/generic-99ae615.svg'
+            break;
         }
       }
     }
@@ -1070,19 +1076,33 @@ const handleDriveModalClose = (event) => {
   }
 
   const ShowFiles = ({indexing, files}) => {
-    if(!files.hasOwnProperty('files') || files.files.length == 0) return null
-
-    return (
-      <>
-        {
-          files.files.map( (file, index) => (
-            <div key={`${indexing}-${index}`} className={classes.icon}>
-              <a onClick={(event) => { openFile(event, file)}} className={classes.fileLink}><FileImage file={file}/>{file?.name ? file.name : file.title}</a>
-            </div>
-          ))
-        }
-      </>
-    )
+    if((!files.hasOwnProperty('files') || files.files.length == 0) && (!files.hasOwnProperty('attachments') || files.attachments.length == 0)) return null
+    if(files.hasOwnProperty('files')) {
+      return (
+        <>
+          {
+            files.files.map( (file, index) => (
+              <div key={`${indexing}-${index}`} className={classes.icon}>
+                <a onClick={(event) => { openFile(event, file)}} className={classes.fileLink}><FileImage file={file}/>{file?.name ? file.name : file.title}</a>
+              </div>
+            ))
+          }
+        </>
+      )
+    } else {
+      return (
+        <>
+          {
+            files.attachments.map( (file, index) => (
+              <div key={`${indexing}-${index}`} className={classes.icon}>
+                <a onClick={(event) => { openFile(event, file.blocks[0].file)}} className={classes.fileLink}><FileImage file={file.blocks[0].file}/>{file.blocks[0].file?.name ? file.blocks[0].file.name : file.blocks[0].file.title}</a>
+              </div>
+            ))
+          }
+        </>
+      )
+    }
+    
   }
 
   const TimelineItem = ({users, comment}) => {
