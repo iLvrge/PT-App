@@ -849,22 +849,27 @@ a.maintain svg.clean_encumbrances path{
 
 .editor-attachment .item{
   margin-right: 10px;
-  min-width: 72px;
-  max-width: 170px;
-  max-height: 30px;
-  overflow: hidden;
   position: relative;
-  padding: 0 5px;
+  padding: 12px;
   display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.editor-attachment .item span{
+  margin-right: 5px;
 }
 
 .attachment_image {
-  width: 30px
+  height: 16px;
+  margin-right: 5px;
+  display:flex;
 }
 
 .remove-attachment{
   position: absolute;
   right: 0px;
+  top: 6px;
   display: none;
   z-index: 99999;
 }

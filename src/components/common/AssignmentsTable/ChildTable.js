@@ -40,6 +40,7 @@ import {
 } from "../../../actions/uiActions";
 
 import { numberWithCommas } from "../../../utils/numbers";
+import clsx from "clsx";
 
 const ChildTable = ({ transactionId, headerRowDisabled }) => {
   const classes = useStyles();
@@ -272,7 +273,7 @@ const ChildTable = ({ transactionId, headerRowDisabled }) => {
   if (assetTypeAssignmentLoadingAssets) return <Loader />;
 
   return (
-    <Paper className={classes.root} square id={`assets_type_assignment_assets`}>
+    <Paper className={clsx(classes.root, classes.root_child)} square id={`assets_type_assignment_assets`}>
       <VirtualizedTable
         classes={classes}
         selected={selectItems}
@@ -282,7 +283,7 @@ const ChildTable = ({ transactionId, headerRowDisabled }) => {
         rows={data}
         rowHeight={rowHeight}
         headerHeight={rowHeight}
-        columns={COLUMNS}
+        columns={COLUMNS}    
         onSelect={handleClickSelectCheckbox}
         onSelectAll={onHandleSelectAll}
         defaultSelectAll={selectedAll}

@@ -238,9 +238,9 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       }
       const itemElement = document.createElement('div')
       itemElement.setAttribute('class', 'item') 
-      itemElement.innerHTML = `<img src="${item.iconLink}" class="attachment_image "/> ${item.name}`
+      itemElement.innerHTML = `<img src="${item.iconLink}" class="attachment_image "/> <span>${item.name}</span>`
       const anchor = document.createElement('a')
-      anchor.innerHTML = `<svg aria-hidden="true" width="15" focusable="false" data-prefix="far" data-icon="times-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm101.8-262.2L295.6 256l62.2 62.2c4.7 4.7 4.7 12.3 0 17l-22.6 22.6c-4.7 4.7-12.3 4.7-17 0L256 295.6l-62.2 62.2c-4.7 4.7-12.3 4.7-17 0l-22.6-22.6c-4.7-4.7-4.7-12.3 0-17l62.2-62.2-62.2-62.2c-4.7-4.7-4.7-12.3 0-17l22.6-22.6c4.7-4.7 12.3-4.7 17 0l62.2 62.2 62.2-62.2c4.7-4.7 12.3-4.7 17 0l22.6 22.6c4.7 4.7 4.7 12.3 0 17z" class=""></path></svg>`
+      anchor.innerHTML = `<svg aria-hidden="true" width="15"  height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm101.8-262.2L295.6 256l62.2 62.2c4.7 4.7 4.7 12.3 0 17l-22.6 22.6c-4.7 4.7-12.3 4.7-17 0L256 295.6l-62.2 62.2c-4.7 4.7-12.3 4.7-17 0l-22.6-22.6c-4.7-4.7-4.7-12.3 0-17l62.2-62.2-62.2-62.2c-4.7-4.7-4.7-12.3 0-17l22.6-22.6c4.7-4.7 12.3-4.7 17 0l62.2 62.2 62.2-62.2c4.7-4.7 12.3-4.7 17 0l22.6 22.6c4.7 4.7 4.7 12.3 0 17z" class=""></path></svg>`
       anchor.setAttribute('href','javascript://')
       anchor.setAttribute('class','remove-attachment')
       anchor.onclick = function() {
@@ -248,11 +248,8 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
         items = items.splice(index, 1)
         setFileRemote(items) 
       }
-      itemElement.insertBefore(anchor, itemElement.firstElementChild)
+      itemElement.appendChild(anchor, itemElement.firstElementChild)
       element.appendChild(itemElement)
-      /* if(editor.parentNode.querySelector('.editor-attachment') != null) {
-        editor.parentNode.removeChild(editor.parentNode.querySelector('.editor-attachment'))
-      }  */     
       editor.parentNode.insertBefore(element, editor.nextSibling)
     })
   }, [fileRemote, editorContainerRef])  
@@ -649,18 +646,18 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       const itemElement = document.createElement('div')
       itemElement.setAttribute('class', 'item') 
       if(file.type.indexOf('image') !== -1) {
-        itemElement.innerHTML = `<img src="${URL.createObjectURL(file)}" class="attachment_image"/>`
+        itemElement.innerHTML = `<img src="${URL.createObjectURL(file)}" class="attachment_image"/> <span>${file.name}</span>`
       } else {
-        itemElement.innerHTML = `<svg width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fal" data-icon="file" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M369.9 97.9L286 14C277 5 264.8-.1 252.1-.1H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V131.9c0-12.7-5.1-25-14.1-34zm-22.6 22.7c2.1 2.1 3.5 4.6 4.2 7.4H256V32.5c2.8.7 5.3 2.1 7.4 4.2l83.9 83.9zM336 480H48c-8.8 0-16-7.2-16-16V48c0-8.8 7.2-16 16-16h176v104c0 13.3 10.7 24 24 24h104v304c0 8.8-7.2 16-16 16z" class=""></path></svg> ${file.name}`
+        itemElement.innerHTML = `<svg width="16" height="16" aria-hidden="true" focusable="false" data-prefix="fal" data-icon="file" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M369.9 97.9L286 14C277 5 264.8-.1 252.1-.1H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V131.9c0-12.7-5.1-25-14.1-34zm-22.6 22.7c2.1 2.1 3.5 4.6 4.2 7.4H256V32.5c2.8.7 5.3 2.1 7.4 4.2l83.9 83.9zM336 480H48c-8.8 0-16-7.2-16-16V48c0-8.8 7.2-16 16-16h176v104c0 13.3 10.7 24 24 24h104v304c0 8.8-7.2 16-16 16z" class=""></path></svg> <span>${file.name}</span>`
       }
       const anchor = document.createElement('a')
-      anchor.innerHTML = `<svg aria-hidden="true" width="15" focusable="false" data-prefix="far" data-icon="times-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm101.8-262.2L295.6 256l62.2 62.2c4.7 4.7 4.7 12.3 0 17l-22.6 22.6c-4.7 4.7-12.3 4.7-17 0L256 295.6l-62.2 62.2c-4.7 4.7-12.3 4.7-17 0l-22.6-22.6c-4.7-4.7-4.7-12.3 0-17l62.2-62.2-62.2-62.2c-4.7-4.7-4.7-12.3 0-17l22.6-22.6c4.7-4.7 12.3-4.7 17 0l62.2 62.2 62.2-62.2c4.7-4.7 12.3-4.7 17 0l22.6 22.6c4.7 4.7 4.7 12.3 0 17z" class=""></path></svg>`
+      anchor.innerHTML = `<svg aria-hidden="true" width="15"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm101.8-262.2L295.6 256l62.2 62.2c4.7 4.7 4.7 12.3 0 17l-22.6 22.6c-4.7 4.7-12.3 4.7-17 0L256 295.6l-62.2 62.2c-4.7 4.7-12.3 4.7-17 0l-22.6-22.6c-4.7-4.7-4.7-12.3 0-17l62.2-62.2-62.2-62.2c-4.7-4.7-4.7-12.3 0-17l22.6-22.6c4.7-4.7 12.3-4.7 17 0l62.2 62.2 62.2-62.2c4.7-4.7 12.3-4.7 17 0l22.6 22.6c4.7 4.7 4.7 12.3 0 17z" class=""></path></svg>`
       anchor.setAttribute('href','javascript://')
       anchor.setAttribute('class','remove-attachment')
       anchor.onclick = function() {
         editor.parentNode.removeChild(editor.parentNode.querySelector('.editor-attachment'))
       }
-      itemElement.insertBefore(anchor, itemElement.firstElementChild)
+      itemElement.appendChild(anchor, itemElement.firstElementChild) 
       element.appendChild(itemElement)
       if(editor.parentNode.querySelector('.editor-attachment') != null) {
         editor.parentNode.removeChild(editor.parentNode.querySelector('.editor-attachment'))

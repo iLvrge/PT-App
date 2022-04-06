@@ -14,6 +14,12 @@ export default makeStyles((theme) => ({
             }
         }
     },    
+    root_child: {
+        /* background: 'none', */
+        '& .ReactVirtualized__Table__row':{
+            cursor: 'text'
+        }
+    },
     tableRow: {
         cursor: 'pointer',
         borderBottom: '1px solid #5c5c5c',
