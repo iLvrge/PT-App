@@ -173,13 +173,15 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       const messagesTrimmed = messages.map((message, index) => {
         if(lastTimeStamp === 0) {
           if(message?.attachments && message.attachments.length > 0) {
-            lastTimeStamp = message.ts.split('.')[0]
+            lastTimeStamp = Moment(new Date(message.ts * 1000)) /* message.ts.split('.')[0] */
             lastUser = message.user
             files = [...files, message.attachments[0].blocks[0].file]
             lastIndexID = index
           }
         } else {
-          if( message.ts.split('.')[0] === lastTimeStamp && lastUser === message.user ) {
+          const time = Moment(new Date(message.ts * 1000));
+          const duration = time.diff(lastTimeStamp, 'minutes')
+          if( duration === 0 && lastUser === message.user && message?.attachments && message.attachments.length > 0 ) {
             files = [...files, message.attachments[0].blocks[0].file]
             removeIndexID.push(index)
           } else {
@@ -193,13 +195,13 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
           }
         }
       })
-      if(lastIndexID !== -1 && files.length > 0 && lastUser === messages[messages.length -1].user &&  messages[messages.length -1].ts.split('.')[0] === lastTimeStamp) {
+      const time = Moment(new Date(messages[messages.length -1].ts * 1000));
+      if(lastIndexID !== -1 && files.length > 0 && lastUser === messages[messages.length -1].user &&  time.diff(lastTimeStamp, 'minutes') === 0) {
         messages[lastIndexID].files = files    
       }
       await Promise.all(messagesTrimmed)  
       if(removeIndexID.length > 0) {
         messages = messages.filter( (c,index) => !removeIndexID.includes(index))
-        console.log("messages", messages)
         setCommentsData({messages, users: slack_messages.users})
       }      
     }
@@ -556,7 +558,9 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
               setFile(null)
               const editor = editorContainerRef.current.querySelector('.ql-editor')
               if(editor.parentNode.querySelector('.editor-attachment') != null) {
-                editor.parentNode.removeChild(editor.parentNode.querySelector('.editor-attachment'))
+                for(let i = 0; i < editor.parentNode.querySelectorAll('.editor-attachment').length ; i++) {
+                  editor.parentNode.removeChild(editor.parentNode.querySelectorAll('.editor-attachment')[i])
+                }                
               }
               const { status, channel } = data;
               if(status != '' && status == 'Message sent') {
@@ -824,6 +828,9 @@ const handleDriveModalClose = (event) => {
       removeFiles.push({...item})
       setFileRemote(removeFiles); 
       setDriveModal( false )
+      document.querySelector('.ql-editor').focus()
+      const selection = window.getSelection();
+      selection.collapse(editor.lastChild, 1)
     /* setCommentHtml( previousContent => previousContent.replace(/<\/?[^>]+(>|$)/g, "").trim() == '' ? `https://docs.google.com/document/d/${item.id}/edit<patentracklinebreak>\n</patentracklinebreak>` :   previousContent + `\nhttps://docs.google.com/document/d/${item.id}/edit<patentracklinebreak>\n</patentracklinebreak>`)
     setDriveModal( false ) */
     removeFocusAndOnSendButton()
