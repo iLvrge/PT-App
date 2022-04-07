@@ -167,7 +167,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
 
   useEffect(() => {    
     const callMessageTrimmer = async() => {
-      let messages = [...slack_messages.messages]
+      let messages = slack_messages.messages.length > 0 ? [...slack_messages.messages] : []
       let files = [], removeIndexID = []
       let lastTimeStamp = 0, lastUser = null, lastIndexID = -1
       const messagesTrimmed = messages.map((message, index) => {
@@ -203,7 +203,6 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       })
 
       const time = Moment(new Date(messages[messages.length -1].ts * 1000));
-      console.log("duration",  lastTimeStamp, time, time.diff(lastTimeStamp, 'minutes'), lastUser, messages[messages.length -1], lastIndexID,  files.length)
       if(lastIndexID !== -1 && files.length > 0 && lastUser === messages[messages.length -1].user &&  time.diff(lastTimeStamp, 'minutes') === 0) {
         messages[lastIndexID].files = files    
       }

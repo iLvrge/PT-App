@@ -69,7 +69,9 @@ import {
   toggleFamilyMode,
   toggleFamilyItemMode,
   toggleLifeSpanMode,
-  setDriveTemplateFrameMode
+  setDriveTemplateFrameMode,
+  setTimelineScreen,
+  setDashboardScreen
 } from "../../../actions/uiActions";
 
 import  { controlList } from '../../../utils/controlList'
@@ -193,6 +195,7 @@ const AssetsTable = ({
   const link_assets_sheet_type = useSelector(state => state.patenTrack2.link_assets_sheet_type)
   const switch_button_assets = useSelector(state => state.patenTrack2.switch_button_assets)
   const foreignAssets = useSelector(state => state.patenTrack2.foreignAssets)
+  const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
   const Clipboard = () => {
     return (
       <svg xmlns="http://www.w3.org/2000/svg" className='clipboard' fill="#fff" enableBackground="new 0 0 80 80" viewBox="0 0 80 80"><path d="M40,5c-3.3085938,0-6,2.6914062-6,6v3h-5c-0.4199219,0-0.7949219,0.262207-0.9394531,0.6567383l-0.880188,2.4077148	h-9.0836792C16.9404297,17.0644531,16,18.0048828,16,19.1611328v53.7421875C16,74.0595703,16.9404297,75,18.0966797,75h43.8066406
@@ -973,7 +976,10 @@ const checkMouseStillOnHover = (e, number) => {
         e.preventDefault()
         const { checked } = e.target
         let cntrlKey = e.ctrlKey ? e.ctrlKey : undefined;
-
+        if(dashboardScreen === true) {
+          dispatch(setTimelineScreen(true))
+          dispatch(setDashboardScreen(false))
+        }
 
         if(cntrlKey !== undefined) {
           if(selectedCategory == 'restore_ownership' && display_clipboard === false) {
@@ -1018,7 +1024,7 @@ const checkMouseStillOnHover = (e, number) => {
           }                         
         }         
     },
-    [dispatch, selectedAssetsPatents, selectItems, currentSelection, dropOpenAsset],
+    [dispatch, dashboardScreen, selectedAssetsPatents, selectItems, currentSelection, dropOpenAsset],
   );
 
   /**

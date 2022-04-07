@@ -248,8 +248,8 @@ const NewHeader = (props) => {
 
   useEffect(() => {
     const findIndex =  controlList.findIndex( item => item.type == 'menu' && item.category == selectedCategory)
-    setLayoutName(selectedCategory != 'due_dilligence' ? findIndex !== -1 ? controlList[findIndex].mainHeading : '' : '')
-  }, [ selectedCategory ])    
+    setLayoutName(dashboardScreen === true ? 'Dashboard' : selectedCategory != 'due_dilligence' ? findIndex !== -1 ? controlList[findIndex].mainHeading : '' : '')
+  }, [ dashboardScreen, selectedCategory ])    
 
   /**
    * Get the Loggedin User Profile data
@@ -569,12 +569,12 @@ const onHandleTimelineScreen = /* useCallback( */(event) => {
           onClickSale={onHandleSaleAssets} 
           dashboardScreen={dashboardScreen}
           setDashboardScreen={onHandleDashboardScreen}
-          seActivityTimeline={onHandleTimelineScreen}
+          setActivityTimeline={onHandleTimelineScreen}
           timelineScreen={timelineScreen} 
           resetAll={resetAll}
           clearOtherItems={clearOtherItems}
         />
-        <div className={classes.breadcrumbs}>{selectedCategory !== 'due_dilligence' ? layoutName : ''}</div>    
+        <div className={classes.breadcrumbs}>{selectedCategory !== 'due_dilligence' || dashboardScreen === true ? layoutName : ''}</div>    
         <div className={classes.rightPanel}>  
             {/* <Switch  
               color="secondary" 

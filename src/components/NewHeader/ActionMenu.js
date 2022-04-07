@@ -148,6 +148,9 @@ const ActionMenu = (props) => {
      * Create Google doc template
      */
     const createTemplate = () => {
+        if(props.dashboardScreen){
+            props.setActivityTimeline()
+        }
         if( selectedAssetsPatents.length > 0 ) {
           const googleToken = getTokenStorage( 'google_auth_token_info' )
           if(googleToken && googleToken != '') {
@@ -349,6 +352,9 @@ const ActionMenu = (props) => {
      */
 
     const onHandleReviewMaintainenceFee = useCallback(async () => { 
+        if(props.dashboardScreen){
+            props.setActivityTimeline()
+        }
         if( maintainenceFrameMode === false) {
             const action = ( selectedMaintainencePatents.length > 0 &&  move_assets.length > 0 ) ? true : move_assets.length > 0 ? true : selectedMaintainencePatents.length > 0 ? true : false
           
@@ -416,6 +422,9 @@ const ActionMenu = (props) => {
      */
 
     const onMaintainenceFeeFile = useCallback(async () => {  
+        if(props.dashboardScreen){
+            props.setActivityTimeline()
+        }
         if(selectedMaintainencePatents.length > 0) {
             const getGoogleToken = getTokenStorage('google_auth_token_info')
             if(getGoogleToken && getGoogleToken != '') {
@@ -470,6 +479,9 @@ const ActionMenu = (props) => {
      */
 
     const onHandleSubmitToUSPTO =  useCallback( async () => {      
+        if(props.dashboardScreen){
+            props.setActivityTimeline()
+        }
         if( (category == 'correct_details' && selectedAssetsTransactions.length == 0) || (category != 'correct_details' && selectedAssetsPatents.length == 0)) {
             alert(category == 'correct_details' ? 'Please select a transaction' : 'Please select an asset first') 
         } else {
@@ -493,6 +505,9 @@ const ActionMenu = (props) => {
     }, [dispatch])
 
     const onHandleSubmitAddressUSPTO = useCallback(async() => {
+        if(props.dashboardScreen){
+            props.setActivityTimeline()
+        }
         if( fixedTransactionAddress.length > 0 ) {
             const form = new FormData()
             form.append('id', fixedTransactionAddress[0][0])
@@ -507,6 +522,9 @@ const ActionMenu = (props) => {
     }, [ dispatch, fixedTransactionAddress ])
 
     const onCorrectAddress = () => {
+        if(props.dashboardScreen){
+            props.setActivityTimeline()
+        }
         /**
          * Show selected company address list
          */
@@ -514,6 +532,9 @@ const ActionMenu = (props) => {
     }
     
     const onChangeAddress = () => {
+        if(props.dashboardScreen){
+            props.setActivityTimeline()
+        }
         /**
          * Show selected company address list
          */
@@ -594,6 +615,9 @@ const ActionMenu = (props) => {
     }, [ dispatch, fixedTransactionName ])
 
     const onSalesAssets = useCallback(async () => {
+        if(props.dashboardScreen){
+            props.setActivityTimeline()
+        }
         if( assetTypeAssignmentAssetsSelected.length == 0) {
             alert('Please select assets from list for sale')
         } else {
@@ -677,20 +701,29 @@ const ActionMenu = (props) => {
     }, [ newCompanyName, assetTypeNamesGroups, mainCompaniesSelected ] )
 
     const handleChangeLayout = (event) => {
+        if(props.dashboardScreen){
+            props.setActivityTimeline()
+        }
         resetAllActivity(category)
+    }    
+
+    const locateLostAssets = () => {
+        if(props.dashboardScreen){
+            props.setActivityTimeline()
+        }
+        resetAllActivity('due_dilligence')
     }
-    
 
     const onHandleTimeline = () => {
         setAnchorEl(null)
         resetAllActivity('')
-        props.seActivityTimeline()
+        props.setActivityTimeline()
     }
 
     const onHandleDashboard = () => {
         setAnchorEl(null)
-        resetAllActivity('')
         props.setDashboardScreen()
+        resetAllActivity('')
     }
 
     const resetAllActivity = (category) => {
@@ -799,7 +832,7 @@ const ActionMenu = (props) => {
                                 click={handleChangeLayout}
                                 category={category}
                             /> ,
-                            <MenuItem>                            
+                            <MenuItem onClick={locateLostAssets}>                            
                                 <ListItemIcon>
                                     <FindInPageIcon/>
                                 </ListItemIcon>
@@ -817,7 +850,11 @@ const ActionMenu = (props) => {
                                 </ListItemIcon>
                                 <ListItemText>Email Open Document</ListItemText>
                             </MenuItem>,
-                            <MenuItem  onClick={() => props.onClickSale(1)} className={`iconItem ${display_sales_assets === true ? 'active' : ''}`}>
+                            <MenuItem  
+                            onClick={() => {
+                                props.setActivityTimeline()
+                                props.onClickSale(1)
+                            }} className={`iconItem ${display_sales_assets === true ? 'active' : ''}`}>
                                 <ListItemIcon>
                                     <Avatar  src="https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/PatentSales2.svg" variant="square" style={{width: 21, height: 21}}/>
                                 </ListItemIcon>

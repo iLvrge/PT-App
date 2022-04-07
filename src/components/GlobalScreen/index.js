@@ -420,8 +420,6 @@ const GlobalScreen = ({
                                         split={`horizontal`}
                                         size={partyBarSize}
                                         ref={entityRef}
-                                        /* onDragFinished={(size) => resizePane('split8', size > 900 ? 900 : size, setAssignmentBarSize)} */
-                                       /*  ref={assignmentRef} */
                                     >
                                         {
                                             openOtherPartyBar === true 
@@ -566,7 +564,7 @@ const GlobalScreen = ({
                             >
                                 <div id={`assets_files_container`} style={{ height: '100%'}}>
                                     <SplitPane
-                                        className={classes.splitPane} 
+                                        className={classes.splitPane}
                                         split={`horizontal`}
                                         size={driveBarSize}
                                         ref={fileBarRef}
@@ -636,7 +634,7 @@ const GlobalScreen = ({
                                             pointerEvents: isDragging === true ? 'none' : 'auto',
                                         }}
                                         ref={mainContainerRef}
-                                        primary={'second'}                                        
+                                        primary={'second'}                                
                                     >
                                         <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
                                             <IllustrationCommentContainer 

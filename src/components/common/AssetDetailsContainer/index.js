@@ -96,6 +96,7 @@ const AssetDetailsContainer = ({
 
 
   useEffect(() => {
+    console.log("defaultSize", defaultSize)
     if(chartBar === true && analyticsBar === true && defaultSize == '100%') {
       fnParams('50%')
     }

@@ -52,7 +52,9 @@ import {
   toggleFamilyMode,
   toggleFamilyItemMode,
   toggleLifeSpanMode,
-  setDriveTemplateFrameMode
+  setDriveTemplateFrameMode,
+  setTimelineScreen,
+  setDashboardScreen
 } from "../../../actions/uiActions";
 
 import { updateHashLocation } from "../../../utils/hashLocation";
@@ -130,7 +132,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
   const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
   const channel_id = useSelector(state => state.patenTrack2.channel_id)
-  
+  const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
 
   const COLUMNS = [
     /* {
@@ -512,6 +514,10 @@ const onHandleClickRow = useCallback(
     e.preventDefault();
     const { checked } = e.target;
     let oldSelection = [...selectItems]
+    if(dashboardScreen === true) {
+      dispatch(setTimelineScreen(true))
+      dispatch(setDashboardScreen(false))
+    }
     if(display_clipboard === false) {
       dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
       dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
@@ -590,7 +596,7 @@ const onHandleClickRow = useCallback(
       }
     }
   },
-  [dispatch, selectedCategory, selectItems, currentSelection, selectedRow, defaultLoad, search_string, display_clipboard],
+  [dispatch, dashboardScreen, selectedCategory, selectItems, currentSelection, selectedRow, defaultLoad, search_string, display_clipboard],
 );
 
 const findChannelID = useCallback((rfID) => {
