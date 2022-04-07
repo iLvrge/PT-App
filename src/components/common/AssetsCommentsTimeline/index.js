@@ -172,31 +172,33 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       let lastTimeStamp = 0, lastUser = null, lastIndexID = -1
       const messagesTrimmed = messages.map((message, index) => {
         if(lastTimeStamp === 0) {
-          lastTimeStamp = Moment(new Date(message.ts * 1000)) /* message.ts.split('.')[0] */
+          lastTimeStamp = Moment(new Date(message.ts * 1000)) 
           lastUser = message.user
           lastIndexID = index
           if(message?.attachments && message.attachments.length > 0) {
             files = [...files, message.attachments[0].blocks[0].file]
           }
         } else {
-          const time = Moment(new Date(message.ts * 1000));
-          const duration = time.diff(lastTimeStamp, 'minutes')
-          if( duration === 0 && lastUser === message.user && message?.attachments && message.attachments.length > 0 ) {
-            files = [...files, message.attachments[0].blocks[0].file]
-            removeIndexID.push(index)
-          } else {
-            if(files.length > 0 && lastIndexID != index - 1) {
-              messages[lastIndexID].files = files            
-            }
-            if(message?.attachments && message.attachments.length > 0) {
-              files = [message.attachments[0].blocks[0].file]
+          if(!message.hasOwnProperty('subtype')) {
+            const time = Moment(new Date(message.ts * 1000));
+            const duration = time.diff(lastTimeStamp, 'minutes')
+            if( duration === 0 && lastUser === message.user && message?.attachments && message.attachments.length > 0 ) {
+              files = [...files, message.attachments[0].blocks[0].file]
+              removeIndexID.push(index)
             } else {
-              files = []
+              if(files.length > 0 && lastIndexID != index - 1) {
+                messages[lastIndexID].files = files            
+              }
+              if(message?.attachments && message.attachments.length > 0) {
+                files = [message.attachments[0].blocks[0].file]
+              } else {
+                files = []
+              }
+              lastTimeStamp = Moment(new Date(message.ts * 1000))
+              lastUser = message.user
+              lastIndexID = index
             }
-            lastTimeStamp = Moment(new Date(message.ts * 1000))
-            lastUser = message.user
-            lastIndexID = index
-          }
+          }          
         }
       })
 
