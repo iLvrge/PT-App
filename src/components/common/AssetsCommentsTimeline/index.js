@@ -172,11 +172,11 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       let lastTimeStamp = 0, lastUser = null, lastIndexID = -1
       const messagesTrimmed = messages.map((message, index) => {
         if(lastTimeStamp === 0) {
+          lastTimeStamp = Moment(new Date(message.ts * 1000)) /* message.ts.split('.')[0] */
+          lastUser = message.user
+          lastIndexID = index
           if(message?.attachments && message.attachments.length > 0) {
-            lastTimeStamp = Moment(new Date(message.ts * 1000)) /* message.ts.split('.')[0] */
-            lastUser = message.user
             files = [...files, message.attachments[0].blocks[0].file]
-            lastIndexID = index
           }
         } else {
           const time = Moment(new Date(message.ts * 1000));
@@ -185,17 +185,23 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
             files = [...files, message.attachments[0].blocks[0].file]
             removeIndexID.push(index)
           } else {
-            if(files.length > 0) {
+            if(files.length > 0 && lastIndexID != index - 1) {
               messages[lastIndexID].files = files            
             }
-            files = []
-            lastTimeStamp = 0
-            lastUser = null
-            lastIndexID = -1
+            if(message?.attachments && message.attachments.length > 0) {
+              files = [message.attachments[0].blocks[0].file]
+            } else {
+              files = []
+            }
+            lastTimeStamp = Moment(new Date(message.ts * 1000))
+            lastUser = message.user
+            lastIndexID = index
           }
         }
       })
+
       const time = Moment(new Date(messages[messages.length -1].ts * 1000));
+      console.log("duration",  lastTimeStamp, time, time.diff(lastTimeStamp, 'minutes'), lastUser, messages[messages.length -1], lastIndexID,  files.length)
       if(lastIndexID !== -1 && files.length > 0 && lastUser === messages[messages.length -1].user &&  time.diff(lastTimeStamp, 'minutes') === 0) {
         messages[lastIndexID].files = files    
       }

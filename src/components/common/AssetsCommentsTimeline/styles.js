@@ -124,7 +124,7 @@ export default makeStyles(theme => ({
       marginRight: 5,
       /* position: 'relative',
       top: 5, */
-      width: 24  
+      width: 20  
     }
   },
   arrowButton:{
