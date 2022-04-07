@@ -828,7 +828,8 @@ const handleDriveModalClose = (event) => {
       removeFiles.push({...item})
       setFileRemote(removeFiles); 
       setDriveModal( false )
-      document.querySelector('.ql-editor').focus()
+      const editor = document.querySelector('.ql-editor')
+      editor.focus()
       const selection = window.getSelection();
       selection.collapse(editor.lastChild, 1)
     /* setCommentHtml( previousContent => previousContent.replace(/<\/?[^>]+(>|$)/g, "").trim() == '' ? `https://docs.google.com/document/d/${item.id}/edit<patentracklinebreak>\n</patentracklinebreak>` :   previousContent + `\nhttps://docs.google.com/document/d/${item.id}/edit<patentracklinebreak>\n</patentracklinebreak>`)
