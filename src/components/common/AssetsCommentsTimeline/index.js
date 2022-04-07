@@ -274,9 +274,9 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
 
   useEffect(() => {
     if(fileRemote.length == 0) return
-
+    
     let items = [...fileRemote]
-    fileRemote.map( (item, index) => {      
+    items.map( (item, index) => {      
       const element = document.createElement('div')
       element.setAttribute('class', `editor-attachment item_${item.id}`) 
       const editor = editorContainerRef.current.querySelector('.ql-editor')
@@ -290,14 +290,20 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       anchor.innerHTML = `<svg aria-hidden="true" width="15"  height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm101.8-262.2L295.6 256l62.2 62.2c4.7 4.7 4.7 12.3 0 17l-22.6 22.6c-4.7 4.7-12.3 4.7-17 0L256 295.6l-62.2 62.2c-4.7 4.7-12.3 4.7-17 0l-22.6-22.6c-4.7-4.7-4.7-12.3 0-17l62.2-62.2-62.2-62.2c-4.7-4.7-4.7-12.3 0-17l22.6-22.6c4.7-4.7 12.3-4.7 17 0l62.2 62.2 62.2-62.2c4.7-4.7 12.3-4.7 17 0l22.6 22.6c4.7 4.7 4.7 12.3 0 17z" class=""></path></svg>`
       anchor.setAttribute('href','javascript://')
       anchor.setAttribute('class','remove-attachment')
-      anchor.onclick = function() {
-        editor.parentNode.removeChild(editor.parentNode.querySelector(`.item_${item.id}`))
-        items = items.splice(index, 1)
-        setFileRemote(items) 
+      anchor.onclick = function(event) {
+        const item = event.target.closest('div.editor-attachment')        
+        const classID = item.classList[1].replace('item_', '')
+        const container = editorContainerRef.current.querySelector('.ql-editor')
+        container.parentNode.removeChild(item)
+        if(classID !== "") {
+          let prevItems = [...fileRemote]
+          prevItems = prevItems.filter(item => item.id !== classID)
+          setFileRemote(prevItems); 
+        }        
       }
       itemElement.appendChild(anchor, itemElement.firstElementChild)
       element.appendChild(itemElement)
-      editor.parentNode.insertBefore(element, editor.nextSibling)
+      editor.parentNode.appendChild(element, editor.nextSibling)
     })
   }, [fileRemote, editorContainerRef])  
 
@@ -562,12 +568,15 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
             if(data != '' && Object.keys(data).length > 0) {
               inputFile.current.value = ''
               setFile(null)
-              const editor = editorContainerRef.current.querySelector('.ql-editor')
-              if(editor.parentNode.querySelector('.editor-attachment') != null) {
-                for(let i = 0; i < editor.parentNode.querySelectorAll('.editor-attachment').length ; i++) {
-                  editor.parentNode.removeChild(editor.parentNode.querySelectorAll('.editor-attachment')[i])
-                }                
-              }
+              setFileRemote([])
+              /* const editor = editorContainerRef.current.querySelector('.ql-editor')
+              if(editor.parentNode.querySelector('.editor-attachment') != null) {                
+                const items = editor.parentNode.querySelectorAll('.editor-attachment')
+                console.log("editor-attachment", items.length)
+                for(let i = 0; i < items.length; i++) {
+                  editor.parentNode.removeChild(items[i])
+                }
+              } */
               const { status, channel } = data;
               if(status != '' && status == 'Message sent') {
                 setEditData( null )
@@ -703,8 +712,9 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       anchor.innerHTML = `<svg aria-hidden="true" width="15"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm101.8-262.2L295.6 256l62.2 62.2c4.7 4.7 4.7 12.3 0 17l-22.6 22.6c-4.7 4.7-12.3 4.7-17 0L256 295.6l-62.2 62.2c-4.7 4.7-12.3 4.7-17 0l-22.6-22.6c-4.7-4.7-4.7-12.3 0-17l62.2-62.2-62.2-62.2c-4.7-4.7-4.7-12.3 0-17l22.6-22.6c4.7-4.7 12.3-4.7 17 0l62.2 62.2 62.2-62.2c4.7-4.7 12.3-4.7 17 0l22.6 22.6c4.7 4.7 4.7 12.3 0 17z" class=""></path></svg>`
       anchor.setAttribute('href','javascript://')
       anchor.setAttribute('class','remove-attachment')
-      anchor.onclick = function() {
-        editor.parentNode.removeChild(editor.parentNode.querySelector('.editor-attachment'))
+      anchor.onclick = function(event) {
+        const item = event.target.closest('div.editor-attachment')
+        editor.parentNode.removeChild(item)
       }
       itemElement.appendChild(anchor, itemElement.firstElementChild) 
       element.appendChild(itemElement)

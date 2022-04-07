@@ -850,7 +850,7 @@ a.maintain svg.clean_encumbrances path{
 .editor-attachment .item{
   margin-right: 10px;
   position: relative;
-  padding: 12px;
+  padding: 5px 12px;
   display: flex;
   justify-content: center;
   align-items: center;
