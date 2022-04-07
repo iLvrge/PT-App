@@ -565,25 +565,25 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
             formData.append('auth_id', bot_user_id)
             const { data } = await PatenTrackApi.sendMessage(access_token, formData)
             setCommentHtml('')
-            setFileRemote([])
+            
             if(data != '' && Object.keys(data).length > 0) {
               inputFile.current.value = ''
               setFile(null)
-              setFileRemote([])
-              /* const editor = editorContainerRef.current.querySelector('.ql-editor')
+              const editor = editorContainerRef.current.querySelector('.ql-editor')
               if(editor.parentNode.querySelector('.editor-attachment') != null) {                
                 const items = editor.parentNode.querySelectorAll('.editor-attachment')
                 console.log("editor-attachment", items.length)
                 for(let i = 0; i < items.length; i++) {
                   editor.parentNode.removeChild(items[i])
-                }
-              } */
+                }   
+                setFileRemote([])
+              } 
               const { status, channel } = data;
               if(status != '' && status == 'Message sent') {
                 setEditData( null )
                 if(channel_id != channel) {
                   dispatch(setChannel({channel_id}))
-                  dispatch(getChannels(access_token))
+                  dispatch(getChannels(access_token))  
                 }
                 dispatch( getSlackMessages( data.channel ) ) 
               }
