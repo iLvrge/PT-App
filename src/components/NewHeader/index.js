@@ -95,7 +95,7 @@ import { setAssetTypeAssignments,
   setAssetTypesPatentsSelectAll,
   setAllAssignments, 
   setSelectAssignments,
-  setSlackMessages
+  setSlackMessages,
  } from '../../actions/patentTrackActions2'
 
  import {  
@@ -400,7 +400,7 @@ const NewHeader = (props) => {
       dispatch(setSelectedAssetsPatents([]))
       dispatch(setAssetFamily([]))
       dispatch(setFamilyItemDisplay({}))
-      dispatch(setChannelID(''))
+      dispatch(setChannelID(null))
       dispatch(setConnectionBoxView(false))
       dispatch(setPDFView(false))
       dispatch(toggleUsptoMode(false))
@@ -424,7 +424,7 @@ const NewHeader = (props) => {
         }
         dispatch(setAssetFamily([]))
         dispatch(setFamilyItemDisplay({}))
-        dispatch(setChannelID(''))
+        dispatch(setChannelID(null))
         dispatch(setConnectionBoxView(false))
         dispatch(setPDFView(false))
         dispatch(toggleUsptoMode(false))
@@ -470,6 +470,7 @@ const NewHeader = (props) => {
 const clearOtherItems = () => {
   dispatch(setAssetsIllustration(null))
   dispatch(setAssetsIllustrationData(null))
+  dispatch(setChannelID(null))
   dispatch(setSelectedAssetsTransactions([]))
   dispatch(setSelectedAssetsPatents([]))
   dispatch(setSlackMessages({messages: [], users: [] }))

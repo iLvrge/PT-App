@@ -59,6 +59,7 @@ const IllustrationCommentContainer = ({
     const classes = useStyles() 
     const iframeRef = useRef()
     const illustrationRef = useRef()
+    const [ containerSize, setContainerSize] = useState(0)
     const [ dashboardFullScreen, setDashboardFullScreen ] = useState( false )
     const [ toggleCommentButtonType , setToggleCommentButtonType ] = useState(true)
     const [ openCommentBar, setCommentOpenBar ] = useState(true)
@@ -109,9 +110,19 @@ const IllustrationCommentContainer = ({
             handleCustomersBarOpen: handleCustomersBarOpen
         }
     ] 
+
+    useEffect(() => {
+        console.log("defaultSize", defaultSize)
+        setContainerSize(defaultSize)
+    }, [defaultSize])
+
+    useEffect(() => {
+        console.log("containerSize", containerSize)
+    }, [containerSize])
+
     useEffect(() => {
         updateResizerBar(illustrationRef, commentBar, 1)
-    }, [ illustrationRef, commentBar ])
+    }, [ illustrationRef, commentBar ]) 
 
     useEffect(() => {        
         if(new_drive_template_file != null && Object.keys(new_drive_template_file).length > 0 && new_drive_template_file.hasOwnProperty('id')) {

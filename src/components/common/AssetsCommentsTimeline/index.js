@@ -167,19 +167,21 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
 
   useEffect(() => {    
     const callMessageTrimmer = async() => {
-      let messages = slack_messages.messages.length > 0 ? [...slack_messages.messages] : []
+      let messages = slack_messages?.messages && slack_messages.messages.length > 0 ? [...slack_messages.messages] : []
+      if(messages.length ===  0) return
+
       let files = [], removeIndexID = []
       let lastTimeStamp = 0, lastUser = null, lastIndexID = -1
       const messagesTrimmed = messages.map((message, index) => {
-        if(lastTimeStamp === 0) {
-          lastTimeStamp = Moment(new Date(message.ts * 1000)) 
-          lastUser = message.user
-          lastIndexID = index
-          if(message?.attachments && message.attachments.length > 0) {
-            files = [...files, message.attachments[0].blocks[0].file]
-          }
-        } else {
-          if(!message.hasOwnProperty('subtype')) {
+        if(!message.hasOwnProperty('subtype')) {
+          if(lastTimeStamp === 0) {
+            lastTimeStamp = Moment(new Date(message.ts * 1000)) 
+            lastUser = message.user
+            lastIndexID = index
+            if(message?.attachments && message.attachments.length > 0) {
+              files = [...files, message.attachments[0].blocks[0].file]
+            }
+          } else {
             const time = Moment(new Date(message.ts * 1000));
             const duration = time.diff(lastTimeStamp, 'minutes')
             if( duration === 0 && lastUser === message.user && message?.attachments && message.attachments.length > 0 ) {
@@ -201,7 +203,6 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
           }          
         }
       })
-
       const time = Moment(new Date(messages[messages.length -1].ts * 1000));
       if(lastIndexID !== -1 && files.length > 0 && lastUser === messages[messages.length -1].user &&  time.diff(lastTimeStamp, 'minutes') === 0) {
         messages[lastIndexID].files = files    
@@ -210,7 +211,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       if(removeIndexID.length > 0) {
         messages = messages.filter( (c,index) => !removeIndexID.includes(index))
         setCommentsData({messages, users: slack_messages.users})
-      }      
+      }    
     }
     callMessageTrimmer()
     setCommentsData(slack_messages)

@@ -16,7 +16,8 @@ import { setAssetTypeAssignments,
     setAssetTypesPatentsSelectAll,
     setAllAssignments, 
     setSelectAssignments,
-    setSlackMessages
+    setSlackMessages,
+    setChannelID
    } from '../actions/patentTrackActions2'
   
    import {  
@@ -31,7 +32,7 @@ import { setAssetTypeAssignments,
     toggleLifeSpanMode,
   } from '../actions/uiActions'
 
-export const updateResizerBar = (ref, bar, t = 0) => {
+export const updateResizerBar = (ref, bar, t = 0, defaultSize) => {
     if( ref.current != null ) {
         const container = ref.current.splitPane, 
                 findResizer = t === 1 ? container.querySelector('span.Resizer.horizontal')  : container.querySelector('span.Resizer.vertical') 
@@ -40,6 +41,13 @@ export const updateResizerBar = (ref, bar, t = 0) => {
             display = ''
         }
         findResizer.style.display = display
+        /* if(typeof defaultSize !== 'undefined') {
+            if(t === 1) {
+                container.querySelector('div.Pane2').style.height = defaultSize
+            } else {
+                container.querySelector('div.Pane1').style.height = defaultSize
+            }
+        } */
     }
     
 }
@@ -112,6 +120,9 @@ export const resetItemList = {
         },
         {
             callback: setSelectedAssetsPatents([])
+        },
+        {
+            callback: setChannelID(null)
         },
         {
             callback: setSlackMessages({messages: [], users: []})
