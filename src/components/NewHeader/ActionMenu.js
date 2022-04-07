@@ -722,8 +722,9 @@ const ActionMenu = (props) => {
 
     const onHandleDashboard = () => {
         setAnchorEl(null)
-        props.setDashboardScreen()
         resetAllActivity('')
+        props.setDashboardScreen()
+        
     }
 
     const resetAllActivity = (category) => {

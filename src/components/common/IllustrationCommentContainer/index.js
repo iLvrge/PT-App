@@ -111,14 +111,6 @@ const IllustrationCommentContainer = ({
         }
     ] 
 
-    useEffect(() => {
-        console.log("defaultSize", defaultSize)
-        setContainerSize(defaultSize)
-    }, [defaultSize])
-
-    useEffect(() => {
-        console.log("containerSize", containerSize)
-    }, [containerSize])
 
     useEffect(() => {
         updateResizerBar(illustrationRef, commentBar, 1)
