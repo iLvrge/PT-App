@@ -164,7 +164,46 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   useEffect(() => {
     checkButtons() 
   }, [ google_auth_token, slack_auth_token ])
-  useEffect(() => {
+
+  useEffect(() => {    
+    const callMessageTrimmer = async() => {
+      let messages = [...slack_messages.messages]
+      let files = [], removeIndexID = []
+      let lastTimeStamp = 0, lastUser = null, lastIndexID = -1
+      const messagesTrimmed = messages.map((message, index) => {
+        if(lastTimeStamp === 0) {
+          if(message?.attachments && message.attachments.length > 0) {
+            lastTimeStamp = message.ts.split('.')[0]
+            lastUser = message.user
+            files = [...files, message.attachments[0].blocks[0].file]
+            lastIndexID = index
+          }
+        } else {
+          if( message.ts.split('.')[0] === lastTimeStamp && lastUser === message.user ) {
+            files = [...files, message.attachments[0].blocks[0].file]
+            removeIndexID.push(index)
+          } else {
+            if(files.length > 0) {
+              messages[lastIndexID].files = files            
+            }
+            files = []
+            lastTimeStamp = 0
+            lastUser = null
+            lastIndexID = -1
+          }
+        }
+      })
+      if(lastIndexID !== -1 && files.length > 0 && lastUser === messages[messages.length -1].user &&  messages[messages.length -1].ts.split('.')[0] === lastTimeStamp) {
+        messages[lastIndexID].files = files    
+      }
+      await Promise.all(messagesTrimmed)  
+      if(removeIndexID.length > 0) {
+        messages = messages.filter( (c,index) => !removeIndexID.includes(index))
+        console.log("messages", messages)
+        setCommentsData({messages, users: slack_messages.users})
+      }      
+    }
+    callMessageTrimmer()
     setCommentsData(slack_messages)
     updateHeight(size, timelineRef)  
     
@@ -1036,15 +1075,19 @@ const handleDriveModalClose = (event) => {
     const fileURL = file !== 'string' && file.hasOwnProperty('external_url') ? file.external_url : ''
     let imageURL = ''
     if(fileURL.toString().indexOf('.google.com') !== -1){
-      /* if(fileURL.toString().indexOf('docs.google.com') !== -1 && fileURL.toString().indexOf('document') !== -1) {
+      if(fileURL.toString().indexOf('docs.google.com') !== -1 && fileURL.toString().indexOf('document') !== -1) {
         imageURL = 'https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document'
       } else if(fileURL.toString().indexOf('docs.google.com') !== -1 && fileURL.toString().indexOf('spreadsheets') !== -1) {
         imageURL = 'https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.spreadsheet'
+      } else if(fileURL.toString().indexOf('docs.google.com') !== -1 && fileURL.toString().indexOf('presentation') !== -1) {
+        imageURL = 'https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.presentation'
+      } else if(fileURL.toString().indexOf('docs.google.com') !== -1 && fileURL.toString().indexOf('forms') !== -1) {
+        imageURL = 'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/forms.svg'
       } else if(fileURL.toString().indexOf('drive.google.com') !== -1 && file.mimetype.toString().indexOf('image') !== -1) {
-        imageURL = 'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/image_icon.png'
+        imageURL = 'https://drive-thirdparty.googleusercontent.com/16/type/image/jpeg'
       } else {
         imageURL = 'https://a.slack-edge.com/bv1-9/generic-99ae615.svg'
-      } */     
+      }     
     }/*  else if(file?.thumb_64 != ''){
       imageURL = fileURL.thumb_64
     } */ else {
@@ -1080,7 +1123,16 @@ const handleDriveModalClose = (event) => {
           {
             files.files.map( (file, index) => (
               <div key={`${indexing}-${index}`} className={classes.icon}>
-                <a onClick={(event) => { openFile(event, file)}} className={classes.fileLink}><FileImage file={file}/>{file?.name ? file.name : file.title}</a>
+                <IconButton 
+                  variant="text" 
+                  onClick={(event) => { openFile(event, file)}} 
+                  className={classes.fileLink}
+                >
+                  <FileImage file={file}/>
+                  <Typography variant="body2">
+                    {file?.name ? file.name : file.title}
+                  </Typography>
+                </IconButton>
               </div>
             ))
           }
@@ -1092,7 +1144,16 @@ const handleDriveModalClose = (event) => {
           {
             files.attachments.map( (file, index) => (
               <div key={`${indexing}-${index}`} className={classes.icon}>
-                <a onClick={(event) => { openFile(event, file.blocks[0].file)}} className={classes.fileLink}><FileImage file={file.blocks[0].file}/>{file.blocks[0].file?.name ? file.blocks[0].file.name : file.blocks[0].file.title}</a>
+                <IconButton 
+                  variant="text"
+                  onClick={(event) => { openFile(event, file.blocks[0].file)}}
+                  className={classes.fileLink}
+                >
+                  <FileImage file={file.blocks[0].file}/>
+                  <Typography variant="body2">
+                    {file.blocks[0].file?.name ? file.blocks[0].file.name : file.blocks[0].file.title}
+                  </Typography>
+                </IconButton>
               </div>
             ))
           }

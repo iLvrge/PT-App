@@ -14,7 +14,7 @@ export default makeStyles(theme => ({
       padding: 0,
       minWidth: 'auto',
       marginRight: '10px'
-    }
+    },
   },
   small: {
     width: '36px !important', 
@@ -114,15 +114,17 @@ export default makeStyles(theme => ({
   },
   fileLink: { 
     cursor: 'pointer',
-    textDecoration: 'underline',
+    /* textDecoration: 'underline', */
+    borderRadius: 0,
+    textTransform: 'capitalize',
     '&:hover':{
       color: '#e60000' 
     },
     '& img':{
       marginRight: 5,
-      position: 'relative',
-      top: 5,
-      width: 24
+      /* position: 'relative',
+      top: 5, */
+      width: 24  
     }
   },
   arrowButton:{
