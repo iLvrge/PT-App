@@ -391,6 +391,18 @@ export default makeStyles(theme => ({
             display: 'block'
         }
     },
+    slackContainer: {
+        width: 40,
+        height: 30,
+        position: 'relative',
+        '& .MuiIconButton-root':{
+            marginRight: 6,
+            position: 'absolute',
+            height: 40,
+            width: 40,
+            top: -4,
+        }
+    },
     buttonIcon: {
         width: 30,
         height: 30,
@@ -404,10 +416,11 @@ export default makeStyles(theme => ({
             /* stroke: '#5a5a5a' */
         },
         '&:hover':{
-            '& svg':{
+            backgroundColor: 'none'
+            /* '& svg':{
                 fill: 'rgb(230, 0, 0)',
                 stroke: 'rgb(230, 0, 0)',
-            }
+            } */
         }
     },
     slackIcon: {

@@ -28,7 +28,7 @@ export default makeStyles(theme => ({
             justifyContent: 'center',
             flexDirection: 'column',
             alignContent: 'start',
-            height: /* 'calc((100vh - 190px) / 3)', */220,
+            height: /* 'calc((100vh - 190px) / 3)', */90,
             flexBasis: '190px !important',
             maxWidth: '190px !important',
             minWidth: '190px !important',
@@ -61,7 +61,7 @@ export default makeStyles(theme => ({
         textOverflow: 'ellipsis',
         padding: '7px 10px 5px',      
         position: 'absolute',
-        bottom: 40,
+        bottom: 0,
         left: 0,
         right: 0,
         marginLeft: 'auto',
@@ -100,13 +100,16 @@ export default makeStyles(theme => ({
         '& .MuiCardActions-root, .MuiCardContent-root':{
             backgroundColor: theme.palette.background.paper,
             padding: '5px 8px',
-            height: '100%'
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center'
         }
-    },
+    },  
     titleContainer:{
         display: 'flex',
         width: '100%',
         paddingLeft: 16,
+        paddingRight: 5,
         fontSize: '1.1rem',
         height: 47,
         minHeight: 47,
@@ -203,18 +206,20 @@ export default makeStyles(theme => ({
         marginLeft: 'auto',
         marginRight: 'auto',
         width: 190,
-        maxWidth: 190
+        maxWidth: 190,
+        height: 165,
+        alignItems: 'center'
     },
     exampleButton: {
         position: 'absolute',
-        top: 30,
+        top: 5,
         /* left: 'calc(50% - 45px)' */
         right: 0
     },
     actionButton: {
         position: 'absolute',
         left: 0,
-        top: 30,
+        top: 5,
         textTransform: 'initial',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis'  

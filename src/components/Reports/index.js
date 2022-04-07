@@ -396,37 +396,15 @@ const Reports = (props) => {
                                 <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{companyname.length > 0 ? companyname[0].original_name : ''}</span></span>
                                 <div className={classes.toolbar}>
                                     <IconButton  size="small" className={classes.shareIcon}>
-                                        <Tooltip 
-                                            title={
-                                                <Typography color="inherit" variant='body2'>Share Dashboard</Typography>
-                                            } 
-                                            className={classes.tooltip}  
-                                            placement='right'
-                                            enterDelay={0}
-                                            TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
-                                        >
-                                            <FontAwesomeIcon
-                                                icon={faShareAlt}
-                                            />
-                                        </Tooltip>
+                                        <FontAwesomeIcon
+                                            icon={faShareAlt}
+                                        />
                                     </IconButton>                            
                                     <IconButton size="small"
                                         onClick={() => {props.handleFullScreen(!props.fullScreen)}}
                                         className={clsx(classes.actionIcon, typeof props.standalone !== 'undefined' ? classes.fontStandalone : '' )}
                                     >
-                                        <Tooltip 
-                                            title={
-                                                <Typography color="inherit" variant='body2'> { typeof props.standalone !== 'undefined' ? 'Close' : 'Fullscreen' }</Typography>
-                                            } 
-                                            className={classes.tooltip}      
-                                            placement='right'
-                                            enterDelay={0}
-                                            TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
-                                        >
-                                            <span>
-                                                { typeof props.standalone !== 'undefined' ? <Close/> : <Fullscreen /> }
-                                            </span>                                            
-                                        </Tooltip>                            
+                                        { typeof props.standalone !== 'undefined' ? <Close/> : <Fullscreen /> }                            
                                     </IconButton>                        
                                 </div>
                             </Paper>
