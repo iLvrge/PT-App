@@ -869,7 +869,7 @@ a.maintain svg.clean_encumbrances path{
 .remove-attachment{
   position: absolute;
   right: 0px;
-  top: 6px;
+  top: -6px;
   display: none;
   z-index: 99999;
 }
