@@ -44,7 +44,7 @@ if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_AP
               }         
               store.dispatch(setSlackAuthToken(slackToken))
               setTokenStorage( 'slack_auth_token_info', JSON.stringify(slackToken))
-              console.log(getTokenStorage('slack_auth_token_info'))
+              
             } else {
               slackToken = getTokenStorage('slack_auth_token_info')
               if( slackToken != '' && slackToken != null ) {
@@ -95,7 +95,7 @@ if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_AP
       }
       store.dispatch(setSlackAuthToken(slackToken))      
       setTokenStorage( 'slack_auth_token_info', JSON.stringify(slackToken))
-      console.log(getTokenStorage('slack_auth_token_info'))
+      
     } else {
       slackToken = getTokenStorage('slack_auth_token_info')
       if( slackToken != '' && slackToken != null ) {
