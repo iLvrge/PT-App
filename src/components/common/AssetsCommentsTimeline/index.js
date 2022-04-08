@@ -297,6 +297,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
         const classID = item.classList[1].replace('item_', '')
         const container = editorContainerRef.current.querySelector('.ql-editor')
         container.parentNode.removeChild(item)
+        setActiveElement()
         if(classID !== "") {
           let prevItems = [...fileRemote]
           prevItems = prevItems.filter(item => item.id !== classID)
@@ -573,7 +574,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
               const editor = editorContainerRef.current.querySelector('.ql-editor')
               if(editor.parentNode.querySelector('.editor-attachment') != null) {                
                 const items = editor.parentNode.querySelectorAll('.editor-attachment')
-                console.log("editor-attachment", items.length)
+                
                 for(let i = 0; i < items.length; i++) {
                   editor.parentNode.removeChild(items[i])
                 }   
@@ -717,6 +718,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       anchor.onclick = function(event) {
         const item = event.target.closest('div.editor-attachment')
         editor.parentNode.removeChild(item)
+        setActiveElement()
       }
       itemElement.appendChild(anchor, itemElement.firstElementChild) 
       element.appendChild(itemElement)
@@ -846,14 +848,18 @@ const handleDriveModalClose = (event) => {
       removeFiles.push({...item})
       setFileRemote(removeFiles); 
       setDriveModal( false )
-      const editor = document.querySelector('.ql-editor')
-      editor.focus()
-      const selection = window.getSelection();
-      selection.collapse(editor.lastChild, 1)
+      setActiveElement()
     /* setCommentHtml( previousContent => previousContent.replace(/<\/?[^>]+(>|$)/g, "").trim() == '' ? `https://docs.google.com/document/d/${item.id}/edit<patentracklinebreak>\n</patentracklinebreak>` :   previousContent + `\nhttps://docs.google.com/document/d/${item.id}/edit<patentracklinebreak>\n</patentracklinebreak>`)
     setDriveModal( false ) */
     removeFocusAndOnSendButton()
   }  
+
+  const setActiveElement = () => {
+    const editor = document.querySelector('.ql-editor')
+    editor.focus()
+    const selection = window.getSelection();
+    selection.collapse(editor.lastChild, 1)
+  }
 
   const onDrop = (data, event) => {
     setCommentHtml( previousContent => previousContent + ` ${data.template_agreement}<patentracklinebreak>\n</patentracklinebreak>`)

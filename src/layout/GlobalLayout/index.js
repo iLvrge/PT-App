@@ -461,7 +461,7 @@ const GlobalLayout = (props) => {
                     } else {
                         tableContainer = document.getElementById('assets_assignments')
                         if(tableContainer !== null) {
-                            findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightWithCol.Mui-selected')
+                            findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
                         }  
                     }                                      
                 }
@@ -479,10 +479,11 @@ const GlobalLayout = (props) => {
                         } else if(event.key === 'ArrowDown') {
                             index = index + 1 
                         }
-                    }
+                    }  
                     if(index >= 0) {
                         const findNextRow =  tableContainer.querySelector(`.rowIndex_${index}`)
                         if(findNextRow !== null) {
+                            findNextRow.focus()
                             findNextRow.click()  
                         }
                     }
