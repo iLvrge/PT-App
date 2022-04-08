@@ -239,21 +239,24 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
 
   useEffect(() => {    
     if(!slack_auth_token && slack_auth_token == null )  return
-
-    const { access_token } = slack_auth_token;
-    if( access_token && access_token != null && (channel_id == '' || channel_id == null) && selectedAssetsPatents.length > 0) {
-      //dispatch( getChannelID( selectedAssetsPatents[0], selectedAssetsPatents[1] ) )
-      if(slack_channel_list.length > 0) {
-        const channelID = findChannelID(selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0] : selectedAssetsPatents[1])
-        if( channelID != '') {
-          dispatch(setChannelID({channel_id: channelID}))
-        }  
+    try {
+      const { access_token } = slack_auth_token;
+      if( access_token && access_token != null && (channel_id == '' || channel_id == null) && selectedAssetsPatents.length > 0) {
+        //dispatch( getChannelID( selectedAssetsPatents[0], selectedAssetsPatents[1] ) )
+        if(slack_channel_list.length > 0) {
+          const assetName = selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0] : selectedAssetsPatents[1]
+          const findIndex = slack_channel_list.findIndex( channel => channel.name == `us${assetName}`.toString().toLocaleLowerCase())
+          if( findIndex !== -1) {
+            dispatch(setChannelID({channel_id: slack_channel_list[findIndex].id}))
+          }
+        }
+      }    
+      if( access_token && access_token != null && slack_channel_list.length === 0 && slack_channel_list_loading === false ) {
+        dispatch(getChannels(access_token))
       }
-    }
-    
-    if( access_token && access_token != null && slack_channel_list.length === 0 && slack_channel_list_loading === false ) {
-      dispatch(getChannels(access_token))
-    }
+    } catch (err) {
+      console.log(err)
+    }    
   }, [ dispatch, slack_auth_token, selectedAssetsPatents, slack_channel_list, slack_channel_list_loading ] )
 
   useEffect(() => {
@@ -329,6 +332,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
         channelID = slack_channel_list[findIndex].id
       }
     }
+    console.log("channelID", channelID)
     return channelID
   }, [ slack_channel_list ])
 
