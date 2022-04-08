@@ -927,7 +927,7 @@ const handleDriveModalClose = (event) => {
       */
       const slackToken = getTokenStorage( 'slack_auth_token_info' ), googleToken = getTokenStorage( 'google_auth_token_info' )
       let slackTokenFlag = false, googleTokenFlag = false
-      if(slackToken && slackToken!= '') {
+      if(slackToken && slackToken!= '' && slackToken!= null && slackToken!= 'null' ) {
         const token = JSON.parse(slackToken)
         if(typeof token === 'string') {
           token = JSON.parse(token)

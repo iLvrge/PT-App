@@ -63,8 +63,9 @@ import ActionMenu from './ActionMenu'
 /* import ClipboardAssets from './ClipboardAssets' */
 import FullScreen from '../common/FullScreen'
 
-import { signOut } from '../../actions/authActions'
+import { signOut, deleteCookie } from '../../actions/authActions'
 import { getTokenStorage, removeTokenStorage } from '../../utils/tokenStorage'
+
 import { 
         getProfile, 
       } from '../../actions/patenTrackActions'
@@ -95,7 +96,12 @@ import { setAssetTypeAssignments,
   setAssetTypesPatentsSelectAll,
   setAllAssignments, 
   setSelectAssignments,
-  setSlackMessages,
+  setSlackMessages,  
+  setSlackAuthToken,
+  setChannelLoading,
+  setChannelsList,
+  setSlackProfileData,
+  setSlackUsers
  } from '../../actions/patentTrackActions2'
 
  import {  
@@ -117,7 +123,7 @@ import {
   toggleLifeSpanMode,
   toggleThemeMode,
   setTimelineScreen,
-  setDashboardScreen
+  setDashboardScreen,
 } from '../../actions/uiActions'
 import Scheduling from './Scheduling'
 
@@ -282,7 +288,7 @@ const NewHeader = (props) => {
       }
       setGoogleAuthLogin(googleLoginButton)
       
-      if(slackToken && slackToken != null && slackToken!= '') {
+      if(slackToken && slackToken != null && slackToken!= 'null' && slackToken != '') {
         const token = JSON.parse(slackToken) 
         if( token.access_token != null && token.id != null ) {
           slackLoginButton = false
@@ -388,7 +394,15 @@ const NewHeader = (props) => {
     if(window.confirm('Log Out?')){
       removeTokenStorage('slack_auth_token_info')
       removeTokenStorage('slack_profile_data')
+      deleteCookie('slack_auth_token_info')
       setSlackAuthLogin(true)
+      dispatch(setSlackMessages({messages: [], users: []}))
+      dispatch(setChannelID(null))
+      dispatch(setSlackAuthToken(null))
+      dispatch(setChannelLoading(false))
+      dispatch(setChannelsList([]))
+      dispatch(setSlackProfileData(null))
+      dispatch(setSlackUsers([]))
     }
   }
 

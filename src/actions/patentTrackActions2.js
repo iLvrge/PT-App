@@ -642,11 +642,11 @@ export const setSlackAuthToken = ( token ) => {
 export const getSlackProfile = ( token, id ) => {
   return async dispatch => {
     const { data } = await PatenTrackApi.getSlackProfile( token, id )
-    dispatch(getSlackProfileData(data))
+    dispatch(setSlackProfileData(data))
   }
 }
    
-export const getSlackProfileData = ( data ) => {
+export const setSlackProfileData = ( data ) => {
   return {
     type: types.SET_SLACK_PROFILE_DATA,
     data

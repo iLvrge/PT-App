@@ -258,6 +258,10 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
             dispatch(setChannelID({channel_id: channelID}))
           }
         }
+      } else {
+        const oldAssets = [...assignmentList]
+        const newArray = oldAssets.map(({channel, ...keepOtherAttrs}) => keepOtherAttrs)
+        setRows(newArray)
       }
     }    
     checkAssetChannel()
@@ -291,7 +295,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   useEffect(() => {
     if(slack_channel_list.length == 0 && slack_channel_list_loading === false) {
       const slackToken = getTokenStorage( 'slack_auth_token_info' )
-      if(slackToken && slackToken!= '') {
+      if(slackToken && slackToken!= '' && slackToken!= null && slackToken!= 'null' ) {
         let token = JSON.parse(slackToken)
         
         if(typeof token === 'string') {

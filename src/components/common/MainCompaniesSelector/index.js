@@ -267,7 +267,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     useEffect(() => {
         if(slack_channel_list.length == 0 && slack_channel_list_loading === false) {
           const slackToken = getTokenStorage( 'slack_auth_token_info' )
-          if(slackToken && slackToken!= '') {
+          if(slackToken && slackToken!= '' && slackToken!= null && slackToken!= 'null' ) {
             let token = JSON.parse(slackToken)
             
             if(typeof token === 'string') {
@@ -325,6 +325,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                 if(findChannel === true){
                     setCompaniesList(oldCompanies)
                 } 
+            } else {
+                const oldCompanies = [...companies.list]
+                const newArray = oldAssets.map(({channel, ...keepOtherAttrs}) => keepOtherAttrs)
+                setCompaniesList(newArray)
             }
         }    
         checkAssetChannel()

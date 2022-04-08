@@ -403,7 +403,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   useEffect(() => {
     if(slack_channel_list.length == 0 && slack_channel_list_loading === false) {
       const slackToken = getTokenStorage( 'slack_auth_token_info' )
-      if(slackToken && slackToken!= '') {
+      if(slackToken && slackToken!= '' && slackToken!= null && slackToken!= 'null' ) {
         let token = JSON.parse(slackToken)
         
         if(typeof token === 'string') {
