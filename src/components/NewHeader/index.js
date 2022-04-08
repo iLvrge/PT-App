@@ -575,7 +575,7 @@ const onHandleTimelineScreen = /* useCallback( */(event) => {
           resetAll={resetAll}
           clearOtherItems={clearOtherItems}
         />
-        <div className={classes.breadcrumbs}>{selectedCategory !== 'due_dilligence' || dashboardScreen === true ? layoutName : ''}</div>    
+        <div className={classes.breadcrumbs}>{selectedCategory !== 'due_dilligence' || dashboardScreen === true ? layoutName : 'Activity Timeline'}</div>    
         <div className={classes.rightPanel}>  
             {/* <Switch  
               color="secondary" 
@@ -616,6 +616,7 @@ const onHandleTimelineScreen = /* useCallback( */(event) => {
               defaultValue={ search_string != null ? search_string : ''}
               inputProps={{ 'aria-label': 'search' }}
               onKeyDown={handleKeyDown}
+              disabled 
             />
           </div>
           <IconButton className={classes.buttonIcon} size="large">
@@ -745,7 +746,7 @@ const onHandleTimelineScreen = /* useCallback( */(event) => {
                       </ListItemIcon>
                       <ListItemText primary={`Sign Out`} />
                   </ListItem>
-                  <ListItem onClick={handleThemeMode} button>
+                  <ListItem onClick={handleThemeMode} button disabled>
                     <ListItemIcon  color='inherit' >
                         {
                           isDarkTheme ?

@@ -416,7 +416,7 @@ export default makeStyles(theme => ({
             /* stroke: '#5a5a5a' */
         },
         '&:hover':{
-            backgroundColor: 'none'
+            backgroundColor: 'unset'
             /* '& svg':{
                 fill: 'rgb(230, 0, 0)',
                 stroke: 'rgb(230, 0, 0)',
