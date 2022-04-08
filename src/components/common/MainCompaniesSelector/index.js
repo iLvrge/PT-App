@@ -327,7 +327,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                 } 
             } else {
                 const oldCompanies = [...companies.list]
-                const newArray = oldAssets.map(({channel, ...keepOtherAttrs}) => keepOtherAttrs)
+                const newArray = oldCompanies.map(({channel, ...keepOtherAttrs}) => keepOtherAttrs)
                 setCompaniesList(newArray)
             }
         }    

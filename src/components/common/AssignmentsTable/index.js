@@ -234,11 +234,11 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   useEffect(() => {
     const checkAssetChannel = async () => {
       if(assignmentList.length > 0 && slack_channel_list.length > 0) {
-        let findChannel = false, oldAssets = [...assignmentList]
+        let findChannel = false, oldAAssignments = [...assignmentList]
         const promises = slack_channel_list.map( channelAsset => {
-          const findIndex = oldAssets.findIndex(rowTransaction => rowTransaction.rf_id.toString().toLowerCase() == channelAsset.name)
+          const findIndex = oldAAssignments.findIndex(rowTransaction => rowTransaction.rf_id.toString().toLowerCase() == channelAsset.name)
           if(findIndex !== -1) {
-            oldAssets[findIndex]['channel'] = oldAssets[findIndex].rf_id
+            oldAAssignments[findIndex]['channel'] = oldAAssignments[findIndex].rf_id
             if(findChannel === false) {
               findChannel = true
             }
@@ -246,7 +246,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
         })
         await Promise.all(promises)
         if(findChannel === true){
-          setRows(oldAssets)
+          setRows(oldAAssignments)
         } 
         
         /**
@@ -259,8 +259,8 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
           }
         }
       } else {
-        const oldAssets = [...assignmentList]
-        const newArray = oldAssets.map(({channel, ...keepOtherAttrs}) => keepOtherAttrs)
+        const oldAAssignments = [...assignmentList]
+        const newArray = oldAAssignments.map(({channel, ...keepOtherAttrs}) => keepOtherAttrs)
         setRows(newArray)
       }
     }    
