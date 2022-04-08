@@ -320,7 +320,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
     }, 50)
   }
 
-  const findChannelID = useMemo(async(asset) => {
+  const findChannelID = useCallback(async(asset) => {
     let channelID = ''
     if(slack_channel_list.length > 0) {
       const findIndex = slack_channel_list.findIndex( channel => channel.name == `us${asset}`.toString().toLocaleLowerCase())
@@ -399,17 +399,24 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   }
 
   const updateHeight = ( size, timelineRef ) => {
-    if( timelineRef.current != null ) {      
-      /* if(displayButton === false) {
-        calHeight = timelineRef.current.parentNode.clientHeight - 96
-      } */
-      setTimeout(() => {
-        const findParentContainer = timelineRef.current.closest('div.comment_root')
-        let calHeight = findParentContainer.parentNode.clientHeight - 105
-        timelineRef.current.style.height = `${ calHeight }px`
-        checkSectionHeight(calHeight)
-      }, 50)
-    }      
+    callHeightOnFly(timelineRef)
+  }
+
+  const callHeightOnFly = (timelineRef) =>{
+    setTimeout(() => {
+      try{
+        if(timelineRef.current !== null) {
+          const findParentContainer = timelineRef.current.closest('div.comment_root')
+          let calHeight = findParentContainer.parentNode.clientHeight - 105
+          timelineRef.current.style.height = `${ calHeight }px`
+          checkSectionHeight(calHeight)
+        } else {
+          callHeightOnFly(timelineRef)
+        }  
+      } catch(err) {
+        console.log(err)
+      }            
+    }, 50)
   }
 
   const checkSectionHeight = (calHeight) => {
