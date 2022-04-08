@@ -32,11 +32,16 @@ if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_AP
             store.dispatch(loginSuccess(decoded_token))
     
             let slackToken = null
-            const slack_auth_token_info = getCookie('slack_auth_token_info')
+            let slack_auth_token_info = getCookie('slack_auth_token_info')
             if( slack_auth_token_info != null ) {
+              if(typeof slack_auth_token_info === 'string'){
+                slack_auth_token_info = JSON.parse(slack_auth_token_info) 
+              }
               setTokenStorage( 'slack_auth_token_info', slack_auth_token_info)
               store.dispatch(setSlackAuthToken(slack_auth_token_info))
-              slackToken = JSON.parse(slack_auth_token_info)      
+              if(typeof slack_auth_token_info === 'string'){
+                slackToken = JSON.parse(slack_auth_token_info)      
+              }
             } else {
               slackToken = getTokenStorage('slack_auth_token_info')
               if( slackToken != '' && slackToken != null ) {
