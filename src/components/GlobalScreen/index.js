@@ -614,7 +614,7 @@ const GlobalScreen = ({
                                         className={`${classes.splitPane} ${classes.splitPane2}  ${classes.splitPane3} ${classes.splitPane2OverflowUnset}`}
                                         split="vertical"
                                         minSize={100}
-                                        maxSize={dashboardScreen === true ? -250 : -520}  
+                                        maxSize={dashboardScreen === true ? -270 : -520}  
                                         size={visualizerBarSize}
                                         onChange={(size) => { 
                                             setVisualizerBarSize(size)
@@ -627,7 +627,7 @@ const GlobalScreen = ({
                                             resizePane('split4', size, setVisualizerBarSize)
                                             setIsDragging(!isDragging)
                                         }}
-                                        pane1Style={{
+                                        pane1Style={{  
                                             pointerEvents: isDragging === true ? 'none' : 'auto',
                                         }}
                                         pane2Style={{
