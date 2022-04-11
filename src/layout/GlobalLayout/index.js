@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, createContext  } from "react"
+import React, { useEffect, useLayoutEffect, useState, useCallback, createContext  } from "react"
 
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -150,6 +150,9 @@ const GlobalLayout = (props) => {
         state => state.patenTrack2.assetTypeAssignments.selectAll,
     );
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
+
+    
+
     useEffect(() => {
         editorBar() // run to find editor width
         window.addEventListener("resize", editorBar) // add on resize window 
@@ -448,6 +451,22 @@ const GlobalLayout = (props) => {
             document.getElementById('mainContainer').style.setProperty('--vh', `${vh}px`);
         }        
     } */
+
+    const getWindowDimensions = () => {
+        const hasWindow = typeof window !== 'undefined';
+        let percentage = '76%'
+        const width = hasWindow ? window.innerWidth : null;
+        if(width > 1400) {
+            percentage = '76%'
+        } else if(width < 1400 && width > 1279) {
+            percentage = '73%'
+        } else if(width < 1280 && width > 1151) {
+            percentage = '69%'
+        } else {
+            percentage = '64%'
+        }  
+        return percentage      
+    }
 
     const handleKeyEvent = (event) => {  
         //event.preventDefault()
@@ -897,10 +916,10 @@ const GlobalLayout = (props) => {
         }
 
         if( typeof usptoMode !== 'undefined' && usptoMode === true ) {
-            setVisualizeOpenBar( true )
+            setVisualizeOpenBar( true ) 
             setVisualizerBarSize(prevItem =>{
                 if(prevItem == '0%') {
-                    return  dashboardScreen === true ? '76%' :'40.1%'
+                    return  dashboardScreen === true ? getWindowDimensions() :'40.1%'
                 } else {
                     return prevItem
                 }
@@ -923,7 +942,7 @@ const GlobalLayout = (props) => {
                 return prevItem
             })
             if((chartPrevItem === true || analyticsPrevItem === true) && (openCommentBar === true || openIllustrationBar === true)){
-                barSize = dashboardScreen === true ? '76%' :'40.1%'
+                barSize = dashboardScreen === true ? getWindowDimensions() :'40.1%'
             } else if (openCommentBar === false && openIllustrationBar === false && ( chartPrevItem === true ||  analyticsPrevItem === true )) {
                 barSize = '100%'
             }
