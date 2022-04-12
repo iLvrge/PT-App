@@ -481,6 +481,7 @@ const NewHeader = (props) => {
   dispatch(setSelectAssignments([]))	
   dispatch(setSelectAssignmentCustomers([]))
   dispatch(setAllAssignmentCustomers(false))
+  dispatch(setIsSalesAssetsDisplay(false))
 }
 
 const clearOtherItems = () => {

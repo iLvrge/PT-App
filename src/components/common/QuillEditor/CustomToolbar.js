@@ -80,7 +80,7 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
         onDocument(true)
       }     
     } else {
-      alert("Please select asset from list first.")
+      alert("Please select an asset from the list first.")
     }    
   }
   

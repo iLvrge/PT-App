@@ -14,7 +14,7 @@ export const controlList = [
         svg: ``,
         image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/restore_ownership.png',
         class: 'hex-1',
-        breadCrumbs: 'Maintenance > Restore Ownership',
+        breadCrumbs: 'Broken Chain-of-Title',
         category: 'restore_ownership',
         layout_id: 1,
         showSvg: false,

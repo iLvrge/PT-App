@@ -173,7 +173,7 @@ const ActionMenu = (props) => {
                 getDriveDocumentList(true)
             }     
         } else {
-          alert("Please select asset from list first.")
+          alert("Please select an asset from the list first.")
         }    
     }
 
@@ -266,7 +266,7 @@ const ActionMenu = (props) => {
             } */
             window.open(url,'GMAIL')
         } else {
-            alert("Please select a document first.")
+            alert("Please open a document to attach to your email message.")
         }
     }, [ template_document_url ] )
 
@@ -708,7 +708,7 @@ const ActionMenu = (props) => {
         if(props.dashboardScreen){
             props.setActivityTimeline()
         }
-        resetAllActivity(category)
+        resetAllActivity(category == 'due_dilligence' ? 'restore_ownership' : 'due_dilligence')
     }    
 
     const locateLostAssets = () => {
@@ -728,26 +728,27 @@ const ActionMenu = (props) => {
 
     const onHandleTimeline = () => {
         setAnchorEl(null)
-        resetAllActivity('')
+        resetAllActivity('due_dilligence')
         props.setActivityTimeline()
     }
 
     const onHandleDashboard = () => {
         setAnchorEl(null)
-        resetAllActivity('')
+        resetAllActivity('due_dilligence')
         props.setDashboardScreen()
         
     }
 
     const resetAllActivity = (category) => {
-        let findIndex = -1
-        if(category == 'due_dilligence') {
+        /* let findIndex = -1 */
+        /* if(category == 'due_dilligence') {
             findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
-        } else if(category != '') {
-            findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == category)
+        } else if(category != '' && category != 'restore_ownership') {
+            
         } else {
             findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'due_dilligence')
-        }
+        } */
+        const findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == category)
         if( findIndex !== -1 ) {
             //hideMenu(event, controlList[findIndex])
             props.resetAll()
@@ -808,7 +809,7 @@ const ActionMenu = (props) => {
                 <MenuItem className={classes.disableHover}>
                     <ListItemText>Analyst:</ListItemText>
                 </MenuItem>
-                <MenuItem onClick={onHandleTimeline} className={`iconItem`} selected={props.timelineScreen}>
+                <MenuItem onClick={onHandleTimeline} className={`iconItem`} selected={props.timelineScreen && category === 'due_dilligence'}>
                     <ListItemIcon>
                         <TvIcon/>
                     </ListItemIcon>
@@ -848,8 +849,9 @@ const ActionMenu = (props) => {
                             <AssetSwitchButton
                                 click={handleChangeLayout}
                                 category={category}
+                                salesAssets={display_sales_assets}  
                             /> ,
-                            <MenuItem onClick={locateLostAssets}>                            
+                            <MenuItem onClick={locateLostAssets} selected={category === 'locate_lost_assets' && !display_sales_assets}>                            
                                 <ListItemIcon>
                                     <FindInPageIcon/>
                                 </ListItemIcon>
@@ -871,7 +873,7 @@ const ActionMenu = (props) => {
                             onClick={() => {
                                 props.setActivityTimeline()
                                 props.onClickSale(1)
-                            }} className={`iconItem ${display_sales_assets === true ? 'active' : ''}`}>
+                            }} className={`iconItem`}  selected={display_sales_assets}>
                                 <ListItemIcon>
                                     <Avatar  src="https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/PatentSales2.svg" variant="square" style={{width: 21, height: 21}}/>
                                 </ListItemIcon>
