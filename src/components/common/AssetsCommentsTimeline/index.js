@@ -449,8 +449,9 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
 
   const openGoogleWindow = useCallback(() => {
     if(googleLoginRef.current != null) {
-      googleLoginRef.current.querySelector('button').click()
-    } 
+      googleLoginRef.current.querySelector('button').click()   
+    }  
+    /* window.open("http://localhost:3000/google_login") */
     setGoogleAuthLogin( true )
     setDisplayButton( true )
   }, [googleLoginRef])
@@ -750,8 +751,9 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
 const onAttachmentOpenedFile = useCallback(() => {    
   if( template_document_url != 'about:blank' && template_document_url != null ) {    
     setCommentHtml( previousContent =>  previousContent + "<patentracklinebreak>\n</patentracklinebreak>" + template_document_url)
-
     removeFocusAndOnSendButton()
+  } else {
+    alert("Please select document first.")
   }
 }, [ template_document_url, editorContainerRef ] )
 
@@ -1183,7 +1185,7 @@ const handleDriveModalClose = (event) => {
       )
     } else {
       return (
-        <>
+        <React.Fragment>
           {
             files.attachments.map( (file, index) => (
               <div key={`${indexing}-${index}`} className={classes.icon}>
@@ -1200,7 +1202,7 @@ const handleDriveModalClose = (event) => {
               </div>
             ))
           }
-        </>
+        </React.Fragment>
       )
     }
     
@@ -1293,70 +1295,9 @@ const handleDriveModalClose = (event) => {
     )
   }, [ isLoadingcomments, commentsData, type, userProfile, classes, onDelete, onEdit ])
 
-  const FolderList = ({items}) => {
-    return items.map( item => {
-      if(item.mimeType == 'application/vnd.google-apps.folder'){
-        return (
-            <div key={item.id} className={classes.item} onClick={(event) => openDriveFolder(event, item.id, item.name)}>
-              <Typography variant="body1" component="h2">
-                <FolderIcon /><span>{item.name}</span>
-              </Typography>
-            </div>
-        )
-      } else {
-        return null
-      }
-    })
-  }
-
-  const FilesList = ({items}) => {
-    return items.map( item => {
-      if(item.mimeType != 'application/vnd.google-apps.folder'){
-        return (
-          <div key={item.id} className={classes.item} onClick={(event) => onHandleSelectFile(event, item.id)}>
-            <Typography variant="body1" component="h2">
-              <InsertDriveFileIcon /><span>{item.name}</span>
-            </Typography>
-          </div>
-        )
-      } else {
-        return null
-      }
-    })
-  }
-
-  const templateBody = useMemo(() => {   
-    return (
-      <Grid container className={classes.driveModal}>
-        {
-          driveFilesAndFolder.hasOwnProperty('files') && driveFilesAndFolder.files.length > 0
-          ?
-          <>
-            <Grid item lg={12} md={12} sm={12} xs={12}>
-              <Typography variant="body1" component="h2" className={classes.heading}>
-                Folders
-              </Typography>
-              <Grid item lg={12} md={12} sm={12} xs={12} className={classes.items}>
-                <FolderList items={driveFilesAndFolder.files} />
-              </Grid>              
-            </Grid>
-            <Grid item lg={12} md={12} sm={12} xs={12}>
-              <Typography variant="body1" component="h2" className={classes.heading}>
-                Files
-              </Typography>
-              <Grid item lg={12} md={12} sm={12} xs={12} className={classes.items}>
-                <FilesList items={driveFilesAndFolder.files} />
-              </Grid>
-            </Grid>
-          </> 
-          :
-          ''
-        } 
-      </Grid>
-    )    
-  }, [ driveFilesAndFolder ])
   
   if (companyListLoading) return null
+
   return (
     <Paper className={clsx(classes.root, 'comment_root')} square>
       <div className={classes.content}>

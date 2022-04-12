@@ -774,6 +774,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state, 
           asset_details: {...state.asset_details, ...action.assetData}
         }
+      case types.SET_DASHBOARD_PANNEL_ACTIVE_BUTTON_ID:
+        return { 
+          ...state, 
+          dashboardPanelActiveButtonId: action.ID
+        }
       default:   
       return state
   } 

@@ -74,7 +74,8 @@ import { setAssetTypeAssignments,
   setSelectedAssetsTransactions, 
   setSelectedAssetsPatents, 
   setAssetsIllustration, 
-  setBreadCrumbsAndCategory,  
+  setBreadCrumbsAndCategory, 
+  setBreadCrumbs, 
   setSearchString, 
   setResetAll,
   getSlackProfile,
@@ -408,8 +409,9 @@ const NewHeader = (props) => {
 
   const onHandleSaleAssets = useCallback((type) => {
     if(process.env.REACT_APP_ENVIROMENT_MODE === 'PRO') {
+      dispatch(setBreadCrumbs(!display_sales_assets === true ? type == 1 ? 'Our Assets for Sale' : 'Patent Marketplace' : ''))
       dispatch(setIsSalesAssetsDisplay(!display_sales_assets))
-      /* dispatch(setSalesAssetsType(type)) */
+      /* dispatch(setSalesAssetsType(type)) */      
       dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
       dispatch(setSelectedAssetsPatents([]))
       dispatch(setAssetFamily([]))
@@ -558,7 +560,7 @@ const onHandleTimelineScreen = /* useCallback( */(event) => {
   props.resetScreen('Timeline', event)
   
 }/* , [dispatch]) */
-
+console.log("adasd", breadcrumbs, layoutName, display_sales_assets)
   return (
     <AppBar className={classes.root} color='transparent' position='relative'>
       <Toolbar className={classes.toolbar}>
@@ -589,7 +591,19 @@ const onHandleTimelineScreen = /* useCallback( */(event) => {
           resetAll={resetAll}
           clearOtherItems={clearOtherItems}
         />
-        <div className={classes.breadcrumbs}>{selectedCategory !== 'due_dilligence' || dashboardScreen === true ? layoutName : 'Activity Timeline'}</div>    
+        <div className={classes.breadcrumbs}>
+          {
+            display_sales_assets == true 
+            ?
+              breadcrumbs
+            :
+              selectedCategory !== 'due_dilligence' || dashboardScreen === true  
+              ? 
+                layoutName 
+              : 
+                'Activity Timeline'
+          }
+        </div>    
         <div className={classes.rightPanel}>  
             {/* <Switch  
               color="secondary" 

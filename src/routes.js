@@ -8,12 +8,14 @@ import Search from './components/Search'
 import Reports from './components/Reports'
 import GlobalScreen from './components/GlobalScreen'
 import CorrectLayout from './components/CorrectLayout' 
+import Googlelogin from './components/common/Googlelogin' 
 
 import Auth from './components/auth'
 import AuthSlack from './components/AuthSlack'
 
 import routeList from './routeList'
 import GlobalLayout from './layout/GlobalLayout'
+import BlankLayout from './layout/BlankLayout'
 
 let pages = [
   //Authenticated  pages   
@@ -108,6 +110,13 @@ let pages = [
     component: GlobalScreen,
     layout: GlobalLayout,
     type: 9
+  },
+  {
+    exact: true,
+    path: routeList.google_login,
+    component: Googlelogin,
+    layout: BlankLayout,
+    childWindow: 1
   }
 ] 
 
@@ -129,13 +138,13 @@ export default (
     {/* <Route path="/dashboard" component={DashBoard} />
     <Route path="/dashboard2" component={DashBoard2} /> */}
     {pages.map(
-      ({ exact, path, type, component: Component, layout: Layout }, index) => (
+      ({ exact, path, type, childWindow, component: Component, layout: Layout }, index) => (
         <Route
           key={index}
           exact={exact}
           path={path}
           render={props => (
-            <Layout history={props.history} type={type}>
+            <Layout history={props.history} type={type} standalone={childWindow}>
               <Component {...props} type={type} />
             </Layout>
           )}

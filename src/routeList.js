@@ -9,11 +9,13 @@ export default {
   correct_details: '/mainenance/correct_names',
   correct_address: '/mainenance/correct_address',
   review_foreign_assets: '/review_foreign_assets',
+  review_foreign_assets: '/locate_lost_assets',
   invent: '/ownership/invent',
   duedilligence: '/due' ,
   search: '/search',
   reports: '/reports',
   global: '/global',
   default: '/',
-  standard_default: '/:code'
+  standard_default: '/:code',
+  google_login: '/google_login'
 } 

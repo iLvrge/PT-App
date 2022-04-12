@@ -242,7 +242,6 @@ const LayoutTemplates = () => {
       }      
   }, [ dispatch, selectedRow ])
 
-
     return (
         <Paper className={classes.root} square id={`layout_templates`}>
             {

@@ -382,6 +382,7 @@ const GlobalLayout = (props) => {
             setOtherPartyOpenBar( false ) // parties
             setCustomerOpenBar( true ) //assets
             setAssignmentOpenBar( true ) //transactions
+            console.log("TAPPPPP")
             setVisualizerBarSize('40.1%')
             setChartBar(true)
             setAnalyticsBar(true)

@@ -12,10 +12,11 @@ import CardElement from './CardElement'
 import ClientList from './ClientList'
 import { Fullscreen, Close, Share } from '@mui/icons-material';
 /* import { useMeasure } from 'react-use'; */
-import { setDashboardPanel,
+import { 
+    setDashboardPanel,
     setTimelineScreen,
     setDashboardScreen } from '../../actions/uiActions'
-import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton  } from '../../actions/patentTrackActions2'
+import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId  } from '../../actions/patentTrackActions2'
 import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar'
 import { controlList } from "../../utils/controlList"
 
@@ -169,6 +170,7 @@ const Reports = (props) => {
         state => state.patenTrack2.assetTypeAssignmentAssets.list,
     ); //Assets List
     const assetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected) //Assets Selected
+    const dashboardPanelActiveButtonId = useSelector(state => state.patenTrack2.dashboardPanelActiveButtonId) 
 
     const assetsTotal = useSelector(
         state => state.patenTrack2.assetTypeAssignmentAssets.total_records,
@@ -219,6 +221,17 @@ const Reports = (props) => {
             }
         }        
     }, []) 
+
+    useEffect(() => {
+        if(dashboardPanelActiveButtonId != activeId) {
+            setActiveId(dashboardPanelActiveButtonId)
+            if(dashboardPanelActiveButtonId != -1) {
+                props.checkChartAnalytics(null, null, dashboardPanelActiveButtonId != -1 ? true : false)
+            }
+        }
+    }, [dashboardPanelActiveButtonId])
+
+
     /**
      * Get Dashboard data
      */
@@ -296,6 +309,7 @@ const Reports = (props) => {
             let showItem = id != activeId ? true : false
             setActiveId(id != activeId ? id : -1)
             dispatch(setDashboardPanel( showItem ))        
+            dispatch(setDashboardPanelActiveButtonId( id != activeId ? id : -1 ))        
             props.checkChartAnalytics(null, null, showItem)
             if(showItem === true) {
                 if(card.type == 1) {

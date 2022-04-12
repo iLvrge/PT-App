@@ -8,6 +8,7 @@ export default {
     search_string: null,
     search_rf_id: [],
     breadcrumbs: '',
+    dashboardPanelActiveButtonId: -1,
     categoryName: 'Legal > Due Diligence',
     selectedCategory: 'due_dilligence',
     layout_id: 0,

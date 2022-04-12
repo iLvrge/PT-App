@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useMemo, useRef} from 'react'
+import React, {useState, useCallback, useMemo, useRef, useEffect} from 'react'
 import { 
     useDispatch, 
     useSelector 
@@ -82,6 +82,7 @@ import {
 
 import PatenTrackApi from '../../api/patenTrack2'
 import clsx from 'clsx'
+import Googlelogin from '../common/Googlelogin'
 
 const ActionMenu = (props) => {
     const classes = useStyles()
@@ -130,6 +131,10 @@ const ActionMenu = (props) => {
     const google_profile = useSelector(state => state.patenTrack2.google_profile)
     const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
     const profile = useSelector(store => (store.patenTrack.profile))
+
+
+ 
+
     /**
      * Open Menu
      * @param {click event} event 
@@ -152,21 +157,21 @@ const ActionMenu = (props) => {
             props.setActivityTimeline()
         }
         if( selectedAssetsPatents.length > 0 ) {
-          const googleToken = getTokenStorage( 'google_auth_token_info' )
-          if(googleToken && googleToken != '') {
-            const tokenParse = JSON.parse( googleToken )
-            const { access_token } = tokenParse
-            if( access_token ) {
-              setBtnActive(previousItem => {
-                return !previousItem
-              })
-              getDriveDocumentList(!btnActive)
+            const googleToken = getTokenStorage( 'google_auth_token_info' )
+            if(googleToken && googleToken != '') {
+                const tokenParse = JSON.parse( googleToken )
+                const { access_token } = tokenParse
+                if( access_token ) {
+                    setBtnActive(previousItem => {
+                        return !previousItem
+                    })
+                    getDriveDocumentList(!btnActive)
+                } else {
+                    getDriveDocumentList(true)
+                }        
             } else {
-              getDriveDocumentList(true)
-            }        
-          } else {
-            getDriveDocumentList(true)
-          }     
+                getDriveDocumentList(true)
+            }     
         } else {
           alert("Please select asset from list first.")
         }    
@@ -176,12 +181,15 @@ const ActionMenu = (props) => {
      * Open google auth login window
      */
     const openGoogleWindow = useCallback(() => {
-        /* if(googleLoginRef.current != null) {
-          googleLoginRef.current.querySelector('button').click()
-        } 
-        setGoogleAuthLogin( true )
-        setDisplayButton( true ) */
-    }, [/* googleLoginRef */])
+        alert("Token Expired, please first login with google account.")
+        if(googleLoginRef.current != null) {
+            if(googleLoginRef.current.querySelector('button') !== null) {
+                googleLoginRef.current.querySelector('button').click()
+            }            
+        }
+    }, [googleLoginRef])
+
+
 
     const getLayout = useMemo(() => {
         return controlList.filter(item => item.category == category)
@@ -193,8 +201,10 @@ const ActionMenu = (props) => {
      */
 
     const getDriveDocumentList = (flag) => {
-        if( flag === true ) {      
+        if( flag === true ) { 
+            
             const googleToken = getTokenStorage( 'google_auth_token_info' )
+            console.log("getDriveDocumentList", googleToken)     
             if(googleToken && googleToken != '' && googleToken != null ) {
     
             const { access_token } = JSON.parse(googleToken)
@@ -229,20 +239,10 @@ const ActionMenu = (props) => {
                     )
                 }
                 } else {
-                //alert("Please first login with google account.")
-                if(googleLoginRef.current != null) {
-                    googleLoginRef.current.querySelector('button').click()
-                } 
-                setGoogleAuthLogin( true )
-                setDisplayButton( true )
+                    openGoogleWindow()
                 }
             } else {
-                //alert("Please first login with google account.")
-                if(googleLoginRef.current != null) {
-                    googleLoginRef.current.querySelector('button').click()
-                }
-                setGoogleAuthLogin( true )
-                setDisplayButton( true )
+                openGoogleWindow()
             }    
         } else {   
             dispatch(setDriveButtonActive( false ))
@@ -256,14 +256,18 @@ const ActionMenu = (props) => {
      * Open gmail compose box
      */
 
-    const onAttachmentOpenedFileAndEmail = useCallback(() => {    
-        const bodyURL = encodeURIComponent(`\n\n\n\n${template_document_url}`)
-        let url = `https://mail.google.com/mail/u/0/?fs=1&tf=cm${template_document_url != '' ? '&body='+bodyURL : ''}`
-        /* if( template_document_url != '') {
-          copyToClipboard(template_document_url)
-    
-        } */
-        window.open(url,'GMAIL')
+    const onAttachmentOpenedFileAndEmail = useCallback(() => {  
+        if(template_document_url !== '' && template_document_url !== null && template_document_url != 'about:blank') {
+            const bodyURL = encodeURIComponent(`\n\n\n\n${template_document_url}`)
+            let url = `https://mail.google.com/mail/u/0/?fs=1&tf=cm${template_document_url != '' ? '&body='+bodyURL : ''}`
+            /* if( template_document_url != '') {
+              copyToClipboard(template_document_url)
+        
+            } */
+            window.open(url,'GMAIL')
+        } else {
+            alert("Please select a document first.")
+        }
     }, [ template_document_url ] )
 
     /**
@@ -711,7 +715,15 @@ const ActionMenu = (props) => {
         if(props.dashboardScreen){
             props.setActivityTimeline()
         }
-        resetAllActivity('due_dilligence')
+        
+        const findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'locate_lost_assets')        
+        if(findIndex !== -1) {
+            props.resetAll()
+            props.clearOtherItems()
+            dispatch(setBreadCrumbsAndCategory(controlList[findIndex])) 
+            resetAllActivity('locate_lost_assets') 
+        }
+        //
     }
 
     const onHandleTimeline = () => {
@@ -730,16 +742,20 @@ const ActionMenu = (props) => {
     const resetAllActivity = (category) => {
         let findIndex = -1
         if(category == 'due_dilligence') {
-          findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
+            findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
+        } else if(category != '') {
+            findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == category)
         } else {
-          findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'due_dilligence')
+            findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'due_dilligence')
         }
         if( findIndex !== -1 ) {
             //hideMenu(event, controlList[findIndex])
             props.resetAll()
             props.clearOtherItems()
-            dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))      
-            dispatch(setSwitchAssetButton(controlList[findIndex].category == 'due_dilligence' ? 0 : 1))
+            dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))  
+            if(category == 'due_dilligence' || category == 'restore_ownership') {
+                dispatch(setSwitchAssetButton(controlList[findIndex].category == 'due_dilligence' ? 0 : 1))
+            }
         }
     }
 
@@ -1113,6 +1129,12 @@ const ActionMenu = (props) => {
                         ] 
                 }
             </Menu>
+            {
+                googleAuthLogin && (
+                <span ref={googleLoginRef}>
+                  <Googlelogin/>
+                </span>)
+            }
             <Modal
                 open={modalOpen}
                 onClose={onHandleModalClose}

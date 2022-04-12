@@ -272,6 +272,20 @@ export const controlList = [
     },
     {
         type: 'menu',
+        mainHeading: 'Locate Lost Assets',
+        subHeading: '',
+        svg: '',
+        image: `https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/due_dilligence.png`,
+        class: 'hex-21',
+        breadCrumbs: 'Locate Lost Assets',
+        category: 'locate_lost_assets',
+        layout_id: 17,
+        showSvg: false,
+        mainHeadingClass: 'correct',
+        redirect: routeList.locate_lost_assets
+    },
+    {
+        type: 'menu',
         mainHeading: 'Technical Scope',
         subHeading: 'Get an immediate list of your patents involved in litigation.',
         svg: '',

@@ -1603,3 +1603,10 @@ export const resetAssetDetails = () => {
     assetData: {asset: null, family: 0, claims: 0, figures: 0, fees: 0, citations: 0, ptab: 0, litigation: 0}
   }
 } 
+
+export const setDashboardPanelActiveButtonId = (ID) => {
+  return {
+    type: types.SET_DASHBOARD_PANNEL_ACTIVE_BUTTON_ID,  
+    ID
+  }
+} 
