@@ -4,7 +4,7 @@ import {
 } from 'react-redux'
 import GaugeChart from 'react-gauge-chart'
 import useStyles from './styles'
-import { IconButton, Button, Typography, Tooltip } from '@mui/material';
+import { IconButton, Button, Typography, Tooltip, Zoom } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import clsx from 'clsx'
 const Chart = (props) => {
@@ -70,7 +70,13 @@ const Chart = (props) => {
                 formatTextValue={displayNumber}
             />    
             
-            <Tooltip title="Tooltip" placement="right">
+            <Tooltip 
+                title="Tooltip" 
+                placement="right"
+                enterDelay={0}
+                TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
+                className={clsx(classes.tooltip/* , {[classes.mobileTooltip]: typeof isMobile !== 'undefined' && isMobile === true} */)}  
+            >
                 <div>
                     <Typography variant="h6" component="div" align="center" className={classes.border}>
                         {props.card.title}

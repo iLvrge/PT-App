@@ -144,6 +144,10 @@ export default makeStyles(theme => ({
     tooltip:{
         fontSize: '1rem'
     },
+    mobileTooltip: {
+        flex: '1 1 100%',
+        fontSize: '20px !important'
+    },
     active: {
         color: pink[500]
     },
