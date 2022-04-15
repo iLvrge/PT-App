@@ -401,12 +401,21 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                 /**
                  * Send Request to server
                  */
-                let activeItems = []
+                let activeItems = [], parentChild = []
                 companies.list.map(row => {
                     if(parseInt(row.type) === 1) {
-                        const parseChild = JSON.parse(row.child)
-                        const filters = parseChild.filter(c => c.status == 1 ? parseInt(c.representative_id) : '')
-                        activeItems = [...activeItems, ...filters]
+                        const parseChild = JSON.parse(row.child_full_detail), parentChildIDs = JSON.parse(row.child)
+                        parentChild.push({parent: parseInt(row.representative_id), child: [...parentChildIDs] })
+                        const filters = parseChild.reduce((acc, item) => {
+                            if (!acc) acc = [];  
+                            if(item.status == 1){
+                                acc.push(parseInt(item.representative_id))
+                            }
+                            return acc
+                        }, [])
+                        if(filters.length > 0) {
+                            activeItems = [...activeItems, ...filters]
+                        }
                     } else {
                         if(row.status == 1) {
                             activeItems.push(parseInt(row.representative_id))
@@ -420,7 +429,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                         setSelectItems([data.list[0].representative_id])
                         dispatch(setMainCompaniesSelected([data.list[0].representative_id], []))
                     } else {
-                        
                         const promise =  data.list.map( representative => {
                             
                             /**
@@ -436,9 +444,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                                     } else {                                       
                                         oldItems = [...oldItems, ...filterItems]
                                         oldItems = [...new Set(oldItems)]
-                                    }
-                                    
-                                }
+                                    }                                    
+                                }  
                             } else {
                                 if(activeItems.includes(parseInt(representative.representative_id))) {
                                     if(dashboardScreen === true) {
