@@ -704,17 +704,19 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             resetAll() 
             clearOtherItems()
         } else {
-            const element = event.target.closest('div.ReactVirtualized__Table__rowColumn')
-            if( element != null ) {
-                const index = element.getAttribute('aria-colindex')
-                if(index == 2) {
-                    if(currentSelection != row.representative_id) {
-                        setCurrentSelection(row.representative_id)
-                    } else { 
-                        setCurrentSelection(null)
+            if(row.status == 1) {
+                const element = event.target.closest('div.ReactVirtualized__Table__rowColumn')
+                if( element != null ) {
+                    const index = element.getAttribute('aria-colindex')
+                    if(index == 2) {
+                        if(currentSelection != row.representative_id) {
+                            setCurrentSelection(row.representative_id)
+                        } else { 
+                            setCurrentSelection(null)
+                        }
                     }
                 }
-            }
+            }            
         }
     } 
 
@@ -835,7 +837,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         rowSelected={selectedRow}
         selectedIndex={currentSelection}
         selectedKey={'representative_id'} 
-        selectedGroup={selectedGroup}        
+        selectedGroup={selectedGroup} 
+        scrollToIndex={true}       
         rows={companiesList}
         rowHeight={rowHeight}
         headerHeight={headerRowHeight}

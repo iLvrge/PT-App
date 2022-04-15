@@ -574,7 +574,6 @@ const VirtualizedTable = ({
       let childComponent = '', selectedRow = false
       if(collapsable === true && selectedIndex == rowData[selectedKey]) {
         const positions = tableRef.current.Grid._scrollingContainer.parentElement.getBoundingClientRect()
-        
         childComponent = (
           <div
             key={`child_${key}`}
@@ -584,15 +583,25 @@ const VirtualizedTable = ({
               marginLeft: typeof childInModal === 'undefined' ? 18 : 0,
               height:
                 disableRow === true
-                  ? rowData[disableRowKey] * rowHeight < childHeight
-                    ? rowData[disableRowKey] * rowHeight + rowHeight
-                    : childHeight + rowHeight
-                  : childCounterColumn != undefined
-                  ? typeof childCounterColumn == 'string' ? rowData[childCounterColumn] * rowHeight < childHeight
-                    ? rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0)
-                    : childHeight 
-                    : childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
-                  : collapseRowHeight,
+                ?
+                  childCounterColumn != undefined
+                  ?
+                    typeof childCounterColumn == 'string' 
+                    ? 
+                      rowData[childCounterColumn] * rowHeight < childHeight
+                      ?
+                        rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0) 
+                      :  
+                        childHeight - rowHeight
+                    :
+                      childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
+                  :
+                    rowData[disableRowKey] * rowHeight < childHeight
+                    ? 
+                      rowData[disableRowKey] * rowHeight + rowHeight
+                    :
+                      childHeight + rowHeight
+                : collapseRowHeight,
               display: "flex",
               position: "absolute",
               top: typeof childInModal === 'undefined' ? style.top + rowHeight + "px" : '0px',
@@ -631,15 +640,25 @@ const VirtualizedTable = ({
             height:
               collapsable === true && selectedIndex == rowData[selectedKey]
                 ? disableRow === true
-                  ? rowData[disableRowKey] * rowHeight < childHeight
-                    ? rowData[disableRowKey] * rowHeight + rowHeight
-                    : childHeight + rowHeight
-                  : childCounterColumn != undefined
-                  ? typeof childCounterColumn == 'string' ? rowData[childCounterColumn] * rowHeight < childHeight
-                    ? rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
-                    : childHeight + rowHeight + (childHeader === true ? headerHeight : 0)
-                    : childCounterColumn * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
-                  : collapseRowHeight
+                  ? 
+                    childCounterColumn != undefined
+                    ?
+                      typeof childCounterColumn == 'string' 
+                      ? 
+                        rowData[childCounterColumn] * rowHeight < childHeight
+                        ?
+                          rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0) 
+                        :  
+                          childHeight + rowHeight
+                      :
+                        childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
+                    :
+                      rowData[disableRowKey] * rowHeight < childHeight
+                      ? 
+                        rowData[disableRowKey] * rowHeight + rowHeight
+                      :
+                        childHeight + rowHeight
+                    : collapseRowHeight
                 : rowHeight,
             alignItems:
               collapsable === true && selectedIndex == rowData[selectedKey]
@@ -783,14 +802,26 @@ const VirtualizedTable = ({
       const rowData = items[index];
       let height = rowHeight
       if (collapsable === true && selectedIndex == rowData[selectedKey] && typeof childInModal === 'undefined') {
-        height = disableRow === true
-          ? rowData[disableRowKey] * rowHeight < childHeight
-            ? rowData[disableRowKey] * rowHeight + rowHeight
-            : childHeight + rowHeight
-          : childCounterColumn != undefined
-          ? rowData[childCounterColumn] * rowHeight < childHeight
-            ? rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
-            : childHeight + rowHeight + (childHeader === true ? headerHeight : 0)
+        height = 
+          disableRow === true
+          ?
+            childCounterColumn != undefined
+            ?
+              typeof childCounterColumn == 'string' 
+              ? 
+                rowData[childCounterColumn] * rowHeight < childHeight
+                ?
+                  rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0) 
+                :  
+                  childHeight
+              :
+                childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
+            :
+              rowData[disableRowKey] * rowHeight < childHeight
+              ? 
+                rowData[disableRowKey] * rowHeight + rowHeight
+              :
+                childHeight + rowHeight
           : collapseRowHeight + rowHeight;
       }
       return height

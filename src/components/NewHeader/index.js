@@ -561,7 +561,7 @@ const onHandleTimelineScreen = /* useCallback( */(event) => {
   props.resetScreen('Timeline', event)
   
 }/* , [dispatch]) */
-console.log("adasd", breadcrumbs, layoutName, display_sales_assets)
+
   return (
     <AppBar className={classes.root} color='transparent' position='relative'>
       <Toolbar className={classes.toolbar}>
