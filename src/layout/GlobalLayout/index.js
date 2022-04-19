@@ -61,7 +61,7 @@ const GlobalLayout = (props) => {
     const [ openTypeBar, setTypeOpenBar ] = useState(false)
     const [ openOtherPartyBar, setOtherPartyOpenBar ] = useState(false)
     const [ openInventorBar, setInventorOpenBar ] = useState(false)
-    const [ openAssignmentBar, setAssignmentOpenBar ] = useState(false) 
+    const [ openAssignmentBar, setAssignmentOpenBar ] = useState(true) 
     const [ openCustomerBar, setCustomerOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
     const [ openIllustrationBar, setIllustrationBar ] = useState(true)
     const [ openCommentBar, setCommentBar ] = useState(isMobile ? false : true)
@@ -94,9 +94,9 @@ const GlobalLayout = (props) => {
     const [ otherPartyBarSize, setOtherPartyBarSize ] = useState(0)
     const [ partyBarSize, setPartyBarSize ] = useState('50%')
     const [ driveBarSize, setDriveBarSize ] = useState('50%')
-    const [ assignmentBarSize, setAssignmentBarSize ] = useState(0)  
+    const [ assignmentBarSize, setAssignmentBarSize ] = useState(180)  
     const [ addressBarSize, setAddressBarSize ] = useState(450)
-    const [ customerBarSize, setCustomerBarSize ] = useState(180)
+    const [ customerBarSize, setCustomerBarSize ] = useState(0)
     const [ commentBarSize , setCommentBarSize ] = useState('30%')
     const [ illustrationBarSize , setIllustrationBarSize ] = useState('50%')
     const [ visualizerBarSize , setVisualizerBarSize ] = useState('0%')
@@ -150,8 +150,11 @@ const GlobalLayout = (props) => {
         state => state.patenTrack2.assetTypeAssignments.selectAll,
     );
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
+    const timelineScreen = useSelector(state => state.ui.timelineScreen)
 
-    
+    useEffect(() => {
+        console.log("customerBarSize, assignmentBarSize", customerBarSize, assignmentBarSize, openAssignmentBar, openCustomerBar)
+    }, [customerBarSize, assignmentBarSize, openAssignmentBar, openCustomerBar])
 
     useEffect(() => {
         editorBar() // run to find editor width
@@ -254,8 +257,6 @@ const GlobalLayout = (props) => {
 
     useEffect(() => {
         if(dashboardScreen === true) {
-            
-
             if(selectedCompanies.length > 0) {
                 const customers = selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies;
                 const assignments = selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;    
@@ -291,8 +292,7 @@ const GlobalLayout = (props) => {
     }, []) */
 
     useEffect(() => {
-        if( openIllustrationBar === false && openCommentBar === false && openChartBar === false && openAnalyticsBar === false ) {
-            
+        if( openIllustrationBar === false && openCommentBar === false && openChartBar === false && openAnalyticsBar === false ) {  
             if( openGoogleDriveBar === true || assetFilesBar === true ) {
                 setAssetFilesBarSize('100%')
                 if(openCustomerBar === true && customerBarSize === '100%') {
@@ -353,7 +353,7 @@ const GlobalLayout = (props) => {
             } else if (openBar === true ) {
                 setCompanyBarSize('100%')                
             }
-        }  else {
+        }  else {      
             if(assetFilesBarSize === '100%' && (openGoogleDriveBar === true || assetFilesBar === true)){
                 setAssetFilesBarSize(200)
             } else if(customerBarSize === '100%') {
@@ -382,7 +382,6 @@ const GlobalLayout = (props) => {
             setOtherPartyOpenBar( false ) // parties
             setCustomerOpenBar( true ) //assets
             setAssignmentOpenBar( true ) //transactions
-            console.log("TAPPPPP")
             setVisualizerBarSize('40.1%')
             setChartBar(true)
             setAnalyticsBar(true)
@@ -630,7 +629,7 @@ const GlobalLayout = (props) => {
         if(!openAssignmentBar === false) {
             setAssignmentBarSize(0)
         } else {
-            setAssignmentBarSize(120) 
+            setAssignmentBarSize(180) 
             if(isMobile){
                 setOpenBar( false )
                 setTypeOpenBar( false )
@@ -645,7 +644,7 @@ const GlobalLayout = (props) => {
     }
 
     const handleCustomersBarOpen = (event) => {
-        console.log("CURRENT=>handleCustomersBarOpen", openCustomerBar)
+        console.log("handleCustomersBarOpen => TAPPPP" )
         setToggleCustomerButtonType( !toggleCustomerButtonType )
         setCustomerOpenBar( !openCustomerBar )
         if(!openCustomerBar === false) {
@@ -1028,7 +1027,7 @@ const GlobalLayout = (props) => {
             }
 
         } else {
-            if(openCustomerBar === false){
+            if(openCustomerBar === false && timelineScreen === false){
                 handleCustomersBarOpen(event)
             }
             if(openCommentBar === false){

@@ -46,13 +46,13 @@ import {
     setBreadCrumbs
 } from '../../actions/patentTrackActions2'
 
-import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpanMode, setMaintainenceFeeFrameMode, setTimelineScreen } from '../../actions/uiActions'
+import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpanMode, setMaintainenceFeeFrameMode, setPatentScreen, setDashboardScreen, setTimelineScreen } from '../../actions/uiActions'
 
 import useStyles from './styles'
 import clsx from 'clsx'
 import IllustrationContainer from '../common/AssetsVisualizer/IllustrationContainer'
 
-const GlobalScreen = ({
+const PatentLayout = ({
     type,
     openBar,
     companyBarSize, 
@@ -125,6 +125,7 @@ const GlobalScreen = ({
     driveTemplateFrameMode,
     driveTemplateMode
 }) => {
+    
     const classes = useStyles() 
     const dispatch = useDispatch()
     const mainContainerRef = useRef()
@@ -142,7 +143,6 @@ const GlobalScreen = ({
     const [ isDragging, setIsDragging] = useState(false)
     const [ isFullscreenOpen, setIsFullscreenOpen] = useState(false)
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false)
-    const timelineScreen = useSelector(state => state.ui.timelineScreen)
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
     const dashboardPanel = useSelector(state => state.ui.dashboardPanel)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
@@ -175,6 +175,13 @@ const GlobalScreen = ({
     }
 
     useEffect(() => {
+        dispatch(setTimelineScreen(false))
+        dispatch(setDashboardScreen(false))
+        dispatch(setPatentScreen(true))
+        dispatch(setBreadCrumbs('Patent Assets'))
+    }, [])
+
+    useEffect(() => {
         if(selectedCategory == 'correct_details') {
             if(openAssignmentBar === false) {
                 handleAssignmentBarOpen()
@@ -183,12 +190,10 @@ const GlobalScreen = ({
                 handleCustomersBarOpen()
             }
         } else {
-            if(openAssignmentBar === true && timelineScreen === false) {
-                handleAssignmentBarOpen()
-            } else if(openAssignmentBar === false && timelineScreen === true) {
+            if(openAssignmentBar === true) {
                 handleAssignmentBarOpen()
             }
-            if(openCustomerBar === false && dashboardScreen === false && timelineScreen === false) {
+            if(openCustomerBar === false && dashboardScreen === false) {
                 handleCustomersBarOpen()
             }
         }
@@ -196,14 +201,24 @@ const GlobalScreen = ({
 
     useEffect(() => {
         if( type === 0 ) {
-            if( selectedMainCompanies.length > 0 || selectedCompaniesAll === true ) {
-                dispatch( getMaintainenceAssetsList( selectedCompaniesAll === true ? [] : selectedMainCompanies ))
+            if(selectedMainCompanies.length > 0) {
+                dispatch( getMaintainenceAssetsList( selectedMainCompanies ))
             } else {
                 resetAll(dispatch)
             }
         }
         
-    }, [ dispatch, selectedMainCompanies, selectedCompaniesAll , type ])
+    }, [ dispatch, selectedMainCompanies , type ])
+
+    useEffect(() => {
+        if( type === 0 ) {
+            if(selectedCompaniesAll === true) {
+                dispatch( getMaintainenceAssetsList( [] ))
+            } else {
+                resetAll(dispatch)
+            }
+        }
+    }, [dispatch, selectedCompaniesAll, type ])
 
     useEffect(() => {
         checkContainer()
@@ -639,8 +654,12 @@ const GlobalScreen = ({
                                                 fn={resizePane}
                                                 fnParams={setCommentBarSize}
                                                 commentBar={openCommentBar}
+                                                companyBarSize={companyBarSize}
                                                 openCustomerBar={openCustomerBar}
                                                 illustrationBar={openIllustrationBar}
+                                                illustrationBarSize={illustrationBarSize}
+                                                visualizerBarSize={visualizerBarSize}
+                                                customerBarSize={customerBarSize}
                                                 fnVarName={`split5`}
                                                 fn2={resizePane2}
                                                 fn2Params={setSize}
@@ -663,26 +682,10 @@ const GlobalScreen = ({
                                                 setChartBar={setChartBar}
                                                 handleCommentBarOpen={handleCommentBarOpen}
                                                 handleCustomersBarOpen={handleCustomersBarOpen}
+                                                cube={true}
                                             /> 
                                         </div>
                                         <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
-                                        {
-                                            dashboardScreen === true && (dashboardPanel === true) ? 
-                                                <IllustrationContainer 
-                                                    isFullscreenOpen={isFullscreenOpen} 
-                                                    asset={assetIllustration} 
-                                                    setIllustrationRecord={setIllustrationRecord} 
-                                                    chartsBar={openChartBar}
-                                                    analyticsBar={openAnalyticsBar}
-                                                    chartsBarToggle={handleChartBarOpen}
-                                                    checkChartAnalytics={checkChartAnalytics}
-                                                    setAnalyticsBar={setAnalyticsBar}
-                                                    setChartBar={setChartBar}
-                                                    fullScreen={handleClickOpenFullscreen}
-                                                    gap={gap}
-                                                    viewOnly={true}
-                                                />
-                                            :
                                             <AssetDetailsContainer 
                                                 cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPaneMainOverflowUnset, { [classes.minimized]: assetsCommentsTimelineMinimized })}
                                                 split={`horizontal`}
@@ -708,8 +711,8 @@ const GlobalScreen = ({
                                                 companyBarSize={companyBarSize}
                                                 isDragging={isDragging}
                                                 type={type}
-                                            />
-                                        }                                            
+                                                cube={true}
+                                            />                                
                                         </div>
                                     </SplitPane>
                                 </SplitPane>
@@ -724,4 +727,4 @@ const GlobalScreen = ({
 }
 
 
-export default GlobalScreen
+export default PatentLayout

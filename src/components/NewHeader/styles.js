@@ -554,5 +554,12 @@ export default makeStyles(theme => ({
     },
     disabled: {
         opacity: 0.38
-    } 
+    },  
+    assetIcon: {
+        width: '1em',
+        height: '1em',
+        fontSize: '1.5rem',
+        display: 'inline-block',
+        userSelect: 'none'
+    }
 }))

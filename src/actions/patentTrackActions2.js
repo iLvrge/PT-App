@@ -492,6 +492,31 @@ export const setMainChildCompanies = (companyID, data) => {
   }
 }
 
+
+
+export const getMaintainenceAssetsEventsList = ( selectedCompanies) => {
+  return async dispatch => {
+    dispatch(setMaintainenceAssetsEventsLoadingMore(true))
+    const { data } = await PatenTrackApi.getMaintainenceAssetsEventsList(selectedCompanies)
+    dispatch(setMaintainenceAssetsEventsLoadingMore(false))
+    dispatch(setMaintainenceAssetsEventsList(data))
+  } 
+}
+
+export const setMaintainenceAssetsEventsLoadingMore = data => {
+  return {
+    type: types.SET_MAINTAINENCE_ASSETS_EVENTS_LIST_LOADING_MORE,
+    payload: data,
+  }
+}
+
+export const setMaintainenceAssetsEventsList = (data) => {
+  return {
+    type: types.SET_MAINTAINENCE_ASSETS_EVENTS_LIST,
+    data
+  }
+}
+
 export const getMaintainenceAssetsList = ( selectedCompanies, offset = 0, append = false) => {
   return async dispatch => {
     dispatch(setMaintainenceAssetsLoadingMore(true))

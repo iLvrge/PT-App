@@ -286,9 +286,22 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ['child_list']: action.data
         })
       }
-    case types.SET_MAINTAINENCE_ASSETS_LIST_LOADING_MORE: 
+    case types.SET_MAINTAINENCE_ASSETS_EVENTS_LIST_LOADING_MORE: 
       return {
         ...state,
+        maintainenceAssetsEventsLoadingMore: action.payload,
+      }
+    case types.SET_MAINTAINENCE_ASSETS_EVENTS_LIST: 
+      return {
+        ...state,
+        maintainenceAssetsEventsList:  Object.assign({}, {
+          ...state.maintainenceAssetsList,
+          ['list']: action.data.list
+        })
+      }
+    case types.SET_MAINTAINENCE_ASSETS_LIST_LOADING_MORE: 
+      return {
+        ...state, 
         maintainenceAssetsLoadingMore: action.payload,
       }
     case types.SET_MAINTAINENCE_ASSETS_LIST: 
@@ -691,7 +704,6 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           selectedCategory: action.category
         }
       case types.SET_BREAD_CRUMBS_AND_SELECTED_CATEGORY:{
-        console.log('SET_BREAD_CRUMBS_AND_SELECTED_CATEGORY', action.item)
         return {
           ...state,
           breadcrumbs: action.item.breadCrumbs,

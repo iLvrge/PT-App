@@ -119,6 +119,12 @@ class PatenTrackApi {
     )
   }
 
+  static getMaintainenceAssetsEventsList( representative_id) {
+    return axios.get(`${base_new_api_url}/companies/maintainence_assets_events?representative_id=${JSON.stringify(representative_id)}`,
+      getHeader(),
+    )
+  }
+
   static getCompaniesUserList(companyID) {
     return axios.get(`${base_new_api_url}/companies${companyID}/users`, getHeader())
   }
@@ -231,6 +237,10 @@ class PatenTrackApi {
 
   static getAssetTypeAssignmentAllAssets(companies, tabs, customers, rfIDs) { 
     return axios.get(`${base_new_api_url}/customers/asset_types/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
+  }
+
+  static getAssetTypeAssignmentAllAssetsWithFamily(companies, tabs, customers, rfIDs) { 
+    return axios.get(`${base_new_api_url}/customers/asset_types/assets/family?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
   }
   
 
@@ -651,6 +661,14 @@ class PatenTrackApi {
       cancelTimeline = c
     })
     return axios.get(`${base_new_api_url}/customers/timeline?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}`, header)
+  }
+
+  static getTimelineSecurityData(companies, tabs, customers, rfIDs = [], layout, exclude) {
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelTimeline = c
+    })
+    return axios.get(`${base_new_api_url}/customers/timeline/security?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}`, header)
   }
 
   static cancelTimeline() {

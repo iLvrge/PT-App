@@ -12,6 +12,7 @@ export default {
     selectedItem: null,
     selectedAsset: null,
   },
+  patentScreen: false,
   timelineScreen: true,
   dashboardScreen: false,
   dashboardPanel: false,

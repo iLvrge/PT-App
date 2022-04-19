@@ -16,6 +16,12 @@ const uiReducer = (state = initialState.ui, action) => {
         timelineScreen: action.flag 
       }
     }
+    case types.SET_PATENT_SCREEN: {
+      return { 
+        ...state,
+        patentScreen: action.flag 
+      }
+    }
     case types.SET_DASHBOARD_SCREEN: {
       return { 
         ...state,

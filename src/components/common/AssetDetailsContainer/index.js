@@ -21,6 +21,9 @@ import { updateResizerBar } from '../../../utils/resizeBar'
 
 import ArrowButton from "../ArrowButton"
 import useStyles from "./styles"
+import GeoChart from "../AssetsVisualizer/GeoChart"
+import GoogleCharts from "../AssetsVisualizer/GoogleCharts"
+import TimelineSecurity from "../AssetsVisualizer/TimelineSecurity"
 
 const AssetDetailsContainer = ({
   cls,
@@ -45,7 +48,8 @@ const AssetDetailsContainer = ({
   illustrationBar,
   customerBarSize,
   companyBarSize,
-  type
+  type,
+  cube
 }) => { 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -81,6 +85,7 @@ const AssetDetailsContainer = ({
   
   const pdfView = useSelector(state => state.patenTrack.pdfView);
   const pdfViewModal = useSelector(state => state.patenTrack.pdfViewModal)
+  const timelineScreen = useSelector(state => state.ui.timelineScreen);
   const usptoMode = useSelector(state => state.ui.usptoMode);
   const familyMode = useSelector(state => state.ui.familyMode);
   const familyItemMode = useSelector(state => state.ui.familyItemMode);
@@ -96,7 +101,6 @@ const AssetDetailsContainer = ({
 
 
   useEffect(() => {
-    console.log("defaultSize", defaultSize)
     if(chartBar === true && analyticsBar === true && defaultSize == '100%') {
       fnParams('50%')
     }
@@ -300,6 +304,24 @@ const AssetDetailsContainer = ({
               } 
               {
                 chartBar == true ? (
+                  cube === true
+                  ?
+                    <GeoChart
+                      chartBar={chartBar} 
+                      openCustomerBar={openCustomerBar} 
+                      visualizerBarSize={visualizerBarSize}
+                      type={type}
+                    />
+                  :
+                  timelineScreen === true 
+                  ?
+                    <GoogleCharts
+                      chartBar={chartBar} 
+                      openCustomerBar={openCustomerBar} 
+                      visualizerBarSize={visualizerBarSize}
+                      type={type}
+                    />
+                  :                  
                   connectionBoxView === true ? (
                       <PdfViewer
                         display={"false"}
@@ -356,6 +378,15 @@ const AssetDetailsContainer = ({
               {
                 analyticsBar === true 
                   ? 
+                    timelineScreen === true 
+                    ?
+                      <TimelineSecurity
+                        chartBar={chartBar} 
+                        openCustomerBar={openCustomerBar} 
+                        visualizerBarSize={visualizerBarSize}
+                        type={type}
+                      />
+                    :
                     openIllustrationBar === true ? (
                       <>
                         {      
@@ -373,7 +404,8 @@ const AssetDetailsContainer = ({
                           ) 
                         }
                       </>
-                    ) : (
+                    ) :
+                    (
                       <LifeSpanContainer 
                         chartBar={chartBar} 
                         openCustomerBar={openCustomerBar} 

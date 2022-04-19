@@ -52,6 +52,8 @@ import { Menu as MenuIcon,
         Close
       } from '@mui/icons-material'
 
+import routeList from '../../routeList'
+
 import { controlList } from '../../utils/controlList'
 import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar'
 import { useDarkMode } from '../../useDarkMode';
@@ -125,6 +127,7 @@ import {
   toggleThemeMode,
   setTimelineScreen,
   setDashboardScreen,
+  setPatentScreen
 } from '../../actions/uiActions'
 import Scheduling from './Scheduling'
 
@@ -147,6 +150,7 @@ const NewHeader = (props) => {
   const search_string = useSelector(state => state.patenTrack2.search_string)
   const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
   const timelineScreen = useSelector(state => state.ui.timelineScreen)
+  const patentScreen = useSelector(state => state.ui.patentScreen)
   const [layoutName, setLayoutName] = useState(null)
   const [ isClipboardActive, setIsClipboardActive ] = useState(false)
   const [ isCompanyMenuOpen, setCompanyMenuOpen ] = useState(false)
@@ -255,8 +259,8 @@ const NewHeader = (props) => {
 
   useEffect(() => {
     const findIndex =  controlList.findIndex( item => item.type == 'menu' && item.category == selectedCategory)
-    setLayoutName(dashboardScreen === true ? 'Dashboard' : selectedCategory != 'due_dilligence' ? findIndex !== -1 ? controlList[findIndex].mainHeading : '' : '')
-  }, [ dashboardScreen, selectedCategory ])    
+    setLayoutName(dashboardScreen === true ? 'Dashboard' : patentScreen === true ? 'Patent Assets' : selectedCategory != 'due_dilligence' ? findIndex !== -1 ? controlList[findIndex].mainHeading : '' : '')
+  }, [ dashboardScreen, patentScreen,  selectedCategory ])    
 
   /**
    * Get the Loggedin User Profile data
@@ -541,26 +545,41 @@ const shareDashboard = () => {
 
 const onHandleDashboardScreen = /* useCallback( */(event) => {
   dispatch(setTimelineScreen(false))
+  dispatch(setPatentScreen(false))
   dispatch(setDashboardScreen(true))
+  
   dispatch(setAssetsIllustration(null))
   dispatch(setAssetsIllustrationData(null))
   /* resetAllRowSelect(dispatch, resetItemList.resetAll)
   resetAllRowSelect(dispatch, resetItemList.clearOtherItems) */
   props.checkChartAnalytics(null, null, false)
   props.resetScreen('Dashboard', event)
+  history.push("/")
 }/* , [dispatch]) */
 
-const onHandleTimelineScreen = /* useCallback( */(event) => {
-  dispatch(setTimelineScreen(true))
+const onHandleTimelineScreen = /* useCallback( */(event) => {  
+  dispatch(setPatentScreen(false))
   dispatch(setDashboardScreen(false))
+  dispatch(setTimelineScreen(true))
   dispatch(setAssetsIllustration(null))
   dispatch(setAssetsIllustrationData(null))
   /* resetAllRowSelect(dispatch, resetItemList.resetAll)
   resetAllRowSelect(dispatch, resetItemList.clearOtherItems) */
   props.checkChartAnalytics(null, null, false)
   props.resetScreen('Timeline', event)
+  history.push("/")
   
 }/* , [dispatch]) */
+
+const onHandlePatentAssetsScreen = () => {    
+  dispatch(setPatentScreen(false))
+  dispatch(setTimelineScreen(false))
+  dispatch(setDashboardScreen(false))
+  dispatch(setAssetsIllustration(null))
+  dispatch(setAssetsIllustrationData(null))
+  dispatch(setBreadCrumbs('Patent Assets')) 
+  history.push(routeList.patent_assets)
+}
 
   return (
     <AppBar className={classes.root} color='transparent' position='relative'>
@@ -583,11 +602,13 @@ const onHandleTimelineScreen = /* useCallback( */(event) => {
         </span>
 
         <ActionMenu 
-          t={0} 
-          onClickSale={onHandleSaleAssets} 
+          t={0}  
+          onClickSale={onHandleSaleAssets}  
+          patentScreen={patentScreen}
           dashboardScreen={dashboardScreen}
           setDashboardScreen={onHandleDashboardScreen}
           setActivityTimeline={onHandleTimelineScreen}
+          setPatentAssets={onHandlePatentAssetsScreen}
           timelineScreen={timelineScreen} 
           resetAll={resetAll}
           clearOtherItems={clearOtherItems}
@@ -598,9 +619,9 @@ const onHandleTimelineScreen = /* useCallback( */(event) => {
             ?
               breadcrumbs
             :
-              selectedCategory !== 'due_dilligence' || dashboardScreen === true  
+              selectedCategory !== 'due_dilligence' || dashboardScreen === true  || patentScreen === true
               ? 
-                layoutName 
+                layoutName     
               : 
                 'Activity Timeline'
           }

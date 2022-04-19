@@ -10,6 +10,7 @@ export default {
   correct_address: '/mainenance/correct_address',
   review_foreign_assets: '/review_foreign_assets',
   review_foreign_assets: '/locate_lost_assets',
+  patent_assets: '/patent_assets',
   invent: '/ownership/invent',
   duedilligence: '/due' ,
   search: '/search',

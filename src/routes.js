@@ -8,6 +8,7 @@ import Search from './components/Search'
 import Reports from './components/Reports'
 import GlobalScreen from './components/GlobalScreen'
 import CorrectLayout from './components/CorrectLayout' 
+import PatentLayout from './components/PatentLayout' 
 import Googlelogin from './components/common/Googlelogin' 
 
 import Auth from './components/auth'
@@ -89,6 +90,13 @@ let pages = [
     component: GlobalScreen,
     layout: GlobalLayout,
     type: 0
+  },
+  {    
+    exact: true,
+    path: routeList.patent_assets,
+    component: PatentLayout,
+    layout: GlobalLayout, 
+    type: 1
   },
   {    
     exact: true,

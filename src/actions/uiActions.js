@@ -77,6 +77,11 @@ export const setTimelineScreen = flag => ({
   flag,
 })
 
+export const setPatentScreen = flag => ({
+  type: types.SET_PATENT_SCREEN,
+  flag,
+})
+
 export const setDashboardScreen = flag => ({
   type: types.SET_DASHBOARD_SCREEN,
   flag,

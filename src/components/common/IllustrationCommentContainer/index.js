@@ -23,6 +23,7 @@ import useStyles from './styles'
 import Reports from '../../Reports'
 import FullScreen from '../FullScreen'
 import clsx from 'clsx'
+import InventionVisualizer from '../AssetsVisualizer/InventionVisualizer'
 
 const IllustrationCommentContainer = ({ 
     cls, 
@@ -34,6 +35,10 @@ const IllustrationCommentContainer = ({
     commentBar, 
     openCustomerBar,
     illustrationBar, 
+    illustrationBarSize,
+    visualizerBarSize,
+    customerBarSize,
+    companyBarSize,
     fnVarName, 
     fn2, 
     fn2Params, 
@@ -55,7 +60,9 @@ const IllustrationCommentContainer = ({
     setAnalyticsBar,
     type,
     handleCommentBarOpen,
-    handleCustomersBarOpen }) => {
+    handleCustomersBarOpen,
+    cube    
+    }) => {
     const classes = useStyles() 
     const iframeRef = useRef()
     const illustrationRef = useRef()
@@ -207,7 +214,7 @@ const IllustrationCommentContainer = ({
             <div style={{display: 'unset'}}>   
                 {/* <AllComponentsMenu onClick={onHandleComponentMenuItem}/> */}
                 {
-                    illustrationBar === true && dashboardScreen === false && !isFullscreenOpen && shouldShowTimeline
+                    illustrationBar === true && cube === false && dashboardScreen === false && !isFullscreenOpen && shouldShowTimeline
                     ?
                         <IconButton 
                             size="small" 
@@ -223,6 +230,20 @@ const IllustrationCommentContainer = ({
                 {  
                     illustrationBar === true && (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' ||  type === 9 || ((process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && auth_token !== null))
                     ?
+                        cube === true
+                        ?
+                            <InventionVisualizer 
+                                defaultSize={illustrationBarSize} 
+                                visualizerBarSize={visualizerBarSize} 
+                                analyticsBar={analyticsBar} 
+                                openCustomerBar={openCustomerBar} 
+                                commentBar={commentBar} 
+                                illustrationBar={illustrationBar} 
+                                customerBarSize={customerBarSize} 
+                                companyBarSize={companyBarSize}
+                                type={type} 
+                            />
+                        :
                         dashboardScreen === true
                         ?
                             <Reports
@@ -311,6 +332,7 @@ const IllustrationCommentContainer = ({
                             <Close /> 
                         </IconButton> 
                         {
+                            
                             shouldShowTimeline === true ? (
                                 <TimelineContainer assignmentBar={assignmentBar} assignmentBarToggle={assignmentBarToggle} type={type}/>
                             )

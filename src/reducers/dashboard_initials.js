@@ -55,6 +55,8 @@ export default {
     display_sales_assets: false,
     display_clipboard: false, 
     driveButtonActive: false,
+    maintainenceAssetsEventsLoadingMore: false,
+    maintainenceAssetsEventsList: {list: []}, 
     maintainenceAssetsLoadingMore: false,
     maintainenceAssetsList: {list: [], total_records: 0}, 
     mainCompaniesList: { list: [], total_records: 0, row_select: [], selected: [], selectedWithName: [], selectedGroups: [], selectAll: false, childID: 0, child_list: [] },
