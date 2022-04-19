@@ -306,7 +306,7 @@ const AssetDetailsContainer = ({
                 } 
                 {
                   chartBar == true ? (
-                    cube === true
+                    cube === true && assetIllustration == null
                     ?
                       <GeoChart
                         chartBar={chartBar} 
@@ -315,7 +315,7 @@ const AssetDetailsContainer = ({
                         type={type}
                       />
                     :
-                    timelineScreen === true 
+                    timelineScreen === true  && assetIllustration == null
                     ?
                       <GoogleCharts
                         chartBar={chartBar} 
@@ -382,7 +382,7 @@ const AssetDetailsContainer = ({
                 {
                   analyticsBar === true 
                     ? 
-                      timelineScreen === true 
+                      timelineScreen === true   && assetIllustration == null
                       ?
                         <TimelineSecurity
                           chartBar={chartBar} 

@@ -799,7 +799,17 @@ const ActionMenu = (props) => {
                         startIcon={<KeyboardArrowDown />}
                         className={classes.btnActionMenu}
                     >
-                        Action
+                        {
+                            props.display_sales_assets == true 
+                            ?
+                                props.breadcrumbs
+                            :
+                                props.selectedCategory !== 'due_dilligence' || props.dashboardScreen === true  || props.patentScreen === true
+                                ? 
+                                    props.layoutName     
+                                : 
+                                'Activity Timeline'
+                        } 
                     </Button>
             }            
             <Menu       

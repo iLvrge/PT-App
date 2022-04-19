@@ -13,7 +13,7 @@ import PatenTrackApi from '../../../../api/patenTrack2'
 const GeoChart = ({ chartBar, visualizerBarSize, standalone }) => {
     const containerRef = useRef(null)
     const [ selectedTab, setSelectedTab ] = useState(0)
-    const [ chartTabs, setChartTabs ] = useState(['Geo'])
+    const [ chartTabs, setChartTabs ] = useState(['Jurisdiction'])
     const [data, setData] = useState([])
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const auth_token = useSelector(state => state.patenTrack2.auth_token)

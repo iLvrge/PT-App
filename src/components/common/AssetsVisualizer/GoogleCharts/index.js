@@ -12,7 +12,7 @@ import PatenTrackApi from '../../../../api/patenTrack2'
 const GoogleCharts = ({ chartBar, visualizerBarSize, standalone }) => {
     const containerRef = useRef(null)
     const [ selectedTab, setSelectedTab ] = useState(0)
-    const [ chartTabs, setChartTabs ] = useState(['Area'])
+    const [ chartTabs, setChartTabs ] = useState(['Maintainence Fees'])
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )

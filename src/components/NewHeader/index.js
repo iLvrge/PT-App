@@ -612,20 +612,12 @@ const onHandlePatentAssetsScreen = () => {
           timelineScreen={timelineScreen} 
           resetAll={resetAll}
           clearOtherItems={clearOtherItems}
+          layoutName={layoutName}
+          breadcrumbs={breadcrumbs}
+          selectedCategory={selectedCategory}
+          display_sales_assets={display_sales_assets}
         />
-        <div className={classes.breadcrumbs}>
-          {
-            display_sales_assets == true 
-            ?
-              breadcrumbs
-            :
-              selectedCategory !== 'due_dilligence' || dashboardScreen === true  || patentScreen === true
-              ? 
-                layoutName     
-              : 
-                'Activity Timeline'
-          }
-        </div>    
+         
         <div className={classes.rightPanel}>  
             {/* <Switch  
               color="secondary" 

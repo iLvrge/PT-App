@@ -153,8 +153,10 @@ const GlobalLayout = (props) => {
     const timelineScreen = useSelector(state => state.ui.timelineScreen)
 
     useEffect(() => {
-        console.log("customerBarSize, assignmentBarSize", customerBarSize, assignmentBarSize, openAssignmentBar, openCustomerBar)
-    }, [customerBarSize, assignmentBarSize, openAssignmentBar, openCustomerBar])
+        if(openVisualizerBar === false && visualizerBarSize != '0%') {
+            setVisualizerBarSize('0%')
+        }
+    }, [visualizerBarSize, openVisualizerBar])
 
     useEffect(() => {
         editorBar() // run to find editor width
@@ -644,7 +646,6 @@ const GlobalLayout = (props) => {
     }
 
     const handleCustomersBarOpen = (event) => {
-        console.log("handleCustomersBarOpen => TAPPPP" )
         setToggleCustomerButtonType( !toggleCustomerButtonType )
         setCustomerOpenBar( !openCustomerBar )
         if(!openCustomerBar === false) {
@@ -1027,17 +1028,28 @@ const GlobalLayout = (props) => {
             }
 
         } else {
-            if(openCustomerBar === false && timelineScreen === false){
+            if(openCustomerBar === false && timelineScreen === false && type !== 'Timeline'){ 
                 handleCustomersBarOpen(event)
+            }
+            if(openAssignmentBar === false && timelineScreen === false && type == 'Timeline'){
+                handleAssignmentBarOpen(event)
             }
             if(openCommentBar === false){
                 handleCommentBarOpen(event)
             }
-            if(openChartBar === true){
-                handleChartBarOpen(event)
-            }
-            if(openAnalyticsBar === true){
-                handleAnalyticsBarOpen(event)
+            if(openChartBar === true || openAnalyticsBar === true) {
+                /* setVisualizeOpenBar(false)  
+                setVisualizerBarSize('0%') */
+                if(openChartBar === true){
+                    handleChartBarOpen(event)
+                }
+                if(openAnalyticsBar === true){
+                    handleAnalyticsBarOpen(event)
+                }
+
+                if(openChartBar === true && openAnalyticsBar === true){
+                    changeVisualBar(false, false, true, true)
+                }
             }
         }
     }
