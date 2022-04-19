@@ -322,13 +322,17 @@ const TimelineSecurity = ({ data, assignmentBar, assignmentBarToggle, type, stan
     */
     const getTimelineSecurityRawDataFunction = async () => {
         //search
-        resetTooltipContainer()  
-        const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-        tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-        customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
-        rfIDs = selectedAssetAssignments.length > 0 ? selectedAssetAssignments : [];
-        const { data } = await PatenTrackApi.getTimelineSecurityData(companies, tabs, customers, rfIDs, selectedCategory)
-        setTimelineRawData(data.list)
+        try{
+            resetTooltipContainer()  
+            const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+            tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+            customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
+            rfIDs = selectedAssetAssignments.length > 0 ? selectedAssetAssignments : [];
+            const { data } = await PatenTrackApi.getTimelineSecurityData(companies, tabs, customers, rfIDs, selectedCategory)
+            setTimelineRawData(data.list)
+        } catch (err) {
+            console.log(err)
+        }        
     }
     getTimelineSecurityRawDataFunction()
     

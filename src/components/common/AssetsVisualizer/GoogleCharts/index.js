@@ -98,12 +98,16 @@ const GoogleCharts = ({ chartBar, visualizerBarSize, standalone }) => {
 
     useEffect(() => {
         const getMaintainenceEventsAssets = async() => {
-            const   companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-                    tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-                    customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
-                    rfIDs = selectedAssetAssignments.length > 0 ? selectedAssetAssignments : [];
-            const { data } = await PatenTrackApi.getMaintainenceAssetsEventsList(companies)
-            setData(data)
+            try {
+                const   companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+                        tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+                        customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
+                        rfIDs = selectedAssetAssignments.length > 0 ? selectedAssetAssignments : [];
+                const { data } = await PatenTrackApi.getMaintainenceAssetsEventsList(companies)
+                setData(data)
+            } catch (err) {
+                console.log(err)
+            }
         }
         getMaintainenceEventsAssets()
         

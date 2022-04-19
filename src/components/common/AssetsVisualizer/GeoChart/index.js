@@ -56,12 +56,16 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone }) => {
 
     useEffect(() => {
         const getAssetsForEachCountry = async() => {
-            const   companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-                    tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-                    customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
-                    rfIDs = selectedAssetAssignments.length > 0 ? selectedAssetAssignments : [];
-            const { data } = await PatenTrackApi.getAssetTypeAssignmentAllAssetsWithFamily(companies, tabs, customers, rfIDs)
-            setData(data)
+            try {
+                const   companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+                tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+                customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
+                rfIDs = selectedAssetAssignments.length > 0 ? selectedAssetAssignments : [];
+                const { data } = await PatenTrackApi.getAssetTypeAssignmentAllAssetsWithFamily(companies, tabs, customers, rfIDs)
+                setData(data)
+            } catch(err) {
+                console.log(err)
+            }            
         }
         getAssetsForEachCountry()
     }, [selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, auth_token])
