@@ -16,6 +16,7 @@ import LoadLinkAssets from './LoadLinkAssets'
 import AllComponentsMenu from '../AllComponentsMenu'
 import ArrowButton from '../ArrowButton'
 import DisplayFile from './DisplayFile'
+import ErrorBoundary from '../ErrorBoundary'
 import { updateResizerBar } from '../../../utils/resizeBar'
 
 import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/numbers";
@@ -214,6 +215,7 @@ const IllustrationCommentContainer = ({
             }}
         >         
             <div style={{display: 'unset'}}>   
+                <ErrorBoundary>
                 {/* <AllComponentsMenu onClick={onHandleComponentMenuItem}/> */}
                 {
                     illustrationBar === true && cube === false && dashboardScreen === false && !isFullscreenOpen && shouldShowTimeline
@@ -373,25 +375,28 @@ const IllustrationCommentContainer = ({
                     />
                     )
                 }
+                </ErrorBoundary>
             </div>
 
             <div 
                 className={classes.commentContainer}
             >
-                {
-                    commentBar === true
-                    ?
-                        <AssetsCommentsTimeline 
-                            toggleMinimize={toggleMinimizeAssetsCommentsTimeline} 
-                            size={size} 
-                            setChannel={setChannel} 
-                            channel_id={channel_id} 
-                            illustrationBar={illustrationBar}
-                        />
-                            
-                    :
-                    ''
-                }
+                <ErrorBoundary>
+                    {
+                        commentBar === true
+                        ?
+                            <AssetsCommentsTimeline 
+                                toggleMinimize={toggleMinimizeAssetsCommentsTimeline} 
+                                size={size} 
+                                setChannel={setChannel} 
+                                channel_id={channel_id} 
+                                illustrationBar={illustrationBar}
+                            />
+                                
+                        :
+                        ''
+                    }
+                </ErrorBoundary>
             </div>
         </SplitPane>
     );

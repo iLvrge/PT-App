@@ -24,6 +24,7 @@ import useStyles from "./styles"
 import GeoChart from "../AssetsVisualizer/GeoChart"
 import GoogleCharts from "../AssetsVisualizer/GoogleCharts"
 import TimelineSecurity from "../AssetsVisualizer/TimelineSecurity"
+import ErrorBoundary from '../ErrorBoundary'
 
 const AssetDetailsContainer = ({
   cls,
@@ -285,50 +286,73 @@ const AssetDetailsContainer = ({
               id={`charts_container`}
               style={{ height: "100%" }}
             > 
-              {/* <ArrowButton
-                arrowId={`arrow_charts`}
-                handleClick={handleDetailsBarOpen}
-                buttonType={toggleDetailsButtonType}
-                buttonVisible={detailsButtonVisible}
-                arrow={3}
-                cls={classes.btnLeft}
-              /> */}
+              <ErrorBoundary>
+                {/* <ArrowButton
+                  arrowId={`arrow_charts`}
+                  handleClick={handleDetailsBarOpen}
+                  buttonType={toggleDetailsButtonType}
+                  buttonVisible={detailsButtonVisible}
+                  arrow={3}
+                  cls={classes.btnLeft}
+                /> */}
 
-              {
-                pdfViewModal &&
-                <Modal open={pdfViewModal} className={classes.fullscreenChartsModal} >
-                  <Paper className={classes.fullscreenCharts} square>
-                    <PdfViewer display={'true'} />
-                  </Paper>
-                </Modal>
-              } 
-              {
-                chartBar == true ? (
-                  cube === true
-                  ?
-                    <GeoChart
-                      chartBar={chartBar} 
-                      openCustomerBar={openCustomerBar} 
-                      visualizerBarSize={visualizerBarSize}
-                      type={type}
-                    />
-                  :
-                  timelineScreen === true 
-                  ?
-                    <GoogleCharts
-                      chartBar={chartBar} 
-                      openCustomerBar={openCustomerBar} 
-                      visualizerBarSize={visualizerBarSize}
-                      type={type}
-                    />
-                  :                  
-                  connectionBoxView === true ? (
-                      <PdfViewer
-                        display={"false"}
-                        fullScreen={false}
-                        resize={resizeFrame}
-                      />  
-                  ) : lifeSpanMode === true ? (
+                {
+                  pdfViewModal &&
+                  <Modal open={pdfViewModal} className={classes.fullscreenChartsModal} >
+                    <Paper className={classes.fullscreenCharts} square>
+                      <PdfViewer display={'true'} />
+                    </Paper>
+                  </Modal>
+                } 
+                {
+                  chartBar == true ? (
+                    cube === true
+                    ?
+                      <GeoChart
+                        chartBar={chartBar} 
+                        openCustomerBar={openCustomerBar} 
+                        visualizerBarSize={visualizerBarSize}
+                        type={type}
+                      />
+                    :
+                    timelineScreen === true 
+                    ?
+                      <GoogleCharts
+                        chartBar={chartBar} 
+                        openCustomerBar={openCustomerBar} 
+                        visualizerBarSize={visualizerBarSize}
+                        type={type}
+                      />
+                    :                  
+                    connectionBoxView === true ? (
+                        <PdfViewer
+                          display={"false"}
+                          fullScreen={false}
+                          resize={resizeFrame}
+                        />  
+                    ) : lifeSpanMode === true ? (
+                        <InventionVisualizer 
+                          defaultSize={defaultSize} 
+                          illustrationBar={openIllustrationBar} 
+                          visualizerBarSize={visualizerBarSize} 
+                          analyticsBar={analyticsBar} 
+                          openCustomerBar={openCustomerBar} 
+                          commentBar={commentBar} 
+                          illustrationBar={illustrationBar} 
+                          customerBarSize={customerBarSize} 
+                          companyBarSize={companyBarSize}
+                          type={type} />
+                    ) : familyItemMode === true ? (
+                        <FamilyItemContainer 
+                          item={selectedAssetsFamilyItem} 
+                          onClose={onCloseFamilyItemMode} 
+                          analyticsBar={analyticsBar} 
+                          chartBar={chartBar} 
+                          illustrationBar={illustrationBar}
+                          visualizerBarSize={visualizerBarSize} 
+                          type={type}
+                        />
+                    ) : (
                       <InventionVisualizer 
                         defaultSize={defaultSize} 
                         illustrationBar={openIllustrationBar} 
@@ -340,33 +364,12 @@ const AssetDetailsContainer = ({
                         customerBarSize={customerBarSize} 
                         companyBarSize={companyBarSize}
                         type={type} />
-                  ) : familyItemMode === true ? (
-                      <FamilyItemContainer 
-                        item={selectedAssetsFamilyItem} 
-                        onClose={onCloseFamilyItemMode} 
-                        analyticsBar={analyticsBar} 
-                        chartBar={chartBar} 
-                        illustrationBar={illustrationBar}
-                        visualizerBarSize={visualizerBarSize} 
-                        type={type}
-                      />
-                  ) : (
-                    <InventionVisualizer 
-                      defaultSize={defaultSize} 
-                      illustrationBar={openIllustrationBar} 
-                      visualizerBarSize={visualizerBarSize} 
-                      analyticsBar={analyticsBar} 
-                      openCustomerBar={openCustomerBar} 
-                      commentBar={commentBar} 
-                      illustrationBar={illustrationBar} 
-                      customerBarSize={customerBarSize} 
-                      companyBarSize={companyBarSize}
-                      type={type} />
+                    )
                   )
-                )
-                :
-                  '' 
-              }
+                  :
+                    '' 
+                }
+              </ErrorBoundary>
             </div>
             <div
               className={`${classes.commentContainer} ${
@@ -375,46 +378,48 @@ const AssetDetailsContainer = ({
               /* onMouseOver={event => handleIllustrationButton(event, true)}
               onMouseLeave={event => handleIllustrationButton(event, false)} */
             >
-              {
-                analyticsBar === true 
-                  ? 
-                    timelineScreen === true 
-                    ?
-                      <TimelineSecurity
-                        chartBar={chartBar} 
-                        openCustomerBar={openCustomerBar} 
-                        visualizerBarSize={visualizerBarSize}
-                        type={type}
-                      />
-                    :
-                    openIllustrationBar === true ? (
-                      <>
-                        {      
-                          lifeSpanMode === true ? (
-                            <LifeSpanContainer 
-                              chartBar={chartBar} 
-                              openCustomerBar={openCustomerBar} 
-                              visualizerBarSize={visualizerBarSize}
-                              type={type}/>
-                          ) :
-                          familyMode && (
-                              <LegalEventsContainer
-                                events={selectedAssetsLegalEvents} 
+              <ErrorBoundary>
+                {
+                  analyticsBar === true 
+                    ? 
+                      timelineScreen === true 
+                      ?
+                        <TimelineSecurity
+                          chartBar={chartBar} 
+                          openCustomerBar={openCustomerBar} 
+                          visualizerBarSize={visualizerBarSize}
+                          type={type}
+                        />
+                      :
+                      openIllustrationBar === true ? (
+                        <>
+                          {      
+                            lifeSpanMode === true ? (
+                              <LifeSpanContainer 
+                                chartBar={chartBar} 
+                                openCustomerBar={openCustomerBar} 
+                                visualizerBarSize={visualizerBarSize}
                                 type={type}/>
-                          ) 
-                        }
-                      </>
-                    ) :
-                    (
-                      <LifeSpanContainer 
-                        chartBar={chartBar} 
-                        openCustomerBar={openCustomerBar} 
-                        visualizerBarSize={visualizerBarSize}
-                        type={type}/>
-                    )
-                  : 
-                    ''
-              }
+                            ) :
+                            familyMode && (
+                                <LegalEventsContainer
+                                  events={selectedAssetsLegalEvents} 
+                                  type={type}/>
+                            ) 
+                          }
+                        </>
+                      ) :
+                      (
+                        <LifeSpanContainer 
+                          chartBar={chartBar} 
+                          openCustomerBar={openCustomerBar} 
+                          visualizerBarSize={visualizerBarSize}
+                          type={type}/>
+                      )
+                    : 
+                      ''
+                }
+              </ErrorBoundary>
             </div>
           </SplitPane>
         ) 
