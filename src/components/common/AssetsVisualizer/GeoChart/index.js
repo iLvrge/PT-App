@@ -28,7 +28,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone }) => {
     const search_string = useSelector(state => state.patenTrack2.search_string)
     const search_rf_id = useSelector(state => state.patenTrack2.search_rf_id)
     const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
-    
+
     const classes = useStyles() 
     const menuItems = [
         {
@@ -61,7 +61,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone }) => {
                     customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
                     rfIDs = selectedAssetAssignments.length > 0 ? selectedAssetAssignments : [];
             const { data } = await PatenTrackApi.getAssetTypeAssignmentAllAssetsWithFamily(companies, tabs, customers, rfIDs)
-            setData(data.list)
+            setData(data)
         }
         getAssetsForEachCountry()
     }, [selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, auth_token])
