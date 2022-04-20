@@ -25,8 +25,9 @@ function ConnectionBox(props) {
   const [ assetData, setAssetData ] = useState({})
   const [ fullView, setFullView ] = useState('')
   const [ visibility, setVisibility] = useState(false)
-
+  
   useEffect(() => {
+    
     /* if(props.assets) {
       setAssetData(props.assets)
     } */

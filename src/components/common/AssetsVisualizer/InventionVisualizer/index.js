@@ -259,7 +259,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             setInventionTabs([ 'Innovation'])
             setSelectedTab(0)
         } else if( connectionBoxView === true || selectedRow.length > 0 ) {
-            setInventionTabs([ 'Innovation', 'Agreement', 'Form', 'Main' ])
+            /* setInventionTabs([ 'Innovation', 'Agreement', 'Form', 'Main' ]) */
+            setInventionTabs([ 'Innovation', 'Agreement'])
             setSelectedTab(1)
         }
         

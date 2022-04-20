@@ -705,17 +705,14 @@ const ActionMenu = (props) => {
     }, [ newCompanyName, assetTypeNamesGroups, mainCompaniesSelected ] )
 
     const handleChangeLayout = (event) => {
-        if(props.dashboardScreen){
-            props.setActivityTimeline()
-        }
+        props.setPatentAssets(category == 'due_dilligence' ? "Broken Chain-of-Title" : 'Patent Assets')
+        setAnchorEl(null)
         resetAllActivity(category == 'due_dilligence' ? 'restore_ownership' : 'due_dilligence')
     }    
 
     const locateLostAssets = () => {
-        if(props.dashboardScreen){
-            props.setActivityTimeline()
-        }
-        
+        props.setPatentAssets('Locate Lost Assets')
+        setAnchorEl(null)
         const findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'locate_lost_assets')        
         if(findIndex !== -1) {
             props.resetAll()
@@ -893,7 +890,7 @@ const ActionMenu = (props) => {
                             </MenuItem>,
                             <MenuItem  
                             onClick={() => {
-                                props.setActivityTimeline()
+                                props.setPatentAssets('Our Assets for Sale')
                                 props.onClickSale(1)
                             }} className={`iconItem`}  selected={display_sales_assets}>
                                 <ListItemIcon>

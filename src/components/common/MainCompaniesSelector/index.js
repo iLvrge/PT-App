@@ -439,20 +439,22 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                                 const parseChild = JSON.parse(representative.child)
                                 if(parseChild.length > 0) {
                                     const filterItems = parseChild.filter(c => activeItems.includes(parseInt(c.representative_id)) ? parseInt(c.representative_id) : '')
-                                    if(dashboardScreen === true) {
+                                    /* if(dashboardScreen === true) {
                                         oldItems = filterItems.length > 0 ? [parseInt(filterItems[0])] : []
                                     } else {                                       
                                         oldItems = [...oldItems, ...filterItems]
                                         oldItems = [...new Set(oldItems)]
-                                    }                                    
+                                    } */ 
+                                    oldItems = filterItems.length > 0 ? [parseInt(filterItems[0])] : []                                   
                                 }  
                             } else {
                                 if(activeItems.includes(parseInt(representative.representative_id))) {
-                                    if(dashboardScreen === true) {
+                                   /*  if(dashboardScreen === true) {
                                         oldItems = [parseInt(representative.representative_id)]
                                     } else {
                                         oldItems.push(parseInt(representative.representative_id))
-                                    }                                    
+                                    } */        
+                                    oldItems = [parseInt(representative.representative_id)]                            
                                 }
                             }
                         })

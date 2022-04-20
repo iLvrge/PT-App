@@ -178,7 +178,7 @@ const PatentLayout = ({
         dispatch(setTimelineScreen(false))
         dispatch(setDashboardScreen(false))
         dispatch(setPatentScreen(true))
-        dispatch(setBreadCrumbs('Patent Assets'))
+        /* dispatch(setBreadCrumbs('Patent Assets')) */
     }, [])
 
     useEffect(() => {

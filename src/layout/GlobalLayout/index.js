@@ -64,7 +64,7 @@ const GlobalLayout = (props) => {
     const [ openAssignmentBar, setAssignmentOpenBar ] = useState(true) 
     const [ openCustomerBar, setCustomerOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
     const [ openIllustrationBar, setIllustrationBar ] = useState(true)
-    const [ openCommentBar, setCommentBar ] = useState(isMobile ? false : true)
+    const [ openCommentBar, setCommentBar ] = useState(false/* isMobile ? false : true */)
     const [ openChartBar, setChartBar ] = useState(false)
     const [ openAnalyticsBar, setAnalyticsBar ] = useState(false)
     const [ openVisualizerBar, setVisualizeOpenBar ] = useState(false)
@@ -87,7 +87,7 @@ const GlobalLayout = (props) => {
         visualizeBar: '0%',
         bar100: '100%',
         bar50: '50%'
-    }
+    } 
     
     const [ companyBarSize, setCompanyBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? 0 : 210) 
     const [ typeBarSize, setTypeBarSize ] = useState(0) 
@@ -97,7 +97,7 @@ const GlobalLayout = (props) => {
     const [ assignmentBarSize, setAssignmentBarSize ] = useState(180)  
     const [ addressBarSize, setAddressBarSize ] = useState(450)
     const [ customerBarSize, setCustomerBarSize ] = useState(0)
-    const [ commentBarSize , setCommentBarSize ] = useState('30%')
+    const [ commentBarSize , setCommentBarSize ] = useState('0%'/* '30%' */)
     const [ illustrationBarSize , setIllustrationBarSize ] = useState('50%')
     const [ visualizerBarSize , setVisualizerBarSize ] = useState('0%')
 
@@ -151,6 +151,7 @@ const GlobalLayout = (props) => {
     );
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
     const timelineScreen = useSelector(state => state.ui.timelineScreen)
+    const patentScreen = useSelector(state => state.ui.patentScreen)
 
     useEffect(() => {
         if(openVisualizerBar === false && visualizerBarSize != '0%') {
@@ -202,6 +203,12 @@ const GlobalLayout = (props) => {
             }
         }
     }, [dispatch, profile])
+
+    useEffect(() => {
+        if(patentScreen === true && openCustomerBar === false) {
+            handleCustomersBarOpen()
+        }
+    }, [patentScreen, openCustomerBar])
 
     /**
      * Dashboard screen is true
@@ -485,6 +492,11 @@ const GlobalLayout = (props) => {
                             findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
                         }  
                     }                                      
+                }
+            } else {
+                tableContainer = document.getElementById('assets_assignments')
+                if(tableContainer !== null) {
+                    findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
                 }
             }
 

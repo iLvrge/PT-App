@@ -259,7 +259,7 @@ const NewHeader = (props) => {
 
   useEffect(() => {
     const findIndex =  controlList.findIndex( item => item.type == 'menu' && item.category == selectedCategory)
-    setLayoutName(dashboardScreen === true ? 'Dashboard' : patentScreen === true ? 'Patent Assets' : selectedCategory != 'due_dilligence' ? findIndex !== -1 ? controlList[findIndex].mainHeading : '' : '')
+    setLayoutName(dashboardScreen === true ? 'Dashboard' : patentScreen === true ? breadcrumbs !== '' ? breadcrumbs : 'Patent Assets' : selectedCategory != 'due_dilligence' ? findIndex !== -1 ? controlList[findIndex].mainHeading : '' : '')
   }, [ dashboardScreen, patentScreen,  selectedCategory ])    
 
   /**
@@ -571,14 +571,15 @@ const onHandleTimelineScreen = /* useCallback( */(event) => {
   
 }/* , [dispatch]) */
 
-const onHandlePatentAssetsScreen = () => {    
+const onHandlePatentAssetsScreen = (breadcrumb) => {    
   dispatch(setPatentScreen(false))
   dispatch(setTimelineScreen(false))
   dispatch(setDashboardScreen(false))
   dispatch(setAssetsIllustration(null))
   dispatch(setAssetsIllustrationData(null))
-  dispatch(setBreadCrumbs('Patent Assets')) 
-  history.push(routeList.patent_assets)
+  console.log("onHandlePatentAssetsScreen=>breadcrumb", breadcrumb)
+  dispatch(setBreadCrumbs(typeof breadcrumb !== 'undefined' ? breadcrumb : 'Patent Assets')) 
+  history.push(routeList.patent_assets)  
 }
 
   return (
