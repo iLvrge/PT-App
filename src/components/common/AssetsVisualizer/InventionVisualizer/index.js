@@ -374,13 +374,16 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     }
                 }                
             }            
-
+            console.log("list", list)
             if( list.length > 0 ) {
                 setFilterList(list)
                 setFilterTotal(totalRecords)
                 findCPCList([...scopeRange], list, totalRecords)
             } else {
-                setIsLoadingCharts(false)
+                setGraphRawData([])
+                setGraphRawGroupData([])
+                setSalesData([])
+                setIsLoadingCharts(false)                
             }
         }
         getChartData()
@@ -835,28 +838,32 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                 ?
                                     !isLoadingCharts
                                     ?
-                                        <>
-                                            <div className={classes.sliderContainer}>
-                                                {
-                                                    typeof standalone === 'undefined' && (
-                                                        <FullScreen componentItems={menuItems}/>
-                                                    )
-                                                }
-                                                
-                                                <IconButton onClick={handleOpenFilter} className={classes.settingBtn} size="large">
-                                                    <svg style={{width: '24px', fill: '#fff'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M5 11.86V29a1 1 0 0 0 2 0V11.86A4 4 0 0 0 7 4.14V3A1 1 0 0 0 5 3V4.14a4 4 0 0 0 0 7.72zM6 6A2 2 0 1 1 4 8 2 2 0 0 1 6 6zM27 12.14V3a1 1 0 0 0-2 0v9.14a4 4 0 0 0 0 7.72V29a1 1 0 0 0 2 0V19.86a4 4 0 0 0 0-7.72zM26 18a2 2 0 1 1 2-2A2 2 0 0 1 26 18zM16 30a1 1 0 0 0 1-1V23.86a4 4 0 0 0 0-7.72V3a1 1 0 0 0-2 0V16.14a4 4 0 0 0 0 7.72V29A1 1 0 0 0 16 30zM14 20a2 2 0 1 1 2 2A2 2 0 0 1 14 20z" /></svg> 
-                                                </IconButton>                                    
-                                            </div>
-                                            <div
-                                                style={{
-                                                height: '100%',
-                                                width: '100%',
-                                                filter: `blur(${isLoadingCharts ? '4px' : 0})`,
-                                                }}
-                                                ref={graphContainerRef}
-                                                className={classes.timeline}
-                                            />
-                                        </>
+                                        graphRawData.length > 0
+                                        ?
+                                            <React.Fragment>
+                                                <div className={classes.sliderContainer}>
+                                                    {
+                                                        typeof standalone === 'undefined' && (
+                                                            <FullScreen componentItems={menuItems}/>
+                                                        )
+                                                    }
+                                                    
+                                                    <IconButton onClick={handleOpenFilter} className={classes.settingBtn} size="large">
+                                                        <svg style={{width: '24px', fill: '#fff'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M5 11.86V29a1 1 0 0 0 2 0V11.86A4 4 0 0 0 7 4.14V3A1 1 0 0 0 5 3V4.14a4 4 0 0 0 0 7.72zM6 6A2 2 0 1 1 4 8 2 2 0 0 1 6 6zM27 12.14V3a1 1 0 0 0-2 0v9.14a4 4 0 0 0 0 7.72V29a1 1 0 0 0 2 0V19.86a4 4 0 0 0 0-7.72zM26 18a2 2 0 1 1 2-2A2 2 0 0 1 26 18zM16 30a1 1 0 0 0 1-1V23.86a4 4 0 0 0 0-7.72V3a1 1 0 0 0-2 0V16.14a4 4 0 0 0 0 7.72V29A1 1 0 0 0 16 30zM14 20a2 2 0 1 1 2 2A2 2 0 0 1 14 20z" /></svg> 
+                                                    </IconButton>                                    
+                                                </div>
+                                                <div
+                                                    style={{
+                                                    height: '100%',
+                                                    width: '100%',
+                                                    filter: `blur(${isLoadingCharts ? '4px' : 0})`,
+                                                    }}
+                                                    ref={graphContainerRef}
+                                                    className={classes.timeline}
+                                                />
+                                            </React.Fragment>
+                                        :
+                                            ''
                                     :
                                         <Loader />
                                 :

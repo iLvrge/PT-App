@@ -50,7 +50,7 @@ const GoogleCharts = ({ chartBar, visualizerBarSize, standalone }) => {
             top:15,
         },
         vAxis: {minValue: 0},
-        colors: ['#1565C0'],
+        colors: ['#1565c0'],
         hAxis: {
             baselineColor: isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider,
             format: '0',
@@ -87,7 +87,7 @@ const GoogleCharts = ({ chartBar, visualizerBarSize, standalone }) => {
             },
             gridlines: {
                 /* color: isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider, */
-                color: '#292a2b',
+                color: 'transparent',   
             },
             minorGridlines:{
                 color:'transparent' 
@@ -186,10 +186,10 @@ const GoogleCharts = ({ chartBar, visualizerBarSize, standalone }) => {
                     ]} 
                 />
                 <svg style={{width:0,height:0,position:'absolute'}} aria-hidden="true" focusable="false">
-                    <linearGradient id="gradient-expense" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#5CB4F3" />
-                        <stop offset="50%" stopColor="#01298B" />
-                        <stop offset="100%" stopColor="#000F52" />
+                    <linearGradient id="gradient-expense" x1="0%" y1="0%" x2="0%" y2="100%" >
+                    <stop offset="0%" stop-color="#0355e9" />
+                    <stop offset="50%" stop-color="#1D2025" />
+                    <stop offset="100%" stop-color="#1D2025" />
                     </linearGradient>
                 </svg>  
             </React.Fragment>

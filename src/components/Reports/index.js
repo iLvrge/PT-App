@@ -151,7 +151,7 @@ const Reports = (props) => {
     const [grid, setGrid] = useState(GRID_ITEM)
     const [smallScreen, setSmallScreen] = useState(false)
     const [activeId, setActiveId] = useState(-1)
-    const profile = useSelector(store => (store.patenTrack.profile))    
+    const profile = useSelector(state => (state.patenTrack.profile))    
     const [cardList, setCardList] = useState(LIST)
     const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
@@ -371,7 +371,7 @@ const Reports = (props) => {
                 })                
             }
         }
-    }, [dispatch, activeId, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, props.openCustomerBar, props.openCommentBar])
+    }, [dispatch, profile, activeId, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, props.openCustomerBar, props.openCommentBar])
 
     const showItems = cardList.map( (card, index) => {
         return <Grid
