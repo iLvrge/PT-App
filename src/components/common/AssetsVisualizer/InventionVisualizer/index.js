@@ -262,8 +262,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             /* setInventionTabs([ 'Innovation', 'Agreement', 'Form', 'Main' ]) */
             setInventionTabs([ 'Innovation', 'Agreement'])
             //setSelectedTab(1)
-        }
-        
+        }        
     }, [ connectionBoxView, selectedRow ])
 
     useEffect(() => {
@@ -380,6 +379,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 setFilterList(list)
                 setFilterTotal(totalRecords)
                 findCPCList([...scopeRange], list, totalRecords)
+            } else {
+                setIsLoadingCharts(false)
             }
         }
         getChartData()

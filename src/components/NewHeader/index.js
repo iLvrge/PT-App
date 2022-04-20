@@ -413,9 +413,12 @@ const NewHeader = (props) => {
 
   const onHandleSaleAssets = useCallback((type) => {
     if(process.env.REACT_APP_ENVIROMENT_MODE === 'PRO') {
-      dispatch(setBreadCrumbs(!display_sales_assets === true ? type == 1 ? 'Our Assets for Sale' : 'Patent Marketplace' : ''))
-      dispatch(setIsSalesAssetsDisplay(!display_sales_assets))
+      /* dispatch(setBreadCrumbs(!display_sales_assets === true ? type == 1 ? 'Our Assets for Sale' : 'Patent Marketplace' : ''))
+      dispatch(setIsSalesAssetsDisplay(!display_sales_assets)) */
       /* dispatch(setSalesAssetsType(type)) */      
+
+      dispatch(setBreadCrumbs(type == 1 ? 'Our Assets for Sale' : 'Patent Marketplace'))
+      dispatch(setIsSalesAssetsDisplay(true))
       dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
       dispatch(setSelectedAssetsPatents([]))
       dispatch(setAssetFamily([]))
