@@ -799,7 +799,7 @@ const ActionMenu = (props) => {
                         {
                             props.display_sales_assets == true 
                             ?
-                                props.breadcrumbs != ''
+                                props.breadcrumbs != '' && typeof props.breadcrumb !== 'undefined'
                                     ?
                                         props.breadcrumbs
                                     :
@@ -813,12 +813,19 @@ const ActionMenu = (props) => {
                                     ?
                                         'Activity Timeline'
                                     :
-
-                                        props.selectedCategory !== 'due_dilligence' || props.dashboardScreen === true  || props.patentScreen === true
-                                        ? 
-                                            props.layoutName     
-                                        : 
-                                            'Action'
+                                        props.patentScreen === true
+                                        ?
+                                            props.layoutName != ''
+                                            ?
+                                                props.layoutName
+                                            :
+                                                'Patent Assets'
+                                        :
+                                            props.selectedCategory !== 'due_dilligence'
+                                            ? 
+                                                props.layoutName     
+                                            : 
+                                                'Action' 
                         } 
                     </Button>
             }            

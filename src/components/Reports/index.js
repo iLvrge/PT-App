@@ -15,7 +15,8 @@ import { Fullscreen, Close, Share } from '@mui/icons-material';
 import { 
     setDashboardPanel,
     setTimelineScreen,
-    setDashboardScreen } from '../../actions/uiActions'
+    setDashboardScreen,
+    setPatentScreen } from '../../actions/uiActions'
 import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId  } from '../../actions/patentTrackActions2'
 import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar'
 import { controlList } from "../../utils/controlList"
@@ -334,22 +335,26 @@ const Reports = (props) => {
 
     const onHandleList = useCallback((id) => {
         /* process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' */
-        let subscription = parseInt(profile?.user?.organisation?.subscribtion)
+        let subscription = parseInt(profile?.user?.organisation?.subscribtion), timeline = false, patent = false
         if( subscription === 2 || subscription === 3 ) {
             let findIndex = -1
             if(id === 0) {                
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
+                patent = true
             } else if(id === 8 && subscription > 2) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'pay_maintainence_fee')
+                patent = true
             } else if(id === 3 && subscription > 2) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'clear_encumbrances')
+                timeline = true
             } else if(id === 4 && subscription > 2) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'correct_names')
+                timeline = true
             }
-           
             if( findIndex !== -1 ) {
                 dispatch(setDashboardScreen(false))
-                dispatch(setTimelineScreen(true))
+                dispatch(setTimelineScreen(timeline))
+                dispatch(setPatentScreen(patent))
                 if(props.openCustomerBar === false){
                     props.handleCustomersBarOpen()
                 }

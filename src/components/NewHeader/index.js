@@ -572,12 +572,11 @@ const onHandleTimelineScreen = /* useCallback( */(event) => {
 }/* , [dispatch]) */
 
 const onHandlePatentAssetsScreen = (breadcrumb) => {    
-  dispatch(setPatentScreen(false))
+  dispatch(setPatentScreen(true))
   dispatch(setTimelineScreen(false))
   dispatch(setDashboardScreen(false))
   dispatch(setAssetsIllustration(null))
   dispatch(setAssetsIllustrationData(null))
-  console.log("onHandlePatentAssetsScreen=>breadcrumb", breadcrumb)
   dispatch(setBreadCrumbs(typeof breadcrumb !== 'undefined' ? breadcrumb : 'Patent Assets')) 
   history.push(routeList.patent_assets)  
 }
