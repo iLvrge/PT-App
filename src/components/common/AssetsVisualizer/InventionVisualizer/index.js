@@ -805,7 +805,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         })
         findCPCList([...scopeRange], filterList, filterTotal, yearList, range, scopeList)        
     }, [ filterList, filterTotal, scopeRange ] )
-
+    
     return (
         <Paper className={classes.root} square>  
             <Tabs

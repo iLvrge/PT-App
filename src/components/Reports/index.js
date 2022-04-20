@@ -405,45 +405,39 @@ const Reports = (props) => {
                     }
                 </div>
             </Grid> */}
-            { 
-                !loading && (
-                    <React.Fragment>
-                        <Grid
-                            item lg={12} md={12} sm={12} xs={12} 
+            <Grid
+                item lg={12} md={12} sm={12} xs={12} 
+            >
+                <Paper className={classes.titleContainer} square>
+                    <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{companyname.length > 0 ? companyname[0].original_name : ''}</span></span>
+                    <div className={classes.toolbar}>
+                        <IconButton  size="small" className={classes.shareIcon}>
+                            <FontAwesomeIcon
+                                icon={faShareAlt}
+                            />
+                        </IconButton>                            
+                        <IconButton size="small"
+                            onClick={() => {props.handleFullScreen(!props.fullScreen)}}
+                            className={clsx(classes.actionIcon, typeof props.standalone !== 'undefined' ? classes.fontStandalone : '' )}
                         >
-                            <Paper className={classes.titleContainer} square>
-                                <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{companyname.length > 0 ? companyname[0].original_name : ''}</span></span>
-                                <div className={classes.toolbar}>
-                                    <IconButton  size="small" className={classes.shareIcon}>
-                                        <FontAwesomeIcon
-                                            icon={faShareAlt}
-                                        />
-                                    </IconButton>                            
-                                    <IconButton size="small"
-                                        onClick={() => {props.handleFullScreen(!props.fullScreen)}}
-                                        className={clsx(classes.actionIcon, typeof props.standalone !== 'undefined' ? classes.fontStandalone : '' )}
-                                    >
-                                        { typeof props.standalone !== 'undefined' ? <Close/> : <Fullscreen /> }                            
-                                    </IconButton>                        
-                                </div>
-                            </Paper>
-                        </Grid>
-                        <Grid
-                            item lg={12} md={12} sm={12} xs={12} 
-                            className={classes.list}
-                        >
-                            <Grid  
-                                container
-                                direction="row"
-                                justifyContent="flex-start"
-                                alignItems="flex-start"
-                            >
-                                {showItems}
-                            </Grid>                
-                        </Grid>
-                    </React.Fragment>
-                )
-            }
+                            { typeof props.standalone !== 'undefined' ? <Close/> : <Fullscreen /> }                            
+                        </IconButton>                        
+                    </div>
+                </Paper>
+            </Grid>
+            <Grid
+                item lg={12} md={12} sm={12} xs={12} 
+                className={classes.list}
+            >
+                <Grid  
+                    container
+                    direction="row"
+                    justifyContent="flex-start"
+                    alignItems="flex-start"
+                >
+                    {showItems}
+                </Grid>                
+            </Grid>
         </Grid>
     );
 }

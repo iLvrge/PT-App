@@ -667,7 +667,7 @@ const GlobalScreen = ({
                                         </div>
                                         <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
                                         {
-                                            dashboardScreen === true && (dashboardPanel === true) ? 
+                                            dashboardScreen === true && (dashboardPanel === true && assetIllustration != null) ? 
                                                 <IllustrationContainer 
                                                     isFullscreenOpen={isFullscreenOpen} 
                                                     asset={assetIllustration} 

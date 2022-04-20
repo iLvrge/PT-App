@@ -382,7 +382,7 @@ const AssetDetailsContainer = ({
                 {
                   analyticsBar === true 
                     ? 
-                      timelineScreen === true   && assetIllustration == null
+                      timelineScreen === true  && assetIllustration == null
                       ?
                         <TimelineSecurity
                           chartBar={chartBar} 
