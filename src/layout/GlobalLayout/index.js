@@ -132,6 +132,7 @@ const GlobalLayout = (props) => {
     const connectionBoxView = useSelector(state => state.patenTrack.connectionBoxView)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const profile = useSelector(store => (store.patenTrack.profile))
+    const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
     const companies = useSelector( state => state.patenTrack2.mainCompaniesList )
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const assetTypesSelected = useSelector(
@@ -932,7 +933,7 @@ const GlobalLayout = (props) => {
             setVisualizeOpenBar( true ) 
             setVisualizerBarSize(prevItem =>{
                 if(prevItem == '0%') {
-                    return  dashboardScreen === true ? getWindowDimensions() :'40.1%'
+                    return  dashboardScreen === true && assetIllustration != null ? getWindowDimensions() :'40.1%'
                 } else {
                     return prevItem
                 }
@@ -955,7 +956,7 @@ const GlobalLayout = (props) => {
                 return prevItem
             })
             if((chartPrevItem === true || analyticsPrevItem === true) && (openCommentBar === true || openIllustrationBar === true)){
-                barSize = dashboardScreen === true ? getWindowDimensions() :'40.1%'
+                barSize = dashboardScreen === true && assetIllustration != null ? getWindowDimensions() : visualizerBarSize !== '0%' ?  visualizerBarSize :  '40.1%'
             } else if (openCommentBar === false && openIllustrationBar === false && ( chartPrevItem === true ||  analyticsPrevItem === true )) {
                 barSize = '100%'
             }

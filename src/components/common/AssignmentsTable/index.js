@@ -634,11 +634,12 @@ const findChannelID = useCallback((rfID) => {
     if(defaultLoad === false){
       dispatch(getAssetTypeAssignmentAssets(rf_id, false, 1, search_string)) // fill assets table 
     }
+    dispatch(setAssetsIllustrationData(null))
     dispatch(setAssetsIllustration({ type: "transaction", id: rf_id }));
     //dispatch(getAssetsAllTransactionsEvents(selectedCategory == '' ? '' : selectedCategory, [], [], [], [rf_id]));
     //dispatch(getChannelIDTransaction(rf_id)); 
     const channelID = findChannelID(rf_id)
-    if( channelID != '') {
+    if( channelID != '') {   
       dispatch(setChannelID({channel_id: channelID}))
     }
   };
