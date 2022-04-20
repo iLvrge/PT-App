@@ -815,7 +815,7 @@ const ActionMenu = (props) => {
                                     :
                                         props.patentScreen === true
                                         ?
-                                            props.layoutName != ''
+                                            props.layoutName != '' && props.layoutName != 'Due Diligence > Legal Ownership'
                                             ?
                                                 props.layoutName
                                             :
