@@ -193,9 +193,9 @@ const PatentLayout = ({
             if(openAssignmentBar === true) {
                 handleAssignmentBarOpen()
             }
-            if(openCustomerBar === false && dashboardScreen === false) {
+            /* if(openCustomerBar === false && dashboardScreen === false) {
                 handleCustomersBarOpen()
-            }
+            } */
         }
     }, [selectedCategory])
 

@@ -116,6 +116,7 @@ const GlobalLayout = (props) => {
     const [ driveTemplateBarSize, setDriveTemplateBarSize ] = useState(200)
 
     const [ isDrag, setIsDrag ] = useState(false)
+    const [ request, setRequest ] = useState(false)
     const [ size, setSize] = useState(0)
     const [ illustrationRecord, setIllustrationRecord ] = useState()
     const authenticated = useSelector(store => store.auth.authenticated)
@@ -188,28 +189,29 @@ const GlobalLayout = (props) => {
 
     useEffect(() => {
         if(profile?.user && profile.user?.organisation) {
+            console.log("profile", profile)
             if(profile.user.organisation.organisation_type == 'Bank') {
                 dispatch( setAssetTypesSelect([5]) ) // always select by default lending activity
                 setOpenBar( false ) //company
                 setTypeOpenBar( false ) //activites
-                setOtherPartyOpenBar( true ) // parties
                 setCustomerOpenBar( false ) //assets
                 setCompanyBarSize(0) //company container
-                setCustomerBarSize(0) // Assets Container
+                setCustomerBarSize(0) // Assets Container                
+                setOtherPartyOpenBar( true ) // parties
                 setOtherPartyBarSize(150) // Parties Container
                 setPartyBarSize('100%')
-                dispatch(setTimelineScreen(false)) //Disable Timeline
-                dispatch(setDashboardScreen(true)) //Show Dashboard
-                handleCommentBarOpen() //Close comment
+                /* dispatch(setTimelineScreen(false)) //Disable Timeline
+                dispatch(setDashboardScreen(true)) //Show Dashboard */
+                /* handleCommentBarOpen() */ //Close comment
             }
         }
-    }, [dispatch, profile])
+    }, [profile])
 
     useEffect(() => {
         if(patentScreen === true && openCustomerBar === false) {
             handleCustomersBarOpen()
         }
-    }, [patentScreen, openCustomerBar])
+    }, [patentScreen])  
 
     /**
      * Dashboard screen is true
@@ -219,46 +221,69 @@ const GlobalLayout = (props) => {
     useEffect(() => {
         if(profile?.user && profile.user?.organisation) {
             if(profile.user.organisation.organisation_type == 'Bank' && dashboardScreen === true) {
-                if(selectedCompanies.length === 0) {
+                if(selectedCompanies.length === 0 && selectedAssetCompaniesAll === false && companies.list.length > 0 && request === false) {
                     const getSelectedCompanies = async() => {
-                        if( companies.list.length > 0 ) {
-                            /**
-                             * Send Request to server
-                             */
-                            const { data } = await PatenTrackApi.getUserCompanySelections();
-                            if(data != null && data.list.length > 0) {
-                                if(selectedCompanies.length == 0) {
-                                    let oldItems = [], groups = []
-                                    if(selectedCategory === 'correct_names') { 
-                                        dispatch(setMainCompaniesSelected([data.list[0].representative_id], []))
-                                    } else {
-                                        const promise =  data.list.map( representative => {
-                                            /**
-                                             * If selected item is Group then select all the companies under group
-                                             */
-                                            if(parseInt(representative.type) === 1) {
-                                                groups.push(parseInt(representative.representative_id))
-                                                const parseChild = JSON.parse(representative.child)
-                                                if(parseChild.length > 0) {
-                                                    oldItems = [...oldItems, ...parseChild]
-                                                    oldItems = [...new Set(oldItems)]
-                                                }
-                                            } else {
-                                                oldItems.push(parseInt(representative.representative_id))
-                                            }
-                                        })
-                                        await Promise.all(promise)
-                                        dispatch(setMainCompaniesSelected(oldItems, groups))
-                                    }                        
+                        /**
+                         * Send Request to server
+                         */
+                        let activeItems = [], parentChild = []
+                        companies.list.map(row => {
+                            if(parseInt(row.type) === 1) {
+                                const parseChild = JSON.parse(row.child_full_detail), parentChildIDs = JSON.parse(row.child)
+                                parentChild.push({parent: parseInt(row.representative_id), child: [...parentChildIDs] })
+                                const filters = parseChild.reduce((acc, item) => {
+                                    if (!acc) acc = [];  
+                                    if(item.status == 1){
+                                        acc.push(parseInt(item.representative_id))
+                                    }
+                                    return acc
+                                }, [])
+                                if(filters.length > 0) {
+                                    activeItems = [...activeItems, ...filters]
                                 }
-                            } 
-                        }            
+                            } else {
+                                if(row.status == 1) {
+                                    activeItems.push(parseInt(row.representative_id))
+                                }
+                            }
+                        })
+                        
+                        const { data } = await PatenTrackApi.getUserCompanySelections();
+                        setRequest(true)
+                        if(data != null && data.list.length > 0) {
+                            let oldItems = [], groups = []
+                            if(selectedCategory === 'correct_names') { 
+                                dispatch(setMainCompaniesSelected([data.list[0].representative_id], []))
+                            } else {
+                                const promise =  data.list.map( representative => {
+                                    /**
+                                     * If selected item is Group then select all the companies under group
+                                     */
+                                    if(parseInt(representative.type) === 1) {
+                                        groups.push(parseInt(representative.representative_id))
+                                        const parseChild = JSON.parse(representative.child)
+                                        if(parseChild.length > 0) {
+                                            const filterItems = parseChild.filter(c => activeItems.includes(parseInt(c.representative_id)) ? parseInt(c.representative_id) : '')
+
+                                            oldItems = filterItems.length > 0 ? [parseInt(filterItems[0])] : []         
+                                        }
+                                    } else {
+                                        if(activeItems.includes(parseInt(representative.representative_id))) {
+                                            oldItems = [parseInt(representative.representative_id)]       
+                                        }       
+                                    }
+                                })
+                                await Promise.all(promise)
+                                console.log("oldItems", oldItems)
+                                dispatch(setMainCompaniesSelected(oldItems, groups))
+                            }
+                        }       
                     }  
                     getSelectedCompanies()
                 }
             }
         }
-    }, [dispatch, dashboardScreen, companies, profile, selectedCompanies])
+    }, [dispatch, dashboardScreen, profile, companies])
 
     /**
      * Dashboard screen is true
@@ -266,8 +291,10 @@ const GlobalLayout = (props) => {
      */
 
     useEffect(() => {
+        console.log("dashboardScreen", dashboardScreen, selectedCompanies.length, openCustomerBar)
         if(dashboardScreen === true) {
-            if(selectedCompanies.length > 0) {
+            if(selectedCompanies.length > 0 && openCustomerBar === false) {
+                console.log("dashboardScreen1", dashboardScreen, selectedCompanies.length, openCustomerBar)
                 const customers = selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies;
                 const assignments = selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;    
                 dispatch(getCustomerAssets(
@@ -284,7 +311,7 @@ const GlobalLayout = (props) => {
                 ))                    
             }
         }  
-    }, [dispatch, dashboardScreen, companies, profile, selectedCompanies, selectedCategory, assetTypesSelected, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, selectedAssetCompanies, selectedAssetAssignments])
+    }, [dispatch, dashboardScreen, selectedCompanies])
 
     /*
     useEffect(() => {

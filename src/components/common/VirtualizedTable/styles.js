@@ -13,6 +13,10 @@ const styles = makeStyles((theme) => ({
       marginRight: 5
     }
   },
+  headDropdown: {
+    left: 0,
+    right: 0
+  },
   td: {
     display: 'flex',
   },

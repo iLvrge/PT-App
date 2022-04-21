@@ -1,7 +1,19 @@
 import * as types from './actionTypes2'
 import PatenTrackApi, { DEFAULT_CUSTOMERS_LIMIT, DEFAULT_TRANSACTIONS_LIMIT, DEFAULT_PATENTS_LIMIT } from '../api/patenTrack2'
 
-import { toggleLifeSpanMode, setDriveTemplateFrameMode, setDriveTemplateMode, resetUiStates } from './uiActions'
+import { 
+  toggleLifeSpanMode, 
+  setDriveTemplateFrameMode, 
+  setDriveTemplateMode, 
+  resetUiStates,
+  toggleUsptoMode, 
+  toggleFamilyMode,
+  toggleFamilyItemMode
+} from './uiActions'
+import {
+  setConnectionBoxView,
+  setPDFView
+} from "./patenTrackActions";
 
 export const setAuthenticateAuthToken = data => {
   return {
@@ -1451,6 +1463,47 @@ export const setResetAll = (t = 0, item) => {
       dispatch( fetchParentCompanies() )
     }
   }
+}
+
+export const transactionRowClick = (rf_id, slackChannelList, defaultLoad, search_string) => {
+  return dispatch => {
+    dispatch(toggleLifeSpanMode(true))
+    dispatch(setConnectionBoxView(false))
+    dispatch(setPDFView(false))
+    dispatch(toggleUsptoMode(false))
+    dispatch(toggleFamilyMode(false))
+    dispatch(toggleFamilyItemMode(false))
+    /* dispatch(setMainCompaniesRowSelect([])) */
+    /* dispatch(setAssetTypeSelectedRow([])) */
+    dispatch(setAssetTypeCustomerSelectedRow([]))
+    dispatch(setChildSelectedAssetsTransactions([]))
+    dispatch(setChildSelectedAssetsPatents([]))
+    dispatch(setSelectedAssetsPatents([]))
+    dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
+    dispatch(setSelectedAssetsTransactions([rf_id]))
+    if(typeof defaultLoad !== 'undefined' && defaultLoad === false){
+      dispatch(getAssetTypeAssignmentAssets(rf_id, false, 1, search_string)) // fill assets table 
+    }
+    dispatch(setAssetsIllustrationData(null))
+    dispatch(setAssetsIllustration({ type: "transaction", id: rf_id }));
+    if(typeof slackChannelList !== 'undefined' && slackChannelList.length == 0) {
+      const channelID = findChannelID(slackChannelList, rf_id)
+      if( channelID != '') {   
+        dispatch(setChannelID({channel_id: channelID}))
+      }
+    }
+  }
+}
+
+const findChannelID = (slack_channel_list, rfID) => {
+  let channelID = ''
+  if(slack_channel_list.length > 0) {
+    const findIndex = slack_channel_list.findIndex( channel => channel.name == rfID.toString())
+    if( findIndex !== -1) {
+      channelID = slack_channel_list[findIndex].id
+    }
+  }
+  return channelID
 }
 
 export const linkWithSheetSelectedAsset = (link_type, asset) => {  

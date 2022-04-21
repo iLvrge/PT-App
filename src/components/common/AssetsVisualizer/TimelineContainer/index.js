@@ -12,30 +12,11 @@ import ClickAwayListener from '@mui/base'
 import themeMode from '../../../../themes/themeMode';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import { 
-  setSelectedAssetsPatents, 
-  setChannelID,
-  setDriveTemplateFile,
-  setTemplateDocument,
-  setMainCompaniesRowSelect,
-  setAssetTypeSelectedRow,
-  setAssetTypeCustomerSelectedRow,
-  setSelectedAssetsTransactions,
-  setAssetsIllustration,
-  setChildSelectedAssetsTransactions,
-  setChildSelectedAssetsPatents,
+  transactionRowClick
 } from '../../../../actions/patentTrackActions2'
-import {
-  toggleUsptoMode, 
-  toggleFamilyMode,
-  toggleFamilyItemMode,
-  setDriveTemplateFrameMode
-} from "../../../../actions/uiActions";
-import {
-  setConnectionBoxView,
-  setPDFView,
-} from "../../../../actions/patenTrackActions"
+
 import PatenTrackApi from '../../../../api/patenTrack2'
-import { convertAssetTypeToTabId, oldConvertTabIdToAssetType, convertTabIdToAssetType, exportGroups, assetsTypesWithKey } from '../../../../utils/assetTypes'
+import { convertTabIdToAssetType, assetsTypesWithKey } from '../../../../utils/assetTypes'
 import { numberWithCommas, capitalize } from '../../../../utils/numbers'
 
 
@@ -133,7 +114,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
   const selectedItem = useSelector(state => state.ui.timeline.selectedItem)
   const auth_token = useSelector(state => state.patenTrack2.auth_token)
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
-
+  const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
   const setSelectedItem = useCallback((item) => {
     dispatch(setTimelineSelectedItem(item))
   }, [ dispatch ])
@@ -313,25 +294,9 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
       const item = items.current.get(properties.items[0])
       setSelectedAsset({ type: 'transaction', id: item.rawData.id })
       setSelectedItem(item)
-      dispatch(setChannelID(''))
-      dispatch(setDriveTemplateFrameMode(false));
-      dispatch(setDriveTemplateFile(null));
-      dispatch(setTemplateDocument(null));      
-      dispatch(setConnectionBoxView(true));
-      dispatch(setPDFView(false));
-      dispatch(toggleUsptoMode(false));
-      dispatch(toggleFamilyMode(false));
-      dispatch(toggleFamilyItemMode(false)); 
-      dispatch(setMainCompaniesRowSelect([]));
-      dispatch(setAssetTypeSelectedRow([]));
-      dispatch(setAssetTypeCustomerSelectedRow([]));
-      dispatch(setChildSelectedAssetsTransactions([]));
-      dispatch(setChildSelectedAssetsPatents([])); 
-      dispatch(setSelectedAssetsPatents([]));
-      dispatch(setSelectedAssetsTransactions([item.rawData.id]));
-      dispatch(setAssetsIllustration({ type: "transaction", id: item.rawData.id }));
+      dispatch(transactionRowClick(item.rawData.id, slack_channel_list, false, search_string))
       if(assignmentBar === false) {
-        assignmentBarToggle()
+        assignmentBarToggle()  
       }
       //history.push(routes.review3)
     }

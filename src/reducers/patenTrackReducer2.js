@@ -2,6 +2,7 @@ import * as types from '../actions/actionTypes2'
 import initialState from './initialState2'
 
 import dashboardIntial from './dashboard_initials'
+import { ConstructionOutlined } from '@mui/icons-material'
 
 
 const arrayToObjectByKey = (array, key) =>
@@ -678,7 +679,7 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state,
           assetTypeAssignmentAssets:  {...state.assetTypeAssignmentAssets, list: action.append === true ? [...state.assetTypeAssignmentAssets.list, ...action.data.list] : action.data.list, total_records: action.data.total_records}
         }  
-      case types.SET_ASSET_TYPE_ASSIGNMENTS_ASSETS_SELECTED:
+      case types.SET_ASSET_TYPE_ASSIGNMENTS_ASSETS_SELECTED:  
         return {
           ...state,
           assetTypeAssignmentAssets: {...state.assetTypeAssignmentAssets, selected: action.data}

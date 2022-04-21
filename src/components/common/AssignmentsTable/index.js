@@ -38,7 +38,8 @@ import {
   setMaintainenceAssetsList,
   setAssetTypeAssignmentAllAssets,
   setAssetsIllustrationData,
-  setDocumentTransaction
+  setDocumentTransaction,
+  transactionRowClick
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -617,31 +618,7 @@ const findChannelID = useCallback((rfID) => {
 
   const getTransactionData = (dispatch, rf_id, defaultLoad, search_string) => {
     setSelectedRow([rf_id]);    
-    dispatch(toggleLifeSpanMode(true))
-    dispatch(setConnectionBoxView(false));
-    dispatch(setPDFView(false));
-    dispatch(toggleLifeSpanMode(true));
-    dispatch(toggleUsptoMode(false));
-    dispatch(toggleFamilyMode(false));
-    dispatch(toggleFamilyItemMode(false)); 
-    dispatch(setMainCompaniesRowSelect([]));
-    dispatch(setAssetTypeSelectedRow([]));
-    dispatch(setAssetTypeCustomerSelectedRow([]));
-    dispatch(setChildSelectedAssetsTransactions([]));
-    dispatch(setChildSelectedAssetsPatents([])); 
-    dispatch(setSelectedAssetsPatents([]));
-    dispatch(setSelectedAssetsTransactions([rf_id]));
-    if(defaultLoad === false){
-      dispatch(getAssetTypeAssignmentAssets(rf_id, false, 1, search_string)) // fill assets table 
-    }
-    dispatch(setAssetsIllustrationData(null))
-    dispatch(setAssetsIllustration({ type: "transaction", id: rf_id }));
-    //dispatch(getAssetsAllTransactionsEvents(selectedCategory == '' ? '' : selectedCategory, [], [], [], [rf_id]));
-    //dispatch(getChannelIDTransaction(rf_id)); 
-    const channelID = findChannelID(rf_id)
-    if( channelID != '') {   
-      dispatch(setChannelID({channel_id: channelID}))
-    }
+    dispatch(transactionRowClick(rf_id, slack_channel_list, defaultLoad, search_string))
   };
 
   const resizeColumnsWidth = useCallback((dataKey, data) => {

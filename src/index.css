@@ -882,6 +882,12 @@ a.maintain svg.clean_encumbrances path{
   display: inline;
 }
 
+svg.clipboard  {
+  width: 1em;
+  height: 1em;
+  font-size: 1.5rem;
+}
+
 /* .editor{
   min-width: 387px;
 } */

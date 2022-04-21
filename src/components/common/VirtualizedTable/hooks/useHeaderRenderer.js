@@ -17,6 +17,7 @@ import Draggable from "react-draggable"
 import _groupBy from 'lodash/groupBy'
 import makeStyles from '@mui/styles/makeStyles';
 import Chip from '@mui/material/Chip'
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined'
 import { pink } from '@mui/material/colors';
 import { numberWithCommas } from '../../../../utils/numbers'
@@ -137,6 +138,23 @@ const HeadCell = ({
   const handleDropdownOpen = () => {
     setDropdownOpen(true);
   };
+
+  const getDropValue = (showDropValue, list) => {
+    const listIndex = list.findIndex( row => row.id == showDropValue )    
+    if(listIndex !== -1) {
+      return (
+        <div /* style={{width: `${width + 10}px`}} */ className={'selectedIcon'}>
+          {
+            list[listIndex].icon != '' ? list[listIndex].icon : list[listIndex].image != '' ? <img src={list[listIndex].image} style={{width: '1.3rem', position: 'absolute', left: '0px'}}/> : showDropValue
+          }
+        </div>
+      )
+    } else {
+      return (
+        <KeyboardArrowDown />
+      )
+    }    
+  }
   
   /* console.log('useHEaderRenderer=>', allSelected, selectedItems.length, totalRows, (selectedItems.length > 0 && selectedItems.length < totalRows) ) */
   return ( 
@@ -182,14 +200,27 @@ const HeadCell = ({
                 <ExpandMoreOutlinedIcon {...props}/>
               )}
               open={dropdownOpen}
+              MenuProps={{
+                anchorOrigin: {
+                  vertical: "bottom",
+                  horizontal: "left"
+                },
+                transformOrigin: {
+                  vertical: "top",
+                  horizontal: "left"
+                },
+                getContentAnchorEl: null
+              }}
               onClose={handleDropdownClose}
               onOpen={handleDropdownOpen} 
-              value={''}
+              value={-1}
               onChange={onClickHeadDropdown}
+              className={classes.headDropdown}
+              renderValue={(value) => getDropValue(value, list)}
             >
               {
                 list.map( (c, idx) => (
-                  <MenuItem key={idx} value={c.id}>
+                  <MenuItem key={idx} value={c.id} className={clsx(`iconItem`, {['visibilityHidden']: c.id === -1 ? true : false})}>
                     {
                       c.icon != '' ? c.icon : c.image != '' ? <img src={c.image} style={{width: '21px'}}/> : ''
                     }

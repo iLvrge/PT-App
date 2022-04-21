@@ -220,15 +220,19 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
     const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
     const channel_id = useSelector(state => state.patenTrack2.channel_id)
+   
     /**
      * Intialise company list
-     */
+    */
 
     useEffect(() => {
         const initCompanies = async () => {
             dispatch(fetchParentCompanies( offset, sortField, sortOrder ) )
         } 
-        initCompanies()  
+        initCompanies() 
+        return () => {
+            
+        } 
     }, []) 
 
     /**
@@ -255,6 +259,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }
     }, [ companies.list ])
 
+    /**
+     * For Mobile screen
+     */
+
     useEffect(() => {
         if(isMobile) {
             let headerColumns = [...COLUMNS]
@@ -263,6 +271,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             setHeaderColumns(headerColumns)
         }
     }, [isMobile])
+
+    /**
+     * Get Slack channels
+     */
 
     useEffect(() => {
         if(slack_channel_list.length == 0 && slack_channel_list_loading === false) {
@@ -286,9 +298,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }
     }, [slack_channel_list, slack_channel_list_loading])
 
-      /**
-   * Adding channel to transaction list
-   */
+
+    /**
+     * Find compoanies channel to add inidication to the list
+     */
 
     useEffect(() => {
         const checkAssetChannel = async () => {
@@ -334,6 +347,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         checkAssetChannel()
     },[ slack_channel_list, companies])
 
+    /**
+     * Get slack messages for selected company and if the screen is dashboard
+     */
+
 
     useEffect(() => {        
                 
@@ -370,7 +387,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }
     }, [slack_channel_list, companiesList, selected, dashboardScreen ])
 
-
     /**
      * if category is correct names then row should show radio button instead of checkboxes
      */
@@ -385,17 +401,20 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         } else {
             let headerColumns = [...COLUMNS]
             headerColumns[0].role = 'checkbox'
+
             headerColumns[0].selectedFromChild = true
             headerColumns[0].show_selection_count = true
             setHeaderColumns(headerColumns)
         }
     }, [selectedCategory])
 
+
     /**
      * Get user selected companies
      */
 
     useEffect(() => {
+        let isSubscribed = true;
         const getSelectedCompanies = async() => {
             if( companies.list.length > 0 && selectItems.length == 0) {
                 /**
@@ -460,35 +479,49 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                         })
                         await Promise.all(promise)
                         //setSelectGroups(groups) 
-                        setSelectItems(oldItems)
-                        dispatch(setMainCompaniesSelected(oldItems, groups))
+                        if(isSubscribed) {
+                            setSelectItems(oldItems)
+                            dispatch(setMainCompaniesSelected(oldItems, groups))
+                        }                        
                     } 
                 } 
             }            
         }  
-        getSelectedCompanies()
-    }, [ companies.list,  ])
+        if(isSubscribed) {
+            getSelectedCompanies()    
+        }
+            
+        return () => (isSubscribed = false)
+    }, [ companies.list, selectItems ])
+
+    /**
+     * Get list of user activity
+     */
 
     useEffect(() => {
+        let isSubscribed = true;
         if((selectedCompaniesAll === true || selected.length > 0 )) {
             if( assetTypesSelected.length === 0 && assetTypesSelectAll === false ) {
                 const getUserSelection = async () => {
                     const { data } = await PatenTrackApi.getUserActivitySelection()
-                    if(data != null && Object.keys(data).length > 0) {
-                        dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
-                        dispatch( setAssetTypeCompanies({ list: [], total_records: 0 }) )
-                        dispatch( setAssetTypeInventor({ list: [], total_records: 0 }) )
-                        dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
-                        dispatch( setAssetTypesSelect([data.activity_id]) )
-                        dispatch( setAllAssetTypes( false ) )
-                    } else {
-                        dispatch( setAssetTypesSelect([]) )
-                        dispatch( setAllAssetTypes( true ) )
+                    if(isSubscribed) {
+                        if(data != null && Object.keys(data).length > 0) {
+                            dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
+                            dispatch( setAssetTypeCompanies({ list: [], total_records: 0 }) )
+                            dispatch( setAssetTypeInventor({ list: [], total_records: 0 }) )
+                            dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+                            dispatch( setAssetTypesSelect([data.activity_id]) )
+                            dispatch( setAllAssetTypes( false ) )
+                        } else {
+                            dispatch( setAssetTypesSelect([]) )
+                            dispatch( setAllAssetTypes( true ) )
+                        }
                     }
                 }
                 getUserSelection();   
             }
         }
+        return () => (isSubscribed = false)
     }, [ dispatch, selectedCompaniesAll, selected])
 
     useEffect(() => {
@@ -513,7 +546,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             dispatch( setMainCompaniesSelected( all, groups )) 
         }
     }, [ dispatch, selectAll, companies, intialization ])
-    
 
     useEffect(() => {
         if( selectAll != undefined && (selectAll === false || selectAll === true )) {
@@ -531,9 +563,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }
     }, [ selected, selectItems ])
 
-
-    
-
     useEffect(() => {
         const getGroupItems = async() => {
             /* const groupList = companiesList.filter( company => parseInt(company.type) === 1)
@@ -550,6 +579,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }
         getGroupItems()
     }, [ selectItems ])
+
 
     const findChannelID = useCallback((name) => {
         let channelID = ''

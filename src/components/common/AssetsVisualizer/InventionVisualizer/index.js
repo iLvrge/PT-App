@@ -266,20 +266,26 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     }, [ connectionBoxView, selectedRow ])
 
     useEffect(() => {
+        
         const getChartData = async () => {
+           
             setGraphRawData([])
             setGraphRawGroupData([])      
             setShowContainer(true)   
+            console.log("adasdas", process.env.REACT_APP_ENVIROMENT_MODE, selectedCompanies.length, type);
             if (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0 && type !== 9){
+                console.log("T")
                 setShowContainer(false)
                 return null
             } else if ( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token === null){
+                console.log("C")
                 setShowContainer(false)
                 return null
             }
             setIsLoadingCharts(true)   
             const list = [];
             let totalRecords = 0;
+            console.log("selectedTab", selectedTab, openCustomerBar, selectedCategory, selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_clipboard)
             if(selectedTab === 0) {
                 if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {
                 
@@ -388,7 +394,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         }
         getChartData()
         //console.log( "getChartData", selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments )
-    }, [selectedCategory, selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_clipboard ]) 
+    }, [selectedTab, openCustomerBar, selectedCategory, selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_clipboard ]) 
 
 
     const findCPCList = async(oldScopeRange, list, totalRecords, year, range, scope) => {       
@@ -640,7 +646,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
 
     useEffect(() => {
-        console.log("selectedAssetAssignments", selectedAssetAssignments, selectedRow, assetIllustration, assetIllustrationData)
         if(assetIllustration != null && Object.keys(assetIllustration).length > 0) {
             /* if((selectedAssetAssignments.length == 1 && selectedCategory == 'correct_details') || selectedRow.length == 1) { */
                 
