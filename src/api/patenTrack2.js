@@ -620,9 +620,10 @@ class PatenTrackApi {
   }
 
   static getCollectionIllustration(rfID) {
+    console.log('rfID', rfID)
     return axios.get(
       `${base_new_api_url}/collections/${rfID}/illustration`,
-      getHeader()
+      getHeader() 
     )
   }
 
@@ -663,12 +664,12 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/customers/timeline?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}`, header)
   }
 
-  static getTimelineSecurityData(companies, tabs, customers, rfIDs = [], layout, exclude) {
+  static getTimelineSecurityData(companies, tabs, customers, rfIDs = [], layout) {
     let header = getHeader()
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelTimeline = c
     })
-    return axios.get(`${base_new_api_url}/customers/timeline/security?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}`, header)
+    return axios.get(`${base_new_api_url}/customers/timeline/security?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}`, header)
   }
 
   static cancelTimeline() {

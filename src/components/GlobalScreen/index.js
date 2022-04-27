@@ -51,6 +51,10 @@ import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpan
 import useStyles from './styles'
 import clsx from 'clsx'
 import IllustrationContainer from '../common/AssetsVisualizer/IllustrationContainer'
+import LegalEventsContainer from '../common/AssetsVisualizer/LegalEventsContainer'
+import ConnectionBox from '../common/ConnectionBox'
+import PdfViewer from '../common/PdfViewer'
+import IllustrationPdf from '../common/AssetDetailsContainer/IllustrationPdf'
 
 const GlobalScreen = ({
     type,
@@ -152,12 +156,18 @@ const GlobalScreen = ({
     
     const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents )
     
-
+    const connectionBoxView = useSelector( state => state.patenTrack.connectionBoxView)
     const maintainenceAssetsList = useSelector( state => state.patenTrack2.maintainenceAssetsList )
     const maintainenceAssetsLoadingMore = useSelector( state => state.patenTrack2.maintainenceAssetsLoadingMore )
     const selectedMaintainencePatents = useSelector( state => state.patenTrack2.selectedMaintainencePatents )
     const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
     const channel_id = useSelector( state => state.patenTrack2.channel_id )   
+    const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
+    const connectionBoxData = useSelector(state => {
+        console.log('state.patenTrack', state.patenTrack)
+        return state.patenTrack.connectionBoxData
+    })
+    console.log('assetIllustrationData', connectionBoxData)
     const checkContainer = () => {
         /* setTimeout(() => {
             if( mainContainerRef.current != null  && mainContainerRef.current != undefined) {                
@@ -667,21 +677,45 @@ const GlobalScreen = ({
                                         </div>
                                         <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
                                         {
-                                            dashboardScreen === true && (dashboardPanel === true && assetIllustration != null) ? 
-                                                <IllustrationContainer 
-                                                    isFullscreenOpen={isFullscreenOpen} 
-                                                    asset={assetIllustration} 
-                                                    setIllustrationRecord={setIllustrationRecord} 
-                                                    chartsBar={openChartBar}
-                                                    analyticsBar={openAnalyticsBar}
-                                                    chartsBarToggle={handleChartBarOpen}
-                                                    checkChartAnalytics={checkChartAnalytics}
-                                                    setAnalyticsBar={setAnalyticsBar}
-                                                    setChartBar={setChartBar}
-                                                    fullScreen={handleClickOpenFullscreen}
-                                                    gap={gap}
-                                                    viewOnly={true}
-                                                />
+                                            dashboardScreen === true && dashboardPanel === true 
+                                            ? 
+                                                assetIllustration != null
+                                                ?
+                                                    <IllustrationContainer 
+                                                        isFullscreenOpen={isFullscreenOpen} 
+                                                        asset={assetIllustration} 
+                                                        setIllustrationRecord={setIllustrationRecord} 
+                                                        chartsBar={openChartBar}
+                                                        analyticsBar={openAnalyticsBar}
+                                                        chartsBarToggle={handleChartBarOpen}
+                                                        checkChartAnalytics={checkChartAnalytics}
+                                                        setAnalyticsBar={setAnalyticsBar}
+                                                        setChartBar={setChartBar}
+                                                        fullScreen={handleClickOpenFullscreen}
+                                                        gap={gap}
+                                                        viewOnly={true}
+                                                    />
+                                                :
+                                                    selectedAssetsLegalEvents != null && selectedAssetsLegalEvents.length > 0
+                                                    ?
+                                                        <LegalEventsContainer
+                                                            events={selectedAssetsLegalEvents} 
+                                                            type={type}/>
+                                                    :
+                                                        connectionBoxView === true 
+                                                        ?
+                                                            <IllustrationPdf 
+                                                                cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPaneMainOverflowUnset, { [classes.minimized]: assetsCommentsTimelineMinimized })}
+                                                                split={`horizontal`}
+                                                                primary={'second'}
+                                                                illustrationData={connectionBoxData}
+                                                                dragStart={setIsDrag}
+                                                                dragFinished={setIsDrag}    
+                                                                analyticsBar={openAnalyticsBar}
+                                                                type={type}
+                                                            />
+                                                        :
+                                                            ''
                                             :
                                             <AssetDetailsContainer 
                                                 cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPaneMainOverflowUnset, { [classes.minimized]: assetsCommentsTimelineMinimized })}

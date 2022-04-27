@@ -17,7 +17,8 @@ import {
     setTimelineScreen,
     setDashboardScreen,
     setPatentScreen } from '../../actions/uiActions'
-import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId  } from '../../actions/patentTrackActions2'
+import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId, setAssetsIllustrationData, retrievePDFFromServer  } from '../../actions/patentTrackActions2'
+import { assetLegalEvents, setAssetLegalEvents, setPDFView, setPDFFile, setConnectionData, setConnectionBoxView  } from '../../actions/patenTrackActions';
 import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar'
 import { controlList } from "../../utils/controlList"
 
@@ -25,10 +26,10 @@ import PatenTrackApi from '../../api/patenTrack2'
 
 
 const Reports = (props) => {
-    const LIST = [
+    let LIST = [
         {
             title: 'Broken Chain-of-Title',
-            sub_heading: 'patents ad ad d ad ad ad', 
+            sub_heading: 'broken', 
             number: 0,
             patent: '',
             application: '',
@@ -152,7 +153,7 @@ const Reports = (props) => {
     const [smallScreen, setSmallScreen] = useState(false)
     const [activeId, setActiveId] = useState(-1)
     const profile = useSelector(state => (state.patenTrack.profile))    
-    const [cardList, setCardList] = useState(LIST)
+    const [cardList, setCardList] = useState([])
     const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
     const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected);
@@ -176,6 +177,13 @@ const Reports = (props) => {
     const assetsTotal = useSelector(
         state => state.patenTrack2.assetTypeAssignmentAssets.total_records,
     );
+
+    useEffect(() => {
+        addCardList()
+        return (() =>{
+
+        })
+    }, [profile])
     useEffect(() => {
         if(ref.current !== null) {
             resizeObserver = new ResizeObserver(entries => {   
@@ -232,7 +240,6 @@ const Reports = (props) => {
         }
     }, [dashboardPanelActiveButtonId])
 
-
     /**
      * Get Dashboard data
      */
@@ -271,6 +278,8 @@ const Reports = (props) => {
                             formData.append('customers', JSON.stringify(selectedAssetCompanies));
                             formData.append('assignments', JSON.stringify(selectedAssetAssignments));
                             formData.append('type', item.type)
+                            formData.append('format_type', profile.user.organisation.organisation_type)
+                            
                             const requestData = await PatenTrackApi.getDashboardData(formData)
                             if( requestData !== null){
                                 updateList(requestData, item.type)
@@ -284,9 +293,37 @@ const Reports = (props) => {
             }
             findDashboardData()
         } else {   
-            setCardList([...LIST])
+            addCardList()
         }
     }, [selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssets, assetsSelected, assetsTotal])
+
+    const addCardList = () => {
+        if(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank') {
+            const bankList = [...LIST]
+            bankList.forEach( (bank, index) => {
+                switch(parseInt(bank.type)) {
+                    case 19:
+                        bankList[index].title = 'Other banks'
+                        break;
+                    case 20:
+                        bankList[index].title = 'Invalid Collateral'
+                        bankList[index].display_value = '%'
+                        break;
+                    case 21:
+                        bankList[index].title = 'Expired Patents'
+                        bankList[index].display_value = '%'
+                        break;
+                    case 22:
+                        bankList[index].title = 'Recently Expired'
+                        bankList[index].display_value = '%'
+                        break;
+                }  
+            })  
+            setCardList([...bankList])
+        } else {
+            setCardList([...LIST])
+        }
+    }
 
     const updateList = useCallback((requestData, type) => {  
         let oldList = [...cardList]
@@ -295,7 +332,8 @@ const Reports = (props) => {
             if( requestData !== null && requestData?.data && requestData?.data?.number){
                 oldList[findIndex].number = requestData.data.number
                 oldList[findIndex].patent = requestData.data.patent != '' ? requestData.data.patent : ''
-                oldList[findIndex].application = requestData.data.patent == '' && requestData.data.application != '' ? requestData.data.application : ''                            
+                oldList[findIndex].application = requestData.data.application != '' ? requestData.data.application : ''                            
+                oldList[findIndex].rf_id = requestData.data.rf_id != '' ? requestData.data.rf_id : ''                            
             } else {
                 oldList[findIndex].number = 0
                 oldList[findIndex].patent = ''
@@ -309,8 +347,17 @@ const Reports = (props) => {
         return selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])
     }, [selectedCompanies, companiesList])
 
-    const onHandleClick = useCallback((id) => {
+    const onHandleClick = useCallback(async(id) => {
         const card = cardList[id]
+        dispatch(setAssetsIllustration(null))
+        dispatch(setAssetLegalEvents([]))
+        dispatch(setConnectionBoxView(false))
+        dispatch(setPDFView(false))
+        dispatch(setPDFFile({ 
+            document: '', 
+            form: '', 
+            agreement: ''
+        }))
         if(card.number > 0) {
             let showItem = id != activeId ? true : false
             setActiveId(id != activeId ? id : -1)
@@ -318,7 +365,7 @@ const Reports = (props) => {
             dispatch(setDashboardPanelActiveButtonId( id != activeId ? id : -1 ))        
             props.checkChartAnalytics(null, null, showItem)
             if(showItem === true) {
-                if(card.type == 1) {
+                if(card.type == 1 || card.type == 17 || card.type == 18) {
                     dispatch(
                         setAssetsIllustration({
                             type: "patent",
@@ -326,9 +373,40 @@ const Reports = (props) => {
                             flag: card.patent !== '' ? 1 : 0
                         }),
                     );
-                }       
-            } else {
-                dispatch(setAssetsIllustration(null))
+                } else if(card.type == 20 || card.type == 23) {
+                    dispatch(assetLegalEvents(card.application, card.patent));
+                } else if(card.type == 24 || card.type == 25) {
+                    
+                    const { data } = await PatenTrackApi.getCollectionIllustration(card.rf_id)
+                    if(data != null) {                        
+                        const obj = data.line.length > 0 ? data.line[0] : null
+                        if(obj != null) {
+                            dispatch(
+                                setConnectionData(obj)
+                            ) 
+                            dispatch(
+                                setPDFView(true)
+                            )
+                            dispatch(
+                                setConnectionBoxView(true)
+                            )
+                            if(obj.document1.indexOf('legacy-assignments.uspto.gov') !== -1 || (obj.document1 == "" && obj.ref_id > 0)) {
+                                obj.rf_id =  obj.ref_id
+                                dispatch(retrievePDFFromServer(obj))   
+                            } else {
+                                dispatch(
+                                    setPDFFile(
+                                      { 
+                                        document: obj.document1, 
+                                        form: obj.document1, 
+                                        agreement: obj.document1 
+                                      }
+                                    )
+                                ) 
+                            }                         
+                        }                        
+                    } 
+                }      
             }
         }
     }, [dispatch, activeId, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, cardList])

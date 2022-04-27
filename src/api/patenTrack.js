@@ -84,6 +84,7 @@ class PatenTrackApi {
   } 
 
   static assetLegalEvents(applicationNumber, patentNumber) { 
+    console.log("assetLegalEvents", applicationNumber, patentNumber)
     return axios.get(`${base_new_api_url}/events/${applicationNumber}/${patentNumber != '' ? encodeURIComponent(patentNumber)  : applicationNumber}`, getHeader())
   }
 

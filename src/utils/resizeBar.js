@@ -22,7 +22,8 @@ import { setAssetTypeAssignments,
   
    import {  
     setPDFView,
-    setPDFFile
+    setPDFFile,
+    setPdfTabIndex
    } from '../actions/patenTrackActions'
   
   import { 
@@ -31,6 +32,10 @@ import { setAssetTypeAssignments,
     toggleUsptoMode,
     toggleLifeSpanMode,
   } from '../actions/uiActions'
+
+
+
+
 
 export const updateResizerBar = (ref, bar, t = 0, defaultSize) => {
     if( ref.current != null ) {

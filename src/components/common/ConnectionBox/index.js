@@ -31,11 +31,13 @@ function ConnectionBox(props) {
     /* if(props.assets) {
       setAssetData(props.assets)
     } */
-    if(props.connectionBoxData){
+    if(typeof props.connectionBoxData != 'undefined'){
       (async () => {
         const { data } = await PatenTrackApi.getConnectionData(props.connectionBoxData.popuptop)
         const oldAssetsData = props.assets
-        oldAssetsData.popup = data.popup
+        if(typeof data.popup != 'undefined' ){
+          oldAssetsData.popup = data.popup
+        }
         setAssetData(oldAssetsData)
         setBoxData(data)
       })();
@@ -43,6 +45,10 @@ function ConnectionBox(props) {
     if(props.connectionBoxView == 'true') {
       setFullView(classes.fullView)
     }
+
+    return (() => {
+
+    })
   },[ classes.fullView, props.assets, props.connectionBoxData, props.connectionBoxView ])
 
   const closeViewer = () => {

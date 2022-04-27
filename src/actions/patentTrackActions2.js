@@ -12,8 +12,11 @@ import {
 } from './uiActions'
 import {
   setConnectionBoxView,
-  setPDFView
+  setPDFView,
+  setPDFFile,
+  setPdfTabIndex
 } from "./patenTrackActions";
+
 
 export const setAuthenticateAuthToken = data => {
   return {
@@ -440,6 +443,27 @@ export const setActiveMenuButton = (index) => {
 /**
  * New Design
  */
+
+export const retrievePDFFromServer = (item) => {    
+  PatenTrackApi.cancelDownloadRequest()
+  return async dispatch => {
+    const {data} = await PatenTrackApi.downloadPDFUrl(item.rf_id)
+    if(data != null && typeof data.link !== 'undefined') {
+        dispatch(
+          setPDFFile(    
+            { 
+              document: data.link, 
+              form: data.link, 
+              agreement: data.link  
+            }
+          )
+        )
+        dispatch(
+          setPdfTabIndex(0)
+        )
+    }
+  }
+}
 
 export const fetchParentCompanies = ( offset = 0, sortFiled = 'original_ompany', sortorder = 'ASC' ) => {
   return async dispatch => {

@@ -13,7 +13,7 @@ const Chart = (props) => {
     const profile = useSelector(store => (store.patenTrack.profile))
 
     const displayNumber = (value) => {
-        return props.card.number
+        return `${props.card.number}${typeof props.card.display_value != 'undefined' ? props.card.display_value  : ''}`
     }
     
     return (
@@ -22,7 +22,7 @@ const Chart = (props) => {
                 size="small" 
                 variant="outlined" 
                 className={clsx(classes.actionButton)} 
-                onClick={() => props.handleList(props.id)}
+                onClick={() => props.handleList(props.id, props.card.type)}
                 disabled={
                     parseInt(profile?.user?.organisation?.subscribtion) === 1 ? 
                         true  
@@ -52,7 +52,7 @@ const Chart = (props) => {
                 size="small" 
                 onClick={() => props.handleClick(props.id)} 
                 className={clsx(classes.exampleButton, props.active === props.id ? classes.active : '')}
-                disabled={parseInt(props.card?.number) == 0 ? true : false}
+                disabled={props.card?.number != '0' ? false : true}
             >
                 <AutoAwesomeIcon />
             </IconButton>
