@@ -6,7 +6,7 @@ import copy from 'copy-to-clipboard'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import PatentrackDiagram from '../../PatentrackDiagram'
 import { toggleUsptoMode, toggleFamilyMode, toggleShow3rdParities } from "../../../../actions/uiActions";
-import { setAssetsIllustrationLoading, setAssetsIllustrationData } from '../../../../actions/patentTrackActions2' 
+import { setAssetsIllustrationLoading, setAssetsIllustrationData, retrievePDFFromServer } from '../../../../actions/patentTrackActions2' 
 import { setPDFFile, setPDFView, setPdfTabIndex, setConnectionData, setConnectionBoxView } from '../../../../actions/patenTrackActions' 
 import { copyToClipboard } from '../../../../utils/html_encode_decode'
 
@@ -90,7 +90,7 @@ const IllustrationContainer = ({
           if(setIllustrationRecord) { setIllustrationRecord(data) }
           if(data.line[0].document1.indexOf('legacy-assignments.uspto.gov') !== -1 || (data.line[0].document1 == "" && data.line[0].ref_id > 0)) {
             data.line[0].rf_id =  data.line[0].ref_id
-            retrievePDFFromServer(data.line[0])
+            dispatch(retrievePDFFromServer(data.line[0]))
           }
           dispatch(setConnectionData(data.line[0]))
           /*dispatch(
@@ -124,7 +124,7 @@ const IllustrationContainer = ({
         setPDFView(true)
       )
       if(obj.document_file.indexOf('legacy-assignments.uspto.gov') !== -1 || (obj.document_file == "" && obj.ref_id > 0)) {
-        retrievePDFFromServer(obj)
+        dispatch(retrievePDFFromServer(obj))
       } else {
         dispatch(
           setPDFFile(
@@ -203,25 +203,6 @@ const IllustrationContainer = ({
     console.log('handleComment ', obj)
   }
 
-  const retrievePDFFromServer = async(item) => {    
-    PatenTrackApi.cancelDownloadRequest()
-    const {data} = await PatenTrackApi.downloadPDFUrl(item.rf_id)
-
-    if(data != null && typeof data.link !== 'undefined') {
-        dispatch(
-          setPDFFile(    
-            { 
-              document: data.link, 
-              form: data.link, 
-              agreement: data.link 
-            }
-          )
-        )
-        dispatch(
-          setPdfTabIndex(0)
-        )
-    }
-  }
 
   const handleConnectionBox = useCallback((obj) => {    
     if (typeof viewOnly == 'undefined' && typeof obj.popup != 'undefined' ) { 
@@ -236,7 +217,7 @@ const IllustrationContainer = ({
           setPDFView(true)
         )
         if(obj.document1.indexOf('legacy-assignments.uspto.gov') !== -1 || (obj.document1 == "" && obj.rf_id > 0) ) {          
-          retrievePDFFromServer(obj)
+          dispatch(retrievePDFFromServer(obj))
         } else {
           dispatch(
             setPDFFile(

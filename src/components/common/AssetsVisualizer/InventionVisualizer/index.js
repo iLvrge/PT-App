@@ -21,7 +21,8 @@ import {
     setMaintainenceAssetsList,
     getCustomerAssets,
     setAssetsIllustrationData,
-    getCustomerSelectedAssets
+    getCustomerSelectedAssets,
+    retrievePDFFromServer
 } from '../../../../actions/patentTrackActions2'
 import { setPDFFile, setPdfTabIndex } from '../../../../actions/patenTrackActions' 
 import PatenTrackApi from '../../../../api/patenTrack2'
@@ -260,32 +261,28 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             setSelectedTab(0)
         } else if( connectionBoxView === true || selectedRow.length > 0 ) {
             /* setInventionTabs([ 'Innovation', 'Agreement', 'Form', 'Main' ]) */
+            console.log('INVENTION')
             setInventionTabs([ 'Innovation', 'Agreement'])
             //setSelectedTab(1)
         }        
     }, [ connectionBoxView, selectedRow ])
 
-    useEffect(() => {
-        
+    useEffect(() => {        
         const getChartData = async () => {
            
             setGraphRawData([])
             setGraphRawGroupData([])      
-            setShowContainer(true)   
-            console.log("adasdas", process.env.REACT_APP_ENVIROMENT_MODE, selectedCompanies.length, type);
+            setShowContainer(true)              
             if (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0 && type !== 9){
-                console.log("T")
                 setShowContainer(false)
                 return null
             } else if ( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token === null){
-                console.log("C")
                 setShowContainer(false)
                 return null
             }
             setIsLoadingCharts(true)   
             const list = [];
             let totalRecords = 0;
-            console.log("selectedTab", selectedTab, openCustomerBar, selectedCategory, selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_clipboard)
             if(selectedTab === 0) {
                 if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {
                 
@@ -646,21 +643,29 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
 
     useEffect(() => {
+        console.log("INVENTIONasdasdsadsa")
         if(assetIllustration != null && Object.keys(assetIllustration).length > 0) {
             /* if((selectedAssetAssignments.length == 1 && selectedCategory == 'correct_details') || selectedRow.length == 1) { */
                 
                 if((selectedAssetAssignments.length == 1 ) || selectedRow.length == 1) {
                 setAssets(assetIllustration)
-                if(assetIllustrationData != null ) {                    
-                    dispatch(
-                        setPDFFile(
-                          { 
-                            document: assetIllustrationData.line[0].document1, 
-                            form: assetIllustrationData.line[0].document1_form, 
-                            agreement: assetIllustrationData.line[0].document1_agreement 
-                          }
+                if(assetIllustrationData != null ) {   
+                    if(assetIllustrationData.line[0].document1.indexOf('legacy-assignments.uspto.gov') !== -1 || (assetIllustrationData.line[0].document1 == "" && assetIllustrationData.line[0].ref_id > 0)) {
+                        const obj = assetIllustrationData.line[0]
+                        obj.rf_id = obj.ref_id
+                        dispatch(retrievePDFFromServer(obj))
+                    } else {
+                        dispatch(
+                            setPDFFile(
+                              { 
+                                document: assetIllustrationData.line[0].document1, 
+                                form: assetIllustrationData.line[0].document1, 
+                                agreement: assetIllustrationData.line[0].document1 
+                              }
+                            )
                         )
-                    )
+                    }             
+                    
                     dispatch(
                         setPdfTabIndex(0)
                     )

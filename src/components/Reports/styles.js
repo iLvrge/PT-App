@@ -95,7 +95,7 @@ export default makeStyles(theme => ({
             marginBottom: 0,
         },
         '& .MuiTypography-h6':{
-            textTransform: 'capitalize'
+            textTransform: 'initial'
         },
         '& .MuiCardActions-root, .MuiCardContent-root':{
             backgroundColor: theme.palette.background.paper,

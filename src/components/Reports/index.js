@@ -55,7 +55,7 @@ const Reports = (props) => {
             type: 18
         },
         {
-            title: 'Wrong addresses',
+            title: 'Wrong Addresses',
             sub_heading: 'adress',
             number: 0,
             patent: '',
@@ -82,7 +82,7 @@ const Reports = (props) => {
             type: 21
         },
         {
-            title: 'Missed monetization',
+            title: 'Missed Monetization',
             sub_heading: 'abandoned patents',
             number: 0,
             patent: '',
@@ -109,7 +109,7 @@ const Reports = (props) => {
             type: 24
         },
         {
-            title: 'Late recordings',
+            title: 'Late Recordings',
             sub_heading: 'patents',
             number: 0,
             patent: '',
@@ -303,7 +303,7 @@ const Reports = (props) => {
             bankList.forEach( (bank, index) => {
                 switch(parseInt(bank.type)) {
                     case 19:
-                        bankList[index].title = 'Other banks'
+                        bankList[index].title = 'Other Banks'
                         break;
                     case 20:
                         bankList[index].title = 'Invalid Collateral'

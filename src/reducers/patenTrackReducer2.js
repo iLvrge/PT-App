@@ -675,9 +675,16 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           assetTypeAssignments: {...state.assetTypeAssignments, selected: action.data}
         }  
       case types.SET_ASSET_TYPE_ASSIGNMENTS_ASSETS:
+
         return {
           ...state,
-          assetTypeAssignmentAssets:  {...state.assetTypeAssignmentAssets, list: action.append === true ? [...state.assetTypeAssignmentAssets.list, ...action.data.list] : action.data.list, total_records: action.data.total_records}
+          assetTypeAssignmentAssets:  {...state.assetTypeAssignmentAssets, 
+                                        list: action.append === true ? [...state.assetTypeAssignmentAssets.list, ...action.data.list] : action.data.list, 
+                                        total_records: action.data.total_records,
+                                        selected: action.append === false && action.data.list.length === 0 ? [] : [...state.assetTypeAssignmentAssets.selected],
+                                        selectAll: action.append === false && action.data.list.length === 0 ? false : state.assetTypeAssignmentAssets.selectAll,
+                                      },
+          selectedAssetsPatents: action.append === false && action.data.list.length === 0 ? [] : [...state.selectedAssetsPatents]
         }  
       case types.SET_ASSET_TYPE_ASSIGNMENTS_ASSETS_SELECTED:  
         return {
