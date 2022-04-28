@@ -305,17 +305,15 @@ const Reports = (props) => {
                     case 19:
                         bankList[index].title = 'Other Banks'
                         break;
-                    case 20:
+                    case 20:  
                         bankList[index].title = 'Invalid Collateral'
                         bankList[index].display_value = '%'
                         break;
                     case 21:
                         bankList[index].title = 'Expired Patents'
-                        bankList[index].display_value = '%'
                         break;
                     case 22:
                         bankList[index].title = 'Recently Expired'
-                        bankList[index].display_value = '%'
                         break;
                 }  
             })  

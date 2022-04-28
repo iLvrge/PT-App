@@ -13,7 +13,7 @@ const Chart = (props) => {
     const profile = useSelector(store => (store.patenTrack.profile))
 
     const displayNumber = (value) => {
-        return `${props.card.number}${typeof props.card.display_value != 'undefined' ? props.card.display_value  : ''}`
+        return `${ props.card.display_value == '%' ? parseFloat(props.card.number).toFixed(1) : props.card.number}${typeof props.card.display_value != 'undefined' ? props.card.display_value  : ''}`
     }
     
     return (

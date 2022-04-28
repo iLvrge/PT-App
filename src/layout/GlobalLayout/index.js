@@ -189,7 +189,6 @@ const GlobalLayout = (props) => {
 
     useEffect(() => {
         if(profile?.user && profile.user?.organisation) {
-            console.log("profile", profile)
             if(profile.user.organisation.organisation_type == 'Bank') {
                 dispatch( setAssetTypesSelect([5]) ) // always select by default lending activity
                 setOpenBar( false ) //company
@@ -291,10 +290,8 @@ const GlobalLayout = (props) => {
      */
 
     useEffect(() => {
-        console.log("dashboardScreen", dashboardScreen, selectedCompanies.length, openCustomerBar)
         if(dashboardScreen === true) {
             if(selectedCompanies.length > 0 && openCustomerBar === false) {
-                console.log("dashboardScreen1", dashboardScreen, selectedCompanies.length, openCustomerBar)
                 const customers = selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies;
                 const assignments = selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;    
                 dispatch(getCustomerAssets(
@@ -518,15 +515,26 @@ const GlobalLayout = (props) => {
                         tableContainer = document.getElementById('assets_assignments')
                         if(tableContainer !== null) {
                             findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
-                        }  
+                        } else {
+                            tableContainer = document.getElementById('assets_type_companies')
+                            if(tableContainer !== null) {
+                                findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                            }
+                        } 
                     }                                      
                 }
             } else {
                 tableContainer = document.getElementById('assets_assignments')
                 if(tableContainer !== null) {
                     findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                } else {
+                    tableContainer = document.getElementById('assets_type_companies')
+                    if(tableContainer !== null) {
+                        findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                    }
                 }
             }
+
 
             if(findActiveRow !== null) {
                 const classList = findActiveRow.className.split(/\s+/);
