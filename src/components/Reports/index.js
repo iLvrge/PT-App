@@ -268,6 +268,7 @@ const Reports = (props) => {
                     }  
                     if(list.length > 0) {
                         setLoading(true)
+                        resetAll(false)
                         props.checkChartAnalytics(null, null, false)                
                         const dashboardRequest = LIST.map(async item => {
                             const formData = new FormData()
@@ -293,9 +294,25 @@ const Reports = (props) => {
             }
             findDashboardData()
         } else {   
-            addCardList()
+            addCardList()  
         }
     }, [selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssets, assetsSelected, assetsTotal])
+
+    const resetAll = (flag) => {
+        dispatch(setDashboardPanel( flag ))
+        dispatch(setAssetsIllustration(null))
+        dispatch(setAssetLegalEvents([]))
+        dispatch(setConnectionBoxView(false))
+        dispatch(setPDFView(false))
+        dispatch(setPDFFile({ 
+            document: '', 
+            form: '', 
+            agreement: ''
+        }))
+        if(flag === false) {
+            setActiveId(-1)
+        }
+    }
 
     const addCardList = () => {
         if(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank') {
@@ -347,23 +364,15 @@ const Reports = (props) => {
 
     const onHandleClick = useCallback(async(id) => {
         const card = cardList[id]
-        dispatch(setAssetsIllustration(null))
-        dispatch(setAssetLegalEvents([]))
-        dispatch(setConnectionBoxView(false))
-        dispatch(setPDFView(false))
-        dispatch(setPDFFile({ 
-            document: '', 
-            form: '', 
-            agreement: ''
-        }))
+        
         if(card.number > 0) {
             let showItem = id != activeId ? true : false
             setActiveId(id != activeId ? id : -1)
-            dispatch(setDashboardPanel( showItem ))        
+            resetAll(showItem)       
             dispatch(setDashboardPanelActiveButtonId( id != activeId ? id : -1 ))        
             props.checkChartAnalytics(null, null, showItem)
             if(showItem === true) {
-                if(card.type == 1 || card.type == 17 || card.type == 18) {
+                if(card.type == 1 || card.type == 18) {
                     dispatch(
                         setAssetsIllustration({
                             type: "patent",
@@ -371,6 +380,8 @@ const Reports = (props) => {
                             flag: card.patent !== '' ? 1 : 0
                         }),
                     );
+                } else if (card.type == 17) {
+                    dispatch(setAssetsIllustration({ type: "transaction", id: card.rf_id }));
                 } else if(card.type == 20 || card.type == 23) {
                     dispatch(assetLegalEvents(card.application, card.patent));
                 } else if(card.type == 24 || card.type == 25) {

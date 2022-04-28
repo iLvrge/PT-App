@@ -91,18 +91,34 @@ function ConnectionBox(props) {
             <TableBody>
             <TableRow>
                 <TableCell>
-                  <ShowText classes={classes.red} data={`Assignors`}/>
+                  <ShowText classes={classes.red} data={`Assignors(as Recorded)`}/>
                   {
                     info[0].patAssignorName.map( (assignor, index) =>(
-                      <ShowText key={`assignor-${index}`} className={index > 0 && index < info[0].patAssignorName.length ? classes.marginBottom : ''} data={assignor}/>
+                      <ShowText key={`assignor-${index}`} className={index > 0 && index < info[0].patAssignorName.length ? classes.marginBottom : ''} data={assignor.recorded_name}/>
                     ))
                   }
                 </TableCell>
                 <TableCell>
-                  <ShowText classes={classes.red} data={`Assignees`}/>
+                  <ShowText classes={classes.red} data={`Nominal`}/>
+                  {
+                    info[0].patAssignorName.map( (assignor, index) =>(
+                      <ShowText key={`assignor-${index}`} className={index > 0 && index < info[0].patAssignorName.length ? classes.marginBottom : ''} data={assignor.normalize_name}/>
+                    ))
+                  }
+                </TableCell>
+                <TableCell>
+                  <ShowText classes={classes.red} data={`Assignees(as Recorded)`}/>
                   {
                     info[0].patAssigneeName.map( (assignee, index) =>(
-                      <ShowText key={`assignee-${index}`} className={index > 0 && index < info[0].patAssigneeName.length ? classes.marginBottom : ''} data={assignee} />
+                      <ShowText key={`assignee-${index}`} className={index > 0 && index < info[0].patAssigneeName.length ? classes.marginBottom : ''} data={assignee.recorded_name} />
+                    ))
+                  }
+                </TableCell>
+                <TableCell>
+                  <ShowText classes={classes.red} data={`Nominal`}/>
+                  {
+                    info[0].patAssigneeName.map( (assignee, index) =>(
+                      <ShowText key={`assignee-${index}`} className={index > 0 && index < info[0].patAssigneeName.length ? classes.marginBottom : ''} data={assignee.normalize_name}/>
                     ))
                   }
                 </TableCell>
