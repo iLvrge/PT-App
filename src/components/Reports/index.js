@@ -37,7 +37,7 @@ const Reports = (props) => {
             type: 1
         },
         {
-            title: 'Lost Patents',
+            title: 'Incorrect Names',
             sub_heading: 'assignee has a typo',
             number: 0,
             patent: '',

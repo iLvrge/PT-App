@@ -24,12 +24,14 @@ import {
     setSelectedAssetsTransactions,
     setMaintainenceAssetsList,
     setAssetTypeAssignmentAllAssets,
-    setAssetTypeAssignments
+    setAssetTypeAssignments,
+    getCustomerAssets
   } from '../../../actions/patentTrackActions2'
 
   import {
     setConnectionBoxView, 
     setPDFView,
+    getAssets,
   } from '../../../actions/patenTrackActions'
 
 import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode } from '../../../actions/uiActions'
@@ -73,6 +75,9 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     const assetTypeCompaniesLoading = useSelector(state => state.patenTrack2.assetTypeCompanies.loading)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
+    const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
+    const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
+
     const [ data, setData ] = useState( [] )
 
     const COLUMNS = [
@@ -225,6 +230,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
                 dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
             }
             dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
+            
             if( !oldSelection.includes(row.id) ){
                 //oldSelection.push(row.id)
                 oldSelection = [row.id]
@@ -237,6 +243,9 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             history.push({
                 hash: updateHashLocation(location, 'otherParties', oldSelection).join('&')
             })
+            if(dashboardScreen === true) {
+                getAssets(oldSelection)
+            }
             setSelectItems(oldSelection)
             setSelectAll(false)
             dispatch( setAllAssignmentCustomers(assetTypeCompanies.length == oldSelection.length ||  data.length == oldSelection.length ? true : false ) )
@@ -262,6 +271,29 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         dispatch(toggleUsptoMode( false ))
         dispatch(toggleFamilyMode( false ))
         dispatch(toggleFamilyItemMode( false )) 
+    }
+
+    const getAssets = (parties) => {
+        const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+                            tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+                            customers = parties,
+                            assignments = [];
+        dispatch(
+            getCustomerAssets(
+                selectedCategory == '' ? '' : selectedCategory,
+                companies,
+                tabs,
+                customers,
+                assignments,
+                false,
+                0,
+                0,
+                'asset',
+                'DESC',
+                -1, 
+                display_sales_assets
+            ),
+        );                   
     }
 
     if ((!standalone && assetTypesCompaniesLoading) || (standalone && assetTypeCompaniesLoading)) return <Loader />

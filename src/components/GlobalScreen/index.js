@@ -696,11 +696,11 @@ const GlobalScreen = ({
                                                         viewOnly={true}
                                                     />
                                                 :
-                                                    selectedAssetsLegalEvents != null && selectedAssetsLegalEvents.length > 0
+                                                    selectedAssetsLegalEvents != null && Object.keys(selectedAssetsLegalEvents).length > 0
                                                     ?
                                                         <LegalEventsContainer
                                                             events={selectedAssetsLegalEvents} 
-                                                            type={type}/>
+                                                            type={type}/>  
                                                     :
                                                         connectionBoxView === true 
                                                         ?

@@ -261,7 +261,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             setSelectedTab(0)
         } else if( connectionBoxView === true || selectedRow.length > 0 ) {
             /* setInventionTabs([ 'Innovation', 'Agreement', 'Form', 'Main' ]) */
-            console.log('INVENTION')
             setInventionTabs([ 'Innovation', 'Agreement'])
             //setSelectedTab(1)
         }        
@@ -643,7 +642,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
 
     useEffect(() => {
-        console.log("INVENTIONasdasdsadsa")
         if(assetIllustration != null && Object.keys(assetIllustration).length > 0) {
             /* if((selectedAssetAssignments.length == 1 && selectedCategory == 'correct_details') || selectedRow.length == 1) { */
                 

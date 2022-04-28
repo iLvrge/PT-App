@@ -77,7 +77,7 @@ export default {
     display_popup_asset: 'none',
     legalEventDataRetrieved: false,
     familyDataRetrieved: false,
-    assetLegalEvents: [],
+    assetLegalEvents: {main: [], other: []},
     assetFamily: [], 
     familyItem: {},
     assets: {},
