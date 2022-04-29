@@ -156,6 +156,7 @@ const Reports = (props) => {
     const [cardList, setCardList] = useState([])
     const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
+    const assetTypeCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.list)
     const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected);
     const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected);
     const selectedAssetCompaniesAll = useSelector(
@@ -250,7 +251,7 @@ const Reports = (props) => {
                 if(loading === false) {                    
                     const list = [];
                     let totalRecords = 0;
-                    if( assetsSelected.length > 0 ) {
+                    /* if( assetsSelected.length > 0 ) {
                         const promise = assetsSelected.map(asset => {
                             const findIndex = assetTypeAssignmentAssets.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset.toString() )
                             if( findIndex !== -1 ) {
@@ -267,6 +268,9 @@ const Reports = (props) => {
                         totalRecords = assetsTotal
                     }  
                     if(list.length > 0) {
+                        
+                    } */
+                    if(assetTypeCompanies.length > 0) {
                         setLoading(true)
                         resetAll(false)
                         props.checkChartAnalytics(null, null, false)                
@@ -289,14 +293,14 @@ const Reports = (props) => {
                         })                
                         await Promise.all(dashboardRequest)
                         setLoading(false)
-                    }
+                    }                    
                 }                
             }
             findDashboardData()
         } else {   
             addCardList()  
         }
-    }, [selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssets, assetsSelected, assetsTotal])
+    }, [selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssets, assetTypeCompanies])
 
     const resetAll = (flag) => {
         dispatch(setDashboardPanel( flag ))
@@ -324,7 +328,7 @@ const Reports = (props) => {
                         break;
                     case 20:  
                         bankList[index].title = 'Invalid Collateral'
-                        bankList[index].display_value = '%'
+                        /* bankList[index].display_value = '%' */
                         break;
                     case 21:
                         bankList[index].title = 'Expired Patents'
@@ -349,10 +353,12 @@ const Reports = (props) => {
                 oldList[findIndex].patent = requestData.data.patent != '' ? requestData.data.patent : ''
                 oldList[findIndex].application = requestData.data.application != '' ? requestData.data.application : ''                            
                 oldList[findIndex].rf_id = requestData.data.rf_id != '' ? requestData.data.rf_id : ''                            
+                oldList[findIndex].total = requestData.data.total
             } else {
                 oldList[findIndex].number = 0
                 oldList[findIndex].patent = ''
                 oldList[findIndex].application = ''
+                oldList[findIndex].total = 0
             }
             setCardList(oldList)
         }      

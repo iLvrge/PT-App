@@ -52,7 +52,7 @@ export default makeStyles(theme => ({
     }
   },
   fixedWidth:{
-    width:180
+    width:220
   },
   red: {
     color: '#e60000'

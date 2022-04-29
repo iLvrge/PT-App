@@ -91,7 +91,7 @@ function ConnectionBox(props) {
             <TableBody>
             <TableRow>
                 <TableCell>
-                  <ShowText classes={classes.red} data={`Assignors(as Recorded)`}/>
+                  <ShowText classes={classes.red} data={`Assignors(Rec.)`}/>
                   {
                     info[0].patAssignorName.map( (assignor, index) =>(
                       <ShowText key={`assignor-${index}`} className={index > 0 && index < info[0].patAssignorName.length ? classes.marginBottom : ''} data={assignor.recorded_name}/>
@@ -107,7 +107,7 @@ function ConnectionBox(props) {
                   }
                 </TableCell>
                 <TableCell>
-                  <ShowText classes={classes.red} data={`Assignees(as Recorded)`}/>
+                  <ShowText classes={classes.red} data={`Assignees(Rec.)`}/>
                   {
                     info[0].patAssigneeName.map( (assignee, index) =>(
                       <ShowText key={`assignee-${index}`} className={index > 0 && index < info[0].patAssigneeName.length ? classes.marginBottom : ''} data={assignee.recorded_name} />
@@ -147,7 +147,7 @@ function ConnectionBox(props) {
                   <ShowText classes={classes.red} data={`Reel/frame`}/>
                   <ShowText data={info[0].displayId}/>
                 </TableCell>
-                <TableCell colSpan={2}>
+                <TableCell colSpan={3}>
                   <ShowText classes={classes.red} data={`Correspondent`}/>
                   <ShowText data={info[0].corrName} classes={classes.marginBottom}/>
                   <ShowText data={info[0].corrAddress1}/>
