@@ -163,11 +163,8 @@ const GlobalScreen = ({
     const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
     const channel_id = useSelector( state => state.patenTrack2.channel_id )   
     const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
-    const connectionBoxData = useSelector(state => {
-        console.log('state.patenTrack', state.patenTrack)
-        return state.patenTrack.connectionBoxData
-    })
-    console.log('assetIllustrationData', connectionBoxData)
+    const connectionBoxData = useSelector(state =>  state.patenTrack.connectionBoxData)
+    
     const checkContainer = () => {
         /* setTimeout(() => {
             if( mainContainerRef.current != null  && mainContainerRef.current != undefined) {                
