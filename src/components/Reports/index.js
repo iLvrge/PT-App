@@ -270,7 +270,7 @@ const Reports = (props) => {
                     if(list.length > 0) {
                         
                     } */
-                    if(assetTypeCompanies.length > 0) {
+                    /*if((profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' && assetTypeCompanies.length > 0) || ()) {*/
                         setLoading(true)
                         resetAll(false)
                         props.checkChartAnalytics(null, null, false)                
@@ -293,7 +293,7 @@ const Reports = (props) => {
                         })                
                         await Promise.all(dashboardRequest)
                         setLoading(false)
-                    }                    
+                    /*}                    */
                 }                
             }
             findDashboardData()

@@ -710,7 +710,9 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                         }   
                         //updateGroup.push(parseInt(row.representative_id))
                     } else {
+                        console.log('company1')
                         if(dashboardScreen === true) {
+                            console.log('company2')
                             updateSelected = [parseInt( row.representative_id )]
                         } else {
                             updateSelected.push(parseInt( row.representative_id ))
@@ -732,7 +734,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                 hash: updateHashLocation(location, 'companies', updateSelected).join('&')
             })
             dispatch(setMainCompaniesRowSelect([]))
-            
+            console.log('updateSelected', updateSelected)
             setSelectItems(updateSelected)
             //setSelectGroups(updateGroup)
             updateUserCompanySelection(updateSelected)
