@@ -498,7 +498,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
 
 
     useEffect(() => {   
-        if(Object.keys(dashboard_share_selected_data).length > 0 && process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
+        if(dashboard_share_selected_data != undefined && Object.keys(dashboard_share_selected_data).length > 0 && process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
             let { selectedCompanies, tabs, customers } = dashboard_share_selected_data
             if(typeof selectedCompanies != 'undefined' && selectedCompanies != '') {
                 try{
