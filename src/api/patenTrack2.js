@@ -22,6 +22,7 @@ const getCookie = name => {
 const getHeader = () => {
   let token = null
   if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
+    console.log('adadasa', localStorage.getItem('auth_signature'))
     token = localStorage.getItem('auth_signature')
   } else {
     token = localStorage.getItem('token')
@@ -29,7 +30,7 @@ const getHeader = () => {
       token = getCookie('token')
     }
   }
-  
+  console.log('getHeader', token,  process.env.REACT_APP_ENVIROMENT_MODE, localStorage.getItem('auth_signature'))
   return {
     headers: {
       'x-auth-token': token
