@@ -1,5 +1,8 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import {
+    useLocation
+  } from "react-router-dom";
 import SplitPane from 'react-split-pane'
 
 
@@ -43,7 +46,12 @@ import {
     getSlackMessages,
     setMaintainenceFileName,
     setSlackMessages,
-    setBreadCrumbs
+    setBreadCrumbs,
+    setMainCompanies,
+    setMainCompaniesSelected,
+    setAssetTypesSelect,
+    setSelectAssignmentCustomers,
+    setDashboardShareData
 } from '../../actions/patentTrackActions2'
 
 import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpanMode, setMaintainenceFeeFrameMode, setTimelineScreen } from '../../actions/uiActions'
@@ -55,6 +63,7 @@ import LegalEventsContainer from '../common/AssetsVisualizer/LegalEventsContaine
 import ConnectionBox from '../common/ConnectionBox'
 import PdfViewer from '../common/PdfViewer'
 import IllustrationPdf from '../common/AssetDetailsContainer/IllustrationPdf'
+import PatenTrackApi from '../../api/patenTrack2'
 
 const GlobalScreen = ({
     type,
@@ -130,6 +139,7 @@ const GlobalScreen = ({
     driveTemplateMode
 }) => {
     const classes = useStyles() 
+    let location = useLocation();
     const dispatch = useDispatch()
     const mainContainerRef = useRef()
     const companyRef = useRef()
@@ -150,6 +160,7 @@ const GlobalScreen = ({
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
     const dashboardPanel = useSelector(state => state.ui.dashboardPanel)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
+    const companies = useSelector( state => state.patenTrack2.mainCompaniesList.list)
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const selectedMainCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
 
@@ -164,6 +175,10 @@ const GlobalScreen = ({
     const channel_id = useSelector( state => state.patenTrack2.channel_id )   
     const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
     const connectionBoxData = useSelector(state =>  state.patenTrack.connectionBoxData)
+    const auth_token = useSelector(state => state.patenTrack2.auth_token)
+    const dashboard_share_selected_data = useSelector(state => state.patenTrack2.dashboard_share_selected_data)
+
+    console.log('dashboard_share_selected_data', dashboard_share_selected_data)
     
     const checkContainer = () => {
         /* setTimeout(() => {
@@ -180,6 +195,57 @@ const GlobalScreen = ({
             }            
         }, 1000) */
     }
+
+    useEffect(() => {
+        if(process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' && auth_token !== null) {
+            console.log('location', location.pathname)
+            let url = location.pathname
+            if(url != '' && location != 'blank') {
+                url = url.replace('/', '')
+                if(url != '') {
+                    (async () => {
+                        PatenTrackApi.cancelShareDashboard()
+                        const {data} = await PatenTrackApi.getShareDashboardList(url)
+                        if(data != null && Object.keys(data).length > 0) {
+                            dispatch(setDashboardShareData(data))
+                            let { selectedCompanies, tabs, customers } = data
+                            if(typeof selectedCompanies != 'undefined' && selectedCompanies != '') {
+                                try{
+                                    selectedCompanies = JSON.parse(selectedCompanies)
+                                    if(selectedCompanies.length > 0) {
+                                        dispatch(setMainCompaniesSelected(selectedCompanies, []))
+                                        (async () => {
+                                            const promise = companies.map((row, index) => {
+                                                if(!selectedCompanies.includes(row.representative_id)) {
+                                                    companies[index].status = 0
+                                                }
+                                            })
+                                            await Promise.all(promise)
+                                            dispatch(setMainCompanies(companies, { append: false }))
+                                        })()
+                    
+                                        if(typeof tabs != 'undefined' && tabs != '') {
+                                            dispatch( setAssetTypesSelect([tabs]) )
+                                        }
+                                        if(typeof customers != 'undefined' && customers != '') {
+                                            customers = JSON.parse(customers)
+                                            if(customers.length > 0) {
+                                                dispatch( setSelectAssignmentCustomers(customers) )
+                                            }
+                                        }
+                                    }                    
+                                } catch (e){
+                                    console.log(e)
+                                }
+                            }
+                        }
+                    })()
+                }
+            } 
+        }
+        return (() => {
+        })
+    }, [auth_token])
 
     useEffect(() => {
         if(selectedCategory == 'correct_details') {

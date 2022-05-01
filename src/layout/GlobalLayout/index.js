@@ -289,7 +289,7 @@ const GlobalLayout = (props) => {
      * Get list of assets
      */
 
-    useEffect(() => {
+    /* useEffect(() => {
         if(dashboardScreen === true) {
             if(selectedCompanies.length > 0 && openCustomerBar === false) {
                 const customers = selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies;
@@ -308,7 +308,7 @@ const GlobalLayout = (props) => {
                 ))                    
             }
         }  
-    }, [dispatch, dashboardScreen, selectedCompanies])
+    }, [dispatch, dashboardScreen, selectedCompanies]) */
 
     /*
     useEffect(() => {
@@ -1106,7 +1106,7 @@ const GlobalLayout = (props) => {
         {
             tooltip: 'Settings',
             bar: false,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleOpenSettings,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleOpenSettings,
             t: 0,
             label: 'Settings',
             margin: true,
@@ -1114,7 +1114,7 @@ const GlobalLayout = (props) => {
         {
             tooltip: 'Filter by Companies',
             bar: props.type === 9 ? false : openBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleCompanyBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  ? handleAlertPop : handleCompanyBarOpen,
             t: 1,
             label: 'Companies',
             ...(props.type === 9 && {highlight: false})
@@ -1138,7 +1138,7 @@ const GlobalLayout = (props) => {
         {
             tooltip: 'Filter by Employees', 
             bar: openInventorBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleInventorBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleInventorBarOpen,
             t: 11,
             margin: true,
             label: 'Employees',
@@ -1147,7 +1147,7 @@ const GlobalLayout = (props) => {
         {
             tooltip: 'Filter by Transactions',
             bar: openAssignmentBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleAssignmentBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleAssignmentBarOpen,
             t: 4,
             label: 'Transactions',
             ...(props.type === 9 && {disabled: true})
@@ -1155,7 +1155,7 @@ const GlobalLayout = (props) => {
         {
             tooltip: 'Assets',
             bar: openCustomerBar,
-            click: handleCustomersBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleCustomersBarOpen,
             t: 5,
             margin: true,
             label: 'Assets' 
@@ -1163,7 +1163,7 @@ const GlobalLayout = (props) => {
         {
             tooltip: 'Recorded Documents',
             bar: assetFilesBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleAssetFileBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleAssetFileBarOpen,
             t: 10,
             label: 'Recorded Documents',
             ...(props.type === 9 && {disabled: true})
@@ -1171,7 +1171,7 @@ const GlobalLayout = (props) => {
         {
             tooltip: 'Initiated Documents',
             bar: openGoogleDriveBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleGoogleDriveBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleGoogleDriveBarOpen,
             t: 12,
             label: 'Initiated Documents',
             ...(props.type === 9 && {disabled: true})
@@ -1408,7 +1408,7 @@ const GlobalLayout = (props) => {
                                 )
                             ) 
                         :
-                            <>
+                            <React.Fragment>
                                 <div className={clsx(classes.filterToolbar)}> 
                                     <div className={clsx(classes.flex)}>                            
                                         {
@@ -1428,7 +1428,7 @@ const GlobalLayout = (props) => {
                                 {
                                     childrenWithProps
                                 }
-                            </>
+                            </React.Fragment>
                     } 
                 </Grid>
             </Grid>

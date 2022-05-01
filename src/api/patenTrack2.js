@@ -21,7 +21,25 @@ const getCookie = name => {
 
 const getHeader = () => {
   let token = null
-  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
+    token = localStorage.getItem('auth_signature')
+  } else {
+    token = localStorage.getItem('token')
+    if (token === null) {
+      token = getCookie('token')
+    }
+  }
+  
+  return {
+    headers: {
+      'x-auth-token': token
+    }
+  }    
+}
+
+const getMultiFormUrlHeader = () => {
+  let token = null
+  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
     token = localStorage.getItem('auth_signature')
   } else {
     token = localStorage.getItem('token')
@@ -32,13 +50,14 @@ const getHeader = () => {
   return {
     headers: {
       'x-auth-token': token,
-    },
-  }
+      'Content-Type': 'multipart/form-data'
+    }
+  } 
 }
 
 const getFormUrlHeader = () => {
   let token = null
-  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
     token = localStorage.getItem('auth_signature')
   } else {
     token = localStorage.getItem('token')
@@ -49,32 +68,14 @@ const getFormUrlHeader = () => {
   return {
     headers: {
       'x-auth-token': token,
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-  }
-} 
-
-const getMultiFormUrlHeader = () => {
-  let token = null
-  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-    token = localStorage.getItem('auth_signature')
-  } else {
-    token = localStorage.getItem('token')
-    if (token === null) {
-      token = getCookie('token')
+      'Content-Type': 'application/x-www-form-urlencoded'
     }
-  }
-  return {
-    headers: {
-      'x-auth-token': token,
-      'Content-Type': 'multipart/form-data',
-    },
-  }
+  } 
 }
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelFamilyCounter, cancelFeesCounter
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelFamilyCounter, cancelFeesCounter
 
 class PatenTrackApi {
   static getSiteLogo() {
@@ -270,6 +271,24 @@ class PatenTrackApi {
     if (cancelAssets !== undefined) {
       try{
         throw cancelAssets('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
+  static getShareDashboardList(shareCode) { 
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelShareDashboard = c
+    })
+    return axios.get(`${base_new_api_url}/share/dashboard/list/${shareCode}`, header)
+  }
+
+  static cancelShareDashboard() {
+    if (cancelShareDashboard !== undefined) {
+      try{
+        throw cancelShareDashboard('Operation canceled by the user.')
       } catch (e){
         console.log('cancelRequest->', e)
       }
@@ -620,10 +639,9 @@ class PatenTrackApi {
   }
 
   static getCollectionIllustration(rfID) {
-    console.log('rfID', rfID)
     return axios.get(
       `${base_new_api_url}/collections/${rfID}/illustration`,
-      getHeader() 
+      getHeader()
     )
   }
 
@@ -1291,6 +1309,10 @@ class PatenTrackApi {
       cancelFeesCounter = c
     })
     return axios.get(`${base_new_api_url}/events/${applicationNumber}/${patentNumber != '' ? encodeURIComponent(patentNumber) : applicationNumber}?counter=true`, header)
+  }
+
+  static shareDashboard(form) { 
+    return axios.post(`${base_new_api_url}/dashboards/share`,  form, getFormUrlHeader())
   }
 
   static cancelFeesCounter () {

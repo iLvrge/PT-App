@@ -789,7 +789,7 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state, 
           assetTableScrollPosition: action.pos  
         }
-      case types.SET_ASSET_DETAILS:
+      case types.SET_ASSET_DETAILS: 
         return { 
           ...state, 
           asset_details: {...state.asset_details, ...action.assetData}
@@ -798,6 +798,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         return { 
           ...state, 
           dashboardPanelActiveButtonId: action.ID
+        }
+      case types.SET_DASHBOARD_SHARE_DATA:
+        return { 
+          ...state, 
+          dashboard_share_selected_data: action.data
         }
       default:   
       return state

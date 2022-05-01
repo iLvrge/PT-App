@@ -1108,7 +1108,6 @@ export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, appe
       dispatch( setAssetTypesAssignmentsAllAssetsLoading( true ) )
     }
     PatenTrackApi.cancelAssets()
-    console.log('salesAssets', salesAssets)
     const { data } = await PatenTrackApi.getCustomerAssets( type, companies, tabs, customers, rfIDs, startIndex, endIndex, column, direction, salesAssets )    
     dispatch( setAssetTypeAssignmentAllAssets(data, append) )
     if(append === false) { 
@@ -1712,3 +1711,10 @@ export const setDashboardPanelActiveButtonId = (ID) => {
     ID
   }
 } 
+
+export const setDashboardShareData = (data) => {
+  return {
+    type: types.SET_DASHBOARD_SHARE_DATA,  
+    data
+  }
+}

@@ -11,6 +11,7 @@ import {
     setMainCompaniesSelected,
     setMainCompaniesAllSelected,
     setMainCompaniesRowSelect,
+    setMainCompanies,
     setMaintainenceAssetsList,
     setAssetTypes,
     setAssetTypeInventor,
@@ -220,6 +221,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
     const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
     const channel_id = useSelector(state => state.patenTrack2.channel_id)
+    const dashboard_share_selected_data = useSelector(state => state.patenTrack2.dashboard_share_selected_data)
    
     /**
      * Intialise company list
@@ -416,7 +418,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     useEffect(() => {
         let isSubscribed = true;
         const getSelectedCompanies = async() => {
-            if( companies.list.length > 0 && selectItems.length == 0) {
+            if( companies.list.length > 0 && selectItems.length == 0 && process.env.REACT_APP_ENVIROMENT_MODE != 'DASHBOARD') {
                 /**
                  * Send Request to server
                  */
@@ -494,13 +496,51 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         return () => (isSubscribed = false)
     }, [ companies.list, selectItems ])
 
+
+    useEffect(() => {   
+        if(Object.keys(dashboard_share_selected_data).length > 0 && process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
+            let { selectedCompanies, tabs, customers } = dashboard_share_selected_data
+            if(typeof selectedCompanies != 'undefined' && selectedCompanies != '') {
+                try{
+                    selectedCompanies = JSON.parse(selectedCompanies)
+                    if(selectedCompanies.length > 0) {
+                        setSelectItems(selectedCompanies)
+                        dispatch(setMainCompaniesSelected(selectedCompanies, []))
+
+                        (async () => {
+                            const promise = companies.list.map((row, index) => {
+                                if(!selectedCompanies.includes(row.representative_id)) {
+                                    companies.list[index].status = 0
+                                }
+                            })
+                            await Promise.all(promise)
+                            dispatch(setMainCompanies(companies, { append: false }))
+                        })()
+    
+                        if(typeof tabs != 'undefined' && tabs != '') {
+                            dispatch( setAssetTypesSelect([tabs]) )
+                        }
+                        if(typeof customers != 'undefined' && customers != '') {
+                            customers = JSON.parse(customers)
+                            if(customers.length > 0) {
+                                dispatch( setSelectAssignmentCustomers(customers) )
+                            }
+                        }
+                    }                    
+                } catch (e){
+                    console.log(e)
+                }
+            }
+        }
+    }, [dashboard_share_selected_data])
+
     /**
      * Get list of user activity
      */
 
     useEffect(() => {
         let isSubscribed = true;
-        if((selectedCompaniesAll === true || selected.length > 0 )) {
+        if((selectedCompaniesAll === true || selected.length > 0 ) && process.env.REACT_APP_ENVIROMENT_MODE != 'DASHBOARD') {
             if( assetTypesSelected.length === 0 && assetTypesSelectAll === false ) {
                 const getUserSelection = async () => {
                     const { data } = await PatenTrackApi.getUserActivitySelection()
@@ -710,9 +750,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                         }   
                         //updateGroup.push(parseInt(row.representative_id))
                     } else {
-                        console.log('company1')
                         if(dashboardScreen === true) {
-                            console.log('company2')
                             updateSelected = [parseInt( row.representative_id )]
                         } else {
                             updateSelected.push(parseInt( row.representative_id ))
