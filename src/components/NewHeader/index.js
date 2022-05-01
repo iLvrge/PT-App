@@ -282,7 +282,7 @@ const NewHeader = (props) => {
     if(auth_token != null && typeof profile == 'undefined') {
       dispatch(getProfile(true))
     }
-  }, [disptch, auth_token, profile])
+  }, [dispatch, auth_token, profile])
 
   /**
    * To check buttons for the Google and Slack
