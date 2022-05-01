@@ -74,6 +74,7 @@ var cancel
 class PatenTrackApi {
 
   static getProfile() {
+    console.log('getProfile', getHeader())
     return axios.get(`${base_new_api_url}/profile`, getHeader()) 
   }
 

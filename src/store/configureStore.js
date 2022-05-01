@@ -22,6 +22,7 @@ if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_AP
     (async() => {
       location = location.replace('/', '')
       if( location != '') {
+        console.log('location=>store', location)
         const { data } = await AuthApi.signInWithShareCode(location.replace('/', ''), process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? 9 : process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 0 : 2)
       
         if( data && data != null ) { 
