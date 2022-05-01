@@ -140,6 +140,7 @@ const NewHeader = (props) => {
   const slack_profile_data = useSelector( state => state.patenTrack2.slack_profile_data )
   const google_profile = useSelector( state => state.patenTrack2.google_profile )
   const slack_auth_token = useSelector(state => state.patenTrack2.slack_auth_token)
+  const auth_token = useSelector(state => state.patenTrack2.auth_token)
   const profile = useSelector(store => (store.patenTrack.profile))
   const user = useSelector(store => (store.patenTrack.profile ? store.patenTrack.profile.user : {}))
   const siteLogo = useSelector(state => (state.patenTrack.siteLogo.site_logo ? state.patenTrack.siteLogo.site_logo.logo_big : 'https://s3.us-west-1.amazonaws.com/static.patentrack.com/logo/PatenTrack.png'))
@@ -275,6 +276,13 @@ const NewHeader = (props) => {
       }     
     }
   }, [ dispatch, profile ])
+
+  useEffect(() => {
+    console.log('TOKEN', auth_token, profile)
+    if(auth_token != null && typeof profile == 'undefined') {
+      dispatch(getProfile(true))
+    }
+  }, [disptch, auth_token, profile])
 
   /**
    * To check buttons for the Google and Slack
