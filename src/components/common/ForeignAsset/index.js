@@ -132,7 +132,6 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
     }, [])
 
     useEffect(() => {
-        console.log("invalidItems", invalidItems)
     }, [invalidItems])
 
     useEffect(() => {
@@ -145,7 +144,6 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
 
     useEffect(() => {   
         const googleToken = getTokenStorage( 'google_auth_token_info' )
-        console.log('google_profile', google_profile, googleToken)
         if(google_profile !== null && google_profile.hasOwnProperty('email') && googleToken && googleToken !== '' && googleToken !== null ) { 
             const token = JSON.parse(googleToken)  
             const { access_token } = token  
@@ -257,7 +255,6 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
 
     const checkGoogleToken = () => {
         const googleToken = getTokenStorage( 'google_auth_token_info' )
-        console.log('googleToken=>1', googleToken)
         if(googleToken && googleToken != '' && googleToken!= null) {
             const token = JSON.parse(googleToken)      
             const { access_token } = token  

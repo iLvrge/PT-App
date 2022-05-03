@@ -178,7 +178,7 @@ const GlobalScreen = ({
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
     const dashboard_share_selected_data = useSelector(state => state.patenTrack2.dashboard_share_selected_data)
 
-    console.log('dashboard_share_selected_data', dashboard_share_selected_data)
+    
     
     const checkContainer = () => {
         /* setTimeout(() => {
@@ -198,7 +198,6 @@ const GlobalScreen = ({
 
     useEffect(() => {
         if(process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' && auth_token !== null) {
-            console.log('location', location.pathname)
             let url = location.pathname
             if(url != '' && location != 'blank') {
                 url = url.replace('/', '')
@@ -740,7 +739,7 @@ const GlobalScreen = ({
                                         </div>
                                         <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
                                         {
-                                            dashboardScreen === true && dashboardPanel === true 
+                                            dashboardScreen === true && dashboardPanel === true && type !== 9  
                                             ? 
                                                 assetIllustration != null
                                                 ?

@@ -248,7 +248,7 @@ const IllustrationCommentContainer = ({
                                 type={type} 
                             />
                         :
-                        dashboardScreen === true
+                        dashboardScreen === true &&  type !== 9  
                         ?
                             <Reports
                                 fullScreen={dashboardFullScreen}

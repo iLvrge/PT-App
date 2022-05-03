@@ -23,6 +23,7 @@ import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar'
 import { controlList } from "../../utils/controlList"
 
 import PatenTrackApi from '../../api/patenTrack2'
+import { copyToClipboard } from '../../utils/html_encode_decode'
 
 
 const Reports = (props) => {
@@ -135,6 +136,117 @@ const Reports = (props) => {
             rf_id: '',
             type: 27
         }
+    ];
+
+    let BANK_LIST = [
+        {
+            title: 'Broken Chain-of-Title',
+            sub_heading: 'broken', 
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 1
+        },
+        {
+            title: 'Incorrect Names',
+            sub_heading: 'assignee has a typo',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 17
+        },
+        {
+            title: 'Encumbrances',
+            sub_heading: 'irrelevant assignee recorded on your patents',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 18
+        },
+        {
+            title: 'Other Banks',
+            sub_heading: 'adress',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 19
+        },
+        {
+            title: 'Invalid Collateral',
+            sub_heading: 'typo in the name of lawyer, wrong lawyer addres, no longer works with that lawyer',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 20
+        },
+        {
+            title: 'Unecessary Patents',
+            sub_heading: 'patents',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 21
+        },
+        {
+            title: 'Expired Patents',
+            sub_heading: 'abandoned patents',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 22
+        },
+        {
+            title: 'Recently Expired',
+            sub_heading: 'Surcharge payments  number of the maintainance actvities',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 23
+        },
+        {
+            title: 'Incorrect Recordings',
+            sub_heading: 'typo in the name of lawyer, wrong lawyer addres, no longer works with that lawyer',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 24
+        },
+        {
+            title: 'Late Recordings',
+            sub_heading: 'patents',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 25
+        },
+        {
+            title: 'Deflated Collateral',
+            sub_heading: 'abandoned patents',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 26
+        },
+        {
+            title: 'Challenged',
+            sub_heading: 'Surcharge payments  number of the maintainance actvities',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 27
+        }
     ]
     const GRID_ITEM = {
         lg:3,
@@ -153,7 +265,7 @@ const Reports = (props) => {
     const [smallScreen, setSmallScreen] = useState(false)
     const [activeId, setActiveId] = useState(-1)
     const profile = useSelector(state => (state.patenTrack.profile))    
-    const [cardList, setCardList] = useState([])
+    const [cardList, setCardList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_LIST : LIST)
     const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
     const assetTypeCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.list)
@@ -179,12 +291,6 @@ const Reports = (props) => {
         state => state.patenTrack2.assetTypeAssignmentAssets.total_records,
     );
 
-    useEffect(() => {
-        addCardList()
-        return (() =>{
-
-        })
-    }, [profile])
     useEffect(() => {
         if(ref.current !== null) {
             resizeObserver = new ResizeObserver(entries => {   
@@ -245,8 +351,7 @@ const Reports = (props) => {
      * Get Dashboard data
      */
     useEffect(() => {
-        if(selectedCompanies.length > 0) {
-            
+        if(selectedCompanies.length > 0) {            
             const findDashboardData = async() => {
                 if(loading === false) {                    
                     const list = [];
@@ -274,7 +379,7 @@ const Reports = (props) => {
                         setLoading(true)
                         resetAll(false)
                         props.checkChartAnalytics(null, null, false)                
-                        const dashboardRequest = LIST.map(async item => {
+                        const dashboardRequest = cardList.map(async item => {
                             const formData = new FormData()
                             formData.append('list', JSON.stringify(list));
                             formData.append('total', totalRecords);
@@ -319,29 +424,7 @@ const Reports = (props) => {
     }
 
     const addCardList = () => {
-        if(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank') {
-            const bankList = [...LIST]
-            bankList.forEach( (bank, index) => {
-                switch(parseInt(bank.type)) {
-                    case 19:
-                        bankList[index].title = 'Other Banks'
-                        break;
-                    case 20:  
-                        bankList[index].title = 'Invalid Collateral'
-                        /* bankList[index].display_value = '%' */
-                        break;
-                    case 21:
-                        bankList[index].title = 'Expired Patents'
-                        break;
-                    case 22:
-                        bankList[index].title = 'Recently Expired'
-                        break;
-                }  
-            })  
-            setCardList([...bankList])
-        } else {
-            setCardList([...LIST])
-        }
+        setCardList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_LIST : LIST)
     }
 
     const updateList = useCallback((requestData, type) => {  
@@ -478,8 +561,7 @@ const Reports = (props) => {
             formData.append('customers', JSON.stringify(selectedAssetCompanies));
             const requestData = await PatenTrackApi.shareDashboard(formData)
             if( requestData !== null){
-                console.log("requestData", requestData)
-                window.open(requestData, "_blank");
+                copyToClipboard(requestData)
             }
         } else {
             alert("Please select a company first")

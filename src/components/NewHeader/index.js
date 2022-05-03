@@ -539,10 +539,10 @@ const onHandleForeignAssets = useCallback((event) => {
     resetAllRowSelect(dispatch, resetItemList.resetAll)
     resetAllRowSelect(dispatch, resetItemList.clearOtherItems)
     
-    if(path.indexOf('/review_foreign_assets') !== -1) {
+    if(path.indexOf('/review_external_assets') !== -1) {
       history.push('/') 
     } else {
-      history.push('/review_foreign_assets') 
+      history.push('/review_external_assets') 
     }
   }  
 }, [dispatch])

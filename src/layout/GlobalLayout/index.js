@@ -48,7 +48,8 @@ import { toggleUsptoMode,
     toggleLifeSpanMode,
     setTimelineScreen,
     setDriveTemplateMode,
-    setDashboardScreen } from '../../actions/uiActions'
+    setDashboardScreen, 
+    setDashboardPanel} from '../../actions/uiActions'
 
 import PatenTrackApi from '../../api/patenTrack2' 
 
@@ -189,7 +190,7 @@ const GlobalLayout = (props) => {
 
     useEffect(() => {
         if(profile?.user && profile.user?.organisation) {
-            if(profile.user.organisation.organisation_type == 'Bank') {
+            if(profile.user.organisation.organisation_type == 'Bank' && props.type != 9) {
                 dispatch( setAssetTypesSelect([5]) ) // always select by default lending activity
                 setOpenBar( false ) //company
                 setTypeOpenBar( false ) //activites
@@ -207,6 +208,13 @@ const GlobalLayout = (props) => {
     }, [profile])
 
     useEffect(() => {
+        if(props.type == 9) {
+            setDashboardScreen(false)
+            setDashboardPanel(false)
+        }  
+    }, [props.type])
+
+    useEffect(() => {
         if(patentScreen === true && openCustomerBar === false) {
             handleCustomersBarOpen()
         }
@@ -219,7 +227,7 @@ const GlobalLayout = (props) => {
 
     useEffect(() => {
         if(profile?.user && profile.user?.organisation) {
-            if(profile.user.organisation.organisation_type == 'Bank' && dashboardScreen === true) {
+            if(profile.user.organisation.organisation_type == 'Bank' && dashboardScreen === true && props.type != 9) {
                 if(selectedCompanies.length === 0 && selectedAssetCompaniesAll === false && companies.list.length > 0 && request === false) {
                     const getSelectedCompanies = async() => {
                         /**
@@ -968,7 +976,7 @@ const GlobalLayout = (props) => {
             setVisualizeOpenBar( true ) 
             setVisualizerBarSize(prevItem =>{
                 if(prevItem == '0%') {
-                    return  dashboardScreen === true && assetIllustration != null ? getWindowDimensions() :'40.1%'
+                    return  dashboardScreen === true ? getWindowDimensions() :'40.1%'
                 } else {
                     return prevItem
                 }
@@ -991,9 +999,9 @@ const GlobalLayout = (props) => {
                 return prevItem
             })
             if((chartPrevItem === true || analyticsPrevItem === true) && (openCommentBar === true || openIllustrationBar === true)){
-                barSize = dashboardScreen === true && assetIllustration != null ? getWindowDimensions() : visualizerBarSize !== '0%' ?  visualizerBarSize :  '40.1%'
+                barSize = dashboardScreen === true ? getWindowDimensions() : visualizerBarSize !== '0%' ?  visualizerBarSize :  '40.1%'
             } else if (openCommentBar === false && openIllustrationBar === false && ( chartPrevItem === true ||  analyticsPrevItem === true )) {
-                barSize = '100%'
+                barSize = '100%'  
             }
             if(barSize === '0%') {
                 setVisualizeOpenBar( false )
@@ -1010,7 +1018,7 @@ const GlobalLayout = (props) => {
             }  */
             /* console.log("barSize", barSize, chartPrevItem, analyticsPrevItem)     */        
         } 
-    }, [openChartBar, openAnalyticsBar, openCommentBar, openIllustrationBar])
+    }, [openChartBar, openAnalyticsBar, openCommentBar, openIllustrationBar, dashboardScreen])
 
 
     const handleOpenSettings = useCallback(() => {
