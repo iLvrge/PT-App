@@ -35,7 +35,7 @@ import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
 var newRange = [1,2]
 
-const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, type }) => {
+const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange }) => {
     
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -84,23 +84,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         }
     ])
 
-    const menuItems = [
-        {
-            id: 1,
-            label: 'Invention Data',
-            component: InventionVisualizer,
-            standalone: true,
-            defaultSize, 
-            visualizerBarSize, 
-            analyticsBar, 
-            openCustomerBar, 
-            commentBar, 
-            illustrationBar, 
-            customerBarSize, 
-            companyBarSize
-        }
-    ]
-
+    
     const [ inventionTabs, setInventionTabs ] = useState(['Innovation'])
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
@@ -131,6 +115,29 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const [ graphRawGroupData, setGraphRawGroupData ] = useState([])  
     let interval;
     
+    const menuItems = [
+        {
+            id: 1,
+            label: 'Invention Data',
+            component: InventionVisualizer,
+            standalone: true,
+            defaultSize, 
+            visualizerBarSize, 
+            analyticsBar, 
+            openCustomerBar, 
+            commentBar, 
+            illustrationBar, 
+            customerBarSize, 
+            companyBarSize,
+            gRawData: graphRawData, 
+            gRawGroupData: graphRawGroupData, 
+            sData: salesData, 
+            fYear: filterYear,
+            vYear: valueYear, 
+            vScope: valueScope, 
+            sRange: scopeRange
+        }
+    ]
     let options = {
         height: '100%',
         width: '100%',
@@ -388,7 +395,18 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 setIsLoadingCharts(false)                
             }
         }
-        getChartData()
+        if(typeof gRawData !== 'undefined') {
+            setGraphRawData(gRawData)
+            setGraphRawGroupData(gRawGroupData)
+            setSalesData(sData)
+            setIsLoadingCharts(false) 
+            setFilterYear(fYear)
+            setValueYear(vYear)
+            setValueScope(vScope)
+            setScopeRange(sRange)
+        } else {
+            getChartData()
+        }
         //console.log( "getChartData", selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments )
     }, [selectedTab, openCustomerBar, selectedCategory, selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_clipboard ]) 
 
