@@ -244,7 +244,8 @@ const VirtualizedTable = ({
         fontSize,
         selectedFromChild,
         classCol,
-        enable
+        enable,
+        show
       } = columns[columnIndex];
       
       let extensionIcon = '', faIcon = '', selectedRow = false
@@ -448,7 +449,14 @@ const VirtualizedTable = ({
             ) : role === 'image'  ?  
                 extensionIcon != '' ?
                 <span className={classes.flexImageContainer}>
-                  <span className={classes.flexImage}><img src={extensionIcon} className={classes.smallImg}/></span><span className={classes.flexData}>{(cellData == '' || cellData == null || cellData == undefined) && rowData[secondaryKey] != undefined && rowData[secondaryKey] != null ? rowData[secondaryKey] :  cellData }</span>
+                  <span className={classes.flexImage}><img src={extensionIcon} className={classes.smallImg}/></span>
+                  {
+                    typeof show !== 'undefined' && show === false 
+                    ?
+                      ''
+                    :
+                      <span className={classes.flexData}>{(cellData == '' || cellData == null || cellData == undefined) && rowData[secondaryKey] != undefined && rowData[secondaryKey] != null ? rowData[secondaryKey] :  cellData }</span>
+                  }
                 </span>  
                 :
                 faIcon != ''

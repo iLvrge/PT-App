@@ -19,7 +19,7 @@ export default makeStyles(theme => ({
         display: 'flex',
     },
     fullscreenCharts: {
-        margin: 35,
+        margin: 28,
         flex: 1,
         display: 'flex',
         backgroundColor: theme.palette.background.default,

@@ -35,7 +35,7 @@ import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
 var newRange = [1,2]
 
-const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange }) => {
+const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal }) => {
     
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -404,6 +404,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             setValueYear(vYear)
             setValueScope(vScope)
             setScopeRange(sRange)
+            setFilterList(fList)
+            setFilterTotal(fTotal)
         } else {
             getChartData()
         }

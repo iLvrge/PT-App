@@ -136,19 +136,22 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
 
   const COLUMNS = [
-    /* {
-      width: 29,
-      minWidth: 29,
+    {
+      width: 10,
+      minWidth: 10,
       label: "",
       dataKey: "rf_id",
       role: "radio",
       disableSort: true,
-      show_selection_count: true
-    }, */
+      show_selection_count: true,
+      enable: false,
+      show: false
+    }, 
     {
-      width: 20,
-      minWidth: 20,
+      width: 25,
+      minWidth: 25,
       label: "",
+      headingIcon: 'transactions',
       dataKey: "rf_id",
       role: "arrow",      
       disableSort: true,
@@ -157,7 +160,6 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       width: 130,
       minWidth: 130,
       label: "Transactions",
-      headingIcon: 'transactions',
       dataKey: "date",
       align: "left",
       badge: true, 

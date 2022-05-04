@@ -388,39 +388,43 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
     /**
      * call for the timeline api data
     */
+    let isSubscribed = true;
     const getTimelineRawDataFunction = async () => {
       //search
-      resetTooltipContainer()
-      if(search_string != '' && search_string != null){
-        if(search_rf_id.length > 0) {
-          //setIsLoadingTimelineData(true)
-          const { data } = await PatenTrackApi.getActivitiesTimelineData([], [], [], search_rf_id) // empty array for company, tabs, customers
-          //setIsLoadingTimelineData(false)
-          //setTimelineRawGroups(data.groups) //groups
-          setTimelineRawData(data.list) //items
-        }       
-      } else {
-        if(type !== 9)  {
-          const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-          tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-          customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
-          rfIDs = selectedAssetAssignments.length > 0 ? selectedAssetAssignments : [];
-  
-          if( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
+      if(isSubscribed) {
+        resetTooltipContainer()
+        if(search_string != '' && search_string != null){
+          if(search_rf_id.length > 0) {
             //setIsLoadingTimelineData(true)
-            const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
+            const { data } = await PatenTrackApi.getActivitiesTimelineData([], [], [], search_rf_id) // empty array for company, tabs, customers
             //setIsLoadingTimelineData(false)
-            setTimelineRawData(data.list)
-          } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null ) {
-            //setIsLoadingTimelineData(true)
-            const { data } = await PatenTrackApi.getShareTimelineList(location.pathname.replace('/', ''))
-            setTimelineRawData(data.list)           
-            //setIsLoadingTimelineData(false)            
+            //setTimelineRawGroups(data.groups) //groups
+            setTimelineRawData(data.list) //items
+          }       
+        } else {
+          if(type !== 9)  {
+            const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+            tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+            customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
+            rfIDs = selectedAssetAssignments.length > 0 ? selectedAssetAssignments : [];
+    
+            if( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
+              //setIsLoadingTimelineData(true)
+              const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
+              //setIsLoadingTimelineData(false)
+              setTimelineRawData(data.list)
+            } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null ) {
+              //setIsLoadingTimelineData(true)
+              const { data } = await PatenTrackApi.getShareTimelineList(location.pathname.replace('/', ''))
+              setTimelineRawData(data.list)           
+              //setIsLoadingTimelineData(false)            
+            }
           }
-        }
-      } 
+        } 
+      }
     }
     getTimelineRawDataFunction()
+    return () => (isSubscribed = false)
     
   }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors, auth_token, switch_button_assets ])
 

@@ -1489,6 +1489,7 @@ export const setResetAll = (t = 0, item) => {
 }
 
 export const transactionRowClick = (rf_id, slackChannelList, defaultLoad, search_string) => {
+  
   return dispatch => {
     dispatch(toggleLifeSpanMode(true))
     dispatch(setConnectionBoxView(false))
@@ -1502,9 +1503,9 @@ export const transactionRowClick = (rf_id, slackChannelList, defaultLoad, search
     dispatch(setChildSelectedAssetsTransactions([]))
     dispatch(setChildSelectedAssetsPatents([]))
     dispatch(setSelectedAssetsPatents([]))
-    dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
     dispatch(setSelectedAssetsTransactions([rf_id]))
     if(typeof defaultLoad !== 'undefined' && defaultLoad === false){
+      dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
       dispatch(getAssetTypeAssignmentAssets(rf_id, false, 1, search_string)) // fill assets table 
     }
     dispatch(setAssetsIllustrationData(null))

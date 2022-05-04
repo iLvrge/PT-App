@@ -68,15 +68,30 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
     
     const ASSET_COLUMNS = [  
         {
-            width: 29, 
-            minWidth: 29,
-            oldWidth: 29,
+            width: 10, 
+            minWidth: 10,
+            oldWidth: 10,
             label: '',
             dataKey: 'id',
             role: 'checkbox',
             disableSort: true,
             show_selection_count: true,   
-            enable: false
+            enable: false,
+            show: false
+        },
+        {
+            width: 25, 
+            minWidth: 25,
+            label: '',
+            dataKey: 'id', 
+            imageURL: '',
+            imageIcon: '',
+            disableSort: true, 
+            extension: true,
+            headingIcon: 'recorded', 
+            role: 'image', 
+            checkboxSelect: true,
+            show: false
         },
         {
             width: 130,
@@ -84,12 +99,7 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
             oldWidth: 130,
             draggable: true,
             label: 'Recorded',
-            headingIcon: 'recorded',
-            dataKey: 'date',  
-            role: 'image', 
-            imageURL: '',
-            imageIcon: '',
-            extension: true,
+            dataKey: 'date', 
             badge: true,   
             align: 'left' 
         },
@@ -127,21 +137,33 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
 
     const DOCUMENT_COLUMNS = [  
         {
-            width: 29, 
-            minWidth: 29,
-            oldWidth: 29,
+            width: 10, 
+            minWidth: 10,
+            oldWidth: 10,
             label: '',
             dataKey: 'id',
             role: 'checkbox',
             disableSort: true,
-            show_selection_count: true
+            show_selection_count: true,   
+            enable: false,
+            show: false
+        },
+        {
+            width: 25, 
+            minWidth: 25,
+            label: '',
+            dataKey: 'id',
+            disableSort: true, 
+            headingIcon: 'initiated',
+            enable: false,
+            show: false,
+            checkboxSelect: true
         },
         {
             width: 300,
             minWidth: 300,
             oldWidth: 300,
             draggable: true,
-            headingIcon: 'initiated',
             label: 'Initiated',
             dataKey: 'title',
             secondaryKey: 'name', 
@@ -338,7 +360,7 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
     const onHandleClickRow = useCallback((e, item) => {
         e.preventDefault()
         const { checked } = e.target;
-        let cntrlKey = e.ctrlKey ? e.ctrlKey : undefined;
+        let cntrlKey = e.ctrlKey ? e.ctrlKey : e.metaKey ? e.metaKey : undefined;
         
         if(cntrlKey !== undefined) {   
              setSelectItems(prevItems =>

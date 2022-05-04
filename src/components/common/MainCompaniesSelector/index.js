@@ -73,18 +73,20 @@ import { resetAllRowSelect } from '../../../utils/resizeBar'
 const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag, parentBar, isMobile}) => {
     const COLUMNS = [
         {
-            width: 29,
-            minWidth: 29,
+            width: 10,
+            minWidth: 10,
             label: '',
             dataKey: 'representative_id',
             role: 'checkbox',
             selectedFromChild: true,     
             disableSort: true,
             show_selection_count: true,
+            enable: false,
+            show: false
             /* showOnCondition: '1' */ 
         },
         {
-            width: 25, 
+            width: 25,     
             minWidth: 25,
             label: '',
             dataKey: 'representative_id',
@@ -92,7 +94,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             role: "arrow",
             disableSort: true,
             showOnCondition: '0',
-            disableColumnKey:'type'
+            disableColumnKey:'type',
+            checkboxSelect: true
         },
         {
             width: 700,  
@@ -403,7 +406,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         } else {
             let headerColumns = [...COLUMNS]
             headerColumns[0].role = 'checkbox'
-
             headerColumns[0].selectedFromChild = true
             headerColumns[0].show_selection_count = true
             setHeaderColumns(headerColumns)
@@ -494,7 +496,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }
             
         return () => (isSubscribed = false)
-    }, [ companies.list, selectItems ])
+    }, [ companies.list ])
 
 
     useEffect(() => {   
@@ -708,8 +710,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
      * @param {*} defaultSelect 
      * @param {*} currentSelection 
      */
-    const updateCompanySelection = async(event, dispatch, row, checked, selected, defaultSelect, currentSelection) => {
-        if(checked != undefined) {
+    const updateCompanySelection = async(event, dispatch, row, cntrlKey, selected, defaultSelect, currentSelection) => {
+        if(cntrlKey !== undefined) {
             let updateSelected = [...selected], sendRequest = false , updateGroup = [...selectedGroup] 
             if(!updateSelected.includes(parseInt( row.representative_id ))) {
                 if(selectedCategory === 'correct_names') {
@@ -806,13 +808,14 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const handleClickRow = useCallback((event, row) => {
         event.preventDefault()
         const { checked } = event.target;
-        if(checked != undefined) {
+        let cntrlKey = event.ctrlKey ? event.ctrlKey : event.metaKey ? event.metaKey : undefined;
+        if(cntrlKey !== undefined) {
             if(display_clipboard === false) {
                 dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
                 dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
             }
         } 
-        updateCompanySelection(event, dispatch, row, checked, selected, defaultSelect, currentSelection)
+        updateCompanySelection(event, dispatch, row, cntrlKey, selected, defaultSelect, currentSelection)
     }, [ dispatch, selected, display_clipboard, currentSelection ])
 
     /**
@@ -820,12 +823,17 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
      */
     
     const handleSelectAll = useCallback((event, row) => {
+        console.log('handleSelectAll')
         event.preventDefault()
         const { checked } = event.target;
         dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
         dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
         resetAll()
-        if(checked === false) {
+        setSelectItems([])
+        dispatch( setMainCompaniesSelected([], []) )            
+        clearOtherItems()
+        dispatch( setMainCompaniesAllSelected( false ) )
+        /* if(checked === false) {
             setSelectItems([])
             dispatch( setMainCompaniesSelected([], []) )            
             clearOtherItems()
@@ -854,8 +862,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                     dispatch( setMainCompaniesSelected(items, groups) )
                 } 
             }            
-        }
-        dispatch( setMainCompaniesAllSelected( checked ) )
+        } 
+        dispatch( setMainCompaniesAllSelected( checked ) ) */
     }, [ dispatch, companies ]) 
 
     const handleOnClickLoadMore = useCallback(() => {

@@ -93,9 +93,8 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
 
     const COLUMNS = [        
         {
-          width: 12,
-          minWidth: 12,
-          headerWidth: 20,
+          width: 10,
+          minWidth: 10,
           label: '',
           dataKey: 'tab_id',
           role: 'none',
@@ -103,8 +102,8 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
           enable: false
         },
         {
-            width: 30,
-            minWidth: 30,
+            width: 25,
+            minWidth: 25,
             label: '',
             dataKey: 'icon',
             headingIcon: 'activities', 

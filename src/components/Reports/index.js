@@ -1,4 +1,5 @@
 import React, {useMemo, useState, useCallback, useEffect, useRef} from 'react'
+import { useHistory } from 'react-router-dom'
 import { Grid, Typography, IconButton, Paper, Tooltip, Zoom }  from '@mui/material'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -24,7 +25,7 @@ import { controlList } from "../../utils/controlList"
 
 import PatenTrackApi from '../../api/patenTrack2'
 import { copyToClipboard } from '../../utils/html_encode_decode'
-
+import routeList from '../../routeList'
 
 const Reports = (props) => {
     let LIST = [
@@ -256,6 +257,7 @@ const Reports = (props) => {
         xl:3
     }
     const classes = useStyles();
+    const history = useHistory()
     const dispatch = useDispatch();
     const DATE_FORMAT = 'MMM DD, YYYY'
     const ref = useRef();
@@ -298,6 +300,7 @@ const Reports = (props) => {
                 let smallScreen = false         
                 const { width } = entries[0].contentRect;
                 if(width > 401 && width < 601 ) {
+                    smallScreen = true
                     setGrid({
                         lg:6,
                         md:6,
@@ -356,49 +359,28 @@ const Reports = (props) => {
                 if(loading === false) {                    
                     const list = [];
                     let totalRecords = 0;
-                    /* if( assetsSelected.length > 0 ) {
-                        const promise = assetsSelected.map(asset => {
-                            const findIndex = assetTypeAssignmentAssets.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset.toString() )
-                            if( findIndex !== -1 ) {
-                                if( assetTypeAssignmentAssets[findIndex].appno_doc_num != '' ) {
-                                    list.push(assetTypeAssignmentAssets[findIndex].appno_doc_num.toString())
-                                }
-                            }
-                        })
-                        await Promise.all(promise)
-                        totalRecords = list.length
-                    } else if( assetTypeAssignmentAssets.length > 0 ) {
-                        const promise = assetTypeAssignmentAssets.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
-                        await Promise.all(promise)
-                        totalRecords = assetsTotal
-                    }  
-                    if(list.length > 0) {
+                    setLoading(true)
+                    resetAll(false)
+                    props.checkChartAnalytics(null, null, false)                
+                    const dashboardRequest = cardList.map(async item => {
+                        const formData = new FormData()
+                        formData.append('list', JSON.stringify(list));
+                        formData.append('total', totalRecords);
+                        formData.append('selectedCompanies', JSON.stringify(selectedCompanies));
+                        formData.append('tabs', JSON.stringify(assetTypesSelected));
+                        formData.append('customers', JSON.stringify(selectedAssetCompanies));
+                        formData.append('assignments', JSON.stringify(selectedAssetAssignments));
+                        formData.append('type', item.type)
+                        formData.append('format_type', profile.user.organisation.organisation_type)
                         
-                    } */
-                    /*if((profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' && assetTypeCompanies.length > 0) || ()) {*/
-                        setLoading(true)
-                        resetAll(false)
-                        props.checkChartAnalytics(null, null, false)                
-                        const dashboardRequest = cardList.map(async item => {
-                            const formData = new FormData()
-                            formData.append('list', JSON.stringify(list));
-                            formData.append('total', totalRecords);
-                            formData.append('selectedCompanies', JSON.stringify(selectedCompanies));
-                            formData.append('tabs', JSON.stringify(assetTypesSelected));
-                            formData.append('customers', JSON.stringify(selectedAssetCompanies));
-                            formData.append('assignments', JSON.stringify(selectedAssetAssignments));
-                            formData.append('type', item.type)
-                            formData.append('format_type', profile.user.organisation.organisation_type)
-                            
-                            const requestData = await PatenTrackApi.getDashboardData(formData)
-                            if( requestData !== null){
-                                updateList(requestData, item.type)
-                            }
-                            return item
-                        })                
-                        await Promise.all(dashboardRequest)
-                        setLoading(false)
-                    /*}                    */
+                        const requestData = await PatenTrackApi.getDashboardData(formData)
+                        if( requestData !== null){
+                            updateList(requestData, item.type)
+                        }
+                        return item
+                    })                
+                    await Promise.all(dashboardRequest)
+                    setLoading(false)
                 }                
             }
             findDashboardData()
@@ -446,6 +428,21 @@ const Reports = (props) => {
             setCardList(oldList)
         }      
     }, [cardList])
+
+    useEffect(() => {
+        if(activeId  !== -1 ) {
+            //scrollToActive item
+            const container = ref.current
+            console.log('container', container)
+            if(container !== null){
+                setTimeout(() => {
+                    const listItemsContainer = container.querySelector('.listItems')
+                    console.log(activeId, listItemsContainer, listItemsContainer.querySelectorAll('.box_item')[activeId].offsetTop)
+                    listItemsContainer.scroll(0, listItemsContainer.querySelectorAll('.box_item')[activeId].offsetTop)
+                }, 1000)
+            }
+        }
+    }, [activeId])
 
     const companyname = useMemo(() => {
         return selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])
@@ -531,6 +528,9 @@ const Reports = (props) => {
                 dispatch(setDashboardScreen(false))
                 dispatch(setTimelineScreen(timeline))
                 dispatch(setPatentScreen(patent))
+                if(patent === true) {
+                    history.push(routeList.patent_assets)  
+                }
                 if(props.openCustomerBar === false){
                     props.handleCustomersBarOpen()
                 }
@@ -559,9 +559,9 @@ const Reports = (props) => {
             formData.append('selectedCompanies', JSON.stringify(selectedCompanies));
             formData.append('tabs', profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? 5 : JSON.stringify(assetTypesSelected));
             formData.append('customers', JSON.stringify(selectedAssetCompanies));
-            const requestData = await PatenTrackApi.shareDashboard(formData)
-            if( requestData !== null){
-                copyToClipboard(requestData)
+            const {data} = await PatenTrackApi.shareDashboard(formData)
+            if( data !== null){
+                copyToClipboard(data, 'Share url is added to your clipboard.')
             }
         } else {
             alert("Please select a company first")
@@ -571,7 +571,7 @@ const Reports = (props) => {
     const showItems = cardList.map( (card, index) => {
         return <Grid
             item  {...grid}
-            className={classes.flexColumn}
+            className={clsx(classes.flexColumn, `box_item`, {['activeItem']: index === activeId})}
             key={`card_${index}`}
         >
             <CardElement 
@@ -619,7 +619,7 @@ const Reports = (props) => {
                             <FontAwesomeIcon
                                 icon={faShareAlt}
                             />
-                        </IconButton>                            
+                        </IconButton>                               
                         <IconButton size="small"
                             onClick={() => {props.handleFullScreen(!props.fullScreen)}}
                             className={clsx(classes.actionIcon, typeof props.standalone !== 'undefined' ? classes.fontStandalone : '' )}
@@ -631,7 +631,7 @@ const Reports = (props) => {
             </Grid>
             <Grid
                 item lg={12} md={12} sm={12} xs={12} 
-                className={classes.list}
+                className={clsx(classes.list, 'listItems')}
             >
                 <Grid  
                     container

@@ -27,7 +27,7 @@ import {
     setNameQueueLoading 
   } from '../../../actions/patentTrackActions2'
 import { setTokenStorage, getTokenStorage } from '../../../utils/tokenStorage'
-import { downloadFile, copyToClipboard } from '../../../utils/html_encode_decode'
+import { downloadFile } from '../../../utils/html_encode_decode'
 import 'react-quill/dist/quill.snow.css'
 import './styles.css'
 import clsx from 'clsx'
@@ -334,10 +334,7 @@ const QuillEditor = ({
   const onAttachmentOpenedFileAndEmail = useCallback(() => {    
     const bodyURL = encodeURIComponent(`\n\n\n\n${template_document_url}`)
     let url = `https://mail.google.com/mail/u/0/?fs=1&tf=cm${template_document_url != '' ? '&body='+bodyURL : ''}`
-    /* if( template_document_url != '') {
-      copyToClipboard(template_document_url)
-
-    } */
+    
     window.open(url,'GMAIL')
   }, [ template_document_url, quillRef ] )  
 

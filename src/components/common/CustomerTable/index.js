@@ -82,18 +82,20 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
 
     const COLUMNS = [
         {
-          width: 12, 
-          minWidth: 12, 
+          width: 10, 
+          minWidth: 10, 
           label: '',
           dataKey: 'id',
           role: 'checkbox',
           disableSort: true,
           show_selection_count: true,   
-          enable: false
+          enable: false,
+          show: false
         },
         {
-            width: 20,
-            minWidth: 20,
+            width: 25,
+            minWidth: 25,
+            headingIcon: 'parties', 
             label: '',
             dataKey: 'id',
             role: 'arrow',
@@ -103,8 +105,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             width: 200,
             minWidth: 200,
             oldWidth: 200,
-            draggable: true,      
-            headingIcon: 'parties',     
+            draggable: true,          
             label: 'Parties',
             dataKey: 'entityName', 
             badge: true,   

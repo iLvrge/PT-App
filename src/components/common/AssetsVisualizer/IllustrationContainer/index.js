@@ -8,9 +8,7 @@ import PatentrackDiagram from '../../PatentrackDiagram'
 import { toggleUsptoMode, toggleFamilyMode, toggleShow3rdParities } from "../../../../actions/uiActions";
 import { setAssetsIllustrationLoading, setAssetsIllustrationData, retrievePDFFromServer } from '../../../../actions/patentTrackActions2' 
 import { setPDFFile, setPDFView, setPdfTabIndex, setConnectionData, setConnectionBoxView } from '../../../../actions/patenTrackActions' 
-import { copyToClipboard } from '../../../../utils/html_encode_decode'
 
-import PdfViewer from '../../../common/PdfViewer'
 import ErrorBoundary from '../../ErrorBoundary'
 import themeMode from '../../../../themes/themeMode';
 import axios from 'axios' 

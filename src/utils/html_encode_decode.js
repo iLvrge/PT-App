@@ -61,9 +61,11 @@ export const downloadFile = (data) => {
     window.URL.revokeObjectURL(url)
 }
 
-export const copyToClipboard = (data) => {
+export const copyToClipboard = (data, message) => {
     //console.log('IN copyToClipboard', data)
-    navigator.clipboard.writeText(data)
+    navigator.clipboard.writeText(data).then(() => {
+        alert(message)
+    })
     /* var textField = document.createElement('textarea')
     textField.innerText = data
     document.body.appendChild(textField)

@@ -462,9 +462,10 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       enable: false
     },
     {
-      width: 20,
-      minWidth: 20,
+      width: 25,
+      minWidth: 25,
       disableSort: true,
+      headingIcon: 'assets',  
       label: "",
       dataKey: "asset",
       role: "static_dropdown",
@@ -483,8 +484,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     {
       width: isMobile === true ? 150 : 100,  
       minWidth: isMobile === true ? 150 : 100,  
-      label: "Assets", 
-      headingIcon: 'assets',   
+      label: "Assets",  
       /* dataKey: "format_asset", */
       dataKey: "asset",
       staticIcon: "US",
@@ -979,7 +979,7 @@ const checkMouseStillOnHover = (e, number) => {
     (e, row) => {
         e.preventDefault()
         const { checked } = e.target
-        let cntrlKey = e.ctrlKey ? e.ctrlKey : undefined;
+        let cntrlKey = e.ctrlKey ? e.ctrlKey : e.metaKey ? e.metaKey : undefined;
         if(dashboardScreen === true) {
           dispatch(setTimelineScreen(true))
           dispatch(setDashboardScreen(false))
