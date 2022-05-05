@@ -50,7 +50,7 @@ const convertDataToItem = (item) => {
 var tootlTip = ''
 const TIME_INTERVAL = 1000
 
-const Ptab = ({ number }) => {
+const Ptab = ({ number, rawData, updateRawData }) => {
     const classes = useStyles()
     const timelineRef = useRef()
     const timelineContainerRef = useRef()
@@ -97,7 +97,6 @@ const Ptab = ({ number }) => {
         } 
     }
 
-
     // Custom ToolTip
   
     const showTooltip = (item, event) => {     
@@ -134,22 +133,25 @@ const Ptab = ({ number }) => {
         }, TIME_INTERVAL) 
     }
 
-
-
     useEffect(() => {
-        const getPtabData = async() => {
-            setIsLoadingTimelineRawData(true)
-            PatenTrackApi.cancelPtab()    
-            const { data } = await PatenTrackApi.getPtabData(selectedAssetsPatents[1])
+        if(typeof rawData !== 'undefined' && rawData.length > 0) {
             setIsLoadingTimelineRawData(false) 
-            if(data !== null) {
-                setTimelineRawData(data)
+            setTimelineRawData(rawData)
+        } else {
+            const getPtabData = async() => {
+                setIsLoadingTimelineRawData(true)
+                PatenTrackApi.cancelPtab()    
+                const { data } = await PatenTrackApi.getPtabData(selectedAssetsPatents[1])
+                setIsLoadingTimelineRawData(false) 
+                if(data !== null && data.length > 0 )  {
+                    setTimelineRawData(data)
+                    updateRawData(rawData)
+                }
             }
+            getPtabData()
         }
-        getPtabData()
-    }, [selectedAssetsPatents])
-
-   
+    }, [selectedAssetsPatents, rawData])
+ 
     useEffect(() => {
         if(timelineRef.current !== null && timelineRef.current != undefined && typeof timelineRef.current.destroy === 'function') {
             timelineRef.current.destroy()
@@ -158,7 +160,6 @@ const Ptab = ({ number }) => {
             timelineRef.current = new Timeline(timelineContainerRef.current, [], options)  
         }                        
     }, [])
-
 
     useEffect(() => {
         if (isLoadingTimelineRawData) return

@@ -354,39 +354,45 @@ const Reports = (props) => {
      * Get Dashboard data
      */
     useEffect(() => {
-        if(selectedCompanies.length > 0) {            
-            const findDashboardData = async() => {
-                if(loading === false) {                    
-                    const list = [];
-                    let totalRecords = 0;
-                    setLoading(true)
-                    resetAll(false)
-                    props.checkChartAnalytics(null, null, false)                
-                    const dashboardRequest = cardList.map(async item => {
-                        const formData = new FormData()
-                        formData.append('list', JSON.stringify(list));
-                        formData.append('total', totalRecords);
-                        formData.append('selectedCompanies', JSON.stringify(selectedCompanies));
-                        formData.append('tabs', JSON.stringify(assetTypesSelected));
-                        formData.append('customers', JSON.stringify(selectedAssetCompanies));
-                        formData.append('assignments', JSON.stringify(selectedAssetAssignments));
-                        formData.append('type', item.type)
-                        formData.append('format_type', profile.user.organisation.organisation_type)
-                        
-                        const requestData = await PatenTrackApi.getDashboardData(formData)
-                        if( requestData !== null){
-                            updateList(requestData, item.type)
-                        }
-                        return item
-                    })                
-                    await Promise.all(dashboardRequest)
-                    setLoading(false)
-                }                
+        if(typeof props.dashboardData !== 'undefined' && props.dashboardData.length > 0) {
+            setLoading(false)
+            setCardList(props.dashboardData)
+        } else {
+            if(selectedCompanies.length > 0) {            
+                const findDashboardData = async() => {
+                    if(loading === false) {                    
+                        const list = [];
+                        let totalRecords = 0;
+                        setLoading(true)
+                        resetAll(false)
+                        props.checkChartAnalytics(null, null, false)                
+                        const dashboardRequest = cardList.map(async item => {
+                            const formData = new FormData()
+                            formData.append('list', JSON.stringify(list));
+                            formData.append('total', totalRecords);
+                            formData.append('selectedCompanies', JSON.stringify(selectedCompanies));
+                            formData.append('tabs', JSON.stringify(assetTypesSelected));
+                            formData.append('customers', JSON.stringify(selectedAssetCompanies));
+                            formData.append('assignments', JSON.stringify(selectedAssetAssignments));
+                            formData.append('type', item.type)
+                            formData.append('format_type', profile.user.organisation.organisation_type)
+                            
+                            const requestData = await PatenTrackApi.getDashboardData(formData)
+                            if( requestData !== null){
+                                updateList(requestData, item.type)
+                            }
+                            return item
+                        })                
+                        await Promise.all(dashboardRequest)
+                        setLoading(false)
+                    }                
+                }
+                findDashboardData()
+            } else {   
+                addCardList()  
             }
-            findDashboardData()
-        } else {   
-            addCardList()  
         }
+        
     }, [selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssets, assetTypeCompanies])
 
     const resetAll = (flag) => {
@@ -426,6 +432,9 @@ const Reports = (props) => {
                 oldList[findIndex].total = 0
             }
             setCardList(oldList)
+            if(typeof props.updateDashboardData !== 'undefined') {
+                props.updateDashboardData(oldList)
+            }
         }      
     }, [cardList])
 
@@ -433,11 +442,9 @@ const Reports = (props) => {
         if(activeId  !== -1 ) {
             //scrollToActive item
             const container = ref.current
-            console.log('container', container)
             if(container !== null){
                 setTimeout(() => {
                     const listItemsContainer = container.querySelector('.listItems')
-                    console.log(activeId, listItemsContainer, listItemsContainer.querySelectorAll('.box_item')[activeId].offsetTop)
                     listItemsContainer.scroll(0, listItemsContainer.querySelectorAll('.box_item')[activeId].offsetTop - 50)
                 }, 1000)
             }

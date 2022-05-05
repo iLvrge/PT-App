@@ -77,6 +77,8 @@ const IllustrationCommentContainer = ({
     const [ isFullscreenOpen, setIsFullscreenOpen ] = useState(false)
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false)
     const [ menuComponent, setMenuComponent ] = useState([])
+    const [ dashboardData, setDashboardData ] = useState([])
+    const [ timelineRawData, setTimelineRawData ] = useState([])
     const [ showManualComponent, setShowManualComponent ] = useState(false)
     const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
     const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
@@ -115,14 +117,15 @@ const IllustrationCommentContainer = ({
             openCustomerBar: openCustomerBar,
             openCommentBar: commentBar,
             handleCommentBarOpen: handleCommentBarOpen,
-            handleCustomersBarOpen: handleCustomersBarOpen
+            handleCustomersBarOpen: handleCustomersBarOpen,
+            dashboardData: dashboardData,
+            updateDashboardData: setDashboardData
         }
     ] 
 
-
     useEffect(() => {
         updateResizerBar(illustrationRef, commentBar, 1)
-    }, [ illustrationRef, commentBar ]) 
+    }, [ illustrationRef, commentBar ])   
 
     useEffect(() => {        
         if(new_drive_template_file != null && Object.keys(new_drive_template_file).length > 0 && new_drive_template_file.hasOwnProperty('id')) {
@@ -218,7 +221,7 @@ const IllustrationCommentContainer = ({
                 <ErrorBoundary>
                 {/* <AllComponentsMenu onClick={onHandleComponentMenuItem}/> */}
                 {
-                    illustrationBar === true && cube === false && dashboardScreen === false && !isFullscreenOpen && shouldShowTimeline
+                    illustrationBar === true && ( typeof cube == 'undefined' || (typeof cube !== 'undefined' && cube === false))  && dashboardScreen === false && !isFullscreenOpen && shouldShowTimeline === true
                     ?
                         <IconButton 
                             size="small" 
@@ -260,6 +263,7 @@ const IllustrationCommentContainer = ({
                                 openCommentBar={commentBar}
                                 handleCommentBarOpen={handleCommentBarOpen}
                                 handleCustomersBarOpen={handleCustomersBarOpen}
+                                updateDashboardData={setDashboardData}
                             /> 
                         :
                         showManualComponent === true && menuComponent.length > 0
@@ -302,7 +306,12 @@ const IllustrationCommentContainer = ({
                         ?
                             shouldShowTimeline
                             ?
-                                <TimelineContainer assignmentBar={assignmentBar} assignmentBarToggle={assignmentBarToggle} type={type}/>
+                                <TimelineContainer 
+                                    assignmentBar={assignmentBar} 
+                                    assignmentBarToggle={assignmentBarToggle} 
+                                    type={type} 
+                                    updateTimelineRawData={setTimelineRawData}
+                                />
                             :
                                 
                                     <IllustrationContainer 
@@ -338,7 +347,12 @@ const IllustrationCommentContainer = ({
                         {
                             
                             shouldShowTimeline === true ? (
-                                <TimelineContainer assignmentBar={assignmentBar} assignmentBarToggle={assignmentBarToggle} type={type}/>
+                                <TimelineContainer 
+                                assignmentBar={assignmentBar} 
+                                assignmentBarToggle={assignmentBarToggle} 
+                                type={type}
+                                timelineData={timelineRawData}
+                                />
                             )
                             :
                                 (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null)
