@@ -774,7 +774,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                 hash: updateHashLocation(location, 'companies', updateSelected).join('&')
             })
             dispatch(setMainCompaniesRowSelect([]))
-            console.log('updateSelected', updateSelected)
             setSelectItems(updateSelected)
             //setSelectGroups(updateGroup)
             updateUserCompanySelection(updateSelected)
@@ -795,9 +794,21 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                         } else { 
                             setCurrentSelection(null)
                         }
-                    }
+                    } else {
+                        const updateSelected = [parseInt(row.representative_id)]
+                        dispatch(setMainCompaniesRowSelect([]))
+                        setSelectItems(updateSelected)
+                        //setSelectGroups(updateGroup)
+                        updateUserCompanySelection(updateSelected)
+                        dispatch( setMainCompaniesSelected( updateSelected, [] ) ) 
+                        dispatch( setNamesTransactionsSelectAll( false ) )
+                        dispatch( setSelectedNamesTransactions([]) )
+                        dispatch( setMainCompaniesAllSelected( updateSelected.length === totalRecords ? true : false ) )
+                        resetAll() 
+                        clearOtherItems() 
+                    }   
                 }
-            }            
+            }          
         }
     } 
 
@@ -823,7 +834,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
      */
     
     const handleSelectAll = useCallback((event, row) => {
-        console.log('handleSelectAll')
         event.preventDefault()
         const { checked } = event.target;
         dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))

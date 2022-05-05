@@ -438,7 +438,7 @@ const Reports = (props) => {
                 setTimeout(() => {
                     const listItemsContainer = container.querySelector('.listItems')
                     console.log(activeId, listItemsContainer, listItemsContainer.querySelectorAll('.box_item')[activeId].offsetTop)
-                    listItemsContainer.scroll(0, listItemsContainer.querySelectorAll('.box_item')[activeId].offsetTop)
+                    listItemsContainer.scroll(0, listItemsContainer.querySelectorAll('.box_item')[activeId].offsetTop - 50)
                 }, 1000)
             }
         }

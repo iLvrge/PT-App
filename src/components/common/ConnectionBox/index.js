@@ -102,7 +102,7 @@ function ConnectionBox(props) {
                   <ShowText classes={classes.red} data={`Nominal`}/>
                   {
                     info[0].patAssignorName.map( (assignor, index) =>(
-                      <ShowText key={`assignor-${index}`} className={index > 0 && index < info[0].patAssignorName.length ? classes.marginBottom : ''} data={assignor.normalize_name}/>
+                      <ShowText key={`assignor-${index}`} className={index > 0 && index < info[0].patAssignorName.length ? classes.marginBottom : ''} data={assignor.normalize_name != '' && assignor.normalize_name != null && assignor.recorded_name != assignor.normalize_name ? assignor.normalize_name: ''}/>
                     ))
                   }
                 </TableCell>
@@ -118,7 +118,7 @@ function ConnectionBox(props) {
                   <ShowText classes={classes.red} data={`Nominal`}/>
                   {
                     info[0].patAssigneeName.map( (assignee, index) =>(
-                      <ShowText key={`assignee-${index}`} className={index > 0 && index < info[0].patAssigneeName.length ? classes.marginBottom : ''} data={assignee.normalize_name}/>
+                      <ShowText key={`assignee-${index}`} className={index > 0 && index < info[0].patAssigneeName.length ? classes.marginBottom : ''} data={assignee.normalize_name != '' && assignee.normalize_name != null && assignee.recorded_name != assignee.normalize_name ? assignee.normalize_name: ''}/>
                     ))
                   }
                 </TableCell>

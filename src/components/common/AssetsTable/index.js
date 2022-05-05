@@ -466,6 +466,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       minWidth: 25,
       disableSort: true,
       headingIcon: 'assets',  
+      checkboxSelect: true,
       label: "",
       dataKey: "asset",
       role: "static_dropdown",
@@ -989,6 +990,7 @@ const checkMouseStillOnHover = (e, number) => {
           if(selectedCategory == 'restore_ownership' && display_clipboard === false) {
             dispatch(setAssetTypesPatentsSelected([row.asset]))
             setSelectItems([row.asset])
+            handleOnClick(row)
           } else {
             let oldSelection = [...selectItems]
             if (!oldSelection.includes(row.asset)) {
@@ -1005,6 +1007,12 @@ const checkMouseStillOnHover = (e, number) => {
                 ? prevItems.filter(item => item !== row.asset)
                 : [...prevItems, row.asset],
             );  
+            if(oldSelection.length == 1) {
+              handleOnClick(row)
+            } else {
+              setCheckBar(!checkBar)
+              resetAll()
+            }
           }
           dispatch(setAssetTypesPatentsSelectAll(false))                      
         } else {
@@ -1016,12 +1024,16 @@ const checkMouseStillOnHover = (e, number) => {
                 if( index == 2 && findElement != null ) {
                   setDropOpenAsset(row.asset)
                 } else {
+                  dispatch(setAssetTypesPatentsSelected([row.asset]))
+                  setSelectItems([row.asset])
                   handleOnClick(row)
                 }
             } else {
               if( row.asset == dropOpenAsset ) {
                 setDropOpenAsset(null)
               } else {
+                dispatch(setAssetTypesPatentsSelected([row.asset]))
+                setSelectItems([row.asset])
                 handleOnClick(row)
               }
             }
@@ -1039,7 +1051,12 @@ const checkMouseStillOnHover = (e, number) => {
     async(event, row) => {
       event.preventDefault();
       const { checked } = event.target;
-      if (checked === false) {
+      setSelectItems([]);
+      dispatch(setAssetTypesPatentsSelected([]))
+      setSelectAll(false);
+      dispatch(setAssetTypesPatentsSelectAll(false))
+      console.log("SELECT ALL")
+      /* if (checked === false) {
         setSelectItems([]);
         dispatch(setAssetTypesPatentsSelected([]))
       } else if (checked === true) {
@@ -1053,7 +1070,7 @@ const checkMouseStillOnHover = (e, number) => {
         dispatch(setAssetTypesPatentsSelected(items))
       }
       setSelectAll(checked);
-      dispatch(setAssetTypesPatentsSelectAll(checked))
+      dispatch(setAssetTypesPatentsSelectAll(checked)) */
     },
     [dispatch, assetRows ],
   );
