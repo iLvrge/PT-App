@@ -229,23 +229,25 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   
   const COLUMNS = [
     {
-      width: 24,
-      minWidth: 24,
+      width: 10,
+      minWidth: 10,
+      label: "", 
+      dataKey: "asset",
+      role: "checkbox",
       disableSort: true,
+      enable: false
+    },
+    {
+      width: 25,
+      minWidth: 25,
+      disableSort: true,
+      headingIcon: 'assets',  
+      checkboxSelect: true,
       label: "",
       dataKey: "asset",
       role: "static_dropdown",
       list: dropdownList,
       onClick: onHandleDropDownlist
-    },
-    {
-      width: 29,
-      minWidth: 29,
-      disableSort: true,
-      label: "",
-      dataKey: "asset",
-      role: "checkbox",
-      show_selection_count: true
     },
     {
       width: isMobile === true ? 150 : 100,  
@@ -259,6 +261,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       formatDefaultValue: 0,
       secondaryFormat: applicationFormat,
       align: "left",
+      show_selection_count: true,
       badge: true,
       /* textBold: true */
     },

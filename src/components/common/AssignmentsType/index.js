@@ -289,7 +289,6 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
     }   
 
     const selectedAllActiveItems = useCallback(async() => {
-        console.log("selectedAllActiveItems", assetTypesSelectAll)
         if (assetTypesSelectAll === false || assetTypesSelected.length == 0) {
             setSelectAll(true)
             dispatch( setAllAssetTypes( true ) )

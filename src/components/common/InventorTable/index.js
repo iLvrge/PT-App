@@ -87,7 +87,6 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             dataKey: 'id',
             role: 'checkbox',
             disableSort: true,
-            show_selection_count: true,   
             enable: false
         },
         {
@@ -106,6 +105,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             draggable: true,
             label: 'Employees',             
             dataKey: 'entityName', 
+            show_selection_count: true,   
             badge: true,           
             align: 'left' 
         },

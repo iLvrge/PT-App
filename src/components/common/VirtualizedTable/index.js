@@ -22,6 +22,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { TableCell, Avatar, Modal, ListItemText, ListItemIcon } from '@mui/material'
 import {
   ArrowKeyStepper,
@@ -380,16 +381,13 @@ const VirtualizedTable = ({
               <Select
                 labelId='dropdown-open-select-label'
                 id='dropdown-open-select'
-                IconComponent={(props) => (
-                  <ExpandMoreOutlinedIcon {...props}/>
-                )}
                 open={ openDropAsset == cellData ? true : false }
                 MenuProps={{
                   anchorOrigin: {
                     vertical: "bottom",
                     horizontal: "left"
                   },
-                  transformOrigin: {
+                  transformOrigin: {  
                     vertical: "top",
                     horizontal: "left"
                   },

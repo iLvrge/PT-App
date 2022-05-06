@@ -74,8 +74,7 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
             label: '',
             dataKey: 'id',
             role: 'checkbox',
-            disableSort: true,
-            show_selection_count: true,   
+            disableSort: true, 
             enable: false,
             show: false
         },
@@ -101,6 +100,7 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
             label: 'Recorded',
             dataKey: 'date', 
             badge: true,   
+            show_selection_count: true,  
             align: 'left' 
         },
         { 
@@ -354,7 +354,12 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
     }
 
     const onHandleSelectAll = () => {
-
+        setSelectItems([])
+        dispatch(setDocumentTransaction([]))     
+        dispatch(setDriveTemplateFrameMode(false))
+        dispatch(setTemplateDocument(null))
+        setSelectedRow([])
+                setCurrentSelection(null)
     }
 
     const onHandleClickRow = useCallback((e, item) => {
@@ -377,6 +382,7 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
                 dispatch(setTemplateDocument(null))
                 setSelectedRow([])
                 setCurrentSelection(null)
+                dispatch(setTemplateDocument(''))
             } else {            
                 if(item.external_type == 'gdrive' || item.external_type == 'usptodrive') {
                     dispatch(setDriveTemplateFrameMode(true))

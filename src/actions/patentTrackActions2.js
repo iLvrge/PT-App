@@ -1112,6 +1112,11 @@ export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, appe
     dispatch( setAssetTypeAssignmentAllAssets(data, append) )
     if(append === false) { 
       dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
+      if(data.list.length == 0) {
+        dispatch(setSelectedAssetsPatents([]))
+        dispatch(setAssetTypesPatentsSelected([]))
+        dispatch(setAssetTypesPatentsSelectAll(false))
+      }
     } else if(append === true && typeof assetTableScrollPosition !== 'undefined' && assetTableScrollPosition !== -1) {
       dispatch( setAssetTableScrollPos( assetTableScrollPosition ) )
     }
@@ -1491,6 +1496,7 @@ export const setResetAll = (t = 0, item) => {
 export const transactionRowClick = (rf_id, slackChannelList, defaultLoad, search_string) => {
   
   return dispatch => {
+    dispatch(setAssetTypesPatentsSelected([]))
     dispatch(toggleLifeSpanMode(true))
     dispatch(setConnectionBoxView(false))
     dispatch(setPDFView(false))

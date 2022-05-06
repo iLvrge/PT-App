@@ -464,6 +464,14 @@ div.vis-tooltip span{
   margin-top: 5px;
 }
 
+.assetIcon {
+  width: 1em;
+  height: 1em;
+  font-size: 1.5rem;
+  display: inline-block;
+  user-select: none;
+}
+
 .MuiTypography-h2,
 .MuiTypography-h6 {
   font-weight: 400 !important;

@@ -84,6 +84,7 @@ import PatenTrackApi from '../../../api/patenTrack2'
 
 import ChildTable from "./ChildTable";
 import clsx from "clsx";
+import { cssFilter } from "xss";
 
 var applicationNumber = null, assetNumber = null, hoverTimer = null
 
@@ -458,7 +459,6 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       dataKey: "asset",
       role: "checkbox",
       disableSort: true,
-      show_selection_count: true,
       enable: false
     },
     {
@@ -494,6 +494,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       formatDefaultValue: 0,
       secondaryFormat: applicationFormat,
       align: "center",
+      show_selection_count: true,
       badge: true,
       /* styleCss: true,
       justifyContent: 'center' */
@@ -730,9 +731,14 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     }
   }, [selectedAssetsPatents, selectedRow])
 
+
+  
+
   useEffect(() => {    
     if(assetTypeAssignmentAssetsSelected.length > 0 && (selectItems.length == 0 || selectItems.length != assetTypeAssignmentAssetsSelected.length) ){
       setSelectItems(assetTypeAssignmentAssetsSelected)
+    } else if(assetTypeAssignmentAssetsSelected.length == 0 && selectItems.length > 0 ) {
+      setSelectItems([])
     }
   }, [ assetTypeAssignmentAssetsSelected, selectItems ])
 
@@ -846,6 +852,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         dispatch(setAssetTypeSelectedRow([]));
         dispatch(setAssetTypeCustomerSelectedRow([]));
         dispatch(setChildSelectedAssetsTransactions([]));
+        dispatch(setAssetFamily([]));
         dispatch(setChannelID(''))
         dispatch(setDriveTemplateFrameMode(false));
         dispatch(setDriveTemplateFile(null));  
@@ -992,9 +999,10 @@ const checkMouseStillOnHover = (e, number) => {
             setSelectItems([row.asset])
             handleOnClick(row)
           } else {
-            let oldSelection = [...selectItems]
+            let oldSelection = [...selectItems], newItem = false
             if (!oldSelection.includes(row.asset)) {
               oldSelection.push(row.asset);
+              newItem = true
             } else {
               oldSelection = oldSelection.filter(
                 asset => asset != row.asset,
@@ -1008,7 +1016,14 @@ const checkMouseStillOnHover = (e, number) => {
                 : [...prevItems, row.asset],
             );  
             if(oldSelection.length == 1) {
-              handleOnClick(row)
+              if(newItem === true){
+                handleOnClick(row)
+              } else {
+                const findIndex = assetRows.findIndex( item => item.asset === oldSelection[0])
+                if(findIndex !== -1) {
+                  handleOnClick(assetRows[findIndex])
+                }
+              }
             } else {
               setCheckBar(!checkBar)
               resetAll()

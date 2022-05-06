@@ -30,6 +30,7 @@ import {
     Contacts as ContactsIcon,
     LocationCity as LocationCityIcon,
     KeyboardArrowDown,
+    KeyboardArrowUp,
     Speed as SpeedIcon,
     MailOutline as MailOutlineIcon,
     FindInPage as FindInPageIcon,
@@ -50,6 +51,7 @@ import CustomerAddress from '../common/CustomerAddress'
 import { controlList } from "../../utils/controlList"
 import { downloadFile, copyToClipboard } from '../../utils/html_encode_decode'
 import { setTokenStorage, getTokenStorage } from '../../utils/tokenStorage'
+import { TransactionIcon } from '../../utils/icons'
 
 import { 
     setBreadCrumbsAndCategory,  
@@ -117,7 +119,6 @@ const ActionMenu = (props) => {
     const mainCompaniesSelected = useSelector(state => state.patenTrack2.mainCompaniesList.selected)
     const assetTypeAssignmentAssetsList = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list)
     const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
-    const selectedMainCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedAssetsTransactions = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
     const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
     const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
@@ -131,8 +132,8 @@ const ActionMenu = (props) => {
     const google_profile = useSelector(state => state.patenTrack2.google_profile)
     const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
     const profile = useSelector(store => (store.patenTrack.profile))
-
-
+    const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected);
+    const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected);
  
 
     /**
@@ -270,6 +271,25 @@ const ActionMenu = (props) => {
         }
     }, [ template_document_url ] )
 
+    const shareDashboard = async() => {
+        /**
+         * get selected companies and selected transaction types
+         * and create shareable dashboard url
+         */
+        if(mainCompaniesSelected.length > 0) {
+            const formData = new FormData()
+            formData.append('selectedCompanies', JSON.stringify(mainCompaniesSelected));
+            formData.append('tabs', profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? 5 : JSON.stringify(assetTypesSelected));
+            formData.append('customers', JSON.stringify(selectedAssetCompanies));
+            const {data} = await PatenTrackApi.shareDashboard(formData)
+            if( data !== null){
+                copyToClipboard(data, 'Share url is added to your clipboard.')
+            }
+        } else {
+            alert("Please select a company first")
+        }
+    }
+
     /**
      * Share a list of selected assets
      */
@@ -278,43 +298,47 @@ const ActionMenu = (props) => {
         if (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'){
             alert('Message..')
         } else {
-            let selectAssetsList = [], selectedTransactions = []
-    
-            let list = maintainencePatentsList.length > 0 ? [...maintainencePatentsList] : [...assetTypeAssignmentAssetsList]
-    
-            let selectedItems = selectedMaintainencePatents.length > 0 ? [...selectedMaintainencePatents] : [...assetTypeAssignmentAssetsSelected]
-    
-            if(selectedItems.length > 0) {
-                selectedItems.forEach( item => {
-                    const findIndex = list.findIndex( row => row.asset == item)
-                    if(findIndex !== -1) {
-                    selectAssetsList.push({asset: item, flag: list[findIndex].grant_doc_num !== '' && list[findIndex].grant_doc_num !== null ? 4 : 5})
-                    }
-                }) 
+            if(props.dashboardScreen === true) {
+                shareDashboard()
             } else {
-                selectedTransactions = [...selectedAssetsTransactions]
-            }
-            if( selectedTransactions.length == 0 &&  selectAssetsList.length == 0 ) {
-                alert('Please select one or more assets to share')
-            } else {
-                // Share list of assets and create share link 
-                let form = new FormData()
-                form.append('assets', JSON.stringify(selectAssetsList))
-                form.append('transactions', JSON.stringify(selectedTransactions))
-                form.append('type', 2)      
-                const {data} = await PatenTrackApi.shareIllustration(form)
-                if (data.indexOf('sample') >= 0) {
-                /**
-                 * just for temporary replacing
-                 * open share url new tab
-                 */
-                //const shareURL = data.replace('https://share.patentrack.com','http://167.172.195.92:3000')
-                
-                if(window.confirm("Copy a sharing link to your clipboard.")){
-                    copy(data)
+                let selectAssetsList = [], selectedTransactions = []
+    
+                let list = maintainencePatentsList.length > 0 ? [...maintainencePatentsList] : [...assetTypeAssignmentAssetsList]
+        
+                let selectedItems = selectedMaintainencePatents.length > 0 ? [...selectedMaintainencePatents] : [...assetTypeAssignmentAssetsSelected]
+        
+                if(selectedItems.length > 0) {
+                    selectedItems.forEach( item => {
+                        const findIndex = list.findIndex( row => row.asset == item)
+                        if(findIndex !== -1) {
+                        selectAssetsList.push({asset: item, flag: list[findIndex].grant_doc_num !== '' && list[findIndex].grant_doc_num !== null ? 4 : 5})
+                        }
+                    }) 
+                } else {
+                    selectedTransactions = [...selectedAssetsTransactions]
                 }
-                //window.open(data,'_BLANK')
-                } 
+                if( selectedTransactions.length == 0 &&  selectAssetsList.length == 0 ) {
+                    alert('Please select one or more assets to share')
+                } else {
+                    // Share list of assets and create share link 
+                    let form = new FormData()
+                    form.append('assets', JSON.stringify(selectAssetsList))
+                    form.append('transactions', JSON.stringify(selectedTransactions))
+                    form.append('type', 2)      
+                    const {data} = await PatenTrackApi.shareIllustration(form)
+                    if (data.indexOf('sample') >= 0) {
+                    /**
+                     * just for temporary replacing
+                     * open share url new tab
+                     */
+                    //const shareURL = data.replace('https://share.patentrack.com','http://167.172.195.92:3000')
+                    
+                    if(window.confirm("Copy a sharing link to your clipboard.")){
+                        copy(data)
+                    }
+                    //window.open(data,'_BLANK')
+                    } 
+                }
             }
         }        
     }, [ dispatch, category, selectedMaintainencePatents, assetTypeAssignmentAssetsSelected, selectedAssetsTransactions ])
@@ -372,7 +396,7 @@ const ActionMenu = (props) => {
                         setRedo(data)
                         dispatch(setMoveAssets([]))
                         if(selectedMaintainencePatents.length == 0) {
-                            dispatch( getMaintainenceAssetsList( selectedMainCompanies ))
+                            dispatch( getMaintainenceAssetsList( mainCompaniesSelected ))
                         }
                     }
                 }
@@ -395,11 +419,11 @@ const ActionMenu = (props) => {
                 if( data ) {
                     // refresh patent list
                     setRedo([])
-                    dispatch( getMaintainenceAssetsList( selectedMainCompanies ))
+                    dispatch( getMaintainenceAssetsList( mainCompaniesSelected ))
                 }
             }
         }    
-    }, [ dispatch, selectedMaintainencePatents, maintainenceFrameMode, move_assets, redo, selectedMainCompanies ])
+    }, [ dispatch, selectedMaintainencePatents, maintainenceFrameMode, move_assets, redo, mainCompaniesSelected ])
 
     /**
      * Open uspto window 
@@ -516,7 +540,7 @@ const ActionMenu = (props) => {
             const form = new FormData()
             form.append('id', fixedTransactionAddress[0][0])
             form.append('update_address', fixedTransactionAddress[0][1])
-            form.append('company_ids', JSON.stringify(selectedMainCompanies))
+            form.append('company_ids', JSON.stringify(mainCompaniesSelected))
             const { data } = await PatenTrackApi.fixedTransactionAddressXML(form)
     
             if( data != null && data != '') {
@@ -609,7 +633,7 @@ const ActionMenu = (props) => {
             const form = new FormData()
             form.append('id', fixedTransactionName[0][0])
             form.append('new_name', fixedTransactionName[0][1])
-            form.append('company_ids', JSON.stringify(selectedMainCompanies))
+            form.append('company_ids', JSON.stringify(mainCompaniesSelected))
             const { data } = await PatenTrackApi.fixedTransactionNameXML(form)
         
             if( data != null && data != '') {
@@ -793,7 +817,7 @@ const ActionMenu = (props) => {
                         variant="text"
                         disableElevation
                         onClick={handleClick}
-                        startIcon={<KeyboardArrowDown />}
+                        startIcon={open === false ? <KeyboardArrowDown /> : <KeyboardArrowUp/>}
                         className={classes.btnActionMenu}
                     >
                         {
@@ -850,9 +874,9 @@ const ActionMenu = (props) => {
                 </MenuItem>
                 <MenuItem onClick={onHandleTimeline} className={`iconItem`} selected={props.timelineScreen && category === 'due_dilligence'}>
                     <ListItemIcon>
-                        <TvIcon/>
+                        <TransactionIcon/>
                     </ListItemIcon> 
-                    <ListItemText>Activities</ListItemText>
+                    <ListItemText>Transactions</ListItemText>
                 </MenuItem>
                 <MenuItem onClick={onHandlePatentAssets} className={`iconItem`} selected={props.patentScreen === true && !display_sales_assets}>
                     <ListItemIcon>
@@ -866,7 +890,7 @@ const ActionMenu = (props) => {
                             icon={faShareAlt}
                         />
                     </ListItemIcon>
-                    <ListItemText>Share Selected Assets</ListItemText>
+                    <ListItemText>Share Dashboard/Transactions/Assets</ListItemText>
                 </MenuItem>
                 {
                     loadingUSPTO && (

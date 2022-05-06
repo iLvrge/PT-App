@@ -512,10 +512,12 @@ const GlobalLayout = (props) => {
 
     const handleKeyEvent = (event) => {  
         //event.preventDefault()
+        
         if(event.key === 'ArrowDown' || event.key === 'ArrowUp' ) {
             let tableContainer = document.getElementById('assets_type_assignment_all_assets'), findActiveRow = null
             if(tableContainer !== null) {
-                findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightWithCol.Mui-selected')
+                /* findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightWithCol.Mui-selected') */
+                findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightRow.Mui-selected')
                 if(findActiveRow === null) {
                     if(tableContainer.getAttribute('data_option') !== null && tableContainer.getAttribute('data_option') == 'single') {
                         findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightRow.Mui-selected')

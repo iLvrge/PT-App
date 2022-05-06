@@ -30,7 +30,7 @@ export default makeStyles(theme => ({
                     fill: 'currentColor',
                     stroke: 'currentColor',
                 }
-            }            
+            }
         }
     },
     headerClassAction1: {

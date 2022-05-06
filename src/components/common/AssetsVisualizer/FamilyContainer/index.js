@@ -190,7 +190,7 @@ const FamilyContainer = ({ family, onClose }) => {
                     ref={timelineContainerRef}
                     className={classes.timeline}
                 />
-                {/* { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> } */} 
+                {isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> } 
             </div>
         </Paper>
     )

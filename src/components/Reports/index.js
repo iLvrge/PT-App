@@ -556,24 +556,7 @@ const Reports = (props) => {
         }
     }, [dispatch, profile, activeId, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, props.openCustomerBar, props.openCommentBar])
 
-    const shareDashboard = async() => {
-        /**
-         * get selected companies and selected transaction types
-         * and create shareable dashboard url
-         */
-        if(selectedCompanies.length > 0) {
-            const formData = new FormData()
-            formData.append('selectedCompanies', JSON.stringify(selectedCompanies));
-            formData.append('tabs', profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? 5 : JSON.stringify(assetTypesSelected));
-            formData.append('customers', JSON.stringify(selectedAssetCompanies));
-            const {data} = await PatenTrackApi.shareDashboard(formData)
-            if( data !== null){
-                copyToClipboard(data, 'Share url is added to your clipboard.')
-            }
-        } else {
-            alert("Please select a company first")
-        }
-    }
+    
 
     const showItems = cardList.map( (card, index) => {
         return <Grid
@@ -617,16 +600,7 @@ const Reports = (props) => {
             >
                 <Paper className={classes.titleContainer} square>
                     <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{companyname.length > 0 ? companyname[0].original_name : ''}</span></span>
-                    <div className={classes.toolbar}>
-                        <IconButton  
-                            size="small" 
-                            className={classes.shareIcon}
-                            onClick={shareDashboard}
-                        >
-                            <FontAwesomeIcon
-                                icon={faShareAlt}
-                            />
-                        </IconButton>                               
+                    <div className={classes.toolbar}>                
                         <IconButton size="small"
                             onClick={() => {props.handleFullScreen(!props.fullScreen)}}
                             className={clsx(classes.actionIcon, typeof props.standalone !== 'undefined' ? classes.fontStandalone : '' )}

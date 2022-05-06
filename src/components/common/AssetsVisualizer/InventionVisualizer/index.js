@@ -49,6 +49,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const [ assetLoading, setAssetsLoading ] = useState(false)
     const [ openFilter, setOpenFilter ] = useState(false)
     const [ showContainer, setShowContainer ] = useState(true)
+    const [ sendAssetRequest, setSentAssetRequest ] = useState(false)
     const [ assets, setAssets ] = useState([])
     const [ filterList, setFilterList ] = useState([])
     const [ filterTotal, setFilterTotal ] = useState(0)
@@ -275,7 +276,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
     useEffect(() => {        
         const getChartData = async () => {
-           
+            
             setGraphRawData([])
             setGraphRawGroupData([])      
             setShowContainer(true)              
@@ -361,7 +362,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                 } */
                             } else {
                                 if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
-                                    
                                     dispatch(
                                         getCustomerAssets(
                                           selectedCategory == '' ? '' : selectedCategory,
@@ -410,7 +410,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             getChartData()
         }
         //console.log( "getChartData", selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments )
-    }, [selectedTab, openCustomerBar, selectedCategory, selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_clipboard ]) 
+    }, [sendAssetRequest, selectedTab, openCustomerBar, selectedCategory, selectedCompanies, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_clipboard ]) 
 
 
     const findCPCList = async(oldScopeRange, list, totalRecords, year, range, scope) => {       

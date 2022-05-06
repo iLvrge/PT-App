@@ -80,7 +80,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             role: 'checkbox',
             selectedFromChild: true,     
             disableSort: true,
-            show_selection_count: true,
             enable: false,
             show: false
             /* showOnCondition: '1' */ 
@@ -107,6 +106,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             /* classCol: 'font12Rem', */
             showOnCondition: '0',
             align: "left", 
+            show_selection_count: true,
             badge: true,
         },
         {
@@ -401,13 +401,11 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             let headerColumns = [...COLUMNS]
             headerColumns[0].role = 'radio'
             headerColumns[0].selectedFromChild = false
-            headerColumns[0].show_selection_count = false
             setHeaderColumns(headerColumns)
         } else {
             let headerColumns = [...COLUMNS]
             headerColumns[0].role = 'checkbox'
             headerColumns[0].selectedFromChild = true
-            headerColumns[0].show_selection_count = true
             setHeaderColumns(headerColumns)
         }
     }, [selectedCategory])

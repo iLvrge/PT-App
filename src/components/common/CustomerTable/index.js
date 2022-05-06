@@ -87,8 +87,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
           label: '',
           dataKey: 'id',
           role: 'checkbox',
-          disableSort: true,
-          show_selection_count: true,   
+          disableSort: true, 
           enable: false,
           show: false
         },
@@ -108,6 +107,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             draggable: true,          
             label: 'Parties',
             dataKey: 'entityName', 
+            show_selection_count: true,  
             badge: true,   
             align: 'left'         
         },

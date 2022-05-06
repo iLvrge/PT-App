@@ -143,7 +143,6 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       dataKey: "rf_id",
       role: "radio",
       disableSort: true,
-      show_selection_count: true,
       enable: false,
       show: false
     }, 
@@ -162,6 +161,7 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       label: "Transactions",
       dataKey: "date",
       align: "left",
+      show_selection_count: true,
       badge: true, 
     },
     {
@@ -682,6 +682,8 @@ const findChannelID = useCallback((rfID) => {
         totalRows={totalRecords}
         grandTotal={grandTotal}
         noBorderLines={true}
+        highlightRow={true} 
+        higlightColums={[2]}
         width={width}
         containerStyle={{
           width: "100%",
