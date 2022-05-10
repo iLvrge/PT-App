@@ -43,11 +43,6 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar }) 
     const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
 
 
-
-
-
-
-
     const classes = useStyles() 
     const menuItems = [
         {
@@ -70,7 +65,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar }) 
             left:40,
             top:15,
         },
-        colorAxis: {colors: ['#1565C0']}
+        colorAxis: {colors: ['#87A8CE','#1565C0']}
     });
 
     useEffect(() => {

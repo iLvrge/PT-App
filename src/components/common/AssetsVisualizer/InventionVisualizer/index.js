@@ -143,7 +143,72 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         height: '100%',
         width: '100%',
         style: 'bar-color',
-        axisFontSize: 18,  
+        axisFontSize: 18,
+        /* yBarWidth:  30, */
+        xStep: 1,
+        yStep: 1,
+        zStep: 3,
+        yCenter: '25%',
+        xCenter: '50%',
+        showPerspective: true,
+        showGrid: true,
+        axisColor: '#fff',
+        keepAspectRatio: false,
+        verticalRatio: 0.4,
+        xLabel: '',
+        yLabel: '',
+        zLabel: '',
+        tooltip: function (point) {
+            // parameter point contains properties x, y, z, and data
+            // data is the original object passed to the point constructor
+            const findIndex = graphRawGroupData.findIndex( row => row.id == point.y )
+            let code = '', defination = '', origin = point.data.origin
+            if(findIndex !== -1) {
+                code = graphRawGroupData[findIndex].cpc_code
+                defination = graphRawGroupData[findIndex].defination
+            }
+            if( origin != null ) {
+                origin = origin.split('@@')
+                origin = Array.from(new Set(origin)).join('<br/>')  
+            }
+
+            return `<div class="graphTooltip"><table class="tooltip_data"><tr><th>Filling Year:</th><td>${point.x}</td></tr>${point.data.patent > 0 ? '<tr><th>Patents:</th><td>'+ point.data.patent +'</td></tr>' : ''}${point.data.application_number > 0 ? '<tr><th>Applications:</th><td>'+ point.data.application_number +'</td></tr>' : ''}<tr><th>Origin:</th><td>${origin != null ? origin : ''}</td></tr><tr><th>Subject Matter:</th><td class='noWrapText'>${capitalize(defination)}</td></tr></table></div>`
+        },
+        yValueLabel: function(value) {
+            const findIndex = graphRawGroupData.findIndex( row => row.id == value)
+            if( findIndex !== -1 ) {
+                return graphRawGroupData[findIndex].cpc_code
+            }  
+            return value;
+        },
+        xValueLabel: function(value) {
+            return parseInt(value)
+        },
+        zValueLabel: function(value) {
+            return parseInt(value)
+        },
+        gridColor: '#e5e5e51c',
+        tooltipStyle: {
+            content: {
+              padding       : '10px',
+              border        : '0px',
+              borderRadius  : '0px',
+              color         : '#fff',
+              background    : 'rgba(0, 0, 0, 0.8)',
+              boxShadow     : 'none',    
+              /* bottom        : '0px', */
+              width         : '90%',
+              /* left          : '0px' */
+              /* maxWidth      : '40%' */
+            },
+            line: {
+              borderLeft    : '0px dotted #e60000',
+              height        : '0px'
+            },
+            dot: {
+              border        : '0px solid rgba(230, 0, 0, 0.5)'
+            }
+        }
     }
 
     const graphClickHandler = useCallback(async (point) => {
