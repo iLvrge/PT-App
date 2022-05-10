@@ -197,7 +197,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
               background    : 'rgba(0, 0, 0, 0.8)',
               boxShadow     : 'none',    
               /* bottom        : '0px', */
-              width         : '100%',
+              width         : '90%',
               /* left          : '0px' */
               /* maxWidth      : '40%' */
             },
@@ -602,6 +602,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                             origin: data.group_name
                         })
                     }
+                    console.log('items', items)
                 }                
             })
 
