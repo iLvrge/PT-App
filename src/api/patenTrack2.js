@@ -241,8 +241,10 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/customers/asset_types/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
   }
 
-  static getAssetTypeAssignmentAllAssetsWithFamily(companies, tabs, customers, rfIDs) { 
-    return axios.get(`${base_new_api_url}/customers/asset_types/assets/family?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
+  static getAssetTypeAssignmentAllAssetsWithFamily(form) { 
+    let header = getFormUrlHeader()
+    
+    return axios.post(`${base_new_api_url}/customers/asset_types/assets/family`, form, header)
   }
   
 

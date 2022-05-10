@@ -589,7 +589,7 @@ const onHandlePatentAssetsScreen = (breadcrumb) => {
   dispatch(setDashboardScreen(false))
   dispatch(setAssetsIllustration(null))
   dispatch(setAssetsIllustrationData(null))
-  dispatch(setBreadCrumbs(typeof breadcrumb !== 'undefined' ? breadcrumb : 'Patent Assets')) 
+  dispatch(setBreadCrumbs(typeof breadcrumb !== 'undefined' ? breadcrumb : 'Assets')) 
   history.push(routeList.patent_assets)  
 }
 

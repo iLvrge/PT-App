@@ -381,13 +381,16 @@ const VirtualizedTable = ({
               <Select
                 labelId='dropdown-open-select-label'
                 id='dropdown-open-select'
+                IconComponent={(props) => (
+                  openDropAsset == cellData ? <ExpandLessIcon {...props} /> : <ExpandMoreOutlinedIcon {...props}/>
+                )}
                 open={ openDropAsset == cellData ? true : false }
                 MenuProps={{
                   anchorOrigin: {
                     vertical: "bottom",
                     horizontal: "left"
                   },
-                  transformOrigin: {  
+                  transformOrigin: {
                     vertical: "top",
                     horizontal: "left"
                   },
@@ -582,7 +585,7 @@ const VirtualizedTable = ({
         const positions = tableRef.current.Grid._scrollingContainer.parentElement.getBoundingClientRect()
         childComponent = (
           <div
-            key={`child_${key}`}
+            key={`child_${key}`} 
             ref={rowRef}
             style={{
               marginRight: "auto",

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import useStyles from './styles'
 import { pink } from '@mui/material/colors'
 
@@ -8,10 +8,13 @@ import { Chart } from "react-google-charts";
 import themeMode from '../../../../themes/themeMode';
 import { Tabs, Tab, Paper } from '@mui/material'
 import PatenTrackApi from '../../../../api/patenTrack2'
+import {
+    getCustomerAssets,
+} from '../../../../actions/patentTrackActions2'
 
-
-const GeoChart = ({ chartBar, visualizerBarSize, standalone }) => {
+const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar }) => {
     const containerRef = useRef(null)
+    const dispatch = useDispatch()
     const [ selectedTab, setSelectedTab ] = useState(0)
     const [ chartTabs, setChartTabs ] = useState(['Jurisdictions'])
     const [data, setData] = useState([])
@@ -24,10 +27,26 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone }) => {
     const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected);
     const assetTypesCompaniesSelected = useSelector(state => state.patenTrack2.assetTypeCompanies.selected);
     const assetTypesCompaniesSelectAll = useSelector( state => state.patenTrack2.assetTypeCompanies.selectAll);
+    const selectedAssetAssignmentsAll = useSelector( state => state.patenTrack2.assetTypeAssignments.selectAll )
     const selectedAssetAssignments = useSelector( state => state.patenTrack2.assetTypeAssignments.selected )
     const search_string = useSelector(state => state.patenTrack2.search_string)
     const search_rf_id = useSelector(state => state.patenTrack2.search_rf_id)
     const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
+
+    
+    const assetsList = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list) //Assets List
+    const assetsTotal = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.total_records) //Assets records
+    const maintainenceAssetsList = useSelector( state => state.patenTrack2.maintainenceAssetsList.list )
+    const maintainenceAssetsTotal = useSelector(state => state.patenTrack2.maintainenceAssetsList.total_records) //Assets records
+    const selectedMaintainencePatents = useSelector( state => state.patenTrack2.selectedMaintainencePatents )
+    const assetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected) //Assets Selected   
+    const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
+
+
+
+
+
+
 
     const classes = useStyles() 
     const menuItems = [
@@ -57,12 +76,113 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone }) => {
     useEffect(() => {
         const getAssetsForEachCountry = async() => {
             try {
-                const   companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-                tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-                customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
-                rfIDs = selectedAssetAssignments.length > 0 ? selectedAssetAssignments : [];
-                const { data } = await PatenTrackApi.getAssetTypeAssignmentAllAssetsWithFamily(companies, tabs, customers, rfIDs)
-                setData(data)
+                const list = [];
+                let totalRecords = 0;
+                if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {
+                    if( assetsSelected.length > 0 ) {
+                        const promise = assetsSelected.map(asset => {
+                            const findIndex = assetsList.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num.toString() == asset.toString() )
+                            if( findIndex !== -1 ) {
+                                if( assetsList[findIndex].appno_doc_num != '' ) {
+                                    list.push(assetsList[findIndex].appno_doc_num.toString())
+                                }
+                            }                        
+                        })
+                        await Promise.all(promise)
+                        totalRecords = list.length
+                    } else {
+                        const promise = selectedMaintainencePatents.map(asset => {
+                            const findIndex = maintainenceAssetsList.findIndex( row => row.appno_doc_num.toString() == asset[1].toString() || row.grant_doc_num.toString() == asset[0].toString() )
+                            if( findIndex !== -1 ) {
+                                if( maintainenceAssetsList[findIndex].appno_doc_num != '' ) {
+                                    list.push(maintainenceAssetsList[findIndex].appno_doc_num.toString())
+                                }
+                            }
+    
+                        })
+                        await Promise.all(promise)
+                        totalRecords = list.length
+                    }
+                } else {
+                    
+                    if( assetsList.length > 0 || maintainenceAssetsList.length > 0 ) {
+                        if( assetsList.length > 0 ) {
+                            const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
+                            await Promise.all(promise)
+                            totalRecords = assetsTotal
+                        } else if ( maintainenceAssetsList.length > 0 ) {
+                            const promise = maintainenceAssetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
+                            await Promise.all(promise)
+                            totalRecords = maintainenceAssetsTotal
+                        }
+                    } else {
+                        
+                        /**
+                         * Check which layout and get the assets list first and then 
+                         */
+                        if( selectedCategory == '' ) { //pay_maintenece_fee
+    
+                        } else {
+                            const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+                            tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+                            customers =
+                            assetTypesCompaniesSelectAll === true ? [] : assetTypesCompaniesSelected,
+                            assignments =
+                              selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
+                              
+                            if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+                                /* if( auth_token != null ) {
+                                    dispatch(
+                                        process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
+                                        getCustomerAssets(
+                                          selectedCategory == '' ? '' : selectedCategory,
+                                          companies,
+                                          tabs,
+                                          customers,   
+                                          assignments,
+                                          false,
+                                        )
+                                        : 
+                                        getCustomerSelectedAssets(location.pathname.replace('/', ''))
+                                    );
+                                } */
+                            } else {
+                                if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
+                                    dispatch(
+                                        getCustomerAssets(
+                                          selectedCategory == '' ? '' : selectedCategory,
+                                          companies,
+                                          tabs,
+                                          customers,
+                                          assignments,
+                                          false,
+                                          0,
+                                          0,
+                                          'asset',
+                                          'DESC',
+                                            -1, 
+                                          display_sales_assets
+                                        ),
+                                    );
+                                }
+                            }                        
+                        }
+                    }                
+                }
+
+                if( list.length > 0 ) {
+                    const form = new FormData()
+                    form.append("list", JSON.stringify(list))
+                    form.append("total", totalRecords)
+                    form.append('selectedCompanies', JSON.stringify(selectedCompanies))
+                    form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
+                    form.append('customers', JSON.stringify(assetTypesCompaniesSelectAll === true ? [] : assetTypesCompaniesSelected))
+                    form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
+                    form.append('other_mode', display_sales_assets)
+                    form.append('type', selectedCategory)
+                    const { data } = await PatenTrackApi.getAssetTypeAssignmentAllAssetsWithFamily(form)
+                    setData(data)
+                }
             } catch(err) {
                 console.log(err)
             }            

@@ -729,7 +729,7 @@ const ActionMenu = (props) => {
     }, [ newCompanyName, assetTypeNamesGroups, mainCompaniesSelected ] )
 
     const handleChangeLayout = (event) => {
-        props.setPatentAssets(category == 'due_dilligence' ? "Broken Chain-of-Title" : 'Patent Assets')
+        props.setPatentAssets(category == 'due_dilligence' ? "Broken Chain-of-Title" : 'Assets')
         handleClose()
         resetAllActivity(category == 'due_dilligence' ? 'restore_ownership' : 'due_dilligence')
     }    
@@ -835,7 +835,7 @@ const ActionMenu = (props) => {
                                 :
                                     props.timelineScreen === true
                                     ?
-                                        'Activities'
+                                        'Transactions'
                                     :
                                         props.patentScreen === true
                                         ?
