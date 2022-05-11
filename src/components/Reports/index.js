@@ -11,7 +11,7 @@ import clsx from 'clsx'
 import moment from 'moment'
 import CardElement from './CardElement'
 import ClientList from './ClientList'
-import { Fullscreen, Close, Share } from '@mui/icons-material';
+import { Fullscreen, Close, Public, BarChart, AutoGraph, BubbleChart, Speed} from '@mui/icons-material';
 /* import { useMeasure } from 'react-use'; */
 import { 
     setDashboardPanel,
@@ -26,6 +26,7 @@ import { controlList } from "../../utils/controlList"
 import PatenTrackApi from '../../api/patenTrack2'
 import { copyToClipboard } from '../../utils/html_encode_decode'
 import routeList from '../../routeList'
+import { SET_CUSTOMERS_NAME_COLLECTIONS_LOADING } from '../../actions/actionTypes'
 
 const Reports = (props) => {
     let LIST = [
@@ -36,7 +37,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 1
+            type: 1,
+            list: []
         },
         {
             title: 'Incorrect Names',
@@ -45,7 +47,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 17
+            type: 17,
+            list: []
         },
         {
             title: 'Encumbrances',
@@ -54,7 +57,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 18
+            type: 18,
+            list: []
         },
         {
             title: 'Wrong Addresses',
@@ -63,7 +67,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 19
+            type: 19,
+            list: []
         },
         {
             title: 'Wrong Lawyers',
@@ -72,7 +77,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 20
+            type: 20,
+            list: []
         },
         {
             title: 'Unecessary Patents',
@@ -81,7 +87,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 21
+            type: 21,
+            list: []
         },
         {
             title: 'Missed Monetization',
@@ -90,7 +97,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 22
+            type: 22,
+            list: []
         },
         {
             title: 'Late Maintainance',
@@ -108,7 +116,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 24
+            type: 24,
+            list: []
         },
         {
             title: 'Late Recordings',
@@ -117,7 +126,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 25
+            type: 25,
+            list: []
         },
         {
             title: 'Deflated Collateral',
@@ -126,7 +136,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 26
+            type: 26,
+            list: []
         },
         {
             title: 'Challenged',
@@ -135,7 +146,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 27
+            type: 27,
+            list: []
         }
     ];
 
@@ -147,7 +159,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 1
+            type: 1,
+            list: []
         },
         {
             title: 'Incorrect Names',
@@ -156,7 +169,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 17
+            type: 17,
+            list: []
         },
         {
             title: 'Encumbrances',
@@ -165,7 +179,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 18
+            type: 18,
+            list: []
         },
         {
             title: 'Other Banks',
@@ -174,7 +189,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 19
+            type: 19,
+            list: []
         },
         {
             title: 'Invalid Collateral',
@@ -183,7 +199,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 20
+            type: 20,
+            list: []
         },
         {
             title: 'Unecessary Patents',
@@ -192,7 +209,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 21
+            type: 21,
+            list: []
         },
         {
             title: 'Expired Patents',
@@ -201,7 +219,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 22
+            type: 22,
+            list: []
         },
         {
             title: 'Recently Expired',
@@ -210,7 +229,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 23
+            type: 23,
+            list: []
         },
         {
             title: 'Incorrect Recordings',
@@ -219,7 +239,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 24
+            type: 24,
+            list: []
         },
         {
             title: 'Late Recordings',
@@ -228,7 +249,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 25
+            type: 25,
+            list: []
         },
         {
             title: 'Deflated Collateral',
@@ -237,7 +259,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 26
+            type: 26,
+            list: []
         },
         {
             title: 'Challenged',
@@ -246,7 +269,8 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 27
+            type: 27,
+            list: []
         }
     ]
     const GRID_ITEM = {
@@ -262,7 +286,9 @@ const Reports = (props) => {
     const DATE_FORMAT = 'MMM DD, YYYY'
     const ref = useRef();
     let resizeObserver = null
+    const [initial, setIntial] = useState(true)
     const [loading, setLoading] = useState(false)
+    const [lineGraph, setLineGraph] = useState(false)
     const [grid, setGrid] = useState(GRID_ITEM)
     const [smallScreen, setSmallScreen] = useState(false)
     const [activeId, setActiveId] = useState(-1)
@@ -350,6 +376,16 @@ const Reports = (props) => {
         }
     }, [dashboardPanelActiveButtonId])
 
+    useEffect(() => {
+        if(initial === false) {
+            if(selectedCompanies.length > 0) {
+                findDashboardData()
+            } else {   
+                addCardList()  
+            }
+        }
+    }, [lineGraph])
+
     /**
      * Get Dashboard data
      */
@@ -358,35 +394,7 @@ const Reports = (props) => {
             setLoading(false)
             setCardList(props.dashboardData)
         } else {
-            if(selectedCompanies.length > 0) {            
-                const findDashboardData = async() => {
-                    if(loading === false) {                    
-                        const list = [];
-                        let totalRecords = 0;
-                        setLoading(true)
-                        resetAll(false)
-                        props.checkChartAnalytics(null, null, false)                
-                        const dashboardRequest = cardList.map(async item => {
-                            const formData = new FormData()
-                            formData.append('list', JSON.stringify(list));
-                            formData.append('total', totalRecords);
-                            formData.append('selectedCompanies', JSON.stringify(selectedCompanies));
-                            formData.append('tabs', JSON.stringify(assetTypesSelected));
-                            formData.append('customers', JSON.stringify(selectedAssetCompanies));
-                            formData.append('assignments', JSON.stringify(selectedAssetAssignments));
-                            formData.append('type', item.type)
-                            formData.append('format_type', profile.user.organisation.organisation_type)
-                            
-                            const requestData = await PatenTrackApi.getDashboardData(formData)
-                            if( requestData !== null){
-                                updateList(requestData, item.type)
-                            }
-                            return item
-                        })                
-                        await Promise.all(dashboardRequest)
-                        setLoading(false)
-                    }                
-                }
+            if(selectedCompanies.length > 0) {
                 findDashboardData()
             } else {   
                 addCardList()  
@@ -394,6 +402,37 @@ const Reports = (props) => {
         }
         
     }, [selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssets, assetTypeCompanies])
+
+
+    const findDashboardData = async() => {
+        if(loading === false) {                    
+            const list = [];
+            let totalRecords = 0;
+            setLoading(true)
+            resetAll(false)
+            props.checkChartAnalytics(null, null, false)                
+            const dashboardRequest = cardList.map(async item => {
+                const formData = new FormData()
+                formData.append('list', JSON.stringify(list));
+                formData.append('total', totalRecords);
+                formData.append('selectedCompanies', JSON.stringify(selectedCompanies));
+                formData.append('tabs', JSON.stringify(assetTypesSelected));
+                formData.append('customers', JSON.stringify(selectedAssetCompanies));
+                formData.append('assignments', JSON.stringify(selectedAssetAssignments));
+                formData.append('type', item.type)
+                formData.append('data_format', lineGraph === true ? 1 : 0)
+                formData.append('format_type', profile.user.organisation.organisation_type)
+                
+                const requestData = await PatenTrackApi.getDashboardData(formData)
+                if( requestData !== null){
+                    updateList(requestData, item.type)
+                }
+                return item
+            })                
+            await Promise.all(dashboardRequest)
+            setLoading(false)
+        }                
+    }
 
     const resetAll = (flag) => {
         dispatch(setDashboardPanel( flag ))
@@ -419,24 +458,44 @@ const Reports = (props) => {
         let oldList = [...cardList]
         const findIndex = oldList.findIndex( item => item.type === type)
         if(findIndex !== -1) {
-            if( requestData !== null && requestData?.data && requestData?.data?.number){
-                oldList[findIndex].number = requestData.data.number
-                oldList[findIndex].patent = requestData.data.patent != '' ? requestData.data.patent : ''
-                oldList[findIndex].application = requestData.data.application != '' ? requestData.data.application : ''                            
-                oldList[findIndex].rf_id = requestData.data.rf_id != '' ? requestData.data.rf_id : ''                            
-                oldList[findIndex].total = requestData.data.total
+            if(lineGraph === true) {
+                if( requestData !== null && requestData.data != null && requestData.data.length > 0) {
+                    const list = [['Year', 'Assets']]
+                    requestData.data.forEach( item => {
+                        list.push([item.year, item.number])
+                    })
+                    
+                    oldList[findIndex].list = list
+                    oldList[findIndex].patent = requestData.data[0].patent
+                    oldList[findIndex].application = requestData.data[0].patent
+                    oldList[findIndex].rf_id = requestData.data[0].rf_id
+                    console.log('list', list, oldList[findIndex])
+                } else {
+                    oldList[findIndex].list = []
+                    oldList[findIndex].patent = ''
+                    oldList[findIndex].application = ''
+                    oldList[findIndex].rf_id = 0
+                }
             } else {
-                oldList[findIndex].number = 0
-                oldList[findIndex].patent = ''
-                oldList[findIndex].application = ''
-                oldList[findIndex].total = 0
-            }
+                if( requestData !== null && requestData?.data && requestData?.data?.number){
+                    oldList[findIndex].number = requestData.data.number
+                    oldList[findIndex].patent = requestData.data.patent != '' ? requestData.data.patent : ''
+                    oldList[findIndex].application = requestData.data.application != '' ? requestData.data.application : ''                            
+                    oldList[findIndex].rf_id = requestData.data.rf_id != '' ? requestData.data.rf_id : ''                            
+                    oldList[findIndex].total = requestData.data.total
+                } else {
+                    oldList[findIndex].number = 0
+                    oldList[findIndex].patent = ''
+                    oldList[findIndex].application = ''
+                    oldList[findIndex].total = 0
+                }
+            }            
             setCardList(oldList)
             if(typeof props.updateDashboardData !== 'undefined') {
                 props.updateDashboardData(oldList)
             }
         }      
-    }, [cardList])
+    }, [cardList, lineGraph])
 
     useEffect(() => {
         if(activeId  !== -1 ) {
@@ -556,7 +615,10 @@ const Reports = (props) => {
         }
     }, [dispatch, profile, activeId, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, props.openCustomerBar, props.openCommentBar])
 
-    
+    const changeGraph = () => {
+        setIntial(false)
+        setLineGraph(!lineGraph)
+    }
 
     const showItems = cardList.map( (card, index) => {
         return <Grid
@@ -571,7 +633,8 @@ const Reports = (props) => {
                 handleClick={onHandleClick}
                 handleList={onHandleList}
                 type={card.type}  
-            />  
+                lineGraph={lineGraph}
+            />
         </Grid>
     })
     
@@ -600,13 +663,38 @@ const Reports = (props) => {
             >
                 <Paper className={classes.titleContainer} square>
                     <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{companyname.length > 0 ? companyname[0].original_name : ''}</span></span>
-                    <div className={classes.toolbar}>                
+                    <div className={classes.toolbar}> 
+                        <IconButton 
+                            size="small"
+                            className={classes.actionIcon}
+                        >
+                            <BubbleChart/>
+                        </IconButton> 
+                        <IconButton 
+                            size="small"
+                            className={classes.actionIcon}
+                            onClick={changeGraph}
+                        >
+                            { lineGraph === true ? <Speed/> : <AutoGraph/>}
+                        </IconButton> 
+                        <IconButton 
+                            size="small"
+                            className={classes.actionIcon}
+                        >
+                            <Public/>
+                        </IconButton>      
+                        <IconButton 
+                            size="small"
+                            className={classes.actionIcon}
+                        >
+                            <BarChart/>
+                        </IconButton>               
                         <IconButton size="small"
                             onClick={() => {props.handleFullScreen(!props.fullScreen)}}
                             className={clsx(classes.actionIcon, typeof props.standalone !== 'undefined' ? classes.fontStandalone : '' )}
                         >
                             { typeof props.standalone !== 'undefined' ? <Close/> : <Fullscreen /> }                            
-                        </IconButton>                        
+                        </IconButton>   
                     </div>
                 </Paper>
             </Grid>

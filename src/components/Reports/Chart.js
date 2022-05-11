@@ -7,6 +7,7 @@ import useStyles from './styles'
 import { IconButton, Button, Typography, Tooltip, Zoom } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import clsx from 'clsx'
+import LineGraph from './LineGraph';
 const Chart = (props) => {
     const [arcs, setArcs] = useState([0.5, 0.3, 0.2])
     const classes = useStyles();
@@ -56,20 +57,29 @@ const Chart = (props) => {
             >
                 <AutoAwesomeIcon />
             </IconButton>
-            <GaugeChart
-                id={`gauge-chart${props.id}`}
-                nrOfLevels={420}
-                arcsLength={arcs}
-                colors={['#5BE12C', '#F5CD19', '#EA4228']}
-                percent={ props.card.total > 0 ? parseFloat(props.card.number / props.card.total).toFixed(2) : 0 }
-                arcPadding={0.02}
-                marginInPercent={0.03}
-                className={'gauge'}
-                animate={false} 
-                /* hideText={true} */
-                formatTextValue={displayNumber}
-            />    
-            
+            {
+                props.lineGraph === true
+                ?
+                    <LineGraph
+                        id={`line-chart${props.id}`}
+                        data={props.card.list}
+                        lineID={props.id}
+                    />
+                :
+                    <GaugeChart
+                        id={`gauge-chart${props.id}`}
+                        nrOfLevels={420}
+                        arcsLength={arcs}
+                        colors={['#5BE12C', '#F5CD19', '#EA4228']}
+                        percent={ props.card.total > 0 ? parseFloat(props.card.number / props.card.total).toFixed(2) : 0 }
+                        arcPadding={0.02}
+                        marginInPercent={0.03}
+                        className={'gauge'}
+                        animate={false} 
+                        /* hideText={true} */
+                        formatTextValue={displayNumber}
+                    />    
+            }
             <Tooltip 
                 title="Tooltip" 
                 placement="right"

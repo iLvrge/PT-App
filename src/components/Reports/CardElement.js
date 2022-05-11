@@ -3,7 +3,7 @@ import { Card, CardContent, CardActions }  from '@mui/material'
 import Chart from './Chart'
 import useStyles from './styles'
 
-const CardElement = ({card, id, active, type, handleList, handleClick}) => {
+const CardElement = ({card, id, active, type, lineGraph, handleList, handleClick}) => {
     const classes = useStyles();
     return (
         <Card variant="outlined" className={classes.card} square={true}>
@@ -14,8 +14,9 @@ const CardElement = ({card, id, active, type, handleList, handleClick}) => {
                     handleList={handleList} 
                     active={active}
                     type={type}
-                    card={card}    
-                />  
+                    card={card}   
+                    lineGraph={lineGraph} 
+                />                 
             </CardContent>  
         </Card>
     )

@@ -1,3 +1,5 @@
+
+
 function escapeCharEntities() {
     var map = {
         "&": "&amp;",
@@ -59,6 +61,12 @@ export const downloadFile = (data) => {
     link.href = url
     link.click()
     window.URL.revokeObjectURL(url)
+}
+
+export const checkFileContent = async(url) => {
+    const response = await fetch(url)
+    const data =  await response.text()
+    console.log('data', data)
 }
 
 export const copyToClipboard = (data, message) => {

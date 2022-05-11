@@ -24,6 +24,8 @@ import MobileFooter from '../../components/MobileFooter'
 
 import { loginRedirect } from  '../../utils/tokenStorage'
 import { editorBar } from  '../../utils/splitpane'
+
+import {checkFileContent} from '../../utils/html_encode_decode'
 import { 
     setBreadCrumbs,
     setAssetTypesAssignmentsLoading,
@@ -281,7 +283,6 @@ const GlobalLayout = (props) => {
                                     }
                                 })
                                 await Promise.all(promise)
-                                console.log("oldItems", oldItems)
                                 dispatch(setMainCompaniesSelected(oldItems, groups))
                             }
                         }       
@@ -291,6 +292,11 @@ const GlobalLayout = (props) => {
             }
         }
     }, [dispatch, dashboardScreen, profile, companies])
+
+    useEffect(() => {
+        checkFileContent(`https://s3.us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-54196-362.pdf`)
+    }, [])
+    
 
     /**
      * Dashboard screen is true
@@ -1135,7 +1141,7 @@ const GlobalLayout = (props) => {
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleTypeBarOpen,
             t: 2,
             label: 'Filter by Activities',
-            ...(props.type === 9 && {disabled: true})
+            ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
         },
         {
             tooltip: 'Filter by Parties',
@@ -1143,7 +1149,7 @@ const GlobalLayout = (props) => {
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleOtherPartyBarOpen,
             t: 3,
             label: 'Select Parties',
-            ...(props.type === 9 && {disabled: true})
+            ...((props.type === 9 || (dashboardScreen === true && profile?.user?.organisation?.organisation_type !== 'Bank')) && {disabled: true})
         },
         {
             tooltip: 'Filter by Employees', 
@@ -1152,7 +1158,7 @@ const GlobalLayout = (props) => {
             t: 11,
             margin: true,
             label: 'Employees',
-            ...(props.type === 9 && {disabled: true})
+            ...((props.type === 9 || (dashboardScreen === true && profile?.user?.organisation?.organisation_type !== 'Bank')) && {disabled: true})
         },
         {
             tooltip: 'Filter by Transactions',
@@ -1160,7 +1166,7 @@ const GlobalLayout = (props) => {
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleAssignmentBarOpen,
             t: 4,
             label: 'Transactions',
-            ...(props.type === 9 && {disabled: true})
+            ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
         },
         {
             tooltip: 'Assets',
@@ -1168,7 +1174,8 @@ const GlobalLayout = (props) => {
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleCustomersBarOpen,
             t: 5,
             margin: true,
-            label: 'Assets' 
+            label: 'Assets' ,
+            ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
         },
         {
             tooltip: 'Recorded Documents',
@@ -1176,7 +1183,7 @@ const GlobalLayout = (props) => {
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleAssetFileBarOpen,
             t: 10,
             label: 'Recorded Documents',
-            ...(props.type === 9 && {disabled: true})
+            ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
         },
         {
             tooltip: 'Initiated Documents',
@@ -1184,7 +1191,7 @@ const GlobalLayout = (props) => {
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleGoogleDriveBarOpen,
             t: 12,
             label: 'Initiated Documents',
-            ...(props.type === 9 && {disabled: true})
+            ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
         },
     ]
 
@@ -1208,14 +1215,16 @@ const GlobalLayout = (props) => {
             bar: openChartBar,
             click: handleChartBarOpen,
             t: 8,
-            label: 'Charts'
+            label: 'Charts',
+            ...(dashboardScreen === true && {disabled: true})
         },
         {
             tooltip: 'Analytics',
             bar: openAnalyticsBar,
             click: handleAnalyticsBarOpen,
             t: 9,
-            label: 'Analytics'
+            label: 'Analytics',
+            ...(dashboardScreen === true && {disabled: true})
         }
     ]
 

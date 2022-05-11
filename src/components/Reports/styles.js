@@ -246,5 +246,12 @@ export default makeStyles(theme => ({
             /* width: '1.5rem !important', 
             height: '1.5rem !important' */
         } 
-    }   
+    },
+    graphContainer: {
+        flex: 1,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 100
+    },   
 }));

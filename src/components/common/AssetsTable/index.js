@@ -992,7 +992,7 @@ const checkMouseStillOnHover = (e, number) => {
           dispatch(setTimelineScreen(true))
           dispatch(setDashboardScreen(false))
         }
-
+        let oldSelection = [...selectItems];
         if(cntrlKey !== undefined) {
           if(selectedCategory == 'restore_ownership' && display_clipboard === false) {
             dispatch(setAssetTypesPatentsSelected([row.asset]))
@@ -1039,17 +1039,27 @@ const checkMouseStillOnHover = (e, number) => {
                 if( index == 2 && findElement != null ) {
                   setDropOpenAsset(row.asset)
                 } else {
-                  dispatch(setAssetTypesPatentsSelected([row.asset]))
-                  setSelectItems([row.asset])
-                  handleOnClick(row)
+                  
+                  if (!oldSelection.includes(`${row.asset}`)) {
+                    console.log('adsadasd', oldSelection, row.asset)
+                    dispatch(setAssetTypesPatentsSelected([row.asset]))
+                    setSelectItems([row.asset])
+                    handleOnClick(row)
+                  } else {
+                    clearSelections()
+                  }                  
                 }
             } else {
               if( row.asset == dropOpenAsset ) {
                 setDropOpenAsset(null)
               } else {
-                dispatch(setAssetTypesPatentsSelected([row.asset]))
-                setSelectItems([row.asset])
-                handleOnClick(row)
+                if (!oldSelection.includes(row.asset)) {
+                  dispatch(setAssetTypesPatentsSelected([row.asset]))
+                  setSelectItems([row.asset])
+                  handleOnClick(row)
+                } else {
+                  clearSelections()
+                }  
               }
             }
           }                         
@@ -1058,6 +1068,13 @@ const checkMouseStillOnHover = (e, number) => {
     [dispatch, dashboardScreen, selectedAssetsPatents, selectItems, currentSelection, dropOpenAsset],
   );
 
+
+  const clearSelections = () => {
+    dispatch(setAssetTypesPatentsSelected([]))
+    setSelectItems([]); 
+    setCheckBar(!checkBar)
+    resetAll()
+  }
   /**
    * Click All checkbox
    */

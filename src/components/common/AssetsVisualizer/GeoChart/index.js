@@ -65,7 +65,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar }) 
             left:40,
             top:15,
         },
-        colorAxis: {colors: ['#87A8CE','#1565C0']}
+        colorAxis: {colors: ['#70A800', '#FFAA00','#1565C0', '#E60000']}
     });
 
     useEffect(() => {
@@ -183,7 +183,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar }) 
             }            
         }
         getAssetsForEachCountry()
-    }, [selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, auth_token])
+    }, [selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, selectedAssetAssignmentsAll, selectedAssetAssignments, display_sales_assets, search_string, auth_token])
     
     
     useEffect(() => {    
