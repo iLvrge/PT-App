@@ -25,7 +25,6 @@ import MobileFooter from '../../components/MobileFooter'
 import { loginRedirect } from  '../../utils/tokenStorage'
 import { editorBar } from  '../../utils/splitpane'
 
-import {checkFileContent} from '../../utils/html_encode_decode'
 import { 
     setBreadCrumbs,
     setAssetTypesAssignmentsLoading,
@@ -293,9 +292,6 @@ const GlobalLayout = (props) => {
         }
     }, [dispatch, dashboardScreen, profile, companies])
 
-    useEffect(() => {
-        checkFileContent(`https://s3.us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-54196-362.pdf`)
-    }, [])
     
 
     /**

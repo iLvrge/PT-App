@@ -11,8 +11,10 @@ import FullscreenIcon from '@mui/icons-material/Fullscreen'
 /* import PDFViewer from 'pdf-viewer-reactjs'
 import { Document, Page } from 'react-pdf'
 import RenderPDF from './RenderPDF' */
+import {checkFileContent} from '../../../utils/html_encode_decode'
 import { connect } from 'react-redux'
 import { setPDFFile,  setPDFView, setPdfTabIndex, setPDFViewModal } from '../../../actions/patenTrackActions'
+import { Typography } from '@mui/material'
 
 /*let pdfFile = "";*/
 
@@ -26,6 +28,7 @@ function PdfViewer(props) {
   const [ agreementPdf, setAgreementPdf ] = useState('about:blank')
   const [ showTabs, setShowTabs ] = useState(true)
   const [ fullView, setFullView ] = useState('')
+  const [ errorMessage, setErrorMessage ] = useState('')
   const [numPages, setNumPages] = useState(null)
   const [pageNumber, setPageNumber] = useState(1)
   /* const activeMenuButton = useSelector(state =>  state.patenTrack2.activeMenuButton ) */
@@ -37,7 +40,6 @@ function PdfViewer(props) {
     if(iframeElement != null) {
         /* const height = props.fullScreen === false ? parentElement.parentNode.clientHeight : ( props.pdfFile.agreement == '' || props.pdfFile.agreement == null) ?  window.innerHeight : parentElement.clientHeight */
       const height =  window.innerHeight 
-      console.log('checkHeight', typeof props.show_tab, height - 93)
       iframeElement.style.height =  `${typeof props.show_tab != undefined ? height - 97 : height - 43}px` 
       parentElement.style.height = '100%'
     }    
@@ -54,18 +56,43 @@ function PdfViewer(props) {
       setFullView(classes.fullView) 
     }
     if(props.pdfFile) {
-      setMainPdf(props.pdfFile.document != '' ? props.pdfFile.document : 'about:blank')
+      /* setMainPdf(props.pdfFile.document != '' ? props.pdfFile.document : 'about:blank')
       setFormPdf(props.pdfFile.document != '' ? props.pdfFile.form : 'about:blank')
-      setAgreementPdf(props.pdfFile.document != '' ? props.pdfFile.agreement : 'about:blank')      
+      setAgreementPdf(props.pdfFile.document != '' ? props.pdfFile.agreement : 'about:blank')  */    
+      const checkFileExist = async() => {
+        if(props.pdfFile.document != '') {
+          await checkFindData(props.pdfFile.document, setMainPdf)
+        }
+
+        if(props.pdfFile.form != '') {
+          await checkFindData(props.pdfFile.form, setFormPdf)
+        }
+
+        if(props.pdfFile.agreement != '') {
+          await checkFindData(props.pdfFile.agreement, setAgreementPdf)
+        }
+      }
+      checkFileExist()
+      
     }
   },[ classes.fullView, props.pdfFile, props.pdfView ])
 
   useEffect(() => {
-    console.log("props", props)
     if(props.resize === true) {
       checkHeight(pdfTab)
     }
   }, [props, pdfTab]) 
+
+
+  const checkFindData = async(file, callBack) => {
+    const data = await checkFileContent(file)
+    if((data.indexOf('AccessDenied') == -1 || data.indexOf('Access Denied') == -1) && data.indexOf('<Error>') == -1) {
+      callBack(file)
+      setErrorMessage('')
+    } else {
+      setErrorMessage('We are sorry, but this request is temporarily unservable. Please try a different request.')
+    }
+  }
   
 
   const closeViewer = () => {
@@ -125,6 +152,17 @@ function PdfViewer(props) {
         }
         
         <div className={classes.container}>
+          {
+            errorMessage != '' && (
+              <Typography
+                variant="body2" gutterBottom
+              >
+                {
+                  errorMessage
+                }
+              </Typography>
+            )
+          }
           {
             pdfTab === 1 && formPdf != 'about:blank'
             ?

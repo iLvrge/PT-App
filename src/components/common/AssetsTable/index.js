@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {useLocation} from 'react-router-dom'
-import { Paper, Popover } from "@mui/material";
+import { Paper, Popover, Box, Rating } from "@mui/material";
 import { Clear, NotInterested, KeyboardArrowDown } from '@mui/icons-material';
 import Loader from "../Loader";
 import useStyles from "./styles";
@@ -84,7 +84,6 @@ import PatenTrackApi from '../../../api/patenTrack2'
 
 import ChildTable from "./ChildTable";
 import clsx from "clsx";
-import { cssFilter } from "xss";
 
 var applicationNumber = null, assetNumber = null, hoverTimer = null
 
@@ -109,7 +108,7 @@ const AssetsTable = ({
   const assetsAssignmentRef = useRef()
   const googleLoginRef = useRef(null)
   const [offsetWithLimit, setOffsetWithLimit] = useState([0, DEFAULT_CUSTOMERS_LIMIT])
-  
+  const [ratingOnFly, setRatingOnFly] = useState({})
   const [rowHeight, setRowHeight] = useState(40)
   const [headerRowHeight, setHeaderRowHeight] = useState(47)
   const [width, setWidth] = useState(1500) 
@@ -127,6 +126,7 @@ const AssetsTable = ({
   const [selectedAssets, setSelectedAssets] = useState([])  
   const [movedAssets, setMovedAssets] = useState([])  
   const [ dropOpenAsset, setDropOpenAsset ] = useState(null)
+  const [ assetRating, setAssetRating ] = useState([])
   const [ callByAuthLogin, setCallByAuth ] = useState(false)
   const [ anchorEl, setAnchorEl ] = useState(null)
   const [optionType, setOptionType] = useState('multiple')
@@ -212,6 +212,62 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     )
   }
 
+  const onHandleRating = (event, newValue, props) => {
+    if(event.type == 'mousemove') {
+      setRatingOnFly({label: props.label, rating_value: newValue})
+    } else {
+      setRatingOnFly({})
+    }    
+  }
+
+  const RatingBox = (props) => {
+    const findValue = useMemo(() => {
+      if(typeof props.data !== 'undefined' && props.data.length > 0) {
+        let value = 0
+        props.data.forEach( item => {
+          if(props.label == item.name && item.value != '') {
+            value = item.value
+          } 
+        })
+        return value;
+      } else {
+        return 0;
+      }
+    }, [props])
+    return (
+      <Box className={classes.rating_container}>
+        <span className={classes.rating_label}><label>{props.label}</label></span>
+        <Rating
+          name={props.name}
+          onChangeActive={(event, newValue) => onHandleRating(event, newValue, props)}
+          value={findValue}
+        />
+      </Box>
+    )
+  }
+
+  const RatingImportant = (props) => {
+    return (
+      <RatingBox
+        label={`Important`}
+        name={`virtual-rating-important`}
+        data={props.item}
+      />
+    )
+  }
+
+
+  const RatingNecessary = (props) => {
+    return (
+      <RatingBox
+        label={`Necessary`}
+        name={`virtual-rating-necessary`}
+        data={props.item}
+      />
+    )
+  }
+
+
   const actionList = [
     {
       id: 99,
@@ -248,6 +304,20 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       name: 'Add to Clipboard',
       image: '',
       icon: <Clipboard />
+    },
+    {
+      id: 6,
+      name: <RatingNecessary item={assetRating}/>,
+      image: '',
+      icon: <Clipboard />,
+      item: false
+    },
+    {
+      id: 7,
+      name: <RatingImportant item={assetRating}/>,
+      image: '',
+      icon: <Clipboard />,
+      item: false
     },
     /* {
       id: 6,
@@ -334,6 +404,56 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     }
   }, [callByAuthLogin, google_auth_token, google_profile])
 
+  useEffect(() => {
+    if(Object.keys(ratingOnFly).length > 0 && ratingOnFly?.asset != '' && ratingOnFly?.asset != undefined){
+      const getSlackToken = getTokenStorage("slack_auth_token_info");
+      if (getSlackToken && getSlackToken != "") {
+        /**
+         * Find slack channel 
+         * send message to this channel
+         */
+        const channelID = findChannelID(ratingOnFly.asset)
+        if(channelID != '') {
+          dispatch(setChannelID({channel_id: channelID}))          
+        }
+        sendRatingMessageToSlack(channelID, ratingOnFly)
+      } else {
+        /**
+         * Alert user to login with slack first
+         */
+        alert("Please login to slack first");
+      }
+    }
+  }, [ratingOnFly])
+
+  const sendRatingMessageToSlack = async(channelID, rowData) => {
+    try{
+      const formData = new FormData()
+      formData.append('text',  `${rowData.label.toUpperCase()} ${rowData.rating_value} star rating applied to this asset via PatenTrack` )
+      formData.append('asset', rowData.asset)
+      formData.append('asset_format', `us${rowData.asset}`)
+      formData.append('user', '')
+      formData.append('reply', '' )
+      formData.append('edit', '')
+      formData.append('file', '')
+      formData.append('remote_file', '')
+      formData.append('channel_id', channelID)
+      const slackToken = getTokenStorage( 'slack_auth_token_info' )
+      if( slackToken  && slackToken != null ) {
+        const { access_token, bot_token, bot_user_id } = JSON.parse(slackToken)
+        if( access_token != undefined) {  
+          formData.append('auth', bot_token)
+          formData.append('auth_id', bot_user_id)
+          const { data } = await PatenTrackApi.sendMessage(access_token, formData)             
+          if(data != '' && Object.keys(data).length > 0) {
+            setRatingOnFly({})
+          }
+        }
+      }
+    } catch( err ) {
+      console.error(err)
+    }    
+  }
 
   const openGoogleWindow = () => {
       if(googleLoginRef.current != null) {
@@ -354,10 +474,17 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     } else {
       if(event.target.value >= 6 && event.target.value <= 8) {
         //6=>Product,7=>Technology,8=>Competition
-        setDropOpenAsset(null)
+        /* setDropOpenAsset(null)
         const type = event.target.value === 7 ? 'technology' : event.target.value === 8 ? 'competitors' : 'products'
         dispatch(linkWithSheetOpenPanel(true))
-        dispatch(linkWithSheetSelectedAsset(type, encodeURIComponent(row.asset_type == 1 ? `US${applicationFormat(asset)}` : `US${numberWithCommas(asset)}`)))        
+        dispatch(linkWithSheetSelectedAsset(type, encodeURIComponent(row.asset_type == 1 ? `US${applicationFormat(asset)}` : `US${numberWithCommas(asset)}`))) */    
+        setRatingOnFly( previousItem => {
+          if(Object.keys(previousItem).length > 0) {
+            return {...previousItem, ...row}            
+          } else {
+            return previousItem
+          }
+        })    
       } else {
         if(type === 9 && event.target.value === 0) {
           /***
@@ -980,6 +1107,78 @@ const checkMouseStillOnHover = (e, number) => {
   }  
 }
 
+const retrieveSlackMessages = async(asset) => {
+  const getSlackToken = getTokenStorage("slack_auth_token_info");
+  
+  
+  if (getSlackToken && getSlackToken != "") {
+    const channelID = findChannelID(asset)
+    if(channelID != '') {
+      const { access_token, bot_token, bot_user_id } = JSON.parse(getSlackToken)
+      if(access_token != '' && access_token != null && access_token != undefined) {
+        const { data } = await PatenTrackApi.getMessages( access_token, channelID);
+        if(data.messages.length > 0) {
+          /**
+           * Find String Necessary or Important and also via PatenTrack
+           */
+          const ratingItems = []
+          data.messages.forEach( item => {
+            if(item.type == 'message') {
+              const {text} = item
+              if(text != '') {
+                console.log(text, text.toLowerCase().indexOf('necessary'), text.indexOf('via PatenTrack'))
+                console.log(text, text.toLowerCase().indexOf('important'), text.indexOf('via PatenTrack'))
+                if(text.toLowerCase().indexOf('necessary') !== -1 && text.indexOf('via PatenTrack') !== -1) {
+                  /**
+                   * Find Necessary
+                   */
+                  const value = text.match(/\d+/)[0]
+                  ratingItems.push({
+                    name: 'Necessary',
+                    value
+                  })
+                }
+
+                if(text.toLowerCase().indexOf('important') !== -1 && text.indexOf('via PatenTrack') !== -1) {
+                  /**
+                   * Find Important
+                   */
+                  const value = text.match(/\d+/)[0]
+                  ratingItems.push({
+                    name: 'Important',
+                    value
+                  })
+                }
+              }
+            }
+          });
+          if(ratingItems.length > 0) {
+            updateTableColumn(ratingItems)
+          }
+        }        
+      }       
+    } 
+  }
+}
+
+const updateTableColumn = (ratingItems) => {
+  setAssetRating(ratingItems)
+  let findIndex = dropdownList.findIndex( item => item.id == 6)
+  if(findIndex !== -1) {
+    dropdownList[findIndex].name = <RatingNecessary item={ratingItems} />
+  }
+  findIndex = dropdownList.findIndex( item => item.id == 7)
+  if(findIndex !== -1) {
+    dropdownList[findIndex].name = <RatingImportant item={ratingItems} />
+  }
+  let previousColumns = [...tableColumns]
+  const columnIndex = previousColumns.findIndex(item => item.role == 'static_dropdown')
+  if(columnIndex !== -1) {
+    previousColumns[columnIndex].list = dropdownList
+    setTableColumns(previousColumns)
+  }
+}
+
   /**
    * Click checkbox
    */
@@ -1038,10 +1237,13 @@ const checkMouseStillOnHover = (e, number) => {
               const findElement = element.querySelector('div.MuiSelect-select')
                 if( index == 2 && findElement != null ) {
                   setDropOpenAsset(row.asset)
-                } else {
-                  
+                  updateTableColumn([])
+                  /**
+                   * Retreive slack messages for this assets
+                   */
+                  retrieveSlackMessages(row.asset)
+                } else {                  
                   if (!oldSelection.includes(`${row.asset}`)) {
-                    console.log('adsadasd', oldSelection, row.asset)
                     dispatch(setAssetTypesPatentsSelected([row.asset]))
                     setSelectItems([row.asset])
                     handleOnClick(row)
@@ -1087,7 +1289,6 @@ const checkMouseStillOnHover = (e, number) => {
       dispatch(setAssetTypesPatentsSelected([]))
       setSelectAll(false);
       dispatch(setAssetTypesPatentsSelectAll(false))
-      console.log("SELECT ALL")
       /* if (checked === false) {
         setSelectItems([]);
         dispatch(setAssetTypesPatentsSelected([]))
@@ -1109,7 +1310,7 @@ const checkMouseStillOnHover = (e, number) => {
 
   const findChannelID = useCallback((asset) => {
     let channelID = ''
-    if(slack_channel_list.length > 0) {
+    if(slack_channel_list.length > 0 && asset != undefined) {
       const findIndex = slack_channel_list.findIndex( channel => channel.name == `us${asset}`.toString().toLocaleLowerCase())
   
       if( findIndex !== -1) {

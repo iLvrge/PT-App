@@ -65,8 +65,7 @@ export const downloadFile = (data) => {
 
 export const checkFileContent = async(url) => {
     const response = await fetch(url)
-    const data =  await response.text()
-    console.log('data', data)
+    return await response.text()    
 }
 
 export const copyToClipboard = (data, message) => {

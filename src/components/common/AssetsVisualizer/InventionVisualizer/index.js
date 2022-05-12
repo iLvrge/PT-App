@@ -561,7 +561,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                             fill: '#1565C0',
                             stroke: '#2196F3'
                         };
-                    if(data.appNum !== null && data.appNum !== '') {
+                    /* if(data.appNum !== null && data.appNum !== '') {
                         const appList = data.appNum.toString().split(',')
                         let salesFind = false
                         if(salesData.length > 0) {
@@ -575,7 +575,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                 }
                             })
                         }                       
-                    }
+                    } */
                     
                     //const col = colors[Math.floor((Math.random()*colors.length))]
                     items.current.add({
