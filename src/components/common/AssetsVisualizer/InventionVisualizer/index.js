@@ -35,7 +35,7 @@ import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
 var newRange = [1,2]
 
-const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal }) => {
+const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, tab, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal }) => {
     
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -602,14 +602,13 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                             origin: data.group_name
                         })
                     }
-                    console.log('items', items)
                 }                
             })
 
             await Promise.all(promises)            
             //TODO height 100% not working well, created allot of isues when we resize pane, 
             if(graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0) {
-                options = {...options, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1, zStep: graphRawData.length > 2 ? 3 : 1, zMax: Math.max(...zMax) }
+                options = {...options, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1, zStep: Math.max(...zMax) > 10 ? parseInt(Math.max(...zMax) / 10) : graphRawData.length > 2 ? 3 : 1, zMax: Math.max(...zMax) }
             }     
             options.axisColor = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
             graphRef.current = new Graph3d(graphContainerRef.current, items.current, options)
@@ -843,23 +842,29 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     
     return (
         <Paper className={classes.root} square>  
-            <Tabs
-                value={selectedTab}
-                variant="scrollable"
-                scrollButtons="auto"
-                onChange={handleChangeTab}
-                className={classes.tabs}
-            >
-                {
-                    inventionTabs.map((tab) => (
-                        <Tab
-                            key={tab}
-                            label={tab}
-                            classes={{ root: classes.tab }}
-                        />
-                    )) 
-                }
-            </Tabs> 
+            {
+                typeof tab == 'undefined' || tab === true 
+                ?
+                    <Tabs
+                        value={selectedTab}
+                        variant="scrollable"
+                        scrollButtons="auto"
+                        onChange={handleChangeTab}
+                        className={classes.tabs}
+                    >
+                        {
+                            inventionTabs.map((tab) => (
+                                <Tab
+                                    key={tab}
+                                    label={tab}
+                                    classes={{ root: classes.tab }}
+                                />
+                            )) 
+                        }
+                    </Tabs> 
+                :
+                    ''
+            }
             <div className={classes.sliderContainer}>
                 {
                     typeof standalone === 'undefined' && (

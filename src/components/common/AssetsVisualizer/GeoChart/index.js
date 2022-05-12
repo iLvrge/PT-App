@@ -12,7 +12,7 @@ import {
     getCustomerAssets,
 } from '../../../../actions/patentTrackActions2'
 
-const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar }) => {
+const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, tab }) => {
     const containerRef = useRef(null)
     const dispatch = useDispatch()
     const [ selectedTab, setSelectedTab ] = useState(0)
@@ -242,23 +242,30 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar }) 
 
     return (
         <Paper className={classes.root} square>  
-            <Tabs
-                value={selectedTab}
-                variant="scrollable"
-                scrollButtons="auto"
-                onChange={handleChangeTab}
-                className={classes.tabs}
-            >
-                {
-                    chartTabs.map((tab) => (
-                        <Tab
-                            key={tab}
-                            label={tab}
-                            classes={{ root: classes.tab }}
-                        />
-                    )) 
-                }
-            </Tabs> 
+            {
+                typeof tab == 'undefined' || tab === true 
+                ?
+                    <Tabs
+                        value={selectedTab}
+                        variant="scrollable"
+                        scrollButtons="auto"
+                        onChange={handleChangeTab}
+                        className={classes.tabs}
+                    >
+                        {
+                            chartTabs.map((tab) => (
+                                <Tab
+                                    key={tab}
+                                    label={tab}
+                                    classes={{ root: classes.tab }}
+                                />
+                            )) 
+                        }
+                    </Tabs> 
+                :
+                    ''
+            }
+            
             {
                 typeof standalone === 'undefined' && (
                     <div className={classes.fullScreenContainer}>

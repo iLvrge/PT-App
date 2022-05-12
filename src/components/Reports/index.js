@@ -27,6 +27,9 @@ import PatenTrackApi from '../../api/patenTrack2'
 import { copyToClipboard } from '../../utils/html_encode_decode'
 import routeList from '../../routeList'
 import { SET_CUSTOMERS_NAME_COLLECTIONS_LOADING } from '../../actions/actionTypes'
+import GeoChart from '../common/AssetsVisualizer/GeoChart'
+import { SET_MAINTAINENCE_ASSETS_EVENTS_LIST_LOADING_MORE } from '../../actions/actionTypes2'
+import InventionVisualizer from '../common/AssetsVisualizer/InventionVisualizer'
 
 const Reports = (props) => {
     let LIST = [
@@ -289,6 +292,8 @@ const Reports = (props) => {
     const [initial, setIntial] = useState(true)
     const [loading, setLoading] = useState(false)
     const [lineGraph, setLineGraph] = useState(false)
+    const [jurisdictions, setJurisdiction] = useState(false)
+    const [invention, setInvention] = useState(false)
     const [grid, setGrid] = useState(GRID_ITEM)
     const [smallScreen, setSmallScreen] = useState(false)
     const [activeId, setActiveId] = useState(-1)
@@ -617,7 +622,21 @@ const Reports = (props) => {
 
     const changeGraph = () => {
         setIntial(false)
+        setJurisdiction(false)
+        setInvention(false)
         setLineGraph(!lineGraph)
+    }
+
+    const onHandleJurisdiction = () => {
+        setLineGraph(false)
+        setInvention(false)
+        setJurisdiction(!jurisdictions)
+    }
+
+    const onHandleInvention = () => {
+        setLineGraph(false)
+        setJurisdiction(false)
+        setInvention(true)
     }
 
     const showItems = cardList.map( (card, index) => {
@@ -680,12 +699,14 @@ const Reports = (props) => {
                         <IconButton 
                             size="small"
                             className={classes.actionIcon}
+                            onClick={onHandleJurisdiction}
                         >
                             <Public/>
                         </IconButton>      
                         <IconButton 
                             size="small"
                             className={classes.actionIcon}
+                            onClick={onHandleInvention}
                         >
                             <BarChart/>
                         </IconButton>               
@@ -707,8 +728,38 @@ const Reports = (props) => {
                     direction="row"
                     justifyContent="flex-start"
                     alignItems="flex-start"
+                    className={classes.container}
                 >
-                    {showItems}
+                    {
+                        jurisdictions === true
+                        ?
+                            <GeoChart
+                                chartBar={props.chartBar} 
+                                openCustomerBar={props.openCustomerBar} 
+                                visualizerBarSize={props.visualizerBarSize}
+                                type={props.type}
+                                tab={false}
+                                standalone={true}
+                            />
+                        :
+                            invention === true
+                            ?
+                                <InventionVisualizer 
+                                    defaultSize={props.defaultSize} 
+                                    visualizerBarSize={props.visualizerBarSize} 
+                                    analyticsBar={props.analyticsBar} 
+                                    openCustomerBar={props.openCustomerBar} 
+                                    commentBar={props.openCommentBar} 
+                                    illustrationBar={props.illustrationBar} 
+                                    customerBarSize={props.customerBarSize} 
+                                    companyBarSize={props.companyBarSize}
+                                    type={props.type} 
+                                    standalone={true}
+                                    tab={false}
+                                />
+                            :    
+                                showItems
+                    }
                 </Grid>                
             </Grid>
         </Grid>

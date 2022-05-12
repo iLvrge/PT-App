@@ -256,6 +256,11 @@ const IllustrationCommentContainer = ({
                             <Reports
                                 fullScreen={dashboardFullScreen}
                                 handleFullScreen={setDashboardFullScreen}
+                                defaultSize={illustrationBarSize} 
+                                customerBarSize={customerBarSize} 
+                                companyBarSize={companyBarSize}
+                                type={type}
+                                illustrationBar={illustrationBar} 
                                 chartsBar={chartsBar}
                                 analyticsBar={analyticsBar}
                                 checkChartAnalytics={checkChartAnalytics}
@@ -264,6 +269,7 @@ const IllustrationCommentContainer = ({
                                 handleCommentBarOpen={handleCommentBarOpen}
                                 handleCustomersBarOpen={handleCustomersBarOpen}
                                 updateDashboardData={setDashboardData}
+                                visualizerBarSize={visualizerBarSize} 
                             /> 
                         :
                         showManualComponent === true && menuComponent.length > 0
