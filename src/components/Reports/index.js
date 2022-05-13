@@ -30,6 +30,7 @@ import { SET_CUSTOMERS_NAME_COLLECTIONS_LOADING } from '../../actions/actionType
 import GeoChart from '../common/AssetsVisualizer/GeoChart'
 import { SET_MAINTAINENCE_ASSETS_EVENTS_LIST_LOADING_MORE } from '../../actions/actionTypes2'
 import InventionVisualizer from '../common/AssetsVisualizer/InventionVisualizer'
+import SankeyChart from './SankeyChart'
 
 const Reports = (props) => {
     let LIST = [
@@ -294,6 +295,7 @@ const Reports = (props) => {
     const [lineGraph, setLineGraph] = useState(false)
     const [jurisdictions, setJurisdiction] = useState(false)
     const [invention, setInvention] = useState(false)
+    const [sankey, setSankey] = useState(false)
     const [grid, setGrid] = useState(GRID_ITEM)
     const [smallScreen, setSmallScreen] = useState(false)
     const [activeId, setActiveId] = useState(-1)
@@ -624,19 +626,29 @@ const Reports = (props) => {
         setIntial(false)
         setJurisdiction(false)
         setInvention(false)
+        setSankey(false)
         setLineGraph(!lineGraph)
     }
 
     const onHandleJurisdiction = () => {
         setLineGraph(false)
         setInvention(false)
-        setJurisdiction(!jurisdictions)
+        setSankey(false)
+        setJurisdiction(true)
     }
 
     const onHandleInvention = () => {
         setLineGraph(false)
         setJurisdiction(false)
+        setSankey(false)
         setInvention(true)
+    }
+
+    const onHandleSankey = () => {
+        setLineGraph(false)
+        setJurisdiction(false)
+        setInvention(false)
+        setSankey(true)
     }
 
     const showItems = cardList.map( (card, index) => {
@@ -685,27 +697,35 @@ const Reports = (props) => {
                     <div className={classes.toolbar}> 
                         <IconButton 
                             size="small"
-                            className={classes.actionIcon}
+                            className={clsx(classes.actionIcon, {[classes.active]: sankey})}
+                            onClick={onHandleSankey}
                         >
                             <BubbleChart/>
                         </IconButton> 
                         <IconButton 
                             size="small"
-                            className={classes.actionIcon}
+                            className={clsx(classes.actionIcon, {[classes.active]: !lineGraph && jurisdictions == false && invention === false && sankey === false})}
                             onClick={changeGraph}
                         >
-                            { lineGraph === true ? <Speed/> : <AutoGraph/>}
+                            <Speed/> 
+                        </IconButton>
+                        <IconButton 
+                            size="small"
+                            className={clsx(classes.actionIcon, {[classes.active]: lineGraph && jurisdictions == false && invention === false && sankey === false})}
+                            onClick={changeGraph}
+                        >
+                            <AutoGraph/>
                         </IconButton> 
                         <IconButton 
                             size="small"
-                            className={classes.actionIcon}
+                            className={clsx(classes.actionIcon, {[classes.active]: jurisdictions})}
                             onClick={onHandleJurisdiction}
                         >
                             <Public/>
                         </IconButton>      
                         <IconButton 
                             size="small"
-                            className={classes.actionIcon}
+                            className={clsx(classes.actionIcon, {[classes.active]: invention})}
                             onClick={onHandleInvention}
                         >
                             <BarChart/>
@@ -758,7 +778,11 @@ const Reports = (props) => {
                                     tab={false}
                                 />
                             :    
-                                showItems
+                                sankey === true
+                                ?
+                                    <SankeyChart />
+                                :
+                                    showItems
                     }
                 </Grid>                
             </Grid>

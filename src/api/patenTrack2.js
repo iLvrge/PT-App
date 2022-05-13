@@ -752,6 +752,10 @@ class PatenTrackApi {
     return axios.post(`${base_new_api_url}/dashboards`, formData, getFormUrlHeader())
   }
 
+  static getDashboardPartiesData(formData) {
+    return axios.post(`${base_new_api_url}/dashboards/parties`, formData, getFormUrlHeader())
+  }
+
   static getLawFirms() {
     return axios.get(`${base_new_api_url}/lawfirm`, getHeader())
   }

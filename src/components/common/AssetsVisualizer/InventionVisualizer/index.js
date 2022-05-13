@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {useLocation} from 'react-router-dom'
-import { Paper, Dialog, DialogContent, DialogTitle, IconButton  } from '@mui/material'
+import { Paper, Dialog, DialogContent, DialogTitle, IconButton, MenuItem, ListItemIcon, Menu, Divider  } from '@mui/material'
 import Draggable from "react-draggable"
 import CloseIcon from '@mui/icons-material/Close'
 import {ResizableBox} from "react-resizable"
@@ -32,6 +32,8 @@ import useStyles from './styles'
 import { capitalize } from "../../../../utils/numbers";
 import themeMode from '../../../../themes/themeMode';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
+import { Close } from '@mui/icons-material'
+import FilterDashboardCPC from './FilterDashboardCPC'
 
 var newRange = [1,2]
 
@@ -43,13 +45,17 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const location = useLocation()
     const graphContainerRef = useRef()  
     const items = useRef(new DataSet())
+    const dashboardScope = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
     const [offsetWithLimit, setOffsetWithLimit] = useState([0, DEFAULT_CUSTOMERS_LIMIT])
     const [ isLoadingCharts, setIsLoadingCharts ] = useState(false)
     const [ openModal, setModalOpen ] = useState(false)
     const [ assetLoading, setAssetsLoading ] = useState(false)
-    const [ openFilter, setOpenFilter ] = useState(false)
+    const [ openFilter, setOpenFilter ] = useState(false)       
     const [ showContainer, setShowContainer ] = useState(true)
     const [ sendAssetRequest, setSentAssetRequest ] = useState(false)
+    const [ anchorEl, setAnchorEl ] = useState(null)
+    const [ sliderValue, setSliderValue ] = useState(50)
+    const [ xy, setXY] = useState({x: '-85px', y: '35px'})
     const [ assets, setAssets ] = useState([])
     const [ filterList, setFilterList ] = useState([])
     const [ filterTotal, setFilterTotal ] = useState(0)
@@ -58,7 +64,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const [ resizableWidthHeight, setResizableWidthHeight ] = useState([665, 350])
     const [ filterDrag, setFilterDrag ] =  useState([0, 0])
     const [ valueYear, setValueYear ] = useState([1, 2])
-    const [ valueScope, setValueScope ] = useState([1, 2])
+    const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
+    const [ valueScope, setValueScope ] = useState(dashboardScreen === true ? [...dashboardScope] : [1, 2])
     const [ valueRange, setValueRange ] = useState(3)
     const [ preValueRange, setPreValueRange ] = useState(3)
     const [ scopeRange, setScopeRange ] = useState([])
@@ -111,6 +118,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const connectionBoxView = useSelector( state => state.patenTrack.connectionBoxView)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
     const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
+    
     const [ graphRawData, setGraphRawData ] = useState([])
     const [ salesData, setSalesData ] = useState([])
     const [ graphRawGroupData, setGraphRawGroupData ] = useState([])  
@@ -239,7 +247,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     })
 
     const checkToolTip = () => {
-        /* const elementFound = document.getElementsByClassName('graphTooltip')
+        const elementFound = document.getElementsByClassName('graphTooltip')
         if(elementFound !== null && elementFound.length > 0) {
             const parentElement = elementFound[0].parentElement,
             computedStyle = window.getComputedStyle(parentElement),
@@ -252,7 +260,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             if(top !== '' && parseInt(top) < 0) {
                 parentElement.style.top = '0px'
             }
-        } */
+        } 
     }
 
     const onHandleMouseOver = (event) => {
@@ -423,6 +431,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
         form.append('other_mode', display_sales_assets)
         form.append('type', selectedCategory)
+        form.append('data_type', dashboardScreen === true ? 1 : 0)
         if(typeof range !== 'undefined') {
             form.append("range", range)
         }
@@ -456,10 +465,10 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             setValueYear([yearLabelList[0].value, yearLabelList[yearLabelList.length - 1].value]) 
         }
 
-        if( typeof range === 'undefined' && typeof scope ===  'undefined'  && data.group.length > 0) {
+        if( typeof range === 'undefined' && typeof scope ===  'undefined'  && data.group.length > 0 && dashboardScreen === false) {
             setValueScope([ data.group[0].id, data.group[data.group.length - 1].id ])
         }    
-        if(typeof scope == 'undefined') {
+        if(typeof scope == 'undefined' && dashboardScreen === false) {
             const findOldRange = []
             if(oldScopeRange.length > 0 && typeof range !== 'undefined') {
                 const promiseScope = newRange.map( scope => {
@@ -709,6 +718,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         setOpenFilter(false);
     };
 
+    
+    
+
     const remoteAssetFromList = useCallback(async (asset) => {
         const list = maintainenceAssetsList.length > 0 ? [...maintainenceAssetsList] : [...assetsList]
 
@@ -822,7 +834,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
     
     const onChangeScopeSlider = useCallback(async (year, range, scope) => {
-        // A, B, .... H
+        // A, B, .... H0
         newRange = scope
         setValueScope(scope)
         const scopeList = [], yearList = []
@@ -839,6 +851,32 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         })
         findCPCList([...scopeRange], filterList, filterTotal, yearList, range, scopeList)        
     }, [ filterList, filterTotal, scopeRange ] )
+
+
+    const onChangeDashboardScopeSlider = useCallback(async (year, range, scope) => {
+        // A, B, .... H
+        newRange = scope
+        setValueScope(scope)
+        const yearList = []
+        filterYear.forEach( r => {
+            if(r.value >= year[0] && r.value <= year[1]){  
+                yearList.push(parseInt(r.label))
+            }
+        })
+        findCPCList([...scopeRange], filterList, filterTotal, yearList, range, scope)        
+    }, [ filterList, filterTotal, scopeRange ] )
+
+    const toggleDrawer = (event, open) => {
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift') ) {
+          return;
+        }
+        setAnchorEl(open === true ? event.currentTarget : null)
+    }
+
+    const handleDashboardDragStop = (e, position) => {
+        const {x, y} = position;
+        setXY({x,y})
+    }
     
     return (
         <Paper className={classes.root} square>  
@@ -872,7 +910,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     )
                 }
                 
-                <IconButton onClick={handleOpenFilter} className={classes.settingBtn} size="large">
+                <IconButton onClick={(event) => dashboardScreen === true ? toggleDrawer(event, true) :  handleOpenFilter()} className={classes.settingBtn} size="large">
                     <svg style={{width: '24px', fill: '#fff'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M5 11.86V29a1 1 0 0 0 2 0V11.86A4 4 0 0 0 7 4.14V3A1 1 0 0 0 5 3V4.14a4 4 0 0 0 0 7.72zM6 6A2 2 0 1 1 4 8 2 2 0 0 1 6 6zM27 12.14V3a1 1 0 0 0-2 0v9.14a4 4 0 0 0 0 7.72V29a1 1 0 0 0 2 0V19.86a4 4 0 0 0 0-7.72zM26 18a2 2 0 1 1 2-2A2 2 0 0 1 26 18zM16 30a1 1 0 0 0 1-1V23.86a4 4 0 0 0 0-7.72V3a1 1 0 0 0-2 0V16.14a4 4 0 0 0 0 7.72V29A1 1 0 0 0 16 30zM14 20a2 2 0 1 1 2 2A2 2 0 0 1 14 20z" /></svg> 
                 </IconButton>                                    
             </div>
@@ -927,7 +965,35 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                             <DialogContent>
                                 <AssetsList loading={assetLoading} assets={assets} remoteAssetFromList={remoteAssetFromList}/>
                             </DialogContent>
-                        </Dialog>    
+                        </Dialog>  
+                        <Draggable 
+                            handle="#draggable-dashboard-filter-menu-item" 
+                            cancel={'[class*="zoom_slider"]'}
+                            onStop={handleDashboardDragStop}
+                        >    
+                            <Menu
+                                id='draggable-dashboard-filter-menu-item'
+                                open={Boolean(anchorEl)}
+                                anchorEl={anchorEl}
+                                onClose={(event) => toggleDrawer(event, false)}              
+                                disableAutoFocusItem
+                                PaperProps={{    
+                                    style: {
+                                    width: 250,  
+                                    left: '50%',
+                                    transform: `translateX(${xy.x}) translateY(${xy.y})`,
+                                    }
+                                }}
+                            >
+                                <MenuItem className={`listIconItem illustration_menu_close_btn`}>
+                                    <ListItemIcon onClick={(event) => toggleDrawer(event, false)}>
+                                        <Close/>
+                                    </ListItemIcon>
+                                </MenuItem>
+                                <FilterDashboardCPC depthRange={depthRange} scopeRange={scopeRange} yearRange={filterYear} yearRangeText={yearRangeText} depthRangeText={depthRangeText} scopeRangeText={scopeRangeText} valueScope={valueScope} valueRange={valueRange} valueYear={valueYear} onChangeRangeSlider={onChangeRangeSlider} onChangeScopeSlider={onChangeDashboardScopeSlider} onChangeYearSlider={onChangeYearSlider}/>
+                            </Menu>
+                        </Draggable>   
+
                         <Dialog
                             open={openFilter}
                             onClose={handleCloseFilter}

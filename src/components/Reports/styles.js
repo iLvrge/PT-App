@@ -254,4 +254,7 @@ export default makeStyles(theme => ({
         alignItems: 'center',
         height: 100
     },   
+    active: {
+        color: pink[500]
+    }
 }));

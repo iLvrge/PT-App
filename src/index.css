@@ -969,13 +969,13 @@ svg.clipboard  {
   font-size: 0.875rem;
   z-index: 9999;
 }
-#draggable-illustration-menu-item .MuiListItem-root:hover{
+#draggable-illustration-menu-item .MuiListItem-root:hover, #draggable-dashboard-filter-menu-item .MuiListItem-root:hover{
   cursor: move;
 }
-#draggable-illustration-menu-item:hover .MuiMenu-paper{
+#draggable-illustration-menu-item:hover .MuiMenu-paper, #draggable-dashboard-filter-menu-item .MuiMenu-paper{
   cursor: move;
 }
-#draggable-illustration-menu-item .MuiListItemIcon-root:hover{
+#draggable-illustration-menu-item .MuiListItemIcon-root:hover, #draggable-dashboard-filter-menu-item .MuiListItemIcon-root:hover{
   cursor: pointer;
 }/* 
 #draggable-illustration-menu-item:hover .MuiTypography-root {
@@ -986,6 +986,7 @@ svg.clipboard  {
   right: 0px;
   top: 0px;
   padding: 0px !important;
+  z-index: 9999;
 }
 div#draggable-illustration-menu-item{
   width: 300px;

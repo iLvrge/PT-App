@@ -19,6 +19,7 @@ const LineGraph = (props) => {
             left: 40,
             top: 15,
         },
+        tooltip: { textStyle: { fontName: 'Roboto', fontSize: 12 } },
         vAxis: {minValue: 0},
         colors: ['#1565c0'],
         hAxis: {
