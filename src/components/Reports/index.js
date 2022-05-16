@@ -622,12 +622,12 @@ const Reports = (props) => {
         }
     }, [dispatch, profile, activeId, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, props.openCustomerBar, props.openCommentBar])
 
-    const changeGraph = () => {
+    const changeGraph = (flag) => {
         setIntial(false)
         setJurisdiction(false)
         setInvention(false)
         setSankey(false)
-        setLineGraph(!lineGraph)
+        setLineGraph(flag)
     }
 
     const onHandleJurisdiction = () => {
@@ -695,33 +695,31 @@ const Reports = (props) => {
                 <Paper className={classes.titleContainer} square>
                     <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{companyname.length > 0 ? companyname[0].original_name : ''}</span></span>
                     <div className={classes.toolbar}> 
-                        <IconButton 
+                        {/* <IconButton 
                             size="small"
                         >
                             <BubbleChart/>
-                        </IconButton> 
-                        <IconButton 
-                            size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: sankey})}
-                            onClick={onHandleSankey}
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" className={clsx('MuiSvgIcon-root MuiSvgIcon-fontSizeMedium')} viewBox="0 0 24 24">
-                                <path d="M23,6l-4-3.969v2L1,4v9h5.5C6.776,13,7,13.224,7,13.5v6.531H6L8,22l2-1.969H9v-7C9,11.928,8.103,11,7,11h5	c1.105,0,2,0.895,2,2v2.031h-2l3.586,3.954L19,15.031h-2V12.5c0-2.481-2.019-4.5-4.5-4.5H19v2.031L23,6z"/>
-                            </svg>
-                        </IconButton>
+                        </IconButton>  */}
                         <IconButton 
                             size="small"
                             className={clsx(classes.actionIcon, {[classes.active]: !lineGraph && jurisdictions == false && invention === false && sankey === false})}
-                            onClick={changeGraph}
+                            onClick={() => changeGraph(false)}
                         >
                             <Speed/> 
                         </IconButton>
                         <IconButton 
                             size="small"
                             className={clsx(classes.actionIcon, {[classes.active]: lineGraph && jurisdictions == false && invention === false && sankey === false})}
-                            onClick={changeGraph}
+                            onClick={() => changeGraph(true)}
                         >
                             <AutoGraph/>
+                        </IconButton> 
+                        <IconButton 
+                            size="small"
+                            className={clsx(classes.actionIcon, {[classes.active]: invention})}
+                            onClick={onHandleInvention}
+                        >
+                            <BarChart/>
                         </IconButton> 
                         <IconButton 
                             size="small"
@@ -732,11 +730,13 @@ const Reports = (props) => {
                         </IconButton>      
                         <IconButton 
                             size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: invention})}
-                            onClick={onHandleInvention}
+                            className={clsx(classes.actionIcon, {[classes.active]: sankey})}
+                            onClick={onHandleSankey}
                         >
-                            <BarChart/>
-                        </IconButton>               
+                            <svg xmlns="http://www.w3.org/2000/svg" className={clsx('MuiSvgIcon-root MuiSvgIcon-fontSizeMedium')} viewBox="0 0 24 24">
+                                <path d="M23,6l-4-3.969v2L1,4v9h5.5C6.776,13,7,13.224,7,13.5v6.531H6L8,22l2-1.969H9v-7C9,11.928,8.103,11,7,11h5	c1.105,0,2,0.895,2,2v2.031h-2l3.586,3.954L19,15.031h-2V12.5c0-2.481-2.019-4.5-4.5-4.5H19v2.031L23,6z"/>
+                            </svg>
+                        </IconButton>
                         <IconButton size="small"
                             onClick={() => {props.handleFullScreen(!props.fullScreen)}}
                             className={clsx(classes.actionIcon, typeof props.standalone !== 'undefined' ? classes.fontStandalone : '' )}

@@ -55,7 +55,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const [ sendAssetRequest, setSentAssetRequest ] = useState(false)
     const [ anchorEl, setAnchorEl ] = useState(null)
     const [ sliderValue, setSliderValue ] = useState(50)
-    const [ xy, setXY] = useState({x: '-85px', y: '35px'})
     const [ assets, setAssets ] = useState([])
     const [ filterList, setFilterList ] = useState([])
     const [ filterTotal, setFilterTotal ] = useState(0)
@@ -65,6 +64,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const [ filterDrag, setFilterDrag ] =  useState([0, 0])
     const [ valueYear, setValueYear ] = useState([1, 2])
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
+    const [ xy, setXY] = useState({x: dashboardScreen === true ? '-100px' : '-85px', y: '35px'})
     const [ valueScope, setValueScope ] = useState(dashboardScreen === true ? [...dashboardScope] : [1, 2])
     const [ valueRange, setValueRange ] = useState(dashboardScreen === true ? 4 : 3)
     const [ preValueRange, setPreValueRange ] = useState(3)
@@ -981,7 +981,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                 disableAutoFocusItem
                                 PaperProps={{    
                                     style: {
-                                    width: 250,  
+                                    width: dashboardScreen === true ? 450 : 250,  
                                     left: '50%',
                                     transform: `translateX(${xy.x}) translateY(${xy.y})`,
                                     }

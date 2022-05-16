@@ -76,6 +76,14 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
     padding-bottom: 0px !important;
     padding-top: 0px !important;
 }
+
+.listIconItem1 {
+    padding-bottom: 0px !important;
+    padding-top: 0px !important;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
 .MuiSlider-rail, .MuiSlider-track{
     background-color: #fff !important;
 }
@@ -124,7 +132,7 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
     flex-basis: 0px !important;
 }
 .show_label{
-    margin-left: 10px;
+    margin-left: 20px;
     margin-right: 10px;
 }
 #topUIToolbarExpanded .uspto_logo{

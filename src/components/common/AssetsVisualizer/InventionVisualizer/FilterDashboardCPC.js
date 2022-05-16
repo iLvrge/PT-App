@@ -17,35 +17,35 @@ const FilterDashboardCPC = ({ depthRange, scopeRange, yearRange, yearRangeText, 
     const [ heightYear, setHeightYear] = useState('250px')
     const [filterSection, setFilterSection] = useState([
         {
-            label: 'HUMAN NECESSITIES',
+            label: 'Human Necessities',
             value: 'A'
         },
         {
-            label: 'PERFORMING OPERATIONS; TRANSPORTING',
+            label: 'Performaing Operations; Transporting',
             value: 'B'
         },
         {
-            label: 'CHEMISTRY; METALLURGY',
+            label: 'Chemistry; Metallurgy',
             value: 'C'
         },
         {
-            label: 'TEXTILES; PAPER',
+            label: 'Textiles; Paper',
             value: 'D'
         },
         {
-            label: 'FIXED CONSTRUCTIONS',
+            label: 'Fixed Constructions',
             value: 'E'
         },
         {
-            label: 'MECHANICAL ENGINEERING; LIGHTING; HEATING; WEAPONS; BLASTING',
+            label: 'Mechanical Engineering; Lighting; Heating; Weapons; Blasting',
             value: 'F'
         },
         {
-            label: 'PHYSICS',
+            label: 'Physics',
             value: 'G'
         },
         {
-            label: 'ELECTRICITY',
+            label: 'Electricity',
             value: 'H'
         }
     ])
@@ -119,20 +119,20 @@ const FilterDashboardCPC = ({ depthRange, scopeRange, yearRange, yearRangeText, 
         onChangeYearSlider(rangeValue, newValue)
     }
     const onChangeSection = (event) => {
-        console.log(event.target.value)
         let oldValue = [...scopeValue]
         if(oldValue.includes(event.target.value)) {
             oldValue = oldValue.filter(item => item != event.target.value)
+        } else {
+            oldValue.push(event.target.value)
         }
         setScopeValue(oldValue)
-        console.log(yearValue, valueYear)
         onChangeScopeSlider(yearValue, rangeValue, oldValue)
     }
     let filters = filterSection.map((category_, i_) => {        
         return (
           <MenuItem
             key={`FilterElement_${i_}`}
-            className={clsx(`listIconItem checkboxItems`)}
+            className={clsx(`listIconItem listIconItem1 checkboxItems`)}
           >
             <ListItemIcon className={'checkbox'}>
               <Checkbox

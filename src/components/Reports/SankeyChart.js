@@ -43,6 +43,10 @@ const SankeyChart = (props) => {
                             parseInt(item.number)
                         ])
                     });
+                    
+                    setOption(prevItem => {
+                        return {...prevItem, height: data.length * 20}
+                    })
                     setData(loadData)
                 }
                 setLoading(false)
@@ -52,8 +56,10 @@ const SankeyChart = (props) => {
         return (() => {})
     }, [selectedCompanies])
 
+    console.log('option', option)
+
     return (
-        <Paper sx={{p: 2}} className={classes.container} square>
+        <Paper sx={{p: 2, overflow: 'auto'}} className={classes.container} square>
             {
                 !loading
                 ?
