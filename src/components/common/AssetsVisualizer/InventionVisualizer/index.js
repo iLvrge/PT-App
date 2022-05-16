@@ -64,7 +64,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const [ filterDrag, setFilterDrag ] =  useState([0, 0])
     const [ valueYear, setValueYear ] = useState([1, 2])
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
-    const [ xy, setXY] = useState({x: dashboardScreen === true ? '-100px' : '-85px', y: '35px'})
+    const [ xy, setXY] = useState({x: dashboardScreen === true ? '0px' : '-85px', y: '35px'})
     const [ valueScope, setValueScope ] = useState(dashboardScreen === true ? [...dashboardScope] : [1, 2])
     const [ valueRange, setValueRange ] = useState(dashboardScreen === true ? 4 : 3)
     const [ preValueRange, setPreValueRange ] = useState(3)
@@ -811,6 +811,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const onChangeYearSlider = useCallback(async (range, year) => {
         setValueYear(year)
         setScopeRange([])
+        setValueScope(dashboardScreen === true ? [...dashboardScope] : [1, 2])
         const yearList = []
         filterYear.forEach( r => {
             if(r.value >= year[0] && r.value <= year[1]){
@@ -859,13 +860,18 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         // A, B, .... H
         newRange = scope
         setValueScope(scope)
-        const yearList = []
-        filterYear.forEach( r => {
-            if(r.value >= year[0] && r.value <= year[1]){  
-                yearList.push(parseInt(r.label))
-            }
-        })
-        findCPCList([...scopeRange], filterList, filterTotal, yearList, range, scope)        
+        if(scope.length > 0) {
+            const yearList = []
+            filterYear.forEach( r => {
+                if(r.value >= year[0] && r.value <= year[1]){  
+                    yearList.push(parseInt(r.label))
+                }
+            })
+            findCPCList([...scopeRange], filterList, filterTotal, yearList, range, scope)  
+        } else {
+            setGraphRawData([])
+        }
+              
     }, [ filterList, filterTotal, scopeRange ] )
 
     const toggleDrawer = (event, open) => {
