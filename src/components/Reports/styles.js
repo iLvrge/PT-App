@@ -99,6 +99,7 @@ export default makeStyles(theme => ({
         },
         '& .MuiCardActions-root, .MuiCardContent-root':{
             backgroundColor: theme.palette.background.paper,
+            backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))',
             padding: '5px 8px',
             height: '100%',
             display: 'flex',
@@ -117,7 +118,7 @@ export default makeStyles(theme => ({
         verticalAlign: 'middle',
         justifyContent: 'flex-start;',
         alignItems: 'center',
-        backgroundImage: 'none',
+        /* backgroundImage: 'none', */
         borderBottom: `1px solid ${theme.palette.divider}`,
         '& span.title':{
             whiteSpace: 'nowrap', 
@@ -239,6 +240,9 @@ export default makeStyles(theme => ({
             width: '1rem !important',
             height: '1rem !important'
         } */
+        '& svg' : {
+            fill: 'currentcolor'
+        }
     },
     fontStandalone: {        
        '& svg':{

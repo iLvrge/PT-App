@@ -66,7 +66,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const [ valueYear, setValueYear ] = useState([1, 2])
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
     const [ valueScope, setValueScope ] = useState(dashboardScreen === true ? [...dashboardScope] : [1, 2])
-    const [ valueRange, setValueRange ] = useState(3)
+    const [ valueRange, setValueRange ] = useState(dashboardScreen === true ? 4 : 3)
     const [ preValueRange, setPreValueRange ] = useState(3)
     const [ scopeRange, setScopeRange ] = useState([])
     const [ depthRange, setDepthRange ] = useState([
@@ -456,9 +456,11 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             const promiseYear = data.list.map( item => yearList.push(item.fillingYear))
             await Promise.all(promiseYear)
             yearList = [...new Set(yearList)]
-            yearList.sort(function(a, b) {
-                return a > b ? -1 : 0
-            });            
+            if(dashboardScreen !== true) {
+                yearList.sort(function(a, b) {
+                    return a > b ? -1 : 0
+                }); 
+            }                       
             const promiseYearLabel = yearList.map( (item, index) => yearLabelList.push({ value: index + 1, label: item }) )
             await Promise.all(promiseYearLabel)
             setFilterYear(yearLabelList)            

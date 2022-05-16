@@ -5,18 +5,20 @@ import useStyles from './styles'
 
 import Loader from '../common/Loader'
 import PatenTrackApi from '../../api/patenTrack2'
+import { Paper } from '@mui/material';
 
 const SankeyChart = (props) => {
+    const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const [height, setHeight] = useState('100%');
     const [data, setData] = useState([]);
     const [option, setOption] = useState({
         width: '100%',
         sankey: {
-            link: { color: { fill: "#d799ae" } },
+            link: { color: { fill: "#1565C0" } },
             node: {
               colors: ['#70A800', '#FFAA00','#1565C0', '#E60000'],
-              label: { color: "#FFF" }
+              label: { color: "#FFF", fontName: 'Roboto', fontSize: 12.25 }
             }
         }
     });
@@ -51,7 +53,7 @@ const SankeyChart = (props) => {
     }, [selectedCompanies])
 
     return (
-        <React.Fragment>  
+        <Paper sx={{p: 2}} className={classes.container} square>
             {
                 !loading
                 ?
@@ -70,7 +72,7 @@ const SankeyChart = (props) => {
                 :
                     <Loader />
             }            
-        </React.Fragment>         
+        </Paper>         
     )
 }
 

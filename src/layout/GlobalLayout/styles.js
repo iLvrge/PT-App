@@ -16,7 +16,7 @@ export default makeStyles(theme => ({
             }
         } ,
         '& .MuiPaper-root':{
-            backgroundImage: 'none'
+            /* backgroundImage: 'none' */
         }
     },
     dashboard: {

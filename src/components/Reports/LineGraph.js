@@ -77,7 +77,7 @@ const LineGraph = (props) => {
                     loader={<div>Loading...</div>}
                     data={props.data}
                     options={option}
-                    chartEvents={[
+                    /* chartEvents={[
                         {
                             eventName: "ready",
                             callback: ({ chartWrapper, google }) => {
@@ -85,7 +85,6 @@ const LineGraph = (props) => {
                                 const container = chart.container
                                 const observer = new MutationObserver(function () {
                                     Array.prototype.forEach.call(container.getElementsByTagName('path'), function(path) {
-                                        console.log("path.getAttribute('fill')", path.getAttribute('fill'))
                                         if (path.getAttribute('fill') === '#1565c0') {
                                             path.setAttribute('fill', `url(#${gradientID}) #1565c0`);
                                         }
@@ -97,7 +96,7 @@ const LineGraph = (props) => {
                                 }); 
                             }
                         }
-                    ]} 
+                    ]} */ 
                 />
                 <svg style={{width:0,height:0,position:'absolute'}} aria-hidden="true" focusable="false">
                     <linearGradient id={gradientID} x1="0%" y1="0%" x2="0%" y2="100%" >

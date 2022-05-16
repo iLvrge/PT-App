@@ -145,7 +145,7 @@ const FilterDashboardCPC = ({ depthRange, scopeRange, yearRange, yearRangeText, 
             <ListItemText>{category_.label}</ListItemText>
           </MenuItem>
         );
-      });
+    });
     return (
         <React.Fragment>
             <MenuItem> 
@@ -168,7 +168,7 @@ const FilterDashboardCPC = ({ depthRange, scopeRange, yearRange, yearRangeText, 
                     <Loader/>
                 }
                 </ListItemIcon>
-                <ListItemText className={'show_label'}>{ yearRange.length > 0 ? `Filter ${yearRange[yearRange.length - 1].label} - ${yearRange[0].label}` : ''}</ListItemText>
+                <ListItemText className={'show_label'}>{ yearRange.length > 0 ? `Filter ${yearRange[0].label} - ${yearRange[yearRange.length - 1].label}` : ''}</ListItemText>
             </MenuItem>
             <Divider /> 
             <MenuItem> 

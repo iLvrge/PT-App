@@ -65,7 +65,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
             left:40,
             top:15,
         },
-        colorAxis: {colors: ['#70A800', '#FFAA00','#1565C0', '#E60000']}
+        colorAxis: {colors: ['#70A800', '#FFAA00', '#1565C0']}
     });
 
     useEffect(() => {
