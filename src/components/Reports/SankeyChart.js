@@ -43,11 +43,13 @@ const SankeyChart = (props) => {
                             parseInt(item.number)
                         ])
                     });
+                    let height = '100%'
                     if(data.length > 10) {
-                        setOption(prevItem => {
-                            return {...prevItem, height: data.length * 20}
-                        })
-                    }                    
+                        height = data.length * 20
+                    }      
+                    setOption(prevItem => {
+                        return {...prevItem, height}
+                    })              
                     setData(loadData)
                 }
                 setLoading(false)
