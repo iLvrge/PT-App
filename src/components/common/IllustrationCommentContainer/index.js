@@ -79,7 +79,11 @@ const IllustrationCommentContainer = ({
     const [ menuComponent, setMenuComponent ] = useState([])
     const [ dashboardData, setDashboardData ] = useState([])
     const [ timelineRawData, setTimelineRawData ] = useState([])
-    const [ showManualComponent, setShowManualComponent ] = useState(false)
+    const [lineGraph, setLineGraph] = useState(false)
+    const [jurisdictions, setJurisdiction] = useState(false)
+    const [invention, setInvention] = useState(false)
+    const [sankey, setSankey] = useState(false)
+    const [showManualComponent, setShowManualComponent ] = useState(false)
     const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
     const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
     const maintainenceFrameMode = useSelector(state => state.ui.maintainenceFrameMode)
@@ -119,7 +123,15 @@ const IllustrationCommentContainer = ({
             handleCommentBarOpen: handleCommentBarOpen,
             handleCustomersBarOpen: handleCustomersBarOpen,
             dashboardData: dashboardData,
-            updateDashboardData: setDashboardData
+            updateDashboardData: setDashboardData,
+            lineGraph: lineGraph,
+            setLineGraph: setLineGraph,
+            jurisdictions: jurisdictions,
+            setJurisdiction: setJurisdiction,
+            invention: invention,
+            setInvention: setInvention,
+            sankey: sankey,
+            setSankey: setSankey
         }
     ] 
 
@@ -270,6 +282,14 @@ const IllustrationCommentContainer = ({
                                 handleCustomersBarOpen={handleCustomersBarOpen}
                                 updateDashboardData={setDashboardData}
                                 visualizerBarSize={visualizerBarSize} 
+                                lineGraph={lineGraph}
+                                setLineGraph={setLineGraph}
+                                jurisdictions={jurisdictions}
+                                setJurisdiction={setJurisdiction}
+                                invention={invention}
+                                setInvention={setInvention}
+                                sankey={sankey}
+                                setSankey={setSankey}
                             /> 
                         :
                         showManualComponent === true && menuComponent.length > 0

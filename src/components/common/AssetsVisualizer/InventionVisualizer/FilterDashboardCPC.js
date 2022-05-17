@@ -168,7 +168,7 @@ const FilterDashboardCPC = ({ depthRange, scopeRange, yearRange, yearRangeText, 
                     <Loader/>
                 }
                 </ListItemIcon>
-                <ListItemText className={'show_label'}>{ yearRange.length > 0 ? `Filter ${yearRange[0].label} - ${yearRange[yearRange.length - 1].label}` : ''}</ListItemText>
+                <ListItemText className={'show_label'}>{ yearRange.length > 0 ? `Filling Years ${yearRange[0].label} - ${yearRange[yearRange.length - 1].label}` : ''}</ListItemText>
             </MenuItem>
             <Divider /> 
             <MenuItem> 
@@ -192,7 +192,7 @@ const FilterDashboardCPC = ({ depthRange, scopeRange, yearRange, yearRangeText, 
                     <Loader/>
                 }
                 </ListItemIcon>
-                <ListItemText className={'show_label'}>Zoom</ListItemText>
+                <ListItemText className={'show_label'}>Technologies Zoom</ListItemText>
             </MenuItem>
             <Divider /> 
             {filters}

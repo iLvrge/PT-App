@@ -292,10 +292,7 @@ const Reports = (props) => {
     let resizeObserver = null
     const [initial, setIntial] = useState(true)
     const [loading, setLoading] = useState(false)
-    const [lineGraph, setLineGraph] = useState(false)
-    const [jurisdictions, setJurisdiction] = useState(false)
-    const [invention, setInvention] = useState(false)
-    const [sankey, setSankey] = useState(false)
+    
     const [grid, setGrid] = useState(GRID_ITEM)
     const [smallScreen, setSmallScreen] = useState(false)
     const [activeId, setActiveId] = useState(-1)
@@ -391,7 +388,7 @@ const Reports = (props) => {
                 addCardList()  
             }
         }
-    }, [lineGraph])
+    }, [props.lineGraph])
 
     /**
      * Get Dashboard data
@@ -427,7 +424,7 @@ const Reports = (props) => {
                 formData.append('customers', JSON.stringify(selectedAssetCompanies));
                 formData.append('assignments', JSON.stringify(selectedAssetAssignments));
                 formData.append('type', item.type)
-                formData.append('data_format', lineGraph === true ? 1 : 0)
+                formData.append('data_format', props.lineGraph === true ? 1 : 0)
                 formData.append('format_type', profile.user.organisation.organisation_type)
                 
                 const requestData = await PatenTrackApi.getDashboardData(formData)
@@ -465,7 +462,7 @@ const Reports = (props) => {
         let oldList = [...cardList]
         const findIndex = oldList.findIndex( item => item.type === type)
         if(findIndex !== -1) {
-            if(lineGraph === true) {
+            if(props.lineGraph === true) {
                 if( requestData !== null && requestData.data != null && requestData.data.length > 0) {
                     const list = [['Year', 'Assets']]
                     requestData.data.forEach( item => {
@@ -502,7 +499,7 @@ const Reports = (props) => {
                 props.updateDashboardData(oldList)
             }
         }      
-    }, [cardList, lineGraph])
+    }, [cardList, props.lineGraph])
 
     useEffect(() => {
         if(activeId  !== -1 ) {
@@ -624,31 +621,31 @@ const Reports = (props) => {
 
     const changeGraph = (flag) => {
         setIntial(false)
-        setJurisdiction(false)
-        setInvention(false)
-        setSankey(false)
-        setLineGraph(flag)
+        props.setJurisdiction(false)
+        props.setInvention(false)
+        props.setSankey(false)
+        props.setLineGraph(flag)
     }
 
     const onHandleJurisdiction = () => {
-        setLineGraph(false)
-        setInvention(false)
-        setSankey(false)
-        setJurisdiction(true)
+        props.setLineGraph(false)
+        props.setInvention(false)
+        props.setSankey(false)
+        props.setJurisdiction(true)
     }
 
     const onHandleInvention = () => {
-        setLineGraph(false)
-        setJurisdiction(false)
-        setSankey(false)
-        setInvention(true)
+        props.setLineGraph(false)
+        props.setJurisdiction(false)
+        props.setSankey(false)
+        props.setInvention(true)
     }
 
     const onHandleSankey = () => {
-        setLineGraph(false)
-        setJurisdiction(false)
-        setInvention(false)
-        setSankey(true)
+        props.setLineGraph(false)
+        props.setJurisdiction(false)
+        props.setInvention(false)
+        props.setSankey(true)
     }
 
     const showItems = cardList.map( (card, index) => {
@@ -664,7 +661,7 @@ const Reports = (props) => {
                 handleClick={onHandleClick}
                 handleList={onHandleList}
                 type={card.type}  
-                lineGraph={lineGraph}
+                lineGraph={props.lineGraph}
             />
         </Grid>
     })
@@ -702,35 +699,35 @@ const Reports = (props) => {
                         </IconButton>  */}
                         <IconButton 
                             size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: !lineGraph && jurisdictions == false && invention === false && sankey === false})}
+                            className={clsx(classes.actionIcon, {[classes.active]: !props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false})}
                             onClick={() => changeGraph(false)}
                         >
                             <Speed/> 
                         </IconButton>
                         <IconButton 
                             size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: lineGraph && jurisdictions == false && invention === false && sankey === false})}
+                            className={clsx(classes.actionIcon, {[classes.active]: props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false})}
                             onClick={() => changeGraph(true)}
                         >
                             <AutoGraph/>
                         </IconButton> 
                         <IconButton 
                             size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: invention})}
+                            className={clsx(classes.actionIcon, {[classes.active]: props.invention})}
                             onClick={onHandleInvention}
                         >
                             <BarChart/>
                         </IconButton> 
                         <IconButton 
                             size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: jurisdictions})}
+                            className={clsx(classes.actionIcon, {[classes.active]: props.jurisdictions})}
                             onClick={onHandleJurisdiction}
                         >
                             <Public/>
                         </IconButton>      
                         <IconButton 
                             size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: sankey})}
+                            className={clsx(classes.actionIcon, {[classes.active]: props.sankey})}
                             onClick={onHandleSankey}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className={clsx('MuiSvgIcon-root MuiSvgIcon-fontSizeMedium')} viewBox="0 0 24 24">
@@ -758,7 +755,7 @@ const Reports = (props) => {
                     className={classes.container}
                 >
                     {
-                        jurisdictions === true
+                        props.jurisdictions === true
                         ?
                             <GeoChart
                                 chartBar={props.chartBar} 
@@ -769,7 +766,7 @@ const Reports = (props) => {
                                 standalone={true}
                             />
                         :
-                            invention === true
+                            props.invention === true
                             ?
                                 <InventionVisualizer 
                                     defaultSize={props.defaultSize} 
@@ -785,7 +782,7 @@ const Reports = (props) => {
                                     tab={false}
                                 />
                             :    
-                                sankey === true
+                                props.sankey === true
                                 ?
                                     <SankeyChart />
                                 :
