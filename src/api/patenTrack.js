@@ -15,7 +15,7 @@ const getCookie = (name)=> {
 const getHeader = () => {
   let token = null
   if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
-    console.log('adadasa', localStorage.getItem('auth_signature'))
+    
     token = localStorage.getItem('auth_signature')
   } else {
     token = localStorage.getItem('token')
@@ -23,7 +23,6 @@ const getHeader = () => {
       token = getCookie('token')
     }
   }
-  console.log('getHeader', token,  process.env.REACT_APP_ENVIROMENT_MODE, localStorage.getItem('auth_signature'))
   return {
     headers: {
       'x-auth-token': token
@@ -74,7 +73,6 @@ var cancel
 class PatenTrackApi {
 
   static getProfile() {
-    console.log('getProfile', getHeader())
     return axios.get(`${base_new_api_url}/profile`, getHeader()) 
   }
 
@@ -87,7 +85,6 @@ class PatenTrackApi {
   } 
 
   static assetLegalEvents(applicationNumber, patentNumber) { 
-    console.log("assetLegalEvents", applicationNumber, patentNumber)
     return axios.get(`${base_new_api_url}/events/${applicationNumber}/${patentNumber != '' ? encodeURIComponent(patentNumber)  : applicationNumber}`, getHeader())
   }
 

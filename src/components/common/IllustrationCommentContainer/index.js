@@ -136,6 +136,10 @@ const IllustrationCommentContainer = ({
     ] 
 
     useEffect(() => {
+        checkChartAnalytics(null, null, false)
+    }, [sankey, invention, jurisdictions, lineGraph])
+
+    useEffect(() => {
         updateResizerBar(illustrationRef, commentBar, 1)
     }, [ illustrationRef, commentBar ])   
 

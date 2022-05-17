@@ -270,7 +270,7 @@ const NewHeader = (props) => {
   useEffect(() => {
     if (!profile) {
       let token = process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' ?  getTokenStorage( 'token' ) :  getTokenStorage( 'auth_signature' )
-      console.log('auth_signature', getTokenStorage( 'auth_signature' ))
+      
       if(token !== '' || token !== null) {
         dispatch(getProfile(true))
       }     
@@ -278,7 +278,6 @@ const NewHeader = (props) => {
   }, [ dispatch, profile ])
 
   useEffect(() => {
-    console.log('TOKEN', auth_token, profile)
     if(auth_token != null && typeof profile == 'undefined') {
       dispatch(getProfile(true))
     }
@@ -551,9 +550,6 @@ const handleThemeMode = useCallback(event => {
   dispatch(toggleThemeMode(!isDarkTheme))
 },[dispatch, isDarkTheme])
 
-const shareDashboard = () => {
-  console.log("shareDashboard")
-}
 
 const onHandleDashboardScreen = /* useCallback( */(event) => {
   dispatch(setTimelineScreen(false))

@@ -140,7 +140,6 @@ if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_E
   ] 
 }
 
-console.log("process.env.REACT_APP_ENVIROMENT_MODE", process.env.REACT_APP_ENVIROMENT_MODE, routeList)
 
 export default (
   <Switch>

@@ -329,7 +329,7 @@ const Reports = (props) => {
                 setLoading(true)    
                 let smallScreen = false         
                 const { width } = entries[0].contentRect;
-                if(width > 401 && width < 601 ) {
+                if(width > 510 && width < 601 ) {
                     smallScreen = true
                     setGrid({
                         lg:6,
@@ -346,7 +346,7 @@ const Reports = (props) => {
                         xs:4,
                         xl:4
                     })
-                } else if (width > 0 && width < 400) {
+                } else if (width > 0 && width < 510) {
                     smallScreen = true
                     setGrid({
                         lg:12,
