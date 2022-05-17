@@ -531,6 +531,11 @@ const GlobalLayout = (props) => {
                             tableContainer = document.getElementById('assets_type_companies')
                             if(tableContainer !== null) {
                                 findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                            } else {
+                                tableContainer = document.getElementById('main_companies')
+                                if(tableContainer !== null) {
+                                    findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                                }
                             }
                         } 
                     }                                      
@@ -543,6 +548,11 @@ const GlobalLayout = (props) => {
                     tableContainer = document.getElementById('assets_type_companies')
                     if(tableContainer !== null) {
                         findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                    } else {
+                        tableContainer = document.getElementById('main_companies')
+                        if(tableContainer !== null) {
+                            findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')                            
+                        }
                     }
                 }
             }

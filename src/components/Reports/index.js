@@ -1,34 +1,25 @@
 import React, {useMemo, useState, useCallback, useEffect, useRef} from 'react'
 import { useHistory } from 'react-router-dom'
-import { Grid, Typography, IconButton, Paper, Tooltip, Zoom }  from '@mui/material'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {
-  faShareAlt,
-} from "@fortawesome/free-solid-svg-icons"
+import { Grid, IconButton, Paper}  from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
 import useStyles from './styles'
 import clsx from 'clsx'
 import moment from 'moment'
 import CardElement from './CardElement'
-import ClientList from './ClientList'
 import { Fullscreen, Close, Public, BarChart, AutoGraph, BubbleChart, Speed} from '@mui/icons-material';
-/* import { useMeasure } from 'react-use'; */
 import { 
     setDashboardPanel,
     setTimelineScreen,
     setDashboardScreen,
     setPatentScreen } from '../../actions/uiActions'
-import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId, setAssetsIllustrationData, retrievePDFFromServer  } from '../../actions/patentTrackActions2'
+import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId,  retrievePDFFromServer  } from '../../actions/patentTrackActions2'
 import { assetLegalEvents, setAssetLegalEvents, setPDFView, setPDFFile, setConnectionData, setConnectionBoxView  } from '../../actions/patenTrackActions';
 import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar'
 import { controlList } from "../../utils/controlList"
 
 import PatenTrackApi from '../../api/patenTrack2'
-import { copyToClipboard } from '../../utils/html_encode_decode'
 import routeList from '../../routeList'
-import { SET_CUSTOMERS_NAME_COLLECTIONS_LOADING } from '../../actions/actionTypes'
 import GeoChart from '../common/AssetsVisualizer/GeoChart'
-import { SET_MAINTAINENCE_ASSETS_EVENTS_LIST_LOADING_MORE } from '../../actions/actionTypes2'
 import InventionVisualizer from '../common/AssetsVisualizer/InventionVisualizer'
 import SankeyChart from './SankeyChart'
 
