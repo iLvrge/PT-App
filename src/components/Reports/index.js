@@ -457,14 +457,13 @@ const Reports = (props) => {
                 if( requestData !== null && requestData.data != null && requestData.data.length > 0) {
                     const list = [['Year', 'Assets']]
                     requestData.data.forEach( item => {
-                        list.push([item.year, item.number])
+                        list.push([item.year, parseInt(item.number)])
                     })
                     
                     oldList[findIndex].list = list
                     oldList[findIndex].patent = requestData.data[0].patent
                     oldList[findIndex].application = requestData.data[0].patent
                     oldList[findIndex].rf_id = requestData.data[0].rf_id
-                    console.log('list', list, oldList[findIndex])
                 } else {
                     oldList[findIndex].list = []
                     oldList[findIndex].patent = ''
