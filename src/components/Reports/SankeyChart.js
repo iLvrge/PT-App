@@ -46,8 +46,10 @@ const SankeyChart = (props) => {
                     let height = '100%'
                     if(data.length > 10) {
                         height = data.length * 20
+                        setHeight('100%')
                     }  else if(data.length < 4) {
                         height = `${data.length * 25}%`
+                        setHeight(height)
                     }    
                     setOption(prevItem => {
                         return {...prevItem, height}
@@ -60,7 +62,6 @@ const SankeyChart = (props) => {
         getPartiesData()
         return (() => {})
     }, [selectedCompanies])
-
     return (
         <Paper sx={{p: 2, overflow: 'auto'}} className={classes.container} square>
             {
