@@ -239,7 +239,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
 
     const DisplayChart = () => {
         if(loading) return <Loader/>
-        if(data.length === 0) return null
+        if(data.length < 2) return null
         return (
             <Chart
                 width={'100%'}

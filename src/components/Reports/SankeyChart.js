@@ -11,6 +11,7 @@ const SankeyChart = (props) => {
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const [height, setHeight] = useState('100%');
+    const screenHeight = useSelector(state => state.patenTrack.screenHeight);
     const [data, setData] = useState([]);
     const [option, setOption] = useState({
         width: '100%',
@@ -45,15 +46,25 @@ const SankeyChart = (props) => {
                     });
                     let height = '100%'
                     if(data.length > 10) {
-                        height = data.length * 20
-                        setHeight('100%')
+                        const chartHeight = data.length * 20
+                        setOption(prevItem => {
+                            return {...prevItem, height: chartHeight}
+                        }) 
                     }  else if(data.length < 4) {
-                        height = `${data.length * 25}%`
-                        setHeight(height)
+                        height =  `${parseInt(screenHeight * (data.length * 25) / 100)}px`
+                        setOption(prevItem => {
+                            let pre = {...prevItem}
+                            delete pre.height
+                            return {...pre}
+                        })
+                    } else {
+                        setOption(prevItem => {
+                            let pre = {...prevItem}
+                            delete pre.height
+                            return {...pre}
+                        })
                     }    
-                    setOption(prevItem => {
-                        return {...prevItem, height}
-                    })              
+                    setHeight(height)       
                     setData(loadData)
                 }
                 setLoading(false)
@@ -63,7 +74,7 @@ const SankeyChart = (props) => {
         return (() => {})
     }, [selectedCompanies])
     return (
-        <Paper sx={{p: 2, overflow: 'auto'}} className={classes.container} square>
+        <Paper sx={{p: 2, overflow: 'auto', alignItems: 'flext-start'}} className={classes.container} square>
             {
                 !loading
                 ?
