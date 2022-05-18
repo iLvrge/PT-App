@@ -1102,7 +1102,7 @@ export const getForeignAssetsBySheet = ( form ) => {
  * @param {*} append 
  */
 
-export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, append = false, startIndex, endIndex, column, direction, assetTableScrollPosition, salesAssets = false ) => {
+export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, append = false, startIndex, endIndex, column, direction, assetTableScrollPosition, salesAssets = false, callBackFn ) => {
   return async dispatch => {
     if(append === false) {
       dispatch( setAssetTypesAssignmentsAllAssetsLoading( true ) )
@@ -1110,6 +1110,9 @@ export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, appe
     PatenTrackApi.cancelAssets()
     const { data } = await PatenTrackApi.getCustomerAssets( type, companies, tabs, customers, rfIDs, startIndex, endIndex, column, direction, salesAssets )    
     dispatch( setAssetTypeAssignmentAllAssets(data, append) )
+    if(typeof callBackFn !== 'undefined') {
+      callBackFn(false)
+    }
     if(append === false) { 
       dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
       if(data.list.length == 0) {

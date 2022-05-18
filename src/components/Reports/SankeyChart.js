@@ -46,7 +46,9 @@ const SankeyChart = (props) => {
                     let height = '100%'
                     if(data.length > 10) {
                         height = data.length * 20
-                    }      
+                    }  else if(data.length < 4) {
+                        height = `${data.length * 25}%`
+                    }    
                     setOption(prevItem => {
                         return {...prevItem, height}
                     })              

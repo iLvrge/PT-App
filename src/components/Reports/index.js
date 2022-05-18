@@ -395,12 +395,12 @@ const Reports = (props) => {
                 addCardList()  
             }
         }
-        
+        return (() => {})
     }, [selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssets, assetTypeCompanies])
 
 
     const findDashboardData = async() => {
-        if(loading === false) {                    
+        if(loading === false && props.invention === false && props.jurisdictions === false && props.sankey === false) {                    
             const list = [];
             let totalRecords = 0;
             setLoading(true)

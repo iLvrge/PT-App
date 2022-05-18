@@ -11,12 +11,15 @@ import PatenTrackApi from '../../../../api/patenTrack2'
 import {
     getCustomerAssets,
 } from '../../../../actions/patentTrackActions2'
+import Loader from '../../Loader'
 
 const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, tab }) => {
     const containerRef = useRef(null)
     const dispatch = useDispatch()
-    const [ selectedTab, setSelectedTab ] = useState(0)
-    const [ chartTabs, setChartTabs ] = useState(['Jurisdictions'])
+    const [loading, setLoading] = useState(false)
+    const [assetRequest, setAssetRequest] = useState(false)
+    const [selectedTab, setSelectedTab ] = useState(0)
+    const [chartTabs, setChartTabs ] = useState(['Jurisdictions'])
     const [data, setData] = useState([])
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
@@ -71,6 +74,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
     useEffect(() => {
         const getAssetsForEachCountry = async() => {
             try {
+                setData([])
                 const list = [];
                 let totalRecords = 0;
                 if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {
@@ -142,7 +146,8 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                                     );
                                 } */
                             } else {
-                                if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
+                                if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0) && assetRequest === false) {
+                                    setAssetRequest(true)
                                     dispatch(
                                         getCustomerAssets(
                                           selectedCategory == '' ? '' : selectedCategory,
@@ -156,7 +161,8 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                                           'asset',
                                           'DESC',
                                             -1, 
-                                          display_sales_assets
+                                          display_sales_assets,
+                                          setAssetRequest
                                         ),
                                     );
                                 }
@@ -166,6 +172,8 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                 }
 
                 if( list.length > 0 ) {
+                    setAssetRequest(false)
+                    setLoading(true)
                     const form = new FormData()
                     form.append("list", JSON.stringify(list))
                     form.append("total", totalRecords)
@@ -176,6 +184,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                     form.append('other_mode', display_sales_assets)
                     form.append('type', selectedCategory)
                     const { data } = await PatenTrackApi.getAssetTypeAssignmentAllAssetsWithFamily(form)
+                    setLoading(false)
                     setData(data)
                 }
             } catch(err) {
@@ -183,6 +192,8 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
             }            
         }
         getAssetsForEachCountry()
+
+        return (() => {})
     }, [selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, selectedAssetAssignmentsAll, selectedAssetAssignments, display_sales_assets, search_string, auth_token])
     
     
@@ -227,6 +238,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
 
 
     const DisplayChart = () => {
+        if(loading) return <Loader/>
         if(data.length === 0) return null
         return (
             <Chart
