@@ -5,7 +5,8 @@ import useStyles from './styles'
 
 import Loader from '../common/Loader'
 import PatenTrackApi from '../../api/patenTrack2'
-import { Paper } from '@mui/material';
+import { collapseClasses, Paper } from '@mui/material';
+import clsx from 'clsx';
 
 const SankeyChart = (props) => {
     const classes = useStyles();
@@ -23,7 +24,7 @@ const SankeyChart = (props) => {
             }
         }
     });
-
+    const CONSTANT_DECREMENT = 106;
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
     
     useEffect(() => {
@@ -51,7 +52,7 @@ const SankeyChart = (props) => {
                             return {...prevItem, height: chartHeight}
                         }) 
                     }  else if(data.length < 4) {
-                        height =  `${parseInt(screenHeight * (data.length * 25) / 100)}px`
+                        height =  `${parseInt((screenHeight - CONSTANT_DECREMENT) * (data.length * 25) / 100)}px`
                         setOption(prevItem => {
                             let pre = {...prevItem}
                             delete pre.height
@@ -74,7 +75,7 @@ const SankeyChart = (props) => {
         return (() => {})
     }, [selectedCompanies])
     return (
-        <Paper sx={{p: 2, overflow: 'auto', alignItems: 'flext-start'}} className={classes.container} square>
+        <Paper sx={{p: 2, overflow: 'auto'}} className={clsx(classes.container, classes.containerTop)} square>
             {
                 !loading
                 ?

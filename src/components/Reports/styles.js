@@ -18,6 +18,9 @@ export default makeStyles(theme => ({
             }
         },
     },  
+    containerTop: {
+        alignItems: 'flex-start',
+    },
     flexColumn: {
         height: 'calc((100vh - 105px) / 3)',
         alignContent: 'start',
