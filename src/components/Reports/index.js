@@ -600,6 +600,14 @@ const Reports = (props) => {
                 timeline = true
             }*/
             if( findIndex !== -1 ) {
+                resetAllRowSelect(dispatch, resetItemList.resetAll)
+                resetAllRowSelect(dispatch, resetItemList.clearOtherItems)
+                setTimeout(() => { 
+                    dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))                
+                    if(id === 0) {
+                        dispatch(setSwitchAssetButton(1))
+                    } 
+                })
                 dispatch(setDashboardScreen(false))
                 dispatch(setTimelineScreen(timeline))
                 dispatch(setPatentScreen(patent))
@@ -611,15 +619,7 @@ const Reports = (props) => {
                 }
                 if(props.openCommentBar === false){
                     props.handleCommentBarOpen()
-                }
-                resetAllRowSelect(dispatch, resetItemList.resetAll)
-                resetAllRowSelect(dispatch, resetItemList.clearOtherItems)
-                setTimeout(() => { 
-                    dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))                
-                    if(id === 0) {
-                        dispatch(setSwitchAssetButton(1))
-                    } 
-                })                
+                }                                
             }
         }
     }, [dispatch, profile, activeId, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, props.openCustomerBar, props.openCommentBar])

@@ -441,7 +441,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     }
     return () => (isSubscribed = false)
     
-  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors, auth_token, switch_button_assets ])
+  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors, auth_token, switch_button_assets, selectedCategory ])
 
   useEffect(() => {
     if(typeof timelineData !== 'undefined') {
