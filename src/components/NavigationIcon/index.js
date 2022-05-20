@@ -40,6 +40,10 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
     const template_document_url = useSelector(state => state.patenTrack2.template_document_url)
     const driveTemplateFrameMode = useSelector(state => state.ui.driveTemplateFrameMode)
     const new_drive_template_file = useSelector(state => state.patenTrack2.new_drive_template_file)
+
+    const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
+
+    if(selectedCategory  != 'due_dilligence' && (t == 2 || t == 3 || t == 4 || t== 11)) return null
    
     return (
         <div className={clsx(classes.showIcon, {[classes.marginBottom25]: typeof margin !== 'undefined' && margin === true && typeof isMobile !== 'undefined' && isMobile === false, [classes.mobile]: typeof isMobile !== 'undefined' && isMobile === true})}> 

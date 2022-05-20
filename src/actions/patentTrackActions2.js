@@ -1108,7 +1108,7 @@ export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, appe
       dispatch( setAssetTypesAssignmentsAllAssetsLoading( true ) )
     }
     PatenTrackApi.cancelAssets()
-    const { data } = await PatenTrackApi.getCustomerAssets( type, companies, tabs, customers, rfIDs, startIndex, endIndex, column, direction, salesAssets )    
+    const { data } = await PatenTrackApi.getCustomerAssets( type, companies, type == 'due_dilligence' ? tabs : [], type == 'due_dilligence' ? customers : [], type == 'due_dilligence' ? rfIDs : [], startIndex, endIndex, column, direction, salesAssets )    
     dispatch( setAssetTypeAssignmentAllAssets(data, append) )
     if(typeof callBackFn !== 'undefined') {
       callBackFn(false)
