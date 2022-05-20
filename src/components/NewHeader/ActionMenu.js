@@ -906,7 +906,7 @@ const ActionMenu = (props) => {
                     <ListItemText><span className={clsx(parseInt(profile?.user?.organisation?.subscribtion) < 2 ? classes.disabled : '')}>Pro:</span> {parseInt(profile?.user?.organisation?.subscribtion) === 1 ? <Button variant="text">Upgrade</Button> : '' }</ListItemText>
                 </MenuItem>
                 {
-                    parseInt(profile?.user?.organisation?.subscribtion) === 2 
+                    parseInt(profile?.user?.organisation?.subscribtion) === 2 || parseInt(profile?.user?.organisation?.subscribtion) === 3
                     ?   
                         [                            
                             <AssetSwitchButton

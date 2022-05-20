@@ -179,7 +179,7 @@ const Reports = (props) => {
         },
         {
             title: 'Other Banks',
-            sub_heading: 'adress',
+            sub_heading: 'address',
             number: 0,
             patent: '',
             application: '',
@@ -574,7 +574,22 @@ const Reports = (props) => {
             if(id === 0) {                
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
                 patent = true
+            } else if(id === 1 && subscription > 2) {
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_names')
+                timeline = true
+            } else if(id === 2 && subscription > 2) {
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'clear_encumbrances')
+                timeline = true
+            } else if(id === 7 && subscription > 2) {
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'late_maintainance')
+                patent = true
             } else if(id === 8 && subscription > 2) {
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_recording')
+                timeline = true
+            }  else if(id === 9 && subscription > 2) {
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'late_recording')
+                timeline = true
+            } /*else if(id === 8 && subscription > 2) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'pay_maintainence_fee')
                 patent = true
             } else if(id === 3 && subscription > 2) {
@@ -583,7 +598,7 @@ const Reports = (props) => {
             } else if(id === 4 && subscription > 2) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'correct_names')
                 timeline = true
-            }
+            }*/
             if( findIndex !== -1 ) {
                 dispatch(setDashboardScreen(false))
                 dispatch(setTimelineScreen(timeline))
@@ -591,7 +606,7 @@ const Reports = (props) => {
                 if(patent === true) {
                     history.push(routeList.patent_assets)  
                 }
-                if(props.openCustomerBar === false){
+                if(props.openCustomerBar === false && timeline === false){
                     props.handleCustomersBarOpen()
                 }
                 if(props.openCommentBar === false){

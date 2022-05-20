@@ -217,6 +217,7 @@ const GlobalLayout = (props) => {
 
     useEffect(() => {
         if(patentScreen === true && openCustomerBar === false) {
+            console.log("LAYOUT=>220")
             handleCustomersBarOpen()
         }
     }, [patentScreen])  
@@ -716,6 +717,7 @@ const GlobalLayout = (props) => {
     }
 
     const handleCustomersBarOpen = (event) => {
+        console.log("ENTERRR")
         setToggleCustomerButtonType( !toggleCustomerButtonType )
         setCustomerOpenBar( !openCustomerBar )
         if(!openCustomerBar === false) {
@@ -1046,6 +1048,7 @@ const GlobalLayout = (props) => {
     const handleResetScreen = (type, event) => {
         if(type == 'Dashboard') {
             if(openCustomerBar === true){
+                console.log("LAYOUT=>1051")
                 handleCustomersBarOpen(event)
             }  
             if(openTypeBar === true){
@@ -1099,6 +1102,7 @@ const GlobalLayout = (props) => {
 
         } else {
             if(openCustomerBar === false && timelineScreen === false && type !== 'Timeline'){ 
+                console.log("LAYOUT=>1105")
                 handleCustomersBarOpen(event)
             }
             if(openAssignmentBar === false && timelineScreen === false && type == 'Timeline'){

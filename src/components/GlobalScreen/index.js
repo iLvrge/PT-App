@@ -252,15 +252,15 @@ const GlobalScreen = ({
                 handleAssignmentBarOpen()
             }
             if(openCustomerBar === true) {
+                console.log("SCREEN=>255")
                 handleCustomersBarOpen()
             }
         } else {
-            if(openAssignmentBar === true && timelineScreen === false) {
+            if((openAssignmentBar === true && timelineScreen === false) || (openAssignmentBar === false && timelineScreen === true)) {
                 handleAssignmentBarOpen()
-            } else if(openAssignmentBar === false && timelineScreen === true) {
-                handleAssignmentBarOpen()
-            }
+            } 
             if(openCustomerBar === false && dashboardScreen === false && timelineScreen === false) {
+                console.log("SCREEN=>263")
                 handleCustomersBarOpen()
             }
         }
