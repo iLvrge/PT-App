@@ -44,7 +44,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
     const selectedMaintainencePatents = useSelector( state => state.patenTrack2.selectedMaintainencePatents )
     const assetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected) //Assets Selected   
     const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
-
+    const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
 
     const classes = useStyles() 
     const menuItems = [
@@ -146,7 +146,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                                     );
                                 } */
                             } else {
-                                if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0) && assetRequest === false) {
+                                if (dashboardScreen === false && openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0) && assetRequest === false) {
                                     setAssetRequest(true)
                                     dispatch(
                                         getCustomerAssets(
@@ -171,7 +171,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                     }                
                 }
 
-                if( list.length > 0 ) {
+                if( dashboardScreen === true || list.length > 0 ) {
                     setAssetRequest(false)
                     setLoading(true)
                     const form = new FormData()
@@ -182,6 +182,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                     form.append('customers', JSON.stringify(assetTypesCompaniesSelectAll === true ? [] : assetTypesCompaniesSelected))
                     form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
                     form.append('other_mode', display_sales_assets)
+                    form.append('data_type', dashboardScreen === true ? 1 : 0)
                     form.append('type', selectedCategory)
                     const { data } = await PatenTrackApi.getAssetTypeAssignmentAllAssetsWithFamily(form)
                     setLoading(false)

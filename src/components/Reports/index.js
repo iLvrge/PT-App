@@ -105,7 +105,7 @@ const Reports = (props) => {
             type: 23
         },
         {
-            title: 'Incorrect Recordings',
+            title: 'Corrected Recordings',
             sub_heading: 'typo in the name of lawyer, wrong lawyer addres, no longer works with that lawyer',
             number: 0,
             patent: '',
@@ -228,7 +228,7 @@ const Reports = (props) => {
             list: []
         },
         {
-            title: 'Incorrect Recordings',
+            title: 'Corrected Recordings',
             sub_heading: 'typo in the name of lawyer, wrong lawyer addres, no longer works with that lawyer',
             number: 0,
             patent: '',
