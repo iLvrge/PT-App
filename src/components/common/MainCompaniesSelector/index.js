@@ -418,7 +418,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     useEffect(() => {
         let isSubscribed = true;
         const getSelectedCompanies = async() => {
-            if( companies.list.length > 0 && selectItems.length == 0 && process.env.REACT_APP_ENVIROMENT_MODE != 'DASHBOARD') {
+            console.log("getSelectedCompanies", selected)
+            if( companies.list.length > 0 && selected.length == 0 && process.env.REACT_APP_ENVIROMENT_MODE != 'DASHBOARD') {
                 /**
                  * Send Request to server
                  */
@@ -491,8 +492,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }  
         if(isSubscribed) {
             getSelectedCompanies()    
-        }
-            
+        }            
         return () => (isSubscribed = false)
     }, [ companies.list ])
 
