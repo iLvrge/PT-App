@@ -20,13 +20,14 @@ export default makeStyles(theme => ({
     },  
     containerTop: {
         alignItems: 'flex-start',
-        justifyContent: 'space-between'
+        justifyContent: 'center',
+        flexDirection: 'column'
     },
     child: {
         display: 'flex',
         height: '100%',
-        /* width: '50%', */
-        margin: 0,
+        width: '100%',
+        marginBottom: 20,
     },
     flexColumn: {
         height: 'calc((100vh - 105px) / 3)',

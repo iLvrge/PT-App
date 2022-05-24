@@ -22,6 +22,7 @@ import routeList from '../../routeList'
 import GeoChart from '../common/AssetsVisualizer/GeoChart'
 import InventionVisualizer from '../common/AssetsVisualizer/InventionVisualizer'
 import SankeyChart from './SankeyChart'
+import Loader from '../common/Loader'
 
 const Reports = (props) => {
     let LIST = [
@@ -316,8 +317,7 @@ const Reports = (props) => {
 
     useEffect(() => {
         if(ref.current !== null) {
-            resizeObserver = new ResizeObserver(entries => {   
-                setLoading(true)    
+            resizeObserver = new ResizeObserver(entries => {  
                 let smallScreen = false         
                 const { width } = entries[0].contentRect;
                 if(width > 510 && width < 601 ) {
@@ -349,7 +349,6 @@ const Reports = (props) => {
                 }  else {
                     setGrid(GRID_ITEM)
                 }
-                setLoading(false)  
                 setSmallScreen(smallScreen)  
             })
                      
@@ -759,6 +758,11 @@ const Reports = (props) => {
                     alignItems="flex-start"
                     className={classes.container}
                 >
+                    {
+                        loading && (
+                            <Loader/>
+                        )
+                    }
                     {
                         props.jurisdictions === true
                         ?

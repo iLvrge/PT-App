@@ -11,5 +11,6 @@ export default makeStyles(theme => ({
     justifyContent: 'center',
     display: 'flex',
     fontSize: '3rem',
+    zIndex: 9999
   },
 }))
