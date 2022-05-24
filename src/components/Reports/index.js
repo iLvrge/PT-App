@@ -579,7 +579,7 @@ const Reports = (props) => {
                 timeline = true
             } else if(id === 2 && subscription > 2) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'clear_encumbrances')
-                timeline = true
+                patent = true
             } else if(id === 7 && subscription > 2) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'late_maintainance')
                 patent = true
