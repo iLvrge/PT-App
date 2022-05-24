@@ -12,8 +12,22 @@ const SankeyChart = (props) => {
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const [height, setHeight] = useState('100%');
+    const [loadingAssignor, setLoadingAssingor] = useState(false);
+    const [assignorHeight, setAssingorHeight] = useState('100%');
     const screenHeight = useSelector(state => state.patenTrack.screenHeight);
     const [data, setData] = useState([]);
+    const [assignorData, setAssignorData] = useState([]);
+    const [assignorOption, setAssignorOption] = useState({
+        width: '100%',
+        sankey: {
+            link: { color: { fill: "#1565C0" } },
+            node: {
+              colors: ['#70A800', '#FFAA00','#1565C0', '#E60000'],
+              label: { color: "#FFF", fontName: 'Roboto', fontSize: 12.25 }
+            }
+        }
+    });
+
     const [option, setOption] = useState({
         width: '100%',
         sankey: {
@@ -31,10 +45,13 @@ const SankeyChart = (props) => {
         const getPartiesData = async() => {
             if(loading === false) {    
                 setLoading(true)
+                setLoadingAssingor(true) 
                 setData([])
+                setAssignorData([])
                 const formData = new FormData()
                 formData.append('selectedCompanies', JSON.stringify(selectedCompanies));                
                 const {data} = await PatenTrackApi.getDashboardPartiesData(formData)
+                const getAssignorData = await PatenTrackApi.getDashboardPartiesAssignorData(formData)
                 const loadData = []
                 if(data.length > 0) {
                     loadData.push(["From", "To", "Assets"])
@@ -69,6 +86,41 @@ const SankeyChart = (props) => {
                     setData(loadData)
                 }
                 setLoading(false)
+                if(getAssignorData.data != null) {
+                    const assignorData  = getAssignorData.data
+                    const loadAssignorData = []
+                    loadAssignorData.push(["From", "To", "Assets"])
+                    assignorData.forEach( item => {
+                        loadAssignorData.push([
+                            item.assignor,
+                            item.name,
+                            parseInt(item.number)
+                        ])
+                    });
+                    let assignorHeight = '100%'
+                    if(assignorData.length > 10) {
+                        const chartHeight = assignorData.length * 20
+                        setAssignorOption(prevItem => {
+                            return {...prevItem, height: chartHeight}
+                        }) 
+                    }  else if(assignorData.length < 4) {
+                        assignorHeight =  `${parseInt((screenHeight - CONSTANT_DECREMENT) * (assignorData.length * 25) / 100)}px`
+                        setAssignorOption(prevItem => {
+                            let pre = {...prevItem}
+                            delete pre.height
+                            return {...pre}
+                        })
+                    } else {
+                        setAssignorOption(prevItem => {
+                            let pre = {...prevItem}
+                            delete pre.height
+                            return {...pre}
+                        })
+                    }    
+                    setAssingorHeight(assignorHeight)       
+                    setAssignorData(loadAssignorData)
+                }
+                setLoadingAssingor(false)
             }
         }
         getPartiesData()
@@ -76,24 +128,46 @@ const SankeyChart = (props) => {
     }, [selectedCompanies])
     return (
         <Paper sx={{p: 2, overflow: 'auto'}} className={clsx(classes.container, classes.containerTop)} square>
-            {
-                !loading
-                ?
-                    data.length > 0
+            <div className={classes.child}>
+                {
+                    !loading
                     ?
-                        <Chart
-                            chartType="Sankey"
-                            width="100%"
-                            height={height}
-                            loader={<div>Loading...</div>}
-                            data={data}
-                            options={option}
-                        />
+                        data.length > 0
+                        ?
+                            <Chart
+                                chartType="Sankey"
+                                width="100%"
+                                height={height}
+                                loader={<div>Loading...</div>}
+                                data={data}
+                                options={option}
+                            />
+                        :
+                            ''
                     :
-                        ''
-                :
-                    <Loader />
-            }            
+                        <Loader />
+                }
+            </div> 
+            <div className={classes.child}>
+                {
+                    !loadingAssignor
+                    ?
+                        assignorData.length > 0
+                        ?
+                            <Chart
+                                chartType="Sankey"
+                                width="100%"
+                                height={assignorHeight}
+                                loader={<div>Loading...</div>}
+                                data={assignorData}
+                                options={assignorOption}
+                            />
+                        :
+                            ''
+                    :
+                        <Loader />
+                }        
+            </div>    
         </Paper>         
     )
 }
