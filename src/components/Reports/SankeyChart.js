@@ -63,24 +63,31 @@ const SankeyChart = (props) => {
 
     return (
         <Paper sx={{p: 2, overflow: 'auto'}} className={clsx(classes.container, classes.containerTop)} square>
-            <div className={classes.child}>
-                {
-                    !loading
-                    ?
-                        <DisplayChart data={data}/>
-                    :
-                        <Loader />
-                }
-            </div> 
-            <div className={classes.child}>
-                {
-                    !loadingAssignor
-                    ?
-                        <DisplayChart data={assignorData}/>
-                    :
-                        <Loader />
-                }        
-            </div>    
+            
+            {
+                !loading
+                ?
+                    data.length > 0 && (
+                        <div className={classes.child}>
+                            <DisplayChart data={data}/>
+                        </div> 
+                    )   
+                    
+                :
+                    <Loader />
+            }           
+            
+            {
+                !loadingAssignor
+                ?
+                    assignorData.length > 0 && (
+                        <div className={classes.child}>
+                            <DisplayChart data={assignorData}/>
+                        </div>  
+                    )                      
+                :
+                    <Loader />  
+            }
         </Paper>         
     )
 }
