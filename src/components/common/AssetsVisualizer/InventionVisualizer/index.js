@@ -34,10 +34,11 @@ import themeMode from '../../../../themes/themeMode';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import { Close } from '@mui/icons-material'
 import FilterDashboardCPC from './FilterDashboardCPC'
+import TitleBar from '../../TitleBar'
 
 var newRange = [1,2]
 
-const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, tab, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal }) => {
+const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, tab, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal, titleBar }) => {
     
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -154,8 +155,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         axisFontSize: 18,
         cameraPosition: {
             distance: 1.8,
-            horizontal: 1.2,
-            vertical: 0.2
+            horizontal: 0.685,
+            vertical: 0.32
         }, 
         /* yBarWidth:  30, */
         xStep: 1,
@@ -248,7 +249,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     },[ graphRawGroupData, filterList ])
 
     const onCameraPositionChange = useCallback(async (event) => {
-        //console.log(event)
+        console.log(event)
     })
 
     const checkToolTip = () => {
@@ -932,7 +933,12 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             </div>
             {
                 showContainer === true && (
-                    <React.Fragment>                        
+                    <React.Fragment>  
+                        {
+                            typeof titleBar !== 'undefined' && titleBar === true && (
+                                <TitleBar title={`Non-Expired Patents and Applications sorted by Technologies and Filling Years`}/>   
+                            )
+                        } 
                         <div className={classes.graphContainer}>                
                             {
                                 selectedTab === 0

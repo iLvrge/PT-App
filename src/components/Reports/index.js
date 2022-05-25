@@ -793,6 +793,7 @@ const Reports = (props) => {
                                 type={props.type}
                                 tab={false}
                                 standalone={true}
+                                titleBar={true}
                             />
                         :
                             props.invention === true
@@ -809,6 +810,7 @@ const Reports = (props) => {
                                     type={props.type} 
                                     standalone={true}
                                     tab={false}
+                                    titleBar={true}
                                 />
                             :    
                                 props.sankey === true

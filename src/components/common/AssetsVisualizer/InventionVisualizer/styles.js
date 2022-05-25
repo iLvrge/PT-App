@@ -94,6 +94,7 @@ export default makeStyles(theme => ({
     },
     tabs: {
         minHeight: 47, 
+        borderTop: `1px solid ${theme.palette.divider} !important`,
     },
     tab: {
         flex: 1,
@@ -112,7 +113,7 @@ export default makeStyles(theme => ({
         justifyContent: 'center',
         alignItems: 'center',
         fontSize: 16,
-        borderTop: `1px solid ${theme.palette.divider} !important`,
+        /* borderTop: `1px solid ${theme.palette.divider} !important`, */
         overflow: 'hidden'
     },
     loadingIndicator: {
@@ -263,6 +264,6 @@ export default makeStyles(theme => ({
         padding: 0,
         position: 'absolute',
         right: 35,
-        top: 6
+        top: -3
     }
 }))

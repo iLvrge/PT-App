@@ -12,8 +12,9 @@ import {
     getCustomerAssets,
 } from '../../../../actions/patentTrackActions2'
 import Loader from '../../Loader'
+import TitleBar from '../../TitleBar'
 
-const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, tab }) => {
+const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, tab, titleBar }) => {
     const containerRef = useRef(null)
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(false)
@@ -291,6 +292,11 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                 :
                     ''
             }
+            {
+                typeof titleBar !== 'undefined' && titleBar === true && (
+                    <TitleBar title={`Non-Expired Patents and Applications sorted by Technologies and Filling Years`}/>   
+                )
+            } 
             
             {
                 typeof standalone === 'undefined' && (
