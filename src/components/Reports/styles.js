@@ -20,8 +20,11 @@ export default makeStyles(theme => ({
     },  
     containerTop: {
         alignItems: 'flex-start',
-        justifyContent: 'center',
-        flexDirection: 'column'
+        justifyContent: 'flex-start',
+        flexDirection: 'column',
+        '& .google-visualization-tooltip': {
+            color: '#000'
+        }
     },
     child: {
         display: 'flex',
@@ -119,8 +122,7 @@ export default makeStyles(theme => ({
         }
     },  
     heading: {
-        fontSize: '1.1rem',
-        paddingBottom: 5
+        fontSize: '1.1rem'
     },
     titleContainer:{
         display: 'flex',
@@ -276,5 +278,8 @@ export default makeStyles(theme => ({
     },   
     active: {
         color: pink[500]
+    },
+    maxChildHeight: {
+        maxHeight: '50%'
     }
 }));

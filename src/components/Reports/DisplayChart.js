@@ -7,16 +7,21 @@ import { Chart } from "react-google-charts";
 const DisplayChart = (props) => {
     const CONSTANT_DECREMENT = 106;
     const [height, setHeight] = useState('100%');
+    const [tooltip, setTooltip] = useState(typeof props.tooltip !== 'undefined' && props.tooltip === true ? {isHtml: true} : {})
     const [option, setOption] = useState({
         width: '100%',
         sankey: {
             link: { color: { fill: "#1565C0" } },
             node: {
               colors: ['#70A800', '#FFAA00','#1565C0', '#E60000'],
-              label: { color: "#FFF", fontName: 'Roboto', fontSize: 12.25 }
+              label: { color: "#FFF", fontName: 'Roboto', fontSize: 12.25 },
+              width: 15
             }
-        }
+        },
+        tooltip
     });
+
+    console.log('option', option)
     const screenHeight = useSelector(state => state.patenTrack.screenHeight);
 
     useEffect(() => {

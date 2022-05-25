@@ -154,16 +154,16 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         style: 'bar-color',
         axisFontSize: 18,
         cameraPosition: {
-            distance: 1.8,
-            horizontal: 0.685,
-            vertical: 0.32
+            distance: 1.9,
+            horizontal: 0.69,
+            vertical: 0.27
         }, 
         /* yBarWidth:  30, */
         xStep: 1,
         yStep: 1,
         zStep: 3,
         yCenter: '25%',
-        xCenter: '50%',
+        xCenter: '60%',
         showPerspective: true,
         showGrid: true,
         axisColor: '#fff',
@@ -896,7 +896,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     }
     
     return (
-        <Paper className={classes.root} square>  
+        <Paper sx={{p: 2}} className={classes.root} square>  
             {
                 typeof tab == 'undefined' || tab === true 
                 ?
@@ -936,7 +936,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     <React.Fragment>  
                         {
                             typeof titleBar !== 'undefined' && titleBar === true && (
-                                <TitleBar title={`Non-Expired Patents and Applications sorted by Technologies and Filling Years`}/>   
+                                <TitleBar title={`Non-Expired Patents and Applications filed after 1997, sorted by Technologies and Filling Years:`} enablePadding={false}/>   
                             )
                         } 
                         <div className={classes.graphContainer}>                

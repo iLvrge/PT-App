@@ -30,13 +30,14 @@ const SankeyChart = (props) => {
                 const getAssignorData = await PatenTrackApi.getDashboardPartiesAssignorData(formData)
                 const loadData = []
                 if(data.length > 0) {
-                    loadData.push(["From", "To", "Assets"])
+                    loadData.push([{ type: 'string', label: "From"}, { type: 'string', label: "To"}, { type: 'number', label: "Assets"}, { type: 'string', role: 'tooltip'}])
                     data.forEach( item => {
                         loadData.push([
                             item.name,
                             item.assignee,
-                            parseInt(item.number)
-                        ])
+                            item.name == 'Employees' ? 10 : parseInt(item.number),
+                            `<p style="padding: 10px; margin: 0px;width: 238px;">${item.name} -> ${item.assignee}<br/> Assets: ${parseInt(item.number)}</p>`
+                        ]) 
                     });    
                     setData(loadData)
                 }
@@ -65,15 +66,19 @@ const SankeyChart = (props) => {
 
     return (
         <Paper sx={{p: 2, overflow: 'auto'}} className={clsx(classes.container, classes.containerTop)} square>
-            
+            {
+                data.length === 0 && assignorData.length === 0 && (
+                    <TitleBar title="Acquistions and divestitures of patent assets filled after 1997:" enablePadding={false}/>
+                )
+            }            
             {
                 !loading
                 ?
                     data.length > 0 && (
                         <div className={classes.child}>
-                            <TitleBar title="Acquistions" enablePadding={false}/>
-                            <DisplayChart data={data}/>
-                        </div> 
+                            <TitleBar title="Acquistions:" enablePadding={false}/>
+                            <DisplayChart data={data} tooltip={true}/>
+                        </div>   
                     )   
                     
                 :
@@ -84,11 +89,11 @@ const SankeyChart = (props) => {
                 !loadingAssignor
                 ?
                     assignorData.length > 0 && (
-                        <div className={classes.child}>
-                            <TitleBar title="Divestitures" enablePadding={false}/>
+                        <div className={clsx(classes.child, {[classes.maxChildHeight]: data.length > 0 ? true : false})} >
+                            <TitleBar title="Divestitures:" enablePadding={false}/>
                             <DisplayChart data={assignorData}/>
                         </div>  
-                    )                      
+                    )
                 :
                     <Loader />  
             }
