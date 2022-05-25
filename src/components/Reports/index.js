@@ -715,6 +715,12 @@ const Reports = (props) => {
                 <Paper className={classes.titleContainer} square>
                     <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{companyname.length > 0 ? companyname[0].original_name : ''}</span></span>
                     <div className={classes.toolbar}> 
+
+                        {
+                            loading && (
+                                <span>Loading...</span>
+                            )
+                        }
                         {/* <IconButton 
                             size="small"
                         >
@@ -777,11 +783,6 @@ const Reports = (props) => {
                     alignItems="flex-start"
                     className={classes.container}
                 >
-                    {
-                        loading && (
-                            <Loader/>
-                        )
-                    }
                     {
                         props.jurisdictions === true
                         ?
