@@ -101,8 +101,10 @@ const PatentLayout = ({
     setCommentBarSize,
     openCommentBar,
     openIllustrationBar,
+    handleIllustrationBarOpen,
     handleChartBarOpen,
     handleAnalyticsBarOpen,
+    changeVisualBar,
     setIsDrag,
     setSize,
     size,
@@ -532,6 +534,10 @@ const PatentLayout = ({
                                                         openAnalyticsBar={openAnalyticsBar}
                                                         openAnalyticsAndCharBar={openAnalyticsAndCharBar}
                                                         closeAnalyticsAndCharBar={closeAnalyticsAndCharBar}
+                                                        openIllustrationBar={openIllustrationBar}
+                                                        handleAnalyticsBarOpen={handleAnalyticsBarOpen}
+                                                        handleIllustrationBarOpen={handleIllustrationBarOpen}
+                                                        setIllustrationBarSize={setIllustrationBarSize}
                                                     />
                                                 )
                                                 :
@@ -546,6 +552,11 @@ const PatentLayout = ({
                                                     openAnalyticsAndCharBar={openAnalyticsAndCharBar}
                                                     closeAnalyticsAndCharBar={closeAnalyticsAndCharBar}
                                                     changeVisualBar={setVisualizerBarSize}
+                                                    openIllustrationBar={openIllustrationBar}
+                                                    commentBar={openCommentBar}
+                                                    handleAnalyticsBarOpen={handleAnalyticsBarOpen}
+                                                    handleIllustrationBarOpen={handleIllustrationBarOpen}
+                                                    handleVisualBarSize={changeVisualBar}
                                                 />
                                             } 
                                             

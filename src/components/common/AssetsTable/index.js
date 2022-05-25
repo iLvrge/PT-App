@@ -93,8 +93,14 @@ const AssetsTable = ({
     standalone, 
     openChartBar,
     openAnalyticsBar,
+    openIllustrationBar,
+    commentBar,
     openAnalyticsAndCharBar,
     closeAnalyticsAndCharBar,
+    handleAnalyticsBarOpen,
+    handleIllustrationBarOpen,
+    handleVisualBarSize,
+    setIllustrationBarSize,
     headerRowDisabled,
     isMobile,
     fileBar,
@@ -959,7 +965,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   }, [dispatch] );
 
   const handleOnClick = useCallback(
-    ({ grant_doc_num, appno_doc_num, asset }) => {      
+    ({ grant_doc_num, appno_doc_num, asset }) => {     
+      console.log('selectedCategory', selectedCategory) 
       /*TV, Comment, Family, FamilyItem, getChannelID Legal Events */
       if(!selectedRow.includes(asset)) {
         if(selectedCategory == 'restore_ownership') {
@@ -971,6 +978,18 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           dispatch(linkWithSheetSelectedAsset('products', encodeURIComponent(grant_doc_num  == '' ? `US${applicationFormat(appno_doc_num)}` : `US${numberWithCommas(grant_doc_num)}`)))     
         }
         callSelectedAssets({ grant_doc_num, appno_doc_num, asset });
+        if(selectedCategory == 'late_maintainance'){
+          /**
+           * Check if Right Pane is close then open it and close the TV
+           */
+          if(openAnalyticsBar === false) {
+            handleAnalyticsBarOpen()
+            if(openIllustrationBar === true) {
+              handleIllustrationBarOpen('100%')
+              handleVisualBarSize(false, true, false, false)
+            }
+          }
+        }
         setCheckBar(!checkBar)        
         dispatch(setChildSelectedAssetsPatents([]));
         dispatch(setSelectedAssetsTransactions([]));

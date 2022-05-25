@@ -114,10 +114,11 @@ const GlobalScreen = ({
     setCommentBarSize,
     openCommentBar,
     openIllustrationBar,
+    handleIllustrationBarOpen,
     handleChartBarOpen,
     handleAnalyticsBarOpen,
     setIsDrag,
-    setSize,
+    setSize,   
     size,
     illustrationRecord,
     setIllustrationRecord,
@@ -252,7 +253,6 @@ const GlobalScreen = ({
                 handleAssignmentBarOpen()
             }
             if(openCustomerBar === true) {
-                console.log("SCREEN=>255")
                 handleCustomersBarOpen()
             }
         } else {
@@ -260,7 +260,6 @@ const GlobalScreen = ({
                 handleAssignmentBarOpen()
             } 
             if(openCustomerBar === false && dashboardScreen === false && timelineScreen === false) {
-                console.log("SCREEN=>263")
                 handleCustomersBarOpen()
             }
         }
@@ -589,6 +588,9 @@ const GlobalScreen = ({
                                                         openAnalyticsBar={openAnalyticsBar}
                                                         openAnalyticsAndCharBar={openAnalyticsAndCharBar}
                                                         closeAnalyticsAndCharBar={closeAnalyticsAndCharBar}
+                                                        openIllustrationBar={openIllustrationBar}
+                                                        handleAnalyticsBarOpen={handleAnalyticsBarOpen}
+                                                        handleIllustrationBarOpen={handleIllustrationBarOpen}
                                                     />
                                                 )
                                                 :
@@ -603,6 +605,9 @@ const GlobalScreen = ({
                                                     openAnalyticsAndCharBar={openAnalyticsAndCharBar}
                                                     closeAnalyticsAndCharBar={closeAnalyticsAndCharBar}
                                                     changeVisualBar={setVisualizerBarSize}
+                                                    openIllustrationBar={openIllustrationBar}
+                                                    handleAnalyticsBarOpen={handleAnalyticsBarOpen}
+                                                    handleIllustrationBarOpen={handleIllustrationBarOpen}
                                                 />
                                             } 
                                             

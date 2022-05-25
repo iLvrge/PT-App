@@ -152,6 +152,11 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         width: '100%',
         style: 'bar-color',
         axisFontSize: 18,
+        cameraPosition: {
+            distance: 1.8,
+            horizontal: 1.2,
+            vertical: 0.2
+        }, 
         /* yBarWidth:  30, */
         xStep: 1,
         yStep: 1,
@@ -243,7 +248,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     },[ graphRawGroupData, filterList ])
 
     const onCameraPositionChange = useCallback(async (event) => {
-        
+        //console.log(event)
     })
 
     const checkToolTip = () => {

@@ -880,7 +880,7 @@ const GlobalLayout = (props) => {
         changeVisualBar(!bar, openAnalyticsBar, openCommentBar, openIllustrationBar)
     }
 
-    const handleAnalyticsBarOpen = () => {
+    const handleAnalyticsBarOpen = () => {  
         let bar = openAnalyticsBar, barSize = '50%'
         setAnalyticsBar( !bar )
         if((!bar === false && openChartBar === false) || (openChartBar === true && !bar === false)) {
@@ -1287,6 +1287,7 @@ const GlobalLayout = (props) => {
         setCommentBarSize,
         openCommentBar,
         openIllustrationBar,
+        handleIllustrationBarOpen,
         handleChartBarOpen,
         handleAnalyticsBarOpen,
         setIsDrag,
@@ -1306,6 +1307,7 @@ const GlobalLayout = (props) => {
         closeAnalyticsAndCharBar,
         checkChartAnalytics,
         setAssetFilesBarSize,
+        changeVisualBar,
         assetFilesBarSize,
         assetFilesBar,
         driveTemplateBarSize,
@@ -1373,6 +1375,7 @@ const GlobalLayout = (props) => {
                 setCommentBarSize,
                 openCommentBar,
                 openIllustrationBar,
+                handleIllustrationBarOpen,
                 handleChartBarOpen,
                 handleAnalyticsBarOpen,
                 setIsDrag,
@@ -1388,6 +1391,7 @@ const GlobalLayout = (props) => {
                 openVisualizerBar,
                 setAnalyticsBar,
                 setChartBar,
+                changeVisualBar,
                 openAnalyticsAndCharBar,
                 closeAnalyticsAndCharBar,
                 checkChartAnalytics,
