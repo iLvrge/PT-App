@@ -28,6 +28,7 @@ export default makeStyles(theme => ({
         height: '100%',
         width: '100%',
         marginBottom: 20,
+        flexDirection: 'column'
     },
     flexColumn: {
         height: 'calc((100vh - 105px) / 3)',
@@ -117,6 +118,10 @@ export default makeStyles(theme => ({
             alignItems: 'center'
         }
     },  
+    heading: {
+        fontSize: '1.1rem',
+        paddingBottom: 5
+    },
     titleContainer:{
         display: 'flex',
         width: '100%',

@@ -42,9 +42,14 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
     const new_drive_template_file = useSelector(state => state.patenTrack2.new_drive_template_file)
 
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
+    const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
 
-    if(selectedCategory  != 'due_dilligence' && (t == 2 || t == 3 || t == 4 || t== 11)) return null
-   
+    const dashboardICONS = [0, 1, 6, 7]
+    const removeFilterICONS = [2, 3, 4, 11]
+    
+
+    if((selectedCategory  != 'due_dilligence' && removeFilterICONS.includes(t)) || ( dashboardScreen === true  && !dashboardICONS.includes(t))) return null
+       
     return (
         <div className={clsx(classes.showIcon, {[classes.marginBottom25]: typeof margin !== 'undefined' && margin === true && typeof isMobile !== 'undefined' && isMobile === false, [classes.mobile]: typeof isMobile !== 'undefined' && isMobile === true})}> 
             <Tooltip 

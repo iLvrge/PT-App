@@ -75,7 +75,9 @@ const getFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelFamilyCounter, cancelFeesCounter
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelFamilyCounter, cancelFeesCounter;
+
+var cancelAllDashboardRequest;
 
 class PatenTrackApi {
   static getSiteLogo() {
@@ -747,8 +749,25 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/address`, getHeader())
   }
 
-  static getDashboardData(formData) {
-    return axios.post(`${base_new_api_url}/dashboards`, formData, getFormUrlHeader())
+  static getDashboardData(formData, source) {
+    let header = getFormUrlHeader()
+    header['cancelToken'] = source.token
+    cancelAllDashboardRequest = source   
+    return axios.post(`${base_new_api_url}/dashboards`, formData, header)
+  }
+
+  static generateCancelToken = () => {
+    return CancelToken
+  }
+
+  static cancelAllDashboardToken = () => {
+    if (cancelAllDashboardRequest !== undefined) {
+      try{
+        cancelAllDashboardRequest.cancel(`Dashboard request aborted`)        
+      } catch (e){
+        console.log('cancelInitiated->', e)
+      }
+    }
   }
 
   static getDashboardPartiesData(formData) {

@@ -27,7 +27,7 @@ const DisplayChart = (props) => {
                 return {...prevItem, height: chartHeight}
             }) 
         }  else if(props.data.length < 4) {
-            height =  `${parseInt((screenHeight - CONSTANT_DECREMENT) * (props.data.length * 25) / 100)}px`
+            height =  `${parseInt((screenHeight - CONSTANT_DECREMENT) * (props.data.length * 10) / 100)}px`
             setOption(prevItem => {
                 let pre = {...prevItem}
                 delete pre.height
@@ -38,7 +38,7 @@ const DisplayChart = (props) => {
                 let pre = {...prevItem}
                 delete pre.height
                 return {...pre}
-            })
+            })   
         }    
         setHeight(height)
     }, [props.data]);

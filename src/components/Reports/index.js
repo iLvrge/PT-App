@@ -397,6 +397,21 @@ const Reports = (props) => {
         return (() => {})
     }, [selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssets, assetTypeCompanies])
 
+     /**
+     * Reset Dashboard boxes data
+     */
+
+    useEffect(() => {
+        if(props.jurisdictions === true || props.invention === true || props.sankey === true) {
+            setIntial(false)
+        }
+    }, [
+        selectedCompanies, 
+        props.jurisdictions, 
+        props.invention,
+        props.sankey
+    ])
+
 
     const findDashboardData = async() => {
         if(loading === false && props.invention === false && props.jurisdictions === false && props.sankey === false) {                    
@@ -404,7 +419,12 @@ const Reports = (props) => {
             let totalRecords = 0;
             setLoading(true)
             resetAll(false)
-            props.checkChartAnalytics(null, null, false)                
+            props.checkChartAnalytics(null, null, false)     
+            const cancelRequest = await PatenTrackApi.cancelAllDashboardToken()  
+            console.log("cancelRequest", cancelRequest)    
+            const CancelToken = PatenTrackApi.generateCancelToken() 
+            const source = CancelToken.source();
+            console.log('generateNewCancelToken', source) 
             const dashboardRequest = cardList.map(async item => {
                 const formData = new FormData()
                 formData.append('list', JSON.stringify(list));
@@ -415,16 +435,15 @@ const Reports = (props) => {
                 formData.append('assignments', JSON.stringify(selectedAssetAssignments));
                 formData.append('type', item.type)
                 formData.append('data_format', props.lineGraph === true ? 1 : 0)
-                formData.append('format_type', profile.user.organisation.organisation_type)
-                
-                const requestData = await PatenTrackApi.getDashboardData(formData)
+                formData.append('format_type', profile.user.organisation.organisation_type)                
+                const requestData = await PatenTrackApi.getDashboardData(formData, source)
                 if( requestData !== null){
                     updateList(requestData, item.type)
                 }
                 return item
             })                
             await Promise.all(dashboardRequest)
-            setLoading(false)
+            setLoading(false)           
         }                
     }
 

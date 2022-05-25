@@ -6,6 +6,7 @@ import Loader from '../common/Loader'
 import PatenTrackApi from '../../api/patenTrack2'
 import useStyles from './styles'
 import clsx from 'clsx';
+import { Box } from '@mui/system';
 
 const SankeyChart = (props) => {
     const classes = useStyles();
@@ -61,6 +62,14 @@ const SankeyChart = (props) => {
         return (() => {})
     }, [selectedCompanies])
 
+    const Title = (props) => {
+        return (
+            <Box>
+                <span className={classes.heading}>{props.name}</span>
+            </Box>
+        )
+    }
+
     return (
         <Paper sx={{p: 2, overflow: 'auto'}} className={clsx(classes.container, classes.containerTop)} square>
             
@@ -69,6 +78,7 @@ const SankeyChart = (props) => {
                 ?
                     data.length > 0 && (
                         <div className={classes.child}>
+                            <Title name="Acquistions"/>
                             <DisplayChart data={data}/>
                         </div> 
                     )   
@@ -82,6 +92,7 @@ const SankeyChart = (props) => {
                 ?
                     assignorData.length > 0 && (
                         <div className={classes.child}>
+                            <Title name="Divestitures"/>
                             <DisplayChart data={assignorData}/>
                         </div>  
                     )                      
