@@ -67,7 +67,7 @@ const SankeyChart = (props) => {
     return (
         <Paper sx={{p: 2, overflow: 'auto'}} className={clsx(classes.container, classes.containerTop)} square>
             {
-                data.length === 0 && assignorData.length === 0 && (
+                !loading && !loadingAssignor && data.length === 0 && assignorData.length === 0 && (
                     <TitleBar title="Acquistions and divestitures of patent assets filled after 1997:" enablePadding={false}/>
                 )
             }            
@@ -79,7 +79,7 @@ const SankeyChart = (props) => {
                             <TitleBar title="Acquistions:" enablePadding={false}/>
                             <DisplayChart data={data} tooltip={true}/>
                         </div>   
-                    )   
+                    ) 
                     
                 :
                     <Loader />

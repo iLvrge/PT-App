@@ -259,7 +259,9 @@ export default makeStyles(theme => ({
             height: '1rem !important'
         } */
         '& svg' : {
-            fill: 'currentcolor'
+            fill: 'currentcolor',
+            width: '1.5rem !important', 
+            height: '1.5rem !important'
         }
     },
     fontStandalone: {        

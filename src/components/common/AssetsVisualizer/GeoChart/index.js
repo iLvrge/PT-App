@@ -196,7 +196,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
     
     useEffect(() => {    
         if(chartBar === false) {
-            setHeight('90%')
+            setHeight('97%')
             const opt = {...option}
             opt.chartArea.height = '92%'
             if(visualizerBarSize == '100%'){
@@ -206,7 +206,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
             }
             setOption(opt)
         } else {
-            setHeight('85%')
+            setHeight('92%')
             const opt = {...option}
             opt.chartArea.height = '91%'
             if(visualizerBarSize == '100%'){
@@ -294,7 +294,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
             }
             {
                 typeof titleBar !== 'undefined' && titleBar === true && (
-                    <TitleBar title={`Family members' jurisdiction of non expired US patent assets filed afer 1997:`} enablePadding={false}/>   
+                    <TitleBar title={`Non expired US patents filed afer 1997 and their foreign counterparts:`} enablePadding={false}/>   
                 )
             } 
             

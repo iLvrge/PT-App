@@ -162,8 +162,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         xStep: 1,
         yStep: 1,
         zStep: 3,
-        yCenter: '25%',
-        xCenter: '60%',
+        yCenter: '35.5%',
+        xCenter: '50%',
         showPerspective: true,
         showGrid: true,
         axisColor: '#fff',
@@ -936,7 +936,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     <React.Fragment>  
                         {
                             typeof titleBar !== 'undefined' && titleBar === true && (
-                                <TitleBar title={`Non-Expired Patents and Applications filed after 1997, sorted by Technologies and Filling Years:`} enablePadding={false}/>   
+                                <TitleBar title={`Technologies and filling years of all non-expired patents and application filed after 1997:`} enablePadding={false}/>   
                             )
                         } 
                         <div className={classes.graphContainer}>                
