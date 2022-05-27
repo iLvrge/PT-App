@@ -20,8 +20,7 @@ const DisplayChart = (props) => {
         },
         tooltip
     });
-
-    console.log('option', option)
+    
     const screenHeight = useSelector(state => state.patenTrack.screenHeight);
 
     useEffect(() => {

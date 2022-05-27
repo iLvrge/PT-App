@@ -371,6 +371,7 @@ const Reports = (props) => {
     }, [dashboardPanelActiveButtonId])
 
     useEffect(() => {
+        console.log("initial", initial)
         if(initial === false) {
             if(selectedCompanies.length > 0) {
                 findDashboardData()
@@ -397,24 +398,9 @@ const Reports = (props) => {
         return (() => {})
     }, [selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssets, assetTypeCompanies])
 
-     /**
-     * Reset Dashboard boxes data
-     */
-
-    useEffect(() => {
-        if(props.jurisdictions === true || props.invention === true || props.sankey === true) {
-            setIntial(false)
-        }
-    }, [
-        selectedCompanies, 
-        props.jurisdictions, 
-        props.invention,
-        props.sankey
-    ])
-
-
-    const findDashboardData = async() => {
-        if(loading === false && props.invention === false && props.jurisdictions === false && props.sankey === false) {                    
+    
+    const findDashboardData = async(invention, jurisdictions, sankey) => {
+        if(loading === false && ((typeof invention !== 'undefined' && invention === false) ||  props.invention === false) && ((typeof jurisidictions !== 'undefined' && jurisdictions === false) || props.jurisdictions === false ) && ((typeof sankey !== 'undefined' && sankey === false) || props.sankey === false)) {                    
             const list = [];
             let totalRecords = 0;
             setLoading(true)
@@ -511,7 +497,7 @@ const Reports = (props) => {
 
     useEffect(() => {
         if(activeId  !== -1 ) {
-            //scrollToActive item
+            //scrollToActive item when the right pane open
             const container = ref.current
             if(container !== null){
                 setTimeout(() => {
@@ -648,6 +634,9 @@ const Reports = (props) => {
         props.setInvention(false)
         props.setSankey(false)
         props.setLineGraph(flag)
+        if((props.lineGraph === false && flag === false) || (props.lineGraph === true && flag === true)) {
+            findDashboardData(false, false, false)
+        }
     }
 
     const onHandleJurisdiction = () => {
