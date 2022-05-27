@@ -269,6 +269,114 @@ const Reports = (props) => {
             list: []
         }
     ]
+
+    const KPI_LIST = [
+        {
+            title: 'Non-Expired Patents',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 1,
+        },
+        {
+            title: 'Patents Acquired',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 17,
+        },
+        {
+            title: 'Patents Invented',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 18,
+        },
+        {
+            title: 'Un-Maintained Patents',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 19,
+            list: []
+        },
+        {
+            title: 'Pending Applications',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 20,
+            list: []
+        },
+        {
+            title: 'Filed Applications',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 21,
+            list: []
+        },
+        {
+            title: 'Acquired Applications',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 22,
+            list: []
+        },
+        {
+            title: 'Maintenance Budget',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 23,
+            list: []
+        },
+        {
+            title: 'Top non-US Members',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 24,
+            list: []
+        },
+        {
+            title: 'Proliferate Inventors',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 25,
+            list: []
+        },
+        {
+            title: 'Top Law Firms',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 26,
+            list: []
+        },
+        {
+            title: 'Top Lenders',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 27,
+            list: []
+        }
+    ]
     const GRID_ITEM = {
         lg:3,
         md:3,
@@ -371,7 +479,6 @@ const Reports = (props) => {
     }, [dashboardPanelActiveButtonId])
 
     useEffect(() => {
-        console.log("initial", initial)
         if(initial === false) {
             if(selectedCompanies.length > 0) {
                 findDashboardData()
@@ -399,18 +506,16 @@ const Reports = (props) => {
     }, [selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssets, assetTypeCompanies])
 
     
-    const findDashboardData = async(invention, jurisdictions, sankey) => {
-        if(loading === false && ((typeof invention !== 'undefined' && invention === false) ||  props.invention === false) && ((typeof jurisidictions !== 'undefined' && jurisdictions === false) || props.jurisdictions === false ) && ((typeof sankey !== 'undefined' && sankey === false) || props.sankey === false)) {                    
+    const findDashboardData = async(invention, jurisdictions, sankey, kpi) => {
+        if(loading === false && ((typeof invention !== 'undefined' && invention === false) ||  props.invention === false) && ((typeof jurisidictions !== 'undefined' && jurisdictions === false) || props.jurisdictions === false ) && ((typeof sankey !== 'undefined' && sankey === false) || props.sankey === false) && ((typeof kpi !== 'undefined' && kpi === false) || props.kpi === false)) {                    
             const list = [];
             let totalRecords = 0;
             setLoading(true)
             resetAll(false)
             props.checkChartAnalytics(null, null, false)     
             const cancelRequest = await PatenTrackApi.cancelAllDashboardToken()  
-            console.log("cancelRequest", cancelRequest)    
             const CancelToken = PatenTrackApi.generateCancelToken() 
-            const source = CancelToken.source();
-            console.log('generateNewCancelToken', source) 
+            const source = CancelToken.source()
             const dashboardRequest = cardList.map(async item => {
                 const formData = new FormData()
                 formData.append('list', JSON.stringify(list));
@@ -633,9 +738,10 @@ const Reports = (props) => {
         props.setJurisdiction(false)
         props.setInvention(false)
         props.setSankey(false)
+        props.setKpi(false)
         props.setLineGraph(flag)
         if((props.lineGraph === false && flag === false) || (props.lineGraph === true && flag === true)) {
-            findDashboardData(false, false, false)
+            findDashboardData(false, false, false, false)
         }
     }
 
@@ -643,6 +749,7 @@ const Reports = (props) => {
         props.setLineGraph(false)
         props.setInvention(false)
         props.setSankey(false)
+        props.setKpi(false)
         props.setJurisdiction(true)
     }
 
@@ -650,6 +757,7 @@ const Reports = (props) => {
         props.setLineGraph(false)
         props.setJurisdiction(false)
         props.setSankey(false)
+        props.setKpi(false)
         props.setInvention(true)
     }
 
@@ -657,7 +765,17 @@ const Reports = (props) => {
         props.setLineGraph(false)
         props.setJurisdiction(false)
         props.setInvention(false)
+        props.setKpi(false)
         props.setSankey(true)
+    }
+
+    const onHandleKPI = () => {
+        setCardList(KPI_LIST)
+        props.setLineGraph(false)
+        props.setJurisdiction(false)
+        props.setInvention(false)
+        props.setSankey(false)
+        props.setKpi(true)
     }
 
     const showItems = cardList.map( (card, index) => {
@@ -673,7 +791,7 @@ const Reports = (props) => {
                 handleClick={onHandleClick}
                 handleList={onHandleList}
                 type={card.type}  
-                lineGraph={props.lineGraph}
+                {...(props.kpi === true ? {kpiEnable: true} : {lineGraph: props.lineGraph})}
             />
         </Grid>
     })
@@ -710,21 +828,23 @@ const Reports = (props) => {
                                 <span>Loading...</span>
                             )
                         }
-                        {/* <IconButton 
+                        { <IconButton 
                             size="small"
+                            className={clsx(classes.actionIcon, {[classes.active]: props.kpi})}
+                            onClick={onHandleKPI}
                         >
                             <BubbleChart/>
-                        </IconButton>  */}
+                        </IconButton> }
                         <IconButton 
                             size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: !props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false})}
+                            className={clsx(classes.actionIcon, {[classes.active]: !props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false && props.kpi === false})}
                             onClick={() => changeGraph(false)}
                         >
                             <Speed/> 
                         </IconButton>
                         <IconButton 
                             size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false})}
+                            className={clsx(classes.actionIcon, {[classes.active]: props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false && props.kpi === false})}
                             onClick={() => changeGraph(true)}
                         >
                             <AutoGraph/>

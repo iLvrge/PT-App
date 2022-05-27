@@ -83,6 +83,7 @@ const IllustrationCommentContainer = ({
     const [jurisdictions, setJurisdiction] = useState(false)
     const [invention, setInvention] = useState(false)
     const [sankey, setSankey] = useState(false)
+    const [kpi, setKpi] = useState(false)
     const [showManualComponent, setShowManualComponent ] = useState(false)
     const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
     const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
@@ -131,7 +132,9 @@ const IllustrationCommentContainer = ({
             invention: invention,
             setInvention: setInvention,
             sankey: sankey,
-            setSankey: setSankey
+            setSankey: setSankey,
+            kpi: kpi,
+            setKpi: setKpi
         }
     ] 
 
@@ -294,6 +297,8 @@ const IllustrationCommentContainer = ({
                                 setInvention={setInvention}
                                 sankey={sankey}
                                 setSankey={setSankey}
+                                kpi={kpi}
+                                setKpi={setKpi}
                             /> 
                         :
                         showManualComponent === true && menuComponent.length > 0

@@ -2,21 +2,29 @@ import React from 'react'
 import { Card, CardContent, CardActions }  from '@mui/material'
 import Chart from './Chart'
 import useStyles from './styles'
+import KpiBox from './KpiBox'
 
-const CardElement = ({card, id, active, type, lineGraph, handleList, handleClick}) => {
+const CardElement = (props) => {
     const classes = useStyles();
+    console.log(props)
     return (
         <Card variant="outlined" className={classes.card} square={true}>
             <CardContent>  
-                <Chart 
-                    id={id}
-                    handleClick={handleClick}
-                    handleList={handleList} 
-                    active={active}
-                    type={type}
-                    card={card}   
-                    lineGraph={lineGraph} 
-                />                 
+                {
+                    typeof props.kpiEnable !== 'undefined' && props.kpiEnable === true
+                    ?
+                        <KpiBox {...props}/>
+                        :
+                            <Chart 
+                                id={props.id}
+                                handleClick={props.handleClick}
+                                handleList={props.handleList} 
+                                active={props.active}
+                                type={props.type}
+                                card={props.card}   
+                                lineGraph={props.lineGraph} 
+                            />
+                }                                 
             </CardContent>  
         </Card>
     )
