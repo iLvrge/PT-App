@@ -39,29 +39,10 @@ const KpiBox = (props) => {
                 className={clsx(classes.actionButton)} 
                 onClick={() => props.handleList(props.id, props.card.type)}
                 disabled={
-                    parseInt(profile?.user?.organisation?.subscribtion) === 1 ? 
-                        true  
-                    :
-                        parseInt(profile?.user?.organisation?.subscribtion) === 2 ? 
-                            (props.type < 3 ) ?
-                                parseInt(props.card?.number) == 0 ? true : false
-                            :
-                                true
-                        :
-                            parseInt(profile?.user?.organisation?.subscribtion) === 3 ? 
-                                parseInt(props.card?.number) == 0 ? true : false                                
-                            :
-                                true
+                    parseInt(props.card?.number) == 0 || (props.card?.list && props.card.list.length == 0) ? true : false
                 }
             >
-                {   parseInt(profile?.user?.organisation?.subscribtion) > 2 ? 
-                        'Let\'s Fix it!' 
-                        : 
-                        parseInt(profile?.user?.organisation?.subscribtion) === 2 && (props.type < 3 ) ?
-                            'Let\'s Fix it!'
-                        :
-                            'Upgrade and Fix it!' 
-                }
+                See List                
             </Button> 
             <IconButton 
                 size="small" 

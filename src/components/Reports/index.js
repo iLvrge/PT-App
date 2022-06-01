@@ -832,13 +832,13 @@ const Reports = (props) => {
                                 <span>Loading...</span>
                             )
                         }
-                        { <IconButton 
+                        <IconButton 
                             size="small"
                             className={clsx(classes.actionIcon, {[classes.active]: props.kpi})}
                             onClick={onHandleKPI}
                         >
                             <BubbleChart/>
-                        </IconButton> }
+                        </IconButton> 
                         <IconButton 
                             size="small"
                             className={clsx(classes.actionIcon, {[classes.active]: !props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false && props.kpi === false})}

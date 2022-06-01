@@ -8,7 +8,7 @@ const TitleBar = (props) => {
     const classes = useStyles();
     return(
         <Box>
-            <span className={clsx(classes.heading, {[classes.paddingLeft]: typeof props.enablePadding !== 'undefined' && props.enablePadding === false ? false : true})}>{props.title}</span>
+            <span className={clsx(classes.heading, {[classes.paddingLeft]: typeof props.enablePadding !== 'undefined' && props.enablePadding === false ? false : true}, {[classes.underline]: typeof props.underline !== 'undefined' && props.underline === false ? false : true})}>{props.title}</span>
         </Box>
     )
 }

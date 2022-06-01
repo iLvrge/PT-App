@@ -4,10 +4,12 @@ export default makeStyles(theme => ({
     heading: {
         fontSize: '1.1rem',
         marginBottom: 5,
-        display: 'block',
-        textDecoration: 'underline'
+        display: 'block',        
     },
     paddingLeft: {
         paddingLeft: 16
+    },
+    underline: {
+        textDecoration: 'underline'
     }
 }));

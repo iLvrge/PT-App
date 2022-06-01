@@ -14,7 +14,7 @@ export default makeStyles(theme => ({
         minHeight: 60,              
         '& .MuiGrid-grid-sm-12': {
             '& span.small':{
-                maxWidth: 68
+                maxWidth: 37
             }
         },
     },  
