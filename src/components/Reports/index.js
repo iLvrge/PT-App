@@ -328,12 +328,13 @@ const Reports = (props) => {
             type: 36
         },
         {
-            title: 'Maintenance Budget',
+            title: 'Maintenance Budget($K)',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
-            type: 37
+            type: 37,
+            currency: true
         },
         {
             title: 'Top non-US Members',

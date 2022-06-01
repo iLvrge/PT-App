@@ -286,10 +286,30 @@ export default makeStyles(theme => ({
     },
     tableContainer: {
         height: '65%',
+        width: '100%',
         overflow: 'auto',
         boxShadow: 'none',
-        '& .MuiTableCell-root':{
-            padding: '9px 16px'
+        '& .MuiListItem-root':{
+            padding: '2px 16px'
         }
+    },
+    itemContainer: {
+        position: 'relative',
+        '& .MuiTypography-root': {
+            lineHeight: 1
+        },
+        nargin: 0
+    },
+    itemHeading: {
+        display: 'inline-block',
+        maxWidth: '70%',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis', 
+        marginRight: 5  
+    },
+    itemText:{
+        position: 'absolute',
+        top: 0
     }
 }));

@@ -3,7 +3,7 @@ import {
     useSelector 
 } from 'react-redux'
 import useStyles from './styles'
-import { IconButton, Button, Typography, Tooltip, Zoom, Table, TableRow, TableCell, TableContainer, Paper } from '@mui/material';
+import { IconButton, Button, Typography, Tooltip, Zoom, Paper, List, ListItem, ListItemText } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import clsx from 'clsx'
 import { numberWithCommas } from '../../utils/numbers';
@@ -16,18 +16,19 @@ const KpiBox = (props) => {
     const ShowTable = (props) => {
         if(props.data.length === 0) return ''
         return (
-            <TableContainer component={Paper} className={classes.tableContainer}>
-                <Table>
+            <Paper className={classes.tableContainer}>
+                <List>
                     {
                         props.data.map( item => (
-                            <TableRow>
-                                <TableCell>{item.name}</TableCell>
-                                <TableCell>{numberWithCommas(item.number)}</TableCell>
-                            </TableRow>
+                            <ListItem>
+                                <ListItemText className={classes.itemContainer}>
+                                    <span className={classes.itemHeading}>{item.name}:</span><span className={classes.itemText}>{numberWithCommas(item.number)}</span>
+                                </ListItemText>
+                            </ListItem>
                         ))
                     }
-                </Table>
-            </TableContainer>
+                </List>
+            </Paper>
         )
     }
 
@@ -39,7 +40,7 @@ const KpiBox = (props) => {
                 className={clsx(classes.actionButton)} 
                 onClick={() => props.handleList(props.id, props.card.type)}
                 disabled={
-                    parseInt(props.card?.number) == 0 || (props.card?.list && props.card.list.length == 0) ? true : false
+                    (parseInt(props.card?.number) == 0 && typeof props.card.list == 'undefined') || (props.card?.list && props.card.list.length == 0) ? true : false
                 }
             >
                 See List                
@@ -63,7 +64,9 @@ const KpiBox = (props) => {
                         variant="h2" 
                         component="div" gutterBottom
                     >
-                        {numberWithCommas(props.card?.number)}
+                        {
+                            props.card?.currency && props.card?.currency === true ? props.card?.number > 1000 ? parseInt(props.card.number / 1000) : props.card?.number : numberWithCommas(props.card?.number)
+                        }
                     </Typography>
             }           
             <Tooltip 
