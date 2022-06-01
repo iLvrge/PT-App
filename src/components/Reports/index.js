@@ -277,7 +277,7 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 1,
+            type: 30,
         },
         {
             title: 'Patents Acquired',
@@ -285,15 +285,15 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 17,
-        },
+            type: 31,
+        }, 
         {
             title: 'Patents Invented',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
-            type: 18,
+            type: 32,
         },
         {
             title: 'Un-Maintained Patents',
@@ -301,8 +301,7 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 19,
-            list: []
+            type: 33
         },
         {
             title: 'Pending Applications',
@@ -310,8 +309,7 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 20,
-            list: []
+            type: 34
         },
         {
             title: 'Filed Applications',
@@ -319,8 +317,7 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 21,
-            list: []
+            type: 35
         },
         {
             title: 'Acquired Applications',
@@ -328,8 +325,7 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 22,
-            list: []
+            type: 36
         },
         {
             title: 'Maintenance Budget',
@@ -337,8 +333,7 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 23,
-            list: []
+            type: 37
         },
         {
             title: 'Top non-US Members',
@@ -346,7 +341,7 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 24,
+            type: 38,
             list: []
         },
         {
@@ -355,7 +350,7 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 25,
+            type: 39,
             list: []
         },
         {
@@ -364,7 +359,7 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 26,
+            type: 40,
             list: []
         },
         {
@@ -373,7 +368,7 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 27,
+            type: 41,
             list: []
         }
     ]
@@ -486,7 +481,7 @@ const Reports = (props) => {
                 addCardList()  
             }
         }
-    }, [props.lineGraph])
+    }, [props.lineGraph, props.kpi])
 
     /**
      * Get Dashboard data
@@ -507,12 +502,13 @@ const Reports = (props) => {
 
     
     const findDashboardData = async(invention, jurisdictions, sankey, kpi) => {
-        if(loading === false && ((typeof invention !== 'undefined' && invention === false) ||  props.invention === false) && ((typeof jurisidictions !== 'undefined' && jurisdictions === false) || props.jurisdictions === false ) && ((typeof sankey !== 'undefined' && sankey === false) || props.sankey === false) && ((typeof kpi !== 'undefined' && kpi === false) || props.kpi === false)) {                    
+        if(loading === false && ((typeof invention !== 'undefined' && invention === false) ||  props.invention === false) && ((typeof jurisidictions !== 'undefined' && jurisdictions === false) || props.jurisdictions === false ) && ((typeof sankey !== 'undefined' && sankey === false) || props.sankey === false) ) {                    
             const list = [];
             let totalRecords = 0;
             setLoading(true)
             resetAll(false)
-            props.checkChartAnalytics(null, null, false)     
+            props.checkChartAnalytics(null, null, false) 
+            console.log("DASHBOARD.............")    
             const cancelRequest = await PatenTrackApi.cancelAllDashboardToken()  
             const CancelToken = PatenTrackApi.generateCancelToken() 
             const source = CancelToken.source()
@@ -566,12 +562,11 @@ const Reports = (props) => {
                 if( requestData !== null && requestData.data != null && requestData.data.length > 0) {
                     const list = [['Year', 'Assets']]
                     requestData.data.forEach( item => {
-                        list.push([item.year, parseInt(item.number)])
-                    })
-                    
+                        list.push([item.name, parseInt(item.number)])
+                    })                    
                     oldList[findIndex].list = list
                     oldList[findIndex].patent = requestData.data[0].patent
-                    oldList[findIndex].application = requestData.data[0].patent
+                    oldList[findIndex].application = requestData.data[0].application
                     oldList[findIndex].rf_id = requestData.data[0].rf_id
                 } else {
                     oldList[findIndex].list = []
@@ -580,7 +575,15 @@ const Reports = (props) => {
                     oldList[findIndex].rf_id = 0
                 }
             } else {
-                if( requestData !== null && requestData?.data && requestData?.data?.number){
+                console.log(Array.isArray(requestData.data), oldList[findIndex].type)
+                if( requestData !== null && requestData.data != null && Array.isArray(requestData.data) && requestData.data.length > 0) {
+                    oldList[findIndex].list = [...requestData.data]
+                    oldList[findIndex].patent = requestData.data[0].patent
+                    oldList[findIndex].application = requestData.data[0].application
+                    oldList[findIndex].rf_id = requestData.data[0].rf_id
+                    oldList[findIndex].total = requestData.data[0].total  
+                    oldList[findIndex].number = 0               
+                } else if( requestData !== null && requestData?.data && requestData?.data?.number){
                     oldList[findIndex].number = requestData.data.number
                     oldList[findIndex].patent = requestData.data.patent != '' ? requestData.data.patent : ''
                     oldList[findIndex].application = requestData.data.application != '' ? requestData.data.application : ''                            
@@ -594,11 +597,11 @@ const Reports = (props) => {
                 }
             }            
             setCardList(oldList)
-            if(typeof props.updateDashboardData !== 'undefined') {
+            if(typeof props.updateDashboardData !== 'undefined' && props.kpi === false) {
                 props.updateDashboardData(oldList)
             }
         }      
-    }, [cardList, props.lineGraph])
+    }, [cardList, props.lineGraph, props.kpi])
 
     useEffect(() => {
         if(activeId  !== -1 ) {
@@ -770,6 +773,7 @@ const Reports = (props) => {
     }
 
     const onHandleKPI = () => {
+        setIntial(false)
         setCardList(KPI_LIST)
         props.setLineGraph(false)
         props.setJurisdiction(false)

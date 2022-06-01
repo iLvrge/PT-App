@@ -283,5 +283,13 @@ export default makeStyles(theme => ({
     },
     maxChildHeight: {
         maxHeight: '50%'
+    },
+    tableContainer: {
+        height: '65%',
+        overflow: 'auto',
+        boxShadow: 'none',
+        '& .MuiTableCell-root':{
+            padding: '9px 16px'
+        }
     }
 }));
