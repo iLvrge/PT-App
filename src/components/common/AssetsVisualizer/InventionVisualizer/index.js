@@ -945,7 +945,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         } 
                         {
                             selectedTab === 0 && (
-                                <TitleBar title={`Hover over the bars for details.`} enablePadding={false} underline={false}/>   
+                                <TitleBar title={`Hover over the bars for details.`} enablePadding={false} underline={false} typography={true}/>   
                             )
                         } 
                         <div className={classes.graphContainer}> 

@@ -294,7 +294,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
             }
             {
                 typeof titleBar !== 'undefined' && titleBar === true && (
-                    <TitleBar title={`Non expired US patents filed afer 1997 and their foreign counterparts:`} enablePadding={false}/>   
+                    <TitleBar title={loading === false && data.length < 2 ? `The company has no non-expired USA patents filed after 1997, and no foreign counterparts.` : `Non expired US patents filed after 1997 and their foreign counterparts:`} enablePadding={false}/>   
                 )
             } 
             

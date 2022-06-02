@@ -289,16 +289,19 @@ export default makeStyles(theme => ({
         width: '100%',
         overflow: 'auto',
         boxShadow: 'none',
+        marginTop:15,
         '& .MuiListItem-root':{
             padding: '2px 16px'
+        },
+        '& .MuiList-root':{
+            padding: 0
         }
     },
     itemContainer: {
         position: 'relative',
         '& .MuiTypography-root': {
             lineHeight: 1
-        },
-        nargin: 0
+        }
     },
     itemHeading: {
         display: 'inline-block',

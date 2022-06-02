@@ -21,8 +21,13 @@ const KpiBox = (props) => {
                     {
                         props.data.map( item => (
                             <ListItem>
-                                <ListItemText className={classes.itemContainer}>
-                                    <span className={classes.itemHeading}>{item.name}:</span><span className={classes.itemText}>{numberWithCommas(item.number)}</span>
+                                <ListItemText className={classes.itemContainer} disableTypography={true}>
+                                    <Typography
+                                        variant="body2" 
+                                        component="div"
+                                    >
+                                        <span className={classes.itemHeading}>{item.name}:</span><span className={classes.itemText}>{numberWithCommas(item.number)}</span>
+                                    </Typography>                                    
                                 </ListItemText>
                             </ListItem>
                         ))
@@ -62,10 +67,18 @@ const KpiBox = (props) => {
                 :
                     <Typography 
                         variant="h2" 
-                        component="div" gutterBottom
+                        component="div"
                     >
                         {
-                            props.card?.currency && props.card?.currency === true ? props.card?.number > 1000 ? parseInt(props.card.number / 1000) : props.card?.number : numberWithCommas(props.card?.number)
+                            props.card?.currency && props.card?.currency === true 
+                                ? 
+                                    props.card?.number > 1000 
+                                        ? 
+                                            `$${numberWithCommas(parseInt(props.card.number / 1000))}`
+                                        : 
+                                            numberWithCommas(props.card?.number) 
+                                : 
+                                    numberWithCommas(props.card?.number)
                         }
                     </Typography>
             }           
