@@ -84,6 +84,7 @@ const IllustrationCommentContainer = ({
     const [invention, setInvention] = useState(false)
     const [sankey, setSankey] = useState(false)
     const [kpi, setKpi] = useState(false)
+    const [timeline, setTimeline] = useState(false)
     const [showManualComponent, setShowManualComponent ] = useState(false)
     const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
     const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
@@ -299,6 +300,8 @@ const IllustrationCommentContainer = ({
                                 setSankey={setSankey}
                                 kpi={kpi}
                                 setKpi={setKpi}
+                                timeline={timeline}
+                                setTimeline={setTimeline}
                             /> 
                         :
                         showManualComponent === true && menuComponent.length > 0

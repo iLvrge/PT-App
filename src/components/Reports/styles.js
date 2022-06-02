@@ -233,6 +233,16 @@ export default makeStyles(theme => ({
         height: 165,
         alignItems: 'center'
     },
+    timelineContainer: {
+        position: 'relative',
+        display: 'flex',
+        justifyContent: 'center',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        width: '100%',
+        height: 200,
+        alignItems: 'center'
+    },
     exampleButton: {
         position: 'absolute',
         top: 5,
@@ -314,5 +324,20 @@ export default makeStyles(theme => ({
     itemText:{
         position: 'absolute',
         top: 0
-    }
+    },
+    timelineProcessingIndicator: {
+        position: 'absolute',
+        top: 10, 
+        right: 10,
+    },
+    timeline: {
+        height: '100%',
+        width: '100%',
+    },
+    loader: {
+        position: 'absolute',
+        zIndex: 100,
+        top: '50%',
+        left: '50%',
+    },
 }));

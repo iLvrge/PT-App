@@ -6,7 +6,7 @@ import useStyles from './styles'
 import clsx from 'clsx'
 import moment from 'moment'
 import CardElement from './CardElement'
-import { Fullscreen, Close, Public, BarChart, AutoGraph, BubbleChart, Speed, AppsOutage} from '@mui/icons-material';
+import { Fullscreen, Close, Public, BarChart, AutoGraph, BubbleChart, Speed, AppsOutage, ViewTimeline} from '@mui/icons-material';
 
 import { 
     setDashboardPanel,
@@ -374,12 +374,58 @@ const Reports = (props) => {
             list: []
         }
     ]
+    const TIMELINE_LIST = [
+        {
+            title: 'Acquisitions and Merger In',
+            rf_id: '',
+            type: 1,
+            list: [] 
+        },
+        {
+            title: 'Sales and Merger Out',
+            rf_id: '',
+            type: 2,
+            list: []
+        },
+        {
+            title: 'Licenses In, License In End, License Out, and License Out End',
+            rf_id: '',
+            type: 3,
+            list: []
+        },
+        {
+            title: 'Securities, Releases, Lending, Lending Release',
+            rf_id: '',
+            type: 4,
+            list: []
+        },
+        {
+            title: 'Employees',
+            rf_id: '',
+            type: 5,
+            list: []
+        },
+        {
+            title: 'Court Orders and Litigation',
+            rf_id: '',
+            type: 6,
+            list: []
+        }
+    ]
+
     const GRID_ITEM = {
         lg:3,
         md:3,
         sm:3,
         xs:3,
         xl:3
+    }
+    const TIMELINE_ITEM = {
+        lg:6,
+        md:6,
+        sm:6,
+        xs:6,
+        xl:6
     }
     const classes = useStyles();
     const history = useHistory()
@@ -388,13 +434,14 @@ const Reports = (props) => {
     const ref = useRef();
     let resizeObserver = null
     const [initial, setIntial] = useState(true)
-    const [loading, setLoading] = useState(false)
-    
+    const [loading, setLoading] = useState(false)    
+    const [timelineGrid, setTimelineGrid] = useState(TIMELINE_ITEM)
     const [grid, setGrid] = useState(GRID_ITEM)
     const [smallScreen, setSmallScreen] = useState(false)
     const [activeId, setActiveId] = useState(-1)
     const profile = useSelector(state => (state.patenTrack.profile))    
     const [cardList, setCardList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_LIST : LIST)
+    const [timelineList, setTimelineList] = useState(TIMELINE_LIST)
     const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
     const assetTypeCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.list)
@@ -425,35 +472,37 @@ const Reports = (props) => {
             resizeObserver = new ResizeObserver(entries => {  
                 let smallScreen = false         
                 const { width } = entries[0].contentRect;
+                let newGridItems = {...GRID_ITEM}, newTimelineGrid = {...TIMELINE_ITEM}
                 if(width > 510 && width < 601 ) {
                     smallScreen = true
-                    setGrid({
+                    newGridItems = {
                         lg:6,
                         md:6,
                         sm:6,
                         xs:6,
                         xl:6
-                    })
+                    }
                 } else if (width > 600 && width < 900) {
-                    setGrid({
+                    newGridItems = {
                         lg:4,
                         md:4,
                         sm:4,
                         xs:4,
                         xl:4
-                    })
+                    }
                 } else if (width > 0 && width < 510) {
                     smallScreen = true
-                    setGrid({
-                        lg:12,
-                        md:12,
-                        sm:12,
-                        xs:12,
-                        xl:12
-                    })  
-                }  else {
-                    setGrid(GRID_ITEM)
-                }
+                    newGridItems = {
+                        lg: 12,
+                        md: 12,
+                        sm: 12,
+                        xs: 12,
+                        xl: 12
+                    }  
+                    newTimelineGrid = {...newGridItems}
+                } 
+                setGrid(newGridItems)
+                setTimelineGrid(newTimelineGrid)
                 setSmallScreen(smallScreen)  
             })
                      
@@ -780,6 +829,7 @@ const Reports = (props) => {
         props.setInvention(false)
         props.setSankey(false)
         props.setKpi(false)
+        props.setTimeline(false)
         props.setLineGraph(flag)
         if((props.lineGraph === false && flag === false) || (props.lineGraph === true && flag === true)) {
             findDashboardData(false, false, false, false)
@@ -791,14 +841,16 @@ const Reports = (props) => {
         props.setInvention(false)
         props.setSankey(false)
         props.setKpi(false)
+        props.setTimeline(false)
         props.setJurisdiction(true)
-    }
+    }  
 
     const onHandleInvention = () => {
         props.setLineGraph(false)
         props.setJurisdiction(false)
         props.setSankey(false)
         props.setKpi(false)
+        props.setTimeline(false)
         props.setInvention(true)
     }
 
@@ -807,6 +859,7 @@ const Reports = (props) => {
         props.setJurisdiction(false)
         props.setInvention(false)
         props.setKpi(false)
+        props.setTimeline(false)
         props.setSankey(true)
     }
 
@@ -817,7 +870,17 @@ const Reports = (props) => {
         props.setJurisdiction(false)
         props.setInvention(false)
         props.setSankey(false)
+        props.setTimeline(false)
         props.setKpi(true)
+    }
+
+    const onHandleTimeline = () => {
+        props.setLineGraph(false)
+        props.setJurisdiction(false)
+        props.setInvention(false)
+        props.setSankey(false)
+        props.setKpi(false)
+        props.setTimeline(true)
     }
 
     const showItems = cardList.map( (card, index) => {
@@ -834,6 +897,24 @@ const Reports = (props) => {
                 handleList={onHandleList}
                 type={card.type}  
                 {...(props.kpi === true ? {kpiEnable: true} : {lineGraph: props.lineGraph})}
+            />
+        </Grid>
+    })
+
+    const showTimelineItems = timelineList.map( (card, index) => {
+        return <Grid
+            item  {...timelineGrid}
+            className={clsx(classes.flexColumn, `box_item`, {['activeItem']: index === activeId})}
+            key={`card_${index}`}
+        >
+            <CardElement 
+                card={card}
+                id={index}
+                active={activeId}
+                handleClick={onHandleClick}
+                handleList={onHandleList}
+                type={card.type}  
+                timeline={true}
             />
         </Grid>
     })
@@ -890,6 +971,13 @@ const Reports = (props) => {
                             onClick={() => changeGraph(true)}
                         >
                             <AutoGraph/>
+                        </IconButton> 
+                        <IconButton 
+                            size="small"
+                            className={clsx(classes.actionIcon, {[classes.active]: props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false && props.kpi === false})}
+                            onClick={onHandleTimeline}
+                        >
+                            <ViewTimeline/>
                         </IconButton> 
                         <IconButton 
                             size="small"
@@ -968,7 +1056,11 @@ const Reports = (props) => {
                                 ?
                                     <SankeyChart />
                                 :
-                                    showItems
+                                    props.timeline === true
+                                    ?
+                                        showTimelineItems
+                                    :
+                                        showItems
                     }
                 </Grid>                
             </Grid>
