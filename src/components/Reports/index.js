@@ -12,9 +12,10 @@ import {
     setDashboardPanel,
     setTimelineScreen,
     setDashboardScreen,
-    setPatentScreen } from '../../actions/uiActions'
+    setPatentScreen, 
+    toggleFamilyItemMode} from '../../actions/uiActions'
 import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId,  retrievePDFFromServer  } from '../../actions/patentTrackActions2'
-import { assetLegalEvents, setAssetLegalEvents, setPDFView, setPDFFile, setConnectionData, setConnectionBoxView  } from '../../actions/patenTrackActions';
+import { assetLegalEvents, setAssetLegalEvents, setPDFView, setPDFFile, setConnectionData, setConnectionBoxView,   } from '../../actions/patenTrackActions';
 import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar'
 import { controlList } from "../../utils/controlList"
 
@@ -435,6 +436,7 @@ const Reports = (props) => {
     let resizeObserver = null
     const [initial, setIntial] = useState(true)
     const [loading, setLoading] = useState(false)    
+    const [timeLineLoading, setTimeLineLoading] = useState(false)    
     const [timelineGrid, setTimelineGrid] = useState(TIMELINE_ITEM)
     const [grid, setGrid] = useState(GRID_ITEM)
     const [smallScreen, setSmallScreen] = useState(false)
@@ -466,6 +468,10 @@ const Reports = (props) => {
     const assetsTotal = useSelector(
         state => state.patenTrack2.assetTypeAssignmentAssets.total_records,
     );
+
+    useEffect(() => {
+        console.log('timelineList', timelineList)
+    }, [timelineList])
 
     useEffect(() => {
         if(ref.current !== null) {
@@ -559,7 +565,6 @@ const Reports = (props) => {
             setLoading(true)
             resetAll(false)
             props.checkChartAnalytics(null, null, false) 
-            console.log("DASHBOARD.............")    
             const cancelRequest = await PatenTrackApi.cancelAllDashboardToken()  
             const CancelToken = PatenTrackApi.generateCancelToken() 
             const source = CancelToken.source()
@@ -585,6 +590,38 @@ const Reports = (props) => {
         }                
     }
 
+    const callTimelineData = async() => {
+        setLoading(true)
+        resetAll(false)
+        setTimeLineLoading(true)
+        const cancelRequest = await PatenTrackApi.cancelAllDashboardTimelineToken()  
+        const CancelToken = PatenTrackApi.generateCancelToken() 
+        const source = CancelToken.source()
+        const dashboardRequest = timelineList.map(async item => {
+            const formData = new FormData()
+            formData.append('selectedCompanies', JSON.stringify(selectedCompanies));
+            formData.append('type', item.type)             
+            const requestData = await PatenTrackApi.getDashboardTimelineData(formData, source)
+            if( requestData !== null){
+                updateTimelineList(requestData, item.type)
+            }
+            return item
+        })                
+        Promise.allSettled(dashboardRequest).then((dashboardRequest) => {
+            const newTimeline = [...TIMELINE_LIST]
+            newTimeline.forEach( (item, index) => {
+                const findIndex = dashboardRequest.findIndex( row => row.status === "fulfilled" && row.value.type === item.type ) 
+
+                if(findIndex !== -1) {
+                    newTimeline[index].list = [...dashboardRequest[findIndex].value.list]
+                }
+            })
+            setTimelineList(newTimeline)
+            setTimeLineLoading(false)
+        })
+        setLoading(false)   
+    }
+
     const resetAll = (flag) => {
         dispatch(setDashboardPanel( flag ))
         dispatch(setAssetsIllustration(null))
@@ -604,6 +641,17 @@ const Reports = (props) => {
     const addCardList = () => {
         setCardList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_LIST : LIST)
     }
+
+    const updateTimelineList =  useCallback((requestData, type) => {  
+        let oldList = [...timelineList]
+        const findIndex = oldList.findIndex( item => item.type === type)
+        if(findIndex !== -1) {
+            if( requestData !== null && requestData.data != null && requestData.data.length > 0) {
+                oldList[findIndex].list = [...requestData.data]
+            }
+        }
+        setTimelineList(oldList)
+    })
 
     const updateList = useCallback((requestData, type) => {  
         let oldList = [...cardList]
@@ -626,7 +674,6 @@ const Reports = (props) => {
                     oldList[findIndex].rf_id = 0
                 }
             } else {
-                console.log(Array.isArray(requestData.data), oldList[findIndex].type)
                 if( requestData !== null && requestData.data != null && Array.isArray(requestData.data) && requestData.data.length > 0) {
                     oldList[findIndex].list = [...requestData.data]
                     oldList[findIndex].patent = requestData.data[0].patent
@@ -733,7 +780,6 @@ const Reports = (props) => {
         let subscription = parseInt(profile?.user?.organisation?.subscribtion), timeline = false, patent = false
         if( subscription === 2 || subscription === 3 ) {
             let findIndex = -1
-            console.log(id, props.kpi)
             if(id === 0 && props.kpi === false) {                
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
                 patent = true
@@ -881,6 +927,7 @@ const Reports = (props) => {
         props.setSankey(false)
         props.setKpi(false)
         props.setTimeline(true)
+        callTimelineData()
     }
 
     const showItems = cardList.map( (card, index) => {

@@ -75,9 +75,7 @@ const getFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelFamilyCounter, cancelFeesCounter;
-
-var cancelAllDashboardRequest;
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest;
 
 class PatenTrackApi {
   static getSiteLogo() {
@@ -760,10 +758,28 @@ class PatenTrackApi {
     return CancelToken
   }
 
+  
   static cancelAllDashboardToken = () => {
     if (cancelAllDashboardRequest !== undefined) {
       try{
         cancelAllDashboardRequest.cancel(`Dashboard request aborted`)        
+      } catch (e){
+        console.log('cancelInitiated->', e)
+      }
+    }
+  }
+
+  static getDashboardTimelineData(formData, source) {
+    let header = getFormUrlHeader()
+    header['cancelToken'] = source.token
+    cancelAllDashboardTimelineRequest = source   
+    return axios.post(`${base_new_api_url}/dashboards/timeline`, formData, header)
+  }
+
+  static cancelAllDashboardTimelineToken = () => {
+    if (cancelAllDashboardTimelineRequest !== undefined) {
+      try{
+        cancelAllDashboardTimelineRequest.cancel(`Dashboard timeline request aborted`)        
       } catch (e){
         console.log('cancelInitiated->', e)
       }

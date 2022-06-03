@@ -12,6 +12,7 @@ import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import useStyles from './styles'
 import clsx from 'clsx'
 import { numberWithCommas, capitalize } from '../../utils/numbers'
+import { convertTabIdToAssetType } from '../../utils/assetTypes'
 
 
 /**
@@ -57,6 +58,8 @@ const TimelineChart = (props) => {
     const [ timelineRawData, setTimelineRawData ] = useState([])
     const [ timelineItems, setTimelineItems ] = useState([])
 
+    const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
+
     useEffect(() => {
         timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
     }, [])
@@ -64,26 +67,72 @@ const TimelineChart = (props) => {
     /**
    * Intial timline items dataset and ref setup
    */
-  useEffect(() => {
-    items.current = new DataSet()
-    timelineRef.current.setOptions(options) 
-    return () => {
-    } 
-  }, [ ]) 
+    useEffect(() => {
+        items.current = new DataSet()
+        timelineRef.current.setOptions(options) 
+        return () => {
+        } 
+    }, [ ]) 
 
+    useEffect(() => {
+        setTimelineRawData(props.card.list)        
+    }, [props])
+
+    //Item for the timeline
+
+    const convertDataToItem = (assetsCustomer) => {
+        
+        const assetType = Number.isInteger(assetsCustomer.tab_id) ? convertTabIdToAssetType(assetsCustomer.tab_id) : 'default'
+        const companyName =  selectedWithName.filter( company => assetsCustomer.company == company.id ? company.name : '')
+        const customerFirstName = assetsCustomer.tab_id == 10 ? assetsCustomer.customerName.split(' ')[0] : assetsCustomer.customerName
+        return ({
+        
+        type: 'point',
+        start: new Date(assetsCustomer.exec_dt),
+        customerName: `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
+        assetType,
+        companyName,
+        rawData: assetsCustomer,
+        /* group: assetsCustomer.group, */
+        className: `asset-type-${assetType}`,
+        collection: [ { id: assetsCustomer.id, totalAssets: assetsCustomer.totalAssets } ],
+        showTooltips: false, 
+        /* title: `
+            <div>
+            <span><strong>Transaction Date:</strong> ${moment(assetsCustomer.exec_dt).format('ll')}</span> 
+            <span><strong>Other Party:</strong> ${assetsCustomer.customerName}</span>
+            <span><strong>Number of Assets:</strong> ${assetsCustomer.totalAssets}</span>
+            </div>
+        `, */
+        })
+    }
   /**
    * Add timeline items to the the dataset and set the start, end, min and max date
    */
    useEffect(() => {
     if (isLoadingTimelineRawData) return null
     
+    const clusteredItems = timelineRawData.reduce((result, dataItem) => {
+        const itemName = dataItem.tab_id == 10 ? dataItem.customerName.split(' ')[0] : dataItem.customerName
+        result[`${dataItem.id}_${itemName}_${dataItem.exec_dt}`] = convertDataToItem(dataItem)
+        return result 
+    }, {})
+      
+    const convertedItems = Object.values(clusteredItems).sort((a, b) => (new Date(a.start) > new Date(b.start)))  
     
+    setTimelineItems(convertedItems)
+
     items.current = new DataSet()
     let start =  new moment(), end = new moment().add(1, 'year')   
     if(timelineRef.current !== null) {
         timelineRef.current.destroy()
         timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
     } 
+    
+    if (convertedItems.length > 0) {
+        start = new moment(convertedItems[0].start).subtract(1, 'week')
+        items.current.add(convertedItems)      
+    }
     timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'year')})
     timelineRef.current.setItems(items.current)   
     }, [ timelineRawData ])
