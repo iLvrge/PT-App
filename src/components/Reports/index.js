@@ -1007,21 +1007,21 @@ const Reports = (props) => {
                         </IconButton> 
                         <IconButton 
                             size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: !props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false && props.kpi === false})}
+                            className={clsx(classes.actionIcon, {[classes.active]: !props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false && props.kpi === false && props.timeline === false})}
                             onClick={() => changeGraph(false)}
                         >
                             <Speed/> 
                         </IconButton>
                         <IconButton 
                             size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false && props.kpi === false})}
+                            className={clsx(classes.actionIcon, {[classes.active]: props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false && props.kpi === false && props.timeline === false})}
                             onClick={() => changeGraph(true)}
                         >
                             <AutoGraph/>
                         </IconButton> 
                         <IconButton 
                             size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false && props.kpi === false})}
+                            className={clsx(classes.actionIcon, {[classes.active]: props.timeline})}
                             onClick={onHandleTimeline}
                         >
                             <ViewTimeline/>
