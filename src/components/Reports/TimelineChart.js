@@ -75,7 +75,23 @@ const TimelineChart = (props) => {
     }, [ ]) 
 
     useEffect(() => {
-        setTimelineRawData(props.card.list)        
+        let {list} = props.card
+
+        if(props.card.type == 4) {
+            const removeRelease = list.filter( item => parseInt(item.release_rf_id) > 0 ? item.release_rf_id : '' )
+
+            if(removeRelease.length > 0) {
+                removeRelease.forEach( ID => {
+                    const findIndex = list.findIndex( item => item.rf_id == ID ? true : false)
+
+                    if(findIndex !== -1) {
+                        list.splice(findIndex, 1)
+                    }
+                })
+            }
+        }        
+
+        setTimelineRawData(list)        
     }, [props])
 
     //Item for the timeline
@@ -84,27 +100,26 @@ const TimelineChart = (props) => {
         
         const assetType = Number.isInteger(assetsCustomer.tab_id) ? convertTabIdToAssetType(assetsCustomer.tab_id) : 'default'
         const companyName =  selectedWithName.filter( company => assetsCustomer.company == company.id ? company.name : '')
-        const customerFirstName = assetsCustomer.tab_id == 10 ? assetsCustomer.customerName.split(' ')[0] : assetsCustomer.customerName
-        return ({
-        
-        type: 'point',
-        start: new Date(assetsCustomer.exec_dt),
-        customerName: `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
-        assetType,
-        companyName,
-        rawData: assetsCustomer,
-        /* group: assetsCustomer.group, */
-        className: `asset-type-${assetType}`,
-        collection: [ { id: assetsCustomer.id, totalAssets: assetsCustomer.totalAssets } ],
-        showTooltips: false, 
-        /* title: `
-            <div>
-            <span><strong>Transaction Date:</strong> ${moment(assetsCustomer.exec_dt).format('ll')}</span> 
-            <span><strong>Other Party:</strong> ${assetsCustomer.customerName}</span>
-            <span><strong>Number of Assets:</strong> ${assetsCustomer.totalAssets}</span>
-            </div>
-        `, */
-        })
+        const customerFirstName = assetsCustomer.tab_id == 10 ? assetsCustomer.customerName.split(' ')[0] : assetsCustomer.customerName;
+
+        const item = {        
+            type: 'point',
+            start: new Date(assetsCustomer.exec_dt),
+            customerName: `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
+            assetType,
+            companyName,
+            rawData: assetsCustomer,
+            /* group: assetsCustomer.group, */
+            className: `asset-type-${assetType}`,
+            collection: [ { id: assetsCustomer.id, totalAssets: assetsCustomer.totalAssets } ],
+            showTooltips: false
+        }
+
+        if([5,12].includes(parseInt(assetsCustomer.tab_id))){
+            item.type = 'range';
+            item['end'] = new Date(assetsCustomer.release_exec_dt);
+        }
+        return item
     }
   /**
    * Add timeline items to the the dataset and set the start, end, min and max date

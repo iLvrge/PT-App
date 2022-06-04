@@ -533,12 +533,20 @@ const Reports = (props) => {
     useEffect(() => {
         if(initial === false) {
             if(selectedCompanies.length > 0) {
-                findDashboardData()
+                if(props.timeline === true) {
+                    callTimelineData()
+                } else {
+                    findDashboardData()
+                }                
             } else {   
-                addCardList()  
+                if(props.timeline === true) {
+                    setTimelineList([...TIMELINE_LIST])
+                } else {
+                    addCardList()  
+                }                
             }
         }
-    }, [props.lineGraph, props.kpi])
+    }, [props.lineGraph, props.kpi, props.timeline])
 
     /**
      * Get Dashboard data
@@ -549,9 +557,17 @@ const Reports = (props) => {
             setCardList(props.dashboardData)
         } else {
             if(selectedCompanies.length > 0) {
-                findDashboardData()
+                if(props.timeline === true) {
+                    callTimelineData()
+                } else {
+                    findDashboardData()
+                }
             } else {   
-                addCardList()  
+                if(props.timeline === true) {
+                    setTimelineList([...TIMELINE_LIST])
+                } else {
+                    addCardList()  
+                }
             }
         }
         return (() => {})
@@ -587,7 +603,7 @@ const Reports = (props) => {
             })                
             await Promise.all(dashboardRequest)
             setLoading(false)           
-        }                
+        }
     }
 
     const callTimelineData = async() => {

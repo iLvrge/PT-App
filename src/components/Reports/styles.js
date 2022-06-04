@@ -262,6 +262,9 @@ export default makeStyles(theme => ({
         },
         '& .vis-time-axis .vis-text':{
             padding: '1px 3px'
+        },
+        '& .vis-item.vis-range':{
+            backgroundColor: '#FFAA00 !important'
         }
     },
     exampleButton: {
