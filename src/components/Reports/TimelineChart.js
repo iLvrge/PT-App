@@ -13,6 +13,7 @@ import useStyles from './styles'
 import clsx from 'clsx'
 import { numberWithCommas, capitalize } from '../../utils/numbers'
 import { convertTabIdToAssetType } from '../../utils/assetTypes'
+import { SET_CUSTOMERS_NAME_COLLECTIONS_LOADING } from '../../actions/actionTypes'
 
 
 /**
@@ -76,7 +77,6 @@ const TimelineChart = (props) => {
 
     useEffect(() => {
         let {list} = props.card
-        console.log("TIMELINE", props.card)
         if(props.card.type == 4) {
             const removeRelease = list.filter( item => parseInt(item.release_rf_id) > 0 ? item.release_rf_id : '' )
 
@@ -136,7 +136,7 @@ const TimelineChart = (props) => {
     const convertedItems = Object.values(clusteredItems).sort((a, b) => (new Date(a.start) > new Date(b.start)))  
     
     setTimelineItems(convertedItems)
-
+    console.log('convertedItems', convertedItems)
     items.current = new DataSet()
     let start =  new moment(), end = new moment().add(1, 'year')   
     if(timelineRef.current !== null) {
@@ -151,7 +151,7 @@ const TimelineChart = (props) => {
     timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'year')})
     timelineRef.current.setItems(items.current)   
     }, [ timelineRawData ])
-
+    console.log('timelineContainerRef', timelineContainerRef)
     return (
         <div className={classes.timelineContainer}>
             <div
@@ -160,25 +160,17 @@ const TimelineChart = (props) => {
                 }}  
                 ref={timelineContainerRef}
                 className={clsx(classes.timeline, 'timeline')}
-                />
-                {
-                isLoadingTimelineData &&
-                    <CircularProgress size={15} color={'secondary'} className={classes.timelineProcessingIndicator} />
-                }
-                { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> }
-            <Tooltip 
-                title="Tooltip" 
-                placement="right"
-                enterDelay={0}
-                TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
-                className={clsx(classes.tooltip/* , {[classes.mobileTooltip]: typeof isMobile !== 'undefined' && isMobile === true} */)}  
-            >
-                <div>
-                    <Typography variant="h6" component="div" align="center" className={classes.border}>
-                        {props.card.title}
-                    </Typography>
-                </div>
-            </Tooltip>
+            />
+            {
+            isLoadingTimelineData &&
+                <CircularProgress size={15} color={'secondary'} className={classes.timelineProcessingIndicator} />
+            }
+            { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> }
+            <div>
+                <Typography variant="h6" component="div" align="center" className={classes.border}>
+                    {props.card.title}
+                </Typography>
+            </div>
         </div>
     )
 }

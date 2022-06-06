@@ -127,7 +127,7 @@ const IllustrationCommentContainer = ({
             handleCustomersBarOpen: handleCustomersBarOpen,
             dashboardData: dashboardData,
             updateDashboardData: setDashboardData,
-            dashboardTimelineData: dashboardTimelineData,
+            dashboardTimelineData: dashboardTimelineData, 
             lineGraph: lineGraph,
             setLineGraph: setLineGraph,
             jurisdictions: jurisdictions,

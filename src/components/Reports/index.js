@@ -556,18 +556,24 @@ const Reports = (props) => {
             }
         }
     }, [props.lineGraph, props.kpi, props.timeline])
-
+    
+    useEffect(() => {
+        console.log('timelineList', timelineList)
+    }, [timelineList])
     /**
      * Get Dashboard data
      */
     useEffect(() => {
+        console.log('FULLSCREEN', props.dashboardTimelineData)
         if(typeof props.dashboardData !== 'undefined' && props.dashboardData.length > 0) {
             setLoading(false)
             setCardList(props.dashboardData)
-        } else if(typeof props.dashboardTimelineData !== 'undefined' && props.dashboardTimelineData.length > 0) {
-            setLoading(false)
-            setTimelineList(props.dashboardTimelineData)
-        } else {
+            if(typeof props.dashboardTimelineData !== 'undefined' && props.dashboardTimelineData.length > 0) {
+                setLoading(false)       
+                console.log('SET TIMELINE DATA')     
+                setTimelineList(props.dashboardTimelineData)
+            }
+        }  else {
             if(selectedCompanies.length > 0) {
                 if(props.timeline === true) {
                     callTimelineData()
