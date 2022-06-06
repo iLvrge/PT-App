@@ -945,7 +945,10 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         } 
                         {
                             selectedTab === 0 && (
-                                <TitleBar title={`Hover over the bars for details.`} enablePadding={false} underline={false} typography={true}/>   
+                                <React.Fragment>  
+                                    <TitleBar title={`Hover over the bars for details.`} enablePadding={typeof titleBar !== 'undefined' ? false : true} underline={false} typography={true}/> 
+                                    <TitleBar title={`Select a bar to see the list of the underlying patents, and to act upon time. Click the icon menu to filter the result.`} enablePadding={typeof titleBar !== 'undefined' ? false : true} underline={false} typography={true}/>   
+                                </React.Fragment>
                             )
                         } 
                         <div className={classes.graphContainer}> 

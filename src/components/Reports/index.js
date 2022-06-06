@@ -390,25 +390,25 @@ const Reports = (props) => {
     ]
     const TIMELINE_LIST = [
         {
-            title: 'Acquisitions and Merger In',
+            title: 'Acquisitions',
             rf_id: '',
             type: 1,
             list: [] 
         },
         {
-            title: 'Sales and Merger Out',
+            title: 'Divestitures',
             rf_id: '',
             type: 2,
             list: []
         },
         {
-            title: 'Licenses In, License In End, License Out, and License Out End',
+            title: 'Licensing',
             rf_id: '',
             type: 3,
             list: []
         },
         {
-            title: 'Securities, Releases, Lending, Lending Release',
+            title: 'Collateralization',
             rf_id: '',
             type: 4,
             list: []
@@ -420,7 +420,7 @@ const Reports = (props) => {
             list: []
         },
         {
-            title: 'Court Orders and Litigation',
+            title: 'Court',
             rf_id: '',
             type: 6,
             list: []
