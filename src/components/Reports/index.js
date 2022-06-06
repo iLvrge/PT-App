@@ -25,12 +25,13 @@ import GeoChart from '../common/AssetsVisualizer/GeoChart'
 import InventionVisualizer from '../common/AssetsVisualizer/InventionVisualizer'
 import SankeyChart from './SankeyChart'
 import Loader from '../common/Loader'
+import AddToolTip from './AddToolTip'
 
 const Reports = (props) => {
     let LIST = [
         {
             title: 'Broken Chain-of-Title',
-            sub_heading: 'broken', 
+            tooltip: 'Patent assets owned by the company, with ownership defects along the chain of title, such as rights not transferred by inventors.',
             number: 0,
             patent: '',
             application: '',
@@ -40,7 +41,7 @@ const Reports = (props) => {
         },
         {
             title: 'Incorrect Names',
-            sub_heading: 'assignee has a typo',
+            tooltip: 'Patent assets assigned under incorrect names, and unlikely to be found in a name search.',
             number: 0,
             patent: '',
             application: '',
@@ -50,7 +51,7 @@ const Reports = (props) => {
         },
         {
             title: 'Encumbrances',
-            sub_heading: 'irrelevant assignee recorded on your patents',
+            tooltip: 'Patent assets subject to third party rights, which could harm the patents’ liquidity.',
             number: 0,
             patent: '',
             application: '',
@@ -60,7 +61,7 @@ const Reports = (props) => {
         },
         {
             title: 'Wrong Addresses',
-            sub_heading: 'adress',
+            tooltip: 'Patent assets assigned under incorrect addresses.',
             number: 0,
             patent: '',
             application: '',
@@ -70,7 +71,7 @@ const Reports = (props) => {
         },
         {
             title: 'Wrong Lawyers',
-            sub_heading: 'typo in the name of lawyer, wrong lawyer addres, no longer works with that lawyer',
+            tooltip: 'Patent assets that are assigned to the company under a stated corresponding agent which is different from those currently employed by the company.',
             number: 0,
             patent: '',
             application: '',
@@ -80,7 +81,7 @@ const Reports = (props) => {
         },
         {
             title: 'Unecessary Patents',
-            sub_heading: 'patents',
+            tooltip: 'Patent assets covering technological areas which are far from the company\’s core technology.',
             number: 0,
             patent: '',
             application: '',
@@ -90,7 +91,7 @@ const Reports = (props) => {
         },
         {
             title: 'Missed Monetization',
-            sub_heading: 'abandoned patents',
+            tooltip: 'Abandoned, yet acknowledged, patent assets which could be sold to interested parties.',
             number: 0,
             patent: '',
             application: '',
@@ -100,7 +101,7 @@ const Reports = (props) => {
         },
         {
             title: 'Late Maintainance',
-            sub_heading: 'Surcharge payments  number of the maintainance actvities',
+            tooltip: 'Patents for which the company paid surcharge fees due to late payment of maintenance fees.',
             number: 0,
             patent: '',
             application: '',
@@ -109,7 +110,7 @@ const Reports = (props) => {
         },
         {
             title: 'Corrected Recordings',
-            sub_heading: 'typo in the name of lawyer, wrong lawyer addres, no longer works with that lawyer',
+            tooltip: 'Patent assets with recording that later on were corrected.',
             number: 0,
             patent: '',
             application: '',
@@ -119,7 +120,7 @@ const Reports = (props) => {
         },
         {
             title: 'Late Recordings',
-            sub_heading: 'patents',
+            tooltip: 'Patent assets exposed to third party\'s rights due to recording that was beyond 45 days from the transaction\’s execution date.',
             number: 0,
             patent: '',
             application: '',
@@ -129,7 +130,7 @@ const Reports = (props) => {
         },
         {
             title: 'Deflated Collateral',
-            sub_heading: 'abandoned patents',
+            tooltip: 'The list of collateralized patent assets that have expired since the collateralization day.',
             number: 0,
             patent: '',
             application: '',
@@ -139,7 +140,7 @@ const Reports = (props) => {
         },
         {
             title: 'Challenged',
-            sub_heading: 'Surcharge payments  number of the maintainance actvities',
+            tooltip: 'The list of patents the validity of which has been challenged.',
             number: 0,
             patent: '',
             application: '',
@@ -152,7 +153,7 @@ const Reports = (props) => {
     let BANK_LIST = [
         {
             title: 'Broken Chain-of-Title',
-            sub_heading: 'broken', 
+            tooltip: 'Patent assets owned by the company, with ownership defects along the chain of title, such as rights not transferred by inventors.',
             number: 0,
             patent: '',
             application: '',
@@ -162,7 +163,7 @@ const Reports = (props) => {
         },
         {
             title: 'Incorrect Names',
-            sub_heading: 'assignee has a typo',
+            tooltip: 'Patent assets assigned under incorrect names, and unlikely to be found in a name search.',
             number: 0,
             patent: '',
             application: '',
@@ -172,7 +173,7 @@ const Reports = (props) => {
         },
         {
             title: 'Encumbrances',
-            sub_heading: 'irrelevant assignee recorded on your patents',
+            tooltip: 'Patent assets subject to third party rights, which could harm the patents’ liquidity.',
             number: 0,
             patent: '',
             application: '',
@@ -182,7 +183,7 @@ const Reports = (props) => {
         },
         {
             title: 'Other Banks',
-            sub_heading: 'address',
+            tooltip: 'Patent assets assigned under incorrect addresses.',
             number: 0,
             patent: '',
             application: '',
@@ -192,7 +193,7 @@ const Reports = (props) => {
         },
         {
             title: 'Invalid Collateral',
-            sub_heading: 'typo in the name of lawyer, wrong lawyer addres, no longer works with that lawyer',
+            tooltip: 'Patent assets that are assigned to the company under a stated corresponding agent which is different from those currently employed by the company.',
             number: 0,
             patent: '',
             application: '',
@@ -202,7 +203,7 @@ const Reports = (props) => {
         },
         {
             title: 'Unecessary Patents',
-            sub_heading: 'patents',
+            tooltip: 'Patent assets covering technological areas which are far from the company’s core technology.',
             number: 0,
             patent: '',
             application: '',
@@ -212,7 +213,7 @@ const Reports = (props) => {
         },
         {
             title: 'Expired Patents',
-            sub_heading: 'abandoned patents',
+            tooltip: 'Abandoned, yet acknowledged, patent assets which could be sold to interested parties.',
             number: 0,
             patent: '',
             application: '',
@@ -222,7 +223,7 @@ const Reports = (props) => {
         },
         {
             title: 'Recently Expired',
-            sub_heading: 'Surcharge payments  number of the maintainance actvities',
+            tooltip: 'Patents for which the company paid surcharge fees due to late payment of maintenance fees.',
             number: 0,
             patent: '',
             application: '',
@@ -232,7 +233,7 @@ const Reports = (props) => {
         },
         {
             title: 'Corrected Recordings',
-            sub_heading: 'typo in the name of lawyer, wrong lawyer addres, no longer works with that lawyer',
+            tooltip: 'Patent assets with recording that later on were corrected.',
             number: 0,
             patent: '',
             application: '',
@@ -242,7 +243,7 @@ const Reports = (props) => {
         },
         {
             title: 'Late Recordings',
-            sub_heading: 'patents',
+            tooltip: 'Patent assets exposed to third party\'s rights due to recording that was beyond 45 days from the transaction\’s execution date.',
             number: 0,
             patent: '',
             application: '',
@@ -252,7 +253,7 @@ const Reports = (props) => {
         },
         {
             title: 'Deflated Collateral',
-            sub_heading: 'abandoned patents',
+            tooltip: 'The list of collateralized patent assets that have expired since the collateralization day.',
             number: 0,
             patent: '',
             application: '',
@@ -262,7 +263,7 @@ const Reports = (props) => {
         },
         {
             title: 'Challenged',
-            sub_heading: 'Surcharge payments  number of the maintainance actvities',
+            tooltip: 'The list of patents the validity of which has been challenged.',
             number: 0,
             patent: '',
             application: '',
@@ -275,6 +276,7 @@ const Reports = (props) => {
     const KPI_LIST = [
         {
             title: 'Non-Expired Patents',
+            tooltip: 'The USA patents which the company currently owns.',
             number: 0,
             patent: '',
             application: '',
@@ -283,6 +285,7 @@ const Reports = (props) => {
         },
         {
             title: 'Patents Acquired',
+            tooltip: 'Non-expired USA patents the company acquired from third parties.',
             number: 0,
             patent: '',
             application: '',
@@ -291,6 +294,7 @@ const Reports = (props) => {
         }, 
         {
             title: 'Patents Invented',
+            tooltip: 'Non-expired USA patents invented by the company\’s employees.',
             number: 0,
             patent: '',
             application: '',
@@ -299,6 +303,7 @@ const Reports = (props) => {
         },
         {
             title: 'Un-Maintained Patents',
+            tooltip: 'Patents the company abandoned, i.e. for which the company has not paid maintenance fees.',
             number: 0,
             patent: '',
             application: '',
@@ -307,6 +312,7 @@ const Reports = (props) => {
         },
         {
             title: 'Pending Applications',
+            tooltip: 'Patent applications which are still in the process of prosecution.',
             number: 0,
             patent: '',
             application: '',
@@ -315,6 +321,7 @@ const Reports = (props) => {
         },
         {
             title: 'Filed Applications',
+            tooltip: 'Non-abandoned patent applications filed by the company\’s employees.',
             number: 0,
             patent: '',
             application: '',
@@ -323,6 +330,7 @@ const Reports = (props) => {
         },
         {
             title: 'Acquired Applications',
+            tooltip: 'Non-abandoned patents applications the company acquired from third parties.',
             number: 0,
             patent: '',
             application: '',
@@ -331,6 +339,7 @@ const Reports = (props) => {
         },
         {
             title: 'Maintenance Budget (K)',
+            tooltip: 'Expected annual maintenance fees to be paid according to the company’s status and number of non-expired parents it currently owns.',
             number: 0,
             patent: '',
             application: '',
@@ -340,6 +349,7 @@ const Reports = (props) => {
         },
         {
             title: 'Top non-US Members',
+            tooltip: 'Countries in which the company has the largest number of patents.',
             number: 0,
             patent: '',
             application: '',
@@ -349,6 +359,7 @@ const Reports = (props) => {
         },
         {
             title: 'Proliferate Inventors',
+            tooltip: 'Company\’s employees with the largest number of inventions.',
             number: 0,
             patent: '',
             application: '',
@@ -358,6 +369,7 @@ const Reports = (props) => {
         },
         {
             title: 'Top Law Firms',
+            tooltip: 'The company\’s law firms with the largest number of registered transactions.',
             number: 0,
             patent: '',
             application: '',
@@ -367,12 +379,13 @@ const Reports = (props) => {
         },
         {
             title: 'Top Lenders',
+            tooltip: 'Banks and lending institutions to which the company secured its patents as collateral.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
             type: 41,
-            list: []
+            list: [] 
         }
     ]
     const TIMELINE_LIST = [
@@ -1018,63 +1031,103 @@ const Reports = (props) => {
                                 <span>Loading...</span>
                             )
                         }
-                        <IconButton 
-                            size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: props.kpi})}
-                            onClick={onHandleKPI}
+                        <AddToolTip
+                            tooltip={'Key Performance Indicators such as the number of patents owned by the company.'}
+                            placement='right'
                         >
-                            <AppsOutage/>
-                        </IconButton> 
-                        <IconButton 
-                            size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: !props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false && props.kpi === false && props.timeline === false})}
-                            onClick={() => changeGraph(false)}
+                            <IconButton 
+                                size="small"
+                                className={clsx(classes.actionIcon, {[classes.active]: props.kpi})}
+                                onClick={onHandleKPI}
+                            >
+                                <AppsOutage/>
+                            </IconButton> 
+                        </AddToolTip>
+                        <AddToolTip
+                            tooltip={'Matters that require attention such as patents with defective ownership.'}
+                            placement='right'
                         >
-                            <Speed/> 
-                        </IconButton>
-                        <IconButton 
-                            size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false && props.kpi === false && props.timeline === false})}
-                            onClick={() => changeGraph(true)}
+                            <IconButton 
+                                size="small"
+                                className={clsx(classes.actionIcon, {[classes.active]: !props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false && props.kpi === false && props.timeline === false})}
+                                onClick={() => changeGraph(false)}
+                            >
+                                <Speed/> 
+                            </IconButton>
+                        </AddToolTip>
+                        <AddToolTip
+                            tooltip={'Changes in matters requiring attention along a timeline.'}
+                            placement='right'
                         >
-                            <AutoGraph/>
-                        </IconButton> 
-                        <IconButton 
-                            size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: props.timeline})}
-                            onClick={onHandleTimeline}
+                            <IconButton 
+                                size="small"
+                                className={clsx(classes.actionIcon, {[classes.active]: props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false && props.kpi === false && props.timeline === false})}
+                                onClick={() => changeGraph(true)}
+                            >
+                                <AutoGraph/>
+                            </IconButton> 
+                        </AddToolTip>
+                        <AddToolTip
+                            tooltip={'Transactional activities such as acquisition, divestitures, collateralization and releases.'}
+                            placement='right'
                         >
-                            <ViewTimeline/>
-                        </IconButton> 
-                        <IconButton 
-                            size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: props.invention})}
-                            onClick={onHandleInvention}
+                            <IconButton 
+                                size="small"
+                                className={clsx(classes.actionIcon, {[classes.active]: props.timeline})}
+                                onClick={onHandleTimeline}
+                            >
+                                <ViewTimeline/>
+                            </IconButton> 
+                        </AddToolTip>
+                        <AddToolTip
+                            tooltip={'Technologies covered by the patent portfolio as they evolved.'}
+                            placement='right'
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><g><path d="M24.844,398.133l114.19,52.7a8.214,8.214,0,0,0,3.4.738,8.105,8.105,0,0,0,3.38-.738l110.17-50.885,110.163,50.885a8,8,0,0,0,6.714,0l114.291-52.7A8.188,8.188,0,0,0,492,390.871v-125.1a8.223,8.223,0,0,0-6.2-7.734L378,229.637V98.558a7.958,7.958,0,0,0-5.912-7.735L258.02,60.692a7.969,7.969,0,0,0-4.074,0L139.906,90.823A7.954,7.954,0,0,0,134,98.558V229.637l-107.8,28.4a8.223,8.223,0,0,0-6.2,7.734v125.1A8.186,8.186,0,0,0,24.844,398.133ZM36,276.112l98,25.407V431.065L36,385.754Zm105.1-31.826,82.461,21.777-81.075,21L60.013,265.7ZM248,134.849V255.967l-98-25.9V108.945ZM451.987,265.7l-82.475,21.362-81.075-21L370.9,244.286ZM150,301.519l98-25.257V386.021l-98,45.044Zm114-25.257,98,25.257V431.065l-98-45.044Zm98-46.2-98,25.9V134.849l98-25.9Zm16,201V301.519l98-25.407V385.754ZM256,76.7l82.76,21.856L256,120.413,173.24,98.558Z" /></g></svg>
-                        </IconButton>
-                        <IconButton 
-                            size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: props.jurisdictions})}
-                            onClick={onHandleJurisdiction}
+                            <IconButton 
+                                size="small"
+                                className={clsx(classes.actionIcon, {[classes.active]: props.invention})}
+                                onClick={onHandleInvention}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><g><path d="M24.844,398.133l114.19,52.7a8.214,8.214,0,0,0,3.4.738,8.105,8.105,0,0,0,3.38-.738l110.17-50.885,110.163,50.885a8,8,0,0,0,6.714,0l114.291-52.7A8.188,8.188,0,0,0,492,390.871v-125.1a8.223,8.223,0,0,0-6.2-7.734L378,229.637V98.558a7.958,7.958,0,0,0-5.912-7.735L258.02,60.692a7.969,7.969,0,0,0-4.074,0L139.906,90.823A7.954,7.954,0,0,0,134,98.558V229.637l-107.8,28.4a8.223,8.223,0,0,0-6.2,7.734v125.1A8.186,8.186,0,0,0,24.844,398.133ZM36,276.112l98,25.407V431.065L36,385.754Zm105.1-31.826,82.461,21.777-81.075,21L60.013,265.7ZM248,134.849V255.967l-98-25.9V108.945ZM451.987,265.7l-82.475,21.362-81.075-21L370.9,244.286ZM150,301.519l98-25.257V386.021l-98,45.044Zm114-25.257,98,25.257V431.065l-98-45.044Zm98-46.2-98,25.9V134.849l98-25.9Zm16,201V301.519l98-25.407V385.754ZM256,76.7l82.76,21.856L256,120.413,173.24,98.558Z" /></g></svg>
+                            </IconButton>
+                        </AddToolTip>
+                        <AddToolTip
+                            tooltip={'The countries in which the company has filed patents.'}
+                            placement='right'
                         >
-                            <Public/>
-                        </IconButton>      
-                        <IconButton 
-                            size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: props.sankey})}
-                            onClick={onHandleSankey}
+                            <IconButton 
+                                size="small"
+                                className={clsx(classes.actionIcon, {[classes.active]: props.jurisdictions})}
+                                onClick={onHandleJurisdiction}
+                            >
+                                <Public/>
+                            </IconButton>   
+                        </AddToolTip>  
+                        <AddToolTip
+                            tooltip={'Sources from which patents were obtained, and divestitures.'}
+                            placement='right'
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" className={clsx('MuiSvgIcon-root MuiSvgIcon-fontSizeMedium')} viewBox="0 0 24 24">
-                                <path d="M23,6l-4-3.969v2L1,4v9h5.5C6.776,13,7,13.224,7,13.5v6.531H6L8,22l2-1.969H9v-7C9,11.928,8.103,11,7,11h5	c1.105,0,2,0.895,2,2v2.031h-2l3.586,3.954L19,15.031h-2V12.5c0-2.481-2.019-4.5-4.5-4.5H19v2.031L23,6z"/>
-                            </svg>
-                        </IconButton>
-                        <IconButton size="small"
-                            onClick={() => {props.handleFullScreen(!props.fullScreen)}}
-                            className={clsx(classes.actionIcon, typeof props.standalone !== 'undefined' ? classes.fontStandalone : '' )}
+                            <IconButton 
+                                size="small"
+                                className={clsx(classes.actionIcon, {[classes.active]: props.sankey})}
+                                onClick={onHandleSankey}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className={clsx('MuiSvgIcon-root MuiSvgIcon-fontSizeMedium')} viewBox="0 0 24 24">
+                                    <path d="M23,6l-4-3.969v2L1,4v9h5.5C6.776,13,7,13.224,7,13.5v6.531H6L8,22l2-1.969H9v-7C9,11.928,8.103,11,7,11h5	c1.105,0,2,0.895,2,2v2.031h-2l3.586,3.954L19,15.031h-2V12.5c0-2.481-2.019-4.5-4.5-4.5H19v2.031L23,6z"/>
+                                </svg>
+                            </IconButton>
+                        </AddToolTip> 
+                        <AddToolTip
+                            tooltip={'Big screen view.'}
+                            placement='right'
                         >
-                            { typeof props.standalone !== 'undefined' ? <Close/> : <Fullscreen /> }                            
-                        </IconButton>   
+                            <IconButton size="small"
+                                onClick={() => {props.handleFullScreen(!props.fullScreen)}}
+                                className={clsx(classes.actionIcon, typeof props.standalone !== 'undefined' ? classes.fontStandalone : '' )}
+                            >
+                                { typeof props.standalone !== 'undefined' ? <Close/> : <Fullscreen /> }                            
+                            </IconButton>   
+                        </AddToolTip>
                     </div>
                 </Paper>
             </Grid>

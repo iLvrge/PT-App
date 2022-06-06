@@ -8,6 +8,7 @@ import { IconButton, Button, Typography, Tooltip, Zoom } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import clsx from 'clsx'
 import LineGraph from './LineGraph';
+import AddToolTip from './AddToolTip';
 const Chart = (props) => {
     const [arcs, setArcs] = useState([0.5, 0.3, 0.2])
     const classes = useStyles();
@@ -80,19 +81,16 @@ const Chart = (props) => {
                         formatTextValue={displayNumber}
                     />    
             }
-            <Tooltip 
-                title="Tooltip" 
-                placement="right"
-                enterDelay={0}
-                TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
-                className={clsx(classes.tooltip/* , {[classes.mobileTooltip]: typeof isMobile !== 'undefined' && isMobile === true} */)}  
+            <AddToolTip
+                tooltip={props.card.tooltip}
+                placement={'top'}
             >
                 <div>
                     <Typography variant="h6" component="div" align="center" className={classes.border}>
                         {props.card.title}
                     </Typography>
                 </div>
-            </Tooltip>              
+            </AddToolTip>            
         </div>
     )
 }
