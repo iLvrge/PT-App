@@ -76,7 +76,7 @@ const TimelineChart = (props) => {
 
     useEffect(() => {
         let {list} = props.card
-
+        console.log("TIMELINE", props.card)
         if(props.card.type == 4) {
             const removeRelease = list.filter( item => parseInt(item.release_rf_id) > 0 ? item.release_rf_id : '' )
 

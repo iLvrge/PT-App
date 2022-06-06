@@ -78,6 +78,7 @@ const IllustrationCommentContainer = ({
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false)
     const [ menuComponent, setMenuComponent ] = useState([])
     const [ dashboardData, setDashboardData ] = useState([])
+    const [ dashboardTimelineData, setDashboardTimelineData ] = useState([])
     const [ timelineRawData, setTimelineRawData ] = useState([])
     const [lineGraph, setLineGraph] = useState(false)
     const [jurisdictions, setJurisdiction] = useState(false)
@@ -126,6 +127,7 @@ const IllustrationCommentContainer = ({
             handleCustomersBarOpen: handleCustomersBarOpen,
             dashboardData: dashboardData,
             updateDashboardData: setDashboardData,
+            dashboardTimelineData: dashboardTimelineData,
             lineGraph: lineGraph,
             setLineGraph: setLineGraph,
             jurisdictions: jurisdictions,
@@ -135,7 +137,9 @@ const IllustrationCommentContainer = ({
             sankey: sankey,
             setSankey: setSankey,
             kpi: kpi,
-            setKpi: setKpi
+            setKpi: setKpi,
+            timeline: timeline,
+            setTimeline: setTimeline
         }
     ] 
 
@@ -289,6 +293,7 @@ const IllustrationCommentContainer = ({
                                 handleCommentBarOpen={handleCommentBarOpen}
                                 handleCustomersBarOpen={handleCustomersBarOpen}
                                 updateDashboardData={setDashboardData}
+                                updateDashboardTimelineData={setDashboardTimelineData}
                                 visualizerBarSize={visualizerBarSize} 
                                 lineGraph={lineGraph}
                                 setLineGraph={setLineGraph}

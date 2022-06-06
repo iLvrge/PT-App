@@ -100,9 +100,9 @@ const LineGraph = (props) => {
                 />
                 <svg style={{width:0,height:0,position:'absolute'}} aria-hidden="true" focusable="false">
                     <linearGradient id={gradientID} x1="0%" y1="0%" x2="0%" y2="100%" >
-                    <stop offset="0%" stop-color="#0355e9" />
-                    <stop offset="50%" stop-color="#1D2025" />
-                    <stop offset="100%" stop-color="#1D2025" />
+                    <stop offset="0%" stopColor="#0355e9" />
+                    <stop offset="50%" stopColor="#1D2025" />
+                    <stop offset="100%" stopColor="#1D2025" />
                     </linearGradient>
                 </svg>  
             </React.Fragment>

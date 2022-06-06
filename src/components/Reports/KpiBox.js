@@ -19,8 +19,8 @@ const KpiBox = (props) => {
             <Paper className={classes.tableContainer}>
                 <List>
                     {
-                        props.data.map( item => (
-                            <ListItem>
+                        props.data.map( (item, index) => (
+                            <ListItem key={index}>
                                 <ListItemText className={classes.itemContainer} disableTypography={true}>
                                     <Typography
                                         variant="body2" 

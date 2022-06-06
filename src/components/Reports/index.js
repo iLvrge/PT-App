@@ -470,10 +470,6 @@ const Reports = (props) => {
     );
 
     useEffect(() => {
-        console.log('timelineList', timelineList)
-    }, [timelineList])
-
-    useEffect(() => {
         if(ref.current !== null) {
             resizeObserver = new ResizeObserver(entries => {  
                 let smallScreen = false         
@@ -555,6 +551,9 @@ const Reports = (props) => {
         if(typeof props.dashboardData !== 'undefined' && props.dashboardData.length > 0) {
             setLoading(false)
             setCardList(props.dashboardData)
+        } else if(typeof props.dashboardTimelineData !== 'undefined' && props.dashboardTimelineData.length > 0) {
+            setLoading(false)
+            setTimelineList(props.dashboardTimelineData)
         } else {
             if(selectedCompanies.length > 0) {
                 if(props.timeline === true) {
@@ -574,8 +573,8 @@ const Reports = (props) => {
     }, [selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssets, assetTypeCompanies])
 
     
-    const findDashboardData = async(invention, jurisdictions, sankey, kpi) => {
-        if(loading === false && ((typeof invention !== 'undefined' && invention === false) ||  props.invention === false) && ((typeof jurisidictions !== 'undefined' && jurisdictions === false) || props.jurisdictions === false ) && ((typeof sankey !== 'undefined' && sankey === false) || props.sankey === false) ) {                    
+    const findDashboardData = async(invention, jurisdictions, sankey, kpi) => {        
+        if(loading === false && ((typeof invention !== 'undefined' && invention === false) ||  props.invention === false) && ((typeof jurisidictions !== 'undefined' && jurisdictions === false) || props.jurisdictions === false ) && ((typeof sankey !== 'undefined' && sankey === false) || props.sankey === false) ) { 
             const list = [];
             let totalRecords = 0;
             setLoading(true)
@@ -633,6 +632,9 @@ const Reports = (props) => {
                 }
             })
             setTimelineList(newTimeline)
+            if(typeof props.updateDashboardTimelineData !== 'undefined') {
+                props.updateDashboardTimelineData(newTimeline)
+            }
             setTimeLineLoading(false)
         })
         setLoading(false)   
@@ -667,6 +669,9 @@ const Reports = (props) => {
             }
         }
         setTimelineList(oldList)
+        if(typeof props.updateDashboardTimelineData !== 'undefined') {
+            props.updateDashboardTimelineData(oldList)
+        }        
     })
 
     const updateList = useCallback((requestData, type) => {  
@@ -887,15 +892,14 @@ const Reports = (props) => {
 
     const changeGraph = (flag) => {
         setIntial(false)
+        addCardList()
         props.setJurisdiction(false)
         props.setInvention(false)
         props.setSankey(false)
         props.setKpi(false)
         props.setTimeline(false)
         props.setLineGraph(flag)
-        if((props.lineGraph === false && flag === false) || (props.lineGraph === true && flag === true)) {
-            findDashboardData(false, false, false, false)
-        }
+        //findDashboardData(false, false, false, false)
     }
 
     const onHandleJurisdiction = () => {
