@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useCallback, useEffect, useRef, useState} from 'react'
 import { 
     useDispatch,
     useSelector 
@@ -12,8 +12,9 @@ import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import useStyles from './styles'
 import clsx from 'clsx'
 import { numberWithCommas, capitalize } from '../../utils/numbers'
-import { convertTabIdToAssetType } from '../../utils/assetTypes'
-import { SET_CUSTOMERS_NAME_COLLECTIONS_LOADING } from '../../actions/actionTypes'
+import { assetsTypesWithKey, convertTabIdToAssetType, oldConvertTabIdToAssetType } from '../../utils/assetTypes'
+import PatenTrackApi from '../../api/patenTrack2'
+import themeMode from '../../themes/themeMode'
 
 
 /**
@@ -32,6 +33,7 @@ const options = {
     verticalScroll: true,
     zoomFriction: 30,
     zoomMin: 1000 * 60 * 60 * 24 * 7, // 7 days
+    /* showTooltips: true, */
     /* zoomMax: 1000 * 60 * 60 * 24 * 30 * 3, */ // 3months
     /* cluster: {
     //   titleTemplate: 'Cluster containing {count} events.<br/> Zoom in to see the individual events.',
@@ -49,6 +51,8 @@ const options = {
     },
 }
 
+const TIME_INTERVAL = 1000
+var tootlTip = ''
 const TimelineChart = (props) => {
     const classes = useStyles()
     const timelineRef = useRef() //timeline Object ref
@@ -58,12 +62,174 @@ const TimelineChart = (props) => {
     const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(false)
     const [ timelineRawData, setTimelineRawData ] = useState([])
     const [ timelineItems, setTimelineItems ] = useState([])
-
+    const [ tooltipItem, setToolTipItem] = useState([])
+    const [ timeInterval, setTimeInterval] = useState(null)
+    const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
 
+
+
+    const onSelect = useCallback((properties) => {
+
+    })
+
+      // Custom ToolTip
+  
+  const showTooltip = (item, event) => {    
+    setTimeout(() => {
+      if(tootlTip === item.id) {
+        PatenTrackApi
+        .cancelTimelineItem()
+        PatenTrackApi
+        .getTimelineItemData(item.id)
+        .then( response => {
+          const { data } = response
+          if( data != null && ( data.assignor.length > 0 || data.assignee.length > 0 ) && tootlTip === data.assignment.rf_id) {
+            const executionDate = data.assignor.length > 0 ? data.assignor[0].exec_dt : ''
+            let transactionType = convertTabIdToAssetType(item.tab_id)
+            const findIndex = assetsTypesWithKey.findIndex( row => row.type == transactionType)
+
+            if(findIndex !== -1) {
+              transactionType = assetsTypesWithKey[findIndex].name
+            } else {
+              transactionType = capitalize(transactionType)
+            }
+            let image = '', color ='';
+            switch(parseInt(item.tab_id)) {
+              case 1:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/acquisition.png'
+                color = '#E60000'
+                break;
+              case 2:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png'
+                color = '#70A800'
+                break;
+              case 3:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licensein.png'
+                color = '#E69800'
+                break;
+              case 4:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licenseout.png'
+                color = '#E69800'
+                break;
+              case 5:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+                color = '#00a9e6'
+                break;
+              case 6:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png'
+                color = '#FFFFFF'
+                break;
+              case 7:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png'
+                color = '#FFFFFF'
+                break;
+              case 8:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/options.png'
+                color = '#000000'
+                break;
+              case 9:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/courtorder.png'
+                color = '#E60000'
+                break;
+              case 10:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png'
+                color = '#FFFFFF'
+                break;
+              case 11:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/release.png'
+                color = '#00a9e6'
+                break;
+              case 12:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+                color = '#00a9e6'
+                break;
+              case 13:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+                color = '#00a9e6'
+                break;
+              case 14:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png'
+                color = '#FFFFFF'
+                break;
+              case 14:
+              default:
+                image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png'
+                color = '#FFFFFF'
+                break;
+            }
+            const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.clientY}px;left:${event.clientX + 20 }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
+                                        <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
+                                        <div>
+                                          ${ executionDate != '' ? moment(executionDate).format('ll') : ''}
+                                        </div>
+                                        <div>
+                                          <h4>Assignors:</h4>
+                                          ${data.assignor.map(or => ( 
+                                            '<div>'+or.or_name+'</div>'
+                                          )).join('')}
+                                        </div>
+                                        <div>
+                                          <h4>Assignees:</h4>
+                                          ${data.assignee.map(ee => (
+                                            '<div>'+ee.ee_name+'</div>'
+                                          )).join('')}
+                                        </div>
+                                      </div>` 
+              resetTooltipContainer() 
+            if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
+              document.body.insertAdjacentHTML('beforeend',tootltipTemplate)
+              //timelineContainerRef.current.childNodes[0].insertAdjacentHTML('beforeend',tootltipTemplate)
+            }
+          } else {
+            resetTooltipContainer()
+          }
+        })
+      }                
+    }, TIME_INTERVAL) 
+} 
     useEffect(() => {
-        timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
-    }, [])
+        console.log(items)
+    }, [items])
+
+    /**
+   * on Itemover for the tooltip data
+   */
+
+  const onItemover = useCallback(({item, event}) => {
+    const overItem = timelineRef.current.itemsData.get(item)
+    if(overItem != null) {
+      onItemout()
+      tootlTip = overItem.rawData.id
+      showTooltip(overItem.rawData, event)
+    }
+  }, [ timelineItems, timeInterval ])
+
+  /**
+   * on onItemout for the remove tooltip
+   */
+
+  const onItemout = () => {
+    tootlTip = ''
+    PatenTrackApi.cancelTimelineItem()
+    resetTooltipContainer()
+    setToolTipItem([])
+    
+    /* clearInterval(timeInterval) */
+  }
+
+  const resetTooltipContainer = () => {  
+    const findOldToolTip = document.getElementsByClassName('custom_tooltip')
+    if( findOldToolTip.length > 0 ) {
+      findOldToolTip[0].parentNode.removeChild(findOldToolTip[0])      
+    } 
+  }
+
+
+  useEffect(() => {
+    timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
+}, [])
+
 
     /**
    * Intial timline items dataset and ref setup
@@ -71,9 +237,15 @@ const TimelineChart = (props) => {
     useEffect(() => {
         items.current = new DataSet()
         timelineRef.current.setOptions(options) 
+        timelineRef.current.on('select', onSelect)
+        timelineRef.current.on('itemover', onItemover)
+        timelineRef.current.on('itemout', onItemout)
         return () => {
+            timelineRef.current.off('select', onSelect)
+            timelineRef.current.off('itemover', onItemover) 
+            timelineRef.current.off('itemout', onItemout)
         } 
-    }, [ ]) 
+    }, [ onSelect, onItemover]) 
 
     useEffect(() => {
         let {list} = props.card
@@ -115,9 +287,9 @@ const TimelineChart = (props) => {
             showTooltips: false
         }
 
-        if([5,12].includes(parseInt(assetsCustomer.tab_id))){
+        if([5,12].includes(parseInt(assetsCustomer.tab_id))){            
             item.type = 'range';
-            item['end'] = new Date(assetsCustomer.release_exec_dt);
+            item['end'] = assetsCustomer.release_exec_dt != null ? new Date(assetsCustomer.release_exec_dt) : new Date();
         }
         return item
     }
@@ -136,42 +308,50 @@ const TimelineChart = (props) => {
     const convertedItems = Object.values(clusteredItems).sort((a, b) => (new Date(a.start) > new Date(b.start)))  
     
     setTimelineItems(convertedItems)
-    console.log('convertedItems', convertedItems)
     items.current = new DataSet()
     let start =  new moment(), end = new moment().add(1, 'year')   
     if(timelineRef.current !== null) {
         timelineRef.current.destroy()
         timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
+        timelineRef.current.on('select', onSelect)
+        timelineRef.current.on('itemover', onItemover)
+        timelineRef.current.on('itemout', onItemout)
     } 
     
     if (convertedItems.length > 0) {
         start = new moment(convertedItems[0].start).subtract(1, 'week')
-        items.current.add(convertedItems)      
+        items.current.add(convertedItems)   
+        console.log('items.current', items.current)   
     }
     timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'year')})
     timelineRef.current.setItems(items.current)   
     }, [ timelineRawData ])
-    console.log('timelineContainerRef', timelineContainerRef)
+
+    
+
+  
     return (
-        <div className={classes.timelineContainer}>
-            <div
-                style={{ 
-                    filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
-                }}  
-                ref={timelineContainerRef}
-                className={clsx(classes.timeline, 'timeline')}
-            />
-            {
-            isLoadingTimelineData &&
-                <CircularProgress size={15} color={'secondary'} className={classes.timelineProcessingIndicator} />
-            }
-            { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> }
-            <div>
-                <Typography variant="h6" component="div" align="center" className={classes.border}>
+        <React.Fragment>
+            <div className={classes.timelineContainer}>
+                <div
+                    style={{ 
+                        filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
+                    }}  
+                    ref={timelineContainerRef}
+                    className={clsx(classes.timeline, 'timeline')}
+                />
+                {
+                isLoadingTimelineData &&
+                    <CircularProgress size={15} color={'secondary'} className={classes.timelineProcessingIndicator} />
+                }
+                { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> }            
+            </div>
+            <div className={classes.timelineHeading}>
+                <Typography variant="h6" component="div" align="center" className={clsx(classes.border, classes.border1)}>
                     {props.card.title}
                 </Typography>
             </div>
-        </div>
+        </React.Fragment>
     )
 }
 

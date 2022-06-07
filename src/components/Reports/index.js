@@ -1039,7 +1039,7 @@ const Reports = (props) => {
                         }
                         <AddToolTip
                             tooltip={'Key Performance Indicators such as the number of patents owned by the company.'}
-                            placement='right'
+                            placement='bottom'
                         >
                             <IconButton 
                                 size="small"
@@ -1051,7 +1051,7 @@ const Reports = (props) => {
                         </AddToolTip>
                         <AddToolTip
                             tooltip={'Matters that require attention such as patents with defective ownership.'}
-                            placement='right'
+                            placement='bottom'
                         >
                             <IconButton 
                                 size="small"
@@ -1063,7 +1063,7 @@ const Reports = (props) => {
                         </AddToolTip>
                         <AddToolTip
                             tooltip={'Changes in matters requiring attention along a timeline.'}
-                            placement='right'
+                            placement='bottom'
                         >
                             <IconButton 
                                 size="small"
@@ -1075,7 +1075,7 @@ const Reports = (props) => {
                         </AddToolTip>
                         <AddToolTip
                             tooltip={'Transactional activities such as acquisition, divestitures, collateralization and releases.'}
-                            placement='right'
+                            placement='bottom'
                         >
                             <IconButton 
                                 size="small"
@@ -1087,7 +1087,7 @@ const Reports = (props) => {
                         </AddToolTip>
                         <AddToolTip
                             tooltip={'Technologies covered by the patent portfolio as they evolved.'}
-                            placement='right'
+                            placement='bottom'
                         >
                             <IconButton 
                                 size="small"
@@ -1099,7 +1099,7 @@ const Reports = (props) => {
                         </AddToolTip>
                         <AddToolTip
                             tooltip={'The countries in which the company has filed patents.'}
-                            placement='right'
+                            placement='bottom'
                         >
                             <IconButton 
                                 size="small"
@@ -1111,7 +1111,7 @@ const Reports = (props) => {
                         </AddToolTip>  
                         <AddToolTip
                             tooltip={'Sources from which patents were obtained, and divestitures.'}
-                            placement='right'
+                            placement='bottom'
                         >
                             <IconButton 
                                 size="small"
@@ -1125,7 +1125,7 @@ const Reports = (props) => {
                         </AddToolTip> 
                         <AddToolTip
                             tooltip={'Big screen view.'}
-                            placement='right'
+                            placement='bottom'
                         >
                             <IconButton size="small"
                                 onClick={() => {props.handleFullScreen(!props.fullScreen)}}

@@ -4,11 +4,12 @@ import Chart from './Chart'
 import useStyles from './styles'
 import KpiBox from './KpiBox'
 import TimelineChart from './TimelineChart'
+import clsx from 'clsx'
 
 const CardElement = (props) => {
     const classes = useStyles();
     return (
-        <Card variant="outlined" className={classes.card} square={true}>
+        <Card variant="outlined" className={clsx(classes.card, {[classes.alignTop]: typeof props.timeline !== 'undefined' && props.timeline === true ? true : false})} square={true}>
             <CardContent>  
                 {
                     typeof props.timeline !== 'undefined' && props.timeline === true
