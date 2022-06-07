@@ -7,6 +7,7 @@ import { IconButton, Button, Typography, Tooltip, Zoom, Paper, List, ListItem, L
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import clsx from 'clsx'
 import { numberWithCommas } from '../../utils/numbers';
+import AddToolTip from './AddToolTip';
 
 
 const KpiBox = (props) => {
@@ -82,19 +83,16 @@ const KpiBox = (props) => {
                         }
                     </Typography>
             }           
-            <Tooltip 
-                title="Tooltip" 
-                placement="right"
-                enterDelay={0}
-                TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
-                className={clsx(classes.tooltip/* , {[classes.mobileTooltip]: typeof isMobile !== 'undefined' && isMobile === true} */)}  
+            <AddToolTip
+                tooltip={props.card.tooltip}
+                placement='top'
             >
                 <div>
                     <Typography variant="h6" component="div" align="center" className={classes.border}>
                         {props.card.title}
                     </Typography>
                 </div>
-            </Tooltip>              
+            </AddToolTip>          
         </div>
     ) 
 }

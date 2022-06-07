@@ -266,8 +266,14 @@ export default makeStyles(theme => ({
             borderLeftColor: theme.palette.divider,
             borderRightColor: theme.palette.divider,
         },
+        '& .vis-panel.vis-center':{
+          borderBottom: 0
+        },
         '& .vis-panel.vis-bottom':{
-            visibility: 'hidden'
+            visibility: 'hidden',
+            '& .vis-time-axis':{
+              height: '1px !important'
+            }
         },
         '&.vis-panel .vis-shadow':{
             /*height: 0*/

@@ -556,21 +556,16 @@ const Reports = (props) => {
             }
         }
     }, [props.lineGraph, props.kpi, props.timeline])
-    
-    useEffect(() => {
-        console.log('timelineList', timelineList)
-    }, [timelineList])
+   
     /**
      * Get Dashboard data
      */
     useEffect(() => {
-        console.log('FULLSCREEN', props.dashboardTimelineData)
         if(typeof props.dashboardData !== 'undefined' && props.dashboardData.length > 0) {
             setLoading(false)
             setCardList(props.dashboardData)
             if(typeof props.dashboardTimelineData !== 'undefined' && props.dashboardTimelineData.length > 0) {
-                setLoading(false)       
-                console.log('SET TIMELINE DATA')     
+                setLoading(false)           
                 setTimelineList(props.dashboardTimelineData)
             }
         }  else {
