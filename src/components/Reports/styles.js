@@ -282,7 +282,18 @@ export default makeStyles(theme => ({
             padding: '1px 3px'
         },
         '& .vis-item.vis-range':{
-            backgroundColor: '#FFAA00 !important'
+          backgroundColor: '#FFAA00 !important',
+          '& .vis-item-overflow':{
+            position: 'unset',
+            minHeight: 28,
+            '& .vis-item-content':{
+              width: 'auto',
+              position: 'absolute',
+              '& span':{
+                whiteSpace: 'nowrap'
+              }
+            }
+          } 
         }
     },
     timelineHeading: {

@@ -247,6 +247,34 @@ export default makeStyles(theme => ({
       color: pink[500],
       fontWeight: 'bold',
     },
+    '& .vis-item.vis-range.asset-type-borrowing':{
+      backgroundColor: '#FFAA00 !important',
+      '& .vis-item-overflow':{
+        position: 'unset',
+        minHeight: 28,
+        '& .vis-item-content':{
+          width: 'auto',
+          position: 'absolute',
+          '& span':{
+            whiteSpace: 'nowrap'
+          }
+        }
+      } 
+    },
+    '& .vis-item.vis-range.asset-type-lending':{
+      backgroundColor: '#70A800 !important',
+      '& .vis-item-overflow':{
+        position: 'unset',
+        minHeight: 28,
+        '& .vis-item-content':{
+          width: 'auto',
+          position: 'absolute',
+          '& span':{
+            whiteSpace: 'nowrap'
+          }
+        }
+      }      
+    },
     '& .vis-top':{
       '& .vis-foreground':{
         /* top: '-15px',

@@ -518,6 +518,7 @@ const GlobalLayout = (props) => {
         if(event.key === 'ArrowDown' || event.key === 'ArrowUp' ) {
             let tableContainer = document.getElementById('assets_type_assignment_all_assets'), findActiveRow = null
             if(tableContainer !== null) {
+                console.log(12345678)
                 /* findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightWithCol.Mui-selected') */
                 findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightRow.Mui-selected')
                 if(findActiveRow === null) {
@@ -525,11 +526,11 @@ const GlobalLayout = (props) => {
                         findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightRow.Mui-selected')
                     } else {
                         tableContainer = document.getElementById('assets_assignments')
-                        if(tableContainer !== null) {
+                        if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
                             findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
                         } else {
                             tableContainer = document.getElementById('assets_type_companies')
-                            if(tableContainer !== null) {
+                            if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
                                 findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
                             } else {
                                 tableContainer = document.getElementById('main_companies')
@@ -542,11 +543,11 @@ const GlobalLayout = (props) => {
                 }
             } else {
                 tableContainer = document.getElementById('assets_assignments')
-                if(tableContainer !== null) {
+                if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
                     findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
                 } else {
                     tableContainer = document.getElementById('assets_type_companies')
-                    if(tableContainer !== null) {
+                    if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
                         findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
                     } else {
                         tableContainer = document.getElementById('main_companies')
