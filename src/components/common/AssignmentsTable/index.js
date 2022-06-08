@@ -151,9 +151,11 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
       minWidth: 25,
       label: "",
       headingIcon: 'transactions',
-      dataKey: "rf_id",
-      role: "arrow",      
+      dataKey: "rf_id", 
       disableSort: true,
+      role: "arrow",
+      enable: false,
+      show: false
     },
     {
       width: 130,

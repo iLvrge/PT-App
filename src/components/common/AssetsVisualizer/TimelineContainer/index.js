@@ -144,7 +144,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     const assetType = Number.isInteger(assetsCustomer.tab_id) ? convertTabIdToAssetType(assetsCustomer.tab_id) : 'default'
     const companyName =  selectedWithName.filter( company => assetsCustomer.company == company.id ? company.name : '')
     const customerFirstName = assetsCustomer.tab_id == 10 ? assetsCustomer.customerName.split(' ')[0] : assetsCustomer.customerName
-    return ({
+    const item = {
       
       type: 'point',
       start: new Date(assetsCustomer.exec_dt),
@@ -163,7 +163,12 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
           <span><strong>Number of Assets:</strong> ${assetsCustomer.totalAssets}</span>
         </div>
       `, */
-    })
+    }
+    if([5,12].includes(parseInt(assetsCustomer.tab_id))){            
+      item.type = 'range';
+      item['end'] = assetsCustomer.release_exec_dt != null ? new Date(assetsCustomer.release_exec_dt) : new Date();
+    }
+    return item
   }
 
   // Custom ToolTip
@@ -366,6 +371,8 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     setIsLoadingTimelineData(false)
   }, 1000), [ timelineItems ])
 
+  
+
   useEffect(() => {
     if (!selectedItem && timelineRef.current) {
       timelineRef.current.setSelection([])
@@ -419,6 +426,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
               if( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
                 //setIsLoadingTimelineData(true)
                 const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
+                
                 //setIsLoadingTimelineData(false)
                 setTimelineRawData(data.list)
                 if(typeof updateTimelineRawData !== 'undefined') {

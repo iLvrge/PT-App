@@ -321,7 +321,7 @@ const TimelineChart = (props) => {
         start = new moment(convertedItems[0].start).subtract(1, 'week')
         items.current.add(convertedItems)   
     }
-    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(1, 'week')})
+    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(2, 'week')})
     timelineRef.current.setItems(items.current)   
     }, [ timelineRawData ])
 
