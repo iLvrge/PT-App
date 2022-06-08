@@ -88,7 +88,8 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
     const profile = useSelector(store => (store.patenTrack.profile))
-    const tabs = [1,2,6,7,3,4,5,11,12,13,8,9,15,14,10,16] 
+    const tabs = [1,2,6,7,3,4,81,8,9,15,14,10,16] 
+    /* const tabs = [1,2,6,7,3,4,5,11,12,13,8,9,15,14,10,16]  */
     /*const tabs = [1,2,6,7,3,4,5,11,12,13,8,9,15,14]*/
 
     const COLUMNS = [        
@@ -181,6 +182,7 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
                 case 4:
                     image =  'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licenseout.svg'
                     break;
+                case 81:
                 case 5:
                     image =  'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/secure.svg'
                     break;
@@ -249,9 +251,9 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
                     dispatch( setAssetTypeCompanies({ list: [], total_records: 0 }) )
                     dispatch( setAssetTypeInventor({ list: [], total_records: 0 }) )
                     dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
-                    setSelectItems([5])
-                    setSelectedRow([5])
-                    dispatch( setAssetTypesSelect([5]) )
+                    setSelectItems([5, 81])
+                    setSelectedRow([5, 81])
+                    dispatch( setAssetTypesSelect([5, 81]) )
                 } else {
                     const getUserSelection = async () => {
                         const { data } = await PatenTrackApi.getUserActivitySelection()

@@ -192,7 +192,7 @@ const GlobalLayout = (props) => {
     useEffect(() => {
         if(profile?.user && profile.user?.organisation) {
             if(profile.user.organisation.organisation_type == 'Bank' && props.type != 9) {
-                dispatch( setAssetTypesSelect([5]) ) // always select by default lending activity
+                dispatch( setAssetTypesSelect([5, 81]) ) // always select by default lending activity
                 setOpenBar( false ) //company
                 setTypeOpenBar( false ) //activites
                 setCustomerOpenBar( false ) //assets
