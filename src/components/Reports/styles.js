@@ -254,7 +254,7 @@ export default makeStyles(theme => ({
         marginLeft: 'auto',
         marginRight: 'auto',
         width: '100%',
-        height: 150,
+        height: '85%',
         alignItems: 'center',
         '& .vis-time-axis .vis-text, .vis-item, .vis-y-axis':{
             color: theme.palette.text.primary,

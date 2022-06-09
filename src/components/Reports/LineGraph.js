@@ -65,7 +65,6 @@ const LineGraph = (props) => {
             },
         }, 
     });
-    console.log(props.data)
     const DisplayChart = () => {
         if(typeof props.data == 'undefined' || props.data.length === 0) return null
         return (

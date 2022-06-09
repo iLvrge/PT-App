@@ -39,7 +39,7 @@ const KpiBox = (props) => {
     }
 
     return (
-        <div className={classes.chartContainer}>
+        <div className={clsx(classes.chartContainer, classes.widthResponsive)}>
             <Button 
                 size="small" 
                 variant="outlined" 

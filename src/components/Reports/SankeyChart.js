@@ -68,10 +68,10 @@ const SankeyChart = (props) => {
         <Paper sx={{p: 2, overflow: 'auto'}} className={clsx(classes.container, classes.containerTop)} square>
             {
                 !loading && !loadingAssignor && data.length === 0 && assignorData.length === 0 && (
-                    <TitleBar title="The company had no acquistions and divestitures of patent assets filled after 1997:" enablePadding={false}/>
+                    <TitleBar title="The company had no acquistions and divestitures of patent assets filled after 1997:" enablePadding={false} underline={false}/>
                 )
             }            
-            {
+            {    
                 !loading
                 ?
                     data.length > 0 && (
