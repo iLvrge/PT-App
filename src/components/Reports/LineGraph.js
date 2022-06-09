@@ -1,3 +1,4 @@
+import { data } from 'autoprefixer';
 import React, {useState, useRef} from 'react'
 import { Chart } from "react-google-charts";
 import { useSelector } from 'react-redux'
@@ -42,8 +43,8 @@ const LineGraph = (props) => {
                 color:'transparent' 
             },
         },
+        
         vAxis: {
-            minValue: 0,
             baselineColor: isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider,
             format: '0',
             textStyle: {
@@ -64,6 +65,7 @@ const LineGraph = (props) => {
             },
         }, 
     });
+    console.log(props.data)
     const DisplayChart = () => {
         if(typeof props.data == 'undefined' || props.data.length === 0) return null
         return (
@@ -71,7 +73,7 @@ const LineGraph = (props) => {
                 <Chart
                     width='100%'
                     height={height}
-                    chartType="AreaChart"
+                    chartType="SteppedAreaChart"
                     loader={<div>Loading...</div>}
                     data={props.data}
                     options={option}
