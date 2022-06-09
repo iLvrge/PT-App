@@ -19,7 +19,7 @@ const Chart = (props) => {
     }
     
     return (
-        <div className={classes.chartContainer}>
+        <div className={clsx(classes.chartContainer, {[classes.widthResponsive]: props.lineGraph})}>
             <Button 
                 size="small" 
                 variant="outlined" 
@@ -68,7 +68,7 @@ const Chart = (props) => {
             }
             <AddToolTip
                 tooltip={props.card.tooltip}
-                placement={'top'}
+                placement={'bottom'}
             >
                 <div>
                     <Typography variant="h6" component="div" align="center" className={classes.border}>

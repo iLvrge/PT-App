@@ -940,14 +940,13 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     <React.Fragment>  
                         {
                             typeof titleBar !== 'undefined' && titleBar === true && (
-                                <TitleBar title={`Technologies and filling years of all non-expired patents and applications filed after 1997:`} enablePadding={false}/>   
+                                <TitleBar title={`Technologies and filling years of all non-expired patents and applications filed after 1997:`} enablePadding={false} underline={false}/>   
                             )
                         } 
                         {
                             selectedTab === 0 && (
                                 <React.Fragment>  
-                                    <TitleBar title={`Hover over the bars for details.`} enablePadding={typeof titleBar !== 'undefined' ? false : true} underline={false} typography={true}/> 
-                                    <TitleBar title={`Select a bar to see the list of the underlying patents, and to act upon time. Click the icon menu to filter the result.`} enablePadding={typeof titleBar !== 'undefined' ? false : true} underline={false} typography={true}/>   
+                                    <TitleBar title={`Hover over the bars for details. Select a bar to see the list of the underlying patents, and to act upon time. Click the icon menu to filter the result.`} enablePadding={typeof titleBar !== 'undefined' ? false : true} underline={false} typography={true}/>
                                 </React.Fragment>
                             )
                         } 

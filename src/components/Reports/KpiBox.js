@@ -85,7 +85,7 @@ const KpiBox = (props) => {
             }           
             <AddToolTip
                 tooltip={props.card.tooltip}
-                placement='top'
+                placement='bottom'
             >
                 <div>
                     <Typography variant="h6" component="div" align="center" className={classes.border}>

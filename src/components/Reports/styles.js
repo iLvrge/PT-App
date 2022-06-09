@@ -232,15 +232,20 @@ export default makeStyles(theme => ({
         },
     },
     chartContainer: {
-        position: 'relative',
-        display: 'flex',
-        justifyContent: 'center',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        width: 190,
-        maxWidth: 190,
-        height: 165,
-        alignItems: 'center'
+      position: 'relative',
+      display: 'flex',
+      justifyContent: 'center',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: 190,
+      maxWidth: 190,
+      height: 165,
+      alignItems: 'center'
+    },
+    widthResponsive:{
+      width: '92%',
+      maxWidth: '92%',
+      height: '92%'
     },
     timelineContainer: {
         position: 'relative',
@@ -339,11 +344,11 @@ export default makeStyles(theme => ({
         } 
     },
     graphContainer: {
-        flex: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 100
+      flex: 1,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '67%'
     },   
     active: {
         color: pink[500]
