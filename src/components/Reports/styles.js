@@ -348,7 +348,8 @@ export default makeStyles(theme => ({
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      height: '67%'
+      height: '70%',
+      overflow: 'hidden'
     },   
     active: {
         color: pink[500]

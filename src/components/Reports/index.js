@@ -696,7 +696,7 @@ const Reports = (props) => {
                 if( requestData !== null && requestData.data != null && requestData.data.length > 0) {
                     const list = [['Year', 'Assets']]
                     requestData.data.forEach( item => {
-                        list.push([item.name, parseInt(item.number)])
+                        list.push([typeof item.name !== 'undefined' ? item.name : item.year, parseInt(item.number)])
                     })                    
                     oldList[findIndex].list = list
                     oldList[findIndex].patent = requestData.data[0].patent

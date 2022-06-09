@@ -42,7 +42,7 @@ const Chart = (props) => {
                 disabled={props.card?.number != '0' ? false : true}
             >
                 <AutoAwesomeIcon />
-            </IconButton>
+            </IconButton> 
             {
                 props.lineGraph === true
                 ?
@@ -75,7 +75,7 @@ const Chart = (props) => {
                         {props.card.title}
                     </Typography>
                 </div>
-            </AddToolTip>            
+            </AddToolTip>     
         </div>
     )
 }

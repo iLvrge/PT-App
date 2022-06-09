@@ -15,12 +15,11 @@ const LineGraph = (props) => {
         backgroundColor: 'transparent',
         chartArea: {
             width: '90%',
-            height: '81%',
+            height: '58%',
             left: 40,
-            top: 15,
+            top: 20,
         },
         tooltip: { textStyle: { fontName: 'Roboto', fontSize: 12 } },
-        vAxis: {minValue: 0},
         colors: ['#1565c0'],
         hAxis: {
             baselineColor: isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider,
@@ -44,6 +43,7 @@ const LineGraph = (props) => {
             },
         },
         vAxis: {
+            minValue: 0,
             baselineColor: isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider,
             format: '0',
             textStyle: {
@@ -57,21 +57,19 @@ const LineGraph = (props) => {
                 fontFamily: 'Roboto'
             },
             gridlines: {
-                /* color: isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider, */
                 color: 'transparent',   
             },
             minorGridlines:{
                 color:'transparent' 
             },
-        },
+        }, 
     });
-
     const DisplayChart = () => {
         if(typeof props.data == 'undefined' || props.data.length === 0) return null
         return (
             <React.Fragment>
                 <Chart
-                    width={'100%'}
+                    width='100%'
                     height={height}
                     chartType="AreaChart"
                     loader={<div>Loading...</div>}
@@ -100,9 +98,9 @@ const LineGraph = (props) => {
                 />
                 <svg style={{width:0,height:0,position:'absolute'}} aria-hidden="true" focusable="false">
                     <linearGradient id={gradientID} x1="0%" y1="0%" x2="0%" y2="100%" >
-                    <stop offset="0%" stopColor="#0355e9" />
-                    <stop offset="50%" stopColor="#1D2025" />
-                    <stop offset="100%" stopColor="#1D2025" />
+                        <stop offset="0%" stopColor="#0355e9" />
+                        <stop offset="50%" stopColor="#1D2025" />
+                        <stop offset="100%" stopColor="#1D2025" />
                     </linearGradient>
                 </svg>  
             </React.Fragment>
