@@ -237,9 +237,9 @@ export default makeStyles(theme => ({
       justifyContent: 'center',
       marginLeft: 'auto',
       marginRight: 'auto',
-      width: 190,
-      maxWidth: 190,
-      height: 165,
+      width: '85%',
+      maxWidth: '85%',
+      height: '92%',
       alignItems: 'center'
     },
     widthResponsive:{
