@@ -67,12 +67,9 @@ const TimelineChart = (props) => {
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
 
-
-
     const onSelect = useCallback((properties) => {
 
     })
-
       // Custom ToolTip
   
     const showTooltip = (item, event) => {    
@@ -228,7 +225,6 @@ const TimelineChart = (props) => {
         timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
     }, [])
 
-
     /**
      * Intial timline items dataset and ref setup
      */
@@ -279,7 +275,6 @@ const TimelineChart = (props) => {
             assetType,
             companyName,
             rawData: assetsCustomer,
-            /* group: assetsCustomer.group, */
             className: `asset-type-${assetType}`,
             collection: [ { id: assetsCustomer.id, totalAssets: assetsCustomer.totalAssets } ],
             showTooltips: false
@@ -324,9 +319,6 @@ const TimelineChart = (props) => {
     timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(2, 'week')})
     timelineRef.current.setItems(items.current)   
     }, [ timelineRawData ])
-
-    
-
   
     return (
         <React.Fragment>

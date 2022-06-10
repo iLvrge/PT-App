@@ -283,7 +283,7 @@ export default makeStyles(theme => ({
       '& .vis-dot':{ 
         backgroundColor: 'inherit',
         borderColor: 'inherit',
-        width: 17,
+        width: 17,  
         height: 17, 
         top: '7px !important',
         left: -5,
