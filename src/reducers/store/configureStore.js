@@ -7,7 +7,7 @@ import rootReducer from '../index'
 import jwt_decode from 'jwt-decode'
 import { loginSuccess, getCookie } from '../../actions/authActions'
 import { setSlackAuthToken, getSlackProfile, setAuthenticateAuthToken, fetchParentCompanies} from '../../actions/patentTrackActions2'
-import { getProfile } from '../../actions/patentTrackActions'
+import { getProfile } from '../../actions/patenTrackActions'
 
 import { setTokenStorage, getTokenStorage } from '../../utils/tokenStorage'
 
