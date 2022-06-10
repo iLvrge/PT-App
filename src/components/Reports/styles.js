@@ -248,58 +248,102 @@ export default makeStyles(theme => ({
       height: '92%'
     },
     timelineContainer: {
-        position: 'relative',
-        display: 'flex',
-        justifyContent: 'center',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        width: '100%',
-        height: '85%',
-        alignItems: 'center',
-        '& .vis-time-axis .vis-text, .vis-item, .vis-y-axis':{
-            color: theme.palette.text.primary,
-        },
-        '& .vis-timeline':{
-            border: 0
-        },
-        '&.vis-panel.vis-center':{
-            border: `1px solid ${theme.palette.divider}`
-        },
-        '& .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom': {
-            borderBottomColor: theme.palette.divider,
-            borderTopColor: theme.palette.divider,
-            borderLeftColor: theme.palette.divider,
-            borderRightColor: theme.palette.divider,
-        },
-        '& .vis-panel.vis-center':{
-          borderBottom: 0
-        },
-        '& .vis-panel.vis-bottom':{
-            visibility: 'hidden',
-            '& .vis-time-axis':{
-              height: '1px !important'
-            }
-        },
-        '&.vis-panel .vis-shadow':{
-            /*height: 0*/
-        },
-        '& .vis-time-axis .vis-text':{
-            padding: '1px 3px'
-        },
-        '& .vis-item.vis-range':{
-          backgroundColor: '#FFAA00 !important',
-          '& .vis-item-overflow':{
-            position: 'unset',
-            minHeight: 28,
-            '& .vis-item-content':{
-              width: 'auto',
-              position: 'absolute',
-              '& span':{
-                whiteSpace: 'nowrap'
-              }
-            }
-          } 
+      position: 'relative',
+      display: 'flex',
+      justifyContent: 'center',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: '100%',
+      height: '85%',
+      alignItems: 'center',
+      '& .vis-time-axis .vis-text, .vis-item, .vis-y-axis':{
+        color: theme.palette.text.primary,
+      },
+      '& .vis-timeline':{
+        border: 0
+      },
+      '&.vis-panel.vis-center':{
+        border: `1px solid ${theme.palette.divider}`
+      },
+      '& .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom': {
+        borderBottomColor: theme.palette.divider,
+        borderTopColor: theme.palette.divider,
+        borderLeftColor: theme.palette.divider,
+        borderRightColor: theme.palette.divider,
+      },
+      '& .vis-panel.vis-center':{
+        borderBottom: 0
+      },
+      '& .vis-panel.vis-bottom':{
+        visibility: 'hidden',
+        '& .vis-time-axis':{
+          height: '1px !important'
         }
+      },
+      '& .vis-dot':{ 
+        backgroundColor: 'inherit',
+        borderColor: 'inherit',
+        width: 17,
+        height: 17, 
+        top: '7px !important',
+        left: -5,
+        border: 0,       
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 15
+      },
+      '& .vis-dot.asset-type-acquisitions,  .cluster-acquisitions': {
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/acquisition.svg)',
+      },
+      '& .vis-dot.asset-type-sales, .cluster-sales': {
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/sales.svg)',
+      },
+      '& .vis-dot.asset-type-licenseIn, .cluster-licenseIn': {
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licensein.svg)',
+      },
+      '& .vis-dot.asset-type-licenseOut, .cluster-licenseOut': {
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licenseout.svg)',
+      },
+      '& .vis-dot.asset-type-mergersIn, .cluster-mergersIn': { 
+        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png)',
+      },
+      '& .vis-dot.asset-type-mergersOut, .cluster-mergersOut': {
+        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png)',
+      },
+      '& .vis-dot.asset-type-correct, .cluster-correct': {
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/correction.svg)',
+      },
+      '& .vis-dot.asset-type-options, .cluster-options': {
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/options.svg)',
+      },
+      '& .vis-dot.asset-type-courtOrders, .cluster-courtOrders': {
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/courtorder.svg)',
+      },
+      '& .vis-dot.asset-type-employees, .cluster-employees': {
+        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png)',
+      },
+      '& .vis-dot.asset-type-other, .cluster-other': {
+        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png)', 
+      },
+      '&.vis-panel .vis-shadow':{
+        /*height: 0*/
+      },
+      '& .vis-time-axis .vis-text':{
+        padding: '1px 3px'
+      },
+      '& .vis-item.vis-range':{
+        backgroundColor: '#FFAA00 !important',
+        '& .vis-item-overflow':{
+          position: 'unset',
+          minHeight: 28,
+          '& .vis-item-content':{
+            width: 'auto',
+            position: 'absolute',
+            '& span':{
+              whiteSpace: 'nowrap'
+            }
+          }
+        } 
+      }
     },
     timelineHeading: {
       display: 'flex',

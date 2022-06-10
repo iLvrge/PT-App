@@ -66,16 +66,17 @@ const Chart = (props) => {
                         formatTextValue={displayNumber}
                     />    
             }
-            <AddToolTip
-                tooltip={props.card.tooltip}
-                placement={'bottom'}
-            >
-                <div>
+            
+            <div>
+                <AddToolTip
+                    tooltip={props.card.tooltip}
+                    placement={'bottom'}
+                >
                     <Typography variant="h6" component="div" align="center" className={classes.border}>
                         {props.card.title}
                     </Typography>
-                </div>
-            </AddToolTip>     
+                </AddToolTip>  
+            </div>   
         </div>
     )
 }

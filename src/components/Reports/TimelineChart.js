@@ -318,7 +318,7 @@ const TimelineChart = (props) => {
     } 
     
     if (convertedItems.length > 0) {
-        start = new moment(convertedItems[0].start).subtract(1, 'week')
+        start = props.type === 5 ? new moment(convertedItems[0].start).subtract(1, 'week') : new moment(convertedItems[convertedItems.length - 1].start).subtract(1, 'week')
         items.current.add(convertedItems)   
     }
     timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(2, 'week')})
