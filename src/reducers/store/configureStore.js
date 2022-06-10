@@ -6,7 +6,8 @@ import rootReducer from '../index'
 
 import jwt_decode from 'jwt-decode'
 import { loginSuccess, getCookie } from '../../actions/authActions'
-import { setSlackAuthToken, getSlackProfile, setAuthenticateAuthToken } from '../../actions/patentTrackActions2'
+import { setSlackAuthToken, getSlackProfile, setAuthenticateAuthToken, fetchParentCompanies} from '../../actions/patentTrackActions2'
+import { getProfile } from '../../actions/patentTrackActions'
 
 import { setTokenStorage, getTokenStorage } from '../../utils/tokenStorage'
 
@@ -28,7 +29,12 @@ if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_AP
             localStorage.setItem('auth_signature', data.accessToken)
             store.dispatch(setAuthenticateAuthToken(data.accessToken))
             store.dispatch(loginSuccess(decoded_token))
-    
+            if(process.env.REACT_APP_ENVIROMENT_MODE !=  'PRO') {
+              store.dispatch(getProfile)
+            }
+            if(process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
+              store.dispatch(fetchParentCompanies(0, 'original_name', 'ASC'))
+            }
             let slackToken = null
             let slack_auth_token_info = getCookie('slack_auth_token_info')
             if( slack_auth_token_info != null ) {
