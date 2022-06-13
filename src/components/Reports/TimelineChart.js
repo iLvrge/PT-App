@@ -15,6 +15,7 @@ import { numberWithCommas, capitalize } from '../../utils/numbers'
 import { assetsTypesWithKey, convertTabIdToAssetType, oldConvertTabIdToAssetType } from '../../utils/assetTypes'
 import PatenTrackApi from '../../api/patenTrack2'
 import themeMode from '../../themes/themeMode'
+import PopperTooltip from '../PopperTooltip'
 
 
 /**
@@ -64,6 +65,8 @@ const TimelineChart = (props) => {
     const [ timelineItems, setTimelineItems ] = useState([])
     const [ tooltipItem, setToolTipItem] = useState([])
     const [ timeInterval, setTimeInterval] = useState(null)
+    const [ toolbarElement, setToolbarElement] = useState('')
+    const [ popperToolbar, setPopperToolbar] = useState(false)
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
 
@@ -173,6 +176,8 @@ const TimelineChart = (props) => {
                                             )).join('')}
                                             </div>
                                         </div>` 
+                /* setToolbarElement(tootltipTemplate)
+                setPopperToolbar(true) */
                 resetTooltipContainer() 
                 if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
                 document.body.insertAdjacentHTML('beforeend',tootltipTemplate)
@@ -341,6 +346,14 @@ const TimelineChart = (props) => {
                     {props.card.title}
                 </Typography>
             </div>
+            {
+                popperToolbar === true
+                ?
+                    <PopperTooltip tooltip={toolbarElement} />
+                :
+                    ''
+
+            }
         </React.Fragment>
     )
 }
