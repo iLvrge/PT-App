@@ -171,14 +171,23 @@ export default makeStyles(theme => ({
         } */
     },    
     tooltip:{
-        fontSize: '1rem'
+      fontSize: '1rem',
+      '&.3':{
+        maxWidth: 260
+      },
+      '&.4':{
+        maxWidth: 290
+      },
+      '&.6':{
+        maxWidth: 290
+      }
     },
     mobileTooltip: {
-        flex: '1 1 100%',
-        fontSize: '20px !important'
+      flex: '1 1 100%',
+      fontSize: '20px !important'
     },
     active: {
-        color: pink[500]
+      color: pink[500]
     },
     list: {
         height: 'calc(100% - 47px)',

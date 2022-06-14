@@ -391,36 +391,42 @@ const Reports = (props) => {
     const TIMELINE_LIST = [
         {
             title: 'Acquisitions',
+            standalone: false,
             rf_id: '',
             type: 1,
             list: [] 
         },
         {
             title: 'Divestitures',
+            standalone: false,
             rf_id: '',
             type: 2,
             list: []
         },
         {
             title: 'Licensing',
+            standalone: false,
             rf_id: '',
             type: 3,
             list: []
         },
         {
             title: 'Collateralization',
+            standalone: false,
             rf_id: '',
             type: 4,
             list: []
         },
         {
             title: 'Employees',
+            standalone: false,
             rf_id: '',
             type: 5,
             list: []
         },
         {
             title: 'Court',
+            standalone: false,
             rf_id: '',
             type: 6,
             list: []
@@ -964,6 +970,16 @@ const Reports = (props) => {
         callTimelineData()
     }
 
+    const handleTimelineFullScreen = (type) => {
+        const list = [...timelineList]
+        const findIndex = list.findIndex( item => item.type === type)
+
+        if(findIndex !== -1) {
+            list[findIndex].standalone = !list[findIndex].standalone
+        }
+        setTimelineList(list)
+    }
+
     const showItems = cardList.map( (card, index) => {
         return <Grid
             item  {...grid}
@@ -977,6 +993,7 @@ const Reports = (props) => {
                 handleClick={onHandleClick}
                 handleList={onHandleList}
                 type={card.type}  
+                grid={grid}
                 {...(props.kpi === true ? {kpiEnable: true} : {lineGraph: props.lineGraph})}
             />
         </Grid>
@@ -994,7 +1011,9 @@ const Reports = (props) => {
                 active={activeId}
                 handleClick={onHandleClick}
                 handleList={onHandleList}
-                type={card.type}  
+                handleFullScreen={handleTimelineFullScreen}
+                type={card.type} 
+                grid={timelineGrid} 
                 timeline={true}
             />
         </Grid>

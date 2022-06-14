@@ -3,10 +3,12 @@ import { Tooltip, Typography, Zoom } from '@mui/material';
 
 
 import useStyles from './styles'
+import clsx from 'clsx';
 
 
 const AddToolTip = (props) => {
     const classes = useStyles();
+
     return (
         <Tooltip 
             title={
@@ -20,7 +22,9 @@ const AddToolTip = (props) => {
             placement={props.placement}
             enterDelay={0}
             TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
-            className={classes.tooltip}  
+            classes={{ 
+                tooltip: clsx(classes.tooltip, typeof props.grid !== 'undefined' ?  `tooltip${props.grid.lg}` : '')
+            }} 
         >
             {props.children}
         </Tooltip>

@@ -71,6 +71,7 @@ const Chart = (props) => {
                 <AddToolTip
                     tooltip={props.card.tooltip}
                     placement={'bottom'}
+                    grid={props.grid}
                 >
                     <Typography variant="h6" component="div" align="center" className={classes.border}>
                         {props.card.title}

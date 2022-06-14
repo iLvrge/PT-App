@@ -1015,6 +1015,21 @@ div#draggable-illustration-menu-item div[aria-hidden='true']{
   max-width: 60%; */
   max-height: 200px;
 }
+.MuiTooltip-tooltip.tooltip3 {
+  max-width: 290px;
+}
+
+.MuiTooltip-tooltip.tooltip4 {
+  max-width: 270px;
+}
+
+.MuiTooltip-tooltip.tooltip6 {
+  max-width: 240px;
+}
+
+.MuiTooltip-tooltip.tooltip12 {
+  max-width: 275px;
+}
 
 .MuiListItem-root svg.clipboard{
   width: 24px;

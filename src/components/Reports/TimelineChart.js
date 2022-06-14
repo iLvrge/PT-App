@@ -7,7 +7,7 @@ import moment from 'moment'
 import _debounce from 'lodash/debounce'
 import { DataSet } from 'vis-data-71/esnext'
 import { Timeline } from 'vis-timeline/esnext'
-import { Typography, Tooltip, Zoom, CircularProgress } from '@mui/material';
+import { Typography, Tooltip, Zoom, CircularProgress, IconButton } from '@mui/material';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import useStyles from './styles'
 import clsx from 'clsx'
@@ -16,6 +16,8 @@ import { assetsTypesWithKey, convertTabIdToAssetType, oldConvertTabIdToAssetType
 import PatenTrackApi from '../../api/patenTrack2'
 import themeMode from '../../themes/themeMode'
 import PopperTooltip from '../PopperTooltip'
+import AddToolTip from './AddToolTip'
+import { Close, Fullscreen } from '@mui/icons-material'
 
 
 /**
@@ -324,9 +326,21 @@ const TimelineChart = (props) => {
     timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(2, 'week')})
     timelineRef.current.setItems(items.current)   
     }, [ timelineRawData ])
-  
     return (
         <React.Fragment>
+            <div style={{position: 'absolute', right: 35, zIndex: 9999}}> 
+                <AddToolTip
+                    tooltip={typeof props.standalone !== 'undefined' ? 'Close big screen view.' : 'Big screen view.'}
+                    placement='bottom'
+                >
+                    <IconButton size="small"
+                        onClick={() => props.handleFullScreen(props.type)}
+                        className={clsx(classes.actionIcon, typeof props.standalone !== 'undefined' ? classes.fontStandalone : '' )}
+                    >
+                        { typeof props.standalone !== 'undefined' ? <Close/> : <Fullscreen /> }                            
+                    </IconButton>   
+                </AddToolTip>
+            </div>
             <div className={classes.timelineContainer}>
                 <div
                     style={{ 
@@ -341,11 +355,16 @@ const TimelineChart = (props) => {
                 }
                 { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> }            
             </div>
-            <div className={classes.timelineHeading}>
-                <Typography variant="h6" component="div" align="center" className={clsx(classes.border, classes.border1)}>
-                    {props.card.title}
-                </Typography>
-            </div>
+            {
+                !props.card.standalone && (
+                    <div className={classes.timelineHeading}>
+                        <Typography variant="h6" component="div" align="center" className={clsx(classes.border, classes.border1)}>
+                            {props.card.title}
+                        </Typography>
+                    </div>
+                )
+            }
+           
             {
                 popperToolbar === true
                 ?
