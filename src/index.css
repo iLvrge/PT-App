@@ -672,6 +672,7 @@ div.vis-tooltip span{
   padding: 5px 10px;
   overflow: hidden;
   z-index: 9999;
+  font-size: 0.875rem;
 }
 
 .custom_tooltip h4 {

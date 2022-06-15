@@ -27,22 +27,29 @@ const Chart = (props) => {
                 onClick={() => props.handleList(props.id, props.card.type)}
             >
                 {   parseInt(profile?.user?.organisation?.subscribtion) > 2 ? 
-                        'See List' 
+                        'View List' 
                         : 
                         parseInt(profile?.user?.organisation?.subscribtion) === 2 && (props.type < 3 ) ?
-                            'See List'
+                            'View List'
                         :
                             'Upgrade and Fix it!' 
                 }
-            </Button> 
-            <IconButton 
-                size="small" 
-                onClick={() => props.handleClick(props.id)} 
-                className={clsx(classes.exampleButton, props.active === props.id ? classes.active : '')}
-                disabled={props.card?.number != '0' ? false : true}
+            </Button>             
+            <AddToolTip
+                tooltip='See Example'
+                placement='bottom'
             >
-                <AutoAwesomeIcon />
-            </IconButton> 
+                <span>
+                    <IconButton 
+                        size="small" 
+                        onClick={() => props.handleClick(props.id)} 
+                        className={clsx(classes.exampleButton, props.active === props.id ? classes.active : '')}
+                        disabled={props.card?.number != '0' ? false : true}
+                    >
+                        <AutoAwesomeIcon />
+                    </IconButton>    
+                </span>
+            </AddToolTip>            
             {
                 props.lineGraph === true
                 ?

@@ -49,16 +49,23 @@ const KpiBox = (props) => {
                     (parseInt(props.card?.number) == 0 && typeof props.card.list == 'undefined') || (props.card?.list && props.card.list.length == 0) ? true : false
                 }
             >
-                See List                
+                View List                
             </Button> 
-            <IconButton 
-                size="small" 
-                onClick={() => props.handleClick(props.id)} 
-                className={clsx(classes.exampleButton, props.active === props.id ? classes.active : '')}
-                disabled={props.card?.number != '0' ? false : true}
+            <AddToolTip
+                tooltip='See Example'
+                placement='bottom'
             >
-                <AutoAwesomeIcon />
-            </IconButton>
+                <span>
+                    <IconButton 
+                        size="small" 
+                        onClick={() => props.handleClick(props.id)} 
+                        className={clsx(classes.exampleButton, props.active === props.id ? classes.active : '')}
+                        disabled={props.card?.number != '0' ? false : true}
+                    >
+                        <AutoAwesomeIcon />
+                    </IconButton>    
+                </span>
+            </AddToolTip>
             {
                 props.card?.list
                 ?

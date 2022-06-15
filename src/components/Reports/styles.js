@@ -2,23 +2,27 @@ import makeStyles from '@mui/styles/makeStyles';
 import { indigo, purple, blue, pink, teal, cyan, lime, green, orange, grey } from '@mui/material/colors';
 export default makeStyles(theme => ({
     container: {
-        height: '100%',
-        margin: 0,
-        color: '#fff',
-        border: 0,
-        display: 'flex',
-        position: 'relative',
-        flexGrow: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: 60,              
-        '& .MuiGrid-grid-sm-12': {
-            '& span.small':{
-              /* maxWidth: 37, */
-              display: 'none'
-            }
-        },
-    },  
+      height: '100%',
+      margin: 0,
+      color: '#fff',
+      border: 0,
+      display: 'flex',
+      position: 'relative',
+      flexGrow: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: 60,              
+      '& .MuiGrid-grid-sm-12': {
+          '& span.small':{
+            /* maxWidth: 37, */
+            display: 'none'
+          }
+      }
+    }, 
+    columnDirection: {
+      width: '100%',
+      flexDirection: 'column'
+    },
     containerTop: {
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
@@ -173,13 +177,13 @@ export default makeStyles(theme => ({
     tooltip:{
       fontSize: '1rem',
       '&.3':{
-        maxWidth: 260
+        maxWidth: 290
       },
       '&.4':{
-        maxWidth: 290
+        maxWidth: 260
       },
       '&.6':{
-        maxWidth: 290
+        maxWidth: 300
       }
     },
     mobileTooltip: {
@@ -282,9 +286,9 @@ export default makeStyles(theme => ({
         borderRightColor: theme.palette.divider,
       },
       '& .vis-panel.vis-center':{
-        borderBottom: 0
+        borderTop: 0
       },
-      '& .vis-panel.vis-bottom':{
+      '& .vis-panel.vis-top':{
         visibility: 'hidden',
         '& .vis-time-axis':{
           height: '1px !important'
@@ -354,6 +358,9 @@ export default makeStyles(theme => ({
           }
         } 
       }
+    },
+    timelineContainerFullheight:{
+      height: '100% !important'
     },
     timelineHeading: {
       display: 'flex',
@@ -483,4 +490,15 @@ export default makeStyles(theme => ({
         top: '50%',
         left: '50%',
     },
+    fullscreenButton:{
+      position: 'absolute', 
+      right: 0, 
+      top: 0,
+      zIndex: 9999
+    },
+    transparentTooltip:{
+      backgroundColor: 'transparent',
+      minWidth: 250,
+      maxWidth: 500
+    }
 }));

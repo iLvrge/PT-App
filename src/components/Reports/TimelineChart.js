@@ -15,7 +15,6 @@ import { numberWithCommas, capitalize } from '../../utils/numbers'
 import { assetsTypesWithKey, convertTabIdToAssetType, oldConvertTabIdToAssetType } from '../../utils/assetTypes'
 import PatenTrackApi from '../../api/patenTrack2'
 import themeMode from '../../themes/themeMode'
-import PopperTooltip from '../PopperTooltip'
 import AddToolTip from './AddToolTip'
 import { Close, Fullscreen } from '@mui/icons-material'
 
@@ -67,10 +66,11 @@ const TimelineChart = (props) => {
     const [ timelineItems, setTimelineItems ] = useState([])
     const [ tooltipItem, setToolTipItem] = useState([])
     const [ timeInterval, setTimeInterval] = useState(null)
-    const [ toolbarElement, setToolbarElement] = useState('')
-    const [ popperToolbar, setPopperToolbar] = useState(false)
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
+    const screenWidth = useSelector( state => state.patenTrack.screenWidth)
+    const screenHeight = useSelector( state => state.patenTrack.screenHeight)
+    
 
     const onSelect = useCallback((properties) => {
 
@@ -92,10 +92,11 @@ const TimelineChart = (props) => {
                 const findIndex = assetsTypesWithKey.findIndex( row => row.type == transactionType)
 
                 if(findIndex !== -1) {
-                transactionType = assetsTypesWithKey[findIndex].name
+                    transactionType = assetsTypesWithKey[findIndex].name
                 } else {
-                transactionType = capitalize(transactionType)
+                    transactionType = capitalize(transactionType)
                 }
+                
                 let image = '', color ='';
                 switch(parseInt(item.tab_id)) {
                 case 1:
@@ -160,7 +161,14 @@ const TimelineChart = (props) => {
                     color = '#FFFFFF'
                     break;
                 }
-                const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.clientY}px;left:${event.clientX + 20 }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
+                let calcLeft = event.clientX + 20, calcTop = event.clientY
+                if((calcLeft + 100) > screenWidth) {
+                    calcLeft = screenWidth - 300
+                }
+                if((calcTop + 160) > screenHeight) {
+                    calcTop = screenHeight - 350
+                }
+                const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${calcTop}px;left:${calcLeft}px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
                                             <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
                                             <div>
                                             ${ executionDate != '' ? moment(executionDate).format('ll') : ''}
@@ -178,12 +186,10 @@ const TimelineChart = (props) => {
                                             )).join('')}
                                             </div>
                                         </div>` 
-                /* setToolbarElement(tootltipTemplate)
-                setPopperToolbar(true) */
                 resetTooltipContainer() 
                 if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
-                document.body.insertAdjacentHTML('beforeend',tootltipTemplate)
-                //timelineContainerRef.current.childNodes[0].insertAdjacentHTML('beforeend',tootltipTemplate)
+                    document.body.insertAdjacentHTML('beforeend',tootltipTemplate)
+                    //timelineContainerRef.current.childNodes[0].insertAdjacentHTML('beforeend',tootltipTemplate)
                 }
             } else {
                 resetTooltipContainer()
@@ -363,15 +369,6 @@ const TimelineChart = (props) => {
                         </Typography>
                     </div>
                 )
-            }
-           
-            {
-                popperToolbar === true
-                ?
-                    <PopperTooltip tooltip={toolbarElement} />
-                :
-                    ''
-
             }
         </React.Fragment>
     )
