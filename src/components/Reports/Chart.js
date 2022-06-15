@@ -20,36 +20,17 @@ const Chart = (props) => {
     
     return (
         <div className={clsx(classes.chartContainer, {[classes.widthResponsive]: props.lineGraph})}>
-            <Button 
-                size="small" 
-                variant="outlined" 
-                className={clsx(classes.actionButton)} 
-                onClick={() => props.handleList(props.id, props.card.type)}
-            >
-                {   parseInt(profile?.user?.organisation?.subscribtion) > 2 ? 
-                        'View List' 
-                        : 
-                        parseInt(profile?.user?.organisation?.subscribtion) === 2 && (props.type < 3 ) ?
-                            'View List'
-                        :
-                            'Upgrade and Fix it!' 
-                }
-            </Button>             
-            <AddToolTip
-                tooltip='See Example'
-                placement='bottom'
-            >
-                <span>
-                    <IconButton 
-                        size="small" 
-                        onClick={() => props.handleClick(props.id)} 
-                        className={clsx(classes.exampleButton, props.active === props.id ? classes.active : '')}
-                        disabled={props.card?.number != '0' ? false : true}
-                    >
-                        <AutoAwesomeIcon />
-                    </IconButton>    
-                </span>
-            </AddToolTip>            
+            <div>
+                <AddToolTip
+                    tooltip={props.card.tooltip}
+                    placement={'bottom'}
+                    grid={props.grid}
+                >
+                    <Typography variant="h6" component="div" align="center" className={classes.border}>
+                        {props.card.title}
+                    </Typography>
+                </AddToolTip>  
+            </div>
             {
                 props.lineGraph === true
                 ?
@@ -73,18 +54,45 @@ const Chart = (props) => {
                         formatTextValue={displayNumber}
                     />    
             }
-            
-            <div>
-                <AddToolTip
-                    tooltip={props.card.tooltip}
-                    placement={'bottom'}
-                    grid={props.grid}
-                >
-                    <Typography variant="h6" component="div" align="center" className={classes.border}>
-                        {props.card.title}
-                    </Typography>
-                </AddToolTip>  
-            </div>   
+            <Button 
+                size="small" 
+                variant="outlined" 
+                className={clsx(classes.actionButton)} 
+                onClick={() => props.handleList(props.id, props.card.type)}
+            >
+                {   parseInt(profile?.user?.organisation?.subscribtion) > 2 ? 
+                        'View List' 
+                        : 
+                        parseInt(profile?.user?.organisation?.subscribtion) === 2 && (props.type < 3 ) ?
+                            'View List'
+                        :
+                            'Upgrade and Fix it!' 
+                }
+            </Button>    
+            {
+                props.card?.number != '0'
+                ?
+                    <AddToolTip
+                        tooltip='See Example'
+                        placement='bottom'
+                    >
+                        <IconButton 
+                            size="small" 
+                            onClick={() => props.handleClick(props.id)} 
+                            className={clsx(classes.exampleButton, props.active === props.id ? classes.active : '')}
+                        >
+                            <AutoAwesomeIcon />
+                        </IconButton>  
+                    </AddToolTip>  
+                :
+                    <IconButton 
+                        size="small" 
+                        className={clsx(classes.exampleButton)}
+                        disabled={true}
+                    >
+                        <AutoAwesomeIcon />
+                    </IconButton>     
+            } 
         </div>
     )
 }

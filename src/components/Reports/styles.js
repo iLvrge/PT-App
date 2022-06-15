@@ -72,21 +72,21 @@ export default makeStyles(theme => ({
         },  
     },
     companyBar:{
-        height: '100%',
+      height: '100%',
     },
     border: {  
-        /* borderTop: `1px solid ${theme.palette.divider}`, */
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
-        padding: '7px 10px 5px',      
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        width: 'fit-content',
+      /* borderTop: `1px solid ${theme.palette.divider}`, */
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      padding: '7px 10px 5px',      
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: 'fit-content',
     }, 
     border1:{
       position: 'unset'
@@ -251,8 +251,8 @@ export default makeStyles(theme => ({
       justifyContent: 'center',
       marginLeft: 'auto',
       marginRight: 'auto',
-      width: '85%',
-      maxWidth: '85%',
+      width: '92%',
+      maxWidth: '92%',
       height: '92%',
       alignItems: 'center'
     },
@@ -367,42 +367,42 @@ export default makeStyles(theme => ({
       width: '100%'
     },
     exampleButton: {
-        position: 'absolute',
-        top: 5,
-        /* left: 'calc(50% - 45px)' */
-        right: 0
+      position: 'absolute',
+      bottom: 5,
+      /* left: 'calc(50% - 45px)' */
+      right: 0
     },
     actionButton: {
-        position: 'absolute',
-        left: 0,
-        top: 5,
-        textTransform: 'initial',
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis'  
+      position: 'absolute',
+      left: 0,
+      bottom: 5,
+      textTransform: 'initial',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis'  
     },
     shareIcon:{
-        '& svg':{
-            width: '1rem !important',
-            height: '1rem !important'
-        }
+      '& svg':{
+        width: '1rem !important',
+        height: '1rem !important'
+      }
     },
     actionIcon: {
-        /* '& svg':{
-            width: '1rem !important',
-            height: '1rem !important'
-        } */
-        '& svg' : {
-            fill: 'currentcolor',
-            width: '1.5rem !important', 
-            height: '1.5rem !important'
-        }
+      /* '& svg':{
+          width: '1rem !important',
+          height: '1rem !important'
+      } */
+      '& svg' : {
+        fill: 'currentcolor',
+        width: '1.5rem !important', 
+        height: '1.5rem !important'
+      }
     },
     fontStandalone: {        
-       '& svg':{
-            fontSize: '1.5rem !important',
-            /* width: '1.5rem !important', 
-            height: '1.5rem !important' */
-        } 
+      '& svg':{
+        fontSize: '1.5rem !important',
+        /* width: '1.5rem !important', 
+        height: '1.5rem !important' */
+      } 
     },
     graphContainer: {
       flex: 1,
@@ -413,46 +413,46 @@ export default makeStyles(theme => ({
       overflow: 'hidden'
     },   
     active: {
-        color: pink[500]
+      color: pink[500]
     },
     maxChildHeight: {
-        maxHeight: '50%'
+      maxHeight: '50%'
     },
     tableContainer: {
-        height: '65%',
-        width: '100%',
-        overflow: 'auto',
-        boxShadow: 'none',
-        marginTop:15,
-        '& .MuiListItem-root':{
-            padding: '2px 16px'
-        },
-        '& .MuiList-root':{
-            padding: 0
-        }
+      height: '65%',
+      width: '100%',
+      overflow: 'auto',
+      boxShadow: 'none',
+      marginTop:15,
+      '& .MuiListItem-root':{
+        padding: '2px 16px'
+      },
+      '& .MuiList-root':{
+        padding: 0
+      }
     },
     itemContainer: {
-        position: 'relative',
-        '& .MuiTypography-root': {
-            lineHeight: 1
-        }
+      position: 'relative',
+      '& .MuiTypography-root': {
+        lineHeight: 1
+      }
     },
     itemHeading: {
-        display: 'inline-block',
-        maxWidth: '70%',
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis', 
-        marginRight: 5  
+      display: 'inline-block',
+      maxWidth: '70%',
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis', 
+      marginRight: 5  
     },
     itemText:{
-        position: 'absolute',
-        top: 0
+      position: 'absolute',
+      top: 0
     },
     timelineProcessingIndicator: {
-        position: 'absolute',
-        top: 10, 
-        right: 10,
+      position: 'absolute',
+      top: 10, 
+      right: 10,
     },
     timeline: {
         height: '100%',
@@ -492,7 +492,7 @@ export default makeStyles(theme => ({
     },
     fullscreenButton:{
       position: 'absolute', 
-      right: 0, 
+      right: 5, 
       top: 0,
       zIndex: 9999
     },

@@ -334,19 +334,24 @@ const TimelineChart = (props) => {
     }, [ timelineRawData ])
     return (
         <React.Fragment>
-            <div style={{position: 'absolute', right: 35, zIndex: 9999}}> 
-                <AddToolTip
-                    tooltip={typeof props.standalone !== 'undefined' ? 'Close big screen view.' : 'Big screen view.'}
-                    placement='bottom'
-                >
-                    <IconButton size="small"
-                        onClick={() => props.handleFullScreen(props.type)}
-                        className={clsx(classes.actionIcon, typeof props.standalone !== 'undefined' ? classes.fontStandalone : '' )}
+            <div className={classes.timelineHeading}>
+                <Typography variant="h6" component="div" align="center" className={clsx(classes.border, classes.border1)}>
+                    {props.card.title}
+                </Typography>
+                <div className={classes.fullscreenButton}> 
+                    <AddToolTip
+                        tooltip={typeof props.standalone !== 'undefined' ? 'Close big screen view.' : 'Big screen view.'}
+                        placement='bottom'
                     >
-                        { typeof props.standalone !== 'undefined' ? <Close/> : <Fullscreen /> }                            
-                    </IconButton>   
-                </AddToolTip>
-            </div>
+                        <IconButton size="small"
+                            onClick={() => props.handleFullScreen(props.type)}
+                            className={clsx(classes.actionIcon, typeof props.standalone !== 'undefined' ? classes.fontStandalone : '' )}
+                        >
+                            { typeof props.standalone !== 'undefined' ? <Close/> : <Fullscreen /> }                            
+                        </IconButton>   
+                    </AddToolTip>
+                </div>
+            </div>   
             <div className={classes.timelineContainer}>
                 <div
                     style={{ 
@@ -361,15 +366,6 @@ const TimelineChart = (props) => {
                 }
                 { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> }            
             </div>
-            {
-                !props.card.standalone && (
-                    <div className={classes.timelineHeading}>
-                        <Typography variant="h6" component="div" align="center" className={clsx(classes.border, classes.border1)}>
-                            {props.card.title}
-                        </Typography>
-                    </div>
-                )
-            }
         </React.Fragment>
     )
 }

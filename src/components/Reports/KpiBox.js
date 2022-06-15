@@ -40,32 +40,17 @@ const KpiBox = (props) => {
 
     return (
         <div className={clsx(classes.chartContainer, classes.widthResponsive)}>
-            <Button 
-                size="small" 
-                variant="outlined" 
-                className={clsx(classes.actionButton)} 
-                onClick={() => props.handleList(props.id, props.card.type)}
-                disabled={
-                    (parseInt(props.card?.number) == 0 && typeof props.card.list == 'undefined') || (props.card?.list && props.card.list.length == 0) ? true : false
-                }
-            >
-                View List                
-            </Button> 
-            <AddToolTip
-                tooltip='See Example'
-                placement='bottom'
-            >
-                <span>
-                    <IconButton 
-                        size="small" 
-                        onClick={() => props.handleClick(props.id)} 
-                        className={clsx(classes.exampleButton, props.active === props.id ? classes.active : '')}
-                        disabled={props.card?.number != '0' ? false : true}
-                    >
-                        <AutoAwesomeIcon />
-                    </IconButton>    
-                </span>
-            </AddToolTip>
+            <div>
+                <AddToolTip
+                    tooltip={props.card.tooltip}
+                    placement='bottom'
+                    grid={props.grid}
+                >
+                    <Typography variant="h6" component="div" align="center" className={classes.border}>
+                        {props.card.title}
+                    </Typography>
+                </AddToolTip>  
+            </div>  
             {
                 props.card?.list
                 ?
@@ -90,18 +75,41 @@ const KpiBox = (props) => {
                         }
                     </Typography>
             }           
-            
-            <div>
-                <AddToolTip
-                    tooltip={props.card.tooltip}
-                    placement='bottom'
-                    grid={props.grid}
-                >
-                    <Typography variant="h6" component="div" align="center" className={classes.border}>
-                        {props.card.title}
-                    </Typography>
-                </AddToolTip>  
-            </div>        
+            <Button 
+                size="small" 
+                variant="outlined" 
+                className={clsx(classes.actionButton)} 
+                onClick={() => props.handleList(props.id, props.card.type)}
+                disabled={
+                    (parseInt(props.card?.number) == 0 && typeof props.card.list == 'undefined') || (props.card?.list && props.card.list.length == 0) ? true : false
+                }
+            >
+                View List                
+            </Button> 
+            {
+                props.card?.number != '0'
+                ?
+                    <AddToolTip
+                        tooltip='See Example'
+                        placement='bottom'
+                    >
+                        <IconButton 
+                            size="small" 
+                            onClick={() => props.handleClick(props.id)} 
+                            className={clsx(classes.exampleButton, props.active === props.id ? classes.active : '')}
+                        >
+                            <AutoAwesomeIcon />
+                        </IconButton>  
+                    </AddToolTip> 
+                :
+                    <IconButton 
+                        size="small" 
+                        className={clsx(classes.exampleButton)}
+                        disabled={true}
+                    >
+                        <AutoAwesomeIcon />
+                    </IconButton>     
+            }                  
         </div>
     ) 
 }

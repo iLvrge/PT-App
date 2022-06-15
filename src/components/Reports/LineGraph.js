@@ -15,9 +15,9 @@ const LineGraph = (props) => {
         legend: { position: 'none' },
         backgroundColor: 'transparent',
         chartArea: {
-            width: '90%',
+            width: '95%',
             height: '58%',
-            left: 40,
+            left: 30,
             top: 20,
         },
         tooltip: { textStyle: { fontName: 'Roboto', fontSize: 12 } },
