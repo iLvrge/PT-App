@@ -7,7 +7,7 @@ import moment from 'moment'
 import _debounce from 'lodash/debounce'
 import { DataSet } from 'vis-data-71/esnext'
 import { Timeline } from 'vis-timeline/esnext'
-import { Typography, Tooltip, Zoom, CircularProgress, IconButton } from '@mui/material';
+import { Typography, Tooltip, Zoom, CircularProgress, IconButton, Paper } from '@mui/material';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import useStyles from './styles'
 import clsx from 'clsx'
@@ -333,7 +333,7 @@ const TimelineChart = (props) => {
     timelineRef.current.setItems(items.current)   
     }, [ timelineRawData ])
     return (
-        <React.Fragment>
+        <Paper className={clsx(classes.container, classes.columnDirection)} square>
             <div className={classes.timelineHeading}>
                 <Typography variant="h6" component="div" align="center" className={clsx(classes.border, classes.border1)}>
                     {props.card.title}
@@ -352,7 +352,7 @@ const TimelineChart = (props) => {
                     </AddToolTip>
                 </div>
             </div>   
-            <div className={classes.timelineContainer}>
+            <div className={clsx(classes.timelineContainer,{[classes.timelineContainerFullheight]: typeof props.standalone !== 'undefined' ? props.standalone : false})}>
                 <div
                     style={{ 
                         filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
@@ -366,7 +366,7 @@ const TimelineChart = (props) => {
                 }
                 { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> }            
             </div>
-        </React.Fragment>
+        </Paper>
     )
 }
 
