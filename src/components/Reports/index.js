@@ -830,6 +830,9 @@ const Reports = (props) => {
             } else if(id === 2 && subscription > 2  && props.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'clear_encumbrances')
                 patent = true
+            }  else if(id === 3 && subscription > 2  && props.kpi === false) {
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_address')
+                timeline = true
             } else if(id === 7 && subscription > 2  && props.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'late_maintainance')
                 patent = true
