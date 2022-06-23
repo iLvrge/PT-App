@@ -419,13 +419,13 @@ export default makeStyles(theme => ({
       maxHeight: '50%'
     },
     tableContainer: {
-      height: '65%',
+      height: '60%',
       width: '100%',
       overflow: 'auto',
       boxShadow: 'none',
-      marginTop:15,
+      /* marginTop:15, */
       '& .MuiListItem-root':{
-        padding: '2px 16px'
+        padding: '0px 16px'
       },
       '& .MuiList-root':{
         padding: 0

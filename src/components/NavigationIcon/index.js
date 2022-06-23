@@ -77,7 +77,7 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
                             :  
                             t === 1 &&  highlight == undefined && (selectedCompanies.length > 0 || selectedCompaniesAll === true) ? 'selection_indicator'
                             :
-                            t === 2 && (assetTypesSelected.length > 0 || assetTypesSelectedAll === true) ? 'selection_indicator'
+                            t === 2 && (assetTypesSelected.length > 0 && assetTypesSelectedAll === false) ? 'selection_indicator'
                             :
                             t === 3 && ((assetTypeCompaniesSelected.length > 0 || assetTypeCompaniesSelectedAll === true) && (assetTypesSelected.length > 0 && !assetTypesSelected.includes(10))) ? 'selection_indicator'
                             :

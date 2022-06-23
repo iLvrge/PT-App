@@ -70,7 +70,7 @@ const Reports = (props) => {
             list: []
         },
         {
-            title: 'Wrong Lawyers',
+            title: 'To Be Monitized',
             tooltip: 'Patent assets that are assigned to the company under a stated corresponding agent which is different from those currently employed by the company.',
             number: 0,
             patent: '',
@@ -778,6 +778,22 @@ const Reports = (props) => {
                     );
                 } else if (card.type == 17) {
                     dispatch(setAssetsIllustration({ type: "transaction", id: card.rf_id }));
+                } else if (card.type == 19) {
+                    const { data } = await PatenTrackApi.getCollectionIllustration(card.rf_id)
+                    if(data != null) {                        
+                        const obj = data.line.length > 0 ? data.line[0] : null
+                        if(obj != null) {
+                            dispatch(
+                                setConnectionData(obj)
+                            )
+                            dispatch(
+                                setConnectionBoxView(true)
+                            )
+                            dispatch(
+                                setPDFView(false)
+                            ) 
+                        }
+                    }
                 } else if(card.type == 20 || card.type == 23) {
                     dispatch(assetLegalEvents(card.application, card.patent));
                 } else if(card.type == 24 || card.type == 25) {

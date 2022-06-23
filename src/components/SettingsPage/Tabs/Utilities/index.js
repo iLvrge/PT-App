@@ -115,7 +115,7 @@ const Utilities = () => {
     const TIMER_OPEN = 2000
     
     useEffect(() => {
-        dispatch(setBreadCrumbs('Settings > Templates and Documents Repository'))
+        dispatch(setBreadCrumbs('Settings > Repository'))
         const googleToken = getTokenStorage( 'google_auth_token_info' )
         if(googleToken && googleToken != '' && googleToken!= null) {
             const token = JSON.parse(googleToken)      

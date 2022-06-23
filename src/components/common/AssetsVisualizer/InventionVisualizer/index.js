@@ -843,7 +843,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 yearList.push(parseInt(r.label))
             }
         })
-        findCPCList([...scopeRange], filterList, filterTotal, yearList, range)      
+        findCPCList([], filterList, filterTotal, yearList, range)      
     }, [ filterList, filterTotal, scopeRange, valueRange ] )
 
     
