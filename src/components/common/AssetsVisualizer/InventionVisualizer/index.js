@@ -153,7 +153,11 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         height: '100%',
         width: '100%',
         style: 'bar-color',
-        axisFontSize: 18
+        axisFontSize: 18,
+        showGrid: true,
+        showShadow: false,
+        keepAspectRatio: true,
+        verticalRatio: 0.5,
     }
 
     const graphClickHandler = useCallback(async (point) => {
@@ -486,6 +490,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             })
             await Promise.all(codePromise)
             console.log('codeList', codeList) */
+            console.log('START')
             const promises = graphRawData.map( (data, index) => {
                 const findIndex = graphRawGroupData.findIndex( row => row.cpc_code == data.cpc_code )
                 if(findIndex !== -1) {
@@ -530,30 +535,27 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     } */
                     
                     //const col = colors[Math.floor((Math.random()*colors.length))]
+                    console.log({
+                        x: year,
+                        y: graphRawGroupData[findIndex].id,
+                        z: parseInt(data.countAssets),
+                        style: 5
+                    })
                     items.current.add({
                         x: year,
                         y: graphRawGroupData[findIndex].id,
-                        z: data.countAssets,
-                        style: style,
-                        patent: data.patent_number,
-                        application_number: data.application_number,   
-                        origin: data.group_name
+                        z: parseInt(data.countAssets),
+                        style: 5
                     })
 
-                    if( index === 0 ) {
+                    /* if( index === 0 ) {
                         items.current.add({
                             x: year,
                             y: graphRawGroupData[findIndex].id,
                             z: 0,
-                            style: {
-                                fill: '#1565C0',
-                                stroke: '#2196F3'
-                            }, 
-                            patent: data.patent_number,
-                            application_number: data.application_number,   
-                            origin: data.group_name
+                            style: 5
                         })
-                    }
+                    }  */
                 }                
             })
 
