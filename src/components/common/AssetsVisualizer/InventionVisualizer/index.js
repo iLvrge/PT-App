@@ -158,6 +158,19 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         showShadow: false,
         keepAspectRatio: true,
         verticalRatio: 0.5,
+        yValueLabel: function(value) {
+            const findIndex = graphRawGroupData.findIndex( row => row.id == value)
+            if( findIndex !== -1 ) {
+                return graphRawGroupData[findIndex].cpc_code
+            }  
+            return value;
+        },
+        xValueLabel: function(value) {
+            return parseInt(value)
+        },
+        zValueLabel: function(value) {
+            return parseInt(value)
+        },
     }
 
     const graphClickHandler = useCallback(async (point) => {
