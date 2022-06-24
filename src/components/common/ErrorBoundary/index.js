@@ -20,7 +20,7 @@ class ErrorBoundary extends React.Component {
         // Error path
         return (
             <div>
-            <h2>We are sorry, but this request is temporarily unservable.</h2>
+            <h2>This request is temporarily un-servable, please try a different one.</h2>
             {/* <details style={{ whiteSpace: 'pre-wrap' }}>
                 {this.state.error && this.state.error.toString()}
                 <br />

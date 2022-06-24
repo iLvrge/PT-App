@@ -90,7 +90,7 @@ function PdfViewer(props) {
       callBack(file)
       setErrorMessage('')
     } else {
-      setErrorMessage('We are sorry, but this request is temporarily unservable. Please try a different request.')
+      setErrorMessage('This request is temporarily un-servable, please try a different one.')
     }
   }
   
