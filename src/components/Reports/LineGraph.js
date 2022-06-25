@@ -27,12 +27,12 @@ const LineGraph = (props) => {
             format: '0',
             textStyle: {
                 color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
-                fontSize: 12,
+                fontSize: 10,
                 fontFamily: 'Roboto'
             },
             titleTextStyle: {
                 color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
-                fontSize: 12,
+                fontSize: 10,
                 fontFamily: 'Roboto'
             },
             gridlines: {
@@ -49,12 +49,12 @@ const LineGraph = (props) => {
             format: '0',
             textStyle: {
                 color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
-                fontSize: 12,
+                fontSize: 10,
                 fontFamily: 'Roboto'
             },
             titleTextStyle: {
                 color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
-                fontSize: 12,
+                fontSize: 10,
                 fontFamily: 'Roboto'
             },
             gridlines: {
