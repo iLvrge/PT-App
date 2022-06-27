@@ -1,5 +1,5 @@
 import { data } from 'autoprefixer';
-import React, {useState, useRef} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import { Chart } from "react-google-charts";
 import { useSelector } from 'react-redux'
 import themeMode from '../../themes/themeMode';
@@ -16,7 +16,7 @@ const LineGraph = (props) => {
         backgroundColor: 'transparent',
         chartArea: {
             width: '95%',
-            height: '58%',
+            height: '50%',
             left: 30,
             top: 20,
         },
@@ -37,11 +37,10 @@ const LineGraph = (props) => {
             },
             gridlines: {
                 color: 'transparent',
-                count: 0,
             },
             minorGridlines:{
                 color:'transparent' 
-            },
+            }, 
         },
         
         vAxis: {
@@ -65,6 +64,7 @@ const LineGraph = (props) => {
             },
         }, 
     });
+    
     const DisplayChart = () => {
         if(typeof props.data == 'undefined' || props.data.length === 0) return null
         return (
@@ -110,7 +110,7 @@ const LineGraph = (props) => {
 
 
     return (
-        <div className={classes.graphContainer} ref={containerRef}>  
+        <div className={classes.graphContainer} ref={containerRef} style={{height: '100%'}}>  
             <DisplayChart />
         </div> 
     )
