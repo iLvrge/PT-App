@@ -846,17 +846,29 @@ const Reports = (props) => {
             } else if(id === 2 && subscription > 2  && props.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'clear_encumbrances')
                 patent = true
-            }  else if(id === 3 && subscription > 2  && props.kpi === false) {
+            } else if(id === 3 && subscription > 2  && props.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_address')
                 timeline = true
+            } else if(id === 4 && subscription > 2  && props.kpi === false) {
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'to_be_monitized')
+                patent = true
+            } else if(id === 5 && subscription > 2  && props.kpi === false) {
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'unnecessary_patents')
+                patent = true
+            } else if(id === 6 && subscription > 2  && props.kpi === false) {
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'missed_monetization')
+                patent = true
             } else if(id === 7 && subscription > 2  && props.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'late_maintainance')
                 patent = true
             } else if(id === 8 && subscription > 2  && props.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_recording')
                 timeline = true
-            }  else if(id === 9 && subscription > 2  && props.kpi === false) {
+            } else if(id === 9 && subscription > 2  && props.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'late_recording')
+                timeline = true
+            } else if(id === 10 && subscription > 2  && props.kpi === false) {
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'deflated_collaterals')
                 timeline = true
             } else if(id === 0 && subscription > 2  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'non_expired_patents')
