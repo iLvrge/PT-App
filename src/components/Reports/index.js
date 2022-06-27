@@ -768,7 +768,7 @@ const Reports = (props) => {
             dispatch(setDashboardPanelActiveButtonId( id != activeId ? id : -1 ))        
             props.checkChartAnalytics(null, null, showItem)
             if(showItem === true) {
-                if(card.type == 1 || card.type == 18 || card.type > 29) {
+                if(card.type == 1 || card.type == 18 || card.type > 29 || card.type > 21 || card.type > 22 || card.type > 26 ) {
                     dispatch(
                         setAssetsIllustration({
                             type: "patent",

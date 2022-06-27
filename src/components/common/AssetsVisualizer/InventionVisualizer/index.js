@@ -157,7 +157,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         cameraPosition: {
             distance: 1.9,
             horizontal: 0.69,
-            vertical: 0.27
+            vertical: 0.2
         }, 
         xStep: 1,
         yStep: 1,
@@ -942,7 +942,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         {
                             selectedTab === 0 && (
                                 <React.Fragment>  
-                                    <TitleBar title={`Hover over the bars for details. Select a bar to see the list of the underlying patents, and to act upon time. Click the icon menu to filter the result.`} enablePadding={typeof titleBar !== 'undefined' ? false : true} underline={false} typography={true}/>
+                                    <TitleBar title={`Hover over the bars for details. Select a bar to see the list of the underlying patents, and to act upon them. Click the menu icon to filter the results.`} enablePadding={typeof titleBar !== 'undefined' ? false : true} underline={false} typography={true}/>
                                 </React.Fragment>
                             )
                         } 

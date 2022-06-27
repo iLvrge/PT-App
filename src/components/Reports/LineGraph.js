@@ -110,7 +110,7 @@ const LineGraph = (props) => {
 
 
     return (
-        <div className={classes.graphContainer} ref={containerRef} style={{height: '100%'}}>  
+        <div className={classes.graphContainer} ref={containerRef} style={{height: '90%'}}>  
             <DisplayChart />
         </div> 
     )

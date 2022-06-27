@@ -62,18 +62,16 @@ function PdfViewer(props) {
       const checkFileExist = async() => {
         if(props.pdfFile.document != '') {
           await checkFindData(props.pdfFile.document, setMainPdf)
-        }
-
-        if(props.pdfFile.form != '') {
+        } else if(props.pdfFile.form != '') {
           await checkFindData(props.pdfFile.form, setFormPdf)
-        }
-
-        if(props.pdfFile.agreement != '') {
+        } else if(props.pdfFile.agreement != '') {
           await checkFindData(props.pdfFile.agreement, setAgreementPdf)
         }
       }
       checkFileExist()
       
+    } else {
+      setErrorMessage('')
     }
   },[ classes.fullView, props.pdfFile, props.pdfView ])
 
