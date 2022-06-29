@@ -23,6 +23,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { TableCell, Avatar, Modal, ListItemText, ListItemIcon } from '@mui/material'
 import {
   ArrowKeyStepper,
@@ -429,6 +430,16 @@ const VirtualizedTable = ({
                 indeterminate={isIndeterminate}
               />
             )
+            : 
+              role === "checkboxwait" ? (
+                rowData[formatCondition] === 0 
+                  ? 
+                    <HourglassBottomIcon/> 
+                  : <Checkbox
+                      checked={checkedIsInderminateCheckbox === true ? checkedIsInderminateCheckbox : selected.includes(cellData) }
+                      indeterminate={isIndeterminate}
+                    />
+              )
             :
             role === "radio" ? (typeof showOnCondition == 'string' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition) ? '' : 
                   (

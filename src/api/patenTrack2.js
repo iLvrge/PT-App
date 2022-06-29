@@ -147,6 +147,15 @@ class PatenTrackApi {
       }
     } 
   }
+  
+  static addCompanyRequest( form ) {
+    let header = getFormUrlHeader()
+    return axios.post(`${base_new_api_url}/companies/request`, form, header)    
+  }
+
+  static getCompaniesRequest( ) {
+    return axios.get(`${base_new_api_url}/companies/request`, getHeader())
+  } 
 
   static linkSheetSelectedData( type, asset, form ) {
     let header = getFormUrlHeader()
