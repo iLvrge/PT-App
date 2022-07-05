@@ -535,10 +535,11 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
                 return [...prevItems, row]
               }
             })          
-          } else if (event.target.value == 2) {
+          } else if (event.target.value == 2 || event.target.value == 4) {
             const formData = new FormData()
             formData.append('appno_doc_num', row.appno_doc_num)
             formData.append('grant_doc_num', row.grant_doc_num)
+            formData.append('type', event.target.value)
             const { data } = await PatenTrackApi.moveAssetForSale(formData)
             if( data  !== null) {
             }
