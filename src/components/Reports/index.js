@@ -433,6 +433,16 @@ const Reports = (props) => {
         }
     ]
 
+    const BANK_TIMELINE_LIST = [
+        {
+            title: 'All',
+            standalone: false,
+            rf_id: '',
+            type: 7,
+            list: []
+        }
+    ]
+
     const GRID_ITEM = {
         lg:3,
         md:3,
@@ -446,6 +456,14 @@ const Reports = (props) => {
         sm:6,
         xs:6,
         xl:6
+    }
+
+    const BANK_TIMELINE_ITEM = {
+        lg: 12,
+        md: 12,
+        sm: 12,
+        xs: 12,
+        xl: 12,
     }
     const classes = useStyles();
     const history = useHistory()
@@ -462,7 +480,7 @@ const Reports = (props) => {
     const [activeId, setActiveId] = useState(-1)
     const profile = useSelector(state => (state.patenTrack.profile))    
     const [cardList, setCardList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_LIST : LIST)
-    const [timelineList, setTimelineList] = useState(TIMELINE_LIST)
+    const [timelineList, setTimelineList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_TIMELINE_LIST : TIMELINE_LIST)
     const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
     const assetTypeCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.list)
@@ -523,7 +541,9 @@ const Reports = (props) => {
                     newTimelineGrid = {...newGridItems}
                 } 
                 setGrid(newGridItems)
-                setTimelineGrid(newTimelineGrid)
+                if(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'){
+                    setTimelineGrid(newTimelineGrid)
+                }
                 setSmallScreen(smallScreen)  
             })
                      
@@ -555,13 +575,20 @@ const Reports = (props) => {
                 }                
             } else {   
                 if(props.timeline === true) {
-                    setTimelineList([...TIMELINE_LIST])
+                    setTimelineList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
                 } else {
                     addCardList()  
                 }                
             }
         }
     }, [props.lineGraph, props.kpi, props.timeline])
+
+    useEffect(() => {
+        if(profile?.user?.organisation?.organisation_type) {
+            setTimelineList(profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
+            setTimelineGrid(BANK_TIMELINE_ITEM)
+        }
+    }, [profile])
    
     /**
      * Get Dashboard data
@@ -583,7 +610,7 @@ const Reports = (props) => {
                 }
             } else {   
                 if(props.timeline === true) {
-                    setTimelineList([...TIMELINE_LIST])
+                    setTimelineList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
                 } else {
                     addCardList()  
                 }
@@ -625,10 +652,11 @@ const Reports = (props) => {
         }
     }
 
-    const callTimelineData = async() => {
+    const callTimelineData = useCallback(async() => {
         setLoading(true)
         resetAll(false)
         setTimeLineLoading(true)
+        console.log("TIMELINE DATA", timelineList)
         const cancelRequest = await PatenTrackApi.cancelAllDashboardTimelineToken()  
         const CancelToken = PatenTrackApi.generateCancelToken() 
         const source = CancelToken.source()
@@ -643,7 +671,7 @@ const Reports = (props) => {
             return item
         })                
         Promise.allSettled(dashboardRequest).then((dashboardRequest) => {
-            const newTimeline = [...TIMELINE_LIST]
+            const newTimeline = profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST]
             newTimeline.forEach( (item, index) => {
                 const findIndex = dashboardRequest.findIndex( row => row.status === "fulfilled" && row.value.type === item.type ) 
 
@@ -658,7 +686,7 @@ const Reports = (props) => {
             setTimeLineLoading(false)
         })
         setLoading(false)   
-    }
+    }, [timelineList, selectedCompanies, profile] )
 
     const resetAll = (flag) => {
         dispatch(setDashboardPanel( flag ))
@@ -1033,7 +1061,7 @@ const Reports = (props) => {
     const showTimelineItems = timelineList.map( (card, index) => {
         return <Grid
             item  {...timelineGrid}
-            className={clsx(classes.flexColumn, `box_item`, {['activeItem']: index === activeId})}
+            className={clsx(classes.flexColumn, {[classes.flexColumnFullHeight]: profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? true : false}, `box_item`, {['activeItem']: index === activeId})}
             key={`card_${index}`}
         >
             <CardElement 

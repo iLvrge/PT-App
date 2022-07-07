@@ -61,7 +61,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     const [ selectedRow, setSelectedRow] = useState( [] )
     const [ selectedAll, setSelectAll ] = useState( false )
     const [ selectItems, setSelectItems] = useState( [] ) 
-    
+    const profile = useSelector(state => (state.patenTrack.profile))    
     
     const assetTypesCompaniesLoading = useSelector(state => state.patenTrack2.assetTypes.loading_companies)
     const assetTypesSelected = useSelector(state => state.patenTrack2.assetTypes.selected)
@@ -105,7 +105,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             minWidth: 200,
             oldWidth: 200,
             draggable: true,          
-            label: 'Parties',
+            label: profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' && dashboardScreen === true ? 'Borrowers'  : 'Parties',
             dataKey: 'entityName', 
             show_selection_count: true,  
             badge: true,   

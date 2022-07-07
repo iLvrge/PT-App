@@ -38,6 +38,9 @@ export default makeStyles(theme => ({
         marginBottom: 20,
         flexDirection: 'column'
     },
+    flexColumnFullHeight: {
+      height: '100% !important',
+    },
     flexColumn: {
         height: 'calc((100vh - 105px) / 3)',
         alignContent: 'start',
