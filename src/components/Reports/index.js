@@ -656,7 +656,6 @@ const Reports = (props) => {
         setLoading(true)
         resetAll(false)
         setTimeLineLoading(true)
-        console.log("TIMELINE DATA", timelineList)
         const cancelRequest = await PatenTrackApi.cancelAllDashboardTimelineToken()  
         const CancelToken = PatenTrackApi.generateCancelToken() 
         const source = CancelToken.source()
@@ -664,6 +663,7 @@ const Reports = (props) => {
             const formData = new FormData()
             formData.append('selectedCompanies', JSON.stringify(selectedCompanies));
             formData.append('type', item.type)             
+            formData.append('customers', JSON.stringify(selectedAssetCompanies));
             const requestData = await PatenTrackApi.getDashboardTimelineData(formData, source)
             if( requestData !== null){
                 updateTimelineList(requestData, item.type)
@@ -686,7 +686,7 @@ const Reports = (props) => {
             setTimeLineLoading(false)
         })
         setLoading(false)   
-    }, [timelineList, selectedCompanies, profile] )
+    }, [timelineList, selectedCompanies, selectedAssetCompanies, profile] )
 
     const resetAll = (flag) => {
         dispatch(setDashboardPanel( flag ))
