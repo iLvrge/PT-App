@@ -739,6 +739,15 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     } 
   }, [ assetTypeAssignmentAssets ])
 
+  /* useEffect(() => {
+    const getSaleOrLiceOutAssets = async () => {
+      const {data} = await PatenTrackApi.getSaleOrLiceOutAssets()
+      if(data != null && data.length > 0) {
+
+      }
+    }
+    getSaleOrLiceOutAssets()
+  }, []) */
 
   useEffect(() => {
     if( display_clipboard === true &&  clipboard_assets.length > 0 ) {
@@ -896,7 +905,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
           tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
           customers = selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
-          assignments = selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;    
+          assignments = selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;   
+    console.log('loadDataFromServer', companies, tabs, customers, assignments, selectedAssetCompanies, selectedAssetCompaniesAll) 
     if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
       if (auth_token != null) {          
         dispatch(

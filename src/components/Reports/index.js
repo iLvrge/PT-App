@@ -945,8 +945,9 @@ const Reports = (props) => {
                 timeline = true
             }*/
             if( findIndex !== -1 ) {
-                resetAllRowSelect(dispatch, resetItemList.resetAll)
-                resetAllRowSelect(dispatch, resetItemList.clearOtherItems)
+                console.log('selectedAssetCompanies', selectedAssetCompanies)
+                resetAllRowSelect(dispatch, resetItemList.resetAll, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [1, 9, 10] : [])
+                resetAllRowSelect(dispatch, resetItemList.clearOtherItems, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [15, 16] : [])
                 setTimeout(() => { 
                     dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))                
                     if(id === 0) {
@@ -967,7 +968,7 @@ const Reports = (props) => {
                 }                                
             }
         }
-    }, [dispatch, profile, activeId, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, props.openCustomerBar, props.openCommentBar, props.kpi])
+    }, [dispatch, profile, activeId, selectedAssetCompanies, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, props.openCustomerBar, props.openCommentBar, props.kpi])
 
     const changeGraph = (flag) => {
         setIntial(false)

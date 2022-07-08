@@ -61,8 +61,9 @@ export const unsetAllFunction = ( dispatch,  resetList) => {
     resetList.forEach( item => dispatch( item ))
 }
 
-export const resetAllRowSelect = ( dispatch,  resetList) => {
-    resetList.forEach( item => dispatch( item.callback ))
+export const resetAllRowSelect = ( dispatch, resetList, skipIndex) => {
+    console.log(resetList, skipIndex)
+    resetList.forEach( (item, index) => typeof skipIndex === 'undefined' || (typeof skipIndex != 'undefined'  && !skipIndex.includes(index)) ? dispatch( item.callback) : '')
 } 
 
 
