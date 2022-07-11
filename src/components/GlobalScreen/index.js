@@ -539,6 +539,9 @@ const GlobalScreen = ({
                                             buttonType={toggleAssignmentButtonType} 
                                             buttonVisible={assignmentButtonVisible}/> */}
                                         <AssignmentsTable 
+                                            checkChartAnalytics={checkChartAnalytics}
+                                            chartsBar={openChartBar}
+                                            analyticsBar={openAnalyticsBar}
                                             type={type} 
                                             defaultLoad={type === 2 ? false : true} />
                                     </>

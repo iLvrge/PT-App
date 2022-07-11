@@ -801,7 +801,8 @@ const GlobalLayout = (props) => {
 
     const changeVisualBar = (chart, analytics, comment, illustration) => {
         /* console.log("changeVisualBar") */
-        let barOpen = true, barSize = '40.1%'        
+        let barOpen = true, barSize = '40.1%'    
+        
         if(chart === false && analytics === false && (comment === true || illustration === true) && usptoMode === false && connectionBoxView === false){
             barSize = '0%'
             barOpen = false

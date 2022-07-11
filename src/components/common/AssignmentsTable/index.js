@@ -66,7 +66,7 @@ import { getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
 
 import Loader from "../Loader";
 
-const AssignmentsTable = ({ defaultLoad, type }) => {
+const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaultLoad, type }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -622,6 +622,9 @@ const findChannelID = useCallback((rfID) => {
 
   const getTransactionData = (dispatch, rf_id, defaultLoad, search_string) => {
     setSelectedRow([rf_id]);    
+    if(chartsBar === false && analyticsBar === false) {
+      checkChartAnalytics(null, null, false)
+    }
     dispatch(transactionRowClick(rf_id, slack_channel_list, defaultLoad, search_string))
   };
 
