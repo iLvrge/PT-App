@@ -11,6 +11,7 @@ export default makeStyles(theme => ({
       flexGrow: 1,
       justifyContent: 'center',
       alignItems: 'center',
+      boxShadow: 'unset !important',
       minHeight: 60,              
       '& .MuiGrid-grid-sm-12': {
           '& span.small':{

@@ -435,7 +435,7 @@ const Reports = (props) => {
 
     const BANK_TIMELINE_LIST = [
         {
-            title: 'All',
+            title: '',
             standalone: false,
             rf_id: '',
             type: 7,
@@ -945,7 +945,7 @@ const Reports = (props) => {
                 timeline = true
             }*/
             if( findIndex !== -1 ) {
-                console.log('selectedAssetCompanies', selectedAssetCompanies)
+                
                 resetAllRowSelect(dispatch, resetItemList.resetAll, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [1, 9, 10] : [])
                 resetAllRowSelect(dispatch, resetItemList.clearOtherItems, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [15, 16] : [])
                 setTimeout(() => { 

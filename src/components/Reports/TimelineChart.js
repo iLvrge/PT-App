@@ -332,25 +332,29 @@ const TimelineChart = (props) => {
     }, [ timelineRawData ])
     return (
         <Paper className={clsx(classes.container, classes.columnDirection)} square>
-            <div className={classes.timelineHeading}>
-                <Typography variant="h6" component="div" align="center" className={clsx(classes.border, classes.border1)}>
-                    {props.card.title}
-                </Typography>
-                <div className={classes.fullscreenButton}> 
-                    <AddToolTip
-                        tooltip={typeof props.standalone !== 'undefined' ? 'Close big screen view.' : 'Big screen view.'}
-                        placement='bottom'
-                    >
-                        <IconButton size="small"
-                            onClick={() => props.handleFullScreen(props.type)}
-                            className={clsx(classes.actionIcon, typeof props.standalone !== 'undefined' ? classes.fontStandalone : '' )}
-                        >
-                            { typeof props.standalone !== 'undefined' ? <Close/> : <Fullscreen /> }                            
-                        </IconButton>   
-                    </AddToolTip>
-                </div>
-            </div>   
-            <div className={clsx(classes.timelineContainer,{[classes.timelineContainerFullheight]: typeof props.standalone !== 'undefined' ? props.standalone : false})}>
+            {
+                props.card.title != '' && (
+                    <div className={classes.timelineHeading}>
+                        <Typography variant="h6" component="div" align="center" className={clsx(classes.border, classes.border1)}>
+                            {props.card.title}
+                        </Typography>
+                        <div className={classes.fullscreenButton}> 
+                            <AddToolTip
+                                tooltip={typeof props.standalone !== 'undefined' ? 'Close big screen view.' : 'Big screen view.'}
+                                placement='bottom'
+                            >
+                                <IconButton size="small"
+                                    onClick={() => props.handleFullScreen(props.type)}
+                                    className={clsx(classes.actionIcon, typeof props.standalone !== 'undefined' ? classes.fontStandalone : '' )}
+                                >
+                                    { typeof props.standalone !== 'undefined' ? <Close/> : <Fullscreen /> }                            
+                                </IconButton>   
+                            </AddToolTip>
+                        </div>
+                    </div>  
+                )
+            }
+            <div className={clsx(classes.timelineContainer,{[classes.timelineContainerFullheight]: typeof props.standalone !== 'undefined' ? props.standalone : props.card.type === 7 ? true : false})}>
                 <div
                     style={{ 
                         filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
