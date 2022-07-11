@@ -221,6 +221,13 @@ const GlobalLayout = (props) => {
         }
     }, [patentScreen])  
 
+    useEffect(() => {
+        if(dashboardScreen === true && profile?.user && profile.user?.organisation && profile.user.organisation.organisation_type == 'Bank' && props.type != 9 && openOtherPartyBar === false) {
+            handleOtherPartyBarOpen()
+        }
+    }, [dashboardScreen]) 
+    
+
     /**
      * Dashboard screen is true
      * And account type is Bank
@@ -1097,7 +1104,6 @@ const GlobalLayout = (props) => {
             if(openAnalyticsBar === true){
                 handleAnalyticsBarOpen(event)
             }
-
         } else {
             if(openCustomerBar === false && timelineScreen === false && type !== 'Timeline'){ 
                 handleCustomersBarOpen(event)
