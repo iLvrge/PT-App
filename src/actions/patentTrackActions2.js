@@ -971,6 +971,14 @@ export const setSelectAssignmentCustomers = (data) => {
   }
 }
 
+export const setSelectAssignmentCustomerName = (name) => {
+  console.log('setSelectAssignmentCustomerName', name)
+  return {
+    type: types.SET_ASSET_TYPES_COMPANIES_SELECT_NAME,
+    name
+  }
+}
+
 export const setAssetTypeCustomerSelectedRow = (data) => {
   return {
     type: types.SET_ASSET_TYPES_COMPANIES_ROW_SELECT,

@@ -275,8 +275,8 @@ const Reports = (props) => {
 
     const KPI_LIST = [
         {
-            title: 'Non-Expired Patents',
-            tooltip: 'The USA patents which the company currently owns.',
+            title: 'Owned Patents (Non-Expired)',
+            tooltip: 'The USA patents assigned to the company from its inventors, and patents acquired by the company, minus those that were sold, expired  and abandoned.',
             number: 0,
             patent: '',
             application: '',
@@ -285,7 +285,7 @@ const Reports = (props) => {
         },
         {
             title: 'Patents Acquired',
-            tooltip: 'Non-expired USA patents the company acquired from third parties.',
+            tooltip: 'The USA patents acquired by the company, minus those that were sold, expired and abandoned',
             number: 0,
             patent: '',
             application: '',
@@ -294,21 +294,12 @@ const Reports = (props) => {
         }, 
         {
             title: 'Patents Invented',
-            tooltip: 'Non-expired USA patents invented by the company\’s employees.',
+            tooltip: 'The USA patents assigned to the company from its inventors, minus those that were sold, expired  and abandoned',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
             type: 32,
-        },
-        {
-            title: 'Un-Maintained Patents',
-            tooltip: 'Patents the company abandoned, i.e. for which the company has not paid maintenance fees.',
-            number: 0,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 33
         },
         {
             title: 'Pending Applications',
@@ -318,6 +309,15 @@ const Reports = (props) => {
             application: '',
             rf_id: '',
             type: 34
+        },
+        {
+            title: 'Un-Maintained Patents',
+            tooltip: 'Patents the company abandoned, i.e. for which the company has not paid maintenance fees.',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 33
         },
         {
             title: 'Filed Applications',
@@ -486,6 +486,7 @@ const Reports = (props) => {
     const assetTypeCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.list)
     const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected);
     const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected);
+    const selectedPartyName = useSelector(state => state.patenTrack2.assetTypeCompanies.name);
     const selectedAssetCompaniesAll = useSelector(
         state => state.patenTrack2.assetTypeCompanies.selectAll,
     );
@@ -1103,7 +1104,11 @@ const Reports = (props) => {
                 item lg={12} md={12} sm={12} xs={12} 
             >
                 <Paper className={classes.titleContainer} square>
-                    <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{companyname.length > 0 ? companyname[0].original_name : ''}</span></span>
+                    <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{companyname.length > 0 ? companyname[0].original_name : ''}</span> {
+                        profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' && selectedAssetCompanies.length == 1 && (
+                            <span className={classes.headingName}>{selectedPartyName}</span>
+                        ) 
+                    }</span>
                     <div className={classes.toolbar}> 
 
                         {

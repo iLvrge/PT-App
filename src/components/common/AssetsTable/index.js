@@ -536,12 +536,38 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
               }
             })          
           } else if (event.target.value == 2 || event.target.value == 4) {
-            const formData = new FormData()
-            formData.append('appno_doc_num', row.appno_doc_num)
-            formData.append('grant_doc_num', row.grant_doc_num)
-            formData.append('type', event.target.value)
-            const { data } = await PatenTrackApi.moveAssetForSale(formData)
-            if( data  !== null) {
+            /**
+             * Assets for Sale or LicenseOut
+             * Check Slack Auth
+             */
+            let token =  '';
+            const slackToken = getTokenStorage( 'slack_auth_token_info' )
+            if(slackToken && slackToken!= '' && slackToken!= null && slackToken!= 'null' ) {
+              token = JSON.parse(slackToken)
+               
+              if(typeof token === 'string') {
+                token = JSON.parse(token)
+              }
+            }
+
+            if(token !== '') {
+              const { access_token, bot_token, bot_user_id } = JSON.parse(token)
+              const formData = new FormData()
+              formData.append('appno_doc_num', row.appno_doc_num)
+              formData.append('grant_doc_num', row.grant_doc_num)
+              formData.append('auth', bot_token)
+              formData.append('auth_id', bot_user_id)
+              formData.append('code', access_token)
+              formData.append('type', event.target.value)
+              const { data } = await PatenTrackApi.moveAssetForSale(formData)
+              if( data  !== null) {
+  
+              }
+            } else {
+              /**
+               * Alert user to login with slack first
+              */
+              alert("Please login to slack first");
             }
           } else if (event.target.value === 0) {
             setSelectedAssets(prevItems => {
@@ -975,6 +1001,10 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     setSelectedRow([asset]);    
   }, [dispatch] );
 
+  /**
+   * Row Click
+   */
+
   const handleOnClick = useCallback(
     ({ grant_doc_num, appno_doc_num, asset }) => {     
       console.log('selectedCategory', selectedCategory) 
@@ -1137,6 +1167,10 @@ const checkMouseStillOnHover = (e, number) => {
   }  
 }
 
+/**
+ * Retireve slack messages and also retrieve Rating and Necessary
+ * @param {*} asset 
+ */
 const retrieveSlackMessages = async(asset) => {
   const getSlackToken = getTokenStorage("slack_auth_token_info");
   

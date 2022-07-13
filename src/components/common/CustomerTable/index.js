@@ -25,7 +25,8 @@ import {
     setMaintainenceAssetsList,
     setAssetTypeAssignmentAllAssets,
     setAssetTypeAssignments,
-    getCustomerAssets
+    getCustomerAssets,
+    setSelectAssignmentCustomerName
   } from '../../../actions/patentTrackActions2'
 
   import {
@@ -239,11 +240,14 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         if( !oldSelection.includes(row.id) ){
             //oldSelection.push(row.id)
             oldSelection = [row.id]
+            console.log("row", row)
+            setSelectAssignmentCustomerName(row.entityName)
         } else if(index != 2) {
             /* oldSelection = oldSelection.filter(
                 customer => customer !== parseInt( row.id ),
             ) */
             oldSelection = []
+            setSelectAssignmentCustomerName('')
         }
         history.push({
             hash: updateHashLocation(location, 'otherParties', oldSelection).join('&')

@@ -15,7 +15,7 @@ export default {
     clipboard_assets: [],
     foreignAssets: { selected: [], selectNames: [] },
     assetTypes: { list: [], row_select: [], selected: [], selectAll: false, loading: false, loading_companies: true },
-    assetTypeCompanies: { list: [], row_select: [], total_records: 0, selected: [], selectAll: false, loading: false },
+    assetTypeCompanies: { list: [], row_select: [], total_records: 0, selected: [], selectAll: false, loading: false , name: ''},
     assetTypeInventors: { list: [], total_records: 0, loading: false},
     assetTypeAssignments: { list: [], total_records: 0, selected: [], selectAll: false, loading: false, children: { list: [], total_records: 0, loading: false, selected:[] } },
     assetTypeAddress: { list: [], row_select: [], all_groups: [], total_records: 0, selected: [], selectAll: false, loading: false },

@@ -12,6 +12,7 @@ const arrayToObjectByKey = (array, key) =>
   }, {})
 
 const patenTrackReducer = (state = initialState.dashboard, action) => {
+  console.log('action.type', action.type)
   switch (action.type) {
     case types.SET_AUTHENTICATE_AUTH_TOKEN:
       return {
@@ -458,12 +459,18 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
       case types.SET_ASSET_TYPES_COMPANIES_SELECT:
         return {
           ...state,
-          assetTypeCompanies:  {...state.assetTypeCompanies, selected: action.data}
+          assetTypeCompanies:  {...state.assetTypeCompanies, selected: action.data, name: action.data.length == 0 ? '' : state.assetTypeCompanies.name}
         }
       case types.SET_ASSET_TYPES_COMPANIES_SELECT_ALL:
         return {
           ...state,
           assetTypeCompanies:  {...state.assetTypeCompanies, selectAll: action.flag}
+        }
+      case types.SET_ASSET_TYPES_COMPANIES_SELECT_NAME:
+        console.log('SET_ASSET_TYPES_COMPANIES_SELECT_NAME', action)
+        return {
+          ...state,
+          assetTypeCompanies: {...state.assetTypeCompanies, name: action.name}
         }
       case types.SET_ASSET_TYPES_COMPANIES_ROW_SELECT:
         return {
@@ -672,7 +679,7 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
       case types.SET_ASSET_TYPE_ASSIGNMENTS_SELECT:
         return {
           ...state,
-          assetTypeAssignments: {...state.assetTypeAssignments, selected: action.data}
+          assetTypeAssignments: {...state.assetTypeAssignments, selected: action.data, name: action.data.length == 0 ? '' : state.assetTypeAssignments.name}
         }  
       case types.SET_ASSET_TYPE_ASSIGNMENTS_ASSETS:
         return {

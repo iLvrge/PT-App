@@ -504,5 +504,8 @@ export default makeStyles(theme => ({
       backgroundColor: 'transparent',
       minWidth: 250,
       maxWidth: 500
+    },
+    headingName: {
+      marginLeft: 10
     }
 }));
