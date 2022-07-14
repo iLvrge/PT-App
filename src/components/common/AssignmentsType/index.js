@@ -230,6 +230,9 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
                     }
             if(assetTypes.length > 0) {
                 if(tab === 17) {
+                    /**
+                     * Temporary add 
+                     */
                     const listData = [];
                     [1, 6].forEach( i => {
                         const findIndex = assetTypes.findIndex( aTab => aTab.tab_id == i )
