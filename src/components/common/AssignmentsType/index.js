@@ -88,7 +88,7 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
     const profile = useSelector(store => (store.patenTrack.profile))
-    const tabs = [1,2,6,7,3,4,81,16,8,9,15,14,10,17] 
+    const tabs = [1,2,6,7,3,4,81,8,9,15,14,10,17] 
     /* const tabs = [1,2,6,7,3,4,5,11,12,13,8,9,15,14,10,16]  */
     /*const tabs = [1,2,6,7,3,4,5,11,12,13,8,9,15,14]*/
 
@@ -229,10 +229,29 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
                         /* background: backgroundRowColor */
                     }
             if(assetTypes.length > 0) {
-                const findIndex = assetTypes.findIndex( aTab => aTab.tab_id == tab )
-                if(findIndex >= 0) {                    
-                    item = {...item, ...assetTypes[findIndex]}
+                if(tab === 17) {
+                    const listData = [];
+                    [1, 6].forEach( i => {
+                        const findIndex = assetTypes.findIndex( aTab => aTab.tab_id == i )
+                        if(findIndex >= 0) {   
+                            listData.push(assetTypes[findIndex])      
+                        }
+                    })
+                    if(listData.length > 0) {
+                        let totalTransactions = 0, customer_count = 0;
+                        listData.forEach( row => {
+                            totalTransactions +=  parseInt(row.totalTransactions)
+                            customer_count +=  parseInt(row.customer_count)
+                        })
+                        item = {...item, totalTransactions, customer_count}
+                    }
+                } else {
+                    const findIndex = assetTypes.findIndex( aTab => aTab.tab_id == tab )
+                    if(findIndex >= 0) {                    
+                        item = {...item, ...assetTypes[findIndex]}
+                    }
                 }
+               
                 setGrandTotal(assetTypes[assetTypes.length - 1].grand_total)
             }
             list.push(item)
