@@ -255,8 +255,8 @@ const TimelineChart = (props) => {
     }, [ onSelect, onItemover]) 
 
     useEffect(() => {
+        let {list} = props.card
         if(props.card.type == 4 || props.card.type == 7) {
-            let {list} = props.card
             const removeRelease = list.filter( item => parseInt(item.release_rf_id) > 0 ? item.release_rf_id : '' )
             if(removeRelease.length > 0) {
                 removeRelease.forEach( remove => {
@@ -264,11 +264,10 @@ const TimelineChart = (props) => {
                     if(findIndex !== -1) {
                         list.splice(findIndex, 1)
                     }
-                })
-                setTimelineRawData(list)       
+                })   
             }
-        }        
-         
+        }   
+        setTimelineRawData(list)
     }, [props])
 
     //Item for the timeline

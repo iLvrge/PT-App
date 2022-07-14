@@ -543,6 +543,7 @@ const Reports = (props) => {
                 } 
                 setGrid(newGridItems)
                 if(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'){
+                    console.log('TIMELINE', newTimelineGrid)
                     setTimelineGrid(newTimelineGrid)
                 }
                 setSmallScreen(smallScreen)  
@@ -587,7 +588,7 @@ const Reports = (props) => {
     useEffect(() => {
         if(profile?.user?.organisation?.organisation_type) {
             setTimelineList(profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
-            setTimelineGrid(BANK_TIMELINE_ITEM)
+            setTimelineGrid(profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? BANK_TIMELINE_ITEM : TIMELINE_ITEM)
         }
     }, [profile])
    
