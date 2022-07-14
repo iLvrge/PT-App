@@ -275,7 +275,7 @@ const Reports = (props) => {
 
     const KPI_LIST = [
         {
-            title: 'Owned Patents (Non-Expired)',
+            title: 'Recorded Assigned Patents',
             tooltip: 'The USA patents assigned to the company from its inventors, and patents acquired by the company, minus those that were sold, expired  and abandoned.',
             number: 0,
             patent: '',
@@ -284,7 +284,7 @@ const Reports = (props) => {
             type: 30,
         },
         {
-            title: 'Patents Acquired',
+            title: 'Un-Recorded Assigned Patents',
             tooltip: 'The USA patents acquired by the company, minus those that were sold, expired and abandoned',
             number: 0,
             patent: '',
