@@ -275,35 +275,48 @@ const Reports = (props) => {
 
     const KPI_LIST = [
         {
-            title: 'Recorded Assigned Patents',
+            title: 'Assigned',
             tooltip: 'The USA patents assigned to the company from its inventors, and patents acquired by the company, minus those that were sold, expired  and abandoned.',
             number: 0,
+            other_number: 0,
             patent: '',
             application: '',
             rf_id: '',
             type: 30,
         },
         {
-            title: 'Un-Recorded Assigned Patents',
+            title: 'Filled',
             tooltip: 'The USA patents acquired by the company, minus those that were sold, expired and abandoned',
             number: 0,
+            other_number: 0,
             patent: '',
             application: '',
             rf_id: '',
             type: 31,
         }, 
         {
-            title: 'Patents Invented',
+            title: 'Acquired',
             tooltip: 'The USA patents assigned to the company from its inventors, minus those that were sold, expired  and abandoned',
             number: 0,
+            other_number: 0,
             patent: '',
             application: '',
             rf_id: '',
             type: 32,
         },
         {
-            title: 'Pending Applications',
+            title: 'Sold',
             tooltip: 'Patent applications which are still in the process of prosecution.',
+            number: 0,
+            other_number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 33
+        },
+        {
+            title: 'Collateralisation',
+            tooltip: 'Patents the company abandoned, i.e. for which the company has not paid maintenance fees.',
             number: 0,
             patent: '',
             application: '',
@@ -311,13 +324,14 @@ const Reports = (props) => {
             type: 34
         },
         {
-            title: 'Un-Maintained Patents',
-            tooltip: 'Patents the company abandoned, i.e. for which the company has not paid maintenance fees.',
+            title: 'Maintenance Budget (K)',
+            tooltip: 'Expected annual maintenance fees to be paid according to the company’s status and number of non-expired parents it currently owns.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
-            type: 33
+            type: 37,
+            currency: true
         },
         {
             title: 'Filed Applications',
@@ -336,16 +350,6 @@ const Reports = (props) => {
             application: '',
             rf_id: '',
             type: 36
-        },
-        {
-            title: 'Maintenance Budget (K)',
-            tooltip: 'Expected annual maintenance fees to be paid according to the company’s status and number of non-expired parents it currently owns.',
-            number: 0,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 37,
-            currency: true
         },
         {
             title: 'Top non-US Members',
@@ -368,7 +372,7 @@ const Reports = (props) => {
             list: []
         },
         {
-            title: 'Top Law Firms',
+            title: 'Law Firms',
             tooltip: 'The company\’s law firms with the largest number of registered transactions.',
             number: 0,
             patent: '',
@@ -378,7 +382,7 @@ const Reports = (props) => {
             list: []
         },
         {
-            title: 'Top Lenders',
+            title: 'Lenders',
             tooltip: 'Banks and lending institutions to which the company secured its patents as collateral.',
             number: 0,
             patent: '',

@@ -78,6 +78,25 @@ export default makeStyles(theme => ({
     companyBar:{
       height: '100%',
     },
+    kpiBorder: {
+      display: 'flex',
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      padding: '7px 10px 5px', 
+    },
+    kpiNumber: {
+      display: 'flex',
+      height: '63%',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    kpiNumberSmall:{
+      display: 'flex',
+      height: '31.5%',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
     border: {  
       /* borderTop: `1px solid ${theme.palette.divider}`, */
       overflow: 'hidden',
@@ -507,5 +526,9 @@ export default makeStyles(theme => ({
     },
     headingName: {
       marginLeft: 10
+    },
+    fixKPI: {
+      flexDirection: 'column',
+      justifyContent: 'flex-start'
     }
 }));

@@ -68,8 +68,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
     const [ xy, setXY] = useState({x: dashboardScreen === true ? '0px' : '-85px', y: '35px'})
     const [ valueScope, setValueScope ] = useState(dashboardScreen === true ? [...dashboardScope] : [1, 2])
-    const [ valueRange, setValueRange ] = useState(dashboardScreen === true ? 4 : 3)
-    const [ preValueRange, setPreValueRange ] = useState(3)
+    const [ valueRange, setValueRange ] = useState(4)/**dashboardScreen === true ? 4 : 3 */
+    const [ preValueRange, setPreValueRange ] = useState(4)
     const [ scopeRange, setScopeRange ] = useState([])
     const [ depthRange, setDepthRange ] = useState([
         {

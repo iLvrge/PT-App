@@ -39,14 +39,14 @@ const KpiBox = (props) => {
     }
 
     return (
-        <div className={clsx(classes.chartContainer, classes.widthResponsive)}>
+        <div className={clsx(classes.chartContainer, classes.widthResponsive, classes.fixKPI)}>
             <div>
                 <AddToolTip
                     tooltip={props.card.tooltip}
                     placement='bottom'
                     grid={props.grid}
                 >
-                    <Typography variant="h6" component="div" align="center" className={classes.border}>
+                    <Typography variant="h6" component="div" align="center" className={classes.kpiBorder}>
                         {props.card.title}
                     </Typography>
                 </AddToolTip>  
@@ -58,22 +58,43 @@ const KpiBox = (props) => {
                         data={props.card.list}
                     />
                 :
-                    <Typography 
-                        variant="h2" 
-                        component="div"
-                    >
-                        {
-                            props.card?.currency && props.card?.currency === true 
-                                ? 
-                                    props.card?.number > 1000 
-                                        ? 
-                                            `$${numberWithCommas(parseInt(props.card.number / 1000))}`
-                                        : 
-                                            numberWithCommas(props.card?.number) 
-                                : 
-                                    numberWithCommas(props.card?.number)
-                        }
-                    </Typography>
+                    [30, 31, 32, 33].includes(props.card.type)
+                    ?
+                        <React.Fragment>
+                            <Typography
+                                variant="h5" 
+                                component="div"
+                                className={classes.kpiNumberSmall}
+                            >
+                                Patents: {numberWithCommas(props.card?.number)}
+                            </Typography>
+                            <Typography
+                                variant="h5" 
+                                component="div"
+                                className={classes.kpiNumberSmall}
+                            >
+                                Application: {numberWithCommas(props.card?.other_number)}
+                            </Typography>
+                        </React.Fragment>
+                    :
+                        <Typography 
+                            variant="h2" 
+                            component="div"
+                            className={classes.kpiNumber}
+                        >
+                            {
+                            
+                                props.card?.currency && props.card?.currency === true 
+                                    ? 
+                                        props.card?.number > 1000 
+                                            ? 
+                                                `$${numberWithCommas(parseInt(props.card.number / 1000))}`
+                                            : 
+                                                numberWithCommas(props.card?.number) 
+                                    : 
+                                        numberWithCommas(props.card?.number)
+                            } 
+                        </Typography>
             }           
             <Button 
                 size="small" 
