@@ -315,7 +315,7 @@ const Reports = (props) => {
             type: 33
         },
         {
-            title: 'Collateralisation',
+            title: 'Collateralized',
             tooltip: 'Patents the company abandoned, i.e. for which the company has not paid maintenance fees.',
             number: 0,
             patent: '',
