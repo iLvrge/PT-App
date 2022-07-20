@@ -305,7 +305,7 @@ const Reports = (props) => {
             type: 32,
         },
         {
-            title: 'Sold',
+            title: 'Divested',
             tooltip: 'Patent applications which are still in the process of prosecution.',
             number: 0,
             other_number: 0,
@@ -318,10 +318,31 @@ const Reports = (props) => {
             title: 'Collateralized',
             tooltip: 'Patents the company abandoned, i.e. for which the company has not paid maintenance fees.',
             number: 0,
+            other_number: 0,
             patent: '',
             application: '',
             rf_id: '',
             type: 34
+        },
+        {
+            title: 'Abandoned',
+            tooltip: 'Non-abandoned patent applications filed by the company\’s employees.',
+            number: 0,
+            other_number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 36
+        },
+        {
+            title: 'Challenged (PTAB)',
+            tooltip: 'Non-abandoned patents applications the company acquired from third parties.',
+            number: 0,
+            other_number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 37
         },
         {
             title: 'Maintenance Budget (K)',
@@ -332,24 +353,6 @@ const Reports = (props) => {
             rf_id: '',
             type: 35,
             currency: true
-        },
-        {
-            title: 'Filed Applications',
-            tooltip: 'Non-abandoned patent applications filed by the company\’s employees.',
-            number: 0,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 36
-        },
-        {
-            title: 'Acquired Applications',
-            tooltip: 'Non-abandoned patents applications the company acquired from third parties.',
-            number: 0,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 37
         },
         {
             title: 'Top non-US Members',
@@ -547,7 +550,6 @@ const Reports = (props) => {
                 } 
                 setGrid(newGridItems)
                 if(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'){
-                    console.log('TIMELINE', newTimelineGrid)
                     setTimelineGrid(newTimelineGrid)
                 }
                 setSmallScreen(smallScreen)  
@@ -625,6 +627,10 @@ const Reports = (props) => {
         return (() => {})
     }, [selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssets, assetTypeCompanies])
 
+    const companyname = useMemo(() => {
+        return selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])
+    }, [selectedCompanies, companiesList])
+
     
     const findDashboardData = async(invention, jurisdictions, sankey, kpi) => {        
         if(loading === false && ((typeof invention !== 'undefined' && invention === false) ||  props.invention === false) && ((typeof jurisidictions !== 'undefined' && jurisdictions === false) || props.jurisdictions === false ) && ((typeof sankey !== 'undefined' && sankey === false) || props.sankey === false) ) { 
@@ -646,7 +652,8 @@ const Reports = (props) => {
                 formData.append('assignments', JSON.stringify(selectedAssetAssignments));
                 formData.append('type', item.type)
                 formData.append('data_format', props.lineGraph === true ? 1 : 0)
-                formData.append('format_type', profile.user.organisation.organisation_type)                
+                formData.append('format_type', profile.user.organisation.organisation_type)  
+                formData.append('company', companyname[0].original_name )              
                 const requestData = await PatenTrackApi.getDashboardData(formData, source)
                 if( requestData !== null){
                     updateList(requestData, item.type)
@@ -795,9 +802,7 @@ const Reports = (props) => {
         }
     }, [activeId])
 
-    const companyname = useMemo(() => {
-        return selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])
-    }, [selectedCompanies, companiesList])
+    
 
     const onHandleClick = useCallback(async(id) => {
         const card = cardList[id]

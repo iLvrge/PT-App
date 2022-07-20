@@ -58,7 +58,7 @@ const KpiBox = (props) => {
                         data={props.card.list}
                     />
                 :
-                    [30, 31, 32, 33].includes(props.card.type)
+                    [30, 31, 32, 33, 34, 36, 37].includes(props.card.type)
                     ?
                         <React.Fragment>
                             <Typography
