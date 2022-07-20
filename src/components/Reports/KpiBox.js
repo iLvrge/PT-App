@@ -37,7 +37,7 @@ const KpiBox = (props) => {
             </Paper>
         )
     }
-
+    console.log(props.card)
     return (
         <div className={clsx(classes.chartContainer, classes.widthResponsive, classes.fixKPI)}>
             <div>
@@ -73,7 +73,7 @@ const KpiBox = (props) => {
                                 component="div"
                                 className={classes.kpiNumberSmall}
                             >
-                                Applications: {numberWithCommas(props.card?.other_number)}
+                                Applications: {numberWithCommas(props.card.other_number)}
                             </Typography>
                         </React.Fragment>
                     :

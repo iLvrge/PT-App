@@ -330,7 +330,7 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 37,
+            type: 35,
             currency: true
         },
         {
@@ -340,7 +340,7 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 35
+            type: 36
         },
         {
             title: 'Acquired Applications',
@@ -349,7 +349,7 @@ const Reports = (props) => {
             patent: '',
             application: '',
             rf_id: '',
-            type: 36
+            type: 37
         },
         {
             title: 'Top non-US Members',
@@ -755,18 +755,24 @@ const Reports = (props) => {
                     oldList[findIndex].application = requestData.data[0].application
                     oldList[findIndex].rf_id = requestData.data[0].rf_id
                     oldList[findIndex].total = requestData.data[0].total  
-                    oldList[findIndex].number = 0               
+                    oldList[findIndex].number = 0           
                 } else if( requestData !== null && requestData?.data && requestData?.data?.number){
                     oldList[findIndex].number = requestData.data.number
                     oldList[findIndex].patent = requestData.data.patent != '' ? requestData.data.patent : ''
                     oldList[findIndex].application = requestData.data.application != '' ? requestData.data.application : ''                            
                     oldList[findIndex].rf_id = requestData.data.rf_id != '' ? requestData.data.rf_id : ''                            
                     oldList[findIndex].total = requestData.data.total
+                    if(typeof requestData.data.other_number !== 'undefined') {
+                        oldList[findIndex].other_number = requestData.data.other_number          
+                    }
                 } else {
                     oldList[findIndex].number = 0
                     oldList[findIndex].patent = ''
                     oldList[findIndex].application = ''
                     oldList[findIndex].total = 0
+                    if(typeof oldList[findIndex].other_number !== 'undefined'){
+                        oldList[findIndex].other_number = 0
+                    }
                 }
             }            
             setCardList(oldList)
