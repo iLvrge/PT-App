@@ -355,7 +355,7 @@ const Reports = (props) => {
             currency: true
         },
         {
-            title: 'Top non-US Members',
+            title: 'Non-US Members',
             tooltip: 'Countries in which the company has the largest number of patents.',
             number: 0,
             patent: '',

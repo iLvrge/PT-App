@@ -96,7 +96,7 @@ export default makeStyles(theme => ({
     },
     kpiNumberSmall:{
       display: 'flex',
-      height: '18.5%',
+      height: '22.5%',
       alignItems: 'center',
       justifyContent: 'center'
     },
