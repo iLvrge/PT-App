@@ -91,9 +91,12 @@ export default makeStyles(theme => ({
       alignItems: 'center',
       justifyContent: 'center'
     },
+    topMargin: {
+      marginTop: 15
+    },
     kpiNumberSmall:{
       display: 'flex',
-      height: '31.5%',
+      height: '18.5%',
       alignItems: 'center',
       justifyContent: 'center'
     },

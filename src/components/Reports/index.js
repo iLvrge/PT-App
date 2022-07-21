@@ -345,12 +345,12 @@ const Reports = (props) => {
             type: 37
         },
         {
-            title: 'Maintenance Budget (K)',
+            title: 'Maintenance Budget',
             tooltip: 'Expected annual maintenance fees to be paid according to the company’s status and number of non-expired parents it currently owns.',
             number: 0,
             patent: '',
             application: '',
-            rf_id: '',
+            rf_id: '', 
             type: 35,
             currency: true
         },
@@ -630,6 +630,10 @@ const Reports = (props) => {
     const companyname = useMemo(() => {
         return selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])
     }, [selectedCompanies, companiesList])
+
+    const partyName = useMemo(() => {
+        return selectedAssetCompanies.length > 0 && assetTypeCompanies.filter( party => party.id === selectedAssetCompanies[0])
+    }, [selectedAssetCompanies, assetTypeCompanies])
 
     
     const findDashboardData = async(invention, jurisdictions, sankey, kpi) => {        
@@ -987,7 +991,7 @@ const Reports = (props) => {
         }
     }, [dispatch, profile, activeId, selectedAssetCompanies, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, props.openCustomerBar, props.openCommentBar, props.kpi])
 
-    const changeGraph = (flag) => {
+    const changeGraph = async(flag) => {
         setIntial(false)
         addCardList()
         props.setJurisdiction(false)
@@ -1026,7 +1030,7 @@ const Reports = (props) => {
         props.setSankey(true)
     }
 
-    const onHandleKPI = () => {
+    const onHandleKPI = async() => {
         setIntial(false)
         setCardList(KPI_LIST)
         props.setLineGraph(false)
@@ -1122,7 +1126,7 @@ const Reports = (props) => {
                 <Paper className={classes.titleContainer} square>
                     <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{companyname.length > 0 ? companyname[0].original_name : ''}</span> {
                         profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' && selectedAssetCompanies.length == 1 && (
-                            <span className={classes.headingName}>{selectedPartyName}</span>
+                            <span className={classes.headingName}>{partyName[0].entityName}</span>
                         ) 
                     }</span>
                     <div className={classes.toolbar}> 

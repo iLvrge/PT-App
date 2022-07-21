@@ -229,36 +229,38 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             } else { 
                 setCurrentSelection(null)
             }
+        } else {
+            if(display_clipboard === false) {
+                dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
+                dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+            }
+            dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
+            
+            if( !oldSelection.includes(row.id) ){
+                //oldSelection.push(row.id)
+                oldSelection = [row.id]
+                console.log("row", row)
+                setSelectAssignmentCustomerName(row.entityName)
+            } else if(index != 2) {
+                /* oldSelection = oldSelection.filter(
+                    customer => customer !== parseInt( row.id ),
+                ) */
+                oldSelection = []
+                setSelectAssignmentCustomerName('')
+            }
+            history.push({
+                hash: updateHashLocation(location, 'otherParties', oldSelection).join('&')
+            })
+            if(dashboardScreen === true) {
+                getAssets(oldSelection)
+            }
+            setSelectItems(oldSelection)
+            setSelectAll(false)
+            dispatch( setAllAssignmentCustomers(assetTypeCompanies.length == oldSelection.length ||  data.length == oldSelection.length ? true : false ) )
+            dispatch( setSelectAssignmentCustomers(oldSelection) )
         }
 
-        if(display_clipboard === false) {
-            dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
-            dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
-        }
-        dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
         
-        if( !oldSelection.includes(row.id) ){
-            //oldSelection.push(row.id)
-            oldSelection = [row.id]
-            console.log("row", row)
-            setSelectAssignmentCustomerName(row.entityName)
-        } else if(index != 2) {
-            /* oldSelection = oldSelection.filter(
-                customer => customer !== parseInt( row.id ),
-            ) */
-            oldSelection = []
-            setSelectAssignmentCustomerName('')
-        }
-        history.push({
-            hash: updateHashLocation(location, 'otherParties', oldSelection).join('&')
-        })
-        if(dashboardScreen === true) {
-            getAssets(oldSelection)
-        }
-        setSelectItems(oldSelection)
-        setSelectAll(false)
-        dispatch( setAllAssignmentCustomers(assetTypeCompanies.length == oldSelection.length ||  data.length == oldSelection.length ? true : false ) )
-        dispatch( setSelectAssignmentCustomers(oldSelection) )
     }, [ dispatch, currentSelection, selectItems, display_clipboard ])
 
     const getTimelineData = (dispatch, id) => {

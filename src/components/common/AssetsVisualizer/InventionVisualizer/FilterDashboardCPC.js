@@ -54,6 +54,10 @@ const FilterDashboardCPC = ({ depthRange, scopeRange, yearRange, yearRangeText, 
     }, [ scopeRange ])
 
     useEffect(() => {
+        setYearValue(valueYear)
+    }, [valueYear])
+
+    useEffect(() => {
         setHeightYear(`${(yearRange.length * CONTANT_HEIGHT) + 15}px`)
         const year = []
         yearRange.forEach(item => year.push({value: item.value}))

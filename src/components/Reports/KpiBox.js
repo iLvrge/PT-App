@@ -37,7 +37,7 @@ const KpiBox = (props) => {
             </Paper>
         )
     }
-    console.log(props.card)
+    
     return (
         <div className={clsx(classes.chartContainer, classes.widthResponsive, classes.fixKPI)}>
             <div>
@@ -64,12 +64,12 @@ const KpiBox = (props) => {
                             <Typography
                                 variant="h5" 
                                 component="div"
-                                className={classes.kpiNumberSmall}
+                                className={clsx(classes.kpiNumberSmall, classes.topMargin)}
                             >
                                 Patents: {numberWithCommas(props.card?.number)}
                             </Typography>
                             <Typography
-                                variant="h5" 
+                                variant="h5"  
                                 component="div"
                                 className={classes.kpiNumberSmall}
                             >
@@ -78,7 +78,7 @@ const KpiBox = (props) => {
                         </React.Fragment>
                     :
                         <Typography 
-                            variant="h2" 
+                            variant="h5" 
                             component="div"
                             className={classes.kpiNumber}
                         >
@@ -88,7 +88,7 @@ const KpiBox = (props) => {
                                     ? 
                                         props.card?.number > 1000 
                                             ? 
-                                                `$${numberWithCommas(parseInt(props.card.number / 1000))}`
+                                                `$${numberWithCommas(parseInt(props.card.number))}`
                                             : 
                                                 numberWithCommas(props.card?.number) 
                                     : 

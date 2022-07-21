@@ -171,9 +171,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         showShadow: false,
         keepAspectRatio: false,
         verticalRatio: 0.4,
-        xLabel: '',
-        yLabel: '',
-        zLabel: '',
+        xLabel: 'Filling Year',
+        yLabel: 'Technologies',
+        zLabel: 'Number of Assets',
         tooltip: function (point) {
             // parameter point contains properties x, y, z, and data
             // data is the original object passed to the point constructor
@@ -556,7 +556,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             })
             await Promise.all(codePromise)
             console.log('codeList', codeList) */
-            console.log('START')
             const promises = graphRawData.map( (data, index) => {
                 const findIndex = graphRawGroupData.findIndex( row => row.cpc_code == data.cpc_code )
                 if(findIndex !== -1) {
@@ -817,14 +816,17 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
     const onChangeYearSlider = useCallback(async (range, year) => {
         setValueYear(year)
-        setScopeRange([])
-        setValueScope(dashboardScreen === true ? [...dashboardScope] : [1, 2])
+        if(dashboardScreen !== true) {
+            setScopeRange([])
+            setValueScope([1, 2])
+        } 
         const yearList = []
         filterYear.forEach( r => {
             if(r.value >= year[0] && r.value <= year[1]){
                 yearList.push(parseInt(r.label))
             }
         })
+        
         findCPCList([...scopeRange], filterList, filterTotal, yearList, range)      
     }, [filterList, filterTotal, filterYear])
 
@@ -859,8 +861,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 yearList.push(parseInt(r.label))
             }
         })
+        
         findCPCList([...scopeRange], filterList, filterTotal, yearList, range, scopeList)        
-    }, [ filterList, filterTotal, scopeRange ] )
+    }, [ filterList, filterTotal, scopeRange, filterYear ] )
 
 
     const onChangeDashboardScopeSlider = useCallback(async (year, range, scope) => {
@@ -879,7 +882,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             setGraphRawData([])
         }
               
-    }, [ filterList, filterTotal, scopeRange ] )
+    }, [ filterList, filterTotal, scopeRange, filterYear ] )
 
     const toggleDrawer = (event, open) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift') ) {
