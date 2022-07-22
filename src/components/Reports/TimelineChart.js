@@ -17,6 +17,7 @@ import PatenTrackApi from '../../api/patenTrack2'
 import themeMode from '../../themes/themeMode'
 import AddToolTip from './AddToolTip'
 import { Close, Fullscreen } from '@mui/icons-material'
+import { namespace } from 'd3'
 
 
 /**
@@ -48,7 +49,7 @@ const options = {
       if (data.isCluster) {
         return data.items.length > 0 ? `<span class="cluster-header"><span class="cluster-image cluster-${data.items[0].assetType}"></span><span>${data.items.length} ${data.items[0].companyName.length > 0 ? capitalize(data.items[0].assetType)  : ''} transactions</span></span>` : ``
       } else { 
-        return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
+        return `<span style="width:100%;display:block;" class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
       }
     },
 }
@@ -75,6 +76,74 @@ const TimelineChart = (props) => {
     const onSelect = useCallback((properties) => {
 
     })
+
+    const findImageColor = (item) => {
+        let image = '', color ='';
+        switch(parseInt(item.tab_id)) {
+        case 1:
+            image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/acquisition.png'
+            color = '#E60000'
+            break;
+        case 2:
+            image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png'
+            color = '#70A800'
+            break;
+        case 3:
+            image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licensein.png'
+            color = '#E69800'
+            break;
+        case 4:
+            image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licenseout.png'
+            color = '#E69800'
+            break;
+        case 5:
+            image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+            color = '#00a9e6'
+            break;
+        case 6:
+            image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png'
+            color = '#FFFFFF'
+            break;
+        case 7:
+            image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png'
+            color = '#FFFFFF'
+            break;
+        case 8:
+            image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/options.png'
+            color = '#000000'
+            break;
+        case 9:
+            image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/courtorder.png'
+            color = '#E60000'
+            break;
+        case 10:
+            image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png'
+            color = '#FFFFFF'
+            break;
+        case 11:
+            image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/release.png'
+            color = '#00a9e6'
+            break;
+        case 12:
+            image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+            color = '#00a9e6'
+            break;
+        case 13:
+            image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+            color = '#00a9e6'
+            break;
+        case 14:
+            image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png'
+            color = '#FFFFFF'
+            break;
+        case 14:
+        default:
+            image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png'
+            color = '#FFFFFF'
+            break;
+        }
+        return {image, color}
+    }
       // Custom ToolTip
   
     const showTooltip = (item, event) => {    
@@ -96,71 +165,8 @@ const TimelineChart = (props) => {
                 } else {
                     transactionType = capitalize(transactionType)
                 }
+                let {image, color} = findImageColor(item)
                 
-                let image = '', color ='';
-                switch(parseInt(item.tab_id)) {
-                case 1:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/acquisition.png'
-                    color = '#E60000'
-                    break;
-                case 2:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png'
-                    color = '#70A800'
-                    break;
-                case 3:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licensein.png'
-                    color = '#E69800'
-                    break;
-                case 4:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licenseout.png'
-                    color = '#E69800'
-                    break;
-                case 5:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
-                    color = '#00a9e6'
-                    break;
-                case 6:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png'
-                    color = '#FFFFFF'
-                    break;
-                case 7:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png'
-                    color = '#FFFFFF'
-                    break;
-                case 8:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/options.png'
-                    color = '#000000'
-                    break;
-                case 9:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/courtorder.png'
-                    color = '#E60000'
-                    break;
-                case 10:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png'
-                    color = '#FFFFFF'
-                    break;
-                case 11:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/release.png'
-                    color = '#00a9e6'
-                    break;
-                case 12:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
-                    color = '#00a9e6'
-                    break;
-                case 13:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
-                    color = '#00a9e6'
-                    break;
-                case 14:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png'
-                    color = '#FFFFFF'
-                    break;
-                case 14:
-                default:
-                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png'
-                    color = '#FFFFFF'
-                    break;
-                }
                 let calcLeft = event.clientX + 20, calcTop = event.clientY
                 if((calcLeft + 100) > screenWidth) {
                     calcLeft = screenWidth - 300
@@ -169,7 +175,8 @@ const TimelineChart = (props) => {
                     calcTop = screenHeight - 350
                 }
                 const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${calcTop}px;left:${calcLeft}px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
-                                            <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
+                <div>                            
+                <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
                                             <div>
                                             ${ executionDate != '' ? moment(executionDate).format('ll') : ''}
                                             </div>
@@ -184,8 +191,29 @@ const TimelineChart = (props) => {
                                             ${data.assignee.map(ee => (
                                                 '<div>'+ee.original_name+'</div>'
                                             )).join('')}
-                                            </div>
-                                        </div>` 
+                                            </div></div>`;
+                if(typeof data.releaseAssignor != 'undefined') {
+
+                    const {releaseAssignor, releaseAssignee, releaseAssignment} = data
+                    const releaseExecutionDate = releaseAssignor.length > 0 ? releaseAssignor[0].exec_dt : ''
+                    tootltipTemplate = `<div>
+                    ${ releaseExecutionDate != '' ? moment(releaseExecutionDate).format('ll') : ''}
+                    </div>
+                    <div>
+                    <h4>Assignors:</h4>
+                    ${releaseAssignor.map(or => ( 
+                        '<div>'+or.original_name+'</div>'
+                    )).join('')}
+                    </div>
+                    <div>
+                    <h4>Assignees:</h4>
+                    ${releaseAssignee.map(ee => (
+                        '<div>'+ee.original_name+'</div>'
+                    )).join('')}
+                    </div></div>`
+                }
+
+                tootltipTemplate +=`</div>` 
                 resetTooltipContainer() 
                 if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
                     document.body.insertAdjacentHTML('beforeend',tootltipTemplate)
@@ -277,7 +305,7 @@ const TimelineChart = (props) => {
         const assetType = Number.isInteger(assetsCustomer.tab_id) ? convertTabIdToAssetType(assetsCustomer.tab_id) : 'default'
         const companyName =  selectedWithName.filter( company => assetsCustomer.company == company.id ? company.name : '')
         const customerFirstName = assetsCustomer.tab_id == 10 ? assetsCustomer.customerName.split(' ')[0] : assetsCustomer.customerName;
-
+        
         const item = {        
             type: 'point',
             start: new Date(assetsCustomer.exec_dt),
@@ -285,7 +313,7 @@ const TimelineChart = (props) => {
             assetType,
             companyName,
             rawData: assetsCustomer,
-            className: `asset-type-${assetType}`,
+            className: `asset-type-${assetType} ${assetsCustomer.release_exec_dt != null ? 'asset-type-security-release' : ''}`,
             collection: [ { id: assetsCustomer.id, totalAssets: assetsCustomer.totalAssets } ],
             showTooltips: false
         }
@@ -293,6 +321,16 @@ const TimelineChart = (props) => {
         if([5,12].includes(parseInt(assetsCustomer.tab_id))){            
             item.type = 'range';
             item['end'] = assetsCustomer.release_exec_dt != null ? new Date(assetsCustomer.release_exec_dt) : new Date();
+            
+            const securityPDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.reel_no}-${assetsCustomer.frame_no}.pdf`
+            item['security_pdf'] = securityPDF
+            let name = `<tt><img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></tt>${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`;
+            if(assetsCustomer.release_exec_dt != null ) {
+                const releasePDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.release_reel_no}-${assetsCustomer.release_frame_no}.pdf`
+                item['release_pdf'] = releasePDF
+                name += `<em><img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></em>`
+            }
+            item['customerName'] = name
         }
         return item
     }

@@ -370,16 +370,43 @@ export default makeStyles(theme => ({
       '& .vis-time-axis .vis-text':{
         padding: '1px 3px'
       },
+      '& .vis-item.asset-type-security-release':{
+        backgroundColor: '#70A800 !important',
+        
+      },
+      '& .vis-item.asset-type-lending':{
+        backgroundColor: '#FFAA00',
+      },
+      '& .vis-item.asset-type-borrowing':{
+        backgroundColor: '#FFAA00',
+      },
       '& .vis-item.vis-range':{
-        backgroundColor: '#FFAA00 !important',
+        border: 0,
         '& .vis-item-overflow':{
           position: 'unset',
           minHeight: 28,
           '& .vis-item-content':{
-            width: 'auto',
+            width: '100%',
             position: 'absolute',
             '& span':{
-              whiteSpace: 'nowrap'
+              whiteSpace: 'nowrap',
+              display: 'block',
+              width: '100%'
+            },
+            '& tt':{
+              marginRight: 10,
+              cursor: 'pointer',
+              '& img':{
+                width: 16
+              }
+            },
+            '& em':{
+              position: 'absolute',
+              right: 7,
+              cursor: 'pointer',
+              '& img':{
+                width: 16
+              }
             }
           }
         } 
