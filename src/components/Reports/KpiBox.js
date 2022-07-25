@@ -27,7 +27,7 @@ const KpiBox = (props) => {
                                         variant="body2" 
                                         component="div"
                                     >
-                                        <span className={classes.itemHeading}>{item.name}:</span><span className={classes.itemText}>{numberWithCommas(item.number)}</span>
+                                        <span className={classes.itemHeading} title={item.name}>{item.name}:</span><span className={classes.itemText}>{numberWithCommas(item.number)}</span>
                                     </Typography>                                    
                                 </ListItemText>
                             </ListItem>

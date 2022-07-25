@@ -478,7 +478,7 @@ export default makeStyles(theme => ({
       boxShadow: 'none',
       /* marginTop:15, */
       '& .MuiListItem-root':{
-        padding: '0px 16px'
+        padding: 0
       },
       '& .MuiList-root':{
         padding: 0
@@ -492,7 +492,7 @@ export default makeStyles(theme => ({
     },
     itemHeading: {
       display: 'inline-block',
-      maxWidth: '70%',
+      width: '80%',
       overflow: 'hidden',
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis', 
@@ -500,7 +500,9 @@ export default makeStyles(theme => ({
     },
     itemText:{
       position: 'absolute',
-      top: 0
+      top: 0,
+      width: '18%',
+      textAlign: 'right'
     },
     timelineProcessingIndicator: {
       position: 'absolute',
