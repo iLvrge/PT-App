@@ -16,8 +16,9 @@ import { assetsTypesWithKey, convertTabIdToAssetType, oldConvertTabIdToAssetType
 import PatenTrackApi from '../../api/patenTrack2'
 import themeMode from '../../themes/themeMode'
 import AddToolTip from './AddToolTip'
-import { Close, Fullscreen } from '@mui/icons-material'
-import { namespace } from 'd3'
+import { Close, Fullscreen } from '@mui/icons-material' 
+import { setConnectionBoxView, setPDFFile, setPDFView } from '../../actions/patenTrackActions'
+import { retrievePDFFromServer } from '../../actions/patentTrackActions2'
 
 
 /**
@@ -57,6 +58,7 @@ const options = {
 const TIME_INTERVAL = 1000
 var tootlTip = ''
 const TimelineChart = (props) => {
+    const dispatch = useDispatch()
     const classes = useStyles()
     const timelineRef = useRef() //timeline Object ref
     const timelineContainerRef = useRef() //div container ref
@@ -74,7 +76,36 @@ const TimelineChart = (props) => {
     
 
     const onSelect = useCallback((properties) => {
+        const {items, event} = properties
+        const {nodeName} = event.target.parentNode
+        const item = timelineRef.current.itemsData.get(items)
+        if(item.length > 0) {
+            const {security_pdf, release_pdf, rawData} = item[0];
 
+            const pdfFile = nodeName == "TT" ? security_pdf : nodeName == "EM" ? release_pdf : ''
+            if(pdfFile !== '' && pdfFile != undefined) {
+                console.log('props.checkChartAnalytics', props.checkChartAnalytics)
+                props.checkChartAnalytics(null, null, true)
+                dispatch(
+                    setPDFView(true)
+                )
+                dispatch(
+                    setConnectionBoxView(true)
+                )
+                if(pdfFile.indexOf('legacy-assignments.uspto.gov') !== -1) {
+                    const retrievePDF = {rf_id: nodeName == "TT" ? rawData.id : rawData.release_rf_id}
+                    dispatch(retrievePDFFromServer(retrievePDF))  
+                } else {
+                    dispatch(
+                        setPDFFile({ 
+                            document: pdfFile, 
+                            form: pdfFile,
+                            agreement: pdfFile
+                        })
+                    ) 
+                }
+            }
+        }
     })
 
     const findImageColor = (item) => {
@@ -145,7 +176,7 @@ const TimelineChart = (props) => {
         return {image, color}
     }
       // Custom ToolTip
-  
+
     const showTooltip = (item, event) => {    
         setTimeout(() => {
         if(tootlTip === item.id) {
@@ -174,8 +205,8 @@ const TimelineChart = (props) => {
                 if((calcTop + 160) > screenHeight) {
                     calcTop = screenHeight - 350
                 }
-                const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${calcTop}px;left:${calcLeft}px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
-                <div>                            
+                let tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${calcTop}px;left:${calcLeft}px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
+                <div style='display:flex;'><div style='display:flex;flex-direction: column;'>                            
                 <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
                                             <div>
                                             ${ executionDate != '' ? moment(executionDate).format('ll') : ''}
@@ -191,12 +222,11 @@ const TimelineChart = (props) => {
                                             ${data.assignee.map(ee => (
                                                 '<div>'+ee.original_name+'</div>'
                                             )).join('')}
-                                            </div></div>`;
+                </div></div>`;
                 if(typeof data.releaseAssignor != 'undefined') {
-
                     const {releaseAssignor, releaseAssignee, releaseAssignment} = data
                     const releaseExecutionDate = releaseAssignor.length > 0 ? releaseAssignor[0].exec_dt : ''
-                    tootltipTemplate = `<div>
+                    tootltipTemplate += `<div style='display:flex;flex-direction: column;'><h4 style='color:#00a9e6;text-align:left;margin:0'>Release</h4><div>
                     ${ releaseExecutionDate != '' ? moment(releaseExecutionDate).format('ll') : ''}
                     </div>
                     <div>
@@ -213,7 +243,7 @@ const TimelineChart = (props) => {
                     </div></div>`
                 }
 
-                tootltipTemplate +=`</div>` 
+                tootltipTemplate +=`</div></div>` 
                 resetTooltipContainer() 
                 if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
                     document.body.insertAdjacentHTML('beforeend',tootltipTemplate)
@@ -246,10 +276,10 @@ const TimelineChart = (props) => {
      */
 
     const onItemout = () => {
-        tootlTip = ''
+         tootlTip = ''
         PatenTrackApi.cancelTimelineItem()
         resetTooltipContainer()
-        setToolTipItem([])
+        setToolTipItem([]) 
         
         /* clearInterval(timeInterval) */
     }

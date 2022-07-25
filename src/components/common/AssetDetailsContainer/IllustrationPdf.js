@@ -17,6 +17,7 @@ const IllustrationPdf = ({split, cls, primary, illustrationData, dragStart, drag
         updateResizerBar(chartAnalyticsContainer, true, 1)
     }, [ chartAnalyticsContainer ])
 
+    console.log('adasdsadasdsd', illustrationData)
     return (
         <div style={{ height: "100%" }} className={classes.root}>
             <SplitPane
@@ -24,7 +25,7 @@ const IllustrationPdf = ({split, cls, primary, illustrationData, dragStart, drag
                 split={split}
                 minSize={10}
                 maxSize={-100}
-                defaultSize={'50%'}
+                defaultSize={illustrationData != '' && illustrationData != null && Object.keys(illustrationData).length > 0 ? '50%' : '100%'}
                 pane1Style={{
                 pointerEvents: isDrag ? 'none' : 'auto',
                 }}
@@ -43,19 +44,23 @@ const IllustrationPdf = ({split, cls, primary, illustrationData, dragStart, drag
                 id={`assets_`}
                 style={{ height: "100%" }}
                 >
-                <PdfViewer
-                    display={"false"}
-                    fullScreen={false}
-                    resize={resizeFrame}
-                />
+                    <PdfViewer
+                        display={"false"}
+                        fullScreen={false}
+                        resize={resizeFrame}
+                    />
                 </div>
-                <div
-                className={`${classes.commentContainer} ${
-                    isDrag === true ? classes.notInteractive : classes.isInteractive
-                }`}
-                >
-                    <ConnectionBox display={"false"} assets={illustrationData} type={type}/>
-                </div>
+                {
+                    illustrationData != '' && illustrationData != null && (
+                        <div
+                            className={`${classes.commentContainer} ${
+                                isDrag === true ? classes.notInteractive : classes.isInteractive
+                            }`}
+                        >
+                            <ConnectionBox display={"false"} assets={illustrationData} type={type}/>
+                        </div>
+                    )
+                }
             </SplitPane>
         </div>        
     )

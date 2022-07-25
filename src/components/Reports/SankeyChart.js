@@ -1,20 +1,25 @@
-import React, {useState, useEffect} from 'react'
-import { useSelector } from 'react-redux'
+import React, {useState, useEffect, useCallback} from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { Paper } from '@mui/material';
 import DisplayChart from './DisplayChart';
 import Loader from '../common/Loader'
 import PatenTrackApi from '../../api/patenTrack2'
 import useStyles from './styles'
 import clsx from 'clsx';
-import { Box } from '@mui/system';
 import TitleBar from '../common/TitleBar';
+import { setSelectAssignmentCustomers } from '../../actions/patentTrackActions2';
+import { setDashboardScreen, setPatentScreen, setTimelineScreen } from '../../actions/uiActions';
 
 const SankeyChart = (props) => {
+    const dispatch = useDispatch();
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const [loadingAssignor, setLoadingAssingor] = useState(false);
     const [data, setData] = useState([]);
     const [assignorData, setAssignorData] = useState([]);    
+    const [assigneeRawData, setAssigneeRawData] = useState([]);    
+    const [assignorRawData, setAssignorRawData] = useState([]);    
+    
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
     
     useEffect(() => {
@@ -24,12 +29,15 @@ const SankeyChart = (props) => {
                 setLoadingAssingor(true) 
                 setData([])
                 setAssignorData([])
+                setAssigneeRawData([])
+                setAssignorRawData([])
                 const formData = new FormData()
                 formData.append('selectedCompanies', JSON.stringify(selectedCompanies));                
                 const {data} = await PatenTrackApi.getDashboardPartiesData(formData)
                 const getAssignorData = await PatenTrackApi.getDashboardPartiesAssignorData(formData)
                 const loadData = []
                 if(data.length > 0) {
+                    setAssigneeRawData(data)
                     loadData.push([{ type: 'string', label: "From"}, { type: 'string', label: "To"}, { type: 'number', label: "Assets"}, { type: 'string', role: 'tooltip'}])
                     data.forEach( item => {
                         loadData.push([
@@ -46,6 +54,7 @@ const SankeyChart = (props) => {
                     const assignorData  = getAssignorData.data
                     const loadAssignorData = []
                     if(assignorData.length > 0) {
+                        setAssignorRawData(assignorData)
                         loadAssignorData.push(["From", "To", "Assets"])
                         assignorData.forEach( item => {
                             loadAssignorData.push([
@@ -64,6 +73,18 @@ const SankeyChart = (props) => {
         return (() => {})
     }, [selectedCompanies])
 
+    const handleSelection = useCallback((items, type) => {
+        console.info(items, type)
+        let oldItems = type == 2 ? [...assigneeRawData] : [...assigneeRawData]
+        const filter = oldItems.filter( row => row.name === items[0].name)
+        if(filter.length > 0) {
+            dispatch(setSelectAssignmentCustomers([filter[0].id]))
+            dispatch(setDashboardScreen(false))
+            dispatch(setTimelineScreen(false))
+            dispatch(setPatentScreen(true))
+        }
+    }, [assigneeRawData, assigneeRawData])
+
     return (
         <Paper sx={{p: 2, overflow: 'auto'}} className={clsx(classes.container, classes.containerTop)} square>
             {
@@ -77,7 +98,7 @@ const SankeyChart = (props) => {
                     data.length > 0 && (
                         <div className={classes.child}>
                             <TitleBar title="Acquistions:" enablePadding={false}/>
-                            <DisplayChart data={data} tooltip={true}/>
+                            <DisplayChart data={data} tooltip={true} type={1} onSelect={handleSelection}/>
                         </div>   
                     ) 
                     
@@ -91,7 +112,7 @@ const SankeyChart = (props) => {
                     assignorData.length > 0 && (
                         <div className={clsx(classes.child, {[classes.maxChildHeight]: data.length > 0 ? true : false})} >
                             <TitleBar title="Divestitures:" enablePadding={false}/>
-                            <DisplayChart data={assignorData}/>
+                            <DisplayChart data={assignorData} type={2} onSelect={handleSelection}/>
                         </div>  
                     )
                 :

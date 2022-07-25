@@ -13,9 +13,10 @@ const DisplayChart = (props) => {
         sankey: {
             link: { color: { fill: "#1565C0" } },
             node: {
-              colors: ['#70A800', '#FFAA00','#1565C0', '#E60000'],
-              label: { color: "#FFF", fontName: 'Roboto', fontSize: 12.25 },
-              width: 15
+                interactivity: true,
+                colors: ['#70A800', '#FFAA00','#1565C0', '#E60000'],
+                label: { color: "#FFF", fontName: 'Roboto', fontSize: 12.25 },
+                width: 15
             }
         },
         tooltip
@@ -59,6 +60,21 @@ const DisplayChart = (props) => {
                         loader={<div>Loading...</div>}
                         data={props.data}
                         options={option}
+                        chartEvents={[
+                            {
+                                eventName: "ready",
+                                callback: ({ chartWrapper, google }) => {
+                                    const chart = chartWrapper.getChart();
+                                    google.visualization.events.addListener(chart, "select", e => {
+                                        const chart = chartWrapper.getChart();
+                                        const selection = chart.getSelection();
+                                        if(selection.length > 0) {
+                                            props.onSelect(selection, props.type)
+                                        }
+                                    });
+                                }
+                            }
+                        ]}
                     />
                 :
                     ''

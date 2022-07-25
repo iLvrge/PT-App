@@ -1096,6 +1096,7 @@ const Reports = (props) => {
                 type={card.type} 
                 grid={timelineGrid} 
                 timeline={true}
+                checkChartAnalytics={props.checkChartAnalytics}
             />
         </Grid>
     })

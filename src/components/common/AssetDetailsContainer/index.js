@@ -223,7 +223,7 @@ const AssetDetailsContainer = ({
             split={split}
             minSize={10}
             maxSize={-100}
-            defaultSize={'50%'}
+            defaultSize={illustrationData != '' && illustrationData != null && Object.keys(illustrationData).length > 0 ? '50%' : '0%'}
             pane1Style={{
               pointerEvents: isDrag ? 'none' : 'auto',
             }}
