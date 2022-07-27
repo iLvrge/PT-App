@@ -920,25 +920,25 @@ const Reports = (props) => {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'deflated_collaterals')
                 timeline = true
             } else if(id === 0 && subscription > 2  && props.kpi === true) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'non_expired_patents')
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'assigned')
                 patent = true
             } else if(id === 1 && subscription > 2  && props.kpi === true) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'patents_acquired')
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'filled')
                 patent = true
             } else if(id === 2 && subscription > 2  && props.kpi === true) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'patents_invented')
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'acquired')
                 patent = true
             } else if(id === 3 && subscription > 2  && props.kpi === true) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'unmaintained_patents')
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'divested')
                 patent = true
             } else if(id === 4 && subscription > 2  && props.kpi === true) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'pending_applications')
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'collaterlized')
                 patent = true
             } else if(id === 5 && subscription > 2  && props.kpi === true) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'filed_applications')
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'abandoned')
                 patent = true
             } else if(id === 6 && subscription > 2  && props.kpi === true) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'acquired_applications')
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'ptab')
                 patent = true
             } else if(id === 7 && subscription > 2  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'maintenance_budget')

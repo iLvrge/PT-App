@@ -108,7 +108,7 @@ const KpiBox = (props) => {
                 View List                
             </Button> 
             {
-                props.card?.number != '0'
+                props.card?.number != '0' || (props.card?.list && props.card.list.length > 0)
                 ?
                     <AddToolTip
                         tooltip='See Example'

@@ -505,12 +505,12 @@ const GlobalLayout = (props) => {
 
     const getWindowDimensions = () => {
         const hasWindow = typeof window !== 'undefined';
-        let percentage = '76%'
+        let percentage = '70%'
         const width = hasWindow ? window.innerWidth : null;
         if(width > 1400) {
-            percentage = '76%'
+            percentage = '70%'
         } else if(width < 1400 && width > 1279) {
-            percentage = '73%'
+            percentage = '70%'
         } else if(width < 1280 && width > 1151) {
             percentage = '69%'
         } else {

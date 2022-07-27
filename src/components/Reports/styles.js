@@ -92,7 +92,7 @@ export default makeStyles(theme => ({
       justifyContent: 'center'
     },
     topMargin: {
-      marginTop: 15
+      marginTop: 10
     },
     kpiNumberSmall:{
       display: 'flex',
