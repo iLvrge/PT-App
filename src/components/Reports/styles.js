@@ -501,7 +501,7 @@ export default makeStyles(theme => ({
     itemText:{
       position: 'absolute',
       top: 0,
-      width: '18%',
+      width: '15%',
       textAlign: 'right'
     },
     timelineProcessingIndicator: {
