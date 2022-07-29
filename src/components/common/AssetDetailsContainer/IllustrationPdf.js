@@ -17,7 +17,6 @@ const IllustrationPdf = ({split, cls, primary, illustrationData, dragStart, drag
         updateResizerBar(chartAnalyticsContainer, true, 1)
     }, [ chartAnalyticsContainer ])
 
-    console.log('adasdsadasdsd', illustrationData)
     return (
         <div style={{ height: "100%" }} className={classes.root}>
             <SplitPane

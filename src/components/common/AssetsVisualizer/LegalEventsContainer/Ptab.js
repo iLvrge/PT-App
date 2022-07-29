@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import Paper from '@mui/material/Paper'
 import { DataSet } from 'vis-data/esnext'
@@ -26,31 +26,16 @@ const options = {
     zoomFriction: 30,
     zoomMin: 1000 * 60 * 60 * 24 * 7,    
     template: function(item, element, data) { 
-      return `<div class='first'><div class='textColumn'><h4>${data.rawData.name} (${data.rawData.otherInfo.proceedingNumber})</h4></div><div class='textColumn'><h4>Filed: </h4> ${moment(new Date(data.rawData.start)).format(DATE_FORMAT)}</div><div class='textColumn'><h4>Status: </h4> ${data.rawData.status} (${moment(new Date(data.rawData.end)).format(DATE_FORMAT)})</div></div>`
+    return `<span style="width:100%;display:block;" class="${data.assetType}">${data.customerName}</span>`
+      /*return `<div class='first'><div class='textColumn'><h4>${data.rawData.name} (${data.rawData.status})</h4></div><div class='textColumn'><h4>Filed: </h4> ${moment(new Date(data.rawData.start)).format(DATE_FORMAT)}</div><div class='textColumn'><h4>Status: </h4> ${data.rawData.status} (${moment(new Date(data.rawData.end)).format(DATE_FORMAT)})</div></div>`*/
     },  
 } 
 
-const convertDataToItem = (item) => {
-    const assetType = 'default'
-    return ({
-      id: item.id,
-      content: '',
-      start: new Date(item.start),
-      end: new Date(item.end),
-      assetType,
-      zoomMin: 3456e5,
-      rawData: item,
-      number: item.name,
-      country: 'US',
-      className: `asset-type-${assetType}`,
-      collection: [],
-      showTooltip: false
-    })
-}
+
 var tootlTip = ''
 const TIME_INTERVAL = 1000
 
-const Ptab = ({ number, rawData, updateRawData }) => {
+const Ptab = ({ number, rawData, updateRawData, standalone }) => {
     const classes = useStyles()
     const timelineRef = useRef()
     const timelineContainerRef = useRef()
@@ -64,6 +49,62 @@ const Ptab = ({ number, rawData, updateRawData }) => {
     const [ timeInterval, setTimeInterval] = useState(null)
 
     const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
+
+    const convertDataToItem = (item) => {
+        const assetType = 'default'
+        const row = {        
+            type: 'point',
+            id: item.id,
+            content: '',
+            start: new Date(item.start),
+            customerName: `${item.name} (${item.status})`,
+            assetType,
+            rawData: item,
+            zoomMin: 3456e5,
+            number: item.name,
+            country: 'US',
+            className: `asset-type-${assetType} ${typeof item.end !== 'undefined' ? 'asset-type-proceeding-end' : ''}`,
+            collection: [],
+            showTooltips: false
+        }
+        if(typeof item.end !== 'undefined'){            
+            row.type = 'range';
+            row.end = item.end != null ? new Date(item.end) : new Date();
+        }
+        return row
+    }
+
+    const onSelect = useCallback( async properties => {
+        const {items, event} = properties
+        const {nodeName} = event.target.parentNode
+        const item = timelineRef.current.itemsData.get(items)
+        if(item.length > 0 && typeof item.rawData.end == 'undefined') {
+            try {
+                const request = new Request(`https://developer.uspto.gov/ptab-api/documents/${item[0].rawData.identifier}/download`,
+                    {
+                        method: "GET",
+                        headers: {
+                            accept: 'application/octet-stream'
+                        },
+                        mode: "cors",
+                        cache: "default",
+                    }
+                );
+            
+                fetch(request)
+                    .then((response) => response.blob())
+                    .then((blob) => {              
+                        const file = window.URL.createObjectURL(blob);
+                        window.open(file);
+                    })
+                    .catch((err ) => {
+                        console.log(err)
+                    });
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    });
 
     /**
     * on Itemover for the tooltip data
@@ -133,11 +174,40 @@ const Ptab = ({ number, rawData, updateRawData }) => {
         }, TIME_INTERVAL) 
     }
 
-    useEffect(() => {
-        if(typeof rawData !== 'undefined' && rawData.length > 0) {
+    const processRawData = useCallback(() => {
+        if(rawData.length > 0) {
+            const events = []
+            rawData.forEach( item => {
+                events.push({
+                    id: Math.random() * 16,
+                    start: item.proceedingFilingDate + ' 00:00:00',
+                    end: item.proceedingLastModifiedDate + ' 00:00:00',
+                    name: `${item.respondentPartyName} / ${item.appellantPartyName}`,
+                    status: item.proceedingStatusCategory,
+                    otherInfo: item
+                })
+            })
             setIsLoadingTimelineRawData(false) 
-            setTimelineRawData(rawData)
+            setTimelineRawData(events)
         } else {
+            setIsLoadingTimelineRawData(false) 
+            setTimelineRawData([])
+        }
+
+    }, [rawData])
+
+    useEffect(() => {
+        if(typeof rawData !== 'undefined') {
+            if(typeof standalone !== 'undefined' &&  standalone === true) {
+                processRawData()
+            } else {
+                setIsLoadingTimelineRawData(false) 
+                if(rawData.length > 0) {
+                    setTimelineRawData(rawData)
+                }
+            }
+        } else {
+            
             const getPtabData = async() => {
                 setIsLoadingTimelineRawData(true)
                 PatenTrackApi.cancelPtab()    
@@ -205,14 +275,16 @@ const Ptab = ({ number, rawData, updateRawData }) => {
     */
     useEffect(() => {
         timelineRef.current.setOptions(options) 
+        timelineRef.current.on('select', onSelect)
         timelineRef.current.on('itemover', onItemover)
         timelineRef.current.on('itemout', onItemout)
         return () => {
-        timelineRef.current.off('itemover', onItemover) 
-        timelineRef.current.off('itemout', onItemout)
-        resetTooltipContainer()
+            timelineRef.current.off('select', onSelect)
+            timelineRef.current.off('itemover', onItemover) 
+            timelineRef.current.off('itemout', onItemout)
+            resetTooltipContainer()
         } 
-    }, [ onItemover, onItemout ]) 
+    }, [ onSelect, onItemover, onItemout ]) 
 
     return(
         <Paper className={classes.root}>   

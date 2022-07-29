@@ -1119,6 +1119,9 @@ export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, appe
     /*const { data } = await PatenTrackApi.getCustomerAssets( type, companies, type == 'due_dilligence' ? tabs : [], type == 'due_dilligence' ? customers : [], rfIDs, startIndex, endIndex, column, direction, salesAssets )    */
     const { data } = await PatenTrackApi.getCustomerAssets( type, companies, tabs, customers, rfIDs, startIndex, endIndex, column, direction, salesAssets )
     dispatch( setAssetTypeAssignmentAllAssets(data, append) )
+    if(data != null && typeof data.other_data != 'undefined') {
+      dispatch(setPtabData(data.other_data))
+    }
     if(typeof callBackFn !== 'undefined') {
       callBackFn(false)
     }
@@ -1449,6 +1452,14 @@ export const setAssetTypeAssignmentAllAssets = (data, append) => {
     append
   }
 }
+
+export const setPtabData = (data)=> {
+  return {
+    type: types.SET_PTAB_DATA,
+    data
+  }
+}
+
 
 export const setBreadCrumbs = (name) => {
   return {

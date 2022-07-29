@@ -25,6 +25,7 @@ import Reports from '../../Reports'
 import FullScreen from '../FullScreen'
 import clsx from 'clsx'
 import InventionVisualizer from '../AssetsVisualizer/InventionVisualizer'
+import Ptab from '../AssetsVisualizer/LegalEventsContainer/Ptab'
 
 const IllustrationCommentContainer = ({ 
     cls, 
@@ -62,7 +63,8 @@ const IllustrationCommentContainer = ({
     type,
     handleCommentBarOpen,
     handleCustomersBarOpen,
-    cube    
+    cube,
+    ptab
     }) => {
     const classes = useStyles() 
     const iframeRef = useRef()
@@ -108,6 +110,7 @@ const IllustrationCommentContainer = ({
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const link_assets_sheet_type = useSelector(state => state.patenTrack2.link_assets_sheet_type)
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
+    const ptabAssets = useSelector(state => state.patenTrack2.ptabAssets)
     
   
     const menuItems = [
@@ -261,6 +264,13 @@ const IllustrationCommentContainer = ({
                 {  
                     illustrationBar === true && (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' ||  type === 9 || ((process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') && auth_token !== null))
                     ?
+                        ptab === true && assetIllustration === null
+                        ?
+                            <Ptab 
+                                rawData={ptabAssets}
+                                standalone={true}
+                            />
+                        :
                         cube === true && assetIllustration === null
                         ?
                             <InventionVisualizer 

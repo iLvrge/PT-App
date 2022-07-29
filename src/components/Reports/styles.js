@@ -83,7 +83,6 @@ export default makeStyles(theme => ({
       overflow: 'hidden',
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis',
-      padding: '7px 10px 5px', 
     },
     kpiNumber: {
       display: 'flex',
@@ -100,12 +99,14 @@ export default makeStyles(theme => ({
       alignItems: 'center',
       justifyContent: 'center'
     },
+    headingContainer:{
+      padding: '7px 10px 5px'
+    },
     border: {  
       /* borderTop: `1px solid ${theme.palette.divider}`, */
       overflow: 'hidden',
       whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis',
-      padding: '7px 10px 5px',      
+      textOverflow: 'ellipsis',    
       position: 'absolute',
       top: 0,
       left: 0,
@@ -193,6 +194,8 @@ export default makeStyles(theme => ({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginLeft: 'auto',
+        position: 'absolute',
+        right: 0
         /* '& .MuiIconButton-root':{
             '& svg':{
                 width: '1em !important',
@@ -326,22 +329,22 @@ export default makeStyles(theme => ({
         width: 17,  
         height: 17, 
         top: '7px !important',
-        left: -5,
+        left: 2,
         border: 0,       
         backgroundRepeat: 'no-repeat',
         backgroundSize: 15
       },
       '& .vis-dot.asset-type-acquisitions,  .cluster-acquisitions': {
-        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/acquisition.svg)',
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/acquisition.svg)',
       },
       '& .vis-dot.asset-type-sales, .cluster-sales': {
-        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/sales.svg)',
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/sales.svg)',
       },
       '& .vis-dot.asset-type-licenseIn, .cluster-licenseIn': {
-        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licensein.svg)',
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/licensein.svg)',
       },
       '& .vis-dot.asset-type-licenseOut, .cluster-licenseOut': {
-        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licenseout.svg)',
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/licenseout.svg)',
       },
       '& .vis-dot.asset-type-mergersIn, .cluster-mergersIn': { 
         backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png)',

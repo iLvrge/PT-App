@@ -20,7 +20,7 @@ const Chart = (props) => {
     
     return (
         <div className={clsx(classes.chartContainer, {[classes.widthResponsive]: props.lineGraph})}>
-            <div>
+            <div className={classes.headingContainer}>
                 <AddToolTip
                     tooltip={props.card.tooltip}
                     placement={'bottom'}
@@ -66,7 +66,7 @@ const Chart = (props) => {
                         parseInt(profile?.user?.organisation?.subscribtion) === 2 && (props.type < 3 ) ?
                             'View List'
                         :
-                            'Upgrade and Fix it!' 
+                            'Upgrade to View' 
                 }
             </Button>    
             {

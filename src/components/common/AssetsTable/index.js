@@ -932,7 +932,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
           customers = selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
           assignments = selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;   
-    console.log('loadDataFromServer', companies, tabs, customers, assignments, selectedAssetCompanies, selectedAssetCompaniesAll) 
+     
     if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
       if (auth_token != null) {          
         dispatch(
@@ -1007,7 +1007,6 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
 
   const handleOnClick = useCallback(
     ({ grant_doc_num, appno_doc_num, asset }) => {     
-      console.log('selectedCategory', selectedCategory) 
       /*TV, Comment, Family, FamilyItem, getChannelID Legal Events */
       if(!selectedRow.includes(asset)) {
         if(selectedCategory == 'restore_ownership') {
@@ -1019,7 +1018,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           dispatch(linkWithSheetSelectedAsset('products', encodeURIComponent(grant_doc_num  == '' ? `US${applicationFormat(appno_doc_num)}` : `US${numberWithCommas(grant_doc_num)}`)))     
         }
         callSelectedAssets({ grant_doc_num, appno_doc_num, asset });
-        if(selectedCategory == 'late_maintainance'){
+        if(selectedCategory == 'late_maintainance' || selectedCategory == 'ptab'){
           /**
            * Check if Right Pane is close then open it and close the TV
            */

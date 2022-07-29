@@ -884,7 +884,9 @@ const Reports = (props) => {
     const onHandleList = useCallback((id) => {
         /* process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' */
         let subscription = parseInt(profile?.user?.organisation?.subscribtion), timeline = false, patent = false
+        console.log(subscription);
         if( subscription === 2 || subscription === 3 ) {
+            console.log(id, props.kpi)
             let findIndex = -1
             if(id === 0 && props.kpi === false) {                
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
@@ -919,40 +921,41 @@ const Reports = (props) => {
             } else if(id === 10 && subscription > 2  && props.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'deflated_collaterals')
                 timeline = true
-            } else if(id === 0 && subscription > 2  && props.kpi === true) {
+            } else if(id === 0 && subscription > 1  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'assigned')
+                console.log(findIndex)
                 patent = true
-            } else if(id === 1 && subscription > 2  && props.kpi === true) {
+            } else if(id === 1 && subscription > 1  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'filled')
                 patent = true
-            } else if(id === 2 && subscription > 2  && props.kpi === true) {
+            } else if(id === 2 && subscription > 1  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'acquired')
                 patent = true
-            } else if(id === 3 && subscription > 2  && props.kpi === true) {
+            } else if(id === 3 && subscription > 1  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'divested')
                 patent = true
-            } else if(id === 4 && subscription > 2  && props.kpi === true) {
+            } else if(id === 4 && subscription > 1  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'collaterlized')
                 patent = true
-            } else if(id === 5 && subscription > 2  && props.kpi === true) {
+            } else if(id === 5 && subscription > 1 && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'abandoned')
                 patent = true
-            } else if(id === 6 && subscription > 2  && props.kpi === true) {
+            } else if(id === 6 && subscription > 1  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'ptab')
                 patent = true
-            } else if(id === 7 && subscription > 2  && props.kpi === true) {
+            } else if(id === 7 && subscription > 1  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'maintenance_budget')
                 patent = true
-            } else if(id === 8 && subscription > 2  && props.kpi === true) {
+            } else if(id === 8 && subscription > 1  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_non_us_members')
                 patent = true
-            } else if(id === 9 && subscription > 2  && props.kpi === true) {
+            } else if(id === 9 && subscription > 1  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'proliferate_inventors')
                 patent = true
-            } else if(id === 10 && subscription > 2  && props.kpi === true) {
+            } else if(id === 10 && subscription > 1  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_law_firms')
                 patent = true
-            } else if(id === 11 && subscription > 2  && props.kpi === true) {
+            } else if(id === 11 && subscription > 1  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_lenders')
                 patent = true
             } /*else if(id === 8 && subscription > 2) {

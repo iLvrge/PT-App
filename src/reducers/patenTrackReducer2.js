@@ -11,8 +11,7 @@ const arrayToObjectByKey = (array, key) =>
     return result
   }, {})
 
-const patenTrackReducer = (state = initialState.dashboard, action) => {
-  console.log('action.type', action.type)
+const patenTrackReducer = (state = initialState.dashboard, action) => { 
   switch (action.type) {
     case types.SET_AUTHENTICATE_AUTH_TOKEN:
       return {
@@ -681,6 +680,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state,
           assetTypeAssignments: {...state.assetTypeAssignments, selected: action.data, name: action.data.length == 0 ? '' : state.assetTypeAssignments.name}
         }  
+      case types.SET_PTAB_DATA:
+        return{
+          ...state,
+          ptabAssets: action.data
+        }
       case types.SET_ASSET_TYPE_ASSIGNMENTS_ASSETS:
         return {
           ...state,

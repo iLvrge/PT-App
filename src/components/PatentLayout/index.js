@@ -693,7 +693,8 @@ const PatentLayout = ({
                                                 setChartBar={setChartBar}
                                                 handleCommentBarOpen={handleCommentBarOpen}
                                                 handleCustomersBarOpen={handleCustomersBarOpen}
-                                                cube={true}
+                                                cube={selectedCategory === 'ptab' ? false : true}
+                                                ptab={selectedCategory === 'ptab' ? true : false}
                                             /> 
                                         </div>
                                         <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>

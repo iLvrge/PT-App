@@ -40,7 +40,7 @@ const KpiBox = (props) => {
     
     return (
         <div className={clsx(classes.chartContainer, classes.widthResponsive, classes.fixKPI)}>
-            <div>
+            <div className={classes.headingContainer}>
                 <AddToolTip
                     tooltip={props.card.tooltip}
                     placement='bottom'

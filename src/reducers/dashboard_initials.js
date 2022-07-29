@@ -23,6 +23,7 @@ export default {
     assetTypeAssignmentAssets: { list: [], total_records: 0, selected: [], selectAll: false, loading: false},
     assetTableScrollPosition: 0,
     asset_details:{asset: null, family: 0, claims: 0, figures: 0, fees: 0, citations: 0, ptab: 0, litigation: 0},
+    ptabAssets: [],
     addressQueuesDisplay: false,
     addressQueuesLoading: false,
     addressQueues: [],

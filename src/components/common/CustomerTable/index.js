@@ -239,7 +239,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             if( !oldSelection.includes(row.id) ){
                 //oldSelection.push(row.id)
                 oldSelection = [row.id]
-                console.log("row", row)
+                //console.log("row", row)
                 setSelectAssignmentCustomerName(row.entityName)
             } else if(index != 2) {
                 /* oldSelection = oldSelection.filter(

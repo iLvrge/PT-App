@@ -19,10 +19,9 @@ const getCookie = name => {
   return null
 }
 
-const getHeader = () => {
+const getToken = () => {
   let token = null
   if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
-    console.log('adadasa', localStorage.getItem('auth_signature'))
     token = localStorage.getItem('auth_signature')
   } else {
     token = localStorage.getItem('token')
@@ -30,44 +29,40 @@ const getHeader = () => {
       token = getCookie('token')
     }
   }
+  return token
+}
+
+const getHeader = () => {
   return {
     headers: {
-      'x-auth-token': token
+      'x-auth-token': getToken()
     }
   }    
 }
 
-const getMultiFormUrlHeader = () => {
-  let token = null
-  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
-    token = localStorage.getItem('auth_signature')
-  } else {
-    token = localStorage.getItem('token')
-    if (token === null) {
-      token = getCookie('token')
-    }
-  }
+const getBlobHeader = () => {
   return {
     headers: {
-      'x-auth-token': token,
+      'x-auth-token': getToken(),
+      'accept': 'application/octet-stream',
+      'Content-Type': 'application/octet-stream'
+    }
+  }
+}  
+
+const getMultiFormUrlHeader = () => {
+  return {
+    headers: {
+      'x-auth-token': getToken(),
       'Content-Type': 'multipart/form-data'
     }
   } 
 }
 
 const getFormUrlHeader = () => {
-  let token = null
-  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
-    token = localStorage.getItem('auth_signature')
-  } else {
-    token = localStorage.getItem('token')
-    if (token === null) {
-      token = getCookie('token')
-    }
-  }
   return {
     headers: {
-      'x-auth-token': token,
+      'x-auth-token': getToken(),
       'Content-Type': 'application/x-www-form-urlencoded'
     }
   } 
@@ -78,6 +73,11 @@ var CancelToken = axios.CancelToken
 var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest;
 
 class PatenTrackApi {
+
+  static getDocumentIdentifierFile(identifier) {
+    return axios.get(`https://developer.uspto.gov/ptab-api/documents/${identifier}/download`, getBlobHeader())
+  }
+
   static getSiteLogo() {
     return axios.get(`${base_api_url}/site_logo`, getHeader())
   }

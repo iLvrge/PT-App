@@ -93,6 +93,7 @@ const AssetDetailsContainer = ({
   const lifeSpanMode = useSelector(state => state.ui.lifeSpanMode);
   const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
   const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
+  const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
 
   
 
@@ -402,7 +403,10 @@ const AssetDetailsContainer = ({
                             familyMode && (
                                 <LegalEventsContainer
                                   events={selectedAssetsLegalEvents} 
-                                  type={type}/>
+                                  type={type}
+                                  selectedCategory
+                                  {...( selectedCategory === 'ptab' ? {activeTab: 2} : {})} 
+                                />
                             ) 
                           }
                         </>
