@@ -565,5 +565,10 @@ export default makeStyles(theme => ({
     fixKPI: {
       flexDirection: 'column',
       justifyContent: 'flex-start'
+    },
+    gauge:{
+      '& g.text-group text':{
+        fontSize: '1.5rem !important'
+      }
     }
 }));

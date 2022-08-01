@@ -90,8 +90,8 @@ const Reports = (props) => {
             list: []
         },
         {
-            title: 'Missed Monetization',
-            tooltip: 'Abandoned, yet acknowledged, patent assets which could be sold to interested parties.',
+            title: 'Un-Assigned',
+            tooltip: '37 CFR § 1.46 Application for patent by an assignee: (b)(1) If the applicant is the assignee, documentary evidence of ownership ( e.g., assignment for an assignee, employment agreement for a person to whom the inventor is under an obligation to assign the invention) should be recorded as provided for in part 3 of this chapter no later than the date the issue fee is paid in the application.',
             number: 0,
             patent: '',
             application: '',

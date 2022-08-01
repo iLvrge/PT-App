@@ -1837,7 +1837,7 @@ class PatentrackDiagram extends React.Component {
           {
             this.props.copyrights && (
               <g transform={`translate(16,${svgParams.height ? svgParams.height - 20 : this.height })`}>
-                <text fill={isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}><tspan>The illustrations, and the systems and methods by which they were created, are copyright</tspan> <tspan x="0" dy="14.25">protected and covered by several pending patent applications.</tspan></text>
+                <text fill={isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}><tspan>Hover over the names to see the original ones, over the connectors to see the nature of the assignment, </tspan> <tspan x="0" dy="14.25">and click the connectors to see the assignment details and document.</tspan></text>
               </g>
             )  
           } 

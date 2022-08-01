@@ -7,6 +7,7 @@ import useStyles from './styles'
 import { IconButton, Button, Typography, Tooltip, Zoom } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import clsx from 'clsx'
+import { numberWithCommas } from '../../utils/numbers';
 import LineGraph from './LineGraph';
 import AddToolTip from './AddToolTip';
 const Chart = (props) => {
@@ -15,7 +16,7 @@ const Chart = (props) => {
     const profile = useSelector(store => (store.patenTrack.profile))
     
     const displayNumber = (value) => {
-        return `${ props.card.display_value == '%' ? parseFloat(props.card.number).toFixed(1) : props.card.number}${typeof props.card.display_value != 'undefined' ? props.card.display_value  : ''}`
+        return `${ props.card.display_value == '%' ? parseFloat(props.card.number).toFixed(1) : numberWithCommas(props.card.number)}${typeof props.card.display_value != 'undefined' ? numberWithCommas(props.card.display_value)  : ''}`
     }
     
     return (
@@ -48,7 +49,7 @@ const Chart = (props) => {
                         percent={ props.card.total > 0 ? parseFloat(props.card.number / props.card.total).toFixed(2) : 0 }
                         arcPadding={0.02}
                         marginInPercent={0.03}
-                        className={'gauge'}
+                        className={classes.gauge}
                         animate={false} 
                         /* hideText={true} */
                         formatTextValue={displayNumber}
