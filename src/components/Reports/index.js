@@ -515,6 +515,10 @@ const Reports = (props) => {
     );
 
     useEffect(() => {
+        console.log("cardList", cardList, props)
+    }, [cardList])
+
+    useEffect(() => {
         if(ref.current !== null) {
             resizeObserver = new ResizeObserver(entries => {  
                 let smallScreen = false         
@@ -722,7 +726,7 @@ const Reports = (props) => {
     }
 
     const addCardList = () => {
-        setCardList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_LIST : LIST)
+        setCardList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_LIST : props.kpi === true ? KPI_LIST : LIST)
     }
 
     const updateTimelineList =  useCallback((requestData, type) => {  
