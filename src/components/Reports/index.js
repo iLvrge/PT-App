@@ -486,7 +486,7 @@ const Reports = (props) => {
     const [smallScreen, setSmallScreen] = useState(false)
     const [activeId, setActiveId] = useState(-1)
     const profile = useSelector(state => (state.patenTrack.profile))    
-    const [cardList, setCardList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_LIST : props.kpi === true ? KPI_LIST  : LIST)
+    const [cardList, setCardList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_LIST : KPI_LIST)
     const [timelineList, setTimelineList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_TIMELINE_LIST : TIMELINE_LIST)
     const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
@@ -586,7 +586,8 @@ const Reports = (props) => {
                 if(props.timeline === true) {
                     setTimelineList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
                 } else {
-                    addCardList()  
+                    console.log('initial')
+                    addCardList(props.kpi === true ? 1 : '')  
                 }                
             }
         }
@@ -610,7 +611,7 @@ const Reports = (props) => {
                 setLoading(false)           
                 setTimelineList(props.dashboardTimelineData)
             }
-        }  else {
+        } else {
             if(selectedCompanies.length > 0) {
                 if(props.timeline === true) {
                     callTimelineData()
@@ -621,7 +622,8 @@ const Reports = (props) => {
                 if(props.timeline === true) {
                     setTimelineList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
                 } else {
-                    addCardList()  
+                    console.log('addCardList2')
+                    addCardList(!props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false && props.kpi === false && props.timeline === false ? 0 : props.kpi === true ? 1 : '')  
                 }
             }
         }
@@ -722,8 +724,9 @@ const Reports = (props) => {
         }
     }
 
-    const addCardList = () => {
-        setCardList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_LIST : props.kpi === true ? KPI_LIST : LIST)
+    const addCardList = (t) => {
+        console.log('addCardList', t)
+        setCardList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_LIST : typeof t != 'undefined' && t === 1 ? KPI_LIST : LIST)
     }
 
     const updateTimelineList =  useCallback((requestData, type) => {  

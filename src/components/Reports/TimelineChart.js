@@ -358,7 +358,7 @@ const TimelineChart = (props) => {
             if(assetsCustomer.release_exec_dt != null ) {
                 const releasePDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.release_reel_no}-${assetsCustomer.release_frame_no}.pdf`
                 item['release_pdf'] = releasePDF
-                name += `<em><span>(${numberWithCommas(assetsCustomer.releaseAssets)})</span><img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></em>`
+                name += `<em>${assetsCustomer.partial_transaction == 1 ? `<span>(${numberWithCommas(assetsCustomer.releaseAssets)})</span>` : ''}<img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></em>`
             }
             item['customerName'] = name
         }

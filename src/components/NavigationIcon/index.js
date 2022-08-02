@@ -47,9 +47,6 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
     const dashboardICONS = [0, 1, 6, 7]
     const removeFilterICONS = [2, 3, 4, 11]
     
-
-    console.log('NAVIGATION_ICON', dashboardScreen, t, selectedCategory)
-
     if((selectedCategory  != 'due_dilligence' && removeFilterICONS.includes(t)) || ( dashboardScreen === true  && !dashboardICONS.includes(t))) return null
        
     return (

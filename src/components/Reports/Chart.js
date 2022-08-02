@@ -19,6 +19,7 @@ const Chart = (props) => {
         return `${ props.card.display_value == '%' ? parseFloat(props.card.number).toFixed(1) : numberWithCommas(props.card.number)}${typeof props.card.display_value != 'undefined' ? numberWithCommas(props.card.display_value)  : ''}`
     }
     
+    
     return (
         <div className={clsx(classes.chartContainer, {[classes.widthResponsive]: props.lineGraph})}>
             <div className={classes.headingContainer}>
@@ -41,7 +42,8 @@ const Chart = (props) => {
                         lineID={props.id}
                     />
                 :
-                    <div style={{display: 'flex', width: '75%'}}>
+
+                    <div style={{display: 'flex', width: '85%'}}>
                         <GaugeChart
                             id={`gauge-chart${props.id}`}
                             nrOfLevels={420}
