@@ -500,14 +500,14 @@ export default makeStyles(theme => ({
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis', 
       marginRight: 5,
-      fontSize: '1.5rem'
+      fontSize: '1.2rem'
     },
     itemText:{
       position: 'absolute',
       top: 0,
       width: '15%',
       textAlign: 'right',
-      fontSize: '1.5rem'
+      fontSize: '1.2rem'
     },
     timelineProcessingIndicator: {
       position: 'absolute',
