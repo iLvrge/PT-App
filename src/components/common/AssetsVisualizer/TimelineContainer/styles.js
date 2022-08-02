@@ -253,6 +253,12 @@ export default makeStyles(theme => ({
     '& .vis-item.vis-range.asset-type-lending':{
       backgroundColor: '#FFAA00 !important'
     },
+    '& .vis-item.asset-type-security-release':{
+      backgroundColor: '#70A800 !important'
+    },
+    '& .vis-item.asset-type-security-release-partial':{
+      backgroundColor: '#228DE8 !important'
+    },
     '& .vis-item.vis-range':{
       border: 0,
       '& .vis-item-overflow':{
@@ -279,6 +285,11 @@ export default makeStyles(theme => ({
             cursor: 'pointer',
             '& img':{
               width: 16
+            },
+            '& span':{
+              position: 'absolute',
+              right: 35,
+              textAlign: 'right'
             }
           }
         }

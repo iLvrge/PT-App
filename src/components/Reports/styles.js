@@ -374,14 +374,16 @@ export default makeStyles(theme => ({
         padding: '1px 3px'
       },
       '& .vis-item.asset-type-security-release':{
-        backgroundColor: '#70A800 !important',
-        
+        backgroundColor: '#70A800 !important'
+      },
+      '& .vis-item.asset-type-security-release-partial':{
+        backgroundColor: '#228DE8 !important'
       },
       '& .vis-item.asset-type-lending':{
-        backgroundColor: '#FFAA00',
+        backgroundColor: '#FFAA00'
       },
       '& .vis-item.asset-type-borrowing':{
-        backgroundColor: '#FFAA00',
+        backgroundColor: '#FFAA00'
       },
       '& .vis-item.vis-range':{
         border: 0,
@@ -409,6 +411,11 @@ export default makeStyles(theme => ({
               cursor: 'pointer',
               '& img':{
                 width: 16
+              },
+              '& span':{
+                position: 'absolute',
+                right: 35,
+                textAlign: 'right'
               }
             }
           }

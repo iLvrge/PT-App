@@ -145,13 +145,13 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     const companyName =  selectedWithName.filter( company => assetsCustomer.company == company.id ? company.name : '')
     const customerFirstName = assetsCustomer.tab_id == 10 ? assetsCustomer.customerName.split(' ')[0] : assetsCustomer.customerName
     const item = {
-            type: 'point',
+      type: 'point',
       start: new Date(assetsCustomer.exec_dt),
       customerName: `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
       assetType,
       companyName,
       rawData: assetsCustomer,
-      className: `asset-type-${assetType} ${assetsCustomer.release_exec_dt != null ? 'asset-type-security-release' : ''}`,
+      className: `asset-type-${assetType} ${assetsCustomer.release_exec_dt != null ? assetsCustomer.partial_transaction == 1 ? 'asset-type-security-release-partial' : 'asset-type-security-release' : ''}`,
       collection: [ { id: assetsCustomer.id, totalAssets: assetsCustomer.totalAssets } ],
       showTooltips: false
     }
@@ -166,11 +166,11 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       if(assetsCustomer.release_exec_dt != null ) {
           const releasePDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.release_reel_no}-${assetsCustomer.release_frame_no}.pdf`
           item['release_pdf'] = releasePDF
-          name += `<em><img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></em>`
+          name += `<em><span>(${numberWithCommas(assetsCustomer.releaseAssets)})</span><img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></em>`
       }
       item['customerName'] = name
     }
-    
+
     return item
   }
 

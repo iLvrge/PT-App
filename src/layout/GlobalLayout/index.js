@@ -1045,6 +1045,7 @@ const GlobalLayout = (props) => {
 
 
     const handleOpenSettings = useCallback(() => {
+        dispatch(setDashboardScreen(false))
         history.push('/settings/templates')
     }, [ history ])
 

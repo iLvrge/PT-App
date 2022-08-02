@@ -514,9 +514,6 @@ const Reports = (props) => {
         state => state.patenTrack2.assetTypeAssignmentAssets.total_records,
     );
 
-    useEffect(() => {
-        console.log("cardList", cardList, props)
-    }, [cardList])
 
     useEffect(() => {
         if(ref.current !== null) {
