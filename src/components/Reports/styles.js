@@ -577,7 +577,7 @@ export default makeStyles(theme => ({
     },
     gauge:{
       '& g.text-group text':{
-        fontSize: '1.2rem !important'
+        fontSize: '1.5rem !important'
       }
     }
 }));

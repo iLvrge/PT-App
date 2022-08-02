@@ -43,7 +43,7 @@ const Chart = (props) => {
                     />
                 :
 
-                    <div style={{display: 'flex', width: '85%'}}>
+                    <div style={{display: 'flex', width: '95%'}}>
                         <GaugeChart
                             id={`gauge-chart${props.id}`}
                             nrOfLevels={420}
