@@ -486,7 +486,7 @@ const Reports = (props) => {
     const [smallScreen, setSmallScreen] = useState(false)
     const [activeId, setActiveId] = useState(-1)
     const profile = useSelector(state => (state.patenTrack.profile))    
-    const [cardList, setCardList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_LIST : LIST)
+    const [cardList, setCardList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_LIST : props.kpi === true ? KPI_LIST  : LIST)
     const [timelineList, setTimelineList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_TIMELINE_LIST : TIMELINE_LIST)
     const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);

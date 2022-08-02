@@ -499,13 +499,15 @@ export default makeStyles(theme => ({
       overflow: 'hidden',
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis', 
-      marginRight: 5  
+      marginRight: 5,
+      fontSize: '1.5rem'
     },
     itemText:{
       position: 'absolute',
       top: 0,
       width: '15%',
-      textAlign: 'right'
+      textAlign: 'right',
+      fontSize: '1.5rem'
     },
     timelineProcessingIndicator: {
       position: 'absolute',

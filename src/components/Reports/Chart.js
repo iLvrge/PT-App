@@ -41,19 +41,21 @@ const Chart = (props) => {
                         lineID={props.id}
                     />
                 :
-                    <GaugeChart
-                        id={`gauge-chart${props.id}`}
-                        nrOfLevels={420}
-                        arcsLength={arcs}
-                        colors={['#5BE12C', '#F5CD19', '#EA4228']}
-                        percent={ props.card.total > 0 ? parseFloat(props.card.number / props.card.total).toFixed(2) : 0 }
-                        arcPadding={0.02}
-                        marginInPercent={0.03}
-                        className={classes.gauge}
-                        animate={false} 
-                        /* hideText={true} */
-                        formatTextValue={displayNumber}
-                    />    
+                    <div style={{display: 'flex', width: '75%'}}>
+                        <GaugeChart
+                            id={`gauge-chart${props.id}`}
+                            nrOfLevels={420}
+                            arcsLength={arcs}
+                            colors={['#5BE12C', '#F5CD19', '#EA4228']}
+                            percent={ props.card.total > 0 ? parseFloat(props.card.number / props.card.total).toFixed(2) : 0 }
+                            arcPadding={0.02}
+                            marginInPercent={0.03}
+                            className={classes.gauge}
+                            animate={false} 
+                            /* hideText={true} */
+                            formatTextValue={displayNumber}
+                        />    
+                    </div>
             }
             <Button 
                 size="small" 

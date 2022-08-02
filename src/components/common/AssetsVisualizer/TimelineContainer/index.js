@@ -145,29 +145,32 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     const companyName =  selectedWithName.filter( company => assetsCustomer.company == company.id ? company.name : '')
     const customerFirstName = assetsCustomer.tab_id == 10 ? assetsCustomer.customerName.split(' ')[0] : assetsCustomer.customerName
     const item = {
-      
-      type: 'point',
+            type: 'point',
       start: new Date(assetsCustomer.exec_dt),
       customerName: `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
       assetType,
       companyName,
       rawData: assetsCustomer,
-      /* group: assetsCustomer.group, */
-      className: `asset-type-${assetType}`,
+      className: `asset-type-${assetType} ${assetsCustomer.release_exec_dt != null ? 'asset-type-security-release' : ''}`,
       collection: [ { id: assetsCustomer.id, totalAssets: assetsCustomer.totalAssets } ],
-      showTooltips: false, 
-      /* title: `
-        <div>
-          <span><strong>Transaction Date:</strong> ${moment(assetsCustomer.exec_dt).format('ll')}</span> 
-          <span><strong>Other Party:</strong> ${assetsCustomer.customerName}</span>
-          <span><strong>Number of Assets:</strong> ${assetsCustomer.totalAssets}</span>
-        </div>
-      `, */
+      showTooltips: false
     }
+
     if([5,12].includes(parseInt(assetsCustomer.tab_id))){            
       item.type = 'range';
       item['end'] = assetsCustomer.release_exec_dt != null ? new Date(assetsCustomer.release_exec_dt) : new Date();
+      
+      const securityPDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.reel_no}-${assetsCustomer.frame_no}.pdf`
+      item['security_pdf'] = securityPDF
+      let name = `<tt><img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></tt>${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`;
+      if(assetsCustomer.release_exec_dt != null ) {
+          const releasePDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.release_reel_no}-${assetsCustomer.release_frame_no}.pdf`
+          item['release_pdf'] = releasePDF
+          name += `<em><img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></em>`
+      }
+      item['customerName'] = name
     }
+    
     return item
   }
 

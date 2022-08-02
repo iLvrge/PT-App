@@ -86,7 +86,7 @@ const IllustrationCommentContainer = ({
     const [jurisdictions, setJurisdiction] = useState(false)
     const [invention, setInvention] = useState(false)
     const [sankey, setSankey] = useState(false)
-    const [kpi, setKpi] = useState(false)
+    const [kpi, setKpi] = useState(true)
     const [timeline, setTimeline] = useState(false)
     const [showManualComponent, setShowManualComponent ] = useState(false)
     const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)

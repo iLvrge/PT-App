@@ -450,6 +450,7 @@ const ActionMenu = (props) => {
      */
 
     const onMaintainenceFeeFile = useCallback(async () => {  
+        console.log('Maintainence Fee File')
         if(props.dashboardScreen){
             props.setActivityTimeline()
         }
