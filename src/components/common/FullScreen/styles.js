@@ -23,7 +23,12 @@ export default makeStyles(theme => ({
         flex: 1,
         display: 'flex',
         backgroundColor: theme.palette.background.default,
-        position: 'relative'
+        position: 'relative',
+        '& .full_heading':{
+            '& .MuiTypography-root':{
+                marginTop: 15
+            }
+        }
     },
     noBackground: {
         background: 'none'  

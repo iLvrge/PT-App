@@ -368,7 +368,7 @@ const TimelineChart = (props) => {
             
             const securityPDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.reel_no}-${assetsCustomer.frame_no}.pdf`
             item['security_pdf'] = securityPDF
-            let name = `<tt><img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></tt><dd>${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})</dd>`;
+            /* let name = `<tt><img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></tt><dd>${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})</dd>`;
             name += `<em>`
             if(assetsCustomer.release_exec_dt != null ) {
                 const getAllReleases = assetsCustomer.all_release_ids
@@ -381,7 +381,8 @@ const TimelineChart = (props) => {
                 const releasePDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.release_reel_no}-${assetsCustomer.release_frame_no}.pdf`
                 item['release_pdf'] = releasePDF
             }
-            name += `${assetsCustomer.partial_transaction == 1 ? `<span>(${numberWithCommas(assetsCustomer.releaseAssets)})</span>` : ''}</em>`
+            name += `${assetsCustomer.partial_transaction == 1 ? `<span>(${numberWithCommas(assetsCustomer.releaseAssets)})</span>` : ''}</em>` */
+            let name = `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`
             item['customerName'] = name
         }
         return item
@@ -416,14 +417,14 @@ const TimelineChart = (props) => {
         start = props.type === 5 ? new moment(convertedItems[0].start).subtract(1, 'week') : new moment(convertedItems[convertedItems.length - 1].start).subtract(1, 'week')
         items.current.add(convertedItems)   
     }
-    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(2, 'week')})
+    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1400-01-01')), max: new moment(new Date('2500-01-01'))})
     timelineRef.current.setItems(items.current)   
     }, [ timelineRawData ])
     return (
         <Paper className={clsx(classes.container, classes.columnDirection)} square>
             {
                 props.card.title != '' && (
-                    <div className={classes.timelineHeading}>
+                    <div className={clsx(classes.timelineHeading, 'full_heading')}>
                         <Typography variant="h6" component="div" align="center" className={clsx(classes.border, classes.border1)}>
                             {props.card.title}
                         </Typography>

@@ -280,13 +280,13 @@ export default makeStyles(theme => ({
       marginRight: 'auto',
       width: '92%',
       maxWidth: '92%',
-      height: '92%',
+      height: '100%',
       alignItems: 'center'
     },
     widthResponsive:{
       width: '92%',
       maxWidth: '92%',
-      height: '92%'
+      height: '100%'
     },
     timelineContainer: {
       position: 'relative',
