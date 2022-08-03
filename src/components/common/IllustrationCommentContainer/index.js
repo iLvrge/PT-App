@@ -83,6 +83,7 @@ const IllustrationCommentContainer = ({
     const [ dashboardTimelineData, setDashboardTimelineData ] = useState([])
     const [ timelineRawData, setTimelineRawData ] = useState([])
     const [lineGraph, setLineGraph] = useState(false)
+    const [gauge, setGauge] = useState(false)
     const [jurisdictions, setJurisdiction] = useState(false)
     const [invention, setInvention] = useState(false)
     const [sankey, setSankey] = useState(false)
@@ -133,6 +134,8 @@ const IllustrationCommentContainer = ({
             dashboardTimelineData: dashboardTimelineData, 
             lineGraph: lineGraph,
             setLineGraph: setLineGraph,
+            gauge: gauge,
+            setGauge: setGauge,
             jurisdictions: jurisdictions,
             setJurisdiction: setJurisdiction,
             invention: invention,
@@ -307,6 +310,8 @@ const IllustrationCommentContainer = ({
                                 visualizerBarSize={visualizerBarSize} 
                                 lineGraph={lineGraph}
                                 setLineGraph={setLineGraph}
+                                gauge={gauge}
+                                setGauge={setGauge}
                                 jurisdictions={jurisdictions}
                                 setJurisdiction={setJurisdiction}
                                 invention={invention}

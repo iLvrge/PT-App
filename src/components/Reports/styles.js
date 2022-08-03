@@ -52,10 +52,10 @@ export default makeStyles(theme => ({
             justifyContent: 'center',
             flexDirection: 'column',
             alignContent: 'start',
-            height: /* 'calc((100vh - 190px) / 3)', */90,
-            flexBasis: '190px !important',
-            maxWidth: '190px !important',
-            minWidth: '190px !important',
+            height: /* 'calc((100vh - 190px) / 3)', */117,
+            flexBasis: '250px !important',
+            maxWidth: '250px !important',
+            minWidth: '250px !important',
             '& svg': {
                 display: 'flex',
                 /* height: '70%' */
@@ -99,14 +99,12 @@ export default makeStyles(theme => ({
       alignItems: 'center',
       justifyContent: 'center'
     },
-    headingContainer:{
-      padding: '7px 10px 5px'
-    },
     border: {  
       /* borderTop: `1px solid ${theme.palette.divider}`, */
       overflow: 'hidden',
       whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis',    
+      textOverflow: 'ellipsis',
+      padding: '7px 10px 5px',      
       position: 'absolute',
       top: 0,
       left: 0,
@@ -190,19 +188,19 @@ export default makeStyles(theme => ({
         }
     },    
     toolbar:{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginLeft: 'auto',
-        position: 'absolute',
-        right: 0
-        /* '& .MuiIconButton-root':{
-            '& svg':{
-                width: '1em !important',
-                height: '1em !important',
-            }
-        } */
-    },    
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginLeft: 'auto',
+      position: 'absolute',
+      right: 0
+      /* '& .MuiIconButton-root':{
+          '& svg':{
+              width: '1em !important',
+              height: '1em !important',
+          }
+      } */
+    }, 
     tooltip:{
       fontSize: '1rem',
       '&.3':{
@@ -384,6 +382,11 @@ export default makeStyles(theme => ({
       },
       '& .vis-item.asset-type-borrowing':{
         backgroundColor: '#FFAA00'
+      },
+      '& .vis-item':{
+        '& .vis-item-overflow':{
+          overflow: 'visible',
+        }
       },
       '& .vis-item.vis-range':{
         border: 0,
@@ -575,9 +578,23 @@ export default makeStyles(theme => ({
       flexDirection: 'column',
       justifyContent: 'flex-start'
     },
-    gauge:{
-      '& g.text-group text':{
-        fontSize: '1.5rem !important'
-      }
-    }
+    headingContainer:{
+      padding: '7px 10px 5px',
+    },
+    headerContainerPosition: {
+      position: 'absolute',
+      top: 0
+    },
+    title: {  
+      /* borderTop: `1px solid ${theme.palette.divider}`, */
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',    
+      top: 0,
+      left: 0,
+      right: 0,
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: 'fit-content',
+    }, 
 }));

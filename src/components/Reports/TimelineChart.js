@@ -223,7 +223,7 @@ const TimelineChart = (props) => {
                                                 '<div>'+ee.original_name+'</div>'
                                             )).join('')}
                 </div></div>`;
-                if(typeof data.releaseAssignor != 'undefined') {
+                if(typeof data.releaseAssignor != 'undefined' && data.releaseAssignor.length > 0) {
                     const {releaseAssignor, releaseAssignee, releaseAssignment} = data
                     const releaseExecutionDate = releaseAssignor.length > 0 ? releaseAssignor[0].exec_dt : ''
                     tootltipTemplate += `<div style='display:flex;flex-direction: column;'><h4 style='color:#00a9e6;text-align:left;margin:0'>Release</h4><div>

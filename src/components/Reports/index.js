@@ -514,7 +514,6 @@ const Reports = (props) => {
         state => state.patenTrack2.assetTypeAssignmentAssets.total_records,
     );
 
-
     useEffect(() => {
         if(ref.current !== null) {
             resizeObserver = new ResizeObserver(entries => {  
@@ -586,12 +585,11 @@ const Reports = (props) => {
                 if(props.timeline === true) {
                     setTimelineList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
                 } else {
-                    console.log('initial')
                     addCardList(props.kpi === true ? 1 : '')  
                 }                
             }
         }
-    }, [props.lineGraph, props.kpi, props.timeline])
+    }, [props.lineGraph, props.kpi, props.timeline, props.gauge])
 
     useEffect(() => {
         if(profile?.user?.organisation?.organisation_type) {
@@ -611,7 +609,7 @@ const Reports = (props) => {
                 setLoading(false)           
                 setTimelineList(props.dashboardTimelineData)
             }
-        } else {
+        }  else {
             if(selectedCompanies.length > 0) {
                 if(props.timeline === true) {
                     callTimelineData()
@@ -622,7 +620,6 @@ const Reports = (props) => {
                 if(props.timeline === true) {
                     setTimelineList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
                 } else {
-                    console.log('addCardList2')
                     addCardList(!props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false && props.kpi === false && props.timeline === false ? 0 : props.kpi === true ? 1 : '')  
                 }
             }
@@ -725,7 +722,6 @@ const Reports = (props) => {
     }
 
     const addCardList = (t) => {
-        console.log('addCardList', t)
         setCardList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_LIST : typeof t != 'undefined' && t === 1 ? KPI_LIST : LIST)
     }
 
@@ -888,9 +884,7 @@ const Reports = (props) => {
     const onHandleList = useCallback((id) => {
         /* process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' */
         let subscription = parseInt(profile?.user?.organisation?.subscribtion), timeline = false, patent = false
-        console.log(subscription);
         if( subscription === 2 || subscription === 3 ) {
-            console.log(id, props.kpi)
             let findIndex = -1
             if(id === 0 && props.kpi === false) {                
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
@@ -927,7 +921,6 @@ const Reports = (props) => {
                 timeline = true
             } else if(id === 0 && subscription > 1  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'assigned')
-                console.log(findIndex)
                 patent = true
             } else if(id === 1 && subscription > 1  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'filled')
@@ -1000,7 +993,8 @@ const Reports = (props) => {
 
     const changeGraph = async(flag) => {
         setIntial(false)
-        addCardList()
+        setCardList(LIST)
+        props.setGauge(!flag)
         props.setJurisdiction(false)
         props.setInvention(false)
         props.setSankey(false)
@@ -1012,6 +1006,7 @@ const Reports = (props) => {
 
     const onHandleJurisdiction = () => {
         props.setLineGraph(false)
+        props.setGauge(false)
         props.setInvention(false)
         props.setSankey(false)
         props.setKpi(false)
@@ -1021,6 +1016,7 @@ const Reports = (props) => {
 
     const onHandleInvention = () => {
         props.setLineGraph(false)
+        props.setGauge(false)
         props.setJurisdiction(false)
         props.setSankey(false)
         props.setKpi(false)
@@ -1030,6 +1026,7 @@ const Reports = (props) => {
 
     const onHandleSankey = () => {
         props.setLineGraph(false)
+        props.setGauge(false)
         props.setJurisdiction(false)
         props.setInvention(false)
         props.setKpi(false)
@@ -1041,6 +1038,7 @@ const Reports = (props) => {
         setIntial(false)
         setCardList(KPI_LIST)
         props.setLineGraph(false)
+        props.setGauge(false)
         props.setJurisdiction(false)
         props.setInvention(false)
         props.setSankey(false)
@@ -1050,6 +1048,7 @@ const Reports = (props) => {
 
     const onHandleTimeline = () => {
         props.setLineGraph(false)
+        props.setGauge(false)
         props.setJurisdiction(false)
         props.setInvention(false)
         props.setSankey(false)
