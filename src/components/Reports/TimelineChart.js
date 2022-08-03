@@ -315,14 +315,28 @@ const TimelineChart = (props) => {
     useEffect(() => {
         let {list} = props.card
         if(props.card.type == 4 || props.card.type == 7) {
-            const removeRelease = list.filter( item => parseInt(item.release_rf_id) > 0 ? item.release_rf_id : '' )
+            let removeRelease = []
+            list.forEach( item => {
+                if(parseInt(item.release_rf_id) > 0) {
+                    removeRelease.push(item.release_rf_id);
+                    const getOtherRelease = item.all_release_ids
+                    if(getOtherRelease != '') {
+                        const parseRelease = JSON.parse(getOtherRelease)
+                        if(parseRelease.length > 0 ) {
+                            parseRelease.forEach(row => removeRelease.push(Number(row.rf_id)))
+                        }
+                    }
+                } 
+            })
             if(removeRelease.length > 0) {
+                removeRelease = [...new Set(removeRelease)];
+                
                 removeRelease.forEach( remove => {
-                    const findIndex = list.findIndex( item => item.id == remove.release_rf_id)
+                    const findIndex = list.findIndex( item => item.id == remove)
                     if(findIndex !== -1) {
                         list.splice(findIndex, 1)
                     }
-                })   
+                })  
             }
         }   
         setTimelineRawData(list)
@@ -354,12 +368,20 @@ const TimelineChart = (props) => {
             
             const securityPDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.reel_no}-${assetsCustomer.frame_no}.pdf`
             item['security_pdf'] = securityPDF
-            let name = `<tt><img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></tt>${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`;
+            let name = `<tt><img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></tt><dd>${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})</dd>`;
+            name += `<em>`
             if(assetsCustomer.release_exec_dt != null ) {
+                const getAllReleases = assetsCustomer.all_release_ids
+                if(getAllReleases != '') {
+                    const parseReleases = JSON.parse(getAllReleases)
+                    parseReleases.forEach((r, index) => {
+                        name += `<img title='${index}' src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/>`
+                    })
+                }
                 const releasePDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.release_reel_no}-${assetsCustomer.release_frame_no}.pdf`
                 item['release_pdf'] = releasePDF
-                name += `<em>${assetsCustomer.partial_transaction == 1 ? `<span>(${numberWithCommas(assetsCustomer.releaseAssets)})</span>` : ''}<img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></em>`
             }
+            name += `${assetsCustomer.partial_transaction == 1 ? `<span>(${numberWithCommas(assetsCustomer.releaseAssets)})</span>` : ''}</em>`
             item['customerName'] = name
         }
         return item

@@ -398,8 +398,9 @@ export default makeStyles(theme => ({
             position: 'absolute',
             '& span':{
               whiteSpace: 'nowrap',
-              display: 'block',
-              width: '100%'
+              display: 'flex',
+              width: '100%',
+              position: 'relative'
             },
             '& tt':{
               marginRight: 10,
@@ -408,17 +409,27 @@ export default makeStyles(theme => ({
                 width: 16
               }
             },
+            '& dd':{
+              marginInlineStart: 0,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            },
             '& em':{
+              display: 'flex',
               position: 'absolute',
               right: 7,
               cursor: 'pointer',
               '& img':{
-                width: 16
+                width: 16,
+                display: 'flex',
+                marginRight: 3
               },
               '& span':{
-                position: 'absolute',
+                /* position: 'absolute',
                 right: 35,
-                textAlign: 'right'
+                textAlign: 'right' */
+                display: 'flex'
               }
             }
           }
