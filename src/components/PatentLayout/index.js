@@ -515,6 +515,7 @@ const PatentLayout = ({
                                             {
                                                 type == 0 ? (
                                                     <MaintainenceAssetsList 
+                                                        type={type} 
                                                         assets={maintainenceAssetsList} 
                                                         isLoading={maintainenceAssetsLoadingMore} 
                                                         loadMore={getMaintainenceAssetsList} 
