@@ -274,7 +274,7 @@ const IllustrationCommentContainer = ({
                                 standalone={true}
                             />
                         :
-                        cube === true && assetIllustration === null
+                        cube === true && maintainenceFrameMode === false && assetIllustration === null
                         ?
                             <InventionVisualizer 
                                 defaultSize={illustrationBarSize} 

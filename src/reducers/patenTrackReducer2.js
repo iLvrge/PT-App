@@ -378,6 +378,10 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         }
       case types.SET_SLACK_MESSAGES:
         let {messages, users} = action.data
+        if(messages == undefined) {
+          messages = []
+          users = []
+        }
         messages = messages.length > 0 ? messages.reverse()  : [...messages]
         return {
           ...state,

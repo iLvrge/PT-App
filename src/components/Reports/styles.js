@@ -523,8 +523,8 @@ export default makeStyles(theme => ({
       display: 'inline-block',
       width: '80%',
       overflow: 'hidden',
-      whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis', 
+      /* whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',  */
       marginRight: 5,
       fontSize: '1.2rem'
     },

@@ -127,7 +127,8 @@ import {
   toggleThemeMode,
   setTimelineScreen,
   setDashboardScreen,
-  setPatentScreen
+  setPatentScreen,
+  setMaintainenceFeeFrameMode
 } from '../../actions/uiActions'
 import Scheduling from './Scheduling'
 
@@ -589,6 +590,17 @@ const onHandlePatentAssetsScreen = (breadcrumb) => {
   history.push(routeList.patent_assets)  
 }
 
+const onHanldeMaintainencePatentAssetScreen = () => {
+  dispatch(setPatentScreen(true))
+  dispatch(setTimelineScreen(false))
+  dispatch(setDashboardScreen(false))
+  dispatch(setAssetsIllustration(null))
+  dispatch(setAssetsIllustrationData(null))
+  dispatch(setMaintainenceFeeFrameMode(true))
+  //dispatch(setBreadCrumbs(typeof breadcrumb !== 'undefined' ? breadcrumb : 'Assets')) 
+  history.push(routeList.pay_maintainence_fee)  
+}
+
   return (
     <AppBar className={classes.root} color='transparent' position='relative'>
       <Toolbar className={classes.toolbar}>
@@ -617,6 +629,7 @@ const onHandlePatentAssetsScreen = (breadcrumb) => {
           setDashboardScreen={onHandleDashboardScreen}
           setActivityTimeline={onHandleTimelineScreen}
           setPatentAssets={onHandlePatentAssetsScreen}
+          setMaintaincePatentAssets={onHanldeMaintainencePatentAssetScreen}
           timelineScreen={timelineScreen} 
           resetAll={resetAll}
           clearOtherItems={clearOtherItems}

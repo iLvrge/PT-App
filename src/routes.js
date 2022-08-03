@@ -87,7 +87,7 @@ let pages = [
   {    
     exact: true,
     path: routeList.pay_maintainence_fee,
-    component: GlobalScreen,
+    component: PatentLayout,
     layout: GlobalLayout,
     type: 0
   },
