@@ -53,9 +53,9 @@ export default makeStyles(theme => ({
             flexDirection: 'column',
             alignContent: 'start',
             height: /* 'calc((100vh - 190px) / 3)', */117,
-            flexBasis: '250px !important',
-            maxWidth: '250px !important',
-            minWidth: '250px !important',
+            flexBasis: '230px !important',
+            maxWidth: '230px !important',
+            minWidth: '230px !important',
             '& svg': {
                 display: 'flex',
                 /* height: '70%' */
@@ -396,6 +396,9 @@ export default makeStyles(theme => ({
           '& .vis-item-content':{
             width: '100%',
             position: 'absolute',
+            boxSizing: 'border-box',
+            whiteSpace: 'nowrap',
+            display: 'inline-block',
             '& span':{
               whiteSpace: 'nowrap',
               display: 'flex',
@@ -413,7 +416,9 @@ export default makeStyles(theme => ({
               marginInlineStart: 0,
               whiteSpace: 'nowrap',
               overflow: 'hidden',
-              textOverflow: 'ellipsis'
+              textOverflow: 'ellipsis',
+              maxWidth: 130,
+              marginRight: 3
             },
             '& em':{
               display: 'flex',
