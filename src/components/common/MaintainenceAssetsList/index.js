@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Paper } from "@mui/material";
-import { Clear, NotInterested, KeyboardArrowDown } from '@mui/icons-material';
+import { Clear, NotInterested, KeyboardArrowDown, MonetizationOn} from '@mui/icons-material';
 import moment from "moment";
 
 import useStyles from "./styles";
@@ -67,7 +67,6 @@ const MaintainenceAssetsList = ({
   assetLegalEvents,
   assetFamily,
   setSelectedMaintainenceAssetsList,
-  selectedMaintainencePatents,
   getChannelID,
   channel_id,
   getSlackMessages,
@@ -86,6 +85,7 @@ const MaintainenceAssetsList = ({
   const [selectedAll, setSelectAll] = useState(false);
   const [selectItems, setSelectItems] = useState([]);
   const [selectedRow, setSelectedRow] = useState([]);
+  const [maintainenceItems, setMaintainenceItems] = useState([]);
   const [ dropOpenAsset, setDropOpenAsset ] = useState(null)
   const [ assetsList, setAssetsLists ] = useState({list: [], total_records: 0})
   const [selectedAssets, setSelectedAssets] = useState([])  
@@ -102,7 +102,8 @@ const MaintainenceAssetsList = ({
   const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
   const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
   const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
-
+  const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
+console.log('open', selectedMaintainencePatents)
   useEffect(() => {  
     if(clipboard_assets.length > 0 && clipboard_assets.length != selectedAssets.length ) {      
       setSelectedAssets([...clipboard_assets])
@@ -153,8 +154,14 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     },
     {
       id: 0,
-      name: 'Remove from this list', 
+      name: 'List to Abandon', 
       icon: <Clear />,
+      image: ''
+    },
+    {
+      id: 10,
+      name: 'Pay Maintainence Fee', 
+      icon: <MonetizationOn />,
       image: ''
     },
     {
@@ -200,6 +207,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           return [...prevItems]
         }
       }) 
+    } else if (event.target.value === 10) {
+      updateMaintainenceSelection(asset, row)
     }   
     const currentLayoutIndex = controlList.findIndex(r => r.type == 'menu' && r.category == selectedCategory )
     if(currentLayoutIndex !== -1) {
@@ -527,6 +536,48 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       }
     }
   }, [dispatch, channel_id]);
+
+  const updateMaintainenceSelection = (asset, row) => {
+    let updateSelected = [];
+    setMaintainenceItems(prevItems => {
+      updateSelected = [...prevItems];
+      const findIndex = prevItems.findIndex( r => r.asset == asset)
+      if( findIndex !== -1 ) {
+        updateSelected = maintainenceItems.filter(
+          asset => asset[1] !== parseInt(row.appno_doc_num),
+        );
+      } else {
+        updateSelected.push([
+          row.grant_doc_num,
+          row.appno_doc_num,
+          "",
+          row.fee_code,
+          row.fee_amount,
+        ]);
+        const todayDate = moment(new Date()).format("YYYY-MM-DD");
+        if (
+          new Date(todayDate).getTime() >=
+          new Date(row.payment_grace).getTime()
+        ) {
+          updateSelected.push([
+            row.grant_doc_num,
+            row.appno_doc_num,
+            "",
+            row.fee_code_surcharge,
+            row.fee_surcharge,
+          ]);
+        }
+      }
+      return updateSelected
+    })   
+
+    setSelectItems(prevItems =>
+      prevItems.includes(row.asset)
+      ? prevItems.filter(item => item !== row.asset)
+      : [...prevItems, row.asset],
+    ); 
+    dispatch(setSelectedMaintainenceAssetsList(updateSelected));
+  }
 
   const handleClickSelectCheckbox = useCallback(
     (e, row) => {
