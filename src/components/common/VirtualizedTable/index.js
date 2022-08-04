@@ -434,7 +434,7 @@ const VirtualizedTable = ({
               role === "checkboxwait" ? (
                 rowData[formatCondition] === 0 
                   ? 
-                    <HourglassBottomIcon/> 
+                    <HourglassBottomIcon className={classes.marginLeft10}/> 
                   : <Checkbox
                       checked={checkedIsInderminateCheckbox === true ? checkedIsInderminateCheckbox : selected.includes(cellData) }
                       indeterminate={isIndeterminate}

@@ -217,16 +217,32 @@ export default makeStyles((theme) => ({
           }
         },
       },
-      tableCell: {
-        flex: 1,
-        whiteSpace: 'nowrap',
-        border: 'none',
-        alignItems: 'center',
-        padding: '0',
-        overflow: 'hidden',
-        /* margin: '0 10px', */
-        '& .MuiSvgIcon-root':{
+      
+  tableCell: {
+      flex: 1,
+      whiteSpace: 'nowrap',
+      border: 'none',
+      alignItems: 'center',
+      padding: '0',
+      overflow: 'hidden',
+      /* margin: '0 10px', */
+      '& .MuiSvgIcon-root':{
           fontSize: '1rem'
-        }
       }
+  },
+  rating_container: {
+      '& .MuiRating-root':{
+          top: 3
+      }
+  },
+  rating_label: {
+      display: 'inline-block',
+      position: 'relative',
+      width: 75,
+      height: 21,
+      '& label':{
+          position: 'absolute',
+          top: 1
+      }
+  }
 }))

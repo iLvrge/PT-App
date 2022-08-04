@@ -28,7 +28,7 @@ export const controlList = [
         svg: '',
         image: `https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/pay_maintainence_fees.png`,
         class: 'hex-3',
-        breadCrumbs: 'Maintenance > Pay Maint. Fee',
+        breadCrumbs: 'Pay Maint. Fee',
         category: 'pay_maintainence_fee',
         layout_id: 3,
         showSvg: false,

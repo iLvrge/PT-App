@@ -1,8 +1,6 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import SplitPane from 'react-split-pane'
-
-
 import ArrowButton from '../common/ArrowButton'
 import MainCompaniesSelector from '../common/MainCompaniesSelector'
 import AssignmentsType from '../common/AssignmentsType'
@@ -51,6 +49,7 @@ import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpan
 import useStyles from './styles'
 import clsx from 'clsx'
 import IllustrationContainer from '../common/AssetsVisualizer/IllustrationContainer'
+import Maintainance from '../common/Maintainence'
 
 const PatentLayout = ({
     type,
@@ -346,6 +345,7 @@ const PatentLayout = ({
 
 
     return (
+        <React.Fragment>
         <SplitPane
             className={classes.splitPane}
             split="vertical"
@@ -513,55 +513,32 @@ const PatentLayout = ({
                                                 buttonType={toggleCustomerButtonType} 
                                                 buttonVisible={customerButtonVisible}/> */}
                                             {
-                                                type == 0 ? (
-                                                    <MaintainenceAssetsList 
-                                                        type={type} 
-                                                        assets={maintainenceAssetsList} 
-                                                        isLoading={maintainenceAssetsLoadingMore} 
-                                                        loadMore={getMaintainenceAssetsList} 
-                                                        toggleLifeSpanMode={toggleLifeSpanMode}
-                                                        setAssetsIllustration={setAssetsIllustration}
-                                                        setSelectedAssetsPatents={setSelectedAssetsPatents} 
-                                                        setCommentsEntity={setCommentsEntity}
-                                                        assetLegalEvents={assetLegalEvents}
-                                                        assetFamily={assetFamily}
-                                                        setSelectedMaintainenceAssetsList={setSelectedMaintainenceAssetsList}
-                                                        selectedMaintainencePatents={selectedMaintainencePatents}
-                                                        channel_id={channel_id}
-                                                        getChannelID={getChannelID}
-                                                        selectedAssetsPatents={selectedAssetsPatents}
-                                                        getSlackMessages={getSlackMessages}
-                                                        openChartBar={openChartBar}
-                                                        openAnalyticsBar={openAnalyticsBar}
-                                                        openAnalyticsAndCharBar={openAnalyticsAndCharBar}
-                                                        closeAnalyticsAndCharBar={closeAnalyticsAndCharBar}
-                                                        openIllustrationBar={openIllustrationBar}
-                                                        handleAnalyticsBarOpen={handleAnalyticsBarOpen}
-                                                        handleIllustrationBarOpen={handleIllustrationBarOpen}
-                                                        setIllustrationBarSize={setIllustrationBarSize}
-                                                    />
-                                                )
+                                                type != 5 
+                                                ?
+                                                    (
+                                                        <AssetsTable 
+                                                            standalone={true} 
+                                                            type={type} 
+                                                            openChartBar={openChartBar}
+                                                            openAnalyticsBar={openAnalyticsBar}
+                                                            openAnalyticsAndCharBar={openAnalyticsAndCharBar}
+                                                            closeAnalyticsAndCharBar={closeAnalyticsAndCharBar}
+                                                            changeVisualBar={setVisualizerBarSize}
+                                                            openIllustrationBar={openIllustrationBar}
+                                                            commentBar={openCommentBar}
+                                                            handleAnalyticsBarOpen={handleAnalyticsBarOpen}
+                                                            handleIllustrationBarOpen={handleIllustrationBarOpen}
+                                                            handleVisualBarSize={changeVisualBar}
+                                                            {...(typeof selectedCategory == 'pay_maintainence_fee' ? {assets: maintainenceAssetsList} : {})} 
+                                                        />
+                                                    )
                                                 :
-                                                type == 5 ? 
-                                                    <></>
-                                                :
-                                                <AssetsTable 
-                                                    standalone={true} 
-                                                    type={type} 
-                                                    openChartBar={openChartBar}
-                                                    openAnalyticsBar={openAnalyticsBar}
-                                                    openAnalyticsAndCharBar={openAnalyticsAndCharBar}
-                                                    closeAnalyticsAndCharBar={closeAnalyticsAndCharBar}
-                                                    changeVisualBar={setVisualizerBarSize}
-                                                    openIllustrationBar={openIllustrationBar}
-                                                    commentBar={openCommentBar}
-                                                    handleAnalyticsBarOpen={handleAnalyticsBarOpen}
-                                                    handleIllustrationBarOpen={handleIllustrationBarOpen}
-                                                    handleVisualBarSize={changeVisualBar}
-                                                />
+                                                    <React.Fragment>
+                                                    </React.Fragment>
+                                                
                                             } 
                                             
-                                        </>
+                                        </> 
                                     : 
                                     ''
                                 }
@@ -735,8 +712,9 @@ const PatentLayout = ({
                 </SplitPane>
             </SplitPane>
         </SplitPane>
+        <Maintainance/>
+        </React.Fragment>
     )
-
 }
 
 

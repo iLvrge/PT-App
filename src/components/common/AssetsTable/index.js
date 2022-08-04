@@ -8,7 +8,8 @@ import React, {
 import { useSelector, useDispatch } from "react-redux";
 import {useLocation} from 'react-router-dom'
 import { Paper, Popover, Box, Rating } from "@mui/material";
-import { Clear, NotInterested, KeyboardArrowDown } from '@mui/icons-material';
+import { Clear, NotInterested, KeyboardArrowDown, MonetizationOn } from '@mui/icons-material';
+import moment from "moment";
 import Loader from "../Loader";
 import useStyles from "./styles";
 import VirtualizedTable from "../VirtualizedTable";
@@ -50,7 +51,8 @@ import {
   getForeignAssetsBySheet,
   setAssetTableScrollPos,
   resetAssetDetails,
-  getAssetDetails
+  getAssetDetails,
+  setSelectedMaintainenceAssetsList
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -89,6 +91,7 @@ var applicationNumber = null, assetNumber = null, hoverTimer = null
 
 const AssetsTable = ({ 
     type,
+    assets,
     transactionId, 
     standalone, 
     openChartBar,
@@ -114,6 +117,7 @@ const AssetsTable = ({
   const assetsAssignmentRef = useRef()
   const googleLoginRef = useRef(null)
   const [offsetWithLimit, setOffsetWithLimit] = useState([0, DEFAULT_CUSTOMERS_LIMIT])
+  const [maintainenceItems, setMaintainenceItems] = useState([])
   const [ratingOnFly, setRatingOnFly] = useState({})
   const [rowHeight, setRowHeight] = useState(40)
   const [headerRowHeight, setHeaderRowHeight] = useState(47)
@@ -345,8 +349,84 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     } */
   ]
 
-  let dropdownList = [...actionList]
+  const maintainanceActionList = [
+    {
+      id: 99,
+      name: 'No action' ,
+      icon: <NotInterested />,
+      image: ''
+    },
+    {
+      id: -1,
+      name: '', 
+      icon: <KeyboardArrowDown />,
+      image: ''
+    },
+    {
+      id: 0,
+      name: 'Abandon', 
+      icon: <Clear />,
+      image: ''
+    },
+    {
+      id: 2,
+      name: 'Move to Sale',
+      image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/sell.png',
+      icon: ''
+    }, 
+    {
+      id: 4,
+      name: 'Move to License-Out',
+      image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/licenseout.png',
+      icon: ''
+    },
+    {
+      id: 5,
+      name: 'Add to Clipboard',
+      image: '',
+      icon: <Clipboard />
+    },
+    {
+      id: 6,
+      name: <RatingNecessary item={assetRating}/>,
+      image: '',
+      icon: <Clipboard />,
+      item: false
+    },
+    {
+      id: 7,
+      name: <RatingImportant item={assetRating}/>,
+      image: '',
+      icon: <Clipboard />,
+      item: false
+    },
+    {
+      id: 10,
+      name: 'Pay Maintainence Fee', 
+      icon: <MonetizationOn />,
+      image: ''
+    }
+    /* {
+      id: 6,
+      name: 'Link to Our Products',
+      image: '',
+      icon: <Clipboard />
+    },
+    {
+      id: 7,
+      name: 'Link to Technology',
+      image: '',
+      icon: <Clipboard />
+    },
+    {
+      id: 8,
+      name: 'Link to Competition',
+      image: '',
+      icon: <Clipboard />
+    } */
+  ]
 
+  let dropdownList = selectedCategory == 'pay_maintainence_fee' ? [...maintainanceActionList] : [...actionList]
 
   useEffect(() => {
     if(openChartBar === false && openAnalyticsBar === false && usptoMode === false) {
@@ -357,21 +437,22 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     }
   }, [checkBar, usptoMode])
 
-  useEffect(() => {
-    if(selectedCategory == 'restore_ownership') {
-      setOptionType(prevItem => 
-        prevItem !== 'single' ? 'single' : prevItem
-      )
-    }
-  }, [selectedCategory])
 
   useEffect(() => {
     if(display_sales_assets === true) {
       dropdownList.splice(3,2)
     } else {
-      dropdownList = [...actionList]
+      dropdownList = selectedCategory == 'pay_maintainence_fee' ? [...maintainanceActionList] : [...actionList]
     }
   }, [display_sales_assets])
+
+  useEffect(() => {
+    if(selectedCategory == 'restore_ownership') {
+      setOptionType(prevItem => 
+        prevItem !== 'single' ? 'single' : prevItem
+      )
+    } 
+  }, [selectedCategory])
     
   useEffect(() => {
     
@@ -385,6 +466,10 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       setMovedAssets([...move_assets])
     }
   }, [ move_assets ])  
+
+  useEffect(() => {
+
+  }, [assets])
 
   useEffect(() => {
     assetsAssignmentRef.current = assetTypeAssignmentAssets
@@ -580,7 +665,9 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
                 return [...prevItems]
               }
             }) 
-          }     
+          } else if (event.target.value === 10) {
+            updateMaintainenceSelection(asset, row)
+          } 
           const currentLayoutIndex = controlList.findIndex(r => r.type == 'menu' && r.category == selectedCategory )
           if(currentLayoutIndex !== -1) {
             setDropOpenAsset(null)
@@ -609,6 +696,43 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         }        
       }      
     }    
+  }
+
+  const updateMaintainenceSelection = (asset, row) => {
+    let updateSelected = [];
+    setMaintainenceItems(prevItems => {
+      updateSelected = [...prevItems];
+      const findIndex = prevItems.findIndex( r => r.asset == asset)
+      if( findIndex !== -1 ) {
+        updateSelected = maintainenceItems.filter(
+          asset => asset[1] !== parseInt(row.appno_doc_num),
+        );
+      } else {
+        updateSelected.push([
+          row.grant_doc_num,
+          row.appno_doc_num,
+          "",
+          row.fee_code,
+          row.fee_amount,
+        ]);
+        const todayDate = moment(new Date()).format("YYYY-MM-DD");
+        if (
+          new Date(todayDate).getTime() >=
+          new Date(row.payment_grace).getTime()
+        ) {
+          updateSelected.push([
+            row.grant_doc_num,
+            row.appno_doc_num,
+            "",
+            row.fee_code_surcharge,
+            row.fee_surcharge,
+          ]);
+        }
+      }
+      return updateSelected
+    })   
+
+    dispatch(setSelectedMaintainenceAssetsList(updateSelected));
   }
 
   const COLUMNS = [
@@ -671,11 +795,85 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     }
   ];
 
-  const [ tableColumns, setTableColumns ] = useState(COLUMNS)
+  const MAINTAINCE_COLUMNS = [
+    {
+      width: 10,
+      minWidth: 10,
+      label: "", 
+      dataKey: "asset",
+      role: "checkbox",
+      disableSort: true,
+      enable: false
+    },
+    {
+      width: 25,
+      minWidth: 25,
+      disableSort: true,
+      headingIcon: 'assets',  
+      checkboxSelect: true,
+      label: "",
+      dataKey: "asset",
+      role: "static_dropdown",
+      list: dropdownList,
+      onClick: onHandleDropDownlist
+    },
+    /* {
+      width: 20,
+      minWidth: 20,
+      label: "",
+      dataKey: "asset",
+      role: "arrow",
+      disableSort: true,
+      headingIcon: 'assets',
+    },  */
+    {
+      width: isMobile === true ? 150 : 100,  
+      minWidth: isMobile === true ? 150 : 100,  
+      label: "Assets",  
+      /* dataKey: "format_asset", */
+      dataKey: "asset",
+      staticIcon: "US",
+      format: numberWithCommas,
+      formatCondition: 'asset_type',
+      formatDefaultValue: 0,
+      secondaryFormat: applicationFormat,
+      align: "center",
+      show_selection_count: true,
+      badge: true,
+      /* styleCss: true,
+      justifyContent: 'center' */
+      /* textBold: true */
+    },
+    {
+      width: isMobile === true ? 60 : 40,
+      minWidth: isMobile === true ? 60 : 40,
+      label: "",
+      dataKey: "channel", 
+      formatCondition: 'asset',
+      headingIcon: 'slack_image',
+      role: 'slack_image',      
+    },
+    {
+      width: 90,
+      minWidth: 90,
+      label: "Due Date",
+      dataKey: "payment_due",
+    },
+    {
+      width: 100,
+      minWidth: 100,
+      label: "Grace Ends",
+      dataKey: "payment_grace",
+    }
+  ];
+
+  
+
+  const [ tableColumns, setTableColumns ] = useState( selectedCategory == 'pay_maintainence_fee' ? MAINTAINCE_COLUMNS : COLUMNS)
 
   useEffect(() => {
     if(display_clipboard === false) {
-      setTableColumns([...COLUMNS])
+      setTableColumns(selectedCategory == 'pay_maintainence_fee' ? [...MAINTAINCE_COLUMNS] : [...COLUMNS])
       setWidth(1500)
       if (standalone) {
         if( type === 9 ) {
@@ -732,6 +930,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     auth_token,
     switch_button_assets        
   ]);
+
 
   useEffect(() => {
     setAssetRows(assetTypeAssignmentAssets)

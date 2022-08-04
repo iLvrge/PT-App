@@ -596,7 +596,7 @@ const onHanldeMaintainencePatentAssetScreen = () => {
   dispatch(setDashboardScreen(false))
   dispatch(setAssetsIllustration(null))
   dispatch(setAssetsIllustrationData(null))
-  dispatch(setMaintainenceFeeFrameMode(true))
+  /* dispatch(setMaintainenceFeeFrameMode(true)) */
   //dispatch(setBreadCrumbs(typeof breadcrumb !== 'undefined' ? breadcrumb : 'Assets')) 
   history.push(routeList.pay_maintainence_fee)  
 }

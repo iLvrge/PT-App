@@ -6,7 +6,7 @@ import React, {
   useMemo,
 } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Paper } from "@mui/material";
+import { Paper,  Popover, Box, Rating } from "@mui/material";
 import { Clear, NotInterested, KeyboardArrowDown, MonetizationOn} from '@mui/icons-material';
 import moment from "moment";
 
@@ -91,6 +91,8 @@ const MaintainenceAssetsList = ({
   const [selectedAssets, setSelectedAssets] = useState([])  
   const [movedAssets, setMovedAssets] = useState([]) 
   const [ redoId, setRedoId] = useState(0)
+  const [ratingOnFly, setRatingOnFly] = useState({})
+  const [ assetRating, setAssetRating ] = useState([])
   const totalRecords = 0;
   const selectedAssetsPatents = useSelector(
     state => state.patenTrack2.selectedAssetsPatents,
@@ -139,6 +141,61 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     )
   }
 
+  const onHandleRating = (event, newValue, props) => {
+    if(event.type == 'mousemove') {
+      setRatingOnFly({label: props.label, rating_value: newValue})
+    } else {
+      setRatingOnFly({})
+    }    
+  }
+
+  const RatingBox = (props) => {
+    const findValue = useMemo(() => {
+      if(typeof props.data !== 'undefined' && props.data.length > 0) {
+        let value = 0
+        props.data.forEach( item => {
+          if(props.label == item.name && item.value != '') {
+            value = item.value
+          } 
+        })
+        return value;
+      } else {
+        return 0;
+      }
+    }, [props])
+    return (
+      <Box className={classes.rating_container}>
+        <span className={classes.rating_label}><label>{props.label}</label></span>
+        <Rating
+          name={props.name}
+          onChangeActive={(event, newValue) => onHandleRating(event, newValue, props)}
+          value={findValue}
+        />
+      </Box>
+    )
+  }
+
+  const RatingImportant = (props) => {
+    return (
+      <RatingBox
+        label={`Important`}
+        name={`virtual-rating-important`}
+        data={props.item}
+      />
+    )
+  }
+
+
+  const RatingNecessary = (props) => {
+    return (
+      <RatingBox
+        label={`Necessary`}
+        name={`virtual-rating-necessary`}
+        data={props.item}
+      />
+    )
+  }
+
   const dropdownList = [
     {
       id: 99,
@@ -154,7 +211,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     },
     {
       id: 0,
-      name: 'List to Abandon', 
+      name: 'Abandon', 
       icon: <Clear />,
       image: ''
     },
@@ -181,7 +238,21 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       name: 'Add to Clipboard',
       image: '',
       icon: <Clipboard />
-    }
+    },
+    {
+      id: 6,
+      name: <RatingNecessary item={assetRating}/>,
+      image: '',
+      icon: <Clipboard />,
+      item: false
+    },
+    {
+      id: 7,
+      name: <RatingImportant item={assetRating}/>,
+      image: '',
+      icon: <Clipboard />,
+      item: false
+    },
   ]
   
   const onHandleDropDownlist = ( event, asset, row ) => {    
