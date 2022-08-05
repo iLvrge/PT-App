@@ -102,5 +102,16 @@ export default makeStyles((theme) => ({
             position: 'absolute',
             top: 1
         }
+    },
+    slack_container: {
+        position: 'relative',
+        display: 'flex',
+        width: 24,
+        height: 24,
+        '& svg': {
+            position: 'absolute',
+            left: -6,
+            bottom: -4
+        }
     }
 }))

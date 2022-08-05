@@ -108,7 +108,8 @@ const AssetsTable = ({
     isMobile,
     fileBar,
     driveBar,
-    changeVisualBar
+    changeVisualBar,
+    handleCommentBarOpen
   }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -277,6 +278,14 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     )
   }
 
+  const Slack = () => {
+    return (
+      <Box className={classes.slack_container}>
+        <svg version="1.1" width="36px" height="36px" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 270 270"><g><g><path fill="#E01E5A" d="M99.4,151.2c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h12.9V151.2z"></path><path fill="#E01E5A" d="M105.9,151.2c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v32.3c0,7.1-5.8,12.9-12.9,12.9s-12.9-5.8-12.9-12.9V151.2z"></path></g><g><path fill="#36C5F0" d="M118.8,99.4c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v12.9H118.8z"></path><path fill="#36C5F0" d="M118.8,105.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9H86.5c-7.1,0-12.9-5.8-12.9-12.9s5.8-12.9,12.9-12.9H118.8z"></path></g><g><path fill="#2EB67D" d="M170.6,118.8c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9h-12.9V118.8z"></path><path fill="#2EB67D" d="M164.1,118.8c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9V86.5c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9V118.8z"></path></g><g><path fill="#ECB22E" d="M151.2,170.6c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9v-12.9H151.2z"></path><path fill="#ECB22E" d="M151.2,164.1c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h32.3c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9H151.2z"></path></g></g></svg>
+      </Box>
+    )
+  }
+
 
   const actionList = [
     {
@@ -327,6 +336,13 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       name: <RatingImportant item={assetRating}/>,
       image: '',
       icon: <Clipboard />,
+      item: false
+    },
+    {
+      id: 9,
+      name:  'Add a task/review',
+      image: '',
+      icon: <Slack />,
       item: false
     },
     /* {
@@ -398,6 +414,13 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       name: <RatingImportant item={assetRating}/>,
       image: '',
       icon: <Clipboard />,
+      item: false
+    },
+    {
+      id: 9,
+      name: <Slack label={'Add a task/review'}/>,
+      image: '',
+      icon: '',
       item: false
     },
     {
@@ -563,7 +586,17 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
       alert('Message....')
     } else {
-      if(event.target.value >= 6 && event.target.value <= 8) {
+      if(event.target.value  == 9) {
+        /**
+         * Slack review box
+         */
+        if(commentBar === false) {
+          handleCommentBarOpen()
+          dispatch(setAssetTypesPatentsSelected([row.asset]))
+          setSelectItems([row.asset])
+          handleOnClick(row)
+        }
+      } else if(event.target.value >= 6 && event.target.value <= 8) {
         //6=>Product,7=>Technology,8=>Competition
         /* setDropOpenAsset(null)
         const type = event.target.value === 7 ? 'technology' : event.target.value === 8 ? 'competitors' : 'products'

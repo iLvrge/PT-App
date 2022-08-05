@@ -529,6 +529,7 @@ const PatentLayout = ({
                                                             handleAnalyticsBarOpen={handleAnalyticsBarOpen}
                                                             handleIllustrationBarOpen={handleIllustrationBarOpen}
                                                             handleVisualBarSize={changeVisualBar}
+                                                            handleCommentBarOpen={handleCommentBarOpen}
                                                             {...(typeof selectedCategory == 'pay_maintainence_fee' ? {assets: maintainenceAssetsList} : {})} 
                                                         />
                                                     )
