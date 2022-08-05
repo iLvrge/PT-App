@@ -345,7 +345,7 @@ const Reports = (props) => {
             type: 37
         },
         {
-            title: 'Maintenance Budget',
+            title: 'Maintenance Fee Due',
             tooltip: 'Expected annual maintenance fees to be paid according to the company’s status and number of non-expired parents it currently owns.',
             number: 0,
             patent: '',
@@ -883,7 +883,7 @@ const Reports = (props) => {
 
     const onHandleList = useCallback((id) => {
         /* process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' */
-        let subscription = parseInt(profile?.user?.organisation?.subscribtion), timeline = false, patent = false
+        let subscription = parseInt(profile?.user?.organisation?.subscribtion), timeline = false, patent = false, maintainence = false
         if( subscription === 2 || subscription === 3 ) {
             let findIndex = -1
             if(id === 0 && props.kpi === false) {                
@@ -941,8 +941,8 @@ const Reports = (props) => {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'ptab')
                 patent = true
             } else if(id === 7 && subscription > 1  && props.kpi === true) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'maintenance_budget')
-                patent = true
+                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'pay_maintainence_fee')
+                maintainence = true
             } else if(id === 8 && subscription > 1  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_non_us_members')
                 patent = true
@@ -980,6 +980,9 @@ const Reports = (props) => {
                 dispatch(setPatentScreen(patent))
                 if(patent === true) {
                     history.push(routeList.patent_assets)  
+                }
+                if(maintainence === true) {
+                    history.push(routeList.pay_maintainence_fee)  
                 }
                 if(props.openCustomerBar === false && timeline === false){
                     props.handleCustomersBarOpen()

@@ -404,7 +404,7 @@ const TimelineChart = (props) => {
     
     setTimelineItems(convertedItems)
     items.current = new DataSet()
-    let start =  new moment(), end = new moment().add(1, 'year')   
+    let start =  new moment(), end =  props.type === 4 ? new moment(new Date('2500-01-01')) : new moment().add(1, 'year')   
     if(timelineRef.current !== null) {
         timelineRef.current.destroy()
         timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
@@ -414,9 +414,10 @@ const TimelineChart = (props) => {
     } 
     
     if (convertedItems.length > 0) {
-        start = props.type === 5 ? new moment(convertedItems[0].start).subtract(1, 'week') : new moment(convertedItems[convertedItems.length - 1].start).subtract(1, 'week')
+        start = props.type === 5 ? new moment(convertedItems[0].start).subtract(1, 'week') : props.type === 4 ? new moment(new Date('1900-01-01')) : new moment(convertedItems[convertedItems.length - 1].start).subtract(1, 'week')
         items.current.add(convertedItems)   
     }
+    
     timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1400-01-01')), max: new moment(new Date('2500-01-01'))})
     timelineRef.current.setItems(items.current)   
     }, [ timelineRawData ])
