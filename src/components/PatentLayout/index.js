@@ -181,7 +181,6 @@ const PatentLayout = ({
         dispatch(setPatentScreen(true))
         /* dispatch(setBreadCrumbs('Assets')) */
     }, [])
-
     useEffect(() => {
         if(selectedCategory == 'correct_details') {
             if(openAssignmentBar === false) {
@@ -189,6 +188,19 @@ const PatentLayout = ({
             }
             if(openCustomerBar === true) {
                 handleCustomersBarOpen()
+            }
+        } else if(selectedCategory == 'pay_maintainence_fee') {
+            let statusChange = false;
+            if(openIllustrationBar === true) {
+                statusChange = true
+                handleIllustrationBarOpen()
+            }
+            if( openAnalyticsBar === false ) {
+                statusChange = true
+                handleAnalyticsBarOpen()
+            }
+            if(statusChange === true) {
+                changeVisualBar(false, true, false, false)
             }
         } else {
             if(openAssignmentBar === true) {
@@ -279,6 +291,10 @@ const PatentLayout = ({
     useEffect(() => {
         updateResizerBar(templateFileRef, driveTemplateMode)
     }, [ templateFileRef, driveTemplateMode ])    
+
+    useEffect(() => {
+        
+    }, [selectedCategory])
 
     const resetAll = (dispatch) => {
         dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))

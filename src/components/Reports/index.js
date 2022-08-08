@@ -1084,6 +1084,7 @@ const Reports = (props) => {
                 handleList={onHandleList}
                 type={card.type}  
                 grid={grid}
+                checkChartAnalytics={props.checkChartAnalytics}
                 {...(props.kpi === true ? {kpiEnable: true} : {lineGraph: props.lineGraph})}
             />
         </Grid>
