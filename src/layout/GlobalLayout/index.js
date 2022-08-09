@@ -506,16 +506,23 @@ const GlobalLayout = (props) => {
     const getWindowDimensions = () => {
         const hasWindow = typeof window !== 'undefined';
         let percentage = '76%'
-        const width = hasWindow ? window.innerWidth : null;
-        if(width > 1400) {
-            percentage = '76%'
-        } else if(width < 1400 && width > 1279) {
-            percentage = '69%'
-        } else if(width < 1280 && width > 1151) {
-            percentage = '67%'
+        const informationContainer = document.getElementById('information_container')
+        if(informationContainer != null && dashboardScreen === true) {
+            const parentContainer = informationContainer.parentNode.parentNode
+            const parentWidth = parentContainer.clientWidth
+            percentage = `${((parentWidth - 250) / parentWidth) * 100}%`
         } else {
-            percentage = '64%'
-        }  
+            const width = hasWindow ? window.innerWidth : null;
+            if(width > 1400) {
+                percentage = '76%'
+            } else if(width < 1400 && width > 1279) {
+                percentage = '69%'
+            } else if(width < 1280 && width > 1151) {
+                percentage = '67%'
+            } else {
+                percentage = '64%'
+            }  
+        }
         return percentage      
     }
 

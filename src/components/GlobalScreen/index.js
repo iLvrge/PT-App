@@ -709,7 +709,7 @@ const GlobalScreen = ({
                                         ref={mainContainerRef}
                                         primary={'second'}                                
                                     >
-                                        <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
+                                        <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}} >
                                             <IllustrationCommentContainer 
                                                 cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPane1OverflowUnset, classes.paneHeightZero, { [classes.minimized]: assetsCommentsTimelineMinimized })}
                                                 split={`horizontal`} 
@@ -745,7 +745,7 @@ const GlobalScreen = ({
                                                 handleCustomersBarOpen={handleCustomersBarOpen}
                                             /> 
                                         </div>
-                                        <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
+                                        <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}} id={`information_container`}>
                                         {
                                             dashboardScreen === true && dashboardPanel === true && type !== 9  
                                             ? 
