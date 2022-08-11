@@ -96,7 +96,7 @@ const SankeyChart = (props) => {
                 !loading
                 ?
                     data.length > 0 && (
-                        <div className={classes.child}>
+                        <div className={clsx(classes.child, {[classes.maxChildHeight]: assignorData.length > 0 ? true : false})}>
                             <TitleBar title="Acquistions:" enablePadding={false}/>
                             <DisplayChart data={data} tooltip={true} type={1} onSelect={handleSelection}/>
                         </div>   
@@ -110,7 +110,7 @@ const SankeyChart = (props) => {
                 !loadingAssignor
                 ?
                     assignorData.length > 0 && (
-                        <div className={clsx(classes.child, {[classes.maxChildHeight]: data.length > 0 ? true : false})} >
+                        <div className={clsx(classes.child , {[classes.maxChildHeight]: data.length > 0 ? true : false})} >
                             <TitleBar title="Divestitures:" enablePadding={false}/>
                             <DisplayChart data={assignorData} type={2} onSelect={handleSelection}/>
                         </div>  

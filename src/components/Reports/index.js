@@ -951,7 +951,7 @@ const Reports = (props) => {
                 patent = true
             } else if(id === 10 && subscription > 1  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_law_firms')
-                patent = true
+                timeline = true
             } else if(id === 11 && subscription > 1  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_lenders')
                 patent = true

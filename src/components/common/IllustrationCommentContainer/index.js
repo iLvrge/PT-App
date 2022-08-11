@@ -26,6 +26,7 @@ import FullScreen from '../FullScreen'
 import clsx from 'clsx'
 import InventionVisualizer from '../AssetsVisualizer/InventionVisualizer'
 import Ptab from '../AssetsVisualizer/LegalEventsContainer/Ptab'
+import LawFirmTimeline from '../AssetsVisualizer/LawFirmTimeline'
 
 const IllustrationCommentContainer = ({ 
     cls, 
@@ -364,12 +365,13 @@ const IllustrationCommentContainer = ({
                         ?
                             shouldShowTimeline
                             ?
-                                <TimelineContainer 
+                                <LawFirmTimeline 
                                     assignmentBar={assignmentBar} 
                                     assignmentBarToggle={assignmentBarToggle} 
                                     type={type} 
                                     updateTimelineRawData={setTimelineRawData}
                                 />
+                                
                             :
                                 
                                     <IllustrationContainer 

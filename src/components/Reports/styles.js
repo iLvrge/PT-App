@@ -498,7 +498,8 @@ export default makeStyles(theme => ({
       color: pink[500]
     },
     maxChildHeight: {
-      maxHeight: '50%'
+      maxHeight: '50%',
+      overflow: 'auto'
     },
     tableContainer: {
       height: '60%',

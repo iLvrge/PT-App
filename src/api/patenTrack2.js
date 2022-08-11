@@ -802,6 +802,11 @@ class PatenTrackApi {
   static getDashboardPartiesAssignorData(formData) {
     return axios.post(`${base_new_api_url}/dashboards/parties/assignor`, formData, getFormUrlHeader())
   }
+  
+
+  static getLawFirmsByCompany(companies) {
+    return axios.get(`${base_new_api_url}/customers/lawfirm?companies=${JSON.stringify(companies)}`, getHeader())
+  }
 
   static getLawFirms() {
     return axios.get(`${base_new_api_url}/lawfirm`, getHeader())

@@ -64,6 +64,7 @@ import ConnectionBox from '../common/ConnectionBox'
 import PdfViewer from '../common/PdfViewer'
 import IllustrationPdf from '../common/AssetDetailsContainer/IllustrationPdf'
 import PatenTrackApi from '../../api/patenTrack2'
+import LawFirmTable from '../common/LawFirmTable';
 
 const GlobalScreen = ({
     type,
@@ -532,19 +533,23 @@ const GlobalScreen = ({
                             { 
                                 openAssignmentBar === true 
                                 ? 
-                                    <>
-                                        {/* <ArrowButton 
-                                            arrowId={`arrow_transactions`} 
-                                            handleClick={handleAssignmentBarOpen} 
-                                            buttonType={toggleAssignmentButtonType} 
-                                            buttonVisible={assignmentButtonVisible}/> */}
+                                    selectedCategory === 'top_law_firms'
+                                    ?
+                                        <LawFirmTable 
+                                            checkChartAnalytics={checkChartAnalytics}
+                                            chartsBar={openChartBar}
+                                            analyticsBar={openAnalyticsBar}
+                                            type={type} 
+                                            defaultLoad={type === 2 ? false : true} 
+                                        />
+                                    :
                                         <AssignmentsTable 
                                             checkChartAnalytics={checkChartAnalytics}
                                             chartsBar={openChartBar}
                                             analyticsBar={openAnalyticsBar}
                                             type={type} 
-                                            defaultLoad={type === 2 ? false : true} />
-                                    </>
+                                            defaultLoad={type === 2 ? false : true} 
+                                        />
                                 : 
                                 ''
                             }

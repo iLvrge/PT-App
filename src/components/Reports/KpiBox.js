@@ -6,7 +6,7 @@ import useStyles from './styles'
 import { IconButton, Button, Typography, Tooltip, Zoom, Paper, List, ListItem, ListItemText } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import clsx from 'clsx'
-import { numberWithCommas } from '../../utils/numbers';
+import { numberWithCommas, capitalAllWords } from '../../utils/numbers';
 import AddToolTip from './AddToolTip';
 
 
@@ -27,7 +27,7 @@ const KpiBox = (props) => {
                                         variant="body2" 
                                         component="div"
                                     >
-                                        <span className={classes.itemHeading} title={item.name}>{item.name}:</span><span className={classes.itemText}>{numberWithCommas(item.number)}</span>
+                                        <span className={classes.itemHeading} title={item.name}>{capitalAllWords(item.name.toLowerCase())}:</span><span className={classes.itemText}>{numberWithCommas(item.number)}</span>
                                     </Typography>                                    
                                 </ListItemText>
                             </ListItem>
