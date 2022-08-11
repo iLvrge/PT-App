@@ -97,7 +97,7 @@ import React, {
         {
             width: 300,
             minWidth: 300,
-            label: "Law Firm",
+            label: "Law Firms",
             dataKey: "lawfirm",
             align: "left",
             show_selection_count: true,
@@ -115,7 +115,7 @@ import React, {
             setGrandTotal(data.length)
         }
         getLawFirmList()
-    }, [])
+    }, [selectedCompanies])
   
     const onHandleSelectAll = useCallback(
       (event, row) => {

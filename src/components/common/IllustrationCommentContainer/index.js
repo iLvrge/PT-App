@@ -365,12 +365,21 @@ const IllustrationCommentContainer = ({
                         ?
                             shouldShowTimeline
                             ?
-                                <LawFirmTimeline 
-                                    assignmentBar={assignmentBar} 
-                                    assignmentBarToggle={assignmentBarToggle} 
-                                    type={type} 
-                                    updateTimelineRawData={setTimelineRawData}
-                                />
+                                selectedCategory == 'top_law_firms'
+                                ?
+                                    <LawFirmTimeline 
+                                        assignmentBar={assignmentBar} 
+                                        assignmentBarToggle={assignmentBarToggle} 
+                                        type={type} 
+                                        updateTimelineRawData={setTimelineRawData}
+                                    />
+                                :
+                                    <TimelineContainer 
+                                        assignmentBar={assignmentBar} 
+                                        assignmentBarToggle={assignmentBarToggle} 
+                                        type={type}
+                                        updateTimelineRawData={setTimelineRawData}
+                                    />
                                 
                             :
                                 
@@ -406,14 +415,22 @@ const IllustrationCommentContainer = ({
                         </IconButton> 
                         {
                             
-                            shouldShowTimeline === true ? (
-                                <TimelineContainer 
-                                assignmentBar={assignmentBar} 
-                                assignmentBarToggle={assignmentBarToggle} 
-                                type={type}
-                                timelineData={timelineRawData}
-                                />
-                            )
+                            shouldShowTimeline === true ? 
+                                selectedCategory == 'top_law_firms'
+                                ?
+                                    <LawFirmTimeline 
+                                        assignmentBar={assignmentBar} 
+                                        assignmentBarToggle={assignmentBarToggle} 
+                                        type={type} 
+                                        timelineData={timelineRawData}
+                                    />
+                                :
+                                    <TimelineContainer 
+                                        assignmentBar={assignmentBar} 
+                                        assignmentBarToggle={assignmentBarToggle} 
+                                        type={type}
+                                        timelineData={timelineRawData}
+                                    />
                             :
                                 (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null)
                                 ?

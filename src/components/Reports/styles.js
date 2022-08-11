@@ -522,17 +522,17 @@ export default makeStyles(theme => ({
     },
     itemHeading: {
       display: 'inline-block',
-      width: '80%',
+      width: '72%',
       overflow: 'hidden',
-      /* whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis',  */
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
       marginRight: 5,
       fontSize: '1.2rem'
     },
     itemText:{
       position: 'absolute',
       top: 0,
-      width: '15%',
+      width: '25%',
       textAlign: 'right',
       fontSize: '1.2rem'
     },

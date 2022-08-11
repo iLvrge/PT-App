@@ -46,7 +46,6 @@ const options = {
   titleTemplate: 'Cluster containing {count} events. Zoom in to see the individual events.',
     showStipes: false,
     clusterCriteria: (firstItem, secondItem) => {
-        console.log(`Clustered ${( firstItem.rawData.law_firm_id === secondItem.rawData.law_firm_id  ||  ( firstItem.rawData.repID != '' && secondItem.rawData.repID != '' && firstItem.rawData.repID == secondItem.rawData.repID))}`)
       return ( firstItem.rawData.law_firm_id === secondItem.rawData.law_firm_id  ||  ( firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID))
     }
   }, 
@@ -54,17 +53,10 @@ const options = {
     if (data.isCluster) {
       return `<span class="cluster-header">${data.items[0].rawData.lawfirm}(${data.items.length})</span>`
     } else { 
-      return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
+      return `<span class="lawfirm">${data.customerName}</span>`
     }
   },
 }
-
-/**
- * 
- * @param {*} assetsCustomer 
- * item data to dsplay for the timeline and for the tooltip
- */
-
 
 
 
@@ -147,11 +139,11 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
     const item = {
       type: 'point',
       start: new Date(assetsCustomer.exec_dt),
-      customerName: `${capitalAllWords(customerFirstName.toLowerCase())}`,
+      customerName: `${customerFirstName}`,
       assetType,
       companyName,
       rawData: assetsCustomer,
-      className: `asset-type-${assetType} ${assetsCustomer.release_exec_dt != null ? assetsCustomer.partial_transaction == 1 ? 'asset-type-security-release-partial' : 'asset-type-security-release' : ''}`,
+      className: `lawfirm`,
       collection: [ { id: assetsCustomer.id, totalAssets: assetsCustomer.totalAssets } ],
       showTooltips: false
     }
