@@ -198,7 +198,8 @@ export default makeStyles(theme => ({
       border: '0px',
       '& .vis-item-content':{
         padding: 0,
-        width: '112px !important'
+        width: '112px !important',
+        textAlign: 'left'
       }
     },
     '& .vis-dot': {
