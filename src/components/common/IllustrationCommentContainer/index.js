@@ -64,6 +64,10 @@ const IllustrationCommentContainer = ({
     type,
     handleCommentBarOpen,
     handleCustomersBarOpen,
+    openInventorBar,
+    handleInventorBarOpen,
+    openOtherPartyBar,
+    handleOtherPartyBarOpen,
     cube,
     ptab
     }) => {
@@ -113,8 +117,7 @@ const IllustrationCommentContainer = ({
     const link_assets_sheet_type = useSelector(state => state.patenTrack2.link_assets_sheet_type)
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
     const ptabAssets = useSelector(state => state.patenTrack2.ptabAssets)
-    
-  
+     
     const menuItems = [
         {
             id: 1,
@@ -133,6 +136,10 @@ const IllustrationCommentContainer = ({
             dashboardData: dashboardData,
             updateDashboardData: setDashboardData,
             dashboardTimelineData: dashboardTimelineData, 
+            openInventorBar: openInventorBar,
+            handleInventorBarOpen: handleInventorBarOpen,
+            openOtherPartyBar: openOtherPartyBar,
+            handleOtherPartyBarOpen: handleOtherPartyBarOpen,
             lineGraph: lineGraph,
             setLineGraph: setLineGraph,
             gauge: gauge,
@@ -296,7 +303,7 @@ const IllustrationCommentContainer = ({
                                 handleFullScreen={setDashboardFullScreen}
                                 defaultSize={illustrationBarSize} 
                                 customerBarSize={customerBarSize} 
-                                companyBarSize={companyBarSize}
+                                companyBarSize={companyBarSize}  
                                 type={type}
                                 illustrationBar={illustrationBar} 
                                 chartsBar={chartsBar}
@@ -309,6 +316,8 @@ const IllustrationCommentContainer = ({
                                 updateDashboardData={setDashboardData}
                                 updateDashboardTimelineData={setDashboardTimelineData}
                                 visualizerBarSize={visualizerBarSize} 
+                                openInventorBar={openInventorBar}
+                                handleInventorBarOpen={handleInventorBarOpen}
                                 lineGraph={lineGraph}
                                 setLineGraph={setLineGraph}
                                 gauge={gauge}
@@ -323,6 +332,10 @@ const IllustrationCommentContainer = ({
                                 setKpi={setKpi}
                                 timeline={timeline}
                                 setTimeline={setTimeline}
+                                assignmentBar={assignmentBar}
+                                assignmentBarToggle={assignmentBarToggle}
+                                openOtherPartyBar={openOtherPartyBar}
+                                handleOtherPartyBarOpen={handleOtherPartyBarOpen}
                             /> 
                         :
                         showManualComponent === true && menuComponent.length > 0
@@ -365,7 +378,7 @@ const IllustrationCommentContainer = ({
                         ?
                             shouldShowTimeline
                             ?
-                                selectedCategory == 'top_law_firms'
+                                selectedCategory == 'top_law_firms' 
                                 ?
                                     <LawFirmTimeline 
                                         assignmentBar={assignmentBar} 

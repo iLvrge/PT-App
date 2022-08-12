@@ -47,7 +47,7 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
     const dashboardICONS = [0, 1, 6, 7]
     const removeFilterICONS = [2, 3, 4, 11]
     
-    if((selectedCategory  != 'due_dilligence' && removeFilterICONS.includes(t)) || ( dashboardScreen === true  && !dashboardICONS.includes(t))) return null
+    if((selectedCategory  != 'due_dilligence' && selectedCategory  != 'proliferate_inventors' && selectedCategory != 'top_lenders' && removeFilterICONS.includes(t)) || ( dashboardScreen === true  && !dashboardICONS.includes(t))) return null
        
     return (
         <div className={clsx(classes.showIcon, {[classes.marginBottom25]: typeof margin !== 'undefined' && margin === true && typeof isMobile !== 'undefined' && isMobile === false, [classes.mobile]: typeof isMobile !== 'undefined' && isMobile === true})}> 

@@ -109,6 +109,7 @@ const GlobalScreen = ({
     openCustomerBar,
     handleCustomersBarOpen,
     handleCommentBarOpen,
+    handleInventorBarOpen,
     toggleCustomerButtonType,
     customerButtonVisible,
     commentBarSize,
@@ -180,8 +181,6 @@ const GlobalScreen = ({
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
     const dashboard_share_selected_data = useSelector(state => state.patenTrack2.dashboard_share_selected_data)
 
-    
-    
     const checkContainer = () => {
         /* setTimeout(() => {
             if( mainContainerRef.current != null  && mainContainerRef.current != undefined) {                
@@ -257,7 +256,7 @@ const GlobalScreen = ({
                 handleCustomersBarOpen()
             }
         } else {
-            if((openAssignmentBar === true && timelineScreen === false) || (openAssignmentBar === false && timelineScreen === true)) {
+            if((openAssignmentBar === true && timelineScreen === false) || (openAssignmentBar === false && timelineScreen === true && selectedCategory != 'top_lenders' &&  selectedCategory != 'proliferate_inventors')) {
                 handleAssignmentBarOpen()
             } 
             if(openCustomerBar === false && dashboardScreen === false && timelineScreen === false) {
@@ -748,6 +747,10 @@ const GlobalScreen = ({
                                                 setChartBar={setChartBar}
                                                 handleCommentBarOpen={handleCommentBarOpen}
                                                 handleCustomersBarOpen={handleCustomersBarOpen}
+                                                openInventorBar={openInventorBar}
+                                                handleInventorBarOpen={handleInventorBarOpen}  
+                                                openOtherPartyBar={openOtherPartyBar}
+                                                handleOtherPartyBarOpen={handleOtherPartyBarOpen}
                                             /> 
                                         </div>
                                         <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}} id={`information_container`}>

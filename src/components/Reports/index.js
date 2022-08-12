@@ -6,7 +6,7 @@ import useStyles from './styles'
 import clsx from 'clsx'
 import moment from 'moment'
 import CardElement from './CardElement'
-import { Fullscreen, Close, Public, BarChart, AutoGraph, BubbleChart, Speed, AppsOutage, ViewTimeline} from '@mui/icons-material';
+import { Fullscreen, Close, Public, BarChart, AutoGraph, BubbleChart, Speed, AppsOutage, ViewTimeline, TryRounded} from '@mui/icons-material';
 
 import { 
     setDashboardPanel,
@@ -14,7 +14,7 @@ import {
     setDashboardScreen,
     setPatentScreen, 
     toggleFamilyItemMode} from '../../actions/uiActions'
-import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId,  retrievePDFFromServer  } from '../../actions/patentTrackActions2'
+import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId,  retrievePDFFromServer, setAssetTypesSelect  } from '../../actions/patentTrackActions2'
 import { assetLegalEvents, setAssetLegalEvents, setPDFView, setPDFFile, setConnectionData, setConnectionBoxView,   } from '../../actions/patenTrackActions';
 import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar'
 import { controlList } from "../../utils/controlList"
@@ -355,7 +355,7 @@ const Reports = (props) => {
             currency: true
         },
         {
-            title: 'Non-US Members',
+            title: 'Non-USA Members',
             tooltip: 'Countries in which the company has the largest number of patents.',
             number: 0,
             patent: '',
@@ -948,13 +948,13 @@ const Reports = (props) => {
                 patent = true
             } else if(id === 9 && subscription > 1  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'proliferate_inventors')
-                patent = true
+                timeline = true
             } else if(id === 10 && subscription > 1  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_law_firms')
                 timeline = true
             } else if(id === 11 && subscription > 1  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_lenders')
-                patent = true
+                timeline = true
             } /*else if(id === 8 && subscription > 2) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'pay_maintainence_fee')
                 patent = true
@@ -966,15 +966,39 @@ const Reports = (props) => {
                 timeline = true
             }*/
             if( findIndex !== -1 ) {
-                
-                resetAllRowSelect(dispatch, resetItemList.resetAll, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [1, 9, 10] : [])
-                resetAllRowSelect(dispatch, resetItemList.clearOtherItems, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [15, 16] : [])
+                console.log(controlList[findIndex].category)
+                resetAllRowSelect(dispatch, resetItemList.resetAll, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [1, 9, 10] :  [])
+                resetAllRowSelect(dispatch, resetItemList.clearOtherItems, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [14, 15] :  controlList[findIndex].category == 'proliferate_inventors' || controlList[findIndex].category == 'top_lenders' ? [14, 15] :  [])
                 setTimeout(() => { 
                     dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))                
                     if(id === 0) {
                         dispatch(setSwitchAssetButton(1))
                     } 
                 })
+                if(controlList[findIndex].category == 'proliferate_inventors') {
+                    /**
+                     * Inventor
+                     * select Inventor activity type
+                     * Open Inventor Table
+                     * 
+                     */
+                    dispatch( setAssetTypesSelect([10]) )
+                    if(props.openInventorBar === false) {
+                        props.handleInventorBarOpen()
+                    }
+                    if(props.assignmentBar === true) {
+                        props.assignmentBarToggle()
+                    }
+                }  
+                if(controlList[findIndex].category == 'top_lenders') {
+                    /**
+                     * Select Lending activity type
+                     */
+                    dispatch( setAssetTypesSelect([81]) )
+                    if(props.openOtherPartyBar === false) {
+                        props.handleOtherPartyBarOpen()
+                    }
+                }
                 dispatch(setDashboardScreen(false))
                 dispatch(setTimelineScreen(timeline))
                 dispatch(setPatentScreen(patent))
@@ -989,10 +1013,10 @@ const Reports = (props) => {
                 }
                 if(props.openCommentBar === false){
                     props.handleCommentBarOpen()
-                }                                
+                }                             
             }
         }
-    }, [dispatch, profile, activeId, selectedAssetCompanies, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, props.openCustomerBar, props.openCommentBar, props.kpi])
+    }, [dispatch, profile, activeId, selectedAssetCompanies, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, props.openCustomerBar, props.openCommentBar, props.kpi, props.openInventorBar, props.assignmentBar, props.openOtherPartyBar])
 
     const changeGraph = async(flag) => {
         setIntial(false)

@@ -157,6 +157,7 @@ const GlobalLayout = (props) => {
     const timelineScreen = useSelector(state => state.ui.timelineScreen)
     const patentScreen = useSelector(state => state.ui.patentScreen)
 
+
     useEffect(() => {
         if(openVisualizerBar === false && visualizerBarSize != '0%') {
             setVisualizerBarSize('0%')
@@ -1306,9 +1307,11 @@ const GlobalLayout = (props) => {
         handleIllustrationBarOpen,
         handleChartBarOpen,
         handleAnalyticsBarOpen,
+        openInventorBar,
+        handleInventorBarOpen,
         setIsDrag,
         isDrag,
-        setSize,
+        setSize, 
         size,
         illustrationRecord,
         setIllustrationRecord,
@@ -1366,6 +1369,7 @@ const GlobalLayout = (props) => {
                 setOtherPartyBarSize,
                 handleOtherPartyButton,
                 handleOtherPartyBarOpen,
+                handleInventorBarOpen,
                 partyBarSize,
                 driveBarSize,
                 toggleOtherPartyButtonType,

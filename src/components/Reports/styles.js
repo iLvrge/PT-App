@@ -522,10 +522,11 @@ export default makeStyles(theme => ({
     },
     itemHeading: {
       display: 'inline-block',
-      width: '72%',
+      width: '70%',
       overflow: 'hidden',
-      whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis',
+      /* whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis', */
+      height: 18,
       marginRight: 5,
       fontSize: '1.2rem'
     },

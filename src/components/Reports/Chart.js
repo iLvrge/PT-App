@@ -18,7 +18,7 @@ const Chart = (props) => {
     const displayNumber = (value) => {
         return `${ props.card.display_value == '%' ? parseFloat(props.card.number).toFixed(1) : numberWithCommas(props.card.number)}${typeof props.card.display_value != 'undefined' ? numberWithCommas(props.card.display_value)  : ''}`
     }
-    console.log('sdsdsd')
+    console.log('sdsdsd', props.card)
     return (
         <div className={clsx(classes.chartContainer, {[classes.widthResponsive]: props.lineGraph})}>
             <div className={clsx(classes.headingContainer, classes.headerContainerPosition)}>
@@ -60,6 +60,9 @@ const Chart = (props) => {
                 variant="outlined" 
                 className={clsx(classes.actionButton)} 
                 onClick={() => props.handleList(props.id, props.card.type)}
+                disabled={
+                    (parseInt(props.card?.number) > 0 || (props.card?.list && props.card.list.length > 0)) ? false : true
+                }
             >
                 {   parseInt(profile?.user?.organisation?.subscribtion) > 2 ? 
                         'View List' 
