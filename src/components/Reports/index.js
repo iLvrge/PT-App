@@ -14,8 +14,8 @@ import {
     setDashboardScreen,
     setPatentScreen, 
     toggleFamilyItemMode} from '../../actions/uiActions'
-import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId,  retrievePDFFromServer, setAssetTypesSelect  } from '../../actions/patentTrackActions2'
-import { assetLegalEvents, setAssetLegalEvents, setPDFView, setPDFFile, setConnectionData, setConnectionBoxView,   } from '../../actions/patenTrackActions';
+import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId,  retrievePDFFromServer, setAssetTypesSelect, setSelectedAssetsPatents  } from '../../actions/patentTrackActions2'
+import { assetLegalEvents, setAssetLegalEvents, setPDFView, setPDFFile, setConnectionData, setConnectionBoxView, assetFamilySingle, assetFamily,   } from '../../actions/patenTrackActions';
 import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar'
 import { controlList } from "../../utils/controlList"
 
@@ -817,7 +817,13 @@ const Reports = (props) => {
             dispatch(setDashboardPanelActiveButtonId( id != activeId ? id : -1 ))        
             props.checkChartAnalytics(null, null, showItem)
             if(showItem === true) {
-                if(card.type == 1 || card.type == 18 || card.type > 29 || card.type > 21 || card.type > 22 || card.type > 26 ) {
+                if(card.type == 38 && profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'){
+                    /**
+                     * Family
+                     */
+                     dispatch(setSelectedAssetsPatents([card.patent, '']));
+                    dispatch(assetFamily(card.patent));
+                } else  if(card.type == 1 || card.type == 18 || card.type > 29 || card.type > 21 || card.type > 22 || card.type > 26 ) {
                     dispatch(
                         setAssetsIllustration({
                             type: "patent",

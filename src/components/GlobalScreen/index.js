@@ -65,6 +65,7 @@ import PdfViewer from '../common/PdfViewer'
 import IllustrationPdf from '../common/AssetDetailsContainer/IllustrationPdf'
 import PatenTrackApi from '../../api/patenTrack2'
 import LawFirmTable from '../common/LawFirmTable';
+import FamilyContainer from '../common/AssetsVisualizer/FamilyContainer';
 
 const GlobalScreen = ({
     type,
@@ -180,7 +181,7 @@ const GlobalScreen = ({
     const connectionBoxData = useSelector(state =>  state.patenTrack.connectionBoxData)
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
     const dashboard_share_selected_data = useSelector(state => state.patenTrack2.dashboard_share_selected_data)
-
+    const selectedAssetsFamily = useSelector(state => state.patenTrack.assetFamily) 
     const checkContainer = () => {
         /* setTimeout(() => {
             if( mainContainerRef.current != null  && mainContainerRef.current != undefined) {                
@@ -757,7 +758,13 @@ const GlobalScreen = ({
                                         {
                                             dashboardScreen === true && dashboardPanel === true && type !== 9  
                                             ? 
-                                                assetIllustration != null
+                                                selectedAssetsFamily.length > 0 
+                                                ?
+                                                    <FamilyContainer
+                                                        family={selectedAssetsFamily}
+                                                    />
+                                                :
+                                                assetIllustration != null 
                                                 ?
                                                     <IllustrationContainer 
                                                         isFullscreenOpen={isFullscreenOpen} 

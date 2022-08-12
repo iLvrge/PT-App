@@ -52,7 +52,7 @@ const options = {
   }, */
   template: function(item, element, data) {
     if (data.isCluster) {
-      return data.items.length > 0 ? `<span class="cluster-header"><span class="cluster-image cluster-${data.items[0].assetType}"></span><span>${data.items.length} ${data.items[0].companyName.length > 0 ? capitalize(data.items[0].assetType)  : ''} transactions</span></span>` : ``
+      return `<span class="cluster-header">${data.items[0].customerName}(${data.items.length})</span>`
     } else { 
       return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
     }
@@ -147,7 +147,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     const item = {
       type: 'point',
       start: new Date(assetsCustomer.exec_dt),
-      customerName: `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
+      customerName: selectedCategory == 'proliferate_inventors' ? customerFirstName : `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
       assetType,
       companyName,
       rawData: assetsCustomer,
@@ -533,6 +533,17 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       //end = new moment().add(1, 'month')
       items.current.add(convertedItems.slice(0, startIndex))      
     }    
+
+    if(selectedCategory == 'proliferate_inventors') {
+      options.cluster = {
+        titleTemplate: 'Cluster containing {count} events. Zoom in to see the individual events.',
+        showStipes: false,
+        clusterCriteria: (firstItem, secondItem) => {
+          return ( firstItem.rawData.law_firm_id === secondItem.rawData.law_firm_id  ||  ( firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID))
+        }
+      }
+    }
+
     timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'year')})
     timelineRef.current.setItems(items.current)   
     //checkCurrentDateStatus()
