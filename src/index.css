@@ -290,8 +290,16 @@ span {
 .vis-timeline {
   /* background-color: #222222 !important; */
 }
-.vis-tooltip p {
+div.vis-tooltip{
   margin: 5px 0 0 0;
+  background-color: #1D2025;
+  border: 0;
+}
+
+div.vis-tooltip table{
+  border: 0;
+  padding: 0;
+  margin: 0;
 }
 
 .vis-content {

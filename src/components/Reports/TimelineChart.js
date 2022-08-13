@@ -7,7 +7,7 @@ import moment from 'moment'
 import _debounce from 'lodash/debounce'
 import { DataSet } from 'vis-data-71/esnext'
 import { Timeline } from 'vis-timeline/esnext'
-import { Typography, Tooltip, Zoom, CircularProgress, IconButton, Paper } from '@mui/material';
+import { Typography, Tooltip, Zoom, CircularProgress, IconButton, Paper, Modal, TableContainer, Table, TableBody, TableRow, TableCell } from '@mui/material';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import useStyles from './styles'
 import clsx from 'clsx'
@@ -65,24 +65,39 @@ const TimelineChart = (props) => {
     const items = useRef(new DataSet()) // timeline items dataset
     const [ isLoadingTimelineData, setIsLoadingTimelineData ] = useState(false)
     const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(false)
+    const [ openModal, setOpenModal ] = useState(false)
     const [ timelineRawData, setTimelineRawData ] = useState([])
     const [ timelineItems, setTimelineItems ] = useState([])
     const [ tooltipItem, setToolTipItem] = useState([])
+    const [ itemData, setItemData ] = useState([])
     const [ timeInterval, setTimeInterval] = useState(null)
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
     const screenWidth = useSelector( state => state.patenTrack.screenWidth)
     const screenHeight = useSelector( state => state.patenTrack.screenHeight)
     
+    const handleOpenPDF = (item) => {
+        console.log(item)
+    }
+
+    const handleClose = () => {
+        setOpenModal(false)
+    } 
+
 
     const onSelect = useCallback((properties) => {
         const {items, event} = properties
         const {nodeName} = event.target.parentNode
         const item = timelineRef.current.itemsData.get(items)
         if(item.length > 0) {
-            const {security_pdf, release_pdf, rawData} = item[0];
+            const {security_pdf, release_pdf,  rawData} = item[0];
+            const {all_release_ids} = rawData
+            if(all_release_ids != null && all_release_ids != '' ) {
+                setOpenModal(true)
+                setItemData(JSON.parse(all_release_ids))
+            }
 
-            const pdfFile = nodeName == "TT" ? security_pdf : nodeName == "EM" ? release_pdf : ''
+            /* const pdfFile = nodeName == "TT" ? security_pdf : nodeName == "EM" ? release_pdf : ''
             if(pdfFile !== '' && pdfFile != undefined) {
                 console.log('props.checkChartAnalytics', props.checkChartAnalytics)
                 props.checkChartAnalytics(null, null, true)
@@ -104,7 +119,7 @@ const TimelineChart = (props) => {
                         })
                     ) 
                 }
-            }
+            } */
         }
     })
 
@@ -459,6 +474,35 @@ const TimelineChart = (props) => {
                 }
                 { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> }            
             </div>
+            <Modal
+                open={openModal}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+                style={{display:'flex',alignItems:'flex-start',justifyContent:'flex-start', width: 400, position: 'fixed', top: '50%',left: '50%',transform: 'translate(-50%, -50%)',overflow: 'hidden auto'}}
+            >
+                <TableContainer component={Paper} style={{height: '100%', border: '1px solid #0B0C0E'}}>
+                    <Table>
+                        <TableBody>
+                        {
+                            itemData.map(item => (
+                                <TableRow>
+                                    <TableCell>
+                                        {item.exec_dt}
+                                    </TableCell>
+                                    <TableCell>
+                                        <img onClick={() => handleOpenPDF(item)} src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/>
+                                    </TableCell>
+                                    <TableCell>
+                                        112
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        }
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Modal>
         </Paper>
     )
 }
