@@ -842,7 +842,7 @@ const ActionMenu = (props) => {
                                 :
                                     props.timelineScreen === true
                                     ?
-                                        'Transactions'
+                                        props.layoutName != '' ? props.layoutName : 'Transactions'
                                     :
                                         props.patentScreen === true
                                         ?

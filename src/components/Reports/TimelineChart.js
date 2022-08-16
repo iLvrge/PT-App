@@ -47,11 +47,11 @@ const options = {
       }
     }, */
     template: function(item, element, data) {
-      if (data.isCluster) {
-        return data.items.length > 0 ? `<span class="cluster-header"><span class="cluster-image cluster-${data.items[0].assetType}"></span><span>${data.items.length} ${data.items[0].companyName.length > 0 ? capitalize(data.items[0].assetType)  : ''} transactions</span></span>` : ``
-      } else { 
-        return `<span style="width:100%;display:block;" class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
-      }
+        if (data.isCluster) {
+            return `<span class="cluster-header">${data.items[0].customerName}(${data.items.length})</span>`
+        } else { 
+            return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
+        }
     },
 }
 
