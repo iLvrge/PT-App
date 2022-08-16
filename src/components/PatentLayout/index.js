@@ -189,7 +189,7 @@ const PatentLayout = ({
             if(openCustomerBar === true) {
                 handleCustomersBarOpen()
             }
-        } else if(selectedCategory == 'pay_maintainence_fee') {
+        } else if(selectedCategory == 'pay_maintainence_fee' || selectedCategory == 'deflated_collaterals') {
             let statusChange = false;
             if(openIllustrationBar === true) {
                 statusChange = true

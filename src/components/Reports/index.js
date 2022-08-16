@@ -924,7 +924,7 @@ const Reports = (props) => {
                 timeline = true
             } else if(id === 10 && subscription > 2  && props.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'deflated_collaterals')
-                timeline = true
+                patent = true
             } else if(id === 0 && subscription > 1  && props.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'assigned')
                 patent = true
@@ -972,7 +972,6 @@ const Reports = (props) => {
                 timeline = true
             }*/
             if( findIndex !== -1 ) {
-                console.log(controlList[findIndex].category)
                 resetAllRowSelect(dispatch, resetItemList.resetAll, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [1, 9, 10] :  [])
                 resetAllRowSelect(dispatch, resetItemList.clearOtherItems, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [14, 15] :  controlList[findIndex].category == 'proliferate_inventors' || controlList[findIndex].category == 'top_lenders' ? [14, 15] :  [])
                 setTimeout(() => { 

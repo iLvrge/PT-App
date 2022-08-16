@@ -481,7 +481,7 @@ const TimelineChart = (props) => {
                 aria-describedby="modal-modal-description"
                 style={{display:'flex',alignItems:'flex-start',justifyContent:'flex-start', width: 400, position: 'fixed', top: '50%',left: '50%',transform: 'translate(-50%, -50%)',overflow: 'hidden auto'}}
             >
-                <TableContainer component={Paper} style={{height: '100%', border: '1px solid #0B0C0E'}}>
+                <TableContainer component={Paper} style={{height: '100%', border: '1px solid #0B0C0E', width: '90%'}}>
                     <Table>
                         <TableBody>
                         {

@@ -18,7 +18,6 @@ const Chart = (props) => {
     const displayNumber = (value) => {
         return `${ props.card.display_value == '%' ? parseFloat(props.card.number).toFixed(1) : numberWithCommas(props.card.number)}${typeof props.card.display_value != 'undefined' ? numberWithCommas(props.card.display_value)  : ''}`
     }
-    console.log('sdsdsd', props.card)
     return (
         <div className={clsx(classes.chartContainer, {[classes.widthResponsive]: props.lineGraph})}>
             <div className={clsx(classes.headingContainer, classes.headerContainerPosition)}>
