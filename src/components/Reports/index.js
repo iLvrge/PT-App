@@ -14,7 +14,7 @@ import {
     setDashboardScreen,
     setPatentScreen, 
     toggleFamilyItemMode} from '../../actions/uiActions'
-import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId,  retrievePDFFromServer, setAssetTypesSelect, setSelectedAssetsPatents  } from '../../actions/patentTrackActions2'
+import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId,  retrievePDFFromServer, setAssetTypesSelect, setSelectedAssetsPatents, getAssetDetails  } from '../../actions/patentTrackActions2'
 import { assetLegalEvents, setAssetLegalEvents, setPDFView, setPDFFile, setConnectionData, setConnectionBoxView, assetFamilySingle, assetFamily,   } from '../../actions/patenTrackActions';
 import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar'
 import { controlList } from "../../utils/controlList"
@@ -823,7 +823,7 @@ const Reports = (props) => {
                      */
                      dispatch(setSelectedAssetsPatents([card.patent, '']));
                     dispatch(assetFamily(card.patent));
-                } else  if(card.type == 1 || card.type == 18 || card.type > 29 || card.type > 21 || card.type > 22 || card.type > 26 ) {
+                } else  if(card.type == 1 || card.type == 18 || card.type > 29 || card.type == 21 || card.type == 22 || card.type == 26 ) {
                     dispatch(
                         setAssetsIllustration({
                             type: "patent",
@@ -833,25 +833,10 @@ const Reports = (props) => {
                     );
                 } else if (card.type == 17) {
                     dispatch(setAssetsIllustration({ type: "transaction", id: card.rf_id }));
-                } else if (card.type == 19) {
-                    const { data } = await PatenTrackApi.getCollectionIllustration(card.rf_id)
-                    if(data != null) {                        
-                        const obj = data.line.length > 0 ? data.line[0] : null
-                        if(obj != null) {
-                            dispatch(
-                                setConnectionData(obj)
-                            )
-                            dispatch(
-                                setConnectionBoxView(true)
-                            )
-                            dispatch(
-                                setPDFView(false)
-                            ) 
-                        }
-                    }
                 } else if(card.type == 20 || card.type == 23) {
+                    dispatch(getAssetDetails(card.application, card.patent))
                     dispatch(assetLegalEvents(card.application, card.patent));
-                } else if(card.type == 24 || card.type == 25) {
+                } else if(card.type == 19 || card.type == 24 || card.type == 25) {
                     
                     const { data } = await PatenTrackApi.getCollectionIllustration(card.rf_id)
                     if(data != null) {                        

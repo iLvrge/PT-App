@@ -204,8 +204,7 @@ const ActionMenu = (props) => {
     const getDriveDocumentList = (flag) => {
         if( flag === true ) { 
             
-            const googleToken = getTokenStorage( 'google_auth_token_info' )
-            console.log("getDriveDocumentList", googleToken)     
+            const googleToken = getTokenStorage( 'google_auth_token_info' ) 
             if(googleToken && googleToken != '' && googleToken != null ) {
     
             const { access_token } = JSON.parse(googleToken)
@@ -271,7 +270,7 @@ const ActionMenu = (props) => {
         }
     }, [ template_document_url ] )
 
-    const shareDashboard = async() => {
+    const shareDashboard = useCallback(async() => {
         /**
          * get selected companies and selected transaction types
          * and create shareable dashboard url
@@ -288,7 +287,7 @@ const ActionMenu = (props) => {
         } else {
             alert("Please select a company first")
         }
-    }
+    }, [mainCompaniesSelected])
 
     /**
      * Share a list of selected assets
@@ -318,7 +317,7 @@ const ActionMenu = (props) => {
                     selectedTransactions = [...selectedAssetsTransactions]
                 }
                 if( selectedTransactions.length == 0 &&  selectAssetsList.length == 0 ) {
-                    alert('Please select one or more assets to share')
+                    alert(`Please select one or more ${props.timelineScreen === true ? 'transactions' : 'assets'} to share`)
                 } else {
                     // Share list of assets and create share link 
                     let form = new FormData()
@@ -327,16 +326,19 @@ const ActionMenu = (props) => {
                     form.append('type', 2)      
                     const {data} = await PatenTrackApi.shareIllustration(form)
                     if (data.indexOf('sample') >= 0) {
-                    /**
-                     * just for temporary replacing
-                     * open share url new tab
-                     */
-                    //const shareURL = data.replace('https://share.patentrack.com','http://167.172.195.92:3000')
-                    
-                    if(window.confirm("Copy a sharing link to your clipboard.")){
-                        copy(data)
-                    }
-                    //window.open(data,'_BLANK')
+                        /**
+                         * just for temporary replacing
+                         * open share url new tab
+                         */
+                        //const shareURL = data.replace('https://share.patentrack.com','http://167.172.195.92:3000')
+                        
+                        /* if(window.confirm("Copy a sharing link to your clipboard.")){
+                            copy(data)
+                        } */
+                        if( data !== null){
+                            copyToClipboard(data, 'Sharing URL was added to your clipboard.')
+                        }
+                        //window.open(data,'_BLANK')
                     } 
                 }
             }
@@ -370,7 +372,6 @@ const ActionMenu = (props) => {
                 form.append('asset', decodeURIComponent(link_assets_sheet_type.asset))
                 form.append('values', JSON.stringify(link_assets_selected))
                 const { data } = await PatenTrackApi.linkSheetUpdateData(form, link_assets_sheet_type.type)
-                console.log('updateSheet', data)
             }      
         }
     }, [link_assets_selected, link_assets_sheet_type])
@@ -883,13 +884,13 @@ const ActionMenu = (props) => {
                     <ListItemIcon>
                         <TransactionIcon/>
                     </ListItemIcon> 
-                    <ListItemText>Transactions</ListItemText>
+                    <ListItemText>All Transactions (1998)</ListItemText>
                 </MenuItem>
                 <MenuItem onClick={onHandlePatentAssets} className={`iconItem`} selected={props.patentScreen === true && !display_sales_assets}>
                     <ListItemIcon>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className={classes.assetIcon}><path d="M0 0h24v24H0V0z" fill="none"/><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 4h2v5l-1-.75L9 9V4zm9 16H6V4h1v9l3-2.25L13 13V4h5v16z"/></svg>
                     </ListItemIcon>   
-                    <ListItemText>Assets</ListItemText>
+                    <ListItemText>All Assets (1998)</ListItemText>
                 </MenuItem>
                 {/* <MenuItem onClick={onHandleMaintainencePatentAssets} className={`iconItem`} selected={props.patentScreen === true && !display_sales_assets}>
                     <ListItemIcon>

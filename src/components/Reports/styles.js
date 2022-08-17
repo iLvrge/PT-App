@@ -615,4 +615,11 @@ export default makeStyles(theme => ({
       marginRight: 'auto',
       width: 'fit-content',
     }, 
+    right:{
+      position: 'absolute', 
+      right: 0,
+      width: 20,
+      height: 20,
+      zIndex: 999999
+  },  
 }));

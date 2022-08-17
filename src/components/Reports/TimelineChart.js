@@ -8,6 +8,7 @@ import _debounce from 'lodash/debounce'
 import { DataSet } from 'vis-data-71/esnext'
 import { Timeline } from 'vis-timeline/esnext'
 import { Typography, Tooltip, Zoom, CircularProgress, IconButton, Paper, Modal, TableContainer, Table, TableBody, TableRow, TableCell } from '@mui/material';
+import { Close, Fullscreen } from '@mui/icons-material' 
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import useStyles from './styles'
 import clsx from 'clsx'
@@ -16,9 +17,10 @@ import { assetsTypesWithKey, convertTabIdToAssetType, oldConvertTabIdToAssetType
 import PatenTrackApi from '../../api/patenTrack2'
 import themeMode from '../../themes/themeMode'
 import AddToolTip from './AddToolTip'
-import { Close, Fullscreen } from '@mui/icons-material' 
-import { setConnectionBoxView, setPDFFile, setPDFView } from '../../actions/patenTrackActions'
+import { setConnectionBoxView, setConnectionData, setPDFFile, setPDFView } from '../../actions/patenTrackActions'
 import { retrievePDFFromServer } from '../../actions/patentTrackActions2'
+import PdfViewer from '../common/PdfViewer'
+import FullScreen from '../common/FullScreen'
 
 
 /**
@@ -65,6 +67,7 @@ const TimelineChart = (props) => {
     const items = useRef(new DataSet()) // timeline items dataset
     const [ isLoadingTimelineData, setIsLoadingTimelineData ] = useState(false)
     const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(false)
+    const [ fullScreen, setFullScreen ] = useState(false)
     const [ openModal, setOpenModal ] = useState(false)
     const [ timelineRawData, setTimelineRawData ] = useState([])
     const [ timelineItems, setTimelineItems ] = useState([])
@@ -75,9 +78,49 @@ const TimelineChart = (props) => {
     const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
     const screenWidth = useSelector( state => state.patenTrack.screenWidth)
     const screenHeight = useSelector( state => state.patenTrack.screenHeight)
+
+    const fullScreenItems = [
+        {
+            id: 1,
+            label: '',
+            component: PdfViewer,
+            display: true,
+            pdfTab: 0,
+            show_tab: false
+        }  
+    ]
     
-    const handleOpenPDF = (item) => {
-        console.log(item)
+    const handleOpenPDF = async(item) => {
+        const { data } = await PatenTrackApi.getCollectionIllustration(item.rf_id)
+        if(data != null) {                        
+            const obj = data.line.length > 0 ? data.line[0] : null
+            if(obj != null) {
+                setFullScreen(true)
+                dispatch(
+                    setConnectionData(obj)
+                ) 
+                dispatch(
+                    setPDFView(true)
+                )
+                dispatch(
+                    setConnectionBoxView(true)
+                )
+                if(obj.document1.indexOf('legacy-assignments.uspto.gov') !== -1 || (obj.document1 == "" && obj.ref_id > 0)) {
+                    obj.rf_id =  obj.ref_id
+                    dispatch(retrievePDFFromServer(obj))   
+                } else {
+                    dispatch(
+                        setPDFFile(
+                            { 
+                                document: obj.document1, 
+                                form: obj.document1, 
+                                agreement: obj.document1 
+                            }
+                        )
+                    ) 
+                }                         
+            }                        
+        }
     }
 
     const handleClose = () => {
@@ -481,7 +524,13 @@ const TimelineChart = (props) => {
                 aria-describedby="modal-modal-description"
                 style={{display:'flex',alignItems:'flex-start',justifyContent:'flex-start', width: 400, position: 'fixed', top: '50%',left: '50%',transform: 'translate(-50%, -50%)',overflow: 'hidden auto'}}
             >
-                <TableContainer component={Paper} style={{height: '100%', border: '1px solid #0B0C0E', width: '90%'}}>
+                <TableContainer component={Paper} style={{height: '100%', border: '1px solid #0B0C0E'}}>
+                    <IconButton
+                        onClick={handleClose}
+                        className={clsx(classes.right)}
+                        size="large">
+                        <Close />
+                    </IconButton>
                     <Table>
                         <TableBody>
                         {
@@ -489,12 +538,16 @@ const TimelineChart = (props) => {
                                 <TableRow>
                                     <TableCell>
                                         {item.exec_dt}
+                                    </TableCell>     
+                                    <TableCell>
+                                        <IconButton 
+                                            onClick={() => handleOpenPDF(item)} 
+                                        >
+                                            <img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/>
+                                        </IconButton>
                                     </TableCell>
                                     <TableCell>
-                                        <img onClick={() => handleOpenPDF(item)} src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/>
-                                    </TableCell>
-                                    <TableCell>
-                                        112
+                                        {item?.total_assets ? item.total_assets : ''}
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -503,6 +556,15 @@ const TimelineChart = (props) => {
                     </Table>
                 </TableContainer>
             </Modal>
+            {  
+                fullScreen === true && (
+                    <FullScreen 
+                        componentItems={fullScreenItems} 
+                        showScreen={true}
+                        setScreen={setFullScreen}                                    
+                    />
+                )
+            }
         </Paper>
     )
 }
