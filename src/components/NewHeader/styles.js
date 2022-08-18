@@ -115,7 +115,8 @@ export default makeStyles(theme => ({
 
     toolbar: {
         padding: 0,
-        minHeight: 40,
+        height: 43,
+        minHeight: 43,
         position: 'relative',
     },
     headerIcon: {
@@ -217,7 +218,8 @@ export default makeStyles(theme => ({
         textDecoration: 'underline'
     },
     search: {
-        position: 'relative',
+        position: 'fixed',
+        top: 40,
         borderRadius: theme.shape.borderRadius,
         backgroundColor: alpha(theme.palette.common.white, 0.15),
         '&:hover': {
@@ -225,10 +227,11 @@ export default makeStyles(theme => ({
         },
         /* margin: '0 4px !important', */
         height: 26,
-        width: '100%', 
+        width: 400, 
         [theme.breakpoints.up('sm')]: {
-          width: 'auto',
+          width: 400,
         },
+        display: 'none'
     },
     searchIcon: {
         padding: theme.spacing(0, 2),
@@ -239,6 +242,9 @@ export default makeStyles(theme => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    searchEnable:{
+        display: 'block'
+    },
     inputRoot: {
         color: 'inherit',
     },
@@ -246,13 +252,13 @@ export default makeStyles(theme => ({
         padding: 0,
         height: 26,
         // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+        paddingLeft: theme.spacing(1),
         transition: theme.transitions.create('width'),
         width: '100%',
         [theme.breakpoints.up('sm')]: {
-            width: '12ch',
+            width: '50%',
             '&:focus': {
-              width: '20ch',
+              width: '100%',
             },
         },
     },

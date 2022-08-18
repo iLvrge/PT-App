@@ -100,6 +100,7 @@ const AssetsTable = ({
     commentBar,
     openAnalyticsAndCharBar,
     closeAnalyticsAndCharBar,
+    handleChartBarOpen,
     handleAnalyticsBarOpen,
     handleIllustrationBarOpen,
     handleVisualBarSize,
@@ -1256,6 +1257,14 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
            */
           if(openAnalyticsBar === false) {
             handleAnalyticsBarOpen()
+            if(openIllustrationBar === true) {
+              handleIllustrationBarOpen('100%')
+              handleVisualBarSize(false, true, false, false)
+            }
+          }
+        } else if (selectedCategory == 'top_non_us_members') {
+          if(openChartBar === false) {
+            handleChartBarOpen()
             if(openIllustrationBar === true) {
               handleIllustrationBarOpen('100%')
               handleVisualBarSize(false, true, false, false)

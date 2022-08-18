@@ -1,4 +1,4 @@
- import React, { useCallback } from 'react'
+ import React, { useCallback, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setViewDashboardIntial, updateViewDashboard } from '../../actions/uiActions'
 import useStyles from './styles'
@@ -9,13 +9,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faShareAlt, faCalendar
 } from "@fortawesome/free-solid-svg-icons"
-import { AppsOutage, AutoGraph, Public, Speed, ViewTimeline, Search, NotificationsNone } from '@mui/icons-material'
+import { AppsOutage, AutoGraph, Public, Speed, ViewTimeline, Search, NotificationsNone, ManageSearch } from '@mui/icons-material'
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PatenTrackApi from '../../api/patenTrack2'
 import { copyToClipboard } from '../../utils/html_encode_decode'
 
 const ViewIcons = (props) => {
     const dispatch = useDispatch();
     const classes = useStyles();
+    const [timelineView, setTimelineView] = useState(false)
+    const [patentView, setPatentView] = useState(false)
+    const [openSearch, setOpenSearch] = useState(false)
     const profile = useSelector(state => (state.patenTrack.profile))  
     const viewDashboard = useSelector(state => state.ui.viewDashboard) 
     const category = useSelector(state => state.patenTrack2.selectedCategory)
@@ -108,6 +112,8 @@ const ViewIcons = (props) => {
     }
 
     const onHandleTimeline = () => {
+        setPatentView(false)
+        setTimelineView(false)
         onHandleDashboard()
         const oldViewScreen = {
             ...viewDashboard, 
@@ -124,18 +130,30 @@ const ViewIcons = (props) => {
     }
 
     const onHandleTransactions = () => {
+        setPatentView(false)
+        setTimelineView(true)
         props.resetAllActivity('due_dilligence')
         props.setActivityTimeline()
     }
 
     const onHandleDashboard = () => {
-        props.resetAllActivity('due_dilligence')
-        props.setDashboardScreen()
+        setPatentView(false)
+        setTimelineView(false)
+        if(props.dashboardScreen === false) {
+            props.resetAllActivity('due_dilligence')
+            props.setDashboardScreen()
+        }
     }
 
     const onHandlePatentAssets = () => {
+        setPatentView(true)
+        setTimelineView(false)
         props.resetAllActivity('due_dilligence')
         props.setPatentAssets()
+    }
+
+    const onHandleSearch = () => {
+        setOpenSearch(!openSearch)
     }
 
     const shareDashboard = useCallback(async() => {
@@ -220,7 +238,7 @@ const ViewIcons = (props) => {
                     >
                         <IconButton 
                             size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: viewDashboard.kpi})}
+                            className={clsx(classes.actionIcon, {[classes.active]: props.dashboardScreen === true && viewDashboard.kpi})}
                             onClick={onHandleKPI}
                         >
                             <AppsOutage/>
@@ -234,7 +252,7 @@ const ViewIcons = (props) => {
             >
                 <IconButton 
                     size="small"
-                    className={clsx(classes.actionIcon, {[classes.active]: !viewDashboard.line && viewDashboard.jurisdictions == false && viewDashboard.invention === false && viewDashboard.sankey === false && viewDashboard.kpi === false && viewDashboard.timeline === false})}
+                    className={clsx(classes.actionIcon, {[classes.active]:  props.dashboardScreen === true && !viewDashboard.line && viewDashboard.jurisdictions == false && viewDashboard.invention === false && viewDashboard.sankey === false && viewDashboard.kpi === false && viewDashboard.timeline === false})}
                     onClick={() => changeGraph(false)}
                 >
                     <Speed/> 
@@ -246,7 +264,7 @@ const ViewIcons = (props) => {
             >
                 <IconButton 
                     size="small"
-                    className={clsx(classes.actionIcon, {[classes.active]: viewDashboard.line && viewDashboard.jurisdictions == false && viewDashboard.invention === false && viewDashboard.sankey === false && viewDashboard.kpi === false && viewDashboard.timeline === false})}
+                    className={clsx(classes.actionIcon, {[classes.active]: props.dashboardScreen === true && viewDashboard.line && viewDashboard.jurisdictions == false && viewDashboard.invention === false && viewDashboard.sankey === false && viewDashboard.kpi === false && viewDashboard.timeline === false})}
                     onClick={() => changeGraph(true)}
                 >
                     <AutoGraph/>
@@ -258,7 +276,7 @@ const ViewIcons = (props) => {
             >
                 <IconButton 
                     size="small"
-                    className={clsx(classes.actionIcon, {[classes.active]: viewDashboard.timeline})}
+                    className={clsx(classes.actionIcon, {[classes.active]: props.dashboardScreen === true && viewDashboard.timeline})}
                     onClick={onHandleTimeline}
                 >
                     <ViewTimeline/>
@@ -274,7 +292,7 @@ const ViewIcons = (props) => {
                         >
                             <IconButton 
                                 size="small"
-                                className={clsx(classes.actionIcon, {[classes.active]: viewDashboard.invention})}
+                                className={clsx(classes.actionIcon, {[classes.active]: props.dashboardScreen === true && viewDashboard.invention})}
                                 onClick={onHandleInvention}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><g><path d="M24.844,398.133l114.19,52.7a8.214,8.214,0,0,0,3.4.738,8.105,8.105,0,0,0,3.38-.738l110.17-50.885,110.163,50.885a8,8,0,0,0,6.714,0l114.291-52.7A8.188,8.188,0,0,0,492,390.871v-125.1a8.223,8.223,0,0,0-6.2-7.734L378,229.637V98.558a7.958,7.958,0,0,0-5.912-7.735L258.02,60.692a7.969,7.969,0,0,0-4.074,0L139.906,90.823A7.954,7.954,0,0,0,134,98.558V229.637l-107.8,28.4a8.223,8.223,0,0,0-6.2,7.734v125.1A8.186,8.186,0,0,0,24.844,398.133ZM36,276.112l98,25.407V431.065L36,385.754Zm105.1-31.826,82.461,21.777-81.075,21L60.013,265.7ZM248,134.849V255.967l-98-25.9V108.945ZM451.987,265.7l-82.475,21.362-81.075-21L370.9,244.286ZM150,301.519l98-25.257V386.021l-98,45.044Zm114-25.257,98,25.257V431.065l-98-45.044Zm98-46.2-98,25.9V134.849l98-25.9Zm16,201V301.519l98-25.407V385.754ZM256,76.7l82.76,21.856L256,120.413,173.24,98.558Z" /></g></svg>
@@ -286,7 +304,7 @@ const ViewIcons = (props) => {
                         >
                             <IconButton 
                                 size="small"
-                                className={clsx(classes.actionIcon, {[classes.active]: viewDashboard.jurisdictions})}
+                                className={clsx(classes.actionIcon, {[classes.active]: props.dashboardScreen === true && viewDashboard.jurisdictions})}
                                 onClick={onHandleJurisdiction}
                             >
                                 <Public/>
@@ -298,7 +316,7 @@ const ViewIcons = (props) => {
                         >
                             <IconButton 
                                 size="small"
-                                className={clsx(classes.actionIcon, {[classes.active]: viewDashboard.sankey})}
+                                className={clsx(classes.actionIcon, {[classes.active]: props.dashboardScreen === true && viewDashboard.sankey})}
                                 onClick={onHandleSankey}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" className={clsx('MuiSvgIcon-root MuiSvgIcon-fontSizeMedium')} viewBox="0 0 24 24">
@@ -312,7 +330,7 @@ const ViewIcons = (props) => {
                         >
                             <IconButton 
                                 size="small"
-                                className={clsx(classes.actionIcon, {[classes.active]: props.patentScreen})}
+                                className={clsx(classes.actionIcon, {[classes.active]: patentView})}
                                 onClick={onHandlePatentAssets}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className={`noStroke`}><path d="M0 0h24v24H0V0z" fill="none"/><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 4h2v5l-1-.75L9 9V4zm9 16H6V4h1v9l3-2.25L13 13V4h5v16z"/></svg>
@@ -324,7 +342,7 @@ const ViewIcons = (props) => {
                         >
                             <IconButton 
                                 size="small"
-                                className={clsx(classes.actionIcon, {[classes.active]: props.timelineScreen})}
+                                className={clsx(classes.actionIcon, {[classes.active]: timelineView})}
                                 onClick={onHandleTransactions}
                             >
                                <svg id="icons" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" className={`noStroke`}><path d="M52,7H12a6,6,0,0,0-6,6V51a6,6,0,0,0,6,6H52a6,6,0,0,0,6-6V13A6,6,0,0,0,52,7Zm2,44a2,2,0,0,1-2,2H12a2,2,0,0,1-2-2V13a2,2,0,0,1,2-2H52a2,2,0,0,1,2,2Z"/><path d="M45,29a2,2,0,0,0,0-4H22.83l2.58-2.59a2,2,0,0,0-2.82-2.82l-6,6a2,2,0,0,0-.44,2.18A2,2,0,0,0,18,29Z"/><path d="M47,36H20a2,2,0,0,0,0,4H42.17l-2.58,2.59a2,2,0,1,0,2.82,2.82l6-6a2,2,0,0,0,.44-2.18A2,2,0,0,0,47,36Z"/></svg>
@@ -366,10 +384,19 @@ const ViewIcons = (props) => {
                                 <NotificationsNone/>
                             </Badge>         
                         </IconButton> 
-                        <div className={classes.search}>
-                            <div className={classes.searchIcon}> 
-                                <Search />
-                            </div>
+                        <AddToolTip
+                            tooltip={`Search`}
+                            placement='bottom'
+                        >
+                            <IconButton 
+                                size="small"
+                                className={clsx(classes.actionIcon, {[classes.active]: openSearch})}
+                                onClick={onHandleSearch}
+                            >
+                               <ManageSearch/>
+                            </IconButton>
+                        </AddToolTip> 
+                        <div className={clsx(classes.search, {[classes.searchEnable]: openSearch})}>
                             <InputBase
                                 placeholder='Search…'
                                 classes={{
@@ -391,9 +418,7 @@ const ViewIcons = (props) => {
                                 className={clsx(classes.actionIcon)}
                                 onClick={() => {props.setScheduling(!props.scheduling)}}
                             >
-                               <FontAwesomeIcon
-                                    icon={faCalendar}
-                                />
+                               <CalendarMonthIcon/>
                             </IconButton>
                         </AddToolTip> 
                     </React.Fragment>

@@ -723,37 +723,39 @@ const ActionMenu = (props) => {
                         startIcon={open === false ? <KeyboardArrowDown /> : <KeyboardArrowUp/>}
                         className={classes.btnActionMenu}
                     >
-                        {
-                            props.display_sales_assets == true 
-                            ?
-                                props.breadcrumbs != '' && typeof props.breadcrumb !== 'undefined'
-                                    ?
-                                        props.breadcrumbs
-                                    :
-                                        'Our Assets for Sale'
-                            :
-                                props.dashboardScreen === true
+                        <span style={{whiteSpace: 'nowrap'}}>
+                            {
+                                props.display_sales_assets == true 
                                 ?
-                                    'Dashboard'
-                                :
-                                    props.timelineScreen === true
-                                    ?
-                                        props.layoutName != '' ? props.layoutName : 'Transactions'
-                                    :
-                                        props.patentScreen === true
+                                    props.breadcrumbs != '' && typeof props.breadcrumb !== 'undefined'
                                         ?
-                                            props.layoutName != '' && props.layoutName != 'Due Diligence > Legal Ownership'
-                                            ?
-                                                props.layoutName
-                                            :
-                                                'Assets'
+                                            props.breadcrumbs
                                         :
-                                            props.selectedCategory !== 'due_dilligence'
-                                            ? 
-                                                props.layoutName     
-                                            : 
-                                                'Action' 
-                        } 
+                                            'Our Assets for Sale'
+                                :
+                                    props.dashboardScreen === true
+                                    ?
+                                        'Dashboard'
+                                    :
+                                        props.timelineScreen === true
+                                        ?
+                                            props.layoutName != '' ? props.layoutName : 'Transactions'
+                                        :
+                                            props.patentScreen === true
+                                            ?
+                                                props.layoutName != '' && props.layoutName != 'Due Diligence > Legal Ownership'
+                                                ?
+                                                    props.layoutName
+                                                :
+                                                    'Assets'
+                                            :
+                                                props.selectedCategory !== 'due_dilligence'
+                                                ? 
+                                                    props.layoutName     
+                                                : 
+                                                    'Action' 
+                            } 
+                        </span>
                     </Button>
             }            
             <Menu       

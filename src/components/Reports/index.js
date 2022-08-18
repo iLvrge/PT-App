@@ -495,27 +495,14 @@ const Reports = (props) => {
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
     const assetTypeCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.list)
     const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected);
-    const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected);
-    const selectedPartyName = useSelector(state => state.patenTrack2.assetTypeCompanies.name);
-    const selectedAssetCompaniesAll = useSelector(
-        state => state.patenTrack2.assetTypeCompanies.selectAll,
-    );
+    const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected); 
     const selectedAssetAssignments = useSelector(
         state => state.patenTrack2.assetTypeAssignments.selected,
-    );
-    const selectedAssetAssignmentsAll = useSelector(
-        state => state.patenTrack2.assetTypeAssignments.selectAll,
-    );
-
+    ); 
     const assetTypeAssignmentAssets = useSelector(
         state => state.patenTrack2.assetTypeAssignmentAssets.list,
-    ); //Assets List
-    const assetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected) //Assets Selected
+    ); //Assets List 
     const dashboardPanelActiveButtonId = useSelector(state => state.patenTrack2.dashboardPanelActiveButtonId) 
-
-    const assetsTotal = useSelector(
-        state => state.patenTrack2.assetTypeAssignmentAssets.total_records,
-    );
     
     useEffect(() => {
         if(ref.current !== null) {
@@ -652,7 +639,15 @@ const Reports = (props) => {
             }
         }
         return (() => {})
-    }, [selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssets, assetTypeCompanies])
+    },  [
+            selectedCompanies, 
+            assetTypesSelected, 
+            selectedAssetCompanies, 
+            selectedAssetAssignments, 
+            assetTypeAssignmentAssets, 
+            assetTypeCompanies
+        ]
+    )
 
 
     const companyname = useMemo(() => {

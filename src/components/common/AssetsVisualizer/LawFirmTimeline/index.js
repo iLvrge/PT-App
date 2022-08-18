@@ -43,7 +43,7 @@ const options = {
   zoomMin: 1000 * 60 * 60 * 24 * 7, // 7 days
   /* zoomMax: 1000 * 60 * 60 * 24 * 30 * 3, */ // 3months
   cluster: {
-  titleTemplate: 'Cluster containing {count} events. Zoom in to see the individual events.',
+    titleTemplate: 'Cluster containing {count} events. Zoom in to see the individual events.',
     showStipes: false,
     clusterCriteria: (firstItem, secondItem) => {
       return ( firstItem.rawData.law_firm_id === secondItem.rawData.law_firm_id  ||  ( firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID))

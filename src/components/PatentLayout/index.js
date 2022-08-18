@@ -542,6 +542,7 @@ const PatentLayout = ({
                                                             changeVisualBar={setVisualizerBarSize}
                                                             openIllustrationBar={openIllustrationBar}
                                                             commentBar={openCommentBar}
+                                                            handleChartBarOpen={handleChartBarOpen}
                                                             handleAnalyticsBarOpen={handleAnalyticsBarOpen}
                                                             handleIllustrationBarOpen={handleIllustrationBarOpen}
                                                             handleVisualBarSize={changeVisualBar}

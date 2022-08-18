@@ -27,7 +27,7 @@ const KpiBox = (props) => {
                                         variant="body2" 
                                         component="div"
                                     >
-                                        <span className={classes.itemHeading} title={item.name}>{capitalAllWords(item.name.toLowerCase())}:</span><span className={classes.itemText}>{numberWithCommas(item.number)}</span>
+                                        <span className={classes.itemHeading} title={item.name}>{item.name != undefined && item.name != null ? capitalAllWords(item.name.toLowerCase()) : ''}:</span><span className={classes.itemText}>{numberWithCommas(item.number)}</span>
                                     </Typography>                                    
                                 </ListItemText>
                             </ListItem>
