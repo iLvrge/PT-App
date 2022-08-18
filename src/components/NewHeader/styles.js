@@ -1,3 +1,4 @@
+import { pink } from '@mui/material/colors';
 import { alpha } from '@mui/material/styles';
 
 import makeStyles from '@mui/styles/makeStyles';
@@ -562,5 +563,25 @@ export default makeStyles(theme => ({
         fontSize: '1.5rem',
         display: 'inline-block',
         userSelect: 'none'
+    },
+    actionIcon: {
+        /* '& svg':{
+            width: '1rem !important',
+            height: '1rem !important'
+        } */
+        '& svg' : {
+          fill: 'currentcolor',
+          width: '1.5rem !important', 
+          height: '1.5rem !important'
+        }
+    }, 
+    active: {
+        color: pink[500]
+    },
+    shareIcon: {
+        '& svg' : {
+            width: '1rem !important', 
+            height: '1rem !important'
+        }
     }
 }))

@@ -111,6 +111,18 @@ const uiReducer = (state = initialState.ui, action) => {
         showThirdParties: action.flag,
       }
     }
+    case types.SET_DASHBOARD_VIEW: {
+      return {
+        ...state,
+        viewDashboard: action.views,
+      }
+    }
+    case types.SET_DASHBOARD_VIEW_INTIAL: {
+      return {
+        ...state,
+        viewInitial: action.flag,
+      }
+    }
     case types.SET_RESET_UI_ALL: { 
       return {
         ...state,

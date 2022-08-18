@@ -91,3 +91,13 @@ export const setDashboardPanel = flag => ({
   type: types.SET_DASHBOARD_PANEL,
   flag,
 })  
+
+export const updateViewDashboard = views => ({
+  type: types.SET_DASHBOARD_VIEW,
+  views,
+})  
+
+export const setViewDashboardIntial = flag => ({
+  type: types.SET_DASHBOARD_VIEW_INTIAL,
+  flag,
+})  

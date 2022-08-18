@@ -13,7 +13,9 @@ import {
     setTimelineScreen,
     setDashboardScreen,
     setPatentScreen, 
-    toggleFamilyItemMode} from '../../actions/uiActions'
+    toggleFamilyItemMode,
+    updateViewDashboard,
+    setViewDashboardIntial} from '../../actions/uiActions'
 import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId,  retrievePDFFromServer, setAssetTypesSelect, setSelectedAssetsPatents, getAssetDetails  } from '../../actions/patentTrackActions2'
 import { assetLegalEvents, setAssetLegalEvents, setPDFView, setPDFFile, setConnectionData, setConnectionBoxView, assetFamilySingle, assetFamily,   } from '../../actions/patenTrackActions';
 import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar'
@@ -478,7 +480,6 @@ const Reports = (props) => {
     const DATE_FORMAT = 'MMM DD, YYYY'
     const ref = useRef();
     let resizeObserver = null
-    const [initial, setIntial] = useState(true)
     const [loading, setLoading] = useState(false)    
     const [timeLineLoading, setTimeLineLoading] = useState(false)    
     const [timelineGrid, setTimelineGrid] = useState(TIMELINE_ITEM)
@@ -488,6 +489,8 @@ const Reports = (props) => {
     const profile = useSelector(state => (state.patenTrack.profile))    
     const [cardList, setCardList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_LIST : KPI_LIST)
     const [timelineList, setTimelineList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_TIMELINE_LIST : TIMELINE_LIST)
+    const viewDashboard = useSelector(state => state.ui.viewDashboard)
+    const viewInitial = useSelector(state => state.ui.viewInitial)
     const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
     const assetTypeCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.list)
@@ -513,7 +516,7 @@ const Reports = (props) => {
     const assetsTotal = useSelector(
         state => state.patenTrack2.assetTypeAssignmentAssets.total_records,
     );
-
+    
     useEffect(() => {
         if(ref.current !== null) {
             resizeObserver = new ResizeObserver(entries => {  
@@ -574,22 +577,46 @@ const Reports = (props) => {
     }, [dashboardPanelActiveButtonId])
 
     useEffect(() => {
-        if(initial === false) {
+        if(viewDashboard.timeline === true) {
+            setTimelineList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
+        } else if(viewDashboard.kpi === true || viewDashboard.line === true || viewDashboard.gauge === true){
+            addCardList(viewDashboard.kpi === true ? 1 : '')  
+        } 
+    }, [viewDashboard])
+
+    useEffect(() => {
+        if(viewInitial === false) {
             if(selectedCompanies.length > 0) {
-                if(props.timeline === true) {
+                if(viewDashboard.timeline === true) {
+                    callTimelineData()
+                } else {
+                    findDashboardData()
+                }                
+            }
+        }
+    }, [cardList, timelineList])
+
+    
+
+    /* useEffect(() => {
+        if(viewInitial === false) {
+            if(selectedCompanies.length > 0) {
+                console.log('SECOND')
+                if(viewDashboard.timeline === true) {
                     callTimelineData()
                 } else {
                     findDashboardData()
                 }                
             } else {   
-                if(props.timeline === true) {
+                if(viewDashboard.timeline === true) {
                     setTimelineList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
                 } else {
-                    addCardList(props.kpi === true ? 1 : '')  
+                    addCardList(viewDashboard.kpi === true ? 1 : '')  
                 }                
             }
         }
-    }, [props.lineGraph, props.kpi, props.timeline, props.gauge])
+    }, [viewInitial]) */
+
 
     useEffect(() => {
         if(profile?.user?.organisation?.organisation_type) {
@@ -611,21 +638,22 @@ const Reports = (props) => {
             }
         }  else {
             if(selectedCompanies.length > 0) {
-                if(props.timeline === true) {
+                if(viewDashboard.timeline === true) {
                     callTimelineData()
                 } else {
                     findDashboardData()
                 }
             } else {   
-                if(props.timeline === true) {
+                if(viewDashboard.timeline === true) {
                     setTimelineList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
                 } else {
-                    addCardList(!props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false && props.kpi === false && props.timeline === false ? 0 : props.kpi === true ? 1 : '')  
+                    addCardList(!viewDashboard.line && viewDashboard.jurisdictions == false && viewDashboard.invention === false && viewDashboard.sankey === false && viewDashboard.kpi === false && viewDashboard.timeline === false ? 0 : viewDashboard.kpi === true ? 1 : '')  
                 }
             }
         }
         return (() => {})
     }, [selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssets, assetTypeCompanies])
+
 
     const companyname = useMemo(() => {
         return selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])
@@ -637,12 +665,13 @@ const Reports = (props) => {
 
     
     const findDashboardData = async(invention, jurisdictions, sankey, kpi) => {        
-        if(loading === false && ((typeof invention !== 'undefined' && invention === false) ||  props.invention === false) && ((typeof jurisidictions !== 'undefined' && jurisdictions === false) || props.jurisdictions === false ) && ((typeof sankey !== 'undefined' && sankey === false) || props.sankey === false) ) { 
+        if(loading === false && ((typeof invention !== 'undefined' && invention === false) ||  viewDashboard.invention === false) && ((typeof jurisidictions !== 'undefined' && jurisdictions === false) || viewDashboard.jurisdictions === false ) && ((typeof sankey !== 'undefined' && sankey === false) || viewDashboard.sankey === false) ) { 
             const list = [];
             let totalRecords = 0;
             setLoading(true)
             resetAll(false)
             props.checkChartAnalytics(null, null, false) 
+            dispatch(setViewDashboardIntial(true))
             const cancelRequest = await PatenTrackApi.cancelAllDashboardToken()  
             const CancelToken = PatenTrackApi.generateCancelToken() 
             const source = CancelToken.source()
@@ -655,7 +684,7 @@ const Reports = (props) => {
                 formData.append('customers', JSON.stringify(selectedAssetCompanies));
                 formData.append('assignments', JSON.stringify(selectedAssetAssignments));
                 formData.append('type', item.type)
-                formData.append('data_format', props.lineGraph === true ? 1 : 0)
+                formData.append('data_format', viewDashboard.line === true ? 1 : 0)
                 formData.append('format_type', profile.user.organisation.organisation_type)  
                 formData.append('company', companyname[0].original_name )              
                 const requestData = await PatenTrackApi.getDashboardData(formData, source)
@@ -676,6 +705,7 @@ const Reports = (props) => {
         const cancelRequest = await PatenTrackApi.cancelAllDashboardTimelineToken()  
         const CancelToken = PatenTrackApi.generateCancelToken() 
         const source = CancelToken.source()
+        dispatch(setViewDashboardIntial(true))
         const dashboardRequest = timelineList.map(async item => {
             const formData = new FormData()
             formData.append('selectedCompanies', JSON.stringify(selectedCompanies));
@@ -743,7 +773,7 @@ const Reports = (props) => {
         let oldList = [...cardList]
         const findIndex = oldList.findIndex( item => item.type === type)
         if(findIndex !== -1) {
-            if(props.lineGraph === true) {
+            if(viewDashboard.line === true) {
                 if( requestData !== null && requestData.data != null && requestData.data.length > 0) {
                     const list = [['Year', 'Assets']]
                     requestData.data.forEach( item => {
@@ -787,11 +817,11 @@ const Reports = (props) => {
                 }
             }            
             setCardList(oldList)
-            if(typeof props.updateDashboardData !== 'undefined' && props.kpi === false) {
+            if(typeof props.updateDashboardData !== 'undefined' && viewDashboard.kpi === false) {
                 props.updateDashboardData(oldList)
             }
         }      
-    }, [cardList, props.lineGraph, props.kpi])
+    }, [cardList, viewDashboard])
 
     useEffect(() => {
         if(activeId  !== -1 ) {
@@ -805,8 +835,6 @@ const Reports = (props) => {
             }
         }
     }, [activeId])
-
-    
 
     const onHandleClick = useCallback(async(id) => {
         const card = cardList[id]
@@ -877,73 +905,73 @@ const Reports = (props) => {
         let subscription = parseInt(profile?.user?.organisation?.subscribtion), timeline = false, patent = false, maintainence = false
         if( subscription === 2 || subscription === 3 ) {
             let findIndex = -1
-            if(id === 0 && props.kpi === false) {                
+            if(id === 0 && viewDashboard.kpi === false) {                
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
                 patent = true
-            } else if(id === 1 && subscription > 2  && props.kpi === false) {
+            } else if(id === 1 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_names')
                 timeline = true
-            } else if(id === 2 && subscription > 2  && props.kpi === false) {
+            } else if(id === 2 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'clear_encumbrances')
                 patent = true
-            } else if(id === 3 && subscription > 2  && props.kpi === false) {
+            } else if(id === 3 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_address')
                 timeline = true
-            } else if(id === 4 && subscription > 2  && props.kpi === false) {
+            } else if(id === 4 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'to_be_monitized')
                 patent = true
-            } else if(id === 5 && subscription > 2  && props.kpi === false) {
+            } else if(id === 5 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'unnecessary_patents')
                 patent = true
-            } else if(id === 6 && subscription > 2  && props.kpi === false) {
+            } else if(id === 6 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'missed_monetization')
                 patent = true
-            } else if(id === 7 && subscription > 2  && props.kpi === false) {
+            } else if(id === 7 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'late_maintainance')
                 patent = true
-            } else if(id === 8 && subscription > 2  && props.kpi === false) {
+            } else if(id === 8 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_recording')
                 timeline = true
-            } else if(id === 9 && subscription > 2  && props.kpi === false) {
+            } else if(id === 9 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'late_recording')
                 timeline = true
-            } else if(id === 10 && subscription > 2  && props.kpi === false) {
+            } else if(id === 10 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'deflated_collaterals')
                 patent = true
-            } else if(id === 0 && subscription > 1  && props.kpi === true) {
+            } else if(id === 0 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'assigned')
                 patent = true
-            } else if(id === 1 && subscription > 1  && props.kpi === true) {
+            } else if(id === 1 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'filled')
                 patent = true
-            } else if(id === 2 && subscription > 1  && props.kpi === true) {
+            } else if(id === 2 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'acquired')
                 patent = true
-            } else if(id === 3 && subscription > 1  && props.kpi === true) {
+            } else if(id === 3 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'divested')
                 patent = true
-            } else if(id === 4 && subscription > 1  && props.kpi === true) {
+            } else if(id === 4 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'collaterlized')
                 patent = true
-            } else if(id === 5 && subscription > 1 && props.kpi === true) {
+            } else if(id === 5 && subscription > 1 && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'abandoned')
                 patent = true
-            } else if(id === 6 && subscription > 1  && props.kpi === true) {
+            } else if(id === 6 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'ptab')
                 patent = true
-            } else if(id === 7 && subscription > 1  && props.kpi === true) {
+            } else if(id === 7 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'pay_maintainence_fee')
                 maintainence = true
-            } else if(id === 8 && subscription > 1  && props.kpi === true) {
+            } else if(id === 8 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_non_us_members')
                 patent = true
-            } else if(id === 9 && subscription > 1  && props.kpi === true) {
+            } else if(id === 9 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'proliferate_inventors')
                 timeline = true
-            } else if(id === 10 && subscription > 1  && props.kpi === true) {
+            } else if(id === 10 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_law_firms')
                 timeline = true
-            } else if(id === 11 && subscription > 1  && props.kpi === true) {
+            } else if(id === 11 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_lenders')
                 timeline = true
             } /*else if(id === 8 && subscription > 2) {
@@ -1006,73 +1034,9 @@ const Reports = (props) => {
                 }                             
             }
         }
-    }, [dispatch, profile, activeId, selectedAssetCompanies, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, props.openCustomerBar, props.openCommentBar, props.kpi, props.openInventorBar, props.assignmentBar, props.openOtherPartyBar])
+    }, [dispatch, profile, activeId, selectedAssetCompanies, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, props.openCustomerBar, props.openCommentBar, viewDashboard, props.openInventorBar, props.assignmentBar, props.openOtherPartyBar])
 
-    const changeGraph = async(flag) => {
-        setIntial(false)
-        setCardList(LIST)
-        props.setGauge(!flag)
-        props.setJurisdiction(false)
-        props.setInvention(false)
-        props.setSankey(false)
-        props.setKpi(false)
-        props.setTimeline(false)
-        props.setLineGraph(flag)
-        //findDashboardData(false, false, false, false)
-    }
-
-    const onHandleJurisdiction = () => {
-        props.setLineGraph(false)
-        props.setGauge(false)
-        props.setInvention(false)
-        props.setSankey(false)
-        props.setKpi(false)
-        props.setTimeline(false)
-        props.setJurisdiction(true)
-    }  
-
-    const onHandleInvention = () => {
-        props.setLineGraph(false)
-        props.setGauge(false)
-        props.setJurisdiction(false)
-        props.setSankey(false)
-        props.setKpi(false)
-        props.setTimeline(false)
-        props.setInvention(true)
-    }
-
-    const onHandleSankey = () => {
-        props.setLineGraph(false)
-        props.setGauge(false)
-        props.setJurisdiction(false)
-        props.setInvention(false)
-        props.setKpi(false)
-        props.setTimeline(false)
-        props.setSankey(true)
-    }
-
-    const onHandleKPI = async() => {
-        setIntial(false)
-        setCardList(KPI_LIST)
-        props.setLineGraph(false)
-        props.setGauge(false)
-        props.setJurisdiction(false)
-        props.setInvention(false)
-        props.setSankey(false)
-        props.setTimeline(false)
-        props.setKpi(true)
-    }
-
-    const onHandleTimeline = () => {
-        props.setLineGraph(false)
-        props.setGauge(false)
-        props.setJurisdiction(false)
-        props.setInvention(false)
-        props.setSankey(false)
-        props.setKpi(false)
-        props.setTimeline(true)
-        callTimelineData()
-    }
+    
 
     const handleTimelineFullScreen = (type) => {
         const list = [...timelineList]
@@ -1099,7 +1063,7 @@ const Reports = (props) => {
                 type={card.type}  
                 grid={grid}
                 checkChartAnalytics={props.checkChartAnalytics}
-                {...(props.kpi === true ? {kpiEnable: true} : {lineGraph: props.lineGraph})}
+                {...(viewDashboard.kpi === true ? {kpiEnable: true} : {lineGraph: viewDashboard.line})}
             />
         </Grid>
     })
@@ -1161,104 +1125,6 @@ const Reports = (props) => {
                                 <span>Loading...</span>
                             )
                         }
-                        {
-                            profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'
-                            && (
-                                <AddToolTip
-                                    tooltip={'Key Performance Indicators such as the number of patents owned by the company.'}
-                                    placement='bottom'
-                                >
-                                    <IconButton 
-                                        size="small"
-                                        className={clsx(classes.actionIcon, {[classes.active]: props.kpi})}
-                                        onClick={onHandleKPI}
-                                    >
-                                        <AppsOutage/>
-                                    </IconButton> 
-                                </AddToolTip>
-                            )
-                        }
-                        <AddToolTip
-                            tooltip={'Matters that require attention such as patents with defective ownership.'}
-                            placement='bottom'
-                        >
-                            <IconButton 
-                                size="small"
-                                className={clsx(classes.actionIcon, {[classes.active]: !props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false && props.kpi === false && props.timeline === false})}
-                                onClick={() => changeGraph(false)}
-                            >
-                                <Speed/> 
-                            </IconButton>
-                        </AddToolTip>
-                        <AddToolTip
-                            tooltip={'Changes in matters requiring attention along a timeline.'}
-                            placement='bottom'
-                        >
-                            <IconButton 
-                                size="small"
-                                className={clsx(classes.actionIcon, {[classes.active]: props.lineGraph && props.jurisdictions == false && props.invention === false && props.sankey === false && props.kpi === false && props.timeline === false})}
-                                onClick={() => changeGraph(true)}
-                            >
-                                <AutoGraph/>
-                            </IconButton> 
-                        </AddToolTip>
-                        <AddToolTip
-                            tooltip={'Transactional activities such as acquisition, divestitures, collateralization and releases.'}
-                            placement='bottom'
-                        >
-                            <IconButton 
-                                size="small"
-                                className={clsx(classes.actionIcon, {[classes.active]: props.timeline})}
-                                onClick={onHandleTimeline}
-                            >
-                                <ViewTimeline/>
-                            </IconButton> 
-                        </AddToolTip>
-                        {
-                            profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'
-                            && (
-                                <React.Fragment>
-                                    <AddToolTip
-                                        tooltip={'Technologies covered by the patent portfolio as they evolved.'}
-                                        placement='bottom'
-                                    >
-                                        <IconButton 
-                                            size="small"
-                                            className={clsx(classes.actionIcon, {[classes.active]: props.invention})}
-                                            onClick={onHandleInvention}
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><g><path d="M24.844,398.133l114.19,52.7a8.214,8.214,0,0,0,3.4.738,8.105,8.105,0,0,0,3.38-.738l110.17-50.885,110.163,50.885a8,8,0,0,0,6.714,0l114.291-52.7A8.188,8.188,0,0,0,492,390.871v-125.1a8.223,8.223,0,0,0-6.2-7.734L378,229.637V98.558a7.958,7.958,0,0,0-5.912-7.735L258.02,60.692a7.969,7.969,0,0,0-4.074,0L139.906,90.823A7.954,7.954,0,0,0,134,98.558V229.637l-107.8,28.4a8.223,8.223,0,0,0-6.2,7.734v125.1A8.186,8.186,0,0,0,24.844,398.133ZM36,276.112l98,25.407V431.065L36,385.754Zm105.1-31.826,82.461,21.777-81.075,21L60.013,265.7ZM248,134.849V255.967l-98-25.9V108.945ZM451.987,265.7l-82.475,21.362-81.075-21L370.9,244.286ZM150,301.519l98-25.257V386.021l-98,45.044Zm114-25.257,98,25.257V431.065l-98-45.044Zm98-46.2-98,25.9V134.849l98-25.9Zm16,201V301.519l98-25.407V385.754ZM256,76.7l82.76,21.856L256,120.413,173.24,98.558Z" /></g></svg>
-                                        </IconButton>
-                                    </AddToolTip>
-                                    <AddToolTip
-                                        tooltip={'The countries in which the company has filed patents.'}
-                                        placement='bottom'
-                                    >
-                                        <IconButton 
-                                            size="small"
-                                            className={clsx(classes.actionIcon, {[classes.active]: props.jurisdictions})}
-                                            onClick={onHandleJurisdiction}
-                                        >
-                                            <Public/>
-                                        </IconButton>   
-                                    </AddToolTip>  
-                                    <AddToolTip
-                                        tooltip={'Sources from which patents were obtained, and divestitures.'}
-                                        placement='bottom'
-                                    >
-                                        <IconButton 
-                                            size="small"
-                                            className={clsx(classes.actionIcon, {[classes.active]: props.sankey})}
-                                            onClick={onHandleSankey}
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" className={clsx('MuiSvgIcon-root MuiSvgIcon-fontSizeMedium')} viewBox="0 0 24 24">
-                                                <path d="M23,6l-4-3.969v2L1,4v9h5.5C6.776,13,7,13.224,7,13.5v6.531H6L8,22l2-1.969H9v-7C9,11.928,8.103,11,7,11h5	c1.105,0,2,0.895,2,2v2.031h-2l3.586,3.954L19,15.031h-2V12.5c0-2.481-2.019-4.5-4.5-4.5H19v2.031L23,6z"/>
-                                            </svg>
-                                        </IconButton>
-                                    </AddToolTip> 
-                                </React.Fragment>
-                            )
-                        }
                         
                         <AddToolTip
                             tooltip={'Big screen view.'}
@@ -1266,7 +1132,7 @@ const Reports = (props) => {
                         >
                             <IconButton size="small"
                                 onClick={() => {props.handleFullScreen(!props.fullScreen)}}
-                                className={clsx(classes.actionIcon, typeof props.standalone !== 'undefined' ? classes.fontStandalone : '' )}
+                                className={clsx(classes.actionIcon, typeof viewDashboard.standalone !== 'undefined' ? classes.fontStandalone : '' )}
                             >
                                 { typeof props.standalone !== 'undefined' ? <Close/> : <Fullscreen /> }                            
                             </IconButton>   
@@ -1286,7 +1152,7 @@ const Reports = (props) => {
                     className={classes.container}
                 >
                     {
-                        props.jurisdictions === true
+                        viewDashboard.jurisdictions === true
                         ?
                             <GeoChart
                                 chartBar={props.chartBar} 
@@ -1298,7 +1164,7 @@ const Reports = (props) => {
                                 titleBar={true}
                             />
                         :
-                            props.invention === true
+                            viewDashboard.invention === true
                             ?
                                 <InventionVisualizer 
                                     defaultSize={props.defaultSize} 
@@ -1315,11 +1181,11 @@ const Reports = (props) => {
                                     titleBar={true}
                                 />
                             :    
-                                props.sankey === true
+                                viewDashboard.sankey === true
                                 ?
                                     <SankeyChart />
                                 :
-                                    props.timeline === true
+                                    viewDashboard.timeline === true
                                     ?
                                         showTimelineItems
                                     :
