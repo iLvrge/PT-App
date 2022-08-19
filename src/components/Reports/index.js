@@ -277,7 +277,7 @@ const Reports = (props) => {
 
     const KPI_LIST = [
         {
-            title: 'Assigned',
+            title: 'Owned',
             tooltip: 'The USA patents assigned to the company from its inventors, and patents acquired by the company, minus those that were sold, expired  and abandoned.',
             number: 0,
             other_number: 0,
@@ -307,16 +307,6 @@ const Reports = (props) => {
             type: 32,
         },
         {
-            title: 'Divested',
-            tooltip: 'Patent applications which are still in the process of prosecution.',
-            number: 0,
-            other_number: 0,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 33
-        },
-        {
             title: 'Collateralized',
             tooltip: 'Patents the company abandoned, i.e. for which the company has not paid maintenance fees.',
             number: 0,
@@ -327,14 +317,14 @@ const Reports = (props) => {
             type: 34
         },
         {
-            title: 'Abandoned',
-            tooltip: 'Non-abandoned patent applications filed by the company\’s employees.',
+            title: 'Maintenance Fee Due',
+            tooltip: 'Expected annual maintenance fees to be paid according to the company’s status and number of non-expired parents it currently owns.',
             number: 0,
-            other_number: 0,
             patent: '',
             application: '',
-            rf_id: '',
-            type: 36
+            rf_id: '', 
+            type: 35,
+            currency: true
         },
         {
             title: 'Challenged (PTAB)',
@@ -347,14 +337,24 @@ const Reports = (props) => {
             type: 37
         },
         {
-            title: 'Maintenance Fee Due',
-            tooltip: 'Expected annual maintenance fees to be paid according to the company’s status and number of non-expired parents it currently owns.',
+            title: 'Divested',
+            tooltip: 'Patent applications which are still in the process of prosecution.',
             number: 0,
+            other_number: 0,
             patent: '',
             application: '',
-            rf_id: '', 
-            type: 35,
-            currency: true
+            rf_id: '',
+            type: 33
+        },
+        {
+            title: 'Abandoned',
+            tooltip: 'Non-abandoned patent applications filed by the company\’s employees.',
+            number: 0,
+            other_number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 36
         },
         {
             title: 'Non-USA Members',
