@@ -37,7 +37,10 @@ export default makeStyles(theme => ({
         height: '100%',
         width: '100%',
         marginBottom: 20,
-        flexDirection: 'column'
+        flexDirection: 'column',
+        '& :last':{
+          marginBottom: 0,
+        }
     },
     flexColumnFullHeight: {
       height: '100% !important',
@@ -218,7 +221,10 @@ export default makeStyles(theme => ({
       fontSize: '20px !important'
     },
     active: {
-      color: pink[500]
+      color: pink['A400'],
+      '& svg': {
+        fill: pink['A400'],
+      }
     },
     list: {
         height: 'calc(100% - 47px)',
@@ -498,8 +504,9 @@ export default makeStyles(theme => ({
       color: pink[500]
     },
     maxChildHeight: {
-      maxHeight: '50%',
-      overflow: 'auto'
+      /* maxHeight: '80vh',
+      height: '80vh',
+      overflow: 'auto' */
     },
     tableContainer: {
       height: '60%',

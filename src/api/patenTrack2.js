@@ -70,7 +70,7 @@ const getFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest;
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest, cancelAllDashboardCountRequest;
 
 class PatenTrackApi {
 
@@ -776,6 +776,29 @@ class PatenTrackApi {
         console.log('cancelInitiated->', e)
       }
     }
+  }
+
+  static getDashboardDataCount(formData, source) {
+    let header = getFormUrlHeader()
+    header['cancelToken'] = source.token
+    cancelAllDashboardCountRequest = source   
+    return axios.post(`${base_new_api_url}/dashboards/count`, formData, header)
+  }
+  
+  static cancelAllDashboardCountToken = () => {
+    if (cancelAllDashboardCountRequest !== undefined) {
+      try{
+        cancelAllDashboardCountRequest.cancel(`Dashboard request aborted`)        
+      } catch (e){
+        console.log('cancelInitiated->', e)
+      }
+    }
+  }
+  
+
+  static findDashboardExample(formData) {
+    let header = getFormUrlHeader()
+    return axios.post(`${base_new_api_url}/dashboards/example`, formData, header)
   }
 
   static getDashboardTimelineData(formData, source) {

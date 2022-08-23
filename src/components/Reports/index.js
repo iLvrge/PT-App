@@ -667,10 +667,34 @@ const Reports = (props) => {
             resetAll(false)
             props.checkChartAnalytics(null, null, false) 
             dispatch(setViewDashboardIntial(true))
-            const cancelRequest = await PatenTrackApi.cancelAllDashboardToken()  
-            const CancelToken = PatenTrackApi.generateCancelToken() 
-            const source = CancelToken.source()
-            const dashboardRequest = cardList.map(async item => {
+            if(viewDashboard.line === true) {
+                const cancelRequest = await PatenTrackApi.cancelAllDashboardToken()  
+                const CancelToken = PatenTrackApi.generateCancelToken() 
+                const source = CancelToken.source()
+                const dashboardRequest = cardList.map(async item => {
+                    const formData = new FormData()
+                    formData.append('list', JSON.stringify(list));
+                    formData.append('total', totalRecords);
+                    formData.append('selectedCompanies', JSON.stringify(selectedCompanies));
+                    formData.append('tabs', JSON.stringify(assetTypesSelected));
+                    formData.append('customers', JSON.stringify(selectedAssetCompanies));
+                    formData.append('assignments', JSON.stringify(selectedAssetAssignments));
+                    formData.append('type', item.type)
+                    formData.append('data_format',  1)
+                    formData.append('format_type', profile.user.organisation.organisation_type)  
+                    formData.append('company', companyname[0].original_name )              
+                    const requestData = await PatenTrackApi.getDashboardData(formData, source)
+                    if( requestData !== null){
+                        updateList(requestData, item.type)
+                    }
+                    return item
+                })                
+                await Promise.all(dashboardRequest)
+            } else {
+                const type = viewDashboard.kpi === true ? [30,31,32,33,34,35,36,37,38,39,40,41] : [1, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+                const cancelRequest = await PatenTrackApi.cancelAllDashboardCountToken()  
+                const CancelToken = PatenTrackApi.generateCancelToken() 
+                const source = CancelToken.source()
                 const formData = new FormData()
                 formData.append('list', JSON.stringify(list));
                 formData.append('total', totalRecords);
@@ -678,17 +702,65 @@ const Reports = (props) => {
                 formData.append('tabs', JSON.stringify(assetTypesSelected));
                 formData.append('customers', JSON.stringify(selectedAssetCompanies));
                 formData.append('assignments', JSON.stringify(selectedAssetAssignments));
-                formData.append('type', item.type)
-                formData.append('data_format', viewDashboard.line === true ? 1 : 0)
+                formData.append('type', JSON.stringify(type))
+                formData.append('data_format',  0)
                 formData.append('format_type', profile.user.organisation.organisation_type)  
                 formData.append('company', companyname[0].original_name )              
-                const requestData = await PatenTrackApi.getDashboardData(formData, source)
+                const requestData = await PatenTrackApi.getDashboardDataCount(formData, source)
                 if( requestData !== null){
-                    updateList(requestData, item.type)
-                }
-                return item
-            })                
-            await Promise.all(dashboardRequest)
+                    const {data} = requestData
+                    let oldList = [...cardList]
+                    const dashboardPromise = data.map( item => {
+                        const findIndex = oldList.findIndex( row => row.type == item.type)
+                        if(findIndex !== -1) {
+                            let {other} = item
+                            if(other != '' && other !== null) {
+                                other = JSON.parse(other)
+                            }
+                            if( Array.isArray(other) && other.length > 0) {
+                                oldList[findIndex].list = [...other]
+                                oldList[findIndex].patent = ''
+                                oldList[findIndex].application = ''
+                                oldList[findIndex].rf_id = ''
+                                oldList[findIndex].total = item.total  
+                                oldList[findIndex].number = 0           
+                            } else if( item?.number) {
+                                oldList[findIndex].number = item.number
+                                oldList[findIndex].patent = ''
+                                oldList[findIndex].application = ''                            
+                                oldList[findIndex].rf_id = ''                            
+                                oldList[findIndex].total = item.total
+                                if(typeof item.other_number !== 'undefined') {
+                                    oldList[findIndex].other_number = item.other_number          
+                                }
+                            } else {
+                                oldList[findIndex].number = 0
+                                oldList[findIndex].patent = ''
+                                oldList[findIndex].application = ''
+                                oldList[findIndex].total = 0
+                                if(typeof oldList[findIndex].other_number !== 'undefined'){
+                                    oldList[findIndex].other_number = 0
+                                }
+                            }
+                        }
+                    })
+                    await Promise.all(dashboardPromise)
+                    setCardList(oldList)
+                    if(typeof props.updateDashboardData !== 'undefined') {
+                        props.updateDashboardData(oldList)
+                    }
+                    if(viewDashboard.kpi === true) {
+                        formData.delete('type')
+                        formData.append('type', 37)
+                        const CancelToken = PatenTrackApi.generateCancelToken() 
+                        const source = CancelToken.source()
+                        const newRequestData = await PatenTrackApi.getDashboardData(formData, source)
+                        if( newRequestData !== null){
+                            updateList(newRequestData, 37)
+                        }
+                    }
+                } 
+            }
             setLoading(false)           
         }
     }
@@ -812,7 +884,7 @@ const Reports = (props) => {
                 }
             }            
             setCardList(oldList)
-            if(typeof props.updateDashboardData !== 'undefined' && viewDashboard.kpi === false) {
+            if(typeof props.updateDashboardData !== 'undefined') {
                 props.updateDashboardData(oldList)
             }
         }      
@@ -834,63 +906,81 @@ const Reports = (props) => {
     const onHandleClick = useCallback(async(id) => {
         const card = cardList[id]
         if(card.number > 0 || (card?.list && card.list.length > 0)) {
+            
+
+
+
             let showItem = id != activeId ? true : false
             setActiveId(id != activeId ? id : -1)
             resetAll(showItem)       
             dispatch(setDashboardPanelActiveButtonId( id != activeId ? id : -1 ))        
             props.checkChartAnalytics(null, null, showItem)
             if(showItem === true) {
-                if(card.type == 38 && profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'){
-                    /**
-                     * Family
-                     */
-                     dispatch(setSelectedAssetsPatents([card.patent, '']));
-                    dispatch(assetFamily(card.patent));
-                } else  if(card.type == 1 || card.type == 18 || card.type > 29 || card.type == 21 || card.type == 22 || card.type == 26 ) {
-                    dispatch(
-                        setAssetsIllustration({
-                            type: "patent",
-                            id: card.patent !== '' ? card.patent : card.application,
-                            flag: card.patent !== '' ? 1 : 0
-                        }),
-                    );
-                } else if (card.type == 17) {
-                    dispatch(setAssetsIllustration({ type: "transaction", id: card.rf_id }));
-                } else if(card.type == 20 || card.type == 23) {
-                    dispatch(getAssetDetails(card.application, card.patent))
-                    dispatch(assetLegalEvents(card.application, card.patent));
-                } else if(card.type == 19 || card.type == 24 || card.type == 25) {
-                    
-                    const { data } = await PatenTrackApi.getCollectionIllustration(card.rf_id)
-                    if(data != null) {                        
-                        const obj = data.line.length > 0 ? data.line[0] : null
-                        if(obj != null) {
-                            dispatch(
-                                setConnectionData(obj)
-                            ) 
-                            dispatch(
-                                setPDFView(true)
-                            )
-                            dispatch(
-                                setConnectionBoxView(true)
-                            )
-                            if(obj.document1.indexOf('legacy-assignments.uspto.gov') !== -1 || (obj.document1 == "" && obj.ref_id > 0)) {
-                                obj.rf_id =  obj.ref_id
-                                dispatch(retrievePDFFromServer(obj))   
-                            } else {
+                const type = viewDashboard.kpi === true ? [30,31,32,33,34,35,36,37,38,39,40,41] : [1, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+                const formData = new FormData()
+                formData.append('list', []);
+                formData.append('total', 0);
+                formData.append('selectedCompanies', JSON.stringify(selectedCompanies));
+                formData.append('tabs', JSON.stringify(assetTypesSelected));
+                formData.append('customers', JSON.stringify(selectedAssetCompanies));
+                formData.append('assignments', JSON.stringify(selectedAssetAssignments));
+                formData.append('type', JSON.stringify(type))
+                formData.append('data_format',  0)
+                formData.append('format_type', profile.user.organisation.organisation_type)  
+                formData.append('company', companyname[0].original_name )              
+                const {data} = await PatenTrackApi.findDashboardExample(formData)
+                if(data != null) {
+                    if(card.type == 38 && profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'){
+                        /**
+                         * Family
+                         */
+                         dispatch(setSelectedAssetsPatents([data.patent, '']));
+                        dispatch(assetFamily(data.patent));
+                    } else  if(card.type == 1 || card.type == 18 || card.type > 29 || card.type == 21 || card.type == 22 || card.type == 26 ) {
+                        dispatch(
+                            setAssetsIllustration({
+                                type: "patent",
+                                id: data.patent !== '' ? data.patent : data.application,
+                                flag: data.patent !== '' ? 1 : 0
+                            }),
+                        );
+                    } else if (card.type == 17) {
+                        dispatch(setAssetsIllustration({ type: "transaction", id: data.rf_id }));
+                    } else if(card.type == 20 || card.type == 23) {
+                        dispatch(getAssetDetails(data.application, data.patent))
+                        dispatch(assetLegalEvents(data.application, data.patent));
+                    } else if(card.type == 19 || card.type == 24 || card.type == 25) {
+                        const { data } = await PatenTrackApi.getCollectionIllustration(data.rf_id)
+                        if(data != null) {                        
+                            const obj = data.line.length > 0 ? data.line[0] : null
+                            if(obj != null) {
                                 dispatch(
-                                    setPDFFile(
-                                      { 
-                                        document: obj.document1, 
-                                        form: obj.document1, 
-                                        agreement: obj.document1 
-                                      }
-                                    )
+                                    setConnectionData(obj)
                                 ) 
-                            }                         
-                        }                        
-                    } 
-                }      
+                                dispatch(
+                                    setPDFView(true)
+                                )
+                                dispatch(
+                                    setConnectionBoxView(true)
+                                )
+                                if(obj.document1.indexOf('legacy-assignments.uspto.gov') !== -1 || (obj.document1 == "" && obj.ref_id > 0)) {
+                                    obj.rf_id =  obj.ref_id
+                                    dispatch(retrievePDFFromServer(obj))   
+                                } else {
+                                    dispatch(
+                                        setPDFFile(
+                                          { 
+                                            document: obj.document1, 
+                                            form: obj.document1, 
+                                            agreement: obj.document1 
+                                          }
+                                        )
+                                    ) 
+                                }                         
+                            }                        
+                        } 
+                    }  
+                } 
             }
         }
     }, [dispatch, activeId, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, cardList])

@@ -2,6 +2,7 @@ import { pink } from '@mui/material/colors';
 import { alpha } from '@mui/material/styles';
 
 import makeStyles from '@mui/styles/makeStyles';
+import { isValidRGBA } from 'vis-util';
 
 const LOGO_WIDTH = 120
 const HEADER_MARGIN = 5
@@ -420,15 +421,20 @@ export default makeStyles(theme => ({
         '& svg':{
             /* width: '2rem',
             height: '2rem', */
-            fill: '#5a5a5a',
+            fill: theme.palette.text.disabled,
             /* stroke: '#5a5a5a' */
         },
         '&:hover':{
-            backgroundColor: 'unset'
+            backgroundColor: 'unset',
             /* '& svg':{
                 fill: 'rgb(230, 0, 0)',
                 stroke: 'rgb(230, 0, 0)',
             } */
+            color: pink['A400'] ,
+            '& svg':{
+                fill: pink['A400'],
+                stroke: pink['A400'],
+            }
         }
     },
     slackIcon: {
@@ -575,14 +581,26 @@ export default makeStyles(theme => ({
             width: '1rem !important',
             height: '1rem !important'
         } */
+        color: theme.palette.text.disabled,
         '& svg' : {
-          fill: 'currentcolor',
+          fill: theme.palette.text.disabled,
           width: '1.5rem !important', 
           height: '1.5rem !important'
-        }
+        },
+        '&:hover':{
+            color: pink['A400'] ,
+            '& svg':{
+                fill: pink['A400'],
+                stroke: pink['A400'],
+            }
+        },
     }, 
     active: {
-        color: pink[500]
+        color: pink['A400'],
+        '& svg':{
+            fill: pink['A400'],
+            stroke: pink['A400'],
+        }
     },
     shareIcon: {
         '& svg' : {
