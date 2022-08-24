@@ -100,4 +100,14 @@ export const updateViewDashboard = views => ({
 export const setViewDashboardIntial = flag => ({
   type: types.SET_DASHBOARD_VIEW_INTIAL,
   flag,
+})   
+
+export const setAssetButton = flag => ({
+  type: types.SET_ASSET_BUTTON,
+  flag,
+})   
+
+export const setTransactionButton = flag => ({
+  type: types.SET_TRANSACTION_BUTTON,
+  flag,
 })  

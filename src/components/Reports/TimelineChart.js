@@ -264,7 +264,7 @@ const TimelineChart = (props) => {
                     calcTop = screenHeight - 350
                 }
                 let tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${calcTop}px;left:${calcLeft}px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
-                <div style='display:flex;'><div style='display:flex;flex-direction: column;'>                            
+                <div style='display:flex;'><div style='display:flex;flex-direction: column;max-width: 48%; margin-right: 10px;'>                            
                 <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
                                             <div>
                                             ${ executionDate != '' ? moment(executionDate).format('ll') : ''}

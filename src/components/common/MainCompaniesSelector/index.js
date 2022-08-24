@@ -97,9 +97,9 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             checkboxSelect: true
         },
         {
-            width: 700,  
-            minWidth: 700,
-            oldWidth: 700,
+            width: 170,  
+            minWidth: 170,
+            oldWidth: 170,
             draggable: true,
             label: 'Companies',        
             dataKey: 'original_name',

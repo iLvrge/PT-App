@@ -44,7 +44,7 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
 
-    const dashboardICONS = [0, 1, 6, 7]
+    const dashboardICONS = [0, 1, 7]
     const removeFilterICONS = [2, 3, 4, 11]
     
     if((selectedCategory  != 'due_dilligence' && selectedCategory  != 'proliferate_inventors' && selectedCategory != 'top_lenders' && removeFilterICONS.includes(t)) || ( dashboardScreen === true  && !dashboardICONS.includes(t))) return null

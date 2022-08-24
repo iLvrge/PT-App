@@ -123,6 +123,18 @@ const uiReducer = (state = initialState.ui, action) => {
         viewInitial: action.flag,
       }
     }
+    case types.SET_ASSET_BUTTON: {
+      return {
+        ...state,
+        assetButton: action.flag,
+      }
+    }
+    case types.SET_TRANSACTION_BUTTON: {
+      return {
+        ...state,
+        transactionButton: action.flag,
+      }
+    }
     case types.SET_RESET_UI_ALL: { 
       return {
         ...state,

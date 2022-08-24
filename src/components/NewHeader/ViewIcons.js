@@ -1,6 +1,6 @@
  import React, { useCallback, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setViewDashboardIntial, updateViewDashboard } from '../../actions/uiActions'
+import { setAssetButton, setTransactionButton, setViewDashboardIntial, updateViewDashboard } from '../../actions/uiActions'
 import useStyles from './styles'
 import clsx from 'clsx'
 import AddToolTip from '../Reports/AddToolTip'
@@ -9,10 +9,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faShareAlt, faCalendar
 } from "@fortawesome/free-solid-svg-icons"
-import { AppsOutage, AutoGraph, Public, Speed, ViewTimeline, Search, NotificationsNone, ManageSearch } from '@mui/icons-material'
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { AppsOutage, AutoGraph, Public, Speed, ViewTimeline, Search, NotificationsNone, ManageSearch, SupportAgent } from '@mui/icons-material'
 import PatenTrackApi from '../../api/patenTrack2'
 import { copyToClipboard } from '../../utils/html_encode_decode'
+import { setSwitchAssetButton } from '../../actions/patentTrackActions2'
 
 const ViewIcons = (props) => {
     const dispatch = useDispatch();
@@ -22,6 +22,8 @@ const ViewIcons = (props) => {
     const [openSearch, setOpenSearch] = useState(false)
     const profile = useSelector(state => (state.patenTrack.profile))  
     const viewDashboard = useSelector(state => state.ui.viewDashboard) 
+    const assetButton = useSelector(state => state.ui.assetButton) 
+    const transactionButton = useSelector(state => state.ui.transactionButton) 
     const category = useSelector(state => state.patenTrack2.selectedCategory)
     const maintainencePatentsList = useSelector(state => state.patenTrack2.maintainenceAssetsList.list)
     const mainCompaniesSelected = useSelector(state => state.patenTrack2.mainCompaniesList.selected)
@@ -31,7 +33,9 @@ const ViewIcons = (props) => {
     const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
     const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected);
     const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected);
+    const SHARE_URL_MESSAGE = 'A sharing URL was added to your clipboard.'
 
+    console.log('button', assetButton, transactionButton)
     const changeGraph = async(flag) => {
         //setCardList(LIST)
         onHandleDashboard()
@@ -130,6 +134,8 @@ const ViewIcons = (props) => {
     }
 
     const onHandleTransactions = () => {
+        dispatch(setAssetButton(false))
+        dispatch(setTransactionButton(true))
         setPatentView(false)
         setTimelineView(true)
         props.resetAllActivity('due_dilligence')
@@ -139,6 +145,8 @@ const ViewIcons = (props) => {
     const onHandleDashboard = () => {
         setPatentView(false)
         setTimelineView(false)
+        dispatch(setAssetButton(false))
+        dispatch(setTransactionButton(false))
         if(props.dashboardScreen === false) {
             props.resetAllActivity('due_dilligence')
             props.setDashboardScreen()
@@ -146,6 +154,8 @@ const ViewIcons = (props) => {
     }
 
     const onHandlePatentAssets = () => {
+        dispatch(setAssetButton(true))
+        dispatch(setTransactionButton(false))
         setPatentView(true)
         setTimelineView(false)
         props.resetAllActivity('due_dilligence')
@@ -168,7 +178,7 @@ const ViewIcons = (props) => {
             formData.append('customers', JSON.stringify(selectedAssetCompanies));
             const {data} = await PatenTrackApi.shareDashboard(formData)
             if( data !== null){
-                copyToClipboard(data, 'Share url is added to your clipboard.')
+                copyToClipboard(data, SHARE_URL_MESSAGE)
             }
         } else {
             alert("Please select a company first")
@@ -218,7 +228,7 @@ const ViewIcons = (props) => {
                             copy(data)
                         } */
                         if( data !== null){
-                            copyToClipboard(data, 'Sharing URL was added to your clipboard.')
+                            copyToClipboard(data, SHARE_URL_MESSAGE)
                         }
                         //window.open(data,'_BLANK')
                     } 
@@ -325,24 +335,24 @@ const ViewIcons = (props) => {
                             </IconButton>
                         </AddToolTip> 
                         <AddToolTip
-                            tooltip={'All Assets (1998)'}
+                            tooltip={'All Assets (Since 1998)'}
                             placement='bottom'
                         >
                             <IconButton 
                                 size="small"
-                                className={clsx(classes.actionIcon, {[classes.active]: patentView})}
+                                className={clsx(classes.actionIcon, {[classes.active]: assetButton})}
                                 onClick={onHandlePatentAssets}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className={`noStroke`}><path d="M0 0h24v24H0V0z" fill="none"/><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 4h2v5l-1-.75L9 9V4zm9 16H6V4h1v9l3-2.25L13 13V4h5v16z"/></svg>
                             </IconButton>
                         </AddToolTip> 
                         <AddToolTip
-                            tooltip={'All Transactions (1998)'}
+                            tooltip={'All Transactions (Since 1998)'}
                             placement='bottom'
                         >
                             <IconButton 
                                 size="small"
-                                className={clsx(classes.actionIcon, {[classes.active]: timelineView})}
+                                className={clsx(classes.actionIcon, {[classes.active]: transactionButton})}
                                 onClick={onHandleTransactions}
                             >
                                <svg id="icons" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" className={`noStroke`}><path d="M52,7H12a6,6,0,0,0-6,6V51a6,6,0,0,0,6,6H52a6,6,0,0,0,6-6V13A6,6,0,0,0,52,7Zm2,44a2,2,0,0,1-2,2H12a2,2,0,0,1-2-2V13a2,2,0,0,1,2-2H52a2,2,0,0,1,2,2Z"/><path d="M45,29a2,2,0,0,0,0-4H22.83l2.58-2.59a2,2,0,0,0-2.82-2.82l-6,6a2,2,0,0,0-.44,2.18A2,2,0,0,0,18,29Z"/><path d="M47,36H20a2,2,0,0,0,0,4H42.17l-2.58,2.59a2,2,0,1,0,2.82,2.82l6-6a2,2,0,0,0,.44-2.18A2,2,0,0,0,47,36Z"/></svg>
@@ -384,7 +394,7 @@ const ViewIcons = (props) => {
                                 <NotificationsNone/>
                             </Badge>         
                         </IconButton> 
-                        <AddToolTip
+                        {/* <AddToolTip
                             tooltip={`Search`}
                             placement='bottom'
                         >
@@ -408,7 +418,7 @@ const ViewIcons = (props) => {
                                 onKeyDown={props.handleKeyDown}
                                 disabled 
                             />
-                        </div>
+                        </div> */}
                         <AddToolTip
                             tooltip={`Schedule a ${process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'd' : 'D' }emo ${process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'for Pro version' : '' }`}
                             placement='bottom'
@@ -418,7 +428,7 @@ const ViewIcons = (props) => {
                                 className={clsx(classes.actionIcon)}
                                 onClick={() => {props.setScheduling(!props.scheduling)}}
                             >
-                               <CalendarMonthIcon/>
+                               <SupportAgent/>
                             </IconButton>
                         </AddToolTip> 
                     </React.Fragment>

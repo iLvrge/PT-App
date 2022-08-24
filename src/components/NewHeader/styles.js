@@ -220,14 +220,14 @@ export default makeStyles(theme => ({
     },
     search: {
         position: 'fixed',
-        top: 40,
+        top: 55,
         borderRadius: theme.shape.borderRadius,
         backgroundColor: alpha(theme.palette.common.white, 0.15),
         '&:hover': {
           backgroundColor: alpha(theme.palette.common.white, 0.25),
         },
         /* margin: '0 4px !important', */
-        height: 26,
+        height: 32,
         width: 400, 
         [theme.breakpoints.up('sm')]: {
           width: 400,
@@ -251,7 +251,7 @@ export default makeStyles(theme => ({
     },
     inputInput: {
         padding: 0,
-        height: 26,
+        height: 32,
         // vertical padding + font size from searchIcon
         paddingLeft: theme.spacing(1),
         transition: theme.transitions.create('width'),
@@ -433,7 +433,7 @@ export default makeStyles(theme => ({
             color: pink['A400'] ,
             '& svg':{
                 fill: pink['A400'],
-                stroke: pink['A400'],
+                /* stroke: pink['A400'], */
             }
         }
     },
@@ -591,7 +591,7 @@ export default makeStyles(theme => ({
             color: pink['A400'] ,
             '& svg':{
                 fill: pink['A400'],
-                stroke: pink['A400'],
+                /* stroke: pink['A400'], */
             }
         },
     }, 
@@ -599,7 +599,7 @@ export default makeStyles(theme => ({
         color: pink['A400'],
         '& svg':{
             fill: pink['A400'],
-            stroke: pink['A400'],
+            /* stroke: pink['A400'], */
         }
     },
     shareIcon: {

@@ -1533,6 +1533,7 @@ export const transactionRowClick = (rf_id, slackChannelList, defaultLoad, search
     dispatch(setChildSelectedAssetsPatents([]))
     dispatch(setSelectedAssetsPatents([]))
     dispatch(setSelectedAssetsTransactions([rf_id]))
+    dispatch(setSelectAssignments([rf_id]))
     if(typeof defaultLoad !== 'undefined' && defaultLoad === false){
       dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
       dispatch(getAssetTypeAssignmentAssets(rf_id, false, 1, search_string)) // fill assets table 
