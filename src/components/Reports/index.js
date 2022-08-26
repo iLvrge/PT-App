@@ -907,9 +907,6 @@ const Reports = (props) => {
         const card = cardList[id]
         if(card.number > 0 || (card?.list && card.list.length > 0)) {
             
-
-
-
             let showItem = id != activeId ? true : false
             setActiveId(id != activeId ? id : -1)
             resetAll(showItem)       
@@ -990,73 +987,73 @@ const Reports = (props) => {
         let subscription = parseInt(profile?.user?.organisation?.subscribtion), timeline = false, patent = false, maintainence = false
         if( subscription === 2 || subscription === 3 ) {
             let findIndex = -1
-            if(id === 0 && viewDashboard.kpi === false) {                
+            if(id === 1 && viewDashboard.kpi === false) {                
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
                 patent = true
-            } else if(id === 1 && subscription > 2  && viewDashboard.kpi === false) {
+            } else if(id === 17 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_names')
                 timeline = true
-            } else if(id === 2 && subscription > 2  && viewDashboard.kpi === false) {
+            } else if(id === 18 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'clear_encumbrances')
                 patent = true
-            } else if(id === 3 && subscription > 2  && viewDashboard.kpi === false) {
+            } else if(id === 19 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_address')
                 timeline = true
-            } else if(id === 4 && subscription > 2  && viewDashboard.kpi === false) {
+            } else if(id === 20 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'to_be_monitized')
                 patent = true
-            } else if(id === 5 && subscription > 2  && viewDashboard.kpi === false) {
+            } else if(id === 21 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'unnecessary_patents')
                 patent = true
-            } else if(id === 6 && subscription > 2  && viewDashboard.kpi === false) {
+            } else if(id === 22 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'missed_monetization')
                 patent = true
-            } else if(id === 7 && subscription > 2  && viewDashboard.kpi === false) {
+            } else if(id === 23 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'late_maintainance')
                 patent = true
-            } else if(id === 8 && subscription > 2  && viewDashboard.kpi === false) {
+            } else if(id === 24 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_recording')
                 timeline = true
-            } else if(id === 9 && subscription > 2  && viewDashboard.kpi === false) {
+            } else if(id === 25 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'late_recording')
                 timeline = true
-            } else if(id === 10 && subscription > 2  && viewDashboard.kpi === false) {
+            } else if(id === 26 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'deflated_collaterals')
                 patent = true
-            } else if(id === 0 && subscription > 1  && viewDashboard.kpi === true) {
+            } else if(id === 30 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'assigned')
                 patent = true
-            } else if(id === 1 && subscription > 1  && viewDashboard.kpi === true) {
+            } else if(id === 31 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'filled')
                 patent = true
-            } else if(id === 2 && subscription > 1  && viewDashboard.kpi === true) {
+            } else if(id === 32 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'acquired')
                 patent = true
-            } else if(id === 3 && subscription > 1  && viewDashboard.kpi === true) {
+            } else if(id === 33 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'divested')
                 patent = true
-            } else if(id === 4 && subscription > 1  && viewDashboard.kpi === true) {
+            } else if(id === 34 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'collaterlized')
                 patent = true
-            } else if(id === 5 && subscription > 1 && viewDashboard.kpi === true) {
+            } else if(id === 36 && subscription > 1 && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'abandoned')
                 patent = true
-            } else if(id === 6 && subscription > 1  && viewDashboard.kpi === true) {
+            } else if(id === 37 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'ptab')
                 patent = true
-            } else if(id === 7 && subscription > 1  && viewDashboard.kpi === true) {
+            } else if(id === 35 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'pay_maintainence_fee')
                 maintainence = true
-            } else if(id === 8 && subscription > 1  && viewDashboard.kpi === true) {
+            } else if(id === 38 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_non_us_members')
                 patent = true
-            } else if(id === 9 && subscription > 1  && viewDashboard.kpi === true) {
+            } else if(id === 39 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'proliferate_inventors')
                 timeline = true
-            } else if(id === 10 && subscription > 1  && viewDashboard.kpi === true) {
+            } else if(id === 40 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_law_firms')
                 timeline = true
-            } else if(id === 11 && subscription > 1  && viewDashboard.kpi === true) {
+            } else if(id === 41 && subscription > 1  && viewDashboard.kpi === true) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_lenders')
                 timeline = true
             } /*else if(id === 8 && subscription > 2) {
@@ -1069,6 +1066,7 @@ const Reports = (props) => {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'correct_names')
                 timeline = true
             }*/
+            
             if( findIndex !== -1 ) {
                 resetAllRowSelect(dispatch, resetItemList.resetAll, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [1, 9, 10] :  [])
                 resetAllRowSelect(dispatch, resetItemList.clearOtherItems, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [14, 15] :  controlList[findIndex].category == 'proliferate_inventors' || controlList[findIndex].category == 'top_lenders' ? [14, 15] :  [])
@@ -1141,7 +1139,7 @@ const Reports = (props) => {
         >
             <CardElement 
                 card={card}
-                id={index}
+                id={card.type}
                 active={activeId}
                 handleClick={onHandleClick}
                 handleList={onHandleList}
@@ -1161,7 +1159,7 @@ const Reports = (props) => {
         >
             <CardElement 
                 card={card}
-                id={index}
+                id={card.type}
                 active={activeId}
                 handleClick={onHandleClick}
                 handleList={onHandleList}
