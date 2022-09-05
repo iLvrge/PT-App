@@ -154,43 +154,46 @@ const Reports = (props) => {
 
     let BANK_LIST = [
         {
-            title: 'Broken Chain-of-Title',
+            title: 'Client Transactions',
             tooltip: 'Patent assets owned by the company, with ownership defects along the chain of title, such as rights not transferred by inventors.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
-            type: 1,
+            type: 21,
+            display_type: 'timeline',
             list: []
         },
         {
-            title: 'Incorrect Names',
+            title: 'Collteralized Assets',
             tooltip: 'Patent assets assigned under incorrect names, and unlikely to be found in a name search.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
             type: 17,
-            list: []
+            display_type: 'numbers'
         },
         {
-            title: 'Encumbrances',
+            title: 'Non-Expired Collaterals',
             tooltip: 'Patent assets subject to third party rights, which could harm the patents’ liquidity.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
             type: 18,
+            display_type: 'gauge',
             list: []
         },
         {
-            title: 'Other Banks',
+            title: 'Non-Client\'s Collaterals',
             tooltip: 'Patent assets assigned under incorrect addresses.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
             type: 19,
+            display_type: 'gauge',
             list: []
         },
         {
@@ -201,46 +204,51 @@ const Reports = (props) => {
             application: '',
             rf_id: '',
             type: 20,
+            display_type: 'gauge',
             list: []
         },
         {
-            title: 'Unecessary Patents',
+            title: 'Broken Chain of Title',
             tooltip: 'Patent assets covering technological areas which are far from the company’s core technology.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
-            type: 21,
+            type: 1,
+            display_type: 'gauge',
             list: []
         },
         {
-            title: 'Expired Patents',
+            title: 'Expired Collaterals',
             tooltip: 'Abandoned, yet acknowledged, patent assets which could be sold to interested parties.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
             type: 22,
+            display_type: 'gauge',
             list: []
         },
         {
-            title: 'Recently Expired',
+            title: 'Conflicting Transactions',
             tooltip: 'Patents for which the company paid surcharge fees due to late payment of maintenance fees.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
             type: 23,
+            display_type: 'gauge',
             list: []
         },
         {
-            title: 'Corrected Recordings',
+            title: 'Encumbtrances',
             tooltip: 'Patent assets with recording that later on were corrected.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
             type: 24,
+            display_type: 'gauge',
             list: []
         },
         {
@@ -251,26 +259,28 @@ const Reports = (props) => {
             application: '',
             rf_id: '',
             type: 25,
+            display_type: 'gauge',
             list: []
         },
         {
-            title: 'Deflated Collateral',
+            title: 'Client Current Assets',
             tooltip: 'The list of collateralized patent assets that have expired since the collateralization day.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
             type: 26,
-            list: []
+            display_type: 'numbers'
         },
         {
-            title: 'Challenged',
+            title: 'Other Banks',
             tooltip: 'The list of patents the validity of which has been challenged.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
             type: 27,
+            display_type: 'timeline',
             list: []
         }
     ]
@@ -357,7 +367,7 @@ const Reports = (props) => {
             type: 36
         },
         {
-            title: 'Non-USA Members',
+            title: 'Members of Owned USA',
             tooltip: 'Countries in which the company has the largest number of patents.',
             number: 0,
             patent: '',
@@ -474,6 +484,8 @@ const Reports = (props) => {
         xs: 12,
         xl: 12,
     }
+    const KPI_TYPE = [30,31,32,33,34,35,36,37,38,39,40,41];
+    const GAUGE_TYPE = [1, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27];
     const classes = useStyles();
     const history = useHistory()
     const dispatch = useDispatch();
@@ -667,7 +679,7 @@ const Reports = (props) => {
             resetAll(false)
             props.checkChartAnalytics(null, null, false) 
             dispatch(setViewDashboardIntial(true))
-            if(viewDashboard.line === true) {
+            if(viewDashboard.line === true || (profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank')) {
                 const cancelRequest = await PatenTrackApi.cancelAllDashboardToken()  
                 const CancelToken = PatenTrackApi.generateCancelToken() 
                 const source = CancelToken.source()
@@ -680,7 +692,7 @@ const Reports = (props) => {
                     formData.append('customers', JSON.stringify(selectedAssetCompanies));
                     formData.append('assignments', JSON.stringify(selectedAssetAssignments));
                     formData.append('type', item.type)
-                    formData.append('data_format',  1)
+                    formData.append('data_format',  profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? 0 : 1)
                     formData.append('format_type', profile.user.organisation.organisation_type)  
                     formData.append('company', companyname[0].original_name )              
                     const requestData = await PatenTrackApi.getDashboardData(formData, source)
@@ -691,7 +703,7 @@ const Reports = (props) => {
                 })                
                 await Promise.all(dashboardRequest)
             } else {
-                const type = viewDashboard.kpi === true ? [30,31,32,33,34,35,36,37,38,39,40,41] : [1, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+                const type = viewDashboard.kpi === true ? [...KPI_TYPE] : [...GAUGE_TYPE]
                 const cancelRequest = await PatenTrackApi.cancelAllDashboardCountToken()  
                 const CancelToken = PatenTrackApi.generateCancelToken() 
                 const source = CancelToken.source()
@@ -838,9 +850,9 @@ const Reports = (props) => {
 
     const updateList = useCallback((requestData, type) => {  
         let oldList = [...cardList]
-        const findIndex = oldList.findIndex( item => item.type === type)
+        const findIndex = oldList.findIndex( item => item.type === type) 
         if(findIndex !== -1) {
-            if(viewDashboard.line === true) {
+            if(viewDashboard.line === true ) {
                 if( requestData !== null && requestData.data != null && requestData.data.length > 0) {
                     const list = [['Year', 'Assets']]
                     requestData.data.forEach( item => {
@@ -856,7 +868,7 @@ const Reports = (props) => {
                     oldList[findIndex].application = ''
                     oldList[findIndex].rf_id = 0
                 }
-            } else {
+            } else { 
                 if( requestData !== null && requestData.data != null && Array.isArray(requestData.data) && requestData.data.length > 0) {
                     oldList[findIndex].list = [...requestData.data]
                     oldList[findIndex].patent = requestData.data[0].patent
@@ -897,14 +909,21 @@ const Reports = (props) => {
             if(container !== null){
                 setTimeout(() => {
                     const listItemsContainer = container.querySelector('.listItems')
-                    listItemsContainer.scroll(0, listItemsContainer.querySelectorAll('.box_item')[activeId].offsetTop - 50)
+                    const findIndex = cardList.findIndex( item => item.type == activeId) 
+                    if(findIndex !== -1) {
+                        listItemsContainer.scroll(0, listItemsContainer.querySelectorAll('.box_item')[findIndex].offsetTop - 50)
+                    }
                 }, 1000)
             }
         }
     }, [activeId])
 
     const onHandleClick = useCallback(async(id) => {
-        const card = cardList[id]
+        const findIndex = cardList.findIndex( item => item.type == id) 
+        let card = {}
+        if(findIndex !== -1) {
+            card = cardList[findIndex]
+        } 
         if(card.number > 0 || (card?.list && card.list.length > 0)) {
             
             let showItem = id != activeId ? true : false
@@ -913,7 +932,7 @@ const Reports = (props) => {
             dispatch(setDashboardPanelActiveButtonId( id != activeId ? id : -1 ))        
             props.checkChartAnalytics(null, null, showItem)
             if(showItem === true) {
-                const type = viewDashboard.kpi === true ? [30,31,32,33,34,35,36,37,38,39,40,41] : [1, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+                const type = viewDashboard.kpi === true ? [...KPI_TYPE] : [...GAUGE_TYPE]
                 const formData = new FormData()
                 formData.append('list', []);
                 formData.append('total', 0);
@@ -931,9 +950,9 @@ const Reports = (props) => {
                         /**
                          * Family
                          */
-                         dispatch(setSelectedAssetsPatents([data.patent, '']));
+                        dispatch(setSelectedAssetsPatents([data.patent, '']));
                         dispatch(assetFamily(data.patent));
-                    } else  if(card.type == 1 || card.type == 18 || card.type > 29 || card.type == 21 || card.type == 22 || card.type == 26 ) {
+                    } else  if(card.type == 1 || card.type == 18 || card.type == 21 || card.type == 22 || card.type > 25 ) {
                         dispatch(
                             setAssetsIllustration({
                                 type: "patent",
@@ -1132,6 +1151,16 @@ const Reports = (props) => {
     }
 
     const showItems = cardList.map( (card, index) => {
+        let displayItems = {kpiEnable: false,  timeline: false}
+        if(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'){
+            if(card.display_type == 'gauge') {
+                displayItems['lineGraph'] = false 
+            } else if(card.display_type == 'numbers'){
+                displayItems['kpiEnable'] = true 
+            } else if(card.display_type == 'timeline'){
+                displayItems['timeline'] = true 
+            }
+        }
         return <Grid
             item  {...grid}
             className={clsx(classes.flexColumn, `box_item`, {['activeItem']: index === activeId})}
@@ -1147,6 +1176,7 @@ const Reports = (props) => {
                 grid={grid}
                 checkChartAnalytics={props.checkChartAnalytics}
                 {...(viewDashboard.kpi === true ? {kpiEnable: true} : {lineGraph: viewDashboard.line})}
+                {...(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank') ? {...displayItems} : ''}
             />
         </Grid>
     })

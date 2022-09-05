@@ -52,7 +52,7 @@ const options = {
   }, */
   template: function(item, element, data) {
     if (data.isCluster) {
-      return `<span class="cluster-header">${data.items[0].customerName}(${data.items.length})</span>`
+      return `<span class="cluster-header">${data.items[0].clusterHeading}(${data.items.length})</span>`
     } else { 
       return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
     }
@@ -125,6 +125,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
 
   
 
+  const [ timelineRemoveRelease, setTimelineRemoveRelease ] = useState(false)
   const [ timelineRawData, setTimelineRawData ] = useState([])
   const [ timelineItems, setTimelineItems ] = useState([])
   const [ timelineGroups, setTimelineRawGroups] = useState([])
@@ -149,6 +150,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       start: new Date(assetsCustomer.exec_dt),
       customerName: selectedCategory == 'proliferate_inventors' ? customerFirstName : `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
       assetType,
+      clusterHeading: customerFirstName,
       companyName,
       rawData: assetsCustomer,
       className: `asset-type-${assetType} ${assetsCustomer.release_exec_dt != null ? assetsCustomer.partial_transaction == 1 ? 'asset-type-security-release-partial' : 'asset-type-security-release' : ''}`,
@@ -375,7 +377,33 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     setIsLoadingTimelineData(false)
   }, 1000), [ timelineItems ])
 
-  
+  const removeSecurityRelease = (timelineData) => {
+    let removeRelease = []
+    let list = [...timelineData]
+    list.forEach( item => {
+      if(parseInt(item.release_rf_id) > 0) {
+        removeRelease.push(item.release_rf_id);
+        const getOtherRelease = item.all_release_ids
+        if(getOtherRelease != '') {
+          const parseRelease = JSON.parse(getOtherRelease)
+          if(parseRelease.length > 0 ) {
+            parseRelease.forEach(row => removeRelease.push(Number(row.rf_id)))
+          }
+        }
+      } 
+    })
+    if(removeRelease.length > 0) {
+      removeRelease = [...new Set(removeRelease)];
+      
+      removeRelease.forEach( remove => {
+        const findIndex = list.findIndex( item => item.id == remove)
+        if(findIndex !== -1) {
+          list.splice(findIndex, 1)
+        }
+      })  
+    }
+    return list;
+  }
 
   useEffect(() => {
     if (!selectedItem && timelineRef.current) {
@@ -386,6 +414,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
   useEffect(() => {
     timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
   }, [])
+
 
   //Timeline list from server
   useEffect(() => {
@@ -415,9 +444,10 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
               const { data } = await PatenTrackApi.getActivitiesTimelineData([], [], [], search_rf_id) // empty array for company, tabs, customers
               //setIsLoadingTimelineData(false)
               //setTimelineRawGroups(data.groups) //groups
-              setTimelineRawData(data.list) //items
+              let list = removeSecurityRelease(data.list)
+              setTimelineRawData(list) //items
               if(typeof updateTimelineRawData !== 'undefined') {
-                updateTimelineRawData(data.list)
+                updateTimelineRawData(list)
               }
             }       
           } else {
@@ -432,16 +462,18 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
                 const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
                 
                 //setIsLoadingTimelineData(false)
-                setTimelineRawData(data.list)
+                let list = removeSecurityRelease(data.list)
+                setTimelineRawData(list) //items
                 if(typeof updateTimelineRawData !== 'undefined') {
-                  updateTimelineRawData(data.list)
+                  updateTimelineRawData(list)
                 }
               } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null ) {
                 //setIsLoadingTimelineData(true)
                 const { data } = await PatenTrackApi.getShareTimelineList(location.pathname.replace('/', ''))
-                setTimelineRawData(data.list)     
+                let list = removeSecurityRelease(data.list)
+                setTimelineRawData(list) //items
                 if(typeof updateTimelineRawData !== 'undefined') {
-                  updateTimelineRawData(data.list)
+                  updateTimelineRawData(list)
                 }      
                 //setIsLoadingTimelineData(false)            
               }
@@ -470,9 +502,10 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
           PatenTrackApi.cancelForeignAssetTimeline()
           const { data } = await PatenTrackApi.getForeignAssetsTimeline(form)
           //setIsLoadingTimelineData(false)
-          setTimelineRawData(data.list) 
+          let list = removeSecurityRelease(data.list)
+          setTimelineRawData(list) //items
           if(typeof updateTimelineRawData !== 'undefined') {
-            updateTimelineRawData(data.list)
+            updateTimelineRawData(list)
           }
         }
       }

@@ -27,6 +27,9 @@ import clsx from 'clsx'
 import InventionVisualizer from '../AssetsVisualizer/InventionVisualizer'
 import Ptab from '../AssetsVisualizer/LegalEventsContainer/Ptab'
 import LawFirmTimeline from '../AssetsVisualizer/LawFirmTimeline'
+import GeoChart from '../AssetsVisualizer/GeoChart'
+import SankeyChart from '../AssetsVisualizer/SankeyChart'
+import TimelineSecurity from '../AssetsVisualizer/TimelineSecurity'
 
 const IllustrationCommentContainer = ({ 
     cls, 
@@ -284,17 +287,36 @@ const IllustrationCommentContainer = ({
                         :
                         cube === true && maintainenceFrameMode === false && assetIllustration === null
                         ?
-                            <InventionVisualizer 
-                                defaultSize={illustrationBarSize} 
-                                visualizerBarSize={visualizerBarSize} 
-                                analyticsBar={analyticsBar} 
-                                openCustomerBar={openCustomerBar} 
-                                commentBar={commentBar} 
-                                illustrationBar={illustrationBar} 
-                                customerBarSize={customerBarSize} 
-                                companyBarSize={companyBarSize}
-                                type={type} 
-                            />
+                            selectedCategory == 'collaterlized' ?
+                                <TimelineContainer 
+                                    assignmentBar={assignmentBar} 
+                                    assignmentBarToggle={assignmentBarToggle} 
+                                    type={type}
+                                    updateTimelineRawData={setTimelineRawData}
+                                />
+                            :
+                                selectedCategory == 'acquired' ||  selectedCategory == 'divested' ?
+                                    <SankeyChart/>
+                                :
+                                    selectedCategory == 'top_non_us_members' ?
+                                        <GeoChart
+                                            chartBar={chartsBar} 
+                                            openCustomerBar={openCustomerBar} 
+                                            visualizerBarSize={visualizerBarSize}
+                                            type={type}
+                                        />
+                                    :
+                                        <InventionVisualizer 
+                                            defaultSize={illustrationBarSize} 
+                                            visualizerBarSize={visualizerBarSize} 
+                                            analyticsBar={analyticsBar} 
+                                            openCustomerBar={openCustomerBar} 
+                                            commentBar={commentBar} 
+                                            illustrationBar={illustrationBar} 
+                                            customerBarSize={customerBarSize} 
+                                            companyBarSize={companyBarSize}
+                                            type={type} 
+                                        />
                         :
                         dashboardScreen === true &&  type !== 9  
                         ?

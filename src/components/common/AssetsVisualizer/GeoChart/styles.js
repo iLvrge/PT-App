@@ -7,7 +7,7 @@ export default makeStyles(theme => ({
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
-        padding: 16,
+        /* padding: 16, */
         '& .MuiTabs-root':{
           borderBottom: `1px solid ${theme.palette.divider} !important`
         },

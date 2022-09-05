@@ -76,6 +76,7 @@ const GlobalLayout = (props) => {
     const [ toggleOtherPartyButtonType, setToggleOtherPartyButtonType ] = useState(true)
     const [ toggleAssignmentButtonType, setToggleAssignmentButtonType ] = useState(true)
     const [ toggleCustomerButtonType, setToggleCustomerButtonType ] = useState(true)  
+    const [ securedTransactionAssets, setSecuredTransactionAssets ] = useState(false)
     const DEFAULT_SCREEN_SIZE = {
         companyBar: 210,
         typeBar: 0,
@@ -488,6 +489,15 @@ const GlobalLayout = (props) => {
         setDriveTemplateBarSize( driveTemplateMode === true ? 200 : 0)
         editorBar()
     }, [ driveTemplateMode ])
+
+
+
+    useEffect(()=>{
+        if(process.env.REACT_APP_ENVIROMENT_MODE === 'PRO') {
+            loginRedirect(authenticated)
+        }        
+        // Fetch data for logged in user using token
+    },[authenticated]);
 
     /* const scrollInitial = () => {  
         if(isMobile) {
@@ -1141,6 +1151,15 @@ const GlobalLayout = (props) => {
         }
     }
 
+    const handleSecuredTransactionAssets = () => {
+        if(!securedTransactionAssets === false){
+            setPartyBarSize('100%')
+        } else {
+            setPartyBarSize('50%')
+        }
+        setSecuredTransactionAssets(!securedTransactionAssets)
+    }
+
     const topToolBar = [
         {
             tooltip: 'Settings',
@@ -1251,6 +1270,17 @@ const GlobalLayout = (props) => {
         }
     ]
 
+    const externalToolBar = [
+        {
+            tooltip: 'Create a New Secured Transaction',
+            bar: false,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleSecuredTransactionAssets,
+            t: 45,
+            label: 'Create a New Secured Transaction',
+            margin: true,
+        },
+    ]
+
     const mobileWrapper = [{
         component: MobileScreen,
         type: props.type,
@@ -1331,15 +1361,10 @@ const GlobalLayout = (props) => {
         assetFilesBar,
         driveTemplateBarSize,
         driveTemplateFrameMode,
-        driveTemplateMode
+        driveTemplateMode,
+        securedTransactionAssets
     }]
-
-    useEffect(()=>{
-        if(process.env.REACT_APP_ENVIROMENT_MODE === 'PRO') {
-            loginRedirect(authenticated)
-        }        
-        // Fetch data for logged in user using token
-    },[authenticated]);
+ 
     
     const childrenWithProps = React.Children.map(props.children, child => {
         if (React.isValidElement(child)) {
@@ -1420,7 +1445,8 @@ const GlobalLayout = (props) => {
                 assetFilesBar,
                 driveTemplateBarSize,
                 driveTemplateFrameMode,
-                driveTemplateMode
+                driveTemplateMode,
+                securedTransactionAssets
             }) 
         }
         return child
@@ -1464,6 +1490,16 @@ const GlobalLayout = (props) => {
                                             topToolBar.map( (item, index) => (
                                                 <NavigationIcon key={index} {...item} />
                                             ))
+                                        }
+
+                                        {
+                                            profile?.user && profile.user?.organisation && profile.user.organisation.organisation_type == 'Bank' && props.type != 9
+                                            ?
+                                                externalToolBar.map( (item, index) => (
+                                                    <NavigationIcon key={index} {...item} />
+                                                ))
+                                            :
+                                                ''
                                         }
                                     </div>
                                     <div className={clsx(classes.flex, classes.bottom)}>

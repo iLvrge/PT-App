@@ -66,6 +66,7 @@ import IllustrationPdf from '../common/AssetDetailsContainer/IllustrationPdf'
 import PatenTrackApi from '../../api/patenTrack2'
 import LawFirmTable from '../common/LawFirmTable';
 import FamilyContainer from '../common/AssetsVisualizer/FamilyContainer';
+import SecuredAssets from '../common/SecuredAssets';
 
 const GlobalScreen = ({
     type,
@@ -140,7 +141,8 @@ const GlobalScreen = ({
     assetFilesBar,
     driveTemplateBarSize,
     driveTemplateFrameMode,
-    driveTemplateMode
+    driveTemplateMode,
+    securedTransactionAssets
 }) => {
     const classes = useStyles() 
     let location = useLocation();
@@ -478,7 +480,7 @@ const GlobalScreen = ({
                         { 
                             openOtherPartyBar === true || openInventorBar === true
                             ? 
-                                <>
+                                <React.Fragment>
                                     {/* <ArrowButton arrowId={`arrow_parties`} handleClick={handleOtherPartyBarOpen} buttonType={toggleOtherPartyButtonType} buttonVisible={otherPartyButtonVisible}/> */}
                                     <SplitPane
                                         className={classes.splitPane}
@@ -511,13 +513,21 @@ const GlobalScreen = ({
                                                     customerType={1}
                                                 />
                                             :
-                                            <div></div>
+                                                securedTransactionAssets === true 
+                                                ?
+                                                    <SecuredAssets
+                                                        sheetName={sheetName} 
+                                                        handleSheetName={handleTextChange}
+                                                    />
+                                                :
+                                                    <div></div>
                                         }
                                     </SplitPane>
-                                </>
+                                </React.Fragment>
                             : 
                             ''
                         }
+                        
                     </div>
                     <SplitPane
                         className={classes.splitPane}
@@ -777,6 +787,7 @@ const GlobalScreen = ({
                                                         setAnalyticsBar={setAnalyticsBar}
                                                         setChartBar={setChartBar}
                                                         fullScreen={handleClickOpenFullscreen}
+                                                        pdfModal={true}
                                                         gap={gap}
                                                         viewOnly={true}
                                                     />

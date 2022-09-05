@@ -351,6 +351,7 @@ const AssetDetailsContainer = ({
                           illustrationBar={illustrationBar}
                           visualizerBarSize={visualizerBarSize} 
                           type={type}
+                          {...( selectedCategory === 'pay_maintainence_fee' || selectedCategory === 'ptab'  ? {activeTab: selectedCategory === 'pay_maintainence_fee' ? 3 : 2} : {})} 
                         />
                     ) : (
                       <InventionVisualizer 

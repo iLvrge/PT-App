@@ -18,9 +18,10 @@ import PatenTrackApi from '../../api/patenTrack2'
 import themeMode from '../../themes/themeMode'
 import AddToolTip from './AddToolTip'
 import { setConnectionBoxView, setConnectionData, setPDFFile, setPDFView } from '../../actions/patenTrackActions'
-import { retrievePDFFromServer } from '../../actions/patentTrackActions2'
+import { retrievePDFFromServer, setAssetsIllustration, setSelectAssignmentCustomerName } from '../../actions/patentTrackActions2'
 import PdfViewer from '../common/PdfViewer'
 import FullScreen from '../common/FullScreen'
+import { setDashboardPanel } from '../../actions/uiActions'
 
 
 /**
@@ -74,6 +75,7 @@ const TimelineChart = (props) => {
     const [ tooltipItem, setToolTipItem] = useState([])
     const [ itemData, setItemData ] = useState([])
     const [ timeInterval, setTimeInterval] = useState(null)
+    const [ selectTransaction, setSelectTransaction] = useState(null)
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
     const screenWidth = useSelector( state => state.patenTrack.screenWidth)
@@ -130,14 +132,26 @@ const TimelineChart = (props) => {
 
     const onSelect = useCallback((properties) => {
         const {items, event} = properties
-        const {nodeName} = event.target.parentNode
-        const item = timelineRef.current.itemsData.get(items)
+        const {nodeName} = event.target.parentNode 
+        const item = timelineRef.current.itemsData.get(items) 
         if(item.length > 0) {
+            console.log('onSelect', item);
             const {security_pdf, release_pdf,  rawData} = item[0];
-            const {all_release_ids} = rawData
-            if(all_release_ids != null && all_release_ids != '' ) {
+            const {all_release_ids, id} = rawData
+            /* if(all_release_ids != null && all_release_ids != '' ) {
                 setOpenModal(true)
                 setItemData(JSON.parse(all_release_ids))
+            } */
+            if(selectTransaction != id) {
+                setSelectTransaction(id)
+                dispatch(setDashboardPanel(true))  
+                props.checkChartAnalytics(null, null, true)
+                dispatch(setAssetsIllustration({ type: "transaction", id }));
+            } else {
+                setSelectTransaction(null)
+                dispatch(setDashboardPanel(false))  
+                dispatch(setAssetsIllustration(null))
+                props.checkChartAnalytics(null, null, false)
             }
 
             /* const pdfFile = nodeName == "TT" ? security_pdf : nodeName == "EM" ? release_pdf : ''
@@ -163,6 +177,9 @@ const TimelineChart = (props) => {
                     ) 
                 }
             } */
+        } else {
+            setSelectTransaction(null)
+            props.checkChartAnalytics(null, null, false)
         }
     })
 

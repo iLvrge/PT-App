@@ -14,6 +14,8 @@ import themeMode from '../../../../themes/themeMode';
 import axios from 'axios' 
 
 import useStyles from './styles'
+import PdfViewer from '../../PdfViewer'
+import FullScreen from '../../FullScreen'
 
 const IllustrationContainer = ({ 
   asset, 
@@ -28,7 +30,8 @@ const IllustrationContainer = ({
   setChartBar,
   fullScreen,
   onHandleChartBarSize,
-  viewOnly
+  viewOnly,
+  pdfModal
  }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -37,6 +40,7 @@ const IllustrationContainer = ({
   const [ lineId, setLineId ] = useState(0)
   const [ linkId, setLinkId ] = useState(null)
   const targetRef = useRef()
+  const [ fullModalScreen, setFullModalScreen ] = useState(false)
   const [ parent_width, setParentWidth ] = useState(0)
   const [ bottomToolbarPosition, setBottomToolbarPosition ] = useState(0)
   const [ topPosition, setTopPosition ] = useState(0)  
@@ -45,7 +49,18 @@ const IllustrationContainer = ({
   const showThirdParties = useSelector(state => state.ui.showThirdParties)
   const isLoadingAssetIllustration = useSelector(state => state.patenTrack2.loadingAssetIllustration)
   const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
-  
+
+  const fullScreenItems = [
+    {
+      id: 1,
+      label: '',
+      component: PdfViewer,
+      display: false,
+      fullScreen: false,
+      resize: false,
+      standalone: true,
+    }
+  ] 
   const updateContainerWidth = useCallback(() => {
     if (targetRef.current) {
       
@@ -118,6 +133,9 @@ const IllustrationContainer = ({
       /* if( chartsBar === false ) {
         chartsBarToggle(!chartsBar)
       } */
+      if(typeof pdfModal !== 'undefined' && pdfModal == true) {
+        setFullModalScreen(true)
+      }
       dispatch(
         setPDFView(true)
       )
@@ -208,6 +226,9 @@ const IllustrationContainer = ({
       if((linkId != obj.popuptop) || (obj.id != lineId && linkId == obj.popuptop) ) {
         setLinkId(obj.popuptop)
         setClick(1)
+        if(typeof pdfModal !== 'undefined' && pdfModal == true) {
+          setFullModalScreen(true)
+        }
         dispatch(
           toggleUsptoMode(false)
         )
@@ -326,6 +347,15 @@ const IllustrationContainer = ({
                   themeMode={themeMode}
                   copyrights={true}   
                 /> 
+                {
+                  typeof pdfModal !== 'undefined' && pdfModal === true && fullScreen === true && (
+                    <FullScreen 
+                      componentItems={fullScreenItems} 
+                      showScreen={fullModalScreen} 
+                      setScreen={setFullModalScreen}
+                    />
+                  ) 
+                }
               </ErrorBoundary>                          
             )
           )

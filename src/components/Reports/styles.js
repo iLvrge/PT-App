@@ -524,25 +524,34 @@ export default makeStyles(theme => ({
     itemContainer: {
       position: 'relative',
       '& .MuiTypography-root': {
-        lineHeight: 1
+        lineHeight: 1,
+        height: 20,
       }
     },
     itemHeading: {
       display: 'inline-block',
       width: '70%',
       overflow: 'hidden',
-      /* whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis', */
       height: 18,
       marginRight: 5,
-      fontSize: '1.2rem'
+      fontSize: '1.2rem',
+      position: 'absolute',
+      left: 0,
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis'
+    },
+    wraper:{
+      /* whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis', */
     },
     itemText:{
       position: 'absolute',
       top: 0,
       width: '25%',
       textAlign: 'right',
-      fontSize: '1.2rem'
+      fontSize: '1.2rem',
+      height: 18,
+      right: 0
     },
     timelineProcessingIndicator: {
       position: 'absolute',

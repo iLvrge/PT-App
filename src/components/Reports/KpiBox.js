@@ -13,6 +13,13 @@ import AddToolTip from './AddToolTip';
 const KpiBox = (props) => {
     const classes = useStyles();
     const profile = useSelector(store => (store.patenTrack.profile))
+    const [addWrapper, setAddWrapper] = useState(true)
+
+
+    const onHandleExample = () => {
+        setAddWrapper(!addWrapper)
+        props.handleClick(props.id)
+    }
 
     const ShowTable = (props) => {
         if(props.data.length === 0) return ''
@@ -27,7 +34,7 @@ const KpiBox = (props) => {
                                         variant="body2" 
                                         component="div"
                                     >
-                                        <span className={classes.itemHeading} title={item.name}>{item.name != undefined && item.name != null ? capitalAllWords(item.name.toLowerCase()) : ''}:</span><span className={classes.itemText}>{numberWithCommas(item.number)}</span>
+                                        <span className={clsx(classes.itemHeading, {[classes.wraper]: addWrapper})} title={item.name}>{item.name != undefined && item.name != null ? capitalAllWords(item.name.toLowerCase()) : ''}</span><span className={classes.itemText}>{numberWithCommas(item.number)}</span>
                                     </Typography>                                    
                                 </ListItemText>
                             </ListItem>
@@ -58,7 +65,7 @@ const KpiBox = (props) => {
                         data={props.card.list}
                     />
                 :
-                    [30, 31, 32, 33, 34, 36, 37].includes(props.card.type)
+                    [30, 31, 32, 33, 34, 36, 37, 17, 26].includes(props.card.type)
                     ?
                         <React.Fragment>
                             <Typography
@@ -116,7 +123,7 @@ const KpiBox = (props) => {
                     >
                         <IconButton 
                             size="small" 
-                            onClick={() => props.handleClick(props.id)} 
+                            onClick={onHandleExample} 
                             className={clsx(classes.exampleButton, props.active === props.id ? classes.active : '')}
                         >
                             <AutoAwesomeIcon />

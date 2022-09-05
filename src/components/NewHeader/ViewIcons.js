@@ -35,7 +35,6 @@ const ViewIcons = (props) => {
     const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected);
     const SHARE_URL_MESSAGE = 'A sharing URL was added to your clipboard.'
 
-    console.log('button', assetButton, transactionButton)
     const changeGraph = async(flag) => {
         //setCardList(LIST)
         onHandleDashboard()
@@ -268,7 +267,7 @@ const ViewIcons = (props) => {
                     <Speed/> 
                 </IconButton>
             </AddToolTip>
-            <AddToolTip
+           {/*  <AddToolTip
                 tooltip={'Changes in matters requiring attention along a timeline.'}
                 placement='bottom'
             >
@@ -279,7 +278,7 @@ const ViewIcons = (props) => {
                 >
                     <AutoGraph/>
                 </IconButton> 
-            </AddToolTip>
+            </AddToolTip> */}
             <AddToolTip
                 tooltip={'Transactional activities such as acquisition, divestitures, collateralization and releases.'}
                 placement='bottom'
@@ -296,7 +295,7 @@ const ViewIcons = (props) => {
                 profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'
                 && (
                     <React.Fragment>
-                        <AddToolTip
+                        {/* <AddToolTip
                             tooltip={'Technologies covered by the patent portfolio as they evolved.'}
                             placement='bottom'
                         >
@@ -333,7 +332,7 @@ const ViewIcons = (props) => {
                                     <path d="M23,6l-4-3.969v2L1,4v9h5.5C6.776,13,7,13.224,7,13.5v6.531H6L8,22l2-1.969H9v-7C9,11.928,8.103,11,7,11h5	c1.105,0,2,0.895,2,2v2.031h-2l3.586,3.954L19,15.031h-2V12.5c0-2.481-2.019-4.5-4.5-4.5H19v2.031L23,6z"/>
                                 </svg>
                             </IconButton>
-                        </AddToolTip> 
+                        </AddToolTip>  */}
                         <AddToolTip
                             tooltip={'All Assets (Since 1998)'}
                             placement='bottom'

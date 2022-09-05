@@ -17,6 +17,7 @@ import {
     setSelectedAssetsPatents,
     setAssetsIllustration,
     getAssetsAllTransactionsEvents,
+    setSelectAssignments,
 } from '../../../actions/patentTrackActions2'
 
 import {
@@ -60,6 +61,7 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
     const assetTypeCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies)
     const assetTypeAssignmentAssets = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
+    const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
 
     const COLUMNS = [ 
         {
@@ -119,6 +121,11 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
 
     const onHandleClickRow = useCallback((e,  row) => {
         e.preventDefault()
+        if(dashboardScreen === true) {
+            setSelectedRow([row.rf_id])
+            dispatch(setSelectedAssetsTransactions([row.rf_id]))
+            dispatch(setSelectAssignments([row.rf_id]))
+        }
         /* getTransactionData(dispatch, row.rf_id) */
     }, [ dispatch, selectItems, currentSelection ])
 
