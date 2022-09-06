@@ -818,6 +818,10 @@ class PatenTrackApi {
     }
   }
 
+  static getFilledAssets(formData) {
+    return axios.post(`${base_new_api_url}/dashboards/filed_assets_events`, formData, getFormUrlHeader())
+  }
+
   static getDashboardPartiesData(formData) {
     return axios.post(`${base_new_api_url}/dashboards/parties`, formData, getFormUrlHeader())
   }

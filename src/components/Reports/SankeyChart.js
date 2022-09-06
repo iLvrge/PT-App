@@ -24,7 +24,7 @@ const SankeyChart = (props) => {
     
     useEffect(() => {
         const getPartiesData = async() => {
-            if(loading === false) {    
+            /* if(loading === false) {    
                 setLoading(true)
                 setLoadingAssingor(true) 
                 setData([])
@@ -67,6 +67,32 @@ const SankeyChart = (props) => {
                     setAssignorData(loadAssignorData)
                 }
                 setLoadingAssingor(false)
+            } */
+            if(loading === false) {    
+                setLoading(true)
+                setLoadingAssingor(true) 
+                setData([])
+                setAssignorData([])
+                setAssigneeRawData([])
+                setAssignorRawData([])
+                const formData = new FormData()
+                formData.append('selectedCompanies', JSON.stringify(selectedCompanies));                
+                const {data} = await PatenTrackApi.getFilledAssets(formData)
+                const loadData = []
+                if(data.length > 0) {
+                    setAssigneeRawData(data)
+                    loadData.push([{ type: 'string', label: "From"}, { type: 'string', label: "To"}, { type: 'number', label: "Weight"}, { type: 'string', role: 'tooltip'}])
+                    data.forEach( item => {
+                        loadData.push([
+                            item.code == 'M1551' ? item.asset : item.asset_event,
+                            item.asset_event,
+                            5,
+                            `<p style="padding: 10px; margin: 0px;width: 238px;">${item.asset} -> ${item.code == 'M1551' ? '4th year maintainence' : item.code == 'M2551' ? '8th year maintainence' : '12th year maintainence'}</p>`
+                        ]) 
+                    });    
+                    setData(loadData)
+                }
+                setLoading(false)
             }
         }
         getPartiesData()
@@ -88,7 +114,7 @@ const SankeyChart = (props) => {
     return (
         <Paper sx={{p: 2, overflow: 'auto'}} className={clsx(classes.container, classes.containerTop)} square>
             {
-                !loading && !loadingAssignor && data.length === 0 && assignorData.length === 0 && (
+                !loading && data.length === 0 && (
                     <TitleBar title="The company had no acquistions and divestitures of patent assets filled after 1997:" enablePadding={false} underline={false}/>
                 )
             }            
@@ -97,7 +123,7 @@ const SankeyChart = (props) => {
                 ?
                     data.length > 0 && (
                         <div className={clsx(classes.child, {[classes.maxChildHeight]: assignorData.length > 0 ? true : false})}>
-                            <TitleBar title="Acquistions:" enablePadding={false}/>
+                            {/* <TitleBar title="Acquistions:" enablePadding={false}/> */}
                             <DisplayChart data={data} tooltip={true} type={1} onSelect={handleSelection}/>
                         </div>   
                     ) 
@@ -106,7 +132,7 @@ const SankeyChart = (props) => {
                     <Loader />
             }           
             
-            {
+            {/* {
                 !loadingAssignor
                 ?
                     assignorData.length > 0 && (
@@ -117,7 +143,7 @@ const SankeyChart = (props) => {
                     )
                 :
                     <Loader />  
-            }
+            } */}
         </Paper>         
     )
 }
