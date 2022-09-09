@@ -45,7 +45,8 @@ import {
 import {
     setConnectionBoxView,
     setPDFView,
-    setPDFFile
+    setPDFFile,
+    setConnectionData
   } from "../../../actions/patenTrackActions";
 
 import {
@@ -134,6 +135,7 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
   const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
   const channel_id = useSelector(state => state.patenTrack2.channel_id)
   const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
+  const connectionBoxView = useSelector(state => state.patenTrack.connectionBoxView)
 
   const COLUMNS = [
     {
@@ -585,6 +587,12 @@ const onHandleClickRow = useCallback(
         dispatch(setSelectedAssetsTransactions([]))
         dispatch(setSelectedAssetsPatents([]))   
         dispatch(
+          setConnectionBoxView(false)
+        )
+        dispatch(
+          setConnectionData({})
+        )
+        dispatch(
           setPDFFile(
             { 
               document: '',  
@@ -599,13 +607,17 @@ const onHandleClickRow = useCallback(
         dispatch(toggleLifeSpanMode(true));
         dispatch(toggleFamilyMode(false));
         dispatch(toggleFamilyItemMode(false));
+        console.log("connectionBoxView", connectionBoxView)
+        if(connectionBoxView === true) {
+          checkChartAnalytics(null, null, false)
+        }
         //dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, []))
         //dispatch(toggleLifeSpanMode(false))
         //dispatch(toggleFamilyItemMode(false))
       }
     }
   },
-  [dispatch, dashboardScreen, selectedCategory, selectItems, currentSelection, selectedRow, defaultLoad, search_string, display_clipboard],
+  [dispatch, connectionBoxView, dashboardScreen, selectedCategory, selectItems, currentSelection, selectedRow, defaultLoad, search_string, display_clipboard],
 );
 
 const findChannelID = useCallback((rfID) => {

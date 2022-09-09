@@ -247,7 +247,13 @@ class PatentLink extends React.Component {
           .type(d3.symbolTriangle)
           .size(18),
       )
-      .attr('fill', this.props.data.color);
+      .attr('fill', this.props.data.color)
+      .on('click', () => {
+        //passing referenced data from json.popup and handleComment
+        //this.props.comment is a handler
+        //this.props.commentContent is the comment content (string or HTML (have to be parsed))
+        this.props.onClickConnectionLine(this.props.data)
+      });
   }
 
   updatePositions() {

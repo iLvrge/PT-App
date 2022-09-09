@@ -306,9 +306,13 @@ export default makeStyles(theme => ({
       background: 'linear-gradient(to right,  #FFFF00 0%,#FFFF00 50%,#E60000 50%,#E60000 100%)',
       opacity: '0.5',
     },
+    '& .vis-item.vis-range.asset-type-default':{
+      backgroundColor: '#228DE8 !important'
+    },
     '& .vis-item.vis-range':{
       border: 0,
       '& .vis-item-overflow':{
+        overflow: 'visible',
         position: 'unset',
         minHeight: 28,
         '& .vis-item-content':{

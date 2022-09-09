@@ -288,7 +288,7 @@ const Reports = (props) => {
     const KPI_LIST = [
         {
             title: 'Owned',
-            tooltip: 'The USA patents assigned to the company from its inventors, and patents acquired by the company, minus those that were sold, expired  and abandoned.',
+            tooltip: 'The USA assets assigned to the company from its inventors, plus assets acquired by the company, minus those that were sold, expired  and abandoned.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -298,7 +298,7 @@ const Reports = (props) => {
         },
         {
             title: 'Filled',
-            tooltip: 'The USA patents acquired by the company, minus those that were sold, expired and abandoned',
+            tooltip: 'The USA assets acquired by the company, minus those that were sold, expired and abandoned',
             number: 0,
             other_number: 0,
             patent: '',
@@ -308,7 +308,7 @@ const Reports = (props) => {
         }, 
         {
             title: 'Acquired',
-            tooltip: 'The USA patents assigned to the company from its inventors, minus those that were sold, expired  and abandoned',
+            tooltip: 'The USA assets assigned to the company from its inventors and others, minus those that were sold, expired or abandoned',
             number: 0,
             other_number: 0,
             patent: '',
@@ -328,7 +328,7 @@ const Reports = (props) => {
         },
         {
             title: 'Maintenance Fee Due',
-            tooltip: 'Expected annual maintenance fees to be paid according to the company’s status and number of non-expired parents it currently owns.',
+            tooltip: 'Maintenance fees to be paid in the next twelve months.',
             number: 0,
             patent: '',
             application: '',

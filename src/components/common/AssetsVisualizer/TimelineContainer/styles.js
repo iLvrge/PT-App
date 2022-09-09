@@ -253,10 +253,10 @@ export default makeStyles(theme => ({
     '& .vis-item.vis-range.asset-type-lending':{
       backgroundColor: '#FFAA00 !important'
     },
-    '& .vis-item.vis-range.asset-type-security-release':{
+    '& .vis-item.vis-range.asset-type-security-release ':{
       backgroundColor: '#70A800 !important'
     },
-    '& .vis-item.vis-range.asset-type-security-release-partial':{
+    '& .vis-item.vis-range.asset-type-security-release-partial, .vis-item.vis-range.asset-type-default':{
       backgroundColor: '#228DE8 !important'
     },
     '& .vis-item.vis-range':{

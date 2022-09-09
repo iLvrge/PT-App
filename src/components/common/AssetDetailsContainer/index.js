@@ -204,7 +204,6 @@ const AssetDetailsContainer = ({
       }
     }
   };
-  
   return (
     <div style={{ height: "100%" }} className={classes.root}>
       {
@@ -314,6 +313,7 @@ const AssetDetailsContainer = ({
                         openCustomerBar={openCustomerBar} 
                         visualizerBarSize={visualizerBarSize}
                         type={type}
+                        titleBar={true}
                       />
                     :
                     timelineScreen === true  && assetIllustration == null

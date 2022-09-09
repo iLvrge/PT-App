@@ -74,7 +74,7 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
         return row
     }
 
-    const onSelect = useCallback( async properties => {
+    /* const onSelect = useCallback( async properties => {
         const {items, event} = properties
         const {nodeName} = event.target.parentNode
         const item = timelineRef.current.itemsData.get(items)
@@ -104,7 +104,7 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
                 console.log(e)
             }
         }
-    });
+    }); */
 
     /**
     * on Itemover for the tooltip data
@@ -145,7 +145,7 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
             if(tootlTip === item.id) {      
                 const color = '#fff'   
                 const height = window.innerHeight|| document.documentElement.clientHeight || document.body.clientHeight;   
-                let tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.clientY - 400 }px;left:${event.clientX + 20 }px;'>`
+                let tootltipTemplate = `<div class='custom_tooltip' style='background:#1E2025;border: 1px solid rgba(255, 255, 255, 0.12) ;top:${event.clientY - 400 < 0 ? 0 : event.clientY - 400  }px;left:${event.clientX + 20 }px;'>`
                 const { otherInfo } = item
                 Object.keys(otherInfo).map(key => {
                     if(Array.isArray(otherInfo[key])) {
@@ -265,9 +265,11 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
             }
         }
         /*console.log(items.current, start, end) */
-        
+        start = new moment(new Date('1900-01-01'))
+        end =  new moment(new Date('2200-01-01'))
         timelineRef.current.setItems(items.current)
-        timelineRef.current.setOptions({ ...options, start, end, min: start, max: end })
+        /* timelineRef.current.setOptions({ ...options, start, end, min: start, max: end }) */
+        timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1900-01-01')), max: new moment(new Date('2200-01-01'))})
     }, [ timelineRawData, isLoadingTimelineRawData, timelineContainerRef ])
 
     /**
@@ -275,16 +277,16 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
     */
     useEffect(() => {
         timelineRef.current.setOptions(options) 
-        timelineRef.current.on('select', onSelect)
+        /* timelineRef.current.on('select', onSelect) */
         timelineRef.current.on('itemover', onItemover)
         timelineRef.current.on('itemout', onItemout)
         return () => {
-            timelineRef.current.off('select', onSelect)
+           /*  timelineRef.current.off('select', onSelect) */
             timelineRef.current.off('itemover', onItemover) 
             timelineRef.current.off('itemout', onItemout)
             resetTooltipContainer()
         } 
-    }, [ onSelect, onItemover, onItemout ]) 
+    }, [ /* onSelect, */ onItemover, onItemout ]) 
 
     return(
         <Paper className={classes.root}>   

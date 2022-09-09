@@ -291,20 +291,6 @@ const ViewIcons = (props) => {
                     <ViewTimeline/>
                 </IconButton> 
             </AddToolTip>
-            <AddToolTip
-                tooltip={'Sources from which patents were obtained, and divestitures.'}
-                placement='bottom'
-            >
-                <IconButton 
-                    size="small"
-                    className={clsx(classes.actionIcon, {[classes.active]: props.dashboardScreen === true && viewDashboard.sankey})}
-                    onClick={onHandleSankey}
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" className={clsx('MuiSvgIcon-root MuiSvgIcon-fontSizeMedium')} viewBox="0 0 24 24">
-                        <path d="M23,6l-4-3.969v2L1,4v9h5.5C6.776,13,7,13.224,7,13.5v6.531H6L8,22l2-1.969H9v-7C9,11.928,8.103,11,7,11h5	c1.105,0,2,0.895,2,2v2.031h-2l3.586,3.954L19,15.031h-2V12.5c0-2.481-2.019-4.5-4.5-4.5H19v2.031L23,6z"/>
-                    </svg>
-                </IconButton>
-            </AddToolTip> 
             {
                 profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'
                 && (

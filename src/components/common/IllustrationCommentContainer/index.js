@@ -304,6 +304,7 @@ const IllustrationCommentContainer = ({
                                             openCustomerBar={openCustomerBar} 
                                             visualizerBarSize={visualizerBarSize}
                                             type={type}
+                                            titleBar={true}
                                         />
                                     :
                                         <InventionVisualizer 
