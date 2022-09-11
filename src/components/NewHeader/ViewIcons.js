@@ -24,6 +24,7 @@ const ViewIcons = (props) => {
     const viewDashboard = useSelector(state => state.ui.viewDashboard) 
     const assetButton = useSelector(state => state.ui.assetButton) 
     const transactionButton = useSelector(state => state.ui.transactionButton) 
+    const loadingDashboardData = useSelector( state => state.ui.loadingDashboardData);
     const category = useSelector(state => state.patenTrack2.selectedCategory)
     const maintainencePatentsList = useSelector(state => state.patenTrack2.maintainenceAssetsList.list)
     const mainCompaniesSelected = useSelector(state => state.patenTrack2.mainCompaniesList.selected)
@@ -235,7 +236,7 @@ const ViewIcons = (props) => {
             }
         }        
     }, [ dispatch, category, selectedMaintainencePatents, assetTypeAssignmentAssetsSelected, selectedAssetsTransactions ])
-
+     
     return(
         <React.Fragment>
             {
@@ -245,27 +246,34 @@ const ViewIcons = (props) => {
                         tooltip={'Key Performance Indicators such as the number of patents owned by the company.'}
                         placement='bottom'
                     >
-                        <IconButton 
-                            size="small"
-                            className={clsx(classes.actionIcon, {[classes.active]: props.dashboardScreen === true && viewDashboard.kpi})}
-                            onClick={onHandleKPI}
-                        >
-                            <AppsOutage/>
-                        </IconButton> 
+                        <span>
+                            <IconButton 
+                                size="small"
+                                className={clsx(classes.actionIcon, {[classes.active]: props.dashboardScreen === true && viewDashboard.kpi})}
+                                onClick={onHandleKPI}
+                                disabled={loadingDashboardData}
+                            >
+                                <AppsOutage/>
+                            </IconButton> 
+                        </span>
                     </AddToolTip>
                 )
             }
+            
             <AddToolTip
                 tooltip={'Matters that require attention such as patents with defective ownership.'}
                 placement='bottom'
             >
-                <IconButton 
-                    size="small"
-                    className={clsx(classes.actionIcon, {[classes.active]:  props.dashboardScreen === true && !viewDashboard.line && viewDashboard.jurisdictions == false && viewDashboard.invention === false && viewDashboard.sankey === false && viewDashboard.kpi === false && viewDashboard.timeline === false})}
-                    onClick={() => changeGraph(false)}
-                >
-                    <Speed/> 
-                </IconButton>
+                <span>
+                    <IconButton 
+                        size="small"
+                        className={clsx(classes.actionIcon, {[classes.active]:  props.dashboardScreen === true && !viewDashboard.line && viewDashboard.jurisdictions == false && viewDashboard.invention === false && viewDashboard.sankey === false && viewDashboard.kpi === false && viewDashboard.timeline === false})}
+                        onClick={() => changeGraph(false)}
+                        disabled={loadingDashboardData}
+                    >
+                        <Speed/> 
+                    </IconButton>
+                </span>
             </AddToolTip>
            {/*  <AddToolTip
                 tooltip={'Changes in matters requiring attention along a timeline.'}

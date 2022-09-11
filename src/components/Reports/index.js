@@ -15,7 +15,8 @@ import {
     setPatentScreen, 
     toggleFamilyItemMode,
     updateViewDashboard,
-    setViewDashboardIntial} from '../../actions/uiActions'
+    setViewDashboardIntial,
+    setLoadingDashboardData} from '../../actions/uiActions'
 import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId,  retrievePDFFromServer, setAssetTypesSelect, setSelectedAssetsPatents, getAssetDetails  } from '../../actions/patentTrackActions2'
 import { assetLegalEvents, setAssetLegalEvents, setPDFView, setPDFFile, setConnectionData, setConnectionBoxView, assetFamilySingle, assetFamily,   } from '../../actions/patenTrackActions';
 import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar'
@@ -575,10 +576,10 @@ const Reports = (props) => {
         }
     }, [dashboardPanelActiveButtonId])
 
-    useEffect(() => {
+    useEffect(() => { 
         if(viewDashboard.timeline === true) {
             setTimelineList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
-        } else if(viewDashboard.kpi === true || viewDashboard.line === true || viewDashboard.gauge === true){
+        } else if(viewDashboard.kpi === true || viewDashboard.line === true || viewDashboard.gauge === true){ 
             addCardList(viewDashboard.kpi === true ? 1 : '')  
         } 
     }, [viewDashboard])
@@ -590,7 +591,7 @@ const Reports = (props) => {
                     callTimelineData()
                 } else {
                     findDashboardData()
-                }                
+                }
             }
         }
     }, [cardList, timelineList])
@@ -630,9 +631,9 @@ const Reports = (props) => {
     useEffect(() => {
         if(typeof props.dashboardData !== 'undefined' && props.dashboardData.length > 0) {
             setLoading(false)
+            dispatch(setLoadingDashboardData(false))
             setCardList(props.dashboardData)
             if(typeof props.dashboardTimelineData !== 'undefined' && props.dashboardTimelineData.length > 0) {
-                setLoading(false)           
                 setTimelineList(props.dashboardTimelineData)
             }
         }  else {
@@ -676,6 +677,7 @@ const Reports = (props) => {
             const list = [];
             let totalRecords = 0;
             setLoading(true)
+            dispatch(setLoadingDashboardData(true))
             resetAll(false)
             props.checkChartAnalytics(null, null, false) 
             dispatch(setViewDashboardIntial(true))
@@ -774,11 +776,13 @@ const Reports = (props) => {
                 } 
             }
             setLoading(false)           
+            dispatch(setLoadingDashboardData(false))
         }
     }
 
     const callTimelineData = useCallback(async() => {
         setLoading(true)
+        dispatch(setLoadingDashboardData(true))
         resetAll(false)
         setTimeLineLoading(true)
         const cancelRequest = await PatenTrackApi.cancelAllDashboardTimelineToken()  
@@ -812,6 +816,7 @@ const Reports = (props) => {
             setTimeLineLoading(false)
         })
         setLoading(false)   
+        dispatch(setLoadingDashboardData(false))
     }, [timelineList, selectedCompanies, selectedAssetCompanies, profile] )
 
     const resetAll = (flag) => {

@@ -34,6 +34,12 @@ const uiReducer = (state = initialState.ui, action) => {
         dashboardPanel: action.flag 
       }
     }
+    case types.SET_LOADING_DASHBOARD_DATA: {
+      return { 
+        ...state,
+        loadingDashboardData: action.flag 
+      }
+    }
     case types.SET_SELECTED_TIMELINE_ITEM: {
       return {
         ...state,
@@ -120,7 +126,7 @@ const uiReducer = (state = initialState.ui, action) => {
     case types.SET_DASHBOARD_VIEW_INTIAL: {
       return {
         ...state,
-        viewInitial: action.flag,
+        viewInitial: action.flag,  
       }
     }
     case types.SET_ASSET_BUTTON: {

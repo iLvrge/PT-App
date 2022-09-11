@@ -24,11 +24,7 @@ const options = {
     horizontalScroll: true,
     verticalScroll: true,
     zoomFriction: 30,
-    zoomMin: 1000 * 60 * 60 * 24 * 7,    
-    template: function(item, element, data) { 
-    return `<span style="width:100%;display:block;" class="${data.assetType}">${data.customerName}</span>`
-      /*return `<div class='first'><div class='textColumn'><h4>${data.rawData.name} (${data.rawData.status})</h4></div><div class='textColumn'><h4>Filed: </h4> ${moment(new Date(data.rawData.start)).format(DATE_FORMAT)}</div><div class='textColumn'><h4>Status: </h4> ${data.rawData.status} (${moment(new Date(data.rawData.end)).format(DATE_FORMAT)})</div></div>`*/
-    },  
+    zoomMin: 1000 * 60 * 60 * 24 * 7,   
 } 
 
 
@@ -53,11 +49,10 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
     const convertDataToItem = (item) => {
         const assetType = 'default'
         const row = {        
-            type: 'point',
             id: item.id,
             content: '',
-            start: new Date(item.start),
-            customerName: `${item.name} (${item.status})`,
+            start: item.start,
+            content: `${item.name} (${item.status})`,
             assetType,
             rawData: item,
             zoomMin: 3456e5,
@@ -69,7 +64,7 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
         }
         if(typeof item.end !== 'undefined'){            
             row.type = 'range';
-            row.end = item.end != null ? new Date(item.end) : new Date();
+            row.end = item.end != null ? item.end : new Date();
         }
         return row
     }
@@ -180,9 +175,9 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
             rawData.forEach( item => {
                 events.push({
                     id: Math.random() * 16,
-                    start: item.proceedingFilingDate + ' 00:00:00',
-                    end: item.proceedingLastModifiedDate + ' 00:00:00',
-                    name: `${item.respondentPartyName} / ${item.appellantPartyName}`,
+                    start: item.proceedingFilingDate,
+                    end: item.proceedingLastModifiedDate,
+                    name: `${item.respondentPartyName.toLowerCase()} / ${item.appellantPartyName.toLowerCase()}`,
                     status: item.proceedingStatusCategory,
                     otherInfo: item
                 })
@@ -236,6 +231,7 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
         let start = new moment().subtract(24, 'months')
         let end = new moment().add(24, 'months')
         if(timelineContainerRef.current != null) {
+            //const newArray = timelineRawData.slice(0, 50);
             const convertedItems = timelineRawData.map(convertDataToItem)
             setTimelineItems(convertedItems)
             items.current = new DataSet()
@@ -256,8 +252,8 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
                     return c
                 })
                 Promise.all(promise)
-                start = new moment(start).subtract(24, 'months') 
-                end = new moment(end).add(24, 'months')
+                start = new moment(start).subtract(48, 'months') 
+                end = new moment(end).add(48, 'months')
                 items.current.add(convertedItems)
                 setDisplay('block')
             } else {
@@ -265,11 +261,12 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
             }
         }
         /*console.log(items.current, start, end) */
-        start = new moment(new Date('1900-01-01'))
-        end =  new moment(new Date('2200-01-01'))
+        //start = new moment(new Date('1900-01-01'))
+        //end =  new moment(new Date('2200-01-01'))
         timelineRef.current.setItems(items.current)
-        /* timelineRef.current.setOptions({ ...options, start, end, min: start, max: end }) */
-        timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1900-01-01')), max: new moment(new Date('2200-01-01'))})
+        timelineRef.current.setOptions({ ...options, start, end, min: start, max: end }) 
+        //timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1900-01-01')), max: new moment(new Date('2200-01-01'))})
+        //timelineRef.current.setOptions({})
     }, [ timelineRawData, isLoadingTimelineRawData, timelineContainerRef ])
 
     /**

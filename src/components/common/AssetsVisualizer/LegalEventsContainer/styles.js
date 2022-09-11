@@ -316,8 +316,6 @@ export default makeStyles(theme => ({
         position: 'unset',
         minHeight: 28,
         '& .vis-item-content':{
-          width: '100%',
-          position: 'absolute',
           '& span':{
             whiteSpace: 'nowrap',
             display: 'block',

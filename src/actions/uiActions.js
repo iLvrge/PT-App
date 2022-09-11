@@ -111,3 +111,8 @@ export const setTransactionButton = flag => ({
   type: types.SET_TRANSACTION_BUTTON,
   flag,
 })  
+
+export const setLoadingDashboardData = flag => ({
+  type: types.SET_LOADING_DASHBOARD_DATA,
+  flag, 
+})

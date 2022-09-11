@@ -97,7 +97,7 @@ const KpiBox = (props) => {
                                             ? 
                                                 `$${numberWithCommas(parseInt(props.card.number))}`
                                             : 
-                                                numberWithCommas(props.card?.number) 
+                                                `$${numberWithCommas(props.card?.number)}` 
                                     : 
                                         numberWithCommas(props.card?.number)
                             } 
