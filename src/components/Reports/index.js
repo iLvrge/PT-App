@@ -499,7 +499,7 @@ const Reports = (props) => {
     const [smallScreen, setSmallScreen] = useState(false)
     const [activeId, setActiveId] = useState(-1)
     const profile = useSelector(state => (state.patenTrack.profile))    
-    const [cardList, setCardList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_LIST : KPI_LIST)
+    const [cardList, setCardList] = useState([])
     const [timelineList, setTimelineList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_TIMELINE_LIST : TIMELINE_LIST)
     const viewDashboard = useSelector(state => state.ui.viewDashboard)
     const viewInitial = useSelector(state => state.ui.viewInitial)
@@ -584,7 +584,7 @@ const Reports = (props) => {
     }, [viewDashboard])
 
     useEffect(() => {
-        if(viewInitial === false) {
+        if(viewInitial === false && cardList.length > 0) {
             if(selectedCompanies.length > 0) {
                 if(viewDashboard.timeline === true) {
                     callTimelineData()
@@ -636,7 +636,7 @@ const Reports = (props) => {
                 setTimelineList(props.dashboardTimelineData)
             }
         }  else {
-            if(selectedCompanies.length > 0) {
+            if(selectedCompanies.length > 0 && cardList.length > 0) {
                 if(viewDashboard.timeline === true) {
                     callTimelineData()
                 } else {
