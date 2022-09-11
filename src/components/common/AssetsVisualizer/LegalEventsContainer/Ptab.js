@@ -177,7 +177,7 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
                     id: Math.random() * 16,
                     start: item.proceedingFilingDate,
                     end: item.proceedingLastModifiedDate,
-                    name: `${item.respondentPartyName.toLowerCase()} / ${item.appellantPartyName.toLowerCase()}`,
+                    name: `${item.respondentPartyName} / ${item.appellantPartyName}`,
                     status: item.proceedingStatusCategory,
                     otherInfo: item
                 })
