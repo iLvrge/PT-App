@@ -142,6 +142,7 @@ const AssetsTable = ({
   const [ callByAuthLogin, setCallByAuth ] = useState(false)
   const [ anchorEl, setAnchorEl ] = useState(null)
   const [optionType, setOptionType] = useState('multiple')
+  const [defaultViewFlag, setDefaultViewFlag] = useState(0)
   const [assetRows, setAssetRows] = useState([])
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState(true)
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
@@ -1255,23 +1256,29 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           /**
            * Check if Right Pane is close then open it and close the TV
            */
-          if(openChartBar === false) {
-            handleChartBarOpen()
-          }
-          if(openAnalyticsBar === false) {
-            handleAnalyticsBarOpen()
-          }
-          if(openIllustrationBar === true) {
-            handleIllustrationBarOpen('100%')
-            handleVisualBarSize(false, true, false, false)
-          }
-        } else if (selectedCategory == 'top_non_us_members') {
-          if(openChartBar === false) {
-            handleChartBarOpen()
+          if(defaultViewFlag === 0) {
+            if(openChartBar === false) {
+              handleChartBarOpen()
+            }
+            if(openAnalyticsBar === false) {
+              handleAnalyticsBarOpen()
+            }
             if(openIllustrationBar === true) {
               handleIllustrationBarOpen('100%')
               handleVisualBarSize(false, true, false, false)
             }
+            setDefaultViewFlag(1)
+          } 
+        } else if (selectedCategory == 'top_non_us_members') {
+          if(defaultViewFlag === 0) {
+            if(openChartBar === false) {
+              handleChartBarOpen()
+              if(openIllustrationBar === true) {
+                handleIllustrationBarOpen('100%')
+                handleVisualBarSize(false, true, false, false)
+              }
+            }
+            setDefaultViewFlag(1)
           }
         }
         setCheckBar(!checkBar)        
@@ -1344,7 +1351,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         }
       }
     },
-    [ dispatch, selectedAssetsPatents, selectedRow, openAnalyticsBar, openChartBar ],
+    [ dispatch, defaultViewFlag, selectedAssetsPatents, selectedRow, openAnalyticsBar, openChartBar ],
   );
 
 const resetAll = useCallback(() => {

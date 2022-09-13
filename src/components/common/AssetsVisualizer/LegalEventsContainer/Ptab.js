@@ -142,7 +142,43 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
                 const height = window.innerHeight|| document.documentElement.clientHeight || document.body.clientHeight;   
                 let tootltipTemplate = `<div class='custom_tooltip' style='background:#1E2025;border: 1px solid rgba(255, 255, 255, 0.12) ;top:${event.clientY - 400 < 0 ? 0 : event.clientY - 400  }px;left:${event.clientX + 20 }px;'>`
                 const { otherInfo } = item
-                Object.keys(otherInfo).map(key => {
+                console.log(otherInfo)
+                tootltipTemplate += `<table>
+                    <tbody>
+                        <tr>
+                            <td>${otherInfo['proceedingTypeCategory']}(${otherInfo['subproceedingTypeCategory']})</td>
+                            <td>${typeof otherInfo['proceedingNumber'] != 'undefined' ? otherInfo['proceedingNumber'] : ''}</td>
+                            <td>Filled: ${moment(new Date(otherInfo['proceedingFilingDate'])).format(DATE_FORMAT)}</td>
+                        </tr>
+                        <tr>
+                            <td>Status: ${typeof otherInfo['proceedingStatusCategory'] != 'undefined' ?  otherInfo['proceedingStatusCategory'] : ''}</td>
+                            <td colspan='2'>Made: ${typeof otherInfo['decisionDate'] != 'undefined' ? moment(new Date(otherInfo['decisionDate'])).format(DATE_FORMAT) : ''}</td>
+                        </tr>
+                        <tr>
+                            <td colspan='3'><span style='margin-top:20px;display:inline-block;'>Appelant: ${typeof otherInfo['appellantPartyName'] != 'undefined' ? otherInfo['appellantPartyName'] : ''}</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan='3'>Counsel: ${typeof otherInfo['appellantCounselName'] != 'undefined' ? otherInfo['appellantCounselName'] : ''}</td>
+                        </tr>
+                        <tr>
+                            <td>Patent: ${typeof otherInfo['appellantPatentNumber'] != 'undefined' ? otherInfo['appellantPatentNumber'] : ''}</td>
+                            <td>Application: ${typeof otherInfo['appellantApplicationNumberText'] != 'undefined' ? otherInfo['appellantApplicationNumberText'] : ''}</td>
+                            <td>Publication: ${typeof otherInfo['appellantPublicationNumber'] != 'undefined' ? otherInfo['appellantPublicationNumber'] : ''}</td>
+                        </tr>
+                        <tr>
+                            <td colspan='3'>Inventor: ${typeof otherInfo['appellantInventorName'] != 'undefined' ? otherInfo['appellantInventorName'] : ''}</td>
+                        </tr>
+                        <tr>
+                            <td colspan='3'><span style='margin-top:20px;display:inline-block;'>Respondent: ${ typeof otherInfo['respondentPartyName'] != 'undefined' ? otherInfo['respondentPartyName'] : ''}</span></td>
+                        </tr>
+                        <tr>
+                            <td>Patent: ${ typeof otherInfo['respondentPatentNumber'] != 'undefined' ? otherInfo['respondentPatentNumber'] : ''}</td>
+                            <td>Application: ${typeof otherInfo['respondentApplicationNumberText'] != 'undefined' ? otherInfo['respondentApplicationNumberText'] : ''}</td>
+                        </tr>
+                    </tbody>
+                </table>`
+
+                /* Object.keys(otherInfo).map(key => {
                     if(Array.isArray(otherInfo[key])) {
                         otherInfo[key].forEach( arrItem => {
                             Object.keys(arrItem).map(arrKey => {
@@ -158,7 +194,7 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
                     }                    
                 })
 
-                tootltipTemplate += `</div>`
+                tootltipTemplate += `</div>` */
                 resetTooltipContainer() 
                 if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
                     document.body.insertAdjacentHTML('beforeend',tootltipTemplate)                

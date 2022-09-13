@@ -724,45 +724,62 @@ const Reports = (props) => {
                 if( requestData !== null){
                     const {data} = requestData
                     let oldList = [...cardList]
-                    const dashboardPromise = data.map( item => {
-                        const findIndex = oldList.findIndex( row => row.type == item.type)
-                        if(findIndex !== -1) {
-                            let {other} = item
-                            if(other != '' && other !== null) {
-                                other = JSON.parse(other)
+                    if(data.length == 0) {
+                        oldList.map((item, index) => {
+                            oldList[index].patent = ''
+                            oldList[index].application = ''
+                            oldList[index].rf_id = ''
+                            oldList[index].total = 0 
+                            oldList[index].number = 0  
+                            if(typeof oldList[index].other_number !== 'undefined'){
+                                oldList[index].other_number = 0
                             }
-                            if( Array.isArray(other) && other.length > 0) {
-                                oldList[findIndex].list = [...other]
-                                oldList[findIndex].patent = ''
-                                oldList[findIndex].application = ''
-                                oldList[findIndex].rf_id = ''
-                                oldList[findIndex].total = item.total  
-                                oldList[findIndex].number = 0           
-                            } else if( item?.number) {
-                                oldList[findIndex].number = item.number
-                                oldList[findIndex].patent = ''
-                                oldList[findIndex].application = ''                            
-                                oldList[findIndex].rf_id = ''                            
-                                oldList[findIndex].total = item.total
-                                if(typeof item.other_number !== 'undefined') {
-                                    oldList[findIndex].other_number = item.other_number          
+                            if(typeof oldList[index].list !== 'undefined'){
+                                oldList[index].list = []
+                            }
+                        })
+                    } else {
+                        const dashboardPromise = data.map( item => {
+                            const findIndex = oldList.findIndex( row => row.type == item.type)
+                            if(findIndex !== -1) {
+                                let {other} = item
+                                if(other != '' && other !== null) {
+                                    other = JSON.parse(other)
                                 }
-                            } else {
-                                oldList[findIndex].number = 0
-                                oldList[findIndex].patent = ''
-                                oldList[findIndex].application = ''
-                                oldList[findIndex].total = 0
-                                if(typeof oldList[findIndex].other_number !== 'undefined'){
-                                    oldList[findIndex].other_number = 0
+                                if( Array.isArray(other) && other.length > 0) {
+                                    oldList[findIndex].list = [...other]
+                                    oldList[findIndex].patent = ''
+                                    oldList[findIndex].application = ''
+                                    oldList[findIndex].rf_id = ''
+                                    oldList[findIndex].total = item.total  
+                                    oldList[findIndex].number = 0           
+                                } else if( item?.number) {
+                                    oldList[findIndex].number = item.number
+                                    oldList[findIndex].patent = ''
+                                    oldList[findIndex].application = ''                            
+                                    oldList[findIndex].rf_id = ''                            
+                                    oldList[findIndex].total = item.total
+                                    if(typeof item.other_number !== 'undefined') {
+                                        oldList[findIndex].other_number = item.other_number          
+                                    }
+                                } else {
+                                    oldList[findIndex].number = 0
+                                    oldList[findIndex].patent = ''
+                                    oldList[findIndex].application = ''
+                                    oldList[findIndex].total = 0
+                                    if(typeof oldList[findIndex].other_number !== 'undefined'){
+                                        oldList[findIndex].other_number = 0
+                                    }
                                 }
                             }
+                        })
+                        await Promise.all(dashboardPromise)
+                        setCardList(oldList)
+                        if(typeof props.updateDashboardData !== 'undefined') {
+                            props.updateDashboardData(oldList)
                         }
-                    })
-                    await Promise.all(dashboardPromise)
-                    setCardList(oldList)
-                    if(typeof props.updateDashboardData !== 'undefined') {
-                        props.updateDashboardData(oldList)
                     }
+                    
                     if(viewDashboard.kpi === true) {
                         formData.delete('type')
                         formData.append('type', 37)

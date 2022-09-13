@@ -153,7 +153,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         height: '100%',
         width: '100%',
         style: 'bar-color',
-        axisFontSize: 18,
+        axisFontSize: 22,
         cameraPosition: {
             distance: 1.9,
             horizontal: 0.69,
@@ -165,7 +165,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         rotateAxisLabels: false,
         yCenter: '35.5%',
         xCenter: '50%',
-        axisColor: '#fff',
+        axisColor: '#ffffff',
         gridColor: '#e5e5e51c',
         showPerspective: true,
         showGrid: true,
@@ -626,9 +626,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             await Promise.all(promises)            
             //TODO height 100% not working well, created allot of isues when we resize pane, 
             if(graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0) {
-                options = {...options, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1, zStep: Math.max(...zMax) > 10 ? parseInt(Math.max(...zMax) / 10) : graphRawData.length > 2 ? 3 : 1, zMax: Math.max(...zMax) }
+                options = {...options, axisFontSize: visualizerBarSize == '30%' ? 22 : 22, yStep:  visualizerBarSize == '30%' ? 8 : 1, zStep: Math.max(...zMax) > 10 ? parseInt(Math.max(...zMax) / 10) : graphRawData.length > 2 ? 3 : 1, zMax: Math.max(...zMax) }
             }     
-            options.axisColor = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
+            /* options.axisColor = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary */
             graphRef.current = new Graph3d(graphContainerRef.current, items.current, options)
             graphRef.current.on('click', graphClickHandler)      
             graphRef.current.on('cameraPositionChange', onCameraPositionChange)
@@ -657,14 +657,14 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
     useEffect(() => {
         if( graphRef.current != undefined &&  graphRef.current !== null && graphRawGroupData.length > 0 && graphRawData.length > 0 && !isLoadingCharts ) {
-            let fontSize = 18, step = 1, verticalRatio = 0.4
+            let fontSize = 22, step = 1, verticalRatio = 0.4
             if( visualizerBarSize == '100%' ) {
                 if(defaultSize != '0') {
                     step = 3
                     verticalRatio = 0.2
                 } 
             } else if(visualizerBarSize == '30%') {
-                fontSize = 18
+                fontSize = 22
                 step = 7
             }
             try {
