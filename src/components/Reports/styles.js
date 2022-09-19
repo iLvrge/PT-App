@@ -534,7 +534,7 @@ export default makeStyles(theme => ({
       overflow: 'hidden',
       height: 18,
       marginRight: 5,
-      fontSize: '1.2rem',
+      fontSize: '1.1rem',
       position: 'absolute',
       left: 0,
       whiteSpace: 'nowrap',
@@ -549,9 +549,9 @@ export default makeStyles(theme => ({
       top: 0,
       width: '25%',
       textAlign: 'right',
-      fontSize: '1.2rem',
+      fontSize: '1.1rem',
       height: 18,
-      right: 0
+      right: 5
     },
     timelineProcessingIndicator: {
       position: 'absolute',

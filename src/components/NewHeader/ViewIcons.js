@@ -1,5 +1,9 @@
  import React, { useCallback, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import {  
+    useHistory,
+    useLocation
+} from 'react-router-dom'
 import { setAssetButton, setTransactionButton, setViewDashboardIntial, updateViewDashboard } from '../../actions/uiActions'
 import useStyles from './styles'
 import clsx from 'clsx'
@@ -17,6 +21,8 @@ import { setSwitchAssetButton } from '../../actions/patentTrackActions2'
 const ViewIcons = (props) => {
     const dispatch = useDispatch();
     const classes = useStyles();
+    const location = useLocation();
+    const history = useHistory()
     const [timelineView, setTimelineView] = useState(false)
     const [patentView, setPatentView] = useState(false)
     const [openSearch, setOpenSearch] = useState(false)
@@ -35,6 +41,7 @@ const ViewIcons = (props) => {
     const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected);
     const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected);
     const SHARE_URL_MESSAGE = 'A sharing URL was added to your clipboard.'
+    const path = location.pathname
 
     const changeGraph = async(flag) => {
         //setCardList(LIST)
@@ -143,6 +150,11 @@ const ViewIcons = (props) => {
     }
 
     const onHandleDashboard = () => {
+        console.log('path', path, path.indexOf('/dashboard') )
+        
+        if(path.indexOf('/dashboard') == -1) {
+            history.push('/dashboard') 
+        }
         setPatentView(false)
         setTimelineView(false)
         dispatch(setAssetButton(false))
