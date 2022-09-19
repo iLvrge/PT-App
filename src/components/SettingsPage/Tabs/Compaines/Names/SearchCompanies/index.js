@@ -5,13 +5,14 @@ import Loader from '../../../../../common/Loader'
 import { addCompany, setSearchCompanies } from '../../../../../../actions/patenTrackActions'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import StyledSearch from '../../../../../common/StyledSearch'
-import { Toolbar, IconButton, Tooltip, Typography, Zoom } from '@mui/material'
+import { Toolbar, IconButton, Tooltip, Typography, Zoom, TextField } from '@mui/material'
 import { DebounceInput } from 'react-debounce-input'
 import VirtualizedTable from '../../../../../common/VirtualizedTable'
-import PatenTrackApi from '../../../../../../api/patenTrack'
+import PatenTrackApi from '../../../../../../api/patenTrack2'
 import SendIcon from '@mui/icons-material/Send'
 import AddMenu from './AddMenu'
 import Chip from '@mui/material/Chip'
+import { setMainCompaniesRowSelect } from '../../../../../../actions/patentTrackActions2'
 
 const COLUMNS = [
   {
@@ -36,6 +37,24 @@ const COLUMNS = [
   },
 ]
 
+const COMPANY_HEADER_COLUMNS = [
+  {
+    label: '',
+    width: 50,
+    dataKey: 'company_id',
+    role: 'checkboxwait',
+    formatCondition: 'status',
+  },
+  {
+    width: 240,
+    minWidth: 240,
+    oldWidth: 240,
+    draggable: true,
+    label: 'Name',
+    dataKey: 'name',
+  }
+]
+
 function SearchCompanies({ onClose, selected, setSelected }) {
   const {
     searchCompanies,
@@ -49,6 +68,9 @@ function SearchCompanies({ onClose, selected, setSelected }) {
   const [ menuAnchorEl, setMenuAnchorEl ] = useState(null)
   const [ loading, setLoading ] = useState(false)
   const [ search, setSearch ] = useState('')
+  const [ list, setList ] = useState([])
+  const [ companyHeaderColumns, setCompanyHeaderColumns] = useState(COMPANY_HEADER_COLUMNS)
+  const [ selectedCompanyRequest, setSelectedCompanyRequest] = useState([])
 
   const rows = useMemo(() => {
     return (searchCompanies || []).map(row => ({
@@ -59,7 +81,7 @@ function SearchCompanies({ onClose, selected, setSelected }) {
   }, [ searchCompanies ])
 
   const onSearch = useCallback(async () => {
-    setSelected([])
+    /* setSelected([])
     dispatch(setSearchCompanies([]))
     PatenTrackApi.cancelRequest()
     setLoading(false)
@@ -69,12 +91,24 @@ function SearchCompanies({ onClose, selected, setSelected }) {
       const response = await PatenTrackApi.searchCompany(search)
       setLoading(false)
       dispatch(setSearchCompanies(response.data))
-    }
+    } */
   }, [ setSelected, dispatch, search ])
 
+  const getCompanyRequestList = async() => {
+    setLoading(true)
+    const {data} = await PatenTrackApi.getCompaniesRequest();
+    setLoading(false)
+    setList(data.length > 0 ? data : [])
+  }
+  
+
   useEffect(() => {
-    onSearch()
+    //onSearch()
   }, [ onSearch ])
+
+  useEffect(() => {
+    getCompanyRequestList()
+  }, [])
 
   const onDropContent = useCallback( event => {
     event.preventDefault();
@@ -139,21 +173,77 @@ const resizeColumnsStop = useCallback((dataKey, data) => {
   setHeaderColumns(previousColumns)
 }, [ headerColumns ] )
 
-  const handleOnInputChange = useCallback((e) => setSearch(e.target.value), [])
-  const openAddMenu = useCallback((e) => setMenuAnchorEl(e.currentTarget), [])
-  const closeAddMenu = useCallback(() => setMenuAnchorEl(null), [])
+
+const resizeCompanyHeaderColumnsWidth = useCallback((dataKey, data) => {
+  let previousColumns = [...companyHeaderColumns]
+  const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
+
+  if( findIndex !== -1 ) {
+    previousColumns[findIndex].width =  previousColumns[findIndex].oldWidth + data.x
+    previousColumns[findIndex].minWidth = previousColumns[findIndex].oldWidth + data.x
+  }
+  setCompanyHeaderColumns(previousColumns)
+}, [ companyHeaderColumns ] )
+
+const resizeCompanyHeaderColumnsStop = useCallback((dataKey, data) => {
+  let previousColumns = [...companyHeaderColumns]
+  const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
+
+  if( findIndex !== -1 ) {
+    previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width + data.x
+  }
+  setCompanyHeaderColumns(previousColumns)
+}, [ companyHeaderColumns ] )
+
+const handleOnInputChange = useCallback((e) => setSearch(e.target.value), [])
+const openAddMenu = useCallback((e) => setMenuAnchorEl(e.currentTarget), [])
+const closeAddMenu = useCallback(() => setMenuAnchorEl(null), [])
+
+
+const onCompanyRequestRowSelect = useCallback((event, row) => {
+  let oldItems = [...selected]
+  console.log(row.company_id)
+  if(!oldItems.includes(row.company_id)){
+    oldItems.push(row.company_id)
+  } else {
+    oldItems = oldItems.filter( item => item != row.company_id)
+  }
+  setSelected(oldItems)
+}, [selected])
+
+const onHandleKeyDown = useCallback(async(event) => {
+  if(event.keyCode == 13){
+    console.log('value', event.target.value);
+    const formData = new FormData();
+    formData.append('name', event.target.value)
+    const requestData = await PatenTrackApi.addCompanyRequest(formData)
+    console.log('requestData', requestData)
+
+    if(requestData) {
+      searchTxtField.current.querySelector('input[type="text"]').value = ''
+      getCompanyRequestList()
+    }
+  }
+});
 
   return (
     <Fragment>
       <Toolbar className={classes.toolbar}>
         <div className={classes.toolbar}>
           <div className={classes.searchContainer} ref={searchTxtField}>
-            <DebounceInput
+            {/* <DebounceInput
               element={StyledSearch}
               placeholder={'Search Companies'}
               value={search}              
               onChange={handleOnInputChange}
-              debounceTimeout={500} />
+              debounceTimeout={500} /> */}
+              <TextField 
+                id="request_add_new_company" 
+                name="request_add_new_company" 
+                label="Request for new company" 
+                variant="filled" 
+                onKeyDown={onHandleKeyDown}
+              />
           </div>
           {
             searchCompanies.length > 0 && (
@@ -202,19 +292,18 @@ const resizeColumnsStop = useCallback((dataKey, data) => {
           loading ? (
             <Loader />
           ) : (
-            <VirtualizedTable
-              classes={classes}
-              selected={selected}
-              headerHeight={53.86}
-              rowHeight={50}
-              rowCount={rows.length}
-              rows={rows}
-              columns={headerColumns}
-              onSelect={onSelect}
-              onSelectAll={onSelectAll}
-              resizeColumnsWidth={resizeColumnsWidth}
-              resizeColumnsStop={resizeColumnsStop}
-            />
+              <VirtualizedTable
+                classes={classes}
+                selected={selected}
+                headerHeight={53.86}
+                rowHeight={50}
+                rowCount={list.length}
+                rows={list}
+                columns={companyHeaderColumns}
+                onSelect={onCompanyRequestRowSelect}
+                resizeColumnsWidth={resizeCompanyHeaderColumnsWidth}
+                resizeColumnsStop={resizeCompanyHeaderColumnsStop}
+              /> 
           )
         }
       </div>

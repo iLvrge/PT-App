@@ -290,8 +290,16 @@ span {
 .vis-timeline {
   /* background-color: #222222 !important; */
 }
-.vis-tooltip p {
+div.vis-tooltip{
   margin: 5px 0 0 0;
+  background-color: #1D2025;
+  border: 0;
+}
+
+div.vis-tooltip table{
+  border: 0;
+  padding: 0;
+  margin: 0;
 }
 
 .vis-content {
@@ -462,6 +470,14 @@ div.vis-tooltip span{
 
 .update_table h6:first-child {
   margin-top: 5px;
+}
+
+.assetIcon {
+  width: 1em;
+  height: 1em;
+  font-size: 1.5rem;
+  display: inline-block;
+  user-select: none;
 }
 
 .MuiTypography-h2,
@@ -664,6 +680,7 @@ div.vis-tooltip span{
   padding: 5px 10px;
   overflow: hidden;
   z-index: 9999;
+  font-size: 0.875rem;
 }
 
 .custom_tooltip h4 {
@@ -882,6 +899,12 @@ a.maintain svg.clean_encumbrances path{
   display: inline;
 }
 
+svg.clipboard  {
+  width: 1em;
+  height: 1em;
+  font-size: 1.5rem;
+}
+
 /* .editor{
   min-width: 387px;
 } */
@@ -918,7 +941,7 @@ a.maintain svg.clean_encumbrances path{
   z-index: 9999;
   padding: 10px;
   width: 500px;
-  /* background: #000; */
+  background: #000; 
   color: #fff;
   position: absolute;   
 }
@@ -955,13 +978,13 @@ a.maintain svg.clean_encumbrances path{
   font-size: 0.875rem;
   z-index: 9999;
 }
-#draggable-illustration-menu-item .MuiListItem-root:hover{
+#draggable-illustration-menu-item .MuiListItem-root:hover, #draggable-dashboard-filter-menu-item .MuiListItem-root:hover{
   cursor: move;
 }
-#draggable-illustration-menu-item:hover .MuiMenu-paper{
+#draggable-illustration-menu-item:hover .MuiMenu-paper, #draggable-dashboard-filter-menu-item .MuiMenu-paper{
   cursor: move;
 }
-#draggable-illustration-menu-item .MuiListItemIcon-root:hover{
+#draggable-illustration-menu-item .MuiListItemIcon-root:hover, #draggable-dashboard-filter-menu-item .MuiListItemIcon-root:hover{
   cursor: pointer;
 }/* 
 #draggable-illustration-menu-item:hover .MuiTypography-root {
@@ -972,6 +995,7 @@ a.maintain svg.clean_encumbrances path{
   right: 0px;
   top: 0px;
   padding: 0px !important;
+  z-index: 9999;
 }
 div#draggable-illustration-menu-item{
   width: 300px;
@@ -999,6 +1023,21 @@ div#draggable-illustration-menu-item div[aria-hidden='true']{
   /* text-overflow: ellipsis;
   max-width: 60%; */
   max-height: 200px;
+}
+.MuiTooltip-tooltip.tooltip3 {
+  max-width: 290px;
+}
+
+.MuiTooltip-tooltip.tooltip4 {
+  max-width: 270px;
+}
+
+.MuiTooltip-tooltip.tooltip6 {
+  max-width: 240px;
+}
+
+.MuiTooltip-tooltip.tooltip12 {
+  max-width: 275px;
 }
 
 .MuiListItem-root svg.clipboard{

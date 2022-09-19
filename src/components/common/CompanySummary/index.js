@@ -4,7 +4,6 @@ import copy from 'copy-to-clipboard'
 import PatenTrackApi from '../../../api/patenTrack2'
 import { capitalize, numberWithCommas } from '../../../utils/numbers'
 import { getTokenStorage } from '../../../utils/tokenStorage'
-import { copyToClipboard } from '../../../utils/html_encode_decode'
 import { 
     getGoogleProfile,
 } from '../../../actions/patentTrackActions2'

@@ -98,7 +98,6 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
     ]
 
     const onHandleHeadDropDownlist = useCallback(async(event) => { 
-        console.log("adad")
         if(event.target.value == 5) {
             let oldItems = [...clipboard_assets, ...assets]
             dispatch(setClipboardAssets(oldItems))
@@ -136,7 +135,6 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
         }
     })
     const onHandleDropDownlist = useCallback(async(event, asset, row ) => { 
-        console.log("onHandleDropDownlist", event.target.value)
         if(event.target.value == 5) {
            
             /* setSelectItems(prevItems =>
@@ -194,8 +192,8 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
     
     const COLUMNS = [
         {
-            width: 10,
-            minWidth: 10,
+            width: 30,
+            minWidth: 30,
             label: "", 
             dataKey: "asset",
             role: "checkbox",
@@ -204,14 +202,16 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
             enable: false
         },
         {
-            width: 20,
-            minWidth: 20,
+            width: 24,
+            minWidth: 24,
             disableSort: true,
             label: "",
             dataKey: "asset",
             role: "static_dropdown",
             list: dropdownList,
-            onClick: onHandleDropDownlist
+            onClick: onHandleDropDownlist,            
+            showDropdown: true,
+            onClickHeadDropdown: onHandleHeadDropDownlist
         },
         {
           width: 120,
@@ -292,7 +292,7 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
                 })
                 await Promise.all(promises)
                 setSelectItems(items)
-                dispatch(setClipboardAssets(allAssets));
+                //dispatch(setClipboardAssets(allAssets));
             }
         }
         setSelectAll(checked)

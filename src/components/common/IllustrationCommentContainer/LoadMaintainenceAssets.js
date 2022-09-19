@@ -18,7 +18,7 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
     const [selectItems, setSelectItems] = useState([])
     const [selectedRow, setSelectedRow] = useState([])
     const [ name, setName ] = useState(`${moment(new Date()).format('MM-DD-YYYY')}_Patent_Maintenance_Fee_Bulk_File`)
-
+console.log('rows', rows)
     const COLUMNS = [
         {
             width: 110,

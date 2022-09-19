@@ -13,6 +13,10 @@ const styles = makeStyles((theme) => ({
       marginRight: 5
     }
   },
+  headDropdown: {
+    left: 0,
+    right: 0
+  },
   td: {
     display: 'flex',
   },
@@ -148,6 +152,9 @@ const styles = makeStyles((theme) => ({
   },
   marginLeft:{
     marginLeft: 5
+  },
+  marginLeft10:{
+    marginLeft: 10
   },
   smallImg:{
     width: '18.375px',

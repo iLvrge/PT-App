@@ -1,6 +1,8 @@
+import { pink } from '@mui/material/colors';
 import { alpha } from '@mui/material/styles';
 
 import makeStyles from '@mui/styles/makeStyles';
+import { isValidRGBA } from 'vis-util';
 
 const LOGO_WIDTH = 120
 const HEADER_MARGIN = 5
@@ -30,7 +32,7 @@ export default makeStyles(theme => ({
                     fill: 'currentColor',
                     stroke: 'currentColor',
                 }
-            }            
+            }
         }
     },
     headerClassAction1: {
@@ -64,9 +66,10 @@ export default makeStyles(theme => ({
     companyLogoCon: {
         display: 'flex',
         alignItems: 'center',
-        width: '12rem', 
+        width: '14rem', 
         justifyContent: 'flex-start', 
         cursor: 'pointer',
+        overflow: 'hidden',
         '@media (max-width: 70em)': {
         //paddingLeft: 15
         },
@@ -113,7 +116,8 @@ export default makeStyles(theme => ({
 
     toolbar: {
         padding: 0,
-        minHeight: 40,
+        height: 43,
+        minHeight: 43,
         position: 'relative',
     },
     headerIcon: {
@@ -215,18 +219,20 @@ export default makeStyles(theme => ({
         textDecoration: 'underline'
     },
     search: {
-        position: 'relative',
+        position: 'fixed',
+        top: 55,
         borderRadius: theme.shape.borderRadius,
         backgroundColor: alpha(theme.palette.common.white, 0.15),
         '&:hover': {
           backgroundColor: alpha(theme.palette.common.white, 0.25),
         },
         /* margin: '0 4px !important', */
-        height: 26,
-        width: '100%', 
+        height: 32,
+        width: 400, 
         [theme.breakpoints.up('sm')]: {
-          width: 'auto',
+          width: 400,
         },
+        display: 'none'
     },
     searchIcon: {
         padding: theme.spacing(0, 2),
@@ -237,20 +243,23 @@ export default makeStyles(theme => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    searchEnable:{
+        display: 'block'
+    },
     inputRoot: {
         color: 'inherit',
     },
     inputInput: {
         padding: 0,
-        height: 26,
+        height: 32,
         // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+        paddingLeft: theme.spacing(1),
         transition: theme.transitions.create('width'),
         width: '100%',
         [theme.breakpoints.up('sm')]: {
-            width: '12ch',
+            width: '50%',
             '&:focus': {
-              width: '20ch',
+              width: '100%',
             },
         },
     },
@@ -412,15 +421,20 @@ export default makeStyles(theme => ({
         '& svg':{
             /* width: '2rem',
             height: '2rem', */
-            fill: '#5a5a5a',
+            fill: theme.palette.text.disabled,
             /* stroke: '#5a5a5a' */
         },
         '&:hover':{
-            backgroundColor: 'unset'
+            backgroundColor: 'unset',
             /* '& svg':{
                 fill: 'rgb(230, 0, 0)',
                 stroke: 'rgb(230, 0, 0)',
             } */
+            color: pink['A400'] ,
+            '& svg':{
+                fill: pink['A400'],
+                /* stroke: pink['A400'], */
+            }
         }
     },
     slackIcon: {
@@ -554,5 +568,44 @@ export default makeStyles(theme => ({
     },
     disabled: {
         opacity: 0.38
-    } 
+    },  
+    assetIcon: {
+        width: '1em',
+        height: '1em',
+        fontSize: '1.5rem',
+        display: 'inline-block',
+        userSelect: 'none'
+    },
+    actionIcon: {
+        /* '& svg':{
+            width: '1rem !important',
+            height: '1rem !important'
+        } */
+        color: theme.palette.text.disabled,
+        '& svg' : {
+          fill: theme.palette.text.disabled,
+          width: '1.5rem !important', 
+          height: '1.5rem !important'
+        },
+        '&:hover':{
+            color: pink['A400'] ,
+            '& svg':{
+                fill: pink['A400'],
+                /* stroke: pink['A400'], */
+            }
+        },
+    }, 
+    active: {
+        color: pink['A400'],
+        '& svg':{
+            fill: pink['A400'],
+            /* stroke: pink['A400'], */
+        }
+    },
+    shareIcon: {
+        '& svg' : {
+            width: '1rem !important', 
+            height: '1rem !important'
+        }
+    }
 }))

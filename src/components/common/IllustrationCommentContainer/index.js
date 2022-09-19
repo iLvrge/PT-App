@@ -16,6 +16,7 @@ import LoadLinkAssets from './LoadLinkAssets'
 import AllComponentsMenu from '../AllComponentsMenu'
 import ArrowButton from '../ArrowButton'
 import DisplayFile from './DisplayFile'
+import ErrorBoundary from '../ErrorBoundary'
 import { updateResizerBar } from '../../../utils/resizeBar'
 
 import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/numbers";
@@ -23,6 +24,12 @@ import useStyles from './styles'
 import Reports from '../../Reports'
 import FullScreen from '../FullScreen'
 import clsx from 'clsx'
+import InventionVisualizer from '../AssetsVisualizer/InventionVisualizer'
+import Ptab from '../AssetsVisualizer/LegalEventsContainer/Ptab'
+import LawFirmTimeline from '../AssetsVisualizer/LawFirmTimeline'
+import GeoChart from '../AssetsVisualizer/GeoChart'
+import SankeyChart from '../AssetsVisualizer/SankeyChart'
+import TimelineSecurity from '../AssetsVisualizer/TimelineSecurity'
 
 const IllustrationCommentContainer = ({ 
     cls, 
@@ -34,6 +41,10 @@ const IllustrationCommentContainer = ({
     commentBar, 
     openCustomerBar,
     illustrationBar, 
+    illustrationBarSize,
+    visualizerBarSize,
+    customerBarSize,
+    companyBarSize,
     fnVarName, 
     fn2, 
     fn2Params, 
@@ -55,7 +66,14 @@ const IllustrationCommentContainer = ({
     setAnalyticsBar,
     type,
     handleCommentBarOpen,
-    handleCustomersBarOpen }) => {
+    handleCustomersBarOpen,
+    openInventorBar,
+    handleInventorBarOpen,
+    openOtherPartyBar,
+    handleOtherPartyBarOpen,
+    cube,
+    ptab
+    }) => {
     const classes = useStyles() 
     const iframeRef = useRef()
     const illustrationRef = useRef()
@@ -69,7 +87,17 @@ const IllustrationCommentContainer = ({
     const [ isFullscreenOpen, setIsFullscreenOpen ] = useState(false)
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false)
     const [ menuComponent, setMenuComponent ] = useState([])
-    const [ showManualComponent, setShowManualComponent ] = useState(false)
+    const [ dashboardData, setDashboardData ] = useState([])
+    const [ dashboardTimelineData, setDashboardTimelineData ] = useState([])
+    const [ timelineRawData, setTimelineRawData ] = useState([])
+    const [lineGraph, setLineGraph] = useState(false)
+    const [gauge, setGauge] = useState(false)
+    const [jurisdictions, setJurisdiction] = useState(false)
+    const [invention, setInvention] = useState(false)
+    const [sankey, setSankey] = useState(false)
+    const [kpi, setKpi] = useState(true)
+    const [timeline, setTimeline] = useState(false)
+    const [showManualComponent, setShowManualComponent ] = useState(false)
     const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
     const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
     const maintainenceFrameMode = useSelector(state => state.ui.maintainenceFrameMode)
@@ -91,8 +119,8 @@ const IllustrationCommentContainer = ({
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const link_assets_sheet_type = useSelector(state => state.patenTrack2.link_assets_sheet_type)
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
-    
-  
+    const ptabAssets = useSelector(state => state.patenTrack2.ptabAssets)
+     
     const menuItems = [
         {
             id: 1,
@@ -107,14 +135,38 @@ const IllustrationCommentContainer = ({
             openCustomerBar: openCustomerBar,
             openCommentBar: commentBar,
             handleCommentBarOpen: handleCommentBarOpen,
-            handleCustomersBarOpen: handleCustomersBarOpen
+            handleCustomersBarOpen: handleCustomersBarOpen,
+            dashboardData: dashboardData,
+            updateDashboardData: setDashboardData,
+            dashboardTimelineData: dashboardTimelineData, 
+            openInventorBar: openInventorBar,
+            handleInventorBarOpen: handleInventorBarOpen,
+            openOtherPartyBar: openOtherPartyBar,
+            handleOtherPartyBarOpen: handleOtherPartyBarOpen,
+            lineGraph: lineGraph,
+            setLineGraph: setLineGraph,
+            gauge: gauge,
+            setGauge: setGauge,
+            jurisdictions: jurisdictions,
+            setJurisdiction: setJurisdiction,
+            invention: invention,
+            setInvention: setInvention,
+            sankey: sankey,
+            setSankey: setSankey,
+            kpi: kpi,
+            setKpi: setKpi,
+            timeline: timeline,
+            setTimeline: setTimeline
         }
     ] 
 
+    useEffect(() => {
+        checkChartAnalytics(null, null, false)
+    }, [sankey, invention, jurisdictions, lineGraph])
 
     useEffect(() => {
         updateResizerBar(illustrationRef, commentBar, 1)
-    }, [ illustrationRef, commentBar ]) 
+    }, [ illustrationRef, commentBar ])   
 
     useEffect(() => {        
         if(new_drive_template_file != null && Object.keys(new_drive_template_file).length > 0 && new_drive_template_file.hasOwnProperty('id')) {
@@ -180,6 +232,8 @@ const IllustrationCommentContainer = ({
         fn(fnVarName, size, fnParams)   
     }, 1), [  ])
 
+    
+
     return (
         <SplitPane
             className={cls}
@@ -205,9 +259,10 @@ const IllustrationCommentContainer = ({
             }}
         >         
             <div style={{display: 'unset'}}>   
+                <ErrorBoundary>
                 {/* <AllComponentsMenu onClick={onHandleComponentMenuItem}/> */}
                 {
-                    illustrationBar === true && dashboardScreen === false && !isFullscreenOpen && shouldShowTimeline
+                    illustrationBar === true && ( typeof cube == 'undefined' || (typeof cube !== 'undefined' && cube === false))  && dashboardScreen === false && !isFullscreenOpen && shouldShowTimeline === true
                     ?
                         <IconButton 
                             size="small" 
@@ -221,13 +276,59 @@ const IllustrationCommentContainer = ({
                 }                
                                               
                 {  
-                    illustrationBar === true && (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' ||  type === 9 || ((process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && auth_token !== null))
+                    illustrationBar === true && (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' ||  type === 9 || ((process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') && auth_token !== null))
                     ?
-                        dashboardScreen === true
+                        ptab === true && assetIllustration === null
+                        ?
+                            <Ptab 
+                                rawData={ptabAssets}
+                                standalone={true}
+                            />
+                        :
+                        cube === true && maintainenceFrameMode === false && assetIllustration === null
+                        ?
+                            selectedCategory == 'collaterlized' ?
+                                <TimelineContainer 
+                                    assignmentBar={assignmentBar} 
+                                    assignmentBarToggle={assignmentBarToggle} 
+                                    type={type}
+                                    updateTimelineRawData={setTimelineRawData}
+                                />
+                            :
+                                selectedCategory == 'acquired' ||  selectedCategory == 'divested' ?
+                                    <SankeyChart/>
+                                :
+                                    selectedCategory == 'top_non_us_members' ?
+                                        <GeoChart
+                                            chartBar={chartsBar} 
+                                            openCustomerBar={openCustomerBar} 
+                                            visualizerBarSize={visualizerBarSize}
+                                            type={type}
+                                            titleBar={true}
+                                        />
+                                    :
+                                        <InventionVisualizer 
+                                            defaultSize={illustrationBarSize} 
+                                            visualizerBarSize={visualizerBarSize} 
+                                            analyticsBar={analyticsBar} 
+                                            openCustomerBar={openCustomerBar} 
+                                            commentBar={commentBar} 
+                                            illustrationBar={illustrationBar} 
+                                            customerBarSize={customerBarSize} 
+                                            companyBarSize={companyBarSize}
+                                            type={type} 
+                                        />
+                        :
+                        dashboardScreen === true &&  type !== 9  
                         ?
                             <Reports
                                 fullScreen={dashboardFullScreen}
                                 handleFullScreen={setDashboardFullScreen}
+                                defaultSize={illustrationBarSize} 
+                                customerBarSize={customerBarSize} 
+                                companyBarSize={companyBarSize}  
+                                type={type}
+                                illustrationBar={illustrationBar} 
                                 chartsBar={chartsBar}
                                 analyticsBar={analyticsBar}
                                 checkChartAnalytics={checkChartAnalytics}
@@ -235,6 +336,29 @@ const IllustrationCommentContainer = ({
                                 openCommentBar={commentBar}
                                 handleCommentBarOpen={handleCommentBarOpen}
                                 handleCustomersBarOpen={handleCustomersBarOpen}
+                                updateDashboardData={setDashboardData}
+                                updateDashboardTimelineData={setDashboardTimelineData}
+                                visualizerBarSize={visualizerBarSize} 
+                                openInventorBar={openInventorBar}
+                                handleInventorBarOpen={handleInventorBarOpen}
+                                lineGraph={lineGraph}
+                                setLineGraph={setLineGraph}
+                                gauge={gauge}
+                                setGauge={setGauge}
+                                jurisdictions={jurisdictions}
+                                setJurisdiction={setJurisdiction}
+                                invention={invention}
+                                setInvention={setInvention}
+                                sankey={sankey}
+                                setSankey={setSankey}
+                                kpi={kpi}
+                                setKpi={setKpi}
+                                timeline={timeline}
+                                setTimeline={setTimeline}
+                                assignmentBar={assignmentBar}
+                                assignmentBarToggle={assignmentBarToggle}
+                                openOtherPartyBar={openOtherPartyBar}
+                                handleOtherPartyBarOpen={handleOtherPartyBarOpen}
                             /> 
                         :
                         showManualComponent === true && menuComponent.length > 0
@@ -277,7 +401,22 @@ const IllustrationCommentContainer = ({
                         ?
                             shouldShowTimeline
                             ?
-                                <TimelineContainer assignmentBar={assignmentBar} assignmentBarToggle={assignmentBarToggle} type={type}/>
+                                selectedCategory == 'top_law_firms' 
+                                ?
+                                    <LawFirmTimeline 
+                                        assignmentBar={assignmentBar} 
+                                        assignmentBarToggle={assignmentBarToggle} 
+                                        type={type} 
+                                        updateTimelineRawData={setTimelineRawData}
+                                    />
+                                :
+                                    <TimelineContainer 
+                                        assignmentBar={assignmentBar} 
+                                        assignmentBarToggle={assignmentBarToggle} 
+                                        type={type}
+                                        updateTimelineRawData={setTimelineRawData}
+                                    />
+                                
                             :
                                 
                                     <IllustrationContainer 
@@ -311,9 +450,23 @@ const IllustrationCommentContainer = ({
                             <Close /> 
                         </IconButton> 
                         {
-                            shouldShowTimeline === true ? (
-                                <TimelineContainer assignmentBar={assignmentBar} assignmentBarToggle={assignmentBarToggle} type={type}/>
-                            )
+                            
+                            shouldShowTimeline === true ? 
+                                selectedCategory == 'top_law_firms'
+                                ?
+                                    <LawFirmTimeline 
+                                        assignmentBar={assignmentBar} 
+                                        assignmentBarToggle={assignmentBarToggle} 
+                                        type={type} 
+                                        timelineData={timelineRawData}
+                                    />
+                                :
+                                    <TimelineContainer 
+                                        assignmentBar={assignmentBar} 
+                                        assignmentBarToggle={assignmentBarToggle} 
+                                        type={type}
+                                        timelineData={timelineRawData}
+                                    />
                             :
                                 (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null)
                                 ?
@@ -349,25 +502,28 @@ const IllustrationCommentContainer = ({
                     />
                     )
                 }
+                </ErrorBoundary>
             </div>
 
             <div 
                 className={classes.commentContainer}
             >
-                {
-                    commentBar === true
-                    ?
-                        <AssetsCommentsTimeline 
-                            toggleMinimize={toggleMinimizeAssetsCommentsTimeline} 
-                            size={size} 
-                            setChannel={setChannel} 
-                            channel_id={channel_id} 
-                            illustrationBar={illustrationBar}
-                        />
-                            
-                    :
-                    ''
-                }
+                <ErrorBoundary>
+                    {
+                        commentBar === true
+                        ?
+                            <AssetsCommentsTimeline 
+                                toggleMinimize={toggleMinimizeAssetsCommentsTimeline} 
+                                size={size} 
+                                setChannel={setChannel} 
+                                channel_id={channel_id} 
+                                illustrationBar={illustrationBar}
+                            />
+                                
+                        :
+                        ''
+                    }
+                </ErrorBoundary>
             </div>
         </SplitPane>
     );

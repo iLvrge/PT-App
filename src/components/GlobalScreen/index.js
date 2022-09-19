@@ -1,5 +1,8 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import {
+    useLocation
+  } from "react-router-dom";
 import SplitPane from 'react-split-pane'
 
 
@@ -43,14 +46,27 @@ import {
     getSlackMessages,
     setMaintainenceFileName,
     setSlackMessages,
-    setBreadCrumbs
+    setBreadCrumbs,
+    setMainCompanies,
+    setMainCompaniesSelected,
+    setAssetTypesSelect,
+    setSelectAssignmentCustomers,
+    setDashboardShareData
 } from '../../actions/patentTrackActions2'
 
-import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpanMode, setMaintainenceFeeFrameMode } from '../../actions/uiActions'
+import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpanMode, setMaintainenceFeeFrameMode, setTimelineScreen } from '../../actions/uiActions'
 
 import useStyles from './styles'
 import clsx from 'clsx'
 import IllustrationContainer from '../common/AssetsVisualizer/IllustrationContainer'
+import LegalEventsContainer from '../common/AssetsVisualizer/LegalEventsContainer'
+import ConnectionBox from '../common/ConnectionBox'
+import PdfViewer from '../common/PdfViewer'
+import IllustrationPdf from '../common/AssetDetailsContainer/IllustrationPdf'
+import PatenTrackApi from '../../api/patenTrack2'
+import LawFirmTable from '../common/LawFirmTable';
+import FamilyContainer from '../common/AssetsVisualizer/FamilyContainer';
+import SecuredAssets from '../common/SecuredAssets';
 
 const GlobalScreen = ({
     type,
@@ -95,16 +111,18 @@ const GlobalScreen = ({
     openCustomerBar,
     handleCustomersBarOpen,
     handleCommentBarOpen,
+    handleInventorBarOpen,
     toggleCustomerButtonType,
     customerButtonVisible,
     commentBarSize,
     setCommentBarSize,
     openCommentBar,
     openIllustrationBar,
+    handleIllustrationBarOpen,
     handleChartBarOpen,
     handleAnalyticsBarOpen,
     setIsDrag,
-    setSize,
+    setSize,   
     size,
     illustrationRecord,
     setIllustrationRecord,
@@ -123,9 +141,11 @@ const GlobalScreen = ({
     assetFilesBar,
     driveTemplateBarSize,
     driveTemplateFrameMode,
-    driveTemplateMode
+    driveTemplateMode,
+    securedTransactionAssets
 }) => {
     const classes = useStyles() 
+    let location = useLocation();
     const dispatch = useDispatch()
     const mainContainerRef = useRef()
     const companyRef = useRef()
@@ -142,21 +162,28 @@ const GlobalScreen = ({
     const [ isDragging, setIsDragging] = useState(false)
     const [ isFullscreenOpen, setIsFullscreenOpen] = useState(false)
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false)
+    const timelineScreen = useSelector(state => state.ui.timelineScreen)
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
     const dashboardPanel = useSelector(state => state.ui.dashboardPanel)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
+    const companies = useSelector( state => state.patenTrack2.mainCompaniesList.list)
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const selectedMainCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
 
     
     const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents )
     
-
+    const connectionBoxView = useSelector( state => state.patenTrack.connectionBoxView)
     const maintainenceAssetsList = useSelector( state => state.patenTrack2.maintainenceAssetsList )
     const maintainenceAssetsLoadingMore = useSelector( state => state.patenTrack2.maintainenceAssetsLoadingMore )
     const selectedMaintainencePatents = useSelector( state => state.patenTrack2.selectedMaintainencePatents )
     const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
     const channel_id = useSelector( state => state.patenTrack2.channel_id )   
+    const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
+    const connectionBoxData = useSelector(state =>  state.patenTrack.connectionBoxData)
+    const auth_token = useSelector(state => state.patenTrack2.auth_token)
+    const dashboard_share_selected_data = useSelector(state => state.patenTrack2.dashboard_share_selected_data)
+    const selectedAssetsFamily = useSelector(state => state.patenTrack.assetFamily) 
     const checkContainer = () => {
         /* setTimeout(() => {
             if( mainContainerRef.current != null  && mainContainerRef.current != undefined) {                
@@ -174,6 +201,56 @@ const GlobalScreen = ({
     }
 
     useEffect(() => {
+        if(process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' && auth_token !== null) {
+            let url = location.pathname
+            if(url != '' && location != 'blank') {
+                url = url.replace('/', '')
+                if(url != '') {
+                    (async () => {
+                        PatenTrackApi.cancelShareDashboard()
+                        const {data} = await PatenTrackApi.getShareDashboardList(url)
+                        if(data != null && Object.keys(data).length > 0) {
+                            dispatch(setDashboardShareData(data))
+                            let { selectedCompanies, tabs, customers } = data
+                            if(typeof selectedCompanies != 'undefined' && selectedCompanies != '') {
+                                try{
+                                    selectedCompanies = JSON.parse(selectedCompanies)
+                                    if(selectedCompanies.length > 0) {
+                                        dispatch(setMainCompaniesSelected(selectedCompanies, []))
+                                        (async () => {
+                                            const promise = companies.map((row, index) => {
+                                                if(!selectedCompanies.includes(row.representative_id)) {
+                                                    companies[index].status = 0
+                                                }
+                                            })
+                                            await Promise.all(promise)
+                                            dispatch(setMainCompanies(companies, { append: false }))
+                                        })()
+                    
+                                        if(typeof tabs != 'undefined' && tabs != '') {
+                                            dispatch( setAssetTypesSelect([tabs]) )
+                                        }
+                                        if(typeof customers != 'undefined' && customers != '') {
+                                            customers = JSON.parse(customers)
+                                            if(customers.length > 0) {
+                                                dispatch( setSelectAssignmentCustomers(customers) )
+                                            }
+                                        }
+                                    }                    
+                                } catch (e){
+                                    console.log(e)
+                                }
+                            }
+                        }
+                    })()
+                }
+            } 
+        }
+        return (() => {
+        })
+    }, [auth_token])
+
+    useEffect(() => {
         if(selectedCategory == 'correct_details') {
             if(openAssignmentBar === false) {
                 handleAssignmentBarOpen()
@@ -182,10 +259,10 @@ const GlobalScreen = ({
                 handleCustomersBarOpen()
             }
         } else {
-            if(openAssignmentBar === true) {
+            if((openAssignmentBar === true && timelineScreen === false) || (openAssignmentBar === false && timelineScreen === true && selectedCategory != 'top_lenders' &&  selectedCategory != 'proliferate_inventors')) {
                 handleAssignmentBarOpen()
-            }
-            if(openCustomerBar === false && dashboardScreen === false) {
+            } 
+            if(openCustomerBar === false && dashboardScreen === false && timelineScreen === false) {
                 handleCustomersBarOpen()
             }
         }
@@ -193,24 +270,14 @@ const GlobalScreen = ({
 
     useEffect(() => {
         if( type === 0 ) {
-            if(selectedMainCompanies.length > 0) {
-                dispatch( getMaintainenceAssetsList( selectedMainCompanies ))
+            if( selectedMainCompanies.length > 0 || selectedCompaniesAll === true ) {
+                dispatch( getMaintainenceAssetsList( selectedCompaniesAll === true ? [] : selectedMainCompanies ))
             } else {
                 resetAll(dispatch)
             }
         }
         
-    }, [ dispatch, selectedMainCompanies , type ])
-
-    useEffect(() => {
-        if( type === 0 ) {
-            if(selectedCompaniesAll === true) {
-                dispatch( getMaintainenceAssetsList( [] ))
-            } else {
-                resetAll(dispatch)
-            }
-        }
-    }, [dispatch, selectedCompaniesAll, type ])
+    }, [ dispatch, selectedMainCompanies, selectedCompaniesAll , type ])
 
     useEffect(() => {
         checkContainer()
@@ -413,7 +480,7 @@ const GlobalScreen = ({
                         { 
                             openOtherPartyBar === true || openInventorBar === true
                             ? 
-                                <>
+                                <React.Fragment>
                                     {/* <ArrowButton arrowId={`arrow_parties`} handleClick={handleOtherPartyBarOpen} buttonType={toggleOtherPartyButtonType} buttonVisible={otherPartyButtonVisible}/> */}
                                     <SplitPane
                                         className={classes.splitPane}
@@ -446,13 +513,21 @@ const GlobalScreen = ({
                                                     customerType={1}
                                                 />
                                             :
-                                            <div></div>
+                                                securedTransactionAssets === true 
+                                                ?
+                                                    <SecuredAssets
+                                                        sheetName={sheetName} 
+                                                        handleSheetName={handleTextChange}
+                                                    />
+                                                :
+                                                    <div></div>
                                         }
                                     </SplitPane>
-                                </>
+                                </React.Fragment>
                             : 
                             ''
                         }
+                        
                     </div>
                     <SplitPane
                         className={classes.splitPane}
@@ -468,16 +543,23 @@ const GlobalScreen = ({
                             { 
                                 openAssignmentBar === true 
                                 ? 
-                                    <>
-                                        {/* <ArrowButton 
-                                            arrowId={`arrow_transactions`} 
-                                            handleClick={handleAssignmentBarOpen} 
-                                            buttonType={toggleAssignmentButtonType} 
-                                            buttonVisible={assignmentButtonVisible}/> */}
-                                        <AssignmentsTable 
+                                    selectedCategory === 'top_law_firms'
+                                    ?
+                                        <LawFirmTable 
+                                            checkChartAnalytics={checkChartAnalytics}
+                                            chartsBar={openChartBar}
+                                            analyticsBar={openAnalyticsBar}
                                             type={type} 
-                                            defaultLoad={type === 2 ? false : true} />
-                                    </>
+                                            defaultLoad={type === 2 ? false : true} 
+                                        />
+                                    :
+                                        <AssignmentsTable 
+                                            checkChartAnalytics={checkChartAnalytics}
+                                            chartsBar={openChartBar}
+                                            analyticsBar={openAnalyticsBar}
+                                            type={type} 
+                                            defaultLoad={type === 2 ? false : true} 
+                                        />
                                 : 
                                 ''
                             }
@@ -524,6 +606,9 @@ const GlobalScreen = ({
                                                         openAnalyticsBar={openAnalyticsBar}
                                                         openAnalyticsAndCharBar={openAnalyticsAndCharBar}
                                                         closeAnalyticsAndCharBar={closeAnalyticsAndCharBar}
+                                                        openIllustrationBar={openIllustrationBar}
+                                                        handleAnalyticsBarOpen={handleAnalyticsBarOpen}
+                                                        handleIllustrationBarOpen={handleIllustrationBarOpen}
                                                     />
                                                 )
                                                 :
@@ -538,6 +623,9 @@ const GlobalScreen = ({
                                                     openAnalyticsAndCharBar={openAnalyticsAndCharBar}
                                                     closeAnalyticsAndCharBar={closeAnalyticsAndCharBar}
                                                     changeVisualBar={setVisualizerBarSize}
+                                                    openIllustrationBar={openIllustrationBar}
+                                                    handleAnalyticsBarOpen={handleAnalyticsBarOpen}
+                                                    handleIllustrationBarOpen={handleIllustrationBarOpen}
                                                 />
                                             } 
                                             
@@ -614,7 +702,7 @@ const GlobalScreen = ({
                                         className={`${classes.splitPane} ${classes.splitPane2}  ${classes.splitPane3} ${classes.splitPane2OverflowUnset}`}
                                         split="vertical"
                                         minSize={100}
-                                        maxSize={dashboardScreen === true ? -270 : -520}  
+                                        maxSize={dashboardScreen === true ? -270 : -100}  
                                         size={visualizerBarSize}
                                         onChange={(size) => { 
                                             setVisualizerBarSize(size)
@@ -636,7 +724,7 @@ const GlobalScreen = ({
                                         ref={mainContainerRef}
                                         primary={'second'}                                
                                     >
-                                        <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
+                                        <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}} >
                                             <IllustrationCommentContainer 
                                                 cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPane1OverflowUnset, classes.paneHeightZero, { [classes.minimized]: assetsCommentsTimelineMinimized })}
                                                 split={`horizontal`} 
@@ -670,25 +758,60 @@ const GlobalScreen = ({
                                                 setChartBar={setChartBar}
                                                 handleCommentBarOpen={handleCommentBarOpen}
                                                 handleCustomersBarOpen={handleCustomersBarOpen}
+                                                openInventorBar={openInventorBar}
+                                                handleInventorBarOpen={handleInventorBarOpen}  
+                                                openOtherPartyBar={openOtherPartyBar}
+                                                handleOtherPartyBarOpen={handleOtherPartyBarOpen}
                                             /> 
                                         </div>
-                                        <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
+                                        <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}} id={`information_container`}>
                                         {
-                                            dashboardScreen === true && (dashboardPanel === true) ? 
-                                                <IllustrationContainer 
-                                                    isFullscreenOpen={isFullscreenOpen} 
-                                                    asset={assetIllustration} 
-                                                    setIllustrationRecord={setIllustrationRecord} 
-                                                    chartsBar={openChartBar}
-                                                    analyticsBar={openAnalyticsBar}
-                                                    chartsBarToggle={handleChartBarOpen}
-                                                    checkChartAnalytics={checkChartAnalytics}
-                                                    setAnalyticsBar={setAnalyticsBar}
-                                                    setChartBar={setChartBar}
-                                                    fullScreen={handleClickOpenFullscreen}
-                                                    gap={gap}
-                                                    viewOnly={true}
-                                                />
+                                            dashboardScreen === true && dashboardPanel === true && type !== 9  
+                                            ? 
+                                                selectedAssetsFamily.length > 0 
+                                                ?
+                                                    <FamilyContainer
+                                                        family={selectedAssetsFamily}
+                                                    />
+                                                :
+                                                assetIllustration != null 
+                                                ?
+                                                    <IllustrationContainer 
+                                                        isFullscreenOpen={isFullscreenOpen} 
+                                                        asset={assetIllustration} 
+                                                        setIllustrationRecord={setIllustrationRecord} 
+                                                        chartsBar={openChartBar}
+                                                        analyticsBar={openAnalyticsBar}
+                                                        chartsBarToggle={handleChartBarOpen}
+                                                        checkChartAnalytics={checkChartAnalytics}
+                                                        setAnalyticsBar={setAnalyticsBar}
+                                                        setChartBar={setChartBar}
+                                                        fullScreen={handleClickOpenFullscreen}
+                                                        pdfModal={true}
+                                                        gap={gap}
+                                                        viewOnly={true}
+                                                    />
+                                                :
+                                                    selectedAssetsLegalEvents != null && Object.keys(selectedAssetsLegalEvents).length > 0
+                                                    ?
+                                                        <LegalEventsContainer
+                                                            events={selectedAssetsLegalEvents} 
+                                                            type={type}/>  
+                                                    :
+                                                        connectionBoxView === true 
+                                                        ?
+                                                            <IllustrationPdf 
+                                                                cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPaneMainOverflowUnset, { [classes.minimized]: assetsCommentsTimelineMinimized })}
+                                                                split={`horizontal`}
+                                                                primary={'second'}
+                                                                illustrationData={connectionBoxData}
+                                                                dragStart={setIsDrag}
+                                                                dragFinished={setIsDrag}    
+                                                                analyticsBar={openAnalyticsBar}
+                                                                type={type}
+                                                            />
+                                                        :
+                                                            ''
                                             :
                                             <AssetDetailsContainer 
                                                 cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPaneMainOverflowUnset, { [classes.minimized]: assetsCommentsTimelineMinimized })}

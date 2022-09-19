@@ -25,16 +25,19 @@ function ConnectionBox(props) {
   const [ assetData, setAssetData ] = useState({})
   const [ fullView, setFullView ] = useState('')
   const [ visibility, setVisibility] = useState(false)
-
+  
   useEffect(() => {
+    
     /* if(props.assets) {
       setAssetData(props.assets)
     } */
-    if(props.connectionBoxData){
+    if(typeof props.connectionBoxData != 'undefined'){
       (async () => {
         const { data } = await PatenTrackApi.getConnectionData(props.connectionBoxData.popuptop)
         const oldAssetsData = props.assets
-        oldAssetsData.popup = data.popup
+        if(typeof data.popup != 'undefined' ){
+          oldAssetsData.popup = data.popup
+        }
         setAssetData(oldAssetsData)
         setBoxData(data)
       })();
@@ -42,6 +45,10 @@ function ConnectionBox(props) {
     if(props.connectionBoxView == 'true') {
       setFullView(classes.fullView)
     }
+
+    return (() => {
+
+    })
   },[ classes.fullView, props.assets, props.connectionBoxData, props.connectionBoxView ])
 
   const closeViewer = () => {
@@ -87,7 +94,7 @@ function ConnectionBox(props) {
                   <ShowText classes={classes.red} data={`Assignors`}/>
                   {
                     info[0].patAssignorName.map( (assignor, index) =>(
-                      <ShowText key={`assignor-${index}`} className={index > 0 && index < info[0].patAssignorName.length ? classes.marginBottom : ''} data={assignor}/>
+                      <ShowText key={`assignor-${index}`} className={index > 0 && index < info[0].patAssignorName.length ? classes.marginBottom : ''} data={assignor.recorded_name}/>
                     ))
                   }
                 </TableCell>
@@ -95,11 +102,11 @@ function ConnectionBox(props) {
                   <ShowText classes={classes.red} data={`Assignees`}/>
                   {
                     info[0].patAssigneeName.map( (assignee, index) =>(
-                      <ShowText key={`assignee-${index}`} className={index > 0 && index < info[0].patAssigneeName.length ? classes.marginBottom : ''} data={assignee} />
+                      <ShowText key={`assignee-${index}`} className={index > 0 && index < info[0].patAssigneeName.length ? classes.marginBottom : ''} data={assignee.recorded_name} />
                     ))
                   }
                 </TableCell>
-                <TableCell colSpan={2}>
+                <TableCell colSpan={3}>
                   <ShowText classes={classes.red} data={`Assignee's Address`}/>
                   {
                     info[0].patAssigneeName.map( (assignee, index) => (
@@ -124,7 +131,7 @@ function ConnectionBox(props) {
                   <ShowText classes={classes.red} data={`Reel/frame`}/>
                   <ShowText data={info[0].displayId}/>
                 </TableCell>
-                <TableCell colSpan={2}>
+                <TableCell colSpan={3}>
                   <ShowText classes={classes.red} data={`Correspondent`}/>
                   <ShowText data={info[0].corrName} classes={classes.marginBottom}/>
                   <ShowText data={info[0].corrAddress1}/>

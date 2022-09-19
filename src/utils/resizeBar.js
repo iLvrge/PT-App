@@ -22,7 +22,8 @@ import { setAssetTypeAssignments,
   
    import {  
     setPDFView,
-    setPDFFile
+    setPDFFile,
+    setPdfTabIndex
    } from '../actions/patenTrackActions'
   
   import { 
@@ -31,6 +32,10 @@ import { setAssetTypeAssignments,
     toggleUsptoMode,
     toggleLifeSpanMode,
   } from '../actions/uiActions'
+
+
+
+
 
 export const updateResizerBar = (ref, bar, t = 0, defaultSize) => {
     if( ref.current != null ) {
@@ -56,8 +61,8 @@ export const unsetAllFunction = ( dispatch,  resetList) => {
     resetList.forEach( item => dispatch( item ))
 }
 
-export const resetAllRowSelect = ( dispatch,  resetList) => {
-    resetList.forEach( item => dispatch( item.callback ))
+export const resetAllRowSelect = ( dispatch, resetList, skipIndex) => {
+    resetList.forEach( (item, index) => typeof skipIndex === 'undefined' || (typeof skipIndex != 'undefined'  && !skipIndex.includes(index)) ? dispatch( item.callback) : '')
 } 
 
 
@@ -128,11 +133,7 @@ export const resetItemList = {
             callback: setSlackMessages({messages: [], users: []})
         },
         {
-            callback: setPDFFile({ 
-                document: '',  
-                form: '', 
-                agreement: '' 
-            })
+            callback: setPDFFile({ document: '', form: '', agreement: '' })
         },
         {
             callback: setPDFView(false)

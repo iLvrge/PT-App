@@ -6,16 +6,16 @@ import copy from 'copy-to-clipboard'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import PatentrackDiagram from '../../PatentrackDiagram'
 import { toggleUsptoMode, toggleFamilyMode, toggleShow3rdParities } from "../../../../actions/uiActions";
-import { setAssetsIllustrationLoading, setAssetsIllustrationData } from '../../../../actions/patentTrackActions2' 
+import { setAssetsIllustrationLoading, setAssetsIllustrationData, retrievePDFFromServer } from '../../../../actions/patentTrackActions2' 
 import { setPDFFile, setPDFView, setPdfTabIndex, setConnectionData, setConnectionBoxView } from '../../../../actions/patenTrackActions' 
-import { copyToClipboard } from '../../../../utils/html_encode_decode'
 
-import PdfViewer from '../../../common/PdfViewer'
 import ErrorBoundary from '../../ErrorBoundary'
 import themeMode from '../../../../themes/themeMode';
 import axios from 'axios' 
 
 import useStyles from './styles'
+import PdfViewer from '../../PdfViewer'
+import FullScreen from '../../FullScreen'
 
 const IllustrationContainer = ({ 
   asset, 
@@ -30,7 +30,8 @@ const IllustrationContainer = ({
   setChartBar,
   fullScreen,
   onHandleChartBarSize,
-  viewOnly
+  viewOnly,
+  pdfModal
  }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -39,6 +40,7 @@ const IllustrationContainer = ({
   const [ lineId, setLineId ] = useState(0)
   const [ linkId, setLinkId ] = useState(null)
   const targetRef = useRef()
+  const [ fullModalScreen, setFullModalScreen ] = useState(false)
   const [ parent_width, setParentWidth ] = useState(0)
   const [ bottomToolbarPosition, setBottomToolbarPosition ] = useState(0)
   const [ topPosition, setTopPosition ] = useState(0)  
@@ -47,7 +49,18 @@ const IllustrationContainer = ({
   const showThirdParties = useSelector(state => state.ui.showThirdParties)
   const isLoadingAssetIllustration = useSelector(state => state.patenTrack2.loadingAssetIllustration)
   const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
-  
+
+  const fullScreenItems = [
+    {
+      id: 1,
+      label: '',
+      component: PdfViewer,
+      display: false,
+      fullScreen: false,
+      resize: false,
+      standalone: true,
+    }
+  ] 
   const updateContainerWidth = useCallback(() => {
     if (targetRef.current) {
       
@@ -90,7 +103,7 @@ const IllustrationContainer = ({
           if(setIllustrationRecord) { setIllustrationRecord(data) }
           if(data.line[0].document1.indexOf('legacy-assignments.uspto.gov') !== -1 || (data.line[0].document1 == "" && data.line[0].ref_id > 0)) {
             data.line[0].rf_id =  data.line[0].ref_id
-            retrievePDFFromServer(data.line[0])
+            dispatch(retrievePDFFromServer(data.line[0]))
           }
           dispatch(setConnectionData(data.line[0]))
           /*dispatch(
@@ -120,11 +133,14 @@ const IllustrationContainer = ({
       /* if( chartsBar === false ) {
         chartsBarToggle(!chartsBar)
       } */
+      if(typeof pdfModal !== 'undefined' && pdfModal == true) {
+        setFullModalScreen(true)
+      }
       dispatch(
         setPDFView(true)
       )
       if(obj.document_file.indexOf('legacy-assignments.uspto.gov') !== -1 || (obj.document_file == "" && obj.ref_id > 0)) {
-        retrievePDFFromServer(obj)
+        dispatch(retrievePDFFromServer(obj))
       } else {
         dispatch(
           setPDFFile(
@@ -203,25 +219,6 @@ const IllustrationContainer = ({
     console.log('handleComment ', obj)
   }
 
-  const retrievePDFFromServer = async(item) => {    
-    PatenTrackApi.cancelDownloadRequest()
-    const {data} = await PatenTrackApi.downloadPDFUrl(item.rf_id)
-
-    if(data != null && typeof data.link !== 'undefined') {
-        dispatch(
-          setPDFFile(    
-            { 
-              document: data.link, 
-              form: data.link, 
-              agreement: data.link 
-            }
-          )
-        )
-        dispatch(
-          setPdfTabIndex(0)
-        )
-    }
-  }
 
   const handleConnectionBox = useCallback((obj) => {    
     if (typeof viewOnly == 'undefined' && typeof obj.popup != 'undefined' ) { 
@@ -229,6 +226,9 @@ const IllustrationContainer = ({
       if((linkId != obj.popuptop) || (obj.id != lineId && linkId == obj.popuptop) ) {
         setLinkId(obj.popuptop)
         setClick(1)
+        if(typeof pdfModal !== 'undefined' && pdfModal == true) {
+          setFullModalScreen(true)
+        }
         dispatch(
           toggleUsptoMode(false)
         )
@@ -236,7 +236,7 @@ const IllustrationContainer = ({
           setPDFView(true)
         )
         if(obj.document1.indexOf('legacy-assignments.uspto.gov') !== -1 || (obj.document1 == "" && obj.rf_id > 0) ) {          
-          retrievePDFFromServer(obj)
+          dispatch(retrievePDFFromServer(obj))
         } else {
           dispatch(
             setPDFFile(
@@ -347,6 +347,15 @@ const IllustrationContainer = ({
                   themeMode={themeMode}
                   copyrights={true}   
                 /> 
+                {
+                  typeof pdfModal !== 'undefined' && pdfModal === true && fullScreen === true && (
+                    <FullScreen 
+                      componentItems={fullScreenItems} 
+                      showScreen={fullModalScreen} 
+                      setScreen={setFullModalScreen}
+                    />
+                  ) 
+                }
               </ErrorBoundary>                          
             )
           )

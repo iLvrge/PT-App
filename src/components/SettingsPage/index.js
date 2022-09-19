@@ -20,7 +20,7 @@ import Grid from '@mui/material/Grid'
 
 
 import { setBreadCrumbs } from  '../../actions/patentTrackActions2' 
-import { setControlModal } from '../../actions/uiActions'
+import { setControlModal, setDashboardScreen } from '../../actions/uiActions'
 import NavigationIcon from '../../components/NavigationIcon'
 
 const TABS = [
@@ -61,6 +61,7 @@ function SettingsPage() {
   const [ openAddressBar, setOpenAddressBar ] = useState(false)
   const [ openLawfirmsBar, setOpenLawfirmsBar ] = useState(false)
   const [ openSlackBar, setOpenSlackBar ] = useState(false)
+  const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
   const currentTab = useMemo(() => {
     const splittedPathname = location.pathname.split('/')
     return splittedPathname.slice(2).join('/')
@@ -70,7 +71,13 @@ function SettingsPage() {
   const initialOpenSubTabs = findTabViaChild(currentTab)
   const [ openSubTabs, setOpenSubTabs ] = useState(initialOpenSubTabs ? [ initialOpenSubTabs ] : [])
 
-  console.log("SettingsPage")  
+  
+
+  useEffect(() => {
+    if(dashboardScreen === true) {
+      dispatch(setDashboardScreen(false))
+    }
+  }, [dashboardScreen])
 
   useEffect(() => {
     const tab = findTabViaChild(currentTab)

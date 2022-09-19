@@ -19,9 +19,9 @@ const getCookie = name => {
   return null
 }
 
-const getHeader = () => {
+const getToken = () => {
   let token = null
-  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
     token = localStorage.getItem('auth_signature')
   } else {
     token = localStorage.getItem('token')
@@ -29,54 +29,55 @@ const getHeader = () => {
       token = getCookie('token')
     }
   }
+  return token
+}
+
+const getHeader = () => {
   return {
     headers: {
-      'x-auth-token': token,
-    },
+      'x-auth-token': getToken()
+    }
+  }    
+}
+
+const getBlobHeader = () => {
+  return {
+    headers: {
+      'x-auth-token': getToken(),
+      'accept': 'application/octet-stream',
+      'Content-Type': 'application/octet-stream'
+    }
   }
+}  
+
+const getMultiFormUrlHeader = () => {
+  return {
+    headers: {
+      'x-auth-token': getToken(),
+      'Content-Type': 'multipart/form-data'
+    }
+  } 
 }
 
 const getFormUrlHeader = () => {
-  let token = null
-  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-    token = localStorage.getItem('auth_signature')
-  } else {
-    token = localStorage.getItem('token')
-    if (token === null) {
-      token = getCookie('token')
-    }
-  }
   return {
     headers: {
-      'x-auth-token': token,
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-  }
-} 
-
-const getMultiFormUrlHeader = () => {
-  let token = null
-  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-    token = localStorage.getItem('auth_signature')
-  } else {
-    token = localStorage.getItem('token')
-    if (token === null) {
-      token = getCookie('token')
+      'x-auth-token': getToken(),
+      'Content-Type': 'application/x-www-form-urlencoded'
     }
-  }
-  return {
-    headers: {
-      'x-auth-token': token,
-      'Content-Type': 'multipart/form-data',
-    },
-  }
+  } 
 }
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelFamilyCounter, cancelFeesCounter
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest, cancelAllDashboardCountRequest;
 
 class PatenTrackApi {
+
+  static getDocumentIdentifierFile(identifier) {
+    return axios.get(`https://developer.uspto.gov/ptab-api/documents/${identifier}/download`, getBlobHeader())
+  }
+
   static getSiteLogo() {
     return axios.get(`${base_api_url}/site_logo`, getHeader())
   }
@@ -119,6 +120,12 @@ class PatenTrackApi {
     )
   }
 
+  static getMaintainenceAssetsEventsList( representative_id) {
+    return axios.get(`${base_new_api_url}/companies/maintainence_assets_events?representative_id=${JSON.stringify(representative_id)}`,
+      getHeader(),
+    )
+  }
+
   static getCompaniesUserList(companyID) {
     return axios.get(`${base_new_api_url}/companies${companyID}/users`, getHeader())
   }
@@ -140,6 +147,15 @@ class PatenTrackApi {
       }
     } 
   }
+  
+  static addCompanyRequest( form ) {
+    let header = getFormUrlHeader()
+    return axios.post(`${base_new_api_url}/companies/request`, form, header)    
+  }
+
+  static getCompaniesRequest( ) {
+    return axios.get(`${base_new_api_url}/companies/request`, getHeader())
+  } 
 
   static linkSheetSelectedData( type, asset, form ) {
     let header = getFormUrlHeader()
@@ -232,6 +248,12 @@ class PatenTrackApi {
   static getAssetTypeAssignmentAllAssets(companies, tabs, customers, rfIDs) { 
     return axios.get(`${base_new_api_url}/customers/asset_types/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
   }
+
+  static getAssetTypeAssignmentAllAssetsWithFamily(form) { 
+    let header = getFormUrlHeader()
+    
+    return axios.post(`${base_new_api_url}/customers/asset_types/assets/family`, form, header)
+  }
   
 
   static getRestoreOwnershipAssets(companies, tabs, customers, rfIDs) { 
@@ -260,6 +282,24 @@ class PatenTrackApi {
     if (cancelAssets !== undefined) {
       try{
         throw cancelAssets('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
+  static getShareDashboardList(shareCode) { 
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelShareDashboard = c
+    })
+    return axios.get(`${base_new_api_url}/share/dashboard/list/${shareCode}`, header)
+  }
+
+  static cancelShareDashboard() {
+    if (cancelShareDashboard !== undefined) {
+      try{
+        throw cancelShareDashboard('Operation canceled by the user.')
       } catch (e){
         console.log('cancelRequest->', e)
       }
@@ -653,6 +693,14 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/customers/timeline?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}`, header)
   }
 
+  static getTimelineSecurityData(companies, tabs, customers, rfIDs = [], layout) {
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelTimeline = c
+    })
+    return axios.get(`${base_new_api_url}/customers/timeline/security?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}`, header)
+  }
+
   static cancelTimeline() {
     if (cancelTimeline !== undefined) {
       try{
@@ -708,8 +756,83 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/address`, getHeader())
   }
 
-  static getDashboardData(formData) {
-    return axios.post(`${base_new_api_url}/dashboards`, formData, getFormUrlHeader())
+  static getDashboardData(formData, source) {
+    let header = getFormUrlHeader()
+    header['cancelToken'] = source.token
+    cancelAllDashboardRequest = source   
+    return axios.post(`${base_new_api_url}/dashboards`, formData, header)
+  }
+
+  static generateCancelToken = () => {
+    return CancelToken
+  }
+
+  
+  static cancelAllDashboardToken = () => {
+    if (cancelAllDashboardRequest !== undefined) {
+      try{
+        cancelAllDashboardRequest.cancel(`Dashboard request aborted`)        
+      } catch (e){
+        console.log('cancelInitiated->', e)
+      }
+    }
+  }
+
+  static getDashboardDataCount(formData, source) {
+    let header = getFormUrlHeader()
+    header['cancelToken'] = source.token
+    cancelAllDashboardCountRequest = source   
+    return axios.post(`${base_new_api_url}/dashboards/count`, formData, header)
+  }
+  
+  static cancelAllDashboardCountToken = () => {
+    if (cancelAllDashboardCountRequest !== undefined) {
+      try{
+        cancelAllDashboardCountRequest.cancel(`Dashboard request aborted`)        
+      } catch (e){
+        console.log('cancelInitiated->', e)
+      }
+    }
+  }
+  
+
+  static findDashboardExample(formData) {
+    let header = getFormUrlHeader()
+    return axios.post(`${base_new_api_url}/dashboards/example`, formData, header)
+  }
+
+  static getDashboardTimelineData(formData, source) {
+    let header = getFormUrlHeader()
+    header['cancelToken'] = source.token
+    cancelAllDashboardTimelineRequest = source   
+    return axios.post(`${base_new_api_url}/dashboards/timeline`, formData, header)
+  }
+
+  static cancelAllDashboardTimelineToken = () => {
+    if (cancelAllDashboardTimelineRequest !== undefined) {
+      try{
+        cancelAllDashboardTimelineRequest.cancel(`Dashboard timeline request aborted`)        
+      } catch (e){
+        console.log('cancelInitiated->', e)
+      }
+    }
+  }
+
+  static getFilledAssets(formData) {
+    return axios.post(`${base_new_api_url}/dashboards/filed_assets_events`, formData, getFormUrlHeader())
+  }
+
+  static getDashboardPartiesData(formData) {
+    return axios.post(`${base_new_api_url}/dashboards/parties`, formData, getFormUrlHeader())
+  }
+
+  static getDashboardPartiesAssignorData(formData) {
+    return axios.post(`${base_new_api_url}/dashboards/parties/assignor`, formData, getFormUrlHeader())
+  }
+  
+
+  static getLawFirmsByCompany(companies) {
+    return axios.get(`${base_new_api_url}/customers/lawfirm?companies=${JSON.stringify(companies)}`, getHeader())
   }
 
   static getLawFirms() {
@@ -1272,6 +1395,10 @@ class PatenTrackApi {
       cancelFeesCounter = c
     })
     return axios.get(`${base_new_api_url}/events/${applicationNumber}/${patentNumber != '' ? encodeURIComponent(patentNumber) : applicationNumber}?counter=true`, header)
+  }
+
+  static shareDashboard(form) { 
+    return axios.post(`${base_new_api_url}/dashboards/share`,  form, getFormUrlHeader())
   }
 
   static cancelFeesCounter () {

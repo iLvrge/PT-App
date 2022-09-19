@@ -6,7 +6,8 @@ import rootReducer from '../index'
 
 import jwt_decode from 'jwt-decode'
 import { loginSuccess, getCookie } from '../../actions/authActions'
-import { setSlackAuthToken, getSlackProfile, setAuthenticateAuthToken } from '../../actions/patentTrackActions2'
+import { setSlackAuthToken, getSlackProfile, setAuthenticateAuthToken, fetchParentCompanies} from '../../actions/patentTrackActions2'
+import { getProfile } from '../../actions/patenTrackActions'
 
 import { setTokenStorage, getTokenStorage } from '../../utils/tokenStorage'
 
@@ -14,22 +15,26 @@ import AuthApi from '../../api/authApi'
 
 const store = createStore(rootReducer, applyMiddleware(thunk, logger ))
 
-if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
   let location = window.location.pathname
 
   if(location && location != 'blank') {
     (async() => {
       location = location.replace('/', '')
       if( location != '') {
-        const { data } = await AuthApi.signInWithShareCode(location.replace('/', ''), process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 0 : 2)
-      
+        const { data } = await AuthApi.signInWithShareCode(location.replace('/', ''), process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? 9 : process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 0 : 2)
         if( data && data != null ) { 
           if(data.accessToken != null ) {
             const decoded_token = jwt_decode(data.accessToken)            
             localStorage.setItem('auth_signature', data.accessToken)
             store.dispatch(setAuthenticateAuthToken(data.accessToken))
             store.dispatch(loginSuccess(decoded_token))
-    
+            if(process.env.REACT_APP_ENVIROMENT_MODE !=  'PRO') {
+              store.dispatch(getProfile)
+            }
+            if(process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
+              store.dispatch(fetchParentCompanies(0, 'original_name', 'ASC'))
+            }
             let slackToken = null
             let slack_auth_token_info = getCookie('slack_auth_token_info')
             if( slack_auth_token_info != null ) {

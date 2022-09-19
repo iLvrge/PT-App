@@ -71,7 +71,7 @@ const convertDataToItem = (item) => {
 }
 
 
-const Citation = ({ number }) => {
+const Citation = ({ number, citationRawData, updateCitationRawData }) => {
     const classes = useStyles()
     const timelineRef = useRef()
     const timelineContainerRef = useRef()
@@ -151,17 +151,23 @@ const Citation = ({ number }) => {
     }
 
     useEffect(() => {
-        const getPtabData = async() => {
-            setIsLoadingTimelineRawData(true)
-            PatenTrackApi.cancelPtab()    
-            const asset = selectedAssetsPatents[0] !== '' ? selectedAssetsPatents[0] : selectedAssetsPatents[1]
-            const { data } = await PatenTrackApi.getCitationData(asset)
+        if(typeof citationData !== 'undefined' && citationRawData.length > 0) {
             setIsLoadingTimelineRawData(false)
-            if(data !== null ) {
-                setTimelineRawData(data)
+            setTimelineRawData(citationRawData)
+        } else {
+            const getPtabData = async() => {
+                setIsLoadingTimelineRawData(true)
+                PatenTrackApi.cancelPtab()    
+                const asset = selectedAssetsPatents[0] !== '' ? selectedAssetsPatents[0] : selectedAssetsPatents[1]
+                const { data } = await PatenTrackApi.getCitationData(asset)
+                setIsLoadingTimelineRawData(false)
+                if(data !== null ) {
+                    setTimelineRawData(data)
+                    updateCitationRawData(data)
+                }
             }
+            getPtabData()
         }
-        getPtabData()
     }, [selectedAssetsPatents])
 
 

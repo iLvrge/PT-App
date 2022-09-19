@@ -257,7 +257,7 @@ export default makeStyles(theme => ({
         background: 'linear-gradient(to right,  #FFFF00 0%,#FFFF00 50%,#E60000 50%,#E60000 100%)',
         opacity: '0.5',
       } 
-    }
+    },
   },
   timelinePtab: {
     height: '100%', 
@@ -302,54 +302,42 @@ export default makeStyles(theme => ({
         backgroundColor: 'unset'
       }
     },
-    '& .vis-dot': {
-      background: 'none !important',
-      border: 'none !important',
-    },
     '& .vis-item.vis-background.negative': {
       background: 'linear-gradient(to right,  #FFFF00 0%,#FFFF00 50%,#E60000 50%,#E60000 100%)',
       opacity: '0.5',
     },
-    '& .vis-item.vis-range': {
-      '&.asset-type-yellow': {
-        background: 'linear-gradient(to right,  #FFFF00 0%,#FFFF00 50%,#E60000 50%,#E60000 100%)',
-        opacity: '0.5',
-      } 
+    '& .vis-item.vis-range.asset-type-default':{
+      backgroundColor: '#228DE8 !important'
     },
-    '& .vis-item.vis-range': {   
-      height: '4.4rem',   
-      '&.asset-type-default': {
-        backgroundColor: theme.palette.background.default,
-        border: 0,
-        borderRadius: 3,
+    '& .vis-item.vis-range':{
+      border: 0,
+      '& .vis-item-overflow':{
+        overflow: 'visible',
+        position: 'unset',
+        minHeight: 28,
         '& .vis-item-content':{
-          border: '1px solid #545454',   
-          borderRadius: 3, 
-          padding: 4,
-          color: '#BDBDBD',
-        }
-      },
-      '& .vis-item-content':{
-        border: '1px solid #545454',
-        borderRadius: 3, 
-        padding: 4,
-        color: '#BDBDBD',
-        height: '100%',
-        width: '100%',
-        '& .first':{
-          display: 'flex',
-          fontSize: '0.875rem',
-          fontWeight: 500,
-          flexDirection: 'column',
-          '& .textColumn':{
-            display: 'flex',
-            '& h4':{
-              display: 'contents',
-              margin: 0
+          '& span':{
+            whiteSpace: 'nowrap',
+            display: 'block',
+            width: '100%'
+          },
+          '& tt':{
+            marginRight: 10,
+            cursor: 'pointer',
+            '& img':{
+              width: 16
+            }
+          },
+          '& em':{
+            position: 'absolute',
+            right: 7,
+            cursor: 'pointer',
+            '& img':{
+              width: 16
             }
           }
         }
-      }
+      } 
     }
   },
   timelineCitation: {

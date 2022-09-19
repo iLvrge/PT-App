@@ -9,28 +9,42 @@ export default makeStyles((theme) => ({
         overflow: 'hidden auto',        
         '& .MuiTableCell-root .MuiSelect-select.MuiSelect-select':{
           paddingRight: 0 
-        },
-        '& .MuiSelect-select:focus':{
-          background: 'none'
-        },
-        '& svg.MuiSelect-icon':{
+      },
+      '& .ReactVirtualized__Table__rowColumn':{
+          '& .MuiSvgIcon-root':{
+              fontSize: 20,
+              width: '1em',
+              height: '1em' ,
+              position: 'absolute',
+              top: 5
+          },
+          '& .MuiTableCell-root span':{
+              padding: 6
+          }
+      },
+      '& .MuiSelect-select:focus':{
+       background: 'none'
+      },
+      '& svg.MuiSelect-icon':{
           fontSize: '1.7rem',
           top: 3,
-          color: 'rgba(255,255,255,0.7)'
-        },
-        '& .MuiInput-underline':{
-          paddingRight: 11 
-        }, 
-        '& .MuiInput-underline:hover:not(.Mui-disabled):before, .MuiInput-underline:before, .MuiInput-underline:after':{
+          /* color: 'rgba(255,255,255,0.7)', */
+          opacity: 0
+      },
+      '& .MuiInput-underline':{
+          /* paddingRight: 11  */
+      }, 
+      '& .MuiInput-underline:hover:not(.Mui-disabled):before, .MuiInput-underline:before, .MuiInput-underline:after':{
           border: 0
-        },
-        '& .selectedIcon svg':{          
+      },
+      '& .selectedIcon svg':{          
           position: 'absolute',
-          left: 9,
           fontSize: '1.3rem',
-          color: 'rgba(255,255,255,0.7)',
-          width: 19
-        }
+          /* color: '#fff', */
+          width: '1.3rem',
+          left: 2,
+          top: '17px  !important'
+      }
     },
     mobile: {
       flex: '1 1 50%'
@@ -203,16 +217,32 @@ export default makeStyles((theme) => ({
           }
         },
       },
-      tableCell: {
-        flex: 1,
-        whiteSpace: 'nowrap',
-        border: 'none',
-        alignItems: 'center',
-        padding: '0',
-        overflow: 'hidden',
-        /* margin: '0 10px', */
-        '& .MuiSvgIcon-root':{
+      
+  tableCell: {
+      flex: 1,
+      whiteSpace: 'nowrap',
+      border: 'none',
+      alignItems: 'center',
+      padding: '0',
+      overflow: 'hidden',
+      /* margin: '0 10px', */
+      '& .MuiSvgIcon-root':{
           fontSize: '1rem'
-        }
       }
+  },
+  rating_container: {
+      '& .MuiRating-root':{
+          top: 3
+      }
+  },
+  rating_label: {
+      display: 'inline-block',
+      position: 'relative',
+      width: 75,
+      height: 21,
+      '& label':{
+          position: 'absolute',
+          top: 1
+      }
+  }
 }))

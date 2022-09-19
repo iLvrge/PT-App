@@ -69,7 +69,9 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
         } else if( connectionBoxView === true || selectedRow.length > 0 ) {
             /*setLifeSpanTabs([ 'Lifespan', 'Assignment', 'USPTO' ])*/
             setLifeSpanTabs([ 'Lifespan', 'Assignment'])
-            setSelectedTab(typeof activeTab !== 'undefined' ? activeTab : 0)
+            if(typeof activeTab !== 'undefined') {
+                setSelectedTab(activeTab)
+            }
         }
     }, [ connectionBoxView, selectedRow ])
 
@@ -173,7 +175,6 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
                     }
                 }                
             }
-
             if( list.length > 0 ) {
                 setFilterList(list)
                 const form = new FormData()
@@ -247,11 +248,14 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
                 }
             </Tabs> 
             {
-                (selectedAssetsTransactionLifeSpan.length > 0 && (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) 
+                ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) 
                 ?
-                    selectedTab === 0 ?
-                        <SpanVisualize chart={selectedAssetsTransactionLifeSpan} chartBar={chartBar} visualizerBarSize={visualizerBarSize}/>
-                        :
+                    selectedTab === 0 
+                    ?
+                        selectedAssetsTransactionLifeSpan.length > 0 && (
+                            <SpanVisualize chart={selectedAssetsTransactionLifeSpan} chartBar={chartBar} visualizerBarSize={visualizerBarSize}/>
+                        )
+                    :
                        /*  selectedTab === 1  ?
                             <Acknowledgements/>
                             : */

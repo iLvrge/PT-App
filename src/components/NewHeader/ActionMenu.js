@@ -30,6 +30,7 @@ import {
     Contacts as ContactsIcon,
     LocationCity as LocationCityIcon,
     KeyboardArrowDown,
+    KeyboardArrowUp,
     Speed as SpeedIcon,
     MailOutline as MailOutlineIcon,
     FindInPage as FindInPageIcon,
@@ -50,6 +51,7 @@ import CustomerAddress from '../common/CustomerAddress'
 import { controlList } from "../../utils/controlList"
 import { downloadFile, copyToClipboard } from '../../utils/html_encode_decode'
 import { setTokenStorage, getTokenStorage } from '../../utils/tokenStorage'
+import { TransactionIcon } from '../../utils/icons'
 
 import { 
     setBreadCrumbsAndCategory,  
@@ -117,7 +119,6 @@ const ActionMenu = (props) => {
     const mainCompaniesSelected = useSelector(state => state.patenTrack2.mainCompaniesList.selected)
     const assetTypeAssignmentAssetsList = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list)
     const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
-    const selectedMainCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedAssetsTransactions = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
     const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
     const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
@@ -131,8 +132,8 @@ const ActionMenu = (props) => {
     const google_profile = useSelector(state => state.patenTrack2.google_profile)
     const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
     const profile = useSelector(store => (store.patenTrack.profile))
-
-
+    const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected);
+    const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected);
  
 
     /**
@@ -203,8 +204,7 @@ const ActionMenu = (props) => {
     const getDriveDocumentList = (flag) => {
         if( flag === true ) { 
             
-            const googleToken = getTokenStorage( 'google_auth_token_info' )
-            console.log("getDriveDocumentList", googleToken)     
+            const googleToken = getTokenStorage( 'google_auth_token_info' ) 
             if(googleToken && googleToken != '' && googleToken != null ) {
     
             const { access_token } = JSON.parse(googleToken)
@@ -270,54 +270,13 @@ const ActionMenu = (props) => {
         }
     }, [ template_document_url ] )
 
+    
+
     /**
      * Share a list of selected assets
      */
 
-    const onShare = useCallback(async () => {
-        if (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'){
-            alert('Message..')
-        } else {
-            let selectAssetsList = [], selectedTransactions = []
     
-            let list = maintainencePatentsList.length > 0 ? [...maintainencePatentsList] : [...assetTypeAssignmentAssetsList]
-    
-            let selectedItems = selectedMaintainencePatents.length > 0 ? [...selectedMaintainencePatents] : [...assetTypeAssignmentAssetsSelected]
-    
-            if(selectedItems.length > 0) {
-                selectedItems.forEach( item => {
-                    const findIndex = list.findIndex( row => row.asset == item)
-                    if(findIndex !== -1) {
-                    selectAssetsList.push({asset: item, flag: list[findIndex].grant_doc_num !== '' && list[findIndex].grant_doc_num !== null ? 4 : 5})
-                    }
-                }) 
-            } else {
-                selectedTransactions = [...selectedAssetsTransactions]
-            }
-            if( selectedTransactions.length == 0 &&  selectAssetsList.length == 0 ) {
-                alert('Please select one or more assets to share')
-            } else {
-                // Share list of assets and create share link 
-                let form = new FormData()
-                form.append('assets', JSON.stringify(selectAssetsList))
-                form.append('transactions', JSON.stringify(selectedTransactions))
-                form.append('type', 2)      
-                const {data} = await PatenTrackApi.shareIllustration(form)
-                if (data.indexOf('sample') >= 0) {
-                /**
-                 * just for temporary replacing
-                 * open share url new tab
-                 */
-                //const shareURL = data.replace('https://share.patentrack.com','http://167.172.195.92:3000')
-                
-                if(window.confirm("Copy a sharing link to your clipboard.")){
-                    copy(data)
-                }
-                //window.open(data,'_BLANK')
-                } 
-            }
-        }        
-    }, [ dispatch, category, selectedMaintainencePatents, assetTypeAssignmentAssetsSelected, selectedAssetsTransactions ])
     /**
      * Add / Update assets list on google spreadsheet
      */
@@ -346,7 +305,6 @@ const ActionMenu = (props) => {
                 form.append('asset', decodeURIComponent(link_assets_sheet_type.asset))
                 form.append('values', JSON.stringify(link_assets_selected))
                 const { data } = await PatenTrackApi.linkSheetUpdateData(form, link_assets_sheet_type.type)
-                console.log('updateSheet', data)
             }      
         }
     }, [link_assets_selected, link_assets_sheet_type])
@@ -372,7 +330,7 @@ const ActionMenu = (props) => {
                         setRedo(data)
                         dispatch(setMoveAssets([]))
                         if(selectedMaintainencePatents.length == 0) {
-                            dispatch( getMaintainenceAssetsList( selectedMainCompanies ))
+                            dispatch( getMaintainenceAssetsList( mainCompaniesSelected ))
                         }
                     }
                 }
@@ -395,11 +353,11 @@ const ActionMenu = (props) => {
                 if( data ) {
                     // refresh patent list
                     setRedo([])
-                    dispatch( getMaintainenceAssetsList( selectedMainCompanies ))
+                    dispatch( getMaintainenceAssetsList( mainCompaniesSelected ))
                 }
             }
         }    
-    }, [ dispatch, selectedMaintainencePatents, maintainenceFrameMode, move_assets, redo, selectedMainCompanies ])
+    }, [ dispatch, selectedMaintainencePatents, maintainenceFrameMode, move_assets, redo, mainCompaniesSelected ])
 
     /**
      * Open uspto window 
@@ -426,6 +384,7 @@ const ActionMenu = (props) => {
      */
 
     const onMaintainenceFeeFile = useCallback(async () => {  
+        console.log('Maintainence Fee File')
         if(props.dashboardScreen){
             props.setActivityTimeline()
         }
@@ -516,7 +475,7 @@ const ActionMenu = (props) => {
             const form = new FormData()
             form.append('id', fixedTransactionAddress[0][0])
             form.append('update_address', fixedTransactionAddress[0][1])
-            form.append('company_ids', JSON.stringify(selectedMainCompanies))
+            form.append('company_ids', JSON.stringify(mainCompaniesSelected))
             const { data } = await PatenTrackApi.fixedTransactionAddressXML(form)
     
             if( data != null && data != '') {
@@ -609,7 +568,7 @@ const ActionMenu = (props) => {
             const form = new FormData()
             form.append('id', fixedTransactionName[0][0])
             form.append('new_name', fixedTransactionName[0][1])
-            form.append('company_ids', JSON.stringify(selectedMainCompanies))
+            form.append('company_ids', JSON.stringify(mainCompaniesSelected))
             const { data } = await PatenTrackApi.fixedTransactionNameXML(form)
         
             if( data != null && data != '') {
@@ -705,62 +664,33 @@ const ActionMenu = (props) => {
     }, [ newCompanyName, assetTypeNamesGroups, mainCompaniesSelected ] )
 
     const handleChangeLayout = (event) => {
-        if(props.dashboardScreen){
-            props.setActivityTimeline()
-        }
-        resetAllActivity(category == 'due_dilligence' ? 'restore_ownership' : 'due_dilligence')
+        props.setPatentAssets(category == 'due_dilligence' ? "Broken Chain-of-Title" : 'Assets')
+        handleClose()
+        props.resetAllActivity(category == 'due_dilligence' ? 'restore_ownership' : 'due_dilligence')
     }    
 
     const locateLostAssets = () => {
-        if(props.dashboardScreen){
-            props.setActivityTimeline()
-        }
-        
+        props.setPatentAssets('Locate Lost Assets')
+        handleClose()
         const findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'locate_lost_assets')        
         if(findIndex !== -1) {
             props.resetAll()
             props.clearOtherItems()
             dispatch(setBreadCrumbsAndCategory(controlList[findIndex])) 
-            resetAllActivity('locate_lost_assets') 
+            props.resetAllActivity('locate_lost_assets') 
         }
         //
     }
 
-    const onHandleTimeline = () => {
-        setAnchorEl(null)
-        resetAllActivity('due_dilligence')
-        props.setActivityTimeline()
+    
+
+    const onHandleMaintainencePatentAssets = () => {
+        handleClose()
+        props.resetAllActivity('pay_maintainence_fee')
+        props.setMaintaincePatentAssets()
     }
 
-    const onHandleDashboard = () => {
-        setAnchorEl(null)
-        resetAllActivity('due_dilligence')
-        props.setDashboardScreen()
-        
-    }
-
-    const resetAllActivity = (category) => {
-        /* let findIndex = -1 */
-        /* if(category == 'due_dilligence') {
-            findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
-        } else if(category != '' && category != 'restore_ownership') {
-            
-        } else {
-            findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'due_dilligence')
-        } */
-        const findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == category)
-        if( findIndex !== -1 ) {
-            //hideMenu(event, controlList[findIndex])
-            props.resetAll()
-            props.clearOtherItems()
-            dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))  
-            if(category == 'due_dilligence' || category == 'restore_ownership') {
-                dispatch(setSwitchAssetButton(controlList[findIndex].category == 'due_dilligence' ? 0 : 1))
-            }
-        }
-    }
-
-
+    
     
     return (
         <div>
@@ -790,10 +720,42 @@ const ActionMenu = (props) => {
                         variant="text"
                         disableElevation
                         onClick={handleClick}
-                        startIcon={<KeyboardArrowDown />}
+                        startIcon={open === false ? <KeyboardArrowDown /> : <KeyboardArrowUp/>}
                         className={classes.btnActionMenu}
                     >
-                        Action
+                        <span style={{whiteSpace: 'nowrap'}}>
+                            {
+                                props.display_sales_assets == true 
+                                ?
+                                    props.breadcrumbs != '' && typeof props.breadcrumb !== 'undefined'
+                                        ?
+                                            props.breadcrumbs
+                                        :
+                                            'Our Assets for Sale'
+                                :
+                                    props.dashboardScreen === true
+                                    ?
+                                        'Dashboard'
+                                    :
+                                        props.timelineScreen === true
+                                        ?
+                                            props.layoutName != '' ? props.layoutName : 'Transactions'
+                                        :
+                                            props.patentScreen === true
+                                            ?
+                                                props.layoutName != '' && props.layoutName != 'Due Diligence > Legal Ownership'
+                                                ?
+                                                    props.layoutName
+                                                :
+                                                    'Assets'
+                                            :
+                                                props.selectedCategory !== 'due_dilligence'
+                                                ? 
+                                                    props.layoutName     
+                                                : 
+                                                    'Action' 
+                            } 
+                        </span>
                     </Button>
             }            
             <Menu       
@@ -806,29 +768,13 @@ const ActionMenu = (props) => {
                 onClose={handleClose}
                 className={classes.actionMenuList} 
             >   
-                <MenuItem className={classes.disableHover}>
-                    <ListItemText>Analyst:</ListItemText>
-                </MenuItem>
-                <MenuItem onClick={onHandleTimeline} className={`iconItem`} selected={props.timelineScreen && category === 'due_dilligence'}>
+                
+                {/* <MenuItem onClick={onHandleMaintainencePatentAssets} className={`iconItem`} selected={props.patentScreen === true && !display_sales_assets}>
                     <ListItemIcon>
-                        <TvIcon/>
-                    </ListItemIcon>
-                    <ListItemText>Activity Timeline</ListItemText>
-                </MenuItem>
-                <MenuItem  onClick={onHandleDashboard} className={`iconItem`} selected={props.dashboardScreen}>
-                    <ListItemIcon>
-                        <SpeedIcon/>
-                    </ListItemIcon>
-                    <ListItemText>Dashboard</ListItemText>
-                </MenuItem>
-                <MenuItem  onClick={onShare} className={`iconItem`}>
-                    <ListItemIcon>
-                        <FontAwesomeIcon
-                            icon={faShareAlt}
-                        />
-                    </ListItemIcon>
-                    <ListItemText>Share Selected Assets</ListItemText>
-                </MenuItem>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className={classes.assetIcon}><path d="M0 0h24v24H0V0z" fill="none"/><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 4h2v5l-1-.75L9 9V4zm9 16H6V4h1v9l3-2.25L13 13V4h5v16z"/></svg>
+                    </ListItemIcon>   
+                    <ListItemText>Maintainence</ListItemText>
+                </MenuItem> */}
                 {
                     loadingUSPTO && (
                         <MenuItem className={`iconItem`}>
@@ -838,12 +784,11 @@ const ActionMenu = (props) => {
                         </MenuItem>
                     )
                 }
-                <Divider />
                 <MenuItem className={classes.disableHover}>
                     <ListItemText><span className={clsx(parseInt(profile?.user?.organisation?.subscribtion) < 2 ? classes.disabled : '')}>Pro:</span> {parseInt(profile?.user?.organisation?.subscribtion) === 1 ? <Button variant="text">Upgrade</Button> : '' }</ListItemText>
                 </MenuItem>
                 {
-                    parseInt(profile?.user?.organisation?.subscribtion) === 2 
+                    parseInt(profile?.user?.organisation?.subscribtion) === 2 || parseInt(profile?.user?.organisation?.subscribtion) === 3
                     ?   
                         [                            
                             <AssetSwitchButton
@@ -871,7 +816,8 @@ const ActionMenu = (props) => {
                             </MenuItem>,
                             <MenuItem  
                             onClick={() => {
-                                props.setActivityTimeline()
+                                handleClose()
+                                props.setPatentAssets('Our Assets for Sale')
                                 props.onClickSale(1)
                             }} className={`iconItem`}  selected={display_sales_assets}>
                                 <ListItemIcon>
@@ -904,7 +850,7 @@ const ActionMenu = (props) => {
                                 </MenuItem>,
                                 <MenuItem className={`iconItem`} disabled>
                                     <ListItemIcon>
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="MuiSvgIcon-root customSVG" viewBox="0 0 24 24" className="MuiSvgIcon-root customSVG"><path d="M11 20H2.5A2.503 2.503 0 0 1 0 17.5v-13C0 3.122 1.122 2 2.5 2h19C22.878 2 24 3.122 24 4.5V18c0 .275-.225.5-.5.5s-.5-.225-.5-.5V4.5c0-.827-.673-1.5-1.5-1.5h-19C1.673 3 1 3.673 1 4.5v13c0 .827.673 1.5 1.5 1.5H11a.5.5 0 0 1 0 1z"/><path d="M12 14.03c-1.014 0-1.962-.425-2.67-1.194L3.122 6.048a.5.5 0 0 1 .739-.675l6.207 6.787c1.03 1.12 2.834 1.121 3.866-.001l6.195-6.777a.5.5 0 0 1 .739.675l-6.196 6.778c-.71.77-1.658 1.195-2.672 1.195z"/><path d="M3.492 17.215a.5.5 0 01-.337-.87l5.458-4.982a.499.499 0 11.675.738L3.83 17.084a.506.506 0 01-.338.131zM19.168 16a.495.495 0 01-.337-.131l-4.127-3.771a.5.5 0 11.675-.738l4.127 3.77a.5.5 0 01-.338.87z"/><path d="M20.542 22h-7.147A2.398 2.398 0 0 1 11 19.605v-.211a2.399 2.399 0 0 1 2.395-2.396h7.147A1.46 1.46 0 0 1 22 18.456c0 .887-.654 1.542-1.458 1.542H15a.5.5 0 0 1 0-1h5.542A.46.46 0 0 0 21 18.54c0-.336-.206-.542-.458-.542h-7.147c-.769 0-1.395.626-1.395 1.396v.211c0 .769.625 1.395 1.395 1.395h7.147A2.463 2.463 0 0 0 23 18.542C23 17.104 21.896 16 20.542 16H15c-.275 0-.5-.225-.5-.5s.225-.5.5-.5h5.542A3.462 3.462 0 0 1 24 18.458C24 20.449 22.449 22 20.542 22z"/></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="MuiSvgIcon-root customSVG"><path d="M11 20H2.5A2.503 2.503 0 0 1 0 17.5v-13C0 3.122 1.122 2 2.5 2h19C22.878 2 24 3.122 24 4.5V18c0 .275-.225.5-.5.5s-.5-.225-.5-.5V4.5c0-.827-.673-1.5-1.5-1.5h-19C1.673 3 1 3.673 1 4.5v13c0 .827.673 1.5 1.5 1.5H11a.5.5 0 0 1 0 1z"/><path d="M12 14.03c-1.014 0-1.962-.425-2.67-1.194L3.122 6.048a.5.5 0 0 1 .739-.675l6.207 6.787c1.03 1.12 2.834 1.121 3.866-.001l6.195-6.777a.5.5 0 0 1 .739.675l-6.196 6.778c-.71.77-1.658 1.195-2.672 1.195z"/><path d="M3.492 17.215a.5.5 0 01-.337-.87l5.458-4.982a.499.499 0 11.675.738L3.83 17.084a.506.506 0 01-.338.131zM19.168 16a.495.495 0 01-.337-.131l-4.127-3.771a.5.5 0 11.675-.738l4.127 3.77a.5.5 0 01-.338.87z"/><path d="M20.542 22h-7.147A2.398 2.398 0 0 1 11 19.605v-.211a2.399 2.399 0 0 1 2.395-2.396h7.147A1.46 1.46 0 0 1 22 18.456c0 .887-.654 1.542-1.458 1.542H15a.5.5 0 0 1 0-1h5.542A.46.46 0 0 0 21 18.54c0-.336-.206-.542-.458-.542h-7.147c-.769 0-1.395.626-1.395 1.396v.211c0 .769.625 1.395 1.395 1.395h7.147A2.463 2.463 0 0 0 23 18.542C23 17.104 21.896 16 20.542 16H15c-.275 0-.5-.225-.5-.5s.225-.5.5-.5h5.542A3.462 3.462 0 0 1 24 18.458C24 20.449 22.449 22 20.542 22z"/></svg>
                                     </ListItemIcon>
                                     <ListItemText>Email Open Document</ListItemText>
                                 </MenuItem>,

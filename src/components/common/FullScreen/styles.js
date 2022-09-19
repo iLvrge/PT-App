@@ -19,11 +19,16 @@ export default makeStyles(theme => ({
         display: 'flex',
     },
     fullscreenCharts: {
-        margin: 35,
+        margin: 28,
         flex: 1,
         display: 'flex',
         backgroundColor: theme.palette.background.default,
-        position: 'relative'
+        position: 'relative',
+        '& .full_heading':{
+            '& .MuiTypography-root':{
+                marginTop: 15
+            }
+        }
     },
     noBackground: {
         background: 'none'  

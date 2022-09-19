@@ -77,6 +77,11 @@ export const setTimelineScreen = flag => ({
   flag,
 })
 
+export const setPatentScreen = flag => ({
+  type: types.SET_PATENT_SCREEN,
+  flag,
+})
+
 export const setDashboardScreen = flag => ({
   type: types.SET_DASHBOARD_SCREEN,
   flag,
@@ -86,3 +91,28 @@ export const setDashboardPanel = flag => ({
   type: types.SET_DASHBOARD_PANEL,
   flag,
 })  
+
+export const updateViewDashboard = views => ({
+  type: types.SET_DASHBOARD_VIEW,
+  views,
+})  
+
+export const setViewDashboardIntial = flag => ({
+  type: types.SET_DASHBOARD_VIEW_INTIAL,
+  flag,
+})   
+
+export const setAssetButton = flag => ({
+  type: types.SET_ASSET_BUTTON,
+  flag,
+})   
+
+export const setTransactionButton = flag => ({
+  type: types.SET_TRANSACTION_BUTTON,
+  flag,
+})  
+
+export const setLoadingDashboardData = flag => ({
+  type: types.SET_LOADING_DASHBOARD_DATA,
+  flag, 
+})

@@ -9,10 +9,11 @@ export const assetsTypes = [
     'mergersOut',
     'options',
     'sales',
-    'lending',
+    'securities',
+   /*  'lending',
     'borrowing',
     'releaseOut',
-    'releaseIn',
+    'releaseIn', */
     'correct',
     'other',
     'ownership'
@@ -28,10 +29,12 @@ export const assetsTypesWithKey = [
   {type: 'mergersOut', name: 'Merger Out', counter: 0},
   {type: 'options', name: 'Options', counter: 0},
   {type: 'sales', name: 'Sales', counter: 0},
+  {type: 'securities', name: 'Securities', counter: 0},
+  /* {type: 'partialRelease', name: 'Partial Release', counter: 0},
   {type: 'lending', name: 'Lending', counter: 0},
   {type: 'borrowing', name: 'Borrowing', counter: 0},
   {type: 'releaseOut', name: 'Release Out', counter: 0},
-  {type: 'releaseIn', name: 'Release In', counter: 0},
+  {type: 'releaseIn', name: 'Release In', counter: 0}, */
   {type: 'correct', name: 'Correction', counter: 0},
   {type: 'other', name: 'Other', counter: 0},
   {type: 'ownership', name: 'Ownership', counter: 0}
@@ -73,6 +76,8 @@ export const assetsTypesWithKey = [
       case 15:
         return 'correct'
       case 16:
+        return 'partialRelease'
+      case 17:
         return 'ownership'
       case 10:
       default:
@@ -111,7 +116,11 @@ export const assetsTypesWithKey = [
       case 15:
         return 'correct'
       case 16:
+        return 'partialRelease'
+      case 17:
         return 'ownership'
+      case 81:
+        return 'securities'
       case 14:
       default:
         return 'other'
@@ -148,8 +157,12 @@ export const assetsTypesWithKey = [
         return 13
       case 'correct':
         return 15
-      case 'ownership':
+      case 'partialRelease':
         return 16
+      case 'ownership':
+        return 17
+      case 'securities':
+        return 81
       case 'other':
       default:
         return 14

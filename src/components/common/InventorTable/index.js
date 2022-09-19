@@ -81,20 +81,20 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
 
     const COLUMNS = [
         {
-            width: 12, 
-            minWidth: 12, 
+            width: 10, 
+            minWidth: 10, 
             label: '',
             dataKey: 'id',
             role: 'checkbox',
             disableSort: true,
-            show_selection_count: true,   
             enable: false
         },
         {
-            width: 20,
-            minWidth: 20,
+            width: 25,
+            minWidth: 25,
             label: '',
             dataKey: 'id',
+            headingIcon: 'inventors', 
             role: 'arrow',
             disableSort: true 
         },
@@ -105,6 +105,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             draggable: true,
             label: 'Employees',             
             dataKey: 'entityName', 
+            show_selection_count: true,   
             badge: true,           
             align: 'left' 
         },

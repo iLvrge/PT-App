@@ -24,12 +24,15 @@ import {
     setSelectedAssetsTransactions,
     setMaintainenceAssetsList,
     setAssetTypeAssignmentAllAssets,
-    setAssetTypeAssignments
+    setAssetTypeAssignments,
+    getCustomerAssets,
+    setSelectAssignmentCustomerName
   } from '../../../actions/patentTrackActions2'
 
   import {
     setConnectionBoxView, 
     setPDFView,
+    getAssets,
   } from '../../../actions/patenTrackActions'
 
 import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode } from '../../../actions/uiActions'
@@ -59,7 +62,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     const [ selectedRow, setSelectedRow] = useState( [] )
     const [ selectedAll, setSelectAll ] = useState( false )
     const [ selectItems, setSelectItems] = useState( [] ) 
-    
+    const profile = useSelector(state => (state.patenTrack.profile))    
     
     const assetTypesCompaniesLoading = useSelector(state => state.patenTrack2.assetTypes.loading_companies)
     const assetTypesSelected = useSelector(state => state.patenTrack2.assetTypes.selected)
@@ -73,22 +76,26 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     const assetTypeCompaniesLoading = useSelector(state => state.patenTrack2.assetTypeCompanies.loading)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
+    const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
+    const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
+
     const [ data, setData ] = useState( [] )
 
     const COLUMNS = [
         {
-          width: 12, 
-          minWidth: 12, 
+          width: 10, 
+          minWidth: 10, 
           label: '',
           dataKey: 'id',
           role: 'checkbox',
-          disableSort: true,
-          show_selection_count: true,   
-          enable: false
+          disableSort: true, 
+          enable: false,
+          show: false
         },
         {
-            width: 20,
-            minWidth: 20,
+            width: 25,
+            minWidth: 25,
+            headingIcon: 'parties', 
             label: '',
             dataKey: 'id',
             role: 'arrow',
@@ -98,10 +105,10 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             width: 200,
             minWidth: 200,
             oldWidth: 200,
-            draggable: true,      
-            headingIcon: 'parties',     
-            label: 'Parties',
+            draggable: true,          
+            label: profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' && dashboardScreen === true ? 'Borrowers'  : 'Parties',
             dataKey: 'entityName', 
+            show_selection_count: true,  
             badge: true,   
             align: 'left'         
         },
@@ -206,42 +213,54 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     }, [ dispatch, standalone, assetTypeCompanies, data ])
 
     const onHandleClickRow = useCallback((e,  row) => {
+        
         e.preventDefault()
         const { checked } = e.target;
         let oldSelection = [...selectItems]
         
         const element = e.target.closest('div.ReactVirtualized__Table__rowColumn')
-        if( element != null ) {
-            const index = element.getAttribute('aria-colindex')
-            if(index == 2) {
-                if(currentSelection != row.id) {
-                    setCurrentSelection(row.id)
-                } else { 
-                    setCurrentSelection(null)
-                }
+        let index = -1
+        if(element !== null ) {
+            index = element.getAttribute("aria-colindex");
+        } 
+        if (index == 2) {
+            if(currentSelection != row.id) {
+                setCurrentSelection(row.id)
+            } else { 
+                setCurrentSelection(null)
             }
+        } else {
             if(display_clipboard === false) {
                 dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
                 dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
             }
             dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
+            
             if( !oldSelection.includes(row.id) ){
                 //oldSelection.push(row.id)
                 oldSelection = [row.id]
+                //console.log("row", row)
+                setSelectAssignmentCustomerName(row.entityName)
             } else if(index != 2) {
                 /* oldSelection = oldSelection.filter(
                     customer => customer !== parseInt( row.id ),
                 ) */
                 oldSelection = []
+                setSelectAssignmentCustomerName('')
             }
             history.push({
                 hash: updateHashLocation(location, 'otherParties', oldSelection).join('&')
             })
+            if(dashboardScreen === true) {
+                getAssets(oldSelection)
+            }
             setSelectItems(oldSelection)
             setSelectAll(false)
             dispatch( setAllAssignmentCustomers(assetTypeCompanies.length == oldSelection.length ||  data.length == oldSelection.length ? true : false ) )
             dispatch( setSelectAssignmentCustomers(oldSelection) )
         }
+
+        
     }, [ dispatch, currentSelection, selectItems, display_clipboard ])
 
     const getTimelineData = (dispatch, id) => {
@@ -262,6 +281,29 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         dispatch(toggleUsptoMode( false ))
         dispatch(toggleFamilyMode( false ))
         dispatch(toggleFamilyItemMode( false )) 
+    }
+
+    const getAssets = (parties) => {
+        const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+                            tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+                            customers = parties,
+                            assignments = [];
+        dispatch(
+            getCustomerAssets(
+                selectedCategory == '' ? '' : selectedCategory,
+                companies,
+                tabs,
+                customers,
+                assignments,
+                false,
+                0,
+                0,
+                'asset',
+                'DESC',
+                -1, 
+                display_sales_assets
+            ),
+        );                   
     }
 
     if ((!standalone && assetTypesCompaniesLoading) || (standalone && assetTypeCompaniesLoading)) return <Loader />

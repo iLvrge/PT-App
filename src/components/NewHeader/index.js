@@ -6,58 +6,39 @@ import React,
 import { useDispatch, 
           useSelector 
         } from 'react-redux'
-import { Link, 
+import {  
           useHistory,
           useLocation
         } from 'react-router-dom'
 import { 
         AppBar, 
         Toolbar, 
-        IconButton, 
-        Button,
-        InputBase, 
+        IconButton,  
         Avatar, 
         Drawer,
         List,
         ListItem,
         ListItemIcon,
         ListItemText,
-        Divider,
-        Modal,
-        Backdrop,
+        Divider, 
         Typography,
         Tooltip,
-        Zoom,
-        Badge,
-        Switch 
+        Zoom, 
       } from '@mui/material'
 
-import { Menu as MenuIcon, 
-        Search as SearchIcon, 
-        Person as PersonIcon, 
-        People as PeopleIcon, 
-        InsertDriveFile as InsertDriveFileIcon, 
-        Business as BusinessIcon, 
-        Gavel as GavelIcon, 
-        LockOpen as LockOpenIcon, 
-        Contacts as ContactsIcon, 
-        Settings as SettingsIcon, 
-        Dashboard as DashboardIcon, 
-        NotificationsNone as NotificationsIcon,
-        Home as HomeIcon,
+import { Menu as MenuIcon,  
+        Business as BusinessIcon,  
+        LockOpen as LockOpenIcon,  
         LightModeOutlined as LightModeOutlinedIcon,
-        DarkModeOutlined as DarkModeOutlinedIcon,
-        ExpandLess,
-        ExpandMore,
-        Close
+        DarkModeOutlined as DarkModeOutlinedIcon, 
       } from '@mui/icons-material'
 
-import { controlList } from '../../utils/controlList'
-import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar'
-import { useDarkMode } from '../../useDarkMode';
-import useStyles from './styles'
+import routeList from '../../routeList'
 
-import Home from '../Home'
+import { controlList } from '../../utils/controlList'
+import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar' 
+import useStyles from './styles'
+ 
 import CompanySummary from '../common/CompanySummary'
 import ActionMenu from './ActionMenu'
 /* import ClipboardAssets from './ClipboardAssets' */
@@ -125,8 +106,11 @@ import {
   toggleThemeMode,
   setTimelineScreen,
   setDashboardScreen,
+  setPatentScreen,
+  setMaintainenceFeeFrameMode
 } from '../../actions/uiActions'
 import Scheduling from './Scheduling'
+import ViewIcons from './ViewIcons'
 
 const NewHeader = (props) => {
   const classes = useStyles()
@@ -137,6 +121,7 @@ const NewHeader = (props) => {
   const slack_profile_data = useSelector( state => state.patenTrack2.slack_profile_data )
   const google_profile = useSelector( state => state.patenTrack2.google_profile )
   const slack_auth_token = useSelector(state => state.patenTrack2.slack_auth_token)
+  const auth_token = useSelector(state => state.patenTrack2.auth_token)
   const profile = useSelector(store => (store.patenTrack.profile))
   const user = useSelector(store => (store.patenTrack.profile ? store.patenTrack.profile.user : {}))
   const siteLogo = useSelector(state => (state.patenTrack.siteLogo.site_logo ? state.patenTrack.siteLogo.site_logo.logo_big : 'https://s3.us-west-1.amazonaws.com/static.patentrack.com/logo/PatenTrack.png'))
@@ -147,6 +132,7 @@ const NewHeader = (props) => {
   const search_string = useSelector(state => state.patenTrack2.search_string)
   const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
   const timelineScreen = useSelector(state => state.ui.timelineScreen)
+  const patentScreen = useSelector(state => state.ui.patentScreen)
   const [layoutName, setLayoutName] = useState(null)
   const [ isClipboardActive, setIsClipboardActive ] = useState(false)
   const [ isCompanyMenuOpen, setCompanyMenuOpen ] = useState(false)
@@ -255,8 +241,8 @@ const NewHeader = (props) => {
 
   useEffect(() => {
     const findIndex =  controlList.findIndex( item => item.type == 'menu' && item.category == selectedCategory)
-    setLayoutName(dashboardScreen === true ? 'Dashboard' : selectedCategory != 'due_dilligence' ? findIndex !== -1 ? controlList[findIndex].mainHeading : '' : '')
-  }, [ dashboardScreen, selectedCategory ])    
+    setLayoutName(dashboardScreen === true ? 'Dashboard' : patentScreen === true ? breadcrumbs !== '' ? breadcrumbs : 'Patent Assets' : selectedCategory != 'due_dilligence' ? findIndex !== -1 ? controlList[findIndex].mainHeading : '' : '')
+  }, [ dashboardScreen, patentScreen,  selectedCategory ])    
 
   /**
    * Get the Loggedin User Profile data
@@ -265,11 +251,18 @@ const NewHeader = (props) => {
   useEffect(() => {
     if (!profile) {
       let token = process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' ?  getTokenStorage( 'token' ) :  getTokenStorage( 'auth_signature' )
+      
       if(token !== '' || token !== null) {
         dispatch(getProfile(true))
       }     
     }
   }, [ dispatch, profile ])
+
+  useEffect(() => {
+    if(auth_token != null && typeof profile == 'undefined') {
+      dispatch(getProfile(true))
+    }
+  }, [dispatch, auth_token, profile])
 
   /**
    * To check buttons for the Google and Slack
@@ -409,9 +402,12 @@ const NewHeader = (props) => {
 
   const onHandleSaleAssets = useCallback((type) => {
     if(process.env.REACT_APP_ENVIROMENT_MODE === 'PRO') {
-      dispatch(setBreadCrumbs(!display_sales_assets === true ? type == 1 ? 'Our Assets for Sale' : 'Patent Marketplace' : ''))
-      dispatch(setIsSalesAssetsDisplay(!display_sales_assets))
+      /* dispatch(setBreadCrumbs(!display_sales_assets === true ? type == 1 ? 'Our Assets for Sale' : 'Patent Marketplace' : ''))
+      dispatch(setIsSalesAssetsDisplay(!display_sales_assets)) */
       /* dispatch(setSalesAssetsType(type)) */      
+
+      dispatch(setBreadCrumbs(type == 1 ? 'Our Assets for Sale' : 'Patent Marketplace'))
+      dispatch(setIsSalesAssetsDisplay(true))
       dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
       dispatch(setSelectedAssetsPatents([]))
       dispatch(setAssetFamily([]))
@@ -523,10 +519,10 @@ const onHandleForeignAssets = useCallback((event) => {
     resetAllRowSelect(dispatch, resetItemList.resetAll)
     resetAllRowSelect(dispatch, resetItemList.clearOtherItems)
     
-    if(path.indexOf('/review_foreign_assets') !== -1) {
+    if(path.indexOf('/review_external_assets') !== -1) {
       history.push('/') 
     } else {
-      history.push('/review_foreign_assets') 
+      history.push('/review_external_assets') 
     }
   }  
 }, [dispatch])
@@ -535,32 +531,76 @@ const handleThemeMode = useCallback(event => {
   dispatch(toggleThemeMode(!isDarkTheme))
 },[dispatch, isDarkTheme])
 
-const shareDashboard = () => {
-  console.log("shareDashboard")
-}
 
 const onHandleDashboardScreen = /* useCallback( */(event) => {
   dispatch(setTimelineScreen(false))
+  dispatch(setPatentScreen(false))
   dispatch(setDashboardScreen(true))
+  
   dispatch(setAssetsIllustration(null))
   dispatch(setAssetsIllustrationData(null))
   /* resetAllRowSelect(dispatch, resetItemList.resetAll)
   resetAllRowSelect(dispatch, resetItemList.clearOtherItems) */
   props.checkChartAnalytics(null, null, false)
   props.resetScreen('Dashboard', event)
+  history.push("/")
 }/* , [dispatch]) */
 
-const onHandleTimelineScreen = /* useCallback( */(event) => {
-  dispatch(setTimelineScreen(true))
+const onHandleTimelineScreen = /* useCallback( */(event) => {  
+  dispatch(setPatentScreen(false))
   dispatch(setDashboardScreen(false))
+  dispatch(setTimelineScreen(true))
   dispatch(setAssetsIllustration(null))
   dispatch(setAssetsIllustrationData(null))
   /* resetAllRowSelect(dispatch, resetItemList.resetAll)
   resetAllRowSelect(dispatch, resetItemList.clearOtherItems) */
   props.checkChartAnalytics(null, null, false)
   props.resetScreen('Timeline', event)
+  history.push("/")
   
 }/* , [dispatch]) */
+
+const onHandlePatentAssetsScreen = (breadcrumb) => {    
+  dispatch(setPatentScreen(true))
+  dispatch(setTimelineScreen(false))
+  dispatch(setDashboardScreen(false))
+  dispatch(setAssetsIllustration(null))
+  dispatch(setAssetsIllustrationData(null))
+  dispatch(setBreadCrumbs(typeof breadcrumb !== 'undefined' ? breadcrumb : 'Assets')) 
+  history.push(routeList.patent_assets)  
+}
+
+const onHanldeMaintainencePatentAssetScreen = () => {
+  dispatch(setPatentScreen(true))
+  dispatch(setTimelineScreen(false))
+  dispatch(setDashboardScreen(false))
+  dispatch(setAssetsIllustration(null))
+  dispatch(setAssetsIllustrationData(null))
+  /* dispatch(setMaintainenceFeeFrameMode(true)) */
+  //dispatch(setBreadCrumbs(typeof breadcrumb !== 'undefined' ? breadcrumb : 'Assets')) 
+  history.push(routeList.pay_maintainence_fee)  
+}
+
+const resetAllActivity = (category) => {
+  /* let findIndex = -1 */
+  /* if(category == 'due_dilligence') {
+      findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
+  } else if(category != '' && category != 'restore_ownership') {
+      
+  } else {
+      findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'due_dilligence')
+  } */
+  const findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == category)
+  if( findIndex !== -1 ) {
+      //hideMenu(event, controlList[findIndex])
+      resetAll()
+      clearOtherItems()
+      dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))  
+      if(category == 'due_dilligence' || category == 'restore_ownership') {
+          dispatch(setSwitchAssetButton(controlList[findIndex].category == 'due_dilligence' ? 0 : 1))
+      }
+  }
+}
 
   return (
     <AppBar className={classes.root} color='transparent' position='relative'>
@@ -583,77 +623,50 @@ const onHandleTimelineScreen = /* useCallback( */(event) => {
         </span>
 
         <ActionMenu 
-          t={0} 
-          onClickSale={onHandleSaleAssets} 
+          t={0}  
+          onClickSale={onHandleSaleAssets}  
+          patentScreen={patentScreen}
           dashboardScreen={dashboardScreen}
           setDashboardScreen={onHandleDashboardScreen}
           setActivityTimeline={onHandleTimelineScreen}
+          setPatentAssets={onHandlePatentAssetsScreen}
+          setMaintaincePatentAssets={onHanldeMaintainencePatentAssetScreen}
           timelineScreen={timelineScreen} 
           resetAll={resetAll}
           clearOtherItems={clearOtherItems}
+          layoutName={layoutName}
+          breadcrumbs={breadcrumbs}
+          selectedCategory={selectedCategory}
+          display_sales_assets={display_sales_assets}
+          resetAllActivity={resetAllActivity}
         />
-        <div className={classes.breadcrumbs}>
-          {
-            display_sales_assets == true 
-            ?
-              breadcrumbs
-            :
-              selectedCategory !== 'due_dilligence' || dashboardScreen === true  
-              ? 
-                layoutName 
-              : 
-                'Activity Timeline'
-          }
-        </div>    
+         
         <div className={classes.rightPanel}>  
             {/* <Switch  
               color="secondary" 
               {...( isDarkTheme == 'dark' ? {checked: true} : {})} 
               onChange={handleThemeMode}
             /> */}
-            <Button className={classes.calendly} onClick={() => {setScheduling(!scheduling)}}>
-              Schedule a {process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'd' : 'D' }emo {process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'for Pro version' : '' }
-            </Button>    
-            <IconButton
-              className={`${classes.buttonIcon} ${clipboard_assets.length > 0 ? classes.clipIconActive : ''} ${ display_clipboard === true ? classes.clipIconIsActive : ''}`}
-              onClick={handleClipboard}
-              size="large">
-              <Badge badgeContent={clipboard_assets.length} color="secondary">    
-                <svg xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 80 80" viewBox="0 0 80 80"><path d="M40,5c-3.3085938,0-6,2.6914062-6,6v3h-5c-0.4199219,0-0.7949219,0.262207-0.9394531,0.6567383l-0.880188,2.4077148	h-9.0836792C16.9404297,17.0644531,16,18.0048828,16,19.1611328v53.7421875C16,74.0595703,16.9404297,75,18.0966797,75h43.8066406
-      C63.0595703,75,64,74.0595703,64,72.9033203V19.1611328c0-1.15625-0.9404297-2.0966797-2.0966797-2.0966797H52.755188
-      L51.875,14.6567383C51.7304688,14.262207,51.3554688,14,50.9355469,14H46v-3C46,7.6914062,43.3085938,5,40,5z M53.1289062,22
-      c0.3261719,0,0.6328125-0.1591797,0.8193359-0.4267578c0.1875-0.2680664,0.2324219-0.6098633,0.1201172-0.9165039
-      l-0.5820923-1.5922852h8.4170532C61.9541016,19.0644531,62,19.1103516,62,19.1611328v53.7421875
-      C62,72.9541016,61.9541016,73,61.9033203,73H18.0966797C18.0458984,73,18,72.9541016,18,72.9033203V19.1611328
-      c0-0.0507812,0.0458984-0.0966797,0.0966797-0.0966797h8.3526001l-0.5820923,1.5922852
-      c-0.1123047,0.3066406-0.0673828,0.6484375,0.1201172,0.9165039C26.1738281,21.8408203,26.4804688,22,26.8066406,22H53.1289062z
-      M50.2363281,16l1.4619141,4H28.2373047l1.4619141-4H35c0.5527344,0,1-0.4477539,1-1v-4c0-2.2055664,1.7939453-4,4-4
-      s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z"  className="color000 svgShape"></path><path d="M23,38h8V28h-8V38z M25,30h4v6h-4V30z"  className="color000 svgShape"></path><rect width="23" height="2" x="34" y="32"  className="color000 svgShape"></rect><rect width="17" height="2" x="23" y="44"  className="color000 svgShape"></rect><rect width="34" height="2" x="23" y="54"  className="color000 svgShape"></rect><rect width="34" height="2" x="23" y="64"  className="color000 svgShape"></rect><rect width="2" height="4" x="38.968" y="9"  className="color000 svgShape"></rect></svg>
-              </Badge>
-            </IconButton>
-          
-          <div className={classes.search}>
-            <div className={classes.searchIcon}> 
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder='Search…'
-              classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-              }}
-              defaultValue={ search_string != null ? search_string : ''}
-              inputProps={{ 'aria-label': 'search' }}
-              onKeyDown={handleKeyDown}
-              disabled 
+             
+            
+            <ViewIcons
+              resetAllActivity={resetAllActivity}
+              setDashboardScreen={onHandleDashboardScreen}
+              setActivityTimeline={onHandleTimelineScreen}
+              setPatentAssets={onHandlePatentAssetsScreen}
+              patentScreen={patentScreen}
+              dashboardScreen={dashboardScreen}
+              timelineScreen={timelineScreen} 
+              display_sales_assets={display_sales_assets}
+              setScheduling={setScheduling}
+              scheduling={scheduling}
+              handleClipboard={handleClipboard}
+              clipboard_assets={clipboard_assets}
+              display_clipboard={display_clipboard}
+              handleKeyDown={handleKeyDown}
+              search_string={search_string}
             />
-          </div>
-          <IconButton className={classes.buttonIcon} size="large">
-            <Badge badgeContent={0} color="secondary"> 
-              <NotificationsIcon/>
-            </Badge>         
-          </IconButton>  
-           
+
             {
               !googleAuthLogin
               ?

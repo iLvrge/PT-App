@@ -21,6 +21,10 @@ import { updateResizerBar } from '../../../utils/resizeBar'
 
 import ArrowButton from "../ArrowButton"
 import useStyles from "./styles"
+import GeoChart from "../AssetsVisualizer/GeoChart"
+import GoogleCharts from "../AssetsVisualizer/GoogleCharts"
+import TimelineSecurity from "../AssetsVisualizer/TimelineSecurity"
+import ErrorBoundary from '../ErrorBoundary'
 
 const AssetDetailsContainer = ({
   cls,
@@ -45,7 +49,8 @@ const AssetDetailsContainer = ({
   illustrationBar,
   customerBarSize,
   companyBarSize,
-  type
+  type,
+  cube
 }) => { 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -81,12 +86,14 @@ const AssetDetailsContainer = ({
   
   const pdfView = useSelector(state => state.patenTrack.pdfView);
   const pdfViewModal = useSelector(state => state.patenTrack.pdfViewModal)
+  const timelineScreen = useSelector(state => state.ui.timelineScreen);
   const usptoMode = useSelector(state => state.ui.usptoMode);
   const familyMode = useSelector(state => state.ui.familyMode);
   const familyItemMode = useSelector(state => state.ui.familyItemMode);
   const lifeSpanMode = useSelector(state => state.ui.lifeSpanMode);
   const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
   const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
+  const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
 
   
 
@@ -96,7 +103,6 @@ const AssetDetailsContainer = ({
 
 
   useEffect(() => {
-    console.log("defaultSize", defaultSize)
     if(chartBar === true && analyticsBar === true && defaultSize == '100%') {
       fnParams('50%')
     }
@@ -198,7 +204,6 @@ const AssetDetailsContainer = ({
       }
     }
   };
-  
   return (
     <div style={{ height: "100%" }} className={classes.root}>
       {
@@ -218,7 +223,7 @@ const AssetDetailsContainer = ({
             split={split}
             minSize={10}
             maxSize={-100}
-            defaultSize={'50%'}
+            defaultSize={illustrationData != '' && illustrationData != null && Object.keys(illustrationData).length > 0 ? '50%' : '0%'}
             pane1Style={{
               pointerEvents: isDrag ? 'none' : 'auto',
             }}
@@ -281,32 +286,74 @@ const AssetDetailsContainer = ({
               id={`charts_container`}
               style={{ height: "100%" }}
             > 
-              {/* <ArrowButton
-                arrowId={`arrow_charts`}
-                handleClick={handleDetailsBarOpen}
-                buttonType={toggleDetailsButtonType}
-                buttonVisible={detailsButtonVisible}
-                arrow={3}
-                cls={classes.btnLeft}
-              /> */}
+              <ErrorBoundary>
+                {/* <ArrowButton
+                  arrowId={`arrow_charts`}
+                  handleClick={handleDetailsBarOpen}
+                  buttonType={toggleDetailsButtonType}
+                  buttonVisible={detailsButtonVisible}
+                  arrow={3}
+                  cls={classes.btnLeft}
+                /> */}
 
-              {
-                pdfViewModal &&
-                <Modal open={pdfViewModal} className={classes.fullscreenChartsModal} >
-                  <Paper className={classes.fullscreenCharts} square>
-                    <PdfViewer display={'true'} />
-                  </Paper>
-                </Modal>
-              } 
-              {
-                chartBar == true ? (
-                  connectionBoxView === true ? (
-                      <PdfViewer
-                        display={"false"}
-                        fullScreen={false}
-                        resize={resizeFrame}
-                      />  
-                  ) : lifeSpanMode === true ? (
+                {
+                  pdfViewModal &&
+                  <Modal open={pdfViewModal} className={classes.fullscreenChartsModal} >
+                    <Paper className={classes.fullscreenCharts} square>
+                      <PdfViewer display={'true'} />
+                    </Paper>
+                  </Modal>
+                } 
+                {
+                  chartBar == true ? (
+                    cube === true && assetIllustration == null
+                    ?
+                      <GeoChart
+                        chartBar={chartBar} 
+                        openCustomerBar={openCustomerBar} 
+                        visualizerBarSize={visualizerBarSize}
+                        type={type}
+                        titleBar={true}
+                      />
+                    :
+                    timelineScreen === true  && assetIllustration == null
+                    ?
+                      <GoogleCharts
+                        chartBar={chartBar} 
+                        openCustomerBar={openCustomerBar} 
+                        visualizerBarSize={visualizerBarSize}
+                        type={type}
+                      />
+                    :                  
+                    connectionBoxView === true ? (
+                        <PdfViewer
+                          display={"false"}
+                          fullScreen={false}
+                          resize={resizeFrame}
+                        />  
+                    ) : lifeSpanMode === true ? (
+                        <InventionVisualizer 
+                          defaultSize={defaultSize} 
+                          illustrationBar={openIllustrationBar} 
+                          visualizerBarSize={visualizerBarSize} 
+                          analyticsBar={analyticsBar} 
+                          openCustomerBar={openCustomerBar} 
+                          commentBar={commentBar} 
+                          customerBarSize={customerBarSize} 
+                          companyBarSize={companyBarSize}
+                          type={type} />
+                    ) : familyItemMode === true ? (
+                        <FamilyItemContainer 
+                          item={selectedAssetsFamilyItem} 
+                          onClose={onCloseFamilyItemMode} 
+                          analyticsBar={analyticsBar} 
+                          chartBar={chartBar} 
+                          illustrationBar={illustrationBar}
+                          visualizerBarSize={visualizerBarSize} 
+                          type={type}
+                          {...( selectedCategory === 'pay_maintainence_fee' || selectedCategory === 'ptab'  ? {activeTab: selectedCategory === 'pay_maintainence_fee' ? 3 : 2} : {})} 
+                        />
+                    ) : (
                       <InventionVisualizer 
                         defaultSize={defaultSize} 
                         illustrationBar={openIllustrationBar} 
@@ -314,37 +361,15 @@ const AssetDetailsContainer = ({
                         analyticsBar={analyticsBar} 
                         openCustomerBar={openCustomerBar} 
                         commentBar={commentBar} 
-                        illustrationBar={illustrationBar} 
                         customerBarSize={customerBarSize} 
                         companyBarSize={companyBarSize}
                         type={type} />
-                  ) : familyItemMode === true ? (
-                      <FamilyItemContainer 
-                        item={selectedAssetsFamilyItem} 
-                        onClose={onCloseFamilyItemMode} 
-                        analyticsBar={analyticsBar} 
-                        chartBar={chartBar} 
-                        illustrationBar={illustrationBar}
-                        visualizerBarSize={visualizerBarSize} 
-                        type={type}
-                      />
-                  ) : (
-                    <InventionVisualizer 
-                      defaultSize={defaultSize} 
-                      illustrationBar={openIllustrationBar} 
-                      visualizerBarSize={visualizerBarSize} 
-                      analyticsBar={analyticsBar} 
-                      openCustomerBar={openCustomerBar} 
-                      commentBar={commentBar} 
-                      illustrationBar={illustrationBar} 
-                      customerBarSize={customerBarSize} 
-                      companyBarSize={companyBarSize}
-                      type={type} />
+                    )
                   )
-                )
-                :
-                  '' 
-              }
+                  :
+                    '' 
+                }
+              </ErrorBoundary>
             </div>
             <div
               className={`${classes.commentContainer} ${
@@ -353,36 +378,51 @@ const AssetDetailsContainer = ({
               /* onMouseOver={event => handleIllustrationButton(event, true)}
               onMouseLeave={event => handleIllustrationButton(event, false)} */
             >
-              {
-                analyticsBar === true 
-                  ? 
-                    openIllustrationBar === true ? (
-                      <>
-                        {      
-                          lifeSpanMode === true ? (
-                            <LifeSpanContainer 
-                              chartBar={chartBar} 
-                              openCustomerBar={openCustomerBar} 
-                              visualizerBarSize={visualizerBarSize}
-                              type={type}/>
-                          ) :
-                          familyMode && (
-                              <LegalEventsContainer
-                                events={selectedAssetsLegalEvents} 
+              <ErrorBoundary>
+                {
+                  analyticsBar === true 
+                    ? 
+                      timelineScreen === true  && assetIllustration == null
+                      ?
+                        <TimelineSecurity
+                          chartBar={chartBar} 
+                          openCustomerBar={openCustomerBar} 
+                          visualizerBarSize={visualizerBarSize}
+                          type={type}
+                        />
+                      :
+                      openIllustrationBar === true ? (
+                        <>
+                          {      
+                            lifeSpanMode === true ? (
+                              <LifeSpanContainer 
+                                chartBar={chartBar} 
+                                openCustomerBar={openCustomerBar} 
+                                visualizerBarSize={visualizerBarSize}
                                 type={type}/>
-                          ) 
-                        }
-                      </>
-                    ) : (
-                      <LifeSpanContainer 
-                        chartBar={chartBar} 
-                        openCustomerBar={openCustomerBar} 
-                        visualizerBarSize={visualizerBarSize}
-                        type={type}/>
-                    )
-                  : 
-                    ''
-              }
+                            ) :
+                            familyMode && (
+                                <LegalEventsContainer
+                                  events={selectedAssetsLegalEvents} 
+                                  type={type}
+                                  selectedCategory
+                                  {...( selectedCategory === 'ptab' ? {activeTab: 2} : {})} 
+                                />
+                            ) 
+                          }
+                        </>
+                      ) :
+                      (
+                        <LifeSpanContainer 
+                          chartBar={chartBar} 
+                          openCustomerBar={openCustomerBar} 
+                          visualizerBarSize={visualizerBarSize}
+                          type={type}/>
+                      )
+                    : 
+                      ''
+                }
+              </ErrorBoundary>
             </div>
           </SplitPane>
         ) 

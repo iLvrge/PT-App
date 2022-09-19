@@ -38,13 +38,15 @@ import {
   setMaintainenceAssetsList,
   setAssetTypeAssignmentAllAssets,
   setAssetsIllustrationData,
-  setDocumentTransaction
+  setDocumentTransaction,
+  transactionRowClick
 } from "../../../actions/patentTrackActions2";
 
 import {
     setConnectionBoxView,
     setPDFView,
-    setPDFFile
+    setPDFFile,
+    setConnectionData
   } from "../../../actions/patenTrackActions";
 
 import {
@@ -65,7 +67,7 @@ import { getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
 
 import Loader from "../Loader";
 
-const AssignmentsTable = ({ defaultLoad, type }) => {
+const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaultLoad, type }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -133,32 +135,37 @@ const AssignmentsTable = ({ defaultLoad, type }) => {
   const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
   const channel_id = useSelector(state => state.patenTrack2.channel_id)
   const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
+  const connectionBoxView = useSelector(state => state.patenTrack.connectionBoxView)
 
   const COLUMNS = [
-    /* {
-      width: 29,
-      minWidth: 29,
+    {
+      width: 10,
+      minWidth: 10,
       label: "",
       dataKey: "rf_id",
       role: "radio",
       disableSort: true,
-      show_selection_count: true
-    }, */
+      enable: false,
+      show: false
+    }, 
     {
-      width: 20,
-      minWidth: 20,
+      width: 25,
+      minWidth: 25,
       label: "",
-      dataKey: "rf_id",
-      role: "arrow",      
+      headingIcon: 'transactions',
+      dataKey: "rf_id", 
       disableSort: true,
+      role: "arrow",
+      enable: false,
+      show: false
     },
     {
       width: 130,
       minWidth: 130,
       label: "Transactions",
-      headingIcon: 'transactions',
       dataKey: "date",
       align: "left",
+      show_selection_count: true,
       badge: true, 
     },
     {
@@ -580,6 +587,12 @@ const onHandleClickRow = useCallback(
         dispatch(setSelectedAssetsTransactions([]))
         dispatch(setSelectedAssetsPatents([]))   
         dispatch(
+          setConnectionBoxView(false)
+        )
+        dispatch(
+          setConnectionData({})
+        )
+        dispatch(
           setPDFFile(
             { 
               document: '',  
@@ -594,13 +607,17 @@ const onHandleClickRow = useCallback(
         dispatch(toggleLifeSpanMode(true));
         dispatch(toggleFamilyMode(false));
         dispatch(toggleFamilyItemMode(false));
+        console.log("connectionBoxView", connectionBoxView)
+        if(connectionBoxView === true) {
+          checkChartAnalytics(null, null, false)
+        }
         //dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, []))
         //dispatch(toggleLifeSpanMode(false))
         //dispatch(toggleFamilyItemMode(false))
       }
     }
   },
-  [dispatch, dashboardScreen, selectedCategory, selectItems, currentSelection, selectedRow, defaultLoad, search_string, display_clipboard],
+  [dispatch, connectionBoxView, dashboardScreen, selectedCategory, selectItems, currentSelection, selectedRow, defaultLoad, search_string, display_clipboard],
 );
 
 const findChannelID = useCallback((rfID) => {
@@ -617,30 +634,10 @@ const findChannelID = useCallback((rfID) => {
 
   const getTransactionData = (dispatch, rf_id, defaultLoad, search_string) => {
     setSelectedRow([rf_id]);    
-    dispatch(toggleLifeSpanMode(true))
-    dispatch(setConnectionBoxView(false));
-    dispatch(setPDFView(false));
-    dispatch(toggleLifeSpanMode(true));
-    dispatch(toggleUsptoMode(false));
-    dispatch(toggleFamilyMode(false));
-    dispatch(toggleFamilyItemMode(false)); 
-    dispatch(setMainCompaniesRowSelect([]));
-    dispatch(setAssetTypeSelectedRow([]));
-    dispatch(setAssetTypeCustomerSelectedRow([]));
-    dispatch(setChildSelectedAssetsTransactions([]));
-    dispatch(setChildSelectedAssetsPatents([])); 
-    dispatch(setSelectedAssetsPatents([]));
-    dispatch(setSelectedAssetsTransactions([rf_id]));
-    if(defaultLoad === false){
-      dispatch(getAssetTypeAssignmentAssets(rf_id, false, 1, search_string)) // fill assets table 
+    if(chartsBar === false && analyticsBar === false) {
+      checkChartAnalytics(null, null, false)
     }
-    dispatch(setAssetsIllustration({ type: "transaction", id: rf_id }));
-    //dispatch(getAssetsAllTransactionsEvents(selectedCategory == '' ? '' : selectedCategory, [], [], [], [rf_id]));
-    //dispatch(getChannelIDTransaction(rf_id)); 
-    const channelID = findChannelID(rf_id)
-    if( channelID != '') {
-      dispatch(setChannelID({channel_id: channelID}))
-    }
+    dispatch(transactionRowClick(rf_id, slack_channel_list, defaultLoad, search_string))
   };
 
   const resizeColumnsWidth = useCallback((dataKey, data) => {
@@ -702,6 +699,8 @@ const findChannelID = useCallback((rfID) => {
         totalRows={totalRecords}
         grandTotal={grandTotal}
         noBorderLines={true}
+        highlightRow={true} 
+        higlightColums={[2]}
         width={width}
         containerStyle={{
           width: "100%",

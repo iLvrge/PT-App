@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import Paper from '@mui/material/Paper'
 import { DataSet } from 'vis-data/esnext'
@@ -24,33 +24,14 @@ const options = {
     horizontalScroll: true,
     verticalScroll: true,
     zoomFriction: 30,
-    zoomMin: 1000 * 60 * 60 * 24 * 7,    
-    template: function(item, element, data) { 
-      return `<div class='first'><div class='textColumn'><h4>${data.rawData.name} (${data.rawData.otherInfo.proceedingNumber})</h4></div><div class='textColumn'><h4>Filed: </h4> ${moment(new Date(data.rawData.start)).format(DATE_FORMAT)}</div><div class='textColumn'><h4>Status: </h4> ${data.rawData.status} (${moment(new Date(data.rawData.end)).format(DATE_FORMAT)})</div></div>`
-    },  
+    zoomMin: 1000 * 60 * 60 * 24 * 7,   
 } 
 
-const convertDataToItem = (item) => {
-    const assetType = 'default'
-    return ({
-      id: item.id,
-      content: '',
-      start: new Date(item.start),
-      end: new Date(item.end),
-      assetType,
-      zoomMin: 3456e5,
-      rawData: item,
-      number: item.name,
-      country: 'US',
-      className: `asset-type-${assetType}`,
-      collection: [],
-      showTooltip: false
-    })
-}
+
 var tootlTip = ''
 const TIME_INTERVAL = 1000
 
-const Ptab = ({ number }) => {
+const Ptab = ({ number, rawData, updateRawData, standalone }) => {
     const classes = useStyles()
     const timelineRef = useRef()
     const timelineContainerRef = useRef()
@@ -64,6 +45,61 @@ const Ptab = ({ number }) => {
     const [ timeInterval, setTimeInterval] = useState(null)
 
     const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
+
+    const convertDataToItem = (item) => {
+        const assetType = 'default'
+        const row = {        
+            id: item.id,
+            content: '',
+            start: item.start,
+            content: `${item.name} (${item.status})`,
+            assetType,
+            rawData: item,
+            zoomMin: 3456e5,
+            number: item.name,
+            country: 'US',
+            className: `asset-type-${assetType} ${typeof item.end !== 'undefined' ? 'asset-type-proceeding-end' : ''}`,
+            collection: [],
+            showTooltips: false
+        }
+        if(typeof item.end !== 'undefined'){            
+            row.type = 'range';
+            row.end = item.end != null ? item.end : new Date();
+        }
+        return row
+    }
+
+    /* const onSelect = useCallback( async properties => {
+        const {items, event} = properties
+        const {nodeName} = event.target.parentNode
+        const item = timelineRef.current.itemsData.get(items)
+        if(item.length > 0 && typeof item.rawData.end == 'undefined') {
+            try {
+                const request = new Request(`https://developer.uspto.gov/ptab-api/documents/${item[0].rawData.identifier}/download`,
+                    {
+                        method: "GET",
+                        headers: {
+                            accept: 'application/octet-stream'
+                        },
+                        mode: "cors",
+                        cache: "default",
+                    }
+                );
+            
+                fetch(request)
+                    .then((response) => response.blob())
+                    .then((blob) => {              
+                        const file = window.URL.createObjectURL(blob);
+                        window.open(file);
+                    })
+                    .catch((err ) => {
+                        console.log(err)
+                    });
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }); */
 
     /**
     * on Itemover for the tooltip data
@@ -97,7 +133,6 @@ const Ptab = ({ number }) => {
         } 
     }
 
-
     // Custom ToolTip
   
     const showTooltip = (item, event) => {     
@@ -105,9 +140,45 @@ const Ptab = ({ number }) => {
             if(tootlTip === item.id) {      
                 const color = '#fff'   
                 const height = window.innerHeight|| document.documentElement.clientHeight || document.body.clientHeight;   
-                let tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.clientY - 400 }px;left:${event.clientX + 20 }px;'>`
+                let tootltipTemplate = `<div class='custom_tooltip' style='background:#1E2025;border: 1px solid rgba(255, 255, 255, 0.12) ;top:${event.clientY - 400 < 0 ? 0 : event.clientY - 400  }px;left:${event.clientX + 20 }px;'>`
                 const { otherInfo } = item
-                Object.keys(otherInfo).map(key => {
+                console.log(otherInfo)
+                tootltipTemplate += `<table>
+                    <tbody>
+                        <tr>
+                            <td>${otherInfo['proceedingTypeCategory']}(${otherInfo['subproceedingTypeCategory']})</td>
+                            <td>${typeof otherInfo['proceedingNumber'] != 'undefined' ? otherInfo['proceedingNumber'] : ''}</td>
+                            <td>Filled: ${moment(new Date(otherInfo['proceedingFilingDate'])).format(DATE_FORMAT)}</td>
+                        </tr>
+                        <tr>
+                            <td>Status: ${typeof otherInfo['proceedingStatusCategory'] != 'undefined' ?  otherInfo['proceedingStatusCategory'] : ''}</td>
+                            <td colspan='2'>Made: ${typeof otherInfo['decisionDate'] != 'undefined' ? moment(new Date(otherInfo['decisionDate'])).format(DATE_FORMAT) : ''}</td>
+                        </tr>
+                        <tr>
+                            <td colspan='3'><span style='margin-top:20px;display:inline-block;'>Appelant: ${typeof otherInfo['appellantPartyName'] != 'undefined' ? otherInfo['appellantPartyName'] : ''}</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan='3'>Counsel: ${typeof otherInfo['appellantCounselName'] != 'undefined' ? otherInfo['appellantCounselName'] : ''}</td>
+                        </tr>
+                        <tr>
+                            <td>Patent: ${typeof otherInfo['appellantPatentNumber'] != 'undefined' ? otherInfo['appellantPatentNumber'] : ''}</td>
+                            <td>Application: ${typeof otherInfo['appellantApplicationNumberText'] != 'undefined' ? otherInfo['appellantApplicationNumberText'] : ''}</td>
+                            <td>Publication: ${typeof otherInfo['appellantPublicationNumber'] != 'undefined' ? otherInfo['appellantPublicationNumber'] : ''}</td>
+                        </tr>
+                        <tr>
+                            <td colspan='3'>Inventor: ${typeof otherInfo['appellantInventorName'] != 'undefined' ? otherInfo['appellantInventorName'] : ''}</td>
+                        </tr>
+                        <tr>
+                            <td colspan='3'><span style='margin-top:20px;display:inline-block;'>Respondent: ${ typeof otherInfo['respondentPartyName'] != 'undefined' ? otherInfo['respondentPartyName'] : ''}</span></td>
+                        </tr>
+                        <tr>
+                            <td>Patent: ${ typeof otherInfo['respondentPatentNumber'] != 'undefined' ? otherInfo['respondentPatentNumber'] : ''}</td>
+                            <td>Application: ${typeof otherInfo['respondentApplicationNumberText'] != 'undefined' ? otherInfo['respondentApplicationNumberText'] : ''}</td>
+                        </tr>
+                    </tbody>
+                </table>`
+
+                /* Object.keys(otherInfo).map(key => {
                     if(Array.isArray(otherInfo[key])) {
                         otherInfo[key].forEach( arrItem => {
                             Object.keys(arrItem).map(arrKey => {
@@ -123,7 +194,7 @@ const Ptab = ({ number }) => {
                     }                    
                 })
 
-                tootltipTemplate += `</div>`
+                tootltipTemplate += `</div>` */
                 resetTooltipContainer() 
                 if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
                     document.body.insertAdjacentHTML('beforeend',tootltipTemplate)                
@@ -134,22 +205,54 @@ const Ptab = ({ number }) => {
         }, TIME_INTERVAL) 
     }
 
+    const processRawData = useCallback(() => {
+        if(rawData.length > 0) {
+            const events = []
+            rawData.forEach( item => {
+                events.push({
+                    id: Math.random() * 16,
+                    start: item.proceedingFilingDate,
+                    end: item.proceedingLastModifiedDate,
+                    name: `${item.respondentPartyName} / ${item.appellantPartyName}`,
+                    status: item.proceedingStatusCategory,
+                    otherInfo: item
+                })
+            })
+            setIsLoadingTimelineRawData(false) 
+            setTimelineRawData(events)
+        } else {
+            setIsLoadingTimelineRawData(false) 
+            setTimelineRawData([])
+        }
 
+    }, [rawData])
 
     useEffect(() => {
-        const getPtabData = async() => {
-            setIsLoadingTimelineRawData(true)
-            PatenTrackApi.cancelPtab()    
-            const { data } = await PatenTrackApi.getPtabData(selectedAssetsPatents[1])
-            setIsLoadingTimelineRawData(false) 
-            if(data !== null) {
-                setTimelineRawData(data)
+        if(typeof rawData !== 'undefined') {
+            if(typeof standalone !== 'undefined' &&  standalone === true) {
+                processRawData()
+            } else {
+                setIsLoadingTimelineRawData(false) 
+                if(rawData.length > 0) {
+                    setTimelineRawData(rawData)
+                }
             }
+        } else {
+            
+            const getPtabData = async() => {
+                setIsLoadingTimelineRawData(true)
+                PatenTrackApi.cancelPtab()    
+                const { data } = await PatenTrackApi.getPtabData(selectedAssetsPatents[1])
+                setIsLoadingTimelineRawData(false) 
+                if(data !== null && data.length > 0 )  {
+                    setTimelineRawData(data)
+                    updateRawData(rawData)
+                }
+            }
+            getPtabData()
         }
-        getPtabData()
-    }, [selectedAssetsPatents])
-
-   
+    }, [selectedAssetsPatents, rawData])
+ 
     useEffect(() => {
         if(timelineRef.current !== null && timelineRef.current != undefined && typeof timelineRef.current.destroy === 'function') {
             timelineRef.current.destroy()
@@ -159,12 +262,12 @@ const Ptab = ({ number }) => {
         }                        
     }, [])
 
-
     useEffect(() => {
         if (isLoadingTimelineRawData) return
         let start = new moment().subtract(24, 'months')
         let end = new moment().add(24, 'months')
         if(timelineContainerRef.current != null) {
+            //const newArray = timelineRawData.slice(0, 50);
             const convertedItems = timelineRawData.map(convertDataToItem)
             setTimelineItems(convertedItems)
             items.current = new DataSet()
@@ -185,8 +288,8 @@ const Ptab = ({ number }) => {
                     return c
                 })
                 Promise.all(promise)
-                start = new moment(start).subtract(24, 'months') 
-                end = new moment(end).add(24, 'months')
+                start = new moment(start).subtract(48, 'months') 
+                end = new moment(end).add(48, 'months')
                 items.current.add(convertedItems)
                 setDisplay('block')
             } else {
@@ -194,9 +297,12 @@ const Ptab = ({ number }) => {
             }
         }
         /*console.log(items.current, start, end) */
-        
+        //start = new moment(new Date('1900-01-01'))
+        //end =  new moment(new Date('2200-01-01'))
         timelineRef.current.setItems(items.current)
-        timelineRef.current.setOptions({ ...options, start, end, min: start, max: end })
+        timelineRef.current.setOptions({ ...options, start, end, min: start, max: end }) 
+        //timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1900-01-01')), max: new moment(new Date('2200-01-01'))})
+        //timelineRef.current.setOptions({})
     }, [ timelineRawData, isLoadingTimelineRawData, timelineContainerRef ])
 
     /**
@@ -204,14 +310,16 @@ const Ptab = ({ number }) => {
     */
     useEffect(() => {
         timelineRef.current.setOptions(options) 
+        /* timelineRef.current.on('select', onSelect) */
         timelineRef.current.on('itemover', onItemover)
         timelineRef.current.on('itemout', onItemout)
         return () => {
-        timelineRef.current.off('itemover', onItemover) 
-        timelineRef.current.off('itemout', onItemout)
-        resetTooltipContainer()
+           /*  timelineRef.current.off('select', onSelect) */
+            timelineRef.current.off('itemover', onItemover) 
+            timelineRef.current.off('itemout', onItemout)
+            resetTooltipContainer()
         } 
-    }, [ onItemover, onItemout ]) 
+    }, [ /* onSelect, */ onItemover, onItemout ]) 
 
     return(
         <Paper className={classes.root}>   

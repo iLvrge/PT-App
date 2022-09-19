@@ -7,6 +7,9 @@ export default makeStyles(theme => ({
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
+        '& fieldset':{
+            border: 0
+        },
         '& .MuiTab-root':{
             minWidth: 'inherit',
             maxWidth: '100px'
@@ -26,6 +29,17 @@ export default makeStyles(theme => ({
         '& .MuiTableCell-root .MuiSelect-select.MuiSelect-select':{
             paddingRight: 0 
         },
+        '& .ReactVirtualized__Table__headerRow':{
+            '& .selectedIcon .MuiSvgIcon-root':{
+                fontSize: 20,
+                width: '1em',
+                height: '1em' ,
+                position: 'absolute',
+                fontSize: '20px',
+                left: 2,
+                top: '17px  !important'  
+            }
+        },
         '& .ReactVirtualized__Table__rowColumn':{
             '& .MuiSvgIcon-root':{
                 fontSize: 20,
@@ -44,7 +58,6 @@ export default makeStyles(theme => ({
         '& svg.MuiSelect-icon':{
             fontSize: '1.7rem',
             top: 3,
-            color: 'rgba(255,255,255,0.7)',
             opacity: 0
         },
         '& .MuiInput-underline':{
@@ -57,8 +70,9 @@ export default makeStyles(theme => ({
             '& svg': {
                 position: 'absolute',
                 fontSize: '1.3rem',
-                color: '#fff',
                 width: '1.3rem',
+                left: 2,
+                top: '17px  !important'  
             } ,
             '& svg.clipboard':{
                 width: 17,
@@ -80,6 +94,7 @@ export default makeStyles(theme => ({
     },
     tabs: {
         minHeight: 47, 
+        /* borderTop: `1px solid ${theme.palette.divider} !important`, */
     },
     tab: {
         flex: 1,
@@ -98,7 +113,7 @@ export default makeStyles(theme => ({
         justifyContent: 'center',
         alignItems: 'center',
         fontSize: 16,
-        borderTop: `1px solid ${theme.palette.divider} !important`,
+        /* borderTop: `1px solid ${theme.palette.divider} !important`, */
         overflow: 'hidden'
     },
     loadingIndicator: {

@@ -1,23 +1,50 @@
 import makeStyles from '@mui/styles/makeStyles';
-import { pink } from '@mui/material/colors';
+import { indigo, purple, blue, pink, teal, cyan, lime, green, orange, grey } from '@mui/material/colors';
 export default makeStyles(theme => ({
     container: {
-        height: '100%',
-        margin: 0,
-        color: '#fff',
-        border: 0,
+      height: '100%',
+      margin: 0,
+      color: '#fff',
+      border: 0,
+      display: 'flex',
+      position: 'relative',
+      flexGrow: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      boxShadow: 'unset !important',
+      minHeight: 60,              
+      '& .MuiGrid-grid-sm-12': {
+          '& span.small':{
+            /* maxWidth: 37, */
+            display: 'none'
+          }
+      }
+    }, 
+    columnDirection: {
+      width: '100%',
+      flexDirection: 'column'
+    },
+    containerTop: {
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+        flexDirection: 'column',
+        '& .google-visualization-tooltip': {
+            color: '#000'
+        }
+    },
+    child: {
         display: 'flex',
-        position: 'relative',
-        flexGrow: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: 60,              
-        '& .MuiGrid-grid-sm-12': {
-            '& span.small':{
-                maxWidth: 185
-            }
-        },
-    },  
+        height: '100%',
+        width: '100%',
+        marginBottom: 20,
+        flexDirection: 'column',
+        '& :last':{
+          marginBottom: 0,
+        }
+    },
+    flexColumnFullHeight: {
+      height: '100% !important',
+    },
     flexColumn: {
         height: 'calc((100vh - 105px) / 3)',
         alignContent: 'start',
@@ -28,10 +55,10 @@ export default makeStyles(theme => ({
             justifyContent: 'center',
             flexDirection: 'column',
             alignContent: 'start',
-            height: /* 'calc((100vh - 190px) / 3)', */90,
-            flexBasis: '190px !important',
-            maxWidth: '190px !important',
-            minWidth: '190px !important',
+            height: /* 'calc((100vh - 190px) / 3)', */117,
+            flexBasis: '210px !important',
+            maxWidth: '210px !important',
+            minWidth: '210px !important',
             '& svg': {
                 display: 'flex',
                 /* height: '70%' */
@@ -52,22 +79,46 @@ export default makeStyles(theme => ({
         },  
     },
     companyBar:{
-        height: '100%',
+      height: '100%',
+    },
+    kpiBorder: {
+      display: 'flex',
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+    },
+    kpiNumber: {
+      display: 'flex',
+      height: '63%',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    topMargin: {
+      marginTop: 10
+    },
+    kpiNumberSmall:{
+      display: 'flex',
+      height: '22.5%',
+      alignItems: 'center',
+      justifyContent: 'center'
     },
     border: {  
-        /* borderTop: `1px solid ${theme.palette.divider}`, */
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
-        padding: '7px 10px 5px',      
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        width: 'fit-content',
-    },  
+      /* borderTop: `1px solid ${theme.palette.divider}`, */
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      padding: '7px 10px 5px',      
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: 'fit-content',
+    }, 
+    border1:{
+      position: 'unset'
+    } ,
     card: {        
         position: 'relative',
         border: 0,
@@ -95,16 +146,26 @@ export default makeStyles(theme => ({
             marginBottom: 0,
         },
         '& .MuiTypography-h6':{
-            textTransform: 'capitalize'
+            textTransform: 'initial'
         },
         '& .MuiCardActions-root, .MuiCardContent-root':{
             backgroundColor: theme.palette.background.paper,
+            backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))',
             padding: '5px 8px',
             height: '100%',
             display: 'flex',
             alignItems: 'center'
         }
     },  
+    alignTop: {
+      '& .MuiCardContent-root':{
+        alignItems: 'flex-start',
+        flexDirection: 'column'
+      }
+    },
+    heading: {
+        fontSize: '1.1rem'
+    },
     titleContainer:{
         display: 'flex',
         width: '100%',
@@ -117,7 +178,7 @@ export default makeStyles(theme => ({
         verticalAlign: 'middle',
         justifyContent: 'flex-start;',
         alignItems: 'center',
-        backgroundImage: 'none',
+        /* backgroundImage: 'none', */
         borderBottom: `1px solid ${theme.palette.divider}`,
         '& span.title':{
             whiteSpace: 'nowrap', 
@@ -130,26 +191,40 @@ export default makeStyles(theme => ({
         }
     },    
     toolbar:{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginLeft: 'auto',
-        /* '& .MuiIconButton-root':{
-            '& svg':{
-                width: '1em !important',
-                height: '1em !important',
-            }
-        } */
-    },    
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginLeft: 'auto',
+      position: 'absolute',
+      right: 0
+      /* '& .MuiIconButton-root':{
+          '& svg':{
+              width: '1em !important',
+              height: '1em !important',
+          }
+      } */
+    }, 
     tooltip:{
-        fontSize: '1rem'
+      fontSize: '1rem',
+      '&.3':{
+        maxWidth: 290
+      },
+      '&.4':{
+        maxWidth: 260
+      },
+      '&.6':{
+        maxWidth: 300
+      }
     },
     mobileTooltip: {
-        flex: '1 1 100%',
-        fontSize: '20px !important'
+      flex: '1 1 100%',
+      fontSize: '20px !important'
     },
     active: {
-        color: pink[500]
+      color: pink['A400'],
+      '& svg': {
+        fill: pink['A400'],
+      }
     },
     list: {
         height: 'calc(100% - 47px)',
@@ -204,47 +279,363 @@ export default makeStyles(theme => ({
         },
     },
     chartContainer: {
-        position: 'relative',
-        display: 'flex',
-        justifyContent: 'center',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        width: 190,
-        maxWidth: 190,
-        height: 165,
-        alignItems: 'center'
+      position: 'relative',
+      display: 'flex',
+      justifyContent: 'center',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: '92%',
+      maxWidth: '92%',
+      height: '100%',
+      alignItems: 'center'
+    },
+    widthResponsive:{
+      width: '92%',
+      maxWidth: '92%',
+      height: '100%'
+    },
+    timelineContainer: {
+      position: 'relative',
+      display: 'flex',
+      justifyContent: 'center',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: '100%',
+      height: '85%',
+      alignItems: 'center',
+      '& .vis-time-axis .vis-text, .vis-item, .vis-y-axis':{
+        color: theme.palette.text.primary,
+      },
+      '& .vis-timeline':{
+        border: 0
+      },
+      '&.vis-panel.vis-center':{
+        border: `1px solid ${theme.palette.divider}`
+      },
+      '& .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom': {
+        borderBottomColor: theme.palette.divider,
+        borderTopColor: theme.palette.divider,
+        borderLeftColor: theme.palette.divider,
+        borderRightColor: theme.palette.divider,
+      },
+      '& .vis-panel.vis-center':{
+        borderTop: 0
+      },
+      '& .vis-panel.vis-top':{
+        visibility: 'hidden',
+        '& .vis-time-axis':{
+          height: '1px !important'
+        }
+      },
+      '& .vis-dot':{ 
+        backgroundColor: 'inherit',
+        borderColor: 'inherit',
+        width: 17,  
+        height: 17, 
+        top: '7px !important',
+        left: 2,
+        border: 0,       
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 15
+      },
+      '& .vis-dot.asset-type-acquisitions,  .cluster-acquisitions': {
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/acquisition.svg)',
+      },
+      '& .vis-dot.asset-type-sales, .cluster-sales': {
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/sales.svg)',
+      },
+      '& .vis-dot.asset-type-licenseIn, .cluster-licenseIn': {
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/licensein.svg)',
+      },
+      '& .vis-dot.asset-type-licenseOut, .cluster-licenseOut': {
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/licenseout.svg)',
+      },
+      '& .vis-dot.asset-type-mergersIn, .cluster-mergersIn': { 
+        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png)',
+      },
+      '& .vis-dot.asset-type-mergersOut, .cluster-mergersOut': {
+        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png)',
+      },
+      '& .vis-dot.asset-type-correct, .cluster-correct': {
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/correction.svg)',
+      },
+      '& .vis-dot.asset-type-options, .cluster-options': {
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/options.svg)',
+      },
+      '& .vis-dot.asset-type-courtOrders, .cluster-courtOrders': {
+        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/courtorder.svg)',
+      },
+      '& .vis-dot.asset-type-employees, .cluster-employees': {
+        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png)',
+      },
+      '& .vis-dot.asset-type-other, .cluster-other': {
+        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png)', 
+      },
+      '&.vis-panel .vis-shadow':{
+        /*height: 0*/
+      },
+      '& .vis-time-axis .vis-text':{
+        padding: '1px 3px'
+      },
+      '& .vis-item.asset-type-security-release':{
+        backgroundColor: '#70A800 !important'
+      },
+      '& .vis-item.asset-type-security-release-partial':{
+        backgroundColor: '#228DE8 !important'
+      },
+      '& .vis-item.asset-type-lending':{
+        backgroundColor: '#FFAA00'
+      },
+      '& .vis-item.asset-type-borrowing':{
+        backgroundColor: '#FFAA00'
+      },
+      '& .vis-item':{
+        '& .vis-item-overflow':{
+          overflow: 'visible',
+        }
+      },
+      '& .vis-item.vis-range':{
+        border: 0,
+        '& .vis-item-overflow':{
+          position: 'unset',
+          minHeight: 28,
+          '& .vis-item-content':{
+            width: '100%',
+            position: 'absolute',
+            boxSizing: 'border-box',
+            whiteSpace: 'nowrap',
+            display: 'inline-block',
+            '& span':{
+              whiteSpace: 'nowrap',
+              display: 'flex',
+              width: '100%',
+              position: 'relative'
+            },
+            '& tt':{
+              marginRight: 10,
+              cursor: 'pointer',
+              '& img':{
+                width: 16
+              }
+            },
+            '& dd':{
+              marginInlineStart: 0,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              maxWidth: 130,
+              marginRight: 3
+            },
+            '& em':{
+              display: 'flex',
+              position: 'absolute',
+              right: 7,
+              cursor: 'pointer',
+              '& img':{
+                width: 16,
+                display: 'flex',
+                marginRight: 3
+              },
+              '& span':{
+                /* position: 'absolute',
+                right: 35,
+                textAlign: 'right' */
+                display: 'flex'
+              }
+            }
+          }
+        } 
+      }
+    },
+    timelineContainerFullheight:{
+      height: '100% !important'
+    },
+    timelineHeading: {
+      display: 'flex',
+      width: '100%'
     },
     exampleButton: {
-        position: 'absolute',
-        top: 5,
-        /* left: 'calc(50% - 45px)' */
-        right: 0
+      position: 'absolute',
+      bottom: 5,
+      /* left: 'calc(50% - 45px)' */
+      right: 0
     },
     actionButton: {
-        position: 'absolute',
-        left: 0,
-        top: 5,
-        textTransform: 'initial',
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis'  
+      position: 'absolute',
+      left: 0,
+      bottom: 5,
+      textTransform: 'initial',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis'  
     },
     shareIcon:{
-        '& svg':{
-            width: '1rem !important',
-            height: '1rem !important'
-        }
+      '& svg':{
+        width: '1rem !important',
+        height: '1rem !important'
+      }
     },
     actionIcon: {
-        /* '& svg':{
-            width: '1rem !important',
-            height: '1rem !important'
-        } */
+      /* '& svg':{
+          width: '1rem !important',
+          height: '1rem !important'
+      } */
+      '& svg' : {
+        fill: 'currentcolor',
+        width: '1.5rem !important', 
+        height: '1.5rem !important'
+      }
     },
     fontStandalone: {        
-       '& svg':{
-            fontSize: '1.5rem !important',
-            /* width: '1.5rem !important', 
-            height: '1.5rem !important' */
-        } 
-    }   
+      '& svg':{
+        fontSize: '1.5rem !important',
+        /* width: '1.5rem !important', 
+        height: '1.5rem !important' */
+      } 
+    },
+    graphContainer: {
+      flex: 1,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '70%',
+      overflow: 'hidden'
+    },   
+    active: {
+      color: pink[500]
+    },
+    maxChildHeight: {
+      /* maxHeight: '80vh',
+      height: '80vh',
+      overflow: 'auto' */
+    },
+    tableContainer: {
+      height: '60%',
+      width: '100%',
+      overflow: 'auto',
+      boxShadow: 'none',
+      /* marginTop:15, */
+      '& .MuiListItem-root':{
+        padding: 0
+      },
+      '& .MuiList-root':{
+        padding: 0
+      }
+    },
+    itemContainer: {
+      position: 'relative',
+      '& .MuiTypography-root': {
+        lineHeight: 1,
+        height: 20,
+      }
+    },
+    itemHeading: {
+      display: 'inline-block',
+      width: '70%',
+      overflow: 'hidden',
+      height: 18,
+      marginRight: 5,
+      fontSize: '1.1rem',
+      position: 'absolute',
+      left: 0,
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis'
+    },
+    wraper:{
+      /* whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis', */
+    },
+    itemText:{
+      position: 'absolute',
+      top: 0,
+      width: '25%',
+      textAlign: 'right',
+      fontSize: '1.1rem',
+      height: 18,
+      right: 5
+    },
+    timelineProcessingIndicator: {
+      position: 'absolute',
+      top: 10, 
+      right: 10,
+    },
+    timeline: {
+        height: '100%',
+        width: '100%',
+        // '& .vis-center .vis-content': {
+        //   transform: 'translateY(0px) !important',
+        //   height: '100% !important',
+        // },
+        // '& .vis-center .vis-itemset': {
+        //   height: '329px !important',
+        //   overflowY: 'auto',
+        //   overflowX: 'hidden',
+        // },
+        '& .custom_tooltip':{
+          position:'absolute',  
+          width:'150px',
+          /* height:'150px', */
+          background: theme.palette.background.paper,
+          border:`1px solid ${theme.palette.action.disabled}`,
+          color: theme.palette.text.primary,
+          padding: '5px 10px' ,
+          '& h4':{
+            margin: '5px 0 0 0' 
+          },
+          overflow: 'hidden'
+        },
+        '& .vis-item': {
+          fontSize: 12, 
+          color: theme.palette.text.primary,
+        },
+    },
+    loader: {
+        position: 'absolute',
+        zIndex: 100,
+        top: '50%',
+        left: '50%',
+    },
+    fullscreenButton:{
+      position: 'absolute', 
+      right: 5, 
+      top: 0,
+      zIndex: 9999
+    },
+    transparentTooltip:{
+      backgroundColor: 'transparent',
+      minWidth: 250,
+      maxWidth: 500
+    },
+    headingName: {
+      marginLeft: 10
+    },
+    fixKPI: {
+      flexDirection: 'column',
+      justifyContent: 'flex-start'
+    },
+    headingContainer:{
+      padding: '7px 10px 5px',
+    },
+    headerContainerPosition: {
+      position: 'absolute',
+      top: 0
+    },
+    title: {  
+      /* borderTop: `1px solid ${theme.palette.divider}`, */
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',    
+      top: 0,
+      left: 0,
+      right: 0,
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: 'fit-content',
+    }, 
+    right:{
+      position: 'absolute', 
+      right: 0,
+      width: 20,
+      height: 20,
+      zIndex: 999999
+  },  
 }));

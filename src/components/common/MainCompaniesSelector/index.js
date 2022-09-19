@@ -11,6 +11,7 @@ import {
     setMainCompaniesSelected,
     setMainCompaniesAllSelected,
     setMainCompaniesRowSelect,
+    setMainCompanies,
     setMaintainenceAssetsList,
     setAssetTypes,
     setAssetTypeInventor,
@@ -72,18 +73,19 @@ import { resetAllRowSelect } from '../../../utils/resizeBar'
 const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag, parentBar, isMobile}) => {
     const COLUMNS = [
         {
-            width: 29,
-            minWidth: 29,
+            width: 10,
+            minWidth: 10,
             label: '',
             dataKey: 'representative_id',
             role: 'checkbox',
             selectedFromChild: true,     
             disableSort: true,
-            show_selection_count: true,
+            enable: false,
+            show: false
             /* showOnCondition: '1' */ 
         },
         {
-            width: 25, 
+            width: 25,     
             minWidth: 25,
             label: '',
             dataKey: 'representative_id',
@@ -91,18 +93,20 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             role: "arrow",
             disableSort: true,
             showOnCondition: '0',
-            disableColumnKey:'type'
+            disableColumnKey:'type',
+            checkboxSelect: true
         },
         {
-            width: 700,  
-            minWidth: 700,
-            oldWidth: 700,
+            width: 170,  
+            minWidth: 170,
+            oldWidth: 170,
             draggable: true,
             label: 'Companies',        
             dataKey: 'original_name',
             /* classCol: 'font12Rem', */
             showOnCondition: '0',
             align: "left", 
+            show_selection_count: true,
             badge: true,
         },
         {
@@ -220,15 +224,20 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
     const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
     const channel_id = useSelector(state => state.patenTrack2.channel_id)
+    const dashboard_share_selected_data = useSelector(state => state.patenTrack2.dashboard_share_selected_data)
+   
     /**
      * Intialise company list
-     */
+    */
 
     useEffect(() => {
         const initCompanies = async () => {
             dispatch(fetchParentCompanies( offset, sortField, sortOrder ) )
         } 
-        initCompanies()  
+        initCompanies() 
+        return () => {
+            
+        } 
     }, []) 
 
     /**
@@ -255,6 +264,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }
     }, [ companies.list ])
 
+    /**
+     * For Mobile screen
+     */
+
     useEffect(() => {
         if(isMobile) {
             let headerColumns = [...COLUMNS]
@@ -263,6 +276,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             setHeaderColumns(headerColumns)
         }
     }, [isMobile])
+
+    /**
+     * Get Slack channels
+     */
 
     useEffect(() => {
         if(slack_channel_list.length == 0 && slack_channel_list_loading === false) {
@@ -286,9 +303,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }
     }, [slack_channel_list, slack_channel_list_loading])
 
-      /**
-   * Adding channel to transaction list
-   */
+
+    /**
+     * Find compoanies channel to add inidication to the list
+     */
 
     useEffect(() => {
         const checkAssetChannel = async () => {
@@ -334,6 +352,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         checkAssetChannel()
     },[ slack_channel_list, companies])
 
+    /**
+     * Get slack messages for selected company and if the screen is dashboard
+     */
+
 
     useEffect(() => {        
                 
@@ -370,7 +392,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }
     }, [slack_channel_list, companiesList, selected, dashboardScreen ])
 
-
     /**
      * if category is correct names then row should show radio button instead of checkboxes
      */
@@ -380,24 +401,24 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             let headerColumns = [...COLUMNS]
             headerColumns[0].role = 'radio'
             headerColumns[0].selectedFromChild = false
-            headerColumns[0].show_selection_count = false
             setHeaderColumns(headerColumns)
         } else {
             let headerColumns = [...COLUMNS]
             headerColumns[0].role = 'checkbox'
             headerColumns[0].selectedFromChild = true
-            headerColumns[0].show_selection_count = true
             setHeaderColumns(headerColumns)
         }
     }, [selectedCategory])
+
 
     /**
      * Get user selected companies
      */
 
     useEffect(() => {
+        let isSubscribed = true;
         const getSelectedCompanies = async() => {
-            if( companies.list.length > 0 && selectItems.length == 0) {
+            if( companies.list.length > 0 && selected.length == 0 && process.env.REACT_APP_ENVIROMENT_MODE != 'DASHBOARD') {
                 /**
                  * Send Request to server
                  */
@@ -439,54 +460,107 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                                 const parseChild = JSON.parse(representative.child)
                                 if(parseChild.length > 0) {
                                     const filterItems = parseChild.filter(c => activeItems.includes(parseInt(c.representative_id)) ? parseInt(c.representative_id) : '')
-                                    if(dashboardScreen === true) {
+                                    /* if(dashboardScreen === true) {
                                         oldItems = filterItems.length > 0 ? [parseInt(filterItems[0])] : []
                                     } else {                                       
                                         oldItems = [...oldItems, ...filterItems]
                                         oldItems = [...new Set(oldItems)]
-                                    }                                    
+                                    } */ 
+                                    oldItems = filterItems.length > 0 ? [parseInt(filterItems[0])] : []                                   
                                 }  
                             } else {
                                 if(activeItems.includes(parseInt(representative.representative_id))) {
-                                    if(dashboardScreen === true) {
+                                   /*  if(dashboardScreen === true) {
                                         oldItems = [parseInt(representative.representative_id)]
                                     } else {
                                         oldItems.push(parseInt(representative.representative_id))
-                                    }                                    
+                                    } */        
+                                    oldItems = [parseInt(representative.representative_id)]                            
                                 }
                             }
                         })
                         await Promise.all(promise)
                         //setSelectGroups(groups) 
-                        setSelectItems(oldItems)
-                        dispatch(setMainCompaniesSelected(oldItems, groups))
+                        if(isSubscribed) {
+                            setSelectItems(oldItems)
+                            dispatch(setMainCompaniesSelected(oldItems, groups))
+                        }                        
                     } 
                 } 
             }            
         }  
-        getSelectedCompanies()
-    }, [ companies.list,  ])
+        if(isSubscribed) {
+            getSelectedCompanies()    
+        }            
+        return () => (isSubscribed = false)
+    }, [ companies.list ])
+
+
+    useEffect(() => {   
+        if(dashboard_share_selected_data != undefined && Object.keys(dashboard_share_selected_data).length > 0 && process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
+            let { selectedCompanies, tabs, customers } = dashboard_share_selected_data
+            if(typeof selectedCompanies != 'undefined' && selectedCompanies != '') {
+                try{
+                    selectedCompanies = JSON.parse(selectedCompanies)
+                    if(selectedCompanies.length > 0) {
+                        setSelectItems(selectedCompanies)
+                        dispatch(setMainCompaniesSelected(selectedCompanies, []))
+
+                        (async () => {
+                            const promise = companies.list.map((row, index) => {
+                                if(!selectedCompanies.includes(row.representative_id)) {
+                                    companies.list[index].status = 0
+                                }
+                            })
+                            await Promise.all(promise)
+                            dispatch(setMainCompanies(companies, { append: false }))
+                        })()
+    
+                        if(typeof tabs != 'undefined' && tabs != '') {
+                            dispatch( setAssetTypesSelect([tabs]) )
+                        }
+                        if(typeof customers != 'undefined' && customers != '') {
+                            customers = JSON.parse(customers)
+                            if(customers.length > 0) {
+                                dispatch( setSelectAssignmentCustomers(customers) )
+                            }
+                        }
+                    }                    
+                } catch (e){
+                    console.log(e)
+                }
+            }
+        }
+    }, [dashboard_share_selected_data])
+
+    /**
+     * Get list of user activity
+     */
 
     useEffect(() => {
-        if((selectedCompaniesAll === true || selected.length > 0 )) {
+        let isSubscribed = true;
+        if((selectedCompaniesAll === true || selected.length > 0 ) && process.env.REACT_APP_ENVIROMENT_MODE != 'DASHBOARD') {
             if( assetTypesSelected.length === 0 && assetTypesSelectAll === false ) {
                 const getUserSelection = async () => {
                     const { data } = await PatenTrackApi.getUserActivitySelection()
-                    if(data != null && Object.keys(data).length > 0) {
-                        dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
-                        dispatch( setAssetTypeCompanies({ list: [], total_records: 0 }) )
-                        dispatch( setAssetTypeInventor({ list: [], total_records: 0 }) )
-                        dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
-                        dispatch( setAssetTypesSelect([data.activity_id]) )
-                        dispatch( setAllAssetTypes( false ) )
-                    } else {
-                        dispatch( setAssetTypesSelect([]) )
-                        dispatch( setAllAssetTypes( true ) )
+                    if(isSubscribed) {
+                        if(data != null && Object.keys(data).length > 0) {
+                            dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
+                            dispatch( setAssetTypeCompanies({ list: [], total_records: 0 }) )
+                            dispatch( setAssetTypeInventor({ list: [], total_records: 0 }) )
+                            dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+                            dispatch( setAssetTypesSelect([data.activity_id]) )
+                            dispatch( setAllAssetTypes( false ) )
+                        } else {
+                            dispatch( setAssetTypesSelect([]) )
+                            dispatch( setAllAssetTypes( true ) )
+                        }
                     }
                 }
                 getUserSelection();   
             }
         }
+        return () => (isSubscribed = false)
     }, [ dispatch, selectedCompaniesAll, selected])
 
     useEffect(() => {
@@ -511,7 +585,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             dispatch( setMainCompaniesSelected( all, groups )) 
         }
     }, [ dispatch, selectAll, companies, intialization ])
-    
 
     useEffect(() => {
         if( selectAll != undefined && (selectAll === false || selectAll === true )) {
@@ -529,9 +602,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }
     }, [ selected, selectItems ])
 
-
-    
-
     useEffect(() => {
         const getGroupItems = async() => {
             /* const groupList = companiesList.filter( company => parseInt(company.type) === 1)
@@ -548,6 +618,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }
         getGroupItems()
     }, [ selectItems ])
+
 
     const findChannelID = useCallback((name) => {
         let channelID = ''
@@ -636,8 +707,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
      * @param {*} defaultSelect 
      * @param {*} currentSelection 
      */
-    const updateCompanySelection = async(event, dispatch, row, checked, selected, defaultSelect, currentSelection) => {
-        if(checked != undefined) {
+    const updateCompanySelection = async(event, dispatch, row, cntrlKey, selected, defaultSelect, currentSelection) => {
+        if(cntrlKey !== undefined) {
             let updateSelected = [...selected], sendRequest = false , updateGroup = [...selectedGroup] 
             if(!updateSelected.includes(parseInt( row.representative_id ))) {
                 if(selectedCategory === 'correct_names') {
@@ -700,7 +771,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                 hash: updateHashLocation(location, 'companies', updateSelected).join('&')
             })
             dispatch(setMainCompaniesRowSelect([]))
-            
             setSelectItems(updateSelected)
             //setSelectGroups(updateGroup)
             updateUserCompanySelection(updateSelected)
@@ -713,17 +783,30 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         } else {
             if(row.status == 1) {
                 const element = event.target.closest('div.ReactVirtualized__Table__rowColumn')
-                if( element != null ) {
-                    const index = element.getAttribute('aria-colindex')
-                    if(index == 2) {
-                        if(currentSelection != row.representative_id) {
-                            setCurrentSelection(row.representative_id)
-                        } else { 
-                            setCurrentSelection(null)
-                        }
+                let index = -1
+                if(element !== null ) {
+                    index = element.getAttribute("aria-colindex");
+                } 
+                if(index == 2) {
+                    if(currentSelection != row.representative_id) {
+                        setCurrentSelection(row.representative_id)
+                    } else { 
+                        setCurrentSelection(null)
                     }
+                } else {
+                    const updateSelected = [parseInt(row.representative_id)]
+                    dispatch(setMainCompaniesRowSelect([]))
+                    setSelectItems(updateSelected)
+                    //setSelectGroups(updateGroup)
+                    updateUserCompanySelection(updateSelected)
+                    dispatch( setMainCompaniesSelected( updateSelected, [] ) ) 
+                    dispatch( setNamesTransactionsSelectAll( false ) )
+                    dispatch( setSelectedNamesTransactions([]) )
+                    dispatch( setMainCompaniesAllSelected( updateSelected.length === totalRecords ? true : false ) )
+                    resetAll() 
+                    clearOtherItems() 
                 }
-            }            
+            }          
         }
     } 
 
@@ -734,13 +817,14 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const handleClickRow = useCallback((event, row) => {
         event.preventDefault()
         const { checked } = event.target;
-        if(checked != undefined) {
+        let cntrlKey = event.ctrlKey ? event.ctrlKey : event.metaKey ? event.metaKey : undefined;
+        if(cntrlKey !== undefined) {
             if(display_clipboard === false) {
                 dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
                 dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
             }
         } 
-        updateCompanySelection(event, dispatch, row, checked, selected, defaultSelect, currentSelection)
+        updateCompanySelection(event, dispatch, row, cntrlKey, selected, defaultSelect, currentSelection)
     }, [ dispatch, selected, display_clipboard, currentSelection ])
 
     /**
@@ -753,7 +837,11 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
         dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
         resetAll()
-        if(checked === false) {
+        setSelectItems([])
+        dispatch( setMainCompaniesSelected([], []) )            
+        clearOtherItems()
+        dispatch( setMainCompaniesAllSelected( false ) )
+        /* if(checked === false) {
             setSelectItems([])
             dispatch( setMainCompaniesSelected([], []) )            
             clearOtherItems()
@@ -782,8 +870,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                     dispatch( setMainCompaniesSelected(items, groups) )
                 } 
             }            
-        }
-        dispatch( setMainCompaniesAllSelected( checked ) )
+        } 
+        dispatch( setMainCompaniesAllSelected( checked ) ) */
     }, [ dispatch, companies ]) 
 
     const handleOnClickLoadMore = useCallback(() => {

@@ -12,30 +12,11 @@ import ClickAwayListener from '@mui/base'
 import themeMode from '../../../../themes/themeMode';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import { 
-  setSelectedAssetsPatents, 
-  setChannelID,
-  setDriveTemplateFile,
-  setTemplateDocument,
-  setMainCompaniesRowSelect,
-  setAssetTypeSelectedRow,
-  setAssetTypeCustomerSelectedRow,
-  setSelectedAssetsTransactions,
-  setAssetsIllustration,
-  setChildSelectedAssetsTransactions,
-  setChildSelectedAssetsPatents,
+  transactionRowClick
 } from '../../../../actions/patentTrackActions2'
-import {
-  toggleUsptoMode, 
-  toggleFamilyMode,
-  toggleFamilyItemMode,
-  setDriveTemplateFrameMode
-} from "../../../../actions/uiActions";
-import {
-  setConnectionBoxView,
-  setPDFView,
-} from "../../../../actions/patenTrackActions"
+
 import PatenTrackApi from '../../../../api/patenTrack2'
-import { convertAssetTypeToTabId, oldConvertTabIdToAssetType, convertTabIdToAssetType, exportGroups, assetsTypesWithKey } from '../../../../utils/assetTypes'
+import { convertTabIdToAssetType, assetsTypesWithKey } from '../../../../utils/assetTypes'
 import { numberWithCommas, capitalize } from '../../../../utils/numbers'
 
 
@@ -71,7 +52,7 @@ const options = {
   }, */
   template: function(item, element, data) {
     if (data.isCluster) {
-      return data.items.length > 0 ? `<span class="cluster-header"><span class="cluster-image cluster-${data.items[0].assetType}"></span><span>${data.items.length} ${data.items[0].companyName.length > 0 ? capitalize(data.items[0].assetType)  : ''} transactions</span></span>` : ``
+      return `<span class="cluster-header">${data.items[0].clusterHeading}(${data.items.length})</span>`
     } else { 
       return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
     }
@@ -89,7 +70,7 @@ const options = {
 
 const TIME_INTERVAL = 1000
 var tootlTip = ''
-const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) => {
+const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, timelineData, updateTimelineRawData }) => {
   
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -133,7 +114,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
   const selectedItem = useSelector(state => state.ui.timeline.selectedItem)
   const auth_token = useSelector(state => state.patenTrack2.auth_token)
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
-
+  const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
   const setSelectedItem = useCallback((item) => {
     dispatch(setTimelineSelectedItem(item))
   }, [ dispatch ])
@@ -144,6 +125,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
 
   
 
+  const [ timelineRemoveRelease, setTimelineRemoveRelease ] = useState(false)
   const [ timelineRawData, setTimelineRawData ] = useState([])
   const [ timelineItems, setTimelineItems ] = useState([])
   const [ timelineGroups, setTimelineRawGroups] = useState([])
@@ -163,26 +145,36 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
     const assetType = Number.isInteger(assetsCustomer.tab_id) ? convertTabIdToAssetType(assetsCustomer.tab_id) : 'default'
     const companyName =  selectedWithName.filter( company => assetsCustomer.company == company.id ? company.name : '')
     const customerFirstName = assetsCustomer.tab_id == 10 ? assetsCustomer.customerName.split(' ')[0] : assetsCustomer.customerName
-    return ({
-      
+    const item = {
       type: 'point',
       start: new Date(assetsCustomer.exec_dt),
-      customerName: `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
+      customerName: selectedCategory == 'proliferate_inventors' ? customerFirstName : `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
       assetType,
+      clusterHeading: customerFirstName,
       companyName,
       rawData: assetsCustomer,
-      /* group: assetsCustomer.group, */
-      className: `asset-type-${assetType}`,
+      className: `asset-type-${assetType} ${assetsCustomer.release_exec_dt != null ? assetsCustomer.partial_transaction == 1 ? 'asset-type-security-release-partial' : 'asset-type-security-release' : ''}`,
       collection: [ { id: assetsCustomer.id, totalAssets: assetsCustomer.totalAssets } ],
-      showTooltips: false, 
-      /* title: `
-        <div>
-          <span><strong>Transaction Date:</strong> ${moment(assetsCustomer.exec_dt).format('ll')}</span> 
-          <span><strong>Other Party:</strong> ${assetsCustomer.customerName}</span>
-          <span><strong>Number of Assets:</strong> ${assetsCustomer.totalAssets}</span>
-        </div>
-      `, */
-    })
+      showTooltips: false
+    }
+
+    if([5,12].includes(parseInt(assetsCustomer.tab_id))){            
+      item.type = 'range';
+      item['end'] = assetsCustomer.release_exec_dt != null ? new Date(assetsCustomer.release_exec_dt) : new Date();
+      
+      const securityPDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.reel_no}-${assetsCustomer.frame_no}.pdf`
+      item['security_pdf'] = securityPDF
+      /* let name = `<tt><img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></tt>${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`;
+      if(assetsCustomer.release_exec_dt != null ) {
+          const releasePDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.release_reel_no}-${assetsCustomer.release_frame_no}.pdf`
+          item['release_pdf'] = releasePDF
+          name += `<em>${assetsCustomer.partial_transaction == 1 ? `<span>(${numberWithCommas(assetsCustomer.releaseAssets)})</span>` : ''}<img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></em>`
+      } */
+      let name = `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`
+      item['customerName'] = name
+    }
+
+    return item
   }
 
   // Custom ToolTip
@@ -278,13 +270,13 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
                                           <div>
                                             <h4>Assignors:</h4>
                                             ${data.assignor.map(or => ( 
-                                              '<div>'+or.or_name+'</div>'
+                                              '<div>'+or.original_name+'</div>'
                                             )).join('')}
                                           </div>
                                           <div>
                                             <h4>Assignees:</h4>
                                             ${data.assignee.map(ee => (
-                                              '<div>'+ee.ee_name+'</div>'
+                                              '<div>'+ee.original_name+'</div>'
                                             )).join('')}
                                           </div>
                                         </div>` 
@@ -313,25 +305,9 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
       const item = items.current.get(properties.items[0])
       setSelectedAsset({ type: 'transaction', id: item.rawData.id })
       setSelectedItem(item)
-      dispatch(setChannelID(''))
-      dispatch(setDriveTemplateFrameMode(false));
-      dispatch(setDriveTemplateFile(null));
-      dispatch(setTemplateDocument(null));      
-      dispatch(setConnectionBoxView(true));
-      dispatch(setPDFView(false));
-      dispatch(toggleUsptoMode(false));
-      dispatch(toggleFamilyMode(false));
-      dispatch(toggleFamilyItemMode(false)); 
-      dispatch(setMainCompaniesRowSelect([]));
-      dispatch(setAssetTypeSelectedRow([]));
-      dispatch(setAssetTypeCustomerSelectedRow([]));
-      dispatch(setChildSelectedAssetsTransactions([]));
-      dispatch(setChildSelectedAssetsPatents([])); 
-      dispatch(setSelectedAssetsPatents([]));
-      dispatch(setSelectedAssetsTransactions([item.rawData.id]));
-      dispatch(setAssetsIllustration({ type: "transaction", id: item.rawData.id }));
+      dispatch(transactionRowClick(item.rawData.id, slack_channel_list, false, search_string))
       if(assignmentBar === false) {
-        assignmentBarToggle()
+        assignmentBarToggle()  
       }
       //history.push(routes.review3)
     }
@@ -401,6 +377,34 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
     setIsLoadingTimelineData(false)
   }, 1000), [ timelineItems ])
 
+  const removeSecurityRelease = (timelineData) => {
+    let removeRelease = []
+    let list = [...timelineData]
+    list.forEach( item => {
+      if(parseInt(item.release_rf_id) > 0) {
+        removeRelease.push(item.release_rf_id);
+        const getOtherRelease = item.all_release_ids
+        if(getOtherRelease != '') {
+          const parseRelease = JSON.parse(getOtherRelease)
+          if(parseRelease.length > 0 ) {
+            parseRelease.forEach(row => removeRelease.push(Number(row.rf_id)))
+          }
+        }
+      } 
+    })
+    if(removeRelease.length > 0) {
+      removeRelease = [...new Set(removeRelease)];
+      
+      removeRelease.forEach( remove => {
+        const findIndex = list.findIndex( item => item.id == remove)
+        if(findIndex !== -1) {
+          list.splice(findIndex, 1)
+        }
+      })  
+    }
+    return list;
+  }
+
   useEffect(() => {
     if (!selectedItem && timelineRef.current) {
       timelineRef.current.setSelection([])
@@ -411,71 +415,102 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
     timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
   }, [])
 
+
   //Timeline list from server
   useEffect(() => {
-    /**
-     * return empty if no company selected
-     */
-    setTimelineRawGroups([]) //groups
-    setTimelineRawData([]) //items
-    //redrawTimeline()
-    PatenTrackApi.cancelTimeline()
-    /**
-     * call for the timeline api data
-    */
-    const getTimelineRawDataFunction = async () => {
-      //search
-      resetTooltipContainer()
-      if(search_string != '' && search_string != null){
-        if(search_rf_id.length > 0) {
-          //setIsLoadingTimelineData(true)
-          const { data } = await PatenTrackApi.getActivitiesTimelineData([], [], [], search_rf_id) // empty array for company, tabs, customers
-          //setIsLoadingTimelineData(false)
-          //setTimelineRawGroups(data.groups) //groups
-          setTimelineRawData(data.list) //items
-        }       
-      } else {
-        if(type !== 9)  {
-          const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-          tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-          customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
-          rfIDs = selectedAssetAssignments.length > 0 ? selectedAssetAssignments : [];
-  
-          if( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
-            //setIsLoadingTimelineData(true)
-            const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
-            //setIsLoadingTimelineData(false)
-            setTimelineRawData(data.list)
-          } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null ) {
-            //setIsLoadingTimelineData(true)
-            const { data } = await PatenTrackApi.getShareTimelineList(location.pathname.replace('/', ''))
-            setTimelineRawData(data.list)           
-            //setIsLoadingTimelineData(false)            
-          }
-        }
-      } 
-    }
-    getTimelineRawDataFunction()
     
-  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors, auth_token, switch_button_assets ])
+    let isSubscribed = true;
+    if(typeof timelineData !== 'undefined') {
+      setTimelineRawData(timelineData)
+    } else {
+      /**
+           * return empty if no company selected
+           */
+      setTimelineRawGroups([]) //groups
+      setTimelineRawData([]) //items
+      //redrawTimeline()
+      PatenTrackApi.cancelTimeline()
+      /**
+        * call for the timeline api data
+      */
+
+      const getTimelineRawDataFunction = async () => {
+        //search
+        if(isSubscribed) {
+          resetTooltipContainer()
+          if(search_string != '' && search_string != null){
+            if(search_rf_id.length > 0) {
+              //setIsLoadingTimelineData(true)
+              const { data } = await PatenTrackApi.getActivitiesTimelineData([], [], [], search_rf_id) // empty array for company, tabs, customers
+              //setIsLoadingTimelineData(false)
+              //setTimelineRawGroups(data.groups) //groups
+              let list = removeSecurityRelease(data.list)
+              setTimelineRawData(list) //items
+              if(typeof updateTimelineRawData !== 'undefined') {
+                updateTimelineRawData(list)
+              }
+            }       
+          } else {
+            if(type !== 9)  {
+              const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+              tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+              customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
+              rfIDs = selectedAssetAssignments.length > 0 ? selectedAssetAssignments : [];
+      
+              if( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
+                //setIsLoadingTimelineData(true)
+                const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
+                
+                //setIsLoadingTimelineData(false)
+                let list = removeSecurityRelease(data.list)
+                setTimelineRawData(list) //items
+                if(typeof updateTimelineRawData !== 'undefined') {
+                  updateTimelineRawData(list)
+                }
+              } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null ) {
+                //setIsLoadingTimelineData(true)
+                const { data } = await PatenTrackApi.getShareTimelineList(location.pathname.replace('/', ''))
+                let list = removeSecurityRelease(data.list)
+                setTimelineRawData(list) //items
+                if(typeof updateTimelineRawData !== 'undefined') {
+                  updateTimelineRawData(list)
+                }      
+                //setIsLoadingTimelineData(false)            
+              }
+            }
+          } 
+        }
+      }
+      getTimelineRawDataFunction()
+    }
+    return () => (isSubscribed = false)
+    
+  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors, auth_token, switch_button_assets, selectedCategory ])
 
   useEffect(() => {
-    const getForeignAssetTimelineData = async(foreignAssets, assetTypeAssignmentAssets) => {
-      if(foreignAssets.selected.length > 0 && assetTypeAssignmentAssets.length > 0) {
-        const assets = []
-        assetTypeAssignmentAssets.forEach( item => {
-          assets.push(item.asset)
-        })
-        const form = new FormData()
-        form.append('assets', JSON.stringify(assets)) 
-        PatenTrackApi.cancelForeignAssetTimeline()
-        const { data } = await PatenTrackApi.getForeignAssetsTimeline(form)
-        //setIsLoadingTimelineData(false)
-        setTimelineRawData(data.list) 
+    if(typeof timelineData !== 'undefined') {
+      setTimelineRawData(timelineData)
+    } else {
+      const getForeignAssetTimelineData = async(foreignAssets, assetTypeAssignmentAssets) => {
+        if(foreignAssets.selected.length > 0 && assetTypeAssignmentAssets.length > 0) {
+          const assets = []
+          assetTypeAssignmentAssets.forEach( item => {
+            assets.push(item.asset)
+          })
+          const form = new FormData()
+          form.append('assets', JSON.stringify(assets)) 
+          PatenTrackApi.cancelForeignAssetTimeline()
+          const { data } = await PatenTrackApi.getForeignAssetsTimeline(form)
+          //setIsLoadingTimelineData(false)
+          let list = removeSecurityRelease(data.list)
+          setTimelineRawData(list) //items
+          if(typeof updateTimelineRawData !== 'undefined') {
+            updateTimelineRawData(list)
+          }
+        }
       }
+      getForeignAssetTimelineData(foreignAssets, assetTypeAssignmentAssets)
     }
-    getForeignAssetTimelineData(foreignAssets, assetTypeAssignmentAssets)
-    
   }, [foreignAssets, assetTypeAssignmentAssets])
 
   const redrawTimeline = () => {
@@ -532,6 +567,17 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type }) =
       //end = new moment().add(1, 'month')
       items.current.add(convertedItems.slice(0, startIndex))      
     }    
+
+    if(selectedCategory == 'proliferate_inventors') {
+      options.cluster = {
+        titleTemplate: 'Cluster containing {count} events. Zoom in to see the individual events.',
+        showStipes: false,
+        clusterCriteria: (firstItem, secondItem) => {
+          return ( firstItem.rawData.law_firm_id === secondItem.rawData.law_firm_id  ||  ( firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID))
+        }
+      }
+    }
+
     timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'year')})
     timelineRef.current.setItems(items.current)   
     //checkCurrentDateStatus()

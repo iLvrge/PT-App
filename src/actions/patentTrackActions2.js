@@ -1,7 +1,22 @@
 import * as types from './actionTypes2'
 import PatenTrackApi, { DEFAULT_CUSTOMERS_LIMIT, DEFAULT_TRANSACTIONS_LIMIT, DEFAULT_PATENTS_LIMIT } from '../api/patenTrack2'
 
-import { toggleLifeSpanMode, setDriveTemplateFrameMode, setDriveTemplateMode, resetUiStates } from './uiActions'
+import { 
+  toggleLifeSpanMode, 
+  setDriveTemplateFrameMode, 
+  setDriveTemplateMode, 
+  resetUiStates,
+  toggleUsptoMode, 
+  toggleFamilyMode,
+  toggleFamilyItemMode
+} from './uiActions'
+import {
+  setConnectionBoxView,
+  setPDFView,
+  setPDFFile,
+  setPdfTabIndex
+} from "./patenTrackActions";
+
 
 export const setAuthenticateAuthToken = data => {
   return {
@@ -429,6 +444,27 @@ export const setActiveMenuButton = (index) => {
  * New Design
  */
 
+export const retrievePDFFromServer = (item) => {    
+  PatenTrackApi.cancelDownloadRequest()
+  return async dispatch => {
+    const {data} = await PatenTrackApi.downloadPDFUrl(item.rf_id)
+    if(data != null && typeof data.link !== 'undefined') {
+        dispatch(
+          setPDFFile(    
+            { 
+              document: data.link, 
+              form: data.link, 
+              agreement: data.link  
+            }
+          )
+        )
+        dispatch(
+          setPdfTabIndex(0)
+        )
+    }
+  }
+}
+
 export const fetchParentCompanies = ( offset = 0, sortFiled = 'original_ompany', sortorder = 'ASC' ) => {
   return async dispatch => {
     dispatch(setMainCompaniesLoadingMore(true))
@@ -489,6 +525,31 @@ export const setMainChildCompanies = (companyID, data) => {
     type: types.SET_MAIN_CHILD_COMPANIES,
     companyID,
     data,
+  }
+}
+
+
+
+export const getMaintainenceAssetsEventsList = ( selectedCompanies) => {
+  return async dispatch => {
+    dispatch(setMaintainenceAssetsEventsLoadingMore(true))
+    const { data } = await PatenTrackApi.getMaintainenceAssetsEventsList(selectedCompanies)
+    dispatch(setMaintainenceAssetsEventsLoadingMore(false))
+    dispatch(setMaintainenceAssetsEventsList(data))
+  } 
+}
+
+export const setMaintainenceAssetsEventsLoadingMore = data => {
+  return {
+    type: types.SET_MAINTAINENCE_ASSETS_EVENTS_LIST_LOADING_MORE,
+    payload: data,
+  }
+}
+
+export const setMaintainenceAssetsEventsList = (data) => {
+  return {
+    type: types.SET_MAINTAINENCE_ASSETS_EVENTS_LIST,
+    data
   }
 }
 
@@ -910,6 +971,14 @@ export const setSelectAssignmentCustomers = (data) => {
   }
 }
 
+export const setSelectAssignmentCustomerName = (name) => {
+  console.log('setSelectAssignmentCustomerName', name)
+  return {
+    type: types.SET_ASSET_TYPES_COMPANIES_SELECT_NAME,
+    name
+  }
+}
+
 export const setAssetTypeCustomerSelectedRow = (data) => {
   return {
     type: types.SET_ASSET_TYPES_COMPANIES_ROW_SELECT,
@@ -1041,17 +1110,28 @@ export const getForeignAssetsBySheet = ( form ) => {
  * @param {*} append 
  */
 
-export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, append = false, startIndex, endIndex, column, direction, assetTableScrollPosition, salesAssets = false ) => {
+export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, append = false, startIndex, endIndex, column, direction, assetTableScrollPosition, salesAssets = false, callBackFn ) => {
   return async dispatch => {
     if(append === false) {
       dispatch( setAssetTypesAssignmentsAllAssetsLoading( true ) )
     }
     PatenTrackApi.cancelAssets()
-    console.log('salesAssets', salesAssets)
-    const { data } = await PatenTrackApi.getCustomerAssets( type, companies, tabs, customers, rfIDs, startIndex, endIndex, column, direction, salesAssets )    
+    /*const { data } = await PatenTrackApi.getCustomerAssets( type, companies, type == 'due_dilligence' ? tabs : [], type == 'due_dilligence' ? customers : [], rfIDs, startIndex, endIndex, column, direction, salesAssets )    */
+    const { data } = await PatenTrackApi.getCustomerAssets( type, companies, tabs, customers, rfIDs, startIndex, endIndex, column, direction, salesAssets )
     dispatch( setAssetTypeAssignmentAllAssets(data, append) )
+    if(data != null && typeof data.other_data != 'undefined') {
+      dispatch(setPtabData(data.other_data))
+    }
+    if(typeof callBackFn !== 'undefined') {
+      callBackFn(false)
+    }
     if(append === false) { 
       dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
+      if(data.list.length == 0) {
+        dispatch(setSelectedAssetsPatents([]))
+        dispatch(setAssetTypesPatentsSelected([]))
+        dispatch(setAssetTypesPatentsSelectAll(false))
+      }
     } else if(append === true && typeof assetTableScrollPosition !== 'undefined' && assetTableScrollPosition !== -1) {
       dispatch( setAssetTableScrollPos( assetTableScrollPosition ) )
     }
@@ -1090,7 +1170,7 @@ export const getCustomerSelectedAssets = ( shareCode, append = false ) => {
 export const getCustomerTransactions = ( type, companies, tabs, customers, append = false ) => {
   return async dispatch => {
     dispatch( setAssetTypesAssignmentsLoading( true ) )
-    const { data } = await PatenTrackApi.getCustomerTransactions( type, companies, tabs, customers )    
+    const { data } = await PatenTrackApi.getCustomerTransactions( type, companies, type == 'due_dilligence' ? tabs : [], type == 'due_dilligence' ? customers : [])    
     dispatch( setAssetTypeAssignments(data, append) )
     dispatch( setAssetTypesAssignmentsLoading( false ) )
   } 
@@ -1373,6 +1453,14 @@ export const setAssetTypeAssignmentAllAssets = (data, append) => {
   }
 }
 
+export const setPtabData = (data)=> {
+  return {
+    type: types.SET_PTAB_DATA,
+    data
+  }
+}
+
+
 export const setBreadCrumbs = (name) => {
   return {
     type: types.SET_BREAD_CRUMBS,
@@ -1426,6 +1514,50 @@ export const setResetAll = (t = 0, item) => {
       dispatch( fetchParentCompanies() )
     }
   }
+}
+
+export const transactionRowClick = (rf_id, slackChannelList, defaultLoad, search_string) => {
+  
+  return dispatch => {
+    dispatch(setAssetTypesPatentsSelected([]))
+    dispatch(toggleLifeSpanMode(true))
+    dispatch(setConnectionBoxView(false))
+    dispatch(setPDFView(false))
+    dispatch(toggleUsptoMode(false))
+    dispatch(toggleFamilyMode(false))
+    dispatch(toggleFamilyItemMode(false))
+    /* dispatch(setMainCompaniesRowSelect([])) */
+    /* dispatch(setAssetTypeSelectedRow([])) */
+    dispatch(setAssetTypeCustomerSelectedRow([]))
+    dispatch(setChildSelectedAssetsTransactions([]))
+    dispatch(setChildSelectedAssetsPatents([]))
+    dispatch(setSelectedAssetsPatents([]))
+    dispatch(setSelectedAssetsTransactions([rf_id]))
+    dispatch(setSelectAssignments([rf_id]))
+    if(typeof defaultLoad !== 'undefined' && defaultLoad === false){
+      dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
+      dispatch(getAssetTypeAssignmentAssets(rf_id, false, 1, search_string)) // fill assets table 
+    }
+    dispatch(setAssetsIllustrationData(null))
+    dispatch(setAssetsIllustration({ type: "transaction", id: rf_id }));
+    if(typeof slackChannelList !== 'undefined' && slackChannelList.length == 0) {
+      const channelID = findChannelID(slackChannelList, rf_id)
+      if( channelID != '') {   
+        dispatch(setChannelID({channel_id: channelID}))
+      }
+    }
+  }
+}
+
+const findChannelID = (slack_channel_list, rfID) => {
+  let channelID = ''
+  if(slack_channel_list.length > 0) {
+    const findIndex = slack_channel_list.findIndex( channel => channel.name == rfID.toString())
+    if( findIndex !== -1) {
+      channelID = slack_channel_list[findIndex].id
+    }
+  }
+  return channelID
 }
 
 export const linkWithSheetSelectedAsset = (link_type, asset) => {  
@@ -1610,3 +1742,10 @@ export const setDashboardPanelActiveButtonId = (ID) => {
     ID
   }
 } 
+
+export const setDashboardShareData = (data) => {
+  return {
+    type: types.SET_DASHBOARD_SHARE_DATA,  
+    data
+  }
+}

@@ -12,6 +12,7 @@ import {
     Description as DescriptionIcon,
     Settings as SettingsIcon,
     Home as HomeIcon,
+    Add as AddIcon
   } from '@mui/icons-material'
 
 import useStyles from './styles'
@@ -40,7 +41,15 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
     const template_document_url = useSelector(state => state.patenTrack2.template_document_url)
     const driveTemplateFrameMode = useSelector(state => state.ui.driveTemplateFrameMode)
     const new_drive_template_file = useSelector(state => state.patenTrack2.new_drive_template_file)
-   
+
+    const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
+    const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
+
+    const dashboardICONS = [0, 1, 7, 45]
+    const removeFilterICONS = [2, 3, 4, 11]
+    
+    if((selectedCategory  != 'due_dilligence' && selectedCategory  != 'proliferate_inventors' && selectedCategory != 'top_lenders' && removeFilterICONS.includes(t)) || ( dashboardScreen === true  && !dashboardICONS.includes(t))) return null
+       
     return (
         <div className={clsx(classes.showIcon, {[classes.marginBottom25]: typeof margin !== 'undefined' && margin === true && typeof isMobile !== 'undefined' && isMobile === false, [classes.mobile]: typeof isMobile !== 'undefined' && isMobile === true})}> 
             <Tooltip 
@@ -68,7 +77,7 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
                             :  
                             t === 1 &&  highlight == undefined && (selectedCompanies.length > 0 || selectedCompaniesAll === true) ? 'selection_indicator'
                             :
-                            t === 2 && (assetTypesSelected.length > 0 || assetTypesSelectedAll === true) ? 'selection_indicator'
+                            t === 2 && (assetTypesSelected.length > 0 && assetTypesSelectedAll === false) ? 'selection_indicator'
                             :
                             t === 3 && ((assetTypeCompaniesSelected.length > 0 || assetTypeCompaniesSelectedAll === true) && (assetTypesSelected.length > 0 && !assetTypesSelected.includes(10))) ? 'selection_indicator'
                             :
@@ -180,7 +189,11 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
                             ?
                                 <HomeIcon />
                             :
-                            ''
+                                t === 45
+                                ?
+                                    <AddIcon />
+                                :
+                                    ''
                         }
                         { 
                             showLabel === true && (

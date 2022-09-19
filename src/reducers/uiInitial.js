@@ -12,9 +12,23 @@ export default {
     selectedItem: null,
     selectedAsset: null,
   },
-  timelineScreen: true,
-  dashboardScreen: false,
-  dashboardPanel: false,
+  assetButton: false,
+  patentScreen: false,
+  transactionButton: false,
+  timelineScreen: false,
+  dashboardScreen: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? false : true,
+  dashboardPanel: true,
   controlModal: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? false : false, 
-  driveButtonActive: false
+  driveButtonActive: false,
+  loadingDashboardData: false,
+  viewDashboard: {
+    line: false,
+    gauge: false,
+    jurisdictions: false,
+    invention: false,
+    sankey: false,
+    kpi: true,
+    timeline: false
+  },
+  viewInitial: false
 }

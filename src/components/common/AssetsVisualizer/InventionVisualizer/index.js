@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {useLocation} from 'react-router-dom'
-import { Paper, Dialog, DialogContent, DialogTitle, IconButton  } from '@mui/material'
+import { Paper, Dialog, DialogContent, DialogTitle, IconButton, MenuItem, ListItemIcon, Menu, Divider  } from '@mui/material'
 import Draggable from "react-draggable"
 import CloseIcon from '@mui/icons-material/Close'
 import {ResizableBox} from "react-resizable"
@@ -21,7 +21,8 @@ import {
     setMaintainenceAssetsList,
     getCustomerAssets,
     setAssetsIllustrationData,
-    getCustomerSelectedAssets
+    getCustomerSelectedAssets,
+    retrievePDFFromServer
 } from '../../../../actions/patentTrackActions2'
 import { setPDFFile, setPdfTabIndex } from '../../../../actions/patenTrackActions' 
 import PatenTrackApi from '../../../../api/patenTrack2'
@@ -31,10 +32,14 @@ import useStyles from './styles'
 import { capitalize } from "../../../../utils/numbers";
 import themeMode from '../../../../themes/themeMode';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
+import { Close } from '@mui/icons-material'
+import FilterDashboardCPC from './FilterDashboardCPC'
+import TitleBar from '../../TitleBar'
+import clsx from 'clsx'
 
 var newRange = [1,2]
 
-const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, type }) => {
+const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, tab, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal, titleBar }) => {
     
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -42,12 +47,16 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const location = useLocation()
     const graphContainerRef = useRef()  
     const items = useRef(new DataSet())
+    const dashboardScope = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
     const [offsetWithLimit, setOffsetWithLimit] = useState([0, DEFAULT_CUSTOMERS_LIMIT])
     const [ isLoadingCharts, setIsLoadingCharts ] = useState(false)
     const [ openModal, setModalOpen ] = useState(false)
     const [ assetLoading, setAssetsLoading ] = useState(false)
-    const [ openFilter, setOpenFilter ] = useState(false)
+    const [ openFilter, setOpenFilter ] = useState(false)       
     const [ showContainer, setShowContainer ] = useState(true)
+    const [ sendAssetRequest, setSentAssetRequest ] = useState(false)
+    const [ anchorEl, setAnchorEl ] = useState(null)
+    const [ sliderValue, setSliderValue ] = useState(50)
     const [ assets, setAssets ] = useState([])
     const [ filterList, setFilterList ] = useState([])
     const [ filterTotal, setFilterTotal ] = useState(0)
@@ -56,9 +65,11 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const [ resizableWidthHeight, setResizableWidthHeight ] = useState([665, 350])
     const [ filterDrag, setFilterDrag ] =  useState([0, 0])
     const [ valueYear, setValueYear ] = useState([1, 2])
-    const [ valueScope, setValueScope ] = useState([1, 2])
-    const [ valueRange, setValueRange ] = useState(3)
-    const [ preValueRange, setPreValueRange ] = useState(3)
+    const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
+    const [ xy, setXY] = useState({x: dashboardScreen === true ? '0px' : '-85px', y: '35px'})
+    const [ valueScope, setValueScope ] = useState(dashboardScreen === true ? [...dashboardScope] : [1, 2])
+    const [ valueRange, setValueRange ] = useState(4)/**dashboardScreen === true ? 4 : 3 */
+    const [ preValueRange, setPreValueRange ] = useState(4)
     const [ scopeRange, setScopeRange ] = useState([])
     const [ depthRange, setDepthRange ] = useState([
         {
@@ -83,23 +94,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         }
     ])
 
-    const menuItems = [
-        {
-            id: 1,
-            label: 'Invention Data',
-            component: InventionVisualizer,
-            standalone: true,
-            defaultSize, 
-            visualizerBarSize, 
-            analyticsBar, 
-            openCustomerBar, 
-            commentBar, 
-            illustrationBar, 
-            customerBarSize, 
-            companyBarSize
-        }
-    ]
-
+    
     const [ inventionTabs, setInventionTabs ] = useState(['Innovation'])
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
@@ -125,30 +120,61 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const connectionBoxView = useSelector( state => state.patenTrack.connectionBoxView)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
     const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
+    
     const [ graphRawData, setGraphRawData ] = useState([])
     const [ salesData, setSalesData ] = useState([])
     const [ graphRawGroupData, setGraphRawGroupData ] = useState([])  
     let interval;
     
+    const menuItems = [
+        {
+            id: 1,
+            label: 'Invention Data',
+            component: InventionVisualizer,
+            standalone: true,
+            defaultSize, 
+            visualizerBarSize, 
+            analyticsBar, 
+            openCustomerBar, 
+            commentBar, 
+            illustrationBar, 
+            customerBarSize, 
+            companyBarSize,
+            gRawData: graphRawData, 
+            gRawGroupData: graphRawGroupData, 
+            sData: salesData, 
+            fYear: filterYear,
+            vYear: valueYear, 
+            vScope: valueScope, 
+            sRange: scopeRange
+        }
+    ]
     let options = {
         height: '100%',
         width: '100%',
         style: 'bar-color',
-        axisFontSize: 18,
-        /* yBarWidth:  30, */
+        axisFontSize: 22,
+        cameraPosition: {
+            distance: 1.9,
+            horizontal: 0.69,
+            vertical: 0.2
+        }, 
         xStep: 1,
         yStep: 1,
         zStep: 3,
-        yCenter: '25%',
-        xCenter: '50%',
+        rotateAxisLabels: false,
+        yCenter: '35.5%',
+        xCenter: '55%',
+        axisColor: '#ffffff',
+        gridColor: '#e5e5e51c',
         showPerspective: true,
         showGrid: true,
-        axisColor: '#fff',
+        showShadow: false,
         keepAspectRatio: false,
         verticalRatio: 0.4,
-        xLabel: '',
-        yLabel: '',
-        zLabel: '',
+        xLabel: 'Filling Year',
+        yLabel: 'Technologies',
+        zLabel: 'Number of Assets',
         tooltip: function (point) {
             // parameter point contains properties x, y, z, and data
             // data is the original object passed to the point constructor
@@ -178,7 +204,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         zValueLabel: function(value) {
             return parseInt(value)
         },
-        gridColor: '#e5e5e51c',
         tooltipStyle: {
             content: {
               padding       : '10px',
@@ -188,7 +213,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
               background    : 'rgba(0, 0, 0, 0.8)',
               boxShadow     : 'none',    
               /* bottom        : '0px', */
-              width         : '100%',
+              width         : '90%',
               /* left          : '0px' */
               /* maxWidth      : '40%' */
             },
@@ -219,6 +244,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             form.append('other_mode', display_sales_assets)
             form.append('type', selectedCategory)
             form.append(`range`, valueRange)
+            form.append('data_type', dashboardScreen === true ? 1 : 0)
             const {data} = await PatenTrackApi.getAssetsByCPCCode(point.x, encodeURIComponent(code), form) 
             setAssetsLoading(false)
             setAssets(data.list)
@@ -226,11 +252,11 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     },[ graphRawGroupData, filterList ])
 
     const onCameraPositionChange = useCallback(async (event) => {
-        
+        console.log(event)
     })
 
     const checkToolTip = () => {
-        /* const elementFound = document.getElementsByClassName('graphTooltip')
+        const elementFound = document.getElementsByClassName('graphTooltip')
         if(elementFound !== null && elementFound.length > 0) {
             const parentElement = elementFound[0].parentElement,
             computedStyle = window.getComputedStyle(parentElement),
@@ -243,7 +269,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             if(top !== '' && parseInt(top) < 0) {
                 parentElement.style.top = '0px'
             }
-        } */
+        } 
     }
 
     const onHandleMouseOver = (event) => {
@@ -259,17 +285,18 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             setInventionTabs([ 'Innovation'])
             setSelectedTab(0)
         } else if( connectionBoxView === true || selectedRow.length > 0 ) {
-            setInventionTabs([ 'Innovation', 'Agreement', 'Form', 'Main' ])
-            setSelectedTab(1)
-        }
-        
+            /* setInventionTabs([ 'Innovation', 'Agreement', 'Form', 'Main' ]) */
+            setInventionTabs([ 'Innovation', 'Agreement'])
+            //setSelectedTab(1)
+        }        
     }, [ connectionBoxView, selectedRow ])
 
-    useEffect(() => {
+    useEffect(() => {        
         const getChartData = async () => {
+            
             setGraphRawData([])
             setGraphRawGroupData([])      
-            setShowContainer(true)   
+            setShowContainer(true)              
             if (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0 && type !== 9){
                 setShowContainer(false)
                 return null
@@ -280,110 +307,130 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             setIsLoadingCharts(true)   
             const list = [];
             let totalRecords = 0;
-            
-            if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {
-                
-                if( assetsSelected.length > 0 ) {
-                    const promise = assetsSelected.map(asset => {
-                        const findIndex = assetsList.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num.toString() == asset.toString() )
-                        if( findIndex !== -1 ) {
-                            if( assetsList[findIndex].appno_doc_num != '' ) {
-                                list.push(assetsList[findIndex].appno_doc_num.toString())
-                            }
-                        }                        
-                    })
-                    await Promise.all(promise)
-                    totalRecords = list.length
-                } else {
-                    const promise = selectedMaintainencePatents.map(asset => {
-                        const findIndex = maintainenceAssetsList.findIndex( row => row.appno_doc_num.toString() == asset[1].toString() || row.grant_doc_num.toString() == asset[0].toString() )
-                        if( findIndex !== -1 ) {
-                            if( maintainenceAssetsList[findIndex].appno_doc_num != '' ) {
-                                list.push(maintainenceAssetsList[findIndex].appno_doc_num.toString())
-                            }
-                        }
-
-                    })
-                    await Promise.all(promise)
-                    totalRecords = list.length
-                }                
-            } else {
-                
-                if( assetsList.length > 0 || maintainenceAssetsList.length > 0 ) {
-                    if( assetsList.length > 0 ) {
-                        const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
-                        await Promise.all(promise)
-                        totalRecords = assetsTotal
-                    } else if ( maintainenceAssetsList.length > 0 ) {
-                        const promise = maintainenceAssetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
-                        await Promise.all(promise)
-                        totalRecords = maintainenceAssetsTotal
-                    }
-                } else {
+            if(dashboardScreen === false) {
+                if(selectedTab === 0) {
+                    if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {
                     
-                    /**
-                     * Check which layout and get the assets list first and then 
-                     */
-                    if( selectedCategory == '' ) { //pay_maintenece_fee
-
-                    } else {
-                        const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-                        tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-                        customers =
-                          selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
-                        assignments =
-                          selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
-                          
-                        if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-                            /* if( auth_token != null ) {
-                                dispatch(
-                                    process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
-                                    getCustomerAssets(
-                                      selectedCategory == '' ? '' : selectedCategory,
-                                      companies,
-                                      tabs,
-                                      customers,   
-                                      assignments,
-                                      false,
-                                    )
-                                    : 
-                                    getCustomerSelectedAssets(location.pathname.replace('/', ''))
-                                );
-                            } */
+                        if( assetsSelected.length > 0 ) {
+                            const promise = assetsSelected.map(asset => {
+                                const findIndex = assetsList.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num.toString() == asset.toString() )
+                                if( findIndex !== -1 ) {
+                                    if( assetsList[findIndex].appno_doc_num != '' ) {
+                                        list.push(assetsList[findIndex].appno_doc_num.toString())
+                                    }
+                                }                        
+                            })
+                            await Promise.all(promise)
+                            totalRecords = list.length
                         } else {
-                            if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
-                                
-                                dispatch(
-                                    getCustomerAssets(
-                                      selectedCategory == '' ? '' : selectedCategory,
-                                      companies,
-                                      tabs,
-                                      customers,
-                                      assignments,
-                                      false,
-                                      0,
-                                      0,
-                                      'asset',
-                                      'DESC',
-                                        -1, 
-                                      display_sales_assets
-                                    ),
-                                );
+                            const promise = selectedMaintainencePatents.map(asset => {
+                                const findIndex = maintainenceAssetsList.findIndex( row => row.appno_doc_num.toString() == asset[1].toString() || row.grant_doc_num.toString() == asset[0].toString() )
+                                if( findIndex !== -1 ) {
+                                    if( maintainenceAssetsList[findIndex].appno_doc_num != '' ) {
+                                        list.push(maintainenceAssetsList[findIndex].appno_doc_num.toString())
+                                    }
+                                }
+        
+                            })
+                            await Promise.all(promise)
+                            totalRecords = list.length
+                        }                
+                    } else {
+                        
+                        if( assetsList.length > 0 || maintainenceAssetsList.length > 0 ) {
+                            if( assetsList.length > 0 ) {
+                                const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
+                                await Promise.all(promise)
+                                totalRecords = assetsTotal
+                            } else if ( maintainenceAssetsList.length > 0 ) {
+                                const promise = maintainenceAssetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
+                                await Promise.all(promise)
+                                totalRecords = maintainenceAssetsTotal
                             }
-                        }                        
+                        } else {
+                            
+                            /**
+                             * Check which layout and get the assets list first and then 
+                             */
+                            if( selectedCategory == '' ) { //pay_maintenece_fee
+        
+                            } else {
+                                const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+                                tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+                                customers =
+                                  selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
+                                assignments =
+                                  selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
+                                  
+                                if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+                                    /* if( auth_token != null ) {
+                                        dispatch(
+                                            process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
+                                            getCustomerAssets(
+                                              selectedCategory == '' ? '' : selectedCategory,
+                                              companies,
+                                              tabs,
+                                              customers,   
+                                              assignments,
+                                              false,
+                                            )
+                                            : 
+                                            getCustomerSelectedAssets(location.pathname.replace('/', ''))
+                                        );
+                                    } */
+                                } else {
+                                    if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
+                                        dispatch(
+                                            getCustomerAssets(
+                                              selectedCategory == '' ? '' : selectedCategory,
+                                              companies,
+                                              tabs,
+                                              customers,
+                                              assignments,
+                                              false,
+                                              0,
+                                              0,
+                                              'asset',
+                                              'DESC',
+                                                -1, 
+                                              display_sales_assets
+                                            ),
+                                        );
+                                    }
+                                }                        
+                            }
+                        }                
                     }
-                }                
-            }            
-
-            if( list.length > 0 ) {
+                }
+            }
+                                    
+            if( dashboardScreen === true ||  list.length > 0 ) {
                 setFilterList(list)
                 setFilterTotal(totalRecords)
                 findCPCList([...scopeRange], list, totalRecords)
+            } else {
+                setGraphRawData([])
+                setGraphRawGroupData([])
+                setSalesData([])
+                setIsLoadingCharts(false)                
             }
         }
-        getChartData()
+        if(typeof gRawData !== 'undefined') {
+            setGraphRawData(gRawData)
+            setGraphRawGroupData(gRawGroupData)
+            setSalesData(sData)
+            setIsLoadingCharts(false) 
+            setFilterYear(fYear)
+            setValueYear(vYear)
+            setValueScope(vScope)
+            setScopeRange(sRange)
+            setFilterList(fList)
+            setFilterTotal(fTotal)
+        } else {
+            getChartData()
+        }
         //console.log( "getChartData", selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments )
-    }, [selectedCategory, selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_clipboard ]) 
+    }, [sendAssetRequest, selectedTab, openCustomerBar, selectedCategory, selectedCompanies, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_clipboard ]) 
 
 
     const findCPCList = async(oldScopeRange, list, totalRecords, year, range, scope) => {       
@@ -396,6 +443,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
         form.append('other_mode', display_sales_assets)
         form.append('type', selectedCategory)
+        form.append('data_type', dashboardScreen === true ? 1 : 0)
         if(typeof range !== 'undefined') {
             form.append("range", range)
         }
@@ -420,19 +468,21 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             const promiseYear = data.list.map( item => yearList.push(item.fillingYear))
             await Promise.all(promiseYear)
             yearList = [...new Set(yearList)]
-            yearList.sort(function(a, b) {
-                return a > b ? -1 : 0
-            });            
+            if(dashboardScreen !== true) {
+                yearList.sort(function(a, b) {
+                    return a > b ? -1 : 0
+                }); 
+            }                       
             const promiseYearLabel = yearList.map( (item, index) => yearLabelList.push({ value: index + 1, label: item }) )
             await Promise.all(promiseYearLabel)
             setFilterYear(yearLabelList)            
             setValueYear([yearLabelList[0].value, yearLabelList[yearLabelList.length - 1].value]) 
         }
 
-        if( typeof range === 'undefined' && typeof scope ===  'undefined'  && data.group.length > 0) {
+        if( typeof range === 'undefined' && typeof scope ===  'undefined'  && data.group.length > 0 && dashboardScreen === false) {
             setValueScope([ data.group[0].id, data.group[data.group.length - 1].id ])
         }    
-        if(typeof scope == 'undefined') {
+        if(typeof scope == 'undefined' && dashboardScreen === false) {
             const findOldRange = []
             if(oldScopeRange.length > 0 && typeof range !== 'undefined') {
                 const promiseScope = newRange.map( scope => {
@@ -534,7 +584,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                             fill: '#1565C0',
                             stroke: '#2196F3'
                         };
-                    if(data.appNum !== null && data.appNum !== '') {
+                    /* if(data.appNum !== null && data.appNum !== '') {
                         const appList = data.appNum.toString().split(',')
                         let salesFind = false
                         if(salesData.length > 0) {
@@ -548,42 +598,37 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                 }
                             })
                         }                       
-                    }
+                    } */
                     
                     //const col = colors[Math.floor((Math.random()*colors.length))]
+                    
                     items.current.add({
                         x: year,
                         y: graphRawGroupData[findIndex].id,
-                        z: data.countAssets,
+                        z: parseInt(data.countAssets),
                         style: style,
                         patent: data.patent_number,
                         application_number: data.application_number,   
                         origin: data.group_name
                     })
 
-                    if( index === 0 ) {
+                    /* if( index === 0 ) {
                         items.current.add({
                             x: year,
                             y: graphRawGroupData[findIndex].id,
                             z: 0,
-                            style: {
-                                fill: '#1565C0',
-                                stroke: '#2196F3'
-                            }, 
-                            patent: data.patent_number,
-                            application_number: data.application_number,   
-                            origin: data.group_name
+                            style: 5
                         })
-                    }
+                    }  */
                 }                
             })
 
             await Promise.all(promises)            
             //TODO height 100% not working well, created allot of isues when we resize pane, 
             if(graphContainerRef.current != null && graphContainerRef.current.clientHeight > 0) {
-                options = {...options, axisFontSize: visualizerBarSize == '30%' ? 18 : 18, yStep:  visualizerBarSize == '30%' ? 8 : 1, zStep: graphRawData.length > 2 ? 3 : 1, zMax: Math.max(...zMax) }
+                options = {...options, axisFontSize: visualizerBarSize == '30%' ? 22 : 22, yStep:  visualizerBarSize == '30%' ? 8 : 1, zStep: Math.max(...zMax) > 10 ? parseInt(Math.max(...zMax) / 10) : graphRawData.length > 2 ? 3 : 1, zMax: Math.max(...zMax) }
             }     
-            options.axisColor = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
+            /* options.axisColor = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary */
             graphRef.current = new Graph3d(graphContainerRef.current, items.current, options)
             graphRef.current.on('click', graphClickHandler)      
             graphRef.current.on('cameraPositionChange', onCameraPositionChange)
@@ -612,14 +657,14 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
     useEffect(() => {
         if( graphRef.current != undefined &&  graphRef.current !== null && graphRawGroupData.length > 0 && graphRawData.length > 0 && !isLoadingCharts ) {
-            let fontSize = 18, step = 1, verticalRatio = 0.4
+            let fontSize = 22, step = 1, verticalRatio = 0.4
             if( visualizerBarSize == '100%' ) {
                 if(defaultSize != '0') {
                     step = 3
                     verticalRatio = 0.2
                 } 
             } else if(visualizerBarSize == '30%') {
-                fontSize = 18
+                fontSize = 22
                 step = 7
             }
             try {
@@ -637,18 +682,26 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     useEffect(() => {
         if(assetIllustration != null && Object.keys(assetIllustration).length > 0) {
             /* if((selectedAssetAssignments.length == 1 && selectedCategory == 'correct_details') || selectedRow.length == 1) { */
+                
                 if((selectedAssetAssignments.length == 1 ) || selectedRow.length == 1) {
                 setAssets(assetIllustration)
-                if(assetIllustrationData != null ) {                    
-                    dispatch(
-                        setPDFFile(
-                          { 
-                            document: assetIllustrationData.line[0].document1, 
-                            form: assetIllustrationData.line[0].document1_form, 
-                            agreement: assetIllustrationData.line[0].document1_agreement 
-                          }
+                if(assetIllustrationData != null ) {   
+                    if(assetIllustrationData.line[0].document1.indexOf('legacy-assignments.uspto.gov') !== -1 || (assetIllustrationData.line[0].document1 == "" && assetIllustrationData.line[0].ref_id > 0)) {
+                        const obj = assetIllustrationData.line[0]
+                        obj.rf_id = obj.ref_id
+                        dispatch(retrievePDFFromServer(obj))
+                    } else {
+                        dispatch(
+                            setPDFFile(
+                              { 
+                                document: assetIllustrationData.line[0].document1, 
+                                form: assetIllustrationData.line[0].document1, 
+                                agreement: assetIllustrationData.line[0].document1 
+                              }
+                            )
                         )
-                    )
+                    }             
+                    
                     dispatch(
                         setPdfTabIndex(0)
                     )
@@ -673,6 +726,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const handleCloseFilter = () => {
         setOpenFilter(false);
     };
+
+    
+    
 
     const remoteAssetFromList = useCallback(async (asset) => {
         const list = maintainenceAssetsList.length > 0 ? [...maintainenceAssetsList] : [...assetsList]
@@ -761,13 +817,17 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
     const onChangeYearSlider = useCallback(async (range, year) => {
         setValueYear(year)
-        setScopeRange([])
+        if(dashboardScreen !== true) {
+            setScopeRange([])
+            setValueScope([1, 2])
+        } 
         const yearList = []
         filterYear.forEach( r => {
             if(r.value >= year[0] && r.value <= year[1]){
                 yearList.push(parseInt(r.label))
             }
         })
+        
         findCPCList([...scopeRange], filterList, filterTotal, yearList, range)      
     }, [filterList, filterTotal, filterYear])
 
@@ -782,12 +842,12 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 yearList.push(parseInt(r.label))
             }
         })
-        findCPCList([...scopeRange], filterList, filterTotal, yearList, range)      
+        findCPCList([], filterList, filterTotal, yearList, range)      
     }, [ filterList, filterTotal, scopeRange, valueRange ] )
 
     
     const onChangeScopeSlider = useCallback(async (year, range, scope) => {
-        // A, B, .... H
+        // A, B, .... H0
         newRange = scope
         setValueScope(scope)
         const scopeList = [], yearList = []
@@ -802,49 +862,103 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 yearList.push(parseInt(r.label))
             }
         })
+        
         findCPCList([...scopeRange], filterList, filterTotal, yearList, range, scopeList)        
-    }, [ filterList, filterTotal, scopeRange ] )
+    }, [ filterList, filterTotal, scopeRange, filterYear ] )
 
-    return (
-        <Paper className={classes.root} square>  
-            <Tabs
-                value={selectedTab}
-                variant="scrollable"
-                scrollButtons="auto"
-                onChange={handleChangeTab}
-                className={classes.tabs}
-            >
-                {
-                    inventionTabs.map((tab) => (
-                        <Tab
-                            key={tab}
-                            label={tab}
-                            classes={{ root: classes.tab }}
-                        />
-                    )) 
+
+    const onChangeDashboardScopeSlider = useCallback(async (year, range, scope) => {
+        // A, B, .... H
+        newRange = scope
+        setValueScope(scope)
+        if(scope.length > 0) {
+            const yearList = []
+            filterYear.forEach( r => {
+                if(r.value >= year[0] && r.value <= year[1]){  
+                    yearList.push(parseInt(r.label))
                 }
-            </Tabs> 
+            })
+            findCPCList([...scopeRange], filterList, filterTotal, yearList, range, scope)  
+        } else {
+            setGraphRawData([])
+        }
+              
+    }, [ filterList, filterTotal, scopeRange, filterYear ] )
+
+    const toggleDrawer = (event, open) => {
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift') ) {
+          return;
+        }
+        setAnchorEl(open === true ? event.currentTarget : null)
+    }
+
+    const handleDashboardDragStop = (e, position) => {
+        const {x, y} = position;
+        setXY({x,y})
+    }
+    
+    return (
+        <Paper 
+            {...(typeof titleBar !== 'undefined' && titleBar === true ? {sx: {p: 2}} : {})}
+            className={classes.root} square>  
+            {
+                typeof tab == 'undefined' || tab === true 
+                ?
+                    <Tabs
+                        value={selectedTab}
+                        variant="scrollable"
+                        scrollButtons="auto"
+                        onChange={handleChangeTab}
+                        className={classes.tabs}
+                    >
+                        {
+                            inventionTabs.map((tab) => (
+                                <Tab
+                                    key={tab}
+                                    label={tab}
+                                    classes={{ root: classes.tab }}
+                                />
+                            )) 
+                        }
+                    </Tabs> 
+                :
+                    ''
+            }
+            <div className={classes.sliderContainer}>
+                {
+                    typeof standalone === 'undefined' && (
+                        <FullScreen componentItems={menuItems}/>
+                    )
+                }
+                
+                <IconButton onClick={(event) => dashboardScreen === true ? toggleDrawer(event, true) :  handleOpenFilter()} className={clsx(classes.settingBtn, {[classes.settingBtnTop]: typeof titleBar !== 'undefined' && titleBar === true ? true : false})} size="large">
+                    <svg style={{width: '24px', fill: '#fff'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M5 11.86V29a1 1 0 0 0 2 0V11.86A4 4 0 0 0 7 4.14V3A1 1 0 0 0 5 3V4.14a4 4 0 0 0 0 7.72zM6 6A2 2 0 1 1 4 8 2 2 0 0 1 6 6zM27 12.14V3a1 1 0 0 0-2 0v9.14a4 4 0 0 0 0 7.72V29a1 1 0 0 0 2 0V19.86a4 4 0 0 0 0-7.72zM26 18a2 2 0 1 1 2-2A2 2 0 0 1 26 18zM16 30a1 1 0 0 0 1-1V23.86a4 4 0 0 0 0-7.72V3a1 1 0 0 0-2 0V16.14a4 4 0 0 0 0 7.72V29A1 1 0 0 0 16 30zM14 20a2 2 0 1 1 2 2A2 2 0 0 1 14 20z" /></svg> 
+                </IconButton>                                    
+            </div>
             {
                 showContainer === true && (
-                    <React.Fragment>                        
-                        <div className={classes.graphContainer}>                
+                    <React.Fragment>  
+                        {
+                            typeof titleBar !== 'undefined' && titleBar === true && (
+                                <TitleBar title={`Technologies and filling years of all non-expired patents and applications filed after 1997:`} enablePadding={false} underline={false}/>   
+                            )
+                        } 
+                        {
+                            selectedTab === 0 && (
+                                <React.Fragment>  
+                                    <TitleBar title={`Hover over the bars for details. Select a bar to see the list of the underlying patents, and to act upon them. Click the menu icon to filter the results.`} enablePadding={typeof titleBar !== 'undefined' ? false : true} underline={false} typography={true}/>
+                                </React.Fragment>
+                            )
+                        } 
+                        <div className={classes.graphContainer}> 
+                                          
                             {
                                 selectedTab === 0
                                 ?
                                     !isLoadingCharts
                                     ?
-                                        <>
-                                            <div className={classes.sliderContainer}>
-                                                {
-                                                    typeof standalone === 'undefined' && (
-                                                        <FullScreen componentItems={menuItems}/>
-                                                    )
-                                                }
-                                                
-                                                <IconButton onClick={handleOpenFilter} className={classes.settingBtn} size="large">
-                                                    <svg style={{width: '24px', fill: '#fff'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M5 11.86V29a1 1 0 0 0 2 0V11.86A4 4 0 0 0 7 4.14V3A1 1 0 0 0 5 3V4.14a4 4 0 0 0 0 7.72zM6 6A2 2 0 1 1 4 8 2 2 0 0 1 6 6zM27 12.14V3a1 1 0 0 0-2 0v9.14a4 4 0 0 0 0 7.72V29a1 1 0 0 0 2 0V19.86a4 4 0 0 0 0-7.72zM26 18a2 2 0 1 1 2-2A2 2 0 0 1 26 18zM16 30a1 1 0 0 0 1-1V23.86a4 4 0 0 0 0-7.72V3a1 1 0 0 0-2 0V16.14a4 4 0 0 0 0 7.72V29A1 1 0 0 0 16 30zM14 20a2 2 0 1 1 2 2A2 2 0 0 1 14 20z" /></svg> 
-                                                </IconButton>                                    
-                                            </div>
+                                        graphRawData.length > 0
+                                        ?
                                             <div
                                                 style={{
                                                 height: '100%',
@@ -854,7 +968,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                                 ref={graphContainerRef}
                                                 className={classes.timeline}
                                             />
-                                        </>
+                                        :
+                                            ''
                                     :
                                         <Loader />
                                 :
@@ -884,7 +999,35 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                             <DialogContent>
                                 <AssetsList loading={assetLoading} assets={assets} remoteAssetFromList={remoteAssetFromList}/>
                             </DialogContent>
-                        </Dialog>    
+                        </Dialog>  
+                        <Draggable 
+                            handle="#draggable-dashboard-filter-menu-item" 
+                            cancel={'[class*="zoom_slider"]'}
+                            onStop={handleDashboardDragStop}
+                        >    
+                            <Menu
+                                id='draggable-dashboard-filter-menu-item'
+                                open={Boolean(anchorEl)}
+                                anchorEl={anchorEl}
+                                onClose={(event) => toggleDrawer(event, false)}              
+                                disableAutoFocusItem
+                                PaperProps={{    
+                                    style: {
+                                    width: dashboardScreen === true ? 450 : 250,  
+                                    left: '50%',
+                                    transform: `translateX(${xy.x}) translateY(${xy.y})`,
+                                    }
+                                }}
+                            >
+                                <MenuItem className={`listIconItem illustration_menu_close_btn`}>
+                                    <ListItemIcon onClick={(event) => toggleDrawer(event, false)}>
+                                        <Close/>
+                                    </ListItemIcon>
+                                </MenuItem>
+                                <FilterDashboardCPC depthRange={depthRange} scopeRange={scopeRange} yearRange={filterYear} yearRangeText={yearRangeText} depthRangeText={depthRangeText} scopeRangeText={scopeRangeText} valueScope={valueScope} valueRange={valueRange} valueYear={valueYear} onChangeRangeSlider={onChangeRangeSlider} onChangeScopeSlider={onChangeDashboardScopeSlider} onChangeYearSlider={onChangeYearSlider}/>
+                            </Menu>
+                        </Draggable>   
+
                         <Dialog
                             open={openFilter}
                             onClose={handleCloseFilter}

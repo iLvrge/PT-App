@@ -87,14 +87,15 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
     const assetTypeCompaniesList = useSelector(state => state.patenTrack2.assetTypeCompanies.list)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
-    const tabs = [1,2,6,7,3,4,5,11,12,13,8,9,15,14,10,16] 
+    const profile = useSelector(store => (store.patenTrack.profile))
+    const tabs = [1,2,6,7,3,4,81,8,9,15,14,10,17] 
+    /* const tabs = [1,2,6,7,3,4,5,11,12,13,8,9,15,14,10,16]  */
     /*const tabs = [1,2,6,7,3,4,5,11,12,13,8,9,15,14]*/
 
     const COLUMNS = [        
         {
-          width: 12,
-          minWidth: 12,
-          headerWidth: 20,
+          width: 10,
+          minWidth: 10,
           label: '',
           dataKey: 'tab_id',
           role: 'none',
@@ -102,8 +103,8 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
           enable: false
         },
         {
-            width: 30,
-            minWidth: 30,
+            width: 25,
+            minWidth: 25,
             label: '',
             dataKey: 'icon',
             headingIcon: 'activities', 
@@ -181,6 +182,7 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
                 case 4:
                     image =  'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licenseout.svg'
                     break;
+                case 81:
                 case 5:
                     image =  'https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/secure.svg'
                     break;
@@ -227,10 +229,32 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
                         /* background: backgroundRowColor */
                     }
             if(assetTypes.length > 0) {
-                const findIndex = assetTypes.findIndex( aTab => aTab.tab_id == tab )
-                if(findIndex >= 0) {                    
-                    item = {...item, ...assetTypes[findIndex]}
+                if(tab === 17) {
+                    /**
+                     * Temporary add 
+                     */
+                    const listData = [];
+                    [1, 6].forEach( i => {
+                        const findIndex = assetTypes.findIndex( aTab => aTab.tab_id == i )
+                        if(findIndex >= 0) {   
+                            listData.push(assetTypes[findIndex])      
+                        }
+                    })
+                    if(listData.length > 0) {
+                        let totalTransactions = 0, customer_count = 0;
+                        listData.forEach( row => {
+                            totalTransactions +=  parseInt(row.totalTransactions)
+                            customer_count +=  parseInt(row.customer_count)
+                        })
+                        item = {...item, totalTransactions, customer_count}
+                    }
+                } else {
+                    const findIndex = assetTypes.findIndex( aTab => aTab.tab_id == tab )
+                    if(findIndex >= 0) {                    
+                        item = {...item, ...assetTypes[findIndex]}
+                    }
                 }
+               
                 setGrandTotal(assetTypes[assetTypes.length - 1].grand_total)
             }
             list.push(item)
@@ -244,28 +268,38 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
             }           
         } else {
             if( assetTypesSelected.length === 0 && assetTypesSelectAll === false ) {
-                const getUserSelection = async () => {
-                    const { data } = await PatenTrackApi.getUserActivitySelection()
-                    if(data != null && Object.keys(data).length > 0) {
-                        
-                        const findIndex = assetTypes.findIndex( aTab => aTab.tab_id == data.activity_id )
-    
-                        if(findIndex !== -1 ) {                            
-                            dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
-                            dispatch( setAssetTypeCompanies({ list: [], total_records: 0 }) )
-                            dispatch( setAssetTypeInventor({ list: [], total_records: 0 }) )
-                            dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
-                            setSelectItems([data.activity_id])
-                            setSelectedRow([data.activity_id])
-                            dispatch( setAssetTypesSelect([data.activity_id]) )
+                if(profile.user.organisation.organisation_type == 'Bank') {
+                    dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
+                    dispatch( setAssetTypeCompanies({ list: [], total_records: 0 }) )
+                    dispatch( setAssetTypeInventor({ list: [], total_records: 0 }) )
+                    dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+                    setSelectItems([5, 81])
+                    setSelectedRow([5, 81])
+                    dispatch( setAssetTypesSelect([5, 81]) )
+                } else {
+                    const getUserSelection = async () => {
+                        const { data } = await PatenTrackApi.getUserActivitySelection()
+                        if(data != null && Object.keys(data).length > 0) {
+                            
+                            const findIndex = assetTypes.findIndex( aTab => aTab.tab_id == data.activity_id )
+        
+                            if(findIndex !== -1 ) {                            
+                                dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
+                                dispatch( setAssetTypeCompanies({ list: [], total_records: 0 }) )
+                                dispatch( setAssetTypeInventor({ list: [], total_records: 0 }) )
+                                dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+                                setSelectItems([data.activity_id])
+                                setSelectedRow([data.activity_id])
+                                dispatch( setAssetTypesSelect([data.activity_id]) )
+                            } else {
+                                selectedAllActiveItems()
+                            }
                         } else {
                             selectedAllActiveItems()
                         }
-                    } else {
-                        selectedAllActiveItems()
                     }
+                    getUserSelection();   
                 }
-                getUserSelection();   
             } else {
                 if( assetTypesSelected.length > 0 ) {
                     setSelectItems(assetTypesSelected)
@@ -279,7 +313,6 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
     }   
 
     const selectedAllActiveItems = useCallback(async() => {
-        console.log("selectedAllActiveItems", assetTypesSelectAll)
         if (assetTypesSelectAll === false || assetTypesSelected.length == 0) {
             setSelectAll(true)
             dispatch( setAllAssetTypes( true ) )

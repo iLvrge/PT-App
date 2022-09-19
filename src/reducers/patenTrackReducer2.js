@@ -2,6 +2,7 @@ import * as types from '../actions/actionTypes2'
 import initialState from './initialState2'
 
 import dashboardIntial from './dashboard_initials'
+import { ConstructionOutlined } from '@mui/icons-material'
 
 
 const arrayToObjectByKey = (array, key) =>
@@ -10,7 +11,7 @@ const arrayToObjectByKey = (array, key) =>
     return result
   }, {})
 
-const patenTrackReducer = (state = initialState.dashboard, action) => {
+const patenTrackReducer = (state = initialState.dashboard, action) => { 
   switch (action.type) {
     case types.SET_AUTHENTICATE_AUTH_TOKEN:
       return {
@@ -286,9 +287,22 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ['child_list']: action.data
         })
       }
-    case types.SET_MAINTAINENCE_ASSETS_LIST_LOADING_MORE: 
+    case types.SET_MAINTAINENCE_ASSETS_EVENTS_LIST_LOADING_MORE: 
       return {
         ...state,
+        maintainenceAssetsEventsLoadingMore: action.payload,
+      }
+    case types.SET_MAINTAINENCE_ASSETS_EVENTS_LIST: 
+      return {
+        ...state,
+        maintainenceAssetsEventsList:  Object.assign({}, {
+          ...state.maintainenceAssetsList,
+          ['list']: action.data.list
+        })
+      }
+    case types.SET_MAINTAINENCE_ASSETS_LIST_LOADING_MORE: 
+      return {
+        ...state, 
         maintainenceAssetsLoadingMore: action.payload,
       }
     case types.SET_MAINTAINENCE_ASSETS_LIST: 
@@ -364,6 +378,10 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         }
       case types.SET_SLACK_MESSAGES:
         let {messages, users} = action.data
+        if(messages == undefined) {
+          messages = []
+          users = []
+        }
         messages = messages.length > 0 ? messages.reverse()  : [...messages]
         return {
           ...state,
@@ -444,12 +462,18 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
       case types.SET_ASSET_TYPES_COMPANIES_SELECT:
         return {
           ...state,
-          assetTypeCompanies:  {...state.assetTypeCompanies, selected: action.data}
+          assetTypeCompanies:  {...state.assetTypeCompanies, selected: action.data, name: action.data.length == 0 ? '' : state.assetTypeCompanies.name}
         }
       case types.SET_ASSET_TYPES_COMPANIES_SELECT_ALL:
         return {
           ...state,
           assetTypeCompanies:  {...state.assetTypeCompanies, selectAll: action.flag}
+        }
+      case types.SET_ASSET_TYPES_COMPANIES_SELECT_NAME:
+        console.log('SET_ASSET_TYPES_COMPANIES_SELECT_NAME', action)
+        return {
+          ...state,
+          assetTypeCompanies: {...state.assetTypeCompanies, name: action.name}
         }
       case types.SET_ASSET_TYPES_COMPANIES_ROW_SELECT:
         return {
@@ -658,14 +682,25 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
       case types.SET_ASSET_TYPE_ASSIGNMENTS_SELECT:
         return {
           ...state,
-          assetTypeAssignments: {...state.assetTypeAssignments, selected: action.data}
+          assetTypeAssignments: {...state.assetTypeAssignments, selected: action.data, name: action.data.length == 0 ? '' : state.assetTypeAssignments.name}
         }  
+      case types.SET_PTAB_DATA:
+        return{
+          ...state,
+          ptabAssets: action.data
+        }
       case types.SET_ASSET_TYPE_ASSIGNMENTS_ASSETS:
         return {
           ...state,
-          assetTypeAssignmentAssets:  {...state.assetTypeAssignmentAssets, list: action.append === true ? [...state.assetTypeAssignmentAssets.list, ...action.data.list] : action.data.list, total_records: action.data.total_records}
+          assetTypeAssignmentAssets:  {...state.assetTypeAssignmentAssets, 
+                                        list: action.append === true ? [...state.assetTypeAssignmentAssets.list, ...action.data.list] : action.data.list, 
+                                        total_records: action.data.total_records,
+                                        selected: action.append === false && action.data.list.length === 0 ? [] : [...state.assetTypeAssignmentAssets.selected],
+                                        selectAll: action.append === false && action.data.list.length === 0 ? false : state.assetTypeAssignmentAssets.selectAll,
+                                      },
+          selectedAssetsPatents: action.append === false && action.data.list.length === 0 ? [] : [...state.selectedAssetsPatents]
         }  
-      case types.SET_ASSET_TYPE_ASSIGNMENTS_ASSETS_SELECTED:
+      case types.SET_ASSET_TYPE_ASSIGNMENTS_ASSETS_SELECTED:  
         return {
           ...state,
           assetTypeAssignmentAssets: {...state.assetTypeAssignmentAssets, selected: action.data}
@@ -691,7 +726,6 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           selectedCategory: action.category
         }
       case types.SET_BREAD_CRUMBS_AND_SELECTED_CATEGORY:{
-        console.log('SET_BREAD_CRUMBS_AND_SELECTED_CATEGORY', action.item)
         return {
           ...state,
           breadcrumbs: action.item.breadCrumbs,
@@ -769,7 +803,7 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state, 
           assetTableScrollPosition: action.pos  
         }
-      case types.SET_ASSET_DETAILS:
+      case types.SET_ASSET_DETAILS: 
         return { 
           ...state, 
           asset_details: {...state.asset_details, ...action.assetData}
@@ -778,6 +812,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         return { 
           ...state, 
           dashboardPanelActiveButtonId: action.ID
+        }
+      case types.SET_DASHBOARD_SHARE_DATA:
+        return { 
+          ...state, 
+          dashboard_share_selected_data: action.data
         }
       default:   
       return state

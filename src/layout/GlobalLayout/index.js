@@ -24,6 +24,7 @@ import MobileFooter from '../../components/MobileFooter'
 
 import { loginRedirect } from  '../../utils/tokenStorage'
 import { editorBar } from  '../../utils/splitpane'
+
 import { 
     setBreadCrumbs,
     setAssetTypesAssignmentsLoading,
@@ -48,7 +49,8 @@ import { toggleUsptoMode,
     toggleLifeSpanMode,
     setTimelineScreen,
     setDriveTemplateMode,
-    setDashboardScreen } from '../../actions/uiActions'
+    setDashboardScreen, 
+    setDashboardPanel} from '../../actions/uiActions'
 
 import PatenTrackApi from '../../api/patenTrack2' 
 
@@ -61,10 +63,10 @@ const GlobalLayout = (props) => {
     const [ openTypeBar, setTypeOpenBar ] = useState(false)
     const [ openOtherPartyBar, setOtherPartyOpenBar ] = useState(false)
     const [ openInventorBar, setInventorOpenBar ] = useState(false)
-    const [ openAssignmentBar, setAssignmentOpenBar ] = useState(false) 
+    const [ openAssignmentBar, setAssignmentOpenBar ] = useState(true) 
     const [ openCustomerBar, setCustomerOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
     const [ openIllustrationBar, setIllustrationBar ] = useState(true)
-    const [ openCommentBar, setCommentBar ] = useState(isMobile ? false : true)
+    const [ openCommentBar, setCommentBar ] = useState(false/* isMobile ? false : true */)
     const [ openChartBar, setChartBar ] = useState(false)
     const [ openAnalyticsBar, setAnalyticsBar ] = useState(false)
     const [ openVisualizerBar, setVisualizeOpenBar ] = useState(false)
@@ -74,6 +76,7 @@ const GlobalLayout = (props) => {
     const [ toggleOtherPartyButtonType, setToggleOtherPartyButtonType ] = useState(true)
     const [ toggleAssignmentButtonType, setToggleAssignmentButtonType ] = useState(true)
     const [ toggleCustomerButtonType, setToggleCustomerButtonType ] = useState(true)  
+    const [ securedTransactionAssets, setSecuredTransactionAssets ] = useState(false)
     const DEFAULT_SCREEN_SIZE = {
         companyBar: 210,
         typeBar: 0,
@@ -87,17 +90,17 @@ const GlobalLayout = (props) => {
         visualizeBar: '0%',
         bar100: '100%',
         bar50: '50%'
-    }
+    } 
     
     const [ companyBarSize, setCompanyBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? 0 : 210) 
     const [ typeBarSize, setTypeBarSize ] = useState(0) 
     const [ otherPartyBarSize, setOtherPartyBarSize ] = useState(0)
     const [ partyBarSize, setPartyBarSize ] = useState('50%')
     const [ driveBarSize, setDriveBarSize ] = useState('50%')
-    const [ assignmentBarSize, setAssignmentBarSize ] = useState(0)  
+    const [ assignmentBarSize, setAssignmentBarSize ] = useState(180)  
     const [ addressBarSize, setAddressBarSize ] = useState(450)
-    const [ customerBarSize, setCustomerBarSize ] = useState(180)
-    const [ commentBarSize , setCommentBarSize ] = useState('30%')
+    const [ customerBarSize, setCustomerBarSize ] = useState(0)
+    const [ commentBarSize , setCommentBarSize ] = useState('0%'/* '30%' */)
     const [ illustrationBarSize , setIllustrationBarSize ] = useState('50%')
     const [ visualizerBarSize , setVisualizerBarSize ] = useState('0%')
 
@@ -116,6 +119,7 @@ const GlobalLayout = (props) => {
     const [ driveTemplateBarSize, setDriveTemplateBarSize ] = useState(200)
 
     const [ isDrag, setIsDrag ] = useState(false)
+    const [ request, setRequest ] = useState(false)
     const [ size, setSize] = useState(0)
     const [ illustrationRecord, setIllustrationRecord ] = useState()
     const authenticated = useSelector(store => store.auth.authenticated)
@@ -132,6 +136,7 @@ const GlobalLayout = (props) => {
     const connectionBoxView = useSelector(state => state.patenTrack.connectionBoxView)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const profile = useSelector(store => (store.patenTrack.profile))
+    const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
     const companies = useSelector( state => state.patenTrack2.mainCompaniesList )
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const assetTypesSelected = useSelector(
@@ -150,8 +155,15 @@ const GlobalLayout = (props) => {
         state => state.patenTrack2.assetTypeAssignments.selectAll,
     );
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
+    const timelineScreen = useSelector(state => state.ui.timelineScreen)
+    const patentScreen = useSelector(state => state.ui.patentScreen)
 
-    
+
+    useEffect(() => {
+        if(openVisualizerBar === false && visualizerBarSize != '0%') {
+            setVisualizerBarSize('0%')
+        }
+    }, [visualizerBarSize, openVisualizerBar])
 
     useEffect(() => {
         editorBar() // run to find editor width
@@ -181,22 +193,42 @@ const GlobalLayout = (props) => {
 
     useEffect(() => {
         if(profile?.user && profile.user?.organisation) {
-            if(profile.user.organisation.organisation_type == 'Bank') {
-                dispatch( setAssetTypesSelect([5]) ) // always select by default lending activity
+            if(profile.user.organisation.organisation_type == 'Bank' && props.type != 9) {
+                dispatch( setAssetTypesSelect([5, 81]) ) // always select by default lending activity
                 setOpenBar( false ) //company
                 setTypeOpenBar( false ) //activites
-                setOtherPartyOpenBar( true ) // parties
                 setCustomerOpenBar( false ) //assets
                 setCompanyBarSize(0) //company container
-                setCustomerBarSize(0) // Assets Container
+                setCustomerBarSize(0) // Assets Container                
+                setOtherPartyOpenBar( true ) // parties
                 setOtherPartyBarSize(150) // Parties Container
                 setPartyBarSize('100%')
-                dispatch(setTimelineScreen(false)) //Disable Timeline
-                dispatch(setDashboardScreen(true)) //Show Dashboard
-                handleCommentBarOpen() //Close comment
+                /* dispatch(setTimelineScreen(false)) //Disable Timeline
+                dispatch(setDashboardScreen(true)) //Show Dashboard */
+                /* handleCommentBarOpen() */ //Close comment
             }
         }
-    }, [dispatch, profile])
+    }, [profile])
+
+    useEffect(() => {
+        if(props.type == 9) {
+            setDashboardScreen(false)
+            setDashboardPanel(false)
+        }  
+    }, [props.type])
+
+    useEffect(() => {
+        if(patentScreen === true && openCustomerBar === false) {
+            handleCustomersBarOpen()
+        }
+    }, [patentScreen])  
+
+    useEffect(() => {
+        if(dashboardScreen === true && profile?.user && profile.user?.organisation && profile.user.organisation.organisation_type == 'Bank' && props.type != 9 && openOtherPartyBar === false) {
+            handleOtherPartyBarOpen()
+        }
+    }, [dashboardScreen]) 
+    
 
     /**
      * Dashboard screen is true
@@ -205,58 +237,80 @@ const GlobalLayout = (props) => {
 
     useEffect(() => {
         if(profile?.user && profile.user?.organisation) {
-            if(profile.user.organisation.organisation_type == 'Bank' && dashboardScreen === true) {
-                if(selectedCompanies.length === 0) {
+            if(profile.user.organisation.organisation_type == 'Bank' && dashboardScreen === true && props.type != 9) {
+                if(selectedCompanies.length === 0 && selectedAssetCompaniesAll === false && companies.list.length > 0 && request === false) {
                     const getSelectedCompanies = async() => {
-                        if( companies.list.length > 0 ) {
-                            /**
-                             * Send Request to server
-                             */
-                            const { data } = await PatenTrackApi.getUserCompanySelections();
-                            if(data != null && data.list.length > 0) {
-                                if(selectedCompanies.length == 0) {
-                                    let oldItems = [], groups = []
-                                    if(selectedCategory === 'correct_names') { 
-                                        dispatch(setMainCompaniesSelected([data.list[0].representative_id], []))
-                                    } else {
-                                        const promise =  data.list.map( representative => {
-                                            /**
-                                             * If selected item is Group then select all the companies under group
-                                             */
-                                            if(parseInt(representative.type) === 1) {
-                                                groups.push(parseInt(representative.representative_id))
-                                                const parseChild = JSON.parse(representative.child)
-                                                if(parseChild.length > 0) {
-                                                    oldItems = [...oldItems, ...parseChild]
-                                                    oldItems = [...new Set(oldItems)]
-                                                }
-                                            } else {
-                                                oldItems.push(parseInt(representative.representative_id))
-                                            }
-                                        })
-                                        await Promise.all(promise)
-                                        dispatch(setMainCompaniesSelected(oldItems, groups))
-                                    }                        
+                        /**
+                         * Send Request to server
+                         */
+                        let activeItems = [], parentChild = []
+                        companies.list.map(row => {
+                            if(parseInt(row.type) === 1) {
+                                const parseChild = JSON.parse(row.child_full_detail), parentChildIDs = JSON.parse(row.child)
+                                parentChild.push({parent: parseInt(row.representative_id), child: [...parentChildIDs] })
+                                const filters = parseChild.reduce((acc, item) => {
+                                    if (!acc) acc = [];  
+                                    if(item.status == 1){
+                                        acc.push(parseInt(item.representative_id))
+                                    }
+                                    return acc
+                                }, [])
+                                if(filters.length > 0) {
+                                    activeItems = [...activeItems, ...filters]
                                 }
-                            } 
-                        }            
+                            } else {
+                                if(row.status == 1) {
+                                    activeItems.push(parseInt(row.representative_id))
+                                }
+                            }
+                        })
+                        
+                        const { data } = await PatenTrackApi.getUserCompanySelections();
+                        setRequest(true)
+                        if(data != null && data.list.length > 0) {
+                            let oldItems = [], groups = []
+                            if(selectedCategory === 'correct_names') { 
+                                dispatch(setMainCompaniesSelected([data.list[0].representative_id], []))
+                            } else {
+                                const promise =  data.list.map( representative => {
+                                    /**
+                                     * If selected item is Group then select all the companies under group
+                                     */
+                                    if(parseInt(representative.type) === 1) {
+                                        groups.push(parseInt(representative.representative_id))
+                                        const parseChild = JSON.parse(representative.child)
+                                        if(parseChild.length > 0) {
+                                            const filterItems = parseChild.filter(c => activeItems.includes(parseInt(c.representative_id)) ? parseInt(c.representative_id) : '')
+
+                                            oldItems = filterItems.length > 0 ? [parseInt(filterItems[0])] : []         
+                                        }
+                                    } else {
+                                        if(activeItems.includes(parseInt(representative.representative_id))) {
+                                            oldItems = [parseInt(representative.representative_id)]       
+                                        }       
+                                    }
+                                })
+                                await Promise.all(promise)
+                                dispatch(setMainCompaniesSelected(oldItems, groups))
+                            }
+                        }       
                     }  
                     getSelectedCompanies()
                 }
             }
         }
-    }, [dispatch, dashboardScreen, companies, profile, selectedCompanies])
+    }, [dispatch, dashboardScreen, profile, companies])
+
+    
 
     /**
      * Dashboard screen is true
      * Get list of assets
      */
 
-    useEffect(() => {
+    /* useEffect(() => {
         if(dashboardScreen === true) {
-            
-
-            if(selectedCompanies.length > 0) {
+            if(selectedCompanies.length > 0 && openCustomerBar === false) {
                 const customers = selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies;
                 const assignments = selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;    
                 dispatch(getCustomerAssets(
@@ -273,7 +327,7 @@ const GlobalLayout = (props) => {
                 ))                    
             }
         }  
-    }, [dispatch, dashboardScreen, companies, profile, selectedCompanies, selectedCategory, assetTypesSelected, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, selectedAssetCompanies, selectedAssetAssignments])
+    }, [dispatch, dashboardScreen, selectedCompanies]) */
 
     /*
     useEffect(() => {
@@ -291,8 +345,7 @@ const GlobalLayout = (props) => {
     }, []) */
 
     useEffect(() => {
-        if( openIllustrationBar === false && openCommentBar === false && openChartBar === false && openAnalyticsBar === false ) {
-            
+        if( openIllustrationBar === false && openCommentBar === false && openChartBar === false && openAnalyticsBar === false ) {  
             if( openGoogleDriveBar === true || assetFilesBar === true ) {
                 setAssetFilesBarSize('100%')
                 if(openCustomerBar === true && customerBarSize === '100%') {
@@ -353,7 +406,7 @@ const GlobalLayout = (props) => {
             } else if (openBar === true ) {
                 setCompanyBarSize('100%')                
             }
-        }  else {
+        }  else {      
             if(assetFilesBarSize === '100%' && (openGoogleDriveBar === true || assetFilesBar === true)){
                 setAssetFilesBarSize(200)
             } else if(customerBarSize === '100%') {
@@ -382,7 +435,6 @@ const GlobalLayout = (props) => {
             setOtherPartyOpenBar( false ) // parties
             setCustomerOpenBar( true ) //assets
             setAssignmentOpenBar( true ) //transactions
-            console.log("TAPPPPP")
             setVisualizerBarSize('40.1%')
             setChartBar(true)
             setAnalyticsBar(true)
@@ -438,6 +490,15 @@ const GlobalLayout = (props) => {
         editorBar()
     }, [ driveTemplateMode ])
 
+
+
+    useEffect(()=>{
+        if(process.env.REACT_APP_ENVIROMENT_MODE === 'PRO') {
+            loginRedirect(authenticated)
+        }        
+        // Fetch data for logged in user using token
+    },[authenticated]);
+
     /* const scrollInitial = () => {  
         if(isMobile) {
             alert(window.innerHeight)
@@ -456,36 +517,72 @@ const GlobalLayout = (props) => {
     const getWindowDimensions = () => {
         const hasWindow = typeof window !== 'undefined';
         let percentage = '76%'
-        const width = hasWindow ? window.innerWidth : null;
-        if(width > 1400) {
-            percentage = '76%'
-        } else if(width < 1400 && width > 1279) {
-            percentage = '73%'
-        } else if(width < 1280 && width > 1151) {
-            percentage = '69%'
+        const informationContainer = document.getElementById('information_container')
+        if(informationContainer != null && dashboardScreen === true) {
+            const parentContainer = informationContainer.parentNode.parentNode
+            const parentWidth = parentContainer.clientWidth
+            percentage = `${((parentWidth - 250) / parentWidth) * 100}%`
         } else {
-            percentage = '64%'
-        }  
+            const width = hasWindow ? window.innerWidth : null;
+            if(width > 1400) {
+                percentage = '76%'
+            } else if(width < 1400 && width > 1279) {
+                percentage = '69%'
+            } else if(width < 1280 && width > 1151) {
+                percentage = '67%'
+            } else {
+                percentage = '64%'
+            }  
+        }
         return percentage      
     }
 
     const handleKeyEvent = (event) => {  
         //event.preventDefault()
+        
         if(event.key === 'ArrowDown' || event.key === 'ArrowUp' ) {
             let tableContainer = document.getElementById('assets_type_assignment_all_assets'), findActiveRow = null
             if(tableContainer !== null) {
-                findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightWithCol.Mui-selected')
+                console.log(12345678)
+                /* findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightWithCol.Mui-selected') */
+                findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightRow.Mui-selected')
                 if(findActiveRow === null) {
                     if(tableContainer.getAttribute('data_option') !== null && tableContainer.getAttribute('data_option') == 'single') {
                         findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightRow.Mui-selected')
                     } else {
                         tableContainer = document.getElementById('assets_assignments')
-                        if(tableContainer !== null) {
+                        if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
                             findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
-                        }  
+                        } else {
+                            tableContainer = document.getElementById('assets_type_companies')
+                            if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
+                                findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                            } else {
+                                tableContainer = document.getElementById('main_companies')
+                                if(tableContainer !== null) {
+                                    findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                                }
+                            }
+                        } 
                     }                                      
                 }
+            } else {
+                tableContainer = document.getElementById('assets_assignments')
+                if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
+                    findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                } else {
+                    tableContainer = document.getElementById('assets_type_companies')
+                    if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
+                        findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                    } else {
+                        tableContainer = document.getElementById('main_companies')
+                        if(tableContainer !== null) {
+                            findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')                            
+                        }
+                    }
+                }
             }
+
 
             if(findActiveRow !== null) {
                 const classList = findActiveRow.className.split(/\s+/);
@@ -630,7 +727,7 @@ const GlobalLayout = (props) => {
         if(!openAssignmentBar === false) {
             setAssignmentBarSize(0)
         } else {
-            setAssignmentBarSize(120) 
+            setAssignmentBarSize(180) 
             if(isMobile){
                 setOpenBar( false )
                 setTypeOpenBar( false )
@@ -645,7 +742,6 @@ const GlobalLayout = (props) => {
     }
 
     const handleCustomersBarOpen = (event) => {
-        console.log("CURRENT=>handleCustomersBarOpen", openCustomerBar)
         setToggleCustomerButtonType( !toggleCustomerButtonType )
         setCustomerOpenBar( !openCustomerBar )
         if(!openCustomerBar === false) {
@@ -723,7 +819,8 @@ const GlobalLayout = (props) => {
 
     const changeVisualBar = (chart, analytics, comment, illustration) => {
         /* console.log("changeVisualBar") */
-        let barOpen = true, barSize = '40.1%'        
+        let barOpen = true, barSize = '40.1%'    
+        
         if(chart === false && analytics === false && (comment === true || illustration === true) && usptoMode === false && connectionBoxView === false){
             barSize = '0%'
             barOpen = false
@@ -810,7 +907,7 @@ const GlobalLayout = (props) => {
         changeVisualBar(!bar, openAnalyticsBar, openCommentBar, openIllustrationBar)
     }
 
-    const handleAnalyticsBarOpen = () => {
+    const handleAnalyticsBarOpen = () => {  
         let bar = openAnalyticsBar, barSize = '50%'
         setAnalyticsBar( !bar )
         if((!bar === false && openChartBar === false) || (openChartBar === true && !bar === false)) {
@@ -943,9 +1040,9 @@ const GlobalLayout = (props) => {
                 return prevItem
             })
             if((chartPrevItem === true || analyticsPrevItem === true) && (openCommentBar === true || openIllustrationBar === true)){
-                barSize = dashboardScreen === true ? getWindowDimensions() :'40.1%'
+                barSize = dashboardScreen === true ? getWindowDimensions() : visualizerBarSize !== '0%' ?  visualizerBarSize :  '40.1%'
             } else if (openCommentBar === false && openIllustrationBar === false && ( chartPrevItem === true ||  analyticsPrevItem === true )) {
-                barSize = '100%'
+                barSize = '100%'  
             }
             if(barSize === '0%') {
                 setVisualizeOpenBar( false )
@@ -962,10 +1059,11 @@ const GlobalLayout = (props) => {
             }  */
             /* console.log("barSize", barSize, chartPrevItem, analyticsPrevItem)     */        
         } 
-    }, [openChartBar, openAnalyticsBar, openCommentBar, openIllustrationBar])
+    }, [openChartBar, openAnalyticsBar, openCommentBar, openIllustrationBar, dashboardScreen])
 
 
     const handleOpenSettings = useCallback(() => {
+        dispatch(setDashboardScreen(false))
         history.push('/settings/templates')
     }, [ history ])
 
@@ -1026,28 +1124,47 @@ const GlobalLayout = (props) => {
             if(openAnalyticsBar === true){
                 handleAnalyticsBarOpen(event)
             }
-
         } else {
-            if(openCustomerBar === false){
+            if(openCustomerBar === false && timelineScreen === false && type !== 'Timeline'){ 
                 handleCustomersBarOpen(event)
+            }
+            if(openAssignmentBar === false && timelineScreen === false && type == 'Timeline'){
+                handleAssignmentBarOpen(event)
             }
             if(openCommentBar === false){
                 handleCommentBarOpen(event)
             }
-            if(openChartBar === true){
-                handleChartBarOpen(event)
-            }
-            if(openAnalyticsBar === true){
-                handleAnalyticsBarOpen(event)
+            if(openChartBar === true || openAnalyticsBar === true) {
+                /* setVisualizeOpenBar(false)  
+                setVisualizerBarSize('0%') */
+                if(openChartBar === true){
+                    handleChartBarOpen(event)
+                }
+                if(openAnalyticsBar === true){
+                    handleAnalyticsBarOpen(event)
+                }
+
+                if(openChartBar === true && openAnalyticsBar === true){
+                    changeVisualBar(false, false, true, true)
+                }
             }
         }
+    }
+
+    const handleSecuredTransactionAssets = () => {
+        if(!securedTransactionAssets === false){
+            setPartyBarSize('100%')
+        } else {
+            setPartyBarSize('50%')
+        }
+        setSecuredTransactionAssets(!securedTransactionAssets)
     }
 
     const topToolBar = [
         {
             tooltip: 'Settings',
             bar: false,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleOpenSettings,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleOpenSettings,
             t: 0,
             label: 'Settings',
             margin: true,
@@ -1055,7 +1172,7 @@ const GlobalLayout = (props) => {
         {
             tooltip: 'Filter by Companies',
             bar: props.type === 9 ? false : openBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleCompanyBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  ? handleAlertPop : handleCompanyBarOpen,
             t: 1,
             label: 'Companies',
             ...(props.type === 9 && {highlight: false})
@@ -1066,7 +1183,7 @@ const GlobalLayout = (props) => {
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleTypeBarOpen,
             t: 2,
             label: 'Filter by Activities',
-            ...(props.type === 9 && {disabled: true})
+            ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
         },
         {
             tooltip: 'Filter by Parties',
@@ -1074,48 +1191,49 @@ const GlobalLayout = (props) => {
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleOtherPartyBarOpen,
             t: 3,
             label: 'Select Parties',
-            ...(props.type === 9 && {disabled: true})
+            ...((props.type === 9 || (dashboardScreen === true && profile?.user?.organisation?.organisation_type !== 'Bank')) && {disabled: true})
         },
         {
             tooltip: 'Filter by Employees', 
             bar: openInventorBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleInventorBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleInventorBarOpen,
             t: 11,
             margin: true,
             label: 'Employees',
-            ...(props.type === 9 && {disabled: true})
+            ...((props.type === 9 || (dashboardScreen === true && profile?.user?.organisation?.organisation_type !== 'Bank')) && {disabled: true})
         },
         {
             tooltip: 'Filter by Transactions',
             bar: openAssignmentBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleAssignmentBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleAssignmentBarOpen,
             t: 4,
             label: 'Transactions',
-            ...(props.type === 9 && {disabled: true})
+            ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
         },
         {
             tooltip: 'Assets',
             bar: openCustomerBar,
-            click: handleCustomersBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleCustomersBarOpen,
             t: 5,
             margin: true,
-            label: 'Assets' 
+            label: 'Assets' ,
+            ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
         },
         {
             tooltip: 'Recorded Documents',
             bar: assetFilesBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleAssetFileBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleAssetFileBarOpen,
             t: 10,
             label: 'Recorded Documents',
-            ...(props.type === 9 && {disabled: true})
+            ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
         },
         {
             tooltip: 'Initiated Documents',
             bar: openGoogleDriveBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleGoogleDriveBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleGoogleDriveBarOpen,
             t: 12,
             label: 'Initiated Documents',
-            ...(props.type === 9 && {disabled: true})
+            ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
         },
     ]
 
@@ -1139,15 +1257,28 @@ const GlobalLayout = (props) => {
             bar: openChartBar,
             click: handleChartBarOpen,
             t: 8,
-            label: 'Charts'
+            label: 'Charts',
+            ...(dashboardScreen === true && {disabled: true})
         },
         {
             tooltip: 'Analytics',
             bar: openAnalyticsBar,
             click: handleAnalyticsBarOpen,
             t: 9,
-            label: 'Analytics'
+            label: 'Analytics',
+            ...(dashboardScreen === true && {disabled: true})
         }
+    ]
+
+    const externalToolBar = [
+        {
+            tooltip: 'Create a New Secured Transaction',
+            bar: false,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleSecuredTransactionAssets,
+            t: 45,
+            label: 'Create a New Secured Transaction',
+            margin: true,
+        },
     ]
 
     const mobileWrapper = [{
@@ -1203,11 +1334,14 @@ const GlobalLayout = (props) => {
         setCommentBarSize,
         openCommentBar,
         openIllustrationBar,
+        handleIllustrationBarOpen,
         handleChartBarOpen,
         handleAnalyticsBarOpen,
+        openInventorBar,
+        handleInventorBarOpen,
         setIsDrag,
         isDrag,
-        setSize,
+        setSize, 
         size,
         illustrationRecord,
         setIllustrationRecord,
@@ -1222,19 +1356,15 @@ const GlobalLayout = (props) => {
         closeAnalyticsAndCharBar,
         checkChartAnalytics,
         setAssetFilesBarSize,
+        changeVisualBar,
         assetFilesBarSize,
         assetFilesBar,
         driveTemplateBarSize,
         driveTemplateFrameMode,
-        driveTemplateMode
+        driveTemplateMode,
+        securedTransactionAssets
     }]
-
-    useEffect(()=>{
-        if(process.env.REACT_APP_ENVIROMENT_MODE === 'PRO') {
-            loginRedirect(authenticated)
-        }        
-        // Fetch data for logged in user using token
-    },[authenticated]);
+ 
     
     const childrenWithProps = React.Children.map(props.children, child => {
         if (React.isValidElement(child)) {
@@ -1264,6 +1394,7 @@ const GlobalLayout = (props) => {
                 setOtherPartyBarSize,
                 handleOtherPartyButton,
                 handleOtherPartyBarOpen,
+                handleInventorBarOpen,
                 partyBarSize,
                 driveBarSize,
                 toggleOtherPartyButtonType,
@@ -1289,6 +1420,7 @@ const GlobalLayout = (props) => {
                 setCommentBarSize,
                 openCommentBar,
                 openIllustrationBar,
+                handleIllustrationBarOpen,
                 handleChartBarOpen,
                 handleAnalyticsBarOpen,
                 setIsDrag,
@@ -1304,6 +1436,7 @@ const GlobalLayout = (props) => {
                 openVisualizerBar,
                 setAnalyticsBar,
                 setChartBar,
+                changeVisualBar,
                 openAnalyticsAndCharBar,
                 closeAnalyticsAndCharBar,
                 checkChartAnalytics,
@@ -1312,7 +1445,8 @@ const GlobalLayout = (props) => {
                 assetFilesBar,
                 driveTemplateBarSize,
                 driveTemplateFrameMode,
-                driveTemplateMode
+                driveTemplateMode,
+                securedTransactionAssets
             }) 
         }
         return child
@@ -1349,13 +1483,23 @@ const GlobalLayout = (props) => {
                                 )
                             ) 
                         :
-                            <>
+                            <React.Fragment>
                                 <div className={clsx(classes.filterToolbar)}> 
                                     <div className={clsx(classes.flex)}>                            
                                         {
                                             topToolBar.map( (item, index) => (
                                                 <NavigationIcon key={index} {...item} />
                                             ))
+                                        }
+
+                                        {
+                                            profile?.user && profile.user?.organisation && profile.user.organisation.organisation_type == 'Bank' && props.type != 9
+                                            ?
+                                                externalToolBar.map( (item, index) => (
+                                                    <NavigationIcon key={index} {...item} />
+                                                ))
+                                            :
+                                                ''
                                         }
                                     </div>
                                     <div className={clsx(classes.flex, classes.bottom)}>
@@ -1369,7 +1513,7 @@ const GlobalLayout = (props) => {
                                 {
                                     childrenWithProps
                                 }
-                            </>
+                            </React.Fragment>
                     } 
                 </Grid>
             </Grid>

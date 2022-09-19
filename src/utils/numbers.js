@@ -7,6 +7,11 @@ export const capitalize = (s) => {
     return s.toLowerCase().charAt(0).toUpperCase() + s.toLowerCase().slice(1)
 }
 
+export const capitalAllWords = (s) => {
+  if (typeof s !== 'string') return s
+  return s.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
+}
+
 export const addCommas = (nStr) => {
     nStr += ''
     var x = nStr.split('.')

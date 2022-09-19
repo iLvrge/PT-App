@@ -17,7 +17,7 @@ const LegalEventsContainer = ({ events, type, standalone, activeTab }) => {
   const [ selectedTab, setSelectedTab ] = useState(typeof activeTab !== 'undefined' ? activeTab : 0)
   const [ eventsData, setEventsData ] = useState([])
   const [ litigationData, setLitigationData ] = useState([])
-  const [ ptabData, setPtabData ] = useState([])
+  const [ ptabRawData, setPtabRawData ] = useState([])
   const [ citationData, setCitationData ] = useState([])
   const [selectedNumber, setSelectedNumber] = useState('')
   const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
@@ -33,7 +33,11 @@ const LegalEventsContainer = ({ events, type, standalone, activeTab }) => {
       events,
       type,
       standalone: true,
-      activeTab: selectedTab
+      activeTab: selectedTab,
+      rawData: ptabRawData,
+      updateRawData: setPtabRawData,
+      citationRawData: citationData, 
+      updateCitationRawData: setCitationData
     }
   ]
   useEffect(() => {
@@ -91,8 +95,8 @@ const LegalEventsContainer = ({ events, type, standalone, activeTab }) => {
             </Tabs>
             <div className={classes.graphContainer}>  
               {selectedTab === 0 && <Fees events={events} number={selectedNumber} />}
-              {selectedTab === 1 && <Citation data={citationData} number={selectedNumber} />}   
-              {selectedTab === 2 && <Ptab data={ptabData} number={selectedNumber}/>}   
+              {selectedTab === 1 && <Citation updateCitationRawData={setCitationData} number={selectedNumber} />}   
+              {selectedTab === 2 && <Ptab number={selectedNumber} updateRawData={setPtabRawData}/>}   
               {selectedTab === 3 && <Litigation data={litigationData} number={selectedNumber} />}   
               {selectedTab === 4 && <Events data={eventsData} number={selectedNumber} />}  
             </div>      

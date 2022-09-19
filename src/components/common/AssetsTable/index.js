@@ -7,8 +7,9 @@ import React, {
 } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {useLocation} from 'react-router-dom'
-import { Paper, Popover } from "@mui/material";
-import { Clear, NotInterested, KeyboardArrowDown } from '@mui/icons-material';
+import { Paper, Popover, Box, Rating } from "@mui/material";
+import { Clear, NotInterested, KeyboardArrowDown, MonetizationOn } from '@mui/icons-material';
+import moment from "moment";
 import Loader from "../Loader";
 import useStyles from "./styles";
 import VirtualizedTable from "../VirtualizedTable";
@@ -50,7 +51,8 @@ import {
   getForeignAssetsBySheet,
   setAssetTableScrollPos,
   resetAssetDetails,
-  getAssetDetails
+  getAssetDetails,
+  setSelectedMaintainenceAssetsList
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -89,17 +91,26 @@ var applicationNumber = null, assetNumber = null, hoverTimer = null
 
 const AssetsTable = ({ 
     type,
+    assets,
     transactionId, 
     standalone, 
     openChartBar,
     openAnalyticsBar,
+    openIllustrationBar,
+    commentBar,
     openAnalyticsAndCharBar,
     closeAnalyticsAndCharBar,
+    handleChartBarOpen,
+    handleAnalyticsBarOpen,
+    handleIllustrationBarOpen,
+    handleVisualBarSize,
+    setIllustrationBarSize,
     headerRowDisabled,
     isMobile,
     fileBar,
     driveBar,
-    changeVisualBar
+    changeVisualBar,
+    handleCommentBarOpen
   }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -108,7 +119,8 @@ const AssetsTable = ({
   const assetsAssignmentRef = useRef()
   const googleLoginRef = useRef(null)
   const [offsetWithLimit, setOffsetWithLimit] = useState([0, DEFAULT_CUSTOMERS_LIMIT])
-  
+  const [maintainenceItems, setMaintainenceItems] = useState([])
+  const [ratingOnFly, setRatingOnFly] = useState({})
   const [rowHeight, setRowHeight] = useState(40)
   const [headerRowHeight, setHeaderRowHeight] = useState(47)
   const [width, setWidth] = useState(1500) 
@@ -126,9 +138,11 @@ const AssetsTable = ({
   const [selectedAssets, setSelectedAssets] = useState([])  
   const [movedAssets, setMovedAssets] = useState([])  
   const [ dropOpenAsset, setDropOpenAsset ] = useState(null)
+  const [ assetRating, setAssetRating ] = useState([])
   const [ callByAuthLogin, setCallByAuth ] = useState(false)
   const [ anchorEl, setAnchorEl ] = useState(null)
   const [optionType, setOptionType] = useState('multiple')
+  const [defaultViewFlag, setDefaultViewFlag] = useState(0)
   const [assetRows, setAssetRows] = useState([])
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState(true)
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
@@ -211,6 +225,70 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     )
   }
 
+  const onHandleRating = (event, newValue, props) => {
+    if(event.type == 'mousemove') {
+      setRatingOnFly({label: props.label, rating_value: newValue})
+    } else {
+      setRatingOnFly({})
+    }    
+  }
+
+  const RatingBox = (props) => {
+    const findValue = useMemo(() => {
+      if(typeof props.data !== 'undefined' && props.data.length > 0) {
+        let value = 0
+        props.data.forEach( item => {
+          if(props.label == item.name && item.value != '') {
+            value = item.value
+          } 
+        })
+        return value;
+      } else {
+        return 0;
+      }
+    }, [props])
+    return (
+      <Box className={classes.rating_container}>
+        <span className={classes.rating_label}><label>{props.label}</label></span>
+        <Rating
+          name={props.name}
+          onChangeActive={(event, newValue) => onHandleRating(event, newValue, props)}
+          value={findValue}
+        />
+      </Box>
+    )
+  }
+
+  const RatingImportant = (props) => {
+    return (
+      <RatingBox
+        label={`Important`}
+        name={`virtual-rating-important`}
+        data={props.item}
+      />
+    )
+  }
+
+
+  const RatingNecessary = (props) => {
+    return (
+      <RatingBox
+        label={`Necessary`}
+        name={`virtual-rating-necessary`}
+        data={props.item}
+      />
+    )
+  }
+
+  const Slack = () => {
+    return (
+      <Box className={classes.slack_container}>
+        <svg version="1.1" width="36px" height="36px" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 270 270"><g><g><path fill="#E01E5A" d="M99.4,151.2c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h12.9V151.2z"></path><path fill="#E01E5A" d="M105.9,151.2c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v32.3c0,7.1-5.8,12.9-12.9,12.9s-12.9-5.8-12.9-12.9V151.2z"></path></g><g><path fill="#36C5F0" d="M118.8,99.4c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v12.9H118.8z"></path><path fill="#36C5F0" d="M118.8,105.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9H86.5c-7.1,0-12.9-5.8-12.9-12.9s5.8-12.9,12.9-12.9H118.8z"></path></g><g><path fill="#2EB67D" d="M170.6,118.8c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9h-12.9V118.8z"></path><path fill="#2EB67D" d="M164.1,118.8c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9V86.5c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9V118.8z"></path></g><g><path fill="#ECB22E" d="M151.2,170.6c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9v-12.9H151.2z"></path><path fill="#ECB22E" d="M151.2,164.1c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h32.3c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9H151.2z"></path></g></g></svg>
+      </Box>
+    )
+  }
+
+
   const actionList = [
     {
       id: 99,
@@ -248,6 +326,27 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       image: '',
       icon: <Clipboard />
     },
+    {
+      id: 6,
+      name: <RatingNecessary item={assetRating}/>,
+      image: '',
+      icon: <Clipboard />,
+      item: false
+    },
+    {
+      id: 7,
+      name: <RatingImportant item={assetRating}/>,
+      image: '',
+      icon: <Clipboard />,
+      item: false
+    },
+    {
+      id: 9,
+      name:  'Add a task/review',
+      image: '',
+      icon: <Slack />,
+      item: false
+    },
     /* {
       id: 6,
       name: 'Link to Our Products',
@@ -268,8 +367,91 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     } */
   ]
 
-  let dropdownList = [...actionList]
+  const maintainanceActionList = [
+    {
+      id: 99,
+      name: 'No action' ,
+      icon: <NotInterested />,
+      image: ''
+    },
+    {
+      id: -1,
+      name: '', 
+      icon: <KeyboardArrowDown />,
+      image: ''
+    },
+    {
+      id: 0,
+      name: 'Abandon', 
+      icon: <Clear />,
+      image: ''
+    },
+    {
+      id: 2,
+      name: 'Move to Sale',
+      image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/sell.png',
+      icon: ''
+    }, 
+    {
+      id: 4,
+      name: 'Move to License-Out',
+      image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/licenseout.png',
+      icon: ''
+    },
+    {
+      id: 5,
+      name: 'Add to Clipboard',
+      image: '',
+      icon: <Clipboard />
+    },
+    {
+      id: 6,
+      name: <RatingNecessary item={assetRating}/>,
+      image: '',
+      icon: <Clipboard />,
+      item: false
+    },
+    {
+      id: 7,
+      name: <RatingImportant item={assetRating}/>,
+      image: '',
+      icon: <Clipboard />,
+      item: false
+    },
+    {
+      id: 9,
+      name: <Slack label={'Add a task/review'}/>,
+      image: '',
+      icon: '',
+      item: false
+    },
+    {
+      id: 10,
+      name: 'Pay Maintainence Fee', 
+      icon: <MonetizationOn />,
+      image: ''
+    }
+    /* {
+      id: 6,
+      name: 'Link to Our Products',
+      image: '',
+      icon: <Clipboard />
+    },
+    {
+      id: 7,
+      name: 'Link to Technology',
+      image: '',
+      icon: <Clipboard />
+    },
+    {
+      id: 8,
+      name: 'Link to Competition',
+      image: '',
+      icon: <Clipboard />
+    } */
+  ]
 
+  let dropdownList = selectedCategory == 'pay_maintainence_fee' ? [...maintainanceActionList] : [...actionList]
 
   useEffect(() => {
     if(openChartBar === false && openAnalyticsBar === false && usptoMode === false) {
@@ -280,21 +462,22 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     }
   }, [checkBar, usptoMode])
 
-  useEffect(() => {
-    if(selectedCategory == 'restore_ownership') {
-      setOptionType(prevItem => 
-        prevItem !== 'single' ? 'single' : prevItem
-      )
-    }
-  }, [selectedCategory])
 
   useEffect(() => {
     if(display_sales_assets === true) {
       dropdownList.splice(3,2)
     } else {
-      dropdownList = [...actionList]
+      dropdownList = selectedCategory == 'pay_maintainence_fee' ? [...maintainanceActionList] : [...actionList]
     }
   }, [display_sales_assets])
+
+  useEffect(() => {
+    if(selectedCategory == 'restore_ownership') {
+      setOptionType(prevItem => 
+        prevItem !== 'single' ? 'single' : prevItem
+      )
+    } 
+  }, [selectedCategory])
     
   useEffect(() => {
     
@@ -308,6 +491,10 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       setMovedAssets([...move_assets])
     }
   }, [ move_assets ])  
+
+  useEffect(() => {
+
+  }, [assets])
 
   useEffect(() => {
     assetsAssignmentRef.current = assetTypeAssignmentAssets
@@ -333,6 +520,56 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     }
   }, [callByAuthLogin, google_auth_token, google_profile])
 
+  useEffect(() => {
+    if(Object.keys(ratingOnFly).length > 0 && ratingOnFly?.asset != '' && ratingOnFly?.asset != undefined){
+      const getSlackToken = getTokenStorage("slack_auth_token_info");
+      if (getSlackToken && getSlackToken != "") {
+        /**
+         * Find slack channel 
+         * send message to this channel
+         */
+        const channelID = findChannelID(ratingOnFly.asset)
+        if(channelID != '') {
+          dispatch(setChannelID({channel_id: channelID}))          
+        }
+        sendRatingMessageToSlack(channelID, ratingOnFly)
+      } else {
+        /**
+         * Alert user to login with slack first
+         */
+        alert("Please login to slack first");
+      }
+    }
+  }, [ratingOnFly])
+
+  const sendRatingMessageToSlack = async(channelID, rowData) => {
+    try{
+      const formData = new FormData()
+      formData.append('text',  `${rowData.label.toUpperCase()} ${rowData.rating_value} star rating applied to this asset via PatenTrack` )
+      formData.append('asset', rowData.asset)
+      formData.append('asset_format', `us${rowData.asset}`)
+      formData.append('user', '')
+      formData.append('reply', '' )
+      formData.append('edit', '')
+      formData.append('file', '')
+      formData.append('remote_file', '')
+      formData.append('channel_id', channelID)
+      const slackToken = getTokenStorage( 'slack_auth_token_info' )
+      if( slackToken  && slackToken != null ) {
+        const { access_token, bot_token, bot_user_id } = JSON.parse(slackToken)
+        if( access_token != undefined) {  
+          formData.append('auth', bot_token)
+          formData.append('auth_id', bot_user_id)
+          const { data } = await PatenTrackApi.sendMessage(access_token, formData)             
+          if(data != '' && Object.keys(data).length > 0) {
+            setRatingOnFly({})
+          }
+        }
+      }
+    } catch( err ) {
+      console.error(err)
+    }    
+  }
 
   const openGoogleWindow = () => {
       if(googleLoginRef.current != null) {
@@ -351,12 +588,29 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
       alert('Message....')
     } else {
-      if(event.target.value >= 6 && event.target.value <= 8) {
+      if(event.target.value  == 9) {
+        /**
+         * Slack review box
+         */
+        if(commentBar === false) {
+          handleCommentBarOpen()
+          dispatch(setAssetTypesPatentsSelected([row.asset]))
+          setSelectItems([row.asset])
+          handleOnClick(row)
+        }
+      } else if(event.target.value >= 6 && event.target.value <= 8) {
         //6=>Product,7=>Technology,8=>Competition
-        setDropOpenAsset(null)
+        /* setDropOpenAsset(null)
         const type = event.target.value === 7 ? 'technology' : event.target.value === 8 ? 'competitors' : 'products'
         dispatch(linkWithSheetOpenPanel(true))
-        dispatch(linkWithSheetSelectedAsset(type, encodeURIComponent(row.asset_type == 1 ? `US${applicationFormat(asset)}` : `US${numberWithCommas(asset)}`)))        
+        dispatch(linkWithSheetSelectedAsset(type, encodeURIComponent(row.asset_type == 1 ? `US${applicationFormat(asset)}` : `US${numberWithCommas(asset)}`))) */    
+        setRatingOnFly( previousItem => {
+          if(Object.keys(previousItem).length > 0) {
+            return {...previousItem, ...row}            
+          } else {
+            return previousItem
+          }
+        })    
       } else {
         if(type === 9 && event.target.value === 0) {
           /***
@@ -401,12 +655,39 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
                 return [...prevItems, row]
               }
             })          
-          } else if (event.target.value == 2) {
-            const formData = new FormData()
-            formData.append('appno_doc_num', row.appno_doc_num)
-            formData.append('grant_doc_num', row.grant_doc_num)
-            const { data } = await PatenTrackApi.moveAssetForSale(formData)
-            if( data  !== null) {
+          } else if (event.target.value == 2 || event.target.value == 4) {
+            /**
+             * Assets for Sale or LicenseOut
+             * Check Slack Auth
+             */
+            let token =  '';
+            const slackToken = getTokenStorage( 'slack_auth_token_info' )
+            if(slackToken && slackToken!= '' && slackToken!= null && slackToken!= 'null' ) {
+              token = JSON.parse(slackToken)
+               
+              if(typeof token === 'string') {
+                token = JSON.parse(token)
+              }
+            }
+
+            if(token !== '') {
+              const { access_token, bot_token, bot_user_id } = JSON.parse(token)
+              const formData = new FormData()
+              formData.append('appno_doc_num', row.appno_doc_num)
+              formData.append('grant_doc_num', row.grant_doc_num)
+              formData.append('auth', bot_token)
+              formData.append('auth_id', bot_user_id)
+              formData.append('code', access_token)
+              formData.append('type', event.target.value)
+              const { data } = await PatenTrackApi.moveAssetForSale(formData)
+              if( data  !== null) {
+  
+              }
+            } else {
+              /**
+               * Alert user to login with slack first
+              */
+              alert("Please login to slack first");
             }
           } else if (event.target.value === 0) {
             setSelectedAssets(prevItems => {
@@ -419,7 +700,9 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
                 return [...prevItems]
               }
             }) 
-          }     
+          } else if (event.target.value === 10) {
+            updateMaintainenceSelection(asset, row)
+          } 
           const currentLayoutIndex = controlList.findIndex(r => r.type == 'menu' && r.category == selectedCategory )
           if(currentLayoutIndex !== -1) {
             setDropOpenAsset(null)
@@ -450,6 +733,43 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     }    
   }
 
+  const updateMaintainenceSelection = (asset, row) => {
+    let updateSelected = [];
+    setMaintainenceItems(prevItems => {
+      updateSelected = [...prevItems];
+      const findIndex = prevItems.findIndex( r => r.asset == asset)
+      if( findIndex !== -1 ) {
+        updateSelected = maintainenceItems.filter(
+          asset => asset[1] !== parseInt(row.appno_doc_num),
+        );
+      } else {
+        updateSelected.push([
+          row.grant_doc_num,
+          row.appno_doc_num,
+          "",
+          row.fee_code,
+          row.fee_amount,
+        ]);
+        const todayDate = moment(new Date()).format("YYYY-MM-DD");
+        if (
+          new Date(todayDate).getTime() >=
+          new Date(row.payment_grace).getTime()
+        ) {
+          updateSelected.push([
+            row.grant_doc_num,
+            row.appno_doc_num,
+            "",
+            row.fee_code_surcharge,
+            row.fee_surcharge,
+          ]);
+        }
+      }
+      return updateSelected
+    })   
+
+    dispatch(setSelectedMaintainenceAssetsList(updateSelected));
+  }
+
   const COLUMNS = [
     {
       width: 10,
@@ -458,13 +778,14 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       dataKey: "asset",
       role: "checkbox",
       disableSort: true,
-      show_selection_count: true,
       enable: false
     },
     {
-      width: 20,
-      minWidth: 20,
+      width: 25,
+      minWidth: 25,
       disableSort: true,
+      headingIcon: 'assets',  
+      checkboxSelect: true,
       label: "",
       dataKey: "asset",
       role: "static_dropdown",
@@ -483,8 +804,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     {
       width: isMobile === true ? 150 : 100,  
       minWidth: isMobile === true ? 150 : 100,  
-      label: "Assets", 
-      headingIcon: 'assets',   
+      label: "Assets",  
       /* dataKey: "format_asset", */
       dataKey: "asset",
       staticIcon: "US",
@@ -493,6 +813,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       formatDefaultValue: 0,
       secondaryFormat: applicationFormat,
       align: "center",
+      show_selection_count: true,
       badge: true,
       /* styleCss: true,
       justifyContent: 'center' */
@@ -509,11 +830,85 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     }
   ];
 
-  const [ tableColumns, setTableColumns ] = useState(COLUMNS)
+  const MAINTAINCE_COLUMNS = [
+    {
+      width: 10,
+      minWidth: 10,
+      label: "", 
+      dataKey: "asset",
+      role: "checkbox",
+      disableSort: true,
+      enable: false
+    },
+    {
+      width: 25,
+      minWidth: 25,
+      disableSort: true,
+      headingIcon: 'assets',  
+      checkboxSelect: true,
+      label: "",
+      dataKey: "asset",
+      role: "static_dropdown",
+      list: dropdownList,
+      onClick: onHandleDropDownlist
+    },
+    /* {
+      width: 20,
+      minWidth: 20,
+      label: "",
+      dataKey: "asset",
+      role: "arrow",
+      disableSort: true,
+      headingIcon: 'assets',
+    },  */
+    {
+      width: isMobile === true ? 150 : 100,  
+      minWidth: isMobile === true ? 150 : 100,  
+      label: "Assets",  
+      /* dataKey: "format_asset", */
+      dataKey: "asset",
+      staticIcon: "US",
+      format: numberWithCommas,
+      formatCondition: 'asset_type',
+      formatDefaultValue: 0,
+      secondaryFormat: applicationFormat,
+      align: "center",
+      show_selection_count: true,
+      badge: true,
+      /* styleCss: true,
+      justifyContent: 'center' */
+      /* textBold: true */
+    },
+    {
+      width: isMobile === true ? 60 : 40,
+      minWidth: isMobile === true ? 60 : 40,
+      label: "",
+      dataKey: "channel", 
+      formatCondition: 'asset',
+      headingIcon: 'slack_image',
+      role: 'slack_image',      
+    },
+    {
+      width: 90,
+      minWidth: 90,
+      label: "Due Date",
+      dataKey: "payment_due",
+    },
+    {
+      width: 100,
+      minWidth: 100,
+      label: "Grace Ends",
+      dataKey: "payment_grace",
+    }
+  ];
+
+  
+
+  const [ tableColumns, setTableColumns ] = useState( selectedCategory == 'pay_maintainence_fee' ? MAINTAINCE_COLUMNS : COLUMNS)
 
   useEffect(() => {
     if(display_clipboard === false) {
-      setTableColumns([...COLUMNS])
+      setTableColumns(selectedCategory == 'pay_maintainence_fee' ? [...MAINTAINCE_COLUMNS] : [...COLUMNS])
       setWidth(1500)
       if (standalone) {
         if( type === 9 ) {
@@ -571,6 +966,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     switch_button_assets        
   ]);
 
+
   useEffect(() => {
     setAssetRows(assetTypeAssignmentAssets)
     if(assetTypeAssignmentAssets.length > 0 && assetTypeAssignmentAssetsSelected.length > 0) {
@@ -603,6 +999,15 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     } 
   }, [ assetTypeAssignmentAssets ])
 
+  /* useEffect(() => {
+    const getSaleOrLiceOutAssets = async () => {
+      const {data} = await PatenTrackApi.getSaleOrLiceOutAssets()
+      if(data != null && data.length > 0) {
+
+      }
+    }
+    getSaleOrLiceOutAssets()
+  }, []) */
 
   useEffect(() => {
     if( display_clipboard === true &&  clipboard_assets.length > 0 ) {
@@ -729,9 +1134,14 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     }
   }, [selectedAssetsPatents, selectedRow])
 
+
+  
+
   useEffect(() => {    
     if(assetTypeAssignmentAssetsSelected.length > 0 && (selectItems.length == 0 || selectItems.length != assetTypeAssignmentAssetsSelected.length) ){
       setSelectItems(assetTypeAssignmentAssetsSelected)
+    } else if(assetTypeAssignmentAssetsSelected.length == 0 && selectItems.length > 0 ) {
+      setSelectItems([])
     }
   }, [ assetTypeAssignmentAssetsSelected, selectItems ])
 
@@ -755,7 +1165,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
           tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
           customers = selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
-          assignments = selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;    
+          assignments = selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;   
+     
     if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
       if (auth_token != null) {          
         dispatch(
@@ -803,7 +1214,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         );
         setWidth(1900)
       } else {
-        PatenTrackApi.cancelAssets()
+        //PatenTrackApi.cancelAssets()
         dispatch(
           setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
         );
@@ -824,8 +1235,12 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     setSelectedRow([asset]);    
   }, [dispatch] );
 
+  /**
+   * Row Click
+   */
+
   const handleOnClick = useCallback(
-    ({ grant_doc_num, appno_doc_num, asset }) => {      
+    ({ grant_doc_num, appno_doc_num, asset }) => {     
       /*TV, Comment, Family, FamilyItem, getChannelID Legal Events */
       if(!selectedRow.includes(asset)) {
         if(selectedCategory == 'restore_ownership') {
@@ -837,6 +1252,35 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           dispatch(linkWithSheetSelectedAsset('products', encodeURIComponent(grant_doc_num  == '' ? `US${applicationFormat(appno_doc_num)}` : `US${numberWithCommas(grant_doc_num)}`)))     
         }
         callSelectedAssets({ grant_doc_num, appno_doc_num, asset });
+        if(selectedCategory == 'pay_maintainence_fee' || selectedCategory == 'late_maintainance' || selectedCategory == 'ptab'){
+          /**
+           * Check if Right Pane is close then open it and close the TV
+           */
+          if(defaultViewFlag === 0) {
+            if(openChartBar === false) {
+              handleChartBarOpen()
+            }
+            if(openAnalyticsBar === false) {
+              handleAnalyticsBarOpen()
+            }
+            if(openIllustrationBar === true) {
+              handleIllustrationBarOpen('100%')
+              handleVisualBarSize(false, true, false, false)
+            }
+            setDefaultViewFlag(1)
+          } 
+        } else if (selectedCategory == 'top_non_us_members') {
+          if(defaultViewFlag === 0) {
+            if(openChartBar === false) {
+              handleChartBarOpen()
+              if(openIllustrationBar === true) {
+                handleIllustrationBarOpen('100%')
+                handleVisualBarSize(false, true, false, false)
+              }
+            }
+            setDefaultViewFlag(1)
+          }
+        }
         setCheckBar(!checkBar)        
         dispatch(setChildSelectedAssetsPatents([]));
         dispatch(setSelectedAssetsTransactions([]));
@@ -845,6 +1289,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         dispatch(setAssetTypeSelectedRow([]));
         dispatch(setAssetTypeCustomerSelectedRow([]));
         dispatch(setChildSelectedAssetsTransactions([]));
+        dispatch(setAssetFamily([]));
         dispatch(setChannelID(''))
         dispatch(setDriveTemplateFrameMode(false));
         dispatch(setDriveTemplateFile(null));  
@@ -906,7 +1351,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         }
       }
     },
-    [ dispatch, selectedAssetsPatents, selectedRow, openAnalyticsBar, openChartBar ],
+    [ dispatch, defaultViewFlag, selectedAssetsPatents, selectedRow, openAnalyticsBar, openChartBar ],
   );
 
 const resetAll = useCallback(() => {
@@ -972,6 +1417,82 @@ const checkMouseStillOnHover = (e, number) => {
   }  
 }
 
+/**
+ * Retireve slack messages and also retrieve Rating and Necessary
+ * @param {*} asset 
+ */
+const retrieveSlackMessages = async(asset) => {
+  const getSlackToken = getTokenStorage("slack_auth_token_info");
+  
+  
+  if (getSlackToken && getSlackToken != "") {
+    const channelID = findChannelID(asset)
+    if(channelID != '') {
+      const { access_token, bot_token, bot_user_id } = JSON.parse(getSlackToken)
+      if(access_token != '' && access_token != null && access_token != undefined) {
+        const { data } = await PatenTrackApi.getMessages( access_token, channelID);
+        if(data.messages.length > 0) {
+          /**
+           * Find String Necessary or Important and also via PatenTrack
+           */
+          const ratingItems = []
+          data.messages.forEach( item => {
+            if(item.type == 'message') {
+              const {text} = item
+              if(text != '') {
+                console.log(text, text.toLowerCase().indexOf('necessary'), text.indexOf('via PatenTrack'))
+                console.log(text, text.toLowerCase().indexOf('important'), text.indexOf('via PatenTrack'))
+                if(text.toLowerCase().indexOf('necessary') !== -1 && text.indexOf('via PatenTrack') !== -1) {
+                  /**
+                   * Find Necessary
+                   */
+                  const value = text.match(/\d+/)[0]
+                  ratingItems.push({
+                    name: 'Necessary',
+                    value
+                  })
+                }
+
+                if(text.toLowerCase().indexOf('important') !== -1 && text.indexOf('via PatenTrack') !== -1) {
+                  /**
+                   * Find Important
+                   */
+                  const value = text.match(/\d+/)[0]
+                  ratingItems.push({
+                    name: 'Important',
+                    value
+                  })
+                }
+              }
+            }
+          });
+          if(ratingItems.length > 0) {
+            updateTableColumn(ratingItems)
+          }
+        }        
+      }       
+    } 
+  }
+}
+
+const updateTableColumn = (ratingItems) => {
+  setAssetRating(ratingItems)
+  let findIndex = dropdownList.findIndex( item => item.id == 6)
+  if(findIndex !== -1) {
+    dropdownList[findIndex].name = <RatingNecessary item={ratingItems} />
+  }
+  findIndex = dropdownList.findIndex( item => item.id == 7)
+  if(findIndex !== -1) {
+    dropdownList[findIndex].name = <RatingImportant item={ratingItems} />
+  }
+  let previousColumns = [...tableColumns]
+  const columnIndex = previousColumns.findIndex(item => item.role == 'static_dropdown')
+  if(columnIndex !== -1) {
+    previousColumns[columnIndex].list = dropdownList
+    setTableColumns(previousColumns)
+  }
+}
+
   /**
    * Click checkbox
    */
@@ -979,20 +1500,22 @@ const checkMouseStillOnHover = (e, number) => {
     (e, row) => {
         e.preventDefault()
         const { checked } = e.target
-        let cntrlKey = e.ctrlKey ? e.ctrlKey : undefined;
+        let cntrlKey = e.ctrlKey ? e.ctrlKey : e.metaKey ? e.metaKey : undefined;
         if(dashboardScreen === true) {
           dispatch(setTimelineScreen(true))
           dispatch(setDashboardScreen(false))
         }
-
+        let oldSelection = [...selectItems];
         if(cntrlKey !== undefined) {
           if(selectedCategory == 'restore_ownership' && display_clipboard === false) {
             dispatch(setAssetTypesPatentsSelected([row.asset]))
             setSelectItems([row.asset])
+            handleOnClick(row)
           } else {
-            let oldSelection = [...selectItems]
+            let oldSelection = [...selectItems], newItem = false
             if (!oldSelection.includes(row.asset)) {
               oldSelection.push(row.asset);
+              newItem = true
             } else {
               oldSelection = oldSelection.filter(
                 asset => asset != row.asset,
@@ -1005,6 +1528,19 @@ const checkMouseStillOnHover = (e, number) => {
                 ? prevItems.filter(item => item !== row.asset)
                 : [...prevItems, row.asset],
             );  
+            if(oldSelection.length == 1) {
+              if(newItem === true){
+                handleOnClick(row)
+              } else {
+                const findIndex = assetRows.findIndex( item => item.asset === oldSelection[0])
+                if(findIndex !== -1) {
+                  handleOnClick(assetRows[findIndex])
+                }
+              }
+            } else {
+              setCheckBar(!checkBar)
+              resetAll()
+            }
           }
           dispatch(setAssetTypesPatentsSelectAll(false))                      
         } else {
@@ -1015,14 +1551,31 @@ const checkMouseStillOnHover = (e, number) => {
               const findElement = element.querySelector('div.MuiSelect-select')
                 if( index == 2 && findElement != null ) {
                   setDropOpenAsset(row.asset)
-                } else {
-                  handleOnClick(row)
+                  updateTableColumn([])
+                  /**
+                   * Retreive slack messages for this assets
+                   */
+                  retrieveSlackMessages(row.asset)
+                } else {                  
+                  if (!oldSelection.includes(`${row.asset}`)) {
+                    dispatch(setAssetTypesPatentsSelected([row.asset]))
+                    setSelectItems([row.asset])
+                    handleOnClick(row)
+                  } else {
+                    clearSelections()
+                  }                  
                 }
             } else {
               if( row.asset == dropOpenAsset ) {
                 setDropOpenAsset(null)
               } else {
-                handleOnClick(row)
+                if (!oldSelection.includes(row.asset)) {
+                  dispatch(setAssetTypesPatentsSelected([row.asset]))
+                  setSelectItems([row.asset])
+                  handleOnClick(row)
+                } else {
+                  clearSelections()
+                }  
               }
             }
           }                         
@@ -1031,6 +1584,13 @@ const checkMouseStillOnHover = (e, number) => {
     [dispatch, dashboardScreen, selectedAssetsPatents, selectItems, currentSelection, dropOpenAsset],
   );
 
+
+  const clearSelections = () => {
+    dispatch(setAssetTypesPatentsSelected([]))
+    setSelectItems([]); 
+    setCheckBar(!checkBar)
+    resetAll()
+  }
   /**
    * Click All checkbox
    */
@@ -1039,7 +1599,11 @@ const checkMouseStillOnHover = (e, number) => {
     async(event, row) => {
       event.preventDefault();
       const { checked } = event.target;
-      if (checked === false) {
+      setSelectItems([]);
+      dispatch(setAssetTypesPatentsSelected([]))
+      setSelectAll(false);
+      dispatch(setAssetTypesPatentsSelectAll(false))
+      /* if (checked === false) {
         setSelectItems([]);
         dispatch(setAssetTypesPatentsSelected([]))
       } else if (checked === true) {
@@ -1053,14 +1617,14 @@ const checkMouseStillOnHover = (e, number) => {
         dispatch(setAssetTypesPatentsSelected(items))
       }
       setSelectAll(checked);
-      dispatch(setAssetTypesPatentsSelectAll(checked))
+      dispatch(setAssetTypesPatentsSelectAll(checked)) */
     },
     [dispatch, assetRows ],
   );
 
   const findChannelID = useCallback((asset) => {
     let channelID = ''
-    if(slack_channel_list.length > 0) {
+    if(slack_channel_list.length > 0 && asset != undefined) {
       const findIndex = slack_channel_list.findIndex( channel => channel.name == `us${asset}`.toString().toLocaleLowerCase())
   
       if( findIndex !== -1) {

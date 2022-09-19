@@ -87,5 +87,31 @@ export default makeStyles((theme) => ({
         '& .MuiSvgIcon-root':{
             fontSize: '1rem'
         }
+    },
+    rating_container: {
+        '& .MuiRating-root':{
+            top: 3
+        }
+    },
+    rating_label: {
+        display: 'inline-block',
+        position: 'relative',
+        width: 75,
+        height: 21,
+        '& label':{
+            position: 'absolute',
+            top: 1
+        }
+    },
+    slack_container: {
+        position: 'relative',
+        display: 'flex',
+        width: 24,
+        height: 24,
+        '& svg': {
+            position: 'absolute',
+            left: -6,
+            bottom: -4
+        }
     }
 }))

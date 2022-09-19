@@ -16,6 +16,12 @@ const uiReducer = (state = initialState.ui, action) => {
         timelineScreen: action.flag 
       }
     }
+    case types.SET_PATENT_SCREEN: {
+      return { 
+        ...state,
+        patentScreen: action.flag 
+      }
+    }
     case types.SET_DASHBOARD_SCREEN: {
       return { 
         ...state,
@@ -26,6 +32,12 @@ const uiReducer = (state = initialState.ui, action) => {
       return { 
         ...state,
         dashboardPanel: action.flag 
+      }
+    }
+    case types.SET_LOADING_DASHBOARD_DATA: {
+      return { 
+        ...state,
+        loadingDashboardData: action.flag 
       }
     }
     case types.SET_SELECTED_TIMELINE_ITEM: {
@@ -103,6 +115,30 @@ const uiReducer = (state = initialState.ui, action) => {
       return {
         ...state,
         showThirdParties: action.flag,
+      }
+    }
+    case types.SET_DASHBOARD_VIEW: {
+      return {
+        ...state,
+        viewDashboard: action.views,
+      }
+    }
+    case types.SET_DASHBOARD_VIEW_INTIAL: {
+      return {
+        ...state,
+        viewInitial: action.flag,  
+      }
+    }
+    case types.SET_ASSET_BUTTON: {
+      return {
+        ...state,
+        assetButton: action.flag,
+      }
+    }
+    case types.SET_TRANSACTION_BUTTON: {
+      return {
+        ...state,
+        transactionButton: action.flag,
       }
     }
     case types.SET_RESET_UI_ALL: { 
