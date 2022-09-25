@@ -559,5 +559,10 @@ export default makeStyles(theme => ({
       wordBreak: 'keep-all',
       color: theme.palette.text.secondary 
     }    
+  },
+  redColor: {
+    '& .MuiBadge-badge':{
+      color: '#E60000'
+    }
   }
 }))

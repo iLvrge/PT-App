@@ -33,103 +33,70 @@ import AddToolTip from './AddToolTip'
 const Reports = (props) => {
     let LIST = [
         {
-            title: 'Broken Chain-of-Title',
+            title: 'Chain-of-Title',
             tooltip: 'Patent assets owned by the company, with ownership defects along the chain of title, such as rights not transferred by inventors.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
             type: 1,
-            list: []
+            list: [],
+            id: 1
         },
         {
-            title: 'Incorrect Names',
-            tooltip: 'Patent assets assigned under incorrect names, and unlikely to be found in a name search.',
-            number: 0,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 17,
-            list: []
-        },
-        {
-            title: 'Encumbrances',
-            tooltip: 'Patent assets subject to third party rights, which could harm the patents’ liquidity.',
-            number: 0,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 18,
-            list: []
-        },
-        {
-            title: 'Wrong Addresses',
-            tooltip: 'Patent assets assigned under incorrect addresses.',
-            number: 0,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 19,
-            list: []
-        },
-        {
-            title: 'To Be Monitized',
-            tooltip: 'Patent assets that are assigned to the company under a stated corresponding agent which is different from those currently employed by the company.',
-            number: 0,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 20,
-            list: []
-        },
-        {
-            title: 'Unecessary Patents',
-            tooltip: 'Patent assets covering technological areas which are far from the company\’s core technology.',
-            number: 0,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 21,
-            list: []
-        },
-        {
-            title: 'Un-Assigned',
+            title: 'To Assign',
             tooltip: '37 CFR § 1.46 Application for patent by an assignee: (b)(1) If the applicant is the assignee, documentary evidence of ownership ( e.g., assignment for an assignee, employment agreement for a person to whom the inventor is under an obligation to assign the invention) should be recorded as provided for in part 3 of this chapter no later than the date the issue fee is paid in the application.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
             type: 22,
-            list: []
+            list: [],
+            id: 2
         },
         {
-            title: 'Late Maintainance',
-            tooltip: 'Patents for which the company paid surcharge fees due to late payment of maintenance fees.',
+            title: 'Divest',
+            tooltip: 'Patent assets covering technological areas which are far from the company\’s core technology.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
-            type: 23
+            type: 21,
+            list: [],
+            id: 3
         },
         {
-            title: 'Corrected Recordings',
-            tooltip: 'Patent assets with recording that later on were corrected.',
+            title: 'To Monetize',
+            tooltip: 'Patent assets that are assigned to the company under a stated corresponding agent which is different from those currently employed by the company.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
-            type: 24,
-            list: []
+            type: 20,
+            list: [],
+            id: 4
         },
         {
-            title: 'Late Recordings',
-            tooltip: 'Patent assets exposed to third party\'s rights due to recording that was beyond 45 days from the transaction\’s execution date.',
+            title: 'Names',
+            tooltip: 'Patent assets assigned under incorrect names, and unlikely to be found in a name search.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
-            type: 25,
-            list: []
+            type: 17,
+            list: [],
+            id: 5
+        },
+        {
+            title: 'Addresses',
+            tooltip: 'Patent assets assigned under incorrect addresses.',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 19,
+            list: [],
+            id: 6
         },
         {
             title: 'Deflated Collateral',
@@ -139,7 +106,51 @@ const Reports = (props) => {
             application: '',
             rf_id: '',
             type: 26,
-            list: []
+            list: [],
+            id: 7
+        },
+        {
+            title: 'Encumbrances',
+            tooltip: 'Patent assets subject to third party rights, which could harm the patents’ liquidity.',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 18,
+            list: [],
+            id: 8
+        },
+        {
+            title: 'Maintainance',
+            tooltip: 'Patents for which the company paid surcharge fees due to late payment of maintenance fees.',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 23,
+            id: 9
+        },
+        {
+            title: 'Recordings',
+            tooltip: 'Patent assets exposed to third party\'s rights due to recording that was beyond 45 days from the transaction\’s execution date.',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 25,
+            list: [],
+            id: 10
+        },
+        {
+            title: 'Corrections',
+            tooltip: 'Patent assets with recording that later on were corrected.',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 24,
+            list: [],
+            id: 11
         },
         {
             title: 'Challenged',
@@ -149,7 +160,8 @@ const Reports = (props) => {
             application: '',
             rf_id: '',
             type: 27,
-            list: []
+            list: [],
+            id: 12
         }
     ];
 
@@ -298,7 +310,7 @@ const Reports = (props) => {
             type: 30,
         },
         {
-            title: 'Filled',
+            title: 'Invented',
             tooltip: 'The USA assets acquired by the company, minus those that were sold, expired and abandoned',
             number: 0,
             other_number: 0,

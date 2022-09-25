@@ -642,6 +642,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         dispatch(setAssetTypeInventor({ list: [], total_records: 0 }))
         dispatch(setAssetTypeAssignments({ list: [], total_records: 0 }))
         dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
+        dispatch(setMaintainenceAssetsList({list: [], total_records: 0}, {append: false}))
         dispatch(setAssetTypesPatentsSelected([]))
         dispatch(setAssetTypesPatentsSelectAll(false))
         dispatch(setAllAssignments(false))

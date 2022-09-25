@@ -276,7 +276,7 @@ class PatentTopTitle extends React.Component {
                  onClick={this.props.update}
                />
              </ListItemIcon>   
-             <ListItemText className={'show_label'}>Right Steps</ListItemText>             
+             <ListItemText className={'show_label'}>Rights</ListItemText>             
            </MenuItem>       
            <Divider /> 
              <MenuItem> 

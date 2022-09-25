@@ -296,7 +296,7 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
       return {
         ...state,
         maintainenceAssetsEventsList:  Object.assign({}, {
-          ...state.maintainenceAssetsList,
+          ...state.maintainenceAssetsEventsList,
           ['list']: action.data.list
         })
       }

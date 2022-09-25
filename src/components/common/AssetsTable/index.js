@@ -1037,7 +1037,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         staticIcon: "",
         format: capitalize
       }]
-      tableColumns[3].label = 'Clipboard'
+      tableColumns[2].label = 'Clipboard'
+      tableColumns.splice(3,1)
       setTableColumns(tableColumns)
       setWidth(1500)
       dispatch(setAssetTypeAssignmentAllAssets({list: clipboard_assets, total_records: clipboard_assets.length}))
@@ -1657,52 +1658,54 @@ const updateTableColumn = (ratingItems) => {
   }, [ tableColumns ] )
 
   const loadMoreRows =  (startIndex, endIndex) => {
-    setOffsetWithLimit([startIndex, endIndex])
-    const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-          tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-          customers =
-            selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
-          assignments =
-            selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
-    if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-      if (auth_token != null) {
-        dispatch(
-          process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
-          getCustomerAssets(
-            selectedCategory == '' ? '' : selectedCategory,
-            companies,
-            tabs,
-            customers,
-            assignments,
-            true,
-            startIndex,
-            endIndex,
-            sortField,
-            sortOrder,
-            assetTableScrollPosition
-          )
-          : 
-          getCustomerSelectedAssets(location.pathname.replace('/', ''))
-        );
-      }
-    } else {
-      if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
-        dispatch(
-          getCustomerAssets(
-            selectedCategory == '' ? '' : selectedCategory,
-            companies,
-            tabs,
-            customers,
-            assignments,
-            true,
-            startIndex,
-            endIndex,
-            sortField,
-            sortOrder,
-            assetTableScrollPosition,
-            display_sales_assets
-          ),
-        );
+    if(startIndex != endIndex && startIndex < totalRecords ) {
+      setOffsetWithLimit([startIndex, endIndex])
+      const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+            tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+            customers =
+              selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
+            assignments =
+              selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
+      if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+        if (auth_token != null) {
+          dispatch(
+            process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
+            getCustomerAssets(
+              selectedCategory == '' ? '' : selectedCategory,
+              companies,
+              tabs,
+              customers,
+              assignments,
+              true,
+              startIndex,
+              endIndex,
+              sortField,
+              sortOrder,
+              assetTableScrollPosition
+            )
+            : 
+            getCustomerSelectedAssets(location.pathname.replace('/', ''))
+          );
+        }
+      } else {
+        if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
+          dispatch(
+            getCustomerAssets(
+              selectedCategory == '' ? '' : selectedCategory,
+              companies,
+              tabs,
+              customers,
+              assignments,
+              true,
+              startIndex,
+              endIndex,
+              sortField,
+              sortOrder,
+              assetTableScrollPosition,
+              display_sales_assets
+            ),
+          );
+        }
       }
     }
   }

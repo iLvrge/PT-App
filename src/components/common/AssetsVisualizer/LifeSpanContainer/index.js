@@ -76,7 +76,9 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
     }, [ connectionBoxView, selectedRow ])
 
     useEffect(() => {
+        console.log('SPAN')
         const getChartData = async () => {
+            console.log('LIFE')
             if ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0) || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token === null)){
                 dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, []))
                 return null
@@ -189,7 +191,9 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
                 PatenTrackApi.cancelLifeSpanRequest()
                 const {data} = await PatenTrackApi.getAssetLifeSpan(form) 
                 dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, data))
-            } 
+            } else {
+                dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, []))
+            }
         }
         getChartData()
     }, [selectedCategory,  selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_sales_assets ])

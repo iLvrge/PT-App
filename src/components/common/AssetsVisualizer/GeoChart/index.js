@@ -80,6 +80,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
         return () => (isSubscribed = false)
     }, [selectedCompanies])
 
+
     useEffect(() => {
         let isSubscribed = true;
         const getAssetsForEachCountry = async() => {
@@ -113,7 +114,6 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                         totalRecords = list.length
                     }
                 } else {
-                    
                     if( assetsList.length > 0 || maintainenceAssetsList.length > 0 ) {
                         if( assetsList.length > 0 ) {
                             const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
@@ -125,7 +125,6 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                             totalRecords = maintainenceAssetsTotal
                         }
                     } else {
-                        
                         /**
                          * Check which layout and get the assets list first and then 
                          */
@@ -182,6 +181,8 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                 } 
                 if(list.length > 0 ) {
                     callChartData(list, totalRecords)
+                } else {
+                    setData([])
                 }
             } catch(err) {
                 console.log(err)
@@ -246,7 +247,9 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
         form.append('type', selectedCategory)
         const { data } = await PatenTrackApi.getAssetTypeAssignmentAllAssetsWithFamily(form)
         setLoading(false)
-        setData(data)
+        if( assetsList.length > 0 || assetsSelected.length > 0 || maintainenceAssetsList.length > 0 ||  selectedMaintainencePatents.length == 0  ) {
+            setData(data)
+        } 
     }
 
     const handleChangeTab = (e, newTab) => setSelectedTab(newTab)

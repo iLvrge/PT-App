@@ -162,7 +162,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         xStep: 1,
         yStep: 1,
         zStep: 3,
-        rotateAxisLabels: false,
+        /* rotateAxisLabels: false, */
         yCenter: '35.5%',
         xCenter: '55%',
         axisColor: '#ffffff',
@@ -172,9 +172,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         showShadow: false,
         keepAspectRatio: false,
         verticalRatio: 0.4,
-        xLabel: 'Filling Year',
+        xLabel: 'Filling',
         yLabel: 'Technologies',
-        zLabel: 'Number of Assets',
+        zLabel: 'Assets',
         tooltip: function (point) {
             // parameter point contains properties x, y, z, and data
             // data is the original object passed to the point constructor

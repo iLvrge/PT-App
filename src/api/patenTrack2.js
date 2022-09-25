@@ -70,7 +70,7 @@ const getFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest, cancelAllDashboardCountRequest;
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelSatusCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest, cancelAllDashboardCountRequest, cancelStatus;
 
 class PatenTrackApi {
 
@@ -1365,6 +1365,42 @@ class PatenTrackApi {
     if (cancelCitationCounter !== undefined) {
       try{
         throw cancelCitationCounter('Operation canceled by the user.')  
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
+  static getStatusData( applicationNumber ) {
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelStatus = c
+    })
+    return axios.get(`${base_new_api_url}/events/assets/status/${applicationNumber}`,  header)
+  } 
+  
+  static cancelStatusData () {
+    if (cancelStatus !== undefined) {
+      try{
+        throw cancelStatus('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
+  static getStatusCounter( applicationNumber ) {
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelSatusCounter = c
+    })
+    return axios.get(`${base_new_api_url}/events/assets/status/${applicationNumber}?counter=true`,  header)
+  } 
+  
+  static cancelSatusCounter () {
+    if (cancelSatusCounter !== undefined) {
+      try{
+        throw cancelSatusCounter('Operation canceled by the user.')  
       } catch (e){
         console.log('cancelRequest->', e)
       }

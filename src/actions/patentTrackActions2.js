@@ -558,7 +558,7 @@ export const getMaintainenceAssetsList = ( selectedCompanies, offset = 0, append
     dispatch(setMaintainenceAssetsLoadingMore(true))
     const { data } = await PatenTrackApi.getMaintainenceAssetsList(selectedCompanies, offset)
     dispatch(setMaintainenceAssetsLoadingMore(false))
-    dispatch(setMaintainenceAssetsList(data, { append: append }))
+    dispatch(setMaintainenceAssetsList(data, { append }))
   } 
 }
 
@@ -1664,7 +1664,7 @@ export const setAssetTableScrollPos = (pos) => {
 export const getAssetDetails = (applicationNumber, patentNumber) => {
   const asset = `US${applicationNumber}`
   return async dispatch => {
-    dispatch( setAssetDetails( {asset, family: 0, claims: 0, figures: 0, fees: 0, citations: 0, ptab: 0, litigation: 0 } ) )
+    dispatch( setAssetDetails( {asset, family: 0, claims: 0, figures: 0, fees: 0, citations: 0, ptab: 0, litigation: 0, status: 0 } ) )
     try{
       const family = await PatenTrackApi.getFamilyCounter( applicationNumber )    
       if(family !== null && family.data !== null) {
@@ -1714,6 +1714,14 @@ export const getAssetDetails = (applicationNumber, patentNumber) => {
     } catch (err) {
       console.log('counterError ptab', err)
     }
+    try{
+      const status = await PatenTrackApi.getStatusCounter( applicationNumber )    
+      if(status !== null && status.data !== null) {
+        dispatch( setAssetDetails( { status: status.data } ) )
+      }
+    } catch (err) {
+      console.log('counterError ptab', err)
+    }
 
     /* const litigation = await PatenTrackApi.getLitigationCounter( asset )    
     if(litigation !== null && litigation.data !== null) {
@@ -1732,7 +1740,7 @@ export const setAssetDetails = (assetData) => {
 export const resetAssetDetails = () => {
   return {
     type: types.SET_ASSET_DETAILS,
-    assetData: {asset: null, family: 0, claims: 0, figures: 0, fees: 0, citations: 0, ptab: 0, litigation: 0}
+    assetData: {asset: null, family: 0, claims: 0, figures: 0, fees: 0, citations: 0, ptab: 0, litigation: 0, status: 0}
   }
 } 
 

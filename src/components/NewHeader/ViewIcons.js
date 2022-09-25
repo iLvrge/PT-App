@@ -150,7 +150,6 @@ const ViewIcons = (props) => {
     }
 
     const onHandleDashboard = () => {
-        console.log('path', path, path.indexOf('/dashboard') )
         
         if(path.indexOf('/dashboard') == -1) {
             history.push('/dashboard') 
@@ -408,11 +407,11 @@ const ViewIcons = (props) => {
                                 s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z"  className="color000 svgShape"></path><path d="M23,38h8V28h-8V38z M25,30h4v6h-4V30z"  className="color000 svgShape"></path><rect width="23" height="2" x="34" y="32"  className="color000 svgShape"></rect><rect width="17" height="2" x="23" y="44"  className="color000 svgShape"></rect><rect width="34" height="2" x="23" y="54"  className="color000 svgShape"></rect><rect width="34" height="2" x="23" y="64"  className="color000 svgShape"></rect><rect width="2" height="4" x="38.968" y="9"  className="color000 svgShape"></rect></svg>
                             </Badge>
                         </IconButton> 
-                        <IconButton className={classes.buttonIcon} size="large">
+                        {/* <IconButton className={classes.buttonIcon} size="large">
                             <Badge badgeContent={0} color="secondary"> 
                                 <NotificationsNone/>
                             </Badge>         
-                        </IconButton> 
+                        </IconButton>  */}
                         {/* <AddToolTip
                             tooltip={`Search`}
                             placement='bottom'

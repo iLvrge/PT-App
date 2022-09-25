@@ -34,7 +34,7 @@ const FullScreen = ({componentItems, setScreen, showScreen, paper, share, handle
                 )
             }            
             <Modal
-                className={classes.fullscreenChartsModal}
+                className={clsx(classes.fullscreenChartsModal, 'fullscreenModal')}
                 open={isFullscreenOpen}
             > 
                 <Paper className={clsx(classes.fullscreenCharts, typeof paper !== 'undefined' && paper === false ? classes.noBackground : '', typeof full !== 'undefined' && full === false ? classes.noFullScreen : '')} square   >

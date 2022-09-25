@@ -259,6 +259,11 @@ export default makeStyles(theme => ({
     '& .vis-item.vis-range.asset-type-security-release-partial, .vis-item.vis-range.asset-type-default':{
       backgroundColor: '#228DE8 !important'
     },
+    '& .vis-item':{
+      '& .vis-item-overflow':{
+        overflow: 'visible',
+      }
+    },
     '& .vis-item.vis-range':{
       border: 0,
       '& .vis-item-overflow':{
@@ -266,7 +271,7 @@ export default makeStyles(theme => ({
         minHeight: 28,
         '& .vis-item-content':{
           width: '100%',
-          position: 'absolute',
+          position: 'relative',
           '& span':{
             whiteSpace: 'nowrap',
             display: 'block',

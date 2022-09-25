@@ -144,6 +144,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
         )
     }
 
+    
     return(
         <Paper className={classes.root} square>
 
@@ -191,7 +192,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                                     {selectedTab === 1 && <AbstractData data={abstractData} number={selectedNumber} />}
                                     {selectedTab === 2 && <SpecificationData data={specificationData} number={selectedNumber} />}                                    
                                     {selectedTab === 3 && <ClaimData data={claimsData} number={selectedNumber} />}                                    
-                                    {selectedTab === 4 && <FigureData data={figureData} number={selectedNumber} analyticsBar={analyticsBar} illustrationBar={illustrationBar} visualizerBarSize={visualizerBarSize}/>}
+                                    {selectedTab === 4 && <FigureData data={figureData} number={selectedNumber} analyticsBar={analyticsBar} illustrationBar={illustrationBar} visualizerBarSize={visualizerBarSize} standalone={standalone}/>}
                                 </Grid> 
                             </Grid>
                             :
