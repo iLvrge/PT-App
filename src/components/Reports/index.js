@@ -55,7 +55,7 @@ const Reports = (props) => {
             id: 2
         },
         {
-            title: 'Divest',
+            title: 'To Divest',
             tooltip: 'Patent assets covering technological areas which are far from the company\’s core technology.',
             number: 0,
             patent: '',

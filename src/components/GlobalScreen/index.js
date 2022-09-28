@@ -762,6 +762,8 @@ const GlobalScreen = ({
                                                 handleInventorBarOpen={handleInventorBarOpen}  
                                                 openOtherPartyBar={openOtherPartyBar}
                                                 handleOtherPartyBarOpen={handleOtherPartyBarOpen}
+                                                parentBarDrag={setVisualizerBarSize}
+                                                parentBar={setVisualizeOpenBar}
                                             /> 
                                         </div>
                                         <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}} id={`information_container`}>

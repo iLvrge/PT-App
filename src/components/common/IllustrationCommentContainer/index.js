@@ -30,6 +30,8 @@ import LawFirmTimeline from '../AssetsVisualizer/LawFirmTimeline'
 import GeoChart from '../AssetsVisualizer/GeoChart'
 import SankeyChart from '../AssetsVisualizer/SankeyChart'
 import TimelineSecurity from '../AssetsVisualizer/TimelineSecurity'
+import CorrectNamesTable from '../CorrectNamesTable'
+import CorrectAddressTable from '../CorrectAddressTable'
 
 const IllustrationCommentContainer = ({ 
     cls, 
@@ -71,6 +73,8 @@ const IllustrationCommentContainer = ({
     handleInventorBarOpen,
     openOtherPartyBar,
     handleOtherPartyBarOpen,
+    parentBarDrag,
+    parentBar,
     cube,
     ptab
     }) => {
@@ -287,7 +291,7 @@ const IllustrationCommentContainer = ({
                         :
                         cube === true && maintainenceFrameMode === false && assetIllustration === null
                         ?
-                            selectedCategory == 'collaterlized' ?
+                            selectedCategory == 'collaterlized' || selectedCategory == 'clear_encumbrances' ?
                                 <TimelineContainer 
                                     assignmentBar={assignmentBar} 
                                     assignmentBarToggle={assignmentBarToggle} 
@@ -401,6 +405,23 @@ const IllustrationCommentContainer = ({
                         ?
                             shouldShowTimeline
                             ?
+                                selectedCategory == 'incorrect_names' ?
+                                    <CorrectNamesTable
+                                        standalone={true}
+                                        parentBarDrag={parentBarDrag}
+                                        parentBar={parentBar}
+                                        type={type}
+                                    />
+                                : 
+                                    selectedCategory == 'incorrect_address'
+                                ?
+                                    <CorrectAddressTable 
+                                        standalone={true}
+                                        parentBarDrag={parentBarDrag}
+                                        parentBar={parentBar}
+                                        type={type}
+                                    />
+                                :
                                 selectedCategory == 'top_law_firms' 
                                 ?
                                     <LawFirmTimeline 
