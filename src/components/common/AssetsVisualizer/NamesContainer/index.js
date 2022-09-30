@@ -1,25 +1,39 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import { Chart, registerables } from 'chart.js';
 import { WordCloudController, WordElement } from 'chartjs-chart-wordcloud';
 
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import PatenTrackApi from '../../../../api/patenTrack2';
 import useStyles from './styles';
-import { Paper } from '@mui/material';
+import { Paper, Tab, Tabs } from '@mui/material';
+import { numberWithCommas } from '../../../../utils/numbers';
+import { SET_ASSET_TYPES_ASSIGNMENTS_ID_ASSETS_LOADING } from '../../../../actions/actionTypes2';
+import { setLoadingDashboardData } from '../../../../actions/uiActions';
+import { setAllAssignmentCustomers, setSelectAssignmentCustomers } from '../../../../actions/patentTrackActions2';
 
 
 const NamesContainer = () => {
     const classes = useStyles() 
+    const dispatch = useDispatch()
+    const [ tabs, setTabs ] = useState(['Incorrect Names'])
+    const [ selectedTab, setSelectedTab ] = useState(0)
+    const [ namesData, setNamesData ] = useState([])
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected );
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll);
+    
+    const footer = (tooltipItems) => {
+        console.log('tooltipItems', tooltipItems)
+        return ''
+    };
 
     useEffect(() => {
         const getIncorrectNamesData = async () => {
-
+            setNamesData([])
             const companies = selectedCompaniesAll === true ? [] : selectedCompanies;
             if(selectedCompaniesAll === true || selectedCompanies.length > 0) {
                 const {data} = await PatenTrackApi.getIncorrectNames(companies);
                 if(data.length > 0) {
+                    setNamesData(data)
                     const labels = [], values = []
                     const promise = data.map( item => {
                         labels.push(item.name)
@@ -35,10 +49,47 @@ const NamesContainer = () => {
                             labels,
                             datasets: [
                                 {
-                                    label: 'Inccorect Names',
-                                    data: [...values]
+                                    label: '',
+                                    data: [...values],
+                                    color: ["#E60000","#228DE8","#FFAA00","#70A800","#C0C000”,”#FFFFFF","#CA7C46"], 
                                 }
                             ]
+                        },
+                        options: {
+                            legend : {
+                                display : false
+                            },
+                            title : {
+                                display : false
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false,
+                                },
+                                chartArea: {
+                                    width: '95%',
+                                    height: '50%',
+                                    left: 30,
+                                    top: 20,
+                                },
+                                tooltip: { textStyle: { fontName: 'Roboto', fontSize: 12 } },
+                                tooltip: {
+                                    callbacks: {
+                                        title: tooltipItems => {
+                                            const findData = data[tooltipItems[0].dataIndex].count_assets
+                                            return `Assets: ${numberWithCommas(findData)}`
+                                        } ,
+                                        label: (tooltipItems) => { 
+                                            return ''
+                                        } 
+                                    }
+                                }
+                            },
+                            onClick: (event, item) => {
+                                const partyID = data[item[0].datasetIndex].id
+                                dispatch(setAllAssignmentCustomers(false))
+                                dispatch(setSelectAssignmentCustomers([partyID]))
+                            }
                         }
                     });
                 }
@@ -46,10 +97,33 @@ const NamesContainer = () => {
         }
         getIncorrectNamesData()
     }, [selectedCompanies, selectedCompaniesAll] )
+
+    const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
   
     return (
-        <Paper className={classes.graphContainer} square>  
-            <canvas id="canvas"></canvas>
+        <Paper className={classes.root} square>  
+            <Tabs
+                value={selectedTab}
+                variant="scrollable"
+                scrollButtons="auto"
+                onChange={handleChangeTab}
+                className={classes.tabs}
+            >
+                {
+                    tabs.map((tab) => (
+                        <Tab
+                            key={tab}
+                            label={tab}
+                            classes={{ root: classes.tab }}
+                        />
+                    )) 
+                }
+            </Tabs> 
+            {
+                selectedTab === 0 && namesData.length > 0 && (
+                    <canvas id="canvas"></canvas>
+                )
+            }
         </Paper> 
     )
 }
