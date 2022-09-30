@@ -1253,7 +1253,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           dispatch(linkWithSheetSelectedAsset('products', encodeURIComponent(grant_doc_num  == '' ? `US${applicationFormat(appno_doc_num)}` : `US${numberWithCommas(grant_doc_num)}`)))     
         }
         callSelectedAssets({ grant_doc_num, appno_doc_num, asset });
-        if(selectedCategory == 'pay_maintainence_fee' || selectedCategory == 'late_maintainance' || selectedCategory == 'ptab'){
+        if(selectedCategory == 'incorrect_names' || selectedCategory == 'pay_maintainence_fee' || selectedCategory == 'late_maintainance' || selectedCategory == 'ptab'){
           /**
            * Check if Right Pane is close then open it and close the TV
            */

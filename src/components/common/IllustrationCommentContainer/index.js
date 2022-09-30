@@ -32,6 +32,7 @@ import SankeyChart from '../AssetsVisualizer/SankeyChart'
 import TimelineSecurity from '../AssetsVisualizer/TimelineSecurity'
 import CorrectNamesTable from '../CorrectNamesTable'
 import CorrectAddressTable from '../CorrectAddressTable'
+import NamesContainer from '../AssetsVisualizer/NamesContainer'
 
 const IllustrationCommentContainer = ({ 
     cls, 
@@ -291,6 +292,9 @@ const IllustrationCommentContainer = ({
                         :
                         cube === true && maintainenceFrameMode === false && assetIllustration === null
                         ?
+                            selectedCategory == 'incorrect_names' ?
+                                <NamesContainer/>
+                            :
                             selectedCategory == 'collaterlized' || selectedCategory == 'clear_encumbrances' ?
                                 <TimelineContainer 
                                     assignmentBar={assignmentBar} 
@@ -406,12 +410,7 @@ const IllustrationCommentContainer = ({
                             shouldShowTimeline
                             ?
                                 selectedCategory == 'incorrect_names' ?
-                                    <CorrectNamesTable
-                                        standalone={true}
-                                        parentBarDrag={parentBarDrag}
-                                        parentBar={parentBar}
-                                        type={type}
-                                    />
+                                    <NamesContainer/>
                                 : 
                                     selectedCategory == 'incorrect_address'
                                 ?

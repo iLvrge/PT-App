@@ -342,18 +342,22 @@ const AssetDetailsContainer = ({
                           customerBarSize={customerBarSize} 
                           companyBarSize={companyBarSize}
                           type={type} />
-                    ) : familyItemMode === true ? (
-                        <FamilyItemContainer 
-                          item={selectedAssetsFamilyItem} 
-                          onClose={onCloseFamilyItemMode} 
-                          analyticsBar={analyticsBar} 
-                          chartBar={chartBar} 
-                          illustrationBar={illustrationBar}
-                          visualizerBarSize={visualizerBarSize} 
-                          type={type}
-                          {...( selectedCategory === 'pay_maintainence_fee' || selectedCategory === 'ptab'  ? {activeTab: selectedCategory === 'pay_maintainence_fee' ? 3 : 2} : {})} 
-                        />
-                    ) : (
+                    ) : familyItemMode === true ? 
+                          selectedCategory == 'incorrect_names'
+                          ?
+                            <ConnectionBox display={"false"} />
+                          :
+                            <FamilyItemContainer 
+                              item={selectedAssetsFamilyItem} 
+                              onClose={onCloseFamilyItemMode} 
+                              analyticsBar={analyticsBar} 
+                              chartBar={chartBar} 
+                              illustrationBar={illustrationBar}
+                              visualizerBarSize={visualizerBarSize} 
+                              type={type}
+                              {...( selectedCategory === 'pay_maintainence_fee' || selectedCategory === 'ptab'  ? {activeTab: selectedCategory === 'pay_maintainence_fee' ? 3 : 2} : {})} 
+                            />
+                    : (
                       <InventionVisualizer 
                         defaultSize={defaultSize} 
                         illustrationBar={openIllustrationBar} 

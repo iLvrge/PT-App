@@ -450,14 +450,14 @@ const Reports = (props) => {
             list: []
         },
         {
-            title: 'Employees',
+            title: 'Invention',
             standalone: false,
             rf_id: '',
             type: 5,
             list: []
         },
         {
-            title: 'Court',
+            title: 'Litigation',
             standalone: false,
             rf_id: '',
             type: 6,
@@ -1038,6 +1038,7 @@ const Reports = (props) => {
     const onHandleList = useCallback((id) => {
         /* process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' */
         let subscription = parseInt(profile?.user?.organisation?.subscribtion), timeline = false, patent = false, maintainence = false
+        
         if( subscription === 2 || subscription === 3 ) {
             let findIndex = -1
             if(id === 1 && viewDashboard.kpi === false) {                
@@ -1045,7 +1046,7 @@ const Reports = (props) => {
                 patent = true
             } else if(id === 17 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_names')
-                timeline = true
+                patent = true
             } else if(id === 18 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'clear_encumbrances')
                 patent = true

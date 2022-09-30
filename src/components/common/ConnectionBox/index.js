@@ -24,25 +24,41 @@ function ConnectionBox(props) {
   const classes = useStyles()
   const [ showSwitcher, setShowSwitcher ] = useState(0)
   const [ boxData, setBoxData ] = useState({})
-  const [ assetData, setAssetData ] = useState({})
+  const [ assetData, setAssetData ] = useState({popup: []})
   const [ fullView, setFullView ] = useState('')
   const [ visibility, setVisibility] = useState(false)
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
+  const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
+  const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
+  const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
+
 
   useEffect(() => {
     
     /* if(props.assets) {
       setAssetData(props.assets)
     } */
-    if(typeof props.connectionBoxData != 'undefined'){
+    if(typeof props.connectionBoxData != 'undefined' || selectedCategory == 'incorrect_names'){
+      
       (async () => {
-        const { data } = await PatenTrackApi.getConnectionData(props.connectionBoxData.popuptop)
-        const oldAssetsData = props.assets
-        if(typeof data.popup != 'undefined' ){
-          oldAssetsData.popup = data.popup
+        if(typeof props.assets != undefined ) {
+          setAssetData(props.assets)
         }
-        setAssetData(oldAssetsData)
-        setBoxData(data)
+        if(selectedCategory == 'incorrect_names') {
+          const { data } = await PatenTrackApi.getConnectionDataFromAsset(selectedAssetsPatents[1], selectedCompanies)
+          if(typeof data.popup != 'undefined' ){
+            setAssetData(data)
+            setBoxData(data)
+          }
+         
+          
+        } else {
+          const { data } = await PatenTrackApi.getConnectionData(props.connectionBoxData.popuptop)
+          if(typeof data.popup != 'undefined' ){
+            setAssetData(data)
+            setBoxData(data)
+          }
+        }
       })();
     }
     if(props.connectionBoxView == 'true') {
@@ -52,7 +68,7 @@ function ConnectionBox(props) {
     return (() => {
 
     })
-  },[ classes.fullView, props.assets, props.connectionBoxData, props.connectionBoxView ])
+  },[ classes.fullView, props.assets, props.connectionBoxData, props.connectionBoxView, selectedAssetsPatents ])
 
   const closeViewer = () => {
     props.setConnectionData({})
@@ -73,9 +89,9 @@ function ConnectionBox(props) {
   }
 
   const RetreieveBoxData = (props) => {
-    const info = assetData.popup && assetData.popup.filter(p => {
+    const info = typeof props.popup != undefined ? assetData.popup && assetData.popup.filter(p => {
       return p.id == props.popup.id
-    })
+    }) : assetData.popup[0]
     
     return (
       <Paper className={classes.rootContainer} square>
