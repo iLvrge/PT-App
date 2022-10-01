@@ -17,10 +17,6 @@ export default makeStyles(theme => ({
         '& .MuiTab-wrapper':{
             whiteSpace: 'nowrap'
         },
-        '& canvas': {
-            width: '100%',
-            height: '80%'
-        }
     },
     tabs: {
         minHeight: 47,

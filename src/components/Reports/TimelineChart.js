@@ -283,7 +283,7 @@ const TimelineChart = (props) => {
                 const element = document.getElementById(`timeline-${props.id}`);
                 const getPosition = element.getBoundingClientRect();  
                 
-                let tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${getPosition.y}px;left:${getPosition.x}px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
+                let tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${getPosition.y + 5}px;left:${getPosition.x}px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
                 <div style='display:flex;'><div style='display:flex;flex-direction: column;${typeof data.releaseAssignor != 'undefined' && data.releaseAssignor.length > 0 ? "max-width: 48%;margin-right: 10px;" : "" } '>                            
                 <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
                                             <div>

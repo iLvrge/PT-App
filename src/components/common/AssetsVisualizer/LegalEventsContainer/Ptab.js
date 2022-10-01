@@ -142,36 +142,33 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
                 const height = window.innerHeight|| document.documentElement.clientHeight || document.body.clientHeight; 
                 const element = document.getElementById('ptabTimeline');
                 const getPosition = element.getBoundingClientRect();  
-                let tootltipTemplate = `<div class='custom_tooltip' style='background:#1E2025;border: 1px solid rgba(255, 255, 255, 0.12) ;top:${getPosition.y}px;left:${getPosition.x}px;'>`
+                let tootltipTemplate = `<div class='custom_tooltip' style='background:#1E2025;border: 1px solid rgba(255, 255, 255, 0.12) ;top:${getPosition.y + 5}px;left:${getPosition.x}px;'>`
                 const { otherInfo } = item
-                console.log(otherInfo)
                 tootltipTemplate += `<table>
                     <tbody>
                         <tr>
-                            <td>${otherInfo['proceedingTypeCategory']}(${otherInfo['subproceedingTypeCategory']})</td>
-                            <td>${typeof otherInfo['proceedingNumber'] != 'undefined' ? otherInfo['proceedingNumber'] : ''}</td>
+                            <td>${otherInfo['proceedingTypeCategory']} (${otherInfo['subproceedingTypeCategory']}): ${typeof otherInfo['proceedingNumber'] != 'undefined' ? otherInfo['proceedingNumber'] : ''}</td>
                             <td>Filled: ${moment(new Date(otherInfo['proceedingFilingDate'])).format(DATE_FORMAT)}</td>
                         </tr>
                         <tr>
                             <td>Status: ${typeof otherInfo['proceedingStatusCategory'] != 'undefined' ?  otherInfo['proceedingStatusCategory'] : ''}</td>
-                            <td colspan='2'>Made: ${typeof otherInfo['decisionDate'] != 'undefined' ? moment(new Date(otherInfo['decisionDate'])).format(DATE_FORMAT) : ''}</td>
+                            <td>Made: ${typeof otherInfo['decisionDate'] != 'undefined' ? moment(new Date(otherInfo['decisionDate'])).format(DATE_FORMAT) : ''}</td>
                         </tr>
                         <tr>
-                            <td colspan='3'><span style='margin-top:20px;display:inline-block;'>Appelant: ${typeof otherInfo['appellantPartyName'] != 'undefined' ? otherInfo['appellantPartyName'] : ''}</span></td>
+                            <td colspan='2'><span style='margin-top:20px;display:inline-block;'>Appelant: ${typeof otherInfo['appellantPartyName'] != 'undefined' ? otherInfo['appellantPartyName'] : ''}</span></td>
                         </tr>
                         <tr>
-                            <td colspan='3'>Counsel: ${typeof otherInfo['appellantCounselName'] != 'undefined' ? otherInfo['appellantCounselName'] : ''}</td>
+                            <td colspan='2'>Counsel: ${typeof otherInfo['appellantCounselName'] != 'undefined' ? otherInfo['appellantCounselName'] : ''}</td>
                         </tr>
                         <tr>
                             <td>Patent: ${typeof otherInfo['appellantPatentNumber'] != 'undefined' ? otherInfo['appellantPatentNumber'] : ''}</td>
                             <td>Application: ${typeof otherInfo['appellantApplicationNumberText'] != 'undefined' ? otherInfo['appellantApplicationNumberText'] : ''}</td>
-                            <td>Publication: ${typeof otherInfo['appellantPublicationNumber'] != 'undefined' ? otherInfo['appellantPublicationNumber'] : ''}</td>
                         </tr>
                         <tr>
-                            <td colspan='3'>Inventor: ${typeof otherInfo['appellantInventorName'] != 'undefined' ? otherInfo['appellantInventorName'] : ''}</td>
+                            <td colspan='2'>Inventor: ${typeof otherInfo['appellantInventorName'] != 'undefined' ? otherInfo['appellantInventorName'] : ''}</td>
                         </tr>
                         <tr>
-                            <td colspan='3'><span style='margin-top:20px;display:inline-block;'>Respondent: ${ typeof otherInfo['respondentPartyName'] != 'undefined' ? otherInfo['respondentPartyName'] : ''}</span></td>
+                            <td colspan='2'><span style='margin-top:20px;display:inline-block;'>Respondent: ${ typeof otherInfo['respondentPartyName'] != 'undefined' ? otherInfo['respondentPartyName'] : ''}</span></td>
                         </tr>
                         <tr>
                             <td>Patent: ${ typeof otherInfo['respondentPatentNumber'] != 'undefined' ? otherInfo['respondentPatentNumber'] : ''}</td>

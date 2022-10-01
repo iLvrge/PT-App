@@ -261,6 +261,7 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
             if(element != null) {
                 const index = element.getAttribute('aria-colindex')
                 const findElement = element.querySelector('div.MuiSelect-select')
+                console.log(index);
                 if( index == 2 && findElement != null ) {
                     setDropOpenAsset(row.asset)
                 }

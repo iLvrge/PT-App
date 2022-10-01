@@ -32,7 +32,7 @@ function ConnectionBox(props) {
   const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
   const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
 
-
+console.log(assetData)
   useEffect(() => {
     
     /* if(props.assets) {
@@ -46,12 +46,11 @@ function ConnectionBox(props) {
         }
         if(selectedCategory == 'incorrect_names') {
           const { data } = await PatenTrackApi.getConnectionDataFromAsset(selectedAssetsPatents[1], selectedCompanies)
+          console.log('data', data)
           if(typeof data.popup != 'undefined' ){
             setAssetData(data)
             setBoxData(data)
           }
-         
-          
         } else {
           const { data } = await PatenTrackApi.getConnectionData(props.connectionBoxData.popuptop)
           if(typeof data.popup != 'undefined' ){
@@ -89,9 +88,9 @@ function ConnectionBox(props) {
   }
 
   const RetreieveBoxData = (props) => {
-    const info = typeof props.popup != undefined ? assetData.popup && assetData.popup.filter(p => {
+    const info = typeof props.popup != undefined && assetData != undefined ? assetData.popup && assetData.popup.filter(p => {
       return p.id == props.popup.id
-    }) : assetData.popup[0]
+    }) : assetData != undefined ? assetData.popup[0] : null
     
     return (
       <Paper className={classes.rootContainer} square>

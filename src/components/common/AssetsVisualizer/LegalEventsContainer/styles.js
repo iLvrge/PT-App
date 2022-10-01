@@ -264,7 +264,7 @@ export default makeStyles(theme => ({
     width: '100%',
     '& .custom_tooltip':{
       position:'absolute',  
-      width:'150px',
+      width:'200px',
       /* height:'150px', */
       background: theme.palette.background.default,
       border:`1px solid ${theme.palette.divider}`, 

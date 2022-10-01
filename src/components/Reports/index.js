@@ -597,11 +597,11 @@ const Reports = (props) => {
     }, [viewDashboard])
 
     useEffect(() => {
-        if(viewInitial === false && cardList.length > 0) {
+        if(viewInitial === false) {
             if(selectedCompanies.length > 0) {
-                if(viewDashboard.timeline === true) {
+                if(viewDashboard.timeline === true && timelineList.length > 0) {
                     callTimelineData()
-                } else {
+                } else if(cardList.length > 0){
                     findDashboardData()
                 }
             }
@@ -649,10 +649,10 @@ const Reports = (props) => {
                 setTimelineList(props.dashboardTimelineData)
             }
         }  else {
-            if(selectedCompanies.length > 0 && cardList.length > 0) {
-                if(viewDashboard.timeline === true) {
+            if(selectedCompanies.length > 0 ) {
+                if(viewDashboard.timeline === true && timelineList.length > 0) {
                     callTimelineData()
-                } else {
+                } else if(cardList.length > 0){
                     findDashboardData()
                 }
             } else {   

@@ -5,11 +5,10 @@ import { WordCloudController, WordElement } from 'chartjs-chart-wordcloud';
 import { useDispatch, useSelector } from 'react-redux'
 import PatenTrackApi from '../../../../api/patenTrack2';
 import useStyles from './styles';
-import { Paper, Tab, Tabs } from '@mui/material';
+import { Paper, Tab, Tabs, Typography } from '@mui/material';
 import { numberWithCommas } from '../../../../utils/numbers';
-import { SET_ASSET_TYPES_ASSIGNMENTS_ID_ASSETS_LOADING } from '../../../../actions/actionTypes2';
-import { setLoadingDashboardData } from '../../../../actions/uiActions';
-import { setAllAssignmentCustomers, setSelectAssignmentCustomers } from '../../../../actions/patentTrackActions2';
+import { setAllAssignmentCustomers, setAssetTypeAssignmentAllAssets, setSelectAssignmentCustomers } from '../../../../actions/patentTrackActions2';
+import TitleBar from '../../TitleBar';
 
 
 const NamesContainer = () => {
@@ -21,11 +20,6 @@ const NamesContainer = () => {
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected );
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll);
     
-    const footer = (tooltipItems) => {
-        console.log('tooltipItems', tooltipItems)
-        return ''
-    };
-
     useEffect(() => {
         const getIncorrectNamesData = async () => {
             setNamesData([])
@@ -37,7 +31,7 @@ const NamesContainer = () => {
                     const labels = [], values = []
                     const promise = data.map( item => {
                         labels.push(item.name)
-                        values.push(item.distance * 15)
+                        values.push( 50 + item.distance * 3)
                     })
                     await Promise.all(promise)
                     const ctx = document.getElementById('canvas')
@@ -56,12 +50,20 @@ const NamesContainer = () => {
                             ]
                         },
                         options: {
+                            chartArea: {
+                                width: '95%',
+                                height: '80%',
+                                left: 30,
+                                top: 20,
+                            },
                             legend : {
                                 display : false
                             },
                             title : {
                                 display : false
                             },
+                            padding: 10,
+                            minRotation: 90,
                             plugins: {
                                 legend: {
                                     display: false,
@@ -77,7 +79,7 @@ const NamesContainer = () => {
                                     callbacks: {
                                         title: tooltipItems => {
                                             const findData = data[tooltipItems[0].dataIndex].count_assets
-                                            return `Assets: ${numberWithCommas(findData)}`
+                                            return `Number of assets ${numberWithCommas(findData)} assigned under the incorrect assignee name: ${tooltipItems[0].label}`
                                         } ,
                                         label: (tooltipItems) => { 
                                             return ''
@@ -86,7 +88,8 @@ const NamesContainer = () => {
                                 }
                             },
                             onClick: (event, item) => {
-                                const partyID = data[item[0].datasetIndex].id
+                                const partyID = data[item[0].index].id
+                                dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }));
                                 dispatch(setAllAssignmentCustomers(false))
                                 dispatch(setSelectAssignmentCustomers([partyID]))
                             }
@@ -119,6 +122,8 @@ const NamesContainer = () => {
                     )) 
                 }
             </Tabs> 
+            <TitleBar title={`Select one of the  incorrect names below to see the list of assets that were assigned under it.`} enablePadding={true} underline={false}/>  
+            <TitleBar title={`Select an asset from the list to see the details of the incorrect assignment.`} enablePadding={true} underline={false}/>  
             {
                 selectedTab === 0 && namesData.length > 0 && (
                     <canvas id="canvas"></canvas>

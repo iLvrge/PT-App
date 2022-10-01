@@ -125,7 +125,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const [ salesData, setSalesData ] = useState([])
     const [ graphRawGroupData, setGraphRawGroupData ] = useState([])  
     let interval;
-    
+    console.log('assetsList', assetsList)
     const menuItems = [
         {
             id: 1,
@@ -146,7 +146,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             fYear: filterYear,
             vYear: valueYear, 
             vScope: valueScope, 
-            sRange: scopeRange
+            sRange: scopeRange,
+            fList: filterList,
+            fTotal: filterTotal,
         }
     ]
     let options = {
