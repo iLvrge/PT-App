@@ -158,6 +158,9 @@ const ViewIcons = (props) => {
         setTimelineView(false)
         dispatch(setAssetButton(false))
         dispatch(setTransactionButton(false))
+        if(props.openIllustrationBar === false) {
+            props.handleIllustrationBarOpen()
+        }
         if(props.dashboardScreen === false) {
             props.resetAllActivity('due_dilligence')
             props.setDashboardScreen()

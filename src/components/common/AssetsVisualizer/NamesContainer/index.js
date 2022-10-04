@@ -79,7 +79,7 @@ const NamesContainer = () => {
                                     callbacks: {
                                         title: tooltipItems => {
                                             const findData = data[tooltipItems[0].dataIndex].count_assets
-                                            return `Number of assets ${numberWithCommas(findData)} assigned under the incorrect assignee name: ${tooltipItems[0].label}`
+                                            return `Number of assets assigned under this incorrect name: ${numberWithCommas(findData)}`
                                         } ,
                                         label: (tooltipItems) => { 
                                             return ''

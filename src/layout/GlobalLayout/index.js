@@ -1460,10 +1460,12 @@ const GlobalLayout = (props) => {
                     <MobileHeader/>
                 :
                     <NewHeader 
+                        openIllustrationBar={openIllustrationBar}
                         openCommentBar={openCommentBar}
                         openCustomerBar={openCustomerBar}
                         openChartBar={openChartBar}
                         openAnalyticsBar={openAnalyticsBar}
+                        handleIllustrationBarOpen={handleIllustrationBarOpen}
                         handleCommentBarOpen={handleCommentBarOpen}
                         handleCustomersBarOpen={handleCustomersBarOpen}
                         checkChartAnalytics={checkChartAnalytics}

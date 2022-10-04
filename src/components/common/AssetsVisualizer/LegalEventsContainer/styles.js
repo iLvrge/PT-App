@@ -177,6 +177,11 @@ export default makeStyles(theme => ({
             width: '57%',
             lineHeight: 1.1
           },
+          '& .first.limit':{
+            height: 29,
+            overflow: 'hidden',
+            alignItems: 'flex-start'
+          },
           '& .second':{            
             fontSize: '0.875rem',
             lineHeight: '1.3',
@@ -237,6 +242,9 @@ export default makeStyles(theme => ({
               },
               '& path.svg_green': {
                 fill: '#70A800' 
+              },
+              '& path.none': {
+                fill: 'none' 
               }
             }
           },

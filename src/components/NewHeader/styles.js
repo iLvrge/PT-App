@@ -607,5 +607,13 @@ export default makeStyles(theme => ({
             width: '1rem !important', 
             height: '1rem !important'
         }
+    },
+    breadcrumbHeadingIcon: {
+        position: 'relative',
+        '& svg': {
+            position: 'relative',
+            top: 5,
+            marginRight: 5
+        }
     }
 }))

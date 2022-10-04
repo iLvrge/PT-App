@@ -13,6 +13,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Loader from '../../Loader'
 
 import useStyles from './styles'
+import { SettingsInputComponentSharp } from '@mui/icons-material'
 
 const options = { 
     height: '100%',
@@ -28,17 +29,25 @@ const options = {
 }
 const DATE_FORMAT = 'MMM DD, YYYY'
  
-const getTemplateContent = (item) => {   
-  const templateContent = `<div class='first'>${item.status}</div><div class='textColumn'>${moment(new Date(item.eventdate)).format(DATE_FORMAT)}</div><div class='absolute'> </div>`
+const getTemplateContent = (item, icons) => {   
+  let status = item.status, icon = '';
+  if(status.toLowerCase().indexOf('abandoned') !== -1) {
+    status = 'Abandoned'
+    icon = icons[1]
+  } else if(status.toLowerCase().indexOf('expire') !== -1) {
+    status = 'Expired'
+    icon = icons[0]
+  }
+  const templateContent = `<div class='first limit'>${status}</div><div class='textColumn'>${moment(new Date(item.eventdate)).format(DATE_FORMAT)}</div><div class='absolute icon'>${icon}</div>`
   return templateContent
 } 
 
-const convertDataToItem = (event) => {
+const convertDataToItem = (event, icons) => {
   const assetType =  'box'
   const date = new Date( event.eventdate )
   const item = {
     id: event.id,
-    content: getTemplateContent(event),
+    content: getTemplateContent(event, icons),
     start: date,
     type: assetType,
     rawData: event, 
@@ -61,6 +70,7 @@ const Status = ({ number, rawData, updateRawData, standalone }) => {
   const items = useRef(new DataSet())
   const [display, setDisplay] = useState('block')
   const [ timelineRawData, setTimelineRawData ] = useState([]) 
+  const [ allIcons, setAllIcons ] = useState([]) 
   const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(true)
   const [ isLoadingTimelineData, setIsLoadingTimelineData ] = useState(false)
   const [ tooltipItem, setToolTipItem] = useState([])
@@ -149,7 +159,8 @@ const Status = ({ number, rawData, updateRawData, standalone }) => {
   const processRawData = useCallback(() => {
     if(rawData.length > 0) {
       setIsLoadingTimelineRawData(false) 
-      setTimelineRawData(rawData)
+      setTimelineRawData(rawData.main)
+      setAllIcons(rawData.icons)
     } else {
       setIsLoadingTimelineRawData(false) 
       setTimelineRawData([])
@@ -163,8 +174,9 @@ useEffect(() => {
             processRawData()
         } else {
             setIsLoadingTimelineRawData(false) 
-            if(rawData.length > 0) {
-                setTimelineRawData(rawData)
+            if(rawData.main.length > 0) {
+                setTimelineRawData(rawData.main)
+                setAllIcons(rawData.icons)
             }
         }
     } else {
@@ -175,6 +187,7 @@ useEffect(() => {
             const { data } = await PatenTrackApi.getStatusData(selectedAssetsPatents[1])
             setIsLoadingTimelineRawData(false) 
             if(data !== null && data.main.length > 0 )  {
+              setAllIcons(data.icons)
               setTimelineRawData(data.main)
               updateRawData(data.main)
             }
@@ -187,7 +200,7 @@ useEffect(() => {
   useEffect(() => {
     if (isLoadingTimelineRawData) return 
    
-    const convertedItems = timelineRawData.map(convertDataToItem)
+    const convertedItems = timelineRawData.map((event) => convertDataToItem(event, allIcons))
 
     items.current = new DataSet()
     let start = new moment().subtract(5, 'year')
@@ -216,7 +229,7 @@ useEffect(() => {
     timelineRef.current.setItems(items.current) 
     timelineRef.current.setOptions({ ...options, start, end, min, max  }) 
     
-}, [ timelineRawData, isLoadingTimelineRawData, timelineContainerRef ])
+}, [ timelineRawData, allIcons, isLoadingTimelineRawData, timelineContainerRef ])
 
   return (
         <Paper className={`${classes.timelineRoot} timelineRoot`} square >

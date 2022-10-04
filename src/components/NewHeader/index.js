@@ -665,6 +665,8 @@ const resetAllActivity = (category) => {
               display_clipboard={display_clipboard}
               handleKeyDown={handleKeyDown}
               search_string={search_string}
+              openIllustrationBar={props.openIllustrationBar}
+              handleIllustrationBarOpen={props.handleIllustrationBarOpen}
             />
 
             {

@@ -634,9 +634,10 @@ const findChannelID = useCallback((rfID) => {
 
   const getTransactionData = (dispatch, rf_id, defaultLoad, search_string) => {
     setSelectedRow([rf_id]);    
-    if(chartsBar === false && analyticsBar === false) {
+    
+    /* if(chartsBar === false && analyticsBar === false) {
       checkChartAnalytics(null, null, false)
-    }
+    } */
     dispatch(transactionRowClick(rf_id, slack_channel_list, defaultLoad, search_string))
   };
 

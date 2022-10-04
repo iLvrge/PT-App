@@ -235,9 +235,7 @@ const IllustrationCommentContainer = ({
     const changePane =  useCallback(_debounce((size) => {
         fn2(size, fn2Params)
         fn(fnVarName, size, fnParams)   
-    }, 1), [  ])
-
-    
+    }, 1), [  ]) 
 
     return (
         <SplitPane
@@ -324,6 +322,8 @@ const IllustrationCommentContainer = ({
                                             illustrationBar={illustrationBar} 
                                             customerBarSize={customerBarSize} 
                                             companyBarSize={companyBarSize}
+                                            openChartBar={chartsBar}
+                                            handleChartBarOpen={chartsBarToggle}
                                             type={type} 
                                         />
                         :

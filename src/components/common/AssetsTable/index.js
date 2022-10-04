@@ -52,7 +52,8 @@ import {
   setAssetTableScrollPos,
   resetAssetDetails,
   getAssetDetails,
-  setSelectedMaintainenceAssetsList
+  setSelectedMaintainenceAssetsList,
+  setAssetsIllustrationData
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -907,7 +908,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   const [ tableColumns, setTableColumns ] = useState( selectedCategory == 'pay_maintainence_fee' ? MAINTAINCE_COLUMNS : COLUMNS)
 
   useEffect(() => {
-    console.log('ASSETS', display_clipboard, selectedAssetCompanies, selectedAssetCompaniesAll)
+    //console.log('ASSETS', display_clipboard, selectedAssetCompanies, selectedAssetCompaniesAll)
     if(display_clipboard === false) {
       setTableColumns(selectedCategory == 'pay_maintainence_fee' ? [...MAINTAINCE_COLUMNS] : [...COLUMNS])
       setWidth(1500)
@@ -1333,9 +1334,9 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         }),
         );
         dispatch(assetFamilySingle(appno_doc_num))
-        dispatch(assetLegalEvents(appno_doc_num, grant_doc_num));
-        dispatch(assetFamily(appno_doc_num));
-        dispatch(setSlackMessages({ messages: [], users: [] }));
+        dispatch(assetLegalEvents(appno_doc_num, grant_doc_num))
+        dispatch(assetFamily(appno_doc_num))
+        dispatch(setSlackMessages({ messages: [], users: [] }))
         const channelID = findChannelID(grant_doc_num != '' ? grant_doc_num : appno_doc_num)        
         if( channelID != '') {
           dispatch(setChannelID({channel_id: channelID}))
@@ -1347,9 +1348,22 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       } else {
         setCheckBar(!checkBar)
         resetAll()
+        console.log('selectedCategory', selectedCategory)
         if(selectedCategory == 'restore_ownership') {
           dispatch(setAssetTypesPatentsSelected([]))
           setSelectItems([])
+        } else if (selectedCategory == 'incorrect_names') {
+          console.log('selectedCategory', openChartBar, openAnalyticsBar, openIllustrationBar)
+          if(openChartBar === true) {
+            handleChartBarOpen()
+          }
+          if(openAnalyticsBar === true) {
+            handleAnalyticsBarOpen()
+          }
+          if(openIllustrationBar === false) {
+            handleIllustrationBarOpen('0%')
+            handleVisualBarSize(false, false, false, true)
+          }
         }
       }
     },
@@ -1359,17 +1373,18 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
 const resetAll = useCallback(() => {
     setSelectedRow([])
     dispatch(setAssetsIllustration(null))
+    dispatch(setAssetsIllustrationData(null))
     dispatch(setSelectedAssetsPatents([]))
     dispatch(setAssetFamily([]))
     dispatch(setFamilyItemDisplay({}))
     dispatch(setChannelID(''))
-    dispatch(setConnectionBoxView(false));
-    dispatch(setPDFView(false));
+    dispatch(setConnectionBoxView(false))
+    dispatch(setPDFView(false))
 
-    dispatch(toggleUsptoMode(false));
-    dispatch(toggleLifeSpanMode(true));
-    dispatch(toggleFamilyMode(false));
-    dispatch(toggleFamilyItemMode(false));
+    dispatch(toggleUsptoMode(false))
+    dispatch(toggleLifeSpanMode(true))
+    dispatch(toggleFamilyMode(false))
+    dispatch(toggleFamilyItemMode(false))
 
     dispatch(setDriveTemplateFrameMode(false))
 

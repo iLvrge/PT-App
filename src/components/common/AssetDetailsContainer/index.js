@@ -90,6 +90,7 @@ const AssetDetailsContainer = ({
   const usptoMode = useSelector(state => state.ui.usptoMode);
   const familyMode = useSelector(state => state.ui.familyMode);
   const familyItemMode = useSelector(state => state.ui.familyItemMode);
+  const familyActiveTab = useSelector(state => state.ui.familyActiveTab);
   const lifeSpanMode = useSelector(state => state.ui.lifeSpanMode);
   const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
   const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
@@ -185,8 +186,8 @@ const AssetDetailsContainer = ({
 
   const onCloseFamilyItemMode = useCallback(() => {
     dispatch(toggleFamilyItemMode(false));
-  }, [dispatch]);
-
+  }, [dispatch]); 
+  
   const changeContainer = () => {
     if (chartAnalyticsContainer.current != null) {
       const mainRoot = chartAnalyticsContainer.current.pane1.querySelector(
@@ -306,7 +307,7 @@ const AssetDetailsContainer = ({
                 } 
                 {
                   chartBar == true ? (
-                    cube === true && assetIllustration == null
+                    cube === true && familyItemMode === false && assetIllustration == null
                     ?
                       <GeoChart
                         chartBar={chartBar} 
@@ -355,7 +356,7 @@ const AssetDetailsContainer = ({
                               illustrationBar={illustrationBar}
                               visualizerBarSize={visualizerBarSize} 
                               type={type}
-                              {...( selectedCategory === 'pay_maintainence_fee' || selectedCategory === 'ptab'  ? {activeTab: selectedCategory === 'pay_maintainence_fee' ? 3 : 2} : {})} 
+                              {...( selectedCategory === 'pay_maintainence_fee' || selectedCategory === 'ptab'  ? {activeTab: selectedCategory === 'pay_maintainence_fee' ? 3 : 2} : {activeTab: familyActiveTab})} 
                             />
                     : (
                       <InventionVisualizer 
