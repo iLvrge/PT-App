@@ -701,6 +701,20 @@ export const controlList = [
         mainHeadingClass: 'acquisition',
         redirect: routeList.invent
     },
+    {
+        type: 'menu',
+        mainHeading: 'Uncollateralized',
+        subHeading: '',
+        svg: '',
+        image: `https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/invent.png`,
+        class: 'hex-6',
+        breadCrumbs: 'Uncollateralized',
+        category: 'uncollateralized',
+        layout_id: 5,
+        showSvg: false,
+        mainHeadingClass: 'acquisition',
+        redirect: routeList.invent
+    },
 ]
 
 export const menuControlList = [

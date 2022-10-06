@@ -592,13 +592,13 @@ const resetAllActivity = (category) => {
   } */
   const findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == category)
   if( findIndex !== -1 ) {
-      //hideMenu(event, controlList[findIndex])
-      resetAll()
-      clearOtherItems()
-      dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))  
-      if(category == 'due_dilligence' || category == 'restore_ownership') {
-          dispatch(setSwitchAssetButton(controlList[findIndex].category == 'due_dilligence' ? 0 : 1))
-      }
+    //hideMenu(event, controlList[findIndex])
+    resetAll()
+    clearOtherItems()
+    dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))  
+    if(category == 'due_dilligence' || category == 'restore_ownership') {
+      dispatch(setSwitchAssetButton(controlList[findIndex].category == 'due_dilligence' ? 0 : 1))
+    }
   }
 }
 

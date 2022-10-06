@@ -8,7 +8,7 @@ import { setAssetButton, setTransactionButton, setViewDashboardIntial, updateVie
 import useStyles from './styles'
 import clsx from 'clsx'
 import AddToolTip from '../Reports/AddToolTip'
-import { IconButton, Badge, InputBase } from '@mui/material'
+import { IconButton, Badge, InputBase, Button } from '@mui/material'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faShareAlt, faCalendar
@@ -176,6 +176,15 @@ const ViewIcons = (props) => {
         props.setPatentAssets()
     }
 
+    const getUnCollatealized = () => {
+        dispatch(setAssetButton(true))
+        dispatch(setTransactionButton(false))
+        setPatentView(true)
+        setTimelineView(false)
+        props.resetAllActivity('uncollateralized')
+        props.setPatentAssets() 
+    }
+
     const onHandleSearch = () => {
         setOpenSearch(!openSearch)
     }
@@ -253,6 +262,7 @@ const ViewIcons = (props) => {
      
     return(
         <React.Fragment>
+            <Button onClick={getUnCollatealized}>Uncollateralized</Button>
             {
                 profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'
                 && (
