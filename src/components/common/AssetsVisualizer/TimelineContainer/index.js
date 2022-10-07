@@ -146,7 +146,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     const companyName =  selectedWithName.filter( company => assetsCustomer.company == company.id ? company.name : '')
     const customerFirstName = assetsCustomer.tab_id == 10 ? assetsCustomer.customerName.split(' ')[0] : assetsCustomer.customerName
     const item = {
-      type: 'point',
+      type: 'point', 
       start: new Date(assetsCustomer.exec_dt),
       customerName: selectedCategory == 'proliferate_inventors' ? customerFirstName : `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
       assetType,
@@ -178,6 +178,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
   }
 
   // Custom ToolTip
+  console.log('Timeline Container')
   
   const showTooltip = (item, event) => {    
       setTimeout(() => {

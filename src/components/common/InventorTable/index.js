@@ -276,6 +276,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             rowSelected={selectedRow}
 			selectedIndex={currentSelection}
             selectedKey={'id'}
+            scrollToIndex={true}
             rows={assetTypeInventors}
             rowHeight={rowHeight}
             headerHeight={headerRowHeight}  
