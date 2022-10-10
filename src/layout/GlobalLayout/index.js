@@ -3,7 +3,7 @@ import React, { useEffect, useLayoutEffect, useState, useCallback, createContext
 import { useDispatch, useSelector } from 'react-redux'
 
 import { 
-    useHistory,
+    useHistory, useLocation,
   } from 'react-router-dom'  
 
 import { Grid} from '@mui/material'
@@ -58,6 +58,7 @@ const GlobalLayout = (props) => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
+    const location = useLocation()
     const BarContext = createContext()
     const [ openBar, setOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? false : true)
     const [ openTypeBar, setTypeOpenBar ] = useState(false)
@@ -157,8 +158,7 @@ const GlobalLayout = (props) => {
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
     const timelineScreen = useSelector(state => state.ui.timelineScreen)
     const patentScreen = useSelector(state => state.ui.patentScreen)
-
-
+    
     useEffect(() => {
         if(openVisualizerBar === false && visualizerBarSize != '0%') {
             setVisualizerBarSize('0%')
@@ -218,16 +218,22 @@ const GlobalLayout = (props) => {
     }, [props.type])
 
     useEffect(() => {
-        if(patentScreen === true && openCustomerBar === false) {
+        if(dashboardScreen === false && patentScreen === true && openCustomerBar === false) {
             handleCustomersBarOpen()
         }
     }, [patentScreen])  
 
     useEffect(() => {
-        if(dashboardScreen === true && profile?.user && profile.user?.organisation && profile.user.organisation.organisation_type == 'Bank' && props.type != 9 && openOtherPartyBar === false) {
+        if((dashboardScreen === true || location.pathname == '/dashboard' ) && profile?.user && profile.user?.organisation && profile.user.organisation.organisation_type == 'Bank' && props.type != 9 && openOtherPartyBar === false) {
             handleOtherPartyBarOpen()
         }
     }, [dashboardScreen]) 
+
+    useEffect(() => { 
+        if( location.pathname == '/dashboard') { 
+            handleResetScreen('Dashboard', null)
+        }
+    }, [location, openCustomerBar])
     
 
     /**
@@ -542,8 +548,7 @@ const GlobalLayout = (props) => {
         
         if(event.key === 'ArrowDown' || event.key === 'ArrowUp' ) {
             let tableContainer = document.getElementById('assets_type_assignment_all_assets'), findActiveRow = null
-            if(tableContainer !== null) {
-                console.log(12345678)
+            if(tableContainer !== null) { 
                 /* findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightWithCol.Mui-selected') */
                 findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightRow.Mui-selected')
                 if(findActiveRow === null) {
@@ -848,7 +853,7 @@ const GlobalLayout = (props) => {
             barSize = '100%'
 
         } else if((!bar === false && openCommentBar === false) || (!bar === true && openCommentBar === false)) {
-            barSize = 0  
+            barSize = '0%'  
             
         }
         if(!bar === true) {
@@ -866,7 +871,7 @@ const GlobalLayout = (props) => {
         let bar = openCommentBar, barSize = '30%'
         setCommentBar( !bar )
         if((!bar === false && openIllustrationBar === false) || (!bar === false && openIllustrationBar === true)) {
-            barSize = 0    
+            barSize = '0%'    
 
         } else if(!bar === true && openIllustrationBar === false) {
             barSize = '100%'
@@ -878,7 +883,7 @@ const GlobalLayout = (props) => {
                 setChartBar(false)
                 setAnalyticsBar(false)
             }            
-        }
+        } 
         setCommentBarSize(barSize)
         changeVisualBar(openChartBar, openAnalyticsBar, !bar, openIllustrationBar)
     }  
@@ -1072,7 +1077,7 @@ const GlobalLayout = (props) => {
     }    
 
     const handleResetScreen = (type, event) => {
-        if(type == 'Dashboard') {
+        if(type == 'Dashboard') { 
             if(openCustomerBar === true){
                 handleCustomersBarOpen(event)
             }  

@@ -1757,3 +1757,10 @@ export const setDashboardShareData = (data) => {
     data
   }
 }
+
+export const setSelectLawFirm = (data) => {
+  return {
+    type: types.SET_LAWFIRM_SELECTED,  
+    data
+  }
+}

@@ -43,7 +43,7 @@ const options = {
   zoomMin: 1000 * 60 * 60 * 24 * 7, // 7 days
   /* zoomMax: 1000 * 60 * 60 * 24 * 30 * 3, */ // 3months
   cluster: {
-    titleTemplate: 'Cluster containing {count} events. Zoom in to see the individual events.',
+    titleTemplate: 'Cluster containing {count} events.\nZoom in to see the individual events.',
     showStipes: false,
     clusterCriteria: (firstItem, secondItem) => {
       return ( firstItem.rawData.law_firm_id === secondItem.rawData.law_firm_id  ||  ( firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID))
@@ -127,7 +127,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
   const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(false)
   const search_string = useSelector(state => state.patenTrack2.search_string)
   const search_rf_id = useSelector(state => state.patenTrack2.search_rf_id)
-
+  const selectedLawFirm = useSelector( state => state.patenTrack2.selectedLawFirm);
 
   //Item for the timeline
 
@@ -416,7 +416,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
               const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
               tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
               customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
-              rfIDs = selectedAssetAssignments.length > 0 ? selectedAssetAssignments : [];
+              rfIDs = [selectedLawFirm];
       
               if( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
                 //setIsLoadingTimelineData(true)
@@ -444,7 +444,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
     }
     return () => (isSubscribed = false)
     
-  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors, auth_token, switch_button_assets, selectedCategory ])
+  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, selectedLawFirm, search_string, assetTypeInventors, auth_token, switch_button_assets, selectedCategory ])
 
   useEffect(() => {
     if(typeof timelineData !== 'undefined') {

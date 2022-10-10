@@ -479,8 +479,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             setFilterYear(yearLabelList)            
             setValueYear([yearLabelList[0].value, yearLabelList[yearLabelList.length - 1].value]) 
         }
-
+         
         if( typeof range === 'undefined' && typeof scope ===  'undefined'  && data.group.length > 0 && dashboardScreen === false) {
+            setValueRange(4) 
             setValueScope([ data.group[0].id, data.group[data.group.length - 1].id ])
         }    
         if(typeof scope == 'undefined' && dashboardScreen === false) {

@@ -374,8 +374,10 @@ export default makeStyles(theme => ({
       overflow: 'hidden'
     },
     '& .vis-timeline':{
-      border: '0 !important',
-      /* backgroundColor: '#424242 !important', */
+      border: 0,
+      borderTop:`1px solid ${theme.palette.divider}`, 
+      borderBottom:`1px solid ${theme.palette.divider}`, 
+      backgroundColor: `${theme.palette.background.paper}!important`,
       '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground':{
         /* backgroundColor: '#424242 !important', */
       }
@@ -417,7 +419,7 @@ export default makeStyles(theme => ({
       borderColor: indigo[500],
       backgroundColor: indigo[500],
       '&.asset-type-default': {
-        backgroundColor: theme.palette.background.default,
+        backgroundColor: /* theme.palette.background.default */ 'unset',
         border: 0,
         width: '9.6rem',
         borderRadius: '3px',

@@ -89,7 +89,7 @@ export default makeStyles(theme => ({
     },
     kpiNumber: {
       display: 'flex',
-      height: '63%',
+      height: '100%',
       alignItems: 'center',
       justifyContent: 'center'
     },
@@ -98,7 +98,7 @@ export default makeStyles(theme => ({
     },
     kpiNumberSmall:{
       display: 'flex',
-      height: '22.5%',
+      padding: '15px 0px',
       alignItems: 'center',
       justifyContent: 'center'
     },
@@ -281,6 +281,7 @@ export default makeStyles(theme => ({
     chartContainer: {
       position: 'relative',
       display: 'flex',
+      flexDirection: 'column',
       justifyContent: 'center',
       marginLeft: 'auto',
       marginRight: 'auto',
@@ -461,9 +462,9 @@ export default makeStyles(theme => ({
       right: 0
     },
     actionButton: {
-      position: 'absolute',
+      /* position: 'absolute',
       left: 0,
-      bottom: 5,
+      bottom: 5, */
       textTransform: 'initial',
       whiteSpace: 'nowrap',
       textOverflow: 'ellipsis'  
@@ -638,4 +639,11 @@ export default makeStyles(theme => ({
       height: 20,
       zIndex: 999999
   },  
+  boxContainer: {
+    display: 'flex',
+    height: '100%',
+    flexDirection: 'column',
+    justifyContent:'center',
+    alignItems: 'center'
+  }
 }));

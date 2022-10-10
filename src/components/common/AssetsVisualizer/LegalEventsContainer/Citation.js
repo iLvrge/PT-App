@@ -238,8 +238,7 @@ const Citation = ({ number, citationRawData, updateCitationRawData }) => {
 
 
     return(
-        <Paper className={classes.root}>   
-            <div className={classes.root}>
+        <Paper className={classes.timelineRoot} square>    
                 <div
                     id={`citationTimeline`}
                     style={{ 
@@ -250,7 +249,6 @@ const Citation = ({ number, citationRawData, updateCitationRawData }) => {
                     className={classes.timelineCitation}
                 />
                 { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> } 
-            </div>
         </Paper>
     )
 }

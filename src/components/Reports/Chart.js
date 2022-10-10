@@ -20,15 +20,25 @@ const Chart = (props) => {
     }
     return (
         <div className={clsx(classes.chartContainer, {[classes.widthResponsive]: props.lineGraph})}>
-            <div className={clsx(classes.headingContainer, classes.headerContainerPosition)}>
+            <div className={clsx(classes.headingContainer )}>
                 <AddToolTip
                     tooltip={props.card.tooltip}
                     placement={'bottom'}
                     grid={props.grid}
                 >
-                    <Typography variant="h6" component="div" align="center" className={classes.title}>
-                        {props.card.title}
-                    </Typography>
+                    <span>
+                        <Button 
+                            size="small" 
+                            variant="outlined" 
+                            className={clsx(classes.actionButton)} 
+                            onClick={() => props.handleList(props.id, props.card.type)}
+                            disabled={
+                                (parseInt(props.card?.number) > 0 || (props.card?.list && props.card.list.length > 0)) ? false : true
+                            }
+                        >
+                            { props.card.title }
+                        </Button> 
+                    </span>
                 </AddToolTip>  
             </div>
             {
@@ -54,48 +64,6 @@ const Chart = (props) => {
                         formatTextValue={displayNumber}
                     />    
             }
-            <Button 
-                size="small" 
-                variant="outlined" 
-                className={clsx(classes.actionButton)} 
-                onClick={() => props.handleList(props.id, props.card.type)}
-                disabled={
-                    (parseInt(props.card?.number) > 0 || (props.card?.list && props.card.list.length > 0)) ? false : true
-                }
-            >
-                {   parseInt(profile?.user?.organisation?.subscribtion) > 2 ? 
-                        'View List' 
-                        : 
-                        parseInt(profile?.user?.organisation?.subscribtion) === 2 && (props.type < 3 ) ?
-                            'View List'
-                        :
-                            'Upgrade and Fix it!' 
-                }
-            </Button>    
-            {
-                props.card?.number != '0'
-                ?
-                    <AddToolTip
-                        tooltip='See Example'
-                        placement='bottom'
-                    >
-                        <IconButton 
-                            size="small" 
-                            onClick={() => props.handleClick(props.id)} 
-                            className={clsx(classes.exampleButton, props.active === props.id ? classes.active : '')}
-                        >
-                            <AutoAwesomeIcon />
-                        </IconButton>  
-                    </AddToolTip>  
-                :
-                    <IconButton 
-                        size="small" 
-                        className={clsx(classes.exampleButton)}
-                        disabled={true}
-                    >
-                        <AutoAwesomeIcon />
-                    </IconButton>     
-            } 
         </div>
     )
 }

@@ -25,6 +25,7 @@ import GeoChart from "../AssetsVisualizer/GeoChart"
 import GoogleCharts from "../AssetsVisualizer/GoogleCharts"
 import TimelineSecurity from "../AssetsVisualizer/TimelineSecurity"
 import ErrorBoundary from '../ErrorBoundary'
+import LawFirmNames from "../AssetsVisualizer/NamesContainer/LawFirmNames"
 
 const AssetDetailsContainer = ({
   cls,
@@ -317,14 +318,9 @@ const AssetDetailsContainer = ({
                         titleBar={true}
                       />
                     :
-                    timelineScreen === true  && assetIllustration == null
+                    timelineScreen === true  && assetIllustration == null && selectedCategory == 'top_law_firms'
                     ?
-                      <GoogleCharts
-                        chartBar={chartBar} 
-                        openCustomerBar={openCustomerBar} 
-                        visualizerBarSize={visualizerBarSize}
-                        type={type}
-                      />
+                      <LawFirmNames/>
                     :                  
                     connectionBoxView === true ? (
                         <PdfViewer

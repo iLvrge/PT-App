@@ -206,11 +206,12 @@ function SettingsPage() {
   }
 
   const handleHomeLink = useCallback(() => {    
-    history.push('/') 
+    history.push('/dashboard') 
     setTimeout(() => {
       dispatch(
         setBreadCrumbs('')
       )
+      dispatch(setDashboardScreen(true))
       /* dispatch(
         setControlModal(true)
       ) */

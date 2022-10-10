@@ -166,12 +166,25 @@ const IllustrationCommentContainer = ({
     ] 
 
     useEffect(() => {
+        let val = '0px'
+        if(commentBar === true) {
+            val = defaultSize
+        }
+        setContainerSize(val)
+        if(illustrationRef !== null) {
+            const container = illustrationRef.current.splitPane;
+            container.querySelector('div.Pane2').style.height = val
+        }
+    }, [defaultSize, commentBar])
+
+    
+    useEffect(() => {
         checkChartAnalytics(null, null, false)
     }, [sankey, invention, jurisdictions, lineGraph])
 
     useEffect(() => {
         updateResizerBar(illustrationRef, commentBar, 1)
-    }, [ illustrationRef, commentBar ])   
+    }, [ illustrationRef, commentBar ])
 
     useEffect(() => {        
         if(new_drive_template_file != null && Object.keys(new_drive_template_file).length > 0 && new_drive_template_file.hasOwnProperty('id')) {
@@ -236,13 +249,13 @@ const IllustrationCommentContainer = ({
         fn2(size, fn2Params)
         fn(fnVarName, size, fnParams)   
     }, 1), [  ]) 
-
+ 
     return (
         <SplitPane
             className={cls}
             split={split}
             minSize={minSize}
-            defaultSize={defaultSize}
+            defaultSize={containerSize}
             onDragStarted={() => {
                 setIsDrag(!isDrag)
             }}

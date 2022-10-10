@@ -13,6 +13,7 @@ import React, {
   import PatenTrackApi, { DEFAULT_CUSTOMERS_LIMIT } from "../../../api/patenTrack2";
   import {capitalizeEachWord} from '../../../utils/numbers'
   import Loader from "../Loader";
+import { setSelectLawFirm } from "../../../actions/patentTrackActions2";
   
   const LawFirmTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaultLoad, type }) => {
     const classes = useStyles();
@@ -128,6 +129,8 @@ import React, {
   const onHandleClickRow = useCallback(
     (e, row) => {
       e.preventDefault();
+      setSelectItems([row.id])
+      dispatch(setSelectLawFirm(row.id))
     },
     [dispatch]
   );

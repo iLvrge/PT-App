@@ -27,6 +27,10 @@ export default makeStyles(theme => ({
     },
     '& .vis-time-axis .vis-text':{
       padding: '1px 3px'
+    },
+    '& .vis-tooltip':{
+      width: 260,
+      whiteSpace: 'normal !important'
     }
   },  
   loader: {

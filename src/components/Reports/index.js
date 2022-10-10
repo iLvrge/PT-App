@@ -44,7 +44,7 @@ const Reports = (props) => {
             id: 1
         },
         {
-            title: 'To Assign',
+            title: 'To Record',
             tooltip: '37 CFR § 1.46 Application for patent by an assignee: (b)(1) If the applicant is the assignee, documentary evidence of ownership ( e.g., assignment for an assignee, employment agreement for a person to whom the inventor is under an obligation to assign the invention) should be recorded as provided for in part 3 of this chapter no later than the date the issue fee is paid in the application.',
             number: 0,
             patent: '',
@@ -380,7 +380,7 @@ const Reports = (props) => {
             type: 36
         },
         {
-            title: 'Members of Owned USA',
+            title: 'Non-U.S. Members',
             tooltip: 'Countries in which the company has the largest number of patents.',
             number: 0,
             patent: '',

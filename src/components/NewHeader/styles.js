@@ -68,7 +68,7 @@ export default makeStyles(theme => ({
         alignItems: 'center',
         width: '14rem', 
         justifyContent: 'flex-start', 
-        cursor: 'pointer',
+        /* cursor: 'pointer', */
         overflow: 'hidden',
         '@media (max-width: 70em)': {
         //paddingLeft: 15
@@ -517,7 +517,8 @@ export default makeStyles(theme => ({
         '&:hover':{
             color: '#E60000',
             backgroundColor: 'transparent', 
-        } */      
+        } */     
+        cursor: 'default' 
     },
     actionMenuList: {
         '& .MuiPaper-root':{

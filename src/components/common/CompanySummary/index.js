@@ -136,7 +136,7 @@ const CompanySummary = () => {
     }
 
     return(
-        <div style={{height: '50vh', marginLeft: 35}}>
+        <div style={{height: '50vh', marginLeft: 25}}>
             <VirtualizedTable
                 classes={classes}
                 rows={companyData}

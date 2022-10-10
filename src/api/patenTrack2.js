@@ -835,8 +835,8 @@ class PatenTrackApi {
   }
   
 
-  static getLawFirmsByCompany(companies) {
-    return axios.get(`${base_new_api_url}/customers/lawfirm?companies=${JSON.stringify(companies)}`, getHeader())
+  static getLawFirmsByCompany(companies, rfID) {
+    return axios.get(`${base_new_api_url}/customers/lawfirm?companies=${JSON.stringify(companies)}&rfID=${rfID}`, getHeader())
   }
 
   static getLawFirms() {

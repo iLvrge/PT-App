@@ -818,6 +818,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state, 
           dashboard_share_selected_data: action.data
         }
+      case types.SET_LAWFIRM_SELECTED:
+        return { 
+          ...state, 
+          selectedLawFirm: action.data
+        }
       default:   
       return state
   } 

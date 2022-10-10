@@ -71,6 +71,7 @@ export default {
     assetsPatentsLoading: false,
     gridWidthClassNumber: 12, 
     activeMenuButton: -1,
+    selectedLawFirm: 0,
     assets: assetsTypes.reduce((result, assetType) => {
       result[assetType] = {} 
       return result 
