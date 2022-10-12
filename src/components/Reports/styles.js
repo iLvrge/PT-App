@@ -91,16 +91,18 @@ export default makeStyles(theme => ({
       display: 'flex',
       height: '100%',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
     },
     topMargin: {
       marginTop: 10
     },
     kpiNumberSmall:{
       display: 'flex',
-      padding: '15px 0px',
+      padding: '2.1vh 0px',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      fontSize: '1.8vw',
+      lineHeight: '2.5vh'
     },
     border: {  
       /* borderTop: `1px solid ${theme.palette.divider}`, */
@@ -467,7 +469,8 @@ export default makeStyles(theme => ({
       bottom: 5, */
       textTransform: 'initial',
       whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis'  
+      textOverflow: 'ellipsis',
+      fontSize: '1.2vw'  
     },
     shareIcon:{
       '& svg':{
@@ -514,6 +517,7 @@ export default makeStyles(theme => ({
       width: '100%',
       overflow: 'auto',
       boxShadow: 'none',
+      marginTop: '2vh',
       /* marginTop:15, */
       '& .MuiListItem-root':{
         padding: 0
@@ -525,17 +529,17 @@ export default makeStyles(theme => ({
     itemContainer: {
       position: 'relative',
       '& .MuiTypography-root': {
-        lineHeight: 1,
-        height: 20,
+        lineHeight: '2.4vh',
+        height: '2.4vh',
       }
     },
     itemHeading: {
       display: 'inline-block',
       width: '70%',
       overflow: 'hidden',
-      height: 18,
+      height: '2.4vh',
       marginRight: 5,
-      fontSize: '1.1rem',
+      fontSize: '1.1vw',
       position: 'absolute',
       left: 0,
       whiteSpace: 'nowrap',
@@ -550,7 +554,8 @@ export default makeStyles(theme => ({
       top: 0,
       width: '25%',
       textAlign: 'right',
-      fontSize: '1.1rem',
+      fontSize: '1.1vw',
+      lineHeight: '2.4vh',
       height: 18,
       right: 5
     },
@@ -614,7 +619,7 @@ export default makeStyles(theme => ({
       justifyContent: 'flex-start'
     },
     headingContainer:{
-      padding: '7px 10px 5px',
+      padding: '2.5vh 0 0',
     },
     headerContainerPosition: {
       position: 'absolute',
