@@ -284,7 +284,7 @@ const ViewIcons = (props) => {
                 )
             }
             
-            {/* <AddToolTip
+            <AddToolTip
                 tooltip={'Matters that require attention such as patents with defective ownership.'}
                 placement='bottom'
             >
@@ -298,7 +298,7 @@ const ViewIcons = (props) => {
                         <Speed/> 
                     </IconButton>
                 </span>
-            </AddToolTip> */}
+            </AddToolTip>
            {/*  <AddToolTip
                 tooltip={'Changes in matters requiring attention along a timeline.'}
                 placement='bottom'

@@ -100,7 +100,7 @@ const GlobalLayout = (props) => {
     const [ driveBarSize, setDriveBarSize ] = useState('50%')
     const [ assignmentBarSize, setAssignmentBarSize ] = useState(180)  
     const [ addressBarSize, setAddressBarSize ] = useState(450)
-    const [ customerBarSize, setCustomerBarSize ] = useState(0)
+    const [ customerBarSize, setCustomerBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? 120 : 0)
     const [ commentBarSize , setCommentBarSize ] = useState('0%'/* '30%' */)
     const [ illustrationBarSize , setIllustrationBarSize ] = useState('50%')
     const [ visualizerBarSize , setVisualizerBarSize ] = useState('0%')
@@ -158,6 +158,8 @@ const GlobalLayout = (props) => {
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
     const timelineScreen = useSelector(state => state.ui.timelineScreen)
     const patentScreen = useSelector(state => state.ui.patentScreen)
+
+    console.log('openCustomerBar', openCustomerBar)
     
     useEffect(() => {
         if(openVisualizerBar === false && visualizerBarSize != '0%') {

@@ -26,6 +26,7 @@ import GoogleCharts from "../AssetsVisualizer/GoogleCharts"
 import TimelineSecurity from "../AssetsVisualizer/TimelineSecurity"
 import ErrorBoundary from '../ErrorBoundary'
 import LawFirmNames from "../AssetsVisualizer/NamesContainer/LawFirmNames"
+import SankeyChart from "../AssetsVisualizer/SankeyChart"
 
 const AssetDetailsContainer = ({
   cls,
@@ -206,6 +207,8 @@ const AssetDetailsContainer = ({
       }
     }
   };
+
+  console.log('selectedCategory', selectedCategory)
   return (
     <div style={{ height: "100%" }} className={classes.root}>
       {
@@ -318,6 +321,12 @@ const AssetDetailsContainer = ({
                         titleBar={true}
                       />
                     :
+                    timelineScreen === true  && assetIllustration == null && selectedCategory == 'due_dilligence'
+                    ?
+                      <SankeyChart
+                        type={'acquired'}
+                      />
+                    : 
                     timelineScreen === true  && assetIllustration == null && selectedCategory == 'top_law_firms'
                     ?
                       <LawFirmNames/>
@@ -383,7 +392,13 @@ const AssetDetailsContainer = ({
                 {
                   analyticsBar === true 
                     ? 
-                      timelineScreen === true  && assetIllustration == null
+                      timelineScreen === true  && assetIllustration == null && selectedCategory == 'due_dilligence'
+                      ?
+                        <SankeyChart
+                          type={'divested'}
+                        />
+                      :
+                      timelineScreen === true  && assetIllustration == null 
                       ?
                         <TimelineSecurity
                           chartBar={chartBar} 

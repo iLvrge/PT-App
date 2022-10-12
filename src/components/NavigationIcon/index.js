@@ -50,6 +50,7 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
     
     if((selectedCategory  != 'due_dilligence' /* && selectedCategory  != 'proliferate_inventors' && selectedCategory != 'top_lenders' */ && removeFilterICONS.includes(t)) || ( dashboardScreen === true  && !dashboardICONS.includes(t))) return null
        
+    console.log('NAVIGATION', t, bar)
     return (
         <div className={clsx(classes.showIcon, {[classes.marginBottom25]: typeof margin !== 'undefined' && margin === true && typeof isMobile !== 'undefined' && isMobile === false, [classes.mobile]: typeof isMobile !== 'undefined' && isMobile === true})}> 
             <Tooltip 
@@ -65,14 +66,14 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
                     <IconButton
                         {...(disabled == undefined && { onClick: click })}
                         className = {
-                            process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'
+                            /* process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'
                                 ?
                                     t != 5 && bar === true 
                                         ? 'active'
                                 :
                                     ''
                                 
-                            :
+                            : */
                             bar === true   ? 'active' 
                             :  
                             t === 1 &&  highlight == undefined && (selectedCompanies.length > 0 || selectedCompaniesAll === true) ? 'selection_indicator'

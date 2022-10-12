@@ -199,7 +199,8 @@ const GlobalScreen = ({
             }            
         }, 1000) */
     }
- 
+    
+     
 
     useEffect(() => {
         if(process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' && auth_token !== null) {
