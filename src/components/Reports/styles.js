@@ -55,10 +55,10 @@ export default makeStyles(theme => ({
             justifyContent: 'center',
             flexDirection: 'column',
             alignContent: 'start',
-            height: /* 'calc((100vh - 190px) / 3)', */117,
-            flexBasis: '210px !important',
-            maxWidth: '210px !important',
-            minWidth: '210px !important',
+            height: '10vh',
+            flexBasis: '15vw !important',
+            maxWidth: '15vw !important',
+            minWidth: '15vw !important',
             '& svg': {
                 display: 'flex',
                 /* height: '70%' */
