@@ -96,11 +96,11 @@ const CompanySummary = () => {
            
             if( Object.keys(data).length > 0 ) {
                 let summaryData = [];
-                Object.keys(data).forEach( key => {
+                Object.keys(data).forEach( key => { 
                     summaryData.push({
-                        name: capitalize(key),
+                        name: capitalize(key == 'entities' ? 'Parties' : key == 'parties' ? '3rd Parties' : key),
                         number: numberWithCommas(data[key]),
-                        iconLink: `https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/${key}.svg`
+                        iconLink: `https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/${key == 'entities' ? 'parties' : key}.svg`
                     })
                 })                
                 setCompanyData(summaryData)
