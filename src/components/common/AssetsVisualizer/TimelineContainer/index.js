@@ -571,12 +571,12 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       items.current.add(convertedItems.slice(0, startIndex))      
     }    
 
-    if(selectedCategory == 'proliferate_inventors') {
+    if (convertedItems.length > 50) {
       options.cluster = {
         titleTemplate: 'Cluster containing {count} events. Zoom in to see the individual events.',
         showStipes: false,
         clusterCriteria: (firstItem, secondItem) => {
-          return ( firstItem.rawData.law_firm_id === secondItem.rawData.law_firm_id  ||  ( firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID))
+          return ( (firstItem.rawData.name_id > 0 && secondItem.rawData.name_id > 0 && firstItem.rawData.name_id === secondItem.rawData.name_id) ||  ( firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID))
         }
       }
     }

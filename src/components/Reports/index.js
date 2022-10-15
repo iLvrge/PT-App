@@ -301,7 +301,7 @@ const Reports = (props) => {
     const KPI_LIST = [
         {
             title: 'Owned',
-            tooltip: 'The USA assets assigned to the company from its inventors, plus assets acquired by the company, minus those that were sold, expired  and abandoned.',
+            tooltip: 'USA assets invented by the company\'s employees and assets assigned to the company from 3rd parties. Excluding assets that were sold, abandoned or expired.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -311,7 +311,7 @@ const Reports = (props) => {
         },
         {
             title: 'Invented',
-            tooltip: 'The USA assets acquired by the company, minus those that were sold, expired and abandoned',
+            tooltip: 'USA assets invented by the company’s employees. Excluding assets that have been sold, abandoned, or expired.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -321,7 +321,7 @@ const Reports = (props) => {
         }, 
         {
             title: 'Acquired',
-            tooltip: 'The USA assets assigned to the company from its inventors and others, minus those that were sold, expired or abandoned',
+            tooltip: 'USA assets, which have not been sold, abandoned, or expired, assigned to the company other than from its employees.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -331,7 +331,7 @@ const Reports = (props) => {
         },
         {
             title: 'Collateralized',
-            tooltip: 'Patents the company abandoned, i.e. for which the company has not paid maintenance fees.',
+            tooltip: 'USA assets subject to unreleased security rights.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -341,7 +341,7 @@ const Reports = (props) => {
         },
         {
             title: 'Maintenance Fee Due',
-            tooltip: 'Maintenance fees to be paid in the next twelve months.',
+            tooltip: 'USA assets for which maintenance fee is due for payment in the next 12 months.',
             number: 0,
             patent: '',
             application: '',
@@ -351,7 +351,7 @@ const Reports = (props) => {
         },
         {
             title: 'Challenged (PTAB)',
-            tooltip: 'Non-abandoned patents applications the company acquired from third parties.',
+            tooltip: 'USA assets under past or present PTAB proceedings.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -361,7 +361,7 @@ const Reports = (props) => {
         },
         {
             title: 'Divested',
-            tooltip: 'Patent applications which are still in the process of prosecution.',
+            tooltip: 'USA assets assigned from the company to others.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -371,7 +371,7 @@ const Reports = (props) => {
         },
         {
             title: 'Abandoned',
-            tooltip: 'Non-abandoned patent applications filed by the company\’s employees.',
+            tooltip: 'USA patent applications the prosecution of which discontinued, and USA patents expired due to non-payment of maintenance fees.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -381,7 +381,7 @@ const Reports = (props) => {
         },
         {
             title: 'Non-U.S. Members',
-            tooltip: 'Countries in which the company has the largest number of patents.',
+            tooltip: 'Owned USA assets, which have non-U.S.A. members.',
             number: 0,
             patent: '',
             application: '',
@@ -401,7 +401,7 @@ const Reports = (props) => {
         },
         {
             title: 'Law Firms',
-            tooltip: 'The company\’s law firms with the largest number of registered transactions.',
+            tooltip: 'The company\’s law firms with the largest number of recorded transactions.',
             number: 0,
             patent: '',
             application: '',
