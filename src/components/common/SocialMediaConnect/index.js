@@ -43,6 +43,24 @@ const SocialMediaConnect = () => {
         }, 500)
     }
 
+    const SlackIcon = () => {
+        return (
+            <img 
+                alt='Sign in with Slack' 
+                src='https://patentrack.com/wp-content/uploads/2022/01/slack-logo.svg' 
+            />              
+        )
+    }
+
+    const MicrosoftIcon = () => {
+        return (
+            <img 
+                alt='Sign in with Microsoft' 
+                src='https://patentrack.com/wp-content/uploads/2022/01/microsoft-logo.svg' 
+            />              
+        )
+    }
+
     return (
         <Paper className={classes.root} square>
             <Tooltip 
@@ -50,17 +68,17 @@ const SocialMediaConnect = () => {
                   <Typography color="inherit" variant='body2'>{/* Once you sign in to your Slack Workspace, we will create for you a dedicated channel in your Workspace for each of the patents and application in the Assets list. Just select an asset and start writing to your Workspace members in the text bar below.<br/>Whatever you write will be saved only in your Slack Workspace. */}Sign in to your Slack account</Typography>
                 } 
                 className={classes.tooltip}  
-                placement='left'
+                placement='top'
                 enterDelay={0}
                 TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
-            >
-                <Button 
+            > 
+                <Button
+                    color="inherit" 
                     onClick={() => onHandleSlackLogin(900, 830) }
+                    className={classes.button}
+                    startIcon={<SlackIcon className={classes.icon} />} 
                 >
-                    <img 
-                        alt='Sign in with Slack' 
-                        src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/sign_in_with_slack_new.png' 
-                    />
+                    Slack
                 </Button>
             </Tooltip>
             <Tooltip 
@@ -68,17 +86,17 @@ const SocialMediaConnect = () => {
                   <Typography color="inherit" variant='body2'>{/* Once you sign in to your Slack Workspace, we will create for you a dedicated channel in your Workspace for each of the patents and application in the Assets list. Just select an asset and start writing to your Workspace members in the text bar below.<br/>Whatever you write will be saved only in your Slack Workspace. */}Sign in to your Microsoft account</Typography>
                 } 
                 className={classes.tooltip}  
-                placement='left'
+                placement='top'
                 enterDelay={0}
                 TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
             >
-                <Button 
+                <Button
+                    color="inherit" 
                     onClick={() => onHandleSlackLogin(900, 830) }
+                    className={classes.button}
+                    startIcon={<MicrosoftIcon className={classes.icon} />} 
                 >
-                    <img 
-                        alt='Sign in with Microsoft' 
-                        src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/sign_in_microsoft_new.png' 
-                    />
+                    Microsoft
                 </Button>
             </Tooltip>
         </Paper>

@@ -16,6 +16,16 @@ export default makeStyles(theme => ({
         fontSize: '1rem'
     },
     button: {
-        borderRadius: '0px'
+        borderRadius: 100,
+        textTransform: 'initial',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        padding: '17px 28px',
+        width: 205,
+        '&:hover':{
+            borderColor: 'rgba(255, 255, 255, 0.08)'
+        }
+    },
+    icon: {
+        marginRight: 5
     }
 }))
