@@ -30,6 +30,9 @@ import LawFirmTimeline from '../AssetsVisualizer/LawFirmTimeline'
 import GeoChart from '../AssetsVisualizer/GeoChart'
 import SankeyChart from '../AssetsVisualizer/SankeyChart'
 import TimelineSecurity from '../AssetsVisualizer/TimelineSecurity'
+import CorrectNamesTable from '../CorrectNamesTable'
+import CorrectAddressTable from '../CorrectAddressTable'
+import NamesContainer from '../AssetsVisualizer/NamesContainer'
 
 const IllustrationCommentContainer = ({ 
     cls, 
@@ -71,6 +74,8 @@ const IllustrationCommentContainer = ({
     handleInventorBarOpen,
     openOtherPartyBar,
     handleOtherPartyBarOpen,
+    parentBarDrag,
+    parentBar,
     cube,
     ptab
     }) => {
@@ -161,12 +166,25 @@ const IllustrationCommentContainer = ({
     ] 
 
     useEffect(() => {
+        let val = '0px'
+        if(commentBar === true) {
+            val = defaultSize
+        }
+        setContainerSize(val)
+        if(illustrationRef !== null) {
+            const container = illustrationRef.current.splitPane;
+            container.querySelector('div.Pane2').style.height = val
+        }
+    }, [defaultSize, commentBar])
+
+    
+    useEffect(() => {
         checkChartAnalytics(null, null, false)
     }, [sankey, invention, jurisdictions, lineGraph])
 
     useEffect(() => {
         updateResizerBar(illustrationRef, commentBar, 1)
-    }, [ illustrationRef, commentBar ])   
+    }, [ illustrationRef, commentBar ])
 
     useEffect(() => {        
         if(new_drive_template_file != null && Object.keys(new_drive_template_file).length > 0 && new_drive_template_file.hasOwnProperty('id')) {
@@ -230,16 +248,14 @@ const IllustrationCommentContainer = ({
     const changePane =  useCallback(_debounce((size) => {
         fn2(size, fn2Params)
         fn(fnVarName, size, fnParams)   
-    }, 1), [  ])
-
-    
-
+    }, 1), [  ]) 
+ 
     return (
         <SplitPane
             className={cls}
             split={split}
             minSize={minSize}
-            defaultSize={defaultSize}
+            defaultSize={containerSize}
             onDragStarted={() => {
                 setIsDrag(!isDrag)
             }}
@@ -287,7 +303,10 @@ const IllustrationCommentContainer = ({
                         :
                         cube === true && maintainenceFrameMode === false && assetIllustration === null
                         ?
-                            selectedCategory == 'collaterlized' ?
+                            selectedCategory == 'incorrect_names' ?
+                                <NamesContainer/>
+                            :
+                            selectedCategory == 'collaterlized' || selectedCategory == 'clear_encumbrances' ?
                                 <TimelineContainer 
                                     assignmentBar={assignmentBar} 
                                     assignmentBarToggle={assignmentBarToggle} 
@@ -316,6 +335,8 @@ const IllustrationCommentContainer = ({
                                             illustrationBar={illustrationBar} 
                                             customerBarSize={customerBarSize} 
                                             companyBarSize={companyBarSize}
+                                            openChartBar={chartsBar}
+                                            handleChartBarOpen={chartsBarToggle}
                                             type={type} 
                                         />
                         :
@@ -401,6 +422,18 @@ const IllustrationCommentContainer = ({
                         ?
                             shouldShowTimeline
                             ?
+                                selectedCategory == 'incorrect_names' ?
+                                    <NamesContainer/>
+                                : 
+                                    selectedCategory == 'incorrect_address'
+                                ?
+                                    <CorrectAddressTable 
+                                        standalone={true}
+                                        parentBarDrag={parentBarDrag}
+                                        parentBar={parentBar}
+                                        type={type}
+                                    />
+                                :
                                 selectedCategory == 'top_law_firms' 
                                 ?
                                     <LawFirmTimeline 

@@ -85,6 +85,13 @@ const uiReducer = (state = initialState.ui, action) => {
       }
     }
 
+    case types.SET_FAMILY_ACTIVE_TAB: {
+      return { 
+        ...state,
+        familyActiveTab: action.data
+      }
+    }
+
     case types.SET_CONTROL_MODAL: {
       return { 
         ...state,

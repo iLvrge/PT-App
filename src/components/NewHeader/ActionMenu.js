@@ -36,7 +36,9 @@ import {
     FindInPage as FindInPageIcon,
     Link as LinkIcon,
     Tv as TvIcon,
-    Check
+    Check,
+    AppsOutage,
+    Speed
 } from '@mui/icons-material'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -134,7 +136,7 @@ const ActionMenu = (props) => {
     const profile = useSelector(store => (store.patenTrack.profile))
     const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected);
     const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected);
- 
+    const viewDashboard = useSelector(state => state.ui.viewDashboard) 
 
     /**
      * Open Menu
@@ -690,7 +692,28 @@ const ActionMenu = (props) => {
         props.setMaintaincePatentAssets()
     }
 
-    
+    const ShowIcon = ({layoutName}) => {
+        return (
+            <React.Fragment>
+                {
+                    layoutName == 'Owned' || layoutName == 'Invented' || layoutName == 'Acquired' || layoutName == 'Collaterlized' || layoutName == 'Maintenance Fee Due' || layoutName == 'Challenged (PTAB)' || layoutName == 'Divested' || layoutName == 'Abandoned' || layoutName == 'Members of Owned USA' || layoutName == 'Proliferate Inventors' || layoutName == 'Law Firms' || layoutName == 'Lenders'
+                    ? 
+                        <span className={classes.breadcrumbHeadingIcon}>
+                            <AppsOutage/>
+                        </span>
+                    :
+                        layoutName == 'Chain-of-Title' || layoutName == 'To Assign' || layoutName == 'To Divest' || layoutName == 'To Monetize' || layoutName == 'Names' || layoutName == 'Addresses' || layoutName == 'Deflated Collateral' || layoutName == 'Encumbrances' || layoutName == 'Maintainance' || layoutName == 'Recordings' || layoutName == 'Corrections'
+                        ?
+                            <span className={classes.breadcrumbHeadingIcon}>
+                                <Speed/>
+                            </span>
+                        :
+                            ''
+                }
+                {layoutName}
+            </React.Fragment>
+        )
+    }
     
     return (
         <div>
@@ -714,13 +737,13 @@ const ActionMenu = (props) => {
                 :
                     <Button
                         id="action-menu"
-                        aria-controls="app-patentrack-action-menu"
+                        variant="text"
+                        /* aria-controls="app-patentrack-action-menu"
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
-                        variant="text"
                         disableElevation
                         onClick={handleClick}
-                        startIcon={open === false ? <KeyboardArrowDown /> : <KeyboardArrowUp/>}
+                        startIcon={open === false ? <KeyboardArrowDown /> : <KeyboardArrowUp/>} */
                         className={classes.btnActionMenu}
                     >
                         <span style={{whiteSpace: 'nowrap'}}>
@@ -735,23 +758,35 @@ const ActionMenu = (props) => {
                                 :
                                     props.dashboardScreen === true
                                     ?
-                                        'Dashboard'
+                                        viewDashboard.kpi === true
+                                        ?
+                                            'KPI'
+                                        :
+                                            viewDashboard.gauge === true
+                                            ?
+                                                'Attention'
+                                            :
+                                                viewDashboard.timeline === true
+                                                ?
+                                                    'Activites'
+                                                :
+                                                    'Dashboard'
                                     :
                                         props.timelineScreen === true
                                         ?
-                                            props.layoutName != '' ? props.layoutName : 'Transactions'
+                                            props.layoutName != '' ? <ShowIcon  layoutName={props.layoutName} /> : 'Transactions'
                                         :
                                             props.patentScreen === true
                                             ?
                                                 props.layoutName != '' && props.layoutName != 'Due Diligence > Legal Ownership'
                                                 ?
-                                                    props.layoutName
+                                                    <ShowIcon  layoutName={props.layoutName} />
                                                 :
                                                     'Assets'
                                             :
                                                 props.selectedCategory !== 'due_dilligence'
                                                 ? 
-                                                    props.layoutName     
+                                                     <ShowIcon  layoutName={props.layoutName} />
                                                 : 
                                                     'Action' 
                             } 

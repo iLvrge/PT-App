@@ -199,6 +199,8 @@ const GlobalScreen = ({
             }            
         }, 1000) */
     }
+    
+     
 
     useEffect(() => {
         if(process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' && auth_token !== null) {
@@ -292,8 +294,7 @@ const GlobalScreen = ({
                 setChartBar( !openChartBar )
             }
         }
-    }, [ openVisualizerBar ])
-    
+    }, [ openVisualizerBar ]) 
 
     useEffect(() => {
         updateResizerBar(companyRef, openBar)
@@ -762,6 +763,8 @@ const GlobalScreen = ({
                                                 handleInventorBarOpen={handleInventorBarOpen}  
                                                 openOtherPartyBar={openOtherPartyBar}
                                                 handleOtherPartyBarOpen={handleOtherPartyBarOpen}
+                                                parentBarDrag={setVisualizerBarSize}
+                                                parentBar={setVisualizeOpenBar}
                                             /> 
                                         </div>
                                         <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}} id={`information_container`}>

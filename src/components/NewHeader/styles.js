@@ -68,7 +68,7 @@ export default makeStyles(theme => ({
         alignItems: 'center',
         width: '14rem', 
         justifyContent: 'flex-start', 
-        cursor: 'pointer',
+        /* cursor: 'pointer', */
         overflow: 'hidden',
         '@media (max-width: 70em)': {
         //paddingLeft: 15
@@ -517,7 +517,8 @@ export default makeStyles(theme => ({
         '&:hover':{
             color: '#E60000',
             backgroundColor: 'transparent', 
-        } */      
+        } */     
+        cursor: 'default' 
     },
     actionMenuList: {
         '& .MuiPaper-root':{
@@ -606,6 +607,14 @@ export default makeStyles(theme => ({
         '& svg' : {
             width: '1rem !important', 
             height: '1rem !important'
+        }
+    },
+    breadcrumbHeadingIcon: {
+        position: 'relative',
+        '& svg': {
+            position: 'relative',
+            top: 5,
+            marginRight: 5
         }
     }
 }))

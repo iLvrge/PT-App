@@ -53,9 +53,19 @@ const KpiBox = (props) => {
                     placement='bottom'
                     grid={props.grid}
                 >
-                    <Typography variant="h6" component="div" align="center" className={classes.kpiBorder}>
-                        {props.card.title}
-                    </Typography>
+                    <span>
+                        <Button 
+                            size="small" 
+                            variant="outlined" 
+                            className={clsx(classes.actionButton)} 
+                            onClick={() => props.handleList(props.id, props.card.type)}
+                            disabled={
+                                (parseInt(props.card?.number) == 0 && typeof props.card.list == 'undefined') || (props.card?.list && props.card.list.length == 0) ? true : false
+                            }
+                        >
+                            {props.card.title}           
+                        </Button> 
+                    </span>
                 </AddToolTip>  
             </div>  
             {
@@ -67,11 +77,11 @@ const KpiBox = (props) => {
                 :
                     [30, 31, 32, 33, 34, 36, 37, 17, 26].includes(props.card.type)
                     ?
-                        <React.Fragment>
+                        <div className={classes.boxContainer}>
                             <Typography
                                 variant="h5" 
                                 component="div"
-                                className={clsx(classes.kpiNumberSmall, classes.topMargin)}
+                                className={clsx(classes.kpiNumberSmall)}
                             >
                                 Patents: {numberWithCommas(props.card?.number)}
                             </Typography>
@@ -82,7 +92,7 @@ const KpiBox = (props) => {
                             >
                                 Applications: {numberWithCommas(props.card.other_number)}
                             </Typography>
-                        </React.Fragment>
+                        </div>
                     :
                         <Typography 
                             variant="h5" 
@@ -102,42 +112,7 @@ const KpiBox = (props) => {
                                         numberWithCommas(props.card?.number)
                             } 
                         </Typography>
-            }           
-            <Button 
-                size="small" 
-                variant="outlined" 
-                className={clsx(classes.actionButton)} 
-                onClick={() => props.handleList(props.id, props.card.type)}
-                disabled={
-                    (parseInt(props.card?.number) == 0 && typeof props.card.list == 'undefined') || (props.card?.list && props.card.list.length == 0) ? true : false
-                }
-            >
-                View List                
-            </Button> 
-            {
-                props.card?.number != '0' || (props.card?.list && props.card.list.length > 0)
-                ?
-                    <AddToolTip
-                        tooltip='See Example'
-                        placement='bottom'
-                    >
-                        <IconButton 
-                            size="small" 
-                            onClick={onHandleExample} 
-                            className={clsx(classes.exampleButton, props.active === props.id ? classes.active : '')}
-                        >
-                            <AutoAwesomeIcon />
-                        </IconButton>  
-                    </AddToolTip> 
-                :
-                    <IconButton 
-                        size="small" 
-                        className={clsx(classes.exampleButton)}
-                        disabled={true}
-                    >
-                        <AutoAwesomeIcon />
-                    </IconButton>     
-            }                  
+            }                    
         </div>
     ) 
 }

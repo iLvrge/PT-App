@@ -25,6 +25,8 @@ import GeoChart from "../AssetsVisualizer/GeoChart"
 import GoogleCharts from "../AssetsVisualizer/GoogleCharts"
 import TimelineSecurity from "../AssetsVisualizer/TimelineSecurity"
 import ErrorBoundary from '../ErrorBoundary'
+import LawFirmNames from "../AssetsVisualizer/NamesContainer/LawFirmNames"
+import SankeyChart from "../AssetsVisualizer/SankeyChart"
 
 const AssetDetailsContainer = ({
   cls,
@@ -90,6 +92,7 @@ const AssetDetailsContainer = ({
   const usptoMode = useSelector(state => state.ui.usptoMode);
   const familyMode = useSelector(state => state.ui.familyMode);
   const familyItemMode = useSelector(state => state.ui.familyItemMode);
+  const familyActiveTab = useSelector(state => state.ui.familyActiveTab);
   const lifeSpanMode = useSelector(state => state.ui.lifeSpanMode);
   const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
   const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
@@ -185,8 +188,8 @@ const AssetDetailsContainer = ({
 
   const onCloseFamilyItemMode = useCallback(() => {
     dispatch(toggleFamilyItemMode(false));
-  }, [dispatch]);
-
+  }, [dispatch]); 
+  
   const changeContainer = () => {
     if (chartAnalyticsContainer.current != null) {
       const mainRoot = chartAnalyticsContainer.current.pane1.querySelector(
@@ -204,6 +207,8 @@ const AssetDetailsContainer = ({
       }
     }
   };
+
+  
   return (
     <div style={{ height: "100%" }} className={classes.root}>
       {
@@ -306,7 +311,7 @@ const AssetDetailsContainer = ({
                 } 
                 {
                   chartBar == true ? (
-                    cube === true && assetIllustration == null
+                    cube === true && familyItemMode === false && assetIllustration == null
                     ?
                       <GeoChart
                         chartBar={chartBar} 
@@ -316,13 +321,17 @@ const AssetDetailsContainer = ({
                         titleBar={true}
                       />
                     :
-                    timelineScreen === true  && assetIllustration == null
+                    timelineScreen === true  && assetIllustration == null && selectedCategory == 'due_dilligence'
                     ?
-                      <GoogleCharts
-                        chartBar={chartBar} 
-                        openCustomerBar={openCustomerBar} 
-                        visualizerBarSize={visualizerBarSize}
-                        type={type}
+                      <SankeyChart
+                        type={'acquired'}
+                      />
+                    : 
+                    timelineScreen === true  && assetIllustration == null && selectedCategory == 'top_law_firms'
+                    ?
+                      <LawFirmNames
+                        analyticsBar={analyticsBar} 
+                        chartBar={chartBar}
                       />
                     :                  
                     connectionBoxView === true ? (
@@ -342,18 +351,22 @@ const AssetDetailsContainer = ({
                           customerBarSize={customerBarSize} 
                           companyBarSize={companyBarSize}
                           type={type} />
-                    ) : familyItemMode === true ? (
-                        <FamilyItemContainer 
-                          item={selectedAssetsFamilyItem} 
-                          onClose={onCloseFamilyItemMode} 
-                          analyticsBar={analyticsBar} 
-                          chartBar={chartBar} 
-                          illustrationBar={illustrationBar}
-                          visualizerBarSize={visualizerBarSize} 
-                          type={type}
-                          {...( selectedCategory === 'pay_maintainence_fee' || selectedCategory === 'ptab'  ? {activeTab: selectedCategory === 'pay_maintainence_fee' ? 3 : 2} : {})} 
-                        />
-                    ) : (
+                    ) : familyItemMode === true ? 
+                          selectedCategory == 'incorrect_names'
+                          ?
+                            <ConnectionBox display={"false"} />
+                          :
+                            <FamilyItemContainer 
+                              item={selectedAssetsFamilyItem} 
+                              onClose={onCloseFamilyItemMode} 
+                              analyticsBar={analyticsBar} 
+                              chartBar={chartBar} 
+                              illustrationBar={illustrationBar}
+                              visualizerBarSize={visualizerBarSize} 
+                              type={type}
+                              {...( selectedCategory === 'pay_maintainence_fee' || selectedCategory === 'ptab'  ? {activeTab: selectedCategory === 'pay_maintainence_fee' ? 3 : 2} : {activeTab: familyActiveTab})} 
+                            />
+                    : (
                       <InventionVisualizer 
                         defaultSize={defaultSize} 
                         illustrationBar={openIllustrationBar} 
@@ -375,6 +388,7 @@ const AssetDetailsContainer = ({
               className={`${classes.commentContainer} ${
                 isDrag === true ? classes.notInteractive : classes.isInteractive
               }`}
+              id={`analyticsBar`}
               /* onMouseOver={event => handleIllustrationButton(event, true)}
               onMouseLeave={event => handleIllustrationButton(event, false)} */
             >
@@ -382,7 +396,13 @@ const AssetDetailsContainer = ({
                 {
                   analyticsBar === true 
                     ? 
-                      timelineScreen === true  && assetIllustration == null
+                      timelineScreen === true  && assetIllustration == null && selectedCategory == 'due_dilligence'
+                      ?
+                        <SankeyChart
+                          type={'divested'}
+                        />
+                      :
+                      timelineScreen === true  && assetIllustration == null 
                       ?
                         <TimelineSecurity
                           chartBar={chartBar} 

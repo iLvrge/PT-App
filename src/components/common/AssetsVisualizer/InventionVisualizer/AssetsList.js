@@ -12,13 +12,15 @@ import  { controlList } from '../../../../utils/controlList'
 
 import { capitalize, numberWithCommas } from '../../../../utils/numbers'
 
-import { setClipboardAssets, setMoveAssets } from '../../../../actions/patentTrackActions2'
+import { getAssetDetails, setClipboardAssets, setMoveAssets, setSelectedAssetsPatents } from '../../../../actions/patentTrackActions2'
 
 import PatenTrackApi from '../../../../api/patenTrack2'
 
 import Loader from '../../Loader'
+import { assetFamily, assetFamilySingle, assetLegalEvents } from '../../../../actions/patenTrackActions';
+import { setFamilyActiveTab, toggleFamilyItemMode, toggleFamilyMode, toggleLifeSpanMode } from '../../../../actions/uiActions';
 
-const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
+const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handleChartBarOpen }) => {
 
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -263,6 +265,27 @@ const AssetsList = ({ assets, loading, remoteAssetFromList }) => {
                 const findElement = element.querySelector('div.MuiSelect-select')
                 if( index == 2 && findElement != null ) {
                     setDropOpenAsset(row.asset)
+                } else if( index == 3) {
+                    setSelectItems([row.asset])
+                    setSelectedAssets([row.asset])
+                    dispatch(setFamilyActiveTab(1))
+                    dispatch(toggleLifeSpanMode(false));
+                    dispatch(toggleFamilyItemMode(true));
+                    dispatch(toggleFamilyMode(true));
+                    PatenTrackApi.cancelFamilyCounter()
+                    PatenTrackApi.cancelClaimsCounter()
+                    PatenTrackApi.cancelFiguresCounter()
+                    PatenTrackApi.cancelPtabCounter()
+                    PatenTrackApi.cancelCitationCounter()
+                    PatenTrackApi.cancelFeesCounter() 
+                    dispatch(setSelectedAssetsPatents([row.grant_doc_num, row.appno_doc_num]))
+                    dispatch(getAssetDetails(row.appno_doc_num, row.grant_doc_num))
+                    dispatch(assetFamilySingle(row.appno_doc_num))
+                    dispatch(assetLegalEvents(row.appno_doc_num, row.grant_doc_num))
+                    dispatch(assetFamily(row.appno_doc_num))
+                    if(openChartBar === false) {
+                        handleChartBarOpen()
+                    }
                 }
             } else {
                 if( row.asset == dropOpenAsset ) {

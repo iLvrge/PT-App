@@ -83,7 +83,8 @@ import { setAssetTypeAssignments,
   setChannelLoading,
   setChannelsList,
   setSlackProfileData,
-  setSlackUsers
+  setSlackUsers,
+  setSocialMediaConnectPopup
  } from '../../actions/patentTrackActions2'
 
  import {  
@@ -111,6 +112,7 @@ import {
 } from '../../actions/uiActions'
 import Scheduling from './Scheduling'
 import ViewIcons from './ViewIcons'
+import SocialMediaConnect from '../common/SocialMediaConnect'
 
 const NewHeader = (props) => {
   const classes = useStyles()
@@ -133,12 +135,22 @@ const NewHeader = (props) => {
   const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
   const timelineScreen = useSelector(state => state.ui.timelineScreen)
   const patentScreen = useSelector(state => state.ui.patentScreen)
+  const socialMediaConnectPopup = useSelector(state => state.patenTrack2.socialMediaConnectPopup)
   const [layoutName, setLayoutName] = useState(null)
   const [ isClipboardActive, setIsClipboardActive ] = useState(false)
   const [ isCompanyMenuOpen, setCompanyMenuOpen ] = useState(false)
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState( true )
   const [ slackAuthLogin, setSlackAuthLogin ] = useState( true )
   const [ scheduling, setScheduling ] = useState( false )
+
+  const connectMenuItems = [
+    {
+      id: 2,
+      label: 'Connect',
+      component: SocialMediaConnect,
+      standalone: true,
+    }
+  ]
   
   const schedulingMenuItems = [
     {
@@ -592,16 +604,19 @@ const resetAllActivity = (category) => {
   } */
   const findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == category)
   if( findIndex !== -1 ) {
-      //hideMenu(event, controlList[findIndex])
-      resetAll()
-      clearOtherItems()
-      dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))  
-      if(category == 'due_dilligence' || category == 'restore_ownership') {
-          dispatch(setSwitchAssetButton(controlList[findIndex].category == 'due_dilligence' ? 0 : 1))
-      }
+    //hideMenu(event, controlList[findIndex])
+    resetAll()
+    clearOtherItems()
+    dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))  
+    if(category == 'due_dilligence' || category == 'restore_ownership') {
+      dispatch(setSwitchAssetButton(controlList[findIndex].category == 'due_dilligence' ? 0 : 1))
+    }
   }
 }
 
+const onHandlleSetSocialMediaPopup = (flag) => {
+  dispatch(setSocialMediaConnectPopup(flag))
+}
   return (
     <AppBar className={classes.root} color='transparent' position='relative'>
       <Toolbar className={classes.toolbar}>
@@ -665,6 +680,8 @@ const resetAllActivity = (category) => {
               display_clipboard={display_clipboard}
               handleKeyDown={handleKeyDown}
               search_string={search_string}
+              openIllustrationBar={props.openIllustrationBar}
+              handleIllustrationBarOpen={props.handleIllustrationBarOpen}
             />
 
             {
@@ -845,6 +862,17 @@ const resetAllActivity = (category) => {
             componentItems={schedulingMenuItems} 
             showScreen={scheduling}  
             setScreen={setScheduling}
+            paper={false} 
+            full={false}   
+          />
+        )
+      }
+      {
+        socialMediaConnectPopup === true &&  (
+          <FullScreen 
+            componentItems={connectMenuItems} 
+            showScreen={socialMediaConnectPopup}  
+            setScreen={onHandlleSetSocialMediaPopup}
             paper={false} 
             full={false}   
           />

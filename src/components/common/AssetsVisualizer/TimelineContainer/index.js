@@ -146,7 +146,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     const companyName =  selectedWithName.filter( company => assetsCustomer.company == company.id ? company.name : '')
     const customerFirstName = assetsCustomer.tab_id == 10 ? assetsCustomer.customerName.split(' ')[0] : assetsCustomer.customerName
     const item = {
-      type: 'point',
+      type: 'point', 
       start: new Date(assetsCustomer.exec_dt),
       customerName: selectedCategory == 'proliferate_inventors' ? customerFirstName : `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
       assetType,
@@ -178,6 +178,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
   }
 
   // Custom ToolTip
+  console.log('Timeline Container')
   
   const showTooltip = (item, event) => {    
       setTimeout(() => {
@@ -262,7 +263,9 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
                   color = '#FFFFFF'
                   break;
               }
-              const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.clientY}px;left:${event.clientX + 20 }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
+              const element = document.getElementById('all_timeline');
+              const getPosition = element.getBoundingClientRect();  
+              const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${getPosition.y + 5}px;left:${getPosition.x }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
                                           <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
                                           <div>
                                             ${ executionDate != '' ? moment(executionDate).format('ll') : ''}
@@ -568,12 +571,12 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       items.current.add(convertedItems.slice(0, startIndex))      
     }    
 
-    if(selectedCategory == 'proliferate_inventors') {
+    if (convertedItems.length > 50) {
       options.cluster = {
         titleTemplate: 'Cluster containing {count} events. Zoom in to see the individual events.',
         showStipes: false,
         clusterCriteria: (firstItem, secondItem) => {
-          return ( firstItem.rawData.law_firm_id === secondItem.rawData.law_firm_id  ||  ( firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID))
+          return ( (firstItem.rawData.name_id > 0 && secondItem.rawData.name_id > 0 && firstItem.rawData.name_id === secondItem.rawData.name_id) ||  ( firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID))
         }
       }
     }
@@ -618,6 +621,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
   return (
       <Paper className={classes.root}>        
         <div
+          id={`all_timeline`}
           style={{ 
             filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
           }}  

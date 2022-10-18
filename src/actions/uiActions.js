@@ -21,6 +21,11 @@ export const toggleFamilyMode = flag => ({
   flag
 })
 
+export const setFamilyActiveTab = data => ({
+  type: types.SET_FAMILY_ACTIVE_TAB,
+  data
+})
+
 export const toggleFamilyItemMode = flag => ({
   type: types.TOGGLE_FAMILY_ITEM_MODE,
   flag: flag

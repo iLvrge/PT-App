@@ -36,10 +36,11 @@ import { Close } from '@mui/icons-material'
 import FilterDashboardCPC from './FilterDashboardCPC'
 import TitleBar from '../../TitleBar'
 import clsx from 'clsx'
+import { setFamilyActiveTab } from '../../../../actions/uiActions'
 
 var newRange = [1,2]
 
-const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, tab, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal, titleBar }) => {
+const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, tab, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal, titleBar, openChartBar, handleChartBarOpen }) => {
     
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -125,7 +126,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const [ salesData, setSalesData ] = useState([])
     const [ graphRawGroupData, setGraphRawGroupData ] = useState([])  
     let interval;
-    
     const menuItems = [
         {
             id: 1,
@@ -146,7 +146,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             fYear: filterYear,
             vYear: valueYear, 
             vScope: valueScope, 
-            sRange: scopeRange
+            sRange: scopeRange,
+            fList: filterList,
+            fTotal: filterTotal,
         }
     ]
     let options = {
@@ -252,7 +254,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     },[ graphRawGroupData, filterList ])
 
     const onCameraPositionChange = useCallback(async (event) => {
-        console.log(event)
     })
 
     const checkToolTip = () => {
@@ -478,8 +479,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             setFilterYear(yearLabelList)            
             setValueYear([yearLabelList[0].value, yearLabelList[yearLabelList.length - 1].value]) 
         }
-
+         
         if( typeof range === 'undefined' && typeof scope ===  'undefined'  && data.group.length > 0 && dashboardScreen === false) {
+            setValueRange(4) 
             setValueScope([ data.group[0].id, data.group[data.group.length - 1].id ])
         }    
         if(typeof scope == 'undefined' && dashboardScreen === false) {
@@ -749,6 +751,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
     const handleClose = () => {
         setModalOpen(false);
+        dispatch(setFamilyActiveTab(0))
     }
 
     const handleResize = (event, {element, size, handle}) => {
@@ -988,16 +991,23 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                 ''
                             }                           
                         </div> 
+                        
                         <Dialog
                             open={openModal}
                             onClose={handleClose}
                             className={classes.modal}
                             PaperComponent={PaperComponent}
-                            aria-labelledby="year-cpc-assets"
+                            aria-labelledby="draggable-dialog-title"
                         >
-                            <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title"></DialogTitle>
+                            <DialogTitle style={{ cursor: 'move' }} ></DialogTitle>
                             <DialogContent>
-                                <AssetsList loading={assetLoading} assets={assets} remoteAssetFromList={remoteAssetFromList}/>
+                                <AssetsList 
+                                    loading={assetLoading} 
+                                    assets={assets} 
+                                    remoteAssetFromList={remoteAssetFromList}
+                                    openChartBar={openChartBar}
+                                    handleChartBarOpen={handleChartBarOpen}
+                                />
                             </DialogContent>
                         </Dialog>  
                         <Draggable 

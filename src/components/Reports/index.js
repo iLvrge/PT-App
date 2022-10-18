@@ -34,7 +34,7 @@ const Reports = (props) => {
     let LIST = [
         {
             title: 'Chain-of-Title',
-            tooltip: 'Patent assets owned by the company, with ownership defects along the chain of title, such as rights not transferred by inventors.',
+            tooltip: 'Owned assets with defects along the chain-of-title that could impede their future use.',
             number: 0,
             patent: '',
             application: '',
@@ -44,8 +44,8 @@ const Reports = (props) => {
             id: 1
         },
         {
-            title: 'To Assign',
-            tooltip: '37 CFR § 1.46 Application for patent by an assignee: (b)(1) If the applicant is the assignee, documentary evidence of ownership ( e.g., assignment for an assignee, employment agreement for a person to whom the inventor is under an obligation to assign the invention) should be recorded as provided for in part 3 of this chapter no later than the date the issue fee is paid in the application.',
+            title: 'To Record',
+            tooltip: 'Patent assets invented by the company\’s employees, the assignment of which to the company is yet to be recorded. 37 CFR § 1.46 Application for patent by an assignee: (b)(1) If the applicant is the assignee, documentary evidence of ownership ( e.g., assignment for an assignee, employment agreement for a person to whom the inventor is under an obligation to assign the invention) should be recorded as provided for in part 3 of this chapter no later than the date the issue fee is paid in the application.',
             number: 0,
             patent: '',
             application: '',
@@ -55,8 +55,8 @@ const Reports = (props) => {
             id: 2
         },
         {
-            title: 'Divest',
-            tooltip: 'Patent assets covering technological areas which are far from the company\’s core technology.',
+            title: 'To Divest',
+            tooltip: 'Patent assets covering subject matters presumably far from the company’s core business.',
             number: 0,
             patent: '',
             application: '',
@@ -67,7 +67,7 @@ const Reports = (props) => {
         },
         {
             title: 'To Monetize',
-            tooltip: 'Patent assets that are assigned to the company under a stated corresponding agent which is different from those currently employed by the company.',
+            tooltip: 'Patent assets with a higher likelihood to license 3rd parties.',
             number: 0,
             patent: '',
             application: '',
@@ -78,7 +78,7 @@ const Reports = (props) => {
         },
         {
             title: 'Names',
-            tooltip: 'Patent assets assigned under incorrect names, and unlikely to be found in a name search.',
+            tooltip: 'Patent assets that were assigned under incorrect owner names, and are likely to not be found in a name search, preventing assignees from finding their own patent assets.',
             number: 0,
             patent: '',
             application: '',
@@ -89,7 +89,7 @@ const Reports = (props) => {
         },
         {
             title: 'Addresses',
-            tooltip: 'Patent assets assigned under incorrect addresses.',
+            tooltip: 'Patent assets that were assigned under incorrect address of the owner or the stated corresponding agent.',
             number: 0,
             patent: '',
             application: '',
@@ -100,7 +100,7 @@ const Reports = (props) => {
         },
         {
             title: 'Deflated Collateral',
-            tooltip: 'The list of collateralized patent assets that have expired since the collateralization day.',
+            tooltip: 'Collateralized patent assets that have expired or abandoned.  Most security agreements require borrowers to maintain the securing assets.',
             number: 0,
             patent: '',
             application: '',
@@ -111,7 +111,7 @@ const Reports = (props) => {
         },
         {
             title: 'Encumbrances',
-            tooltip: 'Patent assets subject to third party rights, which could harm the patents’ liquidity.',
+            tooltip: 'Patent assets that are subject to third party rights, which could harm the patents’ liquidity, enforcement, and collateralization. ',
             number: 0,
             patent: '',
             application: '',
@@ -132,7 +132,7 @@ const Reports = (props) => {
         },
         {
             title: 'Recordings',
-            tooltip: 'Patent assets exposed to third party\'s rights due to recording that was beyond 45 days from the transaction\’s execution date.',
+            tooltip: 'Patent assets the assignment of which was recorded later than 3 months from its date, and therefore exposed to a bona fide purchases for valuable consideration.',
             number: 0,
             patent: '',
             application: '',
@@ -143,7 +143,7 @@ const Reports = (props) => {
         },
         {
             title: 'Corrections',
-            tooltip: 'Patent assets with recording that later on were corrected.',
+            tooltip: 'Patent assets the assignments of which were recorded incorrectly, and required a subsequent correction.',
             number: 0,
             patent: '',
             application: '',
@@ -154,7 +154,7 @@ const Reports = (props) => {
         },
         {
             title: 'Challenged',
-            tooltip: 'The list of patents the validity of which has been challenged.',
+            tooltip: 'Patent assets that were challenged at PTAB.',
             number: 0,
             patent: '',
             application: '',
@@ -301,7 +301,7 @@ const Reports = (props) => {
     const KPI_LIST = [
         {
             title: 'Owned',
-            tooltip: 'The USA assets assigned to the company from its inventors, plus assets acquired by the company, minus those that were sold, expired  and abandoned.',
+            tooltip: 'USA assets invented by the company\'s employees and assets assigned to the company from 3rd parties. Excluding assets that were sold, abandoned or expired.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -311,7 +311,7 @@ const Reports = (props) => {
         },
         {
             title: 'Invented',
-            tooltip: 'The USA assets acquired by the company, minus those that were sold, expired and abandoned',
+            tooltip: 'USA assets invented by the company’s employees. Excluding assets that have been sold, abandoned, or expired.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -321,7 +321,7 @@ const Reports = (props) => {
         }, 
         {
             title: 'Acquired',
-            tooltip: 'The USA assets assigned to the company from its inventors and others, minus those that were sold, expired or abandoned',
+            tooltip: 'USA assets, which have not been sold, abandoned, or expired, assigned to the company other than from its employees.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -331,7 +331,7 @@ const Reports = (props) => {
         },
         {
             title: 'Collateralized',
-            tooltip: 'Patents the company abandoned, i.e. for which the company has not paid maintenance fees.',
+            tooltip: 'USA assets subject to unreleased security rights.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -341,7 +341,7 @@ const Reports = (props) => {
         },
         {
             title: 'Maintenance Fee Due',
-            tooltip: 'Maintenance fees to be paid in the next twelve months.',
+            tooltip: 'USA assets for which maintenance fee is due for payment in the next 12 months.',
             number: 0,
             patent: '',
             application: '',
@@ -351,7 +351,7 @@ const Reports = (props) => {
         },
         {
             title: 'Challenged (PTAB)',
-            tooltip: 'Non-abandoned patents applications the company acquired from third parties.',
+            tooltip: 'USA assets under past or present PTAB proceedings.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -361,7 +361,7 @@ const Reports = (props) => {
         },
         {
             title: 'Divested',
-            tooltip: 'Patent applications which are still in the process of prosecution.',
+            tooltip: 'USA assets assigned from the company to others.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -371,7 +371,7 @@ const Reports = (props) => {
         },
         {
             title: 'Abandoned',
-            tooltip: 'Non-abandoned patent applications filed by the company\’s employees.',
+            tooltip: 'USA patent applications the prosecution of which discontinued, and USA patents expired due to non-payment of maintenance fees.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -380,8 +380,8 @@ const Reports = (props) => {
             type: 36
         },
         {
-            title: 'Members of Owned USA',
-            tooltip: 'Countries in which the company has the largest number of patents.',
+            title: 'Non-U.S. Members',
+            tooltip: 'Owned USA assets, which have non-U.S.A. members.',
             number: 0,
             patent: '',
             application: '',
@@ -401,7 +401,7 @@ const Reports = (props) => {
         },
         {
             title: 'Law Firms',
-            tooltip: 'The company\’s law firms with the largest number of registered transactions.',
+            tooltip: 'The company\’s law firms with the largest number of recorded transactions.',
             number: 0,
             patent: '',
             application: '',
@@ -450,14 +450,14 @@ const Reports = (props) => {
             list: []
         },
         {
-            title: 'Employees',
+            title: 'Invention',
             standalone: false,
             rf_id: '',
             type: 5,
             list: []
         },
         {
-            title: 'Court',
+            title: 'Litigation',
             standalone: false,
             rf_id: '',
             type: 6,
@@ -597,11 +597,11 @@ const Reports = (props) => {
     }, [viewDashboard])
 
     useEffect(() => {
-        if(viewInitial === false && cardList.length > 0) {
+        if(viewInitial === false) {
             if(selectedCompanies.length > 0) {
-                if(viewDashboard.timeline === true) {
+                if(viewDashboard.timeline === true && timelineList.length > 0) {
                     callTimelineData()
-                } else {
+                } else if(cardList.length > 0){
                     findDashboardData()
                 }
             }
@@ -649,10 +649,10 @@ const Reports = (props) => {
                 setTimelineList(props.dashboardTimelineData)
             }
         }  else {
-            if(selectedCompanies.length > 0 && cardList.length > 0) {
-                if(viewDashboard.timeline === true) {
+            if(selectedCompanies.length > 0 ) {
+                if(viewDashboard.timeline === true && timelineList.length > 0) {
                     callTimelineData()
-                } else {
+                } else if(cardList.length > 0){
                     findDashboardData()
                 }
             } else {   
@@ -1038,6 +1038,7 @@ const Reports = (props) => {
     const onHandleList = useCallback((id) => {
         /* process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' */
         let subscription = parseInt(profile?.user?.organisation?.subscribtion), timeline = false, patent = false, maintainence = false
+        
         if( subscription === 2 || subscription === 3 ) {
             let findIndex = -1
             if(id === 1 && viewDashboard.kpi === false) {                
@@ -1045,7 +1046,7 @@ const Reports = (props) => {
                 patent = true
             } else if(id === 17 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_names')
-                timeline = true
+                patent = true
             } else if(id === 18 && subscription > 2  && viewDashboard.kpi === false) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'clear_encumbrances')
                 patent = true
@@ -1128,46 +1129,47 @@ const Reports = (props) => {
                     if(id === 0) {
                         dispatch(setSwitchAssetButton(1))
                     } 
+                    if(controlList[findIndex].category == 'proliferate_inventors') {
+                        /**
+                         * Inventor
+                         * select Inventor activity type
+                         * Open Inventor Table
+                         * 
+                         */
+                        dispatch( setAssetTypesSelect([10]) )
+                        if(props.openInventorBar === false) {
+                            props.handleInventorBarOpen()
+                        }
+                        if(props.assignmentBar === true) {
+                            props.assignmentBarToggle()
+                        }
+                    }  
+                    if(controlList[findIndex].category == 'top_lenders') {
+                        /**
+                         * Select Lending activity type
+                         */
+                        dispatch( setAssetTypesSelect([81]) )
+                        if(props.openOtherPartyBar === false) {
+                            props.handleOtherPartyBarOpen()
+                        }
+                    }
+                    dispatch(setDashboardScreen(false))
+                    dispatch(setTimelineScreen(timeline))
+                    dispatch(setPatentScreen(patent))
+                    if(patent === true) {
+                        history.push(routeList.patent_assets)  
+                    }
+                    if(maintainence === true) {
+                        history.push(routeList.pay_maintainence_fee)  
+                    }
+                    if(props.openCustomerBar === false && timeline === false){
+                        props.handleCustomersBarOpen()
+                    }
+                    if(props.openCommentBar === false){
+                        props.handleCommentBarOpen()
+                    }   
                 })
-                if(controlList[findIndex].category == 'proliferate_inventors') {
-                    /**
-                     * Inventor
-                     * select Inventor activity type
-                     * Open Inventor Table
-                     * 
-                     */
-                    dispatch( setAssetTypesSelect([10]) )
-                    if(props.openInventorBar === false) {
-                        props.handleInventorBarOpen()
-                    }
-                    if(props.assignmentBar === true) {
-                        props.assignmentBarToggle()
-                    }
-                }  
-                if(controlList[findIndex].category == 'top_lenders') {
-                    /**
-                     * Select Lending activity type
-                     */
-                    dispatch( setAssetTypesSelect([81]) )
-                    if(props.openOtherPartyBar === false) {
-                        props.handleOtherPartyBarOpen()
-                    }
-                }
-                dispatch(setDashboardScreen(false))
-                dispatch(setTimelineScreen(timeline))
-                dispatch(setPatentScreen(patent))
-                if(patent === true) {
-                    history.push(routeList.patent_assets)  
-                }
-                if(maintainence === true) {
-                    history.push(routeList.pay_maintainence_fee)  
-                }
-                if(props.openCustomerBar === false && timeline === false){
-                    props.handleCustomersBarOpen()
-                }
-                if(props.openCommentBar === false){
-                    props.handleCommentBarOpen()
-                }                             
+                                          
             }
         }
     }, [dispatch, profile, activeId, selectedAssetCompanies, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, props.openCustomerBar, props.openCommentBar, viewDashboard, props.openInventorBar, props.assignmentBar, props.openOtherPartyBar])

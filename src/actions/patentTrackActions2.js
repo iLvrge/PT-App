@@ -1183,6 +1183,7 @@ export const getCustomerTransactions = ( type, companies, tabs, customers, appen
  */
 
 export const getCustomerParties = ( type, companies, tabs, customerType, append = false ) => {
+  console.log('getCustomerParties', type, companies, tabs, customerType)
   return async dispatch => {
     if(customerType === 1) {
       dispatch( setAssetTypesInventorsLoading( true ) )
@@ -1757,3 +1758,17 @@ export const setDashboardShareData = (data) => {
     data
   }
 }
+
+export const setSelectLawFirm = (data) => {
+  return {
+    type: types.SET_LAWFIRM_SELECTED,  
+    data
+  }
+} 
+
+export const setSocialMediaConnectPopup = (flag) => {  
+  return {
+    type: types.SET_SOCIAL_MEDIA_CONNECT_MODAL, 
+    flag
+  } 
+} 

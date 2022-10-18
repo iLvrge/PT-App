@@ -489,6 +489,10 @@ class PatenTrackApi {
   static getCustomerAddressTransactions( companies, tabs, customers) {  
     return axios.get(`${base_new_api_url}/customers/transactions/address?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}`, getHeader())
   } 
+  
+  static getIncorrectNames( companies) {  
+    return axios.get(`${base_new_api_url}/customers/incorrectnames?companies=${JSON.stringify(companies)}`, getHeader())
+  } 
 
   static getCustomerNormalizeNameTransactions( companies, tabs, customers) {  
     return axios.get(`${base_new_api_url}/customers/transactions/name?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}`, getHeader())
@@ -831,8 +835,8 @@ class PatenTrackApi {
   }
   
 
-  static getLawFirmsByCompany(companies) {
-    return axios.get(`${base_new_api_url}/customers/lawfirm?companies=${JSON.stringify(companies)}`, getHeader())
+  static getLawFirmsByCompany(companies, rfID) {
+    return axios.get(`${base_new_api_url}/customers/lawfirm?companies=${JSON.stringify(companies)}&rfID=${rfID}`, getHeader())
   }
 
   static getLawFirms() {
@@ -1134,6 +1138,10 @@ class PatenTrackApi {
 
   static getConnectionData( popup ) {
     return axios.get(`${base_new_api_url}/connection/${popup}`,  getHeader())
+  }
+
+  static getConnectionDataFromAsset( asset, companies ) {
+    return axios.get(`${base_new_api_url}/connection/asset/${asset}?companies=${JSON.stringify(companies)}`,  getHeader())
   }
   
   static moveAssetToLayout( data ) {

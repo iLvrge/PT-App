@@ -9,7 +9,7 @@ import TitleBar from '../../TitleBar';
 import Loader from '../../Loader';
 
 
-const SankeyChart = () => {
+const SankeyChart = (props) => {
     const dispatch = useDispatch();
     const classes = useStyles();
     const [loading, setLoading] = useState(false);
@@ -29,9 +29,15 @@ const SankeyChart = () => {
                 setAssigneeRawData([])
                 setAssignorRawData([])
                 const formData = new FormData()
-                formData.append('selectedCompanies', JSON.stringify(selectedCompanies));   
-                formData.append('type', selectedCategory);   
-                if(selectedCategory == 'acquired') {
+                formData.append('selectedCompanies', JSON.stringify(selectedCompanies));  
+                console.log(props)
+                if(typeof props.type != 'undefined' && props.type !== null && props.type != '') {
+                    formData.append('type', props.type);  
+                    formData.append('search', 'all');  
+                } else {
+                    formData.append('type', selectedCategory);   
+                }
+                if((typeof props.type != 'undefined' && props.type == 'acquired') || selectedCategory == 'acquired') {
                     setLoading(true)
                     const {data} = await PatenTrackApi.getDashboardPartiesData(formData)
                     
@@ -50,9 +56,9 @@ const SankeyChart = () => {
                         setData(loadData)
                         setLoading(false)
                     }
-                }   
+                }
                 
-                if(selectedCategory == 'divested') {
+                if((typeof props.type != 'undefined' && props.type == 'divested') || selectedCategory == 'divested') {
                     setLoadingAssingor(true) 
                     const getAssignorData = await PatenTrackApi.getDashboardPartiesAssignorData(formData)
                     
@@ -73,7 +79,7 @@ const SankeyChart = () => {
                         setAssignorData(loadAssignorData)
                         setLoadingAssingor(false)
                     }
-                }
+                } 
             }
         }
         getPartiesData()

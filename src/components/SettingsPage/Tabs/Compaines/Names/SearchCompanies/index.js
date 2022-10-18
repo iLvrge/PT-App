@@ -5,11 +5,12 @@ import Loader from '../../../../../common/Loader'
 import { addCompany, setSearchCompanies } from '../../../../../../actions/patenTrackActions'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import StyledSearch from '../../../../../common/StyledSearch'
-import { Toolbar, IconButton, Tooltip, Typography, Zoom, TextField } from '@mui/material'
+import { Toolbar, IconButton, Tooltip, Typography, Zoom, TextField, Button } from '@mui/material'
 import { DebounceInput } from 'react-debounce-input'
 import VirtualizedTable from '../../../../../common/VirtualizedTable'
 import PatenTrackApi from '../../../../../../api/patenTrack2'
 import SendIcon from '@mui/icons-material/Send'
+import AddIcon from '@mui/icons-material/Add'
 import AddMenu from './AddMenu'
 import Chip from '@mui/material/Chip'
 import { setMainCompaniesRowSelect } from '../../../../../../actions/patentTrackActions2'
@@ -25,7 +26,6 @@ const COLUMNS = [
     width: 240,
     minWidth: 240,
     oldWidth: 240,
-    draggable: true,
     label: 'Name',
     dataKey: 'name',
   },
@@ -49,9 +49,15 @@ const COMPANY_HEADER_COLUMNS = [
     width: 240,
     minWidth: 240,
     oldWidth: 240,
-    draggable: true,
     label: 'Name',
     dataKey: 'name',
+  },
+  {
+    width: 500,
+    minWidth: 500,
+    oldWidth: 500,
+    label: 'Status',
+    dataKey: 'status',
   }
 ]
 
@@ -210,12 +216,11 @@ const onCompanyRequestRowSelect = useCallback((event, row) => {
   }
   setSelected(oldItems)
 }, [selected])
+ 
 
-const onHandleKeyDown = useCallback(async(event) => {
-  if(event.keyCode == 13){
-    console.log('value', event.target.value);
+const onHandleAddCompany = useCallback(async(event) => {
     const formData = new FormData();
-    formData.append('name', event.target.value)
+    formData.append('name', searchTxtField.current.querySelector('input[type="text"]').value)
     const requestData = await PatenTrackApi.addCompanyRequest(formData)
     console.log('requestData', requestData)
 
@@ -223,11 +228,13 @@ const onHandleKeyDown = useCallback(async(event) => {
       searchTxtField.current.querySelector('input[type="text"]').value = ''
       getCompanyRequestList()
     }
-  }
 });
 
   return (
     <Fragment>
+      <Typography variant="body2" sx={{p: 1}}>
+        To add to your account the data of any company (including competitors and others) please state the requested company's name below:
+      </Typography>
       <Toolbar className={classes.toolbar}>
         <div className={classes.toolbar}>
           <div className={classes.searchContainer} ref={searchTxtField}>
@@ -237,12 +244,11 @@ const onHandleKeyDown = useCallback(async(event) => {
               value={search}              
               onChange={handleOnInputChange}
               debounceTimeout={500} /> */}
+              
               <TextField 
                 id="request_add_new_company" 
                 name="request_add_new_company" 
-                label="Request for new company" 
                 variant="filled" 
-                onKeyDown={onHandleKeyDown}
               />
           </div>
           {
@@ -252,35 +258,51 @@ const onHandleKeyDown = useCallback(async(event) => {
                 size="small"
                 label={`${selected.length ? `${selected.length}/` : ''}${searchCompanies.length.toLocaleString()}`} />
             )
-          }
-
+          } 
         </div>
 
-        <Fragment>
-          <AddMenu
-            anchorEl={menuAnchorEl}
-            onClose={closeAddMenu}
-            createParent={createParent}
-            associateToParent={associateToParent} />
+          {
 
-          <Tooltip 
-            title={
-              <Typography color="inherit" variant='body2'>{'Import a company to your account'}</Typography>
-            } 
-            enterDelay={0}
-            TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
-          >
-            <div>
-              <IconButton
-                disabled={!selected.length}
-                color={'primary'}
-                onClick={openAddMenu}
-                size="large">
-                <SendIcon />
-              </IconButton>
-            </div>
-          </Tooltip>          
-        </Fragment>
+
+            selected.length == 0 
+            ?
+              <Button
+                color="inherit" 
+                onClick={onHandleAddCompany}
+                startIcon={<AddIcon className={classes.icon} />}
+                className={classes.btnGroup}
+              >
+                Add a Company
+              </Button>
+            :
+            <Fragment>
+              <AddMenu
+                anchorEl={menuAnchorEl}
+                onClose={closeAddMenu}
+                createParent={createParent}
+                associateToParent={associateToParent} />
+
+              <Tooltip 
+                title={
+                  <Typography color="inherit" variant='body2'>{'Import a company to your account'}</Typography>
+                } 
+                enterDelay={0}
+                TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+              >
+                <div>
+                  <Button
+                    disabled={!selected.length}
+                    onClick={openAddMenu}
+                    className={classes.btnGroup}
+                    style={{color: '#fff'}}
+                  >
+                    Import
+                  </Button>
+                </div>
+              </Tooltip>          
+            </Fragment>
+          }
+        
 
         <IconButton onClick={onClose} style={{ display: 'none' }} size="large">
           <ChevronLeftIcon />

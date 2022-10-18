@@ -8,7 +8,7 @@ import { setAssetButton, setTransactionButton, setViewDashboardIntial, updateVie
 import useStyles from './styles'
 import clsx from 'clsx'
 import AddToolTip from '../Reports/AddToolTip'
-import { IconButton, Badge, InputBase } from '@mui/material'
+import { IconButton, Badge, InputBase, Button } from '@mui/material'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faShareAlt, faCalendar
@@ -158,6 +158,9 @@ const ViewIcons = (props) => {
         setTimelineView(false)
         dispatch(setAssetButton(false))
         dispatch(setTransactionButton(false))
+        if(props.openIllustrationBar === false) {
+            props.handleIllustrationBarOpen()
+        }
         if(props.dashboardScreen === false) {
             props.resetAllActivity('due_dilligence')
             props.setDashboardScreen()
@@ -171,6 +174,15 @@ const ViewIcons = (props) => {
         setTimelineView(false)
         props.resetAllActivity('due_dilligence')
         props.setPatentAssets()
+    }
+
+    const getUnCollatealized = () => {
+        dispatch(setAssetButton(true))
+        dispatch(setTransactionButton(false))
+        setPatentView(true)
+        setTimelineView(false)
+        props.resetAllActivity('uncollateralized')
+        props.setPatentAssets() 
     }
 
     const onHandleSearch = () => {
@@ -250,6 +262,7 @@ const ViewIcons = (props) => {
      
     return(
         <React.Fragment>
+            <Button onClick={getUnCollatealized}>Uncollateralized</Button>
             {
                 profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'
                 && (
@@ -286,7 +299,7 @@ const ViewIcons = (props) => {
                     </IconButton>
                 </span>
             </AddToolTip>
-           {/*  <AddToolTip
+            <AddToolTip
                 tooltip={'Changes in matters requiring attention along a timeline.'}
                 placement='bottom'
             >
@@ -297,7 +310,7 @@ const ViewIcons = (props) => {
                 >
                     <AutoGraph/>
                 </IconButton> 
-            </AddToolTip> */}
+            </AddToolTip>
             <AddToolTip
                 tooltip={'Transactional activities such as acquisition, divestitures, collateralization and releases.'}
                 placement='bottom'
@@ -314,7 +327,7 @@ const ViewIcons = (props) => {
                 profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'
                 && (
                     <React.Fragment>
-                        {/* <AddToolTip
+                        <AddToolTip
                             tooltip={'Technologies covered by the patent portfolio as they evolved.'}
                             placement='bottom'
                         >
@@ -351,7 +364,7 @@ const ViewIcons = (props) => {
                                     <path d="M23,6l-4-3.969v2L1,4v9h5.5C6.776,13,7,13.224,7,13.5v6.531H6L8,22l2-1.969H9v-7C9,11.928,8.103,11,7,11h5	c1.105,0,2,0.895,2,2v2.031h-2l3.586,3.954L19,15.031h-2V12.5c0-2.481-2.019-4.5-4.5-4.5H19v2.031L23,6z"/>
                                 </svg>
                             </IconButton>
-                        </AddToolTip>  */}
+                        </AddToolTip> 
                         <AddToolTip
                             tooltip={'All Assets (Since 1998)'}
                             placement='bottom'
@@ -407,19 +420,20 @@ const ViewIcons = (props) => {
                                 s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z"  className="color000 svgShape"></path><path d="M23,38h8V28h-8V38z M25,30h4v6h-4V30z"  className="color000 svgShape"></path><rect width="23" height="2" x="34" y="32"  className="color000 svgShape"></rect><rect width="17" height="2" x="23" y="44"  className="color000 svgShape"></rect><rect width="34" height="2" x="23" y="54"  className="color000 svgShape"></rect><rect width="34" height="2" x="23" y="64"  className="color000 svgShape"></rect><rect width="2" height="4" x="38.968" y="9"  className="color000 svgShape"></rect></svg>
                             </Badge>
                         </IconButton> 
-                        {/* <IconButton className={classes.buttonIcon} size="large">
+                        <IconButton className={classes.buttonIcon} size="large">
                             <Badge badgeContent={0} color="secondary"> 
                                 <NotificationsNone/>
                             </Badge>         
-                        </IconButton>  */}
-                        {/* <AddToolTip
-                            tooltip={`Search`}
+                        </IconButton> 
+                        <AddToolTip
+                            tooltip={`Search at USPTO`}
                             placement='bottom'
                         >
                             <IconButton 
                                 size="small"
                                 className={clsx(classes.actionIcon, {[classes.active]: openSearch})}
-                                onClick={onHandleSearch}
+                                /* onClick={onHandleSearch} */
+                                onClick={() => window.open('https://ppubs.uspto.gov/pubwebapp/')}
                             >
                                <ManageSearch/>
                             </IconButton>
@@ -436,7 +450,7 @@ const ViewIcons = (props) => {
                                 onKeyDown={props.handleKeyDown}
                                 disabled 
                             />
-                        </div> */}
+                        </div>
                         <AddToolTip
                             tooltip={`Schedule a ${process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'd' : 'D' }emo ${process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'for Pro version' : '' }`}
                             placement='bottom'

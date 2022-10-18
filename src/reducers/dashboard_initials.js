@@ -3,6 +3,7 @@ import { BlurLinear } from '@mui/icons-material'
 
 export default {
     auth_token: null,
+    socialMediaConnectPopup: true,
     familyChartVisiblity: 'hidden',
     switch_button_assets: 0,
     search_string: null,
@@ -71,6 +72,7 @@ export default {
     assetsPatentsLoading: false,
     gridWidthClassNumber: 12, 
     activeMenuButton: -1,
+    selectedLawFirm: 0,
     assets: assetsTypes.reduce((result, assetType) => {
       result[assetType] = {} 
       return result 

@@ -689,6 +689,8 @@ const PatentLayout = ({
                                                 setChartBar={setChartBar}
                                                 handleCommentBarOpen={handleCommentBarOpen}
                                                 handleCustomersBarOpen={handleCustomersBarOpen}
+                                                parentBarDrag={setVisualizerBarSize}
+                                                parentBar={setVisualizeOpenBar}
                                                 cube={selectedCategory === 'ptab' ? false : true}
                                                 ptab={selectedCategory === 'ptab' ? true : false}
                                             /> 

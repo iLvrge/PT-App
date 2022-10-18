@@ -21,7 +21,7 @@ export default makeStyles(theme => ({
     padding: '0 5px',
     border: 0,
     position: 'absolute',
-    textTransform: 'inherit'
+    textTransform: 'initial'
   },
   dialog: {
     '& .MuiDialogContent-root':{

@@ -8,6 +8,7 @@ export default {
   lifeSpanMode: false,
   familyMode: false,
   familyItemMode: false,
+  familyActiveTab: 0,
   timeline: {
     selectedItem: null,
     selectedAsset: null,
