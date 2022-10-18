@@ -416,7 +416,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
               const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
               tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
               customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
-              rfIDs = [selectedLawFirm];
+              rfIDs = selectedLawFirm > 0 ? [selectedLawFirm] : [];
       
               if( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
                 //setIsLoadingTimelineData(true)

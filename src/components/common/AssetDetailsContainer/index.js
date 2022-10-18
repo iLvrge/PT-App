@@ -208,7 +208,7 @@ const AssetDetailsContainer = ({
     }
   };
 
-  console.log('selectedCategory', selectedCategory)
+  
   return (
     <div style={{ height: "100%" }} className={classes.root}>
       {
@@ -329,7 +329,10 @@ const AssetDetailsContainer = ({
                     : 
                     timelineScreen === true  && assetIllustration == null && selectedCategory == 'top_law_firms'
                     ?
-                      <LawFirmNames/>
+                      <LawFirmNames
+                        analyticsBar={analyticsBar} 
+                        chartBar={chartBar}
+                      />
                     :                  
                     connectionBoxView === true ? (
                         <PdfViewer
@@ -385,6 +388,7 @@ const AssetDetailsContainer = ({
               className={`${classes.commentContainer} ${
                 isDrag === true ? classes.notInteractive : classes.isInteractive
               }`}
+              id={`analyticsBar`}
               /* onMouseOver={event => handleIllustrationButton(event, true)}
               onMouseLeave={event => handleIllustrationButton(event, false)} */
             >

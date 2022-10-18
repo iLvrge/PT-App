@@ -41,3 +41,24 @@ export const loginRedirect = (authenticated) => {
         window.location.href = 'https://patentrack.com'
     }
 }
+
+export const getAuthConnectToken = () => {
+    let tokenType = 0
+    try {
+        const getSlackToken = localStorage.getItem('slack_auth_token_info')
+        const tokenJSON = JSON.parse( getSlackToken )
+
+        if( tokenJSON != null ) {
+            tokenType = 1;
+        } else {
+            const getTeamToken = localStorage.getItem('team_auth_token_info')
+            const teamTokenJSON = JSON.parse( getTeamToken )
+            if( teamTokenJSON != null ) {
+                tokenType = 2;
+            }
+        }
+    } catch (err) {
+        console.warn(`Issue which retreiving token: ${err}`)
+    }
+    return tokenType
+}

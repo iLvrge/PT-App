@@ -34,7 +34,7 @@ const Reports = (props) => {
     let LIST = [
         {
             title: 'Chain-of-Title',
-            tooltip: 'Patent assets owned by the company, with ownership defects along the chain of title, such as rights not transferred by inventors.',
+            tooltip: 'Owned assets with defects along the chain-of-title that could impede their future use.',
             number: 0,
             patent: '',
             application: '',
@@ -45,7 +45,7 @@ const Reports = (props) => {
         },
         {
             title: 'To Record',
-            tooltip: '37 CFR § 1.46 Application for patent by an assignee: (b)(1) If the applicant is the assignee, documentary evidence of ownership ( e.g., assignment for an assignee, employment agreement for a person to whom the inventor is under an obligation to assign the invention) should be recorded as provided for in part 3 of this chapter no later than the date the issue fee is paid in the application.',
+            tooltip: 'Patent assets invented by the company\’s employees, the assignment of which to the company is yet to be recorded. 37 CFR § 1.46 Application for patent by an assignee: (b)(1) If the applicant is the assignee, documentary evidence of ownership ( e.g., assignment for an assignee, employment agreement for a person to whom the inventor is under an obligation to assign the invention) should be recorded as provided for in part 3 of this chapter no later than the date the issue fee is paid in the application.',
             number: 0,
             patent: '',
             application: '',
@@ -56,7 +56,7 @@ const Reports = (props) => {
         },
         {
             title: 'To Divest',
-            tooltip: 'Patent assets covering technological areas which are far from the company\’s core technology.',
+            tooltip: 'Patent assets covering subject matters presumably far from the company’s core business.',
             number: 0,
             patent: '',
             application: '',
@@ -67,7 +67,7 @@ const Reports = (props) => {
         },
         {
             title: 'To Monetize',
-            tooltip: 'Patent assets that are assigned to the company under a stated corresponding agent which is different from those currently employed by the company.',
+            tooltip: 'Patent assets with a higher likelihood to license 3rd parties.',
             number: 0,
             patent: '',
             application: '',
@@ -78,7 +78,7 @@ const Reports = (props) => {
         },
         {
             title: 'Names',
-            tooltip: 'Patent assets assigned under incorrect names, and unlikely to be found in a name search.',
+            tooltip: 'Patent assets that were assigned under incorrect owner names, and are likely to not be found in a name search, preventing assignees from finding their own patent assets.',
             number: 0,
             patent: '',
             application: '',
@@ -89,7 +89,7 @@ const Reports = (props) => {
         },
         {
             title: 'Addresses',
-            tooltip: 'Patent assets assigned under incorrect addresses.',
+            tooltip: 'Patent assets that were assigned under incorrect address of the owner or the stated corresponding agent.',
             number: 0,
             patent: '',
             application: '',
@@ -100,7 +100,7 @@ const Reports = (props) => {
         },
         {
             title: 'Deflated Collateral',
-            tooltip: 'The list of collateralized patent assets that have expired since the collateralization day.',
+            tooltip: 'Collateralized patent assets that have expired or abandoned.  Most security agreements require borrowers to maintain the securing assets.',
             number: 0,
             patent: '',
             application: '',
@@ -111,7 +111,7 @@ const Reports = (props) => {
         },
         {
             title: 'Encumbrances',
-            tooltip: 'Patent assets subject to third party rights, which could harm the patents’ liquidity.',
+            tooltip: 'Patent assets that are subject to third party rights, which could harm the patents’ liquidity, enforcement, and collateralization. ',
             number: 0,
             patent: '',
             application: '',
@@ -132,7 +132,7 @@ const Reports = (props) => {
         },
         {
             title: 'Recordings',
-            tooltip: 'Patent assets exposed to third party\'s rights due to recording that was beyond 45 days from the transaction\’s execution date.',
+            tooltip: 'Patent assets the assignment of which was recorded later than 3 months from its date, and therefore exposed to a bona fide purchases for valuable consideration.',
             number: 0,
             patent: '',
             application: '',
@@ -143,7 +143,7 @@ const Reports = (props) => {
         },
         {
             title: 'Corrections',
-            tooltip: 'Patent assets with recording that later on were corrected.',
+            tooltip: 'Patent assets the assignments of which were recorded incorrectly, and required a subsequent correction.',
             number: 0,
             patent: '',
             application: '',
@@ -154,7 +154,7 @@ const Reports = (props) => {
         },
         {
             title: 'Challenged',
-            tooltip: 'The list of patents the validity of which has been challenged.',
+            tooltip: 'Patent assets that were challenged at PTAB.',
             number: 0,
             patent: '',
             application: '',

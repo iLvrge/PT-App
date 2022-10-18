@@ -11,7 +11,7 @@ import { setAllAssignmentCustomers, setAssetTypeAssignmentAllAssets, setSelectAs
 import TitleBar from '../../TitleBar';
 
 
-const LawFirmNames = () => {
+const LawFirmNames = (props) => {
     const classes = useStyles() 
     const dispatch = useDispatch()
     const [ tabs, setTabs ] = useState(['LawFirm Names'])
@@ -22,7 +22,7 @@ const LawFirmNames = () => {
     const selectedLawFirm = useSelector( state => state.patenTrack2.selectedLawFirm);
     
     const randomNumbers = () => {
-        const min = 15, max = 25;
+        const min = 10, max = 25;
         return Math.floor(Math.random() * (max - min + 1)) + min
     }
     useEffect(() => {
@@ -30,15 +30,21 @@ const LawFirmNames = () => {
             setNamesData([])
             const companies = selectedCompaniesAll === true ? [] : selectedCompanies;
             if(selectedCompaniesAll === true || selectedCompanies.length > 0) {
-                console.log('selectedLawFirm', selectedLawFirm)
                 const {data} = await PatenTrackApi.getLawFirmsByCompany(companies, selectedLawFirm)
                 if(data.length > 0) {
                     setNamesData(data)
-                    const labels = [], values = []
+                    const labels = [], values = [];
+                    let PIXEL = 50;
+                    const container = document.getElementById('analyticsBar')
+                    if(container.childElementCount > 0 ) {
+                        PIXEL = 10
+                    }
+                    
                     const promise = data.map( item => {
                         labels.push(item.lawfirm)
-                        values.push( typeof item.distance != 'undefined' ? 50 + item.distance * 3 : randomNumbers() )
+                        values.push( typeof item.distance != 'undefined' ? PIXEL + item.distance * 3 : randomNumbers() )
                     })
+                    
                     await Promise.all(promise)
                     const ctx = document.getElementById('canvas')
            

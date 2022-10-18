@@ -1764,3 +1764,10 @@ export const setSelectLawFirm = (data) => {
     data
   }
 }
+
+export const setSocialMediaConnectPopup = (flag) => {  
+  return {
+    type: types.SET_SOCIAL_MEDIA_CONNECT_MODAL, 
+    flag
+  } 
+}

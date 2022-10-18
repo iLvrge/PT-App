@@ -432,7 +432,8 @@ const ViewIcons = (props) => {
                             <IconButton 
                                 size="small"
                                 className={clsx(classes.actionIcon, {[classes.active]: openSearch})}
-                                onClick={onHandleSearch}
+                                /* onClick={onHandleSearch} */
+                                onClick={() => window.open('https://ppubs.uspto.gov/pubwebapp/')}
                             >
                                <ManageSearch/>
                             </IconButton>

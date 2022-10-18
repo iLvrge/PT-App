@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react'
 
 import { useSelector } from 'react-redux'
-import { Tab, Tabs, Paper, Grid, Badge, IconButton } from '@mui/material'
+import { Tab, Tabs, Paper, Grid, Badge, IconButton, Select, MenuItem, FormControl, InputLabel } from '@mui/material'
 import { Fullscreen as FullscreenIcon } from '@mui/icons-material'
 import FamilyContainer from '../FamilyContainer'
 import LegalEventsContainer from '../LegalEventsContainer'
@@ -14,12 +14,14 @@ import FullScreen from '../../FullScreen'
 import { numberWithCommas, applicationFormat, capitalize } from "../../../../utils/numbers";
 
 import useStyles from './styles'
+import { setAssetsUSPTO } from '../../../../actions/patentTrackActions2'
 
 const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrationBar, visualizerBarSize, type, standalone, activeTab }) => {
 
     const classes = useStyles()
     const [ fullScreen, setFullScreen ] = useState(false)
     const [ selectedTab, setSelectedTab ] = useState(typeof activeTab !== 'undefined' ? activeTab : 0)
+    const [ uspto, setUSPTO ] = useState('')
     const [ familyItemData, setfamilyItemData ] = useState({})
     const [ abstractData, setAbsractData ] = useState('')
     const [ claimsData, setClaimsData ] = useState('')
@@ -29,7 +31,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
     const [ ptabData, setPtabData ] = useState([])
     const [ assignmentsData, setAssignmentsData ] = useState([])
     const [selectedNumber, setSelectedNumber] = useState('')
-    const handleChangeTab = (event, newTab) => setSelectedTab(newTab)
+    const handleChangeTab = (event, newTab) => setSelectedTab(previousTab => newTab != 5 ? newTab : previousTab)
     const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
@@ -125,6 +127,15 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
     const onCloseFamilyMode = useCallback(() => {
         //dispatch(toggleFamilyMode());
       }, [/*dispatch*/]);
+
+    const onHandleChange = (event) => {
+        setUSPTO(event.target.value)
+        if(event.target.value != '') {
+            let target = event.target.value != 'Application' ? event.target.value : ''
+            let url = `https://patentcenter.uspto.gov/applications/${selectedAssetsPatents[0]}${target}`
+            window.open(url);
+        }
+    }
     
     const ItemLabel = ({label}) =>  {
         return (
@@ -139,6 +150,27 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                     label === 'Figures'
                     ?
                         <span className={classes.containerRelative}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.figures)} showZero={false}></Badge></span>
+                    :
+                    label ===  'USPTO'
+                    ?
+                        <FormControl sx={{ m: 1, minWidth: 80 }} size="small">
+                            <InputLabel id="uspto-extra-info-label">USPTO</InputLabel>
+                            <Select
+                                labelId="uspto-extra-info-label"
+                                id="uspto-extra-info"
+                                value={uspto}
+                                label="USPTO"
+                                onChange={onHandleChange}
+                            >
+                                <MenuItem value={'Application'}>Application Data</MenuItem>
+                                <MenuItem value={'/ifw/docs'}>Document & Transactions</MenuItem>
+                                <MenuItem value={'/patentTermAdjustment'}>Patent Term Adjustment</MenuItem>
+                                <MenuItem value={'/attorney'}>Address & Attorney/Agent Information</MenuItem>
+                                <MenuItem value={'/supplementalContent/fileType'}>Supplemental Content</MenuItem>
+                                <MenuItem value={'/assignments/abstract'}>Assignments</MenuItem>
+                                <MenuItem value={'/displayReferences/usPatentDocs'}>Display references</MenuItem>
+                            </Select>
+                        </FormControl>
                     :
                     label
         )
@@ -161,7 +193,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                         }
                         <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
                             {
-                                [`Family`, `Abstract`, `Specifications`, `Claims`, `Figures`].map( (item, index) => (
+                                [`Family`, `Abstract`, `Specifications`, `Claims`, `Figures`, 'USPTO'].map( (item, index) => (
                                     <Tab
                                         key={index}
                                         className={classes.tab}

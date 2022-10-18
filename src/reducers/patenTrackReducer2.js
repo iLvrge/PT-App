@@ -823,6 +823,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state, 
           selectedLawFirm: action.data
         }
+      case types.SET_SOCIAL_MEDIA_CONNECT_MODAL:
+        return { 
+          ...state, 
+          socialMediaConnectPopup: action.flag
+        }
       default:   
       return state
   } 
