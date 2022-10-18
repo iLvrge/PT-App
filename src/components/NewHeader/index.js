@@ -868,7 +868,7 @@ const onHandlleSetSocialMediaPopup = (flag) => {
         )
       }
       {
-        socialMediaConnectPopup === true &&  (
+        socialMediaConnectPopup === true && process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && (
           <FullScreen 
             componentItems={connectMenuItems} 
             showScreen={socialMediaConnectPopup}  

@@ -494,10 +494,11 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }            
         return () => (isSubscribed = false)
     }, [ companies.list ])
+    
 
 
     useEffect(() => {   
-        if(dashboard_share_selected_data != undefined && Object.keys(dashboard_share_selected_data).length > 0 && process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
+        if(dashboard_share_selected_data != undefined && Object.keys(dashboard_share_selected_data).length > 0 && (process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI')) {
             let { selectedCompanies, tabs, customers } = dashboard_share_selected_data
             if(typeof selectedCompanies != 'undefined' && selectedCompanies != '') {
                 try{
@@ -531,7 +532,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                 }
             }
         }
-    }, [dashboard_share_selected_data])
+    }, [dashboard_share_selected_data, dispatch])
 
     /**
      * Get list of user activity
