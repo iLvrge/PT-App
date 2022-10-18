@@ -612,7 +612,11 @@ const resetAllActivity = (category) => {
       dispatch(setSwitchAssetButton(controlList[findIndex].category == 'due_dilligence' ? 0 : 1))
     }
   }
-} 
+}
+
+const onHandlleSetSocialMediaPopup = (flag) => {
+  dispatch(setSocialMediaConnectPopup(flag))
+}
   return (
     <AppBar className={classes.root} color='transparent' position='relative'>
       <Toolbar className={classes.toolbar}>
@@ -868,13 +872,11 @@ const resetAllActivity = (category) => {
           <FullScreen 
             componentItems={connectMenuItems} 
             showScreen={socialMediaConnectPopup}  
-            setScreen={setSocialMediaConnectPopup}
+            setScreen={onHandlleSetSocialMediaPopup}
             paper={false} 
             full={false}   
           />
         )
-
-
       }
       {/* <Modal
         open={controlModal}

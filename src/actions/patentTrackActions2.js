@@ -1763,11 +1763,11 @@ export const setSelectLawFirm = (data) => {
     type: types.SET_LAWFIRM_SELECTED,  
     data
   }
-}
+} 
 
 export const setSocialMediaConnectPopup = (flag) => {  
   return {
     type: types.SET_SOCIAL_MEDIA_CONNECT_MODAL, 
     flag
   } 
-}
+} 
