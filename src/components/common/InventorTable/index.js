@@ -145,6 +145,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         }
     }, [ assetTypeCompaniesSelected, selectItems ]) 
 
+    console.log('selectedCategory', selectedCategory)
     useEffect(() => {
         if(standalone) {         
             const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
@@ -154,7 +155,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
                     getCustomerParties(
                         selectedCategory == '' ? '' : selectedCategory,
                         companies, 
-                        tabs, 
+                        [10], 
                         customerType,
                         false 
                     )

@@ -19,4 +19,9 @@ export default makeStyles(theme => ({
   searchContainer: {
     marginRight: 15
   },
+  btnGroup:{
+    padding: '0 5px',
+    border: 0,
+    textTransform: 'initial'
+  },
 }))

@@ -426,7 +426,7 @@ const ViewIcons = (props) => {
                             </Badge>         
                         </IconButton> 
                         <AddToolTip
-                            tooltip={`Search`}
+                            tooltip={`Search at USPTO`}
                             placement='bottom'
                         >
                             <IconButton 

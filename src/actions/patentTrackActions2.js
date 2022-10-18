@@ -1183,6 +1183,7 @@ export const getCustomerTransactions = ( type, companies, tabs, customers, appen
  */
 
 export const getCustomerParties = ( type, companies, tabs, customerType, append = false ) => {
+  console.log('getCustomerParties', type, companies, tabs, customerType)
   return async dispatch => {
     if(customerType === 1) {
       dispatch( setAssetTypesInventorsLoading( true ) )

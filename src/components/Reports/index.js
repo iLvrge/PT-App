@@ -1129,46 +1129,47 @@ const Reports = (props) => {
                     if(id === 0) {
                         dispatch(setSwitchAssetButton(1))
                     } 
+                    if(controlList[findIndex].category == 'proliferate_inventors') {
+                        /**
+                         * Inventor
+                         * select Inventor activity type
+                         * Open Inventor Table
+                         * 
+                         */
+                        dispatch( setAssetTypesSelect([10]) )
+                        if(props.openInventorBar === false) {
+                            props.handleInventorBarOpen()
+                        }
+                        if(props.assignmentBar === true) {
+                            props.assignmentBarToggle()
+                        }
+                    }  
+                    if(controlList[findIndex].category == 'top_lenders') {
+                        /**
+                         * Select Lending activity type
+                         */
+                        dispatch( setAssetTypesSelect([81]) )
+                        if(props.openOtherPartyBar === false) {
+                            props.handleOtherPartyBarOpen()
+                        }
+                    }
+                    dispatch(setDashboardScreen(false))
+                    dispatch(setTimelineScreen(timeline))
+                    dispatch(setPatentScreen(patent))
+                    if(patent === true) {
+                        history.push(routeList.patent_assets)  
+                    }
+                    if(maintainence === true) {
+                        history.push(routeList.pay_maintainence_fee)  
+                    }
+                    if(props.openCustomerBar === false && timeline === false){
+                        props.handleCustomersBarOpen()
+                    }
+                    if(props.openCommentBar === false){
+                        props.handleCommentBarOpen()
+                    }   
                 })
-                if(controlList[findIndex].category == 'proliferate_inventors') {
-                    /**
-                     * Inventor
-                     * select Inventor activity type
-                     * Open Inventor Table
-                     * 
-                     */
-                    dispatch( setAssetTypesSelect([10]) )
-                    if(props.openInventorBar === false) {
-                        props.handleInventorBarOpen()
-                    }
-                    if(props.assignmentBar === true) {
-                        props.assignmentBarToggle()
-                    }
-                }  
-                if(controlList[findIndex].category == 'top_lenders') {
-                    /**
-                     * Select Lending activity type
-                     */
-                    dispatch( setAssetTypesSelect([81]) )
-                    if(props.openOtherPartyBar === false) {
-                        props.handleOtherPartyBarOpen()
-                    }
-                }
-                dispatch(setDashboardScreen(false))
-                dispatch(setTimelineScreen(timeline))
-                dispatch(setPatentScreen(patent))
-                if(patent === true) {
-                    history.push(routeList.patent_assets)  
-                }
-                if(maintainence === true) {
-                    history.push(routeList.pay_maintainence_fee)  
-                }
-                if(props.openCustomerBar === false && timeline === false){
-                    props.handleCustomersBarOpen()
-                }
-                if(props.openCommentBar === false){
-                    props.handleCommentBarOpen()
-                }                             
+                                          
             }
         }
     }, [dispatch, profile, activeId, selectedAssetCompanies, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, props.openCustomerBar, props.openCommentBar, viewDashboard, props.openInventorBar, props.assignmentBar, props.openOtherPartyBar])

@@ -129,10 +129,11 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
       }, [/*dispatch*/]);
 
     const onHandleChange = (event) => {
-        setUSPTO(event.target.value)
+        /* setUSPTO(event.target.value) */
         if(event.target.value != '') {
+            console.log('selectedAssetsPatents', selectedAssetsPatents)
             let target = event.target.value != 'Application' ? event.target.value : ''
-            let url = `https://patentcenter.uspto.gov/applications/${selectedAssetsPatents[0]}${target}`
+            let url = `https://patentcenter.uspto.gov/applications/${selectedAssetsPatents[1]}${target}`
             window.open(url);
         }
     }
@@ -164,11 +165,14 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                             >
                                 <MenuItem value={'Application'}>Application Data</MenuItem>
                                 <MenuItem value={'/ifw/docs'}>Document & Transactions</MenuItem>
+                                <MenuItem value={'/continuity'}>Continuity</MenuItem>
                                 <MenuItem value={'/patentTermAdjustment'}>Patent Term Adjustment</MenuItem>
+                                <MenuItem value={'/foreignPriority'}>Foreign Priority</MenuItem>
+                                <MenuItem value={'/feeHistory'}>Fees Payment History</MenuItem>
                                 <MenuItem value={'/attorney'}>Address & Attorney/Agent Information</MenuItem>
                                 <MenuItem value={'/supplementalContent/fileType'}>Supplemental Content</MenuItem>
                                 <MenuItem value={'/assignments/abstract'}>Assignments</MenuItem>
-                                <MenuItem value={'/displayReferences/usPatentDocs'}>Display references</MenuItem>
+                                <MenuItem value={'/displayReferences/usPatentDocs'}>Display References</MenuItem>
                             </Select>
                         </FormControl>
                     :
