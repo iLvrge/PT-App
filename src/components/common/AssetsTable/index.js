@@ -146,6 +146,7 @@ const AssetsTable = ({
   const [defaultViewFlag, setDefaultViewFlag] = useState(0)
   const [assetRows, setAssetRows] = useState([])
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState(true)
+  const [ selectedDefaultItem, setSelectedDefaultItem ] = useState(false)
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
   const google_profile = useSelector(state => state.patenTrack2.google_profile)
   const openModal = Boolean(anchorEl);
@@ -494,8 +495,15 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   }, [ move_assets ])  
 
   useEffect(() => {
-
-  }, [assets])
+    if(assetRows.length > 0 && (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE')) {
+      if(assetRows.length == 1 && selectedDefaultItem === false) {
+        setSelectedDefaultItem(true)
+        dispatch(setAssetTypesPatentsSelected([assetRows[0].asset]))
+        setSelectItems([assetRows[0].asset])
+        handleOnClick(assetRows[0])
+      }
+    }
+  }, [assetRows, selectedDefaultItem])
 
   useEffect(() => {
     assetsAssignmentRef.current = assetTypeAssignmentAssets

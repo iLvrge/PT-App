@@ -128,7 +128,17 @@ let pages = [
   }
 ] 
 
-if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ) {
+if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') {
+  pages = [  
+    {
+      exact: true,
+      path: routeList.standard_default,
+      component: PatentLayout,
+      layout: GlobalLayout,
+      type: 1
+    },
+  ] 
+} else  if(process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD'  || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') {
   pages = [  
     {
       exact: true,

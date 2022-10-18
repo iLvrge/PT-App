@@ -54,7 +54,7 @@ import {
     setDashboardShareData
 } from '../../actions/patentTrackActions2'
 
-import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpanMode, setMaintainenceFeeFrameMode, setTimelineScreen } from '../../actions/uiActions'
+import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpanMode, setMaintainenceFeeFrameMode, setTimelineScreen, updateViewDashboard } from '../../actions/uiActions'
 
 import useStyles from './styles'
 import clsx from 'clsx'
@@ -184,6 +184,7 @@ const GlobalScreen = ({
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
     const dashboard_share_selected_data = useSelector(state => state.patenTrack2.dashboard_share_selected_data)
     const selectedAssetsFamily = useSelector(state => state.patenTrack.assetFamily) 
+    const viewDashboard = useSelector(state => state.patenTrack.viewDashboard) 
     const checkContainer = () => {
         /* setTimeout(() => {
             if( mainContainerRef.current != null  && mainContainerRef.current != undefined) {                
@@ -200,23 +201,22 @@ const GlobalScreen = ({
         }, 1000) */
     }
     
-     
 
     useEffect(() => {
-        if(process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' && auth_token !== null) {
+        if((process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') && auth_token !== null) {
             let url = location.pathname
             if(url != '' && location != 'blank') {
                 url = url.replace('/', '')
                 if(url != '') {
-                    (async () => {
+                    const getDashboardData = async() => {
                         PatenTrackApi.cancelShareDashboard()
                         const {data} = await PatenTrackApi.getShareDashboardList(url)
                         if(data != null && Object.keys(data).length > 0) {
-                            dispatch(setDashboardShareData(data))
-                            let { selectedCompanies, tabs, customers } = data
+                            let { selectedCompanies, tabs, customers, share_button } = data
                             if(typeof selectedCompanies != 'undefined' && selectedCompanies != '') {
                                 try{
-                                    selectedCompanies = JSON.parse(selectedCompanies)
+                                    dispatch(setDashboardShareData(data))
+                                    selectedCompanies = JSON.parse(selectedCompanies) 
                                     if(selectedCompanies.length > 0) {
                                         dispatch(setMainCompaniesSelected(selectedCompanies, []))
                                         (async () => {
@@ -235,7 +235,7 @@ const GlobalScreen = ({
                                         if(typeof customers != 'undefined' && customers != '') {
                                             customers = JSON.parse(customers)
                                             if(customers.length > 0) {
-                                                dispatch( setSelectAssignmentCustomers(customers) )
+                                                dispatch(setSelectAssignmentCustomers(customers) )
                                             }
                                         }
                                     }                    
@@ -244,13 +244,14 @@ const GlobalScreen = ({
                                 }
                             }
                         }
-                    })()
+                    }
+                    getDashboardData()
                 }
             } 
         }
-        return (() => {
-        })
-    }, [auth_token])
+        /* return (() => {
+        }) */
+    }, [auth_token, dispatch])
 
     useEffect(() => {
         if(selectedCategory == 'correct_details') {

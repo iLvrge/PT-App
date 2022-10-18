@@ -292,7 +292,7 @@ const IllustrationCommentContainer = ({
                 }                
                                               
                 {  
-                    illustrationBar === true && (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' ||  type === 9 || ((process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') && auth_token !== null))
+                    illustrationBar === true && (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' ||  type === 9 || ((process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') && auth_token !== null))
                     ?
                         ptab === true && assetIllustration === null
                         ?
