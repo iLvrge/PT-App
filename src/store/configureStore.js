@@ -17,7 +17,7 @@ const store = createStore(rootReducer, applyMiddleware(thunk))
 
 if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') {
   let location = window.location.pathname
-
+  
   if(location && location != 'blank') {
     (async() => {
       location = location.replace('/', '')

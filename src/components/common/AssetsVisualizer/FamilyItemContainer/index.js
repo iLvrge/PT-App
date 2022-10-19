@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 
 import { useSelector } from 'react-redux'
 import { Tab, Tabs, Paper, Grid, Badge, IconButton, Select, MenuItem, FormControl, InputLabel } from '@mui/material'
@@ -135,6 +135,9 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
             let target = event.target.value != 'Application' ? event.target.value : ''
             let url = `https://patentcenter.uspto.gov/applications/${selectedAssetsPatents[1]}${target}`
             window.open(url);
+            setTimeout(() => {
+                document.activeElement.blur()
+            }) 
         }
     }
     

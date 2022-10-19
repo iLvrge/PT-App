@@ -3,14 +3,21 @@ import makeStyles from '@mui/styles/makeStyles'
 export default makeStyles(theme => ({
     root: {
         display: 'flex',
-        width: 500,
-        height: 300,
-        padding: 20,
-        justifyContent: 'space-around',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
         alignItems: 'center',
+        width: 500,
+        height: 250,
+        padding: 20,
         "& .MuiTouchRipple-root .MuiTouchRipple-child": {
             borderRadius: "8px"
         }
+    },
+    box: {
+        display: 'flex',
+        justifyContent: 'space-around',
+        width: '100%',
+        margin: '20px 0px'
     },
     tooltip:{
         fontSize: '1rem'

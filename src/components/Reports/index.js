@@ -514,6 +514,7 @@ const Reports = (props) => {
     const profile = useSelector(state => (state.patenTrack.profile))    
     const [cardList, setCardList] = useState([])
     const [timelineList, setTimelineList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_TIMELINE_LIST : TIMELINE_LIST)
+    const auth_token = useSelector(state => state.patenTrack2.auth_token)
     const viewDashboard = useSelector(state => state.ui.viewDashboard)
     const viewInitial = useSelector(state => state.ui.viewInitial)
     const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
@@ -641,6 +642,7 @@ const Reports = (props) => {
      * Get Dashboard data
      */
     useEffect(() => {
+        
         if(typeof props.dashboardData !== 'undefined' && props.dashboardData.length > 0) {
             setLoading(false)
             dispatch(setLoadingDashboardData(false))
@@ -648,7 +650,7 @@ const Reports = (props) => {
             if(typeof props.dashboardTimelineData !== 'undefined' && props.dashboardTimelineData.length > 0) {
                 setTimelineList(props.dashboardTimelineData)
             }
-        }  else {
+        }  else { 
             if(selectedCompanies.length > 0 ) {
                 if(viewDashboard.timeline === true && timelineList.length > 0) {
                     callTimelineData()
@@ -670,7 +672,8 @@ const Reports = (props) => {
             selectedAssetCompanies, 
             selectedAssetAssignments, 
             assetTypeAssignmentAssets, 
-            assetTypeCompanies
+            assetTypeCompanies,
+            profile
         ]
     )
 
@@ -685,7 +688,7 @@ const Reports = (props) => {
 
     
     const findDashboardData = async(invention, jurisdictions, sankey, kpi) => {        
-        if(loading === false && ((typeof invention !== 'undefined' && invention === false) ||  viewDashboard.invention === false) && ((typeof jurisidictions !== 'undefined' && jurisdictions === false) || viewDashboard.jurisdictions === false ) && ((typeof sankey !== 'undefined' && sankey === false) || viewDashboard.sankey === false) ) { 
+        if(profile != undefined && profile.user != undefined && loading === false && ((typeof invention !== 'undefined' && invention === false) ||  viewDashboard.invention === false) && ((typeof jurisidictions !== 'undefined' && jurisdictions === false) || viewDashboard.jurisdictions === false ) && ((typeof sankey !== 'undefined' && sankey === false) || viewDashboard.sankey === false) ) { 
             const list = [];
             let totalRecords = 0;
             setLoading(true)
@@ -693,7 +696,7 @@ const Reports = (props) => {
             resetAll(false)
             props.checkChartAnalytics(null, null, false) 
             dispatch(setViewDashboardIntial(true))
-            console.log('companyname', companyname)
+            
             if(viewDashboard.line === true || (profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank')) {
                 const cancelRequest = await PatenTrackApi.cancelAllDashboardToken()  
                 const CancelToken = PatenTrackApi.generateCancelToken() 
