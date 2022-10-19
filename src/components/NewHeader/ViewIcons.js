@@ -281,7 +281,7 @@ const ViewIcons = (props) => {
                             <IconButton 
                                 size="small"
                                 className={clsx(classes.actionIcon, {[classes.active]: props.dashboardScreen === true && viewDashboard.kpi})}
-                                onClick={onHandleKPI}
+                                onClick={() => process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert() : onHandleKPI}
                                 disabled={loadingDashboardData}
                             >
                                 <AppsOutage/>
