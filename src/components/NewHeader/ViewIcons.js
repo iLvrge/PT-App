@@ -1,4 +1,4 @@
- import React, { useCallback, useState } from 'react'
+ import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {  
     useHistory,
@@ -17,6 +17,7 @@ import { AppsOutage, AutoGraph, Public, Speed, ViewTimeline, Search, Notificatio
 import PatenTrackApi from '../../api/patenTrack2'
 import { copyToClipboard } from '../../utils/html_encode_decode'
 import { setSwitchAssetButton } from '../../actions/patentTrackActions2'
+import { setCompanies } from '../../actions/patenTrackActions'
 
 const ViewIcons = (props) => {
     const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const ViewIcons = (props) => {
     const history = useHistory()
     const [timelineView, setTimelineView] = useState(false)
     const [patentView, setPatentView] = useState(false)
-    const [openSearch, setOpenSearch] = useState(false)
+    const [openSearch, setOpenSearch] = useState(false) 
     const profile = useSelector(state => (state.patenTrack.profile))  
     const viewDashboard = useSelector(state => state.ui.viewDashboard) 
     const assetButton = useSelector(state => state.ui.assetButton) 
@@ -42,6 +43,7 @@ const ViewIcons = (props) => {
     const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected);
     const SHARE_URL_MESSAGE = 'A sharing URL was added to your clipboard.'
     const path = location.pathname
+ 
 
     const changeGraph = async(flag) => {
         //setCardList(LIST)
@@ -189,11 +191,11 @@ const ViewIcons = (props) => {
         setOpenSearch(!openSearch)
     }
 
-    const shareDashboard = useCallback(async() => {
+    const shareDashboard = async() => {
         /**
          * get selected companies and selected transaction types
          * and create shareable dashboard url
-         */
+         */ 
         if(mainCompaniesSelected.length > 0) {
             const formData = new FormData()
             formData.append('selectedCompanies', JSON.stringify(mainCompaniesSelected));
@@ -207,13 +209,13 @@ const ViewIcons = (props) => {
         } else {
             alert("Please select a company first")
         }
-    }, [mainCompaniesSelected])
+    }
 
     const onShare = useCallback(async () => {
         if (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'){
             alert('Message..')
         } else {
-            if(props.dashboardScreen === true) {
+            if(props.dashboardScreen === true) { 
                 shareDashboard()
             } else {
                 let selectAssetsList = [], selectedTransactions = []
@@ -259,7 +261,7 @@ const ViewIcons = (props) => {
                 }
             }
         }        
-    }, [ dispatch, category, selectedMaintainencePatents, assetTypeAssignmentAssetsSelected, selectedAssetsTransactions ])
+    }, [ dispatch, category, mainCompaniesSelected, selectedMaintainencePatents, assetTypeAssignmentAssetsSelected, selectedAssetsTransactions ])
 
     const onHandleAlert = () => {
         alert('Please activate your account.')

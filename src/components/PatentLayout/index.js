@@ -191,9 +191,12 @@ const PatentLayout = ({
             }
         } else if(selectedCategory == 'pay_maintainence_fee' || selectedCategory == 'deflated_collaterals') {
             let statusChange = false;
-            if(openIllustrationBar === true) {
+            if(openIllustrationBar === false) {
                 statusChange = true
                 handleIllustrationBarOpen()
+            }
+            if(openAssignmentBar === true) {
+                handleAssignmentBarOpen()
             }
             if( openAnalyticsBar === false ) {
                 statusChange = true
@@ -689,8 +692,7 @@ const PatentLayout = ({
                                                 setChartBar={setChartBar}
                                                 handleCommentBarOpen={handleCommentBarOpen}
                                                 handleCustomersBarOpen={handleCustomersBarOpen}
-                                                parentBarDrag={setVisualizerBarSize}
-                                                parentBar={setVisualizeOpenBar}
+                                               
                                                 cube={selectedCategory === 'ptab' ? false : true}
                                                 ptab={selectedCategory === 'ptab' ? true : false}
                                             /> 
