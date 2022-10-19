@@ -212,6 +212,7 @@ const AssetsTable = ({
   const switch_button_assets = useSelector(state => state.patenTrack2.switch_button_assets)
   const foreignAssets = useSelector(state => state.patenTrack2.foreignAssets)
   const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
+  console.log('selectedAssetCompanies', selectedAssetCompanies)
   const Clipboard = () => {
     return (
       <svg xmlns="http://www.w3.org/2000/svg" className='clipboard' fill="#fff" enableBackground="new 0 0 80 80" viewBox="0 0 80 80"><path d="M40,5c-3.3085938,0-6,2.6914062-6,6v3h-5c-0.4199219,0-0.7949219,0.262207-0.9394531,0.6567383l-0.880188,2.4077148	h-9.0836792C16.9404297,17.0644531,16,18.0048828,16,19.1611328v53.7421875C16,74.0595703,16.9404297,75,18.0966797,75h43.8066406
@@ -942,6 +943,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
           }          
         }  else {
+          console.log('selectedAssetCompanies', selectedAssetCompanies)
           if(assetTypeAssignmentAssets.length === 0 ) {
             loadDataFromServer(offsetWithLimit[0], offsetWithLimit[1], sortField, sortOrder)   
           }         

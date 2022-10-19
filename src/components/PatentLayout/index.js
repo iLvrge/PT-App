@@ -205,6 +205,26 @@ const PatentLayout = ({
             if(statusChange === true) {
                 changeVisualBar(false, true, false, false)
             }
+        } else if (selectedCategory == 'acquired') {
+            let statusChange = false;
+            if(openAssignmentBar === true) {
+                handleAssignmentBarOpen()
+            }
+            if( openCommentBar === false ) {
+                handleCommentBarOpen()
+            }
+            if( openChartBar === false ) {
+                statusChange = true
+                handleChartBarOpen()
+            }
+            if( openAnalyticsBar === false ) {
+                statusChange = true
+                handleAnalyticsBarOpen()
+            }
+            if(statusChange === true) {
+                changeVisualBar(false, true, false, false)
+            }
+
         } else {
             if(openAssignmentBar === true) {
                 handleAssignmentBarOpen()

@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import PatenTrackApi from '../../../../api/patenTrack2';
 import TitleBar from '../../TitleBar';
 import Loader from '../../Loader';
+import { setAssetTypeAssignmentAllAssets, setSelectAssignmentCustomers } from '../../../../actions/patentTrackActions2';
 
 
 const SankeyChart = (props) => {
@@ -30,7 +31,6 @@ const SankeyChart = (props) => {
                 setAssignorRawData([])
                 const formData = new FormData()
                 formData.append('selectedCompanies', JSON.stringify(selectedCompanies));  
-                console.log(props)
                 if(typeof props.type != 'undefined' && props.type !== null && props.type != '') {
                     formData.append('type', props.type);  
                     formData.append('search', 'all');  
@@ -87,16 +87,16 @@ const SankeyChart = (props) => {
     }, [selectedCompanies])
 
     const handleSelection = useCallback((items, type) => {
-        console.info(items, type)
-        /* let oldItems = type == 2 ? [...assigneeRawData] : [...assigneeRawData]
+        let oldItems = type == 2 ? [...assignorRawData] : [...assigneeRawData]
         const filter = oldItems.filter( row => row.name === items[0].name)
         if(filter.length > 0) {
-            dispatch(setSelectAssignmentCustomers([filter[0].id]))
-            dispatch(setDashboardScreen(false))
+            /* dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
+            dispatch(setSelectAssignmentCustomers([filter[0].id])) */
+            /* dispatch(setDashboardScreen(false))
             dispatch(setTimelineScreen(false))
-            dispatch(setPatentScreen(true))
-        } */
-    }, [assigneeRawData, assigneeRawData])
+            dispatch(setPatentScreen(true)) */
+        } 
+    }, [assignorRawData, assigneeRawData])
 
     return (
         <Paper sx={{p: 2, overflow: 'auto'}} className={clsx(classes.container, classes.containerTop)} square>
