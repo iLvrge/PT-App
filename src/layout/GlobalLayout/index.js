@@ -159,6 +159,7 @@ const GlobalLayout = (props) => {
     const timelineScreen = useSelector(state => state.ui.timelineScreen)
     const patentScreen = useSelector(state => state.ui.patentScreen)
 
+    console.log(profile)
 
     useEffect(() => {
         if(openVisualizerBar === false && visualizerBarSize != '0%') {

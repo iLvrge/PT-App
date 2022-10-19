@@ -1,8 +1,9 @@
 import React from 'react'
-import { Button, Paper, Tooltip, Typography, Zoom } from '@mui/material'
+import { Box, Button, Paper, Tooltip, Typography, Zoom } from '@mui/material'
 
 import useStyles from './styles'
 import { getAuthConnectToken } from '../../../utils/tokenStorage'
+import TitleBar from '../TitleBar'
 
 
 
@@ -63,42 +64,57 @@ const SocialMediaConnect = () => {
 
     return (
         <Paper className={classes.root} square>
-            <Tooltip 
-                title={
-                  <Typography color="inherit" variant='body2'>{/* Once you sign in to your Slack Workspace, we will create for you a dedicated channel in your Workspace for each of the patents and application in the Assets list. Just select an asset and start writing to your Workspace members in the text bar below.<br/>Whatever you write will be saved only in your Slack Workspace. */}Sign in to your Slack account</Typography>
-                } 
-                className={classes.tooltip}  
-                placement='top'
-                enterDelay={0}
-                TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
-            > 
-                <Button
-                    color="inherit" 
-                    onClick={() => onHandleSlackLogin(900, 830) }
-                    className={classes.button}
-                    startIcon={<SlackIcon className={classes.icon} />} 
+            <Box style={{width: '100%'}}>
+                <TitleBar
+                    title={`Please log in: `}
+                    enablePadding={true} 
+                    underline={false} 
+                />
+            </Box>
+            <Box className={classes.box}>
+                <Tooltip 
+                    title={
+                    <Typography color="inherit" variant='body2'>{/* Once you sign in to your Slack Workspace, we will create for you a dedicated channel in your Workspace for each of the patents and application in the Assets list. Just select an asset and start writing to your Workspace members in the text bar below.<br/>Whatever you write will be saved only in your Slack Workspace. */}Sign in to your Slack account</Typography>
+                    } 
+                    className={classes.tooltip}  
+                    placement='top'
+                    enterDelay={0}
+                    TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
+                > 
+                    <Button
+                        color="inherit" 
+                        onClick={() => onHandleSlackLogin(900, 830) }
+                        className={classes.button}
+                        startIcon={<SlackIcon className={classes.icon} />} 
+                    >
+                        Slack
+                    </Button>
+                </Tooltip>
+                <Tooltip 
+                    title={
+                    <Typography color="inherit" variant='body2'>{/* Once you sign in to your Slack Workspace, we will create for you a dedicated channel in your Workspace for each of the patents and application in the Assets list. Just select an asset and start writing to your Workspace members in the text bar below.<br/>Whatever you write will be saved only in your Slack Workspace. */}Sign in to your Microsoft account</Typography>
+                    } 
+                    className={classes.tooltip}  
+                    placement='top'
+                    enterDelay={0}
+                    TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
                 >
-                    Slack
-                </Button>
-            </Tooltip>
-            <Tooltip 
-                title={
-                  <Typography color="inherit" variant='body2'>{/* Once you sign in to your Slack Workspace, we will create for you a dedicated channel in your Workspace for each of the patents and application in the Assets list. Just select an asset and start writing to your Workspace members in the text bar below.<br/>Whatever you write will be saved only in your Slack Workspace. */}Sign in to your Microsoft account</Typography>
-                } 
-                className={classes.tooltip}  
-                placement='top'
-                enterDelay={0}
-                TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
-            >
-                <Button
-                    color="inherit" 
-                    onClick={() => onHandleSlackLogin(900, 830) }
-                    className={classes.button}
-                    startIcon={<MicrosoftIcon className={classes.icon} />} 
-                >
-                    Microsoft
-                </Button>
-            </Tooltip>
+                    <Button
+                        color="inherit" 
+                        onClick={() => onHandleSlackLogin(900, 830) }
+                        className={classes.button}
+                        startIcon={<MicrosoftIcon className={classes.icon} />} 
+                    >
+                        Microsoft
+                    </Button>
+                </Tooltip>
+            </Box>
+            <TitleBar
+                title={`Log in will enable you to create and manage a team conversation channel dedicated to each patent asset, transaction, and company. All your team members' input will be secured within these channels.`}
+                enablePadding={true} 
+                underline={false} 
+                typography={true}
+            />
         </Paper>
     )
 }
