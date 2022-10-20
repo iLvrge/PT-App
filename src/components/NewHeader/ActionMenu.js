@@ -699,18 +699,18 @@ const ActionMenu = (props) => {
                     layoutName == 'Owned' || layoutName == 'Invented' || layoutName == 'Acquired' || layoutName == 'Collaterlized' || layoutName == 'Maintenance Fee Due' || layoutName == 'Challenged (PTAB)' || layoutName == 'Divested' || layoutName == 'Abandoned' || layoutName == 'Members of Owned USA' || layoutName == 'Proliferate Inventors' || layoutName == 'Law Firms' || layoutName == 'Lenders'
                     ? 
                         <span className={classes.breadcrumbHeadingIcon}>
-                            <AppsOutage/>
+                            <AppsOutage/>  <span>{layoutName}</span>
                         </span>
                     :
                         layoutName == 'Chain-of-Title' || layoutName == 'To Assign' || layoutName == 'To Divest' || layoutName == 'To Monetize' || layoutName == 'Names' || layoutName == 'Addresses' || layoutName == 'Deflated Collateral' || layoutName == 'Encumbrances' || layoutName == 'Maintainance' || layoutName == 'Recordings' || layoutName == 'Corrections'
                         ?
                             <span className={classes.breadcrumbHeadingIcon}>
-                                <Speed/>
+                                <Speed/>  <span>{layoutName}</span>
                             </span>
                         :
-                            ''
+                            layoutName
                 }
-                {layoutName}
+               
             </React.Fragment>
         )
     }

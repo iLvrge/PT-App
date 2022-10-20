@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {useLocation} from 'react-router-dom'
-import { Paper, Dialog, DialogContent, DialogTitle, IconButton, MenuItem, ListItemIcon, Menu, Divider  } from '@mui/material'
+import { Paper, Dialog, DialogContent, DialogTitle, IconButton, MenuItem, ListItemIcon, Menu, Divider, Button  } from '@mui/material'
 import Draggable from "react-draggable"
 import CloseIcon from '@mui/icons-material/Close'
 import {ResizableBox} from "react-resizable"
@@ -22,7 +22,8 @@ import {
     getCustomerAssets,
     setAssetsIllustrationData,
     getCustomerSelectedAssets,
-    retrievePDFFromServer
+    retrievePDFFromServer,
+    setIsSalesAssetsDisplay
 } from '../../../../actions/patentTrackActions2'
 import { setPDFFile, setPdfTabIndex } from '../../../../actions/patenTrackActions' 
 import PatenTrackApi from '../../../../api/patenTrack2'
@@ -37,6 +38,7 @@ import FilterDashboardCPC from './FilterDashboardCPC'
 import TitleBar from '../../TitleBar'
 import clsx from 'clsx'
 import { setFamilyActiveTab } from '../../../../actions/uiActions'
+import AssetsTable from '../../AssetsTable'
 
 var newRange = [1,2]
 
@@ -280,17 +282,21 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const onHandleMouseOut = (event) => {
         clearInterval(interval)
     }
-
+    console.log('selectedCategory', selectedCategory)
     useEffect(() => {
-        if(selectedRow.length  === 0) {
+        if(selectedCategory == 'assigned' && selectedRow.length == 0) {
+            setInventionTabs([ 'Innovation', 'For Sale', 'To License Out'])
+        } else if(selectedRow.length  === 0) {
             setInventionTabs([ 'Innovation'])
             setSelectedTab(0)
         } else if( connectionBoxView === true || selectedRow.length > 0 ) {
             /* setInventionTabs([ 'Innovation', 'Agreement', 'Form', 'Main' ]) */
             setInventionTabs([ 'Innovation', 'Agreement'])
             //setSelectedTab(1)
-        }        
-    }, [ connectionBoxView, selectedRow ])
+        }
+    }, [ connectionBoxView, selectedRow, selectedCategory ])
+
+
 
     useEffect(() => {        
         const getChartData = async () => {
@@ -309,7 +315,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             const list = [];
             let totalRecords = 0;
             if(dashboardScreen === false) {
-                if(selectedTab === 0) {
+                if(selectedTab === 0 || ((selectedTab === 1 || selectedTab === 2) && (selectedCategory == 'assigned' && selectedRow.length == 0))) {
                     if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {
                     
                         if( assetsSelected.length > 0 ) {
@@ -644,6 +650,14 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         }
     }
 
+    useEffect(() => {
+        console.log('selectedTab', selectedTab)
+        if(selectedTab === 0 && selectedCategory == 'assigned' && selectedRow.length == 0) {
+            dispatch(setIsSalesAssetsDisplay(0))
+            dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
+        }
+    }, [selectedTab])
+
     useEffect(() => { 
         generateChart()
     }, [ isLoadingCharts, graphRawData, graphRawGroupData, graphContainerRef, defaultSize, valueScope, isDarkTheme ])
@@ -789,7 +803,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         );
     }
 
-    const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
+    /* const handleChangeTab = (e, newTab) => setSelectedTab(previousTab => (newTab == 1 || newTab == 2 ) && (selectedCategory == 'assigned' && selectedRow.length == 0) ? previousTab : newTab) */
+    const handleChangeTab = (e, newTab) => setSelectedTab( newTab )
 
     const yearRangeText = (value)=> {
         const findIndex = filterYear.findIndex( range => range.value === value)
@@ -899,6 +914,34 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         const {x, y} = position;
         setXY({x,y})
     }
+
+    const onHandleFilterAssets = (label) => {   
+        if(label === 'For Sale') {
+            dispatch(setIsSalesAssetsDisplay(1))
+            dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
+        } else if(label === 'To License Out') {
+            dispatch(setIsSalesAssetsDisplay(3))
+            dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
+        }
+    }
+
+    const TabLabel = ({label}) => {
+        return (
+            label === 'For Sale' || label === 'To License Out'
+            ?
+                selectedCategory == 'assigned' && selectedRow.length == 0
+                ?
+                    <Button 
+                        className={classes.button}
+                        onClick={() => {onHandleFilterAssets(label)}}>
+                        {label}
+                    </Button>
+                :
+                    label
+            :
+                label
+        )
+    } 
     
     return (
         <Paper 
@@ -918,7 +961,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                             inventionTabs.map((tab) => (
                                 <Tab
                                     key={tab}
-                                    label={tab}
+                                    label={<TabLabel label={tab}/>}
                                     classes={{ root: classes.tab }}
                                 />
                             )) 
@@ -954,9 +997,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                             )
                         } 
                         <div className={classes.graphContainer}> 
-                                          
                             {
-                                selectedTab === 0
+                                selectedTab === 0 || ((selectedTab === 1 || selectedTab === 2) && (selectedCategory == 'assigned' && selectedRow.length == 0))
                                 ?
                                     !isLoadingCharts
                                     ?
@@ -976,20 +1018,20 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                     :
                                         <Loader />
                                 :
-                                selectedTab === 1
-                                ?
-                                    <PdfViewer display={true} pdfTab={0} show_tab={false}/>         
-                                :
-                                selectedTab === 2
-                                ?
-                                    <PdfViewer display={true} pdfTab={1} show_tab={false}/>        
-                                :
-                                selectedTab === 3
-                                ?
-                                    <PdfViewer display={true} pdfTab={2} show_tab={false}/>
-                                :
-                                ''
-                            }                           
+                                    selectedTab === 1
+                                    ?
+                                        <PdfViewer display={true} pdfTab={0} show_tab={false}/>         
+                                    :
+                                        selectedTab === 2
+                                        ?
+                                            <PdfViewer display={true} pdfTab={1} show_tab={false}/>        
+                                        :
+                                            selectedTab === 3
+                                            ?
+                                                <PdfViewer display={true} pdfTab={2} show_tab={false}/>
+                                            :
+                                            ''
+                            }
                         </div> 
                         
                         <Dialog

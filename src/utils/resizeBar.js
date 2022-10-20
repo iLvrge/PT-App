@@ -17,7 +17,8 @@ import { setAssetTypeAssignments,
     setAllAssignments, 
     setSelectAssignments,
     setSlackMessages,
-    setChannelID
+    setChannelID,
+    setSelectedMaintainenceAssetsList
    } from '../actions/patentTrackActions2'
   
    import {  
@@ -111,6 +112,9 @@ export const resetItemList = {
         },
         {
             callback: setAllAssignmentCustomers(false)
+        },
+        {
+            callback: setSelectedMaintainenceAssetsList([])
         },
     ],
     clearOtherItems: [
