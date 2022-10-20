@@ -610,11 +610,14 @@ export default makeStyles(theme => ({
         }
     },
     breadcrumbHeadingIcon: {
-        position: 'relative',
         '& svg': {
-            position: 'relative',
-            top: 5,
-            marginRight: 5
+            marginRight: 5,
+            display: 'inline-block',
+            position: 'absolute',
+            bottom: 7
+        },
+        '& span':{
+            marginLeft: 25
         }
     }
 }))

@@ -112,6 +112,11 @@ export default makeStyles((theme) => ({
             position: 'absolute',
             left: -6,
             bottom: -4
+        },
+        '& svg.team':{
+            left: 0,
+            bottom: 0,
+            fill: '#fff'
         }
     }
 }))

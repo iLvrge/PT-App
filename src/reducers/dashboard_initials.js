@@ -55,6 +55,7 @@ export default {
     new_drive_template_file: null,
     template_document_url: 'about:blank',
     display_sales_assets: false,
+    display_license_assets: false,
     display_clipboard: false, 
     driveButtonActive: false,
     maintainenceAssetsEventsLoadingMore: false,

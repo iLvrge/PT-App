@@ -12,7 +12,7 @@ export default makeStyles(theme => ({
         },
         '& .MuiTab-root':{
             minWidth: 'inherit',
-            maxWidth: '100px'
+            maxWidth: 150
         },
         '& .vis-panel.vis-background.vis-horizontal .vis-grid': {
             borderColor: '#e5e5e51c',
@@ -265,5 +265,9 @@ export default makeStyles(theme => ({
         position: 'absolute',
         right: 35,
         top: 6
+    },
+    button:{
+        textTransform: 'initial',
+        color: 'inherit'
     }
 }))

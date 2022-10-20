@@ -31,7 +31,15 @@ export default makeStyles(theme => ({
     },    
     container: {
         width: '100%',
-        height: '100%'
+        height: '100%',
+        '& .ReactVirtualized__Table__row': {
+            cursor: 'default'
+        }
+    },
+    table: {
+        '& .ReactVirtualized__Table__row': {
+            cursor: 'default'
+        }
     },
     showIcon: {
         /* padding: '10px', */
@@ -49,6 +57,11 @@ export default makeStyles(theme => ({
     commentContainer: {
         /* height: '100%',  */
         width: '100%',
+    },
+    floatIcon: {
+        position: 'absolute',
+        right: 25,
+        zIndex: 9999
     },
     btn:{
         top: '-13px',

@@ -8,7 +8,7 @@ import USPTOContainer from '../AssetsVisualizer/USPTOContainer'
 /* import FamilyContainer from '..//AssetsVisualizer/FamilyContainer' */
 import LegalEventsContainer from '../AssetsVisualizer/LegalEventsContainer'
 import LifeSpanContainer from '../AssetsVisualizer/LifeSpanContainer'
-import InventionVisualizer from '..//AssetsVisualizer/InventionVisualizer'
+import InventionVisualizer from '../AssetsVisualizer/InventionVisualizer'
 import PdfViewer from '../../common/PdfViewer'
 import {
   setTimelineSelectedItem,

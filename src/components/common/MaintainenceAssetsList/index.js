@@ -104,8 +104,8 @@ const MaintainenceAssetsList = ({
   const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
   const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
   const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
-  const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
-console.log('open', selectedMaintainencePatents)
+  const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents) 
+  
   useEffect(() => {  
     if(clipboard_assets.length > 0 && clipboard_assets.length != selectedAssets.length ) {      
       setSelectedAssets([...clipboard_assets])

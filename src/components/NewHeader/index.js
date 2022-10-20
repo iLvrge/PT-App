@@ -84,7 +84,8 @@ import { setAssetTypeAssignments,
   setChannelsList,
   setSlackProfileData,
   setSlackUsers,
-  setSocialMediaConnectPopup
+  setSocialMediaConnectPopup,
+  setSelectedMaintainenceAssetsList
  } from '../../actions/patentTrackActions2'
 
  import {  
@@ -113,6 +114,7 @@ import {
 import Scheduling from './Scheduling'
 import ViewIcons from './ViewIcons'
 import SocialMediaConnect from '../common/SocialMediaConnect'
+import { stubTrue } from 'lodash'
 
 const NewHeader = (props) => {
   const classes = useStyles()
@@ -419,7 +421,7 @@ const NewHeader = (props) => {
       /* dispatch(setSalesAssetsType(type)) */      
 
       dispatch(setBreadCrumbs(type == 1 ? 'Our Assets for Sale' : 'Patent Marketplace'))
-      dispatch(setIsSalesAssetsDisplay(true))
+      dispatch(setIsSalesAssetsDisplay(1))
       dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
       dispatch(setSelectedAssetsPatents([]))
       dispatch(setAssetFamily([]))
@@ -489,7 +491,8 @@ const NewHeader = (props) => {
   dispatch(setSelectAssignments([]))	
   dispatch(setSelectAssignmentCustomers([]))
   dispatch(setAllAssignmentCustomers(false))
-  dispatch(setIsSalesAssetsDisplay(false))
+  dispatch(setIsSalesAssetsDisplay(0))
+  dispatch(setSelectedMaintainenceAssetsList([]))
 }
 
 const clearOtherItems = () => {
