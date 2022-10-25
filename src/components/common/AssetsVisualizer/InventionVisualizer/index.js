@@ -651,8 +651,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     }
 
     useEffect(() => {
-        console.log('selectedTab', selectedTab)
-        if(selectedTab === 0 && selectedCategory == 'assigned' && selectedRow.length == 0) {
+        
+        if(selectedTab === 0 && selectedCategory == 'assigned' && selectedRow.length == 0 && display_sales_assets > 0) {
+            console.log('Cube', selectedTab)
             dispatch(setIsSalesAssetsDisplay(0))
             dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
         }
@@ -931,11 +932,11 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             ?
                 selectedCategory == 'assigned' && selectedRow.length == 0
                 ?
-                    <Button 
+                    <span 
                         className={classes.button}
                         onClick={() => {onHandleFilterAssets(label)}}>
                         {label}
-                    </Button>
+                    </span>
                 :
                     label
             :

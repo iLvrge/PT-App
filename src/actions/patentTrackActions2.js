@@ -1660,6 +1660,13 @@ export const setAssetTableScrollPos = (pos) => {
   }
 } 
 
+export const setCompanyTableScrollPos = (pos) => {
+  return {
+    type: types.SET_COMPANY_TABLE_SCROLL_POSITION,
+    pos
+  }
+} 
+
 
 export const getAssetDetails = (applicationNumber, patentNumber) => {
   const asset = `US${applicationNumber}`

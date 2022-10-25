@@ -51,8 +51,8 @@ const NamesContainer = () => {
                         },
                         options: {
                             chartArea: {
-                                width: '95%',
-                                height: '80%',
+                                /* width: '95%',
+                                height: '80%', */
                                 left: 30,
                                 top: 20,
                             },
@@ -126,7 +126,7 @@ const NamesContainer = () => {
             <TitleBar title={`Select an asset from the list to see the details of the incorrect assignment.`} enablePadding={true} underline={false}/>  
             {
                 selectedTab === 0 && namesData.length > 0 && (
-                    <canvas id="canvas"></canvas>
+                    <canvas id="canvas" style={{height: '85%', width: '95%'}}></canvas>
                 )
             }
         </Paper> 
