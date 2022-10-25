@@ -36,6 +36,7 @@ import {
     getSlackMessages,
     setChannelID,
     getChannels,
+    setCompanyTableScrollPos,
 } from '../../../actions/patentTrackActions2'
 
 
@@ -225,7 +226,9 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
     const channel_id = useSelector(state => state.patenTrack2.channel_id)
     const dashboard_share_selected_data = useSelector(state => state.patenTrack2.dashboard_share_selected_data)
-   
+    const companyTableScrollPosition = useSelector(
+        state => state.patenTrack2.companyTableScrollPosition,
+    );
     /**
      * Intialise company list
     */
@@ -924,12 +927,17 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
 
     }
 
+    const onScrollTable = (scrollPos) => {
+        dispatch(setCompanyTableScrollPos(scrollPos))   
+    }
+
     if (isLoadingCompanies && companies.list.length == 0) return <Loader />
 
   return (
     <Paper className={classes.root} square id={`main_companies`}>
         <VirtualizedTable
         classes={classes}
+        scrollTop={companyTableScrollPosition}
         selected={selectItems}
         rowSelected={selectedRow}
         selectedIndex={currentSelection}
@@ -937,7 +945,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         selectedGroup={selectedGroup} 
         scrollToIndex={true}       
         rows={companiesList}
-        rowHeight={rowHeight}
+        rowHeight={rowHeight}  
         headerHeight={headerRowHeight}
         columns={headerColumns}
         totalRows={totalRecords}
@@ -948,6 +956,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         resizeColumnsStop={resizeColumnsStop}
         /* sortDataLocal={false}
         sortDataFn={handleSortData} */
+        onScrollTable={onScrollTable}
         collapsable={true}
         childHeight={childHeight}
         childSelect={childSelected}
