@@ -386,6 +386,10 @@ class PatenTrackApi {
     return axios.post(`${base_new_api_url}/assets/assets_for_sale/`, form, getFormUrlHeader())
   }
 
+  static assetForMaintainence(form) { 
+    return axios.post(`${base_new_api_url}/assets/maintainence/`, form, getFormUrlHeader())
+  }
+
   static saveForeignAssets(form) { 
     return axios.post(`${base_new_api_url}/assets/external_assets/`, form, getFormUrlHeader())
   }

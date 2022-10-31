@@ -18,6 +18,7 @@ import PatenTrackApi from '../../api/patenTrack2'
 import { copyToClipboard } from '../../utils/html_encode_decode'
 import { setSwitchAssetButton } from '../../actions/patentTrackActions2'
 import { setCompanies } from '../../actions/patenTrackActions'
+import Maintainance from '../common/Maintainence'
 
 const ViewIcons = (props) => {
     const dispatch = useDispatch();
@@ -270,6 +271,7 @@ const ViewIcons = (props) => {
     return(
         <React.Fragment>
             <Button onClick={getUnCollatealized}>Uncollateralized</Button>
+            <Maintainance/>
             {
                 profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'
                 && (

@@ -142,6 +142,29 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
         window.open('https://fees.uspto.gov/MaintenanceFees/', 'Maintainence Fee', `width=${w / systemZoom},height=${h / systemZoom},top=${top},left=${left}`)
     }
 
+
+    const createCSVFile = (rows) => {
+        const headingColumns = [
+            'Patent #',
+            'Application #',
+            'Attorney Docket #',
+            'Fee Code',
+            'Fee Amount'
+        ]
+        let csvContent = "data:text/csv;charset=utf-8,";
+        headingColumns.forEach(function(rowArray) {
+            let row = rowArray.join(",");
+            csvContent += row + "\r\n";
+        });
+        rows.forEach(function(rowArray) {
+            let row = rowArray.join(",");
+            csvContent += row + "\r\n";
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        window.open(encodedUri);
+    }
+
     /**
      * Create Maintainance CSV file and open USPTO window to upload file
      */
@@ -149,7 +172,12 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
     const onMaintainenceFeeFile = useCallback(async () => {  
         console.log('Maintainence Fee File')
         if(selectedMaintainencePatents.length > 0) {
-            const getGoogleToken = getTokenStorage('google_auth_token_info')
+            createCSVFile(selectedMaintainencePatents);
+            /**
+             * Open USPTO Maintainence Fee window
+             */
+            openUSPTOWindow(1200, 700);
+            /* const getGoogleToken = getTokenStorage('google_auth_token_info')
             if(getGoogleToken && getGoogleToken != '') {
                 const tokenJSON = JSON.parse( getGoogleToken )
                 if( tokenJSON && tokenJSON.access_token != '' && tokenJSON.access_token != undefined) {
@@ -165,7 +193,7 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
                         /**
                          * True
                          */
-                        if( promptBox ) {
+                        /*if( promptBox ) {
                             const formData = new FormData()
                             formData.append('file_name',  name )
                             formData.append('file_data',  JSON.stringify(selectedMaintainencePatents))
@@ -178,7 +206,7 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
                                 /**
                                  * Open USPTO Maintainence Fee window
                                  */
-                                openUSPTOWindow(1200, 700)
+                                /*openUSPTOWindow(1200, 700)
                             }
                         }            
                     } else {
@@ -191,7 +219,7 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
                 alert("Please first login with google account")
                 console.log("Google login popup")
                 openGoogleWindow()
-            }
+            } */
         } else {
           alert("Please first select the assets")
         }

@@ -426,7 +426,7 @@ const AssetDetailsContainer = ({
                                   events={selectedAssetsLegalEvents} 
                                   type={type}
                                   selectedCategory
-                                  {...( selectedCategory === 'ptab' ? {activeTab: 2} : {})} 
+                                  {...( selectedCategory === 'ptab' || selectedCategory === 'to_be_monitized' ? {activeTab: selectedCategory === 'to_be_monitized' ? 1 : 2} : {})} 
                                 />
                             ) 
                           }

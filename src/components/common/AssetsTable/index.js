@@ -212,6 +212,7 @@ const AssetsTable = ({
   const switch_button_assets = useSelector(state => state.patenTrack2.switch_button_assets)
   const foreignAssets = useSelector(state => state.patenTrack2.foreignAssets)
   const dashboardScreen = useSelector(state => state.ui.dashboardScreen) 
+  const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
 
   const Clipboard = () => {
     return (
@@ -307,6 +308,10 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       </Box>
     )
   }
+
+  const companyname = useMemo(() => {
+    return selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])
+  }, [selectedCompanies, companiesList])
 
 
   const actionList = [
@@ -611,6 +616,19 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       }
   }
 
+  const getSlackToken = () => {
+    let token =  '';
+    const slackToken = getTokenStorage( 'slack_auth_token_info' )
+    if(slackToken && slackToken!= '' && slackToken!= null && slackToken!= 'null' ) {
+      token = JSON.parse(slackToken)
+        
+      if(typeof token === 'string') {
+        token = JSON.parse(token)
+      }
+    }
+    return token
+  }
+
   const onHandleDropDownlist = async(event, asset, row ) => { 
     if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
       alert('Message....')
@@ -641,7 +659,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       } else {
         if(type === 9 && event.target.value === 0) {
           /***
-          * Asset remove from sreadsheet
+          * Asset remove from spreadsheet
           */
           const googleToken = getTokenStorage( 'google_auth_token_info' )
           const googleProfile = getTokenStorage('google_profile_info')
@@ -687,15 +705,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
              * Assets for Sale or LicenseOut
              * Check Slack Auth
              */
-            let token =  '';
-            const slackToken = getTokenStorage( 'slack_auth_token_info' )
-            if(slackToken && slackToken!= '' && slackToken!= null && slackToken!= 'null' ) {
-              token = JSON.parse(slackToken)
-               
-              if(typeof token === 'string') {
-                token = JSON.parse(token)
-              }
-            }
+            let token =  getSlackToken();
 
             if(token !== '') {
               const { access_token, bot_token, bot_user_id } = JSON.parse(token)
@@ -738,6 +748,12 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
               
               if(findIndex !== -1) {
                 const items = [...prevItems]
+                if(items[findIndex].move_category === 10) {
+                  /**
+                   * Pay Maintainence Fee
+                   */
+                  updateMaintainenceSelection(asset, row)
+                }
                 items.splice( findIndex, 1 )
                 return items
               } else {
@@ -752,7 +768,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
                 } else {
                   return prevItems
                 }              
-              }
+              } 
             })      
           }
         }        
@@ -761,40 +777,83 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   }
 
   const updateMaintainenceSelection = (asset, row) => {
-    let updateSelected = [];
-    setMaintainenceItems(prevItems => {
-      updateSelected = [...prevItems];
-      const findIndex = prevItems.findIndex( r => r.asset == asset)
-      if( findIndex !== -1 ) {
-        updateSelected = maintainenceItems.filter(
-          asset => asset[1] !== parseInt(row.appno_doc_num),
-        );
-      } else {
-        updateSelected.push([
-          row.grant_doc_num,
-          row.appno_doc_num,
-          "",
-          row.fee_code,
-          row.fee_amount,
-        ]);
-        const todayDate = moment(new Date()).format("YYYY-MM-DD");
-        if (
-          new Date(todayDate).getTime() >=
-          new Date(row.payment_grace).getTime()
-        ) {
+    let token =  getSlackToken();
+
+    if(token !== '') {
+      let updateSelected = [];
+      const { access_token, bot_token, bot_user_id } = JSON.parse(token)
+      let message = `${row.grant_doc_num != '' ? numberWithCommas(row.grant_doc_num) : applicationFormat(row.appno_doc_num)} `
+      setMaintainenceItems(prevItems => {
+        updateSelected = [...prevItems];
+        const findIndex = prevItems.findIndex( r => r.asset == asset)
+        if( findIndex !== -1 ) {
+          message += `removed `
+          updateSelected = maintainenceItems.filter(
+            item => item[1] !== parseInt(row.appno_doc_num)
+          );
+        } else {
+          message += `added `
           updateSelected.push([
             row.grant_doc_num,
             row.appno_doc_num,
             "",
-            row.fee_code_surcharge,
-            row.fee_surcharge,
+            row.fee_code,
+            row.fee_amount,
           ]);
+          const todayDate = moment(new Date()).format("YYYY-MM-DD");
+          if (
+            new Date(todayDate).getTime() >=
+            new Date(row.payment_grace).getTime()
+          ) {
+            updateSelected.push([
+              row.grant_doc_num,
+              row.appno_doc_num,
+              "",
+              row.fee_code_surcharge,
+              row.fee_surcharge,
+            ]);
+          }
         }
-      }
-      return updateSelected
-    })   
+        return updateSelected
+      }) 
+      message += ` to maintainence list. `  
+      
+      
+      dispatch(setSelectedMaintainenceAssetsList(updateSelected));
 
-    dispatch(setSelectedMaintainenceAssetsList(updateSelected));
+      (async() => {
+        let name = companyname[0].original_name
+        let formattedName = name.replace(/\s/g,'').replace(/["']/g, "").trim().substr(0, 20)
+
+        let channelID = ''
+        if(slack_channel_list.length > 0 && formattedName != '') {
+          const findIndex = slack_channel_list.findIndex( channel => channel.name == formattedName.toString().toLocaleLowerCase())
+      
+          if( findIndex !== -1) {
+            channelID = slack_channel_list[findIndex].id
+          }
+        }
+        const formData = new FormData()
+        formData.append('text',  message)
+        formData.append('asset', name)
+        formData.append('asset_format', formattedName.toLocaleLowerCase())
+        formData.append('user', '')
+        formData.append('reply', '' )
+        formData.append('edit', '')
+        formData.append('file', '')
+        formData.append('remote_file', '')
+        formData.append('channel_id', channelID)
+        formData.append('auth', bot_token)
+        formData.append('auth_id', bot_user_id)
+        const { data } = await PatenTrackApi.sendMessage(access_token, formData) 
+        console.log(`maintainenece`, data)
+      })() 
+    } else {
+      /**
+       * Alert user to login with slack first
+      */
+      alert("Please login to slack first");
+    }
   }
 
   const COLUMNS = [
@@ -1282,20 +1341,26 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           dispatch(linkWithSheetSelectedAsset('products', encodeURIComponent(grant_doc_num  == '' ? `US${applicationFormat(appno_doc_num)}` : `US${numberWithCommas(grant_doc_num)}`)))     
         }
         callSelectedAssets({ grant_doc_num, appno_doc_num, asset });
-        if(selectedCategory == 'incorrect_names' || selectedCategory == 'pay_maintainence_fee' || selectedCategory == 'late_maintainance' || selectedCategory == 'ptab'){
+        if(selectedCategory == 'incorrect_names' || selectedCategory == 'pay_maintainence_fee' || selectedCategory == 'late_maintainance' || selectedCategory == 'ptab' || selectedCategory == 'to_be_monitized' ){
           /**
            * Check if Right Pane is close then open it and close the TV
            */
           if(defaultViewFlag === 0) {
-            if(openChartBar === false) {
-              handleChartBarOpen()
-            }
-            if(openAnalyticsBar === false) {
-              handleAnalyticsBarOpen()
-            }
-            if(openIllustrationBar === true) {
-              handleIllustrationBarOpen('100%')
-              handleVisualBarSize(false, true, false, false)
+            if(selectedCategory == 'to_be_monitized') {
+              if(openChartBar === false) {
+                handleChartBarOpen()
+              }
+            } else {
+              if(openChartBar === false) {
+                handleChartBarOpen()
+              }
+              if(openAnalyticsBar === false) {
+                handleAnalyticsBarOpen()
+              }
+              if(openIllustrationBar === true) {
+                handleIllustrationBarOpen('100%')
+                handleVisualBarSize(false, true, false, false)
+              }
             }
             setDefaultViewFlag(1)
           } 

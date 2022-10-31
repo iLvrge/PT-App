@@ -754,7 +754,6 @@ const PatentLayout = ({
                 </SplitPane>
             </SplitPane>
         </SplitPane>
-        <Maintainance/>
         </React.Fragment>
     )
 }

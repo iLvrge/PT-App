@@ -156,7 +156,7 @@ class PatentTopTitle extends React.Component {
                </Badge>
              </Tooltip>
            </IconButton>
-           {/* <IconButton onClick={() => this.props.share(this.props.patent)} size="large">
+           <IconButton onClick={() => this.props.share(this.props.patent)} size="large">
              <Tooltip 
              className='tooltip'
              title={
@@ -172,7 +172,7 @@ class PatentTopTitle extends React.Component {
                  />
                </Badge>
              </Tooltip>
-           </IconButton> */}
+           </IconButton>
            {
              !this.props.isFullscreenOpen 
              ?
