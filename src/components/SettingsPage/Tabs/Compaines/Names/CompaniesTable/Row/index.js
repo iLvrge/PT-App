@@ -51,7 +51,7 @@ function Row({ onSelect, isSelected, isChildSelected, row }) {
           />
         </TableCell>
 
-        <TableCell>
+        {/* <TableCell>
           {row.slack !== ''
             ? 
               <a onClick={() => removeFromSlack(row.id)}>
@@ -62,7 +62,7 @@ function Row({ onSelect, isSelected, isChildSelected, row }) {
                 </span>
               </a>
             : ''}
-        </TableCell>
+        </TableCell> */}
 
         <TableCell className={classes.padLR0}>
           {row.representative_name === null

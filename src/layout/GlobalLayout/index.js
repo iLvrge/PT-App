@@ -158,9 +158,7 @@ const GlobalLayout = (props) => {
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
     const timelineScreen = useSelector(state => state.ui.timelineScreen)
     const patentScreen = useSelector(state => state.ui.patentScreen)
-
-    console.log(profile)
-
+  
     useEffect(() => {
         if(openVisualizerBar === false && visualizerBarSize != '0%') {
             setVisualizerBarSize('0%')
@@ -1071,7 +1069,7 @@ const GlobalLayout = (props) => {
 
     const handleOpenSettings = useCallback(() => {
         dispatch(setDashboardScreen(false))
-        history.push('/settings/templates')
+        history.push('/settings/companies/names')
     }, [ history ])
 
     const handleAlertPop = () => {

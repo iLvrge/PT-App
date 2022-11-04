@@ -1,3 +1,4 @@
+import { pink } from '@mui/material/colors';
 import makeStyles from '@mui/styles/makeStyles';
 
 export default makeStyles((theme) => ({
@@ -10,21 +11,23 @@ export default makeStyles((theme) => ({
     position: 'relative !important',
 
     '& .Resizer': {
-      background: `${theme.palette.divider}`,
+      background: `none`,
       opacity: 1,
-      width: 11,
+      height: '100%',
+      width: 3,
       zIndex: 3,
+      cursor: 'col-resize',
       boxSizing: 'border-box',
       backgroundClip: 'padding-box',
       '&:hover': {
-        background: `${theme.palette.background.default}`,
+        background: pink[500],
       },
       '&.vertical': {
-        width: 11,
+        /* width: 11,
         margin: '0 -5px',
         borderLeft: '5px solid rgba(255, 255, 255, 0)',
         borderRight: '5px solid rgba(255, 255, 255, 0)',
-        cursor: 'col-resize',
+        cursor: 'col-resize', */
       },
     },
 

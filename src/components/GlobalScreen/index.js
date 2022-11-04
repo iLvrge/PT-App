@@ -261,15 +261,15 @@ const GlobalScreen = ({
             if(openCustomerBar === true) {
                 handleCustomersBarOpen()
             }
-        } else {
-            if((openAssignmentBar === true && timelineScreen === false) || (openAssignmentBar === false && timelineScreen === true && selectedCategory != 'top_lenders' &&  selectedCategory != 'proliferate_inventors')) {
+        } else { 
+            if((openAssignmentBar === true && timelineScreen === false) || (openAssignmentBar === false && timelineScreen === true && selectedCategory != 'top_lenders' &&  selectedCategory != 'proliferate_inventors' )) { 
                 handleAssignmentBarOpen()
             } 
             if(openCustomerBar === false && dashboardScreen === false && timelineScreen === false) {
                 handleCustomersBarOpen()
             }
         }
-    }, [selectedCategory])
+    }, [selectedCategory, timelineScreen])
 
     useEffect(() => {
         if( type === 0 ) {

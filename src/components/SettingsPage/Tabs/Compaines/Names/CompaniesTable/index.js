@@ -17,6 +17,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 
 import SlackImage from '../../../../../common/SlackImage'
+import { Paper } from '@mui/material'
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -63,7 +64,7 @@ function filterSearch(array, search) {
 }
 
 const HEAD_CELLS = [
-  {
+  /* {
     id: 'slack',
     numeric: false,
     disablePadding: true,
@@ -71,7 +72,7 @@ const HEAD_CELLS = [
     align: 'left',
     class: '',
     width: 35
-  },
+  }, */
   {
     id: 'original_name',
     numeric: false,
@@ -144,7 +145,7 @@ function CompaniesTable({
     setSelected(isAllSelected ? [] : _map(rows, 'id'))
   }, [ setSelected, isAllSelected, rows ])
   return (
-    <Fragment>
+    <Paper square classes={classes.root}>
       {
         isLoading ? (
           <Loader />
@@ -152,7 +153,7 @@ function CompaniesTable({
           <TableContainer className={classes.tableContainer}>
             <Table
               className={classes.table}
-              stickyHeader
+              /* stickyHeader */
               size={'medium'} 
               aria-label="collapsible table">
               <TableHead>
@@ -221,7 +222,7 @@ function CompaniesTable({
           </TableContainer>
         )
       }
-    </Fragment>
+    </Paper>
   )
 }
 

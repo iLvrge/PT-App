@@ -32,7 +32,7 @@ const AddMenu = ({ anchorEl, onClose, createParent, associateToParent }) => {
 
       <MenuItem onClick={onAction(createParent)}>
         <AddIcon className={classes.icon} />
-          Import Outside a Group
+          Import
       </MenuItem>
 
       <NestedMenuItem
