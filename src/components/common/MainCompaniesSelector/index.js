@@ -217,6 +217,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
     const selectedGroups = useSelector( state => state.patenTrack2.mainCompaniesList.selectedGroups)
+    const childID = useSelector( state => state.patenTrack2.mainCompaniesList.chilID)
+    const childList = useSelector( state => state.patenTrack2.mainCompaniesList.child_list)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const assetTypesSelected = useSelector(state => state.patenTrack2.assetTypes.selected)
@@ -733,8 +735,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                     }                  
                 } else {                    
                     if(parseInt(row.type) === 1) {
-                        if(row.child_total > 0) {
-                            const parseChild = JSON.parse(row.child)
+                        if(row.child_total > 0 || row.representative_id == childID) {
+                            const parseChild =  typeof row.child != 'undefined' ? JSON.parse(row.child) : childList
                             if(dashboardScreen === true) {
                                 updateSelected = [parseInt( parseChild[0] )]
                             } else {
@@ -961,10 +963,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         childHeight={childHeight}
         childSelect={childSelected}
         childRows={data}
-        childCounterColumn={`child_total`}
+        /* childCounterColumn={`child_total`} */
         forceChildWaitCall={true}
         renderCollapsableComponent={
-            <ChildTable parentCompanyId={currentSelection} headerRowDisabled={true} itemCallback={handleChildCallback} groups={selectedGroup} companyColWidth={companyColWidth}/>
+            <ChildTable parentCompanyId={currentSelection} headerRowDisabled={true} itemCallback={handleChildCallback} groups={selectedGroup} companyColWidth={companyColWidth} isMobile={isMobile}/>
         }
         disableRow={true}
         disableRowKey={'status'}  
