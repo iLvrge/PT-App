@@ -89,7 +89,7 @@ const HEAD_CELLS = [
     align: 'center',
     class: '',
     alignCenter: true,
-    width: 135
+    width: 155
   },
 ]
 
@@ -160,13 +160,13 @@ function CompaniesTable({
                 <TableRow>
                   <TableCell className={classes.actionTh} padding="none" />
 
-                  <TableCell className={classes.actionTh} padding="none">
+                  {/* <TableCell className={classes.actionTh} padding="none">
                     <Checkbox
                       onChange={onSelectAll}
                       checked={isAllSelected}
                       indeterminate={Boolean(selected.length && selected.length < rows.length)}
                     />
-                  </TableCell>
+                  </TableCell> */}
 
 
                   {HEAD_CELLS.map(headCell => (

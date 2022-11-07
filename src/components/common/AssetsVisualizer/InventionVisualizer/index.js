@@ -314,7 +314,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             setIsLoadingCharts(true)   
             const list = [];
             let totalRecords = 0;
-            if(dashboardScreen === false) {
+            if(dashboardScreen === false && selectedCategory != 'top_law_firms') {
                 if(selectedTab === 0 || ((selectedTab === 1 || selectedTab === 2) && (selectedCategory == 'assigned' && selectedRow.length == 0))) {
                     if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {
                     
@@ -410,8 +410,11 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     }
                 }
             }
-                                    
-            if( dashboardScreen === true ||  list.length > 0 ) {
+            if(selectedCategory == 'top_law_firms') {
+                setFilterList([])
+                setFilterTotal(0)
+                findCPCList([...scopeRange], [], 0)
+            } else if( dashboardScreen === true ||  list.length > 0 ) {
                 setFilterList(list)
                 setFilterTotal(totalRecords)
                 findCPCList([...scopeRange], list, totalRecords)
@@ -653,7 +656,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     useEffect(() => {
         
         if(selectedTab === 0 && selectedCategory == 'assigned' && selectedRow.length == 0 && display_sales_assets > 0) {
-            console.log('Cube', selectedTab)
             dispatch(setIsSalesAssetsDisplay(0))
             dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
         }

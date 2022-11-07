@@ -40,10 +40,14 @@ const COLUMNS = [
 const COMPANY_HEADER_COLUMNS = [
   {
     label: '',
-    width: 50,
+    width: 10,
     dataKey: 'company_id',
-    role: 'checkboxwait',
+    /* role: 'checkboxwait', */ 
+    role: "checkbox",
+    disableSort: true,
+    enable: false,
     formatCondition: 'status',
+
   },
   {
     width: 240,
@@ -53,9 +57,9 @@ const COMPANY_HEADER_COLUMNS = [
     dataKey: 'name',
   },
   {
-    width: 100,
-    minWidth: 100,
-    oldWidth: 100,
+    width: 150,
+    minWidth: 150,
+    oldWidth: 150,
     label: 'Status',
     dataKey: 'status',
   }
@@ -207,14 +211,17 @@ const closeAddMenu = useCallback(() => setMenuAnchorEl(null), [])
 
 
 const onCompanyRequestRowSelect = useCallback((event, row) => {
-  let oldItems = [...selected]
-  console.log(row.company_id)
-  if(!oldItems.includes(row.company_id)){
-    oldItems.push(row.company_id)
-  } else {
-    oldItems = oldItems.filter( item => item != row.company_id)
+  if(row.status != 'Data is being prepared') {
+    let oldItems = [...selected]
+    console.log(row.company_id)
+    if(!oldItems.includes(row.company_id)){
+      oldItems.push(row.company_id)
+    } else {
+      oldItems = oldItems.filter( item => item != row.company_id)
+    }
+    setSelected(oldItems)
   }
-  setSelected(oldItems)
+  
 }, [selected])
  
 
@@ -314,11 +321,14 @@ const onHandleAddCompany = useCallback(async(event) => {
               <VirtualizedTable
                 classes={classes}
                 selected={selected}
+                selectedKey={"company_id"}
                 headerHeight={53.86}
-                rowHeight={50}
+                rowHeight={51}
                 rowCount={list.length}
                 rows={list}
-                columns={companyHeaderColumns}
+                columns={companyHeaderColumns} 
+                highlightRow={true} 
+                higlightColums={[1]}
                 onSelect={onCompanyRequestRowSelect}
                 resizeColumnsWidth={resizeCompanyHeaderColumnsWidth}
                 resizeColumnsStop={resizeCompanyHeaderColumnsStop}

@@ -44,12 +44,12 @@ function Row({ onSelect, isSelected, isChildSelected, row }) {
           </IconButton>
         </TableCell>
 
-        <TableCell className={classes.actionTh} padding="none">
+        {/* <TableCell className={classes.actionTh} padding="none">
           <Checkbox
             checked={isSelected(row.id)}
             value={row.id}
           />
-        </TableCell>
+        </TableCell> */}
 
         {/* <TableCell>
           {row.slack !== ''
@@ -92,7 +92,7 @@ function Row({ onSelect, isSelected, isChildSelected, row }) {
                           key={`${company.id}_child`}
                           selected={isChildSelected(company.id)}
                         >
-                          <TableCell className={classes.actionCell}>
+                          {/* <TableCell className={classes.actionCell}>
                             <Checkbox
                               checked={isChildSelected(company.id)}
                               inputProps={{
@@ -102,12 +102,10 @@ function Row({ onSelect, isSelected, isChildSelected, row }) {
                               value={company.id}
                               disabled={isSelected(row.id)}
                             />
-                          </TableCell>
-                          <TableCell></TableCell>      
+                          </TableCell>    */}
                           <TableCell className={classes.padLR0}>
                             {company.original_name}
-                          </TableCell>
-
+                          </TableCell> 
                           <TableCell align={'center'}>
                             {company.counter}
                           </TableCell>

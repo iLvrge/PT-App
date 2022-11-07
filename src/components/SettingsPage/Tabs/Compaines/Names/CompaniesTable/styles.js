@@ -11,7 +11,8 @@ export default makeStyles(theme => ({
     overflow: 'hidden',
     '& .font12Rem':{
       fontSize: '1rem'
-    }
+    },
+    
   },
   actionTh: {
     width: 50,
@@ -22,6 +23,7 @@ export default makeStyles(theme => ({
   table: {
     /* backgroundColor: theme.palette.background.paper, */
     '& th': {
+      fontSize: '1.1rem',
       backgroundColor: 'inherit',
       '&.MuiTableCell-stickyHeader': {
         /* backgroundColor: '#292929', */
@@ -34,6 +36,9 @@ export default makeStyles(theme => ({
       '&:first-child': {
         paddingLeft: 16
       },
+    },
+    '& .MuiTableRow-root':{
+      cursor: 'pointer'
     }
   },
   padLR0:{
