@@ -693,6 +693,15 @@ class PatenTrackApi {
     } 
   }
 
+
+  static allAssetsSurchargeLegalEvents(companies) { 
+    return axios.get(`${base_new_api_url}/events/all/assets/surcharge?companies=${JSON.stringify(companies)}`, getHeader())
+  } 
+
+  static allFilledAssetsEvents(companies) { 
+    return axios.get(`${base_new_api_url}/events/all/assets/to_record?companies=${JSON.stringify(companies)}`, getHeader())
+  } 
+
   static getActivitiesTimelineData(companies, tabs, customers, rfIDs = [], layout, exclude) {
     let header = getHeader()
     header['cancelToken'] = new CancelToken(function executor(c) {

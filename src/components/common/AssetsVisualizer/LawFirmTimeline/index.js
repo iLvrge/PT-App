@@ -172,7 +172,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
       const element = document.getElementById('all_timeline');
       const getPosition = element.getBoundingClientRect();  
       const color = '#e91e63;';
-      const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${getPosition.y + 5}px;left:${getPosition.x }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'> <h4 style='color:#fff;text-align:left;margin:0'>${item.patent != '' ? numberWithCommas(item.patent) : applicationFormat(item.appno_doc_num)}</h4>
+      const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${getPosition.y}px;left:${getPosition.x }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'> <h4 style='color:#fff;text-align:left;margin:0'>${item.patent != '' ? numberWithCommas(item.patent) : applicationFormat(item.appno_doc_num)}</h4>
         <div>
           ${item.title}
         </div>

@@ -122,11 +122,13 @@ const NamesContainer = () => {
                     )) 
                 }
             </Tabs> 
-            <TitleBar title={`Select one of the  incorrect names below to see the list of assets that were assigned under it.`} enablePadding={true} underline={false}/>  
-            <TitleBar title={`Select an asset from the list to see the details of the incorrect assignment.`} enablePadding={true} underline={false}/>  
+            <TitleBar title={`Select one of the  incorrect names below to see the list of assets that were assigned under it.Select an asset from the list to see the details of the incorrect assignment.`} enablePadding={true} underline={false}/>  
+             
             {
                 selectedTab === 0 && namesData.length > 0 && (
-                    <canvas id="canvas" style={{height: '85%', width: '95%'}}></canvas>
+                    <div style={{height: '85%', width: '95%'}}>
+                        <canvas id="canvas" style={{height: '100%', width: '100%'}}></canvas>
+                    </div>
                 )
             }
         </Paper> 

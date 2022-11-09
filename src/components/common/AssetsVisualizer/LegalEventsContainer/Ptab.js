@@ -142,7 +142,7 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
                 const height = window.innerHeight|| document.documentElement.clientHeight || document.body.clientHeight; 
                 const element = document.getElementById('ptabTimeline');
                 const getPosition = element.getBoundingClientRect();  
-                let tootltipTemplate = `<div class='custom_tooltip' style='background:#1E2025;border: 1px solid rgba(255, 255, 255, 0.12) ;top:${getPosition.y + 5}px;left:${getPosition.x}px;'>`
+                let tootltipTemplate = `<div class='custom_tooltip' style='background:#1E2025;border: 1px solid rgba(255, 255, 255, 0.12) ;top:${getPosition.y}px;left:${getPosition.x}px;'>`
                 const { otherInfo } = item
                 tootltipTemplate += `<table>
                     <tbody>

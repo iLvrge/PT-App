@@ -712,9 +712,10 @@ const PatentLayout = ({
                                                 setChartBar={setChartBar}
                                                 handleCommentBarOpen={handleCommentBarOpen}
                                                 handleCustomersBarOpen={handleCustomersBarOpen}
-                                               
                                                 cube={selectedCategory === 'ptab' ? false : true}
                                                 ptab={selectedCategory === 'ptab' ? true : false}
+                                                maintainence={selectedCategory === 'late_maintainance' ? true : false}
+                                                record={selectedCategory === 'missed_monetization' ? true : false}
                                             /> 
                                         </div>
                                         <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>

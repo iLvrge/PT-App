@@ -161,6 +161,7 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, itemCallback, groups, 
     const [ selectedAll, setSelectAll ] = useState( false )
     const [ selectItems, setSelectItems] = useState( [] )
     const [ selectedRow, setSelectedRow] = useState( [] )
+    const [ companyTableScrollPosition, setCompanyTableScrollPos] = useState( 0 )
     const selected = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
@@ -391,6 +392,9 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, itemCallback, groups, 
         }
     }   
 
+    const onScrollTable = (scrollPos) => {
+        setCompanyTableScrollPos(scrollPos) 
+    }
     
 
     if (childCompaniesLoading) return <Loader /> 
@@ -399,6 +403,7 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, itemCallback, groups, 
         <Paper className={classes.root} square id={`child_companies`}>
             <VirtualizedTable
             classes={classes}
+            scrollTop={companyTableScrollPosition}
             selected={selectItems}
             rowSelected={selectedRow}
             selectedKey={'representative_id'}
@@ -411,9 +416,11 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, itemCallback, groups, 
             defaultSelectAll={selectedAll}
             onSelect={handleClickRow}
             onSelectAll={onHandleSelectAll}
+            onScrollTable={onScrollTable}
             disableHeader={headerRowDisabled} 
             responsive={false}
             width={width}
+            noBorderLines={true}
             containerStyle={{ 
                 width: '100%',
                 maxWidth: '100%'

@@ -962,11 +962,11 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         collapsable={true}
         childHeight={childHeight}
         childSelect={childSelected}
-        childRows={data}
+        childRows={childList}
         /* childCounterColumn={`child_total`} */
         forceChildWaitCall={true}
         renderCollapsableComponent={
-            <ChildTable parentCompanyId={currentSelection} headerRowDisabled={true} itemCallback={handleChildCallback} groups={selectedGroup} companyColWidth={companyColWidth} isMobile={isMobile}/>
+            <ChildTable parentCompanyId={currentSelection} headerRowDisabled={true} itemCallback={handleChildCallback} groups={selectedGroup} companyColWidth={companyColWidth} isMobile={isMobile} reset={resetAll} cleared={clearOtherItems}/>
         }
         disableRow={true}
         disableRowKey={'status'}  

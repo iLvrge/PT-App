@@ -623,13 +623,13 @@ const VirtualizedTable = ({
                     :
                       childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
                   :
-                    rowData[disableRowKey] * rowHeight < childHeight
+                    rowData[disableRowKey] * rowHeight < childHeight  && rowData[disableRowKey] > childRows.length 
                     ? 
                       rowData[disableRowKey] * rowHeight + rowHeight
                     :
                       childRows.length > 0 
                       ?
-                        childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
+                        childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
                       :
                       childHeight + rowHeight
                 : 
@@ -643,7 +643,7 @@ const VirtualizedTable = ({
                       :  
                         childRows.length > 0 
                         ?
-                          childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
+                          childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
                         :
                         childHeight - rowHeight
                     :
@@ -682,7 +682,7 @@ const VirtualizedTable = ({
       if((optionalKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[optionalKey])) || (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey])) || (selected !== undefined && selectedKey !== undefined && highlightRow !== undefined && highlightRow === true && selected.includes(rowData[selectedKey])) || (selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey]))) {
         selectedRow = true
       }  
-      console.log("selectedRow", selectedRow, highlightRow, selected, selectedKey, rowData)
+      /* console.log("selectedRow", childRows, collapsable, selectedIndex, rowData[selectedKey], disableRow, childCounterColumn, rowData[disableRowKey], ) */
       return (      
         <React.Fragment key={key}>
         <TableRow
@@ -710,13 +710,13 @@ const VirtualizedTable = ({
                     :
                       childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
                   :
-                    rowData[disableRowKey] * rowHeight < childHeight
+                    rowData[disableRowKey] * rowHeight < childHeight && rowData[disableRowKey] > childRows.length 
                     ? 
                       rowData[disableRowKey] * rowHeight + rowHeight
                     :
                       childRows.length > 0 
                       ?
-                        childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
+                        childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
                       : 
                       childHeight + rowHeight
                 : 
@@ -891,33 +891,49 @@ const VirtualizedTable = ({
             ?
               typeof childCounterColumn == 'string' 
               ? 
-                rowData[childCounterColumn] * rowHeight < childHeight
+                rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
                 ?
                   rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0) 
                 :  
-                  childHeight
+                  childRows.length > 0 
+                  ?
+                    childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
+                  : 
+                  childHeight + rowHeight
               :
                 childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
             :
-              rowData[disableRowKey] * rowHeight < childHeight
+              rowData[disableRowKey] * rowHeight < childHeight  && rowData[disableRowKey] > childRows.length 
               ? 
                 rowData[disableRowKey] * rowHeight + rowHeight
               :
+                childRows.length > 0 
+                ?
+                  childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
+                : 
                 childHeight + rowHeight
           : 
             childCounterColumn != undefined
             ?
               typeof childCounterColumn == 'string' 
               ? 
-                rowData[childCounterColumn] * rowHeight < childHeight
+                rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
                 ?
                   rowHeight + rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0) 
                 :  
-                  childHeight + rowHeight
+                  childRows.length > 0 
+                  ?
+                    childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
+                  : 
+                  childHeight - rowHeight
               :
                 rowHeight + childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
             :
-            collapseRowHeight + rowHeight;
+              childRows.length > 0 
+              ?
+                childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
+              : 
+              collapseRowHeight + rowHeight;
       }
       return height
     },

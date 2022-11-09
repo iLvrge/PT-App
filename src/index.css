@@ -677,7 +677,7 @@ div.vis-tooltip span{
   /* background:#222222;
   border: 1px solid #545454;
   color: #BDBDBD; */
-  padding: 5px 10px;
+  padding: 20px;
   overflow: hidden;
   z-index: 9999;
   font-size: 0.875rem;

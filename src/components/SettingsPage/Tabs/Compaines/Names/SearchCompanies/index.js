@@ -40,7 +40,7 @@ const COLUMNS = [
 const COMPANY_HEADER_COLUMNS = [
   {
     label: '',
-    width: 10,
+    width: 29,
     dataKey: 'company_id',
     /* role: 'checkboxwait', */ 
     role: "checkbox",

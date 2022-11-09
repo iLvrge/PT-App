@@ -372,6 +372,22 @@ export const assetLegalEvents = (applicationNumber, patentNumber) => {
   }
 }
 
+export const allAssetsSurchargeLegalEvents = (companies) => { 
+  return dispatch => {
+    dispatch(setLegalDataEventRetrieved(true))
+    return PatenTrackApi
+      .allAssetsSurchargeLegalEvents(companies)
+      .then(res => {        
+        console.log('allAssetsSurchargeLegalEvents', res.data)
+        dispatch(setLegalDataEventRetrieved(false))
+        dispatch(setAssetLegalEvents(res.data))
+      }) 
+      .catch(err => {
+        throw(err)
+      })
+  }
+}
+
 export const setFamilyItemDisplay = (item) => {
   return {
     type: types.SET_FAMILY_ITEM_DETAIL,

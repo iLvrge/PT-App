@@ -128,8 +128,9 @@ const Status = ({ number, rawData, updateRawData, standalone }) => {
         const height = window.innerHeight|| document.documentElement.clientHeight || document.body.clientHeight;  
         
         let text = item.status; 
-
-        let tootltipTemplate = `<div class='custom_tooltip' style='background:${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default} ;top:${event.clientY }px;left:${event.clientX + 20 }px;'><h4 style='color:${color};text-align:left;margin:0'>${text}</h4></div>`
+        const element = document.getElementById('statusTimeline');
+        const getPosition = element.getBoundingClientRect(); 
+        let tootltipTemplate = `<div class='custom_tooltip' style='background:${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default} ;top:${getPosition.y}px;left:${getPosition.x}px;'><h4 style='color:${color};text-align:left;margin:0'>${text}</h4></div>`
         resetTooltipContainer() 
         if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
           document.body.insertAdjacentHTML('beforeend',tootltipTemplate)                
@@ -234,7 +235,7 @@ useEffect(() => {
   return (
         <Paper className={`${classes.timelineRoot} timelineRoot`} square >
             <div
-                id={`statusCharts`}
+                id={`statusTimeline`}
                 style={{ 
                     display: display,
                     filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`,

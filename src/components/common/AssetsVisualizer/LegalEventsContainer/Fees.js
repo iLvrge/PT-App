@@ -12,6 +12,8 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Loader from '../../Loader'
 
 import useStyles from './styles'
+import { Badge, Tab, Tabs } from '@mui/material'
+import { numberWithCommas } from '../../../../utils/numbers'
 
 const options = { 
     height: '100%',
@@ -27,10 +29,10 @@ const options = {
 }
 const DATE_FORMAT = 'MMM DD, YYYY'
  
-const getTemplateContent = (item, icons) => {  
-  const getEventIcons = icons[item.event_code]
-  const icon = getEventIcons["icon3"] != undefined != undefined ? getEventIcons["icon3"]: ''
-  const templateContent = `<div class='first'>${item.maintainence_code.template_string}</div><div class='textColumn'>${moment(new Date(item.eventdate)).format(DATE_FORMAT)}</div><div class='absolute'>${icon}</div>`
+const getTemplateContent = (item, icons) => {   
+  const getEventIcons = icons[item.event_code] 
+  const icon = getEventIcons["icon3"] != undefined ? getEventIcons["icon3"]: ''
+  const templateContent = `<div class='first'>${typeof item.template_string != 'undefined' ? item.template_string == 'US0' ? `US${numberWithCommas(item.grant_doc_num)}` : item.template_string : item.maintainence_code.template_string}</div><div class='textColumn'>${moment(new Date(item.eventdate)).format(DATE_FORMAT)}</div><div class='absolute'>${icon}</div>`
   return templateContent
 } 
 
@@ -45,7 +47,7 @@ const convertDataToItem = (eventItem, index, type, cls, icons) => {
     rawData: eventItem,
     number: eventItem.event_code,
     className: type === 1 ? `${eventItem.type} negative` : 'asset-type-default',
-    description: type == 0 ? eventItem.maintainence_code.event_description : 'Payment Due / Grace Period',
+    description: type == 0 ? typeof eventItem.template_string != 'undefined' ? eventItem.template_string : eventItem.maintainence_code.event_description : 'Payment Due / Grace Period',
     collection: [], 
     showTooltip: false
   } 
@@ -61,7 +63,7 @@ const convertDataToItem = (eventItem, index, type, cls, icons) => {
 var tootlTip = ''
 const TIME_INTERVAL = 1000
 
-const Fees = ({ events }) => {
+const Fees = ({ events, showTabs, tabText }) => {
   const classes = useStyles()
   const timelineRef = useRef()
   const timelineContainerRef = useRef()
@@ -142,8 +144,9 @@ const Fees = ({ events }) => {
         const firstText = text[0];
         text.splice(0,1);
         text = firstText+'<br/>'+text.join(',');
-
-        let tootltipTemplate = `<div class='custom_tooltip' style='background:${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default} ;top:${event.clientY }px;left:${event.clientX + 20 }px;'><h4 style='color:${color};text-align:left;margin:0'>${text}</h4></div>`
+        const element = document.getElementById('timelineCharts');
+        const getPosition = element.getBoundingClientRect();  
+        let tootltipTemplate = `<div class='custom_tooltip' style='background:${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default} ;top:${ getPosition.y }px;left:${ getPosition.x }px;'><h4 style='color:${color};text-align:left;margin:0'>${text}</h4></div>`
         resetTooltipContainer() 
         if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
             document.body.insertAdjacentHTML('beforeend',tootltipTemplate)                
@@ -216,8 +219,30 @@ const Fees = ({ events }) => {
     
 }, [ legalEvents, isLoadingTimelineRawData, events ])
 
+const ItemLabel = ({label}) =>  {
+  return ( 
+      <span className={classes.containerRelative}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(Object.keys(events).length > 0 &&  events.main != undefined ? events.main.length : 0)} showZero={false}></Badge></span>
+    )
+  }
+
   return (
         <Paper className={`${classes.timelineRoot} timelineRoot`} square >
+            {
+              showTabs === true && (
+                <Tabs className={classes.tabs} variant={'scrollable'} value={0}>
+                {
+                  [tabText].map( (item, index) => (
+                    <Tab
+                      key={index}
+                      className={classes.tab} 
+                      label={<ItemLabel label={item}/>}
+                    /> 
+                  ))
+                }                            
+                </Tabs>
+              )
+
+            }
             <div
                 id={`timelineCharts`}
                 style={{ 

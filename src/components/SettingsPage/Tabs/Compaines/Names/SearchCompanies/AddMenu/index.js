@@ -39,7 +39,7 @@ const AddMenu = ({ anchorEl, onClose, createParent, associateToParent }) => {
         label={
           <Fragment>
             <LayersIcon className={classes.icon} />
-            Import Into Group
+            Import into group
           </Fragment>
         }
         parentMenuOpen={!!anchorEl}
