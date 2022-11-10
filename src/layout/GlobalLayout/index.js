@@ -1232,14 +1232,14 @@ const GlobalLayout = (props) => {
             label: 'Recorded Documents',
             ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
         },
-        {
+        /* {
             tooltip: 'Initiated Documents',
             bar: openGoogleDriveBar,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? handleAlertPop : handleGoogleDriveBarOpen,
             t: 12,
             label: 'Initiated Documents',
             ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
-        },
+        }, */
     ]
 
     const bottomToolBar = [

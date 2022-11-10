@@ -129,10 +129,17 @@ import { setSelectLawFirm } from "../../../actions/patentTrackActions2";
   const onHandleClickRow = useCallback(
     (e, row) => {
       e.preventDefault();
-      setSelectItems([row.id])
-      dispatch(setSelectLawFirm(row.id))
+      let oldItems = [...selectItems], ID = 0 
+      if(!oldItems.includes(row.id)) { 
+        oldItems = [row.id]
+        ID = row.id
+      } else {
+        oldItems = []
+      }
+      setSelectItems(oldItems)
+      dispatch(setSelectLawFirm(ID))
     },
-    [dispatch]
+    [dispatch, selectItems]
   );
   
     const resizeColumnsWidth = useCallback((dataKey, data) => {

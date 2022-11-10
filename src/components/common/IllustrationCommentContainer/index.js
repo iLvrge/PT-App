@@ -325,7 +325,7 @@ const IllustrationCommentContainer = ({
                             <Fees
                                 standalone={true}
                                 events={allAssetsEvents}
-                                tabText={maintainence  === true ? 'M.Fees' : 'Record'}
+                                tabText={maintainence  === true ? 'M.Fees' : 'To Record'}
                                 showTabs={true}
                             />
                         :    
@@ -339,7 +339,8 @@ const IllustrationCommentContainer = ({
                         cube === true && maintainenceFrameMode === false && assetIllustration === null
                         ?
                             selectedCategory == 'incorrect_names' ?
-                                <NamesContainer/>
+                                <NamesContainer
+                                visualizerBarSize={visualizerBarSize}/>
                             :
                             selectedCategory == 'collaterlized' || selectedCategory == 'clear_encumbrances' ?
                                 <TimelineContainer 

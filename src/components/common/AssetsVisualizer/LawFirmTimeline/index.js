@@ -418,7 +418,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
       setTimelineRawGroups([]) //groups
       setTimelineRawData([]) //items
       //redrawTimeline()
-      PatenTrackApi.cancelTimeline()
+      PatenTrackApi.cancelTimelineActivity()
       /**
         * call for the timeline api data
       */

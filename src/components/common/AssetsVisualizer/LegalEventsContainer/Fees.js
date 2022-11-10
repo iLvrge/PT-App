@@ -14,6 +14,7 @@ import Loader from '../../Loader'
 import useStyles from './styles'
 import { Badge, Tab, Tabs } from '@mui/material'
 import { numberWithCommas } from '../../../../utils/numbers'
+import PatenTrackApi from '../../../../api/patenTrack2'
 
 const options = { 
     height: '100%',
@@ -32,7 +33,7 @@ const DATE_FORMAT = 'MMM DD, YYYY'
 const getTemplateContent = (item, icons) => {   
   const getEventIcons = icons[item.event_code] 
   const icon = getEventIcons["icon3"] != undefined ? getEventIcons["icon3"]: ''
-  const templateContent = `<div class='first'>${typeof item.template_string != 'undefined' ? item.template_string == 'US0' ? `US${numberWithCommas(item.grant_doc_num)}` : item.template_string : item.maintainence_code.template_string}</div><div class='textColumn'>${moment(new Date(item.eventdate)).format(DATE_FORMAT)}</div><div class='absolute'>${icon}</div>`
+  const templateContent = `<div class='first'>${typeof item.template_string != 'undefined' ? item.template_string == '0' ? `US<br/>${numberWithCommas(item.grant_doc_num)}` : item.event_code == '13' ? `US<br/>${item.template_string}` : item.template_string : item.maintainence_code.template_string}</div><div class='textColumn'>${item.event_code == '13' ? `<div style="text-align:left">Filed on:</div>` : ''}${moment(new Date(item.eventdate)).format(DATE_FORMAT)}</div><div class='absolute'>${icon}</div>`
   return templateContent
 } 
 
@@ -136,21 +137,67 @@ const Fees = ({ events, showTabs, tabText }) => {
 
   const showTooltip = (item, event) => {     
     setTimeout(() => {
-      if(tootlTip === item.id) {      
+      if(tootlTip === item.id) {     
         const color = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
-        const height = window.innerHeight|| document.documentElement.clientHeight || document.body.clientHeight;  
-        
-        let text = item.maintainence_code.event_description.split(',');
-        const firstText = text[0];
-        text.splice(0,1);
-        text = firstText+'<br/>'+text.join(',');
+        const height = window.innerHeight|| document.documentElement.clientHeight || document.body.clientHeight; 
         const element = document.getElementById('timelineCharts');
         const getPosition = element.getBoundingClientRect();  
-        let tootltipTemplate = `<div class='custom_tooltip' style='background:${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default} ;top:${ getPosition.y }px;left:${ getPosition.x }px;'><h4 style='color:${color};text-align:left;margin:0'>${text}</h4></div>`
-        resetTooltipContainer() 
-        if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
+        let tootltipTemplate = `<div class='custom_tooltip' style='background:${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default} ;top:${ getPosition.y }px;left:${ getPosition.x }px;'>`
+        if(typeof tabText != 'undefined' && tabText == 'To Record') {
+          PatenTrackApi
+          .allFilledAssetsEventsDetails(item.application)
+          .then( response => {
+            const { data } = response 
+            if(data != null) {
+              const agents = [], applicants = [], assignees = [], inventors = []
+              if(typeof data.agent != 'undefined') {
+                data.agent.map(item => {
+                  agents.push(item.name)
+                })
+              } 
+              if(typeof data.applicant != 'undefined') {
+                data.applicant.map(item => {
+                  applicants.push(item.original_name)
+                })
+              }
+              if(typeof data.assignee != 'undefined') {
+                data.assignee.map(item => {
+                  assignees.push(item.original_name)
+                })
+              }
+              if(typeof data.inventor != 'undefined') {
+                data.inventor.map(item => {
+                  inventors.push(item.name)
+                })
+              }
+              tootltipTemplate += `<div>Filed: ${item.eventdate}</div>`
+              tootltipTemplate += `<div>Agent: ${agents.join(', ')}</div>`
+              tootltipTemplate += `<div>Applicant: ${applicants.join(', ')}</div>`
+              tootltipTemplate += `<div>Assignee: ${assignees.join(', ')}</div>`
+              tootltipTemplate += `<div>Inventors: ${inventors.join(', ')}</div>` 
+              tootltipTemplate += `</div>`
+              resetTooltipContainer() 
+              if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
+                document.body.insertAdjacentHTML('beforeend',tootltipTemplate)                
+              } 
+            }
+          })
+        } else {
+          let text = item.maintainence_code.event_description.split(',');
+          const firstText = text[0];
+          text.splice(0,1);
+          text = firstText+'<br/>'+text.join(',');
+          
+          tootltipTemplate += `<h4 style='color:${color};text-align:left;margin:0'>${text}</h4></div>`
+          resetTooltipContainer() 
+          if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
             document.body.insertAdjacentHTML('beforeend',tootltipTemplate)                
+          }
         }
+
+        
+        
+        
       } else {
           resetTooltipContainer()
       }                

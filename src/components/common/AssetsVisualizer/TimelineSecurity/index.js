@@ -316,7 +316,7 @@ const TimelineSecurity = ({ data, assignmentBar, assignmentBarToggle, type, stan
     setTimelineRawGroups([]) //groups
     setTimelineRawData([]) //items
     //redrawTimeline()
-    PatenTrackApi.cancelTimeline()
+    PatenTrackApi.cancelTimelineSecurity()
     /**
      * call for the timeline api data
     */
@@ -415,8 +415,7 @@ const TimelineSecurity = ({ data, assignmentBar, assignmentBarToggle, type, stan
       }
     }, 1000)
   } */
-  const handleKeyEvent = (event) =>{
-    console.log('handleKeyEvent', event)
+  const handleKeyEvent = (event) =>{ 
     if(event.key === 'ArrowDown' || event.key === 'ArrowUp' ) {
       if(event.key === 'ArrowUp' ) {
         timelineRef.current.zoomOut(0.30)

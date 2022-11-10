@@ -709,6 +709,7 @@ const GlobalScreen = ({
                                         onChange={(size) => { 
                                             setVisualizerBarSize(size)
                                             //editorBar(1) 
+                                            
                                         }} 
                                         onDragStarted={() => {
                                             setIsDragging(!isDragging)
@@ -749,6 +750,7 @@ const GlobalScreen = ({
                                                 gap={gap}
                                                 templateButton={false}
                                                 maintainenceButton={false}
+                                                visualizerBarSize={visualizerBarSize}
                                                 chartsBar={openChartBar}
                                                 analyticsBar={openAnalyticsBar}
                                                 chartsBarToggle={handleChartBarOpen}

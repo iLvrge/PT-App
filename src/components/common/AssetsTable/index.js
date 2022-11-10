@@ -1347,8 +1347,11 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
            */
           if(defaultViewFlag === 0) {
             if(selectedCategory == 'to_be_monitized') {
-              if(openChartBar === false) {
+              if(openChartBar === true) {
                 handleChartBarOpen()
+              }
+              if(openAnalyticsBar === false) {
+                handleAnalyticsBarOpen()
               }
             } else {
               if(openChartBar === false) {
