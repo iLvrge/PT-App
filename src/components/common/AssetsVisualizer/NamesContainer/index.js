@@ -62,7 +62,7 @@ const NamesContainer = (props) => {
     }, [width, height])
 
     const drawCloudChart = async() => { 
-        const CONSTANT_VALUE = 1.2
+        const CONSTANT_VALUE = 0.3
         const labels = [], fontSizes = [];
         /**
          * All Characters
@@ -78,10 +78,10 @@ const NamesContainer = (props) => {
          */
         const promise = namesData.map( item => { 
             labels.push(item.name)
-            fontSizes.push( parseInt(item.distance  * (CONSTANT_VALUE * (width / allCharters.length ))))  
+            fontSizes.push( parseInt(item.distance  * (CONSTANT_VALUE * (width / allCharters.length ))))
         }) 
         await Promise.all(promise)
-        
+        console.log(fontSizes)
         /**
          * Display Chart
          */
