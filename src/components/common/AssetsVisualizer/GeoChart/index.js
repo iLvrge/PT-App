@@ -19,8 +19,8 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(false)
     const [assetRequest, setAssetRequest] = useState(false)
-    const [selectedTab, setSelectedTab ] = useState(0)
-    const [chartTabs, setChartTabs ] = useState(['Jurisdictions'])
+    const [selectedTab, setSelectedTab ] = useState(1)
+    const [chartTabs, setChartTabs ] = useState(['Innovation', 'Jurisdictions', 'Inventors', 'Sellers', 'Agents (fillings)', 'Agents (transactions)'])
     const [data, setData] = useState([])
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
@@ -309,7 +309,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                 )
             } 
             {
-                selectedTab === 0
+                selectedTab === 1
                 ?
                     <div className={classes.graphContainer} ref={containerRef}>  
                         <DisplayChart />

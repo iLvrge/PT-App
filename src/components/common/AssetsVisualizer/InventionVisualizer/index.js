@@ -281,11 +281,11 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
     const onHandleMouseOut = (event) => {
         clearInterval(interval)
-    }
-    console.log('selectedCategory', selectedCategory)
+    } 
     useEffect(() => {
         if(selectedCategory == 'assigned' && selectedRow.length == 0) {
-            setInventionTabs([ 'Innovation', 'For Sale', 'To License Out'])
+           /*  setInventionTabs([ 'Innovation', 'For Sale', 'To License Out']) */
+            setInventionTabs([ 'Innovation'])
         } else if(selectedRow.length  === 0) {
             setInventionTabs([ 'Innovation'])
             setSelectedTab(0)

@@ -170,6 +170,7 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, itemCallback, groups, 
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const oldChildCompany = useSelector( state => state.patenTrack2.mainCompaniesList.childID )
     const oldChildList = useSelector( state => state.patenTrack2.mainCompaniesList.child_list )
+    const childListLoaded = useSelector( state => state.patenTrack2.mainCompaniesList.child_list_loaded )
 
     useEffect(() => {
         if(selectedCategory === 'correct_names') {
@@ -202,24 +203,24 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, itemCallback, groups, 
     useEffect(() => {
         const getChildCompanies = async () => {            
             if( parentCompanyId > 0 ) { 
-                if( oldChildCompany !== parentCompanyId || (parentCompanyId === oldChildCompany && oldChildList.length === 0) ) {
+                if( oldChildCompany !== parentCompanyId || (parentCompanyId === oldChildCompany && oldChildList.length === 0 && childListLoaded === false) ) {
                     setChildCompaniesLoading( true )
                     PatenTrackApi.cancelChildCompanies()
                     const { data } = await PatenTrackApi.getChildCompanies(parentCompanyId)
                     dispatch(
-                        setMainChildCompanies(parentCompanyId, data.list)
+                        setMainChildCompanies(parentCompanyId, data.list, true)
                     )
                     setChildCompanies(data.list)
-                    if(selected.includes(parentCompanyId)){
+                    /* if(selected.includes(parentCompanyId)){
                         checkedAllChildCompanies(data.list)
-                    }
+                    } */
                     setChildCompaniesLoading( false )                    
                 } else {  
                     setChildCompaniesLoading( false )              
-                    setChildCompanies(oldChildList)
+                    setChildCompanies(oldChildList)/* 
                     if(selected.includes(parentCompanyId)){
                         checkedAllChildCompanies(oldChildList)
-                    }
+                    } */
                 }                
             } else {
                 setChildCompaniesLoading( false )

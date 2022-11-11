@@ -30,8 +30,16 @@ export default makeStyles(theme => ({
             borderColor: '#e5e5e51c',
         },
         '& .MuiTab-root':{
-            minWidth: 'inherit',
+            minWidth:  120,
             maxWidth:  150
+        },
+        '& .MuiTab-root:nth-child(n + 4)':{
+            minWidth:  160,
+            maxWidth:  160
+        },
+        '& .MuiTab-root:nth-child(n + 5)':{
+            minWidth:  190,
+            maxWidth:  190
         },
         '& .MuiTab-wrapper':{
             whiteSpace: 'nowrap'

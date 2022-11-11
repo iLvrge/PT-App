@@ -114,6 +114,7 @@ const GlobalScreen = ({
     handleInventorBarOpen,
     toggleCustomerButtonType,
     customerButtonVisible,
+    changeVisualBar,
     commentBarSize,
     setCommentBarSize,
     openCommentBar,
@@ -269,6 +270,28 @@ const GlobalScreen = ({
                 handleCustomersBarOpen()
             }
         }
+        if(timelineScreen === true) {
+            if( openCommentBar === false ) {
+                handleCommentBarOpen()
+            }
+            let statusChange = false;
+    
+            if(openIllustrationBar === false) {
+                statusChange = true
+                handleIllustrationBarOpen()
+            } 
+            if( openChartBar === false ) {
+                statusChange = true
+                handleChartBarOpen()
+            }
+            if( openAnalyticsBar === false ) {
+                statusChange = true
+                handleAnalyticsBarOpen()
+            }
+            if(statusChange === true) {
+                changeVisualBar(false, true, false, false)
+            }
+        } 
     }, [selectedCategory, timelineScreen])
 
     useEffect(() => {

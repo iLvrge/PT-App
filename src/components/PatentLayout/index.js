@@ -181,58 +181,86 @@ const PatentLayout = ({
         dispatch(setPatentScreen(true))
         /* dispatch(setBreadCrumbs('Assets')) */
     }, [])
-    useEffect(() => {
-        if(selectedCategory == 'correct_details') {
-            if(openAssignmentBar === false) {
-                handleAssignmentBarOpen()
-            }
-            if(openCustomerBar === true) {
-                handleCustomersBarOpen()
-            }
-        } else if(selectedCategory == 'pay_maintainence_fee' || selectedCategory == 'deflated_collaterals') {
-            let statusChange = false;
-            if(openIllustrationBar === false) {
-                statusChange = true
-                handleIllustrationBarOpen()
-            }
-            if(openAssignmentBar === true) {
-                handleAssignmentBarOpen()
-            }
-            if( openAnalyticsBar === false ) {
-                statusChange = true
-                handleAnalyticsBarOpen()
-            }
-            if(statusChange === true) {
-                changeVisualBar(false, true, false, false)
-            }
-        } else if (selectedCategory == 'acquired') {
-            let statusChange = false;
-            if(openAssignmentBar === true) {
-                handleAssignmentBarOpen()
-            }
-            if( openCommentBar === false ) {
-                handleCommentBarOpen()
-            }
-            if( openChartBar === false ) {
-                statusChange = true
-                handleChartBarOpen()
-            }
-            if( openAnalyticsBar === false ) {
-                statusChange = true
-                handleAnalyticsBarOpen()
-            }
-            if(statusChange === true) {
-                changeVisualBar(false, true, false, false)
-            }
 
-        } else {
-            if(openAssignmentBar === true) {
-                handleAssignmentBarOpen()
-            }
-            /* if(openCustomerBar === false && dashboardScreen === false) {
-                handleCustomersBarOpen()
-            } */
+    // useEffect(() => {
+    //     if(selectedCategory == 'correct_details') {
+    //         if(openAssignmentBar === false) {
+    //             handleAssignmentBarOpen()
+    //         }
+    //         if(openCustomerBar === true) {
+    //             handleCustomersBarOpen()
+    //         }
+    //     } else if(selectedCategory == 'pay_maintainence_fee' || selectedCategory == 'deflated_collaterals') {
+    //         let statusChange = false;
+    //         if(openIllustrationBar === false) {
+    //             statusChange = true
+    //             handleIllustrationBarOpen()
+    //         }
+    //         if(openAssignmentBar === true) {
+    //             handleAssignmentBarOpen()
+    //         }
+    //         if( openAnalyticsBar === false ) {
+    //             statusChange = true
+    //             handleAnalyticsBarOpen()
+    //         }
+    //         if(statusChange === true) {
+    //             changeVisualBar(false, true, false, false)
+    //         }
+    //     } else if (selectedCategory == 'acquired') {
+    //         let statusChange = false;
+    //         if(openAssignmentBar === true) {
+    //             handleAssignmentBarOpen()
+    //         }
+    //         if( openCommentBar === false ) {
+    //             handleCommentBarOpen()
+    //         }
+    //         if( openChartBar === false ) {
+    //             statusChange = true
+    //             handleChartBarOpen()
+    //         }
+    //         if( openAnalyticsBar === false ) {
+    //             statusChange = true
+    //             handleAnalyticsBarOpen()
+    //         }
+    //         if(statusChange === true) {
+    //             changeVisualBar(false, true, false, false)
+    //         }
+
+    //     } else {
+    //         if(openAssignmentBar === true) {
+    //             handleAssignmentBarOpen()
+    //         }
+    //         /* if(openCustomerBar === false && dashboardScreen === false) {
+    //             handleCustomersBarOpen()
+    //         } */
+    //     }
+    // }, [selectedCategory])
+
+    useEffect(() => {
+        if(openAssignmentBar === true) {
+            handleAssignmentBarOpen()
         }
+        if( openCommentBar === false ) {
+            handleCommentBarOpen()
+        }
+        let statusChange = false;
+
+        if(openIllustrationBar === false) {
+            statusChange = true
+            handleIllustrationBarOpen()
+        } 
+        if( openChartBar === false ) {
+            statusChange = true
+            handleChartBarOpen()
+        }
+        if( openAnalyticsBar === false ) {
+            statusChange = true
+            handleAnalyticsBarOpen()
+        }
+        if(statusChange === true) {
+            changeVisualBar(false, true, false, false)
+        }
+
     }, [selectedCategory])
 
     useEffect(() => {

@@ -718,8 +718,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         if(cntrlKey !== undefined) {
             let updateSelected = [...selected], sendRequest = false , updateGroup = [...selectedGroup] 
             if(!updateSelected.includes(parseInt( row.representative_id ))) {
-                if(selectedCategory === 'correct_names') {
-                   
+                if(selectedCategory === 'correct_names') { 
                     if(parseInt(row.type) === 1) {
                         if(row.child_total > 0) {
                             const parseChild = JSON.parse(row.child)
@@ -740,7 +739,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                             if(dashboardScreen === true) {
                                 updateSelected = [parseInt( parseChild[0] )]
                             } else {
-                                if(!updateSelected.includes(parseInt(parseChild[0]))) {
+                                updateSelected = [parseInt( parseChild[0] )]
+                                /* if(!updateSelected.includes(parseInt(parseChild[0]))) {
                                     updateSelected = [...updateSelected, ...parseChild]
                                     updateSelected = [...new Set(updateSelected)]
                                 } else {
@@ -750,7 +750,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                                         )
                                     })
                                     await Promise.all(childFilterPromise)
-                                }   
+                                }  */  
                             }
                                                      
                         }   
@@ -789,29 +789,37 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             clearOtherItems()
         } else {
             if(row.status == 1) {
-                const element = event.target.closest('div.ReactVirtualized__Table__rowColumn')
-                let index = -1
-                if(element !== null ) {
-                    index = element.getAttribute("aria-colindex");
-                } 
-                if(index == 2) {
+                if(parseInt(row.type) === 1) {
                     if(currentSelection != row.representative_id) {
                         setCurrentSelection(row.representative_id)
                     } else { 
                         setCurrentSelection(null)
                     }
                 } else {
-                    const updateSelected = [parseInt(row.representative_id)]
-                    dispatch(setMainCompaniesRowSelect([]))
-                    setSelectItems(updateSelected)
-                    //setSelectGroups(updateGroup)
-                    updateUserCompanySelection(updateSelected)
-                    dispatch( setMainCompaniesSelected( updateSelected, [] ) ) 
-                    dispatch( setNamesTransactionsSelectAll( false ) )
-                    dispatch( setSelectedNamesTransactions([]) )
-                    dispatch( setMainCompaniesAllSelected( updateSelected.length === totalRecords ? true : false ) )
-                    resetAll() 
-                    clearOtherItems() 
+                    const element = event.target.closest('div.ReactVirtualized__Table__rowColumn')
+                    let index = -1
+                    if(element !== null ) {
+                        index = element.getAttribute("aria-colindex");
+                    } 
+                    if(index == 2) {
+                        if(currentSelection != row.representative_id) {
+                            setCurrentSelection(row.representative_id)
+                        } else { 
+                            setCurrentSelection(null)
+                        }
+                    } else {
+                        const updateSelected = [parseInt(row.representative_id)]
+                        dispatch(setMainCompaniesRowSelect([]))
+                        setSelectItems(updateSelected)
+                        //setSelectGroups(updateGroup)
+                        updateUserCompanySelection(updateSelected)
+                        dispatch( setMainCompaniesSelected( updateSelected, [] ) ) 
+                        dispatch( setNamesTransactionsSelectAll( false ) )
+                        dispatch( setSelectedNamesTransactions([]) )
+                        dispatch( setMainCompaniesAllSelected( updateSelected.length === totalRecords ? true : false ) )
+                        resetAll() 
+                        clearOtherItems() 
+                    } 
                 }
             }          
         }
