@@ -255,6 +255,16 @@ const GlobalScreen = ({
     }, [auth_token, dispatch])
 
     useEffect(() => {
+        console.log('openChartBar BAR CHANGES', openChartBar, openAnalyticsBar)
+    }, [ openChartBar])
+    useEffect(() => {
+        console.log('openAnalyticsBar BAR CHANGES',  openChartBar, openAnalyticsBar)
+    }, [ openAnalyticsBar])
+    useEffect(() => {
+        console.log('BAR CHANGES', selectedCategory, openAssignmentBar, openCustomerBar, openCommentBar, openIllustrationBar, openChartBar, openAnalyticsBar)
+    }, [openAssignmentBar, openCustomerBar, openCommentBar, openIllustrationBar, openChartBar, openAnalyticsBar])
+
+    useEffect(() => {
         if(selectedCategory == 'correct_details') {
             if(openAssignmentBar === false) {
                 handleAssignmentBarOpen()
@@ -270,26 +280,32 @@ const GlobalScreen = ({
                 handleCustomersBarOpen()
             }
         }
+        console.log('timelineScreen', selectedCategory, dashboardScreen, timelineScreen, openCommentBar, openIllustrationBar, openChartBar, openAnalyticsBar)
         if(timelineScreen === true) {
             if( openCommentBar === false ) {
+                console.log(`Send Request to openCommentBar ${openCommentBar}`)
                 handleCommentBarOpen()
             }
             let statusChange = false;
     
             if(openIllustrationBar === false) {
+                console.log(`Send Request to openIllustrationBar ${openIllustrationBar}`)
                 statusChange = true
                 handleIllustrationBarOpen()
             } 
             if( openChartBar === false ) {
+                console.log(`Send Request to openChartBar ${openChartBar}`)
                 statusChange = true
                 handleChartBarOpen()
             }
             if( openAnalyticsBar === false ) {
+                console.log(`Send Request to openAnalyticsBar ${openAnalyticsBar}`)
                 statusChange = true
                 handleAnalyticsBarOpen()
             }
             if(statusChange === true) {
-                changeVisualBar(false, true, false, false)
+                console.log(`Send Request to change ${statusChange}`)
+                changeVisualBar(true, true, true, true)
             }
         } 
     }, [selectedCategory, timelineScreen])

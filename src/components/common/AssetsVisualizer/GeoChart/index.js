@@ -13,14 +13,18 @@ import {
 } from '../../../../actions/patentTrackActions2'
 import Loader from '../../Loader'
 import TitleBar from '../../TitleBar'
+import InventionVisualizer from '../InventionVisualizer'
+import SankeyChart from '../../../Reports/SankeyChart'
+import AgentsVisualizer from '../AgentsVisualizer'
+import InventorsVisualizer from '../InventorsVisualizer'
 
-const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, tab, titleBar }) => {
+const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, tab, titleBar, disableOtherTabs }) => {
     const containerRef = useRef(null)
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(false)
     const [assetRequest, setAssetRequest] = useState(false)
-    const [selectedTab, setSelectedTab ] = useState(1)
-    const [chartTabs, setChartTabs ] = useState(['Innovation', 'Jurisdictions', 'Inventors', 'Sellers', 'Agents (fillings)', 'Agents (transactions)'])
+    const [selectedTab, setSelectedTab ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? 0 : 1)
+    const [chartTabs, setChartTabs ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? ['Jurisdictions'] :  ['Innovation', 'Jurisdictions', 'Inventors', 'Sellers', 'Agents (fillings)', 'Agents (transactions)'])
     const [data, setData] = useState([])
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
@@ -252,6 +256,8 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
         } 
     }
 
+    console.log('selectedTab', selectedTab)
+
     const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
 
 
@@ -308,15 +314,39 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                     </div>
                 )
             } 
-            {
-                selectedTab === 1
-                ?
-                    <div className={classes.graphContainer} ref={containerRef}>  
+            <div className={classes.graphContainer} ref={containerRef}>  
+                {
+                    typeof disableOtherTabs !== 'undefined' && disableOtherTabs === true 
+                    ?
                         <DisplayChart />
-                    </div> 
-                :
-                    ''
-            }
+                        :
+                            selectedTab === 0 
+                            ?
+                                <InventionVisualizer />
+                            :
+                                selectedTab === 1
+                                ?
+                                    <DisplayChart />
+                                :
+                                    selectedTab === 2
+                                    ?
+                                        <InventorsVisualizer />
+                                    :
+                                        selectedTab === 3
+                                        ?
+                                            <SankeyChart />
+                                        :
+                                            selectedTab === 4
+                                            ?
+                                                <AgentsVisualizer type='1'/>
+                                            :
+                                                selectedTab === 5
+                                                ?
+                                                    <AgentsVisualizer type='2'/>
+                                                :
+                                                    ''
+                } 
+            </div> 
         </Paper>  
     )
 }

@@ -1171,9 +1171,9 @@ const Reports = (props) => {
                         if(props.openCustomerBar === false && timeline === false){
                             props.handleCustomersBarOpen()
                         }
-                        if(props.openCommentBar === false){
+                        /* if(props.openCommentBar === false){
                             props.handleCommentBarOpen()
-                        }   
+                        }  */  
                     })
                                             
                 }

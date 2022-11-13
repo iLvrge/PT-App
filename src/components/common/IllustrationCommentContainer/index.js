@@ -360,7 +360,8 @@ const IllustrationCommentContainer = ({
                                             visualizerBarSize={visualizerBarSize}
                                             type={type}
                                             titleBar={true}
-                                        />
+                                            disableOtherTabs={true}
+                                        /> 
                                     :
                                         <InventionVisualizer 
                                             defaultSize={illustrationBarSize} 

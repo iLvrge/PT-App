@@ -1341,11 +1341,34 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           dispatch(linkWithSheetSelectedAsset('products', encodeURIComponent(grant_doc_num  == '' ? `US${applicationFormat(appno_doc_num)}` : `US${numberWithCommas(grant_doc_num)}`)))     
         }
         callSelectedAssets({ grant_doc_num, appno_doc_num, asset });
+        if(defaultViewFlag === 0) {
+          let changeBar = false
+          if(openIllustrationBar === false) {
+            changeBar = true
+            handleIllustrationBarOpen() 
+          }
+          if(commentBar === false) {
+            changeBar = true
+            handleCommentBarOpen() 
+          }
+          if(openChartBar === false) {
+            changeBar = true
+            handleChartBarOpen()
+          }
+          if(openAnalyticsBar === false) {
+            changeBar = true
+            handleAnalyticsBarOpen()
+          }
+
+          if(changeBar === true) {
+            handleVisualBarSize(true, true, true, true)
+          }
+        }
         if(selectedCategory == 'incorrect_names' || selectedCategory == 'pay_maintainence_fee' || selectedCategory == 'late_maintainance' || selectedCategory == 'ptab' || selectedCategory == 'to_be_monitized' ){
           /**
            * Check if Right Pane is close then open it and close the TV
            */
-          if(defaultViewFlag === 0) {
+          /* if(defaultViewFlag === 0) {
             if(selectedCategory == 'to_be_monitized') {
               if(openChartBar === true) {
                 handleChartBarOpen()
@@ -1366,9 +1389,9 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
               }
             }
             setDefaultViewFlag(1)
-          } 
+          }  */
         } else if (selectedCategory == 'top_non_us_members') {
-          if(defaultViewFlag === 0) {
+          /* if(defaultViewFlag === 0) {
             if(openChartBar === false) {
               handleChartBarOpen()
               if(openIllustrationBar === true) {
@@ -1377,7 +1400,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
               }
             }
             setDefaultViewFlag(1)
-          }
+          } */
         }
         setCheckBar(!checkBar)        
         dispatch(setChildSelectedAssetsPatents([]));
@@ -1449,7 +1472,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           setSelectItems([])
         } else if (selectedCategory == 'incorrect_names') {
           console.log('selectedCategory', openChartBar, openAnalyticsBar, openIllustrationBar)
-          if(openChartBar === true) {
+          /* if(openChartBar === true) {
             handleChartBarOpen()
           }
           if(openAnalyticsBar === true) {
@@ -1458,7 +1481,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           if(openIllustrationBar === false) {
             handleIllustrationBarOpen('0%')
             handleVisualBarSize(false, false, false, true)
-          }
+          } */
         }
       }
     },
