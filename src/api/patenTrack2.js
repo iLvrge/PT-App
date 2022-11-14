@@ -250,11 +250,14 @@ class PatenTrackApi {
   }
 
   static getAssetTypeAssignmentAllAssetsWithFamily(form) { 
-    let header = getFormUrlHeader()
-    
+    let header = getFormUrlHeader() 
     return axios.post(`${base_new_api_url}/customers/asset_types/assets/family`, form, header)
   }
   
+  static getAgentsData(form) { 
+    let header = getFormUrlHeader() 
+    return axios.post(`${base_new_api_url}/customers/asset_types/assets/agents`, form, header)
+  }
 
   static getRestoreOwnershipAssets(companies, tabs, customers, rfIDs) { 
     return axios.get(`${base_new_api_url}/customers/restore_ownership/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())

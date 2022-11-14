@@ -37,7 +37,7 @@ const SankeyChart = (props) => {
                 } else {
                     formData.append('type', selectedCategory);   
                 }
-                if((typeof props.type != 'undefined' && props.type == 'acquired') || selectedCategory == 'acquired') {
+                if((typeof props.type != 'undefined' && (props.type == 'acquired' || props.type == 'filled')) || (selectedCategory == 'acquired' || selectedCategory == 'filled')) {
                     setLoading(true)
                     const {data} = await PatenTrackApi.getDashboardPartiesData(formData)
                     
@@ -106,7 +106,7 @@ const SankeyChart = (props) => {
                 )
             }            
             {    
-                selectedCategory == 'acquired'
+                selectedCategory == 'acquired' || selectedCategory == 'filled'
                 ?
                     data.length > 0 ?
                         <div className={clsx(classes.child)}>
