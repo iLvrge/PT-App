@@ -13,10 +13,10 @@ import {
 } from '../../../../actions/patentTrackActions2'
 import Loader from '../../Loader'
 import TitleBar from '../../TitleBar'
-import InventionVisualizer from '../InventionVisualizer'
-import SankeyChart from '../../../Reports/SankeyChart'
+import InventionVisualizer from '../InventionVisualizer' 
 import AgentsVisualizer from '../AgentsVisualizer'
 import InventorsVisualizer from '../InventorsVisualizer'
+import SankeyChart from '../SankeyChart'
 
 const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, tab, titleBar, disableOtherTabs }) => {
     const containerRef = useRef(null)
@@ -24,7 +24,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
     const [loading, setLoading] = useState(false)
     const [assetRequest, setAssetRequest] = useState(false)
     const [selectedTab, setSelectedTab ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? 0 : 1)
-    const [chartTabs, setChartTabs ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? ['Jurisdictions'] :  ['Innovation', 'Jurisdictions', 'Inventors', 'Sellers', 'Agents (fillings)', 'Agents (transactions)'])
+    const [chartTabs, setChartTabs ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? ['Jurisdictions'] :  ['Innovation', 'Jurisdictions', 'Invented', 'Acquired', 'Agents (fillings)', 'Agents (transactions)'])
     const [data, setData] = useState([])
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
@@ -322,7 +322,11 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                         :
                             selectedTab === 0 
                             ?
-                                <InventionVisualizer />
+                                <InventionVisualizer 
+                                    visualizerBarSize={visualizerBarSize} 
+                                    tab={false} 
+                                    standalone={true}
+                                />
                             :
                                 selectedTab === 1
                                 ?
@@ -330,11 +334,17 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                                 :
                                     selectedTab === 2
                                     ?
-                                        <InventorsVisualizer />
+                                        <SankeyChart 
+                                            type={'filled'}
+                                            layout={true}
+                                        />
                                     :
                                         selectedTab === 3
                                         ?
-                                            <SankeyChart />
+                                            <SankeyChart 
+                                                type={'acquired'}
+                                                layout={true}
+                                            />
                                         :
                                             selectedTab === 4
                                             ?

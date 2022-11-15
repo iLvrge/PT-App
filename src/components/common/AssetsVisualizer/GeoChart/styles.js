@@ -34,10 +34,14 @@ export default makeStyles(theme => ({
             maxWidth:  150
         },
         '& .MuiTab-root:nth-child(n + 4)':{
+            minWidth:  80,
+            maxWidth:  80
+        },
+        '& .MuiTab-root:nth-child(n + 5)':{
             minWidth:  160,
             maxWidth:  160
         },
-        '& .MuiTab-root:nth-child(n + 5)':{
+        '& .MuiTab-root:nth-child(n + 6)':{
             minWidth:  190,
             maxWidth:  190
         },

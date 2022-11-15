@@ -62,7 +62,7 @@ const AgentsVisualizer = (props) => {
         backgroundColor: 'transparent',
         chartArea: {
             width: '90%',
-            height: '85%',
+            height: '75%',
             left:40,
             top:15,
         },
@@ -126,7 +126,7 @@ const AgentsVisualizer = (props) => {
             getAssetsForEachCountry()
         }
         return () => (isSubscribed = false)
-    }, [selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, selectedAssetAssignmentsAll, selectedAssetAssignments, display_sales_assets, search_string, auth_token])
+    }, [selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, selectedAssetAssignmentsAll, selectedAssetAssignments, display_sales_assets, search_string, auth_token, props.type])
 
 
     useEffect(() => {

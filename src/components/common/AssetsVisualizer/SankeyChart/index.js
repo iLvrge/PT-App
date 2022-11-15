@@ -30,14 +30,17 @@ const SankeyChart = (props) => {
                 setAssigneeRawData([])
                 setAssignorRawData([])
                 const formData = new FormData()
-                formData.append('selectedCompanies', JSON.stringify(selectedCompanies));  
+                formData.append('selectedCompanies', JSON.stringify(selectedCompanies)); 
+                if(typeof props.layout != 'undefined' && props.layout !== null && props.layout === true) { 
+                    formData.append('layout', selectedCategory);  
+                }
                 if(typeof props.type != 'undefined' && props.type !== null && props.type != '') {
                     formData.append('type', props.type);  
-                    formData.append('search', 'all');  
+                    //formData.append('search', 'all');  
                 } else {
                     formData.append('type', selectedCategory);   
                 }
-                if((typeof props.type != 'undefined' && (props.type == 'acquired' || props.type == 'filled')) || (selectedCategory == 'acquired' || selectedCategory == 'filled')) {
+                if((typeof props.type != 'undefined' && (props.type == 'acquired' || props.type == 'filled')) || (selectedCategory == 'acquired')) {
                     setLoading(true)
                     const {data} = await PatenTrackApi.getDashboardPartiesData(formData)
                     
@@ -84,7 +87,7 @@ const SankeyChart = (props) => {
         }
         getPartiesData()
         return (() => {})
-    }, [selectedCompanies])
+    }, [selectedCompanies, props.type])
 
     const handleSelection = useCallback((items, type) => {
         let oldItems = type == 2 ? [...assignorRawData] : [...assigneeRawData]
@@ -106,7 +109,7 @@ const SankeyChart = (props) => {
                 )
             }            
             {    
-                selectedCategory == 'acquired' || selectedCategory == 'filled'
+                selectedCategory == 'acquired' || props.type == 'acquired' || props.type == 'filled'
                 ?
                     data.length > 0 ?
                         <div className={clsx(classes.child)}>

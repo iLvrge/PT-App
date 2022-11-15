@@ -42,7 +42,7 @@ import AssetsTable from '../../AssetsTable'
 
 var newRange = [1,2]
 
-const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, tab, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal, titleBar, openChartBar, handleChartBarOpen }) => {
+const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, tab, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal, titleBar, openChartBar, handleChartBarOpen, salable, licensable }) => {
     
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -133,6 +133,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             id: 1,
             label: 'Invention Data',
             component: InventionVisualizer,
+            tab,
+            type,
             standalone: true,
             defaultSize, 
             visualizerBarSize, 
@@ -314,7 +316,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             setIsLoadingCharts(true)   
             const list = [];
             let totalRecords = 0;
-            if(dashboardScreen === false && selectedCategory != 'top_law_firms') {
+            if(dashboardScreen === false && selectedCategory != 'top_law_firms' && typeof salable == 'undefined' && typeof licensable == 'undefined') {
                 if(selectedTab === 0 || ((selectedTab === 1 || selectedTab === 2) && (selectedCategory == 'assigned' && selectedRow.length == 0))) {
                     if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {
                     
@@ -410,7 +412,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     }
                 }
             }
-            if(selectedCategory == 'top_law_firms') {
+            if(selectedCategory == 'top_law_firms' || (typeof licensable != 'undefined' && licensable === true) || (typeof salable != 'undefined' && salable === true)) {
                 setFilterList([])
                 setFilterTotal(0)
                 findCPCList([...scopeRange], [], 0)
@@ -440,7 +442,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             getChartData()
         }
         //console.log( "getChartData", selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments )
-    }, [sendAssetRequest, selectedTab, openCustomerBar, selectedCategory, selectedCompanies, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_clipboard ]) 
+    }, [sendAssetRequest, selectedTab, openCustomerBar, selectedCategory, selectedCompanies, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_clipboard, salable, licensable ]) 
 
 
     const findCPCList = async(oldScopeRange, list, totalRecords, year, range, scope) => {       
@@ -454,6 +456,12 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         form.append('other_mode', display_sales_assets)
         form.append('type', selectedCategory)
         form.append('data_type', dashboardScreen === true ? 1 : 0)
+        if(typeof salable != 'undefined' && salable === true) {
+            form.append('sale', 1)
+        }
+        if(typeof licensable != 'undefined' && licensable === true) {
+            form.append('license', 1)
+        }
         if(typeof range !== 'undefined') {
             form.append("range", range)
         }

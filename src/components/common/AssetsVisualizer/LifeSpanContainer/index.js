@@ -14,6 +14,8 @@ import PatenTrackApi from '../../../../api/patenTrack2'
 import { DEFAULT_CUSTOMERS_LIMIT } from "../../../../api/patenTrack2";
 
 import useStyles from './styles'
+import InventionVisualizer from '../InventionVisualizer'
+import Citation from '../LegalEventsContainer/Citation'
 
 const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, standalone, activeTab}) => {
     const classes = useStyles() 
@@ -258,6 +260,31 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
                             <SpanVisualize chart={selectedAssetsTransactionLifeSpan} chartBar={chartBar} visualizerBarSize={visualizerBarSize}/>
                         )
                     :
+                        selectedRow.length == 0
+                        ?
+                            selectedTab === 1 ?
+                                <Acknowledgements/>
+                            :
+                                selectedTab === 2 ? 
+                                    <InventionVisualizer 
+                                        visualizerBarSize={visualizerBarSize} 
+                                        type={type} 
+                                        tab={false}
+                                        salable={true}
+                                        standalone={true}
+                                    />
+                                :
+                                    selectedTab === 3 ? 
+                                        <InventionVisualizer
+                                            visualizerBarSize={visualizerBarSize} 
+                                            type={type} 
+                                            tab={false}
+                                            licensable={true}
+                                            standalone={true}
+                                        />
+                                    :
+                                        ''
+                        :
                        /*  selectedTab === 1  ?
                             <Acknowledgements/>
                             : */
