@@ -33,6 +33,10 @@ import TimelineSecurity from '../AssetsVisualizer/TimelineSecurity'
 import CorrectNamesTable from '../CorrectNamesTable'
 import CorrectAddressTable from '../CorrectAddressTable'
 import NamesContainer from '../AssetsVisualizer/NamesContainer'
+import Fees from '../AssetsVisualizer/LegalEventsContainer/Fees'
+import PatenTrackApi from '../../../api/patenTrack2'
+import { dispatch } from 'd3'
+import { allAssetsSurchargeLegalEvents, setAssetLegalEvents, setLegalDataEventRetrieved } from '../../../actions/patenTrackActions'
 
 const IllustrationCommentContainer = ({ 
     cls, 
@@ -77,7 +81,9 @@ const IllustrationCommentContainer = ({
     parentBarDrag,
     parentBar,
     cube,
-    ptab
+    ptab, 
+    maintainence,
+    record
     }) => {
     const classes = useStyles() 
     const iframeRef = useRef()
@@ -95,6 +101,7 @@ const IllustrationCommentContainer = ({
     const [ dashboardData, setDashboardData ] = useState([])
     const [ dashboardTimelineData, setDashboardTimelineData ] = useState([])
     const [ timelineRawData, setTimelineRawData ] = useState([])
+    const [ allAssetsEvents, setAllAssetsEvents ] = useState([])
     const [lineGraph, setLineGraph] = useState(false)
     const [gauge, setGauge] = useState(false)
     const [jurisdictions, setJurisdiction] = useState(false)
@@ -124,8 +131,9 @@ const IllustrationCommentContainer = ({
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const link_assets_sheet_type = useSelector(state => state.patenTrack2.link_assets_sheet_type)
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
-    const ptabAssets = useSelector(state => state.patenTrack2.ptabAssets)
-     
+    const ptabAssets = useSelector(state => state.patenTrack2.ptabAssets) 
+    const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
+
     const menuItems = [
         {
             id: 1,
@@ -197,6 +205,24 @@ const IllustrationCommentContainer = ({
             setTemplateURL(template_document_url)
         }        
     }, [ templateURL,  template_document_url ])
+
+    useEffect(() => { 
+        if(selectedCategory === 'late_maintainance' && maintainence === true && selectedCompanies.length > 0 && assetIllustration == null ){
+            const getAllSurchargeAssetsEvents = async () => { 
+                const {data} = await PatenTrackApi.allAssetsSurchargeLegalEvents(selectedCompanies)
+                setAllAssetsEvents(data)
+            }
+            getAllSurchargeAssetsEvents() 
+            //dispatch(allAssetsSurchargeLegalEvents(selectedCompanies))
+        } else if(selectedCategory === 'missed_monetization' && record === true && selectedCompanies.length > 0 && assetIllustration == null ){
+            const getAllRecordAssetsEvents = async () => { 
+                const {data} = await PatenTrackApi.allFilledAssetsEvents(selectedCompanies)
+                setAllAssetsEvents(data)
+            }
+            getAllRecordAssetsEvents() 
+            //dispatch(allAssetsSurchargeLegalEvents(selectedCompanies))
+        } 
+    }, [ maintainence, record, assetIllustration, selectedCompanies, selectedCategory])
 
     const handleCommentButton = (event, flag) => {
         event.preventDefault()
@@ -294,6 +320,15 @@ const IllustrationCommentContainer = ({
                 {  
                     illustrationBar === true && (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' ||  type === 9 || ((process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') && auth_token !== null))
                     ?
+                        (maintainence  === true || record === true) && assetIllustration === null
+                        ?
+                            <Fees
+                                standalone={true}
+                                events={allAssetsEvents}
+                                tabText={maintainence  === true ? 'M.Fees' : 'To Record'}
+                                showTabs={true}
+                            />
+                        :    
                         ptab === true && assetIllustration === null
                         ?
                             <Ptab 
@@ -304,7 +339,8 @@ const IllustrationCommentContainer = ({
                         cube === true && maintainenceFrameMode === false && assetIllustration === null
                         ?
                             selectedCategory == 'incorrect_names' ?
-                                <NamesContainer/>
+                                <NamesContainer
+                                visualizerBarSize={visualizerBarSize}/>
                             :
                             selectedCategory == 'collaterlized' || selectedCategory == 'clear_encumbrances' ?
                                 <TimelineContainer 
@@ -324,7 +360,8 @@ const IllustrationCommentContainer = ({
                                             visualizerBarSize={visualizerBarSize}
                                             type={type}
                                             titleBar={true}
-                                        />
+                                            disableOtherTabs={true}
+                                        /> 
                                     :
                                         <InventionVisualizer 
                                             defaultSize={illustrationBarSize} 

@@ -5,7 +5,7 @@ import Loader from '../../../../../common/Loader'
 import { addCompany, setSearchCompanies } from '../../../../../../actions/patenTrackActions'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import StyledSearch from '../../../../../common/StyledSearch'
-import { Toolbar, IconButton, Tooltip, Typography, Zoom, TextField, Button } from '@mui/material'
+import { Toolbar, IconButton, Tooltip, Typography, Zoom, TextField, Button, Paper } from '@mui/material'
 import { DebounceInput } from 'react-debounce-input'
 import VirtualizedTable from '../../../../../common/VirtualizedTable'
 import PatenTrackApi from '../../../../../../api/patenTrack2'
@@ -40,10 +40,14 @@ const COLUMNS = [
 const COMPANY_HEADER_COLUMNS = [
   {
     label: '',
-    width: 50,
+    width: 29,
     dataKey: 'company_id',
-    role: 'checkboxwait',
+    /* role: 'checkboxwait', */ 
+    role: "checkbox",
+    disableSort: true,
+    enable: false,
     formatCondition: 'status',
+
   },
   {
     width: 240,
@@ -53,9 +57,9 @@ const COMPANY_HEADER_COLUMNS = [
     dataKey: 'name',
   },
   {
-    width: 500,
-    minWidth: 500,
-    oldWidth: 500,
+    width: 150,
+    minWidth: 150,
+    oldWidth: 150,
     label: 'Status',
     dataKey: 'status',
   }
@@ -207,14 +211,17 @@ const closeAddMenu = useCallback(() => setMenuAnchorEl(null), [])
 
 
 const onCompanyRequestRowSelect = useCallback((event, row) => {
-  let oldItems = [...selected]
-  console.log(row.company_id)
-  if(!oldItems.includes(row.company_id)){
-    oldItems.push(row.company_id)
-  } else {
-    oldItems = oldItems.filter( item => item != row.company_id)
+  if(row.status != 'Data is being prepared') {
+    let oldItems = [...selected]
+    console.log(row.company_id)
+    if(!oldItems.includes(row.company_id)){
+      oldItems.push(row.company_id)
+    } else {
+      oldItems = oldItems.filter( item => item != row.company_id)
+    }
+    setSelected(oldItems)
   }
-  setSelected(oldItems)
+  
 }, [selected])
  
 
@@ -232,9 +239,9 @@ const onHandleAddCompany = useCallback(async(event) => {
 
   return (
     <Fragment>
-      <Typography variant="body2" sx={{p: 1}}>
+      {/* <Typography variant="body2" sx={{p: 1}}>
         To add to your account the data of any company (including competitors and others) please state the requested company's name below:
-      </Typography>
+      </Typography> */}
       <Toolbar className={classes.toolbar}>
         <div className={classes.toolbar}>
           <div className={classes.searchContainer} ref={searchTxtField}>
@@ -247,8 +254,9 @@ const onHandleAddCompany = useCallback(async(event) => {
               
               <TextField 
                 id="request_add_new_company" 
-                name="request_add_new_company" 
-                variant="filled" 
+                name="request_add_new_company"  
+                label="Request an additional company"
+                size="small"
               />
           </div>
           {
@@ -260,21 +268,16 @@ const onHandleAddCompany = useCallback(async(event) => {
             )
           } 
         </div>
-
+          <IconButton
+            color="inherit" 
+            onClick={onHandleAddCompany}
+            /* startIcon={<AddIcon className={classes.icon} />} */
+            className={classes.btnGroup}
+          >
+            <SendIcon/>
+          </IconButton>
           {
-
-
-            selected.length == 0 
-            ?
-              <Button
-                color="inherit" 
-                onClick={onHandleAddCompany}
-                startIcon={<AddIcon className={classes.icon} />}
-                className={classes.btnGroup}
-              >
-                Add a Company
-              </Button>
-            :
+            selected.length > 0 && (
             <Fragment>
               <AddMenu
                 anchorEl={menuAnchorEl}
@@ -301,6 +304,7 @@ const onHandleAddCompany = useCallback(async(event) => {
                 </div>
               </Tooltip>          
             </Fragment>
+            )
           }
         
 
@@ -309,7 +313,7 @@ const onHandleAddCompany = useCallback(async(event) => {
         </IconButton>
       </Toolbar>
 
-      <div className={classes.list}>
+      <Paper square className={classes.root}>
         {
           loading ? (
             <Loader />
@@ -317,18 +321,21 @@ const onHandleAddCompany = useCallback(async(event) => {
               <VirtualizedTable
                 classes={classes}
                 selected={selected}
+                selectedKey={"company_id"}
                 headerHeight={53.86}
-                rowHeight={50}
+                rowHeight={51}
                 rowCount={list.length}
                 rows={list}
-                columns={companyHeaderColumns}
+                columns={companyHeaderColumns} 
+                highlightRow={true} 
+                higlightColums={[1]}
                 onSelect={onCompanyRequestRowSelect}
                 resizeColumnsWidth={resizeCompanyHeaderColumnsWidth}
                 resizeColumnsStop={resizeCompanyHeaderColumnsStop}
               /> 
           )
         }
-      </div>
+      </Paper>
     </Fragment>
   );
 }

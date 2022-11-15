@@ -520,11 +520,12 @@ export const setMainCompaniesRowSelect = (data) => {
   }
 }
 
-export const setMainChildCompanies = (companyID, data) => {
+export const setMainChildCompanies = (companyID, data, flag) => {
   return {
     type: types.SET_MAIN_CHILD_COMPANIES,
     companyID,
     data,
+    flag
   }
 }
 

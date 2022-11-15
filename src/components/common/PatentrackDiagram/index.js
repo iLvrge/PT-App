@@ -1583,8 +1583,7 @@ class PatentrackDiagram extends React.Component {
       width: this.width,
       height: this.height,
       margin: this.config.margin,
-    };
-
+    }; 
     let links = !showThirdParties
       ? this.data.connections.filter(
           link_ =>
@@ -1836,7 +1835,7 @@ class PatentrackDiagram extends React.Component {
           <g id="patentNodesGroup">{nodes}</g>
           {
             this.props.copyrights && (
-              <g transform={`translate(16,${svgParams.height ? svgParams.height + 120 : this.height + 120})`}>
+              <g transform={`translate(16,${window.innerHeight - 140 > svgParams.height ? window.innerHeight - 140 : svgParams.height ? svgParams.height + 120 : this.height + 120})`}>
                 <text fill={isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}><tspan>Hover over the names to see the original ones, over the connectors to see the nature of the assignment, </tspan> <tspan x="0" dy="14.25">and click the connectors to see the assignment details and document.</tspan></text>
               </g>
             )  

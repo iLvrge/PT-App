@@ -148,8 +148,10 @@ const LawFirmNames = (props) => {
                 }
             </Tabs>  
             {
-                selectedTab === 0 && namesData.length > 0 && (
-                    <canvas id="canvas"></canvas>
+                selectedTab === 0 && namesData.length > 0 && ( 
+                    <div style={{height: '85%', width: '95%'}}>
+                        <canvas id="canvas" style={{height: '100%', width: '100%'}}></canvas>
+                    </div>
                 )
             }
         </Paper> 

@@ -3,6 +3,17 @@ import { alpha } from '@mui/material/styles';
 import makeStyles from '@mui/styles/makeStyles';
 
 export default makeStyles(theme => ({
+  root: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    flex:1,
+    overflow: 'hidden',
+    '& .font12Rem':{
+      fontSize: '1rem'
+    },
+    
+  },
   actionTh: {
     width: 50,
   },
@@ -10,8 +21,10 @@ export default makeStyles(theme => ({
     height: 'calc(100vh - 113px)'
   },
   table: {
-    backgroundColor: theme.palette.background.paper,
+    /* backgroundColor: theme.palette.background.paper, */
     '& th': {
+      fontSize: '1.1rem',
+      backgroundColor: 'inherit',
       '&.MuiTableCell-stickyHeader': {
         /* backgroundColor: '#292929', */
       },
@@ -23,6 +36,9 @@ export default makeStyles(theme => ({
       '&:first-child': {
         paddingLeft: 16
       },
+    },
+    '& .MuiTableRow-root':{
+      cursor: 'pointer'
     }
   },
   padLR0:{

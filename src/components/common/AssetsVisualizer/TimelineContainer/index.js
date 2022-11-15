@@ -177,8 +177,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     return item
   }
 
-  // Custom ToolTip
-  console.log('Timeline Container')
+  // Custom ToolTip 
   
   const showTooltip = (item, event) => {    
       setTimeout(() => {
@@ -265,7 +264,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
               }
               const element = document.getElementById('all_timeline');
               const getPosition = element.getBoundingClientRect();  
-              const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${getPosition.y + 5}px;left:${getPosition.x }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
+              const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${ getPosition.y }px;left:${ getPosition.x }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
                                           <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
                                           <div>
                                             ${ executionDate != '' ? moment(executionDate).format('ll') : ''}
@@ -461,7 +460,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
               rfIDs = selectedAssetAssignments.length > 0 ? selectedAssetAssignments : [];
       
               if( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
-                //setIsLoadingTimelineData(true)
+                //setIsLoadingTimelineData(true) 
                 const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
                 
                 //setIsLoadingTimelineData(false)
@@ -602,8 +601,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       }
     }, 1000)
   } */
-  const handleKeyEvent = (event) =>{
-    console.log('handleKeyEvent', event)
+  const handleKeyEvent = (event) =>{ 
     if(event.key === 'ArrowDown' || event.key === 'ArrowUp' ) {
       if(event.key === 'ArrowUp' ) {
         timelineRef.current.zoomOut(0.30)

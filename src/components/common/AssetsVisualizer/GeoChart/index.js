@@ -13,14 +13,18 @@ import {
 } from '../../../../actions/patentTrackActions2'
 import Loader from '../../Loader'
 import TitleBar from '../../TitleBar'
+import InventionVisualizer from '../InventionVisualizer' 
+import AgentsVisualizer from '../AgentsVisualizer'
+import InventorsVisualizer from '../InventorsVisualizer'
+import SankeyChart from '../SankeyChart'
 
-const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, tab, titleBar }) => {
+const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, tab, titleBar, disableOtherTabs }) => {
     const containerRef = useRef(null)
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(false)
     const [assetRequest, setAssetRequest] = useState(false)
-    const [selectedTab, setSelectedTab ] = useState(0)
-    const [chartTabs, setChartTabs ] = useState(['Jurisdictions'])
+    const [selectedTab, setSelectedTab ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? 0 : 1)
+    const [chartTabs, setChartTabs ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? ['Jurisdictions'] :  ['Innovation', 'Jurisdictions', 'Invented', 'Acquired', 'Agents (fillings)', 'Agents (transactions)'])
     const [data, setData] = useState([])
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
@@ -252,6 +256,8 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
         } 
     }
 
+    console.log('selectedTab', selectedTab)
+
     const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
 
 
@@ -308,15 +314,49 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                     </div>
                 )
             } 
-            {
-                selectedTab === 0
-                ?
-                    <div className={classes.graphContainer} ref={containerRef}>  
+            <div className={classes.graphContainer} ref={containerRef}>  
+                {
+                    typeof disableOtherTabs !== 'undefined' && disableOtherTabs === true 
+                    ?
                         <DisplayChart />
-                    </div> 
-                :
-                    ''
-            }
+                        :
+                            selectedTab === 0 
+                            ?
+                                <InventionVisualizer 
+                                    visualizerBarSize={visualizerBarSize} 
+                                    tab={false} 
+                                    standalone={true}
+                                />
+                            :
+                                selectedTab === 1
+                                ?
+                                    <DisplayChart />
+                                :
+                                    selectedTab === 2
+                                    ?
+                                        <SankeyChart 
+                                            type={'filled'}
+                                            layout={true}
+                                        />
+                                    :
+                                        selectedTab === 3
+                                        ?
+                                            <SankeyChart 
+                                                type={'acquired'}
+                                                layout={true}
+                                            />
+                                        :
+                                            selectedTab === 4
+                                            ?
+                                                <AgentsVisualizer type='1'/>
+                                            :
+                                                selectedTab === 5
+                                                ?
+                                                    <AgentsVisualizer type='2'/>
+                                                :
+                                                    ''
+                } 
+            </div> 
         </Paper>  
     )
 }

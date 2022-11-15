@@ -158,9 +158,7 @@ const GlobalLayout = (props) => {
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
     const timelineScreen = useSelector(state => state.ui.timelineScreen)
     const patentScreen = useSelector(state => state.ui.patentScreen)
-
-    console.log(profile)
-
+  
     useEffect(() => {
         if(openVisualizerBar === false && visualizerBarSize != '0%') {
             setVisualizerBarSize('0%')
@@ -547,7 +545,6 @@ const GlobalLayout = (props) => {
 
     const handleKeyEvent = (event) => {  
         //event.preventDefault()
-        
         if(event.key === 'ArrowDown' || event.key === 'ArrowUp' ) {
             let tableContainer = document.getElementById('assets_type_assignment_all_assets'), findActiveRow = null
             if(tableContainer !== null) { 
@@ -615,6 +612,13 @@ const GlobalLayout = (props) => {
             }
         }
     }
+
+    useEffect(() => {
+        console.log('Layout openChartBar BAR CHANGES', openChartBar, openAnalyticsBar)
+    }, [ openChartBar])
+    useEffect(() => {
+        console.log('Layout openAnalyticsBar BAR CHANGES',  openChartBar, openAnalyticsBar)
+    }, [ openAnalyticsBar])
 
     const handleCompanyBarOpen = (event) => {
         if(props.type === 9) {
@@ -843,6 +847,7 @@ const GlobalLayout = (props) => {
         if(chart === true && barOpen === true && barSize == '40.1%') {
             checkPDFHeight()
         }    
+        console.log('changeVisualBar', barSize, barOpen, chart, analytics, comment, illustration)
         editorBar()
         setVisualizeOpenBar(barOpen)  
         setVisualizerBarSize(barSize)
@@ -891,6 +896,7 @@ const GlobalLayout = (props) => {
     }  
 
     const handleChartBarOpen = () => { 
+        console.log('handleChartBarOpen entered')
         let bar = openChartBar, barSize = '50%'
         setChartBar( !bar )
         if(!bar === false && openAnalyticsBar === true) {
@@ -915,6 +921,7 @@ const GlobalLayout = (props) => {
     }
 
     const handleAnalyticsBarOpen = () => {  
+        console.log('handleAnalyticsBarOpen entered')  
         let bar = openAnalyticsBar, barSize = '50%'
         setAnalyticsBar( !bar )
         if((!bar === false && openChartBar === false) || (openChartBar === true && !bar === false)) {
@@ -953,6 +960,7 @@ const GlobalLayout = (props) => {
     } 
 
     const openAnalyticsAndCharBar = () => {
+        console.log('openAnalyticsAndCharBar 955')
         setChartBar( true )
         setAnalyticsBar( true )
         setIllustrationBarSize( '50%' )
@@ -960,6 +968,7 @@ const GlobalLayout = (props) => {
     }
 
     const closeAnalyticsAndCharBar = () => {  
+        console.log('closeAnalyticsAndCharBar 963')
         setChartBar( false )
         setAnalyticsBar( false )
         setIllustrationBarSize( '50%' )
@@ -992,6 +1001,7 @@ const GlobalLayout = (props) => {
     }
 
     const checkChartAnalytics = useCallback(async (pdfFile, connectionBoxData, usptoMode) => {
+        console.log('checkChartAnalytics 996', pdfFile, connectionBoxData, usptoMode)
         if( pdfFile != null && Object.keys(pdfFile).length > 0 ) {
             setChartBar( true )
             setVisualizeOpenBar( true )
@@ -1071,7 +1081,7 @@ const GlobalLayout = (props) => {
 
     const handleOpenSettings = useCallback(() => {
         dispatch(setDashboardScreen(false))
-        history.push('/settings/templates')
+        history.push('/settings/companies/names')
     }, [ history ])
 
     const handleAlertPop = () => {
@@ -1138,13 +1148,13 @@ const GlobalLayout = (props) => {
             if(openAssignmentBar === false && timelineScreen === false && type == 'Timeline'){
                 handleAssignmentBarOpen(event)
             }
-            if(openCommentBar === false){
+            /* if(openCommentBar === false){
                 handleCommentBarOpen(event)
-            }
+            } */
             if(openChartBar === true || openAnalyticsBar === true) {
                 /* setVisualizeOpenBar(false)  
                 setVisualizerBarSize('0%') */
-                if(openChartBar === true){
+                /* if(openChartBar === true){
                     handleChartBarOpen(event)
                 }
                 if(openAnalyticsBar === true){
@@ -1153,7 +1163,7 @@ const GlobalLayout = (props) => {
 
                 if(openChartBar === true && openAnalyticsBar === true){
                     changeVisualBar(false, false, true, true)
-                }
+                } */
             }
         }
     }
@@ -1234,14 +1244,14 @@ const GlobalLayout = (props) => {
             label: 'Recorded Documents',
             ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
         },
-        {
+        /* {
             tooltip: 'Initiated Documents',
             bar: openGoogleDriveBar,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? handleAlertPop : handleGoogleDriveBarOpen,
             t: 12,
             label: 'Initiated Documents',
             ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
-        },
+        }, */
     ]
 
     const bottomToolBar = [

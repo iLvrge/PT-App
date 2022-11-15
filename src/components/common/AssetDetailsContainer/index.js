@@ -402,6 +402,19 @@ const AssetDetailsContainer = ({
                           type={'divested'}
                         />
                       :
+                      timelineScreen === true  && assetIllustration == null && selectedCategory == 'top_law_firms'
+                      ?
+                        <InventionVisualizer 
+                          defaultSize={defaultSize} 
+                          illustrationBar={openIllustrationBar} 
+                          visualizerBarSize={visualizerBarSize} 
+                          analyticsBar={analyticsBar} 
+                          openCustomerBar={openCustomerBar} 
+                          commentBar={commentBar} 
+                          customerBarSize={customerBarSize} 
+                          companyBarSize={companyBarSize}
+                          type={type} />
+                      :
                       timelineScreen === true  && assetIllustration == null 
                       ?
                         <TimelineSecurity

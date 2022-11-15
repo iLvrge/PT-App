@@ -284,7 +284,8 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         mainCompaniesList:  Object.assign({}, {
           ...state.mainCompaniesList,
           ['childID']: action.companyID,
-          ['child_list']: action.data
+          ['child_list']: action.data,
+          ['child_list_loaded']: action.flag
         })
       }
     case types.SET_MAINTAINENCE_ASSETS_EVENTS_LIST_LOADING_MORE: 

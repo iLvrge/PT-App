@@ -14,6 +14,8 @@ import PatenTrackApi from '../../../../api/patenTrack2'
 import { DEFAULT_CUSTOMERS_LIMIT } from "../../../../api/patenTrack2";
 
 import useStyles from './styles'
+import InventionVisualizer from '../InventionVisualizer'
+import Citation from '../LegalEventsContainer/Citation'
 
 const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, standalone, activeTab}) => {
     const classes = useStyles() 
@@ -24,7 +26,7 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
     const [ assets, setAssets ] = useState(null)
     const [ fullScreen, setFullScreen ] = useState(false)
     const [ filterList, setFilterList ] = useState([])
-    const [ lifeSpanTabs, setLifeSpanTabs ] = useState(['Lifespan'])
+    const [ lifeSpanTabs, setLifeSpanTabs ] = useState(['Lifespan', 'Cited by', 'Salable', 'Licensable'])
     const selectedAssetsTransactionLifeSpan = useSelector(state => state.patenTrack2.transaction_life_span)
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const assetIllustration = useSelector( state => state.patenTrack2.assetIllustration )
@@ -64,7 +66,7 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
     useEffect(() => {
         if(selectedRow.length  === 0) {
             /* setLifeSpanTabs(['Lifespan', 'Acknowledgements']) */
-            setLifeSpanTabs(['Lifespan'])
+            setLifeSpanTabs(['Lifespan', 'Cited by', 'Salable', 'Licensable'])
             setSelectedTab(typeof activeTab !== 'undefined' ? activeTab : 0)
         } else if( connectionBoxView === true || selectedRow.length > 0 ) {
             /*setLifeSpanTabs([ 'Lifespan', 'Assignment', 'USPTO' ])*/
@@ -258,6 +260,31 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
                             <SpanVisualize chart={selectedAssetsTransactionLifeSpan} chartBar={chartBar} visualizerBarSize={visualizerBarSize}/>
                         )
                     :
+                        selectedRow.length == 0
+                        ?
+                            selectedTab === 1 ?
+                                <Acknowledgements/>
+                            :
+                                selectedTab === 2 ? 
+                                    <InventionVisualizer 
+                                        visualizerBarSize={visualizerBarSize} 
+                                        type={type} 
+                                        tab={false}
+                                        salable={true}
+                                        standalone={true}
+                                    />
+                                :
+                                    selectedTab === 3 ? 
+                                        <InventionVisualizer
+                                            visualizerBarSize={visualizerBarSize} 
+                                            type={type} 
+                                            tab={false}
+                                            licensable={true}
+                                            standalone={true}
+                                        />
+                                    :
+                                        ''
+                        :
                        /*  selectedTab === 1  ?
                             <Acknowledgements/>
                             : */

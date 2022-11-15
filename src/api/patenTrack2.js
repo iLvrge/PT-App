@@ -70,7 +70,7 @@ const getFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelSatusCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest, cancelAllDashboardCountRequest, cancelStatus;
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineActivity,cancelTimelineSecurity, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelSatusCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest, cancelAllDashboardCountRequest, cancelStatus;
 
 class PatenTrackApi {
 
@@ -250,11 +250,14 @@ class PatenTrackApi {
   }
 
   static getAssetTypeAssignmentAllAssetsWithFamily(form) { 
-    let header = getFormUrlHeader()
-    
+    let header = getFormUrlHeader() 
     return axios.post(`${base_new_api_url}/customers/asset_types/assets/family`, form, header)
   }
   
+  static getAgentsData(form) { 
+    let header = getFormUrlHeader() 
+    return axios.post(`${base_new_api_url}/customers/asset_types/assets/agents`, form, header)
+  }
 
   static getRestoreOwnershipAssets(companies, tabs, customers, rfIDs) { 
     return axios.get(`${base_new_api_url}/customers/restore_ownership/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
@@ -693,20 +696,61 @@ class PatenTrackApi {
     } 
   }
 
+
+  static allAssetsSurchargeLegalEvents(companies) { 
+    return axios.get(`${base_new_api_url}/events/all/assets/surcharge?companies=${JSON.stringify(companies)}`, getHeader())
+  } 
+
+  static allFilledAssetsEvents(companies) { 
+    return axios.get(`${base_new_api_url}/events/all/assets/to_record?companies=${JSON.stringify(companies)}`, getHeader())
+  } 
+
+  static allFilledAssetsEventsDetails(application) { 
+    return axios.get(`${base_new_api_url}/events/all/assets/to_record/detail/${application}`, getHeader())
+  }
+
   static getActivitiesTimelineData(companies, tabs, customers, rfIDs = [], layout, exclude) {
     let header = getHeader()
     header['cancelToken'] = new CancelToken(function executor(c) {
-      cancelTimeline = c
+      cancelTimelineActivity = c
     })
     return axios.get(`${base_new_api_url}/customers/timeline?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}`, header)
+  }
+
+  static getFilledAssetsTimelineData(companies, tabs, customers, rfIDs = [], layout, exclude) {
+    let header = getHeader()
+    /* header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelTimeline = c
+    }) */
+    return axios.get(`${base_new_api_url}/customers/timeline/filling_assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}`, header)
   }
 
   static getTimelineSecurityData(companies, tabs, customers, rfIDs = [], layout) {
     let header = getHeader()
     header['cancelToken'] = new CancelToken(function executor(c) {
-      cancelTimeline = c
-    })
+      cancelTimelineSecurity = c
+    }) 
     return axios.get(`${base_new_api_url}/customers/timeline/security?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}`, header)
+  }
+
+  static cancelTimelineActivity() {
+    if (cancelTimelineActivity !== undefined) {
+      try{
+        throw cancelTimelineActivity('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
+  static cancelTimelineSecurity() {
+    if (cancelTimelineSecurity !== undefined) {
+      try{
+        throw cancelTimelineSecurity('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
   }
 
   static cancelTimeline() {

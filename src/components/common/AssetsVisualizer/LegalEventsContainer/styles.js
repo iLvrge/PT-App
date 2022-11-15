@@ -65,6 +65,7 @@ export default makeStyles(theme => ({
     position: 'relative',
     flex: 1,
     display: 'flex',
+    flexDirection: 'column',
   },  
   fullscreenBtn: {
     position: 'absolute',

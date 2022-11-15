@@ -17,7 +17,7 @@ import {
 
 import PatenTrackApi from '../../../../api/patenTrack2'
 import { convertTabIdToAssetType, assetsTypesWithKey } from '../../../../utils/assetTypes'
-import { numberWithCommas, capitalize, capitalAllWords} from '../../../../utils/numbers'
+import { numberWithCommas, capitalize, capitalAllWords, applicationFormat} from '../../../../utils/numbers'
 
 
 
@@ -46,7 +46,7 @@ const options = {
     titleTemplate: 'Cluster containing {count} events.\nZoom in to see the individual events.',
     showStipes: false,
     clusterCriteria: (firstItem, secondItem) => {
-      return ( firstItem.rawData.law_firm_id === secondItem.rawData.law_firm_id  ||  ( firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID))
+      return (  (typeof  firstItem.rawData.type == 'undefined' && typeof  secondItem.rawData.type == 'undefined'  && firstItem.rawData.law_firm_id === secondItem.rawData.law_firm_id)  || (typeof  firstItem.rawData.type !== 'undefined' && typeof  secondItem.rawData.type !== 'undefined'  && firstItem.rawData.lawfirm === secondItem.rawData.lawfirm ) || ( firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID))
     }
   }, 
   template: function(item, element, data) {
@@ -131,8 +131,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
 
   //Item for the timeline
 
-  const convertDataToItem = (assetsCustomer) => {
-    
+  const convertDataToItem = (assetsCustomer) => { 
     const assetType = Number.isInteger(assetsCustomer.tab_id) ? convertTabIdToAssetType(assetsCustomer.tab_id) : 'default'
     const companyName =  selectedWithName.filter( company => assetsCustomer.company == company.id ? company.name : '')
     const customerFirstName =  assetsCustomer.lawfirm
@@ -143,7 +142,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
       assetType,
       companyName,
       rawData: assetsCustomer,
-      className: `lawfirm`,
+      className: `lawfirm ${typeof assetsCustomer.type !== 'undefined' ? 'filled' : ''}`,
       collection: [ { id: assetsCustomer.id, totalAssets: assetsCustomer.totalAssets } ],
       showTooltips: false
     }
@@ -167,6 +166,26 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
   }
 
   // Custom ToolTip
+
+  const showTooltipForAsset = (item, event) => {
+    if(tootlTip === item.appno_doc_num) {
+      const element = document.getElementById('all_timeline');
+      const getPosition = element.getBoundingClientRect();  
+      const color = '#e91e63;';
+      const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${getPosition.y}px;left:${getPosition.x }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'> <h4 style='color:#fff;text-align:left;margin:0'>${item.patent != '' ? numberWithCommas(item.patent) : applicationFormat(item.appno_doc_num)}</h4>
+        <div>
+          ${item.title}
+        </div>
+        </div>` 
+        resetTooltipContainer() 
+        if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
+          document.body.insertAdjacentHTML('beforeend',tootltipTemplate)
+          //timelineContainerRef.current.childNodes[0].insertAdjacentHTML('beforeend',tootltipTemplate)
+        }
+    } else {
+      resetTooltipContainer()
+    }
+  } 
   
   const showTooltip = (item, event) => {    
       setTimeout(() => {
@@ -251,7 +270,9 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
                   color = '#FFFFFF'
                   break;
               }
-              const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.clientY}px;left:${event.clientX + 20 }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
+              const element = document.getElementById('all_timeline');
+              const getPosition = element.getBoundingClientRect();  
+              const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${getPosition.y + 5}px;left:${getPosition.x }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
                                           <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
                                           <div>
                                             ${ executionDate != '' ? moment(executionDate).format('ll') : ''}
@@ -310,8 +331,14 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
     const overItem = items.current.get(item)    
     if(overItem != null) {
       onItemout()
-      tootlTip = overItem.rawData.id
-      showTooltip(overItem.rawData, event)
+      if(typeof overItem.rawData.type !== 'undefined'){
+        tootlTip =  overItem.rawData.appno_doc_num 
+        showTooltipForAsset(overItem.rawData, event)
+
+      } else {
+        tootlTip =  overItem.rawData.id 
+        showTooltip(overItem.rawData, event)
+      }
     }
   }, [ timelineItems, timeInterval ])
 
@@ -391,7 +418,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
       setTimelineRawGroups([]) //groups
       setTimelineRawData([]) //items
       //redrawTimeline()
-      PatenTrackApi.cancelTimeline()
+      PatenTrackApi.cancelTimelineActivity()
       /**
         * call for the timeline api data
       */
@@ -421,11 +448,26 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
               if( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
                 //setIsLoadingTimelineData(true)
                 const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
-                
+                const mainList = data.list
                 //setIsLoadingTimelineData(false)
-                setTimelineRawData(data.list)
+                setTimelineRawData(mainList)
                 if(typeof updateTimelineRawData !== 'undefined') {
-                  updateTimelineRawData(data.list)
+                  updateTimelineRawData(mainList)
+                }
+
+                if(selectedCategory == 'top_law_firms') {
+                  /**
+                   * Filling Assets
+                   */
+                  const { data } = await PatenTrackApi.getFilledAssetsTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
+
+                  if( data != null && data.length > 0 ) { 
+                    const oldItems = [...mainList, ...data] 
+                    setTimelineRawData(oldItems)
+                    if(typeof updateTimelineRawData !== 'undefined') {
+                      updateTimelineRawData(oldItems) 
+                    }
+                  }
                 }
               } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null ) {
                 //setIsLoadingTimelineData(true)
@@ -486,15 +528,15 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
     items.current = new DataSet()
     groups.current = new DataSet()
     timelineRef.current.setOptions(options) 
-    /* timelineRef.current.on('select', onSelect)
+    /* timelineRef.current.on('select', onSelect) */
     timelineRef.current.on('itemover', onItemover)
-    timelineRef.current.on('itemout', onItemout) */
+    timelineRef.current.on('itemout', onItemout) 
     timelineRef.current.on('rangechanged', onRangeChanged)
     timelineRef.current.on('rangechange', onRangeChange)    
     return () => {
-      /* timelineRef.current.off('select', onSelect)
+      /* timelineRef.current.off('select', onSelect) */
       timelineRef.current.off('itemover', onItemover) 
-      timelineRef.current.off('itemout', onItemout) */
+      timelineRef.current.off('itemout', onItemout) 
       timelineRef.current.off('rangechange', onRangeChange)
       timelineRef.current.off('rangechanged', onRangeChanged)
       resetTooltipContainer()
@@ -537,6 +579,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
   return (
       <Paper className={classes.root}>        
         <div
+          id={`all_timeline`}
           style={{ 
             filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
           }}  

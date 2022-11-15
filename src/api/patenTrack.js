@@ -88,6 +88,10 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/events/${applicationNumber}/${patentNumber != '' ? encodeURIComponent(patentNumber)  : applicationNumber}`, getHeader())
   }
 
+  static allAssetsSurchargeLegalEvents(companies) { 
+    return axios.get(`${base_new_api_url}/events/all/assets/surcharge?companies=${JSON.stringify(companies)}`, getHeader())
+  } 
+
   static getValidateCounter(companyName) { 
     return axios.get(`${base_new_api_url}/validity_counter/${companyName}`, getHeader())
   } 
