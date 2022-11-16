@@ -7,7 +7,8 @@ export default makeStyles(theme => ({
         display: 'block',        
     },
     paddingLeft: {
-        paddingLeft: 16
+        paddingLeft: 16,
+        paddingTop: 7
     },
     underline: {
         textDecoration: 'underline'

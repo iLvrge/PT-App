@@ -48,6 +48,7 @@ export default makeStyles(theme => ({
     cursor: 'pointer',
   },
   rootContainer:{
+    minWidth: 390,
     '& td':{
       verticalAlign: 'top'
     }

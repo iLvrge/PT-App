@@ -36,14 +36,21 @@ export default makeStyles(theme => ({
             whiteSpace: 'nowrap'
         }
     },
-    tabs: {
-        minHeight: 47,
-    },
     tab: {
-        flex: 1,
-        minWidth: '25%',
-        minHeight: 47,  
-        fontSize: '1.1rem'                          
+      minWidth: '25%',
+      minHeight: 47,
+      fontSize: '1.1rem', 
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow:'ellipsis'
+    },
+    tabs: {
+      minHeight: 47,
+      display: 'flex',
+      width: '94%'
+      /* '& .MuiTab-root': {
+        fontSize: '1.1rem'
+      } */
     },
     graphContainer: {
         flex: 1,
@@ -60,7 +67,7 @@ export default makeStyles(theme => ({
     },
     fullscreenBtn: {
         position: 'absolute',
-        top: 5,
+        top: 9,
         right: 0,
         zIndex: 999
     },

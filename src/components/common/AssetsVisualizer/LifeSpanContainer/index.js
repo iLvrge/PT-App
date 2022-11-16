@@ -234,23 +234,22 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
             }             
             <Tabs
                 value={selectedTab}
-                variant="scrollable"
+                variant={'scrollable'} 
                 scrollButtons="auto"
-                onChange={handleChangeTab}
                 className={classes.tabs}
+                onChange={handleChangeTab} 
             >
                 {
                     lifeSpanTabs.map((tab) => (
                         <Tab
                             key={tab}
-                            label={tab}
-                            classes={{ root: classes.tab }}
-                            disableFocusRipple={true}
-                            disableRipple={true}
+                            className={classes.tab} 
+                            label={tab} 
                         />
                     )) 
                 }
             </Tabs> 
+            
             {
                 ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) 
                 ?

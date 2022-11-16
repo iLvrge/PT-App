@@ -45,4 +45,20 @@ export default makeStyles(theme => ({
     flexColumnFullHeight: {
       height: '100% !important',
     },
+    tab: {
+      minWidth: '25%',
+      minHeight: 47,
+      fontSize: '1.1rem', 
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow:'ellipsis'
+    }, 
+    tabs: {
+      minHeight: 47,
+      display: 'flex',
+      width: '94%'
+      /* '& .MuiTab-root': {
+        fontSize: '1.1rem'
+      } */
+    },
 }))

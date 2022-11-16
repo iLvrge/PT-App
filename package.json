@@ -74,6 +74,7 @@
     "react-use": "^17.3.2",
     "react-viewer": "^3.2.2",
     "react-virtualized": "^9.22.3",
+    "react-wordcloud": "^1.2.7",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",

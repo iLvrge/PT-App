@@ -2,11 +2,11 @@ import React, { useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import useStyles from './styles'
 import { pink } from '@mui/material/colors'
-
+import { Fullscreen as FullscreenIcon } from '@mui/icons-material' 
 import FullScreen from '../../FullScreen'
 import { Chart } from "react-google-charts";
 import themeMode from '../../../../themes/themeMode';
-import { Tabs, Tab, Paper } from '@mui/material'
+import { Tabs, Tab, Paper, IconButton } from '@mui/material'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import {
     getCustomerAssets,
@@ -21,6 +21,7 @@ import SankeyChart from '../SankeyChart'
 const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, tab, titleBar, disableOtherTabs }) => {
     const containerRef = useRef(null)
     const dispatch = useDispatch()
+    const [ fullScreen, setFullScreen ] = useState(false)
     const [loading, setLoading] = useState(false)
     const [assetRequest, setAssetRequest] = useState(false)
     const [selectedTab, setSelectedTab ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? 0 : 1)
@@ -201,7 +202,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
     
     useEffect(() => {    
         if(chartBar === false) {
-            setHeight('97%')
+            setHeight('100%')
             const opt = {...option}
             opt.chartArea.height = '92%'
             if(visualizerBarSize == '100%'){
@@ -211,7 +212,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
             }
             setOption(opt)
         } else {
-            setHeight('92%')
+            setHeight('100%')
             const opt = {...option}
             opt.chartArea.height = '91%'
             if(visualizerBarSize == '100%'){
@@ -279,6 +280,13 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
     return (
         <Paper className={classes.root} square>  
             {
+                ( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) && fullScreen === false && typeof standalone === 'undefined' && (
+                    <IconButton size="small" className={classes.fullscreenBtn} onClick={() => setFullScreen(!fullScreen)}>
+                        <FullscreenIcon />
+                    </IconButton>
+                )
+            }  
+            {
                 typeof tab == 'undefined' || tab === true 
                 ?
                     <Tabs
@@ -302,18 +310,10 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                     ''
             }
             {
-                typeof titleBar !== 'undefined' && titleBar === true && (
+                typeof titleBar !== 'undefined' && titleBar === true && ((typeof disableOtherTabs !== 'undefined' && disableOtherTabs === true ) || selectedTab === 1) && (
                     <TitleBar title={loading === false && data.length < 2 ? `The company has no non-expired USA patents filed after 1997, and no foreign counterparts.` : `Non expired US patents filed after 1997 and their foreign counterparts:`} enablePadding={true}  underline={false} typography={true}/>   
                 )
-            } 
-            
-            {
-                typeof standalone === 'undefined' && (
-                    <div className={classes.fullScreenContainer}>
-                        <FullScreen componentItems={menuItems}/>
-                    </div>
-                )
-            } 
+            }  
             <div className={classes.graphContainer} ref={containerRef}>  
                 {
                     typeof disableOtherTabs !== 'undefined' && disableOtherTabs === true 
@@ -325,7 +325,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                                 <InventionVisualizer 
                                     visualizerBarSize={visualizerBarSize} 
                                     tab={false} 
-                                    standalone={true}
+                                    standalone={true}  
                                 />
                             :
                                 selectedTab === 1
@@ -357,6 +357,15 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                                                     ''
                 } 
             </div> 
+            {  
+                ( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) )  && fullScreen === true && (
+                    <FullScreen 
+                        componentItems={menuItems} 
+                        showScreen={fullScreen} 
+                        setScreen={setFullScreen}
+                    /> 
+                )
+            } 
         </Paper>  
     )
 }

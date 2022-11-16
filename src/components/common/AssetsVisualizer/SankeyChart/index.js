@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Paper } from '@mui/material';
+import { Paper, Tab, Tabs } from '@mui/material';
 import DisplayChart from './DisplayChart';
 import useStyles from './styles'
 import clsx from 'clsx';
@@ -102,18 +102,37 @@ const SankeyChart = (props) => {
     }, [assignorRawData, assigneeRawData])
 
     return (
-        <Paper sx={{p: 2, overflow: 'auto'}} className={clsx(classes.container, classes.containerTop)} square>
-            {
+        <Paper {...(typeof props.showTabs == 'undefined' ? {sx: {p: 2, overflow: 'auto'}} : {})}  className={clsx(classes.container, classes.containerTop)} square>
+            {/* {
                 (selectedCategory == 'acquired' && !loading && data.length === 0 ) || (!loadingAssignor && selectedCategory == 'divested' && assignorData.length === 0) && (
                     <TitleBar title="The company had no acquistions and divestitures of patent assets filled after 1997:" enablePadding={false} underline={false}/>
                 )
-            }            
+            }  */}           
+            {
+                typeof props.showTabs != 'undefined' && props.showTabs === true && typeof props.tabText != 'undefined' && (
+                    <Tabs
+                        value={0}
+                        variant={'scrollable'} 
+                        scrollButtons="auto"
+                        className={classes.tabs} 
+                    >
+                        {
+                            [props.tabText].map((tab) => (
+                                <Tab
+                                    key={tab}
+                                    className={classes.tab} 
+                                    label={tab} 
+                                />
+                            )) 
+                        }
+                    </Tabs> 
+                )
+            } 
             {    
                 selectedCategory == 'acquired' || props.type == 'acquired' || props.type == 'filled'
                 ?
                     data.length > 0 ?
                         <div className={clsx(classes.child)}>
-                            <TitleBar title="Acquistions:" enablePadding={false}/>
                             <DisplayChart data={data} tooltip={true} type={1} onSelect={handleSelection}/>
                         </div>   
                     :
@@ -124,11 +143,10 @@ const SankeyChart = (props) => {
             }           
             
             {
-                selectedCategory == 'divested'
+                selectedCategory == 'divested' 
                 ?
                     assignorData.length > 0 ?
                         <div className={clsx(classes.child)} >
-                            <TitleBar title="Divestitures:" enablePadding={false}/>
                             <DisplayChart data={assignorData} type={2} onSelect={handleSelection}/>
                         </div>  
                     :

@@ -51,12 +51,16 @@ export default makeStyles(theme => ({
     },
     tabs: {
         minHeight: 47,
+        width: '94%'
     },
     tab: {
         flex: 1,
         minWidth: '25%',
         minHeight: 47,  
-        fontSize: '1.1rem'                          
+        fontSize: '1.1rem',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow:'ellipsis'                        
     },
     graphContainer: {
         flex: 1,
@@ -73,7 +77,7 @@ export default makeStyles(theme => ({
     },
     fullscreenBtn: {
         position: 'absolute',
-        top: 5,
+        top: 9,
         right: 0,
         zIndex: 999
     },
