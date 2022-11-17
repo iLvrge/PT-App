@@ -1363,6 +1363,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           if(changeBar === true) {
             handleVisualBarSize(true, true, true, true)
           }
+          setDefaultViewFlag(1)
         }
         if(selectedCategory == 'incorrect_names' || selectedCategory == 'pay_maintainence_fee' || selectedCategory == 'late_maintainance' || selectedCategory == 'ptab' || selectedCategory == 'to_be_monitized' ){
           /**

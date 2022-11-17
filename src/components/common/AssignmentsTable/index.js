@@ -607,10 +607,10 @@ const onHandleClickRow = useCallback(
         dispatch(toggleLifeSpanMode(true));
         dispatch(toggleFamilyMode(false));
         dispatch(toggleFamilyItemMode(false));
-        console.log("connectionBoxView", connectionBoxView)
-        if(connectionBoxView === true) {
+        /* console.log("connectionBoxView", connectionBoxView) */
+        /* if(connectionBoxView === true) {
           checkChartAnalytics(null, null, false)
-        }
+        } */
         //dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, []))
         //dispatch(toggleLifeSpanMode(false))
         //dispatch(toggleFamilyItemMode(false))

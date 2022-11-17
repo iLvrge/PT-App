@@ -98,7 +98,7 @@ const CompanySummary = () => {
                 let summaryData = [];
                 Object.keys(data).forEach( key => { 
                     summaryData.push({
-                        name: capitalize(key == 'entities' ? 'Parties' : key == 'parties' ? '3rd Parties' : key),
+                        name: capitalize(key == 'entities' ? '3rd Parties' : key == 'parties' ? 'Parties' : key),
                         number: numberWithCommas(data[key]),
                         iconLink: `https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/${key == 'entities' ? 'parties' : key}.svg`
                     })

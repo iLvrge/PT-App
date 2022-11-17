@@ -88,8 +88,8 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
     const profile = useSelector(store => (store.patenTrack.profile))
-    const tabs = [1,2,6,7,3,4,81,8,9,15,14,10,17] 
-    /* const tabs = [1,2,6,7,3,4,5,11,12,13,8,9,15,14,10,16]  */
+    const tabs = [1,2,6,7,3,4,81,8,9,15,14,10] 
+    /* const tabs = [1,2,6,7,3,4,5,11,12,13,8,9,15,14,10,16, 17]  */
     /*const tabs = [1,2,6,7,3,4,5,11,12,13,8,9,15,14]*/
 
     const COLUMNS = [        
