@@ -42,7 +42,7 @@ import AssetsTable from '../../AssetsTable'
 
 var newRange = [1,2]
 
-const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, tab, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal, titleBar, openChartBar, handleChartBarOpen, salable, licensable }) => {
+const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, tab, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal, titleBar, middle, openChartBar, handleChartBarOpen, salable, licensable }) => {
     
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -144,6 +144,10 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             illustrationBar, 
             customerBarSize, 
             companyBarSize,
+            titleBar,
+            middle,
+            salable, 
+            licensable,
             gRawData: graphRawData, 
             gRawGroupData: graphRawGroupData, 
             sData: salesData, 
@@ -980,33 +984,33 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     </Tabs> 
                 :
                     ''
-            }
-            <div className={classes.sliderContainer}>
-                {
-                    typeof standalone === 'undefined' && (
-                        <FullScreen componentItems={menuItems}/>
-                    )
-                }
-                
-                <IconButton onClick={(event) => dashboardScreen === true ? toggleDrawer(event, true) :  handleOpenFilter()} className={clsx(classes.settingBtn, {[classes.settingBtnTop]: typeof titleBar !== 'undefined' && titleBar === true ? true : false})} size="large">
-                    <svg style={{width: '24px', fill: '#fff'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M5 11.86V29a1 1 0 0 0 2 0V11.86A4 4 0 0 0 7 4.14V3A1 1 0 0 0 5 3V4.14a4 4 0 0 0 0 7.72zM6 6A2 2 0 1 1 4 8 2 2 0 0 1 6 6zM27 12.14V3a1 1 0 0 0-2 0v9.14a4 4 0 0 0 0 7.72V29a1 1 0 0 0 2 0V19.86a4 4 0 0 0 0-7.72zM26 18a2 2 0 1 1 2-2A2 2 0 0 1 26 18zM16 30a1 1 0 0 0 1-1V23.86a4 4 0 0 0 0-7.72V3a1 1 0 0 0-2 0V16.14a4 4 0 0 0 0 7.72V29A1 1 0 0 0 16 30zM14 20a2 2 0 1 1 2 2A2 2 0 0 1 14 20z" /></svg> 
-                </IconButton>                                    
-            </div>
+            } 
             {
                 showContainer === true && (
                     <React.Fragment>  
                         {
                             typeof titleBar !== 'undefined' && titleBar === true && (
-                                <TitleBar title={`Technologies and filling years of all non-expired patents and applications filed after 1997:`} enablePadding={false} underline={false}/>   
+                                <TitleBar title={`Technologies and filling years of all non-expired patents and applications filed after 1997:`} enablePadding={false} underline={false} typography={true}/>   
                             )
                         } 
                         {
                             selectedTab === 0 && (
                                 <React.Fragment>  
-                                    <TitleBar title={`Hover over the bars for details. Select a bar to see the list of the underlying patents, and to act upon them. Click the menu icon to filter the results.`} enablePadding={typeof titleBar !== 'undefined' ? false : true} underline={false} typography={true}/>
+                                    <TitleBar title={`Hover over the bars for details. Select a bar to see the list of the underlying patents, and to act upon them. Click the menu icon to filter the results.`} enablePadding={typeof titleBar !== 'undefined' && titleBar === true ? false : true} underline={false} typography={true}/>
                                 </React.Fragment>
                             )
                         } 
+                        <div className={classes.sliderContainer}>
+                            {
+                                typeof standalone === 'undefined' && (
+                                    <FullScreen componentItems={menuItems}/>
+                                )
+                            }
+                            
+                            <IconButton onClick={(event) => dashboardScreen === true ? toggleDrawer(event, true) :  handleOpenFilter()} className={clsx(classes.settingBtn, {[classes.settingBtnTop]: typeof middle !== 'undefined' && middle === true ? true : false})} size="large">
+                                <svg style={{width: '24px', fill: '#fff'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M5 11.86V29a1 1 0 0 0 2 0V11.86A4 4 0 0 0 7 4.14V3A1 1 0 0 0 5 3V4.14a4 4 0 0 0 0 7.72zM6 6A2 2 0 1 1 4 8 2 2 0 0 1 6 6zM27 12.14V3a1 1 0 0 0-2 0v9.14a4 4 0 0 0 0 7.72V29a1 1 0 0 0 2 0V19.86a4 4 0 0 0 0-7.72zM26 18a2 2 0 1 1 2-2A2 2 0 0 1 26 18zM16 30a1 1 0 0 0 1-1V23.86a4 4 0 0 0 0-7.72V3a1 1 0 0 0-2 0V16.14a4 4 0 0 0 0 7.72V29A1 1 0 0 0 16 30zM14 20a2 2 0 1 1 2 2A2 2 0 0 1 14 20z" /></svg> 
+                            </IconButton>                                    
+                        </div>
                         <div className={classes.graphContainer}> 
                             {
                                 selectedTab === 0 || ((selectedTab === 1 || selectedTab === 2) && (selectedCategory == 'assigned' && selectedRow.length == 0))
@@ -1017,7 +1021,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                         ?
                                             <div
                                                 style={{
-                                                height: '100%',
+                                                height: '90%',
                                                 width: '100%',
                                                 filter: `blur(${isLoadingCharts ? '4px' : 0})`,
                                                 }}

@@ -521,25 +521,31 @@ const GlobalLayout = (props) => {
     } */
 
     const getWindowDimensions = () => {
+        console.log('dashboardScreen', dashboardScreen)
         const hasWindow = typeof window !== 'undefined';
         let percentage = '76%'
-        const informationContainer = document.getElementById('information_container')
-        if(informationContainer != null && dashboardScreen === true) {
-            const parentContainer = informationContainer.parentNode.parentNode
-            const parentWidth = parentContainer.clientWidth
-            percentage = `${((parentWidth - 250) / parentWidth) * 100}%`
-        } else {
-            const width = hasWindow ? window.innerWidth : null;
-            if(width > 1400) {
-                percentage = '76%'
-            } else if(width < 1400 && width > 1279) {
-                percentage = '69%'
-            } else if(width < 1280 && width > 1151) {
-                percentage = '67%'
+        if( location.pathname == '/patent_assets') { 
+            percentage = '40%'
+        } else { 
+            const informationContainer = document.getElementById('information_container')
+            if(informationContainer != null && dashboardScreen === true) {
+                const parentContainer = informationContainer.parentNode.parentNode
+                const parentWidth = parentContainer.clientWidth
+                percentage = `${((parentWidth - 250) / parentWidth) * 100}%`
             } else {
-                percentage = '64%'
-            }  
+                const width = hasWindow ? window.innerWidth : null;
+                if(width > 1400) {
+                    percentage = '76%'
+                } else if(width < 1400 && width > 1279) {
+                    percentage = '69%'
+                } else if(width < 1280 && width > 1151) {
+                    percentage = '67%'
+                } else {
+                    percentage = '64%'
+                }  
+            }
         }
+        
         return percentage      
     }
 
@@ -1047,7 +1053,7 @@ const GlobalLayout = (props) => {
             }
         } else if( typeof usptoMode !== 'undefined' && usptoMode === false ) {
             /* console.log('usptoMode', usptoMode, openChartBar, openAnalyticsBar, openCommentBar, openIllustrationBar, illustrationBarSize) */
-            let barSize = '0%', chartPrevItem = false, analyticsPrevItem = false
+            let barSize = '0%', chartPrevItem = false, analyticsPrevItem = false, illustrationPrevItem = false, commentPrevItem = false
             await setChartBar(prevItem => {
                 chartPrevItem = prevItem
                 return prevItem
@@ -1056,9 +1062,17 @@ const GlobalLayout = (props) => {
                 analyticsPrevItem = prevItem
                 return prevItem
             })
-            if((chartPrevItem === true || analyticsPrevItem === true) && (openCommentBar === true || openIllustrationBar === true)){
+            await setIllustrationBar(prevItem => {
+                illustrationPrevItem = prevItem
+                return prevItem
+            })
+            await setCommentBar(prevItem => {
+                commentPrevItem = prevItem
+                return prevItem
+            })
+            if((chartPrevItem === true || analyticsPrevItem === true) && (commentPrevItem === true || illustrationPrevItem === true)){
                 barSize = dashboardScreen === true ? getWindowDimensions() : visualizerBarSize !== '0%' ?  visualizerBarSize :  '40.1%'
-            } else if (openCommentBar === false && openIllustrationBar === false && ( chartPrevItem === true ||  analyticsPrevItem === true )) {
+            } else if (commentPrevItem === false && illustrationPrevItem === false && ( chartPrevItem === true ||  analyticsPrevItem === true )) {
                 barSize = '100%'  
             }
             if(barSize === '0%') {

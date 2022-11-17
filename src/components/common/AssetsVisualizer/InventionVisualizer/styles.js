@@ -263,6 +263,10 @@ export default makeStyles(theme => ({
     settingBtn:{
         padding: 0,
         position: 'absolute',
+        right: 5,
+        top: 50
+    },
+    settingBtnTop: {
         right: 35,
         top: 6
     },

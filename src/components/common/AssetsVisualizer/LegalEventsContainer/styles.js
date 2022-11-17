@@ -76,11 +76,15 @@ export default makeStyles(theme => ({
   tab: {
     minWidth: '25%',
     minHeight: 47,
-    fontSize: '1.1rem'
+    fontSize: '1.1rem', 
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow:'ellipsis'
   },
   tabs: {
     minHeight: 47,
     display: 'flex',
+    width: '94%'
     /* '& .MuiTab-root': {
       fontSize: '1.1rem'
     } */
@@ -145,6 +149,17 @@ export default makeStyles(theme => ({
     '& .vis-item.vis-background.red.negative': {
       background: '#E60000 !important',
       opacity: '1'
+    },
+    '& .vis-item.asset-type-status':{
+      backgroundColor: 'rgba(34,34,34, 0.75)',
+      border: 0,
+      '& .vis-item-content':{
+        border: '1px solid #545454',
+        borderRadius: '3px', 
+        padding: '4px 0px 2px 4px', 
+        color: '#fff',
+        width: '100%'
+      }
     },
     '& .vis-item.vis-box': {      
       '&.asset-type-default': {

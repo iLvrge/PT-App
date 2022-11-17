@@ -519,6 +519,8 @@ const Reports = (props) => {
     const viewInitial = useSelector(state => state.ui.viewInitial)
     const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
+    const childID = useSelector( state => state.patenTrack2.mainCompaniesList.childID);
+    const child_list = useSelector( state => state.patenTrack2.mainCompaniesList.child_list);
     const assetTypeCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.list)
     const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected);
     const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected); 
@@ -677,10 +679,42 @@ const Reports = (props) => {
         ]
     )
 
-
+/* 
     const companyname = useMemo(() => {
         return selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])
+    }, [selectedCompanies, companiesList]) */ 
+
+    const companyname = useMemo(() => {
+        let filterList =  selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])
+        if(filterList.length == 0) { 
+            filterList =  selectedCompanies.length > 0 && childID > 0 && child_list.length > 0 && child_list.filter( company => company.representative_id === selectedCompanies[0])
+        }
+        return filterList
     }, [selectedCompanies, companiesList])
+
+    const formattedCompanyname = useMemo(() => {
+        let name = ''
+        let filterList =  selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])
+        if(filterList.length == 0) { 
+            const findCompany = selectedCompanies.length > 0 && child_list.filter( company => company.representative_id === selectedCompanies[0])
+            if(findCompany.length > 0) {
+                if(childID > 0) { 
+                    const findGroup =  companiesList.filter( company => company.representative_id === childID)
+                    if(findGroup.length > 0) {
+                        name = `${findGroup[0].original_name} : ${findCompany[0].original_name}`
+                    } else {
+                        name = findCompany[0].original_name
+                    }
+                } else {
+                    name = findCompany[0].original_name
+                }
+            }
+        } else {
+            name = filterList != false ? filterList[0].original_name : ''
+        } 
+        return name
+    }, [selectedCompanies, companiesList])
+    
 
     const partyName = useMemo(() => {
         return selectedAssetCompanies.length > 0 && assetTypeCompanies.filter( party => party.id === selectedAssetCompanies[0])
@@ -1269,7 +1303,7 @@ const Reports = (props) => {
                 item lg={12} md={12} sm={12} xs={12} 
             >
                 <Paper className={classes.titleContainer} square>
-                    <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{companyname.length > 0 ? companyname[0].original_name : ''}</span> {
+                    <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{formattedCompanyname}</span> {
                         profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' && selectedAssetCompanies.length == 1 && (
                             <span className={classes.headingName}>{partyName[0].entityName}</span>
                         ) 

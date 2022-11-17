@@ -42,16 +42,15 @@ const getTemplateContent = (item, icons) => {
   return templateContent
 } 
 
-const convertDataToItem = (event, icons) => {
-  const assetType =  'box'
-  const date = new Date( event.eventdate )
+const convertDataToItem = (event, icons) => { 
   const item = {
     id: event.id,
     content: getTemplateContent(event, icons),
-    start: date,
-    type: assetType,
+    start: new Date(event.start_date),
+    end: new Date(event.end_date),
+    type: 'range' ,
     rawData: event, 
-    className:  'asset-type-default',
+    className:  'asset-type-status',
     description: event.status,
     collection: [], 
     showTooltip: false

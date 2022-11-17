@@ -351,7 +351,10 @@ const IllustrationCommentContainer = ({
                                 />
                             :
                                 selectedCategory == 'acquired' ||  selectedCategory == 'divested' ?
-                                    <SankeyChart/>
+                                    <SankeyChart
+                                        showTabs={true}
+                                        tabText={selectedCategory == 'acquired' ? 'Acquired' : 'Divested'}
+                                    />
                                 :
                                     selectedCategory == 'top_non_us_members' ?
                                         <GeoChart
@@ -374,7 +377,8 @@ const IllustrationCommentContainer = ({
                                             companyBarSize={companyBarSize}
                                             openChartBar={chartsBar}
                                             handleChartBarOpen={chartsBarToggle}
-                                            type={type} 
+                                            type={type}  
+                                            middle={true}
                                         />
                         :
                         dashboardScreen === true &&  type !== 9  
