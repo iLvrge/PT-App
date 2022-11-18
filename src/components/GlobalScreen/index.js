@@ -743,7 +743,7 @@ const GlobalScreen = ({
                                         className={`${classes.splitPane} ${classes.splitPane2}  ${classes.splitPane3} ${classes.splitPane2OverflowUnset}`}
                                         split="vertical"
                                         minSize={100}
-                                        maxSize={dashboardScreen === true ? -270 : -100}  
+                                        maxSize={-270}  
                                         size={visualizerBarSize}
                                         onChange={(size) => { 
                                             setVisualizerBarSize(size)
@@ -873,6 +873,7 @@ const GlobalScreen = ({
                                                 parentBarDrag={setVisualizerBarSize}
                                                 parentBar={setVisualizeOpenBar}
                                                 primary={'second'}
+                                                setIllustrationRecord={setIllustrationRecord} 
                                                 illustrationData={illustrationRecord}
                                                 chartBar={openChartBar}
                                                 analyticsBar={openAnalyticsBar}
@@ -881,7 +882,12 @@ const GlobalScreen = ({
                                                 illustrationBar={openIllustrationBar}
                                                 customerBarSize={customerBarSize}
                                                 companyBarSize={companyBarSize}
+                                                chartsBarToggle={handleChartBarOpen}
+                                                checkChartAnalytics={checkChartAnalytics}
+                                                setAnalyticsBar={setAnalyticsBar}
+                                                setChartBar={setChartBar}
                                                 isDragging={isDragging}
+                                                gap={gap}
                                                 type={type}
                                             />
                                         }                                            

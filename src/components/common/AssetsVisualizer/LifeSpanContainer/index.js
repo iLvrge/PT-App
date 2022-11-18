@@ -15,15 +15,18 @@ import { DEFAULT_CUSTOMERS_LIMIT } from "../../../../api/patenTrack2";
 
 import useStyles from './styles'
 import InventionVisualizer from '../InventionVisualizer'
-import Citation from '../LegalEventsContainer/Citation'
+import Citation from '../LegalEventsContainer/Citation' 
+import IllustrationContainer from '../IllustrationContainer'
+import AgentsVisualizer from '../AgentsVisualizer'
 
-const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, standalone, activeTab}) => {
+const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerBarSize, type, standalone, activeTab, setIllustrationRecord, chartsBarToggle, checkChartAnalytics, setAnalyticsBar, setChartBar, gap}) => {
     const classes = useStyles() 
     const dispatch = useDispatch()
     const location = useLocation()
     const [offsetWithLimit, setOffsetWithLimit] = useState([0, DEFAULT_CUSTOMERS_LIMIT])
     const [ selectedTab, setSelectedTab ] = useState(typeof activeTab !== 'undefined' ? activeTab : 0)
     const [ assets, setAssets ] = useState(null)
+    const [ isFullscreenOpen, setIsFullscreenOpen ] = useState(false)
     const [ fullScreen, setFullScreen ] = useState(false)
     const [ filterList, setFilterList ] = useState([])
     const [ lifeSpanTabs, setLifeSpanTabs ] = useState(['Lifespan', 'Cited by', 'Salable', 'Licensable'])
@@ -66,11 +69,19 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
     useEffect(() => {
         if(selectedRow.length  === 0) {
             /* setLifeSpanTabs(['Lifespan', 'Acknowledgements']) */
-            setLifeSpanTabs(['Lifespan', 'Cited by', 'Salable', 'Licensable'])
+            if( (selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording')) {
+                setLifeSpanTabs(['Lifespan', 'Lawyers'])
+            } else {
+                setLifeSpanTabs(['Lifespan', 'Cited by', 'Salable', 'Licensable'])
+            }
             setSelectedTab(typeof activeTab !== 'undefined' ? activeTab : 0)
         } else if( connectionBoxView === true || selectedRow.length > 0 ) {
             /*setLifeSpanTabs([ 'Lifespan', 'Assignment', 'USPTO' ])*/
-            setLifeSpanTabs([ 'Lifespan', 'Assignment'])
+            if(selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording') { 
+                setLifeSpanTabs([ 'Lifespan', 'Rights'])
+            } else { 
+                setLifeSpanTabs([ 'Lifespan', 'Assignment'])
+            }
             if(typeof activeTab !== 'undefined') {
                 setSelectedTab(activeTab)
             }
@@ -222,6 +233,14 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
 
 
     const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
+
+    const handleClickOpenFullscreen = () => {
+        setIsFullscreenOpen(true)
+    }
+    
+    const handleCloseFullscreen = () => {
+        setIsFullscreenOpen(false)
+    }
     
     return (
         <Paper className={classes.root} square>  
@@ -262,7 +281,13 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
                         selectedRow.length == 0
                         ?
                             selectedTab === 1 ?
-                                <Acknowledgements/>
+                                selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording'
+                                ?
+                                    <AgentsVisualizer
+                                        type={2}
+                                    />
+                                :
+                                    <Acknowledgements/>
                             :
                                 selectedTab === 2 ? 
                                     <InventionVisualizer 
@@ -288,7 +313,23 @@ const LifeSpanContainer = ({chartBar, openCustomerBar, visualizerBarSize, type, 
                             <Acknowledgements/>
                             : */
                                 selectedTab === 1 ? 
-                                    <ConnectionBox display={"false"} assets={assets}/>
+                                    selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording'
+                                        ?
+                                            <IllustrationContainer 
+                                                isFullscreenOpen={isFullscreenOpen} 
+                                                asset={assetIllustration} 
+                                                setIllustrationRecord={setIllustrationRecord} 
+                                                chartsBar={chartBar}
+                                                analyticsBar={analyticsBar}
+                                                chartsBarToggle={chartsBarToggle}
+                                                checkChartAnalytics={checkChartAnalytics}
+                                                setAnalyticsBar={setAnalyticsBar}
+                                                setChartBar={setChartBar}
+                                                fullScreen={handleClickOpenFullscreen}
+                                                gap={gap}
+                                            />
+                                    :
+                                        <ConnectionBox display={"false"} assets={assets}/>
                                 :
                                     selectedTab === 2 ?
                                     <USPTOContainer assets={assets}/>

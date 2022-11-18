@@ -680,7 +680,7 @@ const PatentLayout = ({
                                         className={`${classes.splitPane} ${classes.splitPane2}  ${classes.splitPane3} ${classes.splitPane2OverflowUnset}`}
                                         split="vertical"
                                         minSize={100}
-                                        maxSize={dashboardScreen === true ? -270 : -100}  
+                                        maxSize={-270}  
                                         size={visualizerBarSize}
                                         onChange={(size) => { 
                                             setVisualizerBarSize(size)

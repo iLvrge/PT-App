@@ -37,6 +37,7 @@ import Fees from '../AssetsVisualizer/LegalEventsContainer/Fees'
 import PatenTrackApi from '../../../api/patenTrack2'
 import { dispatch } from 'd3'
 import { allAssetsSurchargeLegalEvents, setAssetLegalEvents, setLegalDataEventRetrieved } from '../../../actions/patenTrackActions'
+import ConnectionBox from '../ConnectionBox'
 
 const IllustrationCommentContainer = ({ 
     cls, 
@@ -451,6 +452,12 @@ const IllustrationCommentContainer = ({
                         link_assets_sheet_display === true || selectedCategory === 'technical_scope'
                         ?
                             <LoadLinkAssets type={link_assets_sheet_type.type} asset={link_assets_sheet_type.asset}  size={size}/>
+                        :
+                        (selectedCategory ==  'late_recording' || selectedCategory =='incorrect_recording') && selectedAssetAssignments.length > 0 ? 
+                            <ConnectionBox 
+                                display={"false"} 
+                                assets={assetIllustration}
+                            />
                         :
                         !isFullscreenOpen && 
                             illustrationBar === true && 

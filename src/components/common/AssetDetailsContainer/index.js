@@ -52,7 +52,13 @@ const AssetDetailsContainer = ({
   customerBarSize,
   companyBarSize,
   type,
-  cube
+  cube,
+  setIllustrationRecord,
+  chartsBarToggle,
+  checkChartAnalytics,
+  setAnalyticsBar,
+  setChartBar,
+  gap
 }) => { 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -415,6 +421,24 @@ const AssetDetailsContainer = ({
                           companyBarSize={companyBarSize}
                           type={type} />
                       :
+                      timelineScreen === true  && assetIllustration == null && (selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording')
+                      ?
+                        <LifeSpanContainer
+                          chartBar={chartBar} 
+                          analyticsBar={analyticsBar}
+                          openCustomerBar={openCustomerBar} 
+                          visualizerBarSize={visualizerBarSize}
+                          setIllustrationRecord={setIllustrationRecord}
+                          chartsBarToggle={chartsBarToggle}
+                          checkChartAnalytics={checkChartAnalytics}
+                          setAnalyticsBar={setAnalyticsBar}
+                          setChartBar={setChartBar}
+                          gap={gap}
+                          type={type}
+                          activeTab={1}
+                        />
+                        
+                      :
                       timelineScreen === true  && assetIllustration == null 
                       ?
                         <TimelineSecurity
@@ -430,8 +454,15 @@ const AssetDetailsContainer = ({
                             lifeSpanMode === true ? (
                               <LifeSpanContainer 
                                 chartBar={chartBar} 
+                                analyticsBar={analyticsBar}
                                 openCustomerBar={openCustomerBar} 
                                 visualizerBarSize={visualizerBarSize}
+                                setIllustrationRecord={setIllustrationRecord}
+                                chartsBarToggle={chartsBarToggle}
+                                checkChartAnalytics={checkChartAnalytics}
+                                setAnalyticsBar={setAnalyticsBar}
+                                setChartBar={setChartBar}
+                                gap={gap}
                                 type={type}/>
                             ) :
                             familyMode && (
@@ -448,8 +479,15 @@ const AssetDetailsContainer = ({
                       (
                         <LifeSpanContainer 
                           chartBar={chartBar} 
+                          analyticsBar={analyticsBar}
                           openCustomerBar={openCustomerBar} 
                           visualizerBarSize={visualizerBarSize}
+                          setIllustrationRecord={setIllustrationRecord}
+                          chartsBarToggle={chartsBarToggle}
+                          checkChartAnalytics={checkChartAnalytics}
+                          setAnalyticsBar={setAnalyticsBar}
+                          setChartBar={setChartBar}
+                          gap={gap}
                           type={type}/>
                       )
                     : 

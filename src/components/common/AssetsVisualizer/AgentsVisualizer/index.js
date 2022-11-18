@@ -58,10 +58,15 @@ const AgentsVisualizer = (props) => {
     const [height, setHeight] = useState('100%');
     const [minMax, setMinMax] = useState([0,0])
     const [option, setOption] = useState({
-        legend: { position: 'none' },
+        legend: { 
+            position: 'right',
+            textStyle: {
+                color: '#fff'
+            }
+        },
         backgroundColor: 'transparent',
         chartArea: {
-            width: '90%',
+            width: '67%',
             height: '75%',
             left:40,
             top:15,
@@ -109,6 +114,7 @@ const AgentsVisualizer = (props) => {
                 color:'transparent' 
             },
         },
+        pointsVisible: true	
     });
 
     useEffect(() => {

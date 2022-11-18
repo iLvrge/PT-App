@@ -24,8 +24,7 @@ const NamesContainer = (props) => {
     const [options, setOptions] = useState({
         rotations: 1,
         enableTooltip: true,
-        rotationAngles: [0],
-        fontSizes: [30, 90],
+        rotationAngles: [0], 
         fontStyle: "normal",
         fontWeight: "900",
     })
@@ -103,8 +102,6 @@ const NamesContainer = (props) => {
         return (
             <ReactWordcloud 
                 words={namesData} 
-                size={size}
-                options={options}
             />
         )
     } 
