@@ -215,14 +215,14 @@ const AgentsVisualizer = (props) => {
  
     return (
         <Paper className={classes.root} square> 
-            {
+            {/* {
                 typeof standalone === 'undefined' && (
                     <div className={classes.fullScreenContainer}>
                         <FullScreen componentItems={menuItems}/>
                     </div>
                 )
             } 
-            <div className={classes.graphContainer} ref={containerRef}> 
+   */}          <div className={classes.graphContainer} ref={containerRef}> 
                 <DisplayChart />
             </div>
         </Paper>

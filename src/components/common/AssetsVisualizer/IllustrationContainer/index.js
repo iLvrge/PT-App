@@ -305,7 +305,7 @@ const IllustrationContainer = ({
         )
         checkChartAnalytics(null, null, true)
       } else {
-        checkChartAnalytics(null, null, false)
+        checkChartAnalytics(null, null, true)
       }
     }    
   }, [ chartsBar, analyticsBar, dispatch ])

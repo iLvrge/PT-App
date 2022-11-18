@@ -33,7 +33,7 @@ const DATE_FORMAT = 'MMM DD, YYYY'
 const getTemplateContent = (item, icons) => {   
   const getEventIcons = icons[item.event_code] 
   const icon = getEventIcons["icon3"] != undefined ? getEventIcons["icon3"]: ''
-  const templateContent = `<div class='first'>${typeof item.template_string != 'undefined' ? item.template_string == '0' ? `US<br/>${numberWithCommas(item.grant_doc_num)}` : item.event_code == '13' ? `US<br/>${item.template_string}` : item.template_string : item.maintainence_code.template_string}</div><div class='textColumn'>${item.event_code == '13' ? `<div style="text-align:left">Filed on:</div>` : ''}${moment(new Date(item.eventdate)).format(DATE_FORMAT)}</div><div class='absolute'>${icon}</div>`
+  const templateContent = `<div class='first'>${typeof item.template_string != 'undefined' ? item.template_string == '0' ? `US<br/>${numberWithCommas(item.grant_doc_num)}` : item.event_code == '13' ? `US<br/>${item.template_string}` : item.template_string : item.maintainence_code.template_string}</div><div class='textColumn'>${item.event_code == '13' ? `<div style="text-align:leftline-height:0.7">Filed on:</div>` : ''}${moment(new Date(item.eventdate)).format(DATE_FORMAT)}</div><div class='absolute'>${icon}</div>`
   return templateContent
 } 
 

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import { Chart, registerables } from 'chart.js';
 import { WordCloudController, WordElement } from 'chartjs-chart-wordcloud';
-
+import ReactWordcloud from 'react-wordcloud'; 
 import { useDispatch, useSelector } from 'react-redux'
 import PatenTrackApi from '../../../../api/patenTrack2';
 import useStyles from './styles';
@@ -9,20 +9,31 @@ import { Paper, Tab, Tabs, Typography } from '@mui/material';
 import { numberWithCommas } from '../../../../utils/numbers';
 import { setAllAssignmentCustomers, setAssetTypeAssignmentAllAssets, setSelectAssignmentCustomers } from '../../../../actions/patentTrackActions2';
 import TitleBar from '../../TitleBar';
+import AgentsVisualizer from '../AgentsVisualizer';
 
 
 const LawFirmNames = (props) => {
     const classes = useStyles() 
     const dispatch = useDispatch()
-    const [ tabs, setTabs ] = useState(['LawFirm Names'])
+    const [ tabs, setTabs ] = useState(['Names', 'Agent (transactions)'])
     const [ selectedTab, setSelectedTab ] = useState(0)
+    const [ rawData, setRawData ] = useState([])
     const [ namesData, setNamesData ] = useState([])
+    const [size, setSize] = useState([550, 400])
+    const [options, setOptions] = useState({
+        rotations: 1,
+        enableTooltip: true,
+        rotationAngles: [0], 
+        fontStyle: "normal",
+        fontWeight: "900",
+    })
+
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected );
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll);
     const selectedLawFirm = useSelector( state => state.patenTrack2.selectedLawFirm);
     
     const randomNumbers = () => {
-        const min = 10, max = 25;
+        const min = 25, max = 50;
         return Math.floor(Math.random() * (max - min + 1)) + min
     }
     useEffect(() => {
@@ -32,8 +43,9 @@ const LawFirmNames = (props) => {
             if(selectedCompaniesAll === true || selectedCompanies.length > 0) {
                 const {data} = await PatenTrackApi.getLawFirmsByCompany(companies, selectedLawFirm)
                 if(data.length > 0) {
-                    setNamesData(data)
-                    const labels = [], values = [];
+                    setRawData(data)
+                    let PIXEL = 20;
+                    /* const labels = [], values = [];
                     let PIXEL = 50;
                     const container = document.getElementById('analyticsBar')
                     if(container.childElementCount > 0 ) {
@@ -45,8 +57,18 @@ const LawFirmNames = (props) => {
                         values.push( typeof item.distance != 'undefined' ? PIXEL + item.distance * 3 : randomNumbers() )
                     })
                     
+                    await Promise.all(promise) */
+
+                    const words = []
+                    const promise = data.map(item => {
+                        words.push({
+                            text: item.lawfirm,
+                            value: randomNumbers()
+                        })
+                    })
                     await Promise.all(promise)
-                    const ctx = document.getElementById('canvas')
+                    setNamesData(words)
+                    /* const ctx = document.getElementById('canvas')
            
                     Chart.register(...registerables, WordCloudController, WordElement);
                     new Chart(ctx, {
@@ -100,31 +122,29 @@ const LawFirmNames = (props) => {
                                         } 
                                     }
                                 },
-                                /* tooltip: {
-                                    callbacks: {
-                                        title: tooltipItems => {
-                                            const findData = data[tooltipItems[0].dataIndex].lawfirm
-                                            return `Number of assets assigned under this incorrect name: ${numberWithCommas(findData)}`
-                                        } ,
-                                        label: (tooltipItems) => { 
-                                            return ''
-                                        } 
-                                    }
-                                } */
                             },
-                            /* onClick: (event, item) => {
-                                const partyID = data[item[0].index].id
-                                dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }));
-                                dispatch(setAllAssignmentCustomers(false))
-                                dispatch(setSelectAssignmentCustomers([partyID]))
-                            } */
                         }
-                    });
+                    }); */
                 }
             }
         }
         getLawFirmNamesData()
     }, [selectedCompanies, selectedCompaniesAll, selectedLawFirm] )
+
+    useEffect(() => {
+        if(namesData.length > 0) {
+            DrawCloudChart()
+        }
+    }, [namesData]) 
+
+    const DrawCloudChart =  () => {  
+        console.log(namesData)
+        return (
+            <ReactWordcloud 
+                words={namesData} 
+            />
+        )
+    } 
 
     const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
   
@@ -149,9 +169,14 @@ const LawFirmNames = (props) => {
             </Tabs>  
             {
                 selectedTab === 0 && namesData.length > 0 && ( 
-                    <div style={{height: '85%', width: '95%'}}>
-                        <canvas id="canvas" style={{height: '100%', width: '100%'}}></canvas>
+                    <div style={{height: '78%', width: '100%', position: 'absolute', top: 100}} id='cntNames'>
+                        <DrawCloudChart />
                     </div>
+                )
+            }
+            { 
+                selectedTab === 1 && (
+                    <AgentsVisualizer type={2}/>
                 )
             }
         </Paper> 
