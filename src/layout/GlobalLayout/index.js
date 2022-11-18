@@ -881,6 +881,7 @@ const GlobalLayout = (props) => {
     }
 
     const handleCommentBarOpen = () => {
+        console.log('handleCommentBarOpen 884')
         let bar = openCommentBar, barSize = '30%'
         setCommentBar( !bar )
         if((!bar === false && openIllustrationBar === false) || (!bar === false && openIllustrationBar === true)) {
@@ -1104,6 +1105,7 @@ const GlobalLayout = (props) => {
 
     const handleResetScreen = (type, event) => {
         if(type == 'Dashboard') { 
+            console.log('RESET1108')
             if(openCustomerBar === true){
                 handleCustomersBarOpen(event)
             }  
@@ -1156,6 +1158,7 @@ const GlobalLayout = (props) => {
                 handleAnalyticsBarOpen(event)
             }
         } else {
+            console.log('RESET1161')
             if(openCustomerBar === false && timelineScreen === false && type !== 'Timeline'){ 
                 handleCustomersBarOpen(event)
             }

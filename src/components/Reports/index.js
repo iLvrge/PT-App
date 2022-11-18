@@ -1199,6 +1199,9 @@ const Reports = (props) => {
                         if(patent === true) {
                             history.push(routeList.patent_assets)  
                         }
+                        if(timeline === true) {
+                            history.push('/')  
+                        }
                         if(maintainence === true) {
                             history.push(routeList.pay_maintainence_fee)  
                         }
