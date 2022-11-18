@@ -48,7 +48,7 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
 
     const dashboardICONS = [0, 1, 7, 45]
-    const removeFilterICONS = selectedCategory == 'late_recording' ? [2, 3, 11] : [2, 3, 4, 11]
+    const removeFilterICONS = selectedCategory == 'late_recording' || selectedCategory == 'top_law_firms' ? [2, 3, 11] : [2, 3, 4, 11]
 
 
     const TeamBarIcon = () => {
