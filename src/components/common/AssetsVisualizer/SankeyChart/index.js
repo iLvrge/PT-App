@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback, useRef} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Paper, Tab, Tabs } from '@mui/material';
 import DisplayChart from './DisplayChart';
@@ -8,14 +8,17 @@ import PatenTrackApi from '../../../../api/patenTrack2';
 import TitleBar from '../../TitleBar';
 import Loader from '../../Loader';
 import { setAssetTypeAssignmentAllAssets, setSelectAssignmentCustomers } from '../../../../actions/patentTrackActions2';
+import { ConstructionOutlined } from '@mui/icons-material';
 
 
 const SankeyChart = (props) => {
     const dispatch = useDispatch();
     const classes = useStyles();
+    const containerRef = useRef(null)
     const [loading, setLoading] = useState(false);
     const [loadingAssignor, setLoadingAssingor] = useState(false);
     const [data, setData] = useState([]);
+    const [height, setHeight] = useState('100%');
     const [assignorData, setAssignorData] = useState([]);    
     const [assigneeRawData, setAssigneeRawData] = useState([]);    
     const [assignorRawData, setAssignorRawData] = useState([]);    
@@ -89,6 +92,24 @@ const SankeyChart = (props) => {
         return (() => {})
     }, [selectedCompanies, props.type])
 
+    useEffect(() => {
+        if((data.length > 0 || assignorData.length > 0) && containerRef != null && containerRef.current != null) {
+            console.log(containerRef, containerRef.current, containerRef.current.parentElement)
+            const element = containerRef.current.parentElement
+            if(element != null) { 
+                const {height} = element.getBoundingClientRect();
+                const childElement = document.querySelectorAll('.cntSankeyChart')
+                console.log('childElement', childElement)
+                if(childElement.length > 0 ) {
+                    childElement.forEach( (item, index) => {
+                        childElement[index].style.height = `${parseInt(height)}px`
+                    })
+                }
+                
+            }
+        }
+    }, [data, assignorData])
+
     const handleSelection = useCallback((items, type) => {
         let oldItems = type == 2 ? [...assignorRawData] : [...assigneeRawData]
         const filter = oldItems.filter( row => row.name === items[0].name)
@@ -102,7 +123,7 @@ const SankeyChart = (props) => {
     }, [assignorRawData, assigneeRawData])
 
     return (
-        <Paper {...(typeof props.showTabs == 'undefined' ? {sx: {p: 2, overflow: 'auto'}} : {})}  className={clsx(classes.container, classes.containerTop)} square>
+        <Paper {...(typeof props.showTabs == 'undefined' ? {sx: {p: 2, overflow: 'auto'}} : {overflow: 'auto'})}  className={clsx(classes.container, classes.containerTop, 'cntSankeyChart')} square ref={containerRef} >
             {/* {
                 (selectedCategory == 'acquired' && !loading && data.length === 0 ) || (!loadingAssignor && selectedCategory == 'divested' && assignorData.length === 0) && (
                     <TitleBar title="The company had no acquistions and divestitures of patent assets filled after 1997:" enablePadding={false} underline={false}/>
