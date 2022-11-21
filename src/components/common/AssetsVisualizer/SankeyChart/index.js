@@ -47,6 +47,7 @@ const SankeyChart = (props) => {
                     setLoading(true)
                     const {data} = await PatenTrackApi.getDashboardPartiesData(formData)
                     
+                    setLoading(false)
                     const loadData = []
                     if(data.length > 0) {
                         setAssigneeRawData(data)
@@ -60,7 +61,6 @@ const SankeyChart = (props) => {
                             ]) 
                         });    
                         setData(loadData)
-                        setLoading(false)
                     }
                 }
                 
@@ -68,6 +68,7 @@ const SankeyChart = (props) => {
                     setLoadingAssingor(true) 
                     const getAssignorData = await PatenTrackApi.getDashboardPartiesAssignorData(formData)
                     
+                    setLoadingAssingor(false)
                     if(getAssignorData.data != null) {
                         const assignorData  = getAssignorData.data
                         const loadAssignorData = []
@@ -83,7 +84,6 @@ const SankeyChart = (props) => {
                             });  
                         }  
                         setAssignorData(loadAssignorData)
-                        setLoadingAssingor(false)
                     }
                 } 
             }
@@ -152,10 +152,10 @@ const SankeyChart = (props) => {
             {    
                 selectedCategory == 'acquired' || props.type == 'acquired' || props.type == 'filled'
                 ?
-                    data.length > 0 ?
+                    loading === false ? 
                         <div className={clsx(classes.child)}>
-                            <DisplayChart data={data} tooltip={true} type={1} onSelect={handleSelection}/>
-                        </div>   
+                            <DisplayChart data={data} tooltip={true}  type={1} onSelect={handleSelection}/>
+                        </div>  
                     :
                         <Loader />
                     
@@ -166,7 +166,7 @@ const SankeyChart = (props) => {
             {
                 selectedCategory == 'divested' 
                 ?
-                    assignorData.length > 0 ?
+                    loadingAssignor === false ?
                         <div className={clsx(classes.child)} >
                             <DisplayChart data={assignorData} type={2} onSelect={handleSelection}/>
                         </div>  
