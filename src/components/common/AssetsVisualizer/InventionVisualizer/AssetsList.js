@@ -278,6 +278,7 @@ const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handle
                     PatenTrackApi.cancelPtabCounter()
                     PatenTrackApi.cancelCitationCounter()
                     PatenTrackApi.cancelFeesCounter() 
+                    PatenTrackApi.cancelSatusCounter() 
                     dispatch(setSelectedAssetsPatents([row.grant_doc_num, row.appno_doc_num]))
                     dispatch(getAssetDetails(row.appno_doc_num, row.grant_doc_num))
                     dispatch(assetFamilySingle(row.appno_doc_num))

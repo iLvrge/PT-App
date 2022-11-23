@@ -1035,6 +1035,13 @@ const Reports = (props) => {
                     } else if (card.type == 17) {
                         dispatch(setAssetsIllustration({ type: "transaction", id: data.rf_id }));
                     } else if(card.type == 20 || card.type == 23) {
+                        PatenTrackApi.cancelFamilyCounter()
+                        PatenTrackApi.cancelClaimsCounter()
+                        PatenTrackApi.cancelFiguresCounter()
+                        PatenTrackApi.cancelPtabCounter()
+                        PatenTrackApi.cancelCitationCounter()
+                        PatenTrackApi.cancelFeesCounter()
+                        PatenTrackApi.cancelSatusCounter()
                         dispatch(getAssetDetails(data.application, data.patent))
                         dispatch(assetLegalEvents(data.application, data.patent));
                     } else if(card.type == 19 || card.type == 24 || card.type == 25) {

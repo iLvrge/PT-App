@@ -205,18 +205,24 @@ useEffect(() => {
     items.current = new DataSet()
     let start = new moment().subtract(5, 'year')
     let end = new moment().add(3, 'year')
-    let min = start.format('YYYY-MM-DD'), max = end.format('YYYY-MM-DD')
+    let min = start.format('YYYY-MM-DD'), max = end.format('YYYY-MM-DD') 
     if (convertedItems.length > 0) {      
       convertedItems.map( (item, index) => {
         if(index == 0) {
           min = new moment(item.start).format('YYYY-MM-DD')
-          max = min
+          const date = typeof item.rawData.eventdate != 'undefined' && item.rawData.eventdate != '' ? item.rawData.eventdate : item.rawData.end_date
+          if(new moment(date).isAfter(max)) {
+            max = new moment(date).format('YYYY-MM-DD')
+          }
         } else {
           if( new moment(item.start).isBefore(min) ) {
             min = new moment(item.start).format('YYYY-MM-DD')
-          } else if(new moment(item.start).isAfter(max)) {
-            max = new moment(item.start).format('YYYY-MM-DD')
-          }
+          } else {
+            const date = typeof item.rawData.eventdate != 'undefined' && item.rawData.eventdate != '' ? item.rawData.eventdate : item.rawData.end_date
+            if(new moment(date).isAfter(max)) {
+              max = new moment(date).format('YYYY-MM-DD')
+            }
+          } 
         }        
       })
       start = new moment(min).subtract(5, 'year').format('YYYY-MM-DD')
@@ -226,7 +232,7 @@ useEffect(() => {
       items.current.add(convertedItems)
       setDisplay('block')      
     } 
-    timelineRef.current.setItems(items.current) 
+    timelineRef.current.setItems(items.current)  
     timelineRef.current.setOptions({ ...options, start, end, min, max  }) 
     
 }, [ timelineRawData, allIcons, isLoadingTimelineRawData, timelineContainerRef ])

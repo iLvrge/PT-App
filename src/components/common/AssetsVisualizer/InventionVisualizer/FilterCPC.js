@@ -12,7 +12,7 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, yearRange, yearRangeText, 
     const CONTANT_HEIGHT = 18
     const [ height, setHeight] = useState('550px')
     const [ heightYear, setHeightYear] = useState('250px')
-    console.log('valueYear', valueYear)
+    /* console.log('valueYear', valueYear) */
     useEffect(() => {
         setHeight(`${(scopeRange.length * CONTANT_HEIGHT) + 15}px`)
     }, [ scopeRange ])
@@ -67,11 +67,11 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, yearRange, yearRangeText, 
 
     const handleRangeChange = (event, newValue) => {
         setRangeValue(newValue)
-        onChangeRangeSlider(yearValue, newValue)
+        onChangeRangeSlider(yearValue, newValue, valueScope)
     }   
 
     const handleYearChange = (event, newValue) => {
-        onChangeYearSlider(rangeValue, newValue)
+        onChangeYearSlider(rangeValue, newValue, valueScope)
     }
 
     return (

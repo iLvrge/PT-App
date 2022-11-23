@@ -71,6 +71,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
     const [ xy, setXY] = useState({x: dashboardScreen === true ? '0px' : '-85px', y: '35px'})
     const [ valueScope, setValueScope ] = useState(dashboardScreen === true ? [...dashboardScope] : [1, 2])
+    const [ valueScopeLabel, setValueScopeLabel ] = useState([])
     const [ valueRange, setValueRange ] = useState(4)/**dashboardScreen === true ? 4 : 3 */
     const [ preValueRange, setPreValueRange ] = useState(4)
     const [ scopeRange, setScopeRange ] = useState([])
@@ -159,6 +160,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             fTotal: filterTotal,
         }
     ]
+
     let options = {
         height: '100%',
         width: '100%',
@@ -446,7 +448,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             getChartData()
         }
         //console.log( "getChartData", selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments )
-    }, [sendAssetRequest, selectedTab, openCustomerBar, selectedCategory, selectedCompanies, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_clipboard, salable, licensable ]) 
+    }, [sendAssetRequest, selectedTab, /* openCustomerBar,  */selectedCategory, selectedCompanies, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_clipboard, salable, licensable ]) 
 
 
     const findCPCList = async(oldScopeRange, list, totalRecords, year, range, scope) => {       
@@ -506,6 +508,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             setValueScope([ data.group[0].id, data.group[data.group.length - 1].id ])
         }    
         if(typeof scope == 'undefined' && dashboardScreen === false) {
+            /* console.log('valueScopeLabel', valueScopeLabel, 'oldScopeRange', oldScopeRange) */
             const findOldRange = []
             if(oldScopeRange.length > 0 && typeof range !== 'undefined') {
                 const promiseScope = newRange.map( scope => {
@@ -549,7 +552,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 await Promise.all(promiseSelect) 
                 if(selectScope.length > 0) {
                     newRange = [Math.min(...selectScope), Math.max(...selectScope)]      // useState still gives oldValue
-                    setValueScope([Math.min(...selectScope), Math.max(...selectScope)])
+                    setValueScope(newRange)
                     const scopeList = []
                     const promise = scopeGroup.map( r => {
                         if(r.value >= newRange[0] && r.value <= newRange[1]){
@@ -850,10 +853,10 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
     const onChangeYearSlider = useCallback(async (range, year) => {
         setValueYear(year)
-        if(dashboardScreen !== true) {
+        /* if(dashboardScreen !== true) {
             setScopeRange([])
             setValueScope([1, 2])
-        } 
+        }  */
         const yearList = []
         filterYear.forEach( r => {
             if(r.value >= year[0] && r.value <= year[1]){
@@ -864,18 +867,18 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         findCPCList([...scopeRange], filterList, filterTotal, yearList, range)      
     }, [filterList, filterTotal, filterYear])
 
-    const onChangeRangeSlider = useCallback(async (year, range) => {
+    const onChangeRangeSlider = useCallback(async (year, range, ) => {
         // Depth
         setPreValueRange(prevItem => prevItem != valueRange ? valueRange : prevItem)
         setValueRange(range) 
-        setScopeRange([])
+        //setScopeRange([])
         const yearList = []
         filterYear.forEach( r => {
             if(r.value >= year[0] && r.value <= year[1]){
                 yearList.push(parseInt(r.label))
             }
         })
-        findCPCList([], filterList, filterTotal, yearList, range)      
+        findCPCList([...scopeRange], filterList, filterTotal, yearList, range)      
     }, [ filterList, filterTotal, scopeRange, valueRange ] )
 
     
@@ -895,7 +898,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 yearList.push(parseInt(r.label))
             }
         })
-        
+        setValueScopeLabel(scopeList)
         findCPCList([...scopeRange], filterList, filterTotal, yearList, range, scopeList)        
     }, [ filterList, filterTotal, scopeRange, filterYear ] )
 

@@ -68,7 +68,7 @@ const getFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel
+var cancel, cancelAssetLegalEvents, cancelAssetFamily, cancelAssetFamilySingle;
 
 class PatenTrackApi {
 
@@ -77,15 +77,57 @@ class PatenTrackApi {
   }
 
   static assetFamily(applicationNumber) { 
-    return axios.get(`${base_new_api_url}/family/${applicationNumber}`, getHeader())
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelAssetFamily = c
+    })
+    return axios.get(`${base_new_api_url}/family/${applicationNumber}`, header)
   } 
+
+  static cancelAssetFamily() {
+    if (cancelAssetFamily !== undefined) {
+      try{
+        throw cancelAssetFamily('Request cancelled for families.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
 
   static assetFamilySingle(applicationNumber) { 
-    return axios.get(`${base_new_api_url}/family/single/${applicationNumber}`, getHeader())
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelAssetFamilySingle = c
+    })
+    return axios.get(`${base_new_api_url}/family/single/${applicationNumber}`, header)
   } 
 
+  static cancelAssetFamilySingle() { 
+    if (cancelAssetFamilySingle !== undefined) {
+      try{
+        throw cancelAssetFamilySingle('Request cancelled for family.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
   static assetLegalEvents(applicationNumber, patentNumber) { 
-    return axios.get(`${base_new_api_url}/events/${applicationNumber}/${patentNumber != '' ? encodeURIComponent(patentNumber)  : applicationNumber}`, getHeader())
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelAssetLegalEvents = c
+    })
+    return axios.get(`${base_new_api_url}/events/${applicationNumber}/${patentNumber != '' ? encodeURIComponent(patentNumber)  : applicationNumber}`, header)
+  }
+
+  static cancelAssetLegalEvents() {
+    if (cancelAssetLegalEvents !== undefined) {
+      try{
+        throw cancelAssetLegalEvents('Request cancelled for legal events.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
   }
 
   static allAssetsSurchargeLegalEvents(companies) { 

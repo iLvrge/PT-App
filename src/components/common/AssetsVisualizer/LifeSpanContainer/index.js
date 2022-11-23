@@ -219,6 +219,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                     )
                 } else {
                     (async() => {
+                        PatenTrackApi.cancelCollectionIllustration()
                         const { data } = await PatenTrackApi.getCollectionIllustration(assetIllustration.id)
                         dispatch(
                             setAssetsIllustrationData(data != '' ? data : null)
