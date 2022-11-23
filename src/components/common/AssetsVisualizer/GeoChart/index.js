@@ -18,13 +18,13 @@ import AgentsVisualizer from '../AgentsVisualizer'
 import InventorsVisualizer from '../InventorsVisualizer'
 import SankeyChart from '../SankeyChart'
 
-const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, tab, titleBar, disableOtherTabs }) => {
+const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, tab, titleBar, disableOtherTabs, activeTab }) => {
     const containerRef = useRef(null)
     const dispatch = useDispatch()
     const [ fullScreen, setFullScreen ] = useState(false)
     const [loading, setLoading] = useState(false)
     const [assetRequest, setAssetRequest] = useState(false)
-    const [selectedTab, setSelectedTab ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? 0 : 1)
+    const [selectedTab, setSelectedTab ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? 0 : typeof activeTab != 'undefined' ? activeTab : 1)
     const [chartTabs, setChartTabs ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? ['Jurisdictions'] :  ['Innovation', 'Jurisdictions', 'Invented', 'Acquired', 'Agents (fillings)', 'Agents (transactions)'])
     const [data, setData] = useState([])
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
@@ -60,7 +60,8 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
             component: GeoChart,
             standalone: true,
             chartBar, 
-            visualizerBarSize
+            visualizerBarSize,
+            activeTab: selectedTab
         }
     ]
     const [height, setHeight] = useState('100%');
@@ -250,6 +251,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
         form.append('other_mode', display_sales_assets)
         form.append('data_type', dashboardScreen === true ? 1 : 0)
         form.append('type', selectedCategory)
+        PatenTrackApi.cancelAssetTypeAssignmentAllAssetsWithFamily()
         const { data } = await PatenTrackApi.getAssetTypeAssignmentAllAssetsWithFamily(form)
         setLoading(false)
         if( assetsList.length > 0 || assetsSelected.length > 0 || maintainenceAssetsList.length > 0 ||  selectedMaintainencePatents.length == 0  ) {
@@ -257,7 +259,6 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
         } 
     }
 
-    console.log('selectedTab', selectedTab)
 
     const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
 

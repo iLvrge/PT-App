@@ -70,9 +70,9 @@ const getFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineActivity,cancelTimelineSecurity, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelSatusCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest, cancelAllDashboardCountRequest, cancelStatus;
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineActivity,cancelTimelineSecurity, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelSatusCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest, cancelAllDashboardCountRequest, cancelStatus, cancelAssetTypeAssignmentAllAssetsWithFamily, cancelDashboardPartiesData, cancelDashboardPartiesAssignorData, cancelAgentsData, cancelCollectionIllustration;
 
-class PatenTrackApi {
+class PatenTrackApi { 
 
   static getDocumentIdentifierFile(identifier) {
     return axios.get(`https://developer.uspto.gov/ptab-api/documents/${identifier}/download`, getBlobHeader())
@@ -250,14 +250,42 @@ class PatenTrackApi {
   }
 
   static getAssetTypeAssignmentAllAssetsWithFamily(form) { 
-    let header = getFormUrlHeader() 
+    let header = getFormUrlHeader()  
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelAssetTypeAssignmentAllAssetsWithFamily = c
+    })
     return axios.post(`${base_new_api_url}/customers/asset_types/assets/family`, form, header)
   }
+
+  static cancelAssetTypeAssignmentAllAssetsWithFamily() {
+    if (cancelAssetTypeAssignmentAllAssetsWithFamily !== undefined) {
+      try{
+        throw cancelAssetTypeAssignmentAllAssetsWithFamily('Cancelled request manually.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  } 
   
   static getAgentsData(form) { 
     let header = getFormUrlHeader() 
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelAgentsData = c
+    })
     return axios.post(`${base_new_api_url}/customers/asset_types/assets/agents`, form, header)
   }
+
+  static cancelAgentsData() {
+    if (cancelAgentsData !== undefined) {
+      try{
+        throw cancelAgentsData('Request cancelled for agents')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  } 
+
+  
 
   static getRestoreOwnershipAssets(companies, tabs, customers, rfIDs) { 
     return axios.get(`${base_new_api_url}/customers/restore_ownership/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
@@ -661,11 +689,26 @@ class PatenTrackApi {
   }
 
   static getCollectionIllustration(rfID) {
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelCollectionIllustration = c
+    })
     return axios.get(
       `${base_new_api_url}/collections/${rfID}/illustration`,
-      getHeader()
+      header
     )
   }
+
+  static cancelCollectionIllustration() {
+    if (cancelCollectionIllustration !== undefined) {
+      try{
+        throw cancelCollectionIllustration('Request cancelled for illustration.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+  
 
   static geteAssetUSPTOByPatentNumber(type, patentNumber, flag) {
     return axios.get(
@@ -875,11 +918,40 @@ class PatenTrackApi {
   }
 
   static getDashboardPartiesData(formData) {
-    return axios.post(`${base_new_api_url}/dashboards/parties`, formData, getFormUrlHeader())
+    let header = getFormUrlHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelDashboardPartiesData = c
+    })
+    return axios.post(`${base_new_api_url}/dashboards/parties`, formData, header)
   }
 
+  static cancelDashboardPartiesData = () => {
+    if (cancelDashboardPartiesData !== undefined) {
+      try{
+        cancelDashboardPartiesData.cancel(`Request cancelled for invented, acquired`)        
+      } catch (e){
+        console.log('cancelInitiated->', e)
+      }
+    }
+  }
+  
+
   static getDashboardPartiesAssignorData(formData) {
-    return axios.post(`${base_new_api_url}/dashboards/parties/assignor`, formData, getFormUrlHeader())
+    let header = getFormUrlHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelDashboardPartiesAssignorData = c
+    })
+    return axios.post(`${base_new_api_url}/dashboards/parties/assignor`, formData, header)
+  }
+
+  static cancelDashboardPartiesAssignorData = () => {
+    if (cancelDashboardPartiesAssignorData !== undefined) {
+      try{
+        cancelDashboardPartiesAssignorData.cancel(`Request cancelled for assignors`)        
+      } catch (e){
+        console.log('cancelInitiated->', e)
+      }
+    }
   }
   
 

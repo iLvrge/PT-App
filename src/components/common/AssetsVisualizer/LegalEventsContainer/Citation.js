@@ -161,6 +161,7 @@ const Citation = ({ number, citationRawData, updateCitationRawData }) => {
                 setIsLoadingTimelineRawData(true)
                 PatenTrackApi.cancelPtab()    
                 const asset = selectedAssetsPatents[0] !== '' ? selectedAssetsPatents[0] : selectedAssetsPatents[1]
+                PatenTrackApi.cancelCitationData()
                 const { data } = await PatenTrackApi.getCitationData(asset)
                 setIsLoadingTimelineRawData(false)
                 if(data !== null ) {

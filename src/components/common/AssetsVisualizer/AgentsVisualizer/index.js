@@ -159,6 +159,7 @@ const AgentsVisualizer = (props) => {
         form.append('other_mode', display_sales_assets) 
         form.append('type', selectedCategory)
         form.append('data_type', props.type)
+        PatenTrackApi.cancelAgentsData()
         const { data } = await PatenTrackApi.getAgentsData(form)
         setLoading(false)
         setRawData(data)
