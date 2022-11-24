@@ -22,11 +22,19 @@ const NamesContainer = (props) => {
     const [ height, setHeight ] = useState(0)
     const [size, setSize] = useState([550, 400])
     const [options, setOptions] = useState({
-        rotations: 1,
+        colors: ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b"],
         enableTooltip: true,
-        rotationAngles: [0], 
+        deterministic: false,
+        fontFamily: "impact",
+        fontSizes: [5, 60],
         fontStyle: "normal",
-        fontWeight: "900",
+        fontWeight: "normal",
+        padding: 1,
+        rotations: 0, 
+        rotationAngles: [0, 90],
+        scale: "sqrt",
+        spiral: "archimedean",
+        transitionDuration: 1000
     })
 
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected );
@@ -40,7 +48,6 @@ const NamesContainer = (props) => {
             if(selectedCompaniesAll === true || selectedCompanies.length > 0) { 
                 const {data} = await PatenTrackApi.getIncorrectNames(companies);
                 if(data.length > 0) {
-                    setOptions({...options, fontSizes: [30, 90]})
                     setRawData(data)
                     const words = []
                     const promise = data.map(item => {
@@ -76,7 +83,7 @@ const NamesContainer = (props) => {
         }
     }, [namesData]) 
 
-    useEffect(() => {
+    /* useEffect(() => {
         if(width > 0 && height > 0) {
             if(namesData.length > 0) { 
                 if(width > 320 && width < 420) {
@@ -87,7 +94,7 @@ const NamesContainer = (props) => {
                 DrawCloudChart()
             }
         }
-    }, [width, height]) 
+    }, [width, height])  */
 
     useEffect(() => {
         if(width > 0 && height > 0) {
@@ -98,10 +105,10 @@ const NamesContainer = (props) => {
     }, [options]) 
 
     const DrawCloudChart =  () => {  
-        console.log(namesData)
         return (
             <ReactWordcloud 
                 words={namesData} 
+                options={options}
             />
         )
     } 
@@ -133,11 +140,10 @@ const NamesContainer = (props) => {
                 enablePadding={true} 
                 underline={false}
                 typography={true} 
-            />  
-             
+            />   
             {
                 selectedTab === 0 && namesData.length > 0 && (
-                    <div style={{height: '78%', width: '100%', position: 'absolute', top: 100}} id='cntNames'>
+                    <div style={{height: '78%', width: '100%'}} id='cntNames'>
                         <DrawCloudChart />
                     </div>
                 )

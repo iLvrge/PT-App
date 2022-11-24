@@ -338,6 +338,8 @@ const AssetDetailsContainer = ({
                       <LawFirmNames
                         analyticsBar={analyticsBar} 
                         chartBar={chartBar}
+                        visualizerBarSize={visualizerBarSize}
+                        type={type}  
                       />
                     :                  
                     connectionBoxView === true ? (
@@ -419,7 +421,8 @@ const AssetDetailsContainer = ({
                           commentBar={commentBar} 
                           customerBarSize={customerBarSize} 
                           companyBarSize={companyBarSize}
-                          type={type} />
+                          type={type} 
+                          onSelect={false}/>
                       :
                       timelineScreen === true  && assetIllustration == null && (selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording')
                       ?

@@ -42,7 +42,7 @@ import AssetsTable from '../../AssetsTable'
 
 var newRange = [1,2]
 
-const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, tab, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal, titleBar, middle, openChartBar, handleChartBarOpen, salable, licensable }) => {
+const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, tab, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal, titleBar, middle, openChartBar, handleChartBarOpen, salable, licensable, onSelect }) => {
     
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -308,129 +308,136 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
     useEffect(() => {        
         const getChartData = async () => {
-            
-            setGraphRawData([])
-            setGraphRawGroupData([])      
-            setShowContainer(true)              
-            if (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0 && type !== 9){
-                setShowContainer(false)
-                return null
-            } else if ( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token === null){
-                setShowContainer(false)
-                return null
-            }
-            setIsLoadingCharts(true)   
-            const list = [];
-            let totalRecords = 0;
-            if(dashboardScreen === false && selectedCategory != 'top_law_firms' && typeof salable == 'undefined' && typeof licensable == 'undefined') {
-                if(selectedTab === 0 || ((selectedTab === 1 || selectedTab === 2) && (selectedCategory == 'assigned' && selectedRow.length == 0))) {
-                    if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {
-                    
-                        if( assetsSelected.length > 0 ) {
-                            const promise = assetsSelected.map(asset => {
-                                const findIndex = assetsList.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num.toString() == asset.toString() )
-                                if( findIndex !== -1 ) {
-                                    if( assetsList[findIndex].appno_doc_num != '' ) {
-                                        list.push(assetsList[findIndex].appno_doc_num.toString())
-                                    }
-                                }                        
-                            })
-                            await Promise.all(promise)
-                            totalRecords = list.length
-                        } else {
-                            const promise = selectedMaintainencePatents.map(asset => {
-                                const findIndex = maintainenceAssetsList.findIndex( row => row.appno_doc_num.toString() == asset[1].toString() || row.grant_doc_num.toString() == asset[0].toString() )
-                                if( findIndex !== -1 ) {
-                                    if( maintainenceAssetsList[findIndex].appno_doc_num != '' ) {
-                                        list.push(maintainenceAssetsList[findIndex].appno_doc_num.toString())
-                                    }
-                                }
-        
-                            })
-                            await Promise.all(promise)
-                            totalRecords = list.length
-                        }                
-                    } else {
-                        
-                        if( assetsList.length > 0 || maintainenceAssetsList.length > 0 ) {
-                            if( assetsList.length > 0 ) {
-                                const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
-                                await Promise.all(promise)
-                                totalRecords = assetsTotal
-                            } else if ( maintainenceAssetsList.length > 0 ) {
-                                const promise = maintainenceAssetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
-                                await Promise.all(promise)
-                                totalRecords = maintainenceAssetsTotal
-                            }
-                        } else {
-                            
-                            /**
-                             * Check which layout and get the assets list first and then 
-                             */
-                            if( selectedCategory == '' ) { //pay_maintenece_fee
-        
-                            } else {
-                                const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-                                tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-                                customers =
-                                  selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
-                                assignments =
-                                  selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
-                                  
-                                if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-                                    /* if( auth_token != null ) {
-                                        dispatch(
-                                            process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
-                                            getCustomerAssets(
-                                              selectedCategory == '' ? '' : selectedCategory,
-                                              companies,
-                                              tabs,
-                                              customers,   
-                                              assignments,
-                                              false,
-                                            )
-                                            : 
-                                            getCustomerSelectedAssets(location.pathname.replace('/', ''))
-                                        );
-                                    } */
-                                } else {
-                                    if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
-                                        dispatch(
-                                            getCustomerAssets(
-                                              selectedCategory == '' ? '' : selectedCategory,
-                                              companies,
-                                              tabs,
-                                              customers,
-                                              assignments,
-                                              false,
-                                              0,
-                                              0,
-                                              'asset',
-                                              'DESC',
-                                                -1, 
-                                              display_sales_assets
-                                            ),
-                                        );
-                                    }
-                                }                        
-                            }
-                        }                
-                    }
+            let getNewData = true;
+            if(typeof onSelect != 'undefined') {
+                if(onSelect === false && graphRawData.length > 0) {
+                    getNewData = false;
                 }
             }
-            if(selectedCategory == 'top_law_firms' || (typeof licensable != 'undefined' && licensable === true) || (typeof salable != 'undefined' && salable === true)) {
-                setFilterList([])
-                setFilterTotal(0)
-                findCPCList([...scopeRange], [], 0)
-            } else if( dashboardScreen === true ||  list.length > 0 ) {
-                setFilterList(list)
-                setFilterTotal(totalRecords)
-                findCPCList([...scopeRange], list, totalRecords)
-            } else {
+            if(getNewData === true) { 
                 setGraphRawData([])
-                setGraphRawGroupData([])
-                setSalesData([])
-                setIsLoadingCharts(false)                
+                setGraphRawGroupData([])      
+                setShowContainer(true)              
+                if (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0 && type !== 9){
+                    setShowContainer(false)
+                    return null
+                } else if ( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token === null){
+                    setShowContainer(false)
+                    return null
+                }
+                setIsLoadingCharts(true)   
+                const list = [];
+                let totalRecords = 0;
+                if(dashboardScreen === false && selectedCategory != 'top_law_firms' && typeof salable == 'undefined' && typeof licensable == 'undefined') {
+                    if(selectedTab === 0 || ((selectedTab === 1 || selectedTab === 2) && (selectedCategory == 'assigned' && selectedRow.length == 0))) {
+                        if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {
+                        
+                            if( assetsSelected.length > 0 ) {
+                                const promise = assetsSelected.map(asset => {
+                                    const findIndex = assetsList.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num.toString() == asset.toString() )
+                                    if( findIndex !== -1 ) {
+                                        if( assetsList[findIndex].appno_doc_num != '' ) {
+                                            list.push(assetsList[findIndex].appno_doc_num.toString())
+                                        }
+                                    }                        
+                                })
+                                await Promise.all(promise)
+                                totalRecords = list.length
+                            } else {
+                                const promise = selectedMaintainencePatents.map(asset => {
+                                    const findIndex = maintainenceAssetsList.findIndex( row => row.appno_doc_num.toString() == asset[1].toString() || row.grant_doc_num.toString() == asset[0].toString() )
+                                    if( findIndex !== -1 ) {
+                                        if( maintainenceAssetsList[findIndex].appno_doc_num != '' ) {
+                                            list.push(maintainenceAssetsList[findIndex].appno_doc_num.toString())
+                                        }
+                                    }
+            
+                                })
+                                await Promise.all(promise)
+                                totalRecords = list.length
+                            }                
+                        } else {
+                            
+                            if( assetsList.length > 0 || maintainenceAssetsList.length > 0 ) {
+                                if( assetsList.length > 0 ) {
+                                    const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
+                                    await Promise.all(promise)
+                                    totalRecords = assetsTotal
+                                } else if ( maintainenceAssetsList.length > 0 ) {
+                                    const promise = maintainenceAssetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
+                                    await Promise.all(promise)
+                                    totalRecords = maintainenceAssetsTotal
+                                }
+                            } else {
+                                
+                                /**
+                                 * Check which layout and get the assets list first and then 
+                                 */
+                                if( selectedCategory == '' ) { //pay_maintenece_fee
+            
+                                } else {
+                                    const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+                                    tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+                                    customers =
+                                      selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
+                                    assignments =
+                                      selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
+                                      
+                                    if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+                                        /* if( auth_token != null ) {
+                                            dispatch(
+                                                process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
+                                                getCustomerAssets(
+                                                  selectedCategory == '' ? '' : selectedCategory,
+                                                  companies,
+                                                  tabs,
+                                                  customers,   
+                                                  assignments,
+                                                  false,
+                                                )
+                                                : 
+                                                getCustomerSelectedAssets(location.pathname.replace('/', ''))
+                                            );
+                                        } */
+                                    } else {
+                                        if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
+                                            dispatch(
+                                                getCustomerAssets(
+                                                  selectedCategory == '' ? '' : selectedCategory,
+                                                  companies,
+                                                  tabs,
+                                                  customers,
+                                                  assignments,
+                                                  false,
+                                                  0,
+                                                  0,
+                                                  'asset',
+                                                  'DESC',
+                                                    -1, 
+                                                  display_sales_assets
+                                                ),
+                                            );
+                                        }
+                                    }                        
+                                }
+                            }                
+                        }
+                    }
+                }
+                if(selectedCategory == 'top_law_firms' || (typeof licensable != 'undefined' && licensable === true) || (typeof salable != 'undefined' && salable === true)) {
+                    setFilterList([])
+                    setFilterTotal(0)
+                    findCPCList([...scopeRange], [], 0)
+                } else if( dashboardScreen === true ||  list.length > 0 ) {
+                    setFilterList(list)
+                    setFilterTotal(totalRecords)
+                    findCPCList([...scopeRange], list, totalRecords)
+                } else {
+                    setGraphRawData([])
+                    setGraphRawGroupData([])
+                    setSalesData([])
+                    setIsLoadingCharts(false)                
+                }
             }
         }
         if(typeof gRawData !== 'undefined') {
@@ -483,9 +490,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         PatenTrackApi.cancelCPCRequest()
         const {data} = await PatenTrackApi.getCPC(form) 
         setIsLoadingCharts(false)
-        setGraphRawData(data.list)
-        setGraphRawGroupData(data.group)
-        setSalesData(data.sales)
+        
 
         if( typeof year === 'undefined' &&  data.list.length > 0 ) {
             let yearList = [], yearLabelList = []
@@ -562,7 +567,15 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     await Promise.all(promise)
                     findCPCList(oldScopeRange, list, totalRecords, year, range, scopeList)
                 }
+            } else {
+                setGraphRawData(data.list)
+                setGraphRawGroupData(data.group)
+                setSalesData(data.sales)
             }
+        } else {
+            setGraphRawData(data.list)
+            setGraphRawGroupData(data.group)
+            setSalesData(data.sales)
         }
     }
 
@@ -960,6 +973,17 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 label
         )
     } 
+
+    const onHandleResetSettings = () => { 
+        setFilterYear([])
+        setFilterDrag([0,0])
+        setValueYear([1,2])
+        setValueScope([1,2])
+        setValueRange(4)
+        setPreValueRange(4)
+        setScopeRange([])
+        findCPCList([], filterList, filterTotal)  
+    }
     
     return (
         <Paper 
@@ -1008,12 +1032,11 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                 typeof standalone === 'undefined' && (
                                     <FullScreen componentItems={menuItems}/>
                                 )
-                            }
-                            
-                            <IconButton onClick={(event) => dashboardScreen === true ? toggleDrawer(event, true) :  handleOpenFilter()} className={clsx(classes.settingBtn, {[classes.settingBtnTop]: typeof middle !== 'undefined' && middle === true ? true : false})} size="large">
-                                <svg style={{width: '24px', fill: '#fff'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M5 11.86V29a1 1 0 0 0 2 0V11.86A4 4 0 0 0 7 4.14V3A1 1 0 0 0 5 3V4.14a4 4 0 0 0 0 7.72zM6 6A2 2 0 1 1 4 8 2 2 0 0 1 6 6zM27 12.14V3a1 1 0 0 0-2 0v9.14a4 4 0 0 0 0 7.72V29a1 1 0 0 0 2 0V19.86a4 4 0 0 0 0-7.72zM26 18a2 2 0 1 1 2-2A2 2 0 0 1 26 18zM16 30a1 1 0 0 0 1-1V23.86a4 4 0 0 0 0-7.72V3a1 1 0 0 0-2 0V16.14a4 4 0 0 0 0 7.72V29A1 1 0 0 0 16 30zM14 20a2 2 0 1 1 2 2A2 2 0 0 1 14 20z" /></svg> 
-                            </IconButton>                                    
+                            }                     
                         </div>
+                        <IconButton onClick={(event) => dashboardScreen === true ? toggleDrawer(event, true) :  handleOpenFilter()} className={classes.btnSetting} /* className={clsx(classes.settingBtn, {[classes.settingBtnTop]: typeof middle !== 'undefined' && middle === true ? true : false})} */ size="large">
+                            <svg style={{width: '24px', fill: '#fff'}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M5 11.86V29a1 1 0 0 0 2 0V11.86A4 4 0 0 0 7 4.14V3A1 1 0 0 0 5 3V4.14a4 4 0 0 0 0 7.72zM6 6A2 2 0 1 1 4 8 2 2 0 0 1 6 6zM27 12.14V3a1 1 0 0 0-2 0v9.14a4 4 0 0 0 0 7.72V29a1 1 0 0 0 2 0V19.86a4 4 0 0 0 0-7.72zM26 18a2 2 0 1 1 2-2A2 2 0 0 1 26 18zM16 30a1 1 0 0 0 1-1V23.86a4 4 0 0 0 0-7.72V3a1 1 0 0 0-2 0V16.14a4 4 0 0 0 0 7.72V29A1 1 0 0 0 16 30zM14 20a2 2 0 1 1 2 2A2 2 0 0 1 14 20z" /></svg> 
+                        </IconButton>     
                         <div className={classes.graphContainer}> 
                             {
                                 selectedTab === 0 || ((selectedTab === 1 || selectedTab === 2) && (selectedCategory == 'assigned' && selectedRow.length == 0))
@@ -1110,6 +1133,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                             </DialogTitle>
                             <DialogContent className={classes.filterContent}>
                                 <CloseIcon onClick={handleCloseFilter} className={classes.close}/>
+                                <Button onClick={onHandleResetSettings} className={classes.reset}>Reset</Button>
                                 <FilterCPC onClose={handleClose} depthRange={depthRange} scopeRange={scopeRange} yearRange={filterYear} yearRangeText={yearRangeText} depthRangeText={depthRangeText} scopeRangeText={scopeRangeText} valueScope={valueScope} valueRange={valueRange} valueYear={valueYear} onChangeRangeSlider={onChangeRangeSlider} onChangeScopeSlider={onChangeScopeSlider} onChangeYearSlider={onChangeYearSlider}/>
                             </DialogContent>
                         </Dialog> 

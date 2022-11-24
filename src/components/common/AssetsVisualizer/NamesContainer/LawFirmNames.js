@@ -10,27 +10,48 @@ import { numberWithCommas } from '../../../../utils/numbers';
 import { setAllAssignmentCustomers, setAssetTypeAssignmentAllAssets, setSelectAssignmentCustomers } from '../../../../actions/patentTrackActions2';
 import TitleBar from '../../TitleBar';
 import AgentsVisualizer from '../AgentsVisualizer';
+import FullScreen from '../../FullScreen';
+import InventionVisualizer from '../InventionVisualizer';
 
 
 const LawFirmNames = (props) => {
     const classes = useStyles() 
     const dispatch = useDispatch()
-    const [ tabs, setTabs ] = useState(['Names', 'Agent (transactions)'])
+    const [ tabs, setTabs ] = useState(['Names', 'Agent (transactions)', 'Agents (Technologies)'])
     const [ selectedTab, setSelectedTab ] = useState(0)
     const [ rawData, setRawData ] = useState([])
     const [ namesData, setNamesData ] = useState([])
     const [size, setSize] = useState([550, 400])
     const [options, setOptions] = useState({
-        rotations: 1,
+        colors: ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b"],
         enableTooltip: true,
-        rotationAngles: [0], 
+        deterministic: false,
+        fontFamily: "impact",
+        fontSizes: [5, 60],
         fontStyle: "normal",
-        fontWeight: "900",
+        fontWeight: "normal",
+        padding: 1,
+        rotations: 0,
+        rotationAngles: [0, 90],
+        scale: "sqrt",
+        spiral: "archimedean",
+        transitionDuration: 1000
     })
 
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected );
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll);
     const selectedLawFirm = useSelector( state => state.patenTrack2.selectedLawFirm);
+
+    const menuItems = [
+        {
+            id: 1,
+            label: 'Lawfirms',
+            component: LawFirmNames, 
+            activeTab: selectedTab,
+            raw: rawData,
+            standalone: true
+        }
+    ]
     
     const randomNumbers = () => {
         const min = 25, max = 50;
@@ -39,93 +60,18 @@ const LawFirmNames = (props) => {
     useEffect(() => {
         const getLawFirmNamesData = async () => {
             setNamesData([])
-            const companies = selectedCompaniesAll === true ? [] : selectedCompanies;
-            if(selectedCompaniesAll === true || selectedCompanies.length > 0) {
-                const {data} = await PatenTrackApi.getLawFirmsByCompany(companies, selectedLawFirm)
-                if(data.length > 0) {
-                    setRawData(data)
-                    let PIXEL = 20;
-                    /* const labels = [], values = [];
-                    let PIXEL = 50;
-                    const container = document.getElementById('analyticsBar')
-                    if(container.childElementCount > 0 ) {
-                        PIXEL = 10
+            if(typeof props.raw != 'undefined' && props.raw.length > 0) {
+                setRawData(props.raw)
+                formatData(props.raw)
+            } else { 
+                const companies = selectedCompaniesAll === true ? [] : selectedCompanies;
+                if(selectedCompaniesAll === true || selectedCompanies.length > 0) {
+                    const {data} = await PatenTrackApi.getLawFirmsByCompany(companies, selectedLawFirm)
+                    if(data.length > 0) {
+                        setRawData(data)  
+                        formatData(data)
                     }
-                    
-                    const promise = data.map( item => {
-                        labels.push(item.lawfirm)
-                        values.push( typeof item.distance != 'undefined' ? PIXEL + item.distance * 3 : randomNumbers() )
-                    })
-                    
-                    await Promise.all(promise) */
-
-                    const words = []
-                    const promise = data.map(item => {
-                        words.push({
-                            text: item.lawfirm,
-                            value: randomNumbers()
-                        })
-                    })
-                    await Promise.all(promise)
-                    setNamesData(words)
-                    /* const ctx = document.getElementById('canvas')
-           
-                    Chart.register(...registerables, WordCloudController, WordElement);
-                    new Chart(ctx, {
-                        type: WordCloudController.id,
-                        data: {
-                            labels,
-                            datasets: [
-                                {
-                                    label: '',
-                                    data: [...values],
-                                    color: ["#E60000","#228DE8","#FFAA00","#70A800","#C0C000”,”#FFFFFF","#CA7C46"], 
-                                }
-                            ]
-                        },
-                        options: {
-                            chartArea: {
-                                width: '95%',
-                                height: '80%',
-                                left: 30,
-                                top: 20,
-                            },
-                            legend : {
-                                display : false
-                            },
-                            title : {
-                                display : false
-                            },
-                            padding: 10,
-                            minRotation: 90,
-                            plugins: {
-                                legend: {
-                                    display: false,
-                                },
-                                chartArea: {
-                                    width: '95%',
-                                    height: '50%',
-                                    left: 30,
-                                    top: 20,
-                                },
-                                tooltip: { 
-                                    textStyle: { 
-                                        fontName: 'Roboto', 
-                                        fontSize: 12 
-                                    },
-                                    callbacks: {
-                                        title: tooltipItems => {
-                                            return tooltipItems[0].label
-                                        },
-                                        label: (tooltipItems) => { 
-                                            return ''
-                                        } 
-                                    }
-                                },
-                            },
-                        }
-                    }); */
-                }
+                } 
             }
         }
         getLawFirmNamesData()
@@ -137,11 +83,24 @@ const LawFirmNames = (props) => {
         }
     }, [namesData]) 
 
+    const formatData = async(data) => {
+        const words = []
+        const promise = data.map(item => {
+            words.push({
+                text: item.lawfirm,
+                value: randomNumbers()
+            })
+        })
+        await Promise.all(promise)
+        setNamesData(words)
+    }
+
     const DrawCloudChart =  () => {  
         console.log(namesData)
         return (
             <ReactWordcloud 
                 words={namesData} 
+                options={options}
             />
         )
     } 
@@ -168,8 +127,13 @@ const LawFirmNames = (props) => {
                 }
             </Tabs>  
             {
+                typeof props.standalone === 'undefined' && (
+                    <FullScreen componentItems={menuItems}/>
+                )
+            }
+            {
                 selectedTab === 0 && namesData.length > 0 && ( 
-                    <div style={{height: '78%', width: '100%', position: 'absolute', top: 100}} id='cntNames'>
+                    <div style={{height: '78%', width: '100%'}} id='cntNames'>
                         <DrawCloudChart />
                     </div>
                 )
@@ -177,6 +141,16 @@ const LawFirmNames = (props) => {
             { 
                 selectedTab === 1 && (
                     <AgentsVisualizer type={2}/>
+                )
+            }
+            { 
+                selectedTab === 2 && (
+                    <InventionVisualizer 
+                        visualizerBarSize={props.visualizerBarSize} 
+                        type={props.type} 
+                        tab={false}
+                        standalone={true}
+                    />
                 )
             }
         </Paper> 
