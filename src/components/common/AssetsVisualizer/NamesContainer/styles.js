@@ -11,8 +11,8 @@ export default makeStyles(theme => ({
           borderBottom: `1px solid ${theme.palette.divider} !important`
         },
         '& .MuiTab-root':{
-            minWidth: 'inherit',
-            maxWidth:  160
+            minWidth: 200,
+            maxWidth:  200
         },
         '& .MuiTab-wrapper':{
             whiteSpace: 'nowrap'
@@ -25,6 +25,9 @@ export default makeStyles(theme => ({
         flex: 1,
         minWidth: '25%',
         minHeight: 47,  
-        fontSize: '1.1rem'                          
+        fontSize: '1.1rem', 
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow:'ellipsis'
     }
 }))

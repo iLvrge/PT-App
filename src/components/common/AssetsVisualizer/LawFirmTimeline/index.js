@@ -272,7 +272,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
               }
               const element = document.getElementById('all_timeline');
               const getPosition = element.getBoundingClientRect();  
-              const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${getPosition.y + 5}px;left:${getPosition.x }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
+              const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${getPosition.y}px;left:${getPosition.x }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
                                           <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
                                           <div>
                                             ${ executionDate != '' ? moment(executionDate).format('ll') : ''}
@@ -559,7 +559,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
     setTimelineItems(convertedItems)
     items.current = new DataSet()
     groups.current = new DataSet()
-    let start =  new moment(), end = new moment().add(1, 'year')  
+    let start =  new moment(), end = new moment().add(3, 'month')  
 
     if (convertedItems.length > 0) {
       const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
@@ -567,7 +567,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
       //end = new moment().add(1, 'month')
       items.current.add(convertedItems.slice(0, startIndex))      
     }    
-    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'year')})
+    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'month')})
     timelineRef.current.setItems(items.current)   
     //checkCurrentDateStatus()
   }, [ timelineRawData ])

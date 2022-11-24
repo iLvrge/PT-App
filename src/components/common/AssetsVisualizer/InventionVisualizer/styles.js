@@ -239,6 +239,18 @@ export default makeStyles(theme => ({
         zIndex: 999,
         cursor: 'pointer'
     },
+    reset: {
+        position: 'absolute', 
+        right: 30, 
+        top: 2, 
+        zIndex: 999,
+        cursor: 'pointer',
+        color: '#fff'
+    },
+    btnSetting: {
+        justifyContent: 'flex-start',
+        width: 45
+    },
     resizable:{
         position: "relative",
         display: 'flex',
@@ -261,14 +273,14 @@ export default makeStyles(theme => ({
         }
     },
     settingBtn:{
-        padding: 0,
+        /* padding: 0,
         position: 'absolute',
         right: 5,
-        top: 50
+        top: 50 */
     },
     settingBtnTop: {
-        right: 35,
-        top: 6
+        /* right: 35,
+        top: 6 */
     },
     button:{
         textTransform: 'initial',
