@@ -521,7 +521,7 @@ const GlobalLayout = (props) => {
     } */
 
     const getWindowDimensions = () => {
-        console.log('dashboardScreen', dashboardScreen)
+        /* console.log('dashboardScreen', dashboardScreen) */
         const hasWindow = typeof window !== 'undefined';
         let percentage = '76%'
         if( location.pathname == '/patent_assets') { 
@@ -619,12 +619,12 @@ const GlobalLayout = (props) => {
         }
     }
 
-    useEffect(() => {
+    /* useEffect(() => {
         console.log('Layout openChartBar BAR CHANGES', openChartBar, openAnalyticsBar)
     }, [ openChartBar])
     useEffect(() => {
         console.log('Layout openAnalyticsBar BAR CHANGES',  openChartBar, openAnalyticsBar)
-    }, [ openAnalyticsBar])
+    }, [ openAnalyticsBar]) */
 
     const handleCompanyBarOpen = (event) => {
         if(props.type === 9) {
@@ -853,7 +853,7 @@ const GlobalLayout = (props) => {
         if(chart === true && barOpen === true && barSize == '40.1%') {
             checkPDFHeight()
         }    
-        console.log('changeVisualBar', barSize, barOpen, chart, analytics, comment, illustration)
+        /* console.log('changeVisualBar', barSize, barOpen, chart, analytics, comment, illustration) */
         editorBar()
         setVisualizeOpenBar(barOpen)  
         setVisualizerBarSize(barSize)
@@ -881,7 +881,7 @@ const GlobalLayout = (props) => {
     }
 
     const handleCommentBarOpen = () => {
-        console.log('handleCommentBarOpen 884')
+        /* console.log('handleCommentBarOpen 884') */
         let bar = openCommentBar, barSize = '30%'
         setCommentBar( !bar )
         if((!bar === false && openIllustrationBar === false) || (!bar === false && openIllustrationBar === true)) {
@@ -903,7 +903,7 @@ const GlobalLayout = (props) => {
     }  
 
     const handleChartBarOpen = () => { 
-        console.log('handleChartBarOpen entered')
+        /* console.log('handleChartBarOpen entered') */
         let bar = openChartBar, barSize = '50%'
         setChartBar( !bar )
         if(!bar === false && openAnalyticsBar === true) {
@@ -928,7 +928,7 @@ const GlobalLayout = (props) => {
     }
 
     const handleAnalyticsBarOpen = () => {  
-        console.log('handleAnalyticsBarOpen entered')  
+        /* console.log('handleAnalyticsBarOpen entered')   */
         let bar = openAnalyticsBar, barSize = '50%'
         setAnalyticsBar( !bar )
         if((!bar === false && openChartBar === false) || (openChartBar === true && !bar === false)) {
@@ -967,7 +967,7 @@ const GlobalLayout = (props) => {
     } 
 
     const openAnalyticsAndCharBar = () => {
-        console.log('openAnalyticsAndCharBar 955')
+        /* console.log('openAnalyticsAndCharBar 955') */
         setChartBar( true )
         setAnalyticsBar( true )
         setIllustrationBarSize( '50%' )
@@ -975,7 +975,7 @@ const GlobalLayout = (props) => {
     }
 
     const closeAnalyticsAndCharBar = () => {  
-        console.log('closeAnalyticsAndCharBar 963')
+        /* console.log('closeAnalyticsAndCharBar 963') */
         setChartBar( false )
         setAnalyticsBar( false )
         setIllustrationBarSize( '50%' )
@@ -1008,7 +1008,7 @@ const GlobalLayout = (props) => {
     }
 
     const checkChartAnalytics = useCallback(async (pdfFile, connectionBoxData, usptoMode) => {
-        console.log('checkChartAnalytics 996', pdfFile, connectionBoxData, usptoMode)
+        /* console.log('checkChartAnalytics 996', pdfFile, connectionBoxData, usptoMode) */
         if( pdfFile != null && Object.keys(pdfFile).length > 0 ) {
             setChartBar( true )
             setVisualizeOpenBar( true )
@@ -1105,7 +1105,7 @@ const GlobalLayout = (props) => {
 
     const handleResetScreen = (type, event) => {
         if(type == 'Dashboard') { 
-            console.log('RESET1108')
+            /* console.log('RESET1108') */
             if(openCustomerBar === true){
                 handleCustomersBarOpen(event)
             }  
@@ -1158,7 +1158,7 @@ const GlobalLayout = (props) => {
                 handleAnalyticsBarOpen(event)
             }
         } else {
-            console.log('RESET1161')
+            /* console.log('RESET1161') */
             if(openCustomerBar === false && timelineScreen === false && type !== 'Timeline'){ 
                 handleCustomersBarOpen(event)
             }

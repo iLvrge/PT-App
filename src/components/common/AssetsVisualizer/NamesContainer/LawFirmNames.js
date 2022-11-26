@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import PatenTrackApi from '../../../../api/patenTrack2';
 import useStyles from './styles';
 import { Paper, Tab, Tabs, Typography } from '@mui/material';
+import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
+import HandshakeOutlinedIcon from '@mui/icons-material/HandshakeOutlined';
+import { FaLightbulb } from "react-icons/fa";
 import { numberWithCommas } from '../../../../utils/numbers';
 import { setAllAssignmentCustomers, setAssetTypeAssignmentAllAssets, setSelectAssignmentCustomers } from '../../../../actions/patentTrackActions2';
 import TitleBar from '../../TitleBar';
@@ -17,7 +20,7 @@ import InventionVisualizer from '../InventionVisualizer';
 const LawFirmNames = (props) => {
     const classes = useStyles() 
     const dispatch = useDispatch()
-    const [ tabs, setTabs ] = useState(['Names', 'Agent (transactions)', 'Agents (Technologies)'])
+    const [ tabs, setTabs ] = useState(['Names', 'Agents (fillings)', 'Agents (transactions)', 'Agents (Technologies)'])
     const [ selectedTab, setSelectedTab ] = useState(0)
     const [ rawData, setRawData ] = useState([])
     const [ namesData, setNamesData ] = useState([])
@@ -95,6 +98,8 @@ const LawFirmNames = (props) => {
         setNamesData(words)
     }
 
+    const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
+
     const DrawCloudChart =  () => {  
         console.log(namesData)
         return (
@@ -105,7 +110,35 @@ const LawFirmNames = (props) => {
         )
     } 
 
-    const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
+    const LabelWithIcon = ({label}) => {
+        return (
+            <span className={classes.label}>
+                {
+                    label == 'Agents (fillings)' || label == 'Agents (transactions)' || label == 'Agents (Technologies)' 
+                    ?
+                        `Agent `
+                    :
+                        label
+                    
+                }
+                {
+                    label == 'Agents (fillings)'
+                    ?
+                        <NoteAddOutlinedIcon/>
+                        :
+                        label == 'Agents (transactions)' 
+                        ?
+                            <HandshakeOutlinedIcon/>
+                        :
+                            label == 'Agents (Technologies)' ?
+                                <FaLightbulb/>
+                            :
+                                ''
+                }
+            </span>
+        )
+    }
+
   
     return (
         <Paper className={classes.root} square>  
@@ -120,7 +153,7 @@ const LawFirmNames = (props) => {
                     tabs.map((tab) => (
                         <Tab
                             key={tab}
-                            label={tab}
+                            label={<LabelWithIcon label={tab}/>}
                             classes={{ root: classes.tab }}
                         />
                     )) 
@@ -140,11 +173,16 @@ const LawFirmNames = (props) => {
             }
             { 
                 selectedTab === 1 && (
-                    <AgentsVisualizer type={2}/>
+                    <AgentsVisualizer type={1}/>
                 )
             }
             { 
                 selectedTab === 2 && (
+                    <AgentsVisualizer type={2}/>
+                )
+            }
+            { 
+                selectedTab === 3 && (
                     <InventionVisualizer 
                         visualizerBarSize={props.visualizerBarSize} 
                         type={props.type} 

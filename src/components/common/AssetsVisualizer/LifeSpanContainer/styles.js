@@ -279,6 +279,16 @@ export default makeStyles(theme => ({
           backgroundColor: 'none !important',
           color: '#e60000',
           /* fontWeight: 'bold', */
-        },
+        }, 
+    },
+    label: {
+        position: 'relative',
+        '& svg': {
+            position: 'absolute',
+            width: 16,
+            height: 16,
+            top: 3,
+            marginLeft: 5
+        }
     }
 }))
