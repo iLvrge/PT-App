@@ -11,7 +11,7 @@ export default makeStyles(theme => ({
           borderBottom: `1px solid ${theme.palette.divider} !important`
         },
         '& .MuiTab-root':{
-            minWidth: 200,
+            minWidth: 110,
             maxWidth:  200
         },
         '& .MuiTab-wrapper':{
@@ -20,6 +20,7 @@ export default makeStyles(theme => ({
     },
     tabs: {
         minHeight: 47,
+        width: '94%'
     },
     tab: {
         flex: 1,
@@ -29,5 +30,15 @@ export default makeStyles(theme => ({
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow:'ellipsis'
+    },
+    label: {
+        position: 'relative',
+        '& svg': {
+            position: 'absolute',
+            width: 16,
+            height: 16,
+            top: 3,
+            marginLeft: 5
+        }
     }
 }))

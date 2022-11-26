@@ -31,9 +31,9 @@ export default makeStyles(theme => ({
         },
         '& .MuiTab-root':{
             minWidth:  120,
-            maxWidth:  150
+            maxWidth:  130
         },
-        '& .MuiTab-root:nth-child(n + 4)':{
+        /* '& .MuiTab-root:nth-child(n + 4)':{
             minWidth:  80,
             maxWidth:  80
         },
@@ -44,7 +44,7 @@ export default makeStyles(theme => ({
         '& .MuiTab-root:nth-child(n + 6)':{
             minWidth:  190,
             maxWidth:  190
-        },
+        }, */
         '& .MuiTab-wrapper':{
             whiteSpace: 'nowrap'
         }
@@ -96,4 +96,14 @@ export default makeStyles(theme => ({
         cursor: 'pointer',
         zIndex: 999
     },
+    label: {
+        position: 'relative',
+        '& svg': {
+            position: 'absolute',
+            width: 16,
+            height: 16,
+            top: 3,
+            marginLeft: 5
+        }
+    }
 }))

@@ -538,7 +538,7 @@ const ActionMenu = (props) => {
     const onHandleCorrectName = useCallback(() => {
         if(assetTypeNamesSelected.length > 0) {
             onHandleGetNameQueue(undefined, assetTypeNamesGroups, mainCompaniesSelected)
-            console.log("onHandleCorrectName", assetTypeNamesSelected, assetTypeNamesGroups, mainCompaniesSelected)
+            /* console.log("onHandleCorrectName", assetTypeNamesSelected, assetTypeNamesGroups, mainCompaniesSelected) */
         } else {
             alert('Please select name first.')
         }
@@ -554,7 +554,7 @@ const ActionMenu = (props) => {
         if( typeof newName == undefined && mainCompaniesSelected.length > 1) {
             alert('Please select only one company')
         } else {
-            console.log("assetTypeNamesGroups", assetTypeNamesGroups)
+            /* console.log("assetTypeNamesGroups", assetTypeNamesGroups) */
             setChangeNameModal( false )
             const form = new FormData()
             form.append( 'group_ids', JSON.stringify(assetTypeNamesGroups) )
@@ -812,44 +812,44 @@ const ActionMenu = (props) => {
                 </MenuItem> */}
                 {
                     loadingUSPTO && (
-                        <MenuItem className={`iconItem`}>
+                        <MenuItem className={`iconItem`} key={1}>
                             <ListItemIcon>
                                 <CircularProgress size={24} className={classes.buttonProgress} />
                             </ListItemIcon>
                         </MenuItem>
                     )
                 }
-                <MenuItem className={classes.disableHover}>
+                <MenuItem className={classes.disableHover} key={2}>
                     <ListItemText><span className={clsx(parseInt(profile?.user?.organisation?.subscribtion) < 2 ? classes.disabled : '')}>Pro:</span> {parseInt(profile?.user?.organisation?.subscribtion) === 1 ? <Button variant="text">Upgrade</Button> : '' }</ListItemText>
                 </MenuItem>
                 {
                     parseInt(profile?.user?.organisation?.subscribtion) === 2 || parseInt(profile?.user?.organisation?.subscribtion) === 3
                     ?   
                         [                            
-                            <AssetSwitchButton
+                            <AssetSwitchButton  key={3}
                                 click={handleChangeLayout}
                                 category={category}
                                 salesAssets={display_sales_assets}  
                             /> ,
-                            <MenuItem onClick={locateLostAssets} selected={category === 'locate_lost_assets' && !display_sales_assets}>                            
+                            <MenuItem key={4} onClick={locateLostAssets} selected={category === 'locate_lost_assets' && !display_sales_assets}>                            
                                 <ListItemIcon>
                                     <FindInPageIcon/>
                                 </ListItemIcon>
                                 <ListItemText>Locate Lost Assets</ListItemText>
                             </MenuItem>,
-                            <MenuItem onClick={createTemplate} className={`iconItem`}>
+                            <MenuItem  key={5} onClick={createTemplate} className={`iconItem`}>
                                 <ListItemIcon>
                                     <svg viewBox="0 0 24 24" className="MuiSvgIcon-root customSVG"><g><rect fill="none" height="24" width="24" x="0"/></g><g><g><path d="M19,11c0.17,0,0.33,0.01,0.49,0.02L15,3H9l5.68,9.84C15.77,11.71,17.3,11,19,11z"/><polygon points="8.15,4.52 2,15.5 5,21 11.33,10.03"/><path d="M13.2,15.5H9.9L6.73,21h7.81C13.58,19.94,13,18.54,13,17C13,16.48,13.07,15.98,13.2,15.5z"/><polygon points="20,16 20,13 18,13 18,16 15,16 15,18 18,18 18,21 19,21 20,21 20,18 23,18 23,16"/></g></g></svg>
                                 </ListItemIcon>
                                 <ListItemText>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</ListItemText>
                             </MenuItem>,
-                            <MenuItem  onClick={onAttachmentOpenedFileAndEmail}  className={`iconItem`}>
+                            <MenuItem key={6}  onClick={onAttachmentOpenedFileAndEmail}  className={`iconItem`}>
                                 <ListItemIcon>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="MuiSvgIcon-root customSVG"><path d="M11 20H2.5A2.503 2.503 0 0 1 0 17.5v-13C0 3.122 1.122 2 2.5 2h19C22.878 2 24 3.122 24 4.5V18c0 .275-.225.5-.5.5s-.5-.225-.5-.5V4.5c0-.827-.673-1.5-1.5-1.5h-19C1.673 3 1 3.673 1 4.5v13c0 .827.673 1.5 1.5 1.5H11a.5.5 0 0 1 0 1z"/><path d="M12 14.03c-1.014 0-1.962-.425-2.67-1.194L3.122 6.048a.5.5 0 0 1 .739-.675l6.207 6.787c1.03 1.12 2.834 1.121 3.866-.001l6.195-6.777a.5.5 0 0 1 .739.675l-6.196 6.778c-.71.77-1.658 1.195-2.672 1.195z"/><path d="M3.492 17.215a.5.5 0 01-.337-.87l5.458-4.982a.499.499 0 11.675.738L3.83 17.084a.506.506 0 01-.338.131zM19.168 16a.495.495 0 01-.337-.131l-4.127-3.771a.5.5 0 11.675-.738l4.127 3.77a.5.5 0 01-.338.87z"/><path d="M20.542 22h-7.147A2.398 2.398 0 0 1 11 19.605v-.211a2.399 2.399 0 0 1 2.395-2.396h7.147A1.46 1.46 0 0 1 22 18.456c0 .887-.654 1.542-1.458 1.542H15a.5.5 0 0 1 0-1h5.542A.46.46 0 0 0 21 18.54c0-.336-.206-.542-.458-.542h-7.147c-.769 0-1.395.626-1.395 1.396v.211c0 .769.625 1.395 1.395 1.395h7.147A2.463 2.463 0 0 0 23 18.542C23 17.104 21.896 16 20.542 16H15c-.275 0-.5-.225-.5-.5s.225-.5.5-.5h5.542A3.462 3.462 0 0 1 24 18.458C24 20.449 22.449 22 20.542 22z"/></svg>
                                 </ListItemIcon>
                                 <ListItemText>Email Open Document</ListItemText>
                             </MenuItem>,
-                            <MenuItem  
+                            <MenuItem  key={7}
                             onClick={() => {
                                 handleClose()
                                 props.setPatentAssets('Our Assets for Sale')
@@ -865,31 +865,31 @@ const ActionMenu = (props) => {
                         parseInt(profile?.user?.organisation?.subscribtion) == 1 
                         ?
                             [                            
-                                <MenuItem className={`iconItem`} disabled>
+                                <MenuItem key={8} className={`iconItem`} disabled>
                                     <ListItemIcon>
                                         <svg xmlns="http://www.w3.org/2000/svg" className="MuiSvgIcon-root customSVG" style={{width: 21, height: 21}} enableBackground="new 0 0 68 68" viewBox="0 0 68 68"><path d="M45.8 4.6L37.4 13c-3.9 3.9-4.7 10-2.1 14.7l-1.8 1.8c-.3.3-.4.7-.2 1.1s.5.6.9.6l2.5.1.1 2.5c0 .4.3.7.6.9.1 0 .2.1.4.1.3 0 .5-.1.7-.3l1.8-1.8c4.6 2.5 10.7 2 14.7-2.1l8.4-8.4c4.8-4.8 4.9-12.7 0-17.6C58.5-.2 50.7-.2 45.8 4.6zM39.4 30.8l-.8.8-.1-1.1c0-.5-.4-.9-.9-.9l-1.1-.1 9.3-9.3c.6-.6 1.6-.6 2.1 0 .6.6.6 1.5 0 2.1l-4.4 4.4L39.4 30.8zM49.3 18.7c-1.3-1.3-3.6-1.3-5 0l-3 3c0-1.2.5-2.3 1.4-3.2l8.4-8.4c1.9-1.9 4.9-1.9 6.8 0 1.9 1.9 1.9 4.9 0 6.8l-8.4 8.4c-.9.9-2 1.3-3.2 1.4l3-3C50.7 22.2 50.7 20 49.3 18.7zM61.9 20.8l-8.4 8.4c-3.3 3.3-8.1 3.8-11.9 2.1l2.8-2.8c2.2.5 4.7 0 6.4-1.8l8.4-8.4c2.6-2.6 2.6-7 0-9.6-2.7-2.7-6.9-2.7-9.6 0L41.4 17c-1.7 1.7-2.3 4.1-1.8 6.4l-2.8 2.8c-1.9-3.9-1.1-8.7 2-11.8l8.4-8.4C51.3 2 57.9 2 62 6.1 66 10.1 66 16.7 61.9 20.8zM30.6 55c3.9-3.9 4.7-10 2.1-14.7l1.8-1.8c.3-.3.4-.7.2-1.1-.1-.4-.5-.6-.9-.6l-2.5-.1-.1-2.5c0-.4-.3-.7-.6-.9-.4-.1-.8 0-1.1.2l-1.8 1.8c-1.8-1-3.9-1.5-6-1.5-3.3 0-6.4 1.3-8.8 3.6l-8.4 8.4c-4.9 4.9-4.9 12.7 0 17.6 4.9 4.9 12.7 4.8 17.6 0L30.6 55zM28.6 37.2L28.6 37.2l.8-.8.1 1.1c0 .5.4.9.9.9l1.1.1-9.3 9.3c-.6.6-1.6.6-2.1 0-.6-.6-.6-1.5 0-2.1l4.4-4.4 0 0L28.6 37.2zM18.7 49.3c1.4 1.4 3.6 1.4 5 0l3-3c0 1.2-.5 2.3-1.4 3.2L16.8 58C15 59.8 12 59.9 10 58c-1.9-1.9-1.9-4.9 0-6.8l8.4-8.4c.9-.9 2-1.3 3.2-1.4l-3 3C17.3 45.8 17.3 48 18.7 49.3zM6.1 62C2 57.9 2 51.3 6.1 47.2l8.4-8.4c2-2 4.6-3.1 7.4-3.1 1.6 0 3.1.3 4.5 1l-2.8 2.8c-.5-.1-1.1-.2-1.6-.2-1.8 0-3.5.7-4.8 2l-8.4 8.4c-2.6 2.6-2.7 6.9 0 9.6 2.7 2.7 7 2.6 9.6 0l8.4-8.4c1.7-1.7 2.4-4.1 1.8-6.4l2.8-2.8c1.9 3.9 1.1 8.7-2 11.8L20.8 62C16.8 66 10.2 66.1 6.1 62zM46.6 40.6c.5.1 1.1-.2 1.2-.7.1-.5-.2-1.1-.7-1.2l-4.4-1.1c-.5-.1-1.1.2-1.2.7-.1.5.2 1.1.7 1.2L46.6 40.6zM39.9 47.8c.5-.1.9-.7.7-1.2l-1.1-4.4c-.1-.5-.7-.9-1.2-.7-.5.1-.9.7-.7 1.2l1.1 4.4C38.8 47.6 39.4 47.9 39.9 47.8zM29.7 26.6c.5-.1.9-.7.7-1.2L29.3 21c-.1-.5-.7-.9-1.2-.7-.5.1-.9.7-.7 1.2l1.1 4.4C28.6 26.4 29.1 26.7 29.7 26.6zM25.4 30.4c.5.1 1.1-.2 1.2-.7.1-.5-.2-1.1-.7-1.2l-4.4-1.1c-.5-.1-1.1.2-1.2.7-.1.5.2 1.1.7 1.2L25.4 30.4z"/></svg> 
                                     </ListItemIcon>   
                                     <ListItemText>Broken Chain-of-Title</ListItemText>      
                                 </MenuItem> ,
-                                <MenuItem className={`iconItem`} disabled>
+                                <MenuItem key={9} className={`iconItem`} disabled>
                                     <ListItemIcon>
                                         <FindInPageIcon/>
                                     </ListItemIcon> 
                                     <ListItemText>Locate Lost Assets</ListItemText>
                                 </MenuItem>,
-                                <MenuItem className={`iconItem`} disabled>
+                                <MenuItem key={10} className={`iconItem`} disabled>
                                     <ListItemIcon>
                                         <svg viewBox="0 0 24 24" className="MuiSvgIcon-root customSVG"><g><rect fill="none" height="24" width="24" x="0"/></g><g><g><path d="M19,11c0.17,0,0.33,0.01,0.49,0.02L15,3H9l5.68,9.84C15.77,11.71,17.3,11,19,11z"/><polygon points="8.15,4.52 2,15.5 5,21 11.33,10.03"/><path d="M13.2,15.5H9.9L6.73,21h7.81C13.58,19.94,13,18.54,13,17C13,16.48,13.07,15.98,13.2,15.5z"/><polygon points="20,16 20,13 18,13 18,16 15,16 15,18 18,18 18,21 19,21 20,21 20,18 23,18 23,16"/></g></g></svg>
                                     </ListItemIcon>
                                     <ListItemText>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</ListItemText>
                                 </MenuItem>,
-                                <MenuItem className={`iconItem`} disabled>
+                                <MenuItem key={11} className={`iconItem`} disabled>
                                     <ListItemIcon>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="MuiSvgIcon-root customSVG"><path d="M11 20H2.5A2.503 2.503 0 0 1 0 17.5v-13C0 3.122 1.122 2 2.5 2h19C22.878 2 24 3.122 24 4.5V18c0 .275-.225.5-.5.5s-.5-.225-.5-.5V4.5c0-.827-.673-1.5-1.5-1.5h-19C1.673 3 1 3.673 1 4.5v13c0 .827.673 1.5 1.5 1.5H11a.5.5 0 0 1 0 1z"/><path d="M12 14.03c-1.014 0-1.962-.425-2.67-1.194L3.122 6.048a.5.5 0 0 1 .739-.675l6.207 6.787c1.03 1.12 2.834 1.121 3.866-.001l6.195-6.777a.5.5 0 0 1 .739.675l-6.196 6.778c-.71.77-1.658 1.195-2.672 1.195z"/><path d="M3.492 17.215a.5.5 0 01-.337-.87l5.458-4.982a.499.499 0 11.675.738L3.83 17.084a.506.506 0 01-.338.131zM19.168 16a.495.495 0 01-.337-.131l-4.127-3.771a.5.5 0 11.675-.738l4.127 3.77a.5.5 0 01-.338.87z"/><path d="M20.542 22h-7.147A2.398 2.398 0 0 1 11 19.605v-.211a2.399 2.399 0 0 1 2.395-2.396h7.147A1.46 1.46 0 0 1 22 18.456c0 .887-.654 1.542-1.458 1.542H15a.5.5 0 0 1 0-1h5.542A.46.46 0 0 0 21 18.54c0-.336-.206-.542-.458-.542h-7.147c-.769 0-1.395.626-1.395 1.396v.211c0 .769.625 1.395 1.395 1.395h7.147A2.463 2.463 0 0 0 23 18.542C23 17.104 21.896 16 20.542 16H15c-.275 0-.5-.225-.5-.5s.225-.5.5-.5h5.542A3.462 3.462 0 0 1 24 18.458C24 20.449 22.449 22 20.542 22z"/></svg>
                                     </ListItemIcon>
                                     <ListItemText>Email Open Document</ListItemText>
                                 </MenuItem>,
-                                <MenuItem className={`iconItem`} disabled>
+                                <MenuItem key={12} className={`iconItem`} disabled>
                                     <ListItemIcon>
                                         <Avatar  src="https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/PatentSales2.svg" variant="square" style={{width: 21, height: 21}}/>
                                     </ListItemIcon>
@@ -900,12 +900,12 @@ const ActionMenu = (props) => {
                             ''
                 }
                 <Divider />
-                <MenuItem className={classes.disableHover} >
+                <MenuItem key={13} className={classes.disableHover} >
                     <ListItemText><span className={clsx(parseInt(profile?.user?.organisation?.subscribtion) < 3 ? classes.disabled : '')}>Enterprise:</span> {parseInt(profile?.user?.organisation?.subscribtion) < 3 ? <Button variant="text">Upgrade</Button> : '' }</ListItemText>
                 </MenuItem>
                 {
                     parseInt(profile?.user?.organisation?.subscribtion) == 3 && link_assets_sheet_display === true && link_assets_selected.length > 0  && (
-                        <MenuItem onClick={onHandleLinkAssetWithSheet}>
+                        <MenuItem key={14} onClick={onHandleLinkAssetWithSheet}>
                             <ListItemText>Process Selections</ListItemText>
                         </MenuItem>
                     )
@@ -919,7 +919,7 @@ const ActionMenu = (props) => {
                         ?
                             maintainenceFrameMode === false 
                             ?
-                                <MenuItem onClick={onHandleReviewMaintainenceFee}>
+                                <MenuItem key={15} onClick={onHandleReviewMaintainenceFee}>
                                     <ListItemText>Process Selections</ListItemText>
                                 </MenuItem>
                             :
@@ -927,7 +927,7 @@ const ActionMenu = (props) => {
                                     <MenuItem onClick={onMaintainenceFeeFile} key={`${category}_1`}>
                                         <ListItemText>Pay Maintenance Fees</ListItemText>
                                     </MenuItem>,
-                                    <MenuItem onClick={onHandleReviewMaintainenceFee} key={`${category}_2`}>
+                                    <MenuItem  onClick={onHandleReviewMaintainenceFee} key={`${category}_2`}>
                                         <ListItemText>Cancel</ListItemText>
                                     </MenuItem>
                                 ]
@@ -941,7 +941,7 @@ const ActionMenu = (props) => {
                                         </ListItemIcon>
                                         <ListItemText>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</ListItemText>
                                     </MenuItem>,
-                                    <MenuItem onClick={onHandleSubmitToUSPTO} key={`${category}_2`}>
+                                    <MenuItem  onClick={onHandleSubmitToUSPTO} key={`${category}_2`}>
                                         <ListItemIcon>
                                             <img src={'/assets/images/logo-micro.png'} className={classes.uspto_logo}/>
                                         </ListItemIcon>
@@ -990,7 +990,7 @@ const ActionMenu = (props) => {
                             :
                                 category == 'sell_payments'     
                                 ?
-                                    <MenuItem onClick={onSalesAssets}>
+                                    <MenuItem key={16} onClick={onSalesAssets}>
                                         <ListItemText>Select Assets and Click Here</ListItemText>
                                     </MenuItem>
                                 :
@@ -1004,13 +1004,13 @@ const ActionMenu = (props) => {
                                
                         [   
 
-                            <MenuItem className={`iconItem`}>
+                            <MenuItem key={17} className={`iconItem`}>
                                 <ListItemIcon>
                                     <Avatar src="https://patentrack.com/wp-content/uploads/2022/01/MaintenanceFee.svg" variant="square" style={{width: 21, height: 21}}/>
                                 </ListItemIcon>
                                 <ListItemText>Pay Maintaince Fee</ListItemText>  
                             </MenuItem> ,    
-                            <MenuItem className={`iconItem`}>
+                            <MenuItem key={18} className={`iconItem`}>
                                 <ListItemIcon>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="MuiSvgIcon-root customSVG" style={{width: 21, height: 21}} enableBackground="new 0 0 80 80" viewBox="0 0 80 80"><path d="M72,22H47V8c0-0.55-0.45-1-1-1H34c-0.55,0-1,0.45-1,1v14H8c-0.55,0-1,0.45-1,1v49c0,0.55,0.45,1,1,1h64c0.55,0,1-0.45,1-1
                                     V23C73,22.45,72.55,22,72,22z M35,9h10v14v4H35v-4V9z M71,71H9V24h24v3h-1c-0.55,0-1,0.45-1,1s0.45,1,1,1h2h12h2c0.55,0,1-0.45,1-1
@@ -1019,37 +1019,37 @@ const ActionMenu = (props) => {
                                 </ListItemIcon>
                                 <ListItemText>Correct Names</ListItemText>
                             </MenuItem> ,                
-                            <MenuItem className={`iconItem`}>
+                            <MenuItem key={19} className={`iconItem`}>
                                 <ListItemIcon>
                                     <MailOutlineIcon/>
                                 </ListItemIcon>
                                 <ListItemText>Correct Addresses</ListItemText>
                             </MenuItem> ,                  
-                            <MenuItem className={`iconItem`}>
+                            <MenuItem key={20} className={`iconItem`}>
                                 <ListItemIcon>
                                     <LocationCityIcon/>
                                 </ListItemIcon>
                                 <ListItemText>Correct Correspondence</ListItemText>
                             </MenuItem>,
-                            <MenuItem onClick={() => props.onClickSale(2)} className={`iconItem ${display_sales_assets === true ? 'active' : ''}`}>
+                            <MenuItem key={21} onClick={() => props.onClickSale(2)} className={`iconItem ${display_sales_assets === true ? 'active' : ''}`}>
                                 <ListItemIcon>
                                     <Avatar  src="https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/store2.svg" variant="square" style={{width: 21, height: 21}}/>
                                 </ListItemIcon>
                                 <ListItemText>Patent Marketplace</ListItemText>
                             </MenuItem>,
-                            <MenuItem>
+                            <MenuItem key={22}>
                                 <ListItemIcon>  
                                     <Avatar  src="https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/Bankers.svg" variant="square" style={{width: 21, height: 21}}/>
                                 </ListItemIcon>
                                 <ListItemText>Lenders Directory</ListItemText>
                             </MenuItem>,
-                            <MenuItem>
+                            <MenuItem key={23}>
                                 <ListItemIcon>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="MuiSvgIcon-root customSVG" style={{width: 21, height: 21}} viewBox="0 0 64 64"><g><path d="M37,30H27a5.006,5.006,0,0,1-5-5V14a1,1,0,0,1,1-1,3.85,3.85,0,0,0,4-4,1,1,0,0,1,2,0c0,.008.411,4,12,4a1,1,0,0,1,1,1V25A5.006,5.006,0,0,1,37,30ZM24,14.915V25a3,3,0,0,0,3,3H37a3,3,0,0,0,3-3V14.99c-6.783-.138-10.03-1.684-11.583-3.178A5.821,5.821,0,0,1,24,14.915Z"/><path d="M45,19H43V7a5.006,5.006,0,0,0-5-5H26a5.006,5.006,0,0,0-5,5V19H19V7a7.008,7.008,0,0,1,7-7H38a7.008,7.008,0,0,1,7,7Z"/><path d="M41 23V21a2 2 0 0 0 0-4V15a4 4 0 0 1 0 8zM23 23a4 4 0 0 1 0-8v2a2 2 0 0 0 0 4zM31 64H12a1 1 0 0 1-1-1V36a1 1 0 0 1 .876-.992L27 33.117V29h2v5a1 1 0 0 1-.876.992L13 36.883V62H31zM53 39H51V36.883L35.876 34.992A1 1 0 0 1 35 34V29h2v4.117l15.124 1.891A1 1 0 0 1 53 36zM62 64H34a1 1 0 0 1-1-1V43a1 1 0 0 1 1-1H62a1 1 0 0 1 1 1V63A1 1 0 0 1 62 64zM35 62H61V44H35z"/><path d="M56 43H54V40H44v3H42V39a1 1 0 0 1 1-1H55a1 1 0 0 1 1 1zM44 55H38a1 1 0 0 1-1-1V50a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v4A1 1 0 0 1 44 55zm-5-2h4V51H39zM58 55H52a1 1 0 0 1-1-1V50a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v4A1 1 0 0 1 58 55zm-5-2h4V51H53z"/><rect width="2" height="7" x="38" y="43"/><rect width="2" height="7" x="42" y="43"/><rect width="2" height="7" x="52" y="43"/><rect width="2" height="7" x="56" y="43"/><path d="M41 60a1 1 0 0 1-.707-.293l-2-2A1 1 0 0 1 38 57V54h2v2.586l1 1 1-1V54h2v3a1 1 0 0 1-.293.707l-2 2A1 1 0 0 1 41 60zM55 60a1 1 0 0 1-.707-.293l-2-2A1 1 0 0 1 52 57V54h2v2.586l1 1 1-1V54h2v3a1 1 0 0 1-.293.707l-2 2A1 1 0 0 1 55 60z"/><rect width="4" height="2" x="34" y="51"/><rect width="8" height="2" x="44" y="51"/><rect width="4" height="2" x="58" y="51"/><path d="M32,39a1,1,0,0,1-.707-.293l-4-4,1.414-1.414L32,36.586l3.293-3.293,1.414,1.414-4,4A1,1,0,0,1,32,39Z"/><path d="M34,41a1,1,0,0,1-.707-.293L32,39.414l-1.293,1.293a1,1,0,0,1-1.414,0l-4-4A1,1,0,0,1,25,36V34h2v1.586l3,3,1.293-1.293a1,1,0,0,1,1.414,0L34,38.586l3-3V34h2v2a1,1,0,0,1-.293.707l-4,4A1,1,0,0,1,34,41Z"/><rect width="2" height="17" x="17" y="46"/></g></svg>
                                 </ListItemIcon>
                                 <ListItemText>Lawyers Perfomance</ListItemText>
                             </MenuItem>,
-                            <MenuItem>
+                            <MenuItem key={24}>
                                 <ListItemIcon>
                                     <Avatar src="https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png" variant="square" style={{width: 21, height: 21}}/>
                                 </ListItemIcon>
@@ -1058,13 +1058,13 @@ const ActionMenu = (props) => {
                         ]
                     :
                         [            
-                            <MenuItem className={`iconItem`} disabled>
+                            <MenuItem key={25} className={`iconItem`} disabled>
                                 <ListItemIcon>
                                     <Avatar src="https://patentrack.com/wp-content/uploads/2022/01/MaintenanceFee.svg" variant="square" style={{width: 21, height: 21}}/>
                                 </ListItemIcon>
                                 <ListItemText>Pay Maintaince Fee</ListItemText>
                             </MenuItem>     ,
-                            <MenuItem className={`iconItem`} disabled>
+                            <MenuItem key={26} className={`iconItem`} disabled>
                                 <ListItemIcon>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="MuiSvgIcon-root customSVG" style={{width: 21, height: 21}} enableBackground="new 0 0 80 80" viewBox="0 0 80 80"><path d="M72,22H47V8c0-0.55-0.45-1-1-1H34c-0.55,0-1,0.45-1,1v14H8c-0.55,0-1,0.45-1,1v49c0,0.55,0.45,1,1,1h64c0.55,0,1-0.45,1-1
                                     V23C73,22.45,72.55,22,72,22z M35,9h10v14v4H35v-4V9z M71,71H9V24h24v3h-1c-0.55,0-1,0.45-1,1s0.45,1,1,1h2h12h2c0.55,0,1-0.45,1-1
@@ -1073,37 +1073,37 @@ const ActionMenu = (props) => {
                                 </ListItemIcon>
                                 <ListItemText>Correct Names</ListItemText>
                             </MenuItem> ,             
-                            <MenuItem className={`iconItem`} disabled>
+                            <MenuItem  key={27}className={`iconItem`} disabled>
                                 <ListItemIcon>
                                     <MailOutlineIcon/>
                                 </ListItemIcon>
                                 <ListItemText>Correct Addresses</ListItemText>
                             </MenuItem> ,                  
-                            <MenuItem className={`iconItem`} disabled>
+                            <MenuItem key={28} className={`iconItem`} disabled>
                                 <ListItemIcon>
                                     <LocationCityIcon/>
                                 </ListItemIcon>
                                 <ListItemText>Correct Correspondence</ListItemText>
                             </MenuItem>,
-                            <MenuItem className={`iconItem`} disabled>
+                            <MenuItem key={29} className={`iconItem`} disabled>
                                 <ListItemIcon>
                                     <Avatar  src="https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/store2.svg" variant="square" style={{width: 21, height: 21}}/>
                                 </ListItemIcon>
                                 <ListItemText>Patent Marketplace</ListItemText>
                             </MenuItem>,
-                            <MenuItem className={`iconItem`} disabled>
+                            <MenuItem key={30} className={`iconItem`} disabled>
                                 <ListItemIcon>
                                     <Avatar  src="https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/Bankers.svg" variant="square" style={{width: 21, height: 21}}/>
                                 </ListItemIcon>
                                 <ListItemText>Lenders Directory</ListItemText>
                             </MenuItem>,
-                            <MenuItem className={`iconItem`} disabled>
+                            <MenuItem key={31} className={`iconItem`} disabled>
                                 <ListItemIcon>
                                     <svg xmlns="http://www.w3.org/2000/svg" className="MuiSvgIcon-root customSVG" style={{width: 21, height: 21}} viewBox="0 0 64 64"><g><path d="M37,30H27a5.006,5.006,0,0,1-5-5V14a1,1,0,0,1,1-1,3.85,3.85,0,0,0,4-4,1,1,0,0,1,2,0c0,.008.411,4,12,4a1,1,0,0,1,1,1V25A5.006,5.006,0,0,1,37,30ZM24,14.915V25a3,3,0,0,0,3,3H37a3,3,0,0,0,3-3V14.99c-6.783-.138-10.03-1.684-11.583-3.178A5.821,5.821,0,0,1,24,14.915Z"/><path d="M45,19H43V7a5.006,5.006,0,0,0-5-5H26a5.006,5.006,0,0,0-5,5V19H19V7a7.008,7.008,0,0,1,7-7H38a7.008,7.008,0,0,1,7,7Z"/><path d="M41 23V21a2 2 0 0 0 0-4V15a4 4 0 0 1 0 8zM23 23a4 4 0 0 1 0-8v2a2 2 0 0 0 0 4zM31 64H12a1 1 0 0 1-1-1V36a1 1 0 0 1 .876-.992L27 33.117V29h2v5a1 1 0 0 1-.876.992L13 36.883V62H31zM53 39H51V36.883L35.876 34.992A1 1 0 0 1 35 34V29h2v4.117l15.124 1.891A1 1 0 0 1 53 36zM62 64H34a1 1 0 0 1-1-1V43a1 1 0 0 1 1-1H62a1 1 0 0 1 1 1V63A1 1 0 0 1 62 64zM35 62H61V44H35z"/><path d="M56 43H54V40H44v3H42V39a1 1 0 0 1 1-1H55a1 1 0 0 1 1 1zM44 55H38a1 1 0 0 1-1-1V50a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v4A1 1 0 0 1 44 55zm-5-2h4V51H39zM58 55H52a1 1 0 0 1-1-1V50a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v4A1 1 0 0 1 58 55zm-5-2h4V51H53z"/><rect width="2" height="7" x="38" y="43"/><rect width="2" height="7" x="42" y="43"/><rect width="2" height="7" x="52" y="43"/><rect width="2" height="7" x="56" y="43"/><path d="M41 60a1 1 0 0 1-.707-.293l-2-2A1 1 0 0 1 38 57V54h2v2.586l1 1 1-1V54h2v3a1 1 0 0 1-.293.707l-2 2A1 1 0 0 1 41 60zM55 60a1 1 0 0 1-.707-.293l-2-2A1 1 0 0 1 52 57V54h2v2.586l1 1 1-1V54h2v3a1 1 0 0 1-.293.707l-2 2A1 1 0 0 1 55 60z"/><rect width="4" height="2" x="34" y="51"/><rect width="8" height="2" x="44" y="51"/><rect width="4" height="2" x="58" y="51"/><path d="M32,39a1,1,0,0,1-.707-.293l-4-4,1.414-1.414L32,36.586l3.293-3.293,1.414,1.414-4,4A1,1,0,0,1,32,39Z"/><path d="M34,41a1,1,0,0,1-.707-.293L32,39.414l-1.293,1.293a1,1,0,0,1-1.414,0l-4-4A1,1,0,0,1,25,36V34h2v1.586l3,3,1.293-1.293a1,1,0,0,1,1.414,0L34,38.586l3-3V34h2v2a1,1,0,0,1-.293.707l-4,4A1,1,0,0,1,34,41Z"/><rect width="2" height="17" x="17" y="46"/></g></svg>
                                 </ListItemIcon>
                                 <ListItemText>Lawyers Perfomance</ListItemText>
                             </MenuItem>,
-                            <MenuItem className={`iconItem`} disabled>
+                            <MenuItem key={32} className={`iconItem`} disabled>
                                 <ListItemIcon>
                                     <Avatar src="https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png" variant="square" style={{width: 21, height: 21}}/>
                                 </ListItemIcon>

@@ -32,6 +32,7 @@ const options = {
     horizontalScroll: true,
     verticalScroll: true,
     limitSize: true,
+    cluster: true,
     /* cluster: {
   //   titleTemplate: 'Cluster containing {count} events.<br/> Zoom in to see the individual events.',
         showStipes: false,

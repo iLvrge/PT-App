@@ -258,7 +258,7 @@ class PatenTrackApi {
   }
 
   static cancelAssetTypeAssignmentAllAssetsWithFamily() {
-    if (cancelAssetTypeAssignmentAllAssetsWithFamily !== undefined) {
+    if (cancelAssetTypeAssignmentAllAssetsWithFamily !== undefined && typeof cancelAssetTypeAssignmentAllAssetsWithFamily.cancel == 'function') {
       try{
         throw cancelAssetTypeAssignmentAllAssetsWithFamily('Cancelled request manually.')
       } catch (e){
@@ -276,7 +276,7 @@ class PatenTrackApi {
   }
 
   static cancelAgentsData() {
-    if (cancelAgentsData !== undefined) {
+    if (cancelAgentsData !== undefined && typeof cancelAgentsData.cancel == 'function') {
       try{
         throw cancelAgentsData('Request cancelled for agents')
       } catch (e){
@@ -310,7 +310,7 @@ class PatenTrackApi {
   }
 
   static cancelAssets() {
-    if (cancelAssets !== undefined) {
+    if (cancelAssets !== undefined && typeof cancelAssets.cancel == 'function') {
       try{
         throw cancelAssets('Operation canceled by the user.')
       } catch (e){
@@ -346,7 +346,7 @@ class PatenTrackApi {
   }
 
   static cancelShareTimeline() {
-    if (cancelShareTimeline !== undefined) {
+    if (cancelShareTimeline !== undefined && typeof cancelShareTimeline.cancel == 'function') {
       try{
         throw cancelShareTimeline('Operation canceled by the user.')
       } catch (e){
@@ -364,7 +364,7 @@ class PatenTrackApi {
   }
 
   static cancelLifeSpanRequest() {
-    if (cancelLifeSpan !== undefined) {
+    if (cancelLifeSpan !== undefined && typeof cancelLifeSpan.cancel == 'function') {
       try{
         throw cancelLifeSpan('Operation canceled by the user.')
       } catch (e){
@@ -382,7 +382,7 @@ class PatenTrackApi {
   }
 
   static cancelCPCRequest() {
-    if (cancelCPC !== undefined) {
+    if (cancelCPC !== undefined && typeof cancelCPC.cancel == 'function') {
       try{
         throw cancelCPC('Operation canceled by the user.')
       } catch (e){
@@ -400,7 +400,7 @@ class PatenTrackApi {
   }
 
   static cancelDownloadRequest() {
-    if (cancelDownloadURL !== undefined) {
+    if (cancelDownloadURL !== undefined && typeof cancelDownloadURL.cancel == 'function') {
       try{
         throw cancelDownloadURL('Operation canceled by the user.') 
       } catch (e){
@@ -700,7 +700,7 @@ class PatenTrackApi {
   }
 
   static cancelCollectionIllustration() {
-    if (cancelCollectionIllustration !== undefined) {
+    if (cancelCollectionIllustration !== undefined && typeof cancelCollectionIllustration.cancel == 'function') {
       try{
         throw cancelCollectionIllustration('Request cancelled for illustration.')
       } catch (e){
@@ -730,7 +730,7 @@ class PatenTrackApi {
   }
 
   static cancelTimelineItem() {
-    if (cancelTimelineItem !== undefined) {
+    if (cancelTimelineItem !== undefined && typeof cancelTimelineItem.cancel == 'function') {
       try{
         throw cancelTimelineItem('Operation canceled by the user.')
       } catch (e){
@@ -777,7 +777,7 @@ class PatenTrackApi {
   }
 
   static cancelTimelineActivity() {
-    if (cancelTimelineActivity !== undefined) {
+    if (cancelTimelineActivity !== undefined && typeof cancelTimelineActivity.cancel == 'function') {
       try{
         throw cancelTimelineActivity('Operation canceled by the user.')
       } catch (e){
@@ -787,7 +787,7 @@ class PatenTrackApi {
   }
 
   static cancelTimelineSecurity() {
-    if (cancelTimelineSecurity !== undefined) {
+    if (cancelTimelineSecurity !== undefined && typeof cancelTimelineSecurity.cancel == 'function') {
       try{
         throw cancelTimelineSecurity('Operation canceled by the user.')
       } catch (e){
@@ -797,7 +797,7 @@ class PatenTrackApi {
   }
 
   static cancelTimeline() {
-    if (cancelTimeline !== undefined) {
+    if (cancelTimeline !== undefined && typeof cancelTimeline.cancel == 'function') {
       try{
         throw cancelTimeline('Operation canceled by the user.')
       } catch (e){
@@ -864,7 +864,7 @@ class PatenTrackApi {
 
   
   static cancelAllDashboardToken = () => {
-    if (cancelAllDashboardRequest !== undefined) {
+    if (cancelAllDashboardRequest !== undefined && typeof cancelAllDashboardRequest.cancel == 'function') {
       try{
         cancelAllDashboardRequest.cancel(`Dashboard request aborted`)        
       } catch (e){
@@ -881,7 +881,7 @@ class PatenTrackApi {
   }
   
   static cancelAllDashboardCountToken = () => {
-    if (cancelAllDashboardCountRequest !== undefined) {
+    if (cancelAllDashboardCountRequest !== undefined && typeof cancelAllDashboardCountRequest.cancel == 'function') {
       try{
         cancelAllDashboardCountRequest.cancel(`Dashboard request aborted`)        
       } catch (e){
@@ -904,7 +904,7 @@ class PatenTrackApi {
   }
 
   static cancelAllDashboardTimelineToken = () => {
-    if (cancelAllDashboardTimelineRequest !== undefined) {
+    if (cancelAllDashboardTimelineRequest !== undefined && typeof cancelAllDashboardTimelineRequest.cancel == 'function') {
       try{
         cancelAllDashboardTimelineRequest.cancel(`Dashboard timeline request aborted`)        
       } catch (e){
@@ -926,7 +926,7 @@ class PatenTrackApi {
   }
 
   static cancelDashboardPartiesData = () => {
-    if (cancelDashboardPartiesData !== undefined) {
+    if (cancelDashboardPartiesData !== undefined && typeof cancelDashboardPartiesData.cancel == 'function') {
       try{
         cancelDashboardPartiesData.cancel(`Request cancelled for invented, acquired`)        
       } catch (e){
@@ -945,7 +945,7 @@ class PatenTrackApi {
   }
 
   static cancelDashboardPartiesAssignorData = () => {
-    if (cancelDashboardPartiesAssignorData !== undefined) {
+    if (cancelDashboardPartiesAssignorData !== undefined && typeof cancelDashboardPartiesAssignorData.cancel == 'function') {
       try{
         cancelDashboardPartiesAssignorData.cancel(`Request cancelled for assignors`)        
       } catch (e){
@@ -1328,7 +1328,7 @@ class PatenTrackApi {
   } 
 
   static cancelClaimsData () {
-    if (cancelClaims !== undefined) {
+    if (cancelClaims !== undefined && typeof cancelClaims.cancel == 'function') {
       try{
         throw cancelClaims('Operation canceled by the user.')
       } catch (e){
@@ -1346,7 +1346,7 @@ class PatenTrackApi {
   } 
 
   static cancelClaimsCounter () {
-    if (cancelClaimsCounter !== undefined) {
+    if (cancelClaimsCounter !== undefined && typeof cancelClaimsCounter.cancel == 'function') {
       try{
         throw cancelClaimsCounter('Operation canceled by the user.')
       } catch (e){
@@ -1364,7 +1364,7 @@ class PatenTrackApi {
   }
 
   static cancelSpecificationData () {
-    if (cancelSpecifications !== undefined) {
+    if (cancelSpecifications !== undefined && typeof cancelSpecifications.cancel == 'function') {
       try{
         throw cancelSpecifications('Operation canceled by the user.')
       } catch (e){
@@ -1382,7 +1382,7 @@ class PatenTrackApi {
   }
 
   static cancelFamilyData() {
-    if (cancelFamily !== undefined) {
+    if (cancelFamily !== undefined && typeof cancelFamily.cancel == 'function') {
       try{
         throw cancelFamily('Operation canceled by the user.')
       } catch (e){
@@ -1400,7 +1400,7 @@ class PatenTrackApi {
   }
 
   static cancelFiguresCounter() {
-    if (cancelFiguresCounter !== undefined) {
+    if (cancelFiguresCounter !== undefined && typeof cancelFiguresCounter.cancel == 'function') {
       try{
         throw cancelFiguresCounter('Operation canceled by the user.')
       } catch (e){
@@ -1418,7 +1418,7 @@ class PatenTrackApi {
   } 
   
   static cancelPtab () {
-    if (cancelPtab !== undefined) {
+    if (cancelPtab !== undefined && typeof cancelPtab.cancel == 'function') {
       try{
         throw cancelPtab('Operation canceled by the user.')
       } catch (e){
@@ -1436,7 +1436,7 @@ class PatenTrackApi {
   } 
   
   static cancelPtabCounter () {
-    if (cancelPtabCounter !== undefined) {
+    if (cancelPtabCounter !== undefined && typeof cancelPtabCounter.cancel == 'function') {
       try{
         throw cancelPtabCounter('Operation canceled by the user.')
       } catch (e){
@@ -1454,7 +1454,7 @@ class PatenTrackApi {
   } 
   
   static cancelCitationData () {
-    if (cancelCitationData !== undefined) {
+    if (cancelCitationData !== undefined && typeof cancelCitationData.cancel == 'function') {
       try{
         throw cancelCitationData('Operation canceled by the user.')  
       } catch (e){
@@ -1472,7 +1472,7 @@ class PatenTrackApi {
   }  
   
   static cancelAllAssetsCitationData () {
-    if (cancelAllAssetsCitationData !== undefined) {
+    if (cancelAllAssetsCitationData !== undefined && typeof cancelAllAssetsCitationData.cancel == 'function') {
       try{
         throw cancelAllAssetsCitationData('Cancelled old request.')  
       } catch (e){
@@ -1490,7 +1490,7 @@ class PatenTrackApi {
   } 
   
   static cancelCitationCounter () {
-    if (cancelCitationCounter !== undefined) {
+    if (cancelCitationCounter !== undefined && typeof cancelCitationCounter.cancel == 'function') {
       try{
         throw cancelCitationCounter('Operation canceled by the user.')  
       } catch (e){
@@ -1508,7 +1508,7 @@ class PatenTrackApi {
   } 
   
   static cancelStatusData () {
-    if (cancelStatus !== undefined) {
+    if (cancelStatus !== undefined && typeof cancelStatus.cancel == 'function') {
       try{
         throw cancelStatus('Operation canceled by the user.')
       } catch (e){
@@ -1526,7 +1526,7 @@ class PatenTrackApi {
   } 
   
   static cancelSatusCounter () {
-    if (cancelSatusCounter !== undefined) {
+    if (cancelSatusCounter !== undefined && typeof cancelSatusCounter.cancel == 'function') {
       try{
         throw cancelSatusCounter('Operation canceled by the user.')  
       } catch (e){
@@ -1544,7 +1544,7 @@ class PatenTrackApi {
   }
 
   static cancelFamilyCounter () {
-    if (cancelFamilyCounter !== undefined) {
+    if (cancelFamilyCounter !== undefined && typeof cancelFamilyCounter.cancel == 'function') {
       try{
         throw cancelFamilyCounter('Operation canceled by the user.')  
       } catch (e){
@@ -1566,7 +1566,7 @@ class PatenTrackApi {
   }
 
   static cancelFeesCounter () {
-    if (cancelFeesCounter !== undefined) {
+    if (cancelFeesCounter !== undefined && typeof cancelFeesCounter.cancel == 'function') {
       try{
         throw cancelFeesCounter('Operation canceled by the user.')  
       } catch (e){

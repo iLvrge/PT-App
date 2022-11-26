@@ -254,7 +254,7 @@ const GlobalScreen = ({
         }) */
     }, [auth_token, dispatch])
 
-    useEffect(() => {
+    /* useEffect(() => {
         console.log('openChartBar BAR CHANGES', openChartBar, openAnalyticsBar)
     }, [ openChartBar])
     useEffect(() => {
@@ -262,7 +262,7 @@ const GlobalScreen = ({
     }, [ openAnalyticsBar])
     useEffect(() => {
         console.log('BAR CHANGES', selectedCategory, openAssignmentBar, openCustomerBar, openCommentBar, openIllustrationBar, openChartBar, openAnalyticsBar)
-    }, [openAssignmentBar, openCustomerBar, openCommentBar, openIllustrationBar, openChartBar, openAnalyticsBar])
+    }, [openAssignmentBar, openCustomerBar, openCommentBar, openIllustrationBar, openChartBar, openAnalyticsBar]) */
 
     useEffect(() => {
         if(selectedCategory == 'correct_details') {
@@ -280,31 +280,31 @@ const GlobalScreen = ({
                 handleCustomersBarOpen()
             }
         }
-        console.log('timelineScreen', selectedCategory, dashboardScreen, timelineScreen, openCommentBar, openIllustrationBar, openChartBar, openAnalyticsBar)
+        /* console.log('timelineScreen', selectedCategory, dashboardScreen, timelineScreen, openCommentBar, openIllustrationBar, openChartBar, openAnalyticsBar) */
         if(timelineScreen === true) {
             if( openCommentBar === false ) {
-                console.log(`Send Request to openCommentBar ${openCommentBar}`)
+                /* console.log(`Send Request to openCommentBar ${openCommentBar}`) */
                 handleCommentBarOpen()
             }
             let statusChange = false;
     
             if(openIllustrationBar === false) {
-                console.log(`Send Request to openIllustrationBar ${openIllustrationBar}`)
+                /* console.log(`Send Request to openIllustrationBar ${openIllustrationBar}`) */
                 statusChange = true
                 handleIllustrationBarOpen()
             } 
             if( openChartBar === false ) {
-                console.log(`Send Request to openChartBar ${openChartBar}`)
+                /* console.log(`Send Request to openChartBar ${openChartBar}`) */
                 statusChange = true
                 handleChartBarOpen()
             }
             if( openAnalyticsBar === false ) {
-                console.log(`Send Request to openAnalyticsBar ${openAnalyticsBar}`)
+                /* console.log(`Send Request to openAnalyticsBar ${openAnalyticsBar}`) */
                 statusChange = true
                 handleAnalyticsBarOpen()
             }
             if(statusChange === true) {
-                console.log(`Send Request to change ${statusChange}`)
+                /* console.log(`Send Request to change ${statusChange}`) */
                 changeVisualBar(true, true, true, true)
             }
         } 

@@ -2,7 +2,11 @@ import React, { useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import useStyles from './styles'
 import { pink } from '@mui/material/colors'
-import { Fullscreen as FullscreenIcon } from '@mui/icons-material' 
+import { 
+    Fullscreen as FullscreenIcon, 
+    NoteAddOutlined as NoteAddOutlinedIcon,
+    HandshakeOutlined as HandshakeOutlinedIcon} from '@mui/icons-material' 
+import { FaLightbulb } from "react-icons/fa";
 import FullScreen from '../../FullScreen'
 import { Chart } from "react-google-charts";
 import themeMode from '../../../../themes/themeMode';
@@ -278,6 +282,36 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
         )
     }
 
+
+    const LabelWithIcon = ({label}) => {
+        return (
+            <span className={classes.label}>
+                {
+                    label == 'Agents (fillings)' || label == 'Agents (transactions)' || label == 'Agents (Technologies)' 
+                    ?
+                        `Agents `
+                    :
+                        label
+                    
+                }
+                {
+                    label == 'Agents (fillings)'
+                    ?
+                        <NoteAddOutlinedIcon/>
+                        :
+                        label == 'Agents (transactions)' 
+                        ?
+                            <HandshakeOutlinedIcon/>
+                        :
+                            label == 'Agents (Technologies)' ?
+                                <FaLightbulb/>
+                            :
+                                ''
+                }
+            </span>
+        )
+    }
+
     return (
         <Paper className={classes.root} square>  
             {
@@ -301,7 +335,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                             chartTabs.map((tab) => (
                                 <Tab
                                     key={tab}
-                                    label={tab}
+                                    label={<LabelWithIcon label={tab}/>}
                                     classes={{ root: classes.tab }}
                                 />
                             )) 

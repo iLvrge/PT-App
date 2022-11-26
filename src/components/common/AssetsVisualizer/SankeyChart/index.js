@@ -115,6 +115,7 @@ const SankeyChart = (props) => {
     const handleSelection = useCallback((items, type) => {
         let oldItems = type == 2 ? [...assignorRawData] : [...assigneeRawData]
         const filter = oldItems.filter( row => row.name === items[0].name)
+        //console.log('handleSelection', filter)
         if(filter.length > 0) {
             /* dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
             dispatch(setSelectAssignmentCustomers([filter[0].id])) */
