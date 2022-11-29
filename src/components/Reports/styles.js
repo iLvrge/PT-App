@@ -330,6 +330,10 @@ export default makeStyles(theme => ({
           height: '1px !important'
         }
       },
+      '& .vis-cluster': {
+        background: 'none',
+        border: '0px',
+      },
       '& .vis-dot':{ 
         backgroundColor: 'inherit',
         borderColor: 'inherit',
