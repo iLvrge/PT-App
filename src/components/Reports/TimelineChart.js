@@ -42,16 +42,16 @@ const options = {
     zoomMin: 1000 * 60 * 60 * 24 * 7, // 7 days
     /* showTooltips: true, */
     /* zoomMax: 1000 * 60 * 60 * 24 * 30 * 3, */ // 3months
-    /* cluster: {
-    //   titleTemplate: 'Cluster containing {count} events.<br/> Zoom in to see the individual events.',
+    cluster: {
+      titleTemplate: 'Cluster containing {count} events.<br/> Zoom in to see the individual events.',
       showStipes: false,
       clusterCriteria: (firstItem, secondItem) => {
         return ( firstItem.rawData.company === secondItem.rawData.company &&  firstItem.rawData.tab_id == secondItem.rawData.tab_id)
       }
-    }, */
+    }, 
     template: function(item, element, data) {
         if (data.isCluster) {
-            return `<span class="cluster-header">${data.items[0].customerName}(${data.items.length})</span>`
+            return `<span class="cluster-header">Cluster containing ${data.items.length} events.</span>`
         } else { 
             return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
         }
@@ -432,6 +432,7 @@ const TimelineChart = (props) => {
             type: 'point',
             start: new Date(assetsCustomer.exec_dt),
             customerName: `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
+            customerNameCluster: customerFirstName,
             assetType,
             companyName,
             rawData: assetsCustomer,
@@ -483,13 +484,13 @@ const TimelineChart = (props) => {
     setTimelineItems(convertedItems)
     items.current = new DataSet()
     let start =  new moment(), end =  props.type === 4 ? new moment(new Date('2500-01-01')) : new moment().add(1, 'year')   
-    if(timelineRef.current !== null) {
+    /* if(timelineRef.current !== null) {
         timelineRef.current.destroy()
         timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
         timelineRef.current.on('select', onSelect)
         timelineRef.current.on('itemover', onItemover)
         timelineRef.current.on('itemout', onItemout)
-    } 
+    }  */
     
     if (convertedItems.length > 0) {
         start = props.type === 5 ? new moment(convertedItems[0].start).subtract(1, 'week') : props.type === 4 ? new moment(new Date('1900-01-01')) : new moment(convertedItems[convertedItems.length - 1].start).subtract(1, 'week')

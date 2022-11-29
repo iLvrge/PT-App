@@ -122,11 +122,11 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                 }                
             } else {
                 if( assetsList.length > 0 || maintainenceAssetsList.length > 0 ) {
-                    if( assetsList.length > 0 ) {
+                    if( assetsList.length > 0  && assetsTotal == assetsList.length) {
                         const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
                         await Promise.all(promise)
                         totalRecords = assetsTotal
-                    } else if ( maintainenceAssetsList.length > 0 ) {
+                    } else if ( maintainenceAssetsList.length > 0  && maintainenceAssetsTotal == maintainenceAssetsList.length) {
                         const promise = maintainenceAssetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
                         await Promise.all(promise)
                         totalRecords = maintainenceAssetsTotal
@@ -146,7 +146,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                           selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;  
 
                         if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-                             if( auth_token != null ) {
+                             /* if( auth_token != null ) {
                                 dispatch(
                                     process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
                                     getCustomerAssets(
@@ -164,9 +164,9 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                                     : 
                                     getCustomerSelectedAssets(location.pathname.replace('/', ''))
                                 );
-                            } 
+                            }  */
                         } else {
-                            if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
+                            /* if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
                                 dispatch(
                                     getCustomerAssets(
                                       selectedCategory == '' ? '' : selectedCategory,
@@ -183,7 +183,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                                       display_sales_assets
                                     ),
                                 );
-                            }
+                            } */
                         }
                     }
                 }                
