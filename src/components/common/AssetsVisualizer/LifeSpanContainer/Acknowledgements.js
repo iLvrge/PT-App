@@ -32,37 +32,41 @@ const options = {
     horizontalScroll: true,
     verticalScroll: true,
     limitSize: true,
-    cluster: true,
-    /* cluster: {
-  //   titleTemplate: 'Cluster containing {count} events.<br/> Zoom in to see the individual events.',
+    /* cluster: true, */
+    cluster: {
+        titleTemplate: 'Cluster containing {count} events.<br/> Zoom in to see the individual events.',
         showStipes: false,
-        clusterCriteria: (firstItem, secondItem) => {
+        /* clusterCriteria: (firstItem, secondItem) => {
             return ( (firstItem.rawData.assignee === secondItem.rawData.assignee) && moment(new Date(firstItem.rawData.start)).format(DATE_FORMAT_YEAR) == moment(new Date(secondItem.rawData.start)).format(DATE_FORMAT_YEAR))
-        }
-    },  */
+        } */
+    }, 
     zoomFriction: 30,
     zoomMin: 1000 * 60 * 60 * 24 * 7,  
-    template: function(item, element, data) {
-        let itemRaw = data.isCluster ? data.items[0] : data
-        let image = itemRaw.rawData.logo
-        
-        if(itemRaw.rawData.logo !== '' && itemRaw.rawData.logo !== null) {
-            if( itemRaw.rawData.logo.indexOf('http') === -1 ) {
-                image = CDN_PATH_LOGO + itemRaw.rawData.logo
-            } 
-        } else {
-            image = CDN_PATH_LOGO + NO_IMAGE_AVAILABLE
-        }
-      return `<div class="first">
-                <div class="flexMain">
-                    <div class="textColumn">${numberWithCommas(itemRaw.number)}</div>
-                    <div class="textColumn text-height" >${toTitleCase(itemRaw.rawData.assignee)}</div>
-                    <div class="textColumn small-font">${moment(new Date(itemRaw.rawData.start)).format(DATE_FORMAT)}</div>
+    template: function(item, element, data) { 
+        if (data.isCluster) {
+            return `<span class="cluster-header">Cluster containing ${data.items.length} events</span>`
+        } else { 
+            let itemRaw = data.isCluster ? data.items[0] : data
+            let image = itemRaw.rawData.logo
+            
+            if(itemRaw.rawData.logo !== '' && itemRaw.rawData.logo !== null) {
+                if( itemRaw.rawData.logo.indexOf('http') === -1 ) {
+                    image = CDN_PATH_LOGO + itemRaw.rawData.logo
+                } 
+            } else {
+                image = CDN_PATH_LOGO + NO_IMAGE_AVAILABLE
+            }
+          return `<div class="first">
+                    <div class="flexMain">
+                        <div class="textColumn">${numberWithCommas(itemRaw.number)}</div>
+                        <div class="textColumn text-height" >${toTitleCase(itemRaw.rawData.assignee)}</div>
+                        <div class="textColumn small-font">${moment(new Date(itemRaw.rawData.start)).format(DATE_FORMAT)}</div>
+                    </div>
                 </div>
-            </div>
-            <div class="second"><span class="img-holder">
-                <img class="${itemRaw.rawData.logo == '' || itemRaw.rawData.logo == null ? 'no-image' : ''}" src='${image}' /></span>
-            </div>`
+                <div class="second"><span class="img-holder">
+                    <img class="${itemRaw.rawData.logo == '' || itemRaw.rawData.logo == null ? 'no-image' : ''}" src='${image}' /></span>
+                </div>`
+        } 
     },  
 }
 
