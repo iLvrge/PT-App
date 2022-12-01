@@ -271,7 +271,7 @@ const ViewIcons = (props) => {
     return(
         <React.Fragment>
             <Maintainance/>
-            {/* <Button onClick={getUnCollatealized}>Uncollateralized</Button> */}
+            {/* <Button onClick={getUnCollatealized}>Uncollateralized</Button> */} 
             {
                 profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'
                 && (

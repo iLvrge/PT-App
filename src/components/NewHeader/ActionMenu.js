@@ -737,7 +737,7 @@ const ActionMenu = (props) => {
                 :
                     <Button
                         id="action-menu"
-                        variant="text"
+                        variant="text"   
                         /* aria-controls="app-patentrack-action-menu"
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
