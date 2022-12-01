@@ -34,11 +34,13 @@ const options = {
     limitSize: true,
     /* cluster: true, */
     cluster: {
-        titleTemplate: 'Cluster containing {count} events.<br/> Zoom in to see the individual events.',
+        maxItems: 1,
+        titleTemplate: 'Cluster containing {count} citiing patents.<br/> Zoom in to see the individual citiing patent.',
         showStipes: false,
-        /* clusterCriteria: (firstItem, secondItem) => {
-            return ( (firstItem.rawData.assignee === secondItem.rawData.assignee) && moment(new Date(firstItem.rawData.start)).format(DATE_FORMAT_YEAR) == moment(new Date(secondItem.rawData.start)).format(DATE_FORMAT_YEAR))
-        } */
+        clusterCriteria: (firstItem, secondItem) => {
+            return  firstItem.rawData.assignee.toString().toLowerCase() == secondItem.rawData.assignee.toString().toLowerCase()
+        },
+        fitOnDoubleClick: false
     }, 
     zoomFriction: 30,
     /* zoomMin: 1000 * 60 * 60 * 24 * 7,   */
