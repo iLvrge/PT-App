@@ -738,12 +738,12 @@ const ActionMenu = (props) => {
                     <Button
                         id="action-menu"
                         variant="text"
-                        aria-controls="app-patentrack-action-menu"
+                        /* aria-controls="app-patentrack-action-menu"
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
                         disableElevation
                         onClick={handleClick}
-                        startIcon={open === false ? <KeyboardArrowDown /> : <KeyboardArrowUp/>}
+                        startIcon={open === false ? <KeyboardArrowDown /> : <KeyboardArrowUp/>} */
                         className={classes.btnActionMenu}
                     >
                         <span style={{whiteSpace: 'nowrap'}}>

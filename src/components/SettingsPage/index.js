@@ -237,7 +237,7 @@ function SettingsPage() {
       click: handleUsersLink,
       t: 33
     },    
-    {
+    /* {
       tooltip: 'Templates',
       bar: openTemplateBar,
       click: handleTemplatesLink,
@@ -254,13 +254,13 @@ function SettingsPage() {
       bar: openUtilitiesBar,
       click: handleUtilitiesLink,
       t: 32
-    },
+    }, */
     {
       tooltip: 'Companies Addresses',
       bar: openAddressBar,
       click: handleCompanyAddressLink,
       t: 37
-    },
+    },/* 
     {
       tooltip: 'Law Firms',
       bar: openLawfirmsBar,
@@ -272,7 +272,7 @@ function SettingsPage() {
       bar: openSlackBar, 
       click: handleSlackLink,
       t: 31
-    },
+    }, */
     /* {
       tooltip: 'Professionals',
       bar: openBar,
