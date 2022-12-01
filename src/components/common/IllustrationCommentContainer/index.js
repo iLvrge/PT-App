@@ -352,36 +352,30 @@ const IllustrationCommentContainer = ({
                                     updateTimelineRawData={setTimelineRawData}
                                 />
                             :
-                                selectedCategory == 'acquired' ||  selectedCategory == 'divested' ?
-                                    <SankeyChart
-                                        showTabs={true}
-                                        tabText={selectedCategory == 'acquired' ? 'Acquired' : 'Divested'}
-                                    />
+                                selectedCategory == 'top_non_us_members' ?
+                                    <GeoChart
+                                        chartBar={chartsBar} 
+                                        openCustomerBar={openCustomerBar} 
+                                        visualizerBarSize={visualizerBarSize}
+                                        type={type}
+                                        titleBar={true}
+                                        disableOtherTabs={true}
+                                    /> 
                                 :
-                                    selectedCategory == 'top_non_us_members' ?
-                                        <GeoChart
-                                            chartBar={chartsBar} 
-                                            openCustomerBar={openCustomerBar} 
-                                            visualizerBarSize={visualizerBarSize}
-                                            type={type}
-                                            titleBar={true}
-                                            disableOtherTabs={true}
-                                        /> 
-                                    :
-                                        <InventionVisualizer 
-                                            defaultSize={illustrationBarSize} 
-                                            visualizerBarSize={visualizerBarSize} 
-                                            analyticsBar={analyticsBar} 
-                                            openCustomerBar={openCustomerBar} 
-                                            commentBar={commentBar} 
-                                            illustrationBar={illustrationBar} 
-                                            customerBarSize={customerBarSize} 
-                                            companyBarSize={companyBarSize}
-                                            openChartBar={chartsBar}
-                                            handleChartBarOpen={chartsBarToggle}
-                                            type={type}  
-                                            middle={true}
-                                        />
+                                    <InventionVisualizer 
+                                        defaultSize={illustrationBarSize} 
+                                        visualizerBarSize={visualizerBarSize} 
+                                        analyticsBar={analyticsBar} 
+                                        openCustomerBar={openCustomerBar} 
+                                        commentBar={commentBar} 
+                                        illustrationBar={illustrationBar} 
+                                        customerBarSize={customerBarSize} 
+                                        companyBarSize={companyBarSize}
+                                        openChartBar={chartsBar}
+                                        handleChartBarOpen={chartsBarToggle}
+                                        type={type}  
+                                        middle={true}
+                                    />
                         :
                         dashboardScreen === true &&  type !== 9  
                         ?

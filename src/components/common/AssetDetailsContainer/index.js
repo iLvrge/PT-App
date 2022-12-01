@@ -325,6 +325,7 @@ const AssetDetailsContainer = ({
                         visualizerBarSize={visualizerBarSize}
                         type={type}
                         titleBar={true}
+                        activeTab={selectedCategory == 'filled' ? 2 : selectedCategory == 'acquired' ? 3 : 1}
                       />
                     :
                     timelineScreen === true  && assetIllustration == null && selectedCategory == 'due_dilligence'
