@@ -160,27 +160,23 @@ class PatentTopTitle extends React.Component {
               </IconButton>
              )
             }
-            {
-             (typeof this.props.shareButton === 'undefined' || (typeof this.props.shareButton !== 'undefined' && this.props.shareButton === true)) && (
-                  <IconButton onClick={() => this.props.share(this.props.patent)} size="large">
-                  <Tooltip 
-                  className='tooltip'
-                  title={
-                    <Typography color="inherit" variant='body2'>{'Share a diagram'}</Typography>
-                  }
-                  placement='top'
-                  enterDelay={0}
-                  TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
-                  >
-                    <Badge badgeContent={0} color="secondary"> 
-                      <FontAwesomeIcon
-                        icon={faShareAlt}                          
-                      />
-                    </Badge>
-                  </Tooltip>
-                </IconButton>
-              )
-            }
+            {/* <IconButton onClick={() => this.props.share(this.props.patent)} size="large">
+             <Tooltip 
+             className='tooltip'
+             title={
+               <Typography color="inherit" variant='body2'>{'Share a diagram'}</Typography>
+             }
+             placement='top'
+             enterDelay={0}
+             TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+             >
+               <Badge badgeContent={0} color="secondary"> 
+                 <FontAwesomeIcon
+                   icon={faShareAlt}                          
+                 />
+               </Badge>
+             </Tooltip>
+           </IconButton> */}
            {
              !this.props.isFullscreenOpen 
              ?
