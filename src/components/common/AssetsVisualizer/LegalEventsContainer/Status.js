@@ -47,15 +47,22 @@ const convertDataToItem = (event, icons) => {
     id: event.id,
     content: getTemplateContent(event, icons),
     start: new Date(event.start_date),
-    end: new Date(event.end_date),
-    type: 'range' ,
     rawData: event, 
-    className:  'asset-type-status',
+    className: 'asset-type-status',
     description: event.status,
     collection: [], 
     showTooltip: false
   }  
 
+  if(event.status.toLowerCase().indexOf('abandoned') == -1 && event.status.toLowerCase().indexOf('expire') == -1) { 
+    item.end =  new Date(event.end_date);
+    item.type =  'range' ;
+    item.className =  event.status.toLowerCase().indexOf('term') ? item.className + ' yellow' : item.className + ' green'
+  }  else {
+    if(event.status.toLowerCase().indexOf('abandoned') !== -1 || event.status.toLowerCase().indexOf('expire') !== -1) {  
+      item.className =  item.className + ' red'  
+    } 
+  }
   return item
 }
 

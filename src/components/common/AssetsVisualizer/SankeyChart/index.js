@@ -112,13 +112,21 @@ const SankeyChart = (props) => {
         }
     }, [data, assignorData])
 
-    const handleSelection = useCallback((items, type) => {
+    const handleSelection = useCallback(async(items, type) => {
         let oldItems = type == 2 ? [...assignorRawData] : [...assigneeRawData]
         const filter = oldItems.filter( row => row.name === items[0].name)
         //console.log('handleSelection', filter)
         if(filter.length > 0) {
-            /* dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
-            dispatch(setSelectAssignmentCustomers([filter[0].id])) */
+            if(props.type == 'filled') {
+                const {data} = await PatenTrackApi.findInventor(filter[0].id)
+                if(data != null && data?.id && data.id > 0) {
+                    dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
+                    dispatch(setSelectAssignmentCustomers([data.id]))
+                }
+            } else {
+                dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
+                dispatch(setSelectAssignmentCustomers([filter[0].id])) 
+            }
             /* dispatch(setDashboardScreen(false))
             dispatch(setTimelineScreen(false))
             dispatch(setPatentScreen(true)) */

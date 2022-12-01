@@ -531,7 +531,9 @@ const Reports = (props) => {
         state => state.patenTrack2.assetTypeAssignmentAssets.list,
     ); //Assets List 
     const dashboardPanelActiveButtonId = useSelector(state => state.patenTrack2.dashboardPanelActiveButtonId) 
-    
+    useEffect(() => {
+        console.log('timelineGrid', timelineGrid)
+    }, [timelineGrid])
     useEffect(() => {
         if(ref.current !== null) {
             resizeObserver = new ResizeObserver(entries => {  
@@ -566,8 +568,10 @@ const Reports = (props) => {
                     }  
                     newTimelineGrid = {...newGridItems}
                 } 
+                console.log('newTimelineGrid', newTimelineGrid, profile)
                 setGrid(newGridItems)
                 if(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'){
+                    console.log('newTimelineGrid', newTimelineGrid)
                     setTimelineGrid(newTimelineGrid)
                 }
                 setSmallScreen(smallScreen)  
@@ -580,7 +584,7 @@ const Reports = (props) => {
                 }
             }
         }        
-    }, []) 
+    }, [profile]) 
 
     useEffect(() => {
         if(dashboardPanelActiveButtonId != activeId) {
@@ -1049,7 +1053,7 @@ const Reports = (props) => {
                         if(data != null) {                        
                             const obj = data.line.length > 0 ? data.line[0] : null
                             if(obj != null) {
-                                dispatch(
+                                dispatch(    
                                     setConnectionData(obj)
                                 ) 
                                 dispatch(

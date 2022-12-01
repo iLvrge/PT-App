@@ -35,7 +35,20 @@ const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handle
     const move_assets = useSelector(state => state.patenTrack2.move_assets)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
+    const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
+ 
+
+    useEffect(() => {
+        if(selectedAssetsPatents.length > 0) {
+            const itemSelect = selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString()
+            if(!selectItems.includes(itemSelect)) {
+                setSelectItems([itemSelect])
+                setSelectedAssets([itemSelect])
+                setSelectedRow([itemSelect])
+            }
+        }
+    }, [selectedAssetsPatents])
     
     useEffect(() => {
         if( clipboard_assets.length != selectItems.length ) {
@@ -43,6 +56,7 @@ const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handle
             const items = []
             clipboard_assets.map( asset => items.push(asset.id))
             setSelectItems(items)
+            setSelectedRow(items)
         }
     }, [ clipboard_assets ])
     const Clipboard = () => {
@@ -158,8 +172,7 @@ const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handle
             formData.append('appno_doc_num', row.appno_doc_num)
             formData.append('grant_doc_num', row.grant_doc_num)
             const { data } = await PatenTrackApi.moveAssetForSale(formData)
-            if( data  !== null) {
-              console.log(data)
+            if( data  !== null) { 
             }
         } else if( event.target.value == 0 ) {
             if(clipboard_assets.length > 0) {
@@ -265,8 +278,9 @@ const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handle
                 const findElement = element.querySelector('div.MuiSelect-select')
                 if( index == 2 && findElement != null ) {
                     setDropOpenAsset(row.asset)
-                } else if( index == 3) {
+                } else if( index == 3) { 
                     setSelectItems([row.asset])
+                    setSelectedRow([row.asset])
                     setSelectedAssets([row.asset])
                     dispatch(setFamilyActiveTab(1))
                     dispatch(toggleLifeSpanMode(false));
@@ -306,6 +320,7 @@ const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handle
         const { checked } = event.target  
         if (checked === false) {
             setSelectItems([])
+            setSelectedRow([])
             dispatch(setClipboardAssets([]));
         } else if (checked === true) {
             if (assets.length > 0) {
@@ -316,6 +331,7 @@ const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handle
                 })
                 await Promise.all(promises)
                 setSelectItems(items)
+                setSelectedRow(items)
                 //dispatch(setClipboardAssets(allAssets));
             }
         }
@@ -350,8 +366,7 @@ const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handle
          M50.2363281,16l1.4619141,4H28.2373047l1.4619141-4H35c0.5527344,0,1-0.4477539,1-1v-4c0-2.2055664,1.7939453-4,4-4
         s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z"  className="color000 svgShape"></path><path d="M23,38h8V28h-8V38z M25,30h4v6h-4V30z"  className="color000 svgShape"></path><rect width="23" height="2" x="34" y="32"  className="color000 svgShape"></rect><rect width="17" height="2" x="23" y="44"  className="color000 svgShape"></rect><rect width="34" height="2" x="23" y="54"  className="color000 svgShape"></rect><rect width="34" height="2" x="23" y="64"  className="color000 svgShape"></rect><rect width="2" height="4" x="38.968" y="9"  className="color000 svgShape"></rect></svg>
         )
-    }
-    
+    } 
     if (loading || assets.length == 0) return <Loader />
 
     return (
@@ -361,7 +376,7 @@ const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handle
                 openDropAsset={dropOpenAsset}
                 selected={selectItems}
                 rowSelected={selectedRow}
-                selectedKey={"id"}
+                selectedKey={"asset"}
                 rows={assets}
                 dropdownSelections={move_assets}
                 rowHeight={rowHeight}
@@ -372,6 +387,9 @@ const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handle
                 defaultSelectAll={selectedAll}
                 totalRows={assets.length}
                 responsive={false}
+                noBorderLines={true}
+                highlightRow={true} 
+                higlightColums={[2]}
                 width={width}
                 containerStyle={{
                     width: "100%",

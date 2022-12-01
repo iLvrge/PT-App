@@ -41,7 +41,7 @@ const options = {
         } */
     }, 
     zoomFriction: 30,
-    zoomMin: 1000 * 60 * 60 * 24 * 7,  
+    /* zoomMin: 1000 * 60 * 60 * 24 * 7,   */
     template: function(item, element, data) { 
         if (data.isCluster) {
             return `<span class="cluster-header">Cluster containing ${data.items.length} events</span>`

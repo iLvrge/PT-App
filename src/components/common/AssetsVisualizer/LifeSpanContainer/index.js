@@ -66,6 +66,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
         }
     ]
 
+    console.log('activeTab', activeTab, selectedTab)
     useEffect(() => {
         if(selectedRow.length  === 0) {
             /* setLifeSpanTabs(['Lifespan', 'Acknowledgements']) */
@@ -340,7 +341,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                     ''
             }
             {  
-                (selectedAssetsTransactionLifeSpan.length > 0 && (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) )  && fullScreen === true && (
+                ( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) )  && fullScreen === true && (
                     <FullScreen 
                         componentItems={fullScreenItems} 
                         showScreen={fullScreen} 

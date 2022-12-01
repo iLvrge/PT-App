@@ -458,7 +458,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     }, [sendAssetRequest, selectedTab, /* openCustomerBar,  */selectedCategory, selectedCompanies, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_clipboard, salable, licensable ]) 
 
 
-    const findCPCList = async(oldScopeRange, list, totalRecords, year, range, scope) => {       
+    const findCPCList = async(oldScopeRange, list, totalRecords, year, range, scope) => {   
         const form = new FormData()
         form.append("list", JSON.stringify(list))
         form.append("total", totalRecords)
@@ -511,9 +511,10 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         if( typeof range === 'undefined' && typeof scope ===  'undefined'  && data.group.length > 0 && dashboardScreen === false) {
             setValueRange(4) 
             setValueScope([ data.group[0].id, data.group[data.group.length - 1].id ])
+            newRange = [ data.group[0].id, data.group[data.group.length - 1].id ]
         }    
         if(typeof scope == 'undefined' && dashboardScreen === false) {
-            /* console.log('valueScopeLabel', valueScopeLabel, 'oldScopeRange', oldScopeRange) */
+            
             const findOldRange = []
             if(oldScopeRange.length > 0 && typeof range !== 'undefined') {
                 const promiseScope = newRange.map( scope => {
@@ -524,6 +525,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 })
                 await Promise.all(promiseScope)
             } 
+            /* console.log('valueScopeLabel', valueScopeLabel, 'oldScopeRange', oldScopeRange, 'findOldRange', findOldRange, 'newRange', newRange)  */
             const scopeGroup = []
             /* let i = data.group.length + 1 */
             let i = data.group.length + 1

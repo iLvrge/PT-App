@@ -624,7 +624,7 @@ const GlobalLayout = (props) => {
     }, [ openChartBar])
     useEffect(() => {
         console.log('Layout openAnalyticsBar BAR CHANGES',  openChartBar, openAnalyticsBar)
-    }, [ openAnalyticsBar]) */
+    }, [ openAnalyticsBar]) */   
 
     const handleCompanyBarOpen = (event) => {
         if(props.type === 9) {

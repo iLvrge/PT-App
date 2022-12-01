@@ -31,7 +31,10 @@ const IllustrationContainer = ({
   fullScreen,
   onHandleChartBarSize,
   viewOnly,
-  pdfModal
+  pdfModal,
+  shareButton,
+  usptoButton,
+  connectionSelection
  }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -346,6 +349,9 @@ const IllustrationContainer = ({
                   isDarkTheme={isDarkTheme}
                   themeMode={themeMode}
                   copyrights={true}   
+                  shareButton={shareButton}
+                  usptoButton={usptoButton}
+                  connectionSelection={connectionSelection}
                 /> 
                 {
                   typeof pdfModal !== 'undefined' && pdfModal === true && fullScreen === true && (

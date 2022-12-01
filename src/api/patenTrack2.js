@@ -491,6 +491,8 @@ class PatenTrackApi {
       }  
     } 
   }
+
+  
   
 
   static getAssetsByCPCCode( year, cpcCode, form ) { 
@@ -508,6 +510,10 @@ class PatenTrackApi {
   static getNameQueue( form ) { 
     return axios.post(`${base_new_api_url}/customers/transactions/queues/name`, form, getFormUrlHeader())
   }
+
+  static findInventor( inventorID ) {  
+    return axios.get(`${base_new_api_url}/dashboards/parties/inventor/${inventorID}`, getHeader())
+  } 
 
   static getCustomerAddressByCompanyIDs( companies) {  
     return axios.get(`${base_new_api_url}/address/companies?companies=${JSON.stringify(companies)}`, getHeader())

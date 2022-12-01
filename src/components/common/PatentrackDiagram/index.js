@@ -1667,6 +1667,7 @@ class PatentrackDiagram extends React.Component {
           key={`Link_${i_}`}
           svg={`svg_${this.prefix}`}
           onClickConnectionLine={this.onClickConnectionLine}
+          connectionSelection={this.props.connectionSelection}
           activeLine={this.state.activeLine}
           parent="patentLinksGroup"
           data={linkData}
@@ -1795,6 +1796,8 @@ class PatentrackDiagram extends React.Component {
           toggleShow3rdParities={this.props.toggleShow3rdParities}
           showThirdParties={this.props.showThirdParties}
           usptoMode={this.props.usptoMode}
+          shareButton={this.props.shareButton}
+          usptoButton={this.props.usptoButton}
           config={this.config}
           quantatives={{
             assignment: {

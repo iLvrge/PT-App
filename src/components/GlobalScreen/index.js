@@ -67,6 +67,7 @@ import PatenTrackApi from '../../api/patenTrack2'
 import LawFirmTable from '../common/LawFirmTable';
 import FamilyContainer from '../common/AssetsVisualizer/FamilyContainer';
 import SecuredAssets from '../common/SecuredAssets';
+import FullScreen from '../common/FullScreen';
 
 const GlobalScreen = ({
     type,
@@ -309,7 +310,7 @@ const GlobalScreen = ({
             }
         } 
     }, [selectedCategory, timelineScreen])
-
+    
     useEffect(() => {
         if( type === 0 ) {
             if( selectedMainCompanies.length > 0 || selectedCompaniesAll === true ) {
@@ -439,8 +440,33 @@ const GlobalScreen = ({
     }
 
     const handleClickOpenFullscreen = () => {
-        setIsFullscreenOpen(true)
+        setIsFullscreenOpen(!isFullscreenOpen)
     }
+
+    const illustrationMenuItems = [
+        {
+            id: 1,
+            label: `Title`,
+            component: IllustrationContainer,
+            standalone: true,
+            isFullscreenOpen: isFullscreenOpen, 
+            asset: assetIllustration,
+            setIllustrationRecord: setIllustrationRecord, 
+            chartsBar: openChartBar,
+            analyticsBar: openAnalyticsBar,
+            chartsBarToggle: handleChartBarOpen,
+            checkChartAnalytics: checkChartAnalytics,
+            setAnalyticsBar: setAnalyticsBar,
+            setChartBar: setChartBar,
+            fullScreen: handleClickOpenFullscreen,
+            pdfModal: true,
+            gap: gap,
+            viewOnly: true,
+            shareButton: false,
+            usptoButton: false,
+            connectionSelection: false
+        }
+    ]
 
 
     return (
@@ -472,7 +498,8 @@ const GlobalScreen = ({
                                         defaultSelect={''} 
                                         addUrl={true} 
                                         parentBarDrag={setVisualizerBarSize}
-                                        parentBar={setVisualizeOpenBar}                                
+                                        parentBar={setVisualizeOpenBar} 
+                                        checkChartAnalytics={checkChartAnalytics}                               
                                     /> 
                             }
                         </>
@@ -821,21 +848,33 @@ const GlobalScreen = ({
                                                 :
                                                 assetIllustration != null 
                                                 ?
-                                                    <IllustrationContainer 
-                                                        isFullscreenOpen={isFullscreenOpen} 
-                                                        asset={assetIllustration} 
-                                                        setIllustrationRecord={setIllustrationRecord} 
-                                                        chartsBar={openChartBar}
-                                                        analyticsBar={openAnalyticsBar}
-                                                        chartsBarToggle={handleChartBarOpen}
-                                                        checkChartAnalytics={checkChartAnalytics}
-                                                        setAnalyticsBar={setAnalyticsBar}
-                                                        setChartBar={setChartBar}
-                                                        fullScreen={handleClickOpenFullscreen}
-                                                        pdfModal={true}
-                                                        gap={gap}
-                                                        viewOnly={true}
-                                                    />
+                                                    !isFullscreenOpen
+                                                    ?
+                                                        <IllustrationContainer 
+                                                            isFullscreenOpen={isFullscreenOpen} 
+                                                            asset={assetIllustration} 
+                                                            setIllustrationRecord={setIllustrationRecord} 
+                                                            chartsBar={openChartBar}
+                                                            analyticsBar={openAnalyticsBar}
+                                                            chartsBarToggle={handleChartBarOpen}
+                                                            checkChartAnalytics={checkChartAnalytics}
+                                                            setAnalyticsBar={setAnalyticsBar}
+                                                            setChartBar={setChartBar}
+                                                            fullScreen={handleClickOpenFullscreen}
+                                                            pdfModal={true}
+                                                            gap={gap}
+                                                            viewOnly={true}
+                                                            shareButton={false}
+                                                            usptoButton={false}
+                                                            connectionSelection={false}
+                                                        />
+                                                    :
+                                                        <FullScreen 
+                                                            componentItems={illustrationMenuItems} 
+                                                            showScreen={isFullscreenOpen} 
+                                                            setScreen={handleClickOpenFullscreen} 
+                                                            showClose={false}
+                                                        />
                                                 :
                                                     selectedAssetsLegalEvents != null && Object.keys(selectedAssetsLegalEvents).length > 0
                                                     ?

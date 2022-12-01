@@ -151,15 +151,23 @@ export default makeStyles(theme => ({
       opacity: '1'
     },
     '& .vis-item.asset-type-status':{
-      backgroundColor: 'rgba(34,34,34, 0.75)',
-      border: 0,
-      '& .vis-item-content':{
-        border: '1px solid #545454',
-        borderRadius: '3px', 
-        padding: '4px 0px 2px 4px', 
-        color: '#fff',
-        width: '100%'
+      backgroundColor: 'rgba(34,34,34, 0.75)', 
+      border: '1px solid #545454',
+      /* padding: '4px 0px 2px 4px',  */
+      color: '#fff !important',
+      width: '100%',
+      borderRadius: '3px', 
+      '& .vis-item-content':{ 
       }
+    },
+    '& .vis-item.yellow':{
+      backgroundColor: '#FFAA00', 
+    },
+    '& .vis-item.green':{
+      backgroundColor: '#70A800', 
+    },
+    '& .vis-item.red':{
+      backgroundColor: '#E60000', 
     },
     '& .vis-item.vis-box': {      
       '&.asset-type-default': {

@@ -71,7 +71,7 @@ import { resetAllRowSelect } from '../../../utils/resizeBar'
 
 
 
-const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag, parentBar, isMobile}) => {
+const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag, parentBar, isMobile, checkChartAnalytics}) => {
     const COLUMNS = [
         {
             width: 10,
@@ -839,6 +839,9 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                 dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
             }
         } 
+        if(dashboardScreen === true) {
+            checkChartAnalytics(null, null, false)
+        }
         updateCompanySelection(event, dispatch, row, cntrlKey, selected, defaultSelect, currentSelection)
     }, [ dispatch, selected, display_clipboard, currentSelection ])
 

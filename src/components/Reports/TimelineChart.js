@@ -39,7 +39,7 @@ const options = {
     horizontalScroll: true,
     verticalScroll: true,
     zoomFriction: 30,
-    zoomMin: 1000 * 60 * 60 * 24 * 7, // 7 days
+    /* zoomMin: 1000 * 60 * 60 * 24 * 7,  */// 7 days
     /* showTooltips: true, */
     /* zoomMax: 1000 * 60 * 60 * 24 * 30 * 3, */ // 3months
     cluster: {
@@ -135,12 +135,15 @@ const TimelineChart = (props) => {
         const {nodeName} = event.target.parentNode 
         const item = timelineRef.current.itemsData.get(items) 
         if(item.length > 0) {
-            console.log('onSelect', item);
             const {security_pdf, release_pdf,  rawData} = item[0];
             const {all_release_ids, id} = rawData
+            /* setSelectTransaction(id)
+            dispatch(setDashboardPanel(true))  
+            props.checkChartAnalytics(null, null, true)
+            dispatch(setAssetsIllustration({ type: "transaction", id })); */
             /* if(all_release_ids != null && all_release_ids != '' ) {
                 setOpenModal(true)
-                setItemData(JSON.parse(all_release_ids))
+                setItemData(JSON.parse(all_release_ids))     
             } */
             if(selectTransaction != id) {
                 setSelectTransaction(id)
@@ -152,7 +155,7 @@ const TimelineChart = (props) => {
                 dispatch(setDashboardPanel(false))  
                 dispatch(setAssetsIllustration(null))
                 props.checkChartAnalytics(null, null, false)
-            }
+            } 
 
             /* const pdfFile = nodeName == "TT" ? security_pdf : nodeName == "EM" ? release_pdf : ''
             if(pdfFile !== '' && pdfFile != undefined) {
@@ -178,10 +181,10 @@ const TimelineChart = (props) => {
                 }
             } */
         } else {
-            setSelectTransaction(null)
-            props.checkChartAnalytics(null, null, false)
+            /* setSelectTransaction(null)
+            props.checkChartAnalytics(null, null, false) */
         }
-    })
+    }, [selectTransaction])
 
     const findImageColor = (item) => {
         let image = '', color ='';
