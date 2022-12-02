@@ -32,25 +32,25 @@ const options = {
     horizontalScroll: true,
     verticalScroll: true,
     limitSize: true,
-    cluster: true,
-    /* cluster: {
-        maxItems: 1,
-        titleTemplate: 'Cluster containing {count} citiing patents.<br/> Zoom in to see the individual citiing patent.',
+    /* cluster: true, */
+    cluster: {
+        maxItems: 6,
+        titleTemplate: 'Zoom in to see the individual citiing patent.',
         showStipes: false,
-        clusterCriteria: (firstItem, secondItem) => {
+        /* clusterCriteria: (firstItem, secondItem) => {
             return  firstItem.rawData.assignee.toString().toLowerCase() == secondItem.rawData.assignee.toString().toLowerCase()
         },
-        fitOnDoubleClick: false
-    },  */
+        fitOnDoubleClick: false */
+    }, 
     zoomFriction: 30,
     /* zoomMin: 1000 * 60 * 60 * 24 * 7,   */
     template: function(item, element, data) { 
         if (data.isCluster) {
-            return `<span class="cluster-header">Cluster containing ${data.items.length} events</span>`
+            return `<span class="cluster-header">${data.items.length} citing patents</span>`
         } else { 
             let itemRaw = data.isCluster ? data.items[0] : data
             let image = itemRaw.rawData.logo
-            
+             
             if(itemRaw.rawData.logo !== '' && itemRaw.rawData.logo !== null) {
                 if( itemRaw.rawData.logo.indexOf('http') === -1 ) {
                     image = CDN_PATH_LOGO + itemRaw.rawData.logo
