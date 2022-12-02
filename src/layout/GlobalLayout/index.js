@@ -568,9 +568,14 @@ const GlobalLayout = (props) => {
                             if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
                                 findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
                             } else {
-                                tableContainer = document.getElementById('main_companies')
-                                if(tableContainer !== null) {
+                                tableContainer = document.getElementById('lawfirms_container')
+                                if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
                                     findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                                } else {
+                                    tableContainer = document.getElementById('main_companies')
+                                    if(tableContainer !== null) {
+                                        findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                                    }
                                 }
                             }
                         } 
@@ -585,9 +590,14 @@ const GlobalLayout = (props) => {
                     if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
                         findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
                     } else {
-                        tableContainer = document.getElementById('main_companies')
-                        if(tableContainer !== null) {
-                            findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')                            
+                        tableContainer = document.getElementById('lawfirms_container')
+                        if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
+                            findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                        } else {
+                            tableContainer = document.getElementById('main_companies')
+                            if(tableContainer !== null) {
+                                findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')                            
+                            }
                         }
                     }
                 }
@@ -924,6 +934,8 @@ const GlobalLayout = (props) => {
         if(usptoMode === false && lifeSpanMode === false && familyItemMode === false && pdfView === false && !bar === true) {
             dispatch( toggleLifeSpanMode( true ) )
         }
+        /* console.log('handleChartBarOpen', !bar, openAnalyticsBar, openCommentBar, openIllustrationBar, barSize) */
+        changeHeight('analyticsBar', barSize == 0 ? '0px': barSize)
         changeVisualBar(!bar, openAnalyticsBar, openCommentBar, openIllustrationBar)
     }
 
@@ -949,7 +961,16 @@ const GlobalLayout = (props) => {
             dispatch( toggleLifeSpanMode( true ) )
         }    
         setIllustrationBarSize(barSize)
+        changeHeight('analyticsBar', barSize == 0 ? '0px': barSize)
+        /* console.log('handleAnalyticsBarOpen', openChartBar, !bar, openCommentBar, openIllustrationBar, barSize) */
         changeVisualBar(openChartBar, !bar, openCommentBar, openIllustrationBar)
+    }
+
+    const changeHeight = (container, height) => {
+        const element = document.getElementById(container)
+        if(element !== null) {
+            element.parentElement.style.height = height
+        }
     }
 
     const checkPDFHeight = () => {

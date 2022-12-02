@@ -264,6 +264,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     },[ graphRawGroupData, filterList ])
 
     const onCameraPositionChange = useCallback(async (event) => {
+        /* console.log(event) */
     })
 
     const checkToolTip = () => {

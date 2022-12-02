@@ -274,7 +274,7 @@ const AssetDetailsContainer = ({
           <SplitPane
             className={cls}
             split={split}
-            minSize={minSize}
+            minSize={100}
             maxSize={-100}
             defaultSize={defaultSize}
           /*  onChange={() => changeContainer()} */
