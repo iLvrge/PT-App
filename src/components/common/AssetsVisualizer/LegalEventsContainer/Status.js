@@ -45,24 +45,30 @@ const getTemplateContent = (item, icons) => {
 const convertDataToItem = (event, icons) => { 
   const item = {
     id: event.id,
-    content: getTemplateContent(event, icons),
+    content: event.type == 1 || event.type == 'background' ? event.status : getTemplateContent(event, icons),
     start: new Date(event.start_date),
-    rawData: event, 
-    className: 'asset-type-status',
+    rawData: event,  
     description: event.status,
     collection: [], 
     showTooltip: false
   }  
 
-  if(event.status.toLowerCase().indexOf('abandoned') == -1 && event.status.toLowerCase().indexOf('expire') == -1) { 
-    item.end =  new Date(event.end_date);
-    item.type =  'range' ;
-    item.className =  event.status.toLowerCase().indexOf('term') ? item.className + ' yellow' : item.className + ' green'
-  }  else {
-    if(event.status.toLowerCase().indexOf('abandoned') !== -1 || event.status.toLowerCase().indexOf('expire') !== -1) {  
-      item.className =  item.className + ' red'  
-    } 
+  if(typeof event.end_date != 'undefined') { 
+    item.end =  new Date(event.end_date);  
+  } 
+
+  if(typeof event.className != 'undefined') { 
+    item.className =  event.className
+  } else if(event.status.toLowerCase().indexOf('abandoned') !== -1 || event.status.toLowerCase().indexOf('expire') !== -1) {  
+    item.className =  'redBorder'  
+  } else {
+    item.className =  'yellowBorder' 
   }
+
+  if(event.type == 'background') {
+    item.type = event.type
+  }
+  
   return item
 }
 
@@ -209,6 +215,7 @@ useEffect(() => {
    
     const convertedItems = timelineRawData.map((event) => convertDataToItem(event, allIcons))
 
+    console.log('convertedItems', convertedItems)
     items.current = new DataSet()
     let start = new moment().subtract(5, 'year')
     let end = new moment().add(3, 'year')
@@ -253,7 +260,7 @@ useEffect(() => {
                     filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`,
                 }}
                 ref={timelineContainerRef}
-                className={classes.timeline}
+                className={classes.timelineStatus}
             />
             { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> }
             { isLoadingTimelineData && <Loader /> }

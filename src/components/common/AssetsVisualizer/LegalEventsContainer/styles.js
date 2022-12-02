@@ -95,6 +95,57 @@ export default makeStyles(theme => ({
     top: '50%',
     left: '50%',
   },
+  timelineStatus: {
+    height: '100%', 
+    width: '100%',
+    '& .vis-panel.vis-center':{
+      borderTop: 0
+    },
+    '& .vis-timeline':{
+      border: 0,
+      borderTop:`1px solid ${theme.palette.divider}`, 
+      borderBottom:`1px solid ${theme.palette.divider}`, 
+      backgroundColor: `${theme.palette.background.paper}!important`,
+      '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground':{
+        /* backgroundColor: '#424242 !important', */
+      }
+    },
+    '& .vis-left.vis-panel.vis-vertical-scroll, .vis-right.vis-panel.vis-vertical-scroll':{
+      overflowY: 'hidden'
+    },
+    '& .vis-itemset .vis-background':{
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      overflow: 'visible',
+    },
+    '& .vis-item.vis-line':{
+      zIndex: 9999
+    },
+    '& .vis-item.yellowBorder':{
+      backgroundColor: '#FFAA00', 
+      borderColor: '#FFAA00', 
+      color: '#fff !important',
+    },
+    '& .vis-item.greenLight':{
+      backgroundColor: '#CEE7FC',
+      color: '#fff !important',
+    },
+    '& .vis-item.green':{
+      backgroundColor: '#ABD7FC',
+      color: '#fff !important',
+    },
+    '& .vis-item.greenBorder':{
+      borderColor: '#1565C0',
+      backgroundColor: '#1565C0',
+      color: '#fff !important',
+    },
+    '& .vis-item.redBorder':{
+      backgroundColor: '#E60000', 
+      borderColor: '#E60000', 
+      color: '#fff !important',
+    },
+  },
   timeline: { 
     height: '100%', 
     width: '100%',
