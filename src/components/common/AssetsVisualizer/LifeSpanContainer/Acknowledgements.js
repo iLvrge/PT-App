@@ -32,8 +32,8 @@ const options = {
     horizontalScroll: true,
     verticalScroll: true,
     limitSize: true,
-    /* cluster: true, */
-    cluster: {
+    cluster: true,
+    /* cluster: {
         maxItems: 1,
         titleTemplate: 'Cluster containing {count} citiing patents.<br/> Zoom in to see the individual citiing patent.',
         showStipes: false,
@@ -41,7 +41,7 @@ const options = {
             return  firstItem.rawData.assignee.toString().toLowerCase() == secondItem.rawData.assignee.toString().toLowerCase()
         },
         fitOnDoubleClick: false
-    }, 
+    },  */
     zoomFriction: 30,
     /* zoomMin: 1000 * 60 * 60 * 24 * 7,   */
     template: function(item, element, data) { 

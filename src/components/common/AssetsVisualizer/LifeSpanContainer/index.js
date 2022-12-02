@@ -95,9 +95,12 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                 dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, []))
                 return null
             } 
+            dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, []))
             const list = [];
             let totalRecords = 0;
+            
             if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {  
+                
                 if( assetsSelected.length > 0 ) {
                     const promise = assetsSelected.map(asset => {
                         const findIndex = assetsList.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset.toString() )
@@ -123,11 +126,11 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                 }                
             } else {
                 if( assetsList.length > 0 || maintainenceAssetsList.length > 0 ) {
-                    if( assetsList.length > 0  && assetsTotal == assetsList.length) {
+                    if( assetsList.length > 0 ) {
                         const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
                         await Promise.all(promise)
                         totalRecords = assetsTotal
-                    } else if ( maintainenceAssetsList.length > 0  && maintainenceAssetsTotal == maintainenceAssetsList.length) {
+                    } else if ( maintainenceAssetsList.length > 0 ) {
                         const promise = maintainenceAssetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
                         await Promise.all(promise)
                         totalRecords = maintainenceAssetsTotal
@@ -167,7 +170,8 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                                 );
                             }  */
                         } else {
-                            /* if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
+                            if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
+                                
                                 dispatch(
                                     getCustomerAssets(
                                       selectedCategory == '' ? '' : selectedCategory,
@@ -184,11 +188,12 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                                       display_sales_assets
                                     ),
                                 );
-                            } */
+                            }
                         }
                     }
                 }                
             }
+           /*  console.log('list', list) */
             if( list.length > 0 ) {
                 setFilterList(list)
                 const form = new FormData()
@@ -203,9 +208,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                 PatenTrackApi.cancelLifeSpanRequest()
                 const {data} = await PatenTrackApi.getAssetLifeSpan(form) 
                 dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, data))
-            } else {
-                dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, []))
-            }
+            }  
         }
         getChartData()
     }, [selectedCategory,  selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_sales_assets ])
@@ -247,7 +250,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
     return (
         <Paper className={classes.root} square>  
             {
-                (selectedAssetsTransactionLifeSpan.length > 0 && (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) && fullScreen === false && typeof standalone === 'undefined' && (
+                (/* selectedAssetsTransactionLifeSpan.length > 0 &&  */(process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) && fullScreen === false && typeof standalone === 'undefined' && (
                     <IconButton size="small" className={classes.fullscreenBtn} onClick={() => setFullScreen(!fullScreen)}>
                         <FullscreenIcon />
                     </IconButton>

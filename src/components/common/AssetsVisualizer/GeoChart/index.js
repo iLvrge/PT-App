@@ -167,7 +167,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                             } else {
                                 if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0) && assetRequest === false) {
                                     setAssetRequest(true)
-                                    /* dispatch(
+                                    dispatch(
                                         getCustomerAssets(
                                             selectedCategory == '' ? '' : selectedCategory,
                                             companies,
@@ -183,7 +183,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                                             display_sales_assets,
                                             setAssetRequest
                                         ),
-                                    ); */
+                                    );
                                 }
                             }                        
                         }
