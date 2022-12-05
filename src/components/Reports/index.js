@@ -531,9 +531,7 @@ const Reports = (props) => {
         state => state.patenTrack2.assetTypeAssignmentAssets.list,
     ); //Assets List 
     const dashboardPanelActiveButtonId = useSelector(state => state.patenTrack2.dashboardPanelActiveButtonId) 
-    useEffect(() => {
-        console.log('timelineGrid', timelineGrid)
-    }, [timelineGrid])
+     
     useEffect(() => {
         if(ref.current !== null) {
             resizeObserver = new ResizeObserver(entries => {  
@@ -613,6 +611,7 @@ const Reports = (props) => {
                 }
             }
         }
+        return (() => {})
     }, [cardList, timelineList])
 
     

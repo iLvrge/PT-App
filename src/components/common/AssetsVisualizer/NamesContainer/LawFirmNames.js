@@ -101,7 +101,6 @@ const LawFirmNames = (props) => {
     const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
 
     const DrawCloudChart =  () => {  
-        console.log(namesData)
         return (
             <ReactWordcloud 
                 words={namesData} 

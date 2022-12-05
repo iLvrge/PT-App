@@ -547,8 +547,11 @@ const VirtualizedTable = ({
   );
   const checkRowCollapse = (childInModal, collapsable, index, rowData, tableRef) => {  
     if (collapsable && typeof childInModal === 'undefined') {
-      tableRef.current.recomputeRowHeights();
-      tableRef.current.forceUpdate(); 
+      if(tableRef.current !== null && typeof tableRef.current.recomputeRowHeights == 'function') {
+        tableRef.current.recomputeRowHeights();
+        tableRef.current.forceUpdate(); 
+      }
+      
       if ((disableRow === false || disableRow == undefined) || disableRow == true) {
        
         const rowContainer = tableRef.current.Grid._scrollingContainer.querySelector(

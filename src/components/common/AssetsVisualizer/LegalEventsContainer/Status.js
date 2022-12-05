@@ -31,21 +31,21 @@ const DATE_FORMAT = 'MMM DD, YYYY'
  
 const getTemplateContent = (item, icons) => {   
   let status = item.status, icon = '';
-  if(status.toLowerCase().indexOf('abandoned') !== -1) {
+  /* if(status.toLowerCase().indexOf('abandoned') !== -1) {
     status = 'Abandoned'
     icon = icons[1]
   } else if(status.toLowerCase().indexOf('expire') !== -1) {
     status = 'Expired'
     icon = icons[0]
-  }
-  const templateContent = `<div class='first limit'>${status}</div><div class='textColumn'>${moment(new Date(item.eventdate)).format(DATE_FORMAT)}</div><div class='absolute icon'>${icon}</div>`
-  return templateContent
+  } */
+  const templateContent = `<div class='first limit'>${status} ${typeof item.anotherStatus != 'undefined' ? '<br/>' + item.anotherStatus : ''}</div><div class='textColumn'>${moment(new Date(item.eventdate)).format(DATE_FORMAT)}</div><div class='absolute icon'>${icon}</div>`
+  return templateContent 
 } 
 
 const convertDataToItem = (event, icons) => { 
   const item = {
     id: event.id,
-    content: event.type == 1 || event.type == 'background' ? event.status : getTemplateContent(event, icons),
+    content: event.type == 'background' ? event.status : getTemplateContent(event, icons),
     start: new Date(event.start_date),
     rawData: event,  
     description: event.status,
@@ -201,8 +201,37 @@ useEffect(() => {
             setIsLoadingTimelineRawData(false) 
             if(data !== null && data.main.length > 0 )  {
               setAllIcons(data.icons)
-              setTimelineRawData(data.main)
-              updateRawData(data.main)
+
+              const allEvents = data.main;
+              let grantStatus = true, publishedDate = null, expiredStatus = false, expiredDate = null, patentEndDate = null, patentIndex = -1
+              const promises = allEvents.map( (event, index) => {
+                if(event.id == 'A') { 
+                  publishedDate = event.end_date 
+                } else if(event.id == 'B') {
+                  grantStatus = true
+                  patentEndDate = event.end_date
+                  patentIndex = index
+                } else if(event.status.toLowerCase().indexOf('expired') !== -1) {
+                  expiredStatus = true
+                  expiredDate = event.start_date
+                }
+              })
+              await Promise.all(promises)
+              if(patentIndex >= 0 && expiredStatus === true && expiredDate != null) {
+                allEvents[patentIndex].end_date = expiredDate
+                allEvents.push({
+                  id: 'C',
+                  start_date: expiredDate,
+                  end_date: patentEndDate == null ? publishedDate : patentEndDate,
+                  eventdate: expiredDate,
+                  type: 'background',
+                  className: 'grey',
+                  status: ''
+                })
+              }
+
+              setTimelineRawData(allEvents)
+              updateRawData(allEvents)
             }
         }
         getStatusbData()
@@ -217,8 +246,8 @@ useEffect(() => {
 
     console.log('convertedItems', convertedItems)
     items.current = new DataSet()
-    let start = new moment().subtract(5, 'year')
-    let end = new moment().add(3, 'year')
+    let start = new moment().subtract(2, 'year')
+    let end = new moment().add(2, 'year')
     let min = start.format('YYYY-MM-DD'), max = end.format('YYYY-MM-DD') 
     if (convertedItems.length > 0) {      
       convertedItems.map( (item, index) => {
@@ -232,15 +261,15 @@ useEffect(() => {
           if( new moment(item.start).isBefore(min) ) {
             min = new moment(item.start).format('YYYY-MM-DD')
           } else {
-            const date = typeof item.rawData.eventdate != 'undefined' && item.rawData.eventdate != '' ? item.rawData.eventdate : item.rawData.end_date
+            const date = typeof item.rawData.end_date != 'undefined' && item.rawData.end_date != '' ? item.rawData.end_date : item.rawData.eventdate
             if(new moment(date).isAfter(max)) {
               max = new moment(date).format('YYYY-MM-DD')
             }
           } 
         }        
       })
-      start = new moment(min).subtract(5, 'year').format('YYYY-MM-DD')
-      end = new moment(max).add(5, 'year').format('YYYY-MM-DD')
+      start = new moment(min).subtract(2, 'year').format('YYYY-MM-DD')
+      end = new moment(max).add(2, 'year').format('YYYY-MM-DD')
       min = start
       max = end
       items.current.add(convertedItems)

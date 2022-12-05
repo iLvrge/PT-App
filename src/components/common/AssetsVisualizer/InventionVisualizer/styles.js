@@ -94,6 +94,7 @@ export default makeStyles(theme => ({
     },
     tabs: {
         minHeight: 47, 
+        width: '94%'
         /* borderTop: `1px solid ${theme.palette.divider} !important`, */
     },
     tab: {

@@ -113,6 +113,9 @@ export default makeStyles(theme => ({
     '& .vis-left.vis-panel.vis-vertical-scroll, .vis-right.vis-panel.vis-vertical-scroll':{
       overflowY: 'hidden'
     },
+    '& .vis-item ':{
+      textAlign: 'left'
+    },
     '& .vis-itemset .vis-background':{
       position: 'absolute',
       width: '100%',
@@ -135,10 +138,15 @@ export default makeStyles(theme => ({
       backgroundColor: '#ABD7FC',
       color: '#fff !important',
     },
+    '& .vis-item.grey':{
+      backgroundColor: '#ABB3BA',
+      color: '#fff !important',
+    },
     '& .vis-item.greenBorder':{
       borderColor: '#1565C0',
       backgroundColor: '#1565C0',
       color: '#fff !important',
+      zIndex: 99999
     },
     '& .vis-item.redBorder':{
       backgroundColor: '#E60000', 

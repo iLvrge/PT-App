@@ -12,7 +12,7 @@ export default makeStyles(theme => ({
     },  
     fullscreenBtn: {
         position: 'absolute',
-        top: 0,
+        top: 9,
         right: 0,
     },
     fullscreenChartsModal: {
