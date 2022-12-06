@@ -9,9 +9,7 @@ import { Paper, Tab, Tabs, Typography } from '@mui/material';
 import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
 import HandshakeOutlinedIcon from '@mui/icons-material/HandshakeOutlined';
 import { FaLightbulb } from "react-icons/fa";
-import { numberWithCommas } from '../../../../utils/numbers';
-import { setAllAssignmentCustomers, setAssetTypeAssignmentAllAssets, setSelectAssignmentCustomers } from '../../../../actions/patentTrackActions2';
-import TitleBar from '../../TitleBar';
+import { wordCloudOptions } from '../../../../utils/options';  
 import AgentsVisualizer from '../AgentsVisualizer';
 import FullScreen from '../../FullScreen';
 import InventionVisualizer from '../InventionVisualizer';
@@ -25,21 +23,7 @@ const LawFirmNames = (props) => {
     const [ rawData, setRawData ] = useState([])
     const [ namesData, setNamesData ] = useState([])
     const [size, setSize] = useState([550, 400])
-    const [options, setOptions] = useState({
-        colors: ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b"],
-        enableTooltip: true,
-        deterministic: false,
-        fontFamily: "impact",
-        fontSizes: [20, 90],
-        fontStyle: "normal",
-        fontWeight: "normal",
-        padding: 1,
-        rotations: 1,
-        rotationAngles: [0, 90],
-        scale: "sqrt",
-        spiral: "archimedean",
-        transitionDuration: 1000
-    })
+    const [options, setOptions] = useState(wordCloudOptions)
 
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected );
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll);
@@ -94,6 +78,7 @@ const LawFirmNames = (props) => {
                 value: randomNumbers()
             })
         })
+        console.log('words', words)
         await Promise.all(promise)
         setNamesData(words)
     }
@@ -165,7 +150,7 @@ const LawFirmNames = (props) => {
             }
             {
                 selectedTab === 0 && namesData.length > 0 && ( 
-                    <div style={{height: '78%', width: '100%'}} id='cntNames'>
+                    <div style={{height: '100%', width: '100%'}} id='cntNames'>
                         <DrawCloudChart />
                     </div>
                 )
