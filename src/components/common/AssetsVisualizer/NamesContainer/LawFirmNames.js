@@ -150,7 +150,7 @@ const LawFirmNames = (props) => {
             }
             {
                 selectedTab === 0 && namesData.length > 0 && ( 
-                    <div style={{height: '100%', width: '100%'}} id='cntNames'>
+                    <div style={{height: '100%', width: '100%', display: 'flex'}} id='cntNames'>
                         <DrawCloudChart />
                     </div>
                 )
