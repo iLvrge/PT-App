@@ -8,14 +8,19 @@ import { Typography } from '@mui/material';
 const TitleBar = (props) => {
     const classes = useStyles();
     return(
-        <Box>
+        <Box className={
+            clsx(
+                {[classes.relative]: typeof props.relative !== 'undefined' && props.relative === false ? false : true}
+            ) 
+        }>
             <span 
                 className={
-                        clsx(
-                            classes.heading, 
-                            {[classes.paddingLeft]: typeof props.enablePadding !== 'undefined' && props.enablePadding === false ? false : true}, 
-                            {[classes.underline]: typeof props.underline !== 'undefined' && props.underline === false ? false : true}
-                        )
+                    clsx(
+                        classes.heading, 
+                        {[classes.paddingLeft]: typeof props.enablePadding !== 'undefined' && props.enablePadding === false ? false : true}, 
+                        {[classes.underline]: typeof props.underline !== 'undefined' && props.underline === false ? false : true},
+                        {[classes.absolute]: typeof props.relative !== 'undefined' && props.relative === false ? false : true},
+                    ) 
                 }
             >
                 {

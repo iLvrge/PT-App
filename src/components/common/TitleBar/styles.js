@@ -12,5 +12,13 @@ export default makeStyles(theme => ({
     },
     underline: {
         textDecoration: 'underline'
-    }
-}));
+    },
+    relative: {
+        position: 'relative', 
+        width: '100%'
+    },
+    absolute: {
+        position: 'absolute',
+        width: '100%'
+    } 
+}));  
