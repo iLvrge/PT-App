@@ -72,13 +72,12 @@ const LawFirmNames = (props) => {
 
     const formatData = async(data) => {
         const words = []
-        const promise = data.map(item => {
+        const promise = data.map(item => { 
             words.push({
                 text: item.lawfirm,
-                value: randomNumbers()
+                value: typeof item.distance != 'undefined' ? item.distance : randomNumbers()
             })
         })
-        console.log('words', words)
         await Promise.all(promise)
         setNamesData(words)
     }
