@@ -72,13 +72,12 @@ const LawFirmNames = (props) => {
 
     const formatData = async(data) => {
         const words = []
-        const promise = data.map(item => {
+        const promise = data.map(item => { 
             words.push({
                 text: item.lawfirm,
-                value: randomNumbers()
+                value: typeof item.distance != 'undefined' ? item.distance : randomNumbers()
             })
         })
-        console.log('words', words)
         await Promise.all(promise)
         setNamesData(words)
     }
@@ -150,7 +149,7 @@ const LawFirmNames = (props) => {
             }
             {
                 selectedTab === 0 && namesData.length > 0 && ( 
-                    <div style={{height: '100%', width: '100%'}} id='cntNames'>
+                    <div style={{height: '100%', width: '100%', display: 'flex'}} id='cntNames'>
                         <DrawCloudChart />
                     </div>
                 )
