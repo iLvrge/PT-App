@@ -286,5 +286,13 @@ export default makeStyles(theme => ({
     button:{
         textTransform: 'initial',
         color: 'inherit'
+    },
+    settingContainer:{
+        position: 'relative',
+        '& button':{
+            position: 'absolute',
+            top: 60,
+            zIndex: 9999
+        }
     }
 }))

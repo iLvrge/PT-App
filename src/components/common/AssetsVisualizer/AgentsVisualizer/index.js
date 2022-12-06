@@ -2,16 +2,11 @@ import React, { useEffect, useState, useRef } from 'react'
 import { Paper } from '@mui/material';
  
 import useStyles from "./styles";
-import { useDispatch, useSelector } from 'react-redux';
-
-import FullScreen from '../../FullScreen'
+import { useDispatch, useSelector } from 'react-redux'; 
 import Loader from '../../Loader'
 import { Chart } from "react-google-charts";
 
-import PatenTrackApi from '../../../../api/patenTrack2'
-import {
-    getCustomerAssets,
-} from '../../../../actions/patentTrackActions2'
+import PatenTrackApi from '../../../../api/patenTrack2' 
 import themeMode from '../../../../themes/themeMode';
 
 const AgentsVisualizer = (props) => { 
@@ -149,6 +144,7 @@ const AgentsVisualizer = (props) => {
         setLoading(true)
         setData([])
         setRawData([])
+        console.log('selectedAssetAssignments', selectedAssetAssignments)
         const form = new FormData()
         form.append("list", JSON.stringify(list))
         form.append("total", totalRecords)
