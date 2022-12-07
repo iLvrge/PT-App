@@ -299,7 +299,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         } else if(selectedRow.length  === 0) {
             setInventionTabs([ 'Innovation'])
             setSelectedTab(0)
-        } else if( connectionBoxView === true || selectedRow.length > 0 ) {
+        } else if(( connectionBoxView === true || selectedRow.length > 0 ) && selectedCategory != 'top_law_firms') {
             /* setInventionTabs([ 'Innovation', 'Agreement', 'Form', 'Main' ]) */
             setInventionTabs([ 'Innovation', 'Agreement'])
             //setSelectedTab(1)
