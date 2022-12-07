@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useMemo} from 'react'
 import { Chart, registerables } from 'chart.js';
 import { WordCloudController, WordElement } from 'chartjs-chart-wordcloud';
 import ReactWordcloud from 'react-wordcloud'; 
@@ -23,7 +23,7 @@ const LawFirmNames = (props) => {
     const [ rawData, setRawData ] = useState([])
     const [ namesData, setNamesData ] = useState([])
     const [size, setSize] = useState([550, 400])
-    const [options, setOptions] = useState(wordCloudOptions)
+    //const [options, setOptions] = useState(wordCloudOptions)
 
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected );
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll);
@@ -81,6 +81,10 @@ const LawFirmNames = (props) => {
         await Promise.all(promise)
         setNamesData(words)
     }
+
+    const options = useMemo(() => {
+        return wordCloudOptions
+    })
 
     const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
 

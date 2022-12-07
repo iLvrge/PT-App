@@ -42,7 +42,6 @@ const NamesContainer = (props) => {
                         })
                     })
                     await Promise.all(promise)
-                    console.log('words', words)
                     setNamesData(words) 
 
                 }
