@@ -18,7 +18,7 @@ import {
 import PatenTrackApi from '../../../../api/patenTrack2'
 import { convertTabIdToAssetType, assetsTypesWithKey } from '../../../../utils/assetTypes'
 import { numberWithCommas, capitalize, capitalAllWords, applicationFormat} from '../../../../utils/numbers'
-
+import { timelineOptions } from '../../../../utils/options'
 
 
 import useStyles from './styles'
@@ -29,34 +29,7 @@ import clsx from 'clsx';
  * Default options parameter for the Timeline
  */
 
-const options = {
-  height: '100%',
-  autoResize: true,
-  stack: true,
-  orientation: 'both',
-  zoomKey: 'ctrlKey',
-  moveable: true,
-  zoomable: true,
-  horizontalScroll: true,
-  verticalScroll: true,
-  zoomFriction: 30,
-  zoomMin: 1000 * 60 * 60 * 24 * 7, // 7 days
-  /* zoomMax: 1000 * 60 * 60 * 24 * 30 * 3, */ // 3months
-  cluster: {
-    titleTemplate: 'Cluster containing {count} events.\nZoom in to see the individual events.',
-    showStipes: false,
-    clusterCriteria: (firstItem, secondItem) => {
-      return (  (typeof  firstItem.rawData.type == 'undefined' && typeof  secondItem.rawData.type == 'undefined'  && firstItem.rawData.law_firm_id === secondItem.rawData.law_firm_id)  || (typeof  firstItem.rawData.type !== 'undefined' && typeof  secondItem.rawData.type !== 'undefined'  && firstItem.rawData.lawfirm === secondItem.rawData.lawfirm ) || ( firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID))
-    }
-  }, 
-  template: function(item, element, data) {
-    if (data.isCluster) {
-      return `<span class="cluster-header">${data.items[0].rawData.lawfirm}(${data.items.length})</span>`
-    } else { 
-      return `<span class="lawfirm">${data.customerName}</span>`
-    }
-  },
-}
+
 
 
 
@@ -72,6 +45,16 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
   const timelineContainerRef = useRef() //div container ref
   const items = useRef(new DataSet()) // timeline items dataset
   const groups = useRef(new DataSet()) // timeline groups dataset
+  const [options, setOptions] = useState({
+      ...timelineOptions, 
+      template: function(item, element, data) {
+        if (data.isCluster) {
+          return `<span class="cluster-header">${data.items[0].rawData.lawfirm}(${data.items.length})</span>`
+        } else { 
+          return `<span class="lawfirm">${data.customerName}</span>`
+        }
+      }
+    })
   const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
   const assetTypesSelectAll = useSelector(state => state.patenTrack2.assetTypes.selectAll)
   const companies = useSelector( state => state.patenTrack2.mainCompaniesList.list )
@@ -559,15 +542,32 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
     setTimelineItems(convertedItems)
     items.current = new DataSet()
     groups.current = new DataSet()
-    let start =  new moment(), end = new moment().add(3, 'month')  
+    let start = new moment().subtract(20, 'months'), end = new moment().add(20, 'months')
 
     if (convertedItems.length > 0) {
+      start = new Date()
+      end = new Date()
+      const promise = convertedItems.map( (c, index) => {
+          let newDate = new Date(c.start);
+          if(index === 0) {
+              end = newDate
+          }
+          if(newDate.getTime() < start.getTime()) {
+              start = newDate
+          }
+          if(newDate.getTime() > end.getTime()) {
+              end = newDate
+          }
+          return c
+      })
+      Promise.all(promise) 
+      start = new moment(start).subtract(20, 'months') 
+      end = new moment(end).add(20, 'months')
       const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
-      start = convertedItems.length ? new moment(convertedItems[startIndex].start).subtract(1, 'week') : new Date()
-      //end = new moment().add(1, 'month')
-      items.current.add(convertedItems.slice(0, startIndex))      
+      items.current.add(convertedItems.slice(0, startIndex))   
+      //items.current.add(convertedItems)  
     }    
-    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'month')})
+    timelineRef.current.setOptions({ ...options, start, end, min: new moment(start).subtract(20, 'months'), max: new moment(end).add(20, 'months')})
     timelineRef.current.setItems(items.current)   
     //checkCurrentDateStatus()
   }, [ timelineRawData ])
