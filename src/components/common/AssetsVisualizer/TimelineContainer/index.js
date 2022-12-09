@@ -566,7 +566,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       items.current.add(convertedItems.slice(0, startIndex))      
     }    
 
-    if (convertedItems.length > 50) {
+    /* if (convertedItems.length > 50) {
       options.cluster = {
         titleTemplate: 'Cluster containing {count} events. Zoom in to see the individual events.',
         showStipes: false,
@@ -574,7 +574,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
           return ( (firstItem.rawData.name_id > 0 && secondItem.rawData.name_id > 0 && firstItem.rawData.name_id === secondItem.rawData.name_id) ||  ( firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID))
         }
       }
-    }
+    } */
 
     timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'year')})
     timelineRef.current.setItems(items.current)   

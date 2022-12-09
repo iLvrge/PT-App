@@ -1,19 +1,19 @@
 export const wordCloudOptions = {
-    colors: ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b"],
+    colors: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b'],
     enableTooltip: true,
     deterministic: true,
     enableOptimizations: true,
-    fontFamily: "impact",
-    fontSizes: [20, 50],
-    fontStyle: "normal",
-    fontWeight: "normal",
+    fontFamily: 'impact',
+    fontSizes: [20, 22],
+    fontStyle: 'normal',
+    fontWeight: 'normal',
     padding: 3,
     rotations: 1,
     rotationAngles: [0, 90], 
-    scale: "sqrt",
-    spiral: "archimedean",
+    scale: 'sqrt',
+    spiral: 'archimedean',
     transitionDuration: 1000,
-};
+}
 
 export const timelineOptions = {
     height: '100%',
@@ -44,4 +44,4 @@ export const timelineOptions = {
       },
       fitOnDoubleClick: false */
     }
-};
+}
