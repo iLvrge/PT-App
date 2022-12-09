@@ -7,56 +7,24 @@ import moment from 'moment'
 import _debounce from 'lodash/debounce'
 import { DataSet } from 'vis-data-71/esnext'
 import { Timeline } from 'vis-timeline/esnext'
-import { Typography, Tooltip, Zoom, CircularProgress, IconButton, Paper, Modal, TableContainer, Table, TableBody, TableRow, TableCell } from '@mui/material';
+import { Typography, CircularProgress, IconButton, Paper, Modal, TableContainer, Table, TableBody, TableRow, TableCell } from '@mui/material';
 import { Close, Fullscreen } from '@mui/icons-material' 
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import useStyles from './styles'
 import clsx from 'clsx'
 import { numberWithCommas, capitalize } from '../../utils/numbers'
-import { assetsTypesWithKey, convertTabIdToAssetType, oldConvertTabIdToAssetType } from '../../utils/assetTypes'
+import { assetsTypesWithKey, convertTabIdToAssetType } from '../../utils/assetTypes'
+import { timelineOptions } from '../../utils/options'
 import PatenTrackApi from '../../api/patenTrack2'
 import themeMode from '../../themes/themeMode'
 import AddToolTip from './AddToolTip'
 import { setConnectionBoxView, setConnectionData, setPDFFile, setPDFView } from '../../actions/patenTrackActions'
-import { retrievePDFFromServer, setAssetsIllustration, setSelectAssignmentCustomerName } from '../../actions/patentTrackActions2'
+import { retrievePDFFromServer, setAssetsIllustration } from '../../actions/patentTrackActions2'
 import PdfViewer from '../common/PdfViewer'
 import FullScreen from '../common/FullScreen'
 import { setDashboardPanel } from '../../actions/uiActions'
 
 
-/**
- * Default options parameter for the Timeline
- */
-
-const options = {
-    height: '100%',
-    autoResize: true,
-    stack: true,
-    orientation: 'both',
-    zoomKey: 'ctrlKey',
-    moveable: true,
-    zoomable: true,
-    horizontalScroll: true,
-    verticalScroll: true,
-    zoomFriction: 30,
-    /* zoomMin: 1000 * 60 * 60 * 24 * 7,  */// 7 days
-    /* showTooltips: true, */
-    /* zoomMax: 1000 * 60 * 60 * 24 * 30 * 3, */ // 3months
-    cluster: {
-      titleTemplate: 'Cluster containing {count} events.<br/> Zoom in to see the individual events.',
-      showStipes: false,
-      clusterCriteria: (firstItem, secondItem) => {
-        return ( firstItem.rawData.company === secondItem.rawData.company &&  firstItem.rawData.tab_id == secondItem.rawData.tab_id)
-      }
-    }, 
-    template: function(item, element, data) {
-        if (data.isCluster) {
-            return `<span class="cluster-header">Cluster containing ${data.items.length} events.</span>`
-        } else { 
-            return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
-        }
-    },
-}
 
 const TIME_INTERVAL = 1000
 var tootlTip = ''
@@ -66,6 +34,16 @@ const TimelineChart = (props) => {
     const timelineRef = useRef() //timeline Object ref
     const timelineContainerRef = useRef() //div container ref
     const items = useRef(new DataSet()) // timeline items dataset
+    const [options, setTimelineOptions] = useState({
+        ...timelineOptions,
+        template: function(item, element, data) {
+            if (data.isCluster) {
+                return `<span class="cluster-header">Cluster containing ${data.items.length} events.</span>`
+            } else { 
+                return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
+            }
+        },
+    })
     const [ isLoadingTimelineData, setIsLoadingTimelineData ] = useState(false)
     const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(false)
     const [ fullScreen, setFullScreen ] = useState(false)
@@ -496,7 +474,25 @@ const TimelineChart = (props) => {
     }  */
     
     if (convertedItems.length > 0) {
-        start = props.type === 5 ? new moment(convertedItems[0].start).subtract(1, 'week') : props.type === 4 ? new moment(new Date('1900-01-01')) : new moment(convertedItems[convertedItems.length - 1].start).subtract(1, 'week')
+        /* start = props.type === 5 ? new moment(convertedItems[0].start).subtract(1, 'week') : props.type === 4 ? new moment(new Date('1900-01-01')) : new moment(convertedItems[convertedItems.length - 1].start).subtract(1, 'week') */
+        start = new Date()
+        end = new Date()
+        const promise = convertedItems.map( (c, index) => {
+            let newDate = new Date(c.start);
+            if(index === 0) {
+                end = newDate
+            }
+            if(newDate.getTime() < start.getTime()) {
+                start = newDate
+            }
+            if(newDate.getTime() > end.getTime()) {
+                end = newDate
+            }
+            return c
+        })
+        Promise.all(promise) 
+        start = new moment(start).subtract(20, 'months') 
+        end = new moment(end).add(20, 'months')
         items.current.add(convertedItems)   
     }
     

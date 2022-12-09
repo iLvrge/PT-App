@@ -18,46 +18,14 @@ import {
 import PatenTrackApi from '../../../../api/patenTrack2'
 import { convertTabIdToAssetType, assetsTypesWithKey } from '../../../../utils/assetTypes'
 import { numberWithCommas, capitalize } from '../../../../utils/numbers'
-
+import { timelineOptions } from '../../../../utils/options'
 
 
 
 import useStyles from './styles'
 import { setTimelineSelectedItem, setTimelineSelectedAsset } from '../../../../actions/uiActions'
 import clsx from 'clsx';
-
-/**
- * Default options parameter for the Timeline
- */
-
-const options = {
-  height: '100%',
-  autoResize: true,
-  stack: true,
-  orientation: 'both',
-  zoomKey: 'ctrlKey',
-  moveable: true,
-  zoomable: true,
-  horizontalScroll: true,
-  verticalScroll: true,
-  zoomFriction: 30,
-  zoomMin: 1000 * 60 * 60 * 24 * 7, // 7 days
-  /* zoomMax: 1000 * 60 * 60 * 24 * 30 * 3, */ // 3months
-  /* cluster: {
-  //   titleTemplate: 'Cluster containing {count} events.<br/> Zoom in to see the individual events.',
-    showStipes: false,
-    clusterCriteria: (firstItem, secondItem) => {
-      return ( firstItem.rawData.company === secondItem.rawData.company &&  firstItem.rawData.tab_id == secondItem.rawData.tab_id)
-    }
-  }, */
-  template: function(item, element, data) {
-    if (data.isCluster) {
-      return `<span class="cluster-header">${data.items[0].clusterHeading}(${data.items.length})</span>`
-    } else { 
-      return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
-    }
-  },
-}
+ 
 
 /**
  * 
@@ -80,6 +48,16 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
   const timelineContainerRef = useRef() //div container ref
   const items = useRef(new DataSet()) // timeline items dataset
   const groups = useRef(new DataSet()) // timeline groups dataset
+  const [options, setTimelineOptions] = useState({
+    ...timelineOptions,
+    template: function(item, element, data) {
+      if (data.isCluster) {
+        return `<span class="cluster-header">${data.items[0].clusterHeading}(${data.items.length})</span>`
+      } else { 
+        return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
+      }
+    },
+  })
   const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
   const assetTypesSelectAll = useSelector(state => state.patenTrack2.assetTypes.selectAll)
   const companies = useSelector( state => state.patenTrack2.mainCompaniesList.list )
@@ -564,9 +542,27 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     let start =  new moment(), end = new moment().add(1, 'year')  
 
     if (convertedItems.length > 0) {
-      const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
-      start = convertedItems.length ? new moment(convertedItems[startIndex].start).subtract(1, 'week') : new Date()
+      /* start = convertedItems.length ? new moment(convertedItems[startIndex].start).subtract(1, 'week') : new Date() */
       //end = new moment().add(1, 'month')
+      start = new Date()
+      end = new Date()
+      const promise = convertedItems.map( (c, index) => {
+          let newDate = new Date(c.start);
+          if(index === 0) {
+              end = newDate
+          }
+          if(newDate.getTime() < start.getTime()) {
+              start = newDate
+          }
+          if(newDate.getTime() > end.getTime()) {
+              end = newDate
+          }
+          return c
+      })
+      Promise.all(promise) 
+      start = new moment(start).subtract(20, 'months') 
+      end = new moment(end).add(20, 'months')
+      const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
       items.current.add(convertedItems.slice(0, startIndex))      
     }    
 
