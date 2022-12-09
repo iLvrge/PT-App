@@ -49,12 +49,12 @@ export const getAuthConnectToken = () => {
         const tokenJSON = JSON.parse( getSlackToken )
 
         if( tokenJSON != null ) {
-            tokenType = 1;
+            tokenType = 1
         } else {
             const getTeamToken = localStorage.getItem('team_auth_token_info')
             const teamTokenJSON = JSON.parse( getTeamToken )
             if( teamTokenJSON != null ) {
-                tokenType = 2;
+                tokenType = 2
             }
         }
     } catch (err) {

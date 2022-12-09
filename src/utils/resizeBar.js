@@ -134,7 +134,7 @@ export const resetItemList = {
             callback: setChannelID(null)
         },
         {
-            callback: setSlackMessages({messages: [], users: []})
+            callback: setSlackMessages({ messages: [], users: [] })
         },
         {
             callback: setPDFFile({ document: '', form: '', agreement: '' })
