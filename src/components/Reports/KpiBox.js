@@ -3,8 +3,7 @@ import {
     useSelector 
 } from 'react-redux'
 import useStyles from './styles'
-import { IconButton, Button, Typography, Tooltip, Zoom, Paper, List, ListItem, ListItemText } from '@mui/material';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import { Button, Typography, Paper, List, ListItem, ListItemText } from '@mui/material'; 
 import clsx from 'clsx'
 import { numberWithCommas, capitalAllWords } from '../../utils/numbers';
 import AddToolTip from './AddToolTip';

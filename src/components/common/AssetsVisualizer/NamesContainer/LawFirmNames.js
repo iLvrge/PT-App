@@ -5,7 +5,7 @@ import ReactWordcloud from 'react-wordcloud';
 import { useDispatch, useSelector } from 'react-redux'
 import PatenTrackApi from '../../../../api/patenTrack2';
 import useStyles from './styles';
-import { Paper, Tab, Tabs, Typography } from '@mui/material';
+import { Alert, Paper, Tab, Tabs, Typography } from '@mui/material';
 import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
 import HandshakeOutlinedIcon from '@mui/icons-material/HandshakeOutlined';
 import { FaLightbulb } from "react-icons/fa";
@@ -18,10 +18,12 @@ import InventionVisualizer from '../InventionVisualizer';
 const LawFirmNames = (props) => {
     const classes = useStyles() 
     const dispatch = useDispatch()
+    const [showAlert, setShowAlert] = useState(false)
     const [ tabs, setTabs ] = useState(['Names', 'Agents (fillings)', 'Agents (transactions)', 'Agents (Technologies)'])
     const [ selectedTab, setSelectedTab ] = useState(0)
     const [ rawData, setRawData ] = useState([])
     const [ namesData, setNamesData ] = useState([])
+    const [ parentContainerSize, setParentContainerSize ] = useState(0)
     const [size, setSize] = useState([550, 400])
     //const [options, setOptions] = useState(wordCloudOptions)
 
@@ -65,10 +67,43 @@ const LawFirmNames = (props) => {
     }, [selectedCompanies, selectedCompaniesAll, selectedLawFirm] )
 
     useEffect(() => {
+        setShowAlert(false)
         if(namesData.length > 0) {
             DrawCloudChart()
+            setTimeout(checkNamesOnDOM, 3000)
         }
     }, [namesData]) 
+
+    useEffect(() => {
+        setParentContainerSize(props.visualizerBarSize)
+        if(namesData.length > 0) {
+            setShowAlert(false)
+            setTimeout(checkNamesOnDOM, 3000)
+        }
+    }, [props.visualizerBarSize]) 
+
+
+    
+
+    const checkNamesOnDOM = () => {
+        const element = document.getElementById('lawfirm_cloud_names') 
+        if(element != null) {
+            const findSVG = element.querySelector('svg')
+            if(findSVG !== null) {
+                const findTextElements = element.querySelectorAll('text') 
+                if(findTextElements.length > 0 && findTextElements.length != namesData.length) {
+                    /**
+                     * Show noftification
+                     */
+                    setShowAlert(true)
+                } else if(findTextElements.length == 0 && namesData.length > 0 ) {
+                    setTimeout(checkNamesOnDOM, 2000)
+                } else {
+                    setShowAlert(false)
+                }
+            }
+        }
+    }
 
     const formatData = async(data) => {
         const words = []
@@ -126,9 +161,13 @@ const LawFirmNames = (props) => {
         )
     }
 
+    const handleClose = () => {
+        setShowAlert(!showAlert)
+    }
+
   
     return (
-        <Paper className={classes.root} square>  
+        <Paper className={classes.root} square id='lawfirm_cloud_names'>  
             <Tabs
                 value={selectedTab}
                 variant="scrollable"
@@ -146,6 +185,14 @@ const LawFirmNames = (props) => {
                     )) 
                 }
             </Tabs>  
+            {
+                showAlert === true && (
+                    <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
+                        Widen the window to see additional names.
+                    </Alert>
+                )
+            }
+                
             {
                 typeof props.standalone === 'undefined' && (
                     <FullScreen componentItems={menuItems}/>

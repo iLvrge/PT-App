@@ -8,6 +8,7 @@ import useStyles from './styles';
 import { Paper, Tab, Tabs } from '@mui/material'; 
 import { wordCloudOptions } from '../../../../utils/options'; 
 import TitleBar from '../../TitleBar';
+import { warnConsole } from '../../../../utils/hashLocation';
 
 
 const NamesContainer = (props) => {
@@ -87,6 +88,7 @@ const NamesContainer = (props) => {
             }
         }
     }, [options]) 
+ 
 
     const DrawCloudChart =  () => {  
         return (

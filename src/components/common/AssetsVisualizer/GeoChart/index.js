@@ -21,6 +21,7 @@ import InventionVisualizer from '../InventionVisualizer'
 import AgentsVisualizer from '../AgentsVisualizer'
 import InventorsVisualizer from '../InventorsVisualizer'
 import SankeyChart from '../SankeyChart'
+import { warnConsole } from '../../../../utils/hashLocation'
 
 const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, tab, titleBar, disableOtherTabs, activeTab }) => {
     const containerRef = useRef(null)
@@ -81,7 +82,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
         },
         colorAxis: {colors: ['#FFAA00', '#70A800', '#1565C0']}
     });
-
+ 
     useEffect(() => {
         let isSubscribed = true;
         if(isSubscribed && dashboardScreen === true) {

@@ -1,9 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react'
-import { useSelector } from 'react-redux'
-import moment from 'moment'
+import { useSelector } from 'react-redux' 
 import SplitPane from 'react-split-pane'
-import { IconButton, Paper, Modal, Table, TableHead, TableBody, TableRow, TableCell, TableContainer, TextField } from '@mui/material'
-import { Draggable } from 'react-drag-and-drop'
+import { IconButton, Paper, Modal } from '@mui/material' 
 import _debounce from 'lodash/debounce'
 import { Close, Fullscreen } from '@mui/icons-material'
 import IllustrationContainer from '../AssetsVisualizer/IllustrationContainer'
@@ -12,14 +10,11 @@ import AssetsCommentsTimeline from '../AssetsCommentsTimeline'
 import LoadMaintainenceAssets from './LoadMaintainenceAssets'
 import LoadTransactionQueues from './LoadTransactionQueues'
 import LoadTransactionNameQueues from './LoadTransactionNameQueues'
-import LoadLinkAssets from './LoadLinkAssets'
-import AllComponentsMenu from '../AllComponentsMenu'
-import ArrowButton from '../ArrowButton'
+import LoadLinkAssets from './LoadLinkAssets' 
 import DisplayFile from './DisplayFile'
 import ErrorBoundary from '../ErrorBoundary'
 import { updateResizerBar } from '../../../utils/resizeBar'
-
-import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/numbers";
+ 
 import useStyles from './styles'
 import Reports from '../../Reports'
 import FullScreen from '../FullScreen'
@@ -27,17 +22,13 @@ import clsx from 'clsx'
 import InventionVisualizer from '../AssetsVisualizer/InventionVisualizer'
 import Ptab from '../AssetsVisualizer/LegalEventsContainer/Ptab'
 import LawFirmTimeline from '../AssetsVisualizer/LawFirmTimeline'
-import GeoChart from '../AssetsVisualizer/GeoChart'
-import SankeyChart from '../AssetsVisualizer/SankeyChart'
-import TimelineSecurity from '../AssetsVisualizer/TimelineSecurity'
-import CorrectNamesTable from '../CorrectNamesTable'
+import GeoChart from '../AssetsVisualizer/GeoChart' 
 import CorrectAddressTable from '../CorrectAddressTable'
 import NamesContainer from '../AssetsVisualizer/NamesContainer'
 import Fees from '../AssetsVisualizer/LegalEventsContainer/Fees'
-import PatenTrackApi from '../../../api/patenTrack2'
-import { dispatch } from 'd3'
-import { allAssetsSurchargeLegalEvents, setAssetLegalEvents, setLegalDataEventRetrieved } from '../../../actions/patenTrackActions'
+import PatenTrackApi from '../../../api/patenTrack2' 
 import ConnectionBox from '../ConnectionBox'
+import { useIsMounted } from '../../../utils/useIsMounted'
 
 const IllustrationCommentContainer = ({ 
     cls, 
@@ -86,13 +77,11 @@ const IllustrationCommentContainer = ({
     maintainence,
     record
     }) => {
-    const classes = useStyles() 
-    const iframeRef = useRef()
+    const classes = useStyles()  
     const illustrationRef = useRef()
+    const isMounted = useIsMounted()
     const [ containerSize, setContainerSize] = useState(0)
-    const [ dashboardFullScreen, setDashboardFullScreen ] = useState( false )
-    const [ toggleCommentButtonType , setToggleCommentButtonType ] = useState(true)
-    const [ openCommentBar, setCommentOpenBar ] = useState(true)
+    const [ dashboardFullScreen, setDashboardFullScreen ] = useState( false ) 
     const [ commentButtonVisible, setCommentButtonVisible ] = useState(false)
     const [ isDrag, setIsDrag ] = useState(false)
     const [ templateURL, setTemplateURL] = useState('about:blank')
@@ -119,12 +108,9 @@ const IllustrationCommentContainer = ({
     const new_drive_template_file = useSelector(state => state.patenTrack2.new_drive_template_file)
     const template_document_url = useSelector(state => state.patenTrack2.template_document_url)
     const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
-    const selectedAssetAssignments = useSelector( state => state.patenTrack2.assetTypeAssignments.selected )
-    const selectedAssetAssignmentsAll = useSelector( state => state.patenTrack2.assetTypeAssignments.selectAll)
+    const selectedAssetAssignments = useSelector( state => state.patenTrack2.assetTypeAssignments.selected ) 
 
-    const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
-    const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
-    const assetCompaniesRowSelect = useSelector(state => state.patenTrack2.mainCompaniesList.row_select)
+    const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected ) 
     const search_string = useSelector(state => state.patenTrack2.search_string)   
     const addressQueuesDisplay = useSelector(state => state.patenTrack2.addressQueuesDisplay)   
     const nameQueuesDisplay = useSelector(state => state.patenTrack2.nameQueuesDisplay)
@@ -132,8 +118,7 @@ const IllustrationCommentContainer = ({
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
     const link_assets_sheet_type = useSelector(state => state.patenTrack2.link_assets_sheet_type)
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
-    const ptabAssets = useSelector(state => state.patenTrack2.ptabAssets) 
-    const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
+    const ptabAssets = useSelector(state => state.patenTrack2.ptabAssets)  
 
     const menuItems = [
         {
@@ -179,7 +164,9 @@ const IllustrationCommentContainer = ({
         if(commentBar === true) {
             val = defaultSize
         }
-        setContainerSize(val)
+        if (isMounted.current) { 
+            setContainerSize(val)
+        }
         if(illustrationRef !== null) {
             const container = illustrationRef.current.splitPane;
             container.querySelector('div.Pane2').style.height = val
@@ -197,13 +184,17 @@ const IllustrationCommentContainer = ({
 
     useEffect(() => {        
         if(new_drive_template_file != null && Object.keys(new_drive_template_file).length > 0 && new_drive_template_file.hasOwnProperty('id')) {
-            setTemplateURL(`https://docs.google.com/document/d/${new_drive_template_file.id}/edit`)
+            if (isMounted.current) { 
+                setTemplateURL(`https://docs.google.com/document/d/${new_drive_template_file.id}/edit`)
+            }
         }
     }, [new_drive_template_file])
 
     useEffect(() => {
         if( templateURL != template_document_url ) {
-            setTemplateURL(template_document_url)
+            if (isMounted.current) { 
+                setTemplateURL(template_document_url)
+            }
         }        
     }, [ templateURL,  template_document_url ])
 
@@ -211,14 +202,18 @@ const IllustrationCommentContainer = ({
         if(selectedCategory === 'late_maintainance' && maintainence === true && selectedCompanies.length > 0 && assetIllustration == null ){
             const getAllSurchargeAssetsEvents = async () => { 
                 const {data} = await PatenTrackApi.allAssetsSurchargeLegalEvents(selectedCompanies)
-                setAllAssetsEvents(data)
+                if (isMounted.current) { 
+                    setAllAssetsEvents(data)
+                }
             }
             getAllSurchargeAssetsEvents() 
             //dispatch(allAssetsSurchargeLegalEvents(selectedCompanies))
         } else if(selectedCategory === 'missed_monetization' && record === true && selectedCompanies.length > 0 && assetIllustration == null ){
             const getAllRecordAssetsEvents = async () => { 
                 const {data} = await PatenTrackApi.allFilledAssetsEvents(selectedCompanies)
-                setAllAssetsEvents(data)
+                if (isMounted.current) { 
+                    setAllAssetsEvents(data)
+                }
             }
             getAllRecordAssetsEvents() 
             //dispatch(allAssetsSurchargeLegalEvents(selectedCompanies))

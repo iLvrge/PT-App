@@ -203,7 +203,7 @@ import { setAssetTypeAssignmentAllAssets, setAssetTypesPatentsSelected, setSelec
           showIsIndeterminate={false}
           defaultSortField={`lawfirm`}
           defaultSortDirection={`asc`}
-          totalRows={totalRecords}
+          totalRows={grandTotal}
           grandTotal={grandTotal}
           noBorderLines={true}
           width={width}

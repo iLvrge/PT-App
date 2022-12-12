@@ -1,37 +1,33 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useLocation, useHistory } from "react-router-dom";
-import routes from "../../../../routeList"; 
+import { useLocation, useHistory } from "react-router-dom"; 
 import moment from 'moment'
 import _debounce from 'lodash/debounce'
 import { useDispatch, useSelector } from 'react-redux'
 import { DataSet } from 'vis-data-71/esnext'
 import { Timeline } from 'vis-timeline/esnext'
 import Paper from '@mui/material/Paper'
-import CircularProgress from '@mui/material/CircularProgress'
-import ClickAwayListener from '@mui/base'
+import CircularProgress from '@mui/material/CircularProgress' 
 import themeMode from '../../../../themes/themeMode';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import { 
+  retrievePDFFromServer,
   transactionRowClick
 } from '../../../../actions/patentTrackActions2'
 
 import PatenTrackApi from '../../../../api/patenTrack2'
 import { convertTabIdToAssetType, assetsTypesWithKey } from '../../../../utils/assetTypes'
-import { numberWithCommas, capitalize, capitalAllWords, applicationFormat} from '../../../../utils/numbers'
+import { numberWithCommas, capitalize, applicationFormat} from '../../../../utils/numbers'
 import { timelineOptions } from '../../../../utils/options'
 
 
 import useStyles from './styles'
 import { setTimelineSelectedItem, setTimelineSelectedAsset } from '../../../../actions/uiActions'
 import clsx from 'clsx';
+import { setConnectionBoxView, setConnectionData, setPDFFile, setPDFView } from '../../../../actions/patenTrackActions';
 
 /**
  * Default options parameter for the Timeline
  */
-
-
-
-
 
 const TIME_INTERVAL = 1000
 var tootlTip = ''
@@ -69,9 +65,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
   const switch_button_assets = useSelector(state => state.patenTrack2.switch_button_assets)
   
   const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
-  const assignmentList = useSelector(
-    state => state.patenTrack2.assetTypeAssignments.list,
-  );
+   
 
   const assetTypesCompaniesSelected = useSelector(
     state => state.patenTrack2.assetTypeCompanies.selected,
@@ -296,13 +290,46 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
       setSelectedItem()
     } else {
       const item = items.current.get(properties.items[0])
-      setSelectedAsset({ type: 'transaction', id: item.rawData.id })
-      setSelectedItem(item)
-      dispatch(transactionRowClick(item.rawData.id, slack_channel_list, false, search_string))
-      if(assignmentBar === false) {
-        assignmentBarToggle()  
+      if(typeof item.rawData.type === 'undefined'){
+        /* setSelectedAsset({ type: 'transaction', id: item.rawData.id })
+        setSelectedItem(item)
+        dispatch(transactionRowClick(item.rawData.id, slack_channel_list, false, search_string))
+        if(assignmentBar === false) {
+          assignmentBarToggle()  
+        } */
+        (async() => {
+          if(assignmentBar === false) {
+            assignmentBarToggle()  
+          }
+          const { data } = await PatenTrackApi.getCollectionIllustration(item.rawData.id)
+          if(data != null) {                        
+            const obj = data.line.length > 0 ? data.line[0] : null
+            if(obj != null) {
+              dispatch(    
+                setConnectionData(obj)
+              )  
+              dispatch(
+                setConnectionBoxView(true)
+              ) 
+              dispatch(
+                setPDFView(true)
+              ) 
+              if(obj.document1.indexOf('legacy-assignments.uspto.gov') !== -1 || (obj.document1 == "" && obj.ref_id > 0)) {
+                obj.rf_id =  obj.ref_id
+                dispatch(retrievePDFFromServer(obj))   
+              } else {
+                dispatch(
+                  setPDFFile({ 
+                    document: obj.document1,  
+                    form: obj.document1, 
+                    agreement: obj.document1 
+                  })
+                ) 
+              }                       
+            }                        
+          }
+        })(); 
       }
-      //history.push(routes.review3)
     }
   }, [ ])
 
@@ -511,13 +538,13 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
     items.current = new DataSet()
     groups.current = new DataSet()
     timelineRef.current.setOptions(options) 
-    /* timelineRef.current.on('select', onSelect) */
+    timelineRef.current.on('select', onSelect)
     timelineRef.current.on('itemover', onItemover)
     timelineRef.current.on('itemout', onItemout) 
     timelineRef.current.on('rangechanged', onRangeChanged)
     timelineRef.current.on('rangechange', onRangeChange)    
     return () => {
-      /* timelineRef.current.off('select', onSelect) */
+      timelineRef.current.off('select', onSelect)
       timelineRef.current.off('itemover', onItemover) 
       timelineRef.current.off('itemout', onItemout) 
       timelineRef.current.off('rangechange', onRangeChange)

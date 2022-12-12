@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from 'react'
 import { useSelector } from 'react-redux'
 import { Chart } from "react-google-charts";
+import { useIsMounted } from '../../utils/useIsMounted';
 
 
 
 const DisplayChart = (props) => {
     const CONSTANT_DECREMENT = 106;
+    const isMounted = useIsMounted()
     const [height, setHeight] = useState('100%');
     const [tooltip, setTooltip] = useState(typeof props.tooltip !== 'undefined' && props.tooltip === true ? {isHtml: true} : {})
     const [option, setOption] = useState({
@@ -28,24 +30,32 @@ const DisplayChart = (props) => {
         let height = '100%'
         if(props.data.length > 10) {
             const chartHeight = props.data.length * 20
-            setOption(prevItem => {
-                return {...prevItem, height: chartHeight}
-            }) 
+            if (isMounted.current) { 
+                setOption(prevItem => {
+                    return {...prevItem, height: chartHeight}
+                }) 
+            }
         }  else if(props.data.length < 4) {
             height =  `${parseInt((screenHeight - CONSTANT_DECREMENT) * (props.data.length * 5.5) / 100)}px`
-            setOption(prevItem => {
-                let pre = {...prevItem}
-                delete pre.height
-                return {...pre}
-            })
+            if (isMounted.current) { 
+                setOption(prevItem => {
+                    let pre = {...prevItem}
+                    delete pre.height
+                    return {...pre}
+                })
+            }
         } else {
-            setOption(prevItem => {
-                let pre = {...prevItem}
-                delete pre.height
-                return {...pre}
-            })   
+            if (isMounted.current) { 
+                setOption(prevItem => {
+                    let pre = {...prevItem}
+                    delete pre.height
+                    return {...pre}
+                })   
+            }
         }    
-        setHeight(height)
+        if (isMounted.current) { 
+            setHeight(height) 
+        }
     }, [props.data]);
 
     return (
