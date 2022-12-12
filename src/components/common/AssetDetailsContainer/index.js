@@ -103,6 +103,7 @@ const AssetDetailsContainer = ({
   const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
   const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
+  const connectionBoxData = useSelector(state => state.patenTrack.connectionBoxData)
 
   
 
@@ -213,8 +214,7 @@ const AssetDetailsContainer = ({
       }
     }
   };
-
-  
+ 
   return (
     <div style={{ height: "100%" }} className={classes.root}>
       {
@@ -234,7 +234,7 @@ const AssetDetailsContainer = ({
             split={split}
             minSize={10}
             maxSize={-100}
-            defaultSize={illustrationData != '' && illustrationData != null && Object.keys(illustrationData).length > 0 ? '50%' : '0%'}
+            defaultSize={connectionBoxData != '' && connectionBoxData != null && Object.keys(connectionBoxData).length > 0 ? '50%' : '0%'}
             pane1Style={{
               pointerEvents: isDrag ? 'none' : 'auto',
             }}
@@ -264,7 +264,7 @@ const AssetDetailsContainer = ({
                 isDrag === true ? classes.notInteractive : classes.isInteractive
               }`}
             >
-              <ConnectionBox display={"false"} assets={illustrationData} type={type}/>
+              <ConnectionBox display={"false"} assets={connectionBoxData} type={type}/>
             </div>
         </SplitPane>
         )

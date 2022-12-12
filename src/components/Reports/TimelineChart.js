@@ -353,6 +353,7 @@ const TimelineChart = (props) => {
 
     useEffect(() => {
         timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
+        return (() => {})
     }, [])
 
     /**
@@ -399,6 +400,7 @@ const TimelineChart = (props) => {
             }
         }   
         setTimelineRawData(list)
+        return (() => {})
     }, [props])
 
     //Item for the timeline
@@ -497,7 +499,8 @@ const TimelineChart = (props) => {
     }
     
     timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1400-01-01')), max: new moment(new Date('2500-01-01'))})
-    timelineRef.current.setItems(items.current)   
+    timelineRef.current.setItems(items.current)  
+    return (() => {}) 
     }, [ timelineRawData ])
     return (
         <Paper className={clsx(classes.container, classes.columnDirection)} square>

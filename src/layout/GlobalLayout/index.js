@@ -1506,6 +1506,15 @@ const GlobalLayout = (props) => {
         }
         return child
     })
+
+    const originalWarn = console.warn;
+
+    console.warn = function (...args) {
+        const arg = args && args[0] 
+        const messageQuill = 'quill:toolbar', messageGoogleChart = 'Attempting to load version \'51\' of Google Charts', messageCellPosition = 'Rendered cell should include style property for positioning.'
+        if (arg && (arg.includes(messageQuill) || arg.includes(messageGoogleChart) || arg.includes(messageCellPosition))) return;
+        originalWarn(...args);
+    };
  
     return (
         <div className={classes.root} id='main'>

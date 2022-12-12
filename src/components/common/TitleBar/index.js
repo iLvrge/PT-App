@@ -10,16 +10,16 @@ const TitleBar = (props) => {
     return(
         <Box className={
             clsx(
-                {[classes.relative]: typeof props.relative !== 'undefined' && props.relative === false ? false : true}
+                {[classes.relative]: typeof props.relative !== 'undefined' && props.relative === true ? true : false}
             ) 
         }>
             <span 
                 className={
                     clsx(
                         classes.heading, 
-                        {[classes.paddingLeft]: typeof props.enablePadding !== 'undefined' && props.enablePadding === false ? false : true}, 
-                        {[classes.underline]: typeof props.underline !== 'undefined' && props.underline === false ? false : true},
-                        {[classes.absolute]: typeof props.relative !== 'undefined' && props.relative === false ? false : true},
+                        {[classes.paddingLeft]: typeof props.enablePadding !== 'undefined' && props.enablePadding === true ? true : false}, 
+                        {[classes.underline]: typeof props.underline !== 'undefined' && props.underline === true ? true : false},
+                        {[classes.absolute]: typeof props.relative !== 'undefined' && props.relative === true ? true : false},
                     ) 
                 }
             >

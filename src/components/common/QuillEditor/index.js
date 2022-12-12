@@ -547,9 +547,9 @@ const QuillEditor = ({
         }} 
         aria-labelledby="slack-users"
         aria-describedby="">
-        <>
+        <React.Fragment>
           <UserInputForm />
-        </>
+        </React.Fragment>
       </Modal> 
     </div>
   );
