@@ -594,16 +594,17 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
       //items.current.add(convertedItems.slice(0, startIndex))   
       items.current.add(convertedItems)  
     }    
+    const min = new moment(start).subtract(20, 'months') 
     end = new moment(end).add(5, 'months')
-    start = new moment(end).subtract(12, 'months') 
-    /* console.log('Start', start.format('YYYY-MMM-DD'), end.format('YYYY-MMM-DD')) */
+    const max = new moment(end).add(20, 'months')
+    start = new moment(end).subtract(12, 'months')  
     timelineRef.current.setOptions({ 
       ...options, 
       zoomMin: 1000 * 60 * 60 * 24,     
       zoomMax: 1000 * 60 * 60 * 24 * 30 * 12, 
-      start, end, min: new moment(start).subtract(20, 'months'), max: new moment(end).add(20, 'months')})
+      start, end, min, max })
     timelineRef.current.setItems(items.current)   
-    //checkCurrentDateStatus()
+    //checkCurrentDateStatus() 
   }, [ timelineRawData ])
  
   /**
