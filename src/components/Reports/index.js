@@ -568,12 +568,12 @@ const Reports = (props) => {
                     }  
                     newTimelineGrid = {...newGridItems}
                 } 
-                console.log('newTimelineGrid', newTimelineGrid, profile)
+                /* console.log('newTimelineGrid', newTimelineGrid, profile) */
                 if (isMounted.current) { 
                     setGrid(newGridItems)
                 }
                 if(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'){
-                    console.log('newTimelineGrid', newTimelineGrid)
+                    /* console.log('newTimelineGrid', newTimelineGrid) */
                     if (isMounted.current) { 
                         setTimelineGrid(newTimelineGrid)
                     }

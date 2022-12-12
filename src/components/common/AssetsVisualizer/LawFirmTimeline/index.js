@@ -575,26 +575,33 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
       start = new Date()
       end = new Date()
       const promise = convertedItems.map( (c, index) => {
-          let newDate = new Date(c.start);
-          if(index === 0) {
-              end = newDate
-          }
-          if(newDate.getTime() < start.getTime()) {
-              start = newDate
-          }
-          if(newDate.getTime() > end.getTime()) {
-              end = newDate
-          }
-          return c
+        let newDate = new Date(c.start);
+        if(index === 0) {
+          end = newDate
+        }
+        if(newDate.getTime() < start.getTime()) {
+          start = newDate
+        }
+        if(newDate.getTime() > end.getTime()) {
+          end = newDate
+        }
+        return c
       })
       Promise.all(promise) 
-      start = new moment(start).subtract(20, 'months') 
-      end = new moment(end).add(20, 'months')
-      const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
-      items.current.add(convertedItems.slice(0, startIndex))   
-      //items.current.add(convertedItems)  
+      //start = new moment(start).subtract(20, 'months') 
+      //end = new moment(end).add(20, 'months')
+      //const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
+      //items.current.add(convertedItems.slice(0, startIndex))   
+      items.current.add(convertedItems)  
     }    
-    timelineRef.current.setOptions({ ...options, start, end, min: new moment(start).subtract(20, 'months'), max: new moment(end).add(20, 'months')})
+    end = new moment(end).add(5, 'months')
+    start = new moment(end).subtract(12, 'months') 
+    /* console.log('Start', start.format('YYYY-MMM-DD'), end.format('YYYY-MMM-DD')) */
+    timelineRef.current.setOptions({ 
+      ...options, 
+      zoomMin: 1000 * 60 * 60 * 24,     
+      zoomMax: 1000 * 60 * 60 * 24 * 30 * 12, 
+      start, end, min: new moment(start).subtract(20, 'months'), max: new moment(end).add(20, 'months')})
     timelineRef.current.setItems(items.current)   
     //checkCurrentDateStatus()
   }, [ timelineRawData ])
