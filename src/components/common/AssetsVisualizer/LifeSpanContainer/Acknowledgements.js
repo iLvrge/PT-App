@@ -34,7 +34,7 @@ const options = {
     limitSize: true,
     /* cluster: true, */
     cluster: {
-        maxItems: 6,
+        maxItems: 10,
         titleTemplate: 'Zoom in to see the individual citiing patent.',
         showStipes: false,
         /* clusterCriteria: (firstItem, secondItem) => {

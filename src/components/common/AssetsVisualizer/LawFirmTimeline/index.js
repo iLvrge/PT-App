@@ -284,10 +284,26 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
    * When select an item from timeline
    */
 
-  const onSelect = useCallback((properties) => {
+  const onSelect = useCallback(async (properties) => {
     resetTooltipContainer()
     if (properties.items.length === 0) {
-      setSelectedItem()
+      setSelectedItem(null)
+      dispatch(
+        setConnectionBoxView(false)
+      )
+      dispatch(
+        setPDFView(false)
+      )
+      dispatch(    
+        setConnectionData(null)
+      )
+      dispatch(
+        setPDFFile({ 
+          document: null,  
+          form: null, 
+          agreement: null
+        })
+      ) 
     } else {
       const item = items.current.get(properties.items[0])
       if(typeof item.rawData.type === 'undefined'){
@@ -297,7 +313,6 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
         if(assignmentBar === false) {
           assignmentBarToggle()  
         } */
-        (async() => {
           if(assignmentBar === false) {
             assignmentBarToggle()  
           }
@@ -328,7 +343,6 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
               }                       
             }                        
           }
-        })(); 
       }
     }
   }, [ ])
@@ -597,7 +611,8 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
     const min = new moment(start).subtract(20, 'months') 
     end = new moment(end).add(5, 'months')
     const max = new moment(end).add(20, 'months')
-    start = new moment(end).subtract(12, 'months')  
+    start = new moment(end).subtract(12, 'months') 
+    redrawTimeline() 
     timelineRef.current.setOptions({ 
       ...options, 
       zoomMin: 1000 * 60 * 60 * 24,     

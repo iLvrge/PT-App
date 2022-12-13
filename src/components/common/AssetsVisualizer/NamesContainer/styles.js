@@ -17,6 +17,10 @@ export default makeStyles(theme => ({
         '& .MuiTab-wrapper':{
             whiteSpace: 'nowrap'
         },
+        '& .MuiAlert-root':{
+            position: 'absolute',
+            top: 47
+        }
     },
     tabs: {
         minHeight: 47,

@@ -86,23 +86,25 @@ const LawFirmNames = (props) => {
     
 
     const checkNamesOnDOM = () => {
-        const element = document.getElementById('lawfirm_cloud_names') 
-        if(element != null) {
-            const findSVG = element.querySelector('svg')
-            if(findSVG !== null) {
-                const findTextElements = element.querySelectorAll('text') 
-                if(findTextElements.length > 0 && findTextElements.length != namesData.length) {
-                    /**
-                     * Show noftification
-                     */
-                    setShowAlert(true)
-                } else if(findTextElements.length == 0 && namesData.length > 0 ) {
-                    setTimeout(checkNamesOnDOM, 2000)
-                } else {
-                    setShowAlert(false)
+        if(selectedTab === 0) {
+            const element = document.getElementById('lawfirm_cloud_names') 
+            if(element != null) {
+                const findSVG = element.querySelector('svg')
+                if(findSVG !== null) {
+                    const findTextElements = element.querySelectorAll('text') 
+                    if(findTextElements.length > 0 && findTextElements.length != namesData.length) {
+                        /**
+                         * Show noftification
+                         */
+                        setShowAlert(true)
+                    } else if(findTextElements.length == 0 && namesData.length > 0 ) {
+                        setTimeout(checkNamesOnDOM, 2000)
+                    } else {
+                        setShowAlert(false)
+                    }
                 }
             }
-        }
+        } 
     }
 
     const formatData = async(data) => {
