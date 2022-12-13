@@ -48,6 +48,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
     const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
 
     
+    const assetsListLoading = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.loading) 
     const assetsList = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list) //Assets List
     const assetsTotal = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.total_records) //Assets records
     const maintainenceAssetsList = useSelector( state => state.patenTrack2.maintainenceAssetsList.list )
@@ -166,7 +167,9 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                                     );
                                 } */
                             } else {
-                                if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0) && assetRequest === false) {
+                                console.log("GEOCHART", openCustomerBar, selectedCompaniesAll, selectedCompanies.length, assetRequest, assetsListLoading)
+                                if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0) && assetRequest === false && assetsListLoading === false) {
+                                    console.log("SEND REQUEST FROM GEOCHART")
                                     setAssetRequest(true)
                                     dispatch(
                                         getCustomerAssets(
@@ -204,7 +207,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
             getAssetsForEachCountry()
         }
         return () => (isSubscribed = false)
-    }, [selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, selectedAssetAssignmentsAll, selectedAssetAssignments, display_sales_assets, search_string, auth_token])
+    }, [selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, selectedAssetAssignmentsAll, selectedAssetAssignments, display_sales_assets, search_string, auth_token, assetsListLoading])
     
     
     useEffect(() => {    

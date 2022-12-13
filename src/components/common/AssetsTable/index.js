@@ -1020,7 +1020,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           }          
         }  else {
           console.log('selectedAssetCompanies', selectedAssetCompanies)
-          if(assetTypeAssignmentAssets.length === 0 ) {
+          if(assetTypeAssignmentAssets.length === 0 && assetTypeAssignmentAssetsLoading === false) { 
             loadDataFromServer(offsetWithLimit[0], offsetWithLimit[1], sortField, sortOrder)   
           }         
           if(selectedCategory == 'restore_ownership') {    
@@ -1252,13 +1252,15 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   }, [ assetTypeAssignmentAssets ]) 
 
   const loadDataFromServer = (startIndex, endIndex, column, direction) => {
+    
     const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
           tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
           customers = selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
           assignments = selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;   
      
     if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-      if (auth_token != null) {          
+      if (auth_token != null && assetTypeAssignmentAssetsLoading === false ) {  
+        console.log('ASSETS LOAD loadDataFromServer')        
         dispatch(
           process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD'
           ? 
@@ -1285,7 +1287,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
       }
     } else {
-      if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
+      if ((selectedCompaniesAll === true || selectedCompanies.length > 0) && assetTypeAssignmentAssetsLoading === false ) {
+        console.log('ASSETS LOAD loadDataFromServer')
         dispatch(
           getCustomerAssets(
             selectedCategory == '' ? '' : selectedCategory,
@@ -1798,6 +1801,7 @@ const updateTableColumn = (ratingItems) => {
   }, [ tableColumns ] )
 
   const loadMoreRows =  (startIndex, endIndex) => {
+   
     if(startIndex != endIndex && startIndex < totalRecords ) {
       setOffsetWithLimit([startIndex, endIndex])
       const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
