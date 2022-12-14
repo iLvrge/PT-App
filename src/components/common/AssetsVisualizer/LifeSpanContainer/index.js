@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {useLocation} from 'react-router-dom'
 import {Tab, Tabs, Paper, IconButton} from '@mui/material'
-import { Fullscreen as FullscreenIcon } from '@mui/icons-material'
+import { Fullscreen as FullscreenIcon,
+    Battery60 as Battery60Icon } from '@mui/icons-material' 
 import SpanVisualize from './SpanVisualize'
 import Acknowledgements from './Acknowledgements'
 import ConnectionBox from '../../ConnectionBox'
@@ -65,8 +66,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
           activeTab: selectedTab
         }
     ]
-
-    console.log('activeTab', activeTab, selectedTab)
+ 
     useEffect(() => {
         if(selectedRow.length  === 0) {
             /* setLifeSpanTabs(['Lifespan', 'Acknowledgements']) */
@@ -246,6 +246,23 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
     const handleCloseFullscreen = () => {
         setIsFullscreenOpen(false)
     }
+
+    const LabelWithIcon = ({label}) => {
+        return (
+            <span className={classes.label}>
+                {
+                    label 
+                } 
+                {
+                    label == 'Lifespan'
+                    ?
+                        <Battery60Icon/>
+                        :
+                            ''
+                }
+            </span>
+        )
+    }
     
     return (
         <Paper className={classes.root} square>  
@@ -268,7 +285,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                         <Tab
                             key={tab}
                             className={classes.tab} 
-                            label={tab} 
+                            label={<LabelWithIcon label={tab} />} 
                         />
                     )) 
                 }

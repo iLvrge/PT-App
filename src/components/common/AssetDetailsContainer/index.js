@@ -331,7 +331,10 @@ const AssetDetailsContainer = ({
                     timelineScreen === true  && assetIllustration == null && selectedCategory == 'due_dilligence'
                     ?
                       <SankeyChart
-                        type={'acquired'}
+                        type={'acquired'} 
+                        showTabs={true}
+                        tabText={'Acquired'}
+                        fullScreen={true}
                       />
                     : 
                     timelineScreen === true  && assetIllustration == null && selectedCategory == 'top_law_firms'
@@ -409,9 +412,12 @@ const AssetDetailsContainer = ({
                       ?
                         <SankeyChart
                           type={'divested'}
+                          showTabs={true}
+                          tabText={'Divested'}
+                          fullScreen={true}
                         />
                       :
-                      timelineScreen === true  && assetIllustration == null && selectedCategory == 'top_law_firms'
+                      timelineScreen === true  && assetIllustration == null && (selectedCategory == 'top_law_firms' || selectedCategory == 'proliferate_inventors' )
                       ?
                         <InventionVisualizer 
                           defaultSize={defaultSize} 

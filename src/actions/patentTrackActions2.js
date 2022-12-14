@@ -1778,4 +1778,11 @@ export const setSocialMediaConnectPopup = (flag) => {
     type: types.SET_SOCIAL_MEDIA_CONNECT_MODAL, 
     flag
   } 
+}  
+
+export const setTimelineDataLoading = (flag) => {  
+  return {
+    type: types.SET_TIMELINE_DATA_LOADING, 
+    flag
+  } 
 } 
