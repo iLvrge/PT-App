@@ -144,8 +144,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             setSelectItems(assetTypeCompaniesSelected)
         }
     }, [ assetTypeCompaniesSelected, selectItems ]) 
-
-    console.log('selectedCategory', selectedCategory)
+ 
     useEffect(() => {
         if(standalone) {         
             const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
@@ -215,7 +214,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         e.preventDefault()
         const { checked } = e.target;
         const element = e.target.closest('div.ReactVirtualized__Table__rowColumn')
-        let oldSelection = [...selectItems]
+        let oldSelection = [...selectItems] 
         if( element != null ) {
             const index = element.getAttribute('aria-colindex')
             if(index == 2) {
@@ -231,15 +230,15 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             }
             dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
             if( !oldSelection.includes(row.id) ){
-                oldSelection.push(row.id)
+                oldSelection = [row.id]
             } else if(index != 2) {
                 oldSelection = oldSelection.filter(
                     customer => customer !== parseInt( row.id ),
                 )
             }
-            history.push({
+            /* history.push({
                 hash: updateHashLocation(location, 'otherParties', oldSelection).join('&')
-            })
+            }) */
             setSelectItems(oldSelection)
             setSelectAll(false)
             dispatch( setAllAssignmentCustomers(assetTypeCompanies.length == oldSelection.length ||  data.length == oldSelection.length ? true : false ) )

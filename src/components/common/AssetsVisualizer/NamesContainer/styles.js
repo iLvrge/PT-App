@@ -11,7 +11,7 @@ export default makeStyles(theme => ({
           borderBottom: `1px solid ${theme.palette.divider} !important`
         },
         '& .MuiTab-root':{
-            minWidth: 110,
+            minWidth: 130,
             maxWidth:  200
         },
         '& .MuiTab-wrapper':{

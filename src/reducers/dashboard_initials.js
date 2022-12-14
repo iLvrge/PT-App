@@ -99,5 +99,6 @@ export default {
     assetsCompActivitiesDataCount: 0,
     isLoadingCompActivitiesDataCount: null,
     isLoadingAssetsErrorsDataCount: null,
-    assetsErrorsDataCount: 0
+    assetsErrorsDataCount: 0,
+    timelineDataLoading: false
 }

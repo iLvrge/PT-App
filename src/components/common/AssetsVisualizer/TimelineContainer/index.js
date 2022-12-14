@@ -560,24 +560,27 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
           return c
       })
       Promise.all(promise) 
-      start = new moment(start).subtract(20, 'months') 
+      /* start = new moment(start).subtract(20, 'months') 
       end = new moment(end).add(20, 'months')
       const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
-      items.current.add(convertedItems.slice(0, startIndex))      
+      items.current.add(convertedItems.slice(0, startIndex))   */ 
+      items.current.add(convertedItems) 
     }    
-
-    /* if (convertedItems.length > 50) {
-      options.cluster = {
-        titleTemplate: 'Cluster containing {count} events. Zoom in to see the individual events.',
-        showStipes: false,
-        clusterCriteria: (firstItem, secondItem) => {
-          return ( (firstItem.rawData.name_id > 0 && secondItem.rawData.name_id > 0 && firstItem.rawData.name_id === secondItem.rawData.name_id) ||  ( firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID))
-        }
-      }
-    } */
-
+    /* 
     timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'year')})
-    timelineRef.current.setItems(items.current)   
+    timelineRef.current.setItems(items.current)   */ 
+
+    const min = new moment(start).subtract(20, 'months') 
+    end = new moment(end).add(5, 'months')
+    const max = new moment(end).add(20, 'months')
+    start = new moment(end).subtract(12, 'months') 
+    redrawTimeline() 
+    timelineRef.current.setOptions({ 
+      ...options, 
+      zoomMin: 1000 * 60 * 60 * 24,     
+      zoomMax: 1000 * 60 * 60 * 24 * 30 * 12, 
+      start, end, min, max })
+    timelineRef.current.setItems(items.current) 
     //checkCurrentDateStatus()
   }, [ timelineRawData ])
 
@@ -591,7 +594,6 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       if( document.getElementsByClassName('vis-current-time').length == 0 ) {
         let currentElementTransform = document.getElementsByClassName('vis-current-time')[0].style.transform
         currentElementTransform = parseInt(currentElementTransform.replace('translateX(', '').replace(')', ''))
-
       } else {
         checkCurrentDateStatus()
       }

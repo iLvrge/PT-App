@@ -470,8 +470,7 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state,
           assetTypeCompanies:  {...state.assetTypeCompanies, selectAll: action.flag}
         }
-      case types.SET_ASSET_TYPES_COMPANIES_SELECT_NAME:
-        console.log('SET_ASSET_TYPES_COMPANIES_SELECT_NAME', action)
+      case types.SET_ASSET_TYPES_COMPANIES_SELECT_NAME: 
         return {
           ...state,
           assetTypeCompanies: {...state.assetTypeCompanies, name: action.name}
@@ -829,12 +828,16 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state, 
           selectedLawFirm: action.data
         }
-      case types.SET_SOCIAL_MEDIA_CONNECT_MODAL:
-        console.log('action', action)
+      case types.SET_SOCIAL_MEDIA_CONNECT_MODAL: 
         return { 
           ...state, 
           socialMediaConnectPopup: action.flag
         }
+        case types.SET_TIMELINE_DATA_LOADING: 
+        return { 
+          ...state, 
+          timelineDataLoading: action.flag
+        } 
       default:   
       return state
   } 

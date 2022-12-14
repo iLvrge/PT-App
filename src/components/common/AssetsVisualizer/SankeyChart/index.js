@@ -4,11 +4,10 @@ import { Paper, Tab, Tabs } from '@mui/material';
 import DisplayChart from './DisplayChart';
 import useStyles from './styles'
 import clsx from 'clsx';
-import PatenTrackApi from '../../../../api/patenTrack2';
-import TitleBar from '../../TitleBar';
+import PatenTrackApi from '../../../../api/patenTrack2'; 
 import Loader from '../../Loader';
-import { setAssetTypeAssignmentAllAssets, setSelectAssignmentCustomers } from '../../../../actions/patentTrackActions2';
-import { ConstructionOutlined } from '@mui/icons-material';
+import { setAssetTypeAssignmentAllAssets, setSelectAssignmentCustomers } from '../../../../actions/patentTrackActions2'; 
+import FullScreen from '../../FullScreen';
 
 
 const SankeyChart = (props) => {
@@ -17,6 +16,7 @@ const SankeyChart = (props) => {
     const containerRef = useRef(null)
     const [loading, setLoading] = useState(false);
     const [loadingAssignor, setLoadingAssingor] = useState(false);
+    const [ fullScreen, setFullScreen ] = useState(false)
     const [data, setData] = useState([]);
     const [height, setHeight] = useState('100%');
     const [assignorData, setAssignorData] = useState([]);    
@@ -24,6 +24,19 @@ const SankeyChart = (props) => {
     const [assignorRawData, setAssignorRawData] = useState([]);    
     const selectedCategory = useSelector(state =>  state.patenTrack2.selectedCategory )
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
+
+    const fullScreenItems = [
+        {
+          id: 1,
+          label: '',
+          component: SankeyChart,
+          type: props.type,
+          showTabs: props.showTabs,
+          tabText: props.tabText,
+          standalone: true,
+          activeTab: 0
+        }
+    ]
     
     useEffect(() => {
         const getPartiesData = async() => {
@@ -93,13 +106,11 @@ const SankeyChart = (props) => {
     }, [selectedCompanies, props.type])
 
     useEffect(() => {
-        if((data.length > 0 || assignorData.length > 0) && containerRef != null && containerRef.current != null) {
-            console.log(containerRef, containerRef.current, containerRef.current.parentElement)
+        if((data.length > 0 || assignorData.length > 0) && containerRef != null && containerRef.current != null) { 
             const element = containerRef.current.parentElement
             if(element != null) { 
                 const {height} = element.getBoundingClientRect();
-                const childElement = document.querySelectorAll('.cntSankeyChart')
-                console.log('childElement', childElement)
+                const childElement = document.querySelectorAll('.cntSankeyChart') 
                 if(childElement.length > 0 ) {
                     childElement.forEach( (item, index) => {
                         childElement[index].style.height = `${parseInt(height)}px`
@@ -129,8 +140,7 @@ const SankeyChart = (props) => {
             dispatch(setTimelineScreen(false))
             dispatch(setPatentScreen(true)) */
         } 
-    }, [assignorRawData, assigneeRawData])
-
+    }, [assignorRawData, assigneeRawData]) 
     return (
         <Paper {...(typeof props.showTabs == 'undefined' ? {sx: {p: 2, overflow: 'auto'}} : {overflow: 'auto'})}  className={clsx(classes.container, classes.containerTop, 'cntSankeyChart')} square ref={containerRef} >
             {/* {
@@ -183,6 +193,15 @@ const SankeyChart = (props) => {
                     <Loader />
                 :
                     ''  
+            }
+            {
+                typeof props.fullScreen != 'undefined' && props.fullScreen === true && (
+                    <FullScreen 
+                        componentItems={fullScreenItems} 
+                        showScreen={fullScreen} 
+                        setScreen={setFullScreen}
+                    />
+                )
             }
         </Paper>         
     )

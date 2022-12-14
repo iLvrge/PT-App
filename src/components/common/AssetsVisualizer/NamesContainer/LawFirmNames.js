@@ -8,6 +8,7 @@ import useStyles from './styles';
 import { Alert, Paper, Tab, Tabs, Typography } from '@mui/material';
 import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
 import HandshakeOutlinedIcon from '@mui/icons-material/HandshakeOutlined';
+import BadgeIcon from '@mui/icons-material/Badge';
 import { FaLightbulb } from "react-icons/fa";
 import { wordCloudOptions } from '../../../../utils/options';  
 import AgentsVisualizer from '../AgentsVisualizer';
@@ -19,7 +20,7 @@ const LawFirmNames = (props) => {
     const classes = useStyles() 
     const dispatch = useDispatch()
     const [showAlert, setShowAlert] = useState(false)
-    const [ tabs, setTabs ] = useState(['Names', 'Agents (fillings)', 'Agents (transactions)', 'Agents (Technologies)'])
+    const [ tabs, setTabs ] = useState(['Names', 'Filling', 'Transactions', 'Inventions'])
     const [ selectedTab, setSelectedTab ] = useState(0)
     const [ rawData, setRawData ] = useState([])
     const [ namesData, setNamesData ] = useState([])
@@ -138,26 +139,25 @@ const LawFirmNames = (props) => {
         return (
             <span className={classes.label}>
                 {
-                    label == 'Agents (fillings)' || label == 'Agents (transactions)' || label == 'Agents (Technologies)' 
-                    ?
-                        `Agent `
-                    :
-                        label
+                    label
                     
                 }
                 {
-                    label == 'Agents (fillings)'
+                    label == 'Filling'
                     ?
                         <NoteAddOutlinedIcon/>
                         :
-                        label == 'Agents (transactions)' 
+                        label == 'Transactions' 
                         ?
                             <HandshakeOutlinedIcon/>
                         :
-                            label == 'Agents (Technologies)' ?
+                            label == 'Inventions' ?
                                 <FaLightbulb/>
                             :
-                                ''
+                                label == 'Names' ?
+                                    <BadgeIcon/>
+                                :
+                                    ''
                 }
             </span>
         )

@@ -30,7 +30,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
     const [loading, setLoading] = useState(false)
     const [assetRequest, setAssetRequest] = useState(false)
     const [selectedTab, setSelectedTab ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? 0 : typeof activeTab != 'undefined' ? activeTab : 1)
-    const [chartTabs, setChartTabs ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? ['Jurisdictions'] :  ['Innovation', 'Jurisdictions', 'Invented', 'Acquired', 'Agents (fillings)', 'Agents (transactions)'])
+    const [chartTabs, setChartTabs ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? ['Jurisdictions'] :  ['Innovation', 'Jurisdictions', 'Invented', 'Acquired', 'Filling', 'Transactions'])
     const [data, setData] = useState([])
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
@@ -292,23 +292,18 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
         return (
             <span className={classes.label}>
                 {
-                    label == 'Agents (fillings)' || label == 'Agents (transactions)' || label == 'Agents (Technologies)' 
-                    ?
-                        `Agents `
-                    :
-                        label
-                    
+                    label
                 }
                 {
-                    label == 'Agents (fillings)'
+                    label == 'Filling'
                     ?
                         <NoteAddOutlinedIcon/>
                         :
-                        label == 'Agents (transactions)' 
+                        label == 'Transactions' 
                         ?
                             <HandshakeOutlinedIcon/>
                         :
-                            label == 'Agents (Technologies)' ?
+                            label == 'Innovation' ?
                                 <FaLightbulb/>
                             :
                                 ''

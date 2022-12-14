@@ -157,8 +157,7 @@ const patenTrackReducer = (state = initialState.patient, action) => {
           break
       }
       const newItems = [ ...state.customersData[params] ]
-      const parentIndex = newItems.findIndex(x => x.id == action.parentNode)
-      console.log('COLLECTION parentIndex', parentIndex)
+      const parentIndex = newItems.findIndex(x => x.id == action.parentNode) 
       const childIndex = newItems[parentIndex].child.findIndex(x => x.id == action.currentNode)
       newItems[parentIndex].child[childIndex]['child'] = [ ...action.data ]
       return {
@@ -216,13 +215,10 @@ const patenTrackReducer = (state = initialState.patient, action) => {
         case 10:
           propIndex = 'other'
           break
-      }
-      console.log(propIndex, action.tabId)
+      } 
       const oldItems = [ ...state.customersData[propIndex] ]
-      const parentNode = oldItems.findIndex(x => x.id == action.parentNode)
-      console.log('COLLECTION parentNode', parentNode)
-      const parentNode2 = oldItems[parentNode].child.findIndex(x => x.id == action.parentNode1)
-      console.log('COLLECTION parentNode2',  action.parentNode1, parentNode2)
+      const parentNode = oldItems.findIndex(x => x.id == action.parentNode) 
+      const parentNode2 = oldItems[parentNode].child.findIndex(x => x.id == action.parentNode1) 
       const childNode = oldItems[parentNode].child[parentNode2].child.findIndex(x => x.id == action.currentNode)
       oldItems[parentNode].child[parentNode2].child[childNode]['child'] = [ ...action.data ]
         return {
@@ -366,7 +362,6 @@ const patenTrackReducer = (state = initialState.patient, action) => {
       }
     case types.SET_ERRORS_ITEMS_APPEND:
       const tabType = action.currentTab == 0 ? 'invent' : action.currentTab == 1 ? 'assign' : action.currentTab == 2 ? 'corr' : action.currentTab == 3 ? 'address' : 'security'
-      console.log(tabType)
       const oldList = state.errorItems[action.itemType]
       const oldData  = oldList[tabType]
       const newList = [ ...oldData, ...action.data[tabType] ]
