@@ -11,14 +11,22 @@ export default makeStyles(theme => ({
     overflow: 'hidden',
     '& .font12Rem':{
       fontSize: '1rem'
-    },
-    
+    }
+  },
+  tableHeading: {
+    backgroundColor: '#282B30',
+    color: '#fff',  
+    boxShadow: '0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)',
+    backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))',
   },
   actionTh: {
     width: 50,
   },
   tableContainer:{
-    height: 'calc(100vh - 113px)'
+    height: 'calc(100vh - 113px)',
+    '& fieldset':{
+      border: 0
+    }
   },
   table: {
     /* backgroundColor: theme.palette.background.paper, */

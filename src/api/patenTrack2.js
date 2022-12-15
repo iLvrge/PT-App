@@ -88,6 +88,10 @@ class PatenTrackApi {
 
   static getCompaniesList() {
     return axios.get(`${base_new_api_url}/companies`, getHeader())
+  } 
+
+  static updateCompany(companyId, form) {
+    return axios.put(`${base_new_api_url}/companies/${companyId}`, form, getFormUrlHeader())
   }
 
   static getChildCompanies(companyID, offset = 0 ) {
@@ -983,7 +987,7 @@ class PatenTrackApi {
 
   static deleteLawFirmAddress(addressId) {
     return axios.delete(`${base_new_api_url}/lawfirm_address/${addressId}`, getHeader())
-  }
+  } 
   
   static addCompanyAddress(address) {
     return axios.post(`${base_new_api_url}/address`, address, getFormUrlHeader())

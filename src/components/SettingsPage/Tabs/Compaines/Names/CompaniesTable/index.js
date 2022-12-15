@@ -1,5 +1,5 @@
 import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -10,14 +10,12 @@ import TableSortLabel from '@mui/material/TableSortLabel'
 import useStyles from './styles'
 import Loader from '../../../../../common/Loader'
 import Row from './Row'
-import Checkbox from '@mui/material/Checkbox'
-import _map from 'lodash/map'
-import IconButton from '@mui/material/IconButton'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import _map from 'lodash/map' 
 
 import SlackImage from '../../../../../common/SlackImage'
 import { Paper } from '@mui/material'
+import PatenTrackApi from '../../../../../../api/patenTrack2' 
+import { setCompanies } from '../../../../../../actions/patenTrackActions'
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -101,6 +99,7 @@ function CompaniesTable({
   setChildCompaniesSelected,
 }) {
   const classes = useStyles()
+  const dispatch = useDispatch()
   const isLoading = useSelector(state => state.patenTrack.companyListLoading)
   const companiesList = useSelector(state => state.patenTrack.companiesList)
   const [ order, setOrder ] = useState('asc')
@@ -126,6 +125,7 @@ function CompaniesTable({
   }, [ handleRequestSort ])
 
   const onSelect = useCallback((event, row, type) => {
+    console.log('onSelect Event', row, type)
     if (type === 'parent') {
       setSelected((selected) => selected.includes(row.id) ? selected.filter(_id => _id !== row.id) : [ ...selected, row.id ])
       setChildCompaniesSelected((childCompaniesSelected) => childCompaniesSelected.filter(_id => row.children.findIndex(item => item.id === _id) === -1))
@@ -144,6 +144,25 @@ function CompaniesTable({
   const onSelectAll = useCallback(() => {
     setSelected(isAllSelected ? [] : _map(rows, 'id'))
   }, [ setSelected, isAllSelected, rows ])
+
+  const updateRowData = async(name, row) => {
+    const form = new FormData()
+    form.append('name', name)  
+    const { data } = await PatenTrackApi.updateCompany(row.id, form) 
+    if( data != null && data.length > 0) {
+      dispatch(setCompanies(data))
+    }
+  }
+
+  const moveItem = async(parentId, item) => {
+    const form = new FormData()
+    form.append('parent_id', parentId > 0 ? parentId : 0) 
+    const { data } = await PatenTrackApi.updateCompany(item.id, form) 
+    if( data != null && data.length > 0) {
+      dispatch(setCompanies(data))
+    }
+  }
+
   return (
     <Paper square classes={classes.root}>
       {
@@ -153,11 +172,11 @@ function CompaniesTable({
           <TableContainer className={classes.tableContainer}>
             <Table
               className={classes.table}
-              /* stickyHeader */
+              stickyHeader
               size={'medium'} 
-              aria-label="collapsible table">
-              <TableHead>
-                <TableRow>
+              aria-label="collapsible table"> 
+              <TableHead className={classes.tableHeading}>
+                <TableRow className={classes.tableHeading}>
                   <TableCell className={classes.actionTh} padding="none" />
 
                   {/* <TableCell className={classes.actionTh} padding="none">
@@ -214,6 +233,8 @@ function CompaniesTable({
                       onSelect={onSelect}
                       isSelected={isSelected}
                       isChildSelected={isChildSelected}
+                      updateData={updateRowData}
+                      moveItem={moveItem}
                     />
                   ))
                 }
