@@ -14,6 +14,8 @@ export default makeStyles(() => ({
   },
   box: {
     margin: '0 0 -1px 19px',
+    maxHeight: 400,
+    overflow: 'auto'
   },
   actionCell: {
     width: 20,

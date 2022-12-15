@@ -40,6 +40,18 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Are you sure you want to remove {numSelected} {typeof selectedType !== 'undefined' ? selectedType.toLowerCase() : title.toLowerCase()}?
+            {
+              selectedType.toLowerCase() != 'companies' && (
+                <React.Fragment>
+                  <Button
+                    onClick={onConfirmDelete}
+                  >Remove the group together with its entities</Button>
+                  <Button
+                    onClick={onConfirmDelete}
+                  >Remove the group but keep its entities</Button>
+                </React.Fragment>
+              ) 
+            }
           </DialogContentText>
         </DialogContent> 
 
@@ -47,9 +59,13 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
           <Button onClick={onCloseDialog}>
             CANCEL
           </Button>
-          <Button onClick={onConfirmDelete} color="primary" variant={'contained'} autoFocus>
-            OK
-          </Button>
+          {
+            selectedType.toLowerCase() == 'companies' && (
+              <Button onClick={onConfirmDelete} color="primary" variant={'contained'} autoFocus>
+                OK
+              </Button>
+            )
+          }
         </DialogActions>
       </Dialog>
 
