@@ -17,20 +17,43 @@ import {
     setSelectedAssetsPatents,
     setAssetsIllustration,
     getAssetsAllTransactionsEvents,
+    setAssetTypeAssignmentAllAssets,
+    setAssetTypesPatentsSelected,
+    linkWithSheetOpenPanel,
+    linkWithSheetSelectedAsset,
+    setChildSelectedAssetsPatents,
+    setSelectedAssetAddressTransactions,
+    setAssetTypeChildCustomerSelectedRow,
+    setChannelID,
+    setDriveTemplateFile,
+    setTemplateDocument,
+    getAssetDetails,
+    setCommentsEntity,
+    setSlackMessages,
+    setAssetsIllustrationData,
+    setLinkAssetData,
+    setLinkAssetListSelected,
+    resetAssetDetails,
 } from '../../../actions/patentTrackActions2'
 
 import {
+    assetFamily,
+    assetFamilySingle,
+    assetLegalEvents,
+    setAssetFamily,
     setConnectionBoxView, 
+    setFamilyItemDisplay, 
+    setPDFFile, 
     setPDFView,
 } from '../../../actions/patenTrackActions'
 
-import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode } from '../../../actions/uiActions'
+import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, setDriveTemplateFrameMode, toggleLifeSpanMode } from '../../../actions/uiActions'
 
 import { 
     updateHashLocation
 } from '../../../utils/hashLocation'
 
-import { numberWithCommas } from '../../../utils/numbers'
+import { applicationFormat, numberWithCommas } from '../../../utils/numbers'
 
 import Loader from '../Loader'
 
@@ -52,7 +75,8 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
     const [ selectItems, setSelectItems] = useState( [] )
     const [ selectedRow, setSelectedRow] = useState( [] )
     const [ childSelected, setCheckedSelected] = useState( 0 )
-    const [ currentSelection, setCurrentSelection] = useState(null)
+    const [ currentSelection, setCurrentSelection] = useState(null) 
+    const [defaultViewFlag, setDefaultViewFlag] = useState(0)
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const assetTypesSelected = useSelector(state => state.patenTrack2.assetTypes.selected)
@@ -60,21 +84,21 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
     const assetTypeCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies)
     const assetTypeAssignmentAssets = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
-
+    const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
+    const channel_id = useSelector(state => state.patenTrack2.channel_id)
+    const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
+    const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
     const COLUMNS = [ 
         {
             width: 100,
-            label: 'Transactions', 
-            dataKey: 'date',
-            align: 'left'   
-        },
-        {
-            width: 100,
-            label: 'Assets', 
-            dataKey: 'assets',
-            staticIcon: '',
+            label: 'Asset', 
+            dataKey: 'asset',
+            staticIcon: "US",
             format: numberWithCommas,
-            align: 'left'           
+            formatCondition: 'asset_type',
+            formatDefaultValue: 0,
+            secondaryFormat: applicationFormat,
+            align: "center",         
         }
     ]
        
@@ -86,7 +110,8 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
                     tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
                     customers = [partiesId]
                 
-                const { data } = await PatenTrackApi.getAssetTypeAssignments(companies, tabs, customers, selectedCategory != '' ? selectedCategory : '', false)
+                /* const { data } = await PatenTrackApi.getAssetTypeAssignments(companies, tabs, customers, selectedCategory != '' ? selectedCategory : '', false) */ 
+                const { data } = await PatenTrackApi.getCustomerAssets(selectedCategory, companies, tabs, customers, [], 0, 3000, 'asset', 'desc', false) 
                 setAssignments(data.list)
                 setAssignmentLoading( false )
                 if( data.list != null && data != '' && data.list.length > 0 ){
@@ -98,6 +123,7 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
                         return row
                     })
                     await Promise.all(promise)
+                    dispatch( setAssetTypeAssignmentAllAssets(data, false) )
                     dispatch(
                         setAssetTypeCompanies({
                             ...assetTypeCompanies,
@@ -120,7 +146,177 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
     const onHandleClickRow = useCallback((e,  row) => {
         e.preventDefault()
         /* getTransactionData(dispatch, row.rf_id) */
+        let oldSelection = [...selectItems];
+        if (!oldSelection.includes(`${row.asset}`)) {
+            dispatch(setAssetTypesPatentsSelected([row.asset]))
+            setSelectItems([row.asset])
+            handleOnClick(row)
+        } else {
+            clearSelections()
+        } 
+
     }, [ dispatch, selectItems, currentSelection ])
+
+    const clearSelections = () => {
+        dispatch(setAssetTypesPatentsSelected([]))
+        setSelectItems([]); 
+        /* setCheckBar(!checkBar) */
+        resetAll()
+    }
+
+    const callSelectedAssets = useCallback(({ grant_doc_num, appno_doc_num, asset }) => {  
+        setSelectedRow([asset]);    
+      }, [dispatch] );
+
+
+  const findChannelID = useCallback((asset) => {
+    let channelID = ''
+    if(slack_channel_list.length > 0 && asset != undefined) {
+      const findIndex = slack_channel_list.findIndex( channel => channel.name == `us${asset}`.toString().toLocaleLowerCase())
+  
+      if( findIndex !== -1) {
+        channelID = slack_channel_list[findIndex].id
+      }
+    }
+    return channelID
+  }, [ slack_channel_list ]) 
+
+    const handleOnClick = useCallback(
+        ({ grant_doc_num, appno_doc_num, asset }) => {     
+          /*TV, Comment, Family, FamilyItem, getChannelID Legal Events */
+          if(!selectedRow.includes(asset)) {
+            if(selectedCategory == 'restore_ownership') {
+              dispatch(setAssetTypesPatentsSelected([asset]))
+              setSelectItems([asset])
+            }
+            if(selectedCategory == 'technical_scope') {
+              dispatch(linkWithSheetOpenPanel(true))
+              dispatch(linkWithSheetSelectedAsset('products', encodeURIComponent(grant_doc_num  == '' ? `US${applicationFormat(appno_doc_num)}` : `US${numberWithCommas(grant_doc_num)}`)))     
+            }
+            callSelectedAssets({ grant_doc_num, appno_doc_num, asset });
+            /* if(defaultViewFlag === 0) {
+              let changeBar = false
+              if(openIllustrationBar === false) {
+                changeBar = true
+                handleIllustrationBarOpen() 
+              }
+              if(commentBar === false) {
+                changeBar = true
+                handleCommentBarOpen() 
+              }
+              if(openChartBar === false) {
+                changeBar = true
+                handleChartBarOpen()
+              }
+              if(openAnalyticsBar === false) {
+                changeBar = true
+                handleAnalyticsBarOpen()
+              }
+    
+              if(changeBar === true) {
+                handleVisualBarSize(true, true, true, true)
+              }
+              setDefaultViewFlag(1)
+            }  */       
+            dispatch(setChildSelectedAssetsPatents([]));
+            dispatch(setSelectedAssetAddressTransactions([]));
+            //dispatch(setDocumentTransaction([]));
+            dispatch(setMainCompaniesRowSelect([]));
+            dispatch(setAssetTypeSelectedRow([]));
+            dispatch(setAssetTypeChildCustomerSelectedRow([]));
+            dispatch(setChildSelectedAssetsTransactions([]));
+            dispatch(setAssetFamily([]));
+            dispatch(setChannelID(''))
+            dispatch(setDriveTemplateFrameMode(false));
+            dispatch(setDriveTemplateFile(null));  
+            dispatch(setTemplateDocument(null));
+            dispatch(setConnectionBoxView(false));
+            dispatch(setPDFView(false));        
+            //dispatch(toggleUsptoMode(false));  
+            dispatch(toggleLifeSpanMode(false));
+            dispatch(toggleFamilyMode(true));
+            dispatch(toggleFamilyItemMode(true));
+            PatenTrackApi.cancelFamilyCounterRequest()
+            PatenTrackApi.cancelClaimsCounterRequest()
+            PatenTrackApi.cancelFiguresCounterRequest()
+            PatenTrackApi.cancelPtabCounterRequest()
+            PatenTrackApi.cancelCitationCounterRequest()
+            PatenTrackApi.cancelFeesCounterRequest()
+            PatenTrackApi.cancelStatusCounterRequest()
+            dispatch(getAssetDetails(appno_doc_num, grant_doc_num))
+            dispatch(
+              setPDFFile(
+                { 
+                  document: null, 
+                  form: null, 
+                  agreement: null 
+                }
+              )
+            )
+            dispatch(setSelectedAssetsPatents([grant_doc_num, appno_doc_num]));
+            dispatch(
+            setAssetsIllustration({
+                type: "patent",
+                id: grant_doc_num || appno_doc_num,
+                flag: grant_doc_num !== '' && grant_doc_num !== null ? 1 : 0
+            }),
+            );
+            dispatch(
+            setCommentsEntity({
+                type: "asset",
+                id: grant_doc_num || appno_doc_num,
+            }),
+            );
+            
+    
+            dispatch(assetFamilySingle(appno_doc_num))
+            dispatch(assetLegalEvents(appno_doc_num, grant_doc_num))
+            dispatch(assetFamily(appno_doc_num))
+            dispatch(setSlackMessages({ messages: [], users: [] }))
+            const channelID = findChannelID(grant_doc_num != '' ? grant_doc_num : appno_doc_num)        
+            if( channelID != '') {
+              dispatch(setChannelID({channel_id: channelID}))
+            }
+            //dispatch(getChannelID(grant_doc_num, appno_doc_num));
+            /* if(openAnalyticsBar === false || openChartBar === false) {
+                openAnalyticsAndCharBar()
+            } */
+          } else { 
+            resetAll() 
+            if(selectedCategory == 'restore_ownership') {
+              dispatch(setAssetTypesPatentsSelected([]))
+              setSelectItems([])
+            }  
+          }
+        },
+        [ dispatch,  selectedAssetsPatents, selectedRow ],
+      );
+
+    const resetAll = useCallback(() => {
+        setSelectedRow([])
+        dispatch(setAssetsIllustration(null))
+        dispatch(setAssetsIllustrationData(null))
+        dispatch(setSelectedAssetsPatents([]))
+        dispatch(setAssetFamily([]))
+        dispatch(setFamilyItemDisplay({}))
+        dispatch(setChannelID(''))
+        dispatch(setConnectionBoxView(false))
+        dispatch(setPDFView(false))
+    
+        dispatch(toggleUsptoMode(false))
+        dispatch(toggleLifeSpanMode(true))
+        dispatch(toggleFamilyMode(false))
+        dispatch(toggleFamilyItemMode(false))
+    
+        dispatch(setDriveTemplateFrameMode(false))
+    
+        dispatch(linkWithSheetOpenPanel(false))
+        dispatch(linkWithSheetSelectedAsset(null, null))
+        dispatch(setLinkAssetData([]))
+        dispatch(setLinkAssetListSelected([]))
+        dispatch(resetAssetDetails())
+        
+    }, [dispatch])
 
     const getTransactionData = (dispatch, rf_id) => {
         setSelectedRow([rf_id])

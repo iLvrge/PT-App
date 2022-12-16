@@ -198,7 +198,7 @@ const Utilities = () => {
     } 
     
     const getRepoFolder = useCallback(async(userAccount, token) => {
-        PatenTrackApi.cancelGetRepoFolder()
+        PatenTrackApi.cancelGetRepoFolderRequest()
         const {data} = await PatenTrackApi.getRepoFolder(userAccount)
 
         if(data != null) {

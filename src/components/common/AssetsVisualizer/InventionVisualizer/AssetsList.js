@@ -286,13 +286,13 @@ const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handle
                     dispatch(toggleLifeSpanMode(false));
                     dispatch(toggleFamilyItemMode(true));
                     dispatch(toggleFamilyMode(true));
-                    PatenTrackApi.cancelFamilyCounter()
-                    PatenTrackApi.cancelClaimsCounter()
-                    PatenTrackApi.cancelFiguresCounter()
-                    PatenTrackApi.cancelPtabCounter()
-                    PatenTrackApi.cancelCitationCounter()
-                    PatenTrackApi.cancelFeesCounter() 
-                    PatenTrackApi.cancelSatusCounter() 
+                    PatenTrackApi.cancelFamilyCounterRequest()
+                    PatenTrackApi.cancelClaimsCounterRequest()
+                    PatenTrackApi.cancelFiguresCounterRequest()
+                    PatenTrackApi.cancelPtabCounterRequest()
+                    PatenTrackApi.cancelCitationCounterRequest()
+                    PatenTrackApi.cancelFeesCounterRequest() 
+                    PatenTrackApi.cancelStatusCounterRequest() 
                     dispatch(setSelectedAssetsPatents([row.grant_doc_num, row.appno_doc_num]))
                     dispatch(getAssetDetails(row.appno_doc_num, row.grant_doc_num))
                     dispatch(assetFamilySingle(row.appno_doc_num))

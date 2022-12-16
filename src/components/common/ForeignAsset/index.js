@@ -311,7 +311,7 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
             const form = new FormData()
             form.append('account', email)
             form.append('token', token)
-            PatenTrackApi.cancelForeignAssetsSheet()
+            PatenTrackApi.cancelForeignAssetsSheetRequest()
             const { data } = await PatenTrackApi.getForeignAssetsSheets(form)
     
             if(data != null ) {

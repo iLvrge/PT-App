@@ -211,7 +211,7 @@ const GlobalScreen = ({
                 url = url.replace('/', '')
                 if(url != '') {
                     const getDashboardData = async() => {
-                        PatenTrackApi.cancelShareDashboard()
+                        PatenTrackApi.cancelShareDashboardRequest()
                         const {data} = await PatenTrackApi.getShareDashboardList(url)
                         if(data != null && Object.keys(data).length > 0) {
                             let { selectedCompanies, tabs, customers, share_button } = data

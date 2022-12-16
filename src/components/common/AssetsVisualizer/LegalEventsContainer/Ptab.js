@@ -240,7 +240,7 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
             
             const getPtabData = async() => {
                 setIsLoadingTimelineRawData(true)
-                PatenTrackApi.cancelPtab()    
+                PatenTrackApi.cancelPtabRequest()    
                 const { data } = await PatenTrackApi.getPtabData(selectedAssetsPatents[1])
                 setIsLoadingTimelineRawData(false) 
                 if(data !== null && data.length > 0 )  {

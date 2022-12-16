@@ -222,7 +222,7 @@ const Acknowledgements = () => {
     useEffect(() => {
         const getAcknowledgementData = async() => {
             setIsLoadingTimelineRawData(true)
-            PatenTrackApi.cancelAllAssetsCitationData()   
+            PatenTrackApi.cancelAllAssetsCitationDataRequest()   
             if ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0) || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token === null)){
                 setIsLoadingTimelineRawData(false)
                 setTimelineRawData([])

@@ -58,7 +58,7 @@ const SankeyChart = (props) => {
                 }
                 if((typeof props.type != 'undefined' && (props.type == 'acquired' || props.type == 'filled')) || (selectedCategory == 'acquired')) {
                     setLoading(true)
-                    PatenTrackApi.cancelDashboardPartiesData()
+                    PatenTrackApi.cancelDashboardPartiesDataRequest()
                     const {data} = await PatenTrackApi.getDashboardPartiesData(formData) 
                     setLoading(false)
                     const loadData = []
@@ -79,7 +79,7 @@ const SankeyChart = (props) => {
                 
                 if((typeof props.type != 'undefined' && props.type == 'divested') || selectedCategory == 'divested') {
                     setLoadingAssingor(true) 
-                    PatenTrackApi.cancelDashboardPartiesAssignorData()
+                    PatenTrackApi.cancelDashboardPartiesAssignorDataRequest()
                     const getAssignorData = await PatenTrackApi.getDashboardPartiesAssignorData(formData) 
                     setLoadingAssingor(false)
                     if(getAssignorData.data != null) {
