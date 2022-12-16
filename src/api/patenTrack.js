@@ -84,7 +84,7 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/family/${applicationNumber}`, header)
   } 
 
-  static cancelAssetFamily() {
+  static cancelAssetFamilyRequest() {
     if (cancelAssetFamily !== undefined) {
       try{
         throw cancelAssetFamily('Request cancelled for families.')
@@ -102,7 +102,7 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/family/single/${applicationNumber}`, header)
   } 
 
-  static cancelAssetFamilySingle() { 
+  static cancelAssetFamilySingleRequest() { 
     if (cancelAssetFamilySingle !== undefined) {
       try{
         throw cancelAssetFamilySingle('Request cancelled for family.')
@@ -120,7 +120,7 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/events/${applicationNumber}/${patentNumber != '' ? encodeURIComponent(patentNumber)  : applicationNumber}`, header)
   }
 
-  static cancelAssetLegalEvents() {
+  static cancelAssetLegalEventsRequest() {
     if (cancelAssetLegalEvents !== undefined) {
       try{
         throw cancelAssetLegalEvents('Request cancelled for legal events.')

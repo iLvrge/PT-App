@@ -83,6 +83,12 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
         },
         colorAxis: {colors: ['#FFAA00', '#70A800', '#1565C0']}
     });
+
+    useEffect(() => {
+        if(selectedCategory == 'proliferate_inventors') {
+            setChartTabs(['Innovation', 'Location'])
+        }
+    }, [selectedCategory ])
  
     useEffect(() => {
         let isSubscribed = true;
@@ -260,12 +266,19 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
         form.append('other_mode', display_sales_assets)
         form.append('data_type', dashboardScreen === true ? 1 : 0)
         form.append('type', selectedCategory)
-        PatenTrackApi.cancelAssetTypeAssignmentAllAssetsWithFamily()
-        const { data } = await PatenTrackApi.getAssetTypeAssignmentAllAssetsWithFamily(form)
-        setLoading(false)
-        if( assetsList.length > 0 || assetsSelected.length > 0 || maintainenceAssetsList.length > 0 ||  selectedMaintainencePatents.length == 0  ) {
+        if(selectedCategory == 'proliferate_inventors') {
+            PatenTrackApi.cancelInventorGeoLocationRequest()
+            const { data } = await PatenTrackApi.getInventorGeoLocation(form)
+            setLoading(false)
             setData(data)
-        } 
+        } else {
+            PatenTrackApi.cancelAssetTypeAssignmentAllAssetsWithFamilyRequest()
+            const { data } = await PatenTrackApi.getAssetTypeAssignmentAllAssetsWithFamily(form)
+            setLoading(false)
+            if( assetsList.length > 0 || assetsSelected.length > 0 || maintainenceAssetsList.length > 0 ||  selectedMaintainencePatents.length == 0  ) {
+                setData(data)
+            } 
+        }
     }
 
 

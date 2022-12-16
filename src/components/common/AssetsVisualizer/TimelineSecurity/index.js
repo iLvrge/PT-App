@@ -253,7 +253,7 @@ const TimelineSecurity = ({ data, assignmentBar, assignmentBarToggle, type, stan
 
   const onItemout = () => {
     tootlTip = ''
-    PatenTrackApi.cancelTimelineItem()
+    PatenTrackApi.cancelTimelineItemRequest()
     resetTooltipContainer()
     setToolTipItem([])
     
@@ -316,7 +316,7 @@ const TimelineSecurity = ({ data, assignmentBar, assignmentBarToggle, type, stan
     setTimelineRawGroups([]) //groups
     setTimelineRawData([]) //items
     //redrawTimeline()
-    PatenTrackApi.cancelTimelineSecurity()
+    PatenTrackApi.cancelTimelineSecurityRequest()
     /**
      * call for the timeline api data
     */

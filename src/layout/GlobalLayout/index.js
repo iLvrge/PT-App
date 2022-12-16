@@ -523,7 +523,7 @@ const GlobalLayout = (props) => {
     const getWindowDimensions = () => {
         /* console.log('dashboardScreen', dashboardScreen) */
         const hasWindow = typeof window !== 'undefined';
-        let percentage = '76%'
+        let percentage = '40%'
         if( location.pathname == '/patent_assets') { 
             percentage = '40%'
         } else { 
@@ -533,7 +533,7 @@ const GlobalLayout = (props) => {
                 const parentWidth = parentContainer.clientWidth
                 percentage = `${((parentWidth - 250) / parentWidth) * 100}%`
             } else {
-                const width = hasWindow ? window.innerWidth : null;
+                /* const width = hasWindow ? window.innerWidth : null;
                 if(width > 1400) {
                     percentage = '76%'
                 } else if(width < 1400 && width > 1279) {
@@ -542,10 +542,9 @@ const GlobalLayout = (props) => {
                     percentage = '67%'
                 } else {
                     percentage = '64%'
-                }  
+                }   */
             }
         }
-        
         return percentage      
     }
 

@@ -161,7 +161,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       setTimeout(() => {
         if(tootlTip === item.id) {
           PatenTrackApi
-          .cancelTimelineItem()
+          .cancelTimelineItemRequest()
           PatenTrackApi
           .getTimelineItemData(item.id)
           .then( response => {
@@ -312,7 +312,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
 
   const onItemout = () => {
     tootlTip = ''
-    PatenTrackApi.cancelTimelineItem()
+    PatenTrackApi.cancelTimelineItemRequest()
     resetTooltipContainer()
     setToolTipItem([])
     
@@ -409,7 +409,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       setTimelineRawGroups([]) //groups
       setTimelineRawData([]) //items
       //redrawTimeline()
-      PatenTrackApi.cancelTimeline()
+      PatenTrackApi.cancelTimelineRequest()
       /**
         * call for the timeline api data
       */
@@ -479,7 +479,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
           })
           const form = new FormData()
           form.append('assets', JSON.stringify(assets)) 
-          PatenTrackApi.cancelForeignAssetTimeline()
+          PatenTrackApi.cancelForeignAssetTimelineRequest()
           const { data } = await PatenTrackApi.getForeignAssetsTimeline(form)
           //setIsLoadingTimelineData(false)
           let list = removeSecurityRelease(data.list)

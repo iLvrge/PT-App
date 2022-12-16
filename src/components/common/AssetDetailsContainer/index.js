@@ -337,15 +337,26 @@ const AssetDetailsContainer = ({
                         fullScreen={true}
                       />
                     : 
-                    timelineScreen === true  && assetIllustration == null && selectedCategory == 'top_law_firms'
+                    timelineScreen === true  && assetIllustration == null && selectedCategory == 'proliferate_inventors'
                     ?
-                      <LawFirmNames
-                        analyticsBar={analyticsBar} 
-                        chartBar={chartBar}
+                      <GeoChart
+                        chartBar={chartBar} 
+                        openCustomerBar={openCustomerBar} 
                         visualizerBarSize={visualizerBarSize}
-                        type={type}  
+                        type={type}
+                        titleBar={true}
+                        activeTab={1}
                       />
-                    :                  
+                    :  
+                      timelineScreen === true  && assetIllustration == null && selectedCategory == 'top_law_firms'
+                      ?
+                        <LawFirmNames
+                          analyticsBar={analyticsBar} 
+                          chartBar={chartBar}
+                          visualizerBarSize={visualizerBarSize}
+                          type={type}  
+                        />
+                      :                  
                     connectionBoxView === true ? (
                         <PdfViewer
                           display={"false"}

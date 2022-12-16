@@ -237,7 +237,7 @@ const TimelineChart = (props) => {
         setTimeout(() => {
         if(tootlTip === item.id) {
             PatenTrackApi
-            .cancelTimelineItem()
+            .cancelTimelineItemRequest()
             PatenTrackApi
             .getTimelineItemData(item.id)
             .then( response => {
@@ -336,7 +336,7 @@ const TimelineChart = (props) => {
 
     const onItemout = () => {
          tootlTip = ''
-        PatenTrackApi.cancelTimelineItem()
+        PatenTrackApi.cancelTimelineItemRequest()
         resetTooltipContainer()
         setToolTipItem([]) 
         

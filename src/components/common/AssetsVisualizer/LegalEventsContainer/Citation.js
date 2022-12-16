@@ -159,9 +159,9 @@ const Citation = ({ number, citationRawData, updateCitationRawData }) => {
         } else {
             const getPtabData = async() => {
                 setIsLoadingTimelineRawData(true)
-                PatenTrackApi.cancelPtab()    
+                PatenTrackApi.cancelPtabRequest()    
                 const asset = selectedAssetsPatents[0] !== '' ? selectedAssetsPatents[0] : selectedAssetsPatents[1]
-                PatenTrackApi.cancelCitationData()
+                PatenTrackApi.cancelCitationDataRequest()
                 const { data } = await PatenTrackApi.getCitationData(asset)
                 setIsLoadingTimelineRawData(false)
                 if(data !== null ) {

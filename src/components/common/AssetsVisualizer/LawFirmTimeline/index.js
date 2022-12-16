@@ -168,7 +168,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
       setTimeout(() => {
         if(tootlTip === item.id) {
           PatenTrackApi
-          .cancelTimelineItem()
+          .cancelTimelineItemRequest()
           PatenTrackApi
           .getTimelineItemData(item.id)
           .then( response => {
@@ -372,7 +372,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
 
   const onItemout = () => {
     tootlTip = ''
-    PatenTrackApi.cancelTimelineItem()
+    PatenTrackApi.cancelTimelineItemRequest()
     resetTooltipContainer()
     setToolTipItem([])
     
@@ -442,7 +442,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
       setTimelineRawGroups([]) //groups
       setTimelineRawData([]) //items
       //redrawTimeline()
-      PatenTrackApi.cancelTimelineActivity()
+      PatenTrackApi.cancelTimelineActivityRequest()
       /**
         * call for the timeline api data
       */
@@ -483,6 +483,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
                   /**
                    * Filling Assets
                    */
+                  PatenTrackApi.cancelTimelineRequest()
                   const { data } = await PatenTrackApi.getFilledAssetsTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
 
                   if( data != null && data.length > 0 ) { 
@@ -524,7 +525,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
           })
           const form = new FormData()
           form.append('assets', JSON.stringify(assets)) 
-          PatenTrackApi.cancelForeignAssetTimeline()
+          PatenTrackApi.cancelForeignAssetTimelineRequest()
           const { data } = await PatenTrackApi.getForeignAssetsTimeline(form)
           //setIsLoadingTimelineData(false)
           setTimelineRawData(data.list) 
@@ -615,8 +616,8 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
     redrawTimeline() 
     timelineRef.current.setOptions({ 
       ...options, 
-      zoomMin: 1000 * 60 * 60 * 24,     
-      zoomMax: 1000 * 60 * 60 * 24 * 30 * 12, 
+      /* zoomMin: 1000 * 60 * 60 * 24,     
+      zoomMax: 1000 * 60 * 60 * 24 * 30 * 12,  */
       start, end, min, max })
     timelineRef.current.setItems(items.current)   
     //checkCurrentDateStatus() 
