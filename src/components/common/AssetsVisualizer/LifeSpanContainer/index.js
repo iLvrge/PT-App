@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {useLocation} from 'react-router-dom'
 import {Tab, Tabs, Paper, IconButton} from '@mui/material'
-import { Fullscreen as FullscreenIcon,
-    Battery60 as Battery60Icon } from '@mui/icons-material' 
+import { Fullscreen as FullscreenIcon } from '@mui/icons-material' 
 import SpanVisualize from './SpanVisualize'
 import Acknowledgements from './Acknowledgements'
 import ConnectionBox from '../../ConnectionBox'
@@ -19,6 +18,9 @@ import InventionVisualizer from '../InventionVisualizer'
 import Citation from '../LegalEventsContainer/Citation' 
 import IllustrationContainer from '../IllustrationContainer'
 import AgentsVisualizer from '../AgentsVisualizer'
+import LabelWithIcon from '../../LabelWithIcon'
+import HistogramYears from './HistogramYears'
+import SteppedAges from './SteppedAges'
 
 const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerBarSize, type, standalone, activeTab, setIllustrationRecord, chartsBarToggle, checkChartAnalytics, setAnalyticsBar, setChartBar, gap}) => {
     const classes = useStyles() 
@@ -72,6 +74,8 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
             /* setLifeSpanTabs(['Lifespan', 'Acknowledgements']) */
             if( (selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording')) {
                 setLifeSpanTabs(['Lifespan', 'Lawyers'])
+            } else if(selectedCategory == 'abandoned'){
+                setLifeSpanTabs(['Years', 'Ages', 'Cited by', 'Salable', 'Licensable'])
             } else {
                 setLifeSpanTabs(['Lifespan', 'Cited by', 'Salable', 'Licensable'])
             }
@@ -246,23 +250,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
     const handleCloseFullscreen = () => {
         setIsFullscreenOpen(false)
     }
-
-    const LabelWithIcon = ({label}) => {
-        return (
-            <span className={classes.label}>
-                {
-                    label 
-                } 
-                {
-                    label == 'Lifespan'
-                    ?
-                        <Battery60Icon/>
-                        :
-                            ''
-                }
-            </span>
-        )
-    }
+ 
     
     return (
         <Paper className={classes.root} square>  
@@ -296,13 +284,20 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                 ?
                     selectedTab === 0 
                     ?
-                        selectedAssetsTransactionLifeSpan.length > 0 && (
-                            <SpanVisualize chart={selectedAssetsTransactionLifeSpan} chartBar={chartBar} visualizerBarSize={visualizerBarSize}/>
-                        )
+                        selectedCategory == 'abandoned' ? 
+                            <HistogramYears/>
+                        :
+                            selectedAssetsTransactionLifeSpan.length > 0 && (
+                                <SpanVisualize chart={selectedAssetsTransactionLifeSpan} chartBar={chartBar} visualizerBarSize={visualizerBarSize}/>
+                            )
                     :
                         selectedRow.length == 0
                         ?
                             selectedTab === 1 ?
+                                selectedCategory == 'abandoned' 
+                                ? 
+                                    <SteppedAges/>
+                                :
                                 selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording'
                                 ?
                                     <AgentsVisualizer

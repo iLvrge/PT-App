@@ -39,6 +39,7 @@ import TitleBar from '../../TitleBar'
 import clsx from 'clsx'
 import { setFamilyActiveTab } from '../../../../actions/uiActions'
 import AssetsTable from '../../AssetsTable'
+import LabelWithIcon from '../../LabelWithIcon'
 
 var newRange = [1,2]
 
@@ -972,9 +973,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         {label}
                     </span>
                 :
-                    label
+                    <LabelWithIcon label={label} />
             :
-                label
+                <LabelWithIcon label={label} />
         )
     } 
 

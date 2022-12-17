@@ -1,15 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import useStyles from './styles'
-import { pink } from '@mui/material/colors'
+import useStyles from './styles' 
 import { 
-    Fullscreen as FullscreenIcon, 
-    NoteAddOutlined as NoteAddOutlinedIcon,
-    HandshakeOutlined as HandshakeOutlinedIcon} from '@mui/icons-material' 
-import { FaLightbulb } from "react-icons/fa";
+    Fullscreen as FullscreenIcon} from '@mui/icons-material'  
 import FullScreen from '../../FullScreen'
-import { Chart } from "react-google-charts";
-import themeMode from '../../../../themes/themeMode';
+import { Chart } from "react-google-charts"; 
 import { Tabs, Tab, Paper, IconButton } from '@mui/material'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import {
@@ -18,10 +13,9 @@ import {
 import Loader from '../../Loader'
 import TitleBar from '../../TitleBar'
 import InventionVisualizer from '../InventionVisualizer' 
-import AgentsVisualizer from '../AgentsVisualizer'
-import InventorsVisualizer from '../InventorsVisualizer'
-import SankeyChart from '../SankeyChart'
-import { warnConsole } from '../../../../utils/hashLocation'
+import AgentsVisualizer from '../AgentsVisualizer' 
+import SankeyChart from '../SankeyChart' 
+import LabelWithIcon from '../../LabelWithIcon' 
 
 const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, tab, titleBar, disableOtherTabs, activeTab }) => {
     const containerRef = useRef(null)
@@ -30,7 +24,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
     const [loading, setLoading] = useState(false)
     const [assetRequest, setAssetRequest] = useState(false)
     const [selectedTab, setSelectedTab ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? 0 : typeof activeTab != 'undefined' ? activeTab : 1)
-    const [chartTabs, setChartTabs ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? ['Jurisdictions'] :  ['Innovation', 'Jurisdictions', 'Invented', 'Acquired', 'Filling', 'Transactions'])
+    const [chartTabs, setChartTabs ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? ['Jurisdictions'] :  ['Innovations', 'Jurisdictions', 'Invented', 'Acquired', 'Filling', 'Assignments'])
     const [data, setData] = useState([])
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
@@ -84,9 +78,10 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
         colorAxis: {colors: ['#FFAA00', '#70A800', '#1565C0']}
     });
 
+
     useEffect(() => {
         if(selectedCategory == 'proliferate_inventors') {
-            setChartTabs(['Innovation', 'Location'])
+            setChartTabs(['Innovations', 'Location'])
         }
     }, [selectedCategory ])
  
@@ -300,30 +295,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
         )
     }
 
-
-    const LabelWithIcon = ({label}) => {
-        return (
-            <span className={classes.label}>
-                {
-                    label
-                }
-                {
-                    label == 'Filling'
-                    ?
-                        <NoteAddOutlinedIcon/>
-                        :
-                        label == 'Transactions' 
-                        ?
-                            <HandshakeOutlinedIcon/>
-                        :
-                            label == 'Innovation' ?
-                                <FaLightbulb/>
-                            :
-                                ''
-                }
-            </span>
-        )
-    }
+ 
 
     return (
         <Paper className={classes.root} square style={{overflow: 'hidden'}}>  

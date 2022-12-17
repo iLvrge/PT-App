@@ -38,11 +38,11 @@ export default makeStyles(theme => ({
     label: {
         position: 'relative',
         '& svg': {
-            position: 'absolute',
+           /*  position: 'absolute', */
             width: 16,
             height: 16,
-            top: 3,
-            marginLeft: 5
+            /* top: 3, */
+            marginRight: 5
         }
     }
 }))
