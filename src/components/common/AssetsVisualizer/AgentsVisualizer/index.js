@@ -56,7 +56,8 @@ const AgentsVisualizer = (props) => {
         legend: { 
             position: 'right',
             textStyle: {
-                color: '#fff'
+                color: '#fff',
+                fontSize: '0.875rem',
             }
         },
         backgroundColor: 'transparent',
@@ -143,8 +144,7 @@ const AgentsVisualizer = (props) => {
         setAssetRequest(false)
         setLoading(true)
         setData([])
-        setRawData([])
-        console.log('selectedAssetAssignments', selectedAssetAssignments)
+        setRawData([]) 
         const form = new FormData()
         form.append("list", JSON.stringify(list))
         form.append("total", totalRecords)
@@ -188,8 +188,7 @@ const AgentsVisualizer = (props) => {
                     await Promise.all(promiseNames)
                     chartData.push(yearsData)
                 })
-                await Promise.all(promiseYear)
-                console.log('years', years, agentsNames, chartData)
+                await Promise.all(promiseYear) 
                 setData(chartData)
             }
         } 

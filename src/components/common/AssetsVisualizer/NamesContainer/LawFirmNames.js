@@ -6,22 +6,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import PatenTrackApi from '../../../../api/patenTrack2';
 import useStyles from './styles';
 import { Alert, Paper, Tab, Tabs, Typography } from '@mui/material';
-import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
-import HandshakeOutlinedIcon from '@mui/icons-material/HandshakeOutlined';
-import BadgeIcon from '@mui/icons-material/Badge';
-import { FaLightbulb } from "react-icons/fa";
 import { wordCloudOptions } from '../../../../utils/options';  
 import AgentsVisualizer from '../AgentsVisualizer';
 import FullScreen from '../../FullScreen';
 import InventionVisualizer from '../InventionVisualizer';
+import LabelWithIcon from '../../LabelWithIcon';
 
 
 const LawFirmNames = (props) => {
     const classes = useStyles() 
     const dispatch = useDispatch()
     const [showAlert, setShowAlert] = useState(false)
-    const [ tabs, setTabs ] = useState(['Names', 'Filling', 'Transactions', 'Inventions'])
-    const [ selectedTab, setSelectedTab ] = useState(0)
+    const [ tabs, setTabs ] = useState(['Names', 'Filling', 'Assignments', 'Innovations'])
+    const [ selectedTab, setSelectedTab ] = useState(typeof props.activeTab != 'undefined' ? props.activeTab : 0)
     const [ rawData, setRawData ] = useState([])
     const [ namesData, setNamesData ] = useState([])
     const [ parentContainerSize, setParentContainerSize ] = useState(0)
@@ -135,33 +132,7 @@ const LawFirmNames = (props) => {
         )
     } 
 
-    const LabelWithIcon = ({label}) => {
-        return (
-            <span className={classes.label}>
-                {
-                    label
-                    
-                }
-                {
-                    label == 'Filling'
-                    ?
-                        <NoteAddOutlinedIcon/>
-                        :
-                        label == 'Transactions' 
-                        ?
-                            <HandshakeOutlinedIcon/>
-                        :
-                            label == 'Inventions' ?
-                                <FaLightbulb/>
-                            :
-                                label == 'Names' ?
-                                    <BadgeIcon/>
-                                :
-                                    ''
-                }
-            </span>
-        )
-    }
+    
 
     const handleClose = () => {
         setShowAlert(!showAlert)
@@ -185,7 +156,7 @@ const LawFirmNames = (props) => {
                             classes={{ root: classes.tab }}
                         />
                     )) 
-                }
+                } 
             </Tabs>  
             {
                 showAlert === true && (

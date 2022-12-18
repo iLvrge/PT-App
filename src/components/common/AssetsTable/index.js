@@ -1288,7 +1288,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     } else {
       if ((selectedCompaniesAll === true || selectedCompanies.length > 0) && assetTypeAssignmentAssetsLoading === false ) {
         console.log('ASSETS LOAD loadDataFromServer')
-        PatenTrackApi.cancelAssets()
+        PatenTrackApi.cancelAssetsRequest()
         dispatch(
           getCustomerAssets(
             selectedCategory == '' ? '' : selectedCategory,

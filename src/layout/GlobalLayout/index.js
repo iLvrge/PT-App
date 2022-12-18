@@ -50,7 +50,8 @@ import { toggleUsptoMode,
     setTimelineScreen,
     setDriveTemplateMode,
     setDashboardScreen, 
-    setDashboardPanel} from '../../actions/uiActions'
+    setDashboardPanel,
+    setViewDashboardIntial} from '../../actions/uiActions'
 
 import PatenTrackApi from '../../api/patenTrack2' 
 
@@ -571,9 +572,14 @@ const GlobalLayout = (props) => {
                                 if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
                                     findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
                                 } else {
-                                    tableContainer = document.getElementById('main_companies')
-                                    if(tableContainer !== null) {
+                                    tableContainer = document.getElementById('layout_templates')
+                                    if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
                                         findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                                    } else {
+                                        tableContainer = document.getElementById('main_companies')
+                                        if(tableContainer !== null) {
+                                            findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                                        }
                                     }
                                 }
                             }
@@ -593,9 +599,14 @@ const GlobalLayout = (props) => {
                         if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
                             findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
                         } else {
-                            tableContainer = document.getElementById('main_companies')
-                            if(tableContainer !== null) {
-                                findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')                            
+                            tableContainer = document.getElementById('layout_templates')
+                            if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
+                                findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                            } else {
+                                tableContainer = document.getElementById('main_companies')
+                                if(tableContainer !== null) {
+                                    findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')                            
+                                }
                             }
                         }
                     }
@@ -844,7 +855,7 @@ const GlobalLayout = (props) => {
     }
 
     const changeVisualBar = (chart, analytics, comment, illustration) => {
-        /* console.log("changeVisualBar") */
+        console.log("changeVisualBar", dashboardScreen)
         let barOpen = true, barSize = '40.1%'    
         
         if(chart === false && analytics === false && (comment === true || illustration === true) && usptoMode === false && connectionBoxView === false){
@@ -933,7 +944,7 @@ const GlobalLayout = (props) => {
         if(usptoMode === false && lifeSpanMode === false && familyItemMode === false && pdfView === false && !bar === true) {
             dispatch( toggleLifeSpanMode( true ) )
         }
-        /* console.log('handleChartBarOpen', !bar, openAnalyticsBar, openCommentBar, openIllustrationBar, barSize) */
+        console.log('handleChartBarOpen', !bar, openAnalyticsBar, openCommentBar, openIllustrationBar, barSize)
         changeHeight('analyticsBar', barSize == 0 ? '0px': barSize)
         changeVisualBar(!bar, openAnalyticsBar, openCommentBar, openIllustrationBar)
     }
@@ -961,7 +972,7 @@ const GlobalLayout = (props) => {
         }    
         setIllustrationBarSize(barSize)
         changeHeight('analyticsBar', barSize == 0 ? '0px': barSize)
-        /* console.log('handleAnalyticsBarOpen', openChartBar, !bar, openCommentBar, openIllustrationBar, barSize) */
+        console.log('handleAnalyticsBarOpen', openChartBar, !bar, openCommentBar, openIllustrationBar, barSize)
         changeVisualBar(openChartBar, !bar, openCommentBar, openIllustrationBar)
     }
 
@@ -1028,7 +1039,7 @@ const GlobalLayout = (props) => {
     }
 
     const checkChartAnalytics = useCallback(async (pdfFile, connectionBoxData, usptoMode) => {
-        /* console.log('checkChartAnalytics 996', pdfFile, connectionBoxData, usptoMode) */
+        console.log('checkChartAnalytics 1031', pdfFile, connectionBoxData, usptoMode, dashboardScreen)
         if( pdfFile != null && Object.keys(pdfFile).length > 0 ) {
             setChartBar( true )
             setVisualizeOpenBar( true )
@@ -1096,6 +1107,7 @@ const GlobalLayout = (props) => {
             } else if (commentPrevItem === false && illustrationPrevItem === false && ( chartPrevItem === true ||  analyticsPrevItem === true )) {
                 barSize = '100%'  
             }
+            console.log('barSize', barSize)
             if(barSize === '0%') {
                 setVisualizeOpenBar( false )
             }
@@ -1114,8 +1126,10 @@ const GlobalLayout = (props) => {
     }, [openChartBar, openAnalyticsBar, openCommentBar, openIllustrationBar, dashboardScreen])
 
 
-    const handleOpenSettings = useCallback(() => {
-        dispatch(setDashboardScreen(false))
+    const handleOpenSettings = useCallback((event) => {
+        dispatch(setDashboardScreen(false)) 
+        dispatch(setViewDashboardIntial(false)) 
+        checkChartAnalytics(null, null, false)
         history.push('/settings/companies/names')
     }, [ history ])
 
@@ -1171,6 +1185,7 @@ const GlobalLayout = (props) => {
             if(openCommentBar === true){
                 handleCommentBarOpen(event)
             }
+            console.log('1174=>', openChartBar, openAnalyticsBar, visualizerBarSize)
             if(openChartBar === true){
                 handleChartBarOpen(event)
             }
@@ -1178,12 +1193,19 @@ const GlobalLayout = (props) => {
                 handleAnalyticsBarOpen(event)
             }
         } else {
-            /* console.log('RESET1161') */
+            console.log('RESET1186') 
             if(openCustomerBar === false && timelineScreen === false && type !== 'Timeline'){ 
                 handleCustomersBarOpen(event)
             }
-            if(openAssignmentBar === false && timelineScreen === false && type == 'Timeline'){
+            if(selectedCategory != 'top_law_firms' && openAssignmentBar === false && timelineScreen === false && type == 'Timeline'){
                 handleAssignmentBarOpen(event)
+            }
+            console.log(selectedCategory, openOtherPartyBar, openAssignmentBar)
+            if(selectedCategory == 'top_law_firms' && openOtherPartyBar === false && timelineScreen === false && type == 'Timeline'){
+                handleOtherPartyBarOpen(event)
+                if(openAssignmentBar === true) {
+                    handleAssignmentBarOpen(event)
+                }
             }
             /* if(openCommentBar === false){
                 handleCommentBarOpen(event)
@@ -1240,11 +1262,11 @@ const GlobalLayout = (props) => {
             ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
         },
         {
-            tooltip: 'Filter by Parties',
+            tooltip: selectedCategory === 'top_law_firms' ? 'Filter by Law Firms' : 'Filter by Parties',
             bar: openOtherPartyBar,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleOtherPartyBarOpen,
             t: 3,
-            label: 'Select Parties',
+            label: selectedCategory === 'top_law_firms' ? 'Filter by Law Firms' : 'Filter by Parties',
             ...((props.type === 9 || (dashboardScreen === true && profile?.user?.organisation?.organisation_type !== 'Bank')) && {disabled: true})
         },
         {

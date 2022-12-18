@@ -15,7 +15,7 @@ const NamesContainer = (props) => {
     const classes = useStyles() 
     const dispatch = useDispatch()
     const [ tabs, setTabs ] = useState(['Incorrect Names'])
-    const [ selectedTab, setSelectedTab ] = useState(0)
+    const [ selectedTab, setSelectedTab ] = useState(typeof props.activeTab != 'undefined' ? props.activeTab : 0)
     const [ namesData, setNamesData ] = useState([])
     const [ rawData, setRawData ] = useState([])
     const [ width, setWidth ] = useState(0)
@@ -50,6 +50,8 @@ const NamesContainer = (props) => {
         }
         getIncorrectNamesData()
     }, [selectedCompanies, selectedCompaniesAll] )
+
+     
 
     useEffect(() => {
         const element = document.getElementById('cntNames')

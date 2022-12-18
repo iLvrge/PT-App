@@ -273,8 +273,9 @@ const GlobalScreen = ({
             if(openCustomerBar === true) {
                 handleCustomersBarOpen()
             }
-        } else { 
-            if((openAssignmentBar === true && timelineScreen === false) || (openAssignmentBar === false && timelineScreen === true && selectedCategory != 'top_lenders' &&  selectedCategory != 'proliferate_inventors' )) { 
+        } else {  
+            console.log("268=>", selectedCategory)
+            if((openAssignmentBar === true && timelineScreen === false) || (openAssignmentBar === false && timelineScreen === true && selectedCategory != 'top_lenders' &&  selectedCategory != 'proliferate_inventors' &&  selectedCategory != 'top_law_firms' )) { 
                 handleAssignmentBarOpen()
             } 
             if(openCustomerBar === false && dashboardScreen === false && timelineScreen === false) {
@@ -283,6 +284,12 @@ const GlobalScreen = ({
         }
         /* console.log('timelineScreen', selectedCategory, dashboardScreen, timelineScreen, openCommentBar, openIllustrationBar, openChartBar, openAnalyticsBar) */
         if(timelineScreen === true) {
+            if(selectedCategory === 'top_law_firms' && openOtherPartyBar === false) {
+                handleOtherPartyBarOpen()
+                if(openAssignmentBar === true) {
+                    handleAssignmentBarOpen()
+                }
+            }
             if( openCommentBar === false ) {
                 /* console.log(`Send Request to openCommentBar ${openCommentBar}`) */
                 handleCommentBarOpen()
@@ -380,6 +387,13 @@ const GlobalScreen = ({
         updateResizerBar(templateFileRef, driveTemplateMode)
     }, [ templateFileRef, driveTemplateMode ])    
 
+    useEffect(() => { 
+        if(dashboardScreen === true && openChartBar === true && openAnalyticsBar === true) { 
+            setVisualizeOpenBar(false)
+            checkChartAnalytics(null, null, false)
+        }
+    }, [dashboardScreen])
+
     const resetAll = (dispatch) => {
         dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
         dispatch( setSelectedAssetsPatents( [] ) )
@@ -467,8 +481,7 @@ const GlobalScreen = ({
             connectionSelection: false
         }
     ]
-
-
+ 
     return (
         <SplitPane
             className={classes.splitPane}
@@ -559,13 +572,23 @@ const GlobalScreen = ({
                                         {
                                             openOtherPartyBar === true 
                                             ?
-                                                <CustomerTable 
-                                                    standalone={true}
-                                                    parentBarDrag={setVisualizerBarSize}
-                                                    parentBar={setVisualizeOpenBar}
-                                                    type={type}
-                                                    customerType={0}
-                                                />
+                                                selectedCategory === 'top_law_firms'
+                                                ?
+                                                    <LawFirmTable 
+                                                        checkChartAnalytics={checkChartAnalytics}
+                                                        chartsBar={openChartBar}
+                                                        analyticsBar={openAnalyticsBar}
+                                                        type={type} 
+                                                        defaultLoad={type === 2 ? false : true} 
+                                                    />
+                                                :
+                                                    <CustomerTable 
+                                                        standalone={true}
+                                                        parentBarDrag={setVisualizerBarSize}
+                                                        parentBar={setVisualizeOpenBar}
+                                                        type={type}
+                                                        customerType={0}
+                                                    />
                                             :
                                             <div></div>
                                         }
@@ -610,24 +633,14 @@ const GlobalScreen = ({
                         <div id={`transaction_container`} style={{ height: '100%'}}>
                             { 
                                 openAssignmentBar === true 
-                                ? 
-                                    selectedCategory === 'top_law_firms'
-                                    ?
-                                        <LawFirmTable 
-                                            checkChartAnalytics={checkChartAnalytics}
-                                            chartsBar={openChartBar}
-                                            analyticsBar={openAnalyticsBar}
-                                            type={type} 
-                                            defaultLoad={type === 2 ? false : true} 
-                                        />
-                                    :
-                                        <AssignmentsTable 
-                                            checkChartAnalytics={checkChartAnalytics}
-                                            chartsBar={openChartBar}
-                                            analyticsBar={openAnalyticsBar}
-                                            type={type} 
-                                            defaultLoad={type === 2 ? false : true} 
-                                        />
+                                ?  
+                                    <AssignmentsTable 
+                                        checkChartAnalytics={checkChartAnalytics}
+                                        chartsBar={openChartBar}
+                                        analyticsBar={openAnalyticsBar}
+                                        type={type} 
+                                        defaultLoad={type === 2 ? false : true} 
+                                    />
                                 : 
                                 ''
                             }
