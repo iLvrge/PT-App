@@ -603,22 +603,23 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
         return c
       })
       Promise.all(promise) 
-      //start = new moment(start).subtract(20, 'months') 
-      //end = new moment(end).add(20, 'months')
+      start = new moment(start).subtract(20, 'months') 
+      end = new moment(end).add(20, 'months')
       //const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
       //items.current.add(convertedItems.slice(0, startIndex))   
       items.current.add(convertedItems)  
     }    
-    const min = new moment(start).subtract(20, 'months') 
+    console.log('start and end time', start, end)
+    /* const min = new moment(start).subtract(20, 'months') 
     end = new moment(end).add(5, 'months')
     const max = new moment(end).add(20, 'months')
-    start = new moment(end).subtract(12, 'months') 
+    start = new moment(end).subtract(12, 'months')  */
     redrawTimeline() 
     timelineRef.current.setOptions({ 
       ...options, 
       /* zoomMin: 1000 * 60 * 60 * 24,     
       zoomMax: 1000 * 60 * 60 * 24 * 30 * 12,  */
-      start, end, min, max })
+      start, end, min: start, max: end })  
     timelineRef.current.setItems(items.current)   
     //checkCurrentDateStatus() 
   }, [ timelineRawData ])
