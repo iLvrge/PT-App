@@ -43,7 +43,7 @@ import LabelWithIcon from '../../LabelWithIcon'
 
 var newRange = [1,2]
 
-const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, tab, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal, titleBar, middle, openChartBar, handleChartBarOpen, salable, licensable, onSelect }) => {
+const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, tab, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal, titleBar, middle, openChartBar, handleChartBarOpen, salable, licensable, onSelect, top }) => {
     
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -472,6 +472,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         form.append('other_mode', display_sales_assets)
         form.append('type', selectedCategory)
         form.append('data_type', dashboardScreen === true ? 1 : 0)
+        if(typeof top != 'undefined') {
+            form.append('primary', 1)
+        }
         if(typeof salable != 'undefined' && salable === true) {
             form.append('sale', 1)
         }

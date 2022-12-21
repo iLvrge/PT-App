@@ -121,7 +121,14 @@ const LawFirmNames = (props) => {
         return wordCloudOptions
     })
 
-    const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
+    const handleChangeTab = (e, newTab) => {
+        if(newTab > 0) {
+            setShowAlert(false)
+        } else if(newTab == 0) {
+            checkNamesOnDOM()
+        }
+        setSelectedTab(newTab)
+    }
 
     const DrawCloudChart =  () => {  
         return (
@@ -195,6 +202,7 @@ const LawFirmNames = (props) => {
                         type={props.type} 
                         tab={false}
                         standalone={true}
+                        top={true}
                     />
                 )
             }
