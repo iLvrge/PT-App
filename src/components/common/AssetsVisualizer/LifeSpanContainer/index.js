@@ -174,8 +174,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                                 );
                             }  */
                         } else {
-                            if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
-                                
+                            if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0) && selectedCategory != 'top_law_firms') {
                                 dispatch(
                                     getCustomerAssets(
                                       selectedCategory == '' ? '' : selectedCategory,
@@ -198,7 +197,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                 }                
             }
            /*  console.log('list', list) */
-            if( list.length > 0 ) {
+            if( list.length > 0 || selectedCategory == 'top_law_firms') {
                 setFilterList(list)
                 const form = new FormData()
                 form.append("list", JSON.stringify(list)) 
