@@ -7,6 +7,13 @@ export default makeStyles(theme => ({
     width: '100%',
     position: 'relative',
     /* backgroundColor: theme.palette.background.default, */
+    '& #visualization':{
+      position: 'relative',
+      '& .menu':{
+        position: 'absolute',
+        zIndex: 9999
+      }
+    },
     '& .vis-time-axis .vis-text, .vis-item, .vis-y-axis':{
       color: theme.palette.text.primary,
     },
