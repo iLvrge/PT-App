@@ -24,6 +24,7 @@ import useStyles from './styles'
 import { setTimelineSelectedItem, setTimelineSelectedAsset } from '../../../../actions/uiActions'
 import clsx from 'clsx';
 import { setConnectionBoxView, setConnectionData, setPDFFile, setPDFView } from '../../../../actions/patenTrackActions';
+import { Button } from '@mui/material';
 
 /**
  * Default options parameter for the Timeline
@@ -43,6 +44,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
   const groups = useRef(new DataSet()) // timeline groups dataset
   const [options, setOptions] = useState({
       ...timelineOptions, 
+      type: 'point',
       template: function(item, element, data) {
         if (data.isCluster) {
           return `<span class="cluster-header">${data.items[0].rawData.lawfirm}(${data.items.length})</span>`
@@ -108,37 +110,14 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
 
   //Item for the timeline
 
-  const convertDataToItem = (assetsCustomer) => { 
-    const assetType = Number.isInteger(assetsCustomer.tab_id) ? convertTabIdToAssetType(assetsCustomer.tab_id) : 'default'
-    const companyName =  selectedWithName.filter( company => assetsCustomer.company == company.id ? company.name : '')
+  const convertDataToItem = (assetsCustomer) => {   
     const customerFirstName =  assetsCustomer.lawfirm
-    const item = {
-      type: 'point',
+    const item = { 
       start: new Date(assetsCustomer.exec_dt),
       customerName: `${customerFirstName}`,
-      assetType,
-      companyName,
       rawData: assetsCustomer,
-      className: `lawfirm ${typeof assetsCustomer.type !== 'undefined' ? 'filled' : ''}`,
-      collection: [ { id: assetsCustomer.id, totalAssets: assetsCustomer.totalAssets } ],
-      showTooltips: false
-    }
-
-    if([5,12].includes(parseInt(assetsCustomer.tab_id))){            
-      item.type = 'range';
-      item['end'] = assetsCustomer.release_exec_dt != null ? new Date(assetsCustomer.release_exec_dt) : new Date();
-      
-      const securityPDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.reel_no}-${assetsCustomer.frame_no}.pdf`
-      item['security_pdf'] = securityPDF
-      let name = `<tt><img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></tt>${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`;
-      if(assetsCustomer.release_exec_dt != null ) {
-          const releasePDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.release_reel_no}-${assetsCustomer.release_frame_no}.pdf`
-          item['release_pdf'] = releasePDF
-          name += `<em>${assetsCustomer.partial_transaction == 1 ? `<span>(${numberWithCommas(assetsCustomer.releaseAssets)})</span>` : ''}<img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></em>`
-      }
-      item['customerName'] = name
-    }
-
+      className: `lawfirm ${typeof assetsCustomer.type !== 'undefined' ? 'filled' : ''} `
+    }  
     return item
   }
 
@@ -609,7 +588,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
       //items.current.add(convertedItems.slice(0, startIndex))   
       items.current.add(convertedItems)  
     }    
-    console.log('start and end time', start, end)
+   
     /* const min = new moment(start).subtract(20, 'months') 
     end = new moment(end).add(5, 'months')
     const max = new moment(end).add(20, 'months')
@@ -623,13 +602,47 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
     timelineRef.current.setItems(items.current)   
     //checkCurrentDateStatus() 
   }, [ timelineRawData ])
+
+  const move  = (percentage) => {
+    var range = timelineRef.current.getWindow();
+    var interval = range.end - range.start;
+
+    timelineRef.current.setWindow({
+        start: range.start.valueOf() - interval * percentage,
+        end:   range.end.valueOf()   - interval * percentage
+    });
+  }
+
+  const zoomIn = () => {
+    timelineRef.current.zoomIn(0.2);
+  }
+
+  const zoomOut = () => {
+    timelineRef.current.zoomOut(0.2);
+  }
+
+  const moveLeft = () => {
+    move(0.2);
+  }
+
+  const moveRight = () => {
+    move(-0.2);
+  }
  
   /**
    * return component 
    */    
 
   return (
-      <Paper className={classes.root}>        
+      <Paper className={classes.root}>     
+        <div id="visualization">
+          <div class="menu">
+            <Button onClick={zoomIn}>Zoom in</Button>
+            <Button onClick={zoomOut}>Zoom out</Button>
+            <Button onClick={moveLeft}>Move left</Button>
+            <Button onClick={moveRight}>Move right</Button> 
+          </div>
+        </div>   
         <div
           id={`all_timeline`}
           style={{ 
@@ -638,6 +651,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
           ref={timelineContainerRef}
           className={clsx(classes.timeline, 'timeline')}
         />
+        
         {
           isLoadingTimelineData &&
           <CircularProgress size={15} color={'secondary'} className={classes.timelineProcessingIndicator} />

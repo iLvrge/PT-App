@@ -270,6 +270,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
             PatenTrackApi.cancelAssetTypeAssignmentAllAssetsWithFamilyRequest()
             const { data } = await PatenTrackApi.getAssetTypeAssignmentAllAssetsWithFamily(form)
             setLoading(false)
+            console.log('LOADING FAMILY', data)
             if( assetsList.length > 0 || assetsSelected.length > 0 || maintainenceAssetsList.length > 0 ||  selectedMaintainencePatents.length == 0  ) {
                 setData(data)
             } 
@@ -281,6 +282,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
 
 
     const DisplayChart = () => {
+        console.log('DisplayChart', loading, data);
         if(loading) return <Loader/>
         if(data.length < 2) return null
         return (
