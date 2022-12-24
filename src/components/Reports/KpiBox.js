@@ -93,24 +93,49 @@ const KpiBox = (props) => {
                             </Typography>
                         </div>
                     :
-                        <Typography 
-                            variant="h5" 
-                            component="div"
-                            className={classes.kpiNumber}
-                        >
-                            {
-                            
-                                props.card?.currency && props.card?.currency === true 
-                                    ? 
+                        props.card.type == 35
+                        ?
+                            <div className={classes.boxContainer}>
+                                <Typography
+                                    variant="h5" 
+                                    component="div"
+                                    className={clsx(classes.kpiNumberSmall)}
+                                >
+                                    Patents: {numberWithCommas(props.card?.total)}
+                                </Typography>
+                                <Typography
+                                    variant="h5"  
+                                    component="div"
+                                    className={classes.kpiNumberSmall}
+                                >
+                                    {
                                         props.card?.number > 1000 
-                                            ? 
-                                                `$${numberWithCommas(parseInt(props.card.number))}`
-                                            : 
-                                                `$${numberWithCommas(props.card?.number)}` 
-                                    : 
-                                        numberWithCommas(props.card?.number)
-                            } 
-                        </Typography>
+                                        ? 
+                                            `$${numberWithCommas(parseInt(props.card.number))}`
+                                        : 
+                                            `$${numberWithCommas(props.card?.number)}` 
+                                    }
+                                </Typography>
+                            </div>  
+                        :
+                            <Typography 
+                                variant="h5" 
+                                component="div"
+                                className={classes.kpiNumber}
+                            >
+                                {
+                                
+                                    props.card?.currency && props.card?.currency === true 
+                                        ? 
+                                            props.card?.number > 1000 
+                                                ? 
+                                                    `$${numberWithCommas(parseInt(props.card.number))}`
+                                                : 
+                                                    `$${numberWithCommas(props.card?.number)}` 
+                                        : 
+                                            numberWithCommas(props.card?.number)
+                                } 
+                            </Typography>
             }                    
         </div>
     ) 

@@ -5,7 +5,8 @@ import {
     NoteAddOutlined as NoteAddOutlinedIcon,
     HandshakeOutlined as HandshakeOutlinedIcon,
     Badge as BadgeIcon,
- } from '@mui/icons-material' 
+    FileOpen as FileOpenIcon
+ } from '@mui/icons-material'  
 import { FaLightbulb } from "react-icons/fa";
 import useStyles from './styles' 
 
@@ -32,7 +33,11 @@ const LabelWithIcon = ({label}) => {
                                 ?
                                     <Battery60Icon/>
                                 :
-                                    ''
+                                    label == 'Cited by'
+                                    ?
+                                        <FileOpenIcon/>
+                                    :
+                                        ''
             }
             {
                 label

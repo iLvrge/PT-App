@@ -325,7 +325,7 @@ const AssetDetailsContainer = ({
                         visualizerBarSize={visualizerBarSize}
                         type={type}
                         titleBar={true}
-                        activeTab={selectedCategory == 'filled' ? 2 : selectedCategory == 'acquired' ? 3 : selectedCategory == 'top_non_us_members' ? 0 : 1}
+                        activeTab={selectedCategory == 'filled' ? 2 : selectedCategory == 'acquired' ? 3 : (selectedCategory == 'top_non_us_members' || selectedCategory == 'divested') ? 0 : 1}
                       />
                     :
                     timelineScreen === true  && assetIllustration == null && selectedCategory == 'due_dilligence'
@@ -363,7 +363,8 @@ const AssetDetailsContainer = ({
                           fullScreen={false}
                           resize={resizeFrame}
                         />  
-                    ) : lifeSpanMode === true ? (
+                    ) :  
+                    lifeSpanMode === true ? (
                         <InventionVisualizer 
                           defaultSize={defaultSize} 
                           illustrationBar={openIllustrationBar} 

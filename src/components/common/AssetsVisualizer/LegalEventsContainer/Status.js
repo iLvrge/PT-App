@@ -31,10 +31,15 @@ const DATE_FORMAT = 'MMM DD, YYYY'
  
 const getTemplateContent = (item, icons) => {   
   let status = item.status, icon = '';
-  /* if(status.toLowerCase().indexOf('abandoned') !== -1) {
-    status = 'Abandoned'
-    icon = icons[1]
-  } else if(status.toLowerCase().indexOf('expire') !== -1) {
+  if(status.toLowerCase().indexOf('abandoned') !== -1) {
+    let newStatus = status
+    console.log('newStatus', newStatus)
+    status = 'Abandoned: ' 
+    newStatus = newStatus.replace('Abandoned', '');
+    console.log('newStatus', newStatus)
+    newStatus = newStatus.replace('  --  ', '')
+    status += `<br/>${newStatus}`
+  } /* else if(status.toLowerCase().indexOf('expire') !== -1) {
     status = 'Expired'
     icon = icons[0]
   } */
@@ -268,8 +273,8 @@ useEffect(() => {
           } 
         }        
       })
-      start = new moment(min).subtract(2, 'year').format('YYYY-MM-DD')
-      end = new moment(max).add(2, 'year').format('YYYY-MM-DD')
+      start = new moment(min).subtract(7, 'year').format('YYYY-MM-DD')
+      end = new moment(max).add(4, 'year').format('YYYY-MM-DD')
       min = start
       max = end
       items.current.add(convertedItems)

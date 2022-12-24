@@ -8,7 +8,7 @@ import { Chart } from "react-google-charts";
 import { Tabs, Tab, Paper, IconButton } from '@mui/material'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import {
-    getCustomerAssets,
+    getCustomerAssets, setJurisdictionData,
 } from '../../../../actions/patentTrackActions2'
 import Loader from '../../Loader'
 import TitleBar from '../../TitleBar'
@@ -50,6 +50,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
     const selectedMaintainencePatents = useSelector( state => state.patenTrack2.selectedMaintainencePatents )
     const assetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected) //Assets Selected   
     const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
+    const jurisdictionData = useSelector(state => state.patenTrack2.jurisdictionData)
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
 
     const classes = useStyles() 
@@ -99,6 +100,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
         const getAssetsForEachCountry = async() => {
             try {
                 setData([])
+                dispatch(setJurisdictionData([]))
                 const list = [];
                 let totalRecords = 0;
                 if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {
@@ -167,10 +169,8 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                                         getCustomerSelectedAssets(location.pathname.replace('/', ''))
                                     );
                                 } */
-                            } else {
-                                console.log("GEOCHART", openCustomerBar, selectedCompaniesAll, selectedCompanies.length, assetRequest, assetsListLoading)
-                                if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0) && assetRequest === false && assetsListLoading === false) {
-                                    console.log("SEND REQUEST FROM GEOCHART")
+                            } else { 
+                                if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0) && assetRequest === false && assetsListLoading === false) { 
                                     setAssetRequest(true)
                                     dispatch(
                                         getCustomerAssets(
@@ -251,6 +251,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
         setAssetRequest(false)
         setLoading(true)
         setData([])
+        dispatch(setJurisdictionData([]))
         const form = new FormData()
         form.append("list", JSON.stringify(list))
         form.append("total", totalRecords)
@@ -266,13 +267,14 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
             const { data } = await PatenTrackApi.getInventorGeoLocation(form)
             setLoading(false)
             setData(data)
+            dispatch(setJurisdictionData(data))
         } else {
             PatenTrackApi.cancelAssetTypeAssignmentAllAssetsWithFamilyRequest()
             const { data } = await PatenTrackApi.getAssetTypeAssignmentAllAssetsWithFamily(form)
-            setLoading(false)
-            console.log('LOADING FAMILY', data)
+            setLoading(false) 
             if( assetsList.length > 0 || assetsSelected.length > 0 || maintainenceAssetsList.length > 0 ||  selectedMaintainencePatents.length == 0  ) {
                 setData(data)
+                dispatch(setJurisdictionData(data))
             } 
         }
     }
@@ -282,16 +284,15 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
 
 
     const DisplayChart = () => {
-        console.log('DisplayChart', loading, data);
-        if(loading) return <Loader/>
-        if(data.length < 2) return null
+        if(loading && jurisdictionData.length == 0) return <Loader/>
+        if(jurisdictionData.length < 2) return null
         return (
             <Chart
                 width={'100%'}
                 height={height}
                 chartType="GeoChart"
                 loader={<div>Loading...</div>}
-                data={data}
+                data={jurisdictionData}
                 options={option}
             />
         )
