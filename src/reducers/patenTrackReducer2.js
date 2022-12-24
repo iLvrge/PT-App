@@ -838,6 +838,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state, 
           timelineDataLoading: action.flag
         } 
+        case types.SET_JURISDICTION_DATA: 
+        return { 
+          ...state, 
+          jurisdictionData: action.data
+        } 
       default:   
       return state
   } 

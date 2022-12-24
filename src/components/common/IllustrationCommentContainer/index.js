@@ -29,6 +29,7 @@ import Fees from '../AssetsVisualizer/LegalEventsContainer/Fees'
 import PatenTrackApi from '../../../api/patenTrack2' 
 import ConnectionBox from '../ConnectionBox'
 import { useIsMounted } from '../../../utils/useIsMounted'
+import SankeyChart from '../AssetsVisualizer/SankeyChart'
 
 const IllustrationCommentContainer = ({ 
     cls, 
@@ -335,6 +336,15 @@ const IllustrationCommentContainer = ({
                         :
                         cube === true && maintainenceFrameMode === false && assetIllustration === null
                         ?
+                            selectedCategory == 'divested'
+                            ?
+                                <SankeyChart
+                                    type={'divested'} 
+                                    showTabs={true}
+                                    tabText={'Divested'}
+                                    fullScreen={true}
+                                />
+                            :
                             selectedCategory == 'incorrect_names' ?
                                 <NamesContainer
                                 visualizerBarSize={visualizerBarSize}/>

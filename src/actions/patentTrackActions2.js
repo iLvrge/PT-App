@@ -1773,6 +1773,13 @@ export const setSelectLawFirm = (data) => {
   }
 } 
 
+export const setJurisdictionData = (data) => {
+  return {
+    type: types.SET_JURISDICTION_DATA,  
+    data
+  }
+} 
+
 export const setSocialMediaConnectPopup = (flag) => {  
   return {
     type: types.SET_SOCIAL_MEDIA_CONNECT_MODAL, 
