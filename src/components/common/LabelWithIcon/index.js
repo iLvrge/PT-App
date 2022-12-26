@@ -5,10 +5,12 @@ import {
     NoteAddOutlined as NoteAddOutlinedIcon,
     HandshakeOutlined as HandshakeOutlinedIcon,
     Badge as BadgeIcon,
-    FileOpen as FileOpenIcon
- } from '@mui/icons-material'  
+    FileOpen as FileOpenIcon,
+    Language as LanguageIcon
+ } from '@mui/icons-material'   
 import { FaLightbulb } from "react-icons/fa";
 import useStyles from './styles' 
+
 
 const LabelWithIcon = ({label}) => {
     const classes = useStyles() 
@@ -17,29 +19,71 @@ const LabelWithIcon = ({label}) => {
             {
                 label == 'Filling'
                 ?
-                    <NoteAddOutlinedIcon/>
+                    <span className={classes.imgContainer}>
+                        <NoteAddOutlinedIcon/>
+                    </span>
                     :
                     label == 'Assignments' 
                     ?
-                        <svg id="icons" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" className={`noStroke`}><path d="M52,7H12a6,6,0,0,0-6,6V51a6,6,0,0,0,6,6H52a6,6,0,0,0,6-6V13A6,6,0,0,0,52,7Zm2,44a2,2,0,0,1-2,2H12a2,2,0,0,1-2-2V13a2,2,0,0,1,2-2H52a2,2,0,0,1,2,2Z"/><path d="M45,29a2,2,0,0,0,0-4H22.83l2.58-2.59a2,2,0,0,0-2.82-2.82l-6,6a2,2,0,0,0-.44,2.18A2,2,0,0,0,18,29Z"/><path d="M47,36H20a2,2,0,0,0,0,4H42.17l-2.58,2.59a2,2,0,1,0,2.82,2.82l6-6a2,2,0,0,0,.44-2.18A2,2,0,0,0,47,36Z"/></svg>
+                        <span className={classes.imgContainer}>
+                            <svg id="icons" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" className={`noStroke`}><path d="M52,7H12a6,6,0,0,0-6,6V51a6,6,0,0,0,6,6H52a6,6,0,0,0,6-6V13A6,6,0,0,0,52,7Zm2,44a2,2,0,0,1-2,2H12a2,2,0,0,1-2-2V13a2,2,0,0,1,2-2H52a2,2,0,0,1,2,2Z"/><path d="M45,29a2,2,0,0,0,0-4H22.83l2.58-2.59a2,2,0,0,0-2.82-2.82l-6,6a2,2,0,0,0-.44,2.18A2,2,0,0,0,18,29Z"/><path d="M47,36H20a2,2,0,0,0,0,4H42.17l-2.58,2.59a2,2,0,1,0,2.82,2.82l6-6a2,2,0,0,0,.44-2.18A2,2,0,0,0,47,36Z"/></svg>
+                        </span>
                     :
                         label == 'Innovations' || label == 'Innovation'?
-                            <FaLightbulb/>
+                            <span className={classes.imgContainer}>
+                                <FaLightbulb/>
+                            </span>
                         :
                             label == 'Names' ?
-                                <BadgeIcon/>
+                                <span className={classes.imgContainer}>
+                                    <BadgeIcon/>
+                                </span>
                             :
                                 label == 'Lifespan'
                                 ?
-                                    <Battery60Icon/>
+                                    <span className={classes.imgContainer}>
+                                        <Battery60Icon/>
+                                    </span>
                                 :
                                     label == 'Cited by'
                                     ?
-                                        <FileOpenIcon/>
+                                        <span className={classes.imgContainer}>
+                                            <FileOpenIcon/>
+                                        </span>
                                     :
-                                        ''
+                                        label == 'Salable'
+                                        ?
+                                            <span className={classes.imgContainer}>
+                                                <img src={`https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/sell.png`} className={classes.img} />
+                                            </span>
+                                        :
+                                            label ==  'Licensable'
+                                            ?
+                                                <span className={classes.imgContainer}>
+                                                    <img src={`https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/licenseout.png`} className={classes.img} />
+                                                </span>
+                                            :
+                                                label ==  'Jurisdictions'
+                                                ?
+                                                    <span className={classes.imgContainer}>
+                                                        <LanguageIcon/>
+                                                    </span>
+                                                : 
+                                                    label == 'Invented'
+                                                    ?
+                                                        <span className={classes.imgContainer}>
+                                                            <img src={`https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png`} className={classes.img} />
+                                                        </span>
+                                                    :
+                                                        label ==  'Acquired'
+                                                        ?
+                                                            <span className={classes.imgContainer}>
+                                                                <img src={`https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/acquisition.svg`} className={classes.img} />
+                                                            </span>
+                                                        :
+                                                            ''
             }
-            {
+            {  
                 label
                 
             }

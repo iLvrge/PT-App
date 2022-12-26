@@ -77,7 +77,7 @@ const SankeyChart = (props) => {
                     }
                 }
                 
-                if((typeof props.type != 'undefined' && props.type == 'divested') || selectedCategory == 'divested') {
+                if((typeof props.type != 'undefined' && props.type == 'divested')) {
                     setLoadingAssingor(true) 
                     PatenTrackApi.cancelDashboardPartiesAssignorDataRequest()
                     const getAssignorData = await PatenTrackApi.getDashboardPartiesAssignorData(formData) 
