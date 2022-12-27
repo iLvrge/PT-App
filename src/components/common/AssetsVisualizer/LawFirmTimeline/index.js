@@ -591,7 +591,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
       Promise.all(promise) 
       start = new moment(start).subtract(20, 'months') 
       end = new moment(end).add(20, 'months')
-      const startIndex = convertedItems.length < 1001 ? (convertedItems.length - 1) : 999
+      const startIndex = convertedItems.length < 201 ? (convertedItems.length - 1) : 199
       items.current.add(convertedItems.slice(0, startIndex))   
       /* items.current.add(convertedItems)  */ 
     }    
