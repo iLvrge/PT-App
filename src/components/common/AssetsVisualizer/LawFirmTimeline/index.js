@@ -453,11 +453,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
                 const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
                 const mainList = data.list
                 //setIsLoadingTimelineData(false)
-                setTimelineRawData(mainList)
-                if(typeof updateTimelineRawData !== 'undefined') {
-                  updateTimelineRawData(mainList)
-                }
-
+                setTimelineRawData(mainList) 
                 if(selectedCategory == 'top_law_firms') {
                   /**
                    * Filling Assets
@@ -471,6 +467,14 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
                     if(typeof updateTimelineRawData !== 'undefined') {
                       updateTimelineRawData(oldItems) 
                     }
+                  } else {
+                    if(typeof updateTimelineRawData !== 'undefined') {
+                      updateTimelineRawData(mainList)
+                    }
+                  }
+                } else {
+                  if(typeof updateTimelineRawData !== 'undefined') {
+                    updateTimelineRawData(mainList)
                   }
                 }
               } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null ) {
