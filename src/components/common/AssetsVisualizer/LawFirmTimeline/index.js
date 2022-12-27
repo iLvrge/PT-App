@@ -449,42 +449,44 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
               rfIDs = selectedLawFirm > 0 ? [selectedLawFirm] : [];
       
               if( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
-                //setIsLoadingTimelineData(true)
+                setIsLoadingTimelineData(true)
                 const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
                 const mainList = data.list
-                //setIsLoadingTimelineData(false)
-                setTimelineRawData(mainList) 
+                //setIsLoadingTimelineData(false) 
                 if(selectedCategory == 'top_law_firms') {
                   /**
                    * Filling Assets
                    */
                  /*  PatenTrackApi.cancelTimelineRequest() */
                   const { data } = await PatenTrackApi.getFilledAssetsTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
-
+                  setIsLoadingTimelineData(false) 
                   if( data != null && data.length > 0 ) { 
                     const oldItems = [...mainList, ...data] 
                     setTimelineRawData(oldItems)
                     if(typeof updateTimelineRawData !== 'undefined') {
                       updateTimelineRawData(oldItems) 
                     }
-                  } else {
+                  } else { 
+                    setTimelineRawData(mainList) 
                     if(typeof updateTimelineRawData !== 'undefined') {
                       updateTimelineRawData(mainList)
                     }
                   }
                 } else {
+                  setIsLoadingTimelineData(false) 
+                  setTimelineRawData(mainList) 
                   if(typeof updateTimelineRawData !== 'undefined') {
                     updateTimelineRawData(mainList)
                   }
                 }
               } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null ) {
-                //setIsLoadingTimelineData(true)
+                setIsLoadingTimelineData(true)
                 const { data } = await PatenTrackApi.getShareTimelineList(location.pathname.replace('/', ''))
                 setTimelineRawData(data.list)     
                 if(typeof updateTimelineRawData !== 'undefined') {
                   updateTimelineRawData(data.list)
                 }      
-                //setIsLoadingTimelineData(false)            
+                setIsLoadingTimelineData(false)            
               }
             }
           } 
