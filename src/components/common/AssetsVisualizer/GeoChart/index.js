@@ -70,6 +70,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
     const [option, setOption] = useState({
         legend: { position: 'none' },
         backgroundColor: 'transparent',
+        displayMode: 'regions',
         chartArea: {
             width: '83%',
             height: '92%',
