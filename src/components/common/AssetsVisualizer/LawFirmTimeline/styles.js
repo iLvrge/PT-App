@@ -11,7 +11,9 @@ export default makeStyles(theme => ({
       position: 'relative',
       '& .menu':{
         position: 'absolute',
-        zIndex: 9999
+        zIndex: 9999,
+        right: 0,
+        top: 50
       }
     },
     '& .vis-time-axis .vis-text, .vis-item, .vis-y-axis':{

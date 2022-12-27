@@ -272,7 +272,9 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                         <Tab
                             key={tab}
                             className={classes.tab} 
-                            label={<LabelWithIcon label={tab} />} 
+                            icon={<LabelWithIcon label={tab}/>}
+                            label={tab} 
+                            iconPosition="start"
                         />
                     )) 
                 }

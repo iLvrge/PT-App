@@ -31,14 +31,55 @@ const DATE_FORMAT = 'MMM DD, YYYY'
  
 const getTemplateContent = (item, icons) => {   
   let status = item.status, icon = '';
-  if(status.toLowerCase().indexOf('abandoned') !== -1) {
-    let newStatus = status
-    console.log('newStatus', newStatus)
-    status = 'Abandoned: ' 
-    newStatus = newStatus.replace('Abandoned', '');
-    console.log('newStatus', newStatus)
-    newStatus = newStatus.replace('  --  ', '')
-    status += `<br/>${newStatus}`
+  if(status.toLowerCase().indexOf('abandoned') !== -1 || status.toLowerCase().indexOf('expired') !== -1) {
+    switch(status) {
+      case 'Patent Expired Due to NonPayment of Maintenance Fees Under 37 CFR 1.362': 
+        status = status.split('Due to NonPayment of Maintenance Fees ');
+        status.splice(1, 0, 'Due to NonPayment of Maintenance Fees ');
+        status = status.join('<br/>')
+      break;
+      case  'Expressly Abandoned  --  During Publication Process': 
+      case 'Expressly Abandoned  --  During Examination': 
+        status = status.split('Expressly Abandoned  --  ');
+        status.splice(0, 0, 'Expressly Abandoned  --  ');
+        status = status.join('<br/>')
+      break;
+      case 'Abandoned  --  After Examiner\'s Answer or Board of Appeals Decision': 
+        status = status.split('After Examiner\'s Answer or ');
+        status.splice(1, 0, 'After Examiner\'s Answer or ');
+        status = status.join('<br/>')
+      break;
+      case 'Abandoned  --  Failure to Pay Issue Fee':  
+        status = status.split('Failure to Pay Issue Fee ');
+        status.splice(1, 0, 'Failure to Pay Issue Fee ');
+        status = status.join('<br/>')
+      break;
+      case 'Abandoned  --  File-Wrapper-Continuation Parent Application': 
+        status = status.split('File-Wrapper-Continuation ');
+        status.splice(1, 0, 'File-Wrapper-Continuation ');
+        status = status.join('<br/>')
+      break;
+      case 'Abandoned  --  Failure to Respond to an Office Action': 
+        status = status.split('Failure to Respond to an ');
+        status.splice(1, 0, 'Failure to Respond to an ');
+        status = status.join('<br/>')
+      break;
+      case 'Abandoned  --  Incomplete (Filing Date Under Rule 53 (b) - PreExam)': 
+        status = status.split('Incomplete (Filing Date Under Rule 53 (b) - PreExam) ');
+        status.splice(1, 0, 'Incomplete (Filing Date Under Rule 53 (b) - PreExam) ');
+        status = status.join('<br/>')
+      break;
+      case 'Abandoned  --  Incomplete Application (Pre-examination)': 
+        status = status.split('Incomplete Application ');
+        status.splice(1, 0, 'Incomplete Application ');
+        status = status.join('<br/>')
+      break;
+      case 'Abandonment for Failure to Correct Drawings/Oath/NonPub Request': 
+        status = status.split('for Failure to ');
+        status.splice(1, 0, 'for Failure to ');
+        status = status.join('<br/>')
+      break;
+    }
   } /* else if(status.toLowerCase().indexOf('expire') !== -1) {
     status = 'Expired'
     icon = icons[0]

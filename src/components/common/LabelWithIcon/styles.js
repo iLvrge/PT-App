@@ -19,15 +19,17 @@ export default makeStyles(theme => ({
         position: 'relative',
         display: 'inline-block',
         '& svg':{
-            position: 'absolute',
-            top: 4,
-            left: 0
         }
     },  
     img: {
-        width: 20,
-        position: 'absolute',
-        left: -3,
-        top: 4
+        width: '1.5em',
+    },
+    svgImg: {
+        width: '1em',
+        height: '1em',
+        display: 'inline-block',
+        fill: 'currentColor', 
+        flexShrink: 0,
+        fontSize: '1.5rem'
     }
 }))

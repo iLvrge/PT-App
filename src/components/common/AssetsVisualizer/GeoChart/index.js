@@ -324,7 +324,9 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                             chartTabs.map((tab) => (
                                 <Tab
                                     key={tab}
-                                    label={<LabelWithIcon label={tab}/>}
+                                    label={tab}
+                                    icon={<LabelWithIcon label={tab}/>}
+                                    iconPosition="start"
                                     classes={{ root: classes.tab }}
                                 />
                             )) 
