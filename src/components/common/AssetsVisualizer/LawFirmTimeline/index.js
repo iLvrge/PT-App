@@ -374,28 +374,38 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
     setIsLoadingTimelineData(true)
   }, []) */
 
-  const onRangeChange = useCallback(_debounce((properties) => {
+  const onRangeChange = useCallback((properties) => {
     setIsLoadingTimelineData(true)
-    const updatedItems = timelineItems.filter((item) => (item.start >= properties.start && item.start <= properties.end))
+    /* const updatedItems = timelineItems.filter((item) => (item.start >= properties.start && item.start <= properties.end))
     items.current = new DataSet()
     items.current.add(updatedItems)
-    timelineRef.current.setItems(items.current)
+    timelineRef.current.setItems(items.current) */
     setIsLoadingTimelineData(false)
-  }, 100), [ timelineItems ])
+  }, [ timelineItems ])
 
 
   /**
    * this call when Timeline rangechanged
    */
 
-  const onRangeChanged = useCallback(_debounce((properties) => {
+  /* const onRangeChanged = useCallback(_debounce((properties) => {
     setIsLoadingTimelineData(true)
     const updatedItems = timelineItems.filter((item) => (item.start >= properties.start && item.start <= properties.end))
     items.current = new DataSet()
     items.current.add(updatedItems)
     timelineRef.current.setItems(items.current)
     setIsLoadingTimelineData(false)
-  }, 1000), [ timelineItems ])
+  }, 1000), [ timelineItems ]) */
+
+
+  const onRangeChanged = useCallback((properties) => {
+    setIsLoadingTimelineData(true)
+    const updatedItems = timelineItems.filter((item) => (item.start >= properties.start && item.start <= properties.end))
+    items.current = new DataSet()
+    items.current.add(updatedItems)
+    timelineRef.current.setItems(items.current)
+    setIsLoadingTimelineData(false)
+  }, [ timelineItems ])
 
   
 
