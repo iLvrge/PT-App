@@ -40,6 +40,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
   const history = useHistory()
   const timelineRef = useRef() //timeline Object ref
   const timelineContainerRef = useRef() //div container ref
+  const [previousLoad, setPreviousLoad] = useState(false)
   const items = useRef(new DataSet()) // timeline items dataset
   const groups = useRef(new DataSet()) // timeline groups dataset
   const [options, setOptions] = useState({
@@ -600,12 +601,18 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
     const max = new moment(end).add(20, 'months')
     start = new moment(end).subtract(12, 'months')  */
     redrawTimeline() 
-    timelineRef.current.setOptions({ 
-      ...options, 
-      /* zoomMin: 1000 * 60 * 60 * 24,     
-      zoomMax: 1000 * 60 * 60 * 24 * 30 * 12,  */
-      /* start, end, min: start, max: end  */})  
-    timelineRef.current.setItems(items.current)   
+    console.log('Timeline Loading.....', timelineRawData, previousLoad)
+    if(timelineRawData.length > 0 || previousLoad === false) {
+      console.log('Entered.....')
+      setPreviousLoad(true)
+      timelineRef.current.setOptions({ 
+        ...options, 
+        /* zoomMin: 1000 * 60 * 60 * 24,     
+        zoomMax: 1000 * 60 * 60 * 24 * 30 * 12,  */
+        /* start, end, min: start, max: end  */})  
+      timelineRef.current.setItems(items.current)   
+    }
+    
     //checkCurrentDateStatus() 
   }, [ timelineRawData ])
 
