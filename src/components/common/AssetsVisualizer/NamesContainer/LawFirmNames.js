@@ -159,7 +159,9 @@ const LawFirmNames = (props) => {
                     tabs.map((tab) => (
                         <Tab
                             key={tab}
-                            label={<LabelWithIcon label={tab}/>}
+                            label={tab}
+                            icon={<LabelWithIcon label={tab}/>} 
+                            iconPosition="start"
                             classes={{ root: classes.tab }}
                         />
                     )) 

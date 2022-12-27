@@ -66,14 +66,6 @@ export default makeStyles(theme => ({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    '& #statusTimeline':{
-      '& .vis-item-content':{
-        whiteSpace: 'unset',
-        '& .first':{
-          width: 135
-        }
-      }
-    }
   },  
   fullscreenBtn: {
     position: 'absolute',

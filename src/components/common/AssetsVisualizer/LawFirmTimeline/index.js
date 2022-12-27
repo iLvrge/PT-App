@@ -5,6 +5,11 @@ import _debounce from 'lodash/debounce'
 import { useDispatch, useSelector } from 'react-redux'
 import { DataSet } from 'vis-data-71/esnext'
 import { Timeline } from 'vis-timeline/esnext'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import ZoomOutIcon from '@mui/icons-material/ZoomOut';
+
 import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress' 
 import themeMode from '../../../../themes/themeMode';
@@ -24,7 +29,7 @@ import useStyles from './styles'
 import { setTimelineSelectedItem, setTimelineSelectedAsset } from '../../../../actions/uiActions'
 import clsx from 'clsx';
 import { setConnectionBoxView, setConnectionData, setPDFFile, setPDFView } from '../../../../actions/patenTrackActions';
-import { Button } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 
 /**
  * Default options parameter for the Timeline
@@ -661,10 +666,18 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
       <Paper className={classes.root}>     
         <div id="visualization">
           <div class="menu">
-            <Button onClick={zoomIn}>Zoom in</Button>
-            <Button onClick={zoomOut}>Zoom out</Button>
-            <Button onClick={moveLeft}>Move left</Button>
-            <Button onClick={moveRight}>Move right</Button> 
+            <IconButton onClick={zoomIn}>
+              <ZoomInIcon/>
+            </IconButton>
+            <IconButton onClick={zoomOut}>
+              <ZoomOutIcon/>
+            </IconButton>
+            <IconButton onClick={moveLeft}>
+              <ChevronLeftIcon />
+            </IconButton>
+            <IconButton onClick={moveRight}>
+              <ChevronRightIcon/>
+            </IconButton> 
           </div>
         </div>   
         <div
