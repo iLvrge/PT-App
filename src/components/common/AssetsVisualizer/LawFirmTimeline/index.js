@@ -607,6 +607,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
       setPreviousLoad(true)
       timelineRef.current.setOptions({ 
         ...options, 
+        end: new moment().add(1, 'months')
         /* zoomMin: 1000 * 60 * 60 * 24,     
         zoomMax: 1000 * 60 * 60 * 24 * 30 * 12,  */
         /* start, end, min: start, max: end  */})  
