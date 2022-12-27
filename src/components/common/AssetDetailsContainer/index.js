@@ -355,6 +355,7 @@ const AssetDetailsContainer = ({
                           chartBar={chartBar}
                           visualizerBarSize={visualizerBarSize}
                           type={type}  
+                          activeTab={2}
                         />
                       :                  
                     connectionBoxView === true ? (
