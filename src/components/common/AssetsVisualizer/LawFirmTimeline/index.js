@@ -421,7 +421,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
       setTimelineRawGroups([]) //groups
       setTimelineRawData([]) //items
       //redrawTimeline()
-      PatenTrackApi.cancelTimelineActivityRequest()
+      /* PatenTrackApi.cancelTimelineActivityRequest() */
       /**
         * call for the timeline api data
       */
@@ -462,7 +462,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
                   /**
                    * Filling Assets
                    */
-                  PatenTrackApi.cancelTimelineRequest()
+                 /*  PatenTrackApi.cancelTimelineRequest() */
                   const { data } = await PatenTrackApi.getFilledAssetsTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
 
                   if( data != null && data.length > 0 ) { 
@@ -584,9 +584,9 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
       Promise.all(promise) 
       start = new moment(start).subtract(20, 'months') 
       end = new moment(end).add(20, 'months')
-      //const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
-      //items.current.add(convertedItems.slice(0, startIndex))   
-      items.current.add(convertedItems)  
+      const startIndex = convertedItems.length < 1001 ? (convertedItems.length - 1) : 999
+      items.current.add(convertedItems.slice(0, startIndex))   
+      /* items.current.add(convertedItems)  */ 
     }    
    
     /* const min = new moment(start).subtract(20, 'months') 
@@ -598,7 +598,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
       ...options, 
       /* zoomMin: 1000 * 60 * 60 * 24,     
       zoomMax: 1000 * 60 * 60 * 24 * 30 * 12,  */
-      start, end, min: start, max: end })  
+      /* start, end, min: start, max: end  */})  
     timelineRef.current.setItems(items.current)   
     //checkCurrentDateStatus() 
   }, [ timelineRawData ])
