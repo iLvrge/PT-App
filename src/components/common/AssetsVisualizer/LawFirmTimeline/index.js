@@ -406,8 +406,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
 
   const onRangeChanged = useCallback(async (properties) => {
     console.log('buttonClick', buttonClick)
-    if(buttonClick === true) {
-
+    if(buttonClick === true) { 
       setIsLoadingTimelineData(true)
       const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
           tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
@@ -485,7 +484,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
                 setIsLoadingTimelineData(true)
                 const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
                 const mainList = data.list
-                //setIsLoadingTimelineData(false) 
+                setIsLoadingTimelineData(false) 
                 if(selectedCategory == 'top_law_firms') {
                   /**
                    * Filling Assets
@@ -505,7 +504,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
                       updateTimelineRawData(mainList)
                     }
                   } */
-                  setTimelineRawData(mainList) 
+                    setTimelineRawData(mainList) 
                     if(typeof updateTimelineRawData !== 'undefined') {
                       updateTimelineRawData(mainList)
                     }
