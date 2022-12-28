@@ -551,12 +551,11 @@ const VirtualizedTable = ({
         tableRef.current.recomputeRowHeights();
         tableRef.current.forceUpdate(); 
       }
-      
+
       if ((disableRow === false || disableRow == undefined) || disableRow == true) {
        
-        const rowContainer = tableRef.current.Grid._scrollingContainer.querySelector(
-          `div.rowIndex_${index}`,
-        ); 
+        const rowContainer = typeof tableRef.current.Grid != 'undefined' ? tableRef.current.Grid._scrollingContainer.querySelector(
+          `div.rowIndex_${index}`) : null; 
  
         if (rowContainer !== null) {
           const nextSibling = rowContainer.nextElementSibling

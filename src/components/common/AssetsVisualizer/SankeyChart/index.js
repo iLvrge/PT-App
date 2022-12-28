@@ -8,6 +8,7 @@ import PatenTrackApi from '../../../../api/patenTrack2';
 import Loader from '../../Loader';
 import { setAssetTypeAssignmentAllAssets, setSelectAssignmentCustomers } from '../../../../actions/patentTrackActions2'; 
 import FullScreen from '../../FullScreen';
+import LabelWithIcon from '../../LabelWithIcon';
 
 
 const SankeyChart = (props) => {
@@ -162,6 +163,9 @@ const SankeyChart = (props) => {
                                     key={tab}
                                     className={classes.tab} 
                                     label={tab} 
+                                    icon={<LabelWithIcon label={tab}/>}
+                                    iconPosition='start'
+
                                 />
                             )) 
                         }

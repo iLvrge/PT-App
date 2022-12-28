@@ -54,7 +54,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
       type: 'point',
       template: function(item, element, data) {
         if (data.isCluster) {
-          return `<span class="cluster-header">${data.items[0].rawData.lawfirm}(${data.items.length})</span>`
+          return `<span class="cluster-header">${data.items[0].rawData.lawfirm} (${data.items.length})</span>`
         } else { 
           return `<span class="lawfirm">${data.customerName}</span>`
         }
@@ -405,6 +405,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
 
 
   const onRangeChanged = useCallback(async (properties) => {
+    console.log('buttonClick', buttonClick)
     if(buttonClick === true) {
 
       setIsLoadingTimelineData(true)
@@ -426,7 +427,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
     items.current.add(updatedItems)
     timelineRef.current.setItems(items.current) */
    
-  }, [ timelineItems ])
+  }, [ timelineItems, buttonClick ])
 
   
 

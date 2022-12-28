@@ -40,7 +40,8 @@ export default makeStyles(theme => ({
         flexDirection: 'column',
         '& :last':{
           marginBottom: 0,
-        }
+        },
+        overflow: 'auto'
     },
     flexColumnFullHeight: {
       height: '100% !important',

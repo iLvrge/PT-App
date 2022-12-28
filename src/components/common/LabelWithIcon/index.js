@@ -57,7 +57,11 @@ const LabelWithIcon = ({label}) => {
                                                     ? 
                                                         <img src={`https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/acquisition.svg`} className={classes.img} /> 
                                                     :
-                                                        '' 
+                                                        label == 'Divested'
+                                                        ?
+                                                            <img src={`https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/sales.svg`} className={classes.img} />
+                                                        :
+                                                            ''
     )
 }
 
