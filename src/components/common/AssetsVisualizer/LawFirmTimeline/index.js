@@ -46,6 +46,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
   const timelineRef = useRef() //timeline Object ref
   const timelineContainerRef = useRef() //div container ref
   const [previousLoad, setPreviousLoad] = useState(false)
+  const [buttonClick, setSetButtonClick] = useState(false)
   const items = useRef(new DataSet()) // timeline items dataset
   const groups = useRef(new DataSet()) // timeline groups dataset
   const [options, setOptions] = useState({
@@ -404,24 +405,27 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
 
 
   const onRangeChanged = useCallback(async (properties) => {
-    setIsLoadingTimelineData(true)
-    const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-        tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-        customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
-        rfIDs = selectedLawFirm > 0 ? [selectedLawFirm] : [];
-    const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined, moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))
-    setIsLoadingTimelineData(false) 
-    if( data != null && data.length > 0 ) { 
-      setTimelineRawData(data.list)
-      if(typeof updateTimelineRawData !== 'undefined') {
-        updateTimelineRawData(data.list) 
+    if(buttonClick === true) {
+
+      setIsLoadingTimelineData(true)
+      const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+          tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+          customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
+          rfIDs = selectedLawFirm > 0 ? [selectedLawFirm] : [];
+      const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined, moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))
+      setIsLoadingTimelineData(false) 
+      if( data != null && data.length > 0 ) { 
+        setTimelineRawData(data.list)
+        if(typeof updateTimelineRawData !== 'undefined') {
+          updateTimelineRawData(data.list) 
+        }
       }
     }
     /* const updatedItems = timelineItems.filter((item) => (item.start >= properties.start && item.start <= properties.end))
     items.current = new DataSet()
     items.current.add(updatedItems)
     timelineRef.current.setItems(items.current) */
-    setIsLoadingTimelineData(false)
+   
   }, [ timelineItems ])
 
   
@@ -659,10 +663,12 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
   }
 
   const zoomIn = () => {
+    setSetButtonClick(true)
     timelineRef.current.zoomIn(0.2);
   }
 
   const zoomOut = () => {
+    setSetButtonClick(true)
     timelineRef.current.zoomOut(0.2);
   }
 
