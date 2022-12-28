@@ -25,7 +25,7 @@ export const timelineOptions = {
     zoomable: true,
     horizontalScroll: true,
     verticalScroll: true,
-    zoomFriction: 70,
+    zoomFriction: 150,
     zoomMin: 1000 * 60 * 60 * 24 * 7, // 7 days
     /* zoomMax: 1000 * 60 * 60 * 24 * 30 * 3, */ // 3months
     /* cluster: {
