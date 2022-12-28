@@ -403,12 +403,24 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
   }, 1000), [ timelineItems ]) */
 
 
-  const onRangeChanged = useCallback((properties) => {
+  const onRangeChanged = useCallback(async (properties) => {
     setIsLoadingTimelineData(true)
-    const updatedItems = timelineItems.filter((item) => (item.start >= properties.start && item.start <= properties.end))
+    const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+        tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+        customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
+        rfIDs = selectedLawFirm > 0 ? [selectedLawFirm] : [];
+    const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined, moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))
+    setIsLoadingTimelineData(false) 
+    if( data != null && data.length > 0 ) { 
+      setTimelineRawData(data.list)
+      if(typeof updateTimelineRawData !== 'undefined') {
+        updateTimelineRawData(data.list) 
+      }
+    }
+    /* const updatedItems = timelineItems.filter((item) => (item.start >= properties.start && item.start <= properties.end))
     items.current = new DataSet()
     items.current.add(updatedItems)
-    timelineRef.current.setItems(items.current)
+    timelineRef.current.setItems(items.current) */
     setIsLoadingTimelineData(false)
   }, [ timelineItems ])
 
@@ -474,7 +486,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
                    * Filling Assets
                    */
                  /*  PatenTrackApi.cancelTimelineRequest() */
-                  const { data } = await PatenTrackApi.getFilledAssetsTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
+                  /* const { data } = await PatenTrackApi.getFilledAssetsTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
                   setIsLoadingTimelineData(false) 
                   if( data != null && data.length > 0 ) { 
                     const oldItems = [...mainList, ...data] 
@@ -487,7 +499,11 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
                     if(typeof updateTimelineRawData !== 'undefined') {
                       updateTimelineRawData(mainList)
                     }
-                  }
+                  } */
+                  setTimelineRawData(mainList) 
+                    if(typeof updateTimelineRawData !== 'undefined') {
+                      updateTimelineRawData(mainList)
+                    }
                 } else {
                   setIsLoadingTimelineData(false) 
                   setTimelineRawData(mainList) 
@@ -606,9 +622,9 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
       Promise.all(promise) 
       start = new moment(start).subtract(20, 'months') 
       end = new moment(end).add(20, 'months')
-      const startIndex = convertedItems.length < 201 ? (convertedItems.length - 1) : 199
-      items.current.add(convertedItems.slice(0, startIndex))   
-      /* items.current.add(convertedItems)  */ 
+      /* const startIndex = convertedItems.length < 201 ? (convertedItems.length - 1) : 199
+      items.current.add(convertedItems.slice(0, startIndex))  */  
+      items.current.add(convertedItems)  
     }    
    
     /* const min = new moment(start).subtract(20, 'months') 

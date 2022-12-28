@@ -786,12 +786,12 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/events/all/assets/to_record/detail/${application}`, getHeader())
   }
 
-  static getActivitiesTimelineData(companies, tabs, customers, rfIDs = [], layout, exclude) { 
+  static getActivitiesTimelineData(companies, tabs, customers, rfIDs = [], layout, exclude, start='', end='') { 
     let header = getHeader() 
     header['cancelToken'] = new CancelToken(function executor(c) { 
       cancelTimelineActivity = c 
     })
-    return axios.get(`${base_new_api_url}/customers/timeline?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}`, header)
+    return axios.get(`${base_new_api_url}/customers/timeline?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}&start=${start}&end=${end}`, header)
   }
 
   static cancelTimelineActivityRequest() { 
