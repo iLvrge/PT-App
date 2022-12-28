@@ -109,21 +109,20 @@ export default makeStyles(theme => ({
     },
     '& .vis-left.vis-panel.vis-vertical-scroll, & .vis-right.vis-panel.vis-vertical-scroll': {
       overflowY: 'hidden',
-    },
+    }, 
     '& .vis-item': {
       fontSize: 12,
       backgroundColor: 'transparent',      
       color: theme.palette.text.primary,
       '& .vis-item-content':{
-        width: '95px',
+        width: 'auto !important',
         whiteSpace: 'normal',
         padding: '5px 5px 5px 0px',
         '& .cluster-header':{
           width: '100%',
           textAlign: 'left',
           display: 'flex',
-          padding: 5,
-          border: '0px',
+          padding: 5, 
           '& .cluster-image': {
             backgroundRepeat: 'no-repeat',
             backgroundSize: '17px',
@@ -219,12 +218,15 @@ export default makeStyles(theme => ({
       /* color: pink[500] */
     },
     '& .vis-cluster': {
-      background: 'none',
-      border: '0px',
+      backgroundColor: '#222222',
+      border: '1px solid #545454 !important',
+      borderRadius: 3, 
+      padding: 5,
       '& .vis-item-content':{
         padding: 0,
-        width: '112px !important',
-        textAlign: 'left'
+        width: 'auto !important',
+        textAlign: 'left',
+        padding: '0 !important'
       }
     },
     '& .vis-dot': {

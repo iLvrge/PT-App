@@ -976,9 +976,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         {label}
                     </span>
                 :
-                    <LabelWithIcon label={label} />
+                    <LabelWithIcon label={label} showLabel={true}/>
             :
-                <LabelWithIcon label={label} />
+                <LabelWithIcon label={label} showLabel={true}/>
         )
     } 
 
@@ -1011,7 +1011,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                             inventionTabs.map((tab) => (
                                 <Tab
                                     key={tab}
-                                    label={<TabLabel label={tab}/>}
+                                    label={tab == 'For Sale' || tab == 'To License Out' ? <TabLabel label={tab} /> : tab}
+                                    {...(typeof tab != 'For Sale' && tab != 'To License Out'  ? {icon: <LabelWithIcon label={tab}/>} : {})} 
+                                    iconPosition='start'
                                     classes={{ root: classes.tab }}
                                 />
                             )) 

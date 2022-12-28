@@ -151,9 +151,22 @@ export default makeStyles(theme => ({
           background: 'none !important',
           border: 'none !important',
         },
-        '& .vis-item.vis-box, .vis-item.vis-cluster': {
-          borderColor: indigo[500],
-          backgroundColor: indigo[500],
+        '& .vis-item.vis-cluster': {
+          backgroundColor: '#222222',
+          border: '1px solid #545454 !important',
+          borderRadius: 3, 
+          padding: 5,
+          '& .vis-item-content':{
+            padding: 0,
+            width: 'auto !important',
+            textAlign: 'left',
+            padding: '0 !important',
+            color: '#BDBDBD',
+            overflow: 'hidden',
+            flexWrap: 'wrap',  
+          },
+        },
+        '& .vis-item.vis-box': {
           '&.asset-type-default': {
             backgroundColor: '#222222',
             border: 0,
