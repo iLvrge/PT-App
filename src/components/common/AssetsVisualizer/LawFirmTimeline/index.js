@@ -122,7 +122,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
     const item = { 
       start: new Date(assetsCustomer.exec_dt),
       customerName: `${customerFirstName}`,
-      rawData: assetsCustomer,
+      rawData: assetsCustomer, 
       className: `lawfirm ${typeof assetsCustomer.type !== 'undefined' ? 'filled' : ''} `
     }  
     return item
@@ -381,12 +381,12 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
   }, []) */
 
   const onRangeChange = useCallback((properties) => {
-    setIsLoadingTimelineData(true)
+    
     /* const updatedItems = timelineItems.filter((item) => (item.start >= properties.start && item.start <= properties.end))
     items.current = new DataSet()
     items.current.add(updatedItems)
     timelineRef.current.setItems(items.current) */
-    setIsLoadingTimelineData(false)
+    
   }, [ timelineItems ])
 
 
@@ -404,22 +404,26 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
   }, 1000), [ timelineItems ]) */
 
 
-  const onRangeChanged = useCallback(async (properties) => {
-    console.log('buttonClick', buttonClick)
+  const onRangeChanged = useCallback(async (properties) => { 
     if(buttonClick === true) { 
-      setIsLoadingTimelineData(true)
+      
       const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
           tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
           customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
           rfIDs = selectedLawFirm > 0 ? [selectedLawFirm] : [];
       const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined, moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))
-      setIsLoadingTimelineData(false) 
+       
       if( data != null && data.length > 0 ) { 
         setTimelineRawData(data.list)
         if(typeof updateTimelineRawData !== 'undefined') {
           updateTimelineRawData(data.list) 
         }
       }
+    } else {
+      const updatedItems = timelineItems.filter((item) => (item.start >= properties.start && item.start <= properties.end))
+      items.current = new DataSet()
+      items.current.add(updatedItems)
+      timelineRef.current.setItems(items.current)
     }
     /* const updatedItems = timelineItems.filter((item) => (item.start >= properties.start && item.start <= properties.end))
     items.current = new DataSet()
@@ -464,9 +468,9 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
           resetTooltipContainer()
           if(search_string != '' && search_string != null){
             if(search_rf_id.length > 0) {
-              //setIsLoadingTimelineData(true)
+              
               const { data } = await PatenTrackApi.getActivitiesTimelineData([], [], [], search_rf_id) // empty array for company, tabs, customers
-              //setIsLoadingTimelineData(false)
+              
               //setTimelineRawGroups(data.groups) //groups
               setTimelineRawData(data.list) //items
               if(typeof updateTimelineRawData !== 'undefined') {
@@ -481,10 +485,10 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
               rfIDs = selectedLawFirm > 0 ? [selectedLawFirm] : [];
       
               if( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
-                setIsLoadingTimelineData(true)
+                
                 const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
                 const mainList = data.list
-                setIsLoadingTimelineData(false) 
+                 
                 if(selectedCategory == 'top_law_firms') {
                   /**
                    * Filling Assets
@@ -509,20 +513,20 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
                       updateTimelineRawData(mainList)
                     }
                 } else {
-                  setIsLoadingTimelineData(false) 
+                   
                   setTimelineRawData(mainList) 
                   if(typeof updateTimelineRawData !== 'undefined') {
                     updateTimelineRawData(mainList)
                   }
                 }
               } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null ) {
-                setIsLoadingTimelineData(true)
+                
                 const { data } = await PatenTrackApi.getShareTimelineList(location.pathname.replace('/', ''))
                 setTimelineRawData(data.list)     
                 if(typeof updateTimelineRawData !== 'undefined') {
                   updateTimelineRawData(data.list)
                 }      
-                setIsLoadingTimelineData(false)            
+                            
               }
             }
           } 
@@ -548,7 +552,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
           form.append('assets', JSON.stringify(assets)) 
           PatenTrackApi.cancelForeignAssetTimelineRequest()
           const { data } = await PatenTrackApi.getForeignAssetsTimeline(form)
-          //setIsLoadingTimelineData(false)
+          
           setTimelineRawData(data.list) 
           if(typeof updateTimelineRawData !== 'undefined') {
             updateTimelineRawData(data.list)
@@ -627,7 +631,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
       start = new moment(start).subtract(20, 'months') 
       end = new moment(end).add(20, 'months')
       /* const startIndex = convertedItems.length < 201 ? (convertedItems.length - 1) : 199
-      items.current.add(convertedItems.slice(0, startIndex))  */  
+      items.current.add(convertedItems.slice(0, startIndex))  */   
       items.current.add(convertedItems)  
     }    
    
@@ -635,11 +639,8 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
     end = new moment(end).add(5, 'months')
     const max = new moment(end).add(20, 'months')
     start = new moment(end).subtract(12, 'months')  */
-    redrawTimeline() 
-    console.log('Timeline Loading.....', timelineRawData, previousLoad)
-    if(timelineRawData.length > 0 || previousLoad === false) {
-      console.log('Entered.....')
-      setPreviousLoad(true)
+    redrawTimeline()  
+    if(timelineRawData.length > 0 || previousLoad === false) { 
       timelineRef.current.setOptions({ 
         ...options, 
         end: new moment().add(1, 'months')
@@ -647,6 +648,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
         zoomMax: 1000 * 60 * 60 * 24 * 30 * 12,  */
         /* start, end, min: start, max: end  */})  
       timelineRef.current.setItems(items.current)   
+      setPreviousLoad(true)
     }
     
     //checkCurrentDateStatus() 
@@ -710,12 +712,6 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
           ref={timelineContainerRef}
           className={clsx(classes.timeline, 'timeline')}
         />
-        
-        {
-          isLoadingTimelineData &&
-          <CircularProgress size={15} color={'secondary'} className={classes.timelineProcessingIndicator} />
-        }
-        { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> }
       </Paper>
   ) 
 }

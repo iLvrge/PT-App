@@ -1329,6 +1329,7 @@ const Reports = (props) => {
             justifyContent="flex-start"
             alignItems="flex-start"
             ref={ref}
+            id="dashboard"
         >
             {/* <Grid
                 item lg={2} md={2} sm={2} xs={2}  
