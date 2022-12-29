@@ -208,7 +208,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                 form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
                 form.append('type', selectedCategory)
                 form.append('other_mode', display_sales_assets)
-                PatenTrackApi.cancelLifeSpanRequest()
+                //PatenTrackApi.cancelLifeSpanRequest()
                 const {data} = await PatenTrackApi.getAssetLifeSpan(form) 
                 dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, data))
             }  

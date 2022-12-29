@@ -264,13 +264,13 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
         form.append('data_type', dashboardScreen === true ? 1 : 0)
         form.append('type', selectedCategory)
         if(selectedCategory == 'proliferate_inventors') {
-            PatenTrackApi.cancelInventorGeoLocationRequest()
+            //PatenTrackApi.cancelInventorGeoLocationRequest()
             const { data } = await PatenTrackApi.getInventorGeoLocation(form)
             setLoading(false)
             setData(data)
             dispatch(setJurisdictionData(data))
         } else {
-            PatenTrackApi.cancelAssetTypeAssignmentAllAssetsWithFamilyRequest()
+            //PatenTrackApi.cancelAssetTypeAssignmentAllAssetsWithFamilyRequest()
             const { data } = await PatenTrackApi.getAssetTypeAssignmentAllAssetsWithFamily(form)
             setLoading(false) 
             if( assetsList.length > 0 || assetsSelected.length > 0 || maintainenceAssetsList.length > 0 ||  selectedMaintainencePatents.length == 0  ) {

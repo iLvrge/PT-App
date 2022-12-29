@@ -272,8 +272,7 @@ const IllustrationCommentContainer = ({
         fn2(size, fn2Params)
         fn(fnVarName, size, fnParams)   
     }, 1), [  ]) 
-    
- 
+     
     return (
         <SplitPane
             className={cls}
@@ -382,7 +381,7 @@ const IllustrationCommentContainer = ({
                                         middle={true}
                                     />
                         :
-                        dashboardScreen === true &&  type !== 9  
+                        dashboardScreen === true &&  type !== 9  && selectedCategory == 'due_dilligence'
                         ?
                             <Reports
                                 fullScreen={dashboardFullScreen}
