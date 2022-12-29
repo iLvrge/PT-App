@@ -1116,7 +1116,7 @@ export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, appe
     if(append === false) {
       dispatch( setAssetTypesAssignmentsAllAssetsLoading( true ) )
     }
-    PatenTrackApi.cancelAssetsRequest()
+    //PatenTrackApi.cancelAssetsRequest()
     /*const { data } = await PatenTrackApi.getCustomerAssets( type, companies, type == 'due_dilligence' ? tabs : [], type == 'due_dilligence' ? customers : [], rfIDs, startIndex, endIndex, column, direction, salesAssets )    */
     const { data } = await PatenTrackApi.getCustomerAssets( type, companies, tabs, customers, rfIDs, startIndex, endIndex, column, direction, salesAssets )
     dispatch( setAssetTypeAssignmentAllAssets(data, append) )
@@ -1152,7 +1152,7 @@ export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, appe
 export const getCustomerSelectedAssets = ( shareCode, append = false ) => {
   return async dispatch => {
     dispatch( setAssetTypesAssignmentsAllAssetsLoading( true ) )
-    PatenTrackApi.cancelAssetsRequest()
+    //PatenTrackApi.cancelAssetsRequest()
     const { data } = await PatenTrackApi.getCustomerSelectedAssets( shareCode )    
     dispatch( setAssetTypeAssignmentAllAssets(data, append) )
     dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )

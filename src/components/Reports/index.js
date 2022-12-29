@@ -1202,6 +1202,7 @@ const Reports = (props) => {
                 }*/
                 
                 if( findIndex !== -1 ) {
+                    dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))   
                     resetAllRowSelect(dispatch, resetItemList.resetAll, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [1, 9, 10] :  [])
                     resetAllRowSelect(dispatch, resetItemList.clearOtherItems, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [14, 15] :  controlList[findIndex].category == 'proliferate_inventors' || controlList[findIndex].category == 'top_lenders' ? [14, 15] :  [])
                     setTimeout(() => { 

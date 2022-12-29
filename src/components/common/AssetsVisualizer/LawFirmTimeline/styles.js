@@ -464,5 +464,18 @@ export default makeStyles(theme => ({
   defaultLoadingImages: {
     position: 'absolute',     
     top: '-99999999px'
-  }
+  },
+  tabs: {
+    minHeight: 47,
+    width: '94%'
+  },
+  tab: {
+      flex: 1,
+      minWidth: '25%',
+      minHeight: 47,  
+      fontSize: '1.1rem',
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow:'ellipsis'                        
+  },
 }))

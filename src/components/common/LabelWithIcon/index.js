@@ -12,10 +12,10 @@ import { FaLightbulb } from "react-icons/fa";
 import useStyles from './styles' 
 
 
-const LabelWithIcon = ({label}) => {
+const LabelWithIcon = ({label, showLabel}) => {
     const classes = useStyles() 
     return (  
-            label == 'Filling'
+            label == 'Filling' || label == 'Fillings'
             ? 
                 <NoteAddOutlinedIcon/> 
                 :

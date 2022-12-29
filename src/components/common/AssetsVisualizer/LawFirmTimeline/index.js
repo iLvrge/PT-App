@@ -29,7 +29,8 @@ import useStyles from './styles'
 import { setTimelineSelectedItem, setTimelineSelectedAsset } from '../../../../actions/uiActions'
 import clsx from 'clsx';
 import { setConnectionBoxView, setConnectionData, setPDFFile, setPDFView } from '../../../../actions/patenTrackActions';
-import { Button, IconButton } from '@mui/material';
+import { Button, IconButton, Tab, Tabs } from '@mui/material';
+import LabelWithIcon from '../../LabelWithIcon';
 
 /**
  * Default options parameter for the Timeline
@@ -47,6 +48,8 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
   const timelineContainerRef = useRef() //div container ref
   const [previousLoad, setPreviousLoad] = useState(false)
   const [buttonClick, setSetButtonClick] = useState(false)
+  const [selectedTab, setSelectedTab ] = useState(1)
+  const [timelineTabs, setTimelineTabs ] = useState(['Fillings', 'Assignments'])
   const items = useRef(new DataSet()) // timeline items dataset
   const groups = useRef(new DataSet()) // timeline groups dataset
   const [options, setOptions] = useState({
@@ -409,19 +412,13 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
     items.current = new DataSet()
     items.current.add(timelineItems)
     timelineRef.current.setItems(items.current) 
-    if(properties.byUser === true) {  
-      const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-          tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-          customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
-          rfIDs = selectedLawFirm > 0 ? [selectedLawFirm] : [];
-      const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined, moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))
-       
-      if( data != null && data.length > 0 ) { 
-        setTimelineRawData(data.list)
-        if(typeof updateTimelineRawData !== 'undefined') {
-          updateTimelineRawData(data.list) 
-        }
+    if(properties.byUser === true) {    
+      if(selectedTab === 1) { 
+        await assignmentData(moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))
+      } else {
+        await fillingData(moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))
       }
+          
     } 
     /* const updatedItems = timelineItems.filter((item) => (item.start >= properties.start && item.start <= properties.end))
     items.current = new DataSet()
@@ -477,46 +474,14 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
             }       
           } else {
             if(type !== 9)  {
-              const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-              tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-              customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
-              rfIDs = selectedLawFirm > 0 ? [selectedLawFirm] : [];
+              
       
               if( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
-                
-                const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
-                const mainList = data.list
-                 
-                if(selectedCategory == 'top_law_firms') {
-                  /**
-                   * Filling Assets
-                   */
-                 /*  PatenTrackApi.cancelTimelineRequest() */
-                  /* const { data } = await PatenTrackApi.getFilledAssetsTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
-                  setIsLoadingTimelineData(false) 
-                  if( data != null && data.length > 0 ) { 
-                    const oldItems = [...mainList, ...data] 
-                    setTimelineRawData(oldItems)
-                    if(typeof updateTimelineRawData !== 'undefined') {
-                      updateTimelineRawData(oldItems) 
-                    }
-                  } else { 
-                    setTimelineRawData(mainList) 
-                    if(typeof updateTimelineRawData !== 'undefined') {
-                      updateTimelineRawData(mainList)
-                    }
-                  } */
-                    setTimelineRawData(mainList) 
-                    if(typeof updateTimelineRawData !== 'undefined') {
-                      updateTimelineRawData(mainList)
-                    }
+                if(selectedTab === 1) {
+                  await assignmentData()
                 } else {
-                   
-                  setTimelineRawData(mainList) 
-                  if(typeof updateTimelineRawData !== 'undefined') {
-                    updateTimelineRawData(mainList)
-                  }
-                }
+                  await fillingData()
+                } 
               } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null ) {
                 
                 const { data } = await PatenTrackApi.getShareTimelineList(location.pathname.replace('/', ''))
@@ -565,6 +530,34 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
     if(timelineRef.current !== null) {
       timelineRef.current.destroy()
       timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
+    }
+  }
+
+
+  const assignmentData = async(start, end) => {
+    const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+        tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+        customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
+        rfIDs = selectedLawFirm > 0 ? [selectedLawFirm] : [];
+    const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined, start, end) 
+    setTimelineRawData(data.list) 
+    if(typeof updateTimelineRawData !== 'undefined') {
+      updateTimelineRawData(data.list)
+    }
+  }
+
+
+  const fillingData = async(start, end) => {
+    const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+              tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+              customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
+              rfIDs = selectedLawFirm > 0 ? [selectedLawFirm] : [];
+    const { data } = await PatenTrackApi.getFilledAssetsTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined, start, end) 
+    if( data != null && data.length > 0 ) {  
+      setTimelineRawData(data)
+      if(typeof updateTimelineRawData !== 'undefined') {
+        updateTimelineRawData(data) 
+      }
     }
   }
 
@@ -678,6 +671,15 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
   const moveRight = () => {
     move(-0.2);
   }
+
+  const handleChangeTab = async(e, newTab) => {
+    setSelectedTab(newTab)
+    if(newTab === 0) {
+      await fillingData()
+    } else {
+      await assignmentData()
+    }
+  }
  
   /**
    * return component 
@@ -685,6 +687,25 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
 
   return (
       <Paper className={classes.root}>     
+        <Tabs
+          value={selectedTab}
+          variant="scrollable"
+          scrollButtons="auto"
+          onChange={handleChangeTab}
+          className={classes.tabs}
+      >
+          {
+            timelineTabs.map((tab) => (
+              <Tab
+                key={tab}
+                label={tab}
+                icon={<LabelWithIcon label={tab}/>}
+                iconPosition="start"
+                classes={{ root: classes.tab }}
+              />
+            )) 
+          }
+      </Tabs> 
         <div id="visualization">
           <div class="menu">
             <IconButton onClick={zoomIn}>

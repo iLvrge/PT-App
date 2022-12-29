@@ -493,7 +493,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             form.append('year', JSON.stringify(year))
         }
 
-        PatenTrackApi.cancelCPCRequest()
+        //PatenTrackApi.cancelCPCRequest()
         const {data} = await PatenTrackApi.getCPC(form) 
         setIsLoadingCharts(false)
         
