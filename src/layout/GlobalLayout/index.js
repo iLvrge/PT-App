@@ -521,15 +521,15 @@ const GlobalLayout = (props) => {
         }        
     } */
 
-    const getWindowDimensions = () => {
-        /* console.log('dashboardScreen', dashboardScreen) */
+    const getWindowDimensions = useCallback(() => { 
         const hasWindow = typeof window !== 'undefined';
         let percentage = '40%'
         if( location.pathname == '/patent_assets') { 
             percentage = '40%'
         } else { 
             const informationContainer = document.getElementById('information_container')
-            if(informationContainer != null && dashboardScreen === true) {
+            const dashboardContainer = document.getElementById('dashboard')
+            if(informationContainer != null && dashboardContainer !== null) {
                 const parentContainer = informationContainer.parentNode.parentNode
                 const parentWidth = parentContainer.clientWidth
                 percentage = `${((parentWidth - 250) / parentWidth) * 100}%`
@@ -547,7 +547,7 @@ const GlobalLayout = (props) => {
             }
         }
         return percentage      
-    }
+    }, [dashboardScreen])
 
     const handleKeyEvent = (event) => {  
         //event.preventDefault()
