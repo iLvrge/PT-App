@@ -554,7 +554,7 @@ const VirtualizedTable = ({
 
       if ((disableRow === false || disableRow == undefined) || disableRow == true) {
        
-        const rowContainer = typeof tableRef.current.Grid != 'undefined' ? tableRef.current.Grid._scrollingContainer.querySelector(
+        const rowContainer = typeof tableRef.current.Grid != 'undefined' && tableRef.current.Grid != null ? tableRef.current.Grid._scrollingContainer.querySelector(
           `div.rowIndex_${index}`) : null; 
  
         if (rowContainer !== null) {

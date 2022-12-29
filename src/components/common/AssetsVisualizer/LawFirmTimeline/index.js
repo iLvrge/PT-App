@@ -405,9 +405,11 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
 
 
   const onRangeChanged = useCallback(async (properties) => { 
-    console.log('onRangeChanged', properties)
-    if(properties.byUser === true) { 
-      
+    console.log('onRangeChanged', properties) 
+    items.current = new DataSet()
+    items.current.add(timelineItems)
+    timelineRef.current.setItems(items.current) 
+    if(properties.byUser === true) {  
       const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
           tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
           customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
