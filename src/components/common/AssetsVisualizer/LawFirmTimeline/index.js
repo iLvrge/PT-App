@@ -405,7 +405,8 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
 
 
   const onRangeChanged = useCallback(async (properties) => { 
-    if(buttonClick === true) { 
+    console.log('onRangeChanged', properties)
+    if(properties.byUser === true) { 
       
       const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
           tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
@@ -419,12 +420,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
           updateTimelineRawData(data.list) 
         }
       }
-    } else {
-      const updatedItems = timelineItems.filter((item) => (item.start >= properties.start && item.start <= properties.end))
-      items.current = new DataSet()
-      items.current.add(updatedItems)
-      timelineRef.current.setItems(items.current)
-    }
+    } 
     /* const updatedItems = timelineItems.filter((item) => (item.start >= properties.start && item.start <= properties.end))
     items.current = new DataSet()
     items.current.add(updatedItems)
@@ -576,19 +572,18 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
    */
   useEffect(() => {
     items.current = new DataSet()
-    groups.current = new DataSet()
     timelineRef.current.setOptions(options) 
     timelineRef.current.on('select', onSelect)
     timelineRef.current.on('itemover', onItemover)
     timelineRef.current.on('itemout', onItemout) 
     timelineRef.current.on('rangechanged', onRangeChanged)
-    timelineRef.current.on('rangechange', onRangeChange)    
+    //timelineRef.current.on('rangechange', onRangeChange)  
     return () => {
       timelineRef.current.off('select', onSelect)
       timelineRef.current.off('itemover', onItemover) 
       timelineRef.current.off('itemout', onItemout) 
-      timelineRef.current.off('rangechange', onRangeChange)
-      timelineRef.current.off('rangechanged', onRangeChanged)
+      timelineRef.current.off('rangechanged', onRangeChanged) 
+      //timelineRef.current.off('rangechange', onRangeChange)
       resetTooltipContainer()
     } 
   }, [ onRangeChange, onRangeChanged, onSelect, onItemover ]) 
