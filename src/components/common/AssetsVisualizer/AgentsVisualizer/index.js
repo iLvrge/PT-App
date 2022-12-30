@@ -57,7 +57,8 @@ const AgentsVisualizer = (props) => {
             position: 'right',
             textStyle: {
                 color: '#fff',
-                fontSize: '0.875rem',
+                fontSize: 12,
+                fontFamily: 'Roboto'
             }
         },
         backgroundColor: 'transparent',
@@ -215,7 +216,7 @@ const AgentsVisualizer = (props) => {
                             ui: {
                                 chartType: null,
                                 chartOptions: {
-                                    chartArea: { width: '100%', height: '20%' },
+                                    chartArea: { width: '70%', height: '20%' },
                                     backgroundColor: { fill:'transparent' },  
                                     series: {
                                         0: { color: 'transparent' },
