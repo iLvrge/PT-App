@@ -855,7 +855,7 @@ const GlobalLayout = (props) => {
     }
 
     const changeVisualBar = (chart, analytics, comment, illustration) => {
-        console.log("changeVisualBar", dashboardScreen)
+        console.log("changeVisualBar", dashboardScreen, chart, analytics, comment, illustration)
         let barOpen = true, barSize = '40.1%'    
         
         if(chart === false && analytics === false && (comment === true || illustration === true) && usptoMode === false && connectionBoxView === false){
@@ -873,7 +873,7 @@ const GlobalLayout = (props) => {
         if(chart === true && barOpen === true && barSize == '40.1%') {
             checkPDFHeight()
         }    
-        /* console.log('changeVisualBar', barSize, barOpen, chart, analytics, comment, illustration) */
+        console.log('changeVisualBar', barSize, barOpen, chart, analytics, comment, illustration)
         editorBar()
         setVisualizeOpenBar(barOpen)  
         setVisualizerBarSize(barSize)
@@ -897,6 +897,7 @@ const GlobalLayout = (props) => {
             }            
         }
         setCommentBarSize(barSize)
+        console.log('LUUSTRATION_OPEN _ 900')
         changeVisualBar(openChartBar, openAnalyticsBar, openCommentBar, !bar)
     }
 
@@ -919,12 +920,13 @@ const GlobalLayout = (props) => {
             }            
         } 
         setCommentBarSize(barSize)
+        console.log('handleCommentBarOpen _ 900')
         changeVisualBar(openChartBar, openAnalyticsBar, !bar, openIllustrationBar)
     }  
 
     const handleChartBarOpen = () => { 
         /* console.log('handleChartBarOpen entered') */
-        let bar = openChartBar, barSize = '50%'
+        let bar = openChartBar, barSize = '40.1%'
         setChartBar( !bar )
         if(!bar === false && openAnalyticsBar === true) {
             barSize = '100%'
@@ -944,7 +946,7 @@ const GlobalLayout = (props) => {
         if(usptoMode === false && lifeSpanMode === false && familyItemMode === false && pdfView === false && !bar === true) {
             dispatch( toggleLifeSpanMode( true ) )
         }
-        console.log('handleChartBarOpen', !bar, openAnalyticsBar, openCommentBar, openIllustrationBar, barSize)
+        console.log('handleChartBarOpen927', !bar, openAnalyticsBar, openCommentBar, openIllustrationBar, barSize)
         changeHeight('analyticsBar', barSize == 0 ? '0px': barSize)
         changeVisualBar(!bar, openAnalyticsBar, openCommentBar, openIllustrationBar)
     }
@@ -972,7 +974,7 @@ const GlobalLayout = (props) => {
         }    
         setIllustrationBarSize(barSize)
         changeHeight('analyticsBar', barSize == 0 ? '0px': barSize)
-        console.log('handleAnalyticsBarOpen', openChartBar, !bar, openCommentBar, openIllustrationBar, barSize)
+        console.log('handleAnalyticsBarOpen 954', openChartBar, !bar, openCommentBar, openIllustrationBar, barSize)
         changeVisualBar(openChartBar, !bar, openCommentBar, openIllustrationBar)
     }
 
@@ -998,7 +1000,7 @@ const GlobalLayout = (props) => {
     } 
 
     const openAnalyticsAndCharBar = () => {
-        /* console.log('openAnalyticsAndCharBar 955') */
+        console.log('openAnalyticsAndCharBar 1003')
         setChartBar( true )
         setAnalyticsBar( true )
         setIllustrationBarSize( '50%' )
@@ -1006,7 +1008,7 @@ const GlobalLayout = (props) => {
     }
 
     const closeAnalyticsAndCharBar = () => {  
-        /* console.log('closeAnalyticsAndCharBar 963') */
+        console.log('closeAnalyticsAndCharBar 1011') 
         setChartBar( false )
         setAnalyticsBar( false )
         setIllustrationBarSize( '50%' )

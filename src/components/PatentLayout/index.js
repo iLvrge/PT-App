@@ -258,7 +258,7 @@ const PatentLayout = ({
             handleAnalyticsBarOpen()
         }
         if(statusChange === true) {
-            changeVisualBar(false, true, false, false)
+            changeVisualBar(true, true, true, true)
         }
 
     }, [selectedCategory])

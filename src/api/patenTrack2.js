@@ -70,7 +70,7 @@ const getFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineActivity,cancelTimelineSecurity, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelSatusCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest, cancelAllDashboardCountRequest, cancelStatus, cancelAssetTypeAssignmentAllAssetsWithFamily, cancelDashboardPartiesData, cancelDashboardPartiesAssignorData, cancelAgentsData, cancelCollectionIllustration, cancelInventorGeoLocation;
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineActivity,cancelTimelineSecurity, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelSatusCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest, cancelAllDashboardCountRequest, cancelStatus, cancelAssetTypeAssignmentAllAssetsWithFamily, cancelDashboardPartiesData, cancelDashboardPartiesAssignorData, cancelAgentsData, cancelCollectionIllustration, cancelInventorGeoLocation, cancelAbandoned;
 
 
 class PatenTrackApi { 
@@ -395,6 +395,24 @@ class PatenTrackApi {
     if (cancelLifeSpan !== undefined && typeof cancelLifeSpan == 'function') {
       try{
         throw cancelLifeSpan('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
+  static getAssetAbandondSpan( form ) { 
+    let header = getFormUrlHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelAbandoned = c
+    })
+    return axios.post(`${base_new_api_url}/events/abandoned/assets`, form, header)
+  }
+
+  static cancelAssetAbandondRequest() {
+    if (cancelAbandoned !== undefined && typeof cancelAbandoned == 'function') {
+      try{
+        throw cancelAbandoned('Operation canceled by the user.')
       } catch (e){
         console.log('cancelRequest->', e)
       }
