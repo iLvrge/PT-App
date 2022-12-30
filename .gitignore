@@ -24,7 +24,7 @@ package-lock_BACKUP_7080.json
 package-lock_BASE_7080.json
 package-lock_LOCAL_7080.json
 package-lock_REMOTE_7080.json
-
+newrelic_agent.log*
 
 npm-debug.log*
 yarn-debug.log*
