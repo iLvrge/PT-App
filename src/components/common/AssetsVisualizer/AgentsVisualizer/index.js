@@ -50,7 +50,7 @@ const AgentsVisualizer = (props) => {
             type: props.type
         }
     ]
-    const [height, setHeight] = useState('100%');
+    const [height, setHeight] = useState('77%');
     const [minMax, setMinMax] = useState([0,0])
     const [option, setOption] = useState({
         legend: { 
@@ -63,9 +63,9 @@ const AgentsVisualizer = (props) => {
         backgroundColor: 'transparent',
         chartArea: {
             width: '67%',
-            height: '75%',
+            height: '90%',
             left:40,
-            top:15,
+            top:10,
         },
         colorAxis: {colors: ['#FFAA00', '#70A800', '#1565C0']},
         hAxis: {
@@ -176,14 +176,14 @@ const AgentsVisualizer = (props) => {
                 chartData.push(['Year', ...agentsNames])  
                 const promiseYear = years.map(async year => {
                     const yearsData = [];
-                    yearsData.push(year)
+                    yearsData.push(parseInt(year))
                     const promiseNames = agentsNames.map( name => {
                         const findIndex = data.findIndex( item => item.year == year && name == item.name)
                         let nameNumber = 0
                         if(findIndex !== -1) {
                             nameNumber = data[findIndex].counter
                         }
-                        yearsData.push(nameNumber)
+                        yearsData.push(parseInt(nameNumber))
                     })
                     await Promise.all(promiseNames)
                     chartData.push(yearsData)
@@ -201,10 +201,44 @@ const AgentsVisualizer = (props) => {
             <Chart
                 width={'100%'}
                 height={height}
-                chartType="LineChart"
+                chartType='LineChart'
                 loader={<div>Loading...</div>}
                 data={data}
                 options={option}
+                chartPackages={['corechart', 'controls']}
+                controls={[
+                    {
+                        controlType: 'ChartRangeFilter',
+                        controlPosition: 'bottom',
+                        options: {
+                            filterColumnIndex: 0,
+                            ui: {
+                                chartType: null,
+                                chartOptions: {
+                                    chartArea: { width: '100%', height: '20%' },
+                                    backgroundColor: { fill:'transparent' },  
+                                    series: {
+                                        0: { color: 'transparent' },
+                                    },
+                                    hAxis: { 
+                                        baselineColor: 'none' ,
+                                        gridlines: {
+                                            color: 'transparent'
+                                        },
+                                        textStyle: { color: '#fff' } ,
+                                    },
+                                    vAxis: {
+                                        textPosition: 'none',
+                                        gridlines: {
+                                            color: 'transparent' 
+                                        },
+                                        textStyle: { color: '#fff' } ,
+                                    }
+                                },
+                            },
+                        }, 
+                    }
+                ]}
             />
         )
     }

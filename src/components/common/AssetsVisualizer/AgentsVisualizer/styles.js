@@ -11,7 +11,7 @@ export default makeStyles((theme) => ({
         flex: 1,
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         fontSize: 16,  
     },
     loadingIndicator: {
