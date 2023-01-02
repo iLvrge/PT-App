@@ -6,8 +6,10 @@ import {
     HandshakeOutlined as HandshakeOutlinedIcon,
     Badge as BadgeIcon,
     FileOpen as FileOpenIcon,
-    Language as LanguageIcon
- } from '@mui/icons-material'   
+    Language as LanguageIcon,
+    Psychology as PsychologyIcon,
+    ShoppingCart as ShoppingCartIcon
+ } from '@mui/icons-material'     
 import { FaLightbulb } from "react-icons/fa";
 import useStyles from './styles' 
 
@@ -17,25 +19,25 @@ const LabelWithIcon = ({label, showLabel}) => {
     return (  
             label == 'Filling' || label == 'Fillings'
             ? 
-                <NoteAddOutlinedIcon/> 
+                <NoteAddOutlinedIcon className={classes.svgIcon}/> 
                 :
                 label == 'Assignments' 
                 ? 
                     <svg id="icons" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" className={`MuiSvgIcon-root MuiSvgIcon-fontSizeMedium ${classes.svgImg}`}><path d="M52,7H12a6,6,0,0,0-6,6V51a6,6,0,0,0,6,6H52a6,6,0,0,0,6-6V13A6,6,0,0,0,52,7Zm2,44a2,2,0,0,1-2,2H12a2,2,0,0,1-2-2V13a2,2,0,0,1,2-2H52a2,2,0,0,1,2,2Z"/><path d="M45,29a2,2,0,0,0,0-4H22.83l2.58-2.59a2,2,0,0,0-2.82-2.82l-6,6a2,2,0,0,0-.44,2.18A2,2,0,0,0,18,29Z"/><path d="M47,36H20a2,2,0,0,0,0,4H42.17l-2.58,2.59a2,2,0,1,0,2.82,2.82l6-6a2,2,0,0,0,.44-2.18A2,2,0,0,0,47,36Z"/></svg> 
                 :
                     label == 'Innovations' || label == 'Innovation'? 
-                        <FaLightbulb/> 
+                        <FaLightbulb className={classes.svgImg}/> 
                     :
                         label == 'Names' ? 
-                            <BadgeIcon/> 
+                            <BadgeIcon className={classes.svgIcon}/> 
                         :
                             label == 'Lifespan'
                             ? 
-                                <Battery60Icon/> 
+                                <Battery60Icon className={classes.svgIcon}/> 
                             :
                                 label == 'Cited by'
                                 ? 
-                                    <FileOpenIcon/>
+                                    <FileOpenIcon className={classes.svgIcon}/>
                                 :
                                     label == 'Salable'
                                     ? 
@@ -47,7 +49,7 @@ const LabelWithIcon = ({label, showLabel}) => {
                                         :
                                             label ==  'Jurisdictions'
                                             ? 
-                                                <LanguageIcon/> 
+                                                <LanguageIcon className={classes.svgIcon}/> 
                                             : 
                                                 label == 'Invented'
                                                 ? 

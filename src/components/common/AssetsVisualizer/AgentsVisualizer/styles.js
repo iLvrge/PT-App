@@ -13,6 +13,11 @@ export default makeStyles((theme) => ({
         justifyContent: 'center',
         alignItems: 'flex-start',
         fontSize: 16,  
+        '& div[id*="reactgooglegraph-"]':{
+            position: 'absolute',
+            top: 92,
+            zIndex: 9999
+        }
     },
     loadingIndicator: {
         position: 'absolute',

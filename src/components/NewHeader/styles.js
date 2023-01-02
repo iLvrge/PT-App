@@ -33,6 +33,16 @@ export default makeStyles(theme => ({
                     stroke: 'currentColor',
                 }
             }
+        },
+        
+    },
+    title:{
+        whiteSpace: 'nowrap', 
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        '& span':{
+            textTransform:'uppercase',
+            marginLeft: 24
         }
     },
     headerClassAction1: {

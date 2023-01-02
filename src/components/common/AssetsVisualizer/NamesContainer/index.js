@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import { Chart, registerables } from 'chart.js';
 import { WordCloudController, WordElement } from 'chartjs-chart-wordcloud';
 import ReactWordcloud from 'react-wordcloud';
@@ -21,10 +21,14 @@ const NamesContainer = (props) => {
     const [ width, setWidth ] = useState(0)
     const [ height, setHeight ] = useState(0)
     const [size, setSize] = useState([550, 400])
-    const [options, setOptions] = useState(wordCloudOptions)
+    
 
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected );
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll);
+
+    const options = useMemo(() => {
+        return wordCloudOptions
+    })
      
     useEffect(() => {
         const getIncorrectNamesData = async () => {

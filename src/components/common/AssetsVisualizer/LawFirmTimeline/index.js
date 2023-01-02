@@ -686,26 +686,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
    */    
 
   return (
-      <Paper className={classes.root}>     
-        <Tabs
-          value={selectedTab}
-          variant="scrollable"
-          scrollButtons="auto"
-          onChange={handleChangeTab}
-          className={classes.tabs}
-      >
-          {
-            timelineTabs.map((tab) => (
-              <Tab
-                key={tab}
-                label={tab}
-                icon={<LabelWithIcon label={tab}/>}
-                iconPosition="start"
-                classes={{ root: classes.tab }}
-              />
-            )) 
-          }
-      </Tabs> 
+      <Paper className={classes.root}> 
         <div id="visualization">
           <div class="menu">
             <IconButton onClick={zoomIn}>
@@ -721,7 +702,26 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
               <ChevronRightIcon/>
             </IconButton> 
           </div>
-        </div>   
+        </div>      
+        <Tabs
+          value={selectedTab}
+          variant="scrollable"
+          scrollButtons="auto"
+          onChange={handleChangeTab}
+          className={classes.tabs}
+        >
+          {
+            timelineTabs.map((tab) => (
+              <Tab
+                key={tab}
+                label={tab}
+                icon={<LabelWithIcon label={tab}/>}
+                iconPosition="start"
+                classes={{ root: classes.tab }}
+              />
+            )) 
+          }
+        </Tabs> 
         <div
           id={`all_timeline`}
           style={{ 

@@ -31,8 +31,13 @@ const DATE_FORMAT = 'MMM DD, YYYY'
  
 const getTemplateContent = (item, icons) => {   
   let status = item.status, icon = '';
-  if(status.toLowerCase().indexOf('abandoned') !== -1 || status.toLowerCase().indexOf('expired') !== -1) {
+  if(status.toLowerCase().indexOf('abandoned') !== -1 || status.toLowerCase().indexOf('expired') !== -1 || status.toLowerCase().indexOf('allowance') !== -1) {
     switch(status) {
+      case 'Notice of Allowance Mailed -- Application Received in Office of Publications': 
+        status = status.split('Application Received in ');
+        status.splice(1, 0, 'Application Received in ');
+        status = status.join('<br/>')
+      break;
       case 'Patent Expired Due to NonPayment of Maintenance Fees Under 37 CFR 1.362': 
         status = status.split('Due to NonPayment of Maintenance Fees ');
         status.splice(1, 0, 'Due to NonPayment of Maintenance Fees ');
@@ -148,8 +153,7 @@ const Status = ({ number, rawData, updateRawData, standalone }) => {
   */
 
   const onItemover = ({item, event}) => {
-    const overItem = items.current.get(item)    
-    console.log('onItemover=>overItem', overItem, event, item)
+    const overItem = items.current.get(item)     
     if(overItem != null) {
         onItemout()
         tootlTip = overItem.rawData.id

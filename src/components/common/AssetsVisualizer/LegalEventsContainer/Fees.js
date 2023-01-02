@@ -33,7 +33,7 @@ const DATE_FORMAT = 'MMM DD, YYYY'
 const getTemplateContent = (item, icons) => {   
   const getEventIcons = icons[item.event_code] 
   const icon = getEventIcons["icon3"] != undefined ? getEventIcons["icon3"]: ''
-  const templateContent = `<div class='first'>${typeof item.template_string != 'undefined' ? item.template_string == '0' ? `US<br/>${numberWithCommas(item.grant_doc_num)}` : item.event_code == '13' ? `US<br/>${item.template_string}` : item.template_string : item.maintainence_code.template_string}</div><div class='textColumn'>${item.event_code == '13' ? `<div style="text-align:leftline-height:0.7">Filed on:</div>` : ''}${moment(new Date(item.eventdate)).format(DATE_FORMAT)}</div><div class='absolute'>${icon}</div>`
+  const templateContent = `<div class='first'>${typeof item.template_string != 'undefined' ? item.template_string == '0' ? `US<br/>${numberWithCommas(item.grant_doc_num)}` : item.event_code == '13' ? `US<br/>${item.template_string}` : item.template_string : item.maintainence_code.template_string}</div><div class='textColumn'>${item.event_code == '13' ? `<div style="text-align:left;line-height:0.7">Filed on:</div>` : ''}${moment(new Date(item.eventdate)).format(DATE_FORMAT)}</div><div class='absolute'>${icon}</div>`
   return templateContent
 } 
 
@@ -104,8 +104,7 @@ const Fees = ({ events, showTabs, tabText }) => {
   */
 
   const onItemover = ({item, event}) => {
-    const overItem = items.current.get(item)    
-    console.log('onItemover=>overItem', overItem, event, item)
+    const overItem = items.current.get(item)     
     if(overItem != null) {
         onItemout()
         tootlTip = overItem.rawData.id
@@ -142,7 +141,7 @@ const Fees = ({ events, showTabs, tabText }) => {
         const height = window.innerHeight|| document.documentElement.clientHeight || document.body.clientHeight; 
         const element = document.getElementById('timelineCharts');
         const getPosition = element.getBoundingClientRect();  
-        let tootltipTemplate = `<div class='custom_tooltip' style='background:${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default} ;top:${ getPosition.y }px;left:${ getPosition.x }px;'>`
+        let tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid #fff;background:${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default} ;top:${ getPosition.y }px;left:${ getPosition.x }px;'>`
         if(typeof tabText != 'undefined' && tabText == 'To Record') {
           PatenTrackApi
           .allFilledAssetsEventsDetails(item.application)

@@ -1,6 +1,9 @@
 import makeStyles from '@mui/styles/makeStyles';
 
 export default makeStyles(theme => ({ 
+    svgIcon :{
+        marginRight: 8
+    },
     label: {
         position: 'relative',
         '& svg': { 
@@ -23,6 +26,7 @@ export default makeStyles(theme => ({
     },  
     img: {
         width: '1.5em',
+        marginRight: 8
     },
     svgImg: {
         width: '1em',
@@ -30,6 +34,7 @@ export default makeStyles(theme => ({
         display: 'inline-block',
         fill: 'currentColor', 
         flexShrink: 0,
-        fontSize: '1.5rem'
+        fontSize: '1.5rem',
+        marginRight: 8
     }
 }))

@@ -195,7 +195,7 @@ const Acknowledgements = () => {
                 const color = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
                 const element = document.getElementById('citationTimeline');
                 const getPosition = element.getBoundingClientRect(); 
-                const tootltipTemplate = `<div class='custom_tooltip' style='background:${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default} ;top:${ getPosition.y }px;left:${ getPosition.x }px;border:1px solid #fff;'>
+                const tootltipTemplate = `<div class='custom_tooltip' style='border:1px solid #fff;background:${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default} ;top:${ getPosition.y }px;left:${ getPosition.x }px;'>
                                             <h4 style='color:${color};text-align:left;margin:0'>${numberWithCommas(item.number)}</h4>
                                             <div>
                                                 <h4>Grant Date: </h4>${moment(new Date(item.start)).format(DATE_FORMAT)}
