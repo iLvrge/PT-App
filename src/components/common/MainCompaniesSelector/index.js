@@ -37,6 +37,8 @@ import {
     setChannelID,
     getChannels,
     setCompanyTableScrollPos,
+    setCPCRequest,
+    setJurisdictionRequest,
 } from '../../../actions/patentTrackActions2'
 
 
@@ -785,6 +787,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             dispatch( setNamesTransactionsSelectAll( false ) )
             dispatch( setSelectedNamesTransactions([]) )
             dispatch( setMainCompaniesAllSelected( updateSelected.length === totalRecords ? true : false ) )
+            dispatch(setCPCRequest(false))
+            dispatch(setJurisdictionRequest(false))
             resetAll() 
             clearOtherItems()
         } else {
@@ -817,6 +821,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                         dispatch( setNamesTransactionsSelectAll( false ) )
                         dispatch( setSelectedNamesTransactions([]) )
                         dispatch( setMainCompaniesAllSelected( updateSelected.length === totalRecords ? true : false ) )
+                        dispatch(setCPCRequest(false))
+                        dispatch(setJurisdictionRequest(false))
                         resetAll() 
                         clearOtherItems() 
                     } 

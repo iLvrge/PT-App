@@ -1773,7 +1773,7 @@ export const setSelectLawFirm = (data) => {
   }
 } 
 
-export const setJurisdictionData = (data) => {
+export const setJurisdictionData = (data) => { 
   return {
     type: types.SET_JURISDICTION_DATA,  
     data
@@ -1791,5 +1791,19 @@ export const setTimelineDataLoading = (flag) => {
   return {
     type: types.SET_TIMELINE_DATA_LOADING, 
     flag
+  } 
+} 
+
+export const setCPCRequest = (flag) => {   
+  return {
+    type: types.SET_CPC_REQUEST, 
+    flag   
+  } 
+} 
+
+export const setJurisdictionRequest = (flag) => {   
+  return {
+    type: types.SET_JURISDICTION_REQUEST, 
+    flag   
   } 
 } 

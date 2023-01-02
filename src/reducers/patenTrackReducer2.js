@@ -13,6 +13,16 @@ const arrayToObjectByKey = (array, key) =>
 
 const patenTrackReducer = (state = initialState.dashboard, action) => { 
   switch (action.type) {
+    case types.SET_CPC_REQUEST: 
+      return { 
+        ...state, 
+        cpc_request: action.flag
+      }
+    case types.SET_JURISDICTION_REQUEST: 
+      return { 
+        ...state, 
+        jurisdiction_request: action.flag
+      }
     case types.SET_AUTHENTICATE_AUTH_TOKEN:
       return {
         ...state,
@@ -843,6 +853,7 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state, 
           jurisdictionData: action.data
         } 
+        
       default:   
       return state
   } 

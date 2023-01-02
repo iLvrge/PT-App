@@ -23,7 +23,8 @@ import {
     setAssetsIllustrationData,
     getCustomerSelectedAssets,
     retrievePDFFromServer,
-    setIsSalesAssetsDisplay
+    setIsSalesAssetsDisplay,
+    setCPCRequest
 } from '../../../../actions/patentTrackActions2'
 import { setPDFFile, setPdfTabIndex } from '../../../../actions/patenTrackActions' 
 import PatenTrackApi from '../../../../api/patenTrack2'
@@ -104,9 +105,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const [ inventionTabs, setInventionTabs ] = useState(['Innovation'])
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
-    const selectedAssetsTransactionLifeSpan = useSelector( state => state.patenTrack2.transaction_life_span )
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected ) //companies
-    const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll )
     const assetsList = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list) //Assets List
     const assetsTotal = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.total_records) //Assets records
     const maintainenceAssetsList = useSelector( state => state.patenTrack2.maintainenceAssetsList.list )
@@ -116,16 +115,15 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected )
     const assetTypesSelectAll = useSelector( state => state.patenTrack2.assetTypes.selectAll )
     const selectedAssetCompanies = useSelector( state => state.patenTrack2.assetTypeCompanies.selected )
-    const selectedAssetCompaniesAll = useSelector( state => state.patenTrack2.assetTypeCompanies.selectAll )
     const selectedAssetAssignments = useSelector( state => state.patenTrack2.assetTypeAssignments.selected )
-    const selectedAssetAssignmentsAll = useSelector( state => state.patenTrack2.assetTypeAssignments.selectAll )
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
     const assetIllustration = useSelector( state => state.patenTrack2.assetIllustration )
     const assetIllustrationData = useSelector( state => state.patenTrack2.assetIllustrationData )
     const selectedRow = useSelector( state => state.patenTrack2.selectedAssetsTransactions )
     const connectionBoxView = useSelector( state => state.patenTrack.connectionBoxView)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
-    const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
+    const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets) 
+    const cpc_request = useSelector(state => state.patenTrack2.cpc_request) 
     
     const [ graphRawData, setGraphRawData ] = useState([])
     const [ salesData, setSalesData ] = useState([])
@@ -253,8 +251,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             form.append("total", maintainenceAssetsList.length > 0 ? maintainenceAssetsTotal : assetsTotal)
             form.append('selectedCompanies', JSON.stringify(selectedCompanies))
             form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
-            form.append('customers', JSON.stringify(selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies))
-            form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
+            form.append('customers', JSON.stringify(selectedAssetCompanies))
+            form.append('assignments', JSON.stringify(selectedAssetAssignments))
             form.append('other_mode', display_sales_assets)
             form.append('type', selectedCategory)
             form.append(`range`, valueRange)
@@ -307,8 +305,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         }
     }, [ connectionBoxView, selectedRow, selectedCategory ])
 
-
-
+ 
     useEffect(() => {        
         const getChartData = async () => {
             let getNewData = true;
@@ -317,9 +314,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     getNewData = false;
                 }
             }
-            if(getNewData === true) { 
-                setGraphRawData([])
-                setGraphRawGroupData([])      
+            if(getNewData === true) {   
                 setShowContainer(true)              
                 if (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0 && type !== 9){
                     setShowContainer(false)
@@ -328,7 +323,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     setShowContainer(false)
                     return null
                 }
-                setIsLoadingCharts(true)   
+                
                 const list = [];
                 let totalRecords = 0;
                 if(dashboardScreen === false && selectedCategory != 'top_law_firms' && typeof salable == 'undefined' && typeof licensable == 'undefined') {
@@ -379,12 +374,10 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                 if( selectedCategory == '' ) { //pay_maintenece_fee
             
                                 } else {
-                                    const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+                                    const companies =  selectedCompanies,
                                     tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-                                    customers =
-                                      selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
-                                    assignments =
-                                      selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
+                                    customers = selectedAssetCompanies,
+                                    assignments = selectedAssetAssignments;
                                       
                                     if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
                                         /* if( auth_token != null ) {
@@ -427,15 +420,27 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         }
                     }
                 } 
-                if(selectedCategory == 'top_law_firms' || (typeof licensable != 'undefined' && licensable === true) || (typeof salable != 'undefined' && salable === true)) { 
-                    setFilterList([])
-                    setFilterTotal(0)
-                    findCPCList([...scopeRange], [], 0)
-                } else if( dashboardScreen === true ||  /* list.length > 0 */ selectedCategory != '') {
-                    setFilterList(list)
-                    setFilterTotal(totalRecords)
-                    findCPCList([...scopeRange], list, totalRecords)
-                } else {
+                if( selectedCategory == 'top_law_firms' || (typeof licensable != 'undefined' && licensable === true) || (typeof salable != 'undefined' && salable === true)) { 
+                    if(cpc_request === false) {  
+                        setGraphRawData([])
+                        setGraphRawGroupData([])    
+                        setIsLoadingCharts(true)   
+                        dispatch(setCPCRequest(true))
+                        setFilterList([])
+                        setFilterTotal(0)
+                        findCPCList([...scopeRange], [], 0)
+                    }
+                } else if(dashboardScreen === true ||  /* list.length > 0 */ selectedCategory != 'due_dilligence') { 
+                    if(cpc_request === false) { 
+                        setGraphRawData([])
+                        setGraphRawGroupData([])    
+                        setIsLoadingCharts(true)   
+                        dispatch(setCPCRequest(true))
+                        setFilterList(list)
+                        setFilterTotal(totalRecords)
+                        findCPCList([...scopeRange], list, totalRecords)
+                    }
+                } else { 
                     setGraphRawData([])
                     setGraphRawGroupData([])
                     setSalesData([])
@@ -458,7 +463,16 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             getChartData()
         }
         //console.log( "getChartData", selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments )
-    }, [sendAssetRequest, selectedTab, /* openCustomerBar,  */selectedCategory, selectedCompanies, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_clipboard, salable, licensable ]) 
+    }, [/* openCustomerBar,  */selectedCompanies, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, auth_token, display_clipboard, salable, licensable ]) 
+
+
+    useEffect(() => { 
+        if(selectedCategory == 'due_dilligence' && cpc_request === true) { 
+            setFilterList([])
+            setFilterTotal(0)
+            findCPCList([...scopeRange], [], 0)
+        }
+    }, [assetTypesSelectAll, selectedTab, selectedCompanies,])
 
 
     const findCPCList = async(oldScopeRange, list, totalRecords, year, range, scope) => {   
@@ -467,8 +481,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         form.append("total", totalRecords)
         form.append('selectedCompanies', JSON.stringify(selectedCompanies))
         form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
-        form.append('customers', JSON.stringify(selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies))
-        form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
+        form.append('customers', JSON.stringify( selectedAssetCompanies))
+        form.append('assignments', JSON.stringify( selectedAssetAssignments))
         form.append('other_mode', display_sales_assets)
         form.append('type', selectedCategory)
         form.append('data_type', dashboardScreen === true ? 1 : 0)
@@ -494,7 +508,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         }
 
         //PatenTrackApi.cancelCPCRequest()
-        const {data} = await PatenTrackApi.getCPC(form) 
+        const {data} = await PatenTrackApi.getCPC(form)  
         setIsLoadingCharts(false)
         
 
@@ -573,21 +587,20 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         }
                     })
                     await Promise.all(promise)
-                    findCPCList(oldScopeRange, list, totalRecords, year, range, scopeList)
-                }
-            } else {
+                    findCPCList(oldScopeRange, list, totalRecords, year, range, scopeList) 
+                }  
+            } else { 
                 setGraphRawData(data.list)
                 setGraphRawGroupData(data.group)
                 setSalesData(data.sales)
             }
-        } else {
+        } else { 
             setGraphRawData(data.list)
             setGraphRawGroupData(data.group)
             setSalesData(data.sales)
         }
     }
-
-
+ 
 
     const generateChart = async () => {
         try {
@@ -992,6 +1005,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         setScopeRange([])
         findCPCList([], filterList, filterTotal)  
     }
+ 
     
     return (
         <Paper 
