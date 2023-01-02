@@ -8,7 +8,7 @@ import { Chart } from "react-google-charts";
 import { Tabs, Tab, Paper, IconButton } from '@mui/material'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import {
-    getCustomerAssets, setJurisdictionData,
+    getCustomerAssets, setJurisdictionData, setJurisdictionRequest,
 } from '../../../../actions/patentTrackActions2'
 import Loader from '../../Loader'
 import TitleBar from '../../TitleBar'
@@ -51,6 +51,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
     const assetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected) //Assets Selected   
     const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
     const jurisdictionData = useSelector(state => state.patenTrack2.jurisdictionData)
+    const jurisdiction_request = useSelector(state => state.patenTrack2.jurisdiction_request)
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
 
     const classes = useStyles() 
@@ -87,21 +88,20 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
         }
     }, [selectedCategory ])
  
-    useEffect(() => {
+   /*  useEffect(() => {
         let isSubscribed = true;
         if(isSubscribed && dashboardScreen === true) {
             callChartData([], 0)
         }            
         return () => (isSubscribed = false)
-    }, [selectedCompanies])
+    }, [selectedCompanies]) */
 
 
     useEffect(() => {
         let isSubscribed = true;
         const getAssetsForEachCountry = async() => {
             try {
-                setData([])
-                dispatch(setJurisdictionData([]))
+                
                 const list = [];
                 let totalRecords = 0;
                 if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {
@@ -200,7 +200,10 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                 } else {
                     setData([])
                 } */
-                callChartData(list, totalRecords)
+                if(jurisdiction_request === false) {
+                    dispatch(setJurisdictionRequest(true))
+                    callChartData(list, totalRecords)
+                }
             } catch(err) {
                 console.log(err)
             }            
@@ -209,7 +212,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
             getAssetsForEachCountry()
         }
         return () => (isSubscribed = false)
-    }, [selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, selectedAssetAssignmentsAll, selectedAssetAssignments, display_sales_assets, search_string, auth_token, assetsListLoading])
+    }, [selectedCompanies, selectedAssetsPatents, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelected, selectedAssetAssignments, display_sales_assets, search_string, auth_token, assetsListLoading])
     
     
     useEffect(() => {    
@@ -258,8 +261,8 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
         form.append("total", totalRecords)
         form.append('selectedCompanies', JSON.stringify(selectedCompanies))
         form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
-        form.append('customers', JSON.stringify(assetTypesCompaniesSelectAll === true ? [] : assetTypesCompaniesSelected))
-        form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
+        form.append('customers', JSON.stringify(assetTypesCompaniesSelected))
+        form.append('assignments', JSON.stringify(selectedAssetAssignments))
         form.append('other_mode', display_sales_assets)
         form.append('data_type', dashboardScreen === true ? 1 : 0)
         form.append('type', selectedCategory)
