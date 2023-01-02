@@ -403,7 +403,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                             );
                                         } */
                                     } else {
-                                        if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0) && selectedCategory != 'top_law_firms') { 
+                                        /* if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0) && selectedCategory != 'top_law_firms') { 
                                             dispatch(
                                                 getCustomerAssets(
                                                   selectedCategory == '' ? '' : selectedCategory,
@@ -420,7 +420,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                                   display_sales_assets
                                                 ),
                                             );
-                                        }
+                                        } */
                                     }                        
                                 }
                             }                
@@ -431,7 +431,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     setFilterList([])
                     setFilterTotal(0)
                     findCPCList([...scopeRange], [], 0)
-                } else if( dashboardScreen === true ||  list.length > 0 ) {
+                } else if( dashboardScreen === true ||  /* list.length > 0 */ selectedCategory != '') {
                     setFilterList(list)
                     setFilterTotal(totalRecords)
                     findCPCList([...scopeRange], list, totalRecords)
