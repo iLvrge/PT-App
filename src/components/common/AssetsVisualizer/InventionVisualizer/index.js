@@ -310,7 +310,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         const getChartData = async () => {
             let getNewData = true;
             if(typeof onSelect != 'undefined') {
-                if(onSelect === false && graphRawData.length > 0) {
+                if(onSelect === false && graphRawData.length > 0 && cpc_request === true) {
                     getNewData = false;
                 }
             }
