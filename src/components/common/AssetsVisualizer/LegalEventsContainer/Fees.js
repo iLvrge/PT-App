@@ -13,7 +13,7 @@ import Loader from '../../Loader'
 
 import useStyles from './styles'
 import { Badge, Tab, Tabs } from '@mui/material'
-import { numberWithCommas } from '../../../../utils/numbers'
+import { numberWithCommas, applicationFormat } from '../../../../utils/numbers'
 import PatenTrackApi from '../../../../api/patenTrack2'
 
 const options = { 
@@ -31,9 +31,32 @@ const options = {
 const DATE_FORMAT = 'MMM DD, YYYY'
  
 const getTemplateContent = (item, icons) => {   
+  let formatString = '';
+  if(item.event_code == '13') {
+    if(item.template_string == '0') {
+      if(item.patent != '' ) {
+        formatString = `US<br/>${numberWithCommas(item.patent)}`
+      } else {
+        formatString =  `US<br/>${applicationFormat(item.application)}`
+      }
+    } else {
+      formatString = `US<br/>${item.template_string}`
+    }
+  } else {
+    if(typeof item.template_string != 'undefined') {
+      if(item.template_string == '0') {
+        formatString = `US<br/>${numberWithCommas(item.grant_doc_num)}`
+      } else {
+        formatString = item.template_string
+      }
+    } else {
+      formatString = item.maintainence_code.template_string
+    }
+  }
+  /*typeof item.template_string != 'undefined' ? item.template_string == '0' ? `US<br/>${numberWithCommas(item.grant_doc_num)}` : item.event_code == '13' ? `US<br/>${item.template_string == '0' ? item.patent != '' ? numberWithCommas(item.patent) : applicationFormat(item.application) : item.template_string}` : item.template_string : item.maintainence_code.template_string*/
   const getEventIcons = icons[item.event_code] 
   const icon = getEventIcons["icon3"] != undefined ? getEventIcons["icon3"]: ''
-  const templateContent = `<div class='first'>${typeof item.template_string != 'undefined' ? item.template_string == '0' ? `US<br/>${numberWithCommas(item.grant_doc_num)}` : item.event_code == '13' ? `US<br/>${item.template_string}` : item.template_string : item.maintainence_code.template_string}</div><div class='textColumn'>${item.event_code == '13' ? `<div style="text-align:left;line-height:0.7">Filed on:</div>` : ''}${moment(new Date(item.eventdate)).format(DATE_FORMAT)}</div><div class='absolute'>${icon}</div>`
+  const templateContent = `<div class='first'>${formatString}</div><div class='textColumn'>${item.event_code == '13' ? `<div style="text-align:left;line-height:0.7">Filed on:</div>` : ''}${moment(new Date(item.eventdate)).format(DATE_FORMAT)}</div><div class='absolute'>${icon}</div>`
   return templateContent
 } 
 
@@ -169,7 +192,7 @@ const Fees = ({ events, showTabs, tabText }) => {
                   inventors.push(item.name)
                 })
               }
-              tootltipTemplate += `<div>Filed: ${item.eventdate}</div>`
+              tootltipTemplate += `<div>Filed: ${moment(new Date(item.eventdate)).format(DATE_FORMAT)}</div>`
               tootltipTemplate += `<div>Agent: ${agents.join(', ')}</div>`
               tootltipTemplate += `<div>Applicant: ${applicants.join(', ')}</div>`
               tootltipTemplate += `<div>Assignee: ${assignees.join(', ')}</div>`

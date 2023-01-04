@@ -855,7 +855,7 @@ const ActionMenu = (props) => {
                         </MenuItem>
                     )
                 }
-                <MenuItem className={classes.disableHover} key={2}>
+                {/* <MenuItem className={classes.disableHover} key={2}>
                     <ListItemText><span className={clsx(parseInt(profile?.user?.organisation?.subscribtion) < 2 ? classes.disabled : '')}>Pro:</span> {parseInt(profile?.user?.organisation?.subscribtion) === 1 ? <Button variant="text">Upgrade</Button> : '' }</ListItemText>
                 </MenuItem>
                 {
@@ -907,12 +907,6 @@ const ActionMenu = (props) => {
                                     </ListItemIcon>   
                                     <ListItemText>Broken Chain-of-Title</ListItemText>      
                                 </MenuItem> ,
-                                <MenuItem key={9} className={`iconItem`} disabled>
-                                    <ListItemIcon>
-                                        <FindInPageIcon/>
-                                    </ListItemIcon> 
-                                    <ListItemText>Locate Lost Assets</ListItemText>
-                                </MenuItem>,
                                 <MenuItem key={10} className={`iconItem`} disabled>
                                     <ListItemIcon>
                                         <svg viewBox="0 0 24 24" className="MuiSvgIcon-root customSVG"><g><rect fill="none" height="24" width="24" x="0"/></g><g><g><path d="M19,11c0.17,0,0.33,0.01,0.49,0.02L15,3H9l5.68,9.84C15.77,11.71,17.3,11,19,11z"/><polygon points="8.15,4.52 2,15.5 5,21 11.33,10.03"/><path d="M13.2,15.5H9.9L6.73,21h7.81C13.58,19.94,13,18.54,13,17C13,16.48,13.07,15.98,13.2,15.5z"/><polygon points="20,16 20,13 18,13 18,16 15,16 15,18 18,18 18,21 19,21 20,21 20,18 23,18 23,16"/></g></g></svg>
@@ -935,7 +929,7 @@ const ActionMenu = (props) => {
                         :
                             ''
                 }
-                <Divider />
+                <Divider /> */}
                 <MenuItem key={13} className={classes.disableHover} >
                     <ListItemText><span className={clsx(parseInt(profile?.user?.organisation?.subscribtion) < 3 ? classes.disabled : '')}>Enterprise:</span> {parseInt(profile?.user?.organisation?.subscribtion) < 3 ? <Button variant="text">Upgrade</Button> : '' }</ListItemText>
                 </MenuItem>
@@ -1036,10 +1030,14 @@ const ActionMenu = (props) => {
                 }                
                 {
                     parseInt(profile?.user?.organisation?.subscribtion) === 3
-                    ?
-                               
-                        [   
-
+                    ? 
+                        [    
+                            <MenuItem key={4} onClick={locateLostAssets} selected={category === 'locate_lost_assets' && !display_sales_assets}>                            
+                                <ListItemIcon>
+                                    <FindInPageIcon/>
+                                </ListItemIcon>
+                                <ListItemText>Locate Lost Assets</ListItemText>
+                            </MenuItem>,
                             <MenuItem key={17} className={`iconItem`}>
                                 <ListItemIcon>
                                     <Avatar src="https://patentrack.com/wp-content/uploads/2022/01/MaintenanceFee.svg" variant="square" style={{width: 21, height: 21}}/>
@@ -1094,6 +1092,12 @@ const ActionMenu = (props) => {
                         ]
                     :
                         [            
+                            <MenuItem key={9} className={`iconItem`} disabled>
+                                <ListItemIcon>
+                                    <FindInPageIcon/>
+                                </ListItemIcon> 
+                                <ListItemText>Locate Lost Assets</ListItemText>
+                            </MenuItem>,
                             <MenuItem key={25} className={`iconItem`} disabled>
                                 <ListItemIcon>
                                     <Avatar src="https://patentrack.com/wp-content/uploads/2022/01/MaintenanceFee.svg" variant="square" style={{width: 21, height: 21}}/>
