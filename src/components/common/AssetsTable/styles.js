@@ -88,6 +88,16 @@ export default makeStyles((theme) => ({
             fontSize: '1rem'
         }
     },
+    blue: {
+        '& .MuiSvgIcon-root':{ 
+            fill: '#228DE8'
+        }
+    },
+    yellow: {
+        '& .MuiSvgIcon-root':{ 
+            fill: '#FFAA00'
+        } 
+    },
     rating_container: {
         '& .MuiRating-root':{
             top: 3

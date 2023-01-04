@@ -1124,34 +1124,34 @@ const Reports = (props) => {
                 if(id === 1 && viewDashboard.kpi === false) {                
                     findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
                     patent = true
-                } else if(id === 17 && subscription > 2  && viewDashboard.kpi === false) {
+                } else if(id === 17 /* && subscription > 2 */  && viewDashboard.kpi === false) {
                     findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_names')
                     patent = true
-                } else if(id === 18 && subscription > 2  && viewDashboard.kpi === false) {
+                } else if(id === 18 /* && subscription > 2 */  && viewDashboard.kpi === false) {
                     findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'clear_encumbrances')
                     patent = true
-                } else if(id === 19 && subscription > 2  && viewDashboard.kpi === false) {
+                } else if(id === 19 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
                     findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_address')
                     timeline = true
-                } else if(id === 20 && subscription > 2  && viewDashboard.kpi === false) {
+                } else if(id === 20 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
                     findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'to_be_monitized')
                     patent = true
-                } else if(id === 21 && subscription > 2  && viewDashboard.kpi === false) {
+                } else if(id === 21 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
                     findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'unnecessary_patents')
                     patent = true
-                } else if(id === 22 && subscription > 2  && viewDashboard.kpi === false) {
+                } else if(id === 22 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
                     findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'missed_monetization')
                     patent = true
-                } else if(id === 23 && subscription > 2  && viewDashboard.kpi === false) {
+                } else if(id === 23 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
                     findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'late_maintainance')
                     patent = true
-                } else if(id === 24 && subscription > 2  && viewDashboard.kpi === false) {
+                } else if(id === 24 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
                     findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_recording')
                     timeline = true
-                } else if(id === 25 && subscription > 2  && viewDashboard.kpi === false) {
+                } else if(id === 25 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
                     findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'late_recording')
                     timeline = true
-                } else if(id === 26 && subscription > 2  && viewDashboard.kpi === false) {
+                } else if(id === 26 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
                     findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'deflated_collaterals')
                     patent = true
                 } else if(id === 30 && subscription > 1  && viewDashboard.kpi === true) {

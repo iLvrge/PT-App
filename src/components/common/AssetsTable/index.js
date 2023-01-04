@@ -8,7 +8,7 @@ import React, {
 import { useSelector, useDispatch } from "react-redux";
 import {useLocation} from 'react-router-dom'
 import { Paper, Popover, Box, Rating } from "@mui/material";
-import { Clear, NotInterested, KeyboardArrowDown, MonetizationOn } from '@mui/icons-material';
+import { Clear, NotInterested, KeyboardArrowDown, MonetizationOn, StarOutline, StarOutlineOutlined, PendingActionsOutlined } from '@mui/icons-material';  
 import moment from "moment";
 import Loader from "../Loader";
 import useStyles from "./styles";
@@ -256,6 +256,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         <span className={classes.rating_label}><label>{props.label}</label></span>
         <Rating
           name={props.name}
+          className={props.class}
           onChangeActive={(event, newValue) => onHandleRating(event, newValue, props)}
           value={findValue}
         />
@@ -267,6 +268,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     return (
       <RatingBox
         label={`Important`}
+        class={classes.yellow}
         name={`virtual-rating-important`}
         data={props.item}
       />
@@ -278,6 +280,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     return (
       <RatingBox
         label={`Necessary`}
+        class={classes.blue}
         name={`virtual-rating-necessary`}
         data={props.item}
       />
@@ -349,20 +352,20 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       id: 5,
       name: 'Add to Clipboard',
       image: '',
-      icon: <Clipboard />
+      icon: <PendingActionsOutlined />
     },
     {
       id: 6,
       name: <RatingNecessary item={assetRating}/>,
       image: '',
-      icon: <Clipboard />,
+      icon: <StarOutline />,
       item: false
     },
     {
       id: 7,
       name: <RatingImportant item={assetRating}/>,
       image: '',
-      icon: <Clipboard />,
+      icon: <StarOutlineOutlined />,
       item: false
     },
     {
@@ -427,20 +430,20 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       id: 5,
       name: 'Add to Clipboard',
       image: '',
-      icon: <Clipboard />
+      icon: <PendingActionsOutlined />
     },
     {
       id: 6,
       name: <RatingNecessary item={assetRating}/>,
       image: '',
-      icon: <Clipboard />,
+      icon: <StarOutline />,
       item: false
     },
     {
       id: 7,
       name: <RatingImportant item={assetRating}/>,
       image: '',
-      icon: <Clipboard />,
+      icon: <StarOutlineOutlined />,
       item: false
     },
     {
