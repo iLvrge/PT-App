@@ -554,13 +554,13 @@ const VirtualizedTable = ({
 
       if ((disableRow === false || disableRow == undefined) || disableRow == true) {
        
-        const rowContainer = typeof tableRef.current.Grid != 'undefined' && tableRef.current.Grid != null ? tableRef.current.Grid._scrollingContainer.querySelector(
+        const rowContainer = tableRef.current !== null && typeof tableRef.current.Grid != 'undefined' && tableRef.current.Grid != null ? tableRef.current.Grid._scrollingContainer.querySelector(
           `div.rowIndex_${index}`) : null; 
  
         if (rowContainer !== null) {
           const nextSibling = rowContainer.nextElementSibling
           if (
-            nextSibling.querySelector(".ReactVirtualized__Table__row") !== null
+            nextSibling != null && nextSibling.querySelector(".ReactVirtualized__Table__row") !== null
           ) {
             const allRowHeight = 
               nextSibling.querySelectorAll(".ReactVirtualized__Table__row")

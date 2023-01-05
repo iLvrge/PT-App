@@ -3,9 +3,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Tab, Tabs, Paper, Grid, Badge, IconButton, Select, MenuItem, FormControl, InputLabel } from '@mui/material'
 import { Fullscreen as FullscreenIcon } from '@mui/icons-material'
-import FamilyContainer from '../FamilyContainer'
-import LegalEventsContainer from '../LegalEventsContainer'
-import ItemData from './ItemData'
+import FamilyContainer from '../FamilyContainer' 
 import AbstractData from './AbstractData'
 import ClaimData from './ClaimData'
 import SpecificationData from './SpecificationData'
@@ -86,7 +84,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                     publication_country: item.publication_country,
                     publication_kind: item.publication_kind
                 })
-                let number = item.publication_kind.toString().toLowerCase().indexOf('a') !== -1 
+                let number = typeof item.publication_kind != 'undefined' && item.publication_kind != null && item.publication_kind.toString().toLowerCase().indexOf('a') !== -1 
                             ? 
                                 `${item.publication_country}${applicationFormat(item.application_number)}${item.publication_kind}` 
                             : 
