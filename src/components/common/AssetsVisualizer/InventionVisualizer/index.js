@@ -24,7 +24,8 @@ import {
     getCustomerSelectedAssets,
     retrievePDFFromServer,
     setIsSalesAssetsDisplay,
-    setCPCRequest
+    setCPCRequest,
+    setCPCData
 } from '../../../../actions/patentTrackActions2'
 import { setPDFFile, setPdfTabIndex } from '../../../../actions/patenTrackActions' 
 import PatenTrackApi from '../../../../api/patenTrack2'
@@ -124,6 +125,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
     const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets) 
     const cpc_request = useSelector(state => state.patenTrack2.cpc_request) 
+    const cpcData = useSelector(state => state.patenTrack2.cpcData) 
     
     const [ graphRawData, setGraphRawData ] = useState([])
     const [ salesData, setSalesData ] = useState([])
@@ -429,8 +431,11 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         setFilterList([])
                         setFilterTotal(0)
                         findCPCList([...scopeRange], [], 0)
+                    } else if(cpcData.list.length > 0) {
+                        console.log('CPCDATA', cpcData)
+                        updateCPCData([...scopeRange], list, totalRecords)
                     }
-                } else if(dashboardScreen === true ||  /* list.length > 0 */ selectedCategory != 'due_dilligence') { 
+                } else if(dashboardScreen === true  ||   /* list.length > 0 */ selectedCategory != 'due_dilligence'  || (dashboardScreen === false && selectedCategory == 'due_dilligence')) { 
                     if(cpc_request === false) { 
                         setGraphRawData([])
                         setGraphRawGroupData([])    
@@ -439,6 +444,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         setFilterList(list)
                         setFilterTotal(totalRecords)
                         findCPCList([...scopeRange], list, totalRecords)
+                    } else if(cpcData.list.length > 0) {
+                        console.log('CPCDATA', cpcData)
+                        updateCPCData([...scopeRange], list, totalRecords)
                     }
                 } else { 
                     setGraphRawData([])
@@ -467,51 +475,23 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
 
     useEffect(() => { 
-        if(selectedCategory == 'due_dilligence' && cpc_request === true) { 
+        if(selectedCompanies.length > 0 && selectedCategory == 'due_dilligence' && cpc_request === true && cpcData.list.length == 0) { 
             setFilterList([])
             setFilterTotal(0)
             findCPCList([...scopeRange], [], 0)
+        } else {
+            updateCPCData([...scopeRange], [], 0)
         }
     }, [assetTypesSelectAll, selectedTab, selectedCompanies,])
 
+    useEffect(() => {
+        if(selectedCompanies.length > 0  && cpc_request === true && cpcData.list.length > 0 && graphRawData.length == 0) { 
+            updateCPCData([...scopeRange], [], 0)
+        }
+    }, [cpcData])
 
-    const findCPCList = async(oldScopeRange, list, totalRecords, year, range, scope) => {   
-        const form = new FormData()
-        form.append("list", JSON.stringify(list))
-        form.append("total", totalRecords)
-        form.append('selectedCompanies', JSON.stringify(selectedCompanies))
-        form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
-        form.append('customers', JSON.stringify( selectedAssetCompanies))
-        form.append('assignments', JSON.stringify( selectedAssetAssignments))
-        form.append('other_mode', display_sales_assets)
-        form.append('type', selectedCategory)
-        form.append('data_type', dashboardScreen === true ? 1 : 0)
-        if(typeof top != 'undefined') {
-            form.append('primary', 1)
-        }
-        if(typeof salable != 'undefined' && salable === true) {
-            form.append('sale', 1)
-        }
-        if(typeof licensable != 'undefined' && licensable === true) {
-            form.append('license', 1)
-        }
-        if(typeof range !== 'undefined') {
-            form.append("range", range)
-        }
-
-        if(typeof scope !== 'undefined') {
-            form.append("scope", JSON.stringify(scope))  
-        }
-
-        if(typeof year !== 'undefined') {
-            form.append('year', JSON.stringify(year))
-        }
-
-        //PatenTrackApi.cancelCPCRequest()
-        const {data} = await PatenTrackApi.getCPC(form)  
-        setIsLoadingCharts(false)
-        
-
+    const updateCPCData = async(oldScopeRange, list, totalRecords, year, range, scope) => {  
+        const data = {...cpcData}
         if( typeof year === 'undefined' &&  data.list.length > 0 ) {
             let yearList = [], yearLabelList = []
             const promiseYear = data.list.map( item => yearList.push(item.fillingYear))
@@ -527,7 +507,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             setFilterYear(yearLabelList)            
             setValueYear([yearLabelList[0].value, yearLabelList[yearLabelList.length - 1].value]) 
         }
-         
         if( typeof range === 'undefined' && typeof scope ===  'undefined'  && data.group.length > 0 && dashboardScreen === false) {
             setValueRange(4) 
             setValueScope([ data.group[0].id, data.group[data.group.length - 1].id ])
@@ -587,6 +566,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         }
                     })
                     await Promise.all(promise)
+                    dispatch(setCPCData({list: [], group: [], sales: []}))
                     findCPCList(oldScopeRange, list, totalRecords, year, range, scopeList) 
                 }  
             } else { 
@@ -598,6 +578,136 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             setGraphRawData(data.list)
             setGraphRawGroupData(data.group)
             setSalesData(data.sales)
+        }
+    }
+
+
+    const findCPCList = async(oldScopeRange, list, totalRecords, year, range, scope) => {   
+        if(selectedCompanies.length > 0) {
+
+            const form = new FormData()
+            form.append("list", JSON.stringify(list))
+            form.append("total", totalRecords)
+            form.append('selectedCompanies', JSON.stringify(selectedCompanies))
+            form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
+            form.append('customers', JSON.stringify( selectedAssetCompanies))
+            form.append('assignments', JSON.stringify( selectedAssetAssignments))
+            form.append('other_mode', display_sales_assets)
+            form.append('type', selectedCategory)
+            form.append('data_type', dashboardScreen === true ? 1 : 0)
+            if(typeof top != 'undefined') {
+                form.append('primary', 1)
+            }
+            if(typeof salable != 'undefined' && salable === true) {
+                form.append('sale', 1)
+            }
+            if(typeof licensable != 'undefined' && licensable === true) {
+                form.append('license', 1)
+            }
+            if(typeof range !== 'undefined') {
+                form.append("range", range)
+            }
+    
+            if(typeof scope !== 'undefined') {
+                form.append("scope", JSON.stringify(scope))  
+            }
+    
+            if(typeof year !== 'undefined') {
+                form.append('year', JSON.stringify(year))
+            }
+    
+            //PatenTrackApi.cancelCPCRequest()
+            const {data} = await PatenTrackApi.getCPC(form)  
+            setIsLoadingCharts(false)
+            dispatch(setCPCData(data)) 
+            if( typeof year === 'undefined' &&  data.list.length > 0 ) {
+                let yearList = [], yearLabelList = []
+                const promiseYear = data.list.map( item => yearList.push(item.fillingYear))
+                await Promise.all(promiseYear)
+                yearList = [...new Set(yearList)]
+                if(dashboardScreen !== true) {
+                    yearList.sort(function(a, b) {
+                        return a > b ? -1 : 0
+                    }); 
+                }                       
+                const promiseYearLabel = yearList.map( (item, index) => yearLabelList.push({ value: index + 1, label: item }) )
+                await Promise.all(promiseYearLabel)
+                setFilterYear(yearLabelList)            
+                setValueYear([yearLabelList[0].value, yearLabelList[yearLabelList.length - 1].value]) 
+            }
+             
+            if( typeof range === 'undefined' && typeof scope ===  'undefined'  && data.group.length > 0 && dashboardScreen === false) {
+                setValueRange(4) 
+                setValueScope([ data.group[0].id, data.group[data.group.length - 1].id ])
+                newRange = [ data.group[0].id, data.group[data.group.length - 1].id ]
+            }    
+            if(typeof scope == 'undefined' && dashboardScreen === false) {
+                
+                const findOldRange = []
+                if(oldScopeRange.length > 0 && typeof range !== 'undefined') {
+                    const promiseScope = newRange.map( scope => {
+                        const findIndex = oldScopeRange.findIndex( s => s.value === scope)
+                        if(findIndex !== -1) {
+                            findOldRange.push(oldScopeRange[findIndex])
+                        }
+                    })
+                    await Promise.all(promiseScope)
+                } 
+                /* console.log('valueScopeLabel', valueScopeLabel, 'oldScopeRange', oldScopeRange, 'findOldRange', findOldRange, 'newRange', newRange)  */
+                const scopeGroup = []
+                /* let i = data.group.length + 1 */
+                let i = data.group.length + 1
+                const promise = data.group.map( group => {
+                    i -= 1
+                    scopeGroup.push({
+                        value: group.id,
+                        label: `${group.cpc_code} - ${group.defination}`,
+                        code: group.cpc_code,
+                        section: group.section, 
+                        class: group.class, 
+                        sub_class: group.sub_class, 
+                        main_group: group.main_group, 
+                        sub_group: group.sub_group
+                    })
+                })    
+                await Promise.all(promise)
+                /*setScopeRange([...scopeGroup].reverse())*/
+                setScopeRange(scopeGroup)
+                if(findOldRange.length > 0) {
+                    const selectScope = []
+                    const promiseSelect = findOldRange.map( r => {
+                        scopeGroup.map( scope => {                        
+                            if(scope.section === r.section) {
+                                if(!selectScope.includes(scope.value)) {
+                                    selectScope.push(scope.value)
+                                }
+                            }
+                        })
+                    })
+                    await Promise.all(promiseSelect) 
+                    if(selectScope.length > 0) {
+                        newRange = [Math.min(...selectScope), Math.max(...selectScope)]      // useState still gives oldValue
+                        setValueScope(newRange)
+                        const scopeList = []
+                        const promise = scopeGroup.map( r => {
+                            if(r.value >= newRange[0] && r.value <= newRange[1]){
+                                scopeList.push(r.code)
+                            }
+                        })
+                        await Promise.all(promise)
+                        dispatch(setCPCData({list: [], group: [], sales: []}))
+                        findCPCList(oldScopeRange, list, totalRecords, year, range, scopeList) 
+                    }  
+                } else { 
+                    setGraphRawData(data.list)
+                    setGraphRawGroupData(data.group)
+                    setSalesData(data.sales)
+                }
+            } else { 
+                setGraphRawData(data.list)
+                setGraphRawGroupData(data.group)
+                setSalesData(data.sales)
+            }
         }
     }
  

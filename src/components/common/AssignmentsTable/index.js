@@ -454,6 +454,7 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
 
   
   useEffect(() => {
+    let ignore = false;
     if (defaultLoad === true || defaultLoad === undefined) {
       const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
         tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
@@ -463,13 +464,16 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
             : assetTypesCompaniesSelected;
       if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
         if(assignmentList.length === 0) {
-          dispatch(
-            getCustomerTransactions(
-              selectedCategory == '' ? '' : selectedCategory, 
-              companies, 
-              tabs, 
-              customers, 
-              false));
+          if (!ignore){
+            console.log("TRANSActionsss loading")
+            dispatch(
+              getCustomerTransactions(
+                selectedCategory == '' ? '' : selectedCategory, 
+                companies, 
+                tabs, 
+                customers, 
+                false));
+          }
         }
         //dispatch(getChannels())
         
@@ -483,6 +487,7 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
       setRows([])
       setGrandTotal(0)
     }
+    return () => { ignore = true };
   }, [
     dispatch, 
     selectedCompanies,

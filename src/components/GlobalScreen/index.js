@@ -68,6 +68,7 @@ import LawFirmTable from '../common/LawFirmTable';
 import FamilyContainer from '../common/AssetsVisualizer/FamilyContainer';
 import SecuredAssets from '../common/SecuredAssets';
 import FullScreen from '../common/FullScreen';
+import { useReloadLayout } from '../../utils/useReloadLayout';
 
 const GlobalScreen = ({
     type,
@@ -159,6 +160,7 @@ const GlobalScreen = ({
     const assetFileRef = useRef()
     const fileBarRef = useRef()
     const templateFileRef = useRef()
+    const [isLoaded, checkPageLoad] = useReloadLayout()
     const [sheetName, setSheetName] = useState('')
     const [ gap, setGap ] = useState( { x: '14.1rem', y: '7.5rem'} )
     const [ isDragging, setIsDragging] = useState(false)
@@ -202,6 +204,13 @@ const GlobalScreen = ({
             }            
         }, 1000) */
     }
+
+    useEffect(() => {
+        if(!isLoaded) { 
+            checkPageLoad(0)
+        }
+    }, [])
+
     
 
     useEffect(() => {
@@ -273,11 +282,13 @@ const GlobalScreen = ({
             if(openCustomerBar === true) {
                 handleCustomersBarOpen()
             }
-        } else {  
-            console.log("268=>", selectedCategory)
+        } else {   
             if((openAssignmentBar === true && timelineScreen === false) || (openAssignmentBar === false && timelineScreen === true && selectedCategory != 'top_lenders' &&  selectedCategory != 'proliferate_inventors' &&  selectedCategory != 'top_law_firms' )) { 
                 handleAssignmentBarOpen()
             } 
+            if(openAssignmentBar === false && timelineScreen === true && dashboardScreen === false && selectedCategory == 'proliferate_inventors') {
+                handleAssignmentBarOpen()
+            }
             if(openCustomerBar === false && dashboardScreen === false && timelineScreen === false) {
                 handleCustomersBarOpen()
             }
@@ -827,6 +838,7 @@ const GlobalScreen = ({
                                                 setChannel={setChannelID}
                                                 size={size}
                                                 gap={gap}
+                                                cube={false}
                                                 templateButton={false}
                                                 maintainenceButton={false}
                                                 visualizerBarSize={visualizerBarSize}

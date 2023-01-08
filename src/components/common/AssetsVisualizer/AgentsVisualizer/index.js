@@ -120,7 +120,9 @@ const AgentsVisualizer = (props) => {
             try {
                 setData([])
                 setRawData([])
-                callChartData([], 0)
+                if(selectedCompanies.length > 0) {
+                    callChartData([], 0)
+                }
             } catch(err) {
                 console.log(err)
             }            
@@ -156,7 +158,7 @@ const AgentsVisualizer = (props) => {
         form.append('other_mode', display_sales_assets) 
         form.append('type', selectedCategory)
         form.append('data_type', props.type)
-        PatenTrackApi.cancelAgentsDataRequest()
+        /* PatenTrackApi.cancelAgentsDataRequest() */
         const { data } = await PatenTrackApi.getAgentsData(form)
         setLoading(false)
         setRawData(data)

@@ -1238,10 +1238,10 @@ const Reports = (props) => {
                         dispatch(setTimelineScreen(timeline))
                         dispatch(setPatentScreen(patent))
                         if(patent === true) {
-                            history.push(routeList.patent_assets)  
+                            history.push(`${routeList.patent_assets}/${controlList[findIndex].mainHeading.toLowerCase()}`)  
                         }
                         if(timeline === true) {
-                            history.push('/')  
+                            history.push(`${routeList.assignments}/${controlList[findIndex].mainHeading.toLowerCase()}`)  
                         }
                         if(maintainence === true) {
                             history.push(routeList.pay_maintainence_fee)  

@@ -56,6 +56,7 @@ export default {
     new_drive_template_file: null,
     template_document_url: 'about:blank',
     jurisdictionData: [],
+    cpcData: {list: [], group: [], sales: []},
     jurisdiction_request: false,
     cpc_request: false, 
     display_sales_assets: false,

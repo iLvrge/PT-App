@@ -566,6 +566,7 @@ class PatenTrackApi {
   } 
 
   static getCustomerTransactions(type, companies, tabs, customers) { 
+    console.log('TRansactionssss')
     return axios.get(`${base_new_api_url}/customers/${type}/transactions?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}`, getHeader())
   } 
 
