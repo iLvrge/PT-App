@@ -18,6 +18,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         ...state, 
         cpc_request: action.flag
       }
+    case types.SET_CPC_DATA: 
+      return { 
+        ...state, 
+        cpcData: action.data
+      }
     case types.SET_JURISDICTION_REQUEST: 
       return { 
         ...state, 

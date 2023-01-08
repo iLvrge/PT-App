@@ -16,7 +16,7 @@ import {
 import { AppsOutage, AutoGraph, Public, Speed, ViewTimeline, Search, NotificationsNone, ManageSearch, SupportAgent, PendingActionsOutlined } from '@mui/icons-material' 
 import PatenTrackApi from '../../api/patenTrack2'
 import { copyToClipboard } from '../../utils/html_encode_decode'
-import { setSwitchAssetButton } from '../../actions/patentTrackActions2'
+import { setCPCRequest, setJurisdictionRequest, setSwitchAssetButton } from '../../actions/patentTrackActions2'
 import { setCompanies } from '../../actions/patenTrackActions'
 import Maintainance from '../common/Maintainence'
 
@@ -161,6 +161,8 @@ const ViewIcons = (props) => {
         setTimelineView(false)
         dispatch(setAssetButton(false))
         dispatch(setTransactionButton(false))
+        dispatch(setJurisdictionRequest(false))
+        dispatch(setCPCRequest(false))
         if(props.openIllustrationBar === false) {
             props.handleIllustrationBarOpen()
         }
@@ -175,6 +177,8 @@ const ViewIcons = (props) => {
         dispatch(setTransactionButton(false))
         setPatentView(true)
         setTimelineView(false)
+        dispatch(setJurisdictionRequest(false))
+        dispatch(setCPCRequest(false))
         props.resetAllActivity('due_dilligence')
         props.setPatentAssets()
     }
@@ -270,7 +274,7 @@ const ViewIcons = (props) => {
      
     return(
         <React.Fragment>
-            {/* <Button onClick={getUnCollatealized}>Uncollateralized</Button> */}
+           {/*  <Button onClick={getUnCollatealized}>Uncollateralized</Button> */}
             <Maintainance/>
             {
                 profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'

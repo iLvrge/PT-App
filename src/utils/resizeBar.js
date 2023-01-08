@@ -18,7 +18,11 @@ import { setAssetTypeAssignments,
     setSelectAssignments,
     setSlackMessages,
     setChannelID,
-    setSelectedMaintainenceAssetsList
+    setSelectedMaintainenceAssetsList,
+    setCPCRequest,
+    setJurisdictionRequest,
+    setJurisdictionData,
+    setCPCData
    } from '../actions/patentTrackActions2'
   
    import {  
@@ -79,7 +83,19 @@ export const resetAllRowSelect = ( dispatch, resetList, skipIndex) => {
 }  */
 
 export const resetItemList = {
-    resetAll: [
+    resetAll: [ 
+        {
+            callback: setCPCRequest(false)
+        },
+        {
+            callback: setJurisdictionRequest(false)
+        },
+        {
+            callback: setJurisdictionData([])
+        },
+        {
+            callback: setCPCData({list:[], group: [], sales: []})
+        },
         {
             callback: setAssetTypes([])
         },

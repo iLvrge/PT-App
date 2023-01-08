@@ -1,22 +1,23 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import {  useLocation } from "react-router-dom";
+
 import SplitPane from 'react-split-pane'
 import ArrowButton from '../common/ArrowButton'
 import MainCompaniesSelector from '../common/MainCompaniesSelector'
 import AssignmentsType from '../common/AssignmentsType'
 import CustomerTable from '../common/CustomerTable'
-import InventorTable from '../common/InventorTable'
-import CorrectAddressTable from '../common/CorrectAddressTable'
+import InventorTable from '../common/InventorTable' 
 import AssignmentsTable from '../common/AssignmentsTable'
 import AssetsTable from '../common/AssetsTable'
 import IllustrationCommentContainer from '../common/IllustrationCommentContainer'
-import AssetDetailsContainer from '../common/AssetDetailsContainer'
-import MaintainenceAssetsList from '../common/MaintainenceAssetsList'
+import AssetDetailsContainer from '../common/AssetDetailsContainer' 
 import LayoutTemplates from '../common/LayoutTemplates'
 import FilesTemplates from '../common/FilesTemplates'
 import ForeignAsset from '../common/ForeignAsset'
 import { resizePane, resizePane2, editorBar } from '../../utils/splitpane'
 import { updateResizerBar } from '../../utils/resizeBar'
+import { controlList } from '../../utils/controlList'
 import config from "../common/PatentrackDiagram/config.json";
 
 import { 
@@ -41,7 +42,9 @@ import {
     getSlackMessages,
     setMaintainenceFileName,
     setSlackMessages,
-    setBreadCrumbs
+    setBreadCrumbs,
+    setSelectedCategory,
+    setBreadCrumbsAndCategory
 } from '../../actions/patentTrackActions2'
 
 import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpanMode, setMaintainenceFeeFrameMode, setPatentScreen, setDashboardScreen, setTimelineScreen } from '../../actions/uiActions'
@@ -50,6 +53,7 @@ import useStyles from './styles'
 import clsx from 'clsx'
 import IllustrationContainer from '../common/AssetsVisualizer/IllustrationContainer'
 import Maintainance from '../common/Maintainence'
+import { useReloadLayout } from '../../utils/useReloadLayout';
 
 const PatentLayout = ({
     type,
@@ -129,6 +133,7 @@ const PatentLayout = ({
     
     const classes = useStyles() 
     const dispatch = useDispatch()
+    const location = useLocation()
     const mainContainerRef = useRef()
     const companyRef = useRef()
     const assignmentTypeRef = useRef()
@@ -140,6 +145,7 @@ const PatentLayout = ({
     const fileBarRef = useRef()
     const templateFileRef = useRef()
     const [sheetName, setSheetName] = useState('')
+    const [isLoaded, checkPageLoad] = useReloadLayout()
     const [ gap, setGap ] = useState( { x: '14.1rem', y: '7.5rem'} )
     const [ isDragging, setIsDragging] = useState(false)
     const [ isFullscreenOpen, setIsFullscreenOpen] = useState(false)
@@ -180,6 +186,13 @@ const PatentLayout = ({
         dispatch(setDashboardScreen(false))
         dispatch(setPatentScreen(true))
         /* dispatch(setBreadCrumbs('Assets')) */
+    }, [])
+
+ 
+    useEffect(() => {
+        if(!isLoaded) { 
+            checkPageLoad(1)
+        }
     }, [])
 
     // useEffect(() => {
@@ -543,7 +556,7 @@ const PatentLayout = ({
                     >
                         <div id={`transaction_container`} style={{ height: '100%'}}>
                             { 
-                                openAssignmentBar === true 
+                                openAssignmentBar === true && selectedCategory == 'due_dilligence'
                                 ? 
                                     <>
                                         {/* <ArrowButton 

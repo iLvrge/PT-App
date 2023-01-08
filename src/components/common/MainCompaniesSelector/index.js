@@ -39,6 +39,8 @@ import {
     setCompanyTableScrollPos,
     setCPCRequest,
     setJurisdictionRequest,
+    setCPCData,
+    setJurisdictionData,
 } from '../../../actions/patentTrackActions2'
 
 
@@ -548,7 +550,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     useEffect(() => {
         let isSubscribed = true;
         if((selectedCompaniesAll === true || selected.length > 0 ) && process.env.REACT_APP_ENVIROMENT_MODE != 'DASHBOARD') {
-            if( assetTypesSelected.length === 0 && assetTypesSelectAll === false ) {
+            if( assetTypesSelected.length === 0 && assetTypesSelectAll === false && selectedCategory == 'due_dilligence') {
                 const getUserSelection = async () => {
                     const { data } = await PatenTrackApi.getUserActivitySelection()
                     if(isSubscribed) {
@@ -789,6 +791,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             dispatch( setMainCompaniesAllSelected( updateSelected.length === totalRecords ? true : false ) )
             dispatch(setCPCRequest(false))
             dispatch(setJurisdictionRequest(false))
+            dispatch(setCPCData({list:[], group: [], sales: []}))
+            dispatch(setJurisdictionData([]))
             resetAll() 
             clearOtherItems()
         } else {

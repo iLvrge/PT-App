@@ -11,6 +11,9 @@ export default {
   review_foreign_assets: '/review_external_assets',  
   locate_lost_assets: '/locate_lost_assets',
   patent_assets: '/patent_assets',
+  patent_assets_layouts: '/patent_assets/:layout',
+  assignments: '/assignments',
+  assignments_layouts: '/assignments/:layout',
   invent: '/ownership/invent',
   duedilligence: '/due' ,
   search: '/search',
@@ -18,5 +21,5 @@ export default {
   global: '/global',
   default: '/',
   standard_default: '/:code',
-  google_login: '/google_login'
+  google_login: '/google_login' 
 } 

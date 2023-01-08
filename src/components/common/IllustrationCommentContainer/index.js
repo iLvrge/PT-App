@@ -272,6 +272,7 @@ const IllustrationCommentContainer = ({
         fn2(size, fn2Params)
         fn(fnVarName, size, fnParams)   
     }, 1), [  ]) 
+
      
     return (
         <SplitPane
@@ -481,7 +482,7 @@ const IllustrationCommentContainer = ({
                                         type={type}
                                     />
                                 :
-                                selectedCategory == 'top_law_firms' 
+                                    selectedCategory == 'top_law_firms' 
                                 ?
                                     <LawFirmTimeline 
                                         assignmentBar={assignmentBar} 

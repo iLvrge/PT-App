@@ -1780,6 +1780,13 @@ export const setJurisdictionData = (data) => {
   }
 } 
 
+export const setCPCData = (data) => { 
+  return {
+    type: types.SET_CPC_DATA,  
+    data
+  }
+} 
+
 export const setSocialMediaConnectPopup = (flag) => {  
   return {
     type: types.SET_SOCIAL_MEDIA_CONNECT_MODAL, 

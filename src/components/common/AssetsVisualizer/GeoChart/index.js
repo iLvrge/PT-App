@@ -200,7 +200,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                 } else {
                     setData([])
                 } */
-                if(jurisdiction_request === false) {
+                if(jurisdiction_request === false && selectedCompanies.length > 0) {
                     dispatch(setJurisdictionRequest(true))
                     callChartData(list, totalRecords)
                 }

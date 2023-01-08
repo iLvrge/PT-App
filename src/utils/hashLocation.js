@@ -15,7 +15,6 @@ export const warnConsole = (message) => {
 
     console.warn = function (...args) {
         const arg = args && args[0]
-        console.log('arg', arg)
         if (arg && arg.includes(message)) return;
         originalWarn(...args);
     };

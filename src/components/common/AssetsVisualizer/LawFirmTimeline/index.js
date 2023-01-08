@@ -688,7 +688,7 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
   return (
       <Paper className={classes.root}> 
         <div id="visualization">
-          <div class="menu">
+          <div className="menu">
             <IconButton onClick={zoomIn}>
               <ZoomInIcon/>
             </IconButton>

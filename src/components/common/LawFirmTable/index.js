@@ -111,9 +111,11 @@ import { setAssetTypeAssignmentAllAssets, setAssetTypesPatentsSelected, setSelec
     
     useEffect(() => {
         const getLawFirmList = async() => {
+          if(selectedCompanies.length > 0) {
             const {data} = await PatenTrackApi.getLawFirmsByCompany(selectedCompanies)
             setRows(data)
             setGrandTotal(data.length)
+          }
         }
         getLawFirmList()
     }, [selectedCompanies])

@@ -63,6 +63,20 @@ let pages = [
     layout: GlobalLayout,
     type: 1
   },
+  {
+    exact: true,
+    path: routeList.assignments,
+    component: GlobalScreen,
+    layout: GlobalLayout,
+    type: 1
+  },
+  {
+    exact: false,
+    path: routeList.assignments_layouts,
+    component: GlobalScreen,
+    layout: GlobalLayout,
+    type: 1
+  },
   {    
     exact: true,
     path: routeList.invent,
@@ -94,6 +108,13 @@ let pages = [
   {    
     exact: true,
     path: routeList.patent_assets,
+    component: PatentLayout,
+    layout: GlobalLayout, 
+    type: 1
+  },
+  {    
+    exact: false,
+    path: routeList.patent_assets_layouts,
     component: PatentLayout,
     layout: GlobalLayout, 
     type: 1
