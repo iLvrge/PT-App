@@ -162,7 +162,8 @@ const Fees = ({ events, showTabs, tabText }) => {
       if(tootlTip === item.id) {     
         const color = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
         const height = window.innerHeight|| document.documentElement.clientHeight || document.body.clientHeight; 
-        const element = document.getElementById('timelineCharts');
+        const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
+        const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector('#timelineCharts') : document.getElementById('timelineCharts');  
         const getPosition = element.getBoundingClientRect();  
         let tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid #fff;background:${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default} ;top:${ getPosition.y }px;left:${ getPosition.x }px;'>`
         if(typeof tabText != 'undefined' && tabText == 'To Record') {
