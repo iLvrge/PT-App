@@ -50,7 +50,7 @@ const AgentsVisualizer = (props) => {
             type: props.type
         }
     ]
-    const [height, setHeight] = useState('72%');
+    const [height, setHeight] = useState('74%');
     const [minMax, setMinMax] = useState([0,0])
     const [option, setOption] = useState({
         legend: { 
@@ -64,7 +64,7 @@ const AgentsVisualizer = (props) => {
         backgroundColor: 'transparent',
         chartArea: {
             width: '67%',
-            height: '90%',
+            height: '94%',
             left:40,
             top:10,
         },
@@ -212,7 +212,7 @@ const AgentsVisualizer = (props) => {
                 controls={[
                     {
                         controlType: 'ChartRangeFilter',
-                        controlPosition: 'top',
+                        controlPosition: 'bottom',
                         options: {
                             filterColumnIndex: 0,
                             ui: {

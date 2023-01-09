@@ -123,7 +123,9 @@ const Citation = ({ number, citationRawData, updateCitationRawData }) => {
     const showTooltip = (item, event) => {    
         setTimeout(() => {
             if(tootlTip === item.id) {    
-                const element = document.getElementById('citationTimeline');
+                const checkFullScreen = document.getElementsByClassName('fullscreenModal');
+                console.log('FullScreen', checkFullScreen)
+                const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector('#citationTimeline') : document.getElementById('citationTimeline');
                 const getPosition = element.getBoundingClientRect();    
                 const color = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
                 const tootltipTemplate = `<div class='custom_tooltip' style='background:${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default} ;top:${ getPosition.y }px;left:${ getPosition.x }px;'>

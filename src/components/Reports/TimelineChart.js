@@ -261,7 +261,8 @@ const TimelineChart = (props) => {
                 if((calcTop + 160) > screenHeight) {
                     calcTop = screenHeight - 350
                 }
-                const element = document.getElementById(`timeline-${props.id}`);
+                const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
+                const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector(`#timeline-${props.id}`) : document.getElementById(`timeline-${props.id}`);  
                 const getPosition = element.getBoundingClientRect();  
                 
                 let tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${getPosition.y + 5}px;left:${getPosition.x}px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>

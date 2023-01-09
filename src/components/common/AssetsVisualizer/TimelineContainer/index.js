@@ -240,7 +240,8 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
                   color = '#FFFFFF'
                   break;
               }
-              const element = document.getElementById('all_timeline');
+              const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
+              const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector(`#all_timeline`) : document.getElementById(`all_timeline`);   
               const getPosition = element.getBoundingClientRect();  
               const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${ getPosition.y }px;left:${ getPosition.x }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
                                           <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>

@@ -188,9 +188,9 @@ const Status = ({ number, rawData, updateRawData, standalone }) => {
       if(tootlTip === item.id) {      
         const color = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
         const height = window.innerHeight|| document.documentElement.clientHeight || document.body.clientHeight;  
-        
-        let text = item.status; 
-        const element = document.getElementById('statusTimeline');
+        const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
+        const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector('#statusTimeline') : document.getElementById('statusTimeline'); 
+        let text = item.status;  
         const getPosition = element.getBoundingClientRect(); 
         let tootltipTemplate = `<div class='custom_tooltip' style='background:${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default} ;top:${getPosition.y}px;left:${getPosition.x}px;'><h4 style='color:${color};text-align:left;margin:0'>${text}</h4></div>`
         resetTooltipContainer() 

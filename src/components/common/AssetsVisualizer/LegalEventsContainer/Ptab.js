@@ -139,8 +139,9 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
         setTimeout(() => {
             if(tootlTip === item.id) {      
                 const color = '#fff'   
-                const height = window.innerHeight|| document.documentElement.clientHeight || document.body.clientHeight; 
-                const element = document.getElementById('ptabTimeline');
+                const height = window.innerHeight|| document.documentElement.clientHeight || document.body.clientHeight;  
+                const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
+                const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector('#ptabTimeline') : document.getElementById('ptabTimeline'); 
                 const getPosition = element.getBoundingClientRect();  
                 let tootltipTemplate = `<div class='custom_tooltip' style='background:#1E2025;border: 1px solid rgba(255, 255, 255, 0.12) ;top:${getPosition.y}px;left:${getPosition.x}px;'>`
                 const { otherInfo } = item
