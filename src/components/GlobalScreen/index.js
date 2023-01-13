@@ -285,18 +285,24 @@ const GlobalScreen = ({
         } else {   
             if((openAssignmentBar === true && timelineScreen === false) || (openAssignmentBar === false && timelineScreen === true && selectedCategory != 'top_lenders' &&  selectedCategory != 'proliferate_inventors' &&  selectedCategory != 'top_law_firms' )) { 
                 handleAssignmentBarOpen()
-            } 
-            if(openAssignmentBar === false && timelineScreen === true && dashboardScreen === false && selectedCategory == 'proliferate_inventors') {
-                handleAssignmentBarOpen()
-            }
+            }  
             if(openCustomerBar === false && dashboardScreen === false && timelineScreen === false) {
                 handleCustomersBarOpen()
-            }
+            } 
         }
         /* console.log('timelineScreen', selectedCategory, dashboardScreen, timelineScreen, openCommentBar, openIllustrationBar, openChartBar, openAnalyticsBar) */
         if(timelineScreen === true) {
             if(selectedCategory === 'top_law_firms' && openOtherPartyBar === false) {
                 handleOtherPartyBarOpen()
+                if(openAssignmentBar === true) {
+                    handleAssignmentBarOpen()
+                }
+            }
+            if(selectedCategory == 'proliferate_inventors' && openInventorBar === false){
+                handleInventorBarOpen() 
+                if(openOtherPartyBar === true) {
+                    handleOtherPartyBarOpen()
+                }
                 if(openAssignmentBar === true) {
                     handleAssignmentBarOpen()
                 }

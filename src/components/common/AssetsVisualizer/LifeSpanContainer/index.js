@@ -308,13 +308,17 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                                     <Acknowledgements/>
                             :
                                 selectedTab === 2 ? 
-                                    <InventionVisualizer 
-                                        visualizerBarSize={visualizerBarSize} 
-                                        type={type} 
-                                        tab={false}
-                                        salable={true}
-                                        standalone={true}
-                                    />
+                                    selectedCategory == 'abandoned' 
+                                    ?
+                                        <Acknowledgements/>
+                                    :
+                                        <InventionVisualizer 
+                                            visualizerBarSize={visualizerBarSize} 
+                                            type={type} 
+                                            tab={false} 
+                                            salable={true}
+                                            standalone={true}
+                                        /> 
                                 :
                                     selectedTab === 3 ? 
                                         <InventionVisualizer

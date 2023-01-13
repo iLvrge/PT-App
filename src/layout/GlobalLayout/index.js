@@ -925,7 +925,7 @@ const GlobalLayout = (props) => {
     }  
 
     const handleChartBarOpen = () => { 
-        /* console.log('handleChartBarOpen entered') */
+        console.log('handleChartBarOpen entered', openChartBar)
         let bar = openChartBar, barSize = '40.1%'
         setChartBar( !bar )
         if(!bar === false && openAnalyticsBar === true) {
@@ -1209,6 +1209,12 @@ const GlobalLayout = (props) => {
                     handleAssignmentBarOpen(event)
                 }
             }
+            if(selectedCategory == 'proliferate_inventors' && openInventorBar === false && timelineScreen === false && type == 'Timeline'){
+                handleInventorBarOpen(event) 
+                if(openOtherPartyBar === true) {
+                    handleOtherPartyBarOpen(event)
+                }
+            }
             /* if(openCommentBar === false){
                 handleCommentBarOpen(event)
             } */
@@ -1272,12 +1278,12 @@ const GlobalLayout = (props) => {
             ...((props.type === 9 || (dashboardScreen === true && profile?.user?.organisation?.organisation_type !== 'Bank')) && {disabled: true})
         },
         {
-            tooltip: 'Filter by Employees', 
+            tooltip:  selectedCategory === 'proliferate_inventors' ? 'Filter by Inventors' : 'Filter by Employees', 
             bar: openInventorBar,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? handleAlertPop : handleInventorBarOpen,
             t: 11,
             margin: true,
-            label: 'Employees',
+            label: selectedCategory === 'proliferate_inventors' ? 'Filter by Inventors' : 'Filter by Employees', 
             ...((props.type === 9 || (dashboardScreen === true && profile?.user?.organisation?.organisation_type !== 'Bank')) && {disabled: true})
         },
         {
