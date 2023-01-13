@@ -9,6 +9,7 @@ import Loader from '../../Loader';
 import { setAssetTypeAssignmentAllAssets, setSelectAssignmentCustomers } from '../../../../actions/patentTrackActions2'; 
 import FullScreen from '../../FullScreen';
 import LabelWithIcon from '../../LabelWithIcon';
+import TitleBar from '../../TitleBar';
 
 
 const SankeyChart = (props) => {
@@ -110,17 +111,20 @@ const SankeyChart = (props) => {
         if((data.length > 0 || assignorData.length > 0) && containerRef != null && containerRef.current != null) { 
             const element = containerRef.current.parentElement
             if(element != null) { 
-                const {height} = element.getBoundingClientRect();
-                const childElement = document.querySelectorAll('.cntSankeyChart') 
-                if(childElement.length > 0 ) {
-                    childElement.forEach( (item, index) => {
-                        childElement[index].style.height = `${parseInt(height)}px`
-                    })
-                }
                 
+                const childElement = document.querySelectorAll('.cntSankeyChart') 
+                if(childElement.length > 0 ) { 
+                    childElement.forEach( (item, index) => {
+                        const containerID = childElement[index].parentNode.parentNode.parentNode.getAttribute('id')
+                        if(containerID == 'charts_container') { 
+                            const {height} = childElement[index].parentNode.parentNode.parentNode.getBoundingClientRect();
+                            childElement[index].style.height = `${parseInt(height) - 32 }px`
+                        }
+                    })
+                } 
             }
         }
-    }, [data, assignorData])
+    }, [data, assignorData]) 
 
     const handleSelection = useCallback(async(items, type) => {
         let oldItems = type == 2 ? [...assignorRawData] : [...assigneeRawData]
@@ -144,11 +148,7 @@ const SankeyChart = (props) => {
     }, [assignorRawData, assigneeRawData]) 
     return (
         <Paper {...(typeof props.showTabs == 'undefined' ? {sx: {p: 2, overflow: 'auto'}} : {overflow: 'auto'})}  className={clsx(classes.container, classes.containerTop, 'cntSankeyChart')} square ref={containerRef} >
-            {/* {
-                (selectedCategory == 'acquired' && !loading && data.length === 0 ) || (!loadingAssignor && selectedCategory == 'divested' && assignorData.length === 0) && (
-                    <TitleBar title="The company had no acquistions and divestitures of patent assets filled after 1997:" enablePadding={false} underline={false}/>
-                )
-            }  */}           
+                 
             {
                 typeof props.showTabs != 'undefined' && props.showTabs === true && typeof props.tabText != 'undefined' && (
                     <Tabs
@@ -172,6 +172,11 @@ const SankeyChart = (props) => {
                     </Tabs> 
                 )
             } 
+            {
+                (selectedCategory == 'acquired' && !loading && data.length > 0 ) || (!loadingAssignor && selectedCategory == 'divested' && assignorData.length > 0) && (
+                    <TitleBar title="Hover over the bars for details. Select one of the colored bars to the right of each name to filter the Assets table accordingly." enablePadding={false} underline={false}/>
+                )
+            }  
             {    
                 selectedCategory == 'acquired' || props.type == 'acquired' || props.type == 'filled'
                 ?
@@ -187,7 +192,7 @@ const SankeyChart = (props) => {
             }           
             
             {
-                selectedCategory == 'divested' 
+                selectedCategory == 'divested' && props.type == 'divested'
                 ?
                     loadingAssignor === false ?
                         <div className={clsx(classes.child)} >

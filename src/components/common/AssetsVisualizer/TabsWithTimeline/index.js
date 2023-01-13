@@ -38,7 +38,7 @@ import LabelWithIcon from '../../LabelWithIcon';
 
 const TIME_INTERVAL = 1000
 var tootlTip = ''
-const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timelineData, updateTimelineRawData }) => {
+const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timelineData, updateTimelineRawData }) => {
   
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -735,4 +735,4 @@ const LawFirmTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timel
   ) 
 }
 
-export default LawFirmTimeline
+export default TabsWithTimeline

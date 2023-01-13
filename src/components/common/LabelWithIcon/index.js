@@ -8,8 +8,10 @@ import {
     FileOpen as FileOpenIcon,
     Language as LanguageIcon,
     Psychology as PsychologyIcon,
-    ShoppingCart as ShoppingCartIcon
- } from '@mui/icons-material'     
+    ShoppingCart as ShoppingCartIcon,
+    StackedBarChartOutlined as StackedBarChartOutlinedIcon,
+    LeaderboardOutlined as LeaderboardOutlinedIcon
+ } from '@mui/icons-material'       
 import { FaLightbulb } from "react-icons/fa";
 import useStyles from './styles' 
 
@@ -63,7 +65,15 @@ const LabelWithIcon = ({label, showLabel}) => {
                                                         ?
                                                             <img src={`https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/sales.svg`} className={classes.img} />
                                                         :
-                                                            ''
+                                                            label == 'Years'
+                                                            ?
+                                                                <StackedBarChartOutlinedIcon className={classes.svgIcon}/> 
+                                                            :
+                                                                label == 'Ages'
+                                                                ?
+                                                                    <LeaderboardOutlinedIcon className={classes.svgIcon}/> 
+                                                                :
+                                                                    ''
     )
 }
 

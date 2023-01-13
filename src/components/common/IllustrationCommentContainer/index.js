@@ -21,7 +21,7 @@ import FullScreen from '../FullScreen'
 import clsx from 'clsx'
 import InventionVisualizer from '../AssetsVisualizer/InventionVisualizer'
 import Ptab from '../AssetsVisualizer/LegalEventsContainer/Ptab'
-import LawFirmTimeline from '../AssetsVisualizer/LawFirmTimeline'
+import TabsWithTimeline from '../AssetsVisualizer/TabsWithTimeline'
 import GeoChart from '../AssetsVisualizer/GeoChart' 
 import CorrectAddressTable from '../CorrectAddressTable'
 import NamesContainer from '../AssetsVisualizer/NamesContainer'
@@ -482,9 +482,9 @@ const IllustrationCommentContainer = ({
                                         type={type}
                                     />
                                 :
-                                    selectedCategory == 'top_law_firms' 
+                                    selectedCategory == 'top_law_firms'
                                 ?
-                                    <LawFirmTimeline 
+                                    <TabsWithTimeline 
                                         assignmentBar={assignmentBar} 
                                         assignmentBarToggle={assignmentBarToggle} 
                                         type={type} 
@@ -535,7 +535,7 @@ const IllustrationCommentContainer = ({
                             shouldShowTimeline === true ? 
                                 selectedCategory == 'top_law_firms'
                                 ?
-                                    <LawFirmTimeline 
+                                    <TabsWithTimeline 
                                         assignmentBar={assignmentBar} 
                                         assignmentBarToggle={assignmentBarToggle} 
                                         type={type} 
