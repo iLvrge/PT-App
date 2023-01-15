@@ -72,6 +72,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
             }
             
             const getFamilyItemDataFunction = async () => {
+                
                 setfamilyItemData({
                     inventors: item.inventors,
                     applicants: item.applicants,
@@ -80,10 +81,11 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                     patent_number: item.patent_number,
                     application_date: item.application_date,
                     publication_date: item.publication_date,
-                    application_number: item.application_number,                
+                    application_number: item.application_number,
                     publication_country: item.publication_country,
                     publication_kind: item.publication_kind
                 })
+
                 let number = typeof item.publication_kind != 'undefined' && item.publication_kind != null && item.publication_kind.toString().toLowerCase().indexOf('a') !== -1 
                             ? 
                                 `${item.publication_country}${applicationFormat(item.application_number)}${item.publication_kind}` 
@@ -105,7 +107,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                     console.log(err)
                 }
             }
-            getFamilyItemDataFunction()     
+            //getFamilyItemDataFunction()     
         } else {
             if(selectedAssetsPatents.length > 0) {
                 setSelectedNumber(selectedAssetsPatents[1] !== '' ? `US${numberWithCommas(selectedAssetsPatents[1])}` : `US${applicationFormat(selectedAssetsPatents[0])}`)
@@ -198,11 +200,11 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                         }
                         <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
                             {
-                                [`Family`, `Abstract`, `Specifications`, `Claims`, `Figures`, 'USPTO'].map( (item, index) => (
+                                [`Family`, `Abstract`, `Specifications`, `Claims`, `Figures`, 'USPTO'].map( (itemTab, index) => (
                                     <Tab
                                         key={index}
                                         className={classes.tab}
-                                        label={<ItemLabel label={item}/>}
+                                        label={<ItemLabel label={itemTab}/>}
                                         disableFocusRipple={true}
                                         disableRipple={true}
                                     />
