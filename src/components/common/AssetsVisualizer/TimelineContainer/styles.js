@@ -6,7 +6,16 @@ export default makeStyles(theme => ({
     height: '100%',
     width: '100%',
     position: 'relative',
-    /* backgroundColor: theme.palette.background.default, */
+    /* backgroundColor: theme.palette.background.default, */ 
+    '& #visualization':{
+      position: 'relative',
+      '& .menu':{
+        position: 'absolute',
+        zIndex: 9999,
+        right: 25,
+        top: 2
+      }
+    },
     '& .vis-time-axis .vis-text, .vis-item, .vis-y-axis':{
       color: theme.palette.text.primary,
     },
