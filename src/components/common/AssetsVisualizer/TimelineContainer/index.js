@@ -61,7 +61,11 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       if (data.isCluster) {
         return `<span class="cluster-header">${data.items[0].clusterHeading}(${data.items.length})</span>`
       } else { 
-        return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
+        if(data.category == 'late_recording' && ![5,12].includes(parseInt(data.rawData.tab_id))) {
+          return `<span class="${data.assetType} ${data.rawData.tab_id}"><span class="name">Assignor: ${data.customerName}</span><span class="recordby">Recorded By: ${data.recorded_by}</span></span>`
+        } else { 
+          return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
+        }
       }
     },
   })
@@ -126,7 +130,6 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
   //Item for the timeline
 
   const convertDataToItem = (assetsCustomer) => {
-    
     const assetType = Number.isInteger(assetsCustomer.tab_id) ? convertTabIdToAssetType(assetsCustomer.tab_id) : 'default'
     const companyName =  selectedWithName.filter( company => assetsCustomer.company == company.id ? company.name : '')
     const customerFirstName = assetsCustomer.tab_id == 10 ? assetsCustomer.customerName.split(' ')[0] : assetsCustomer.customerName
@@ -138,27 +141,33 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       clusterHeading: customerFirstName,
       companyName,
       rawData: assetsCustomer,
+      category: selectedCategory,
       className: `asset-type-${assetType} ${assetsCustomer.release_exec_dt != null ? assetsCustomer.partial_transaction == 1 ? 'asset-type-security-release-partial' : 'asset-type-security-release' : ''}`,
       collection: [ { id: assetsCustomer.id, totalAssets: assetsCustomer.totalAssets } ],
       showTooltips: false
     }
 
-    if([5,12].includes(parseInt(assetsCustomer.tab_id))){            
+    if([5,12].includes(parseInt(assetsCustomer.tab_id)) ||  selectedCategory == 'late_recording') {            
       item.type = 'range';
-      item['end'] = assetsCustomer.release_exec_dt != null ? new Date(assetsCustomer.release_exec_dt) : new Date();
+      item['end'] = selectedCategory == 'late_recording' ? assetsCustomer.record_dt != null ? assetsCustomer.record_dt : new Date() : assetsCustomer.release_exec_dt != null ? new Date(assetsCustomer.release_exec_dt) : new Date();
+      if([5,12].includes(parseInt(assetsCustomer.tab_id))) {
+        const securityPDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.reel_no}-${assetsCustomer.frame_no}.pdf`
+        item['security_pdf'] = securityPDF
+        /* let name = `<tt><img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></tt>${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`;
+        if(assetsCustomer.release_exec_dt != null ) {
+            const releasePDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.release_reel_no}-${assetsCustomer.release_frame_no}.pdf`
+            item['release_pdf'] = releasePDF
+            name += `<em>${assetsCustomer.partial_transaction == 1 ? `<span>(${numberWithCommas(assetsCustomer.releaseAssets)})</span>` : ''}<img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></em>`
+        } */
+        let name = `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`
+        item['customerName'] = name
+      } else {
+        item['recorded_by'] = assetsCustomer.recorded_by
+        item['customerName'] = assetsCustomer.assignors
+        item['clusterHeading'] = assetsCustomer.assignors
+      }
       
-      const securityPDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.reel_no}-${assetsCustomer.frame_no}.pdf`
-      item['security_pdf'] = securityPDF
-      /* let name = `<tt><img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></tt>${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`;
-      if(assetsCustomer.release_exec_dt != null ) {
-          const releasePDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.release_reel_no}-${assetsCustomer.release_frame_no}.pdf`
-          item['release_pdf'] = releasePDF
-          name += `<em>${assetsCustomer.partial_transaction == 1 ? `<span>(${numberWithCommas(assetsCustomer.releaseAssets)})</span>` : ''}<img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></em>`
-      } */
-      let name = `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`
-      item['customerName'] = name
     }
-
     return item
   }
 
