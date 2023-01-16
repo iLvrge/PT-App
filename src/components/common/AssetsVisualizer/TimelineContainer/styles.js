@@ -248,7 +248,13 @@ export default makeStyles(theme => ({
       '&.asset-type-other': {
         backgroundColor: grey[500],
       },
+    }, 
+    '& .vis-item.vis-range.asset-type-default, .vis-item.vis-range.asset-type-acquisitions, .vis-item.vis-range.asset-type-sales, .vis-item.vis-range.asset-type-licenseIn, .vis-item.vis-range.asset-type-licenseOut, .vis-item.vis-range.asset-type-mergersIn, .vis-item.vis-range.asset-type-mergersOut, .vis-item.vis-range.asset-type-options, .vis-item.vis-range.asset-type-courtOrders, .vis-item.vis-range.asset-type-employees': {
+      backgroundColor: '#228DE8',
     },
+    '& .vis-item.vis-range.asset-type-other': {
+      backgroundColor: grey[500],
+    }, 
     '& .vis-item.vis-point.vis-selected': {
       backgroundColor: 'inherit',
       color: pink[500],

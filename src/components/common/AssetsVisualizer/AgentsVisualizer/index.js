@@ -50,7 +50,7 @@ const AgentsVisualizer = (props) => {
             type: props.type
         }
     ]
-    const [height, setHeight] = useState('74%');
+    const [height, setHeight] = useState('92%');
     const [minMax, setMinMax] = useState([0,0])
     const [option, setOption] = useState({
         legend: { 
@@ -208,7 +208,7 @@ const AgentsVisualizer = (props) => {
                 loader={<div>Loading...</div>}
                 data={data}
                 options={option}
-                chartPackages={['corechart', 'controls']}
+                /* chartPackages={['corechart', 'controls']}
                 controls={[
                     {
                         controlType: 'ChartRangeFilter',
@@ -245,7 +245,7 @@ const AgentsVisualizer = (props) => {
                             },
                         }, 
                     }
-                ]}
+                ]} */
             />
         )
     }
