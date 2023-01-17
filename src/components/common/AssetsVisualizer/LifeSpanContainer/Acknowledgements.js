@@ -6,6 +6,11 @@ import Paper from '@mui/material/Paper'
 import { DataSet } from 'vis-data/esnext'
 import { Timeline } from 'vis-timeline-73/esnext'
 import CircularProgress from '@mui/material/CircularProgress'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import ZoomOutIcon from '@mui/icons-material/ZoomOut';
+import { IconButton } from '@mui/material';
 import moment from 'moment'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import { getCustomerAssets, getCustomerSelectedAssets } from '../../../../actions/patentTrackActions2'
@@ -102,6 +107,8 @@ const Acknowledgements = () => {
     const [ timelineItems, setTimelineItems ] = useState([])
     const [ isLoadingTimelineData, setIsLoadingTimelineData ] = useState(false)
     const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(true)
+    const [previousLoad, setPreviousLoad] = useState(false)
+    const [buttonClick, setSetButtonClick] = useState(false)
     const [ tooltipItem, setToolTipItem] = useState([])
     const [ timeInterval, setTimeInterval] = useState(null)  
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
@@ -166,19 +173,15 @@ const Acknowledgements = () => {
        * this call when Timeline rangechanged
        */
     
-      const onRangeChanged = useCallback(_debounce((properties) => {
-        console.log('onRangeChanged', properties)
-        setIsLoadingTimelineData(true)
-        const updatedItems = timelineItems.filter((item) => {
-            console.log(new Date(item.start + ' 00:00:00'), properties)
-            return (new Date(item.start + ' 00:00:00') >= properties.start && new Date(item.start + ' 00:00:00') <= properties.end)
-        })
+    const onRangeChanged = useCallback(_debounce(async(properties) => {
+        console.log('onRangeChanged', properties) 
         items.current = new DataSet()
-        items.current.add(updatedItems)
-        console.log('onRangeChanged', timelineItems.length, updatedItems)
-        timelineRef.current.setItems(items.current)
-        setIsLoadingTimelineData(false)
-      }, 1000), [ timelineItems ])
+        items.current.add(timelineItems)
+        timelineRef.current.setItems(items.current) 
+        if(properties.byUser === true) {    
+          await retrieveCitedData(moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))   
+        } 
+    }, 1000), [ timelineItems ])
 
     const resetTooltipContainer = () => {  
         const findOldToolTip = document.getElementsByClassName('custom_tooltip')
@@ -220,123 +223,129 @@ const Acknowledgements = () => {
         }, TIME_INTERVAL) 
     }
 
+    const retrieveCitedData = async(start = '', end = '') => {
+        setIsLoadingTimelineRawData(true)
+        PatenTrackApi.cancelAllAssetsCitationDataRequest()   
+        if ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0) || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token === null)){
+            setIsLoadingTimelineRawData(false)
+            setTimelineRawData([])
+            return null
+        }  
+        const list = [];
+        let totalRecords = 0;
+        if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {  
+            if( assetsSelected.length > 0 ) {
+                const promise = assetsSelected.map(asset => {
+                    const findIndex = assetsList.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset.toString() )
+                    if( findIndex !== -1 ) {
+                        if( assetsList[findIndex].appno_doc_num != '' ) {
+                            list.push(assetsList[findIndex].appno_doc_num.toString())
+                        }
+                    }
+                })
+                await Promise.all(promise)
+                totalRecords = list.length
+            } else {
+                const promise = selectedMaintainencePatents.map(asset => {
+                    const findIndex = maintainenceAssetsList.findIndex( row => row.appno_doc_num.toString() == asset[1].toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset[0].toString() )
+                    if( findIndex !== -1 ) {
+                        if( maintainenceAssetsList[findIndex].appno_doc_num != '' ) {
+                            list.push(maintainenceAssetsList[findIndex].appno_doc_num.toString())
+                        }
+                    }
+                })
+                await Promise.all(promise)
+                totalRecords = list.length
+            }                
+        } else {
+            if( assetsList.length > 0 || maintainenceAssetsList.length > 0 ) {
+                if( assetsList.length > 0 ) {
+                    const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
+                    await Promise.all(promise)
+                    totalRecords = assetsTotal
+                } else if ( maintainenceAssetsList.length > 0 ) {
+                    const promise = maintainenceAssetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
+                    await Promise.all(promise)
+                    totalRecords = maintainenceAssetsTotal
+                }
+            } else {
+                /**
+                 * Check which layout and get the assets list first and then 
+                 */
+                if( selectedCategory == '' ) { //pay_maintenece_fee
+
+                } else {
+                    const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+                    tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+                    customers =
+                        selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
+                    assignments =
+                        selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;  
+
+                    if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+                            if( auth_token != null ) {
+                            dispatch(
+                                process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
+                                getCustomerAssets(
+                                    selectedCategory == '' ? '' : selectedCategory,
+                                    companies,
+                                    tabs,
+                                    customers,
+                                    assignments,
+                                    false,
+                                    0,
+                                    0,
+                                    'asset',
+                                    'DESC'
+                                )
+                                : 
+                                getCustomerSelectedAssets(location.pathname.replace('/', ''))
+                            );
+                        } 
+                    } else {
+                        dispatch(
+                            getCustomerAssets(
+                                selectedCategory == '' ? '' : selectedCategory,
+                                companies,
+                                tabs,
+                                customers,
+                                assignments,
+                                false,
+                                0,
+                                0, 
+                                'asset',
+                                'DESC',
+                                -1, 
+                                display_sales_assets
+                            ),
+                        );
+                    }
+                }
+            }                
+        }
+        if( list.length > 0 ) {
+            const form = new FormData()
+            form.append("list", JSON.stringify(list)) 
+            form.append("total", totalRecords)
+            form.append('selectedCompanies', JSON.stringify(selectedCompanies))
+            form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
+            form.append('customers', JSON.stringify(selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies))
+            form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
+            form.append('type', selectedCategory)
+            form.append('other_mode', display_sales_assets)
+            form.append('start', start)
+            form.append('end', end)
+            const { data } = await PatenTrackApi.getAllAssetsCitationData(form)
+            setIsLoadingTimelineRawData(false)
+            if(data !== null ) {
+                setTimelineRawData(data)
+            }
+        }       
+    }
+
     useEffect(() => {
         const getAcknowledgementData = async() => {
-            setIsLoadingTimelineRawData(true)
-            PatenTrackApi.cancelAllAssetsCitationDataRequest()   
-            if ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0) || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token === null)){
-                setIsLoadingTimelineRawData(false)
-                setTimelineRawData([])
-                return null
-            }  
-            const list = [];
-            let totalRecords = 0;
-            if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {  
-                if( assetsSelected.length > 0 ) {
-                    const promise = assetsSelected.map(asset => {
-                        const findIndex = assetsList.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset.toString() )
-                        if( findIndex !== -1 ) {
-                            if( assetsList[findIndex].appno_doc_num != '' ) {
-                                list.push(assetsList[findIndex].appno_doc_num.toString())
-                            }
-                        }
-                    })
-                    await Promise.all(promise)
-                    totalRecords = list.length
-                } else {
-                    const promise = selectedMaintainencePatents.map(asset => {
-                        const findIndex = maintainenceAssetsList.findIndex( row => row.appno_doc_num.toString() == asset[1].toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset[0].toString() )
-                        if( findIndex !== -1 ) {
-                            if( maintainenceAssetsList[findIndex].appno_doc_num != '' ) {
-                                list.push(maintainenceAssetsList[findIndex].appno_doc_num.toString())
-                            }
-                        }
-                    })
-                    await Promise.all(promise)
-                    totalRecords = list.length
-                }                
-            } else {
-                if( assetsList.length > 0 || maintainenceAssetsList.length > 0 ) {
-                    if( assetsList.length > 0 ) {
-                        const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
-                        await Promise.all(promise)
-                        totalRecords = assetsTotal
-                    } else if ( maintainenceAssetsList.length > 0 ) {
-                        const promise = maintainenceAssetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
-                        await Promise.all(promise)
-                        totalRecords = maintainenceAssetsTotal
-                    }
-                } else {
-                    /**
-                     * Check which layout and get the assets list first and then 
-                     */
-                    if( selectedCategory == '' ) { //pay_maintenece_fee
-
-                    } else {
-                        const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-                        tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-                        customers =
-                          selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
-                        assignments =
-                          selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;  
-
-                        if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-                             if( auth_token != null ) {
-                                dispatch(
-                                    process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
-                                    getCustomerAssets(
-                                      selectedCategory == '' ? '' : selectedCategory,
-                                      companies,
-                                      tabs,
-                                      customers,
-                                      assignments,
-                                      false,
-                                      0,
-                                      0,
-                                      'asset',
-                                      'DESC'
-                                    )
-                                    : 
-                                    getCustomerSelectedAssets(location.pathname.replace('/', ''))
-                                );
-                            } 
-                        } else {
-                            dispatch(
-                                getCustomerAssets(
-                                  selectedCategory == '' ? '' : selectedCategory,
-                                  companies,
-                                  tabs,
-                                  customers,
-                                  assignments,
-                                  false,
-                                  0,
-                                  0, 
-                                  'asset',
-                                  'DESC',
-                                  -1, 
-                                  display_sales_assets
-                                ),
-                            );
-                        }
-                    }
-                }                
-            }
-            if( list.length > 0 ) {
-                const form = new FormData()
-                form.append("list", JSON.stringify(list)) 
-                form.append("total", totalRecords)
-                form.append('selectedCompanies', JSON.stringify(selectedCompanies))
-                form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
-                form.append('customers', JSON.stringify(selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies))
-                form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
-                form.append('type', selectedCategory)
-                form.append('other_mode', display_sales_assets)
-                const { data } = await PatenTrackApi.getAllAssetsCitationData(form)
-                setIsLoadingTimelineRawData(false)
-                if(data !== null ) {
-                    setTimelineRawData(data)
-                }
-            }            
+            retrieveCitedData()     
         }
         getAcknowledgementData()
     }, [selectedCategory,  selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_sales_assets])
@@ -358,13 +367,13 @@ const Acknowledgements = () => {
         timelineRef.current.setOptions(options) 
         timelineRef.current.on('itemover', onItemover)
         timelineRef.current.on('itemout', onItemout)
-        /* timelineRef.current.on('rangechanged', onRangeChanged)
-        timelineRef.current.on('rangechange', onRangeChange)     */
+        timelineRef.current.on('rangechanged', onRangeChanged)
+         /* timelineRef.current.on('rangechange', onRangeChange)     */
         return () => {
             timelineRef.current.off('itemover', onItemover) 
             timelineRef.current.off('itemout', onItemout)
-            /* timelineRef.current.on('rangechanged', onRangeChanged)
-            timelineRef.current.on('rangechange', onRangeChange)     */
+            timelineRef.current.on('rangechanged', onRangeChanged)
+            /* timelineRef.current.on('rangechange', onRangeChange)     */
             resetTooltipContainer()
         } 
     }, [ onItemover, onItemout ]) 
@@ -413,10 +422,52 @@ const Acknowledgements = () => {
         }, 50)
     }, [ timelineRawData, isLoadingTimelineRawData, timelineContainerRef ])
 
-
+    const move  = (percentage) => {
+        var range = timelineRef.current.getWindow();
+        var interval = range.end - range.start;
+    
+        timelineRef.current.setWindow({
+            start: range.start.valueOf() - interval * percentage,
+            end:   range.end.valueOf()   - interval * percentage
+        });
+      }
+    
+      const zoomIn = () => {
+        setSetButtonClick(true)
+        timelineRef.current.zoomIn(0.2);
+      }
+    
+      const zoomOut = () => {
+        setSetButtonClick(true)
+        timelineRef.current.zoomOut(0.2);
+      }
+    
+      const moveLeft = () => {
+        move(0.2);
+      }
+    
+      const moveRight = () => {
+        move(-0.2);
+      }
 
     return(
-        <React.Fragment>   
+        <Paper className={classes.root}> 
+            <div id="visualization">
+                <div className="menu">
+                    <IconButton onClick={zoomIn}>
+                        <ZoomInIcon/>
+                    </IconButton>
+                    <IconButton onClick={zoomOut}>
+                        <ZoomOutIcon/>
+                    </IconButton>
+                    <IconButton onClick={moveLeft}>
+                        <ChevronLeftIcon />
+                    </IconButton>
+                    <IconButton onClick={moveRight}>
+                        <ChevronRightIcon/>
+                    </IconButton> 
+                </div>
+            </div>  
             <div
                 id={`citationTimeline`}
                 style={{ 
@@ -427,7 +478,7 @@ const Acknowledgements = () => {
                 className={classes.timelineCitation}
             />
             { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> } 
-        </React.Fragment>
+        </Paper>
     )
 }
 

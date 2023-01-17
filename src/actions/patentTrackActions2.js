@@ -1168,10 +1168,10 @@ export const getCustomerSelectedAssets = ( shareCode, append = false ) => {
  * @param {*} append 
  */
 
-export const getCustomerTransactions = ( type, companies, tabs, customers, append = false ) => {
+export const getCustomerTransactions = ( type, companies, tabs, customers, lawfirm, append = false ) => {
   return async dispatch => {
     dispatch( setAssetTypesAssignmentsLoading( true ) )
-    const { data } = await PatenTrackApi.getCustomerTransactions( type, companies, type == 'due_dilligence' ? tabs : [], type == 'due_dilligence' ? customers : [])    
+    const { data } = await PatenTrackApi.getCustomerTransactions( type, companies, type == 'due_dilligence' ? tabs : [], type == 'due_dilligence' ? customers : [], lawfirm)    
     dispatch( setAssetTypeAssignments(data, append) )
     dispatch( setAssetTypesAssignmentsLoading( false ) )
   } 

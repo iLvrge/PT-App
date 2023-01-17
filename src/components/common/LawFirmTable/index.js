@@ -13,7 +13,7 @@ import React, {
   import PatenTrackApi, { DEFAULT_CUSTOMERS_LIMIT } from "../../../api/patenTrack2";
   import {capitalizeEachWord} from '../../../utils/numbers'
   import Loader from "../Loader";
-import { setAssetTypeAssignmentAllAssets, setAssetTypesPatentsSelected, setSelectAssignments, setSelectedAssetsPatents, setSelectedAssetsTransactions, setSelectLawFirm } from "../../../actions/patentTrackActions2";
+import { setAssetTypeAssignmentAllAssets, setAssetTypeAssignments, setAssetTypesPatentsSelected, setSelectAssignments, setSelectedAssetsPatents, setSelectedAssetsTransactions, setSelectLawFirm } from "../../../actions/patentTrackActions2";
   
   const LawFirmTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaultLoad, type }) => {
     const classes = useStyles();
@@ -149,9 +149,9 @@ import { setAssetTypeAssignmentAllAssets, setAssetTypesPatentsSelected, setSelec
       }
       setSelectItems(oldItems)
       dispatch(setSelectLawFirm(ID))
-
-      dispatch(setSelectedAssetsTransactions(allIDs))
-      dispatch(setSelectAssignments(allIDs))
+      dispatch(setAssetTypeAssignments({ list: [], total_records: 0 }, false))
+      /* dispatch(setSelectedAssetsTransactions(allIDs))
+      dispatch(setSelectAssignments(allIDs)) */
 
     },
     [dispatch, selectItems]
