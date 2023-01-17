@@ -136,6 +136,7 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
   const channel_id = useSelector(state => state.patenTrack2.channel_id)
   const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
   const connectionBoxView = useSelector(state => state.patenTrack.connectionBoxView)
+  const selectedLawFirm = useSelector( state => state.patenTrack2.selectedLawFirm)
 
   const COLUMNS = [
     {
@@ -472,6 +473,7 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
                 companies, 
                 tabs, 
                 customers, 
+                selectedLawFirm,
                 false));
           }
         }
@@ -496,6 +498,7 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
     assetTypesSelectAll,
     assetTypesCompaniesSelected,
     assetTypesCompaniesSelectAll,
+    selectedLawFirm,
     defaultLoad,
   ]);
 

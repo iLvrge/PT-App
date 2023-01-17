@@ -82,15 +82,15 @@ const SankeyChart = (props) => {
                 if((typeof props.type != 'undefined' && props.type == 'divested')) {
                     setLoadingAssingor(true) 
                     PatenTrackApi.cancelDashboardPartiesAssignorDataRequest()
-                    const getAssignorData = await PatenTrackApi.getDashboardPartiesAssignorData(formData) 
+                    const getAssignorData = await PatenTrackApi.getDashboardPartiesAssignorData(formData)  
                     setLoadingAssingor(false)
                     if(getAssignorData.data != null) {
-                        const assignorData  = getAssignorData.data   
+                        const aorData  = getAssignorData.data   
                         const loadAssignorData = []
-                        if(assignorData.length > 0) {
-                            setAssignorRawData(assignorData)
+                        if(aorData.length > 0) {
+                            setAssignorRawData(aorData)
                             loadAssignorData.push(["From", "To", "Assets"])
-                            assignorData.forEach( item => {
+                            aorData.forEach( item => {
                                 loadAssignorData.push([
                                     item.assignor,
                                     item.name,
@@ -192,7 +192,7 @@ const SankeyChart = (props) => {
             }           
             
             {
-                selectedCategory == 'divested' && props.type == 'divested'
+                selectedCategory == 'divested' || props.type == 'divested'
                 ?
                     loadingAssignor === false ?
                         <div className={clsx(classes.child)} >

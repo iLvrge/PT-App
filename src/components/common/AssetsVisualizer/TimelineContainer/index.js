@@ -142,7 +142,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       companyName,
       rawData: assetsCustomer,
       category: selectedCategory,
-      className: `asset-type-${assetType} ${assetsCustomer.release_exec_dt != null ? assetsCustomer.partial_transaction == 1 ? 'asset-type-security-release-partial' : 'asset-type-security-release' : ''}`,
+      className: `asset-type-${assetType} ${assetsCustomer.release_exec_dt != null && assetsCustomer.release_exec_dt != '' ? assetsCustomer.partial_transaction == 1 ? 'asset-type-security-release-partial' : 'asset-type-security-release' : ''}`,
       collection: [ { id: assetsCustomer.id, totalAssets: assetsCustomer.totalAssets } ],
       showTooltips: false
     }
@@ -169,6 +169,11 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       
     }
     return item
+  }
+
+  const dateDifference = (date1, date2) => {
+    const diffTime = Math.abs(new Date(date2) - new Date(date1))
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
   }
 
   // Custom ToolTip 
@@ -204,6 +209,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
               const { data } = response
               if( data != null && ( data.assignor.length > 0 || data.assignee.length > 0 ) && tootlTip === data.assignment.rf_id) {
                 const executionDate = data.assignor.length > 0 ? data.assignor[0].exec_dt : ''
+                const recordedDate = typeof data.assignment != 'undefined' ? data.assignment.record_dt  : ''
                 let transactionType = convertTabIdToAssetType(item.tab_id)
                 const findIndex = assetsTypesWithKey.findIndex( row => row.type == transactionType)
   
@@ -279,12 +285,16 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
                 const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
                 const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector(`#all_timeline`) : document.getElementById(`all_timeline`);   
                 const getPosition = element.getBoundingClientRect();  
-                const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${ getPosition.y }px;left:${ getPosition.x }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
+                let tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${ getPosition.y }px;left:${ getPosition.x }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
                                             <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
                                             <div>
-                                              ${ executionDate != '' ? moment(executionDate).format('ll') : ''}
-                                            </div>
-                                            <div>
+                                              Exected: ${ executionDate != '' ? moment(executionDate).format('ll') : ''}
+                                            </div> `
+                if(selectedCategory == 'late_recording' ){
+                  tootltipTemplate += `<div>Recorded:$ { recordedDate != '' ? moment(recordedDate).format('ll') : ''}
+                  </div> <div>Lapsed: ${dateDifference(executionDate, recordedDate)} days</div>`
+                }                       
+                tootltipTemplate += `<div>
                                               <h4>Assignors:</h4>
                                               ${data.assignor.map(or => ( 
                                                 '<div>'+or.original_name+'</div>'
@@ -382,11 +392,14 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
    * this call when Timeline rangechanged
    */
 
-  const onRangeChanged = useCallback(_debounce((properties) => {
+  const onRangeChanged = useCallback(_debounce(async(properties) => {
     console.log('onRangeChanged', properties) 
     items.current = new DataSet()
     items.current.add(timelineItems)
     timelineRef.current.setItems(items.current) 
+    if(properties.byUser === true) {    
+      await getTimelineRawData(moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))   
+    } 
     
   }, 1000), [ timelineItems ])
 

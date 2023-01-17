@@ -70,7 +70,7 @@ const getFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineActivity,cancelTimelineSecurity, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelSatusCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest, cancelAllDashboardCountRequest, cancelStatus, cancelAssetTypeAssignmentAllAssetsWithFamily, cancelDashboardPartiesData, cancelDashboardPartiesAssignorData, cancelAgentsData, cancelCollectionIllustration, cancelInventorGeoLocation, cancelAbandoned;
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineActivity,cancelTimelineSecurity, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelSatusCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest, cancelAllDashboardCountRequest, cancelStatus, cancelAssetTypeAssignmentAllAssetsWithFamily, cancelDashboardPartiesData, cancelDashboardPartiesAssignorData, cancelAgentsData, cancelCollectionIllustration, cancelInventorGeoLocation, cancelAbandoned, cancelAllAbandonedAssetsYears, cancelAllAbandonedAssetsAges;
 
 
 class PatenTrackApi { 
@@ -565,9 +565,9 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/address/companies?companies=${JSON.stringify(companies)}`, getHeader())
   } 
 
-  static getCustomerTransactions(type, companies, tabs, customers) { 
+  static getCustomerTransactions(type, companies, tabs, customers, lawfirm) { 
     console.log('TRansactionssss')
-    return axios.get(`${base_new_api_url}/customers/${type}/transactions?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}`, getHeader())
+    return axios.get(`${base_new_api_url}/customers/${type}/transactions?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&lawfirm=${lawfirm}`, getHeader())
   } 
 
   static getCustomerParties(type, companies, tabs, customerType) {  
@@ -1523,12 +1523,48 @@ class PatenTrackApi {
       cancelAllAssetsCitationData = c
     })
     return axios.post(`${base_new_api_url}/citation`,  form, header)
-  }  
+  } 
   
   static cancelAllAssetsCitationDataRequest() {
     if (cancelAllAssetsCitationData !== undefined && typeof cancelAllAssetsCitationData == 'function') {
       try{
         throw cancelAllAssetsCitationData('Cancelled old request.')  
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  } 
+
+  static getAllAbandonedAssetsYears( form ) {
+    let header = getFormUrlHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelAllAbandonedAssetsYears = c
+    })
+    return axios.post(`${base_new_api_url}/events/abandoned/yearly/assets`,  form, header)
+  } 
+  
+  static cancelAllAbandonedAssetsYearsRequest() {
+    if (cancelAllAbandonedAssetsYears !== undefined && typeof cancelAllAbandonedAssetsYears == 'function') {
+      try{
+        throw cancelAllAbandonedAssetsYears('Cancelled old request.')  
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
+  static getAllAbandonedAssetsAges( form ) {
+    let header = getFormUrlHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelAllAbandonedAssetsAges = c
+    })
+    return axios.post(`${base_new_api_url}/events/abandoned/maintainence/assets`,  form, header)
+  } 
+
+  static cancelAllAbandonedAssetsAgesRequest() {
+    if (cancelAllAbandonedAssetsAges !== undefined && typeof cancelAllAbandonedAssetsAges == 'function') {
+      try{
+        throw cancelAllAbandonedAssetsAges('Cancelled old request.')  
       } catch (e){
         console.log('cancelRequest->', e)
       }

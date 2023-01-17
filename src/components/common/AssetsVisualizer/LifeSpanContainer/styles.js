@@ -7,6 +7,15 @@ export default makeStyles(theme => ({
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
+        '& #visualization':{
+          position: 'relative',
+          '& .menu':{
+            position: 'absolute',
+            zIndex: 9999,
+            right: 25,
+            top: 2
+          }
+        },
         '& .MuiTabs-root':{
           borderBottom: `1px solid ${theme.palette.divider} !important`
         },

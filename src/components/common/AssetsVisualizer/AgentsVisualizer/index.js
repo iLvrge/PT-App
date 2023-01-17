@@ -50,23 +50,23 @@ const AgentsVisualizer = (props) => {
             type: props.type
         }
     ]
-    const [height, setHeight] = useState('92%');
+    const [height, setHeight] = useState('97%');
     const [minMax, setMinMax] = useState([0,0])
     const [option, setOption] = useState({
         legend: { 
             position: 'right',
             textStyle: {
                 color: '#fff',
-                fontSize: 12,
-                fontFamily: 'Roboto'
+                fontSize: '0.875rem',
+                fontName: 'Roboto'
             }
         },
         backgroundColor: 'transparent',
         chartArea: {
             width: '67%',
-            height: '94%',
-            left:40,
-            top:10,
+            height: '80%',
+            left: 40,
+            top: 30,
         },
         colorAxis: {colors: ['#FFAA00', '#70A800', '#1565C0']},
         hAxis: {
@@ -75,12 +75,12 @@ const AgentsVisualizer = (props) => {
             textStyle: {
                 color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
                 fontSize: 12,
-                fontFamily: 'Roboto'
+                fontName: 'Roboto'
             },
             titleTextStyle: {
                 color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
                 fontSize: 12,
-                fontFamily: 'Roboto'
+                fontName: 'Roboto'
             },
             gridlines: {
                 color: 'transparent',
@@ -96,12 +96,12 @@ const AgentsVisualizer = (props) => {
             textStyle: {
                 color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
                 fontSize: 12,
-                fontFamily: 'Roboto'
+                fontName: 'Roboto'
             },
             titleTextStyle: {
                 color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
                 fontSize: 12,
-                fontFamily: 'Roboto'
+                fontName: 'Roboto'
             },
             gridlines: {
                 /* color: isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider, */
