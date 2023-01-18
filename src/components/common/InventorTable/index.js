@@ -24,7 +24,13 @@ import {
     setSelectedAssetsTransactions,
     setMaintainenceAssetsList,
     setAssetTypeAssignmentAllAssets,
-    setAssetTypeAssignments
+    setAssetTypeAssignments,
+    setTimelineRequest,
+    setTimelineData,
+    setJurisdictionRequest,
+    setJurisdictionData,
+    setCPCRequest,
+    setCPCData
   } from '../../../actions/patentTrackActions2'
 
   import {
@@ -238,7 +244,13 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             }
             /* history.push({
                 hash: updateHashLocation(location, 'otherParties', oldSelection).join('&')
-            }) */
+            }) */ 
+            dispatch(setTimelineRequest(false))
+            dispatch(setJurisdictionRequest(false))
+            /* dispatch(setCPCRequest(false)) */
+            dispatch(setTimelineData([]))
+            dispatch(setJurisdictionData([])) 
+            dispatch(setCPCData({list:[], group: [], sales: []}))
             setSelectItems(oldSelection)
             setSelectAll(false)
             dispatch( setAllAssignmentCustomers(assetTypeCompanies.length == oldSelection.length ||  data.length == oldSelection.length ? true : false ) )

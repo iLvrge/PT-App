@@ -6,11 +6,11 @@ import {
     HandshakeOutlined as HandshakeOutlinedIcon,
     Badge as BadgeIcon,
     FileOpen as FileOpenIcon,
-    Language as LanguageIcon,
-    Psychology as PsychologyIcon,
-    ShoppingCart as ShoppingCartIcon,
+    Language as LanguageIcon, 
     StackedBarChartOutlined as StackedBarChartOutlinedIcon,
-    LeaderboardOutlined as LeaderboardOutlinedIcon
+    LeaderboardOutlined as LeaderboardOutlinedIcon,
+    ShoppingCartOutlined as ShoppingCartOutlinedIcon,
+    PsychologyOutlined as PsychologyOutlinedIcon
  } from '@mui/icons-material'       
 import { FaLightbulb } from "react-icons/fa";
 import useStyles from './styles' 
@@ -55,11 +55,11 @@ const LabelWithIcon = ({label, showLabel}) => {
                                             : 
                                                 label == 'Invented'
                                                 ? 
-                                                    <img src={`https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png`} className={classes.img} /> 
+                                                    <PsychologyOutlinedIcon className={classes.svgIcon}/>
                                                 :
                                                     label ==  'Acquired'
                                                     ? 
-                                                        <img src={`https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/acquisition.svg`} className={classes.img} /> 
+                                                        <ShoppingCartOutlinedIcon className={classes.svgIcon}/>
                                                     :
                                                         label == 'Divested'
                                                         ?

@@ -13,7 +13,7 @@ import React, {
   import PatenTrackApi, { DEFAULT_CUSTOMERS_LIMIT } from "../../../api/patenTrack2";
   import {capitalizeEachWord} from '../../../utils/numbers'
   import Loader from "../Loader";
-import { setAssetTypeAssignmentAllAssets, setAssetTypeAssignments, setAssetTypesPatentsSelected, setSelectAssignments, setSelectedAssetsPatents, setSelectedAssetsTransactions, setSelectLawFirm } from "../../../actions/patentTrackActions2";
+import { setAssetTypeAssignmentAllAssets, setAssetTypeAssignments, setAssetTypesPatentsSelected, setCPCData, setLineChartRequest, setSelectAssignments, setSelectedAssetsPatents, setSelectedAssetsTransactions, setSelectLawFirm } from "../../../actions/patentTrackActions2";
   
   const LawFirmTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaultLoad, type }) => {
     const classes = useStyles();
@@ -150,6 +150,9 @@ import { setAssetTypeAssignmentAllAssets, setAssetTypeAssignments, setAssetTypes
       setSelectItems(oldItems)
       dispatch(setSelectLawFirm(ID))
       dispatch(setAssetTypeAssignments({ list: [], total_records: 0 }, false))
+      dispatch(setCPCData({list:[], group: [], sales: []}))
+      dispatch(setLineChartRequest(1, false))
+      dispatch(setLineChartRequest(2, false))
       /* dispatch(setSelectedAssetsTransactions(allIDs))
       dispatch(setSelectAssignments(allIDs)) */
 

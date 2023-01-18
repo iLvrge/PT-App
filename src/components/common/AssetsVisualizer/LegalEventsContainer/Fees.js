@@ -274,8 +274,8 @@ const Fees = ({ events, showTabs, tabText }) => {
           }
         }        
       })
-      start = new moment(min).subtract(5, 'year').format('YYYY-MM-DD')
-      end = new moment(max).add(5, 'year').format('YYYY-MM-DD')
+      start = new moment(min).subtract(3, 'year') 
+      end = new moment(max).add(3, 'year') 
       min = start
       max = end
       items.current.add(convertedItems)

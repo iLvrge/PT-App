@@ -42,6 +42,7 @@ const AgentsVisualizer = (props) => {
     const assetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected) //Assets Selected   
     const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
     const line_chart_data = useSelector(state => state.patenTrack2.line_chart_data)
+    const selectedLawFirm = useSelector(state => state.patenTrack2.selectedLawFirm)
 
     const menuItems = [
         {
@@ -200,6 +201,7 @@ const AgentsVisualizer = (props) => {
             form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
             form.append('customers', JSON.stringify(assetTypesCompaniesSelectAll === true ? [] : assetTypesCompaniesSelected))
             form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
+            form.append('lawfirm', selectedLawFirm)
             form.append('other_mode', display_sales_assets) 
             form.append('type', selectedCategory)
             form.append('data_type', props.type)

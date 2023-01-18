@@ -405,8 +405,8 @@ const Acknowledgements = () => {
                     return c
                 })
                 Promise.all(promise)
-                start = new moment(start).subtract(20, 'months') 
-                end = new moment(end).add(20, 'months')
+                start = new moment(start).subtract(3, 'year') 
+                end = new moment(end).add(3, 'year')
                 /* const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
                 items.current.add(convertedItems.slice(0, startIndex))   */
                 items.current.add(convertedItems)

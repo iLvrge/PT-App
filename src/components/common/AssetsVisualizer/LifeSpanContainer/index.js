@@ -312,50 +312,35 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                                     ?
                                         <Acknowledgements/>
                                     :
-                                        <InventionVisualizer 
-                                            visualizerBarSize={visualizerBarSize} 
-                                            type={type} 
-                                            tab={false} 
-                                            salable={true}
-                                            standalone={true}
-                                        /> 
+                                        '' 
                                 :
                                     selectedTab === 3 ? 
-                                        <InventionVisualizer
-                                            visualizerBarSize={visualizerBarSize} 
-                                            type={type} 
-                                            tab={false}
-                                            licensable={true}
-                                            standalone={true}
-                                        />
+                                        ''
                                     :
                                         ''
                         :
-                       /*  selectedTab === 1  ?
-                            <Acknowledgements/>
-                            : */
-                                selectedTab === 1 ? 
-                                    selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording'
-                                        ?
-                                            <IllustrationContainer 
-                                                isFullscreenOpen={isFullscreenOpen} 
-                                                asset={assetIllustration} 
-                                                setIllustrationRecord={setIllustrationRecord} 
-                                                chartsBar={chartBar}
-                                                analyticsBar={analyticsBar}
-                                                chartsBarToggle={chartsBarToggle}
-                                                checkChartAnalytics={checkChartAnalytics}
-                                                setAnalyticsBar={setAnalyticsBar}
-                                                setChartBar={setChartBar}
-                                                fullScreen={handleClickOpenFullscreen}
-                                                gap={gap}
-                                            />
-                                    :
-                                        <ConnectionBox display={"false"} assets={assets}/>
+                            selectedTab === 1 ? 
+                                selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording'
+                                    ?
+                                        <IllustrationContainer 
+                                            isFullscreenOpen={isFullscreenOpen} 
+                                            asset={assetIllustration} 
+                                            setIllustrationRecord={setIllustrationRecord} 
+                                            chartsBar={chartBar}
+                                            analyticsBar={analyticsBar}
+                                            chartsBarToggle={chartsBarToggle}
+                                            checkChartAnalytics={checkChartAnalytics}
+                                            setAnalyticsBar={setAnalyticsBar}
+                                            setChartBar={setChartBar}
+                                            fullScreen={handleClickOpenFullscreen}
+                                            gap={gap}
+                                        />
                                 :
-                                    selectedTab === 2 ?
-                                    <USPTOContainer assets={assets}/>
-                                :
+                                    <ConnectionBox display={"false"} assets={assets}/>
+                            :
+                                selectedTab === 2 ?
+                                <USPTOContainer assets={assets}/>
+                            :
                                 ''     
                 :
                     ''

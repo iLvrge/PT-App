@@ -53,8 +53,7 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
 
   const onHandleDropDown = (event, item) => {
     console.log('onHandleDropDown', event, event.target.value, item)
-    moveItem(event.target.value, item)
-
+    moveItem(event.target.value, item) 
   }
 
   const ShowDropDown = ({item}) => { 
@@ -135,7 +134,8 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
                 {open ? <ExpandMoreIcon /> : <ChevronRightIcon />}
               </IconButton>
             : 
-              <ShowDropDown item={row}/>
+              ''
+             /*  <ShowDropDown item={row}/> */
           }
           
         </TableCell>

@@ -316,6 +316,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     getNewData = false;
                 }
             }
+            console.log("CPC", onSelect, getNewData, cpc_request, graphRawData )
             if(getNewData === true) {   
                 setShowContainer(true)              
                 if (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0 && type !== 9){
@@ -423,7 +424,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     }
                 } 
                 if( selectedCategory == 'top_law_firms' || (typeof licensable != 'undefined' && licensable === true) || (typeof salable != 'undefined' && salable === true)) { 
-                    if(cpc_request === false) {  
+                    if(cpc_request === false || cpcData.list.length == 0) {  
                         setGraphRawData([])
                         setGraphRawGroupData([])    
                         setIsLoadingCharts(true)   
@@ -436,7 +437,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         updateCPCData([...scopeRange], list, totalRecords)
                     }
                 } else if(dashboardScreen === true  ||   /* list.length > 0 */ selectedCategory != 'due_dilligence'  || (dashboardScreen === false && selectedCategory == 'due_dilligence')) { 
-                    if(cpc_request === false) { 
+                    if(cpc_request === false || cpcData.list.length == 0) { 
                         setGraphRawData([])
                         setGraphRawGroupData([])    
                         setIsLoadingCharts(true)   
