@@ -624,8 +624,8 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
         return c
       })
       Promise.all(promise) 
-      start = new moment(start).subtract(3, 'years') 
-      end = new moment(end).add(20, 'months')
+      start = new moment(start).subtract(3, 'year') 
+      end = new moment(end).add(3, 'year')
       /* const startIndex = convertedItems.length < 201 ? (convertedItems.length - 1) : 199
       items.current.add(convertedItems.slice(0, startIndex))  */   
       items.current.add(convertedItems)  
@@ -634,9 +634,13 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     if(timelineRawData.length > 0 || previousLoad === false) { 
       timelineRef.current.setOptions({ 
         ...options, 
-        end: new moment().add(1, 'months')})  
+        start, 
+        end,
+        min: new moment(new Date('1998-01-01')), 
+        max: new moment().add(3, 'year')
+      })  
       timelineRef.current.setItems(items.current)   
-      setPreviousLoad(true)
+      setPreviousLoad(true) 
     }
     //checkCurrentDateStatus()
   }, [ timelineRawData ])

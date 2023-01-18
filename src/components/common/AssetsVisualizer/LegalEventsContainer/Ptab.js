@@ -288,8 +288,8 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
                     return c
                 })
                 Promise.all(promise)
-                start = new moment(start).subtract(48, 'months') 
-                end = new moment(end).add(48, 'months')
+                start = new moment(start).subtract(3, 'year') 
+                end = new moment(end).add(3, 'year') 
                 items.current.add(convertedItems)
                 setDisplay('block')
             } else {

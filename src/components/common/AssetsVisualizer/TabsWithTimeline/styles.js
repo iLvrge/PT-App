@@ -20,6 +20,9 @@ export default makeStyles(theme => ({
         top: 2
       }
     },
+    /* '& .MuiTabs-root':{
+      borderBottom: `1px solid ${theme.palette.divider} !important`
+    }, */
     '& .vis-time-axis .vis-text, .vis-item, .vis-y-axis':{
       color: theme.palette.text.primary,
     },
@@ -155,13 +158,13 @@ export default makeStyles(theme => ({
       '& .vis-dot':{ 
         backgroundColor: 'inherit',
         borderColor: 'inherit',
-        width: 17,
-        height: 17, 
-        top: '7px !important',
-         /* left: 10, */
+        width: 24,
+        height: 24, 
+        top: '1px !important',
+        left: -5, 
         border: 0,       
         backgroundRepeat: 'no-repeat',
-        backgroundSize: 15
+        backgroundSize: 24
       },
       '& .vis-dot.asset-type-default': {
         borderColor: indigo[500],

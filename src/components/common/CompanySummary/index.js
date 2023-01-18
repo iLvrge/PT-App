@@ -84,9 +84,9 @@ const CompanySummary = () => {
     }, [google_profile, google_auth_token])
 
     const openGoogleWindow = () => {
-        if(document.getElementsByClassName('googleButton').length > 0) {
+        /* if(document.getElementsByClassName('googleButton').length > 0) {
             document.getElementsByClassName('googleButton')[0].click()
-        }
+        } */
     }
 
     const getSummaryData = async(access_token, user_email) => {

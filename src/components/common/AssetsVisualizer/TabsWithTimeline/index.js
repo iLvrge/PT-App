@@ -619,8 +619,8 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
         return c
       })
       Promise.all(promise) 
-      start = new moment(start).subtract(20, 'months') 
-      end = new moment(end).add(20, 'months')
+      start = new moment(start).subtract(3, 'year') 
+      end = new moment(end).add(3, 'year')
       /* const startIndex = convertedItems.length < 201 ? (convertedItems.length - 1) : 199
       items.current.add(convertedItems.slice(0, startIndex))  */   
       items.current.add(convertedItems)  
@@ -634,10 +634,11 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
     if(timelineRawData.length > 0 || previousLoad === false) { 
       timelineRef.current.setOptions({ 
         ...options, 
-        end: new moment().add(1, 'months')
-        /* zoomMin: 1000 * 60 * 60 * 24,     
-        zoomMax: 1000 * 60 * 60 * 24 * 30 * 12,  */
-        /* start, end, min: start, max: end  */})  
+        start, 
+        end,
+        min: start, 
+        max: end
+      })  
       timelineRef.current.setItems(items.current)   
       setPreviousLoad(true)
     }
