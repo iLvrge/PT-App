@@ -22,7 +22,9 @@ import { setAssetTypeAssignments,
     setCPCRequest,
     setJurisdictionRequest,
     setJurisdictionData,
-    setCPCData
+    setCPCData,
+    setTimelineRequest,
+    setTimelineData
    } from '../actions/patentTrackActions2'
   
    import {  
@@ -80,10 +82,16 @@ export const resetAllRowSelect = ( dispatch, resetList, skipIndex) => {
             dispatch( item.callback() )
         }
     })
-}  */
+}  */ 
 
 export const resetItemList = {
     resetAll: [ 
+        {
+            callback: setTimelineRequest(false)
+        },
+        {
+            callback: setTimelineData([])
+        },
         {
             callback: setCPCRequest(false)
         },

@@ -175,7 +175,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                             }  */
                         } else {
                             if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0) && selectedCategory != 'top_law_firms') {
-                                dispatch(
+                                /* dispatch(
                                     getCustomerAssets(
                                       selectedCategory == '' ? '' : selectedCategory,
                                       companies,
@@ -190,7 +190,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                                       -1, 
                                       display_sales_assets
                                     ),
-                                );
+                                ); */
                             }
                         }
                     }

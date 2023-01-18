@@ -16,7 +16,7 @@ import {
 import { AppsOutage, AutoGraph, Public, Speed, ViewTimeline, Search, NotificationsNone, ManageSearch, SupportAgent, PendingActionsOutlined } from '@mui/icons-material' 
 import PatenTrackApi from '../../api/patenTrack2'
 import { copyToClipboard } from '../../utils/html_encode_decode'
-import { setCPCRequest, setJurisdictionRequest, setSwitchAssetButton } from '../../actions/patentTrackActions2'
+import { setCPCRequest, setJurisdictionRequest, setSwitchAssetButton, setTimelineData, setTimelineRequest } from '../../actions/patentTrackActions2'
 import { setCompanies } from '../../actions/patenTrackActions'
 import Maintainance from '../common/Maintainence'
 
@@ -163,6 +163,8 @@ const ViewIcons = (props) => {
         dispatch(setTransactionButton(false))
         dispatch(setJurisdictionRequest(false))
         dispatch(setCPCRequest(false))
+        dispatch(setTimelineRequest(false))
+        dispatch(setTimelineData([]))
         if(props.openIllustrationBar === false) {
             props.handleIllustrationBarOpen()
         }
@@ -179,6 +181,8 @@ const ViewIcons = (props) => {
         setTimelineView(false)
         dispatch(setJurisdictionRequest(false))
         dispatch(setCPCRequest(false))
+        dispatch(setTimelineRequest(false))
+        dispatch(setTimelineData([]))
         props.resetAllActivity('due_dilligence')
         props.setPatentAssets()
     }

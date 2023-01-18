@@ -72,42 +72,47 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
             }
             
             const getFamilyItemDataFunction = async () => {
-                
-                setfamilyItemData({
-                    inventors: item.inventors,
-                    applicants: item.applicants,
-                    assignee: item.assignee,
-                    priority_date: item.priority_date,
-                    patent_number: item.patent_number,
-                    application_date: item.application_date,
-                    publication_date: item.publication_date,
-                    application_number: item.application_number,
-                    publication_country: item.publication_country,
-                    publication_kind: item.publication_kind
-                })
-
-                let number = typeof item.publication_kind != 'undefined' && item.publication_kind != null && item.publication_kind.toString().toLowerCase().indexOf('a') !== -1 
-                            ? 
-                                `${item.publication_country}${applicationFormat(item.application_number)}${item.publication_kind}` 
-                            : 
-                                item.publication_country.toLowerCase().indexOf('us') !== -1 && item.application_number !== '' 
+                if(!Array.isArray(item)) {
+                    setfamilyItemData({
+                        inventors: item.inventors,
+                        applicants: item.applicants,
+                        assignee: item.assignee,
+                        priority_date: item.priority_date,
+                        patent_number: item.patent_number,
+                        application_date: item.application_date,
+                        publication_date: item.publication_date,
+                        application_number: item.application_number,
+                        publication_country: item.publication_country,
+                        publication_kind: item.publication_kind
+                    })
+    
+                    let number =  typeof item.publication_kind != 'undefined' && item.publication_kind != null && item.publication_kind.toString().toLowerCase().indexOf('a') !== -1 
                                 ? 
-                                    `${item.publication_country}${applicationFormat(item.application_number)}` 
-                                :  
-                                    `${item.publication_country}${numberWithCommas(item.patent_number)}${item.publication_kind}`
-                
-                setSelectedNumber(number)
-                setAbsractData(item.abstracts)
-                setClaimsData(item.claims)
-                setClaimsData(item.specification)
-                try{
-                    setFigureData(JSON.parse(item.images))                
-                    setAssignmentsData(JSON.parse(item.assigments))
-                } catch( err) {
-                    console.log(err)
+                                    `${item.publication_country}${applicationFormat(item.application_number)}${item.publication_kind}` 
+                                : 
+                                    item.publication_country.toLowerCase().indexOf('us') !== -1 && item.application_number !== '' 
+                                    ? 
+                                        `${item.publication_country}${applicationFormat(item.application_number)}` 
+                                    :  
+                                        `${item.publication_country}${numberWithCommas(item.patent_number)}${item.publication_kind}`
+                    
+                    setSelectedNumber(number)
+                    setAbsractData(item.abstracts)
+                    setClaimsData(item.claims)
+                    setClaimsData(item.specification)
+                    try{
+                        setFigureData(JSON.parse(item.images))                
+                        setAssignmentsData(JSON.parse(item.assigments))
+                    } catch( err) {
+                        console.log(err)
+                    }
+                } else {
+                    if(selectedAssetsPatents.length > 0) {
+                        setSelectedNumber(selectedAssetsPatents[1] !== '' ? `US${numberWithCommas(selectedAssetsPatents[1])}` : `US${applicationFormat(selectedAssetsPatents[0])}`)
+                    }
                 }
             }
-            //getFamilyItemDataFunction()     
+            getFamilyItemDataFunction()     
         } else {
             if(selectedAssetsPatents.length > 0) {
                 setSelectedNumber(selectedAssetsPatents[1] !== '' ? `US${numberWithCommas(selectedAssetsPatents[1])}` : `US${applicationFormat(selectedAssetsPatents[0])}`)
