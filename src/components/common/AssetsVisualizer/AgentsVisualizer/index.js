@@ -8,6 +8,7 @@ import { Chart } from "react-google-charts";
 
 import PatenTrackApi from '../../../../api/patenTrack2' 
 import themeMode from '../../../../themes/themeMode';
+import { setLineChartData, setLineChartRequest } from '../../../../actions/patentTrackActions2';
 
 const AgentsVisualizer = (props) => { 
     const containerRef = useRef(null)
@@ -40,6 +41,7 @@ const AgentsVisualizer = (props) => {
     const selectedMaintainencePatents = useSelector( state => state.patenTrack2.selectedMaintainencePatents )
     const assetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected) //Assets Selected   
     const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
+    const line_chart_data = useSelector(state => state.patenTrack2.line_chart_data)
 
     const menuItems = [
         {
@@ -118,11 +120,11 @@ const AgentsVisualizer = (props) => {
         let isSubscribed = true;
         const getAssetsForEachCountry = async() => {
             try {
-                setData([])
-                setRawData([])
-                if(selectedCompanies.length > 0) {
-                    callChartData([], 0)
-                }
+                if(line_chart_data[props.type].loading === false) { 
+                    if(selectedCompanies.length > 0) { 
+                        callChartData([], 0)
+                    }
+                } 
             } catch(err) {
                 console.log(err)
             }            
@@ -143,57 +145,73 @@ const AgentsVisualizer = (props) => {
         }
     }, [height, containerRef])
 
-    const callChartData = async(list, totalRecords) => {
-        setAssetRequest(false)
-        setLoading(true)
-        setData([])
-        setRawData([]) 
-        const form = new FormData()
-        form.append("list", JSON.stringify(list))
-        form.append("total", totalRecords)
-        form.append('selectedCompanies', JSON.stringify(selectedCompanies))
-        form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
-        form.append('customers', JSON.stringify(assetTypesCompaniesSelectAll === true ? [] : assetTypesCompaniesSelected))
-        form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
-        form.append('other_mode', display_sales_assets) 
-        form.append('type', selectedCategory)
-        form.append('data_type', props.type)
-        /* PatenTrackApi.cancelAgentsDataRequest() */
-        const { data } = await PatenTrackApi.getAgentsData(form)
-        setLoading(false)
-        setRawData(data)
-        if( assetsList.length > 0 || assetsSelected.length > 0 || maintainenceAssetsList.length > 0 ||  selectedMaintainencePatents.length == 0  ) {
-            const chartData = [], years = [], agentsNames = []
-            if(data !== null && data.length > 0) {
-                const promise = data.map( row => {
-                    if(!years.includes(row.year)) {
-                        years.push(row.year)
-                    }
-                    if(!agentsNames.includes(row.name)) {
-                        agentsNames.push(row.name)
-                    }
-                })
-                await Promise.all(promise)
-                years.sort()
-                agentsNames.sort()
-                chartData.push(['Year', ...agentsNames])  
-                const promiseYear = years.map(async year => {
-                    const yearsData = [];
-                    yearsData.push(parseInt(year))
-                    const promiseNames = agentsNames.map( name => {
-                        const findIndex = data.findIndex( item => item.year == year && name == item.name)
-                        let nameNumber = 0
-                        if(findIndex !== -1) {
-                            nameNumber = data[findIndex].counter
+    useEffect(() => {
+        if(line_chart_data[props.type].data.length > 0) {
+            const buiildChartData = async() => { 
+                const chartData = [], years = [], agentsNames = []
+                const rawData = line_chart_data[props.type].data
+                if(rawData !== null && rawData.length > 0) {
+                    const promise = rawData.map( row => {
+                        if(!years.includes(row.year)) {
+                            years.push(row.year)
                         }
-                        yearsData.push(parseInt(nameNumber))
+                        if(!agentsNames.includes(row.name)) {
+                            agentsNames.push(row.name)
+                        }
                     })
-                    await Promise.all(promiseNames)
-                    chartData.push(yearsData)
-                })
-                await Promise.all(promiseYear) 
-                setData(chartData)
+                    await Promise.all(promise)
+                    years.sort()
+                    agentsNames.sort()
+                    chartData.push(['Year', ...agentsNames])  
+                    const promiseYear = years.map(async year => {
+                        const yearsData = [];
+                        yearsData.push(parseInt(year))
+                        const promiseNames = agentsNames.map( name => {
+                            const findIndex = rawData.findIndex( item => item.year == year && name == item.name)
+                            let nameNumber = 0
+                            if(findIndex !== -1) {
+                                nameNumber = rawData[findIndex].counter
+                            }
+                            yearsData.push(parseInt(nameNumber))
+                        })
+                        await Promise.all(promiseNames)
+                        chartData.push(yearsData)
+                    })
+                    await Promise.all(promiseYear) 
+                    setData(chartData)
+                }
             }
+            buiildChartData()
+        }
+    }, [line_chart_data])
+
+    const callChartData = async(list, totalRecords) => {
+        if(line_chart_data[props.type].loading === false) {
+            console.log("SEND REUQEST")
+            dispatch(setLineChartRequest(props.type, true))
+            setAssetRequest(false)
+            setLoading(true)
+            setData([])
+            setRawData([]) 
+            const form = new FormData()
+            form.append("list", JSON.stringify(list))
+            form.append("total", totalRecords)
+            form.append('selectedCompanies', JSON.stringify(selectedCompanies))
+            form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
+            form.append('customers', JSON.stringify(assetTypesCompaniesSelectAll === true ? [] : assetTypesCompaniesSelected))
+            form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
+            form.append('other_mode', display_sales_assets) 
+            form.append('type', selectedCategory)
+            form.append('data_type', props.type)
+            /* PatenTrackApi.cancelAgentsDataRequest() */
+            const { data } = await PatenTrackApi.getAgentsData(form)
+            setLoading(false)
+            setRawData(data)
+            dispatch(setLineChartData(props.type,  data))
+        }
+        
+        if( assetsList.length > 0 || assetsSelected.length > 0 || maintainenceAssetsList.length > 0 ||  selectedMaintainencePatents.length == 0  ) {
+            
         } 
     }
 

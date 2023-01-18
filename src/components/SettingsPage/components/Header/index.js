@@ -35,13 +35,14 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
   
   return (
     <Fragment>
+
       <Dialog open={openDialog} onClose={onCloseDialog} className={classes.dialog}>
         <DialogTitle id="alert-dialog-title">Remove Items</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to remove {numSelected} {typeof selectedType !== 'undefined' ? selectedType.toLowerCase() : title.toLowerCase()}?
+            Are you sure you want to remove {numSelected} { typeof selectedType != 'undefined' ? selectedType.toLowerCase() : title.toLowerCase()}?
             {
-              selectedType.toLowerCase() != 'companies' && (
+              typeof selectedType != 'undefined' && selectedType.toLowerCase() != 'companies' && (
                 <React.Fragment>
                   <Button
                     onClick={onConfirmDelete}
@@ -60,7 +61,7 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
             CANCEL
           </Button>
           {
-            selectedType.toLowerCase() == 'companies' && (
+            typeof selectedType != 'undefined' && selectedType.toLowerCase() == 'companies' && (
               <Button onClick={onConfirmDelete} color="primary" variant={'contained'} autoFocus>
                 OK
               </Button>
@@ -68,7 +69,6 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
           }
         </DialogActions>
       </Dialog>
-
       <Toolbar className={clsx(classes.root, /* { [classes.highlight]: numSelected > 0 } */)}>
         <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
           {numSelected > 0 ? `${numSelected} Selected` : title}

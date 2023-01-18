@@ -30,9 +30,21 @@ const options = {
 const DATE_FORMAT = 'MMM DD, YYYY'
  
 const getTemplateContent = (item, icons) => {   
-  let status = item.status, icon = '';
-  if(status.toLowerCase().indexOf('abandoned') !== -1 || status.toLowerCase().indexOf('expired') !== -1 || status.toLowerCase().indexOf('allowance') !== -1) {
-    switch(status) {
+  let status = item.status, icon = ''; 
+  if(status.toLowerCase().indexOf('abandoned') !== -1 || status.toLowerCase().indexOf('expired') !== -1 || status.toLowerCase().indexOf('allowance') !== -1 || status.toLowerCase().indexOf('examiner') !== -1 || status.toLowerCase().indexOf('examination') !== -1) {
+    switch(status.trim()) {
+      case 'Response to Non-Final Office Action Entered and Forwarded to Examiner':   
+        status = status.split('Response to Non-Final Office Action '); 
+        status.splice(0, 1);
+        status.splice(0, 0, 'Response to Non-Final Office Action '); 
+        status = status.join('<br/>') 
+      break;
+      case 'Docketed New Case - Ready for Examination':   
+        status = status.split('Docketed New Case - '); 
+        status.splice(0, 1);
+        status.splice(0, 0, 'Docketed New Case - '); 
+        status = status.join('<br/>') 
+      break;
       case 'Notice of Allowance Mailed -- Application Received in Office of Publications': 
         status = status.split('Application Received in ');
         status.splice(1, 0, 'Application Received in ');
@@ -294,7 +306,6 @@ useEffect(() => {
    
     const convertedItems = timelineRawData.map((event) => convertDataToItem(event, allIcons))
 
-    console.log('convertedItems', convertedItems)
     items.current = new DataSet()
     let start = new moment().subtract(2, 'year')
     let end = new moment().add(2, 'year')
@@ -318,7 +329,7 @@ useEffect(() => {
           } 
         }        
       })
-      start = new moment(min).subtract(7, 'year').format('YYYY-MM-DD')
+      start = new moment(min).subtract(3, 'year').format('YYYY-MM-DD')
       end = new moment(max).add(4, 'year').format('YYYY-MM-DD')
       min = start
       max = end

@@ -29,6 +29,8 @@ const FigureData = ( { analyticsBar, illustrationBar, visualizerBarSize, data, n
         getFamilyData()
     }, [number]) 
 
+    console.log("NUMBER", number)
+
     const getFamilyData = async () => {
         setLoading(true)
         PatenTrackApi.cancelFamilyData()

@@ -1814,3 +1814,33 @@ export const setJurisdictionRequest = (flag) => {
     flag   
   } 
 } 
+
+export const setTimelineRequest = (flag) => {   
+  return {
+    type: types.SET_TIMELINE_REQUEST, 
+    flag   
+  } 
+}
+
+export const setTimelineData = (data) => {  
+  return {
+    type: types.SET_TIMELINE_DATA,  
+    data
+  }
+}  
+
+export const setLineChartRequest = (chartType, flag) => {  
+  return {
+    type: types.SET_LINE_CHART_REQUEST,  
+    chartType,
+    flag
+  }
+}
+
+export const setLineChartData = (chartType, data) => {  
+  return {
+    type: types.SET_LINE_CHART_DATA,  
+    chartType,
+    data
+  }
+}

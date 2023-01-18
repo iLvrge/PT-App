@@ -28,6 +28,41 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         ...state, 
         jurisdiction_request: action.flag
       }
+    case types.SET_TIMELINE_REQUEST: 
+      return { 
+        ...state, 
+        timeline_request: action.flag
+      }
+    case types.SET_TIMELINE_DATA:  
+      return { 
+        ...state, 
+        timeline_data: action.data
+      }
+    case types.SET_LINE_CHART_REQUEST:  
+      return { 
+        ...state, 
+        line_chart_data: {...state.line_chart_data, [action.chartType]: {...state.line_chart_data[action.chartType], loading: action.flag}}
+      }
+    case types.SET_LINE_CHART_DATA:  
+      const sp = { 
+        ...state, 
+        line_chart_data: {...state.line_chart_data, 
+          [action.chartType]: {
+            ...state.line_chart_data[action.chartType], 
+            data: action.data
+          }
+        }
+      }
+      console.log("SP", sp, action)
+      return { 
+        ...state, 
+        line_chart_data: {...state.line_chart_data, 
+          [action.chartType]: {
+            ...state.line_chart_data[action.chartType], 
+            data: action.data
+          }
+        }
+      }
     case types.SET_AUTHENTICATE_AUTH_TOKEN:
       return {
         ...state,

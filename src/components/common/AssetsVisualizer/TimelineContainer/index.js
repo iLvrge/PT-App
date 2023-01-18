@@ -17,6 +17,8 @@ import ClickAwayListener from '@mui/base'
 import themeMode from '../../../../themes/themeMode';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import { 
+  setTimelineData,
+  setTimelineRequest,
   transactionRowClick
 } from '../../../../actions/patentTrackActions2'
 
@@ -59,7 +61,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     ...timelineOptions,
     template: function(item, element, data) {
       if (data.isCluster) {
-        return `<span class="cluster-header">${data.items[0].clusterHeading}(${data.items.length})</span>`
+        return `<span class="cluster-header">${data.items[0].clusterHeading} (${data.items.length})</span>`
       } else { 
         if(data.category == 'late_recording' && ![5,12].includes(parseInt(data.rawData.tab_id))) {
           return `<span class="${data.assetType} ${data.rawData.tab_id}"><span class="name">Assignor: ${data.customerName}</span><span class="recordby">Recorded By: ${data.recorded_by}</span></span>`
@@ -115,7 +117,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
   
 
   const [ timelineRemoveRelease, setTimelineRemoveRelease ] = useState(false)
-  const [ timelineRawData, setTimelineRawData ] = useState([])
+  const [ timelineRawData, setTimelineRawData ] = useState([]) 
   const [ timelineItems, setTimelineItems ] = useState([])
   const [ timelineGroups, setTimelineRawGroups] = useState([])
   const [ tooltipItem, setToolTipItem] = useState([])
@@ -125,6 +127,8 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
   const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(false)
   const search_string = useSelector(state => state.patenTrack2.search_string)
   const search_rf_id = useSelector(state => state.patenTrack2.search_rf_id)
+  const timelineRequest = useSelector(state => state.patenTrack2.timeline_request)
+  const timelineRequestData = useSelector(state => state.patenTrack2.timeline_data)
 
 
   //Item for the timeline
@@ -136,9 +140,9 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     const item = {
       type: 'point', 
       start: new Date(assetsCustomer.exec_dt),
-      customerName: selectedCategory == 'proliferate_inventors' ? customerFirstName : `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
+      customerName: selectedCategory == 'proliferate_inventors' ? assetsCustomer.customerName : `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
       assetType,
-      clusterHeading: customerFirstName,
+      clusterHeading:  assetsCustomer.customerName ,
       companyName,
       rawData: assetsCustomer,
       category: selectedCategory,
@@ -405,6 +409,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
 
 
   const getTimelineRawData = async(start, end) => {
+    dispatch(setTimelineRequest(true))
     setIsLoadingTimelineData(true) 
     const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
               tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
@@ -413,15 +418,15 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined, start, end) 
     setIsLoadingTimelineData(false)
     let list = removeSecurityRelease(data.list)
-      setTimelineRawData(list) //items
+      dispatch(setTimelineData(list)) //items
       if(typeof updateTimelineRawData !== 'undefined') {
         updateTimelineRawData(list)
       }
   }
 
-  const removeSecurityRelease = (timelineData) => {
+  const removeSecurityRelease = (releaseData) => {
     let removeRelease = []
-    let list = [...timelineData]
+    let list = [...releaseData]
     list.forEach( item => {
       if(parseInt(item.release_rf_id) > 0) {
         removeRelease.push(item.release_rf_id);
@@ -457,10 +462,12 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
   }, [])
 
+  useEffect(() => {
+    setTimelineRawData(timelineRequestData)
+  }, [timelineRequestData])
 
   //Timeline list from server
   useEffect(() => {
-    
     let isSubscribed = true;
     if(typeof timelineData !== 'undefined') {
       setTimelineRawData(timelineData)
@@ -468,8 +475,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       /**
            * return empty if no company selected
            */
-      setTimelineRawGroups([]) //groups
-      setTimelineRawData([]) //items
+      
       //redrawTimeline()
       //PatenTrackApi.cancelTimelineRequest()
       /**
@@ -483,6 +489,8 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
           if(search_string != '' && search_string != null){
             if(search_rf_id.length > 0) {
               //setIsLoadingTimelineData(true)
+              setTimelineRawGroups([]) //groups
+              setTimelineRawData([]) //items
               const { data } = await PatenTrackApi.getActivitiesTimelineData([], [], [], search_rf_id) // empty array for company, tabs, customers
               //setIsLoadingTimelineData(false)
               //setTimelineRawGroups(data.groups) //groups
@@ -496,12 +504,17 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
             if(type !== 9)  {
               if( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
                 //setIsLoadingTimelineData(true) 
-                getTimelineRawData();
-                
+                if(timelineRequest === false) {
+                  setTimelineRawGroups([]) //groups
+                  setTimelineRawData([]) //items
+                  getTimelineRawData();
+                } 
                 //setIsLoadingTimelineData(false)
                 
               } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null ) {
                 //setIsLoadingTimelineData(true)
+                setTimelineRawGroups([]) //groups
+                setTimelineRawData([]) //items
                 const { data } = await PatenTrackApi.getShareTimelineList(location.pathname.replace('/', ''))
                 let list = removeSecurityRelease(data.list)
                 setTimelineRawData(list) //items
@@ -611,49 +624,22 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
         return c
       })
       Promise.all(promise) 
-      start = new moment(start).subtract(20, 'months') 
+      start = new moment(start).subtract(3, 'years') 
       end = new moment(end).add(20, 'months')
       /* const startIndex = convertedItems.length < 201 ? (convertedItems.length - 1) : 199
       items.current.add(convertedItems.slice(0, startIndex))  */   
       items.current.add(convertedItems)  
     }    
-    /* 
-    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'year')})
-    timelineRef.current.setItems(items.current)   */ 
-
-    /* const min = new moment(start).subtract(20, 'months') 
-    end = new moment(end).add(5, 'months')
-    const max = new moment(end).add(20, 'months')
-    start = new moment(end).subtract(12, 'months')  */
     redrawTimeline()  
     if(timelineRawData.length > 0 || previousLoad === false) { 
       timelineRef.current.setOptions({ 
         ...options, 
-        end: new moment().add(1, 'months')
-        /* zoomMin: 1000 * 60 * 60 * 24,     
-        zoomMax: 1000 * 60 * 60 * 24 * 30 * 12,  */
-        /* start, end, min: start, max: end  */})  
+        end: new moment().add(1, 'months')})  
       timelineRef.current.setItems(items.current)   
       setPreviousLoad(true)
     }
     //checkCurrentDateStatus()
   }, [ timelineRawData ])
-
-  useEffect(() => {
-    /* window.addEventListener('keydown', handleKeyEvent)
-    return () => window.removeEventListener("keydown", handleKeyEvent) */
-  }, []) 
-
-  /* const checkCurrentDateStatus = () => {
-    setTimeout(() => {
-      if( document.getElementsByClassName('vis-current-time').length == 0 ) {
-        let currentElementTransform = document.getElementsByClassName('vis-current-time')[0].style.transform
-        currentElementTransform = parseInt(currentElementTransform.replace('translateX(', '').replace(')', ''))
-      } else {
-        checkCurrentDateStatus()
-      }
-    }, 1000)
-  } */ 
 
   const move  = (percentage) => {
     var range = timelineRef.current.getWindow();

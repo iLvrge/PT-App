@@ -97,11 +97,11 @@ export default makeStyles(theme => ({
           borderColor: 'inherit',
           width: 17,
           height: 17, 
-          top: '7px !important',
+          top: '5px !important',
           /* left: 10, */
           border: 0,       
           backgroundRepeat: 'no-repeat',
-          backgroundSize: 15
+          backgroundSize: 18
         },
         '&.vis-dot.asset-type-default': {
           borderColor: indigo[500],

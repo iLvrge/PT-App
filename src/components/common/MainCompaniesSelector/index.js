@@ -41,6 +41,8 @@ import {
     setJurisdictionRequest,
     setCPCData,
     setJurisdictionData,
+    setTimelineRequest,
+    setTimelineData,
 } from '../../../actions/patentTrackActions2'
 
 
@@ -791,6 +793,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             dispatch( setMainCompaniesAllSelected( updateSelected.length === totalRecords ? true : false ) )
             dispatch(setCPCRequest(false))
             dispatch(setJurisdictionRequest(false))
+            dispatch(setTimelineRequest(false))
+            dispatch(setTimelineData([]))
             dispatch(setCPCData({list:[], group: [], sales: []}))
             dispatch(setJurisdictionData([]))
             resetAll() 
