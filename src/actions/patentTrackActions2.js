@@ -1844,3 +1844,31 @@ export const setLineChartData = (chartType, data) => {
     data
   }
 }
+
+export const setAbandonedYearsRequest = (flag) => {  
+  return {
+    type: types.SET_ABANDONED_YEAR_REQUEST,   
+    flag
+  }
+}
+
+export const setAbandonedYearsData = (data) => {  
+  return {
+    type: types.SET_ABANDONED_YEAR_DATA,  
+    data
+  }
+} 
+
+export const setAbandonedMaintainenceRequest = (flag) => {  
+  return {
+    type: types.SET_ABANDONED_MAINTAINENCE_REQUEST,   
+    flag
+  }
+}
+
+export const setAbandonedMaintainenceData = (data) => {  
+  return {
+    type: types.SET_ABANDONED_MAINTAINENCE_DATA,  
+    data
+  }
+}

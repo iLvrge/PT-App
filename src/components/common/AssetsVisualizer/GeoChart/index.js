@@ -5,7 +5,7 @@ import {
     Fullscreen as FullscreenIcon} from '@mui/icons-material'  
 import FullScreen from '../../FullScreen'
 import { Chart } from "react-google-charts"; 
-import { Tabs, Tab, Paper, IconButton } from '@mui/material'
+import { Tabs, Tab, Paper, IconButton, Box } from '@mui/material'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import {
     getCustomerAssets, setJurisdictionData, setJurisdictionRequest,
@@ -78,7 +78,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
             left:40,
             top:15,
         },
-        colorAxis: {colors: ['#FFAA00', '#70A800', '#1565C0']}
+        /* colorAxis: {colors: ['#FFAA00', '#70A800', '#1565C0']} */
     });
 
 
@@ -338,12 +338,12 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                 :
                     ''
             }
-            {
-                typeof titleBar !== 'undefined' && titleBar === true && ((typeof disableOtherTabs !== 'undefined' && disableOtherTabs === true ) || selectedTab === 1) && (
-                    <TitleBar title={loading === false && data.length < 2 ? `The company has no non-expired USA patents filed after 1997, and no foreign counterparts.` : `Non expired US patents filed after 1997 and their foreign counterparts:`} enablePadding={true}  underline={false} typography={true}/>   
-                )
-            }  
-            <div className={classes.graphContainer} ref={containerRef}>  
+            <Box className={classes.graphContainer} ref={containerRef} sx={{p: 2}}>  
+                {
+                    typeof titleBar !== 'undefined' && titleBar === true && ((typeof disableOtherTabs !== 'undefined' && disableOtherTabs === true ) || selectedTab === 1) && (
+                        <TitleBar title={loading === false && data.length < 2 ? `The company has no non-expired USA patents filed after 1997, and no foreign counterparts.` : `Non expired US patents filed after 1997 and their foreign counterparts:`} enablePadding={false}  underline={false} typography={true}/>   
+                    )
+                }  
                 {
                     typeof disableOtherTabs !== 'undefined' && disableOtherTabs === true 
                     ?
@@ -366,6 +366,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                                         <SankeyChart 
                                             type={'filled'}
                                             layout={true}
+                                            chartBar={chartBar} 
                                         />
                                     :
                                         selectedTab === 3
@@ -373,6 +374,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                                             <SankeyChart 
                                                 type={'acquired'}
                                                 layout={true}
+                                                chartBar={chartBar} 
                                             />
                                         :
                                             selectedTab === 4
@@ -385,7 +387,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                                                 :
                                                     ''
                 } 
-            </div> 
+            </Box> 
             {  
                 ( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) )  && fullScreen === true && (
                     <FullScreen 

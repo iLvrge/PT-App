@@ -65,10 +65,11 @@ export default makeStyles(theme => ({
     graphContainer: {
         flex: 1,
         display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: 'top',
+        alignItems: 'flex-start',
         fontSize: 16,        
-        
+        height: '86%',
+        flexDirection: 'column'
     },
     loadingIndicator: {
         position: 'absolute',

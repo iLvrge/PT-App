@@ -335,6 +335,7 @@ const AssetDetailsContainer = ({
                         showTabs={true}
                         tabText={'Acquired'}
                         fullScreen={true}
+                        standalone={true}
                       />
                     : 
                     timelineScreen === true  && assetIllustration == null && selectedCategory == 'proliferate_inventors'
@@ -356,6 +357,7 @@ const AssetDetailsContainer = ({
                           visualizerBarSize={visualizerBarSize}
                           type={type}  
                           activeTab={2}
+                          standalone={true}
                         />
                       :                  
                     connectionBoxView === true ? (
@@ -375,7 +377,9 @@ const AssetDetailsContainer = ({
                           commentBar={commentBar} 
                           customerBarSize={customerBarSize} 
                           companyBarSize={companyBarSize}
-                          type={type} />
+                          type={type} 
+                          tab={true}
+                        />
                     ) : familyItemMode === true ? 
                           selectedCategory == 'incorrect_names'
                           ?
@@ -401,7 +405,9 @@ const AssetDetailsContainer = ({
                         commentBar={commentBar} 
                         customerBarSize={customerBarSize} 
                         companyBarSize={companyBarSize}
-                        type={type} />
+                        type={type}  
+                        tab={true}
+                      />
                     )
                   )
                   :
@@ -428,6 +434,7 @@ const AssetDetailsContainer = ({
                           showTabs={true}
                           tabText={'Divested'}
                           fullScreen={true}
+                          standalone={true}
                         />
                       :
                       timelineScreen === true  && assetIllustration == null && (selectedCategory == 'top_law_firms' || selectedCategory == 'proliferate_inventors' )
@@ -442,7 +449,9 @@ const AssetDetailsContainer = ({
                           customerBarSize={customerBarSize} 
                           companyBarSize={companyBarSize}
                           type={type} 
-                          onSelect={false}/>
+                          onSelect={false}
+                          titleBar={true}
+                        />
                       :
                       timelineScreen === true  && assetIllustration == null && (selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording')
                       ?

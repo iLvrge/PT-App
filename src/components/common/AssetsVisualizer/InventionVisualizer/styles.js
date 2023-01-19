@@ -7,6 +7,7 @@ export default makeStyles(theme => ({
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
+        boxShadow: 'none',
         '& fieldset':{
             border: 0
         },
@@ -107,6 +108,15 @@ export default makeStyles(theme => ({
         fill: '#fff',  
         width: 24,
         height: 24
+    },
+    boxContainer: {
+        flex: 1,
+        display: 'flex',
+        justifyContent: 'start',
+        alignItems: 'center',
+        flexDirection: 'column',
+        width: '100%',
+        pading: '100%'
     },
     graphContainer: {
         flex: 1,

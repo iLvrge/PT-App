@@ -42,6 +42,7 @@ import clsx from 'clsx'
 import { setFamilyActiveTab } from '../../../../actions/uiActions'
 import AssetsTable from '../../AssetsTable'
 import LabelWithIcon from '../../LabelWithIcon'
+import { Box } from '@mui/system'
 
 var newRange = [1,2]
 
@@ -432,8 +433,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         setFilterList([])
                         setFilterTotal(0)
                         findCPCList([...scopeRange], [], 0)
-                    } else if(cpcData.list.length > 0) {
-                        console.log('CPCDATA', cpcData)
+                    } else if(cpcData.list.length > 0) { 
                         updateCPCData([...scopeRange], list, totalRecords)
                     }
                 } else if(dashboardScreen === true  ||   /* list.length > 0 */ selectedCategory != 'due_dilligence'  || (dashboardScreen === false && selectedCategory == 'due_dilligence')) { 
@@ -445,8 +445,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         setFilterList(list)
                         setFilterTotal(totalRecords)
                         findCPCList([...scopeRange], list, totalRecords)
-                    } else if(cpcData.list.length > 0) {
-                        console.log('CPCDATA', cpcData)
+                    } else if(cpcData.list.length > 0) { 
                         updateCPCData([...scopeRange], list, totalRecords)
                     }
                 } else { 
@@ -1120,7 +1119,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     
     return (
         <Paper 
-            {...(typeof titleBar !== 'undefined' && titleBar === true ? {sx: {p: 2}} : {})}
+            /* {...(typeof titleBar !== 'undefined' && titleBar === true ? {sx: {p: 2}} : {})} */
             className={classes.root} square>  
             {
                 typeof tab == 'undefined' || tab === true 
@@ -1147,18 +1146,19 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 :
                     ''
             } 
+            <Box {...(typeof tab != 'undefined' && tab === true ? {sx: {p: 2}} : {})}  className={classes.boxContainer}>
             {
                 showContainer === true && (
                     <React.Fragment>  
-                        {
+                        {/* {
                             typeof titleBar !== 'undefined' && titleBar === true && (
                                 <TitleBar title={`Technologies and filling years of all non-expired patents and applications filed after 1997:`} enablePadding={false} underline={false} typography={true} relative={true}/>   
                             )
-                        } 
+                        }  */}
                         {
                             selectedTab === 0 && (
                                 <React.Fragment>  
-                                    <TitleBar title={`Hover over the bars for details. Select a bar to see the list of the underlying patents, and to act upon them. Click the menu icon to filter the results.`} enablePadding={typeof titleBar !== 'undefined' && titleBar === true ? false : true} underline={false} typography={true} relative={true} button={
+                                    <TitleBar title={`Hover over the bars for details. Select a bar to see the list of the underlying patents, and to act upon them. Click the menu icon to filter the results.`} enablePadding={typeof titleBar !== 'undefined' && titleBar === true ? false : false} underline={false} typography={true} relative={true} button={
                                         {
                                             dashboardScreen: dashboardScreen, 
                                             click: dashboardScreen === true ? toggleDrawer  :  handleOpenFilter,
@@ -1209,8 +1209,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                             :
                                             ''
                             }
-                        </div> 
-                        
+                        </div>  
+                      
                         <Dialog
                             open={openModal}
                             onClose={handleClose}
@@ -1275,7 +1275,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         </Dialog> 
                     </React.Fragment>
                 )
-            }              
+            } 
+            </Box>              
         </Paper>
     );
 }

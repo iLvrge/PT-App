@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {useLocation} from 'react-router-dom'
-import {Tab, Tabs, Paper, IconButton} from '@mui/material'
+import {Tab, Tabs, Paper, IconButton, Box} from '@mui/material'
 import { Fullscreen as FullscreenIcon } from '@mui/icons-material' 
 import SpanVisualize from './SpanVisualize'
 import Acknowledgements from './Acknowledgements'
@@ -279,7 +279,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                     )) 
                 }
             </Tabs> 
-            
+            <Box sx={{p: 2}} style={{display: 'flex', height: '86%'}}>  
             {
                 ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) 
                 ?
@@ -345,6 +345,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                 :
                     ''
             }
+            </Box>
             {  
                 ( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) )  && fullScreen === true && (
                     <FullScreen 
