@@ -154,8 +154,8 @@ const Reports = (props) => {
             id: 11
         },
         {
-            title: 'Challenged',
-            tooltip: 'Patent assets that were challenged at PTAB.',
+            title: 'Purchase',
+            tooltip: 'Patent assets available for you to purchase directly from other PatenTrack\'s users. These assets were selected based on the innovative focus of your patent portfolio.',
             number: 0,
             patent: '',
             application: '',

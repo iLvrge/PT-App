@@ -6,7 +6,7 @@ import useStyles from './styles'
 import clsx from 'clsx';
 import PatenTrackApi from '../../../../api/patenTrack2'; 
 import Loader from '../../Loader';
-import { setAssetTypeAssignmentAllAssets, setSelectAssignmentCustomers } from '../../../../actions/patentTrackActions2'; 
+import { setAssetTypeAssignmentAllAssets, setCPCData, setCPCRequest, setSelectAssignmentCustomers } from '../../../../actions/patentTrackActions2'; 
 import FullScreen from '../../FullScreen';
 import LabelWithIcon from '../../LabelWithIcon';
 import TitleBar from '../../TitleBar';
@@ -111,43 +111,43 @@ const SankeyChart = (props) => {
         if((data.length > 0 || assignorData.length > 0) && containerRef != null && containerRef.current != null) { 
             const element = containerRef.current.parentElement
             if(element != null) { 
-                
                 const childElement = document.querySelectorAll('.cntSankeyChart') 
                 if(childElement.length > 0 ) { 
                     childElement.forEach( (item, index) => {
                         const containerID = childElement[index].parentNode.parentNode.parentNode.getAttribute('id')
                         if(containerID == 'charts_container') { 
                             const {height} = childElement[index].parentNode.parentNode.parentNode.getBoundingClientRect();
-                            childElement[index].style.height = `${parseInt(height) - 32 }px`
+                            childElement[index].style.height = `${parseInt(height) - 64 }px`
                         }
                     })
                 } 
             }
         }
-    }, [data, assignorData]) 
+    }, [data, assignorData, props]) 
 
-    const handleSelection = useCallback(async(items, type) => {
+    const handleSelection = useCallback(async(items, type, event) => {
         let oldItems = type == 2 ? [...assignorRawData] : [...assigneeRawData]
         const filter = oldItems.filter( row => row.name === items[0].name)
-        //console.log('handleSelection', filter)
+        console.log('handleSelection', filter, event)
         if(filter.length > 0) {
-            if(props.type == 'filled') {
+            if(props.type == 'filled') {        
                 const {data} = await PatenTrackApi.findInventor(filter[0].id)
                 if(data != null && data?.id && data.id > 0) {
-                    dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
+                    dispatch(setCPCRequest(false))
+                    dispatch(setCPCData({list:[], group: [], sales: []}))
                     dispatch(setSelectAssignmentCustomers([data.id]))
+                    dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
                 }
             } else {
-                dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
+                dispatch(setCPCRequest(false))
+                dispatch(setCPCData({list:[], group: [], sales: []}))
                 dispatch(setSelectAssignmentCustomers([filter[0].id])) 
-            }
-            /* dispatch(setDashboardScreen(false))
-            dispatch(setTimelineScreen(false))
-            dispatch(setPatentScreen(true)) */
-        } 
+                dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
+            } 
+        }
     }, [assignorRawData, assigneeRawData]) 
     return (
-        <Paper {...(typeof props.showTabs == 'undefined' ? {sx: {p: 2, overflow: 'auto'}} : {overflow: 'auto'})}  className={clsx(classes.container, classes.containerTop, 'cntSankeyChart')} square ref={containerRef} >
+        <Paper {...(typeof props.showTabs == 'undefined' ? {sx: {p: 0, overflow: 'auto'}} : {overflow: 'auto'})}  className={clsx(classes.container, classes.containerTop, 'cntSankeyChart')} square ref={containerRef} >
                  
             {
                 typeof props.showTabs != 'undefined' && props.showTabs === true && typeof props.tabText != 'undefined' && (
@@ -172,18 +172,17 @@ const SankeyChart = (props) => {
                     </Tabs> 
                 )
             } 
+            <div className={clsx(classes.child, typeof props.standalone != 'undefined' && props.standalone === true ? classes.padding16 : '')} >
             {
-                (selectedCategory == 'acquired' && !loading && data.length > 0 ) || (!loadingAssignor && selectedCategory == 'divested' && assignorData.length > 0) && (
-                    <TitleBar title="Hover over the bars for details. Select one of the colored bars to the right of each name to filter the Assets table accordingly." enablePadding={false} underline={false}/>
+                ( data.length > 0   ||  assignorData.length > 0)  && (
+                    <TitleBar title="Hover over the bars for details. Select one of the colored bars to the right of each name to filter the Assets table accordingly." enablePadding={false} underline={false} typography={true}/>
                 )
             }  
             {    
                 selectedCategory == 'acquired' || props.type == 'acquired' || props.type == 'filled'
                 ?
-                    loading === false ? 
-                        <div className={clsx(classes.child)}>
-                            <DisplayChart data={data} tooltip={true}  type={1} onSelect={handleSelection}/>
-                        </div>  
+                    loading === false ?  
+                        <DisplayChart data={data} tooltip={true}  type={1} onSelect={handleSelection}/> 
                     :
                         <Loader />
                     
@@ -194,15 +193,14 @@ const SankeyChart = (props) => {
             {
                 selectedCategory == 'divested' || props.type == 'divested'
                 ?
-                    loadingAssignor === false ?
-                        <div className={clsx(classes.child)} >
-                            <DisplayChart data={assignorData} type={2} onSelect={handleSelection}/>
-                        </div>  
+                    loadingAssignor === false ? 
+                        <DisplayChart data={assignorData} type={2} onSelect={handleSelection}/> 
                     :
                     <Loader />
                 :
                     ''  
             }
+            </div>  
             {
                 typeof props.fullScreen != 'undefined' && props.fullScreen === true && (
                     <FullScreen 

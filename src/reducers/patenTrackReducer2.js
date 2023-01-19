@@ -13,10 +13,30 @@ const arrayToObjectByKey = (array, key) =>
 
 const patenTrackReducer = (state = initialState.dashboard, action) => { 
   switch (action.type) {
+    case types.SET_ABANDONED_YEAR_REQUEST: 
+      return { 
+        ...state, 
+        abandoned_year_request: action.flag 
+      }
+    case types.SET_ABANDONED_YEAR_DATA: 
+      return { 
+        ...state, 
+        abandoned_year_data: action.data
+      }
+    case types.SET_ABANDONED_MAINTAINENCE_REQUEST: 
+      return { 
+        ...state, 
+        abandoned_maintainence_request: action.flag 
+      }
+    case types.SET_ABANDONED_MAINTAINENCE_DATA: 
+      return { 
+        ...state, 
+        abandoned_maintainence_data: action.data
+      }
     case types.SET_CPC_REQUEST: 
       return { 
         ...state, 
-        cpc_request: action.flag
+        cpc_request: action.flag 
       }
     case types.SET_CPC_DATA: 
       return { 
@@ -53,7 +73,6 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           }
         }
       }
-      console.log("SP", sp, action)
       return { 
         ...state, 
         line_chart_data: {...state.line_chart_data, 

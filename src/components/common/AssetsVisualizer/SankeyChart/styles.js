@@ -36,7 +36,7 @@ export default makeStyles(theme => ({
         display: 'flex',
         height: '100%',
         width: '100%',
-        marginBottom: 20,
+        marginBottom: 10,
         flexDirection: 'column',
         '& :last':{
           marginBottom: 0,
@@ -62,4 +62,7 @@ export default makeStyles(theme => ({
         fontSize: '1.1rem'
       } */
     },
+    padding16: {
+      padding: 16
+    }
 }))

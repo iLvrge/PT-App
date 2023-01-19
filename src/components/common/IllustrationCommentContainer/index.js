@@ -343,6 +343,7 @@ const IllustrationCommentContainer = ({
                                     showTabs={true}
                                     tabText={'Divested'}
                                     fullScreen={true}
+                                    standalone={true}
                                 />
                             :
                             selectedCategory == 'incorrect_names' ?
@@ -380,6 +381,7 @@ const IllustrationCommentContainer = ({
                                         handleChartBarOpen={chartsBarToggle}
                                         type={type}  
                                         middle={true}
+                                        tab={true}
                                     />
                         :
                         dashboardScreen === true &&  type !== 9  && selectedCategory == 'due_dilligence'
