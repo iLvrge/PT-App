@@ -78,7 +78,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
             left:40,
             top:15,
         },
-        /* colorAxis: {colors: ['#FFAA00', '#70A800', '#1565C0']} */
+        colorAxis: {colors: ['#3366cc', '#dc3912', '#ff9900', '#109618', '#990099', '#0099c6', '#dd4477', '#66aa00', '#b82e2e', '#316395', '#994499', '#22aa99', '#aaaa11', '#6633cc', '#e67300', '#8b0707', '#651067', '#329262', '#5574a6', '#3b3eac', '#b77322', '#16d620', '#b91383', '#f4359e', '#9c5935', '#a9c413', '#2a778d', '#668d1c', '#bea413', '#0c5922', '#743411']}
     });
 
 
@@ -341,7 +341,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
             <Box className={classes.graphContainer} ref={containerRef} sx={{p: 2}}>  
                 {
                     typeof titleBar !== 'undefined' && titleBar === true && ((typeof disableOtherTabs !== 'undefined' && disableOtherTabs === true ) || selectedTab === 1) && (
-                        <TitleBar title={loading === false && data.length < 2 ? `The company has no non-expired USA patents filed after 1997, and no foreign counterparts.` : `Non expired US patents filed after 1997 and their foreign counterparts:`} enablePadding={false}  underline={false} typography={true}/>   
+                        <TitleBar title={loading === false && data.length < 2 ? `The company has no non-expired USA patents filed after 1999, and no foreign counterparts.` : `Non expired US patents filed after 1999 and their foreign counterparts:`} enablePadding={false}  underline={false} typography={true}/>   
                     )
                 }  
                 {
