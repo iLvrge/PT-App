@@ -1152,7 +1152,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     <React.Fragment>  
                         {/* {
                             typeof titleBar !== 'undefined' && titleBar === true && (
-                                <TitleBar title={`Technologies and filling years of all non-expired patents and applications filed after 1997:`} enablePadding={false} underline={false} typography={true} relative={true}/>   
+                                <TitleBar title={`Technologies and filling years of all non-expired patents and applications filed after 1999:`} enablePadding={false} underline={false} typography={true} relative={true}/>   
                             )
                         }  */}
                         {

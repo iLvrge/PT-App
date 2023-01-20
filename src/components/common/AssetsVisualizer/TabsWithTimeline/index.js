@@ -50,6 +50,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
   const [buttonClick, setSetButtonClick] = useState(false)
   const [selectedTab, setSelectedTab ] = useState(1)
   const [timelineTabs, setTimelineTabs ] = useState(['Fillings', 'Assignments'])
+  const [scrollNewRequest, setScrollNewRequest] = useState(false)
   const items = useRef(new DataSet()) // timeline items dataset
   const groups = useRef(new DataSet()) // timeline groups dataset
   const [options, setOptions] = useState({
@@ -409,17 +410,20 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
 
 
   const onRangeChanged = useCallback(async (properties) => { 
-    console.log('onRangeChanged', properties) 
     items.current = new DataSet()
     items.current.add(timelineItems)
     timelineRef.current.setItems(items.current) 
-    if(properties.byUser === true) {    
-      if(selectedTab === 1) { 
-        await assignmentData(moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))
-      } else {
-        await fillingData(moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))
-      }
-          
+    if(properties.byUser === true) {  
+      const filter =   timelineItems.filter(row => new Date(row.start) < new Date(properties.start) )
+      if(filter.length == 0) {
+        if(selectedTab === 1) { 
+          setScrollNewRequest(true)
+          await assignmentData(moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))
+        } else {
+          setScrollNewRequest(true)
+          await fillingData(moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))
+        }
+      } 
     } 
     /* const updatedItems = timelineItems.filter((item) => (item.start >= properties.start && item.start <= properties.end))
     items.current = new DataSet()
@@ -618,9 +622,21 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
         }
         return c
       })
+      if(scrollNewRequest === false) {
+        if(convertedItems.length > 100) {
+          start = new Date(convertedItems[99].start)
+        } else {
+          start = new moment(start).subtract(3, 'year') 
+        }
+      } else {
+        if(convertedItems.length > 0) {
+          start = new Date(convertedItems[convertedItems.length - 1].start)
+        }
+      }
       Promise.all(promise) 
-      start = new moment(start).subtract(3, 'year') 
-      end = new moment(end).add(3, 'year')
+      if(scrollNewRequest === false) {
+        end = new moment(end).add(3, 'year')
+      }
       /* const startIndex = convertedItems.length < 201 ? (convertedItems.length - 1) : 199
       items.current.add(convertedItems.slice(0, startIndex))  */   
       items.current.add(convertedItems)  
@@ -636,8 +652,13 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
         ...options, 
         start, 
         end,
-        min: start, 
-        max: end
+        min: new Date('1999-01-01'), 
+        max: end,
+        cluster: {
+          clusterCriteria: (firstItem, secondItem) => {
+            return ( firstItem.rawData.law_firm_id === secondItem.rawData.law_firm_id  ||  ( firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID))
+          }
+        }
       })  
       timelineRef.current.setItems(items.current)   
       setPreviousLoad(true)
