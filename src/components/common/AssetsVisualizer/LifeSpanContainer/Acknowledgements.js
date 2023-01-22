@@ -111,6 +111,7 @@ const Acknowledgements = () => {
     const [buttonClick, setSetButtonClick] = useState(false)
     const [ tooltipItem, setToolTipItem] = useState([])
     const [ timeInterval, setTimeInterval] = useState(null)  
+    const [scrollNewRequest, setScrollNewRequest] = useState(false) 
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const selectedCategory = useSelector( state => state.patenTrack2.selectedCategory )
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
@@ -158,14 +159,7 @@ const Acknowledgements = () => {
     }
 
     const onRangeChange = useCallback(_debounce((properties) => {
-        setIsLoadingTimelineData(true)
-        
-        const updatedItems = timelineItems.filter((item) => (new Date(item.start + '00:00:00') >= properties.start && new Date(item.start + '00:00:00') <= properties.end))
-        items.current = new DataSet()
-        items.current.add(updatedItems)
-        console.log('onRangeChange', timelineItems.length, updatedItems)
-        timelineRef.current.setItems(items.current)
-        setIsLoadingTimelineData(false)
+       
       }, 100), [ timelineItems ])
     
     
@@ -175,12 +169,20 @@ const Acknowledgements = () => {
     
     const onRangeChanged = useCallback(_debounce(async(properties) => {
         console.log('onRangeChanged', properties) 
-        items.current = new DataSet()
+        /* items.current = new DataSet()
         items.current.add(timelineItems)
-        timelineRef.current.setItems(items.current) 
-        if(properties.byUser === true) {    
-          await retrieveCitedData(moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))   
-        } 
+        timelineRef.current.setItems(items.current)  */
+        if(properties.byUser === true) {  
+            let filter =  timelineItems.filter(row => new Date(row.start) < new Date(properties.start) )
+            if(filter.length == 0) {
+              filter =  timelineItems.filter(row => new Date(row.start) > new Date(properties.end) && new Date(properties.end) <= new Date() )
+            }
+            if(filter.length == 0) {
+                console.log(timelineItems)
+                setScrollNewRequest(true)
+                //await retrieveCitedData(moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))  
+            } 
+        }
     }, 1000), [ timelineItems ])
 
     const resetTooltipContainer = () => {  
@@ -405,8 +407,21 @@ const Acknowledgements = () => {
                     return c
                 })
                 Promise.all(promise)
-                start = new moment(start).subtract(3, 'year') 
-                end = new moment(end).add(3, 'year')
+                if(scrollNewRequest === false) {
+                    if(convertedItems.length > 100) {
+                      start = new Date(convertedItems[99].start)
+                    } else {
+                      start = new moment(start).subtract(3, 'year') 
+                    }
+                } else {
+                    if(convertedItems.length > 0) {
+                      start = new Date(convertedItems[convertedItems.length - 1].start)
+                    }
+                }
+                  
+                if(scrollNewRequest === false) {
+                    end = new moment(end).add(3, 'year')
+                }  
                 /* const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
                 items.current.add(convertedItems.slice(0, startIndex))   */
                 items.current.add(convertedItems)
@@ -418,7 +433,8 @@ const Acknowledgements = () => {
         /* console.log(items.current, start, end) */
         setTimeout(() => {
             timelineRef.current.setItems(items.current)
-            timelineRef.current.setOptions({ ...options, start, end, min: start, max: end })
+            timelineRef.current.setOptions({ ...options, start, end, min: new Date('1999-01-01'), 
+            max: new moment().add(1, 'year') })
         }, 50)
     }, [ timelineRawData, isLoadingTimelineRawData, timelineContainerRef ])
 

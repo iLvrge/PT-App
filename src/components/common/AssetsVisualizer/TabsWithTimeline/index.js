@@ -50,7 +50,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
   const [buttonClick, setSetButtonClick] = useState(false)
   const [selectedTab, setSelectedTab ] = useState(1)
   const [timelineTabs, setTimelineTabs ] = useState(['Fillings', 'Assignments'])
-  const [scrollNewRequest, setScrollNewRequest] = useState(false)
+  const [scrollNewRequest, setScrollNewRequest] = useState(false) 
   const items = useRef(new DataSet()) // timeline items dataset
   const groups = useRef(new DataSet()) // timeline groups dataset
   const [options, setOptions] = useState({
@@ -277,7 +277,8 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
 
   const onSelect = useCallback(async (properties) => {
     resetTooltipContainer()
-    if (properties.items.length === 0) {
+    console.log(selectedItem, properties.items)
+    if (properties.items.length === 0 || selectedItem === properties.items[0]) {
       setSelectedItem(null)
       dispatch(
         setConnectionBoxView(false)
@@ -297,46 +298,47 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
       ) 
     } else {
       const item = items.current.get(properties.items[0])
-      if(typeof item.rawData.type === 'undefined'){
+      if(item != null && typeof item.rawData.type === 'undefined'){ 
+        setSelectedItem(properties.items[0])
         /* setSelectedAsset({ type: 'transaction', id: item.rawData.id })
-        setSelectedItem(item)
+        
         dispatch(transactionRowClick(item.rawData.id, slack_channel_list, false, search_string))
         if(assignmentBar === false) {
           assignmentBarToggle()  
         } */
-          if(assignmentBar === false) {
-            assignmentBarToggle()  
-          }
-          const { data } = await PatenTrackApi.getCollectionIllustration(item.rawData.id)
-          if(data != null) {                        
-            const obj = data.line.length > 0 ? data.line[0] : null
-            if(obj != null) {
-              dispatch(    
-                setConnectionData(obj)
-              )  
+        /* if(assignmentBar === false) {
+          assignmentBarToggle()  
+        } */
+        const { data } = await PatenTrackApi.getCollectionIllustration(item.rawData.id)
+        if(data != null) {                        
+          const obj = data.line.length > 0 ? data.line[0] : null
+          if(obj != null) {
+            dispatch(    
+              setConnectionData(obj)
+            )  
+            dispatch(
+              setConnectionBoxView(true)
+            ) 
+            dispatch(
+              setPDFView(true)
+            ) 
+            if(obj.document1.indexOf('legacy-assignments.uspto.gov') !== -1 || (obj.document1 == "" && obj.ref_id > 0)) {
+              obj.rf_id =  obj.ref_id
+              dispatch(retrievePDFFromServer(obj))   
+            } else {
               dispatch(
-                setConnectionBoxView(true)
+                setPDFFile({ 
+                  document: obj.document1,  
+                  form: obj.document1, 
+                  agreement: obj.document1 
+                })
               ) 
-              dispatch(
-                setPDFView(true)
-              ) 
-              if(obj.document1.indexOf('legacy-assignments.uspto.gov') !== -1 || (obj.document1 == "" && obj.ref_id > 0)) {
-                obj.rf_id =  obj.ref_id
-                dispatch(retrievePDFFromServer(obj))   
-              } else {
-                dispatch(
-                  setPDFFile({ 
-                    document: obj.document1,  
-                    form: obj.document1, 
-                    agreement: obj.document1 
-                  })
-                ) 
-              }                       
-            }                        
-          }
+            }                       
+          }                        
+        }
       }
     }
-  }, [ ])
+  }, [ selectedItem ])
 
   /**
    * on Itemover for the tooltip data
@@ -414,7 +416,10 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
     items.current.add(timelineItems)
     timelineRef.current.setItems(items.current) 
     if(properties.byUser === true) {  
-      const filter =   timelineItems.filter(row => new Date(row.start) < new Date(properties.start) )
+      let filter =  timelineItems.filter(row => new Date(row.start) < new Date(properties.start) )
+      if(filter.length == 0) {
+        filter =  timelineItems.filter(row => new Date(row.start) > new Date(properties.end) && new Date(properties.end) <= new Date() )
+      }
       if(filter.length == 0) {
         if(selectedTab === 1) { 
           setScrollNewRequest(true)
@@ -488,13 +493,11 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
                   await fillingData()
                 } 
               } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null ) {
-                
                 const { data } = await PatenTrackApi.getShareTimelineList(location.pathname.replace('/', ''))
                 setTimelineRawData(data.list)     
                 if(typeof updateTimelineRawData !== 'undefined') {
                   updateTimelineRawData(data.list)
-                }      
-                            
+                }          
               }
             }
           } 
@@ -622,6 +625,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
         }
         return c
       })
+      Promise.all(promise) 
       if(scrollNewRequest === false) {
         if(convertedItems.length > 100) {
           start = new Date(convertedItems[99].start)
@@ -633,10 +637,10 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
           start = new Date(convertedItems[convertedItems.length - 1].start)
         }
       }
-      Promise.all(promise) 
+      
       if(scrollNewRequest === false) {
-        end = new moment(end).add(3, 'year')
-      }
+        end = new moment(end).add(1, 'year')
+      }  
       /* const startIndex = convertedItems.length < 201 ? (convertedItems.length - 1) : 199
       items.current.add(convertedItems.slice(0, startIndex))  */   
       items.current.add(convertedItems)  
@@ -653,7 +657,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
         start, 
         end,
         min: new Date('1999-01-01'), 
-        max: end,
+        max: new moment().add(1, 'year'),
         cluster: {
           clusterCriteria: (firstItem, secondItem) => {
             return ( firstItem.rawData.law_firm_id === secondItem.rawData.law_firm_id  ||  ( firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID))

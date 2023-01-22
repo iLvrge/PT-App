@@ -14,7 +14,9 @@ export default makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        fontSize: 16,  
+        height: '86%',
+        fontSize: '0.875rem',  
+        padding: 10,
         '& div[id*="googlechart-control-"]':{
             position: 'absolute',
             top: 200,

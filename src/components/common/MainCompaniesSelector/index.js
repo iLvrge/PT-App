@@ -43,6 +43,8 @@ import {
     setJurisdictionData,
     setTimelineRequest,
     setTimelineData,
+    setCPCSecondData,
+    setLineChartReset,
 } from '../../../actions/patentTrackActions2'
 
 
@@ -796,6 +798,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             dispatch(setTimelineRequest(false))
             dispatch(setTimelineData([]))
             dispatch(setCPCData({list:[], group: [], sales: []}))
+            dispatch(setCPCSecondData({list:[], group: [], sales: []}))
+            dispatch(setLineChartReset())
             dispatch(setJurisdictionData([]))
             resetAll() 
             clearOtherItems()

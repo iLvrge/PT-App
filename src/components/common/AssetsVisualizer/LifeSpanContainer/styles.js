@@ -7,6 +7,7 @@ export default makeStyles(theme => ({
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
+        boxShadow: 'none',
         '& #visualization':{
           position: 'relative',
           '& .menu':{
@@ -62,12 +63,12 @@ export default makeStyles(theme => ({
       } */
     },
     graphContainer: {
-        flex: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 16,        
-        
+      flex: 1,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'flex-start',
+      fontSize: 16,        
+      flexDirection: 'column',
     },
     loadingIndicator: {
         position: 'absolute',

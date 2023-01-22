@@ -25,7 +25,8 @@ import {
     retrievePDFFromServer,
     setIsSalesAssetsDisplay,
     setCPCRequest,
-    setCPCData
+    setCPCData,
+    setCPCSecondData
 } from '../../../../actions/patentTrackActions2'
 import { setPDFFile, setPdfTabIndex } from '../../../../actions/patenTrackActions' 
 import PatenTrackApi from '../../../../api/patenTrack2'
@@ -46,7 +47,7 @@ import { Box } from '@mui/system'
 
 var newRange = [1,2]
 
-const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, tab, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal, titleBar, middle, openChartBar, handleChartBarOpen, salable, licensable, onSelect, top }) => {
+const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, tab, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal, titleBar, middle, openChartBar, handleChartBarOpen, salable, licensable, onSelect, top, side }) => {
     
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -127,6 +128,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets) 
     const cpc_request = useSelector(state => state.patenTrack2.cpc_request) 
     const cpcData = useSelector(state => state.patenTrack2.cpcData) 
+    const cpcSecondData = useSelector(state => state.patenTrack2.cpcSecondData) 
     
     const [ graphRawData, setGraphRawData ] = useState([])
     const [ salesData, setSalesData ] = useState([])
@@ -257,7 +259,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             form.append('customers', JSON.stringify(selectedAssetCompanies))
             form.append('assignments', JSON.stringify(selectedAssetAssignments))
             form.append('other_mode', display_sales_assets)
-            form.append('type', selectedCategory)
+            form.append('type', typeof side != 'undefined' && side === true ? 'assigned' : selectedCategory)
             form.append(`range`, valueRange)
             form.append('data_type', dashboardScreen === true ? 1 : 0)
             const {data} = await PatenTrackApi.getAssetsByCPCCode(point.x, encodeURIComponent(code), form) 
@@ -425,7 +427,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     }
                 } 
                 if( selectedCategory == 'top_law_firms' || (typeof licensable != 'undefined' && licensable === true) || (typeof salable != 'undefined' && salable === true)) { 
-                    if(cpc_request === false || cpcData.list.length == 0) {  
+                    if(cpc_request === false || (cpcData.list.length == 0 || (typeof side != 'undefined' && side === true && cpcSecondData.list.length == 0))) {  
                         setGraphRawData([])
                         setGraphRawGroupData([])    
                         setIsLoadingCharts(true)   
@@ -433,11 +435,11 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         setFilterList([])
                         setFilterTotal(0)
                         findCPCList([...scopeRange], [], 0)
-                    } else if(cpcData.list.length > 0) { 
+                    } else if(cpcData.list.length > 0 || cpcSecondData.list.length > 0) { 
                         updateCPCData([...scopeRange], list, totalRecords)
                     }
                 } else if(dashboardScreen === true  ||   /* list.length > 0 */ selectedCategory != 'due_dilligence'  || (dashboardScreen === false && selectedCategory == 'due_dilligence')) { 
-                    if(cpc_request === false || cpcData.list.length == 0) { 
+                    if(cpc_request === false || (cpcData.list.length == 0 || (typeof side != 'undefined' && side === true && cpcSecondData.list.length == 0))) { 
                         setGraphRawData([])
                         setGraphRawGroupData([])    
                         setIsLoadingCharts(true)   
@@ -445,7 +447,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         setFilterList(list)
                         setFilterTotal(totalRecords)
                         findCPCList([...scopeRange], list, totalRecords)
-                    } else if(cpcData.list.length > 0) { 
+                    } else if(cpcData.list.length > 0 || cpcSecondData.list.length > 0) { 
                         updateCPCData([...scopeRange], list, totalRecords)
                     }
                 } else { 
@@ -490,8 +492,16 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         }
     }, [cpcData])
 
+    useEffect(() => {
+        if(selectedCompanies.length > 0  && cpc_request === true && typeof side != 'undefined' && side === true && cpcSecondData.list.length > 0 && graphRawData.length == 0) { 
+            updateCPCData([...scopeRange], [], 0)
+        }
+    }, [cpcSecondData])
+
+    
+
     const updateCPCData = async(oldScopeRange, list, totalRecords, year, range, scope) => {  
-        const data = {...cpcData}
+        const data = typeof side != 'undefined' && side === true ? { ...cpcSecondData } : { ...cpcData }
         if( typeof year === 'undefined' &&  data.list.length > 0 ) {
             let yearList = [], yearLabelList = []
             const promiseYear = data.list.map( item => yearList.push(item.fillingYear))
@@ -593,7 +603,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             form.append('customers', JSON.stringify( selectedAssetCompanies))
             form.append('assignments', JSON.stringify( selectedAssetAssignments))
             form.append('other_mode', display_sales_assets)
-            form.append('type', selectedCategory)
+            form.append('type', typeof side != 'undefined' && side === true ? 'assigned' : selectedCategory)
             form.append('data_type', dashboardScreen === true ? 1 : 0)
             if(typeof top != 'undefined') {
                 form.append('primary', 1)
@@ -619,7 +629,11 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             //PatenTrackApi.cancelCPCRequest()
             const {data} = await PatenTrackApi.getCPC(form)  
             setIsLoadingCharts(false)
-            dispatch(setCPCData(data)) 
+            if(typeof side != 'undefined' && side === true) {
+                dispatch(setCPCSecondData(data)) 
+            } else { 
+                dispatch(setCPCData(data)) 
+            }
             if( typeof year === 'undefined' &&  data.list.length > 0 ) {
                 let yearList = [], yearLabelList = []
                 const promiseYear = data.list.map( item => yearList.push(item.fillingYear))

@@ -43,6 +43,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         ...state, 
         cpcData: action.data
       }
+    case types.SET_CPC_SECOND_DATA: 
+      return { 
+        ...state, 
+        cpcSecondData: action.data
+      }
     case types.SET_JURISDICTION_REQUEST: 
       return { 
         ...state, 
@@ -63,16 +68,7 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         ...state, 
         line_chart_data: {...state.line_chart_data, [action.chartType]: {...state.line_chart_data[action.chartType], loading: action.flag}}
       }
-    case types.SET_LINE_CHART_DATA:  
-      const sp = { 
-        ...state, 
-        line_chart_data: {...state.line_chart_data, 
-          [action.chartType]: {
-            ...state.line_chart_data[action.chartType], 
-            data: action.data
-          }
-        }
-      }
+    case types.SET_LINE_CHART_DATA:   
       return { 
         ...state, 
         line_chart_data: {...state.line_chart_data, 
@@ -81,6 +77,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
             data: action.data
           }
         }
+      }
+    case types.SET_LINE_CHART_RESET:  
+      return { 
+        ...state, 
+        line_chart_data: {1: {loading: false, data: []}, 2: {loading: false, data: []}}
       }
     case types.SET_AUTHENTICATE_AUTH_TOKEN:
       return {
