@@ -57,6 +57,7 @@ export default {
     template_document_url: 'about:blank',
     jurisdictionData: [],
     cpcData: {list: [], group: [], sales: []},
+    cpcSecondData: {list: [], group: [], sales: []},
     jurisdiction_request: false,
     timeline_request: false,
     timeline_data: [], 

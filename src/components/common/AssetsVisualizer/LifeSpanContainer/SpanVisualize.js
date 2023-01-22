@@ -6,6 +6,7 @@ import { pink } from '@mui/material/colors'
 import FullScreen from '../../FullScreen'
 import { Chart } from "react-google-charts";
 import themeMode from '../../../../themes/themeMode';
+import TitleBar from '../../TitleBar'
 
 const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
     const containerRef = useRef(null)
@@ -159,6 +160,12 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
                 )
             } */} 
             <div className={classes.graphContainer} ref={containerRef}>  
+                <TitleBar 
+                    title={`Hover over the bars to see how many patents will remain active if maintained.`} 
+                    enablePadding={false}  
+                    underline={false} 
+                    typography={true}
+                />
                 <DisplayChart />
             </div> 
         </>  

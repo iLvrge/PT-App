@@ -53,7 +53,7 @@ const AgentsVisualizer = (props) => {
             type: props.type
         }
     ]
-    const [height, setHeight] = useState('97%');
+    const [height, setHeight] = useState('98%');
     const [minMax, setMinMax] = useState([0,0])
     const [option, setOption] = useState({
         legend: { 
@@ -67,9 +67,9 @@ const AgentsVisualizer = (props) => {
         backgroundColor: 'transparent',
         chartArea: {
             width: '67%',
-            height: '80%',
+            height: '90%',
             left: 40,
-            top: 30,
+            top: 10,
         },
         colorAxis: {colors: ['#FFAA00', '#70A800', '#1565C0']},
         hAxis: {
@@ -77,12 +77,12 @@ const AgentsVisualizer = (props) => {
             format: '0',
             textStyle: {
                 color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
-                fontSize: 12,
+                fontSize: '0.875rem',
                 fontName: 'Roboto'
             },
             titleTextStyle: {
                 color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
-                fontSize: 12,
+                fontSize: '0.875rem',
                 fontName: 'Roboto'
             },
             gridlines: {
@@ -135,6 +135,16 @@ const AgentsVisualizer = (props) => {
         }
         return () => (isSubscribed = false)
     }, [selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, selectedAssetAssignmentsAll, selectedAssetAssignments, display_sales_assets, search_string, auth_token, props.type])
+
+    useEffect(() => {
+        if(props.analyticsBar === false) {
+            setHeight('100%')
+            setOption({...option, chartArea: {...option.chartArea, height: '93%'}})
+        } else {
+            setHeight('98%')
+            setOption({...option, chartArea: {...option.chartArea, height: '90%'}})
+        }
+    }, [props])
 
 
     useEffect(() => {

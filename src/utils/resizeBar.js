@@ -24,7 +24,9 @@ import { setAssetTypeAssignments,
     setJurisdictionData,
     setCPCData,
     setTimelineRequest,
-    setTimelineData
+    setTimelineData,
+    setCPCSecondData,
+    setLineChartReset
    } from '../actions/patentTrackActions2'
   
    import {  
@@ -102,7 +104,13 @@ export const resetItemList = {
             callback: setJurisdictionData([])
         },
         {
+            callback: setLineChartReset()
+        },
+        {
             callback: setCPCData({list:[], group: [], sales: []})
+        },
+        {
+            callback: setCPCSecondData({list:[], group: [], sales: []})
         },
         {
             callback: setAssetTypes([])

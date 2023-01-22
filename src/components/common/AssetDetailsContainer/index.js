@@ -321,6 +321,7 @@ const AssetDetailsContainer = ({
                     ?
                       <GeoChart
                         chartBar={chartBar} 
+                        analyticsBar={analyticsBar} 
                         openCustomerBar={openCustomerBar} 
                         visualizerBarSize={visualizerBarSize}
                         type={type}
@@ -342,6 +343,7 @@ const AssetDetailsContainer = ({
                     ?
                       <GeoChart
                         chartBar={chartBar} 
+                        analyticsBar={analyticsBar} 
                         openCustomerBar={openCustomerBar} 
                         visualizerBarSize={visualizerBarSize}
                         type={type}
@@ -357,7 +359,6 @@ const AssetDetailsContainer = ({
                           visualizerBarSize={visualizerBarSize}
                           type={type}  
                           activeTab={2}
-                          standalone={true}
                         />
                       :                  
                     connectionBoxView === true ? (
@@ -379,6 +380,7 @@ const AssetDetailsContainer = ({
                           companyBarSize={companyBarSize}
                           type={type} 
                           tab={true}
+                          side={true}
                         />
                     ) : familyItemMode === true ? 
                           selectedCategory == 'incorrect_names'
@@ -407,6 +409,7 @@ const AssetDetailsContainer = ({
                         companyBarSize={companyBarSize}
                         type={type}  
                         tab={true}
+                        side={true}
                       />
                     )
                   )

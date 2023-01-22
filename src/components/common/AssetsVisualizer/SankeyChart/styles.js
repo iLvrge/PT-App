@@ -3,6 +3,8 @@ import { indigo, purple, blue, pink, teal, cyan, lime, green, orange, grey } fro
 export default makeStyles(theme => ({
     container: {
       height: '100%',
+      flex: 1,
+      width: '100%',
       margin: 0,
       color: '#fff',
       border: 0,

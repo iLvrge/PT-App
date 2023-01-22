@@ -1787,6 +1787,13 @@ export const setCPCData = (data) => {
   }
 } 
 
+export const setCPCSecondData = (data) => { 
+  return {
+    type: types.SET_CPC_SECOND_DATA,  
+    data
+  }
+} 
+
 export const setSocialMediaConnectPopup = (flag) => {  
   return {
     type: types.SET_SOCIAL_MEDIA_CONNECT_MODAL, 
@@ -1842,6 +1849,12 @@ export const setLineChartData = (chartType, data) => {
     type: types.SET_LINE_CHART_DATA,  
     chartType,
     data
+  }
+}
+
+export const setLineChartReset = () => {  
+  return {
+    type: types.SET_LINE_CHART_RESET 
   }
 }
 

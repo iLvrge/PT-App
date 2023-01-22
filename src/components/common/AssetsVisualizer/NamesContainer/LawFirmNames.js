@@ -189,12 +189,12 @@ const LawFirmNames = (props) => {
             }
             { 
                 selectedTab === 1 && (
-                    <AgentsVisualizer type={1}/>
+                    <AgentsVisualizer type={1} analyticsBar={props.analyticsBar} />
                 )
             }
             { 
                 selectedTab === 2 && (
-                    <AgentsVisualizer type={2}/>
+                    <AgentsVisualizer type={2} analyticsBar={props.analyticsBar}/>
                 )
             }
             { 

@@ -17,7 +17,7 @@ import AgentsVisualizer from '../AgentsVisualizer'
 import SankeyChart from '../SankeyChart' 
 import LabelWithIcon from '../../LabelWithIcon' 
 
-const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, tab, titleBar, disableOtherTabs, activeTab }) => {
+const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openCustomerBar, tab, titleBar, disableOtherTabs, activeTab }) => {
     const containerRef = useRef(null)
     const dispatch = useDispatch()
     const [ fullScreen, setFullScreen ] = useState(false)
@@ -355,6 +355,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                                     visualizerBarSize={visualizerBarSize} 
                                     tab={false} 
                                     standalone={true}  
+                                    side={ selectedCategory == 'divested' ? false : true }
                                 />
                             :
                                 selectedTab === 1
@@ -379,11 +380,11 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                                         :
                                             selectedTab === 4
                                             ?
-                                                <AgentsVisualizer type='1'/>
+                                                <AgentsVisualizer type='1' analyticsBar={analyticsBar}/>
                                             :
                                                 selectedTab === 5
                                                 ?
-                                                    <AgentsVisualizer type='2'/>
+                                                    <AgentsVisualizer type='2' analyticsBar={analyticsBar}/>
                                                 :
                                                     ''
                 } 

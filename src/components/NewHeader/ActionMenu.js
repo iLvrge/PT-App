@@ -743,7 +743,7 @@ const ActionMenu = (props) => {
     }
     
     return (
-        <div>
+        <div className={classes.middleContainer}>
             {
                 props.t == 1
                 ?

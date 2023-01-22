@@ -123,7 +123,11 @@ export default makeStyles(theme => ({
         marginLeft: 5,
         fontSize: 15,
     },
-
+    middleContainer: {
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden'
+    },
     toolbar: {
         padding: 0,
         height: 43,

@@ -279,7 +279,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                     )) 
                 }
             </Tabs> 
-            <Box sx={{p: 2}} style={{display: 'flex', height: '86%'}}>  
+            <Box {...( lifeSpanTabs[selectedTab] !== 'Cited by' ? {sx: {p: 2}} : {})} style={{display: 'flex', height: '86%'}}>  
             {
                 ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) 
                 ?
