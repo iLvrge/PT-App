@@ -253,7 +253,7 @@ const TimelineSecurity = ({ data, assignmentBar, assignmentBarToggle, type, stan
 
   const onItemout = () => {
     tootlTip = ''
-    PatenTrackApi.cancelTimelineItem()
+    PatenTrackApi.cancelTimelineItemRequest()
     resetTooltipContainer()
     setToolTipItem([])
     
@@ -316,7 +316,7 @@ const TimelineSecurity = ({ data, assignmentBar, assignmentBarToggle, type, stan
     setTimelineRawGroups([]) //groups
     setTimelineRawData([]) //items
     //redrawTimeline()
-    PatenTrackApi.cancelTimeline()
+    PatenTrackApi.cancelTimelineSecurityRequest()
     /**
      * call for the timeline api data
     */
@@ -386,15 +386,15 @@ const TimelineSecurity = ({ data, assignmentBar, assignmentBarToggle, type, stan
     setTimelineItems(convertedItems)
     items.current = new DataSet()
     groups.current = new DataSet()
-    let start =  new moment(), end = new moment().add(1, 'year')  
+    let start =  new moment(), end = new moment().add(3, 'year')  
 
     if (convertedItems.length > 0) {
       const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
-      start = convertedItems.length ? new moment(convertedItems[startIndex].start).subtract(1, 'week') : new Date()
+      start = convertedItems.length ? new moment(convertedItems[startIndex].start).subtract(3, 'year') : new Date()
       //end = new moment().add(1, 'month')
       items.current.add(convertedItems.slice(0, startIndex))      
     }    
-    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'year')})
+    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1999-01-01')), max: new moment().add(3, 'year')})
     timelineRef.current.setItems(items.current)   
     //checkCurrentDateStatus()
   }, [ timelineRawData ])
@@ -415,8 +415,7 @@ const TimelineSecurity = ({ data, assignmentBar, assignmentBarToggle, type, stan
       }
     }, 1000)
   } */
-  const handleKeyEvent = (event) =>{
-    console.log('handleKeyEvent', event)
+  const handleKeyEvent = (event) =>{ 
     if(event.key === 'ArrowDown' || event.key === 'ArrowUp' ) {
       if(event.key === 'ArrowUp' ) {
         timelineRef.current.zoomOut(0.30)

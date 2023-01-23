@@ -14,7 +14,7 @@ const getCookie = (name)=> {
 
 const getHeader = () => {
   let token = null
-  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
+  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') {
     
     token = localStorage.getItem('auth_signature')
   } else {
@@ -32,7 +32,7 @@ const getHeader = () => {
 
 const getMultiFormUrlHeader = () => {
   let token = null
-  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
+  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') {
     token = localStorage.getItem('auth_signature')
   } else {
     token = localStorage.getItem('token')
@@ -50,7 +50,7 @@ const getMultiFormUrlHeader = () => {
 
 const getFormUrlHeader = () => {
   let token = null
-  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
+  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') {
     token = localStorage.getItem('auth_signature')
   } else {
     token = localStorage.getItem('token')
@@ -68,7 +68,7 @@ const getFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel
+var cancel, cancelAssetLegalEvents, cancelAssetFamily, cancelAssetFamilySingle;
 
 class PatenTrackApi {
 
@@ -77,16 +77,62 @@ class PatenTrackApi {
   }
 
   static assetFamily(applicationNumber) { 
-    return axios.get(`${base_new_api_url}/family/${applicationNumber}`, getHeader())
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelAssetFamily = c
+    })
+    return axios.get(`${base_new_api_url}/family/${applicationNumber}`, header)
   } 
+
+  static cancelAssetFamilyRequest() {
+    if (cancelAssetFamily !== undefined) {
+      try{
+        throw cancelAssetFamily('Request cancelled for families.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
 
   static assetFamilySingle(applicationNumber) { 
-    return axios.get(`${base_new_api_url}/family/single/${applicationNumber}`, getHeader())
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelAssetFamilySingle = c
+    })
+    return axios.get(`${base_new_api_url}/family/single/${applicationNumber}`, header)
   } 
 
-  static assetLegalEvents(applicationNumber, patentNumber) { 
-    return axios.get(`${base_new_api_url}/events/${applicationNumber}/${patentNumber != '' ? encodeURIComponent(patentNumber)  : applicationNumber}`, getHeader())
+  static cancelAssetFamilySingleRequest() { 
+    if (cancelAssetFamilySingle !== undefined) {
+      try{
+        throw cancelAssetFamilySingle('Request cancelled for family.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
   }
+
+  static assetLegalEvents(applicationNumber, patentNumber) { 
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelAssetLegalEvents = c
+    })
+    return axios.get(`${base_new_api_url}/events/${applicationNumber}/${patentNumber != '' ? encodeURIComponent(patentNumber)  : applicationNumber}`, header)
+  }
+
+  static cancelAssetLegalEventsRequest() {
+    if (cancelAssetLegalEvents !== undefined) {
+      try{
+        throw cancelAssetLegalEvents('Request cancelled for legal events.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
+  static allAssetsSurchargeLegalEvents(companies) { 
+    return axios.get(`${base_new_api_url}/events/all/assets/surcharge?companies=${JSON.stringify(companies)}`, getHeader())
+  } 
 
   static getValidateCounter(companyName) { 
     return axios.get(`${base_new_api_url}/validity_counter/${companyName}`, getHeader())

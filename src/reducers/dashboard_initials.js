@@ -3,6 +3,7 @@ import { BlurLinear } from '@mui/icons-material'
 
 export default {
     auth_token: null,
+    socialMediaConnectPopup: true,
     familyChartVisiblity: 'hidden',
     switch_button_assets: 0,
     search_string: null,
@@ -22,7 +23,8 @@ export default {
     assetTypeNames: { list: [], row_select: [], all_groups: [], total_records: 0, selected: [], selectAll: false, loading: false },
     assetTypeAssignmentAssets: { list: [], total_records: 0, selected: [], selectAll: false, loading: false},
     assetTableScrollPosition: 0,
-    asset_details:{asset: null, family: 0, claims: 0, figures: 0, fees: 0, citations: 0, ptab: 0, litigation: 0},
+    companyTableScrollPosition: 0,
+    asset_details:{asset: null, family: 0, claims: 0, figures: 0, fees: 0, citations: 0, ptab: 0, litigation: 0, status: 0},
     ptabAssets: [],
     addressQueuesDisplay: false,
     addressQueuesLoading: false,
@@ -53,6 +55,18 @@ export default {
     template_drive_files: [], 
     new_drive_template_file: null,
     template_document_url: 'about:blank',
+    jurisdictionData: [],
+    cpcData: {list: [], group: [], sales: []},
+    cpcSecondData: {list: [], group: [], sales: []},
+    jurisdiction_request: false,
+    timeline_request: false,
+    timeline_data: [], 
+    line_chart_data: {1: {loading: false, data: []}, 2: {loading: false, data: []}},
+    cpc_request: false, 
+    abandoned_year_request: false,
+    abandoned_year_data: [],
+    abandoned_maintainence_request: false,
+    abandoned_maintainence_data: [],
     display_sales_assets: false,
     display_clipboard: false, 
     driveButtonActive: false,
@@ -60,7 +74,7 @@ export default {
     maintainenceAssetsEventsList: {list: []}, 
     maintainenceAssetsLoadingMore: false,
     maintainenceAssetsList: {list: [], total_records: 0}, 
-    mainCompaniesList: { list: [], total_records: 0, row_select: [], selected: [], selectedWithName: [], selectedGroups: [], selectAll: false, childID: 0, child_list: [] },
+    mainCompaniesList: { list: [], total_records: 0, row_select: [], selected: [], selectedWithName: [], selectedGroups: [], selectAll: false, childID: 0, child_list: [], child_list_loaded: false },
     mainCompaniesLoadingMore: false,
     selectedMaintainencePatents: [],
     companiesList: [], 
@@ -71,6 +85,7 @@ export default {
     assetsPatentsLoading: false,
     gridWidthClassNumber: 12, 
     activeMenuButton: -1,
+    selectedLawFirm: 0,
     assets: assetsTypes.reduce((result, assetType) => {
       result[assetType] = {} 
       return result 
@@ -96,5 +111,6 @@ export default {
     assetsCompActivitiesDataCount: 0,
     isLoadingCompActivitiesDataCount: null,
     isLoadingAssetsErrorsDataCount: null,
-    assetsErrorsDataCount: 0
+    assetsErrorsDataCount: 0,
+    timelineDataLoading: false
 }

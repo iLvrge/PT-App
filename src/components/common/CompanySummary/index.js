@@ -84,9 +84,9 @@ const CompanySummary = () => {
     }, [google_profile, google_auth_token])
 
     const openGoogleWindow = () => {
-        if(document.getElementsByClassName('googleButton').length > 0) {
+        /* if(document.getElementsByClassName('googleButton').length > 0) {
             document.getElementsByClassName('googleButton')[0].click()
-        }
+        } */
     }
 
     const getSummaryData = async(access_token, user_email) => {
@@ -96,11 +96,11 @@ const CompanySummary = () => {
            
             if( Object.keys(data).length > 0 ) {
                 let summaryData = [];
-                Object.keys(data).forEach( key => {
+                Object.keys(data).forEach( key => { 
                     summaryData.push({
-                        name: capitalize(key),
+                        name: capitalize(key == 'entities' ? '3rd Parties' : key == 'parties' ? 'Parties' : key),
                         number: numberWithCommas(data[key]),
-                        iconLink: `https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/${key}.svg`
+                        iconLink: `https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/${key == 'entities' ? 'parties' : key}.svg`
                     })
                 })                
                 setCompanyData(summaryData)
@@ -136,7 +136,7 @@ const CompanySummary = () => {
     }
 
     return(
-        <div style={{height: '50vh', marginLeft: 35}}>
+        <div style={{height: '50vh', marginLeft: 25}}>
             <VirtualizedTable
                 classes={classes}
                 rows={companyData}

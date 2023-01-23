@@ -13,6 +13,76 @@ const arrayToObjectByKey = (array, key) =>
 
 const patenTrackReducer = (state = initialState.dashboard, action) => { 
   switch (action.type) {
+    case types.SET_ABANDONED_YEAR_REQUEST: 
+      return { 
+        ...state, 
+        abandoned_year_request: action.flag 
+      }
+    case types.SET_ABANDONED_YEAR_DATA: 
+      return { 
+        ...state, 
+        abandoned_year_data: action.data
+      }
+    case types.SET_ABANDONED_MAINTAINENCE_REQUEST: 
+      return { 
+        ...state, 
+        abandoned_maintainence_request: action.flag 
+      }
+    case types.SET_ABANDONED_MAINTAINENCE_DATA: 
+      return { 
+        ...state, 
+        abandoned_maintainence_data: action.data
+      }
+    case types.SET_CPC_REQUEST: 
+      return { 
+        ...state, 
+        cpc_request: action.flag 
+      }
+    case types.SET_CPC_DATA: 
+      return { 
+        ...state, 
+        cpcData: action.data
+      }
+    case types.SET_CPC_SECOND_DATA: 
+      return { 
+        ...state, 
+        cpcSecondData: action.data
+      }
+    case types.SET_JURISDICTION_REQUEST: 
+      return { 
+        ...state, 
+        jurisdiction_request: action.flag
+      }
+    case types.SET_TIMELINE_REQUEST: 
+      return { 
+        ...state, 
+        timeline_request: action.flag
+      }
+    case types.SET_TIMELINE_DATA:  
+      return { 
+        ...state, 
+        timeline_data: action.data
+      }
+    case types.SET_LINE_CHART_REQUEST:  
+      return { 
+        ...state, 
+        line_chart_data: {...state.line_chart_data, [action.chartType]: {...state.line_chart_data[action.chartType], loading: action.flag}}
+      }
+    case types.SET_LINE_CHART_DATA:   
+      return { 
+        ...state, 
+        line_chart_data: {...state.line_chart_data, 
+          [action.chartType]: {
+            ...state.line_chart_data[action.chartType], 
+            data: action.data
+          }
+        }
+      }
+    case types.SET_LINE_CHART_RESET:  
+      return { 
+        ...state, 
+        line_chart_data: {1: {loading: false, data: []}, 2: {loading: false, data: []}}
+      }
     case types.SET_AUTHENTICATE_AUTH_TOKEN:
       return {
         ...state,
@@ -284,7 +354,8 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         mainCompaniesList:  Object.assign({}, {
           ...state.mainCompaniesList,
           ['childID']: action.companyID,
-          ['child_list']: action.data
+          ['child_list']: action.data,
+          ['child_list_loaded']: action.flag
         })
       }
     case types.SET_MAINTAINENCE_ASSETS_EVENTS_LIST_LOADING_MORE: 
@@ -296,7 +367,7 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
       return {
         ...state,
         maintainenceAssetsEventsList:  Object.assign({}, {
-          ...state.maintainenceAssetsList,
+          ...state.maintainenceAssetsEventsList,
           ['list']: action.data.list
         })
       }
@@ -469,8 +540,7 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state,
           assetTypeCompanies:  {...state.assetTypeCompanies, selectAll: action.flag}
         }
-      case types.SET_ASSET_TYPES_COMPANIES_SELECT_NAME:
-        console.log('SET_ASSET_TYPES_COMPANIES_SELECT_NAME', action)
+      case types.SET_ASSET_TYPES_COMPANIES_SELECT_NAME: 
         return {
           ...state,
           assetTypeCompanies: {...state.assetTypeCompanies, name: action.name}
@@ -803,6 +873,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state, 
           assetTableScrollPosition: action.pos  
         }
+      case types.SET_COMPANY_TABLE_SCROLL_POSITION:
+        return { 
+          ...state, 
+          companyTableScrollPosition: action.pos  
+        }
       case types.SET_ASSET_DETAILS: 
         return { 
           ...state, 
@@ -818,6 +893,27 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state, 
           dashboard_share_selected_data: action.data
         }
+      case types.SET_LAWFIRM_SELECTED:
+        return { 
+          ...state, 
+          selectedLawFirm: action.data
+        }
+      case types.SET_SOCIAL_MEDIA_CONNECT_MODAL: 
+        return { 
+          ...state, 
+          socialMediaConnectPopup: action.flag
+        }
+        case types.SET_TIMELINE_DATA_LOADING: 
+        return { 
+          ...state, 
+          timelineDataLoading: action.flag
+        } 
+        case types.SET_JURISDICTION_DATA: 
+        return { 
+          ...state, 
+          jurisdictionData: action.data
+        } 
+        
       default:   
       return state
   } 

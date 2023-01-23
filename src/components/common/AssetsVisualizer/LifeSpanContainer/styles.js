@@ -7,6 +7,16 @@ export default makeStyles(theme => ({
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
+        boxShadow: 'none',
+        '& #visualization':{
+          position: 'relative',
+          '& .menu':{
+            position: 'absolute',
+            zIndex: 9999,
+            right: 25,
+            top: 2
+          }
+        },
         '& .MuiTabs-root':{
           borderBottom: `1px solid ${theme.palette.divider} !important`
         },
@@ -36,22 +46,29 @@ export default makeStyles(theme => ({
             whiteSpace: 'nowrap'
         }
     },
-    tabs: {
-        minHeight: 47,
-    },
     tab: {
-        flex: 1,
-        minWidth: '25%',
-        minHeight: 47,  
-        fontSize: '1.1rem'                          
+      minWidth: '25%',
+      minHeight: 47,
+      fontSize: '1.1rem', 
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow:'ellipsis'
+    },
+    tabs: {
+      minHeight: 47,
+      display: 'flex',
+      width: '94%'
+      /* '& .MuiTab-root': {
+        fontSize: '1.1rem'
+      } */
     },
     graphContainer: {
-        flex: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 16,        
-        
+      flex: 1,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'flex-start',
+      fontSize: 16,        
+      flexDirection: 'column',
     },
     loadingIndicator: {
         position: 'absolute',
@@ -60,7 +77,7 @@ export default makeStyles(theme => ({
     },
     fullscreenBtn: {
         position: 'absolute',
-        top: 5,
+        top: 9,
         right: 0,
         zIndex: 999
     },
@@ -144,9 +161,22 @@ export default makeStyles(theme => ({
           background: 'none !important',
           border: 'none !important',
         },
-        '& .vis-item.vis-box, .vis-item.vis-cluster': {
-          borderColor: indigo[500],
-          backgroundColor: indigo[500],
+        '& .vis-item.vis-cluster': {
+          backgroundColor: '#222222',
+          border: '1px solid #545454 !important',
+          borderRadius: 3, 
+          padding: 5,
+          '& .vis-item-content':{
+            padding: 0,
+            width: 'auto !important',
+            textAlign: 'left',
+            padding: '0 !important',
+            color: '#BDBDBD',
+            overflow: 'hidden',
+            flexWrap: 'wrap',  
+          },
+        },
+        '& .vis-item.vis-box': {
           '&.asset-type-default': {
             backgroundColor: '#222222',
             border: 0,
@@ -272,6 +302,16 @@ export default makeStyles(theme => ({
           backgroundColor: 'none !important',
           color: '#e60000',
           /* fontWeight: 'bold', */
-        },
+        }, 
+    },
+    label: {
+        position: 'relative',
+        '& svg': {
+            /* position: 'absolute', */
+            width: 16,
+            height: 16,
+           /*  top: 3, */
+            marginRight: 5
+        }
     }
 }))

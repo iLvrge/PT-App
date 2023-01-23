@@ -206,11 +206,12 @@ function SettingsPage() {
   }
 
   const handleHomeLink = useCallback(() => {    
-    history.push('/') 
+    history.push('/dashboard') 
     setTimeout(() => {
       dispatch(
         setBreadCrumbs('')
       )
+      dispatch(setDashboardScreen(true))
       /* dispatch(
         setControlModal(true)
       ) */
@@ -236,7 +237,7 @@ function SettingsPage() {
       click: handleUsersLink,
       t: 33
     },    
-    {
+    /* {
       tooltip: 'Templates',
       bar: openTemplateBar,
       click: handleTemplatesLink,
@@ -271,7 +272,7 @@ function SettingsPage() {
       bar: openSlackBar, 
       click: handleSlackLink,
       t: 31
-    },
+    }, */
     /* {
       tooltip: 'Professionals',
       bar: openBar,

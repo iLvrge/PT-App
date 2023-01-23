@@ -119,7 +119,6 @@ const FamilyContainer = ({ family, onClose }) => {
         const getTimelineRawDataFunction = async () => {            
             setTimelineRawData(family)
             setIsLoadingTimelineRawData(false)
-            console.log('Family', family)
             /* const findIndex = family.findIndex(item => selectedAsset.includes(item.application_number) || selectedAsset.includes(item.patent_number))
             
             if(findIndex !== -1 ) { 
@@ -165,8 +164,8 @@ const FamilyContainer = ({ family, onClose }) => {
                     return c
                 })
                 Promise.all(promise)
-                start = new moment(start).subtract(10, 'months') 
-                end = new moment(end).add(10, 'months')
+                start = new moment(start).subtract(3, 'year') 
+                end = new moment(end).add(3, 'year')
                 items.current.add(convertedItems)
                 setDisplay('block')
             } else {

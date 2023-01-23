@@ -520,11 +520,12 @@ export const setMainCompaniesRowSelect = (data) => {
   }
 }
 
-export const setMainChildCompanies = (companyID, data) => {
+export const setMainChildCompanies = (companyID, data, flag) => {
   return {
     type: types.SET_MAIN_CHILD_COMPANIES,
     companyID,
     data,
+    flag
   }
 }
 
@@ -558,7 +559,7 @@ export const getMaintainenceAssetsList = ( selectedCompanies, offset = 0, append
     dispatch(setMaintainenceAssetsLoadingMore(true))
     const { data } = await PatenTrackApi.getMaintainenceAssetsList(selectedCompanies, offset)
     dispatch(setMaintainenceAssetsLoadingMore(false))
-    dispatch(setMaintainenceAssetsList(data, { append: append }))
+    dispatch(setMaintainenceAssetsList(data, { append }))
   } 
 }
 
@@ -1091,7 +1092,7 @@ export const setAssetTypeAssignmentsAssets = (rf_id, data, append) => {
 export const getForeignAssetsBySheet = ( form ) => {
   return async dispatch => {
     dispatch( setAssetTypesAssignmentsAllAssetsLoading( true ) )
-    PatenTrackApi.cancelForeignAssetsBySheet()
+    PatenTrackApi.cancelForeignAssetsBySheetRequest()
     const { data } = await PatenTrackApi.getForeignAssetsBySheet(form)
     //dispatch(getChannels())
     dispatch( setAssetTypeAssignmentAllAssets(data, true) )
@@ -1115,7 +1116,7 @@ export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, appe
     if(append === false) {
       dispatch( setAssetTypesAssignmentsAllAssetsLoading( true ) )
     }
-    PatenTrackApi.cancelAssets()
+    //PatenTrackApi.cancelAssetsRequest()
     /*const { data } = await PatenTrackApi.getCustomerAssets( type, companies, type == 'due_dilligence' ? tabs : [], type == 'due_dilligence' ? customers : [], rfIDs, startIndex, endIndex, column, direction, salesAssets )    */
     const { data } = await PatenTrackApi.getCustomerAssets( type, companies, tabs, customers, rfIDs, startIndex, endIndex, column, direction, salesAssets )
     dispatch( setAssetTypeAssignmentAllAssets(data, append) )
@@ -1151,7 +1152,7 @@ export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, appe
 export const getCustomerSelectedAssets = ( shareCode, append = false ) => {
   return async dispatch => {
     dispatch( setAssetTypesAssignmentsAllAssetsLoading( true ) )
-    PatenTrackApi.cancelAssets()
+    //PatenTrackApi.cancelAssetsRequest()
     const { data } = await PatenTrackApi.getCustomerSelectedAssets( shareCode )    
     dispatch( setAssetTypeAssignmentAllAssets(data, append) )
     dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
@@ -1167,10 +1168,10 @@ export const getCustomerSelectedAssets = ( shareCode, append = false ) => {
  * @param {*} append 
  */
 
-export const getCustomerTransactions = ( type, companies, tabs, customers, append = false ) => {
+export const getCustomerTransactions = ( type, companies, tabs, customers, lawfirm, append = false ) => {
   return async dispatch => {
     dispatch( setAssetTypesAssignmentsLoading( true ) )
-    const { data } = await PatenTrackApi.getCustomerTransactions( type, companies, type == 'due_dilligence' ? tabs : [], type == 'due_dilligence' ? customers : [])    
+    const { data } = await PatenTrackApi.getCustomerTransactions( type, companies, type == 'due_dilligence' ? tabs : [], type == 'due_dilligence' ? customers : [], lawfirm)    
     dispatch( setAssetTypeAssignments(data, append) )
     dispatch( setAssetTypesAssignmentsLoading( false ) )
   } 
@@ -1660,11 +1661,18 @@ export const setAssetTableScrollPos = (pos) => {
   }
 } 
 
+export const setCompanyTableScrollPos = (pos) => {
+  return {
+    type: types.SET_COMPANY_TABLE_SCROLL_POSITION,
+    pos
+  }
+} 
+
 
 export const getAssetDetails = (applicationNumber, patentNumber) => {
   const asset = `US${applicationNumber}`
   return async dispatch => {
-    dispatch( setAssetDetails( {asset, family: 0, claims: 0, figures: 0, fees: 0, citations: 0, ptab: 0, litigation: 0 } ) )
+    dispatch( setAssetDetails( {asset, family: 0, claims: 0, figures: 0, fees: 0, citations: 0, ptab: 0, litigation: 0, status: 0 } ) )
     try{
       const family = await PatenTrackApi.getFamilyCounter( applicationNumber )    
       if(family !== null && family.data !== null) {
@@ -1714,6 +1722,14 @@ export const getAssetDetails = (applicationNumber, patentNumber) => {
     } catch (err) {
       console.log('counterError ptab', err)
     }
+    try{
+      const status = await PatenTrackApi.getStatusCounter( applicationNumber )    
+      if(status !== null && status.data !== null) {
+        dispatch( setAssetDetails( { status: status.data } ) )
+      }
+    } catch (err) {
+      console.log('counterError ptab', err)
+    }
 
     /* const litigation = await PatenTrackApi.getLitigationCounter( asset )    
     if(litigation !== null && litigation.data !== null) {
@@ -1732,7 +1748,7 @@ export const setAssetDetails = (assetData) => {
 export const resetAssetDetails = () => {
   return {
     type: types.SET_ASSET_DETAILS,
-    assetData: {asset: null, family: 0, claims: 0, figures: 0, fees: 0, citations: 0, ptab: 0, litigation: 0}
+    assetData: {asset: null, family: 0, claims: 0, figures: 0, fees: 0, citations: 0, ptab: 0, litigation: 0, status: 0}
   }
 } 
 
@@ -1746,6 +1762,126 @@ export const setDashboardPanelActiveButtonId = (ID) => {
 export const setDashboardShareData = (data) => {
   return {
     type: types.SET_DASHBOARD_SHARE_DATA,  
+    data
+  }
+}
+
+export const setSelectLawFirm = (data) => {
+  return {
+    type: types.SET_LAWFIRM_SELECTED,  
+    data
+  }
+} 
+
+export const setJurisdictionData = (data) => { 
+  return {
+    type: types.SET_JURISDICTION_DATA,  
+    data
+  }
+} 
+
+export const setCPCData = (data) => { 
+  return {
+    type: types.SET_CPC_DATA,  
+    data
+  }
+} 
+
+export const setCPCSecondData = (data) => { 
+  return {
+    type: types.SET_CPC_SECOND_DATA,  
+    data
+  }
+} 
+
+export const setSocialMediaConnectPopup = (flag) => {  
+  return {
+    type: types.SET_SOCIAL_MEDIA_CONNECT_MODAL, 
+    flag
+  } 
+}  
+
+export const setTimelineDataLoading = (flag) => {  
+  return {
+    type: types.SET_TIMELINE_DATA_LOADING, 
+    flag
+  } 
+} 
+
+export const setCPCRequest = (flag) => {   
+  return {
+    type: types.SET_CPC_REQUEST, 
+    flag   
+  } 
+} 
+
+export const setJurisdictionRequest = (flag) => {   
+  return {
+    type: types.SET_JURISDICTION_REQUEST, 
+    flag   
+  } 
+} 
+
+export const setTimelineRequest = (flag) => {   
+  return {
+    type: types.SET_TIMELINE_REQUEST, 
+    flag   
+  } 
+}
+
+export const setTimelineData = (data) => {  
+  return {
+    type: types.SET_TIMELINE_DATA,  
+    data
+  }
+}  
+
+export const setLineChartRequest = (chartType, flag) => {  
+  return {
+    type: types.SET_LINE_CHART_REQUEST,  
+    chartType,
+    flag
+  }
+}
+
+export const setLineChartData = (chartType, data) => {  
+  return {
+    type: types.SET_LINE_CHART_DATA,  
+    chartType,
+    data
+  }
+}
+
+export const setLineChartReset = () => {  
+  return {
+    type: types.SET_LINE_CHART_RESET 
+  }
+}
+
+export const setAbandonedYearsRequest = (flag) => {  
+  return {
+    type: types.SET_ABANDONED_YEAR_REQUEST,   
+    flag
+  }
+}
+
+export const setAbandonedYearsData = (data) => {  
+  return {
+    type: types.SET_ABANDONED_YEAR_DATA,  
+    data
+  }
+} 
+
+export const setAbandonedMaintainenceRequest = (flag) => {  
+  return {
+    type: types.SET_ABANDONED_MAINTAINENCE_REQUEST,   
+    flag
+  }
+}
+
+export const setAbandonedMaintainenceData = (data) => {  
+  return {
+    type: types.SET_ABANDONED_MAINTAINENCE_DATA,  
     data
   }
 }

@@ -25,7 +25,7 @@ import {
 
 import ChildTable from './ChildTable'
 
-const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag, parentBar, customerType }) => {
+const CorrectNamesTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag, parentBar, customerType }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
@@ -302,4 +302,4 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
 }
 
 
-export default CorrectAddressTable
+export default CorrectNamesTable

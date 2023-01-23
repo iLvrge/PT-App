@@ -150,7 +150,7 @@ const VirtualizedTable = ({
       } else {
         setSortDirection(isAsc ? SortDirection.DESC : SortDirection.ASC);
         setSortBy(property);
-      }
+      } 
       if(collapsable === true && selectedIndex !== null) {
         updateNewHeight(100)
       }
@@ -545,38 +545,42 @@ const VirtualizedTable = ({
     noOfSelectedItems,
     selectedGroup
   );
-  const checkRowCollapse = (childInModal, collapsable, index, rowData, tableRef) => { 
+  const checkRowCollapse = (childInModal, collapsable, index, rowData, tableRef) => {  
     if (collapsable && typeof childInModal === 'undefined') {
-      tableRef.current.recomputeRowHeights();
-      tableRef.current.forceUpdate(); 
-      if (disableRow === false || disableRow == undefined) {
+      if(tableRef.current !== null && typeof tableRef.current.recomputeRowHeights == 'function') {
+        tableRef.current.recomputeRowHeights();
+        tableRef.current.forceUpdate(); 
+      }
+
+      if ((disableRow === false || disableRow == undefined) || disableRow == true) {
        
-        const rowContainer = tableRef.current.Grid._scrollingContainer.querySelector(
-          `div.rowIndex_${index}`,
-        ); 
-        if (rowContainer != null) {
+        const rowContainer = tableRef.current !== null && typeof tableRef.current.Grid != 'undefined' && tableRef.current.Grid != null ? tableRef.current.Grid._scrollingContainer.querySelector(
+          `div.rowIndex_${index}`) : null; 
+ 
+        if (rowContainer !== null) {
+          const nextSibling = rowContainer.nextElementSibling
           if (
-            rowContainer.querySelector(".ReactVirtualized__Table__row") != null
+            nextSibling != null && nextSibling.querySelector(".ReactVirtualized__Table__row") !== null
           ) {
-            const allRowHeight =
-              rowContainer.querySelectorAll(".ReactVirtualized__Table__row")
+            const allRowHeight = 
+              nextSibling.querySelectorAll(".ReactVirtualized__Table__row")
                 .length * rowHeight;
             let updateHeight = childHeight;
             if (allRowHeight < childHeight) {
               updateHeight = allRowHeight + 10;
-            }
+            } 
             setCollapseRowHeight(updateHeight);
             updateNewHeight(499);
           } else {
-            waitAndCall(collapsable, index, rowData, tableRef);
+            waitAndCall(childInModal, collapsable, index, rowData, tableRef);
           }
         } else {
-          waitAndCall(collapsable, index, rowData, tableRef);
+          waitAndCall(childInModal, collapsable, index, rowData, tableRef);
         }
       }  
     }
   };
-  const updateNewHeight = (time) => {
+  const updateNewHeight = (time) => { 
     setTimeout(() => {
       /* tableRef.current.recomputeRowHeights(index) */
       if(tableRef.current != null) {
@@ -609,32 +613,48 @@ const VirtualizedTable = ({
                   ?
                     typeof childCounterColumn == 'string' 
                     ? 
-                      rowData[childCounterColumn] * rowHeight < childHeight
+                      rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
                       ?
                         rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0) 
-                      :  
+                      : 
+                        childRows.length > 0 
+                        ?
+                          childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
+                        :
                         childHeight - rowHeight
                     :
                       childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
                   :
-                    rowData[disableRowKey] * rowHeight < childHeight
+                    rowData[disableRowKey] * rowHeight < childHeight  && rowData[disableRowKey] > childRows.length 
                     ? 
                       rowData[disableRowKey] * rowHeight + rowHeight
                     :
+                      childRows.length > 0 
+                      ?
+                        childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
+                      :
                       childHeight + rowHeight
                 : 
                   childCounterColumn != undefined
                   ?
                     typeof childCounterColumn == 'string' 
                     ? 
-                      rowData[childCounterColumn] * rowHeight < childHeight
+                      rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
                       ?
                         rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0) 
                       :  
+                        childRows.length > 0 
+                        ?
+                          childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
+                        :
                         childHeight - rowHeight
                     :
                       childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
                   :
+                    childRows.length > 0 
+                    ?
+                      childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
+                    :
                     collapseRowHeight,
               display: "flex",
               position: "absolute",
@@ -664,9 +684,10 @@ const VirtualizedTable = ({
       if((optionalKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[optionalKey])) || (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey])) || (selected !== undefined && selectedKey !== undefined && highlightRow !== undefined && highlightRow === true && selected.includes(rowData[selectedKey])) || (selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey]))) {
         selectedRow = true
       }  
-      /* console.log("selectedRow", selected, selectedKey, rowData) */
-      return (      
-        <React.Fragment key={key}>
+      /* console.log("selectedRow", childRows, collapsable, selectedIndex, rowData[selectedKey], disableRow, childCounterColumn, rowData[disableRowKey], ) */
+      /* console.log('rowData', rowData) */
+     return (      
+        <React.Fragment key={`${key}_${index}`}>
         <TableRow
           className={clsx(className, `rowIndex_${index}`, {['noBorderLines']: typeof noBorderLines !== 'undefined' ? true : false}, { ['highlightRow']: highlightRow !== undefined && highlightRow === true && selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey]) ? true : false }, {['highlightWithCol']: highlightRow !== undefined && highlightRow === true &&  !selected.includes(rowData[selectedKey]) && ( (optionalKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[optionalKey])) || (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey]))) ? true : false }) }
           style={{
@@ -680,32 +701,48 @@ const VirtualizedTable = ({
                   ?
                     typeof childCounterColumn == 'string' 
                     ? 
-                      rowData[childCounterColumn] * rowHeight < childHeight
+                      rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
                       ?
                         rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0) 
-                      :  
+                      : 
+                        childRows.length > 0 
+                        ?
+                          childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
+                        : 
                         childHeight + rowHeight
                     :
                       childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
                   :
-                    rowData[disableRowKey] * rowHeight < childHeight
+                    rowData[disableRowKey] * rowHeight < childHeight && rowData[disableRowKey] > childRows.length 
                     ? 
                       rowData[disableRowKey] * rowHeight + rowHeight
                     :
+                      childRows.length > 0 
+                      ?
+                        childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
+                      : 
                       childHeight + rowHeight
                 : 
                   childCounterColumn != undefined
                   ?
                     typeof childCounterColumn == 'string' 
                     ? 
-                      rowData[childCounterColumn] * rowHeight < childHeight
+                      rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
                       ?
                         rowHeight + rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0) 
                       :  
+                        childRows.length > 0 
+                        ?
+                          childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
+                        : 
                         childHeight - rowHeight
                     :
                       rowHeight + childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
                   :
+                    childRows.length > 0 
+                    ?
+                      childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
+                    : 
                     collapseRowHeight
               : rowHeight,
             alignItems:
@@ -857,33 +894,49 @@ const VirtualizedTable = ({
             ?
               typeof childCounterColumn == 'string' 
               ? 
-                rowData[childCounterColumn] * rowHeight < childHeight
+                rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
                 ?
                   rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0) 
                 :  
-                  childHeight
+                  childRows.length > 0 
+                  ?
+                    childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
+                  : 
+                  childHeight + rowHeight
               :
                 childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
             :
-              rowData[disableRowKey] * rowHeight < childHeight
+              rowData[disableRowKey] * rowHeight < childHeight  && rowData[disableRowKey] > childRows.length 
               ? 
                 rowData[disableRowKey] * rowHeight + rowHeight
               :
+                childRows.length > 0 
+                ?
+                  childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
+                : 
                 childHeight + rowHeight
           : 
             childCounterColumn != undefined
             ?
               typeof childCounterColumn == 'string' 
               ? 
-                rowData[childCounterColumn] * rowHeight < childHeight
+                rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
                 ?
                   rowHeight + rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0) 
                 :  
-                  childHeight + rowHeight
+                  childRows.length > 0 
+                  ?
+                    childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
+                  : 
+                  childHeight - rowHeight
               :
                 rowHeight + childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
             :
-            collapseRowHeight + rowHeight;
+              childRows.length > 0 
+              ?
+                childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
+              : 
+              collapseRowHeight + rowHeight;
       }
       return height
     },

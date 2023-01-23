@@ -83,7 +83,9 @@ import { setAssetTypeAssignments,
   setChannelLoading,
   setChannelsList,
   setSlackProfileData,
-  setSlackUsers
+  setSlackUsers,
+  setSocialMediaConnectPopup,
+  setSelectedMaintainenceAssetsList
  } from '../../actions/patentTrackActions2'
 
  import {  
@@ -111,6 +113,8 @@ import {
 } from '../../actions/uiActions'
 import Scheduling from './Scheduling'
 import ViewIcons from './ViewIcons'
+import SocialMediaConnect from '../common/SocialMediaConnect'
+import { stubTrue } from 'lodash'
 
 const NewHeader = (props) => {
   const classes = useStyles()
@@ -133,12 +137,22 @@ const NewHeader = (props) => {
   const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
   const timelineScreen = useSelector(state => state.ui.timelineScreen)
   const patentScreen = useSelector(state => state.ui.patentScreen)
+  const socialMediaConnectPopup = useSelector(state => state.patenTrack2.socialMediaConnectPopup)
   const [layoutName, setLayoutName] = useState(null)
   const [ isClipboardActive, setIsClipboardActive ] = useState(false)
   const [ isCompanyMenuOpen, setCompanyMenuOpen ] = useState(false)
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState( true )
   const [ slackAuthLogin, setSlackAuthLogin ] = useState( true )
   const [ scheduling, setScheduling ] = useState( false )
+
+  const connectMenuItems = [
+    {
+      id: 2,
+      label: 'Connect',
+      component: SocialMediaConnect,
+      standalone: true,
+    }
+  ]
   
   const schedulingMenuItems = [
     {
@@ -407,7 +421,7 @@ const NewHeader = (props) => {
       /* dispatch(setSalesAssetsType(type)) */      
 
       dispatch(setBreadCrumbs(type == 1 ? 'Our Assets for Sale' : 'Patent Marketplace'))
-      dispatch(setIsSalesAssetsDisplay(true))
+      dispatch(setIsSalesAssetsDisplay(1))
       dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
       dispatch(setSelectedAssetsPatents([]))
       dispatch(setAssetFamily([]))
@@ -477,7 +491,8 @@ const NewHeader = (props) => {
   dispatch(setSelectAssignments([]))	
   dispatch(setSelectAssignmentCustomers([]))
   dispatch(setAllAssignmentCustomers(false))
-  dispatch(setIsSalesAssetsDisplay(false))
+  dispatch(setIsSalesAssetsDisplay(0))
+  dispatch(setSelectedMaintainenceAssetsList([]))
 }
 
 const clearOtherItems = () => {
@@ -592,16 +607,19 @@ const resetAllActivity = (category) => {
   } */
   const findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == category)
   if( findIndex !== -1 ) {
-      //hideMenu(event, controlList[findIndex])
-      resetAll()
-      clearOtherItems()
-      dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))  
-      if(category == 'due_dilligence' || category == 'restore_ownership') {
-          dispatch(setSwitchAssetButton(controlList[findIndex].category == 'due_dilligence' ? 0 : 1))
-      }
+    //hideMenu(event, controlList[findIndex])
+    resetAll()
+    clearOtherItems()
+    dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))  
+    if(category == 'due_dilligence' || category == 'restore_ownership') {
+      dispatch(setSwitchAssetButton(controlList[findIndex].category == 'due_dilligence' ? 0 : 1))
+    }
   }
 }
 
+const onHandlleSetSocialMediaPopup = (flag) => {
+  dispatch(setSocialMediaConnectPopup(flag))
+}
   return (
     <AppBar className={classes.root} color='transparent' position='relative'>
       <Toolbar className={classes.toolbar}>
@@ -665,6 +683,8 @@ const resetAllActivity = (category) => {
               display_clipboard={display_clipboard}
               handleKeyDown={handleKeyDown}
               search_string={search_string}
+              openIllustrationBar={props.openIllustrationBar}
+              handleIllustrationBarOpen={props.handleIllustrationBarOpen}
             />
 
             {
@@ -812,12 +832,12 @@ const resetAllActivity = (category) => {
                     :
                     ''
                   }
-                  <ListItem button onClick={onHandleForeignAssets}>
+                  {/* <ListItem button onClick={onHandleForeignAssets}>
                     <ListItemIcon  color='inherit' >
                       <svg width="18" height="18" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-import" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" ><path fill="currentColor" d="M16 288c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h112v-64zm489-183L407.1 7c-4.5-4.5-10.6-7-17-7H384v128h128v-6.1c0-6.3-2.5-12.4-7-16.9zm-153 31V0H152c-13.3 0-24 10.7-24 24v264h128v-65.2c0-14.3 17.3-21.4 27.4-11.3L379 308c6.6 6.7 6.6 17.4 0 24l-95.7 96.4c-10.1 10.1-27.4 3-27.4-11.3V352H128v136c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H376c-13.2 0-24-10.8-24-24z" class=""></path></svg>
                     </ListItemIcon>
                     <ListItemText primary={`Review External Assets`} />
-                  </ListItem>  
+                  </ListItem>   */}
                   {
                     process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' 
                     ?
@@ -845,6 +865,17 @@ const resetAllActivity = (category) => {
             componentItems={schedulingMenuItems} 
             showScreen={scheduling}  
             setScreen={setScheduling}
+            paper={false} 
+            full={false}   
+          />
+        )
+      }
+      {
+        socialMediaConnectPopup === true && process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && (
+          <FullScreen 
+            componentItems={connectMenuItems} 
+            showScreen={socialMediaConnectPopup}  
+            setScreen={onHandlleSetSocialMediaPopup}
             paper={false} 
             full={false}   
           />

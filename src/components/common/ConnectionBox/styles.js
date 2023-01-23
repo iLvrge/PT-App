@@ -1,3 +1,4 @@
+import { yellow } from '@mui/material/colors';
 import makeStyles from '@mui/styles/makeStyles';
 
 export default makeStyles(theme => ({
@@ -47,6 +48,7 @@ export default makeStyles(theme => ({
     cursor: 'pointer',
   },
   rootContainer:{
+    minWidth: 390,
     '& td':{
       verticalAlign: 'top'
     }
@@ -86,5 +88,8 @@ export default makeStyles(theme => ({
   },
   marginBottom: {
     marginBottom: 5,
+  },
+  highlight: {
+    color: yellow[500]
   }
 }))

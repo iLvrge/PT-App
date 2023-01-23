@@ -6,6 +6,11 @@ import Paper from '@mui/material/Paper'
 import { DataSet } from 'vis-data/esnext'
 import { Timeline } from 'vis-timeline-73/esnext'
 import CircularProgress from '@mui/material/CircularProgress'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import ZoomOutIcon from '@mui/icons-material/ZoomOut';
+import { IconButton } from '@mui/material';
 import moment from 'moment'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import { getCustomerAssets, getCustomerSelectedAssets } from '../../../../actions/patentTrackActions2'
@@ -32,36 +37,43 @@ const options = {
     horizontalScroll: true,
     verticalScroll: true,
     limitSize: true,
-    /* cluster: {
-  //   titleTemplate: 'Cluster containing {count} events.<br/> Zoom in to see the individual events.',
+    /* cluster: true, */
+    cluster: {
+        maxItems: 10,
+        titleTemplate: 'Zoom in to see the individual citiing patent.',
         showStipes: false,
-        clusterCriteria: (firstItem, secondItem) => {
-            return ( (firstItem.rawData.assignee === secondItem.rawData.assignee) && moment(new Date(firstItem.rawData.start)).format(DATE_FORMAT_YEAR) == moment(new Date(secondItem.rawData.start)).format(DATE_FORMAT_YEAR))
-        }
-    },  */
+        /* clusterCriteria: (firstItem, secondItem) => {
+            return  firstItem.rawData.assignee.toString().toLowerCase() == secondItem.rawData.assignee.toString().toLowerCase()
+        },
+        fitOnDoubleClick: false */
+    }, 
     zoomFriction: 30,
-    zoomMin: 1000 * 60 * 60 * 24 * 7,  
-    template: function(item, element, data) {
-        let itemRaw = data.isCluster ? data.items[0] : data
-        let image = itemRaw.rawData.logo
-        
-        if(itemRaw.rawData.logo !== '' && itemRaw.rawData.logo !== null) {
-            if( itemRaw.rawData.logo.indexOf('http') === -1 ) {
-                image = CDN_PATH_LOGO + itemRaw.rawData.logo
-            } 
-        } else {
-            image = CDN_PATH_LOGO + NO_IMAGE_AVAILABLE
-        }
-      return `<div class="first">
-                <div class="flexMain">
-                    <div class="textColumn">${numberWithCommas(itemRaw.number)}</div>
-                    <div class="textColumn text-height" >${toTitleCase(itemRaw.rawData.assignee)}</div>
-                    <div class="textColumn small-font">${moment(new Date(itemRaw.rawData.start)).format(DATE_FORMAT)}</div>
+    /* zoomMin: 1000 * 60 * 60 * 24 * 7,   */
+    template: function(item, element, data) { 
+        if (data.isCluster) {
+            return `<span class="cluster-header">${data.items.length} citing patents</span>`
+        } else { 
+            let itemRaw = data.isCluster ? data.items[0] : data
+            let image = itemRaw.rawData.logo
+             
+            if(itemRaw.rawData.logo !== '' && itemRaw.rawData.logo !== null) {
+                if( itemRaw.rawData.logo.indexOf('http') === -1 ) {
+                    image = CDN_PATH_LOGO + itemRaw.rawData.logo
+                } 
+            } else {
+                image = CDN_PATH_LOGO + NO_IMAGE_AVAILABLE
+            }
+          return `<div class="first">
+                    <div class="flexMain">
+                        <div class="textColumn">${numberWithCommas(itemRaw.number)}</div>
+                        <div class="textColumn text-height" >${toTitleCase(itemRaw.rawData.assignee)}</div>
+                        <div class="textColumn small-font">${moment(new Date(itemRaw.rawData.start)).format(DATE_FORMAT)}</div>
+                    </div>
                 </div>
-            </div>
-            <div class="second"><span class="img-holder">
-                <img class="${itemRaw.rawData.logo == '' || itemRaw.rawData.logo == null ? 'no-image' : ''}" src='${image}' /></span>
-            </div>`
+                <div class="second"><span class="img-holder">
+                    <img class="${itemRaw.rawData.logo == '' || itemRaw.rawData.logo == null ? 'no-image' : ''}" src='${image}' /></span>
+                </div>`
+        } 
     },  
 }
 
@@ -95,8 +107,11 @@ const Acknowledgements = () => {
     const [ timelineItems, setTimelineItems ] = useState([])
     const [ isLoadingTimelineData, setIsLoadingTimelineData ] = useState(false)
     const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(true)
+    const [previousLoad, setPreviousLoad] = useState(false)
+    const [buttonClick, setSetButtonClick] = useState(false)
     const [ tooltipItem, setToolTipItem] = useState([])
     const [ timeInterval, setTimeInterval] = useState(null)  
+    const [scrollNewRequest, setScrollNewRequest] = useState(false) 
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const selectedCategory = useSelector( state => state.patenTrack2.selectedCategory )
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
@@ -144,14 +159,7 @@ const Acknowledgements = () => {
     }
 
     const onRangeChange = useCallback(_debounce((properties) => {
-        setIsLoadingTimelineData(true)
-        
-        const updatedItems = timelineItems.filter((item) => (new Date(item.start + '00:00:00') >= properties.start && new Date(item.start + '00:00:00') <= properties.end))
-        items.current = new DataSet()
-        items.current.add(updatedItems)
-        console.log('onRangeChange', timelineItems.length, updatedItems)
-        timelineRef.current.setItems(items.current)
-        setIsLoadingTimelineData(false)
+       
       }, 100), [ timelineItems ])
     
     
@@ -159,19 +167,23 @@ const Acknowledgements = () => {
        * this call when Timeline rangechanged
        */
     
-      const onRangeChanged = useCallback(_debounce((properties) => {
-        console.log('onRangeChanged', properties)
-        setIsLoadingTimelineData(true)
-        const updatedItems = timelineItems.filter((item) => {
-            console.log(new Date(item.start + ' 00:00:00'), properties)
-            return (new Date(item.start + ' 00:00:00') >= properties.start && new Date(item.start + ' 00:00:00') <= properties.end)
-        })
-        items.current = new DataSet()
-        items.current.add(updatedItems)
-        console.log('onRangeChanged', timelineItems.length, updatedItems)
-        timelineRef.current.setItems(items.current)
-        setIsLoadingTimelineData(false)
-      }, 1000), [ timelineItems ])
+    const onRangeChanged = useCallback(_debounce(async(properties) => {
+        console.log('onRangeChanged', properties) 
+        /* items.current = new DataSet()
+        items.current.add(timelineItems)
+        timelineRef.current.setItems(items.current)  */
+        if(properties.byUser === true) {  
+            let filter =  timelineItems.filter(row => new Date(row.start) < new Date(properties.start) )
+            if(filter.length == 0) {
+              filter =  timelineItems.filter(row => new Date(row.start) > new Date(properties.end) && new Date(properties.end) <= new Date() )
+            }
+            if(filter.length == 0) {
+                console.log(timelineItems)
+                setScrollNewRequest(true)
+                //await retrieveCitedData(moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))  
+            } 
+        }
+    }, 1000), [ timelineItems ])
 
     const resetTooltipContainer = () => {  
         const findOldToolTip = document.getElementsByClassName('custom_tooltip')
@@ -186,7 +198,10 @@ const Acknowledgements = () => {
         setTimeout(() => {
             if(tootlTip === item.id) {      
                 const color = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
-                const tootltipTemplate = `<div class='custom_tooltip' style='background:${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default} ;top:${event.clientY}px;left:${event.clientX + 20 }px;'>
+                const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
+                const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector('#citationTimeline') : document.getElementById('citationTimeline'); 
+                const getPosition = element.getBoundingClientRect(); 
+                const tootltipTemplate = `<div class='custom_tooltip' style='border:1px solid #fff;background:${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default} ;top:${ getPosition.y }px;left:${ getPosition.x }px;'>
                                             <h4 style='color:${color};text-align:left;margin:0'>${numberWithCommas(item.number)}</h4>
                                             <div>
                                                 <h4>Grant Date: </h4>${moment(new Date(item.start)).format(DATE_FORMAT)}
@@ -210,123 +225,129 @@ const Acknowledgements = () => {
         }, TIME_INTERVAL) 
     }
 
+    const retrieveCitedData = async(start = '', end = '') => {
+        setIsLoadingTimelineRawData(true)
+        PatenTrackApi.cancelAllAssetsCitationDataRequest()   
+        if ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0) || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token === null)){
+            setIsLoadingTimelineRawData(false)
+            setTimelineRawData([])
+            return null
+        }  
+        const list = [];
+        let totalRecords = 0;
+        if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {  
+            if( assetsSelected.length > 0 ) {
+                const promise = assetsSelected.map(asset => {
+                    const findIndex = assetsList.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset.toString() )
+                    if( findIndex !== -1 ) {
+                        if( assetsList[findIndex].appno_doc_num != '' ) {
+                            list.push(assetsList[findIndex].appno_doc_num.toString())
+                        }
+                    }
+                })
+                await Promise.all(promise)
+                totalRecords = list.length
+            } else {
+                const promise = selectedMaintainencePatents.map(asset => {
+                    const findIndex = maintainenceAssetsList.findIndex( row => row.appno_doc_num.toString() == asset[1].toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset[0].toString() )
+                    if( findIndex !== -1 ) {
+                        if( maintainenceAssetsList[findIndex].appno_doc_num != '' ) {
+                            list.push(maintainenceAssetsList[findIndex].appno_doc_num.toString())
+                        }
+                    }
+                })
+                await Promise.all(promise)
+                totalRecords = list.length
+            }                
+        } else {
+            if( assetsList.length > 0 || maintainenceAssetsList.length > 0 ) {
+                if( assetsList.length > 0 ) {
+                    const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
+                    await Promise.all(promise)
+                    totalRecords = assetsTotal
+                } else if ( maintainenceAssetsList.length > 0 ) {
+                    const promise = maintainenceAssetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
+                    await Promise.all(promise)
+                    totalRecords = maintainenceAssetsTotal
+                }
+            } else {
+                /**
+                 * Check which layout and get the assets list first and then 
+                 */
+                if( selectedCategory == '' ) { //pay_maintenece_fee
+
+                } else {
+                    const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+                    tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+                    customers =
+                        selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
+                    assignments =
+                        selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;  
+
+                    if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+                            if( auth_token != null ) {
+                            dispatch(
+                                process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
+                                getCustomerAssets(
+                                    selectedCategory == '' ? '' : selectedCategory,
+                                    companies,
+                                    tabs,
+                                    customers,
+                                    assignments,
+                                    false,
+                                    0,
+                                    0,
+                                    'asset',
+                                    'DESC'
+                                )
+                                : 
+                                getCustomerSelectedAssets(location.pathname.replace('/', ''))
+                            );
+                        } 
+                    } else {
+                        dispatch(
+                            getCustomerAssets(
+                                selectedCategory == '' ? '' : selectedCategory,
+                                companies,
+                                tabs,
+                                customers,
+                                assignments,
+                                false,
+                                0,
+                                0, 
+                                'asset',
+                                'DESC',
+                                -1, 
+                                display_sales_assets
+                            ),
+                        );
+                    }
+                }
+            }                
+        }
+        if( list.length > 0 ) {
+            const form = new FormData()
+            form.append("list", JSON.stringify(list)) 
+            form.append("total", totalRecords)
+            form.append('selectedCompanies', JSON.stringify(selectedCompanies))
+            form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
+            form.append('customers', JSON.stringify(selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies))
+            form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
+            form.append('type', selectedCategory)
+            form.append('other_mode', display_sales_assets)
+            form.append('start', start)
+            form.append('end', end)
+            const { data } = await PatenTrackApi.getAllAssetsCitationData(form)
+            setIsLoadingTimelineRawData(false)
+            if(data !== null ) {
+                setTimelineRawData(data)
+            }
+        }       
+    }
+
     useEffect(() => {
         const getAcknowledgementData = async() => {
-            setIsLoadingTimelineRawData(true)
-            PatenTrackApi.cancelAllAssetsCitationData()   
-            if ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0) || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token === null)){
-                setIsLoadingTimelineRawData(false)
-                setTimelineRawData([])
-                return null
-            }  
-            const list = [];
-            let totalRecords = 0;
-            if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {  
-                if( assetsSelected.length > 0 ) {
-                    const promise = assetsSelected.map(asset => {
-                        const findIndex = assetsList.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset.toString() )
-                        if( findIndex !== -1 ) {
-                            if( assetsList[findIndex].appno_doc_num != '' ) {
-                                list.push(assetsList[findIndex].appno_doc_num.toString())
-                            }
-                        }
-                    })
-                    await Promise.all(promise)
-                    totalRecords = list.length
-                } else {
-                    const promise = selectedMaintainencePatents.map(asset => {
-                        const findIndex = maintainenceAssetsList.findIndex( row => row.appno_doc_num.toString() == asset[1].toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset[0].toString() )
-                        if( findIndex !== -1 ) {
-                            if( maintainenceAssetsList[findIndex].appno_doc_num != '' ) {
-                                list.push(maintainenceAssetsList[findIndex].appno_doc_num.toString())
-                            }
-                        }
-                    })
-                    await Promise.all(promise)
-                    totalRecords = list.length
-                }                
-            } else {
-                if( assetsList.length > 0 || maintainenceAssetsList.length > 0 ) {
-                    if( assetsList.length > 0 ) {
-                        const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
-                        await Promise.all(promise)
-                        totalRecords = assetsTotal
-                    } else if ( maintainenceAssetsList.length > 0 ) {
-                        const promise = maintainenceAssetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
-                        await Promise.all(promise)
-                        totalRecords = maintainenceAssetsTotal
-                    }
-                } else {
-                    /**
-                     * Check which layout and get the assets list first and then 
-                     */
-                    if( selectedCategory == '' ) { //pay_maintenece_fee
-
-                    } else {
-                        const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-                        tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-                        customers =
-                          selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
-                        assignments =
-                          selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;  
-
-                        if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-                             if( auth_token != null ) {
-                                dispatch(
-                                    process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
-                                    getCustomerAssets(
-                                      selectedCategory == '' ? '' : selectedCategory,
-                                      companies,
-                                      tabs,
-                                      customers,
-                                      assignments,
-                                      false,
-                                      0,
-                                      0,
-                                      'asset',
-                                      'DESC'
-                                    )
-                                    : 
-                                    getCustomerSelectedAssets(location.pathname.replace('/', ''))
-                                );
-                            } 
-                        } else {
-                            dispatch(
-                                getCustomerAssets(
-                                  selectedCategory == '' ? '' : selectedCategory,
-                                  companies,
-                                  tabs,
-                                  customers,
-                                  assignments,
-                                  false,
-                                  0,
-                                  0, 
-                                  'asset',
-                                  'DESC',
-                                  -1, 
-                                  display_sales_assets
-                                ),
-                            );
-                        }
-                    }
-                }                
-            }
-            if( list.length > 0 ) {
-                const form = new FormData()
-                form.append("list", JSON.stringify(list)) 
-                form.append("total", totalRecords)
-                form.append('selectedCompanies', JSON.stringify(selectedCompanies))
-                form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
-                form.append('customers', JSON.stringify(selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies))
-                form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
-                form.append('type', selectedCategory)
-                form.append('other_mode', display_sales_assets)
-                const { data } = await PatenTrackApi.getAllAssetsCitationData(form)
-                setIsLoadingTimelineRawData(false)
-                if(data !== null ) {
-                    setTimelineRawData(data)
-                }
-            }            
+            retrieveCitedData()     
         }
         getAcknowledgementData()
     }, [selectedCategory,  selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_sales_assets])
@@ -348,13 +369,13 @@ const Acknowledgements = () => {
         timelineRef.current.setOptions(options) 
         timelineRef.current.on('itemover', onItemover)
         timelineRef.current.on('itemout', onItemout)
-        /* timelineRef.current.on('rangechanged', onRangeChanged)
-        timelineRef.current.on('rangechange', onRangeChange)     */
+        timelineRef.current.on('rangechanged', onRangeChanged)
+         /* timelineRef.current.on('rangechange', onRangeChange)     */
         return () => {
             timelineRef.current.off('itemover', onItemover) 
             timelineRef.current.off('itemout', onItemout)
-            /* timelineRef.current.on('rangechanged', onRangeChanged)
-            timelineRef.current.on('rangechange', onRangeChange)     */
+            timelineRef.current.on('rangechanged', onRangeChanged)
+            /* timelineRef.current.on('rangechange', onRangeChange)     */
             resetTooltipContainer()
         } 
     }, [ onItemover, onItemout ]) 
@@ -386,8 +407,21 @@ const Acknowledgements = () => {
                     return c
                 })
                 Promise.all(promise)
-                start = new moment(start).subtract(20, 'months') 
-                end = new moment(end).add(20, 'months')
+                if(scrollNewRequest === false) {
+                    if(convertedItems.length > 100) {
+                      start = new Date(convertedItems[99].start)
+                    } else {
+                      start = new moment(start).subtract(3, 'year') 
+                    }
+                } else {
+                    if(convertedItems.length > 0) {
+                      start = new Date(convertedItems[convertedItems.length - 1].start)
+                    }
+                }
+                  
+                if(scrollNewRequest === false) {
+                    end = new moment(end).add(3, 'year')
+                }  
                 /* const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
                 items.current.add(convertedItems.slice(0, startIndex))   */
                 items.current.add(convertedItems)
@@ -399,14 +433,57 @@ const Acknowledgements = () => {
         /* console.log(items.current, start, end) */
         setTimeout(() => {
             timelineRef.current.setItems(items.current)
-            timelineRef.current.setOptions({ ...options, start, end, min: start, max: end })
+            timelineRef.current.setOptions({ ...options, start, end, min: new Date('1999-01-01'), 
+            max: new moment().add(1, 'year') })
         }, 50)
     }, [ timelineRawData, isLoadingTimelineRawData, timelineContainerRef ])
 
-
+    const move  = (percentage) => {
+        var range = timelineRef.current.getWindow();
+        var interval = range.end - range.start;
+    
+        timelineRef.current.setWindow({
+            start: range.start.valueOf() - interval * percentage,
+            end:   range.end.valueOf()   - interval * percentage
+        });
+      }
+    
+      const zoomIn = () => {
+        setSetButtonClick(true)
+        timelineRef.current.zoomIn(0.2);
+      }
+    
+      const zoomOut = () => {
+        setSetButtonClick(true)
+        timelineRef.current.zoomOut(0.2);
+      }
+    
+      const moveLeft = () => {
+        move(0.2);
+      }
+    
+      const moveRight = () => {
+        move(-0.2);
+      }
 
     return(
-        <React.Fragment>   
+        <Paper className={classes.root}> 
+            <div id="visualization">
+                <div className="menu">
+                    <IconButton onClick={zoomIn}>
+                        <ZoomInIcon/>
+                    </IconButton>
+                    <IconButton onClick={zoomOut}>
+                        <ZoomOutIcon/>
+                    </IconButton>
+                    <IconButton onClick={moveLeft}>
+                        <ChevronLeftIcon />
+                    </IconButton>
+                    <IconButton onClick={moveRight}>
+                        <ChevronRightIcon/>
+                    </IconButton> 
+                </div>
+            </div>  
             <div
                 id={`citationTimeline`}
                 style={{ 
@@ -417,7 +494,7 @@ const Acknowledgements = () => {
                 className={classes.timelineCitation}
             />
             { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> } 
-        </React.Fragment>
+        </Paper>
     )
 }
 

@@ -10,6 +10,10 @@ export default makeStyles(theme => ({
     height: '100%',
     display: 'flex',    
     flexDirection: 'column',
+    '& .MuiTab-root:last-child':{
+      width: 85,
+      padding: 0
+    },
     '& .MuiTab-root':{
       minWidth: 'inherit',
     },
@@ -19,6 +23,12 @@ export default makeStyles(theme => ({
     '& embed':{
       height: '100%',
       width: '100%'
+    },
+    '& .MuiFormControl-root':{
+      margin: 0
+    },
+    '& .MuiFormControl-root:has(> button.MuiTab-root)':{
+      padding: 0
     },
     '& .MuiPaper-elevation1': {
       boxShadow: 'none'
@@ -78,11 +88,15 @@ export default makeStyles(theme => ({
   tab: {
     minWidth: '25%',
     minHeight: 47,
-    fontSize: '1.1rem'
+    fontSize: '1.1rem', 
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow:'ellipsis'
   },
   tabs: {
     minHeight: 47, 
     display: 'flex',
+    width: '94%',
     '& .MuiTab-root': {
       fontSize: '1.1rem'
     }
@@ -550,5 +564,8 @@ export default makeStyles(theme => ({
       wordBreak: 'keep-all',
       color: theme.palette.text.secondary 
     }    
+  },
+  dropdown: {
+
   }
 }))

@@ -8,6 +8,7 @@ export default {
   lifeSpanMode: false,
   familyMode: false,
   familyItemMode: false,
+  familyActiveTab: 0,
   timeline: {
     selectedItem: null,
     selectedAsset: null,
@@ -23,11 +24,11 @@ export default {
   loadingDashboardData: false,
   viewDashboard: {
     line: false,
-    gauge: false,
+    gauge: process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? true : false,
     jurisdictions: false,
     invention: false,
     sankey: false,
-    kpi: true,
+    kpi: process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? false : true,
     timeline: false
   },
   viewInitial: false

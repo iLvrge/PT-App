@@ -136,6 +136,7 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
   const channel_id = useSelector(state => state.patenTrack2.channel_id)
   const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
   const connectionBoxView = useSelector(state => state.patenTrack.connectionBoxView)
+  const selectedLawFirm = useSelector( state => state.patenTrack2.selectedLawFirm)
 
   const COLUMNS = [
     {
@@ -454,6 +455,7 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
 
   
   useEffect(() => {
+    let ignore = false;
     if (defaultLoad === true || defaultLoad === undefined) {
       const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
         tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
@@ -463,13 +465,17 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
             : assetTypesCompaniesSelected;
       if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
         if(assignmentList.length === 0) {
-          dispatch(
-            getCustomerTransactions(
-              selectedCategory == '' ? '' : selectedCategory, 
-              companies, 
-              tabs, 
-              customers, 
-              false));
+          if (!ignore){
+            console.log("TRANSActionsss loading")
+            dispatch(
+              getCustomerTransactions(
+                selectedCategory == '' ? '' : selectedCategory, 
+                companies, 
+                tabs, 
+                customers, 
+                selectedLawFirm,
+                false));
+          }
         }
         //dispatch(getChannels())
         
@@ -483,6 +489,7 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
       setRows([])
       setGrandTotal(0)
     }
+    return () => { ignore = true };
   }, [
     dispatch, 
     selectedCompanies,
@@ -491,6 +498,7 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
     assetTypesSelectAll,
     assetTypesCompaniesSelected,
     assetTypesCompaniesSelectAll,
+    selectedLawFirm,
     defaultLoad,
   ]);
 
@@ -607,10 +615,10 @@ const onHandleClickRow = useCallback(
         dispatch(toggleLifeSpanMode(true));
         dispatch(toggleFamilyMode(false));
         dispatch(toggleFamilyItemMode(false));
-        console.log("connectionBoxView", connectionBoxView)
-        if(connectionBoxView === true) {
+        /* console.log("connectionBoxView", connectionBoxView) */
+        /* if(connectionBoxView === true) {
           checkChartAnalytics(null, null, false)
-        }
+        } */
         //dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, []))
         //dispatch(toggleLifeSpanMode(false))
         //dispatch(toggleFamilyItemMode(false))
@@ -634,9 +642,10 @@ const findChannelID = useCallback((rfID) => {
 
   const getTransactionData = (dispatch, rf_id, defaultLoad, search_string) => {
     setSelectedRow([rf_id]);    
-    if(chartsBar === false && analyticsBar === false) {
+    
+    /* if(chartsBar === false && analyticsBar === false) {
       checkChartAnalytics(null, null, false)
-    }
+    } */
     dispatch(transactionRowClick(rf_id, slack_channel_list, defaultLoad, search_string))
   };
 

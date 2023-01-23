@@ -8,7 +8,7 @@ import USPTOContainer from '../AssetsVisualizer/USPTOContainer'
 /* import FamilyContainer from '..//AssetsVisualizer/FamilyContainer' */
 import LegalEventsContainer from '../AssetsVisualizer/LegalEventsContainer'
 import LifeSpanContainer from '../AssetsVisualizer/LifeSpanContainer'
-import InventionVisualizer from '..//AssetsVisualizer/InventionVisualizer'
+import InventionVisualizer from '../AssetsVisualizer/InventionVisualizer'
 import PdfViewer from '../../common/PdfViewer'
 import {
   setTimelineSelectedItem,
@@ -25,6 +25,8 @@ import GeoChart from "../AssetsVisualizer/GeoChart"
 import GoogleCharts from "../AssetsVisualizer/GoogleCharts"
 import TimelineSecurity from "../AssetsVisualizer/TimelineSecurity"
 import ErrorBoundary from '../ErrorBoundary'
+import LawFirmNames from "../AssetsVisualizer/NamesContainer/LawFirmNames"
+import SankeyChart from "../AssetsVisualizer/SankeyChart"
 
 const AssetDetailsContainer = ({
   cls,
@@ -50,7 +52,13 @@ const AssetDetailsContainer = ({
   customerBarSize,
   companyBarSize,
   type,
-  cube
+  cube,
+  setIllustrationRecord,
+  chartsBarToggle,
+  checkChartAnalytics,
+  setAnalyticsBar,
+  setChartBar,
+  gap
 }) => { 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -90,10 +98,12 @@ const AssetDetailsContainer = ({
   const usptoMode = useSelector(state => state.ui.usptoMode);
   const familyMode = useSelector(state => state.ui.familyMode);
   const familyItemMode = useSelector(state => state.ui.familyItemMode);
+  const familyActiveTab = useSelector(state => state.ui.familyActiveTab);
   const lifeSpanMode = useSelector(state => state.ui.lifeSpanMode);
   const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
   const selectedAssetsLegalEvents = useSelector(state => state.patenTrack.assetLegalEvents)
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
+  const connectionBoxData = useSelector(state => state.patenTrack.connectionBoxData)
 
   
 
@@ -185,8 +195,8 @@ const AssetDetailsContainer = ({
 
   const onCloseFamilyItemMode = useCallback(() => {
     dispatch(toggleFamilyItemMode(false));
-  }, [dispatch]);
-
+  }, [dispatch]); 
+  
   const changeContainer = () => {
     if (chartAnalyticsContainer.current != null) {
       const mainRoot = chartAnalyticsContainer.current.pane1.querySelector(
@@ -204,6 +214,7 @@ const AssetDetailsContainer = ({
       }
     }
   };
+ 
   return (
     <div style={{ height: "100%" }} className={classes.root}>
       {
@@ -223,7 +234,7 @@ const AssetDetailsContainer = ({
             split={split}
             minSize={10}
             maxSize={-100}
-            defaultSize={illustrationData != '' && illustrationData != null && Object.keys(illustrationData).length > 0 ? '50%' : '0%'}
+            defaultSize={connectionBoxData != '' && connectionBoxData != null && Object.keys(connectionBoxData).length > 0 ? '50%' : '0%'}
             pane1Style={{
               pointerEvents: isDrag ? 'none' : 'auto',
             }}
@@ -253,7 +264,7 @@ const AssetDetailsContainer = ({
                 isDrag === true ? classes.notInteractive : classes.isInteractive
               }`}
             >
-              <ConnectionBox display={"false"} assets={illustrationData} type={type}/>
+              <ConnectionBox display={"false"} assets={connectionBoxData} type={type}/>
             </div>
         </SplitPane>
         )
@@ -263,7 +274,7 @@ const AssetDetailsContainer = ({
           <SplitPane
             className={cls}
             split={split}
-            minSize={minSize}
+            minSize={100}
             maxSize={-100}
             defaultSize={defaultSize}
           /*  onChange={() => changeContainer()} */
@@ -306,32 +317,58 @@ const AssetDetailsContainer = ({
                 } 
                 {
                   chartBar == true ? (
-                    cube === true && assetIllustration == null
+                    cube === true && familyItemMode === false && assetIllustration == null
                     ?
                       <GeoChart
                         chartBar={chartBar} 
+                        analyticsBar={analyticsBar} 
                         openCustomerBar={openCustomerBar} 
                         visualizerBarSize={visualizerBarSize}
                         type={type}
                         titleBar={true}
+                        activeTab={selectedCategory == 'filled' ? 2 : selectedCategory == 'acquired' ? 3 : (selectedCategory == 'top_non_us_members' || selectedCategory == 'divested') ? 0 : 1}
                       />
                     :
-                    timelineScreen === true  && assetIllustration == null
+                    timelineScreen === true  && assetIllustration == null && selectedCategory == 'due_dilligence'
                     ?
-                      <GoogleCharts
+                      <SankeyChart
+                        type={'acquired'} 
+                        showTabs={true}
+                        tabText={'Acquired'}
+                        fullScreen={true}
+                        standalone={true}
+                      />
+                    : 
+                    timelineScreen === true  && assetIllustration == null && selectedCategory == 'proliferate_inventors'
+                    ?
+                      <GeoChart
                         chartBar={chartBar} 
+                        analyticsBar={analyticsBar} 
                         openCustomerBar={openCustomerBar} 
                         visualizerBarSize={visualizerBarSize}
                         type={type}
+                        titleBar={true}
+                        activeTab={1}
                       />
-                    :                  
+                    :  
+                      timelineScreen === true  && assetIllustration == null && selectedCategory == 'top_law_firms'
+                      ?
+                        <LawFirmNames
+                          analyticsBar={analyticsBar} 
+                          chartBar={chartBar}
+                          visualizerBarSize={visualizerBarSize}
+                          type={type}  
+                          activeTab={2}
+                        />
+                      :                  
                     connectionBoxView === true ? (
                         <PdfViewer
                           display={"false"}
                           fullScreen={false}
                           resize={resizeFrame}
                         />  
-                    ) : lifeSpanMode === true ? (
+                    ) :  
+                    lifeSpanMode === true ? (
                         <InventionVisualizer 
                           defaultSize={defaultSize} 
                           illustrationBar={openIllustrationBar} 
@@ -341,19 +378,26 @@ const AssetDetailsContainer = ({
                           commentBar={commentBar} 
                           customerBarSize={customerBarSize} 
                           companyBarSize={companyBarSize}
-                          type={type} />
-                    ) : familyItemMode === true ? (
-                        <FamilyItemContainer 
-                          item={selectedAssetsFamilyItem} 
-                          onClose={onCloseFamilyItemMode} 
-                          analyticsBar={analyticsBar} 
-                          chartBar={chartBar} 
-                          illustrationBar={illustrationBar}
-                          visualizerBarSize={visualizerBarSize} 
-                          type={type}
-                          {...( selectedCategory === 'pay_maintainence_fee' || selectedCategory === 'ptab'  ? {activeTab: selectedCategory === 'pay_maintainence_fee' ? 3 : 2} : {})} 
+                          type={type} 
+                          tab={true}
+                          side={true}
                         />
-                    ) : (
+                    ) : familyItemMode === true ? 
+                          selectedCategory == 'incorrect_names'
+                          ?
+                            <ConnectionBox display={"false"} />
+                          :
+                            <FamilyItemContainer 
+                              item={selectedAssetsFamilyItem} 
+                              onClose={onCloseFamilyItemMode} 
+                              analyticsBar={analyticsBar} 
+                              chartBar={chartBar} 
+                              illustrationBar={illustrationBar}
+                              visualizerBarSize={visualizerBarSize} 
+                              type={type}
+                              {...( selectedCategory === 'pay_maintainence_fee' || selectedCategory === 'ptab'  ? {activeTab: selectedCategory === 'pay_maintainence_fee' ? 3 : 2} : {activeTab: familyActiveTab})} 
+                            />
+                    : (
                       <InventionVisualizer 
                         defaultSize={defaultSize} 
                         illustrationBar={openIllustrationBar} 
@@ -363,7 +407,10 @@ const AssetDetailsContainer = ({
                         commentBar={commentBar} 
                         customerBarSize={customerBarSize} 
                         companyBarSize={companyBarSize}
-                        type={type} />
+                        type={type}  
+                        tab={true}
+                        side={true}
+                      />
                     )
                   )
                   :
@@ -375,6 +422,7 @@ const AssetDetailsContainer = ({
               className={`${classes.commentContainer} ${
                 isDrag === true ? classes.notInteractive : classes.isInteractive
               }`}
+              id={`analyticsBar`}
               /* onMouseOver={event => handleIllustrationButton(event, true)}
               onMouseLeave={event => handleIllustrationButton(event, false)} */
             >
@@ -382,7 +430,52 @@ const AssetDetailsContainer = ({
                 {
                   analyticsBar === true 
                     ? 
-                      timelineScreen === true  && assetIllustration == null
+                      timelineScreen === true  && assetIllustration == null && selectedCategory == 'due_dilligence'
+                      ?
+                        <SankeyChart
+                          type={'divested'}
+                          showTabs={true}
+                          tabText={'Divested'}
+                          fullScreen={true}
+                          standalone={true}
+                        />
+                      :
+                      timelineScreen === true  && assetIllustration == null && (selectedCategory == 'top_law_firms' || selectedCategory == 'proliferate_inventors' )
+                      ?
+                        <InventionVisualizer 
+                          defaultSize={defaultSize} 
+                          illustrationBar={openIllustrationBar} 
+                          visualizerBarSize={visualizerBarSize} 
+                          analyticsBar={analyticsBar} 
+                          openCustomerBar={openCustomerBar} 
+                          commentBar={commentBar} 
+                          customerBarSize={customerBarSize} 
+                          companyBarSize={companyBarSize}
+                          type={type} 
+                          onSelect={false}
+                          titleBar={true}
+                          tab={true}
+                        />
+                      :
+                      timelineScreen === true  && assetIllustration == null && (selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording')
+                      ?
+                        <LifeSpanContainer
+                          chartBar={chartBar} 
+                          analyticsBar={analyticsBar}
+                          openCustomerBar={openCustomerBar} 
+                          visualizerBarSize={visualizerBarSize}
+                          setIllustrationRecord={setIllustrationRecord}
+                          chartsBarToggle={chartsBarToggle}
+                          checkChartAnalytics={checkChartAnalytics}
+                          setAnalyticsBar={setAnalyticsBar}
+                          setChartBar={setChartBar}
+                          gap={gap}
+                          type={type}
+                          activeTab={1}
+                        />
+                        
+                      :
+                      timelineScreen === true  && assetIllustration == null 
                       ?
                         <TimelineSecurity
                           chartBar={chartBar} 
@@ -397,8 +490,15 @@ const AssetDetailsContainer = ({
                             lifeSpanMode === true ? (
                               <LifeSpanContainer 
                                 chartBar={chartBar} 
+                                analyticsBar={analyticsBar}
                                 openCustomerBar={openCustomerBar} 
                                 visualizerBarSize={visualizerBarSize}
+                                setIllustrationRecord={setIllustrationRecord}
+                                chartsBarToggle={chartsBarToggle}
+                                checkChartAnalytics={checkChartAnalytics}
+                                setAnalyticsBar={setAnalyticsBar}
+                                setChartBar={setChartBar}
+                                gap={gap}
                                 type={type}/>
                             ) :
                             familyMode && (
@@ -406,7 +506,7 @@ const AssetDetailsContainer = ({
                                   events={selectedAssetsLegalEvents} 
                                   type={type}
                                   selectedCategory
-                                  {...( selectedCategory === 'ptab' ? {activeTab: 2} : {})} 
+                                  {...( selectedCategory === 'ptab' || selectedCategory === 'to_be_monitized' ? {activeTab: selectedCategory === 'to_be_monitized' ? 1 : 2} : {})} 
                                 />
                             ) 
                           }
@@ -415,8 +515,15 @@ const AssetDetailsContainer = ({
                       (
                         <LifeSpanContainer 
                           chartBar={chartBar} 
+                          analyticsBar={analyticsBar}
                           openCustomerBar={openCustomerBar} 
                           visualizerBarSize={visualizerBarSize}
+                          setIllustrationRecord={setIllustrationRecord}
+                          chartsBarToggle={chartsBarToggle}
+                          checkChartAnalytics={checkChartAnalytics}
+                          setAnalyticsBar={setAnalyticsBar}
+                          setChartBar={setChartBar}
+                          gap={gap}
                           type={type}/>
                       )
                     : 

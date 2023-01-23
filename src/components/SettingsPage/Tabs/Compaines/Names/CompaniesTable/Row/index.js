@@ -1,28 +1,116 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
 import IconButton from '@mui/material/IconButton'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined'
+import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import Checkbox from '@mui/material/Checkbox'
 import Collapse from '@mui/material/Collapse'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import clsx from 'clsx'
 import useStyles from './styles'
-import Box from '@mui/material/Box'
-import SlackImage from '../../../../../../common/SlackImage'
+import Box from '@mui/material/Box' 
+import { ListItemIcon, ListItemText, MenuItem, Select } from '@mui/material'
+import { useSelector } from 'react-redux'
 
-function Row({ onSelect, isSelected, isChildSelected, row }) {
-  const [ open, setOpen ] = React.useState(false)
+function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem }) {
+  const [ open, setOpen ] = useState(false)
+  const [dropdownValue, setDropdownRowItem] = useState(null)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [ editableRow, setEditableRow ] = useState(null)
+  const companiesList = useSelector(state => state.patenTrack.companiesList)
   const classes = useStyles()
   const toggleOpen = useCallback((e) => {
     e.stopPropagation()
     setOpen(open => !open)
   }, [])
 
-  const removeFromSlack = (companyID) => {
+  const editColumn = (row) => { 
+    setEditableRow(row)
+  }
 
+  const onHandleChangeName = (event) => {   
+    if(event.charCode == 13 || event.keyCode == 13) {
+      updateData(event.target.value, editableRow)
+      setEditableRow(null)
+    } else if(event.key === "Escape") {
+      setEditableRow(null)
+    }
+  }
+
+  const handleDropdownClose = () => {
+    setDropdownOpen(false);
+    setDropdownRowItem(null)
+  };
+
+  const handleDropdownOpen = (item) => { 
+    setDropdownRowItem(item)
+    setDropdownOpen(true);
+  };
+
+  const onHandleDropDown = (event, item) => {
+    console.log('onHandleDropDown', event, event.target.value, item)
+    moveItem(event.target.value, item) 
+  }
+
+  const ShowDropDown = ({item}) => { 
+    return (
+      <Select
+        labelId='dropdown-open-select-label'
+        id='dropdown-open-select'
+        IconComponent={(props) => (
+          dropdownOpen ? <ExpandLessIcon {...props} /> : <ChevronRightIcon {...props}/>
+        )}
+        open={ dropdownOpen && item.id == dropdownValue.id}
+        MenuProps={{
+          anchorOrigin: {
+            vertical: "bottom",
+            horizontal: "left"
+          },
+          transformOrigin: {
+            vertical: "top",
+            horizontal: "left"
+          },
+          getContentAnchorEl: null
+        }}
+        onClose={handleDropdownClose}
+        onOpen={() => handleDropdownOpen(item)}  
+        onChange={(event) =>  onHandleDropDown(event, item) }
+        value={''}
+      >
+        <MenuItem key={-99} value={-99}>
+            <ListItemIcon>
+              
+            </ListItemIcon>
+            <ListItemText className={'heading'}>
+              Move Outside 
+            </ListItemText> 
+        </MenuItem>
+        {
+          (companiesList || []).map(company => {
+            return company.type == 1 
+              ?
+                <MenuItem key={company.id} value={company.id}>
+                    <ListItemIcon>
+                      
+                    </ListItemIcon>
+                    <ListItemText className={'heading'}>
+                      {
+                        company.representative_name === null
+                        ? company.original_name
+                        : company.representative_name}
+                    </ListItemText> 
+                </MenuItem>
+              :
+                ''
+          })
+          
+        }
+      </Select> 
+    )
   }
 
   return (
@@ -37,21 +125,29 @@ function Row({ onSelect, isSelected, isChildSelected, row }) {
         key={row.id}>
 
         <TableCell padding="none">
-          <IconButton
-            onClick={toggleOpen} size="small"
-            style={{ visibility: row.children.length > 0 ? 'visible' : 'hidden' }}>
-            {open ? <ExpandMoreIcon /> : <ChevronRightIcon />}
-          </IconButton>
+          {
+            row.children.length > 0
+            ?
+              <IconButton
+                onClick={toggleOpen} size="small"
+              >
+                {open ? <ExpandMoreIcon /> : <ChevronRightIcon />}
+              </IconButton>
+            : 
+              ''
+             /*  <ShowDropDown item={row}/> */
+          }
+          
         </TableCell>
 
-        <TableCell className={classes.actionTh} padding="none">
+        {/* <TableCell className={classes.actionTh} padding="none">
           <Checkbox
             checked={isSelected(row.id)}
             value={row.id}
           />
-        </TableCell>
+        </TableCell> */}
 
-        <TableCell>
+        {/* <TableCell>
           {row.slack !== ''
             ? 
               <a onClick={() => removeFromSlack(row.id)}>
@@ -62,12 +158,34 @@ function Row({ onSelect, isSelected, isChildSelected, row }) {
                 </span>
               </a>
             : ''}
-        </TableCell>
+        </TableCell> */}
 
-        <TableCell className={classes.padLR0}>
-          {row.representative_name === null
-            ? row.original_name
-            : row.representative_name} {row.children.length > 0 ? `(${row.children.length})` : ''}
+        <TableCell 
+          className={classes.padLR0}  
+          {...(row.children.length > 0 ? {onClick: () => editColumn(row)} : {})}
+        >
+          {
+            editableRow !== null && row.id == editableRow.id
+            ?
+              <input
+                type="text"
+                autoFocus
+                defaultValue={row.representative_name === null
+                  ? row.original_name
+                  : row.representative_name}
+                  onKeyDown={e => onHandleChangeName(e)}
+              />
+            :
+              <React.Fragment>
+                {
+                  row.representative_name === null
+                  ? row.original_name
+                  : row.representative_name
+                }
+                {row.children.length > 0 ? `(${row.children.length})` : ''}
+              </React.Fragment> 
+          }
+          
         </TableCell>
 
         <TableCell align={'center'}>
@@ -92,7 +210,7 @@ function Row({ onSelect, isSelected, isChildSelected, row }) {
                           key={`${company.id}_child`}
                           selected={isChildSelected(company.id)}
                         >
-                          <TableCell className={classes.actionCell}>
+                          {/* <TableCell className={classes.actionCell}>
                             <Checkbox
                               checked={isChildSelected(company.id)}
                               inputProps={{
@@ -102,12 +220,13 @@ function Row({ onSelect, isSelected, isChildSelected, row }) {
                               value={company.id}
                               disabled={isSelected(row.id)}
                             />
+                          </TableCell>    */}
+                          <TableCell>
+                            <ShowDropDown item={company}/>
                           </TableCell>
-                          <TableCell></TableCell>      
                           <TableCell className={classes.padLR0}>
                             {company.original_name}
-                          </TableCell>
-
+                          </TableCell> 
                           <TableCell align={'center'}>
                             {company.counter}
                           </TableCell>

@@ -144,7 +144,9 @@ class PatentLink extends React.Component {
         //passing referenced data from json.popup and handleComment
         //this.props.comment is a handler
         //this.props.commentContent is the comment content (string or HTML (have to be parsed))
-        this.props.onClickConnectionLine(this.props.data)
+        if(typeof this.props.connectionSelection === 'undefined' || (typeof this.props.connectionSelection !== 'undefined' && this.props.connectionSelection === true)) {
+          this.props.onClickConnectionLine(this.props.data)
+        }
       });
     
     g.append('path')

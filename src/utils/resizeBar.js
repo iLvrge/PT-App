@@ -17,7 +17,16 @@ import { setAssetTypeAssignments,
     setAllAssignments, 
     setSelectAssignments,
     setSlackMessages,
-    setChannelID
+    setChannelID,
+    setSelectedMaintainenceAssetsList,
+    setCPCRequest,
+    setJurisdictionRequest,
+    setJurisdictionData,
+    setCPCData,
+    setTimelineRequest,
+    setTimelineData,
+    setCPCSecondData,
+    setLineChartReset
    } from '../actions/patentTrackActions2'
   
    import {  
@@ -75,10 +84,34 @@ export const resetAllRowSelect = ( dispatch, resetList, skipIndex) => {
             dispatch( item.callback() )
         }
     })
-}  */
+}  */ 
 
 export const resetItemList = {
-    resetAll: [
+    resetAll: [ 
+        {
+            callback: setTimelineRequest(false)
+        },
+        {
+            callback: setTimelineData([])
+        },
+        {
+            callback: setCPCRequest(false)
+        },
+        {
+            callback: setJurisdictionRequest(false)
+        },
+        {
+            callback: setJurisdictionData([])
+        },
+        {
+            callback: setLineChartReset()
+        },
+        {
+            callback: setCPCData({list:[], group: [], sales: []})
+        },
+        {
+            callback: setCPCSecondData({list:[], group: [], sales: []})
+        },
         {
             callback: setAssetTypes([])
         },
@@ -112,6 +145,9 @@ export const resetItemList = {
         {
             callback: setAllAssignmentCustomers(false)
         },
+        {
+            callback: setSelectedMaintainenceAssetsList([])
+        },
     ],
     clearOtherItems: [
         {
@@ -130,7 +166,7 @@ export const resetItemList = {
             callback: setChannelID(null)
         },
         {
-            callback: setSlackMessages({messages: [], users: []})
+            callback: setSlackMessages({ messages: [], users: [] })
         },
         {
             callback: setPDFFile({ document: '', form: '', agreement: '' })

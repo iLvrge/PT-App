@@ -29,127 +29,140 @@ import InventionVisualizer from '../common/AssetsVisualizer/InventionVisualizer'
 import SankeyChart from './SankeyChart'
 import Loader from '../common/Loader'
 import AddToolTip from './AddToolTip'
+import { useIsMounted } from '../../utils/useIsMounted'
 
 const Reports = (props) => {
     let LIST = [
         {
-            title: 'Broken Chain-of-Title',
-            tooltip: 'Patent assets owned by the company, with ownership defects along the chain of title, such as rights not transferred by inventors.',
+            title: 'Chain-of-Title',
+            tooltip: 'Owned assets with defects along the chain-of-title that could impede their future use.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
             type: 1,
-            list: []
+            list: [],
+            id: 1
         },
         {
-            title: 'Incorrect Names',
-            tooltip: 'Patent assets assigned under incorrect names, and unlikely to be found in a name search.',
-            number: 0,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 17,
-            list: []
-        },
-        {
-            title: 'Encumbrances',
-            tooltip: 'Patent assets subject to third party rights, which could harm the patents’ liquidity.',
-            number: 0,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 18,
-            list: []
-        },
-        {
-            title: 'Wrong Addresses',
-            tooltip: 'Patent assets assigned under incorrect addresses.',
-            number: 0,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 19,
-            list: []
-        },
-        {
-            title: 'To Be Monitized',
-            tooltip: 'Patent assets that are assigned to the company under a stated corresponding agent which is different from those currently employed by the company.',
-            number: 0,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 20,
-            list: []
-        },
-        {
-            title: 'Unecessary Patents',
-            tooltip: 'Patent assets covering technological areas which are far from the company\’s core technology.',
-            number: 0,
-            patent: '',
-            application: '',
-            rf_id: '',
-            type: 21,
-            list: []
-        },
-        {
-            title: 'Un-Assigned',
-            tooltip: '37 CFR § 1.46 Application for patent by an assignee: (b)(1) If the applicant is the assignee, documentary evidence of ownership ( e.g., assignment for an assignee, employment agreement for a person to whom the inventor is under an obligation to assign the invention) should be recorded as provided for in part 3 of this chapter no later than the date the issue fee is paid in the application.',
+            title: 'To Record',
+            tooltip: 'Patent assets invented by the company\’s employees, the assignment of which to the company is yet to be recorded. 37 CFR § 1.46 Application for patent by an assignee: (b)(1) If the applicant is the assignee, documentary evidence of ownership ( e.g., assignment for an assignee, employment agreement for a person to whom the inventor is under an obligation to assign the invention) should be recorded as provided for in part 3 of this chapter no later than the date the issue fee is paid in the application.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
             type: 22,
-            list: []
+            list: [],
+            id: 2
         },
         {
-            title: 'Late Maintainance',
-            tooltip: 'Patents for which the company paid surcharge fees due to late payment of maintenance fees.',
+            title: 'To Divest',
+            tooltip: 'Patent assets covering subject matters presumably far from the company’s core business.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
-            type: 23
+            type: 21,
+            list: [],
+            id: 3
         },
         {
-            title: 'Corrected Recordings',
-            tooltip: 'Patent assets with recording that later on were corrected.',
+            title: 'To Monetize',
+            tooltip: 'Patent assets with a higher likelihood to license 3rd parties.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
-            type: 24,
-            list: []
+            type: 20,
+            list: [],
+            id: 4
         },
         {
-            title: 'Late Recordings',
-            tooltip: 'Patent assets exposed to third party\'s rights due to recording that was beyond 45 days from the transaction\’s execution date.',
+            title: 'Names',
+            tooltip: 'Patent assets that were assigned under incorrect owner names, and are likely to not be found in a name search, preventing assignees from finding their own patent assets.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
-            type: 25,
-            list: []
+            type: 17,
+            list: [],
+            id: 5
+        },
+        {
+            title: 'Addresses',
+            tooltip: 'Patent assets that were assigned under incorrect address of the owner or the stated corresponding agent.',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 19,
+            list: [],
+            id: 6
         },
         {
             title: 'Deflated Collateral',
-            tooltip: 'The list of collateralized patent assets that have expired since the collateralization day.',
+            tooltip: 'Collateralized patent assets that have expired or abandoned.  Most security agreements require borrowers to maintain the securing assets.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
             type: 26,
-            list: []
+            list: [],
+            id: 7
         },
         {
-            title: 'Challenged',
-            tooltip: 'The list of patents the validity of which has been challenged.',
+            title: 'Encumbrances',
+            tooltip: 'Patent assets that are subject to third party rights, which could harm the patents’ liquidity, enforcement, and collateralization. ',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 18,
+            list: [],
+            id: 8
+        },
+        {
+            title: 'Maintainance',
+            tooltip: 'Patents for which the company paid surcharge fees due to late payment of maintenance fees.',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 23,
+            id: 9
+        },
+        {
+            title: 'Recordings',
+            tooltip: 'Patent assets the assignment of which was recorded later than 3 months from its date, and therefore exposed to a bona fide purchases for valuable consideration.',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 25,
+            list: [],
+            id: 10
+        },
+        {
+            title: 'Corrections',
+            tooltip: 'Patent assets the assignments of which were recorded incorrectly, and required a subsequent correction.',
+            number: 0,
+            patent: '',
+            application: '',
+            rf_id: '',
+            type: 24,
+            list: [],
+            id: 11
+        },
+        {
+            title: 'To Purchase',
+            tooltip: 'Patent assets available for you to purchase directly from other PatenTrack\'s users. These assets were selected based on the innovative focus of your patent portfolio.',
             number: 0,
             patent: '',
             application: '',
             rf_id: '',
             type: 27,
-            list: []
+            list: [],
+            id: 12
         }
     ];
 
@@ -289,7 +302,7 @@ const Reports = (props) => {
     const KPI_LIST = [
         {
             title: 'Owned',
-            tooltip: 'The USA assets assigned to the company from its inventors, plus assets acquired by the company, minus those that were sold, expired  and abandoned.',
+            tooltip: 'USA assets invented by the company\'s employees and assets assigned to the company from 3rd parties. Excluding assets that were sold, abandoned or expired.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -298,8 +311,8 @@ const Reports = (props) => {
             type: 30,
         },
         {
-            title: 'Filled',
-            tooltip: 'The USA assets acquired by the company, minus those that were sold, expired and abandoned',
+            title: 'Invented',
+            tooltip: 'USA assets invented by the company’s employees. Excluding assets that have been sold, abandoned, or expired.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -309,7 +322,7 @@ const Reports = (props) => {
         }, 
         {
             title: 'Acquired',
-            tooltip: 'The USA assets assigned to the company from its inventors and others, minus those that were sold, expired or abandoned',
+            tooltip: 'USA assets, which have not been sold, abandoned, or expired, assigned to the company other than from its employees.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -319,7 +332,7 @@ const Reports = (props) => {
         },
         {
             title: 'Collateralized',
-            tooltip: 'Patents the company abandoned, i.e. for which the company has not paid maintenance fees.',
+            tooltip: 'USA assets subject to unreleased security rights.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -329,7 +342,7 @@ const Reports = (props) => {
         },
         {
             title: 'Maintenance Fee Due',
-            tooltip: 'Maintenance fees to be paid in the next twelve months.',
+            tooltip: 'USA assets for which maintenance fee is due for payment in the next 12 months.',
             number: 0,
             patent: '',
             application: '',
@@ -339,7 +352,7 @@ const Reports = (props) => {
         },
         {
             title: 'Challenged (PTAB)',
-            tooltip: 'Non-abandoned patents applications the company acquired from third parties.',
+            tooltip: 'USA assets under past or present PTAB proceedings.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -349,7 +362,7 @@ const Reports = (props) => {
         },
         {
             title: 'Divested',
-            tooltip: 'Patent applications which are still in the process of prosecution.',
+            tooltip: 'USA assets assigned from the company to others.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -359,7 +372,7 @@ const Reports = (props) => {
         },
         {
             title: 'Abandoned',
-            tooltip: 'Non-abandoned patent applications filed by the company\’s employees.',
+            tooltip: 'USA patent applications the prosecution of which discontinued, and USA patents expired due to non-payment of maintenance fees.',
             number: 0,
             other_number: 0,
             patent: '',
@@ -368,8 +381,8 @@ const Reports = (props) => {
             type: 36
         },
         {
-            title: 'Members of Owned USA',
-            tooltip: 'Countries in which the company has the largest number of patents.',
+            title: 'Non-U.S. Members',
+            tooltip: 'Owned USA assets, which have non-U.S.A. members.',
             number: 0,
             patent: '',
             application: '',
@@ -389,7 +402,7 @@ const Reports = (props) => {
         },
         {
             title: 'Law Firms',
-            tooltip: 'The company\’s law firms with the largest number of registered transactions.',
+            tooltip: 'The company\’s law firms with the largest number of recorded transactions.',
             number: 0,
             patent: '',
             application: '',
@@ -438,14 +451,14 @@ const Reports = (props) => {
             list: []
         },
         {
-            title: 'Employees',
+            title: 'Invention',
             standalone: false,
             rf_id: '',
             type: 5,
             list: []
         },
         {
-            title: 'Court',
+            title: 'Litigation',
             standalone: false,
             rf_id: '',
             type: 6,
@@ -485,11 +498,12 @@ const Reports = (props) => {
         xs: 12,
         xl: 12,
     }
-    const KPI_TYPE = [30,31,32,33,34,35,36,37,38,39,40,41];
-    const GAUGE_TYPE = [1, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27];
-    const classes = useStyles();
+    const KPI_TYPE = [30,31,32,33,34,35,36,37,38,39,40,41]
+    const GAUGE_TYPE = [1, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+    const classes = useStyles()
     const history = useHistory()
-    const dispatch = useDispatch();
+    const dispatch = useDispatch()
+    const isMounted = useIsMounted()
     const DATE_FORMAT = 'MMM DD, YYYY'
     const ref = useRef();
     let resizeObserver = null
@@ -502,21 +516,24 @@ const Reports = (props) => {
     const profile = useSelector(state => (state.patenTrack.profile))    
     const [cardList, setCardList] = useState([])
     const [timelineList, setTimelineList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_TIMELINE_LIST : TIMELINE_LIST)
+    const auth_token = useSelector(state => state.patenTrack2.auth_token)
     const viewDashboard = useSelector(state => state.ui.viewDashboard)
     const viewInitial = useSelector(state => state.ui.viewInitial)
-    const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
-    const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
+    const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list)
+    const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected)
+    const childID = useSelector( state => state.patenTrack2.mainCompaniesList.childID)
+    const child_list = useSelector( state => state.patenTrack2.mainCompaniesList.child_list)
     const assetTypeCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.list)
-    const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected);
-    const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected); 
+    const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected)
+    const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected)
     const selectedAssetAssignments = useSelector(
         state => state.patenTrack2.assetTypeAssignments.selected,
-    ); 
+    )
     const assetTypeAssignmentAssets = useSelector(
         state => state.patenTrack2.assetTypeAssignmentAssets.list,
-    ); //Assets List 
+    ) //Assets List 
     const dashboardPanelActiveButtonId = useSelector(state => state.patenTrack2.dashboardPanelActiveButtonId) 
-    
+     
     useEffect(() => {
         if(ref.current !== null) {
             resizeObserver = new ResizeObserver(entries => {  
@@ -551,11 +568,19 @@ const Reports = (props) => {
                     }  
                     newTimelineGrid = {...newGridItems}
                 } 
-                setGrid(newGridItems)
-                if(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'){
-                    setTimelineGrid(newTimelineGrid)
+                /* console.log('newTimelineGrid', newTimelineGrid, profile) */
+                if (isMounted.current) { 
+                    setGrid(newGridItems)
                 }
-                setSmallScreen(smallScreen)  
+                if(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'){
+                    /* console.log('newTimelineGrid', newTimelineGrid) */
+                    if (isMounted.current) { 
+                        setTimelineGrid(newTimelineGrid)
+                    }
+                }
+                if (isMounted.current) { 
+                    setSmallScreen(smallScreen)  
+                }
             })
                      
             resizeObserver.observe(ref.current)
@@ -564,33 +589,39 @@ const Reports = (props) => {
                     resizeObserver.disconnect();
                 }
             }
-        }        
-    }, []) 
+        }   
+    }, [profile]) 
 
     useEffect(() => {
         if(dashboardPanelActiveButtonId != activeId) {
-            setActiveId(dashboardPanelActiveButtonId)
-            if(dashboardPanelActiveButtonId != -1) {
-                props.checkChartAnalytics(null, null, dashboardPanelActiveButtonId != -1 ? true : false)
+            if (isMounted.current) { 
+                setActiveId(dashboardPanelActiveButtonId)
+                if(dashboardPanelActiveButtonId != -1) {
+                    props.checkChartAnalytics(null, null, dashboardPanelActiveButtonId != -1 ? true : false)
+                }
             }
-        }
+        } 
     }, [dashboardPanelActiveButtonId])
 
     useEffect(() => { 
-        if(viewDashboard.timeline === true) {
-            setTimelineList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
-        } else if(viewDashboard.kpi === true || viewDashboard.line === true || viewDashboard.gauge === true){ 
-            addCardList(viewDashboard.kpi === true ? 1 : '')  
-        } 
+        if (isMounted.current) { 
+            if(viewDashboard.timeline === true) {
+                setTimelineList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
+            } else if(viewDashboard.kpi === true || viewDashboard.line === true || viewDashboard.gauge === true){ 
+                addCardList(viewDashboard.kpi === true ? 1 : '')  
+            }  
+        }
     }, [viewDashboard])
 
     useEffect(() => {
-        if(viewInitial === false && cardList.length > 0) {
+        if(viewInitial === false) {
             if(selectedCompanies.length > 0) {
-                if(viewDashboard.timeline === true) {
-                    callTimelineData()
-                } else {
-                    findDashboardData()
+                if (isMounted.current) {
+                    if(viewDashboard.timeline === true && timelineList.length > 0) {
+                        callTimelineData()
+                    } else if(cardList.length > 0){
+                        findDashboardData()
+                    }
                 }
             }
         }
@@ -619,16 +650,18 @@ const Reports = (props) => {
 
 
     useEffect(() => {
-        if(profile?.user?.organisation?.organisation_type) {
-            setTimelineList(profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
-            setTimelineGrid(profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? BANK_TIMELINE_ITEM : TIMELINE_ITEM)
+        if (isMounted.current) { 
+            if(profile?.user?.organisation?.organisation_type) {
+                setTimelineList(profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
+                setTimelineGrid(profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? BANK_TIMELINE_ITEM : TIMELINE_ITEM)
+            } 
         }
     }, [profile])
    
     /**
      * Get Dashboard data
      */
-    useEffect(() => {
+    useEffect(() => { 
         if(typeof props.dashboardData !== 'undefined' && props.dashboardData.length > 0) {
             setLoading(false)
             dispatch(setLoadingDashboardData(false))
@@ -636,36 +669,89 @@ const Reports = (props) => {
             if(typeof props.dashboardTimelineData !== 'undefined' && props.dashboardTimelineData.length > 0) {
                 setTimelineList(props.dashboardTimelineData)
             }
-        }  else {
-            if(selectedCompanies.length > 0 && cardList.length > 0) {
-                if(viewDashboard.timeline === true) {
+        }  else { 
+            if(selectedCompanies.length > 0 ) { 
+                if(viewDashboard.timeline === true && timelineList.length > 0) {
                     callTimelineData()
-                } else {
+                } else if(cardList.length > 0){
                     findDashboardData()
-                }
+                } 
             } else {   
                 if(viewDashboard.timeline === true) {
-                    setTimelineList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
+                    if (isMounted.current) { 
+                        setTimelineList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
+                    }
                 } else {
                     addCardList(!viewDashboard.line && viewDashboard.jurisdictions == false && viewDashboard.invention === false && viewDashboard.sankey === false && viewDashboard.kpi === false && viewDashboard.timeline === false ? 0 : viewDashboard.kpi === true ? 1 : '')  
                 }
             }
-        }
-        return (() => {})
+        } 
     },  [
             selectedCompanies, 
             assetTypesSelected, 
             selectedAssetCompanies, 
             selectedAssetAssignments, 
             assetTypeAssignmentAssets, 
-            assetTypeCompanies
+            assetTypeCompanies,
+            profile
         ]
     )
 
 
+
+    useEffect(() => {
+        if(activeId  !== -1 ) {
+            //scrollToActive item when the right pane open
+            const container = ref.current
+            if(container !== null){
+                setTimeout(() => {
+                    const listItemsContainer = container.querySelector('.listItems')
+                    const findIndex = cardList.findIndex( item => item.type == activeId) 
+                    if(findIndex !== -1) {
+                        listItemsContainer.scroll(0, listItemsContainer.querySelectorAll('.box_item')[findIndex].offsetTop - 50)
+                    }
+                }, 1000)
+            }
+        }
+        return (() => {})
+    }, [activeId])
+
+/* 
     const companyname = useMemo(() => {
         return selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])
+    }, [selectedCompanies, companiesList]) */ 
+
+    const companyname = useMemo(() => {
+        let filterList =  selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])
+        if(filterList.length == 0) { 
+            filterList =  selectedCompanies.length > 0 && childID > 0 && child_list.length > 0 && child_list.filter( company => company.representative_id === selectedCompanies[0])
+        }
+        return filterList
     }, [selectedCompanies, companiesList])
+
+    const formattedCompanyname = useMemo(() => {
+        let name = ''
+        let filterList =  selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])
+        if(filterList.length == 0) { 
+            const findCompany = selectedCompanies.length > 0 && child_list.filter( company => company.representative_id === selectedCompanies[0])
+            if(findCompany.length > 0) {
+                if(childID > 0) { 
+                    const findGroup =  companiesList.filter( company => company.representative_id === childID)
+                    if(findGroup.length > 0) {
+                        name = `${findGroup[0].original_name} : ${findCompany[0].original_name}`
+                    } else {
+                        name = findCompany[0].original_name
+                    }
+                } else {
+                    name = findCompany[0].original_name
+                }
+            }
+        } else {
+            name = filterList != false ? filterList[0].original_name : ''
+        } 
+        return name
+    }, [selectedCompanies, companiesList])
+    
 
     const partyName = useMemo(() => {
         return selectedAssetCompanies.length > 0 && assetTypeCompanies.filter( party => party.id === selectedAssetCompanies[0])
@@ -673,19 +759,46 @@ const Reports = (props) => {
 
     
     const findDashboardData = async(invention, jurisdictions, sankey, kpi) => {        
-        if(loading === false && ((typeof invention !== 'undefined' && invention === false) ||  viewDashboard.invention === false) && ((typeof jurisidictions !== 'undefined' && jurisdictions === false) || viewDashboard.jurisdictions === false ) && ((typeof sankey !== 'undefined' && sankey === false) || viewDashboard.sankey === false) ) { 
+        if(profile != undefined && profile.user != undefined && loading === false && ((typeof invention !== 'undefined' && invention === false) ||  viewDashboard.invention === false) && ((typeof jurisidictions !== 'undefined' && jurisdictions === false) || viewDashboard.jurisdictions === false ) && ((typeof sankey !== 'undefined' && sankey === false) || viewDashboard.sankey === false) ) { 
             const list = [];
-            let totalRecords = 0;
+            let totalRecords = 0; 
             setLoading(true)
             dispatch(setLoadingDashboardData(true))
             resetAll(false)
             props.checkChartAnalytics(null, null, false) 
-            dispatch(setViewDashboardIntial(true))
+            dispatch(setViewDashboardIntial(true)) 
+            
             if(viewDashboard.line === true || (profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank')) {
                 const cancelRequest = await PatenTrackApi.cancelAllDashboardToken()  
                 const CancelToken = PatenTrackApi.generateCancelToken() 
                 const source = CancelToken.source()
-                const dashboardRequest = cardList.map(async item => {
+                if (isMounted.current) { 
+                    const dashboardRequest = cardList.map(async item => {
+                        const formData = new FormData()
+                        formData.append('list', JSON.stringify(list));
+                        formData.append('total', totalRecords);
+                        formData.append('selectedCompanies', JSON.stringify(selectedCompanies));
+                        formData.append('tabs', JSON.stringify(assetTypesSelected));
+                        formData.append('customers', JSON.stringify(selectedAssetCompanies));
+                        formData.append('assignments', JSON.stringify(selectedAssetAssignments));
+                        formData.append('type', item.type)
+                        formData.append('data_format',  profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? 0 : 1)
+                        formData.append('format_type', profile.user.organisation.organisation_type)  
+                        formData.append('company', companyname.length > 0 ? companyname[0].original_name : '' )              
+                        const requestData = await PatenTrackApi.getDashboardData(formData, source)
+                        if( requestData !== null){
+                            updateList(requestData, item.type)
+                        }
+                        return item
+                    })                
+                    await Promise.all(dashboardRequest)
+                }
+            } else {
+                const type = viewDashboard.kpi === true ? [...KPI_TYPE] : [...GAUGE_TYPE]
+                const cancelRequest = await PatenTrackApi.cancelAllDashboardCountToken()  
+                const CancelToken = PatenTrackApi.generateCancelToken() 
+                const source = CancelToken.source()
+                if (isMounted.current) { 
                     const formData = new FormData()
                     formData.append('list', JSON.stringify(list));
                     formData.append('total', totalRecords);
@@ -693,115 +806,93 @@ const Reports = (props) => {
                     formData.append('tabs', JSON.stringify(assetTypesSelected));
                     formData.append('customers', JSON.stringify(selectedAssetCompanies));
                     formData.append('assignments', JSON.stringify(selectedAssetAssignments));
-                    formData.append('type', item.type)
-                    formData.append('data_format',  profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? 0 : 1)
+                    formData.append('type', JSON.stringify(type))
+                    formData.append('data_format',  0)
                     formData.append('format_type', profile.user.organisation.organisation_type)  
-                    formData.append('company', companyname[0].original_name )              
-                    const requestData = await PatenTrackApi.getDashboardData(formData, source)
+                    formData.append('company', companyname.length > 0 ? companyname[0].original_name : '' )              
+                    const requestData = await PatenTrackApi.getDashboardDataCount(formData, source)
                     if( requestData !== null){
-                        updateList(requestData, item.type)
-                    }
-                    return item
-                })                
-                await Promise.all(dashboardRequest)
-            } else {
-                const type = viewDashboard.kpi === true ? [...KPI_TYPE] : [...GAUGE_TYPE]
-                const cancelRequest = await PatenTrackApi.cancelAllDashboardCountToken()  
-                const CancelToken = PatenTrackApi.generateCancelToken() 
-                const source = CancelToken.source()
-                const formData = new FormData()
-                formData.append('list', JSON.stringify(list));
-                formData.append('total', totalRecords);
-                formData.append('selectedCompanies', JSON.stringify(selectedCompanies));
-                formData.append('tabs', JSON.stringify(assetTypesSelected));
-                formData.append('customers', JSON.stringify(selectedAssetCompanies));
-                formData.append('assignments', JSON.stringify(selectedAssetAssignments));
-                formData.append('type', JSON.stringify(type))
-                formData.append('data_format',  0)
-                formData.append('format_type', profile.user.organisation.organisation_type)  
-                formData.append('company', companyname[0].original_name )              
-                const requestData = await PatenTrackApi.getDashboardDataCount(formData, source)
-                if( requestData !== null){
-                    const {data} = requestData
-                    let oldList = [...cardList]
-                    if(data.length == 0) {
-                        oldList.map((item, index) => {
-                            oldList[index].patent = ''
-                            oldList[index].application = ''
-                            oldList[index].rf_id = ''
-                            oldList[index].total = 0 
-                            oldList[index].number = 0  
-                            if(typeof oldList[index].other_number !== 'undefined'){
-                                oldList[index].other_number = 0
-                            }
-                            if(typeof oldList[index].list !== 'undefined'){
-                                oldList[index].list = []
-                            }
-                        })
-                    } else {
-                        const dashboardPromise = data.map( item => {
-                            const findIndex = oldList.findIndex( row => row.type == item.type)
-                            if(findIndex !== -1) {
-                                let {other} = item
-                                if(other != '' && other !== null) {
-                                    other = JSON.parse(other)
+                        const {data} = requestData
+                        let oldList = [...cardList]
+                        if(data.length == 0) {
+                            oldList.map((item, index) => {
+                                oldList[index].patent = ''
+                                oldList[index].application = ''
+                                oldList[index].rf_id = ''
+                                oldList[index].total = 0 
+                                oldList[index].number = 0  
+                                if(typeof oldList[index].other_number !== 'undefined'){
+                                    oldList[index].other_number = 0
                                 }
-                                if( Array.isArray(other) && other.length > 0) {
-                                    oldList[findIndex].list = [...other]
-                                    oldList[findIndex].patent = ''
-                                    oldList[findIndex].application = ''
-                                    oldList[findIndex].rf_id = ''
-                                    oldList[findIndex].total = item.total  
-                                    oldList[findIndex].number = 0           
-                                } else if( item?.number) {
-                                    oldList[findIndex].number = item.number
-                                    oldList[findIndex].patent = ''
-                                    oldList[findIndex].application = ''                            
-                                    oldList[findIndex].rf_id = ''                            
-                                    oldList[findIndex].total = item.total
-                                    if(typeof item.other_number !== 'undefined') {
-                                        oldList[findIndex].other_number = item.other_number          
+                                if(typeof oldList[index].list !== 'undefined'){
+                                    oldList[index].list = []
+                                }
+                            })
+                        } else {
+                            const dashboardPromise = data.map( item => {
+                                const findIndex = oldList.findIndex( row => row.type == item.type)
+                                if(findIndex !== -1) {
+                                    let {other} = item
+                                    if(other != '' && other !== null) {
+                                        other = JSON.parse(other)
                                     }
-                                } else {
-                                    oldList[findIndex].number = 0
-                                    oldList[findIndex].patent = ''
-                                    oldList[findIndex].application = ''
-                                    oldList[findIndex].total = 0
-                                    if(typeof oldList[findIndex].other_number !== 'undefined'){
-                                        oldList[findIndex].other_number = 0
+                                    if( Array.isArray(other) && other.length > 0) {
+                                        oldList[findIndex].list = [...other]
+                                        oldList[findIndex].patent = ''
+                                        oldList[findIndex].application = ''
+                                        oldList[findIndex].rf_id = ''
+                                        oldList[findIndex].total = item.total  
+                                        oldList[findIndex].number = 0           
+                                    } else if( item?.number) {
+                                        oldList[findIndex].number = item.number
+                                        oldList[findIndex].patent = ''
+                                        oldList[findIndex].application = ''                            
+                                        oldList[findIndex].rf_id = ''                            
+                                        oldList[findIndex].total = item.total
+                                        if(typeof item.other_number !== 'undefined') {
+                                            oldList[findIndex].other_number = item.other_number          
+                                        }
+                                    } else {
+                                        oldList[findIndex].number = 0
+                                        oldList[findIndex].patent = ''
+                                        oldList[findIndex].application = ''
+                                        oldList[findIndex].total = 0
+                                        if(typeof oldList[findIndex].other_number !== 'undefined'){
+                                            oldList[findIndex].other_number = 0
+                                        }
                                     }
                                 }
+                            })
+                            await Promise.all(dashboardPromise)
+                            setCardList(oldList)
+                            if(typeof props.updateDashboardData !== 'undefined') {
+                                props.updateDashboardData(oldList)
                             }
-                        })
-                        await Promise.all(dashboardPromise)
-                        setCardList(oldList)
-                        if(typeof props.updateDashboardData !== 'undefined') {
-                            props.updateDashboardData(oldList)
                         }
-                    }
-                    
-                    if(viewDashboard.kpi === true) {
-                        formData.delete('type')
-                        formData.append('type', 37)
-                        const CancelToken = PatenTrackApi.generateCancelToken() 
-                        const source = CancelToken.source()
-                        const newRequestData = await PatenTrackApi.getDashboardData(formData, source)
-                        if( newRequestData !== null){
-                            updateList(newRequestData, 37)
+                        
+                        if(viewDashboard.kpi === true) {
+                            formData.delete('type')
+                            formData.append('type', 37)
+                            const CancelToken = PatenTrackApi.generateCancelToken() 
+                            const source = CancelToken.source()
+                            const newRequestData = await PatenTrackApi.getDashboardData(formData, source)
+                            if( newRequestData !== null){
+                                updateList(newRequestData, 37)
+                            }
                         }
-                    }
-                } 
-            }
+                    } 
+                }
+            } 
             setLoading(false)           
-            dispatch(setLoadingDashboardData(false))
+            dispatch(setLoadingDashboardData(false)) 
         }
     }
 
-    const callTimelineData = useCallback(async() => {
+    const callTimelineData = useCallback(async() => { 
         setLoading(true)
         dispatch(setLoadingDashboardData(true))
         resetAll(false)
-        setTimeLineLoading(true)
+        setTimeLineLoading(true) 
         const cancelRequest = await PatenTrackApi.cancelAllDashboardTimelineToken()  
         const CancelToken = PatenTrackApi.generateCancelToken() 
         const source = CancelToken.source()
@@ -813,7 +904,9 @@ const Reports = (props) => {
             formData.append('customers', JSON.stringify(selectedAssetCompanies));
             const requestData = await PatenTrackApi.getDashboardTimelineData(formData, source)
             if( requestData !== null){
-                updateTimelineList(requestData, item.type)
+                if (isMounted.current) { 
+                    updateTimelineList(requestData, item.type)
+                }
             }
             return item
         })                
@@ -826,7 +919,9 @@ const Reports = (props) => {
                     newTimeline[index].list = [...dashboardRequest[findIndex].value.list]
                 }
             })
-            setTimelineList(newTimeline)
+            if (isMounted.current) { 
+                setTimelineList(newTimeline)
+            }
             if(typeof props.updateDashboardTimelineData !== 'undefined') {
                 props.updateDashboardTimelineData(newTimeline)
             }
@@ -864,7 +959,9 @@ const Reports = (props) => {
                 oldList[findIndex].list = [...requestData.data]
             }
         }
-        setTimelineList(oldList)
+        if (isMounted.current) { 
+            setTimelineList(oldList)
+        }
         if(typeof props.updateDashboardTimelineData !== 'undefined') {
             props.updateDashboardTimelineData(oldList)
         }        
@@ -916,29 +1013,15 @@ const Reports = (props) => {
                         oldList[findIndex].other_number = 0
                     }
                 }
-            }            
-            setCardList(oldList)
+            }    
+            if (isMounted.current) {         
+                setCardList(oldList)
+            }
             if(typeof props.updateDashboardData !== 'undefined') {
                 props.updateDashboardData(oldList)
             }
         }      
     }, [cardList, viewDashboard])
-
-    useEffect(() => {
-        if(activeId  !== -1 ) {
-            //scrollToActive item when the right pane open
-            const container = ref.current
-            if(container !== null){
-                setTimeout(() => {
-                    const listItemsContainer = container.querySelector('.listItems')
-                    const findIndex = cardList.findIndex( item => item.type == activeId) 
-                    if(findIndex !== -1) {
-                        listItemsContainer.scroll(0, listItemsContainer.querySelectorAll('.box_item')[findIndex].offsetTop - 50)
-                    }
-                }, 1000)
-            }
-        }
-    }, [activeId])
 
     const onHandleClick = useCallback(async(id) => {
         const findIndex = cardList.findIndex( item => item.type == id) 
@@ -965,7 +1048,7 @@ const Reports = (props) => {
                 formData.append('type', JSON.stringify(type))
                 formData.append('data_format',  0)
                 formData.append('format_type', profile.user.organisation.organisation_type)  
-                formData.append('company', companyname[0].original_name )              
+                formData.append('company', companyname.length > 0 ? companyname[0].original_name : '' )              
                 const {data} = await PatenTrackApi.findDashboardExample(formData)
                 if(data != null) {
                     if(card.type == 38 && profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'){
@@ -985,6 +1068,13 @@ const Reports = (props) => {
                     } else if (card.type == 17) {
                         dispatch(setAssetsIllustration({ type: "transaction", id: data.rf_id }));
                     } else if(card.type == 20 || card.type == 23) {
+                        PatenTrackApi.cancelFamilyCounterRequest()
+                        PatenTrackApi.cancelClaimsCounterRequest()
+                        PatenTrackApi.cancelFiguresCounterRequest()
+                        PatenTrackApi.cancelPtabCounterRequest()
+                        PatenTrackApi.cancelCitationCounterRequest()
+                        PatenTrackApi.cancelFeesCounterRequest()
+                        PatenTrackApi.cancelStatusCounterRequest()
                         dispatch(getAssetDetails(data.application, data.patent))
                         dispatch(assetLegalEvents(data.application, data.patent));
                     } else if(card.type == 19 || card.type == 24 || card.type == 25) {
@@ -992,7 +1082,7 @@ const Reports = (props) => {
                         if(data != null) {                        
                             const obj = data.line.length > 0 ? data.line[0] : null
                             if(obj != null) {
-                                dispatch(
+                                dispatch(    
                                     setConnectionData(obj)
                                 ) 
                                 dispatch(
@@ -1024,138 +1114,147 @@ const Reports = (props) => {
     }, [dispatch, activeId, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, cardList])
 
     const onHandleList = useCallback((id) => {
-        /* process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' */
-        let subscription = parseInt(profile?.user?.organisation?.subscribtion), timeline = false, patent = false, maintainence = false
-        if( subscription === 2 || subscription === 3 ) {
-            let findIndex = -1
-            if(id === 1 && viewDashboard.kpi === false) {                
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
-                patent = true
-            } else if(id === 17 && subscription > 2  && viewDashboard.kpi === false) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_names')
-                timeline = true
-            } else if(id === 18 && subscription > 2  && viewDashboard.kpi === false) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'clear_encumbrances')
-                patent = true
-            } else if(id === 19 && subscription > 2  && viewDashboard.kpi === false) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_address')
-                timeline = true
-            } else if(id === 20 && subscription > 2  && viewDashboard.kpi === false) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'to_be_monitized')
-                patent = true
-            } else if(id === 21 && subscription > 2  && viewDashboard.kpi === false) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'unnecessary_patents')
-                patent = true
-            } else if(id === 22 && subscription > 2  && viewDashboard.kpi === false) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'missed_monetization')
-                patent = true
-            } else if(id === 23 && subscription > 2  && viewDashboard.kpi === false) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'late_maintainance')
-                patent = true
-            } else if(id === 24 && subscription > 2  && viewDashboard.kpi === false) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_recording')
-                timeline = true
-            } else if(id === 25 && subscription > 2  && viewDashboard.kpi === false) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'late_recording')
-                timeline = true
-            } else if(id === 26 && subscription > 2  && viewDashboard.kpi === false) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'deflated_collaterals')
-                patent = true
-            } else if(id === 30 && subscription > 1  && viewDashboard.kpi === true) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'assigned')
-                patent = true
-            } else if(id === 31 && subscription > 1  && viewDashboard.kpi === true) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'filled')
-                patent = true
-            } else if(id === 32 && subscription > 1  && viewDashboard.kpi === true) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'acquired')
-                patent = true
-            } else if(id === 33 && subscription > 1  && viewDashboard.kpi === true) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'divested')
-                patent = true
-            } else if(id === 34 && subscription > 1  && viewDashboard.kpi === true) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'collaterlized')
-                patent = true
-            } else if(id === 36 && subscription > 1 && viewDashboard.kpi === true) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'abandoned')
-                patent = true
-            } else if(id === 37 && subscription > 1  && viewDashboard.kpi === true) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'ptab')
-                patent = true
-            } else if(id === 35 && subscription > 1  && viewDashboard.kpi === true) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'pay_maintainence_fee')
-                maintainence = true
-            } else if(id === 38 && subscription > 1  && viewDashboard.kpi === true) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_non_us_members')
-                patent = true
-            } else if(id === 39 && subscription > 1  && viewDashboard.kpi === true) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'proliferate_inventors')
-                timeline = true
-            } else if(id === 40 && subscription > 1  && viewDashboard.kpi === true) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_law_firms')
-                timeline = true
-            } else if(id === 41 && subscription > 1  && viewDashboard.kpi === true) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_lenders')
-                timeline = true
-            } /*else if(id === 8 && subscription > 2) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'pay_maintainence_fee')
-                patent = true
-            } else if(id === 3 && subscription > 2) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'clear_encumbrances')
-                timeline = true
-            } else if(id === 4 && subscription > 2) {
-                findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'correct_names')
-                timeline = true
-            }*/
+        if(process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') {
+            alert('Please activate your account.')
+        } else {
+            let subscription = parseInt(profile?.user?.organisation?.subscribtion), timeline = false, patent = false, maintainence = false
             
-            if( findIndex !== -1 ) {
-                resetAllRowSelect(dispatch, resetItemList.resetAll, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [1, 9, 10] :  [])
-                resetAllRowSelect(dispatch, resetItemList.clearOtherItems, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [14, 15] :  controlList[findIndex].category == 'proliferate_inventors' || controlList[findIndex].category == 'top_lenders' ? [14, 15] :  [])
-                setTimeout(() => { 
-                    dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))                
-                    if(id === 0) {
-                        dispatch(setSwitchAssetButton(1))
-                    } 
-                })
-                if(controlList[findIndex].category == 'proliferate_inventors') {
-                    /**
-                     * Inventor
-                     * select Inventor activity type
-                     * Open Inventor Table
-                     * 
-                     */
-                    dispatch( setAssetTypesSelect([10]) )
-                    if(props.openInventorBar === false) {
-                        props.handleInventorBarOpen()
-                    }
-                    if(props.assignmentBar === true) {
-                        props.assignmentBarToggle()
-                    }
-                }  
-                if(controlList[findIndex].category == 'top_lenders') {
-                    /**
-                     * Select Lending activity type
-                     */
-                    dispatch( setAssetTypesSelect([81]) )
-                    if(props.openOtherPartyBar === false) {
-                        props.handleOtherPartyBarOpen()
-                    }
+            if( subscription === 2 || subscription === 3 ) {
+                let findIndex = -1
+                if(id === 1 && viewDashboard.kpi === false) {                
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
+                    patent = true
+                } else if(id === 17 /* && subscription > 2 */  && viewDashboard.kpi === false) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_names')
+                    patent = true
+                } else if(id === 18 /* && subscription > 2 */  && viewDashboard.kpi === false) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'clear_encumbrances')
+                    patent = true
+                } else if(id === 19 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_address')
+                    timeline = true
+                } else if(id === 20 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'to_be_monitized')
+                    patent = true
+                } else if(id === 21 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'unnecessary_patents')
+                    patent = true
+                } else if(id === 22 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'missed_monetization')
+                    patent = true
+                } else if(id === 23 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'late_maintainance')
+                    patent = true
+                } else if(id === 24 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_recording')
+                    timeline = true
+                } else if(id === 25 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'late_recording')
+                    timeline = true
+                } else if(id === 26 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'deflated_collaterals')
+                    patent = true
+                } else if(id === 30 && subscription > 1  && viewDashboard.kpi === true) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'assigned')
+                    patent = true
+                } else if(id === 31 && subscription > 1  && viewDashboard.kpi === true) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'filled')
+                    patent = true
+                } else if(id === 32 && subscription > 1  && viewDashboard.kpi === true) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'acquired')
+                    patent = true
+                } else if(id === 33 && subscription > 1  && viewDashboard.kpi === true) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'divested')
+                    patent = true
+                } else if(id === 34 && subscription > 1  && viewDashboard.kpi === true) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'collaterlized')
+                    patent = true
+                } else if(id === 36 && subscription > 1 && viewDashboard.kpi === true) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'abandoned')
+                    patent = true
+                } else if(id === 37 && subscription > 1  && viewDashboard.kpi === true) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'ptab')
+                    patent = true
+                } else if(id === 35 && subscription > 1  && viewDashboard.kpi === true) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'pay_maintainence_fee')
+                    maintainence = true
+                } else if(id === 38 && subscription > 1  && viewDashboard.kpi === true) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_non_us_members')
+                    patent = true
+                } else if(id === 39 && subscription > 1  && viewDashboard.kpi === true) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'proliferate_inventors')
+                    timeline = true
+                } else if(id === 40 && subscription > 1  && viewDashboard.kpi === true) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_law_firms')
+                    timeline = true
+                } else if(id === 41 && subscription > 1  && viewDashboard.kpi === true) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_lenders')
+                    timeline = true
+                } /*else if(id === 8 && subscription > 2) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'pay_maintainence_fee')
+                    patent = true
+                } else if(id === 3 && subscription > 2) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'clear_encumbrances')
+                    timeline = true
+                } else if(id === 4 && subscription > 2) {
+                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'correct_names')
+                    timeline = true
+                }*/
+                
+                if( findIndex !== -1 ) {
+                    dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))   
+                    resetAllRowSelect(dispatch, resetItemList.resetAll, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [1, 9, 10] :  [])
+                    resetAllRowSelect(dispatch, resetItemList.clearOtherItems, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [14, 15] :  controlList[findIndex].category == 'proliferate_inventors' || controlList[findIndex].category == 'top_lenders' ? [14, 15] :  [])
+                    setTimeout(() => { 
+                        dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))                
+                        if(id === 0) {
+                            dispatch(setSwitchAssetButton(1))
+                        } 
+                        if(controlList[findIndex].category == 'proliferate_inventors') {
+                            /**
+                             * Inventor
+                             * select Inventor activity type
+                             * Open Inventor Table
+                             * 
+                             */
+                            dispatch( setAssetTypesSelect([10]) )
+                            if(props.openInventorBar === false) {
+                                props.handleInventorBarOpen()
+                            }
+                            if(props.assignmentBar === true) {
+                                props.assignmentBarToggle()
+                            }
+                        }  
+                        if(controlList[findIndex].category == 'top_lenders') {
+                            /**
+                             * Select Lending activity type
+                             */
+                            dispatch( setAssetTypesSelect([81]) )
+                            if(props.openOtherPartyBar === false) {
+                                props.handleOtherPartyBarOpen()
+                            }
+                        }
+                        dispatch(setDashboardScreen(false))
+                        dispatch(setTimelineScreen(timeline))
+                        dispatch(setPatentScreen(patent))
+                        if(patent === true) {
+                            history.push(`${routeList.patent_assets}/${controlList[findIndex].mainHeading.toLowerCase()}`)  
+                        }
+                        if(timeline === true) {
+                            history.push(`${routeList.assignments}/${controlList[findIndex].mainHeading.toLowerCase()}`)  
+                        }
+                        if(maintainence === true) {
+                            history.push(routeList.pay_maintainence_fee)  
+                        }
+                        if(props.openCustomerBar === false && timeline === false){
+                            props.handleCustomersBarOpen()
+                        }
+                        /* if(props.openCommentBar === false){
+                            props.handleCommentBarOpen()
+                        }  */  
+                    })
+                                            
                 }
-                dispatch(setDashboardScreen(false))
-                dispatch(setTimelineScreen(timeline))
-                dispatch(setPatentScreen(patent))
-                if(patent === true) {
-                    history.push(routeList.patent_assets)  
-                }
-                if(maintainence === true) {
-                    history.push(routeList.pay_maintainence_fee)  
-                }
-                if(props.openCustomerBar === false && timeline === false){
-                    props.handleCustomersBarOpen()
-                }
-                if(props.openCommentBar === false){
-                    props.handleCommentBarOpen()
-                }                             
             }
         }
     }, [dispatch, profile, activeId, selectedAssetCompanies, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, props.openCustomerBar, props.openCommentBar, viewDashboard, props.openInventorBar, props.assignmentBar, props.openOtherPartyBar])
@@ -1231,6 +1330,7 @@ const Reports = (props) => {
             justifyContent="flex-start"
             alignItems="flex-start"
             ref={ref}
+            id="dashboard"
         >
             {/* <Grid
                 item lg={2} md={2} sm={2} xs={2}  
@@ -1248,7 +1348,7 @@ const Reports = (props) => {
                 item lg={12} md={12} sm={12} xs={12} 
             >
                 <Paper className={classes.titleContainer} square>
-                    <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{companyname.length > 0 ? companyname[0].original_name : ''}</span> {
+                    <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{formattedCompanyname}</span> {
                         profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' && selectedAssetCompanies.length == 1 && (
                             <span className={classes.headingName}>{partyName[0].entityName}</span>
                         ) 

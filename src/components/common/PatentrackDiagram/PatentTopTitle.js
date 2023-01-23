@@ -135,27 +135,32 @@ class PatentTopTitle extends React.Component {
                  </Badge>   
              </Tooltip>                     
            </IconButton> 
-           <IconButton
-             onClick={() => this.props.uspto(!this.props.usptoMode)}
-             /* className={'uspto_logo'} */
-             size="large">
-             <Tooltip 
-             className='tooltip'
-             title={
-               <Typography color="inherit" variant='body2'>{'USPTO'}</Typography>
-             }
-             placement='top'
-             enterDelay={0}
-             TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
-             >
-               <Badge badgeContent={0} color="secondary">   
-                 <FaLightbulb
-                   className={this.props.usptoMode === true ? 'active' : '' }
-                 />
-                 {/* <span className={'uspto_logo_container'}><img src={'/assets/images/logo-micro.png'}/></span> */}
-               </Badge>
-             </Tooltip>
-           </IconButton>
+            {
+             (typeof this.props.usptoButton === 'undefined' || (typeof this.props.usptoButton !== 'undefined' && this.props.usptoButton === true)) && (
+              <IconButton
+                onClick={() => this.props.uspto(!this.props.usptoMode)}
+                /* className={'uspto_logo'} */
+                size="large">
+                <Tooltip 
+                className='tooltip'
+                title={
+                  <Typography color="inherit" variant='body2'>{'USPTO'}</Typography>
+                }
+                placement='top'
+                enterDelay={0}
+                TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+                >
+                  <Badge badgeContent={0} color="secondary">   
+                    <FaLightbulb
+                      className={this.props.usptoMode === true ? 'active' : '' }
+                    />
+                    {/* <span className={'uspto_logo_container'}><img src={'/assets/images/logo-micro.png'}/></span> */}
+                  </Badge>
+                </Tooltip>
+              </IconButton>
+             )
+            }
+           
            {/* <IconButton onClick={() => this.props.share(this.props.patent)} size="large">
              <Tooltip 
              className='tooltip'
@@ -194,7 +199,7 @@ class PatentTopTitle extends React.Component {
                  </Tooltip>
                </IconButton>
              :
-             <IconButton className={'empty'} size="large">&nbsp;</IconButton>
+             <IconButton className={'empty'} onClick={() => this.props.fullScreen()}  size="large"><Close /></IconButton>
            }                
          </div>              
        </div>
@@ -276,7 +281,7 @@ class PatentTopTitle extends React.Component {
                  onClick={this.props.update}
                />
              </ListItemIcon>   
-             <ListItemText className={'show_label'}>Right Steps</ListItemText>             
+             <ListItemText className={'show_label'}>Rights</ListItemText>             
            </MenuItem>       
            <Divider /> 
              <MenuItem> 

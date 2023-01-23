@@ -1315,10 +1315,10 @@ const handleDriveModalClose = (event) => {
           displayButton === true
           ?
           <div className={classes.button}>
-            {
+            {/* {
               slackAuthLogin && (<Tooltip 
                 title={
-                  <Typography color="inherit" variant='body2'>{/* Once you sign in to your Slack Workspace, we will create for you a dedicated channel in your Workspace for each of the patents and application in the Assets list. Just select an asset and start writing to your Workspace members in the text bar below.<br/>Whatever you write will be saved only in your Slack Workspace. */}Sign in  to your Slack account</Typography>
+                  <Typography color="inherit" variant='body2'>Sign in  to your Slack account</Typography>
                 } 
                 className={classes.tooltip}  
                 placement='left'
@@ -1337,7 +1337,7 @@ const handleDriveModalClose = (event) => {
               src='https://platform.slack-edge.com/img/sign_in_with_slack.png' 
               srcSet='https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x' />
           </Button></Tooltip>)              
-            }
+            } */}
 
             {
               googleAuthLogin && (

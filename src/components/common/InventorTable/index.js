@@ -24,7 +24,13 @@ import {
     setSelectedAssetsTransactions,
     setMaintainenceAssetsList,
     setAssetTypeAssignmentAllAssets,
-    setAssetTypeAssignments
+    setAssetTypeAssignments,
+    setTimelineRequest,
+    setTimelineData,
+    setJurisdictionRequest,
+    setJurisdictionData,
+    setCPCRequest,
+    setCPCData
   } from '../../../actions/patentTrackActions2'
 
   import {
@@ -144,7 +150,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             setSelectItems(assetTypeCompaniesSelected)
         }
     }, [ assetTypeCompaniesSelected, selectItems ]) 
-
+ 
     useEffect(() => {
         if(standalone) {         
             const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
@@ -154,7 +160,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
                     getCustomerParties(
                         selectedCategory == '' ? '' : selectedCategory,
                         companies, 
-                        tabs, 
+                        [10], 
                         customerType,
                         false 
                     )
@@ -214,7 +220,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         e.preventDefault()
         const { checked } = e.target;
         const element = e.target.closest('div.ReactVirtualized__Table__rowColumn')
-        let oldSelection = [...selectItems]
+        let oldSelection = [...selectItems] 
         if( element != null ) {
             const index = element.getAttribute('aria-colindex')
             if(index == 2) {
@@ -230,15 +236,21 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             }
             dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
             if( !oldSelection.includes(row.id) ){
-                oldSelection.push(row.id)
+                oldSelection = [row.id]
             } else if(index != 2) {
                 oldSelection = oldSelection.filter(
                     customer => customer !== parseInt( row.id ),
                 )
             }
-            history.push({
+            /* history.push({
                 hash: updateHashLocation(location, 'otherParties', oldSelection).join('&')
-            })
+            }) */ 
+            dispatch(setTimelineRequest(false))
+            dispatch(setJurisdictionRequest(false))
+            /* dispatch(setCPCRequest(false)) */
+            dispatch(setTimelineData([]))
+            dispatch(setJurisdictionData([])) 
+            dispatch(setCPCData({list:[], group: [], sales: []}))
             setSelectItems(oldSelection)
             setSelectAll(false)
             dispatch( setAllAssignmentCustomers(assetTypeCompanies.length == oldSelection.length ||  data.length == oldSelection.length ? true : false ) )
@@ -276,6 +288,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             rowSelected={selectedRow}
 			selectedIndex={currentSelection}
             selectedKey={'id'}
+            scrollToIndex={true}
             rows={assetTypeInventors}
             rowHeight={rowHeight}
             headerHeight={headerRowHeight}  

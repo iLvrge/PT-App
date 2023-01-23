@@ -320,6 +320,7 @@ export const fetchMoreFixItItems = (currentTab, from, companyName) => {
 export const assetFamilySingle = (applicationNumber) => { 
   return dispatch => {
     dispatch(setFamilyItemDataEventRetrieved(false))
+    PatenTrackApi.cancelAssetFamilySingleRequest()
     return PatenTrackApi
       .assetFamilySingle(applicationNumber)
       .then(res => {
@@ -337,6 +338,7 @@ export const assetFamilySingle = (applicationNumber) => {
 export const assetFamily = (applicationNumber) => { 
   return dispatch => {
     dispatch(setFamilyItemDataEventRetrieved(false))
+    PatenTrackApi.cancelAssetFamilyRequest()
     return PatenTrackApi
       .assetFamily(applicationNumber)
       .then(res => {
@@ -360,9 +362,26 @@ export const setAssetFamily = (family) => {
 export const assetLegalEvents = (applicationNumber, patentNumber) => { 
   return dispatch => {
     dispatch(setLegalDataEventRetrieved(true))
+    PatenTrackApi.cancelAssetLegalEventsRequest()
     return PatenTrackApi
       .assetLegalEvents(applicationNumber, patentNumber)
       .then(res => {        
+        dispatch(setLegalDataEventRetrieved(false))
+        dispatch(setAssetLegalEvents(res.data))
+      }) 
+      .catch(err => {
+        throw(err)
+      })
+  }
+}
+
+export const allAssetsSurchargeLegalEvents = (companies) => { 
+  return dispatch => {
+    dispatch(setLegalDataEventRetrieved(true))
+    return PatenTrackApi
+      .allAssetsSurchargeLegalEvents(companies)
+      .then(res => {        
+        console.log('allAssetsSurchargeLegalEvents', res.data)
         dispatch(setLegalDataEventRetrieved(false))
         dispatch(setAssetLegalEvents(res.data))
       }) 

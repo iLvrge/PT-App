@@ -7,12 +7,13 @@ export default makeStyles(theme => ({
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
+        boxShadow: 'none',
         '& fieldset':{
             border: 0
         },
         '& .MuiTab-root':{
             minWidth: 'inherit',
-            maxWidth: '100px'
+            maxWidth: 150
         },
         '& .vis-panel.vis-background.vis-horizontal .vis-grid': {
             borderColor: '#e5e5e51c',
@@ -94,6 +95,7 @@ export default makeStyles(theme => ({
     },
     tabs: {
         minHeight: 47, 
+        width: '94%'
         /* borderTop: `1px solid ${theme.palette.divider} !important`, */
     },
     tab: {
@@ -106,6 +108,15 @@ export default makeStyles(theme => ({
         fill: '#fff',  
         width: 24,
         height: 24
+    },
+    boxContainer: {
+        flex: 1,
+        display: 'flex',
+        justifyContent: 'start',
+        alignItems: 'center',
+        flexDirection: 'column',
+        width: '100%',
+        pading: '100%'
     },
     graphContainer: {
         flex: 1,
@@ -239,6 +250,18 @@ export default makeStyles(theme => ({
         zIndex: 999,
         cursor: 'pointer'
     },
+    reset: {
+        position: 'absolute', 
+        right: 30, 
+        top: 2, 
+        zIndex: 999,
+        cursor: 'pointer',
+        color: '#fff'
+    },
+    btnSetting: {
+        justifyContent: 'flex-start',
+        width: 45
+    },
     resizable:{
         position: "relative",
         display: 'flex',
@@ -261,9 +284,25 @@ export default makeStyles(theme => ({
         }
     },
     settingBtn:{
-        padding: 0,
+        /* padding: 0,
         position: 'absolute',
-        right: 35,
-        top: 6
+        right: 5,
+        top: 50 */
+    },
+    settingBtnTop: {
+        /* right: 35,
+        top: 6 */
+    },
+    button:{
+        textTransform: 'initial',
+        color: 'inherit'
+    },
+    settingContainer:{
+        position: 'relative',
+        '& button':{
+            position: 'absolute',
+            top: 60,
+            zIndex: 9999
+        }
     }
 }))

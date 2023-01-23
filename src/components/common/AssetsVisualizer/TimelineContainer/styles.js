@@ -6,7 +6,16 @@ export default makeStyles(theme => ({
     height: '100%',
     width: '100%',
     position: 'relative',
-    /* backgroundColor: theme.palette.background.default, */
+    /* backgroundColor: theme.palette.background.default, */ 
+    '& #visualization':{
+      position: 'relative',
+      '& .menu':{
+        position: 'absolute',
+        zIndex: 9999,
+        right: 25,
+        top: 2
+      }
+    },
     '& .vis-time-axis .vis-text, .vis-item, .vis-y-axis':{
       color: theme.palette.text.primary,
     },
@@ -27,6 +36,10 @@ export default makeStyles(theme => ({
     },
     '& .vis-time-axis .vis-text':{
       padding: '1px 3px'
+    },
+    '& .vis-tooltip':{
+      width: 260,
+      whiteSpace: 'normal !important'
     }
   },  
   loader: {
@@ -38,15 +51,102 @@ export default makeStyles(theme => ({
   timeline: {
     height: '100%',
     width: '100%',
-    // '& .vis-center .vis-content': {
-    //   transform: 'translateY(0px) !important',
-    //   height: '100% !important',
-    // },
-    // '& .vis-center .vis-itemset': {
-    //   height: '329px !important',
-    //   overflowY: 'auto',
-    //   overflowX: 'hidden',
-    // },
+    '& .vis-content':{
+      color: '#000000',
+      '& .vis-item': {
+        fontSize: 12,
+        backgroundColor: 'transparent',      
+        color: theme.palette.text.primary,
+        '& .vis-item-content':{
+          /* width: '95px', */
+          whiteSpace: 'normal',
+          padding: '5px 10px 5px 3px',
+          '& .cluster-header':{
+            width: '100%',
+            textAlign: 'left',
+            display: 'flex',
+            padding: 5,
+            border: '0px',
+            '& .cluster-image': {
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: '17px',
+              width: 32,
+              height: 17,
+              display: 'inline-block',
+              marginRight: '5px' 
+            }         
+          },
+          '& .cluster-employees, .cluster-acqusitions, .cluster-sales, .cluster-courtOrders, .cluster-mergersIn, .cluster-mergersOut':{
+            borderColor: '#e60000'
+          },
+          '& .cluster-releaseIn, .cluster-releaseOut':{
+            borderColor: '#70A800'
+          },
+          '& .cluster-lending, .cluster-borrowing':{
+            borderColor: '#FFAA00'
+          },
+          '& .cluster-licenseIn, .cluster-licenseOut':{
+            borderColor: '#C0C000'
+          },
+          '& .cluster-other, .cluster-options':{
+            borderColor: '#CA7C46'
+          }
+        },
+        '&.vis-dot':{ 
+          backgroundColor: 'inherit',
+          borderColor: 'inherit',
+          width: 24,
+          height: 24, 
+          top: '1px !important',
+          left: -5, 
+          border: 0,       
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 24
+        },
+        '&.vis-dot.asset-type-default': {
+          borderColor: indigo[500],
+        },
+        '&.vis-dot.asset-type-acquisitions,  .cluster-acquisitions': {
+          backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/acquisition.svg)',
+        },
+        '&.vis-dot.asset-type-sales, .cluster-sales': {
+          backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/sales.svg)',
+        },
+        '&.vis-dot.asset-type-licenseIn, .cluster-licenseIn': {
+          backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licensein.svg)',
+        },
+        '&.vis-dot.asset-type-licenseOut, .cluster-licenseOut': {
+          backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licenseout.svg)',
+        },
+        '&.vis-dot.asset-type-lending, .vis-dot.asset-type-borrowing, .asset-type-securitiesOut, .asset-type-securitiesIn, .cluster-lending, .cluster-borrowing, .cluster-securitiesIn, .cluster-securitiesOut': {
+          backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/secure.svg)',
+        },
+        '&.vis-dot.asset-type-mergersIn, .cluster-mergersIn': { 
+          backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png)',
+        },
+        '&.vis-dot.asset-type-mergersOut, .cluster-mergersOut': {
+          backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png)',
+        },
+        '&.vis-dot.asset-type-correct, .cluster-correct': {
+          backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/correction.svg)',
+        },
+        '&.vis-dot.asset-type-options, .cluster-options': {
+          backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/options.svg)',
+        },
+        '&.vis-dot.asset-type-courtOrders, .cluster-courtOrders': {
+          backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/courtorder.svg)',
+        },
+        '&.vis-dot.asset-type-releaseOut, .vis-dot.asset-type-releaseIn, .cluster-releaseIn, .cluster-releaseOut': {
+          backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/release.svg)',
+        },
+        '&.vis-dot.asset-type-employees, .cluster-employees': {
+          backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png)',
+        },
+        '&.vis-dot.asset-type-other, .cluster-other': {
+          backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png)', 
+        },
+      },
+    },
     '& .custom_tooltip':{
       position:'absolute',  
       width:'150px',
@@ -96,99 +196,6 @@ export default makeStyles(theme => ({
     },
     '& .vis-left.vis-panel.vis-vertical-scroll, & .vis-right.vis-panel.vis-vertical-scroll': {
       overflowY: 'hidden',
-    },
-    '& .vis-item': {
-      fontSize: 12,
-      backgroundColor: 'transparent',      
-      color: theme.palette.text.primary,
-      '& .vis-item-content':{
-        width: '95px',
-        whiteSpace: 'normal',
-        padding: '5px 5px 5px 0px',
-        '& .cluster-header':{
-          width: '100%',
-          textAlign: 'left',
-          display: 'flex',
-          padding: 5,
-          border: '0px',
-          '& .cluster-image': {
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: '17px',
-            width: 32,
-            height: 17,
-            display: 'inline-block',
-            marginRight: '5px' 
-          }         
-        },
-        '& .cluster-employees, .cluster-acqusitions, .cluster-sales, .cluster-courtOrders, .cluster-mergersIn, .cluster-mergersOut':{
-          borderColor: '#e60000'
-        },
-        '& .cluster-releaseIn, .cluster-releaseOut':{
-          borderColor: '#70A800'
-        },
-        '& .cluster-lending, .cluster-borrowing':{
-          borderColor: '#FFAA00'
-        },
-        '& .cluster-licenseIn, .cluster-licenseOut':{
-          borderColor: '#C0C000'
-        },
-        '& .cluster-other, .cluster-options':{
-          borderColor: '#CA7C46'
-        }
-      },
-      '& .vis-dot':{ 
-        backgroundColor: 'inherit',
-        borderColor: 'inherit',
-        width: 17,
-        height: 17, 
-        top: '7px !important',
-         /* left: 10, */
-        border: 0,       
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 15
-      },
-      '& .vis-dot.asset-type-default': {
-        borderColor: indigo[500],
-      },
-      '& .vis-dot.asset-type-acquisitions,  .cluster-acquisitions': {
-        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/acquisition.svg)',
-      },
-      '& .vis-dot.asset-type-sales, .cluster-sales': {
-        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/sales.svg)',
-      },
-      '& .vis-dot.asset-type-licenseIn, .cluster-licenseIn': {
-        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licensein.svg)',
-      },
-      '& .vis-dot.asset-type-licenseOut, .cluster-licenseOut': {
-        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licenseout.svg)',
-      },
-      '& .vis-dot.asset-type-lending, .vis-dot.asset-type-borrowing, .asset-type-securitiesOut, .asset-type-securitiesIn, .cluster-lending, .cluster-borrowing, .cluster-securitiesIn, .cluster-securitiesOut': {
-        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/secure.svg)',
-      },
-      '& .vis-dot.asset-type-mergersIn, .cluster-mergersIn': { 
-        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png)',
-      },
-      '& .vis-dot.asset-type-mergersOut, .cluster-mergersOut': {
-        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png)',
-      },
-      '& .vis-dot.asset-type-correct, .cluster-correct': {
-        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/correction.svg)',
-      },
-      '& .vis-dot.asset-type-options, .cluster-options': {
-        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/options.svg)',
-      },
-      '& .vis-dot.asset-type-courtOrders, .cluster-courtOrders': {
-        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/courtorder.svg)',
-      },
-      '& .vis-dot.asset-type-releaseOut, .vis-dot.asset-type-releaseIn, .cluster-releaseIn, .cluster-releaseOut': {
-        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/release.svg)',
-      },
-      '& .vis-dot.asset-type-employees, .cluster-employees': {
-        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png)',
-      },
-      '& .vis-dot.asset-type-other, .cluster-other': {
-        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png)', 
-      },
     },
     '& .vis-cluster': {
       background: 'none',
@@ -241,7 +248,13 @@ export default makeStyles(theme => ({
       '&.asset-type-other': {
         backgroundColor: grey[500],
       },
+    }, 
+    '& .vis-item.vis-range.asset-type-default, .vis-item.vis-range.asset-type-acquisitions, .vis-item.vis-range.asset-type-sales, .vis-item.vis-range.asset-type-licenseIn, .vis-item.vis-range.asset-type-licenseOut, .vis-item.vis-range.asset-type-mergersIn, .vis-item.vis-range.asset-type-mergersOut, .vis-item.vis-range.asset-type-options, .vis-item.vis-range.asset-type-courtOrders, .vis-item.vis-range.asset-type-employees': {
+      backgroundColor: '#228DE8',
     },
+    '& .vis-item.vis-range.asset-type-other': {
+      backgroundColor: grey[500],
+    }, 
     '& .vis-item.vis-point.vis-selected': {
       backgroundColor: 'inherit',
       color: pink[500],
@@ -259,6 +272,11 @@ export default makeStyles(theme => ({
     '& .vis-item.vis-range.asset-type-security-release-partial, .vis-item.vis-range.asset-type-default':{
       backgroundColor: '#228DE8 !important'
     },
+    '& .vis-item':{
+      '& .vis-item-overflow':{
+        overflow: 'visible',
+      }
+    },
     '& .vis-item.vis-range':{
       border: 0,
       '& .vis-item-overflow':{
@@ -266,7 +284,7 @@ export default makeStyles(theme => ({
         minHeight: 28,
         '& .vis-item-content':{
           width: '100%',
-          position: 'absolute',
+          position: 'relative',
           '& span':{
             whiteSpace: 'nowrap',
             display: 'block',

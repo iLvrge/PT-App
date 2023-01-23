@@ -4,7 +4,8 @@ import makeStyles from '@mui/styles/makeStyles';
 
 export default makeStyles((theme) => ({
   root: {
-    background: '#222222',
+    background: theme.palette.background.paper,
+    
   },
   highlight: {
     color: theme.palette.text.primary,

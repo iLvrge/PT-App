@@ -30,29 +30,46 @@ export default makeStyles(theme => ({
             borderColor: '#e5e5e51c',
         },
         '& .MuiTab-root':{
-            minWidth: 'inherit',
-            maxWidth:  150
+            minWidth:  135,
+            maxWidth:  140
         },
+        /* '& .MuiTab-root:nth-child(n + 4)':{
+            minWidth:  80,
+            maxWidth:  80
+        },
+        '& .MuiTab-root:nth-child(n + 5)':{
+            minWidth:  160,
+            maxWidth:  160
+        },
+        '& .MuiTab-root:nth-child(n + 6)':{
+            minWidth:  190,
+            maxWidth:  190
+        }, */
         '& .MuiTab-wrapper':{
             whiteSpace: 'nowrap'
         }
     },
     tabs: {
         minHeight: 47,
+        width: '94%'
     },
     tab: {
         flex: 1,
         minWidth: '25%',
         minHeight: 47,  
-        fontSize: '1.1rem'                          
+        fontSize: '1.1rem',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow:'ellipsis'                        
     },
     graphContainer: {
         flex: 1,
         display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
+        justifyContent: 'top',
+        alignItems: 'flex-start',
         fontSize: 16,        
-        
+        height: '86%',
+        flexDirection: 'column'
     },
     loadingIndicator: {
         position: 'absolute',
@@ -61,7 +78,7 @@ export default makeStyles(theme => ({
     },
     fullscreenBtn: {
         position: 'absolute',
-        top: 5,
+        top: 9,
         right: 0,
         zIndex: 999
     },
@@ -80,4 +97,14 @@ export default makeStyles(theme => ({
         cursor: 'pointer',
         zIndex: 999
     },
+    label: {
+        position: 'relative',
+        '& svg': {
+            /* position: 'absolute', */
+            width: 16,
+            height: 16,
+            /* top: 3, */
+            marginRight: 5
+        }
+    }
 }))

@@ -46,8 +46,9 @@ const DisplayChart = (props) => {
             })   
         }    
         setHeight(height)
-    }, [props.data]);
+    }, [props.data])
 
+    
     return (
         <React.Fragment>
             {

@@ -8,56 +8,31 @@ import { DataSet } from 'vis-data-71/esnext'
 import { Timeline } from 'vis-timeline/esnext'
 import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
+
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import ClickAwayListener from '@mui/base'
 import themeMode from '../../../../themes/themeMode';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import { 
+  setTimelineData,
+  setTimelineRequest,
   transactionRowClick
 } from '../../../../actions/patentTrackActions2'
 
 import PatenTrackApi from '../../../../api/patenTrack2'
 import { convertTabIdToAssetType, assetsTypesWithKey } from '../../../../utils/assetTypes'
-import { numberWithCommas, capitalize } from '../../../../utils/numbers'
-
-
-
+import { numberWithCommas, applicationFormat, capitalize } from '../../../../utils/numbers'
+import { timelineOptions } from '../../../../utils/options'
+ 
 
 import useStyles from './styles'
 import { setTimelineSelectedItem, setTimelineSelectedAsset } from '../../../../actions/uiActions'
 import clsx from 'clsx';
-
-/**
- * Default options parameter for the Timeline
- */
-
-const options = {
-  height: '100%',
-  autoResize: true,
-  stack: true,
-  orientation: 'both',
-  zoomKey: 'ctrlKey',
-  moveable: true,
-  zoomable: true,
-  horizontalScroll: true,
-  verticalScroll: true,
-  zoomFriction: 30,
-  zoomMin: 1000 * 60 * 60 * 24 * 7, // 7 days
-  /* zoomMax: 1000 * 60 * 60 * 24 * 30 * 3, */ // 3months
-  /* cluster: {
-  //   titleTemplate: 'Cluster containing {count} events.<br/> Zoom in to see the individual events.',
-    showStipes: false,
-    clusterCriteria: (firstItem, secondItem) => {
-      return ( firstItem.rawData.company === secondItem.rawData.company &&  firstItem.rawData.tab_id == secondItem.rawData.tab_id)
-    }
-  }, */
-  template: function(item, element, data) {
-    if (data.isCluster) {
-      return `<span class="cluster-header">${data.items[0].clusterHeading}(${data.items.length})</span>`
-    } else { 
-      return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
-    }
-  },
-}
+import { IconButton } from '@mui/material';
+ 
 
 /**
  * 
@@ -78,8 +53,24 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
   const history = useHistory()
   const timelineRef = useRef() //timeline Object ref
   const timelineContainerRef = useRef() //div container ref
+  const [previousLoad, setPreviousLoad] = useState(false)
+  const [buttonClick, setSetButtonClick] = useState(false)
   const items = useRef(new DataSet()) // timeline items dataset
   const groups = useRef(new DataSet()) // timeline groups dataset
+  const [options, setTimelineOptions] = useState({
+    ...timelineOptions,
+    template: function(item, element, data) {
+      if (data.isCluster) {
+        return `<span class="cluster-header">${data.items[0].clusterHeading} (${data.items.length})</span>`
+      } else { 
+        if(data.category == 'late_recording' && ![5,12].includes(parseInt(data.rawData.tab_id))) {
+          return `<span class="${data.assetType} ${data.rawData.tab_id}"><span class="name">Assignor: ${data.customerName}</span><span class="recordby">Recorded By: ${data.recorded_by}</span></span>`
+        } else { 
+          return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
+        }
+      }
+    },
+  })
   const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
   const assetTypesSelectAll = useSelector(state => state.patenTrack2.assetTypes.selectAll)
   const companies = useSelector( state => state.patenTrack2.mainCompaniesList.list )
@@ -126,7 +117,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
   
 
   const [ timelineRemoveRelease, setTimelineRemoveRelease ] = useState(false)
-  const [ timelineRawData, setTimelineRawData ] = useState([])
+  const [ timelineRawData, setTimelineRawData ] = useState([]) 
   const [ timelineItems, setTimelineItems ] = useState([])
   const [ timelineGroups, setTimelineRawGroups] = useState([])
   const [ tooltipItem, setToolTipItem] = useState([])
@@ -136,159 +127,201 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
   const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(false)
   const search_string = useSelector(state => state.patenTrack2.search_string)
   const search_rf_id = useSelector(state => state.patenTrack2.search_rf_id)
+  const timelineRequest = useSelector(state => state.patenTrack2.timeline_request)
+  const timelineRequestData = useSelector(state => state.patenTrack2.timeline_data)
 
 
   //Item for the timeline
 
   const convertDataToItem = (assetsCustomer) => {
-    
     const assetType = Number.isInteger(assetsCustomer.tab_id) ? convertTabIdToAssetType(assetsCustomer.tab_id) : 'default'
     const companyName =  selectedWithName.filter( company => assetsCustomer.company == company.id ? company.name : '')
     const customerFirstName = assetsCustomer.tab_id == 10 ? assetsCustomer.customerName.split(' ')[0] : assetsCustomer.customerName
     const item = {
-      type: 'point',
+      type: 'point', 
       start: new Date(assetsCustomer.exec_dt),
-      customerName: selectedCategory == 'proliferate_inventors' ? customerFirstName : `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
+      customerName: selectedCategory == 'proliferate_inventors' ? assetsCustomer.customerName : `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
       assetType,
-      clusterHeading: customerFirstName,
+      clusterHeading:  assetsCustomer.customerName ,
       companyName,
       rawData: assetsCustomer,
-      className: `asset-type-${assetType} ${assetsCustomer.release_exec_dt != null ? assetsCustomer.partial_transaction == 1 ? 'asset-type-security-release-partial' : 'asset-type-security-release' : ''}`,
+      category: selectedCategory,
+      className: `asset-type-${assetType} ${assetsCustomer.release_exec_dt != null && assetsCustomer.release_exec_dt != '' ? assetsCustomer.partial_transaction == 1 ? 'asset-type-security-release-partial' : 'asset-type-security-release' : ''}`,
       collection: [ { id: assetsCustomer.id, totalAssets: assetsCustomer.totalAssets } ],
       showTooltips: false
     }
 
-    if([5,12].includes(parseInt(assetsCustomer.tab_id))){            
+    if([5,12].includes(parseInt(assetsCustomer.tab_id)) ||  selectedCategory == 'late_recording') {            
       item.type = 'range';
-      item['end'] = assetsCustomer.release_exec_dt != null ? new Date(assetsCustomer.release_exec_dt) : new Date();
+      item['end'] = selectedCategory == 'late_recording' ? assetsCustomer.record_dt != null ? assetsCustomer.record_dt : new Date() : assetsCustomer.release_exec_dt != null ? new Date(assetsCustomer.release_exec_dt) : new Date();
+      if([5,12].includes(parseInt(assetsCustomer.tab_id))) {
+        const securityPDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.reel_no}-${assetsCustomer.frame_no}.pdf`
+        item['security_pdf'] = securityPDF
+        /* let name = `<tt><img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></tt>${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`;
+        if(assetsCustomer.release_exec_dt != null ) {
+            const releasePDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.release_reel_no}-${assetsCustomer.release_frame_no}.pdf`
+            item['release_pdf'] = releasePDF
+            name += `<em>${assetsCustomer.partial_transaction == 1 ? `<span>(${numberWithCommas(assetsCustomer.releaseAssets)})</span>` : ''}<img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></em>`
+        } */
+        let name = `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`
+        item['customerName'] = name
+      } else {
+        item['recorded_by'] = assetsCustomer.recorded_by
+        item['customerName'] = assetsCustomer.assignors
+        item['clusterHeading'] = assetsCustomer.assignors
+      }
       
-      const securityPDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.reel_no}-${assetsCustomer.frame_no}.pdf`
-      item['security_pdf'] = securityPDF
-      /* let name = `<tt><img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></tt>${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`;
-      if(assetsCustomer.release_exec_dt != null ) {
-          const releasePDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.release_reel_no}-${assetsCustomer.release_frame_no}.pdf`
-          item['release_pdf'] = releasePDF
-          name += `<em>${assetsCustomer.partial_transaction == 1 ? `<span>(${numberWithCommas(assetsCustomer.releaseAssets)})</span>` : ''}<img src='https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/pdf.png'/></em>`
-      } */
-      let name = `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`
-      item['customerName'] = name
     }
-
     return item
   }
 
-  // Custom ToolTip
+  const dateDifference = (date1, date2) => {
+    const diffTime = Math.abs(new Date(date2) - new Date(date1))
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  }
+
+  // Custom ToolTip 
   
   const showTooltip = (item, event) => {    
       setTimeout(() => {
         if(tootlTip === item.id) {
-          PatenTrackApi
-          .cancelTimelineItem()
-          PatenTrackApi
-          .getTimelineItemData(item.id)
-          .then( response => {
-            const { data } = response
-            if( data != null && ( data.assignor.length > 0 || data.assignee.length > 0 ) && tootlTip === data.assignment.rf_id) {
-              const executionDate = data.assignor.length > 0 ? data.assignor[0].exec_dt : ''
-              let transactionType = convertTabIdToAssetType(item.tab_id)
-              const findIndex = assetsTypesWithKey.findIndex( row => row.type == transactionType)
-
-              if(findIndex !== -1) {
-                transactionType = assetsTypesWithKey[findIndex].name
-              } else {
-                transactionType = capitalize(transactionType)
-              }
-              let image = '', color ='';
-              switch(parseInt(item.tab_id)) {
-                case 1:
-                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/acquisition.png'
-                  color = '#E60000'
-                  break;
-                case 2:
-                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png'
-                  color = '#70A800'
-                  break;
-                case 3:
-                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licensein.png'
-                  color = '#E69800'
-                  break;
-                case 4:
-                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licenseout.png'
-                  color = '#E69800'
-                  break;
-                case 5:
-                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
-                  color = '#00a9e6'
-                  break;
-                case 6:
-                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png'
-                  color = '#FFFFFF'
-                  break;
-                case 7:
-                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png'
-                  color = '#FFFFFF'
-                  break;
-                case 8:
-                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/options.png'
-                  color = '#000000'
-                  break;
-                case 9:
-                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/courtorder.png'
-                  color = '#E60000'
-                  break;
-                case 10:
-                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png'
-                  color = '#FFFFFF'
-                  break;
-                case 11:
-                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/release.png'
-                  color = '#00a9e6'
-                  break;
-                case 12:
-                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
-                  color = '#00a9e6'
-                  break;
-                case 13:
-                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
-                  color = '#00a9e6'
-                  break;
-                case 14:
-                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png'
-                  color = '#FFFFFF'
-                  break;
-                case 14:
-                default:
-                  image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png'
-                  color = '#FFFFFF'
-                  break;
-              }
-              const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${event.clientY}px;left:${event.clientX + 20 }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
-                                          <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
-                                          <div>
-                                            ${ executionDate != '' ? moment(executionDate).format('ll') : ''}
-                                          </div>
-                                          <div>
-                                            <h4>Assignors:</h4>
-                                            ${data.assignor.map(or => ( 
-                                              '<div>'+or.original_name+'</div>'
-                                            )).join('')}
-                                          </div>
-                                          <div>
-                                            <h4>Assignees:</h4>
-                                            ${data.assignee.map(ee => (
-                                              '<div>'+ee.original_name+'</div>'
-                                            )).join('')}
-                                          </div>
-                                        </div>` 
-                resetTooltipContainer() 
-              if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
-                document.body.insertAdjacentHTML('beforeend',tootltipTemplate)
-                //timelineContainerRef.current.childNodes[0].insertAdjacentHTML('beforeend',tootltipTemplate)
-              }
-            } else {
-              resetTooltipContainer()
+          if(selectedCategory == 'proliferate_inventors') {
+            const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
+            const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector(`#all_timeline`) : document.getElementById(`all_timeline`);   
+            const getPosition = element.getBoundingClientRect();  
+            const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid #fff;top:${ getPosition.y }px;left:${ getPosition.x }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
+                                        <h4 style='text-align:left; margin:0;'>US${item.patent != '' ? numberWithCommas(item.patent) : applicationFormat(item.application)}</h4>
+                                        <div>
+                                          ${item.exec_dt != '' ? moment(item.exec_dt).format('ll') : ''}
+                                        </div>
+                                        <div>
+                                          <h4>Inventors:</h4>
+                                          ${item.all_inventors}
+                                        </div> 
+                                      </div>` 
+              resetTooltipContainer() 
+            if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
+              document.body.insertAdjacentHTML('beforeend',tootltipTemplate)
+              //timelineContainerRef.current.childNodes[0].insertAdjacentHTML('beforeend',tootltipTemplate)
             }
-          })
+          } else {
+            PatenTrackApi
+            .cancelTimelineItemRequest()
+            PatenTrackApi
+            .getTimelineItemData(item.id)
+            .then( response => {
+              const { data } = response
+              if( data != null && ( data.assignor.length > 0 || data.assignee.length > 0 ) && tootlTip === data.assignment.rf_id) {
+                const executionDate = data.assignor.length > 0 ? data.assignor[0].exec_dt : ''
+                const recordedDate = typeof data.assignment != 'undefined' ? data.assignment.record_dt  : ''
+                let transactionType = convertTabIdToAssetType(item.tab_id)
+                const findIndex = assetsTypesWithKey.findIndex( row => row.type == transactionType)
+  
+                if(findIndex !== -1) {
+                  transactionType = assetsTypesWithKey[findIndex].name
+                } else {
+                  transactionType = capitalize(transactionType)
+                }
+                let image = '', color ='';
+                switch(parseInt(item.tab_id)) {
+                  case 1:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/acquisition.png'
+                    color = '#E60000'
+                    break;
+                  case 2:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png'
+                    color = '#70A800'
+                    break;
+                  case 3:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licensein.png'
+                    color = '#E69800'
+                    break;
+                  case 4:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licenseout.png'
+                    color = '#E69800'
+                    break;
+                  case 5:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+                    color = '#00a9e6'
+                    break;
+                  case 6:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png'
+                    color = '#FFFFFF'
+                    break;
+                  case 7:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png'
+                    color = '#FFFFFF'
+                    break;
+                  case 8:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/options.png'
+                    color = '#000000'
+                    break;
+                  case 9:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/courtorder.png'
+                    color = '#E60000'
+                    break;
+                  case 10:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png'
+                    color = '#FFFFFF'
+                    break;
+                  case 11:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/release.png'
+                    color = '#00a9e6'
+                    break;
+                  case 12:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+                    color = '#00a9e6'
+                    break;
+                  case 13:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
+                    color = '#00a9e6'
+                    break;
+                  case 14:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png'
+                    color = '#FFFFFF'
+                    break;
+                  case 14:
+                  default:
+                    image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png'
+                    color = '#FFFFFF'
+                    break;
+                }
+                const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
+                const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector(`#all_timeline`) : document.getElementById(`all_timeline`);   
+                const getPosition = element.getBoundingClientRect();  
+                let tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${ getPosition.y }px;left:${ getPosition.x }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
+                                            <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
+                                            <div>
+                                              Exected: ${ executionDate != '' ? moment(executionDate).format('ll') : ''}
+                                            </div> `
+                if(selectedCategory == 'late_recording' ){
+                  tootltipTemplate += `<div>Recorded:$ { recordedDate != '' ? moment(recordedDate).format('ll') : ''}
+                  </div> <div>Lapsed: ${dateDifference(executionDate, recordedDate)} days</div>`
+                }                       
+                tootltipTemplate += `<div>
+                                              <h4>Assignors:</h4>
+                                              ${data.assignor.map(or => ( 
+                                                '<div>'+or.original_name+'</div>'
+                                              )).join('')}
+                                            </div>
+                                            <div>
+                                              <h4>Assignees:</h4>
+                                              ${data.assignee.map(ee => (
+                                                '<div>'+ee.original_name+'</div>'
+                                              )).join('')}
+                                            </div>
+                                          </div>` 
+                  resetTooltipContainer() 
+                if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
+                  document.body.insertAdjacentHTML('beforeend',tootltipTemplate)
+                  //timelineContainerRef.current.childNodes[0].insertAdjacentHTML('beforeend',tootltipTemplate)
+                }
+              } else {
+                resetTooltipContainer()
+              }
+            })
+          }
+          
         }                
       }, TIME_INTERVAL) 
   } 
@@ -332,7 +365,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
 
   const onItemout = () => {
     tootlTip = ''
-    PatenTrackApi.cancelTimelineItem()
+    PatenTrackApi.cancelTimelineItemRequest()
     resetTooltipContainer()
     setToolTipItem([])
     
@@ -354,32 +387,46 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     setIsLoadingTimelineData(true)
   }, []) */
 
-  const onRangeChange = useCallback(_debounce((properties) => {
-    setIsLoadingTimelineData(true)
-    const updatedItems = timelineItems.filter((item) => (item.start >= properties.start && item.start <= properties.end))
-    items.current = new DataSet()
-    items.current.add(updatedItems)
-    timelineRef.current.setItems(items.current)
-    setIsLoadingTimelineData(false)
-  }, 100), [ timelineItems ])
+  const onRangeChange = useCallback((properties) => {
+    
+  }, [ timelineItems ])
 
 
   /**
    * this call when Timeline rangechanged
    */
 
-  const onRangeChanged = useCallback(_debounce((properties) => {
-    setIsLoadingTimelineData(true)
-    const updatedItems = timelineItems.filter((item) => (item.start >= properties.start && item.start <= properties.end))
+  const onRangeChanged = useCallback(_debounce(async(properties) => {
+    console.log('onRangeChanged', properties) 
     items.current = new DataSet()
-    items.current.add(updatedItems)
-    timelineRef.current.setItems(items.current)
-    setIsLoadingTimelineData(false)
+    items.current.add(timelineItems)
+    timelineRef.current.setItems(items.current) 
+    if(properties.byUser === true) {    
+      await getTimelineRawData(moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))   
+    } 
+    
   }, 1000), [ timelineItems ])
 
-  const removeSecurityRelease = (timelineData) => {
+
+  const getTimelineRawData = async(start, end) => {
+    dispatch(setTimelineRequest(true))
+    setIsLoadingTimelineData(true) 
+    const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+              tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+              customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
+              rfIDs = selectedAssetAssignments.length > 0 ? selectedAssetAssignments : [];
+    const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined, start, end) 
+    setIsLoadingTimelineData(false)
+    let list = removeSecurityRelease(data.list)
+      dispatch(setTimelineData(list)) //items
+      if(typeof updateTimelineRawData !== 'undefined') {
+        updateTimelineRawData(list)
+      }
+  }
+
+  const removeSecurityRelease = (releaseData) => {
     let removeRelease = []
-    let list = [...timelineData]
+    let list = [...releaseData]
     list.forEach( item => {
       if(parseInt(item.release_rf_id) > 0) {
         removeRelease.push(item.release_rf_id);
@@ -415,10 +462,12 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
   }, [])
 
+  useEffect(() => {
+    setTimelineRawData(timelineRequestData)
+  }, [timelineRequestData])
 
   //Timeline list from server
   useEffect(() => {
-    
     let isSubscribed = true;
     if(typeof timelineData !== 'undefined') {
       setTimelineRawData(timelineData)
@@ -426,10 +475,9 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       /**
            * return empty if no company selected
            */
-      setTimelineRawGroups([]) //groups
-      setTimelineRawData([]) //items
+      
       //redrawTimeline()
-      PatenTrackApi.cancelTimeline()
+      //PatenTrackApi.cancelTimelineRequest()
       /**
         * call for the timeline api data
       */
@@ -441,6 +489,8 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
           if(search_string != '' && search_string != null){
             if(search_rf_id.length > 0) {
               //setIsLoadingTimelineData(true)
+              setTimelineRawGroups([]) //groups
+              setTimelineRawData([]) //items
               const { data } = await PatenTrackApi.getActivitiesTimelineData([], [], [], search_rf_id) // empty array for company, tabs, customers
               //setIsLoadingTimelineData(false)
               //setTimelineRawGroups(data.groups) //groups
@@ -452,23 +502,19 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
             }       
           } else {
             if(type !== 9)  {
-              const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-              tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-              customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
-              rfIDs = selectedAssetAssignments.length > 0 ? selectedAssetAssignments : [];
-      
               if( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
-                //setIsLoadingTimelineData(true)
-                const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined)
-                
+                //setIsLoadingTimelineData(true) 
+                if(timelineRequest === false) {
+                  setTimelineRawGroups([]) //groups
+                  setTimelineRawData([]) //items
+                  getTimelineRawData();
+                } 
                 //setIsLoadingTimelineData(false)
-                let list = removeSecurityRelease(data.list)
-                setTimelineRawData(list) //items
-                if(typeof updateTimelineRawData !== 'undefined') {
-                  updateTimelineRawData(list)
-                }
+                
               } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null ) {
                 //setIsLoadingTimelineData(true)
+                setTimelineRawGroups([]) //groups
+                setTimelineRawData([]) //items
                 const { data } = await PatenTrackApi.getShareTimelineList(location.pathname.replace('/', ''))
                 let list = removeSecurityRelease(data.list)
                 setTimelineRawData(list) //items
@@ -499,7 +545,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
           })
           const form = new FormData()
           form.append('assets', JSON.stringify(assets)) 
-          PatenTrackApi.cancelForeignAssetTimeline()
+          PatenTrackApi.cancelForeignAssetTimelineRequest()
           const { data } = await PatenTrackApi.getForeignAssetsTimeline(form)
           //setIsLoadingTimelineData(false)
           let list = removeSecurityRelease(data.list)
@@ -558,57 +604,73 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
 
     setTimelineItems(convertedItems)
     items.current = new DataSet()
-    groups.current = new DataSet()
-    let start =  new moment(), end = new moment().add(1, 'year')  
+    groups.current = new DataSet() 
+    let start = new moment().subtract(20, 'months'), end = new moment().add(20, 'months')
 
     if (convertedItems.length > 0) {
-      const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
-      start = convertedItems.length ? new moment(convertedItems[startIndex].start).subtract(1, 'week') : new Date()
-      //end = new moment().add(1, 'month')
-      items.current.add(convertedItems.slice(0, startIndex))      
-    }    
-
-    if(selectedCategory == 'proliferate_inventors') {
-      options.cluster = {
-        titleTemplate: 'Cluster containing {count} events. Zoom in to see the individual events.',
-        showStipes: false,
-        clusterCriteria: (firstItem, secondItem) => {
-          return ( firstItem.rawData.law_firm_id === secondItem.rawData.law_firm_id  ||  ( firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID))
+      start = new Date()
+      end = new Date()
+      const promise = convertedItems.map( (c, index) => {
+        let newDate = new Date(c.start);
+        if(index === 0) {
+          end = newDate
         }
-      }
+        if(newDate.getTime() < start.getTime()) {
+          start = newDate
+        }
+        if(newDate.getTime() > end.getTime()) {
+          end = newDate
+        }
+        return c
+      })
+      Promise.all(promise) 
+      start = new moment(start).subtract(3, 'year') 
+      end = new moment(end).add(3, 'year')
+      /* const startIndex = convertedItems.length < 201 ? (convertedItems.length - 1) : 199
+      items.current.add(convertedItems.slice(0, startIndex))  */   
+      items.current.add(convertedItems)  
+    }    
+    redrawTimeline()  
+    if(timelineRawData.length > 0 || previousLoad === false) { 
+      timelineRef.current.setOptions({ 
+        ...options, 
+        start, 
+        end,
+        min: new moment(new Date('1998-01-01')), 
+        max: new moment().add(3, 'year')
+      })  
+      timelineRef.current.setItems(items.current)   
+      setPreviousLoad(true) 
     }
-
-    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1998-01-01')), max: new moment().add(3, 'year')})
-    timelineRef.current.setItems(items.current)   
     //checkCurrentDateStatus()
   }, [ timelineRawData ])
 
-  useEffect(() => {
-    /* window.addEventListener('keydown', handleKeyEvent)
-    return () => window.removeEventListener("keydown", handleKeyEvent) */
-  }, []) 
+  const move  = (percentage) => {
+    var range = timelineRef.current.getWindow();
+    var interval = range.end - range.start;
 
-  /* const checkCurrentDateStatus = () => {
-    setTimeout(() => {
-      if( document.getElementsByClassName('vis-current-time').length == 0 ) {
-        let currentElementTransform = document.getElementsByClassName('vis-current-time')[0].style.transform
-        currentElementTransform = parseInt(currentElementTransform.replace('translateX(', '').replace(')', ''))
+    timelineRef.current.setWindow({
+        start: range.start.valueOf() - interval * percentage,
+        end:   range.end.valueOf()   - interval * percentage
+    });
+  }
 
-      } else {
-        checkCurrentDateStatus()
-      }
-    }, 1000)
-  } */
-  const handleKeyEvent = (event) =>{
-    console.log('handleKeyEvent', event)
-    if(event.key === 'ArrowDown' || event.key === 'ArrowUp' ) {
-      if(event.key === 'ArrowUp' ) {
-        timelineRef.current.zoomOut(0.30)
-      } else {
-        timelineRef.current.zoomIn(0.30)
-      }
-      
-    }
+  const zoomIn = () => {
+    setSetButtonClick(true)
+    timelineRef.current.zoomIn(0.2);
+  }
+
+  const zoomOut = () => {
+    setSetButtonClick(true)
+    timelineRef.current.zoomOut(0.2);
+  }
+
+  const moveLeft = () => {
+    move(0.2);
+  }
+
+  const moveRight = () => {
+    move(-0.2);
   }
  
   /**
@@ -616,8 +678,25 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
    */    
 
   return (
-      <Paper className={classes.root}>        
+      <Paper className={classes.root}> 
+        <div id="visualization">
+          <div className="menu">
+            <IconButton onClick={zoomIn}>
+              <ZoomInIcon/>
+            </IconButton>
+            <IconButton onClick={zoomOut}>
+              <ZoomOutIcon/>
+            </IconButton>
+            <IconButton onClick={moveLeft}>
+              <ChevronLeftIcon />
+            </IconButton>
+            <IconButton onClick={moveRight}>
+              <ChevronRightIcon/>
+            </IconButton> 
+          </div>
+        </div>        
         <div
+          id={`all_timeline`}
           style={{ 
             filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
           }}  

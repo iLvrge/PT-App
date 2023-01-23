@@ -63,6 +63,20 @@ let pages = [
     layout: GlobalLayout,
     type: 1
   },
+  {
+    exact: true,
+    path: routeList.assignments,
+    component: GlobalScreen,
+    layout: GlobalLayout,
+    type: 1
+  },
+  {
+    exact: false,
+    path: routeList.assignments_layouts,
+    component: GlobalScreen,
+    layout: GlobalLayout,
+    type: 1
+  },
   {    
     exact: true,
     path: routeList.invent,
@@ -99,6 +113,13 @@ let pages = [
     type: 1
   },
   {    
+    exact: false,
+    path: routeList.patent_assets_layouts,
+    component: PatentLayout,
+    layout: GlobalLayout, 
+    type: 1
+  },
+  {    
     exact: true,
     path: routeList.correct_details,
     component: CorrectLayout,
@@ -128,7 +149,17 @@ let pages = [
   }
 ] 
 
-if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ) {
+if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') {
+  pages = [  
+    {
+      exact: true,
+      path: routeList.standard_default,
+      component: PatentLayout,
+      layout: GlobalLayout,
+      type: 1
+    },
+  ] 
+} else  if(process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD'  || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') {
   pages = [  
     {
       exact: true,

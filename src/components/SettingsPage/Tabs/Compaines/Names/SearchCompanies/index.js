@@ -5,11 +5,12 @@ import Loader from '../../../../../common/Loader'
 import { addCompany, setSearchCompanies } from '../../../../../../actions/patenTrackActions'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import StyledSearch from '../../../../../common/StyledSearch'
-import { Toolbar, IconButton, Tooltip, Typography, Zoom, TextField } from '@mui/material'
+import { Toolbar, IconButton, Tooltip, Typography, Zoom, TextField, Button, Paper } from '@mui/material'
 import { DebounceInput } from 'react-debounce-input'
 import VirtualizedTable from '../../../../../common/VirtualizedTable'
 import PatenTrackApi from '../../../../../../api/patenTrack2'
 import SendIcon from '@mui/icons-material/Send'
+import AddIcon from '@mui/icons-material/Add'
 import AddMenu from './AddMenu'
 import Chip from '@mui/material/Chip'
 import { setMainCompaniesRowSelect } from '../../../../../../actions/patentTrackActions2'
@@ -25,7 +26,6 @@ const COLUMNS = [
     width: 240,
     minWidth: 240,
     oldWidth: 240,
-    draggable: true,
     label: 'Name',
     dataKey: 'name',
   },
@@ -40,18 +40,28 @@ const COLUMNS = [
 const COMPANY_HEADER_COLUMNS = [
   {
     label: '',
-    width: 50,
+    width: 29,
     dataKey: 'company_id',
-    role: 'checkboxwait',
+    /* role: 'checkboxwait', */ 
+    role: "checkbox",
+    disableSort: true,
+    enable: false,
     formatCondition: 'status',
+
   },
   {
     width: 240,
     minWidth: 240,
     oldWidth: 240,
-    draggable: true,
     label: 'Name',
     dataKey: 'name',
+  },
+  {
+    width: 150,
+    minWidth: 150,
+    oldWidth: 150,
+    label: 'Status',
+    dataKey: 'status',
   }
 ]
 
@@ -201,21 +211,23 @@ const closeAddMenu = useCallback(() => setMenuAnchorEl(null), [])
 
 
 const onCompanyRequestRowSelect = useCallback((event, row) => {
-  let oldItems = [...selected]
-  console.log(row.company_id)
-  if(!oldItems.includes(row.company_id)){
-    oldItems.push(row.company_id)
-  } else {
-    oldItems = oldItems.filter( item => item != row.company_id)
+  if(row.status != 'Data is being prepared') {
+    let oldItems = [...selected]
+    console.log(row.company_id)
+    if(!oldItems.includes(row.company_id)){
+      oldItems.push(row.company_id)
+    } else {
+      oldItems = oldItems.filter( item => item != row.company_id)
+    }
+    setSelected(oldItems)
   }
-  setSelected(oldItems)
+  
 }, [selected])
+ 
 
-const onHandleKeyDown = useCallback(async(event) => {
-  if(event.keyCode == 13){
-    console.log('value', event.target.value);
+const onHandleAddCompany = useCallback(async(event) => {
     const formData = new FormData();
-    formData.append('name', event.target.value)
+    formData.append('name', searchTxtField.current.querySelector('input[type="text"]').value)
     const requestData = await PatenTrackApi.addCompanyRequest(formData)
     console.log('requestData', requestData)
 
@@ -223,11 +235,13 @@ const onHandleKeyDown = useCallback(async(event) => {
       searchTxtField.current.querySelector('input[type="text"]').value = ''
       getCompanyRequestList()
     }
-  }
 });
 
   return (
     <Fragment>
+      {/* <Typography variant="body2" sx={{p: 1}}>
+        To add to your account the data of any company (including competitors and others) please state the requested company's name below:
+      </Typography> */}
       <Toolbar className={classes.toolbar}>
         <div className={classes.toolbar}>
           <div className={classes.searchContainer} ref={searchTxtField}>
@@ -237,12 +251,12 @@ const onHandleKeyDown = useCallback(async(event) => {
               value={search}              
               onChange={handleOnInputChange}
               debounceTimeout={500} /> */}
+              
               <TextField 
                 id="request_add_new_company" 
-                name="request_add_new_company" 
-                label="Request for new company" 
-                variant="filled" 
-                onKeyDown={onHandleKeyDown}
+                name="request_add_new_company"  
+                label="Request an additional company"
+                size="small"
               />
           </div>
           {
@@ -252,42 +266,54 @@ const onHandleKeyDown = useCallback(async(event) => {
                 size="small"
                 label={`${selected.length ? `${selected.length}/` : ''}${searchCompanies.length.toLocaleString()}`} />
             )
-          }
-
+          } 
         </div>
-
-        <Fragment>
-          <AddMenu
-            anchorEl={menuAnchorEl}
-            onClose={closeAddMenu}
-            createParent={createParent}
-            associateToParent={associateToParent} />
-
-          <Tooltip 
-            title={
-              <Typography color="inherit" variant='body2'>{'Import a company to your account'}</Typography>
-            } 
-            enterDelay={0}
-            TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+          <IconButton
+            color="inherit" 
+            onClick={onHandleAddCompany}
+            /* startIcon={<AddIcon className={classes.icon} />} */
+            className={classes.btnGroup}
           >
-            <div>
-              <IconButton
-                disabled={!selected.length}
-                color={'primary'}
-                onClick={openAddMenu}
-                size="large">
-                <SendIcon />
-              </IconButton>
-            </div>
-          </Tooltip>          
-        </Fragment>
+            <SendIcon/>
+          </IconButton>
+          {
+            selected.length > 0 && (
+            <Fragment>
+              <AddMenu
+                anchorEl={menuAnchorEl}
+                onClose={closeAddMenu}
+                createParent={createParent}
+                associateToParent={associateToParent} />
+
+              <Tooltip 
+                title={
+                  <Typography color="inherit" variant='body2'>{'Import a company to your account'}</Typography>
+                } 
+                enterDelay={0}
+                TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+              >
+                <div>
+                  <Button
+                    disabled={!selected.length}
+                    onClick={openAddMenu}
+                    className={classes.btnGroup}
+                    style={{color: '#fff'}}
+                  >
+                    Import
+                  </Button>
+                </div>
+              </Tooltip>          
+            </Fragment>
+            )
+          }
+        
 
         <IconButton onClick={onClose} style={{ display: 'none' }} size="large">
           <ChevronLeftIcon />
         </IconButton>
       </Toolbar>
 
-      <div className={classes.list}>
+      <Paper square className={classes.root}>
         {
           loading ? (
             <Loader />
@@ -295,18 +321,21 @@ const onHandleKeyDown = useCallback(async(event) => {
               <VirtualizedTable
                 classes={classes}
                 selected={selected}
+                selectedKey={"company_id"}
                 headerHeight={53.86}
-                rowHeight={50}
+                rowHeight={51}
                 rowCount={list.length}
                 rows={list}
-                columns={companyHeaderColumns}
+                columns={companyHeaderColumns} 
+                highlightRow={true} 
+                higlightColums={[1]}
                 onSelect={onCompanyRequestRowSelect}
                 resizeColumnsWidth={resizeCompanyHeaderColumnsWidth}
                 resizeColumnsStop={resizeCompanyHeaderColumnsStop}
               /> 
           )
         }
-      </div>
+      </Paper>
     </Fragment>
   );
 }

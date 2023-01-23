@@ -247,7 +247,7 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
             setCurrentSelection(null)
            
             if(type == 1) {
-                await PatenTrackApi.cancelInitiated()
+                await PatenTrackApi.cancelInitiatedRequest()
                 if(channel_id != '' && channel_id != null) {
                     const getSlackToken = getTokenStorage("slack_auth_token_info");
                     if (getSlackToken && getSlackToken != "") {
@@ -265,7 +265,7 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
                     }
                 }
             } else {
-                await PatenTrackApi.cancelRecords()
+                await PatenTrackApi.cancelRecordsRequest()
                 /* if(selectedCompanies.length > 0 && selectedAssetsPatents.length > 0 ) {
                     setLoading(true)
                     const { data } = await PatenTrackApi.getDriveAndAssetFiles(0, 'undefined', 'undefined', selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString(), selectedCompanies, selectedCategory )
@@ -327,7 +327,7 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
             }
         }
         if(gToken != '' && gAccount != '') {
-            await PatenTrackApi.cancelInitiated()
+            await PatenTrackApi.cancelInitiatedRequest()
             const { data } = await PatenTrackApi.getDriveAndAssetFiles(1, 'undefined', 'undefined', selectedAssetsPatents.length > 0 ? selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString() : 'undefined', selectedCompanies, selectedCategory, gToken, gAccount )
             setLoading(false)
             setDocumentsFiles(data.document_files)

@@ -1,5 +1,5 @@
 import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -10,13 +10,12 @@ import TableSortLabel from '@mui/material/TableSortLabel'
 import useStyles from './styles'
 import Loader from '../../../../../common/Loader'
 import Row from './Row'
-import Checkbox from '@mui/material/Checkbox'
-import _map from 'lodash/map'
-import IconButton from '@mui/material/IconButton'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import _map from 'lodash/map' 
 
 import SlackImage from '../../../../../common/SlackImage'
+import { Paper } from '@mui/material'
+import PatenTrackApi from '../../../../../../api/patenTrack2' 
+import { setCompanies } from '../../../../../../actions/patenTrackActions'
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -63,7 +62,7 @@ function filterSearch(array, search) {
 }
 
 const HEAD_CELLS = [
-  {
+  /* {
     id: 'slack',
     numeric: false,
     disablePadding: true,
@@ -71,7 +70,7 @@ const HEAD_CELLS = [
     align: 'left',
     class: '',
     width: 35
-  },
+  }, */
   {
     id: 'original_name',
     numeric: false,
@@ -88,7 +87,7 @@ const HEAD_CELLS = [
     align: 'center',
     class: '',
     alignCenter: true,
-    width: 135
+    width: 155
   },
 ]
 
@@ -100,6 +99,7 @@ function CompaniesTable({
   setChildCompaniesSelected,
 }) {
   const classes = useStyles()
+  const dispatch = useDispatch()
   const isLoading = useSelector(state => state.patenTrack.companyListLoading)
   const companiesList = useSelector(state => state.patenTrack.companiesList)
   const [ order, setOrder ] = useState('asc')
@@ -125,6 +125,7 @@ function CompaniesTable({
   }, [ handleRequestSort ])
 
   const onSelect = useCallback((event, row, type) => {
+    console.log('onSelect Event', row, type)
     if (type === 'parent') {
       setSelected((selected) => selected.includes(row.id) ? selected.filter(_id => _id !== row.id) : [ ...selected, row.id ])
       setChildCompaniesSelected((childCompaniesSelected) => childCompaniesSelected.filter(_id => row.children.findIndex(item => item.id === _id) === -1))
@@ -143,8 +144,27 @@ function CompaniesTable({
   const onSelectAll = useCallback(() => {
     setSelected(isAllSelected ? [] : _map(rows, 'id'))
   }, [ setSelected, isAllSelected, rows ])
+
+  const updateRowData = async(name, row) => {
+    const form = new FormData()
+    form.append('name', name)  
+    const { data } = await PatenTrackApi.updateCompany(row.id, form) 
+    if( data != null && data.length > 0) {
+      dispatch(setCompanies(data))
+    }
+  }
+
+  const moveItem = async(parentId, item) => {
+    const form = new FormData()
+    form.append('parent_id', parentId > 0 ? parentId : 0) 
+    const { data } = await PatenTrackApi.updateCompany(item.id, form) 
+    if( data != null && data.length > 0) {
+      dispatch(setCompanies(data))
+    }
+  }
+
   return (
-    <Fragment>
+    <Paper square classes={classes.root}>
       {
         isLoading ? (
           <Loader />
@@ -154,18 +174,18 @@ function CompaniesTable({
               className={classes.table}
               stickyHeader
               size={'medium'} 
-              aria-label="collapsible table">
-              <TableHead>
-                <TableRow>
+              aria-label="collapsible table"> 
+              <TableHead className={classes.tableHeading}>
+                <TableRow className={classes.tableHeading}>
                   <TableCell className={classes.actionTh} padding="none" />
 
-                  <TableCell className={classes.actionTh} padding="none">
+                  {/* <TableCell className={classes.actionTh} padding="none">
                     <Checkbox
                       onChange={onSelectAll}
                       checked={isAllSelected}
                       indeterminate={Boolean(selected.length && selected.length < rows.length)}
                     />
-                  </TableCell>
+                  </TableCell> */}
 
 
                   {HEAD_CELLS.map(headCell => (
@@ -213,6 +233,8 @@ function CompaniesTable({
                       onSelect={onSelect}
                       isSelected={isSelected}
                       isChildSelected={isChildSelected}
+                      updateData={updateRowData}
+                      moveItem={moveItem}
                     />
                   ))
                 }
@@ -221,7 +243,7 @@ function CompaniesTable({
           </TableContainer>
         )
       }
-    </Fragment>
+    </Paper>
   )
 }
 

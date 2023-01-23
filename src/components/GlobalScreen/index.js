@@ -54,7 +54,7 @@ import {
     setDashboardShareData
 } from '../../actions/patentTrackActions2'
 
-import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpanMode, setMaintainenceFeeFrameMode, setTimelineScreen } from '../../actions/uiActions'
+import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpanMode, setMaintainenceFeeFrameMode, setTimelineScreen, updateViewDashboard } from '../../actions/uiActions'
 
 import useStyles from './styles'
 import clsx from 'clsx'
@@ -67,6 +67,8 @@ import PatenTrackApi from '../../api/patenTrack2'
 import LawFirmTable from '../common/LawFirmTable';
 import FamilyContainer from '../common/AssetsVisualizer/FamilyContainer';
 import SecuredAssets from '../common/SecuredAssets';
+import FullScreen from '../common/FullScreen';
+import { useReloadLayout } from '../../utils/useReloadLayout';
 
 const GlobalScreen = ({
     type,
@@ -114,6 +116,7 @@ const GlobalScreen = ({
     handleInventorBarOpen,
     toggleCustomerButtonType,
     customerButtonVisible,
+    changeVisualBar,
     commentBarSize,
     setCommentBarSize,
     openCommentBar,
@@ -157,6 +160,7 @@ const GlobalScreen = ({
     const assetFileRef = useRef()
     const fileBarRef = useRef()
     const templateFileRef = useRef()
+    const [isLoaded, checkPageLoad] = useReloadLayout()
     const [sheetName, setSheetName] = useState('')
     const [ gap, setGap ] = useState( { x: '14.1rem', y: '7.5rem'} )
     const [ isDragging, setIsDragging] = useState(false)
@@ -184,6 +188,7 @@ const GlobalScreen = ({
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
     const dashboard_share_selected_data = useSelector(state => state.patenTrack2.dashboard_share_selected_data)
     const selectedAssetsFamily = useSelector(state => state.patenTrack.assetFamily) 
+    const viewDashboard = useSelector(state => state.patenTrack.viewDashboard) 
     const checkContainer = () => {
         /* setTimeout(() => {
             if( mainContainerRef.current != null  && mainContainerRef.current != undefined) {                
@@ -201,20 +206,28 @@ const GlobalScreen = ({
     }
 
     useEffect(() => {
-        if(process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' && auth_token !== null) {
+        if(!isLoaded) { 
+            checkPageLoad(0)
+        }
+    }, [])
+
+    
+
+    useEffect(() => {
+        if((process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') && auth_token !== null) {
             let url = location.pathname
             if(url != '' && location != 'blank') {
                 url = url.replace('/', '')
                 if(url != '') {
-                    (async () => {
-                        PatenTrackApi.cancelShareDashboard()
+                    const getDashboardData = async() => {
+                        PatenTrackApi.cancelShareDashboardRequest()
                         const {data} = await PatenTrackApi.getShareDashboardList(url)
                         if(data != null && Object.keys(data).length > 0) {
-                            dispatch(setDashboardShareData(data))
-                            let { selectedCompanies, tabs, customers } = data
+                            let { selectedCompanies, tabs, customers, share_button } = data
                             if(typeof selectedCompanies != 'undefined' && selectedCompanies != '') {
                                 try{
-                                    selectedCompanies = JSON.parse(selectedCompanies)
+                                    dispatch(setDashboardShareData(data))
+                                    selectedCompanies = JSON.parse(selectedCompanies) 
                                     if(selectedCompanies.length > 0) {
                                         dispatch(setMainCompaniesSelected(selectedCompanies, []))
                                         (async () => {
@@ -233,7 +246,7 @@ const GlobalScreen = ({
                                         if(typeof customers != 'undefined' && customers != '') {
                                             customers = JSON.parse(customers)
                                             if(customers.length > 0) {
-                                                dispatch( setSelectAssignmentCustomers(customers) )
+                                                dispatch(setSelectAssignmentCustomers(customers) )
                                             }
                                         }
                                     }                    
@@ -242,13 +255,24 @@ const GlobalScreen = ({
                                 }
                             }
                         }
-                    })()
+                    }
+                    getDashboardData()
                 }
             } 
         }
-        return (() => {
-        })
-    }, [auth_token])
+        /* return (() => {
+        }) */
+    }, [auth_token, dispatch])
+
+    /* useEffect(() => {
+        console.log('openChartBar BAR CHANGES', openChartBar, openAnalyticsBar)
+    }, [ openChartBar])
+    useEffect(() => {
+        console.log('openAnalyticsBar BAR CHANGES',  openChartBar, openAnalyticsBar)
+    }, [ openAnalyticsBar])
+    useEffect(() => {
+        console.log('BAR CHANGES', selectedCategory, openAssignmentBar, openCustomerBar, openCommentBar, openIllustrationBar, openChartBar, openAnalyticsBar)
+    }, [openAssignmentBar, openCustomerBar, openCommentBar, openIllustrationBar, openChartBar, openAnalyticsBar]) */
 
     useEffect(() => {
         if(selectedCategory == 'correct_details') {
@@ -258,16 +282,59 @@ const GlobalScreen = ({
             if(openCustomerBar === true) {
                 handleCustomersBarOpen()
             }
-        } else {
-            if((openAssignmentBar === true && timelineScreen === false) || (openAssignmentBar === false && timelineScreen === true && selectedCategory != 'top_lenders' &&  selectedCategory != 'proliferate_inventors')) {
+        } else {   
+            if((openAssignmentBar === true && timelineScreen === false) || (openAssignmentBar === false && timelineScreen === true && selectedCategory != 'top_lenders' &&  selectedCategory != 'proliferate_inventors' &&  selectedCategory != 'top_law_firms' )) { 
                 handleAssignmentBarOpen()
-            } 
+            }  
             if(openCustomerBar === false && dashboardScreen === false && timelineScreen === false) {
                 handleCustomersBarOpen()
-            }
+            } 
         }
-    }, [selectedCategory])
-
+        /* console.log('timelineScreen', selectedCategory, dashboardScreen, timelineScreen, openCommentBar, openIllustrationBar, openChartBar, openAnalyticsBar) */
+        if(timelineScreen === true) {
+            if(selectedCategory === 'top_law_firms' && openOtherPartyBar === false) {
+                handleOtherPartyBarOpen()
+                if(openAssignmentBar === true) {
+                    handleAssignmentBarOpen()
+                }
+            }
+            if(selectedCategory == 'proliferate_inventors' && openInventorBar === false){
+                handleInventorBarOpen() 
+                if(openOtherPartyBar === true) {
+                    handleOtherPartyBarOpen()
+                }
+                if(openAssignmentBar === true) {
+                    handleAssignmentBarOpen()
+                }
+            }
+            if( openCommentBar === false ) {
+                /* console.log(`Send Request to openCommentBar ${openCommentBar}`) */
+                handleCommentBarOpen()
+            }
+            let statusChange = false;
+    
+            if(openIllustrationBar === false) {
+                /* console.log(`Send Request to openIllustrationBar ${openIllustrationBar}`) */
+                statusChange = true
+                handleIllustrationBarOpen()
+            } 
+            if( openChartBar === false ) {
+                /* console.log(`Send Request to openChartBar ${openChartBar}`) */
+                statusChange = true
+                handleChartBarOpen()
+            }
+            if( openAnalyticsBar === false ) {
+                /* console.log(`Send Request to openAnalyticsBar ${openAnalyticsBar}`) */
+                statusChange = true
+                handleAnalyticsBarOpen()
+            }
+            if(statusChange === true) {
+                /* console.log(`Send Request to change ${statusChange}`) */
+                changeVisualBar(true, true, true, true)
+            }
+        } 
+    }, [selectedCategory, timelineScreen])
+    
     useEffect(() => {
         if( type === 0 ) {
             if( selectedMainCompanies.length > 0 || selectedCompaniesAll === true ) {
@@ -292,8 +359,7 @@ const GlobalScreen = ({
                 setChartBar( !openChartBar )
             }
         }
-    }, [ openVisualizerBar ])
-    
+    }, [ openVisualizerBar ]) 
 
     useEffect(() => {
         updateResizerBar(companyRef, openBar)
@@ -337,6 +403,13 @@ const GlobalScreen = ({
     useEffect(() => {
         updateResizerBar(templateFileRef, driveTemplateMode)
     }, [ templateFileRef, driveTemplateMode ])    
+
+    useEffect(() => { 
+        if(dashboardScreen === true && openChartBar === true && openAnalyticsBar === true) { 
+            setVisualizeOpenBar(false)
+            checkChartAnalytics(null, null, false)
+        }
+    }, [dashboardScreen])
 
     const resetAll = (dispatch) => {
         dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
@@ -398,10 +471,34 @@ const GlobalScreen = ({
     }
 
     const handleClickOpenFullscreen = () => {
-        setIsFullscreenOpen(true)
+        setIsFullscreenOpen(!isFullscreenOpen)
     }
 
-
+    const illustrationMenuItems = [
+        {
+            id: 1,
+            label: `Title`,
+            component: IllustrationContainer,
+            standalone: true,
+            isFullscreenOpen: isFullscreenOpen, 
+            asset: assetIllustration,
+            setIllustrationRecord: setIllustrationRecord, 
+            chartsBar: openChartBar,
+            analyticsBar: openAnalyticsBar,
+            chartsBarToggle: handleChartBarOpen,
+            checkChartAnalytics: checkChartAnalytics,
+            setAnalyticsBar: setAnalyticsBar,
+            setChartBar: setChartBar,
+            fullScreen: handleClickOpenFullscreen,
+            pdfModal: true,
+            gap: gap,
+            viewOnly: true,
+            shareButton: false,
+            usptoButton: false,
+            connectionSelection: false
+        }
+    ]
+ 
     return (
         <SplitPane
             className={classes.splitPane}
@@ -431,7 +528,8 @@ const GlobalScreen = ({
                                         defaultSelect={''} 
                                         addUrl={true} 
                                         parentBarDrag={setVisualizerBarSize}
-                                        parentBar={setVisualizeOpenBar}                                
+                                        parentBar={setVisualizeOpenBar} 
+                                        checkChartAnalytics={checkChartAnalytics}                               
                                     /> 
                             }
                         </>
@@ -491,13 +589,23 @@ const GlobalScreen = ({
                                         {
                                             openOtherPartyBar === true 
                                             ?
-                                                <CustomerTable 
-                                                    standalone={true}
-                                                    parentBarDrag={setVisualizerBarSize}
-                                                    parentBar={setVisualizeOpenBar}
-                                                    type={type}
-                                                    customerType={0}
-                                                />
+                                                selectedCategory === 'top_law_firms'
+                                                ?
+                                                    <LawFirmTable 
+                                                        checkChartAnalytics={checkChartAnalytics}
+                                                        chartsBar={openChartBar}
+                                                        analyticsBar={openAnalyticsBar}
+                                                        type={type} 
+                                                        defaultLoad={type === 2 ? false : true} 
+                                                    />
+                                                :
+                                                    <CustomerTable 
+                                                        standalone={true}
+                                                        parentBarDrag={setVisualizerBarSize}
+                                                        parentBar={setVisualizeOpenBar}
+                                                        type={type}
+                                                        customerType={0}
+                                                    />
                                             :
                                             <div></div>
                                         }
@@ -542,24 +650,14 @@ const GlobalScreen = ({
                         <div id={`transaction_container`} style={{ height: '100%'}}>
                             { 
                                 openAssignmentBar === true 
-                                ? 
-                                    selectedCategory === 'top_law_firms'
-                                    ?
-                                        <LawFirmTable 
-                                            checkChartAnalytics={checkChartAnalytics}
-                                            chartsBar={openChartBar}
-                                            analyticsBar={openAnalyticsBar}
-                                            type={type} 
-                                            defaultLoad={type === 2 ? false : true} 
-                                        />
-                                    :
-                                        <AssignmentsTable 
-                                            checkChartAnalytics={checkChartAnalytics}
-                                            chartsBar={openChartBar}
-                                            analyticsBar={openAnalyticsBar}
-                                            type={type} 
-                                            defaultLoad={type === 2 ? false : true} 
-                                        />
+                                ?  
+                                    <AssignmentsTable 
+                                        checkChartAnalytics={checkChartAnalytics}
+                                        chartsBar={openChartBar}
+                                        analyticsBar={openAnalyticsBar}
+                                        type={type} 
+                                        defaultLoad={type === 2 ? false : true} 
+                                    />
                                 : 
                                 ''
                             }
@@ -702,11 +800,12 @@ const GlobalScreen = ({
                                         className={`${classes.splitPane} ${classes.splitPane2}  ${classes.splitPane3} ${classes.splitPane2OverflowUnset}`}
                                         split="vertical"
                                         minSize={100}
-                                        maxSize={dashboardScreen === true ? -270 : -100}  
+                                        maxSize={-270}  
                                         size={visualizerBarSize}
                                         onChange={(size) => { 
                                             setVisualizerBarSize(size)
                                             //editorBar(1) 
+                                            
                                         }} 
                                         onDragStarted={() => {
                                             setIsDragging(!isDragging)
@@ -745,8 +844,10 @@ const GlobalScreen = ({
                                                 setChannel={setChannelID}
                                                 size={size}
                                                 gap={gap}
+                                                cube={false}
                                                 templateButton={false}
                                                 maintainenceButton={false}
+                                                visualizerBarSize={visualizerBarSize}
                                                 chartsBar={openChartBar}
                                                 analyticsBar={openAnalyticsBar}
                                                 chartsBarToggle={handleChartBarOpen}
@@ -762,6 +863,8 @@ const GlobalScreen = ({
                                                 handleInventorBarOpen={handleInventorBarOpen}  
                                                 openOtherPartyBar={openOtherPartyBar}
                                                 handleOtherPartyBarOpen={handleOtherPartyBarOpen}
+                                                parentBarDrag={setVisualizerBarSize}
+                                                parentBar={setVisualizeOpenBar}
                                             /> 
                                         </div>
                                         <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}} id={`information_container`}>
@@ -776,21 +879,33 @@ const GlobalScreen = ({
                                                 :
                                                 assetIllustration != null 
                                                 ?
-                                                    <IllustrationContainer 
-                                                        isFullscreenOpen={isFullscreenOpen} 
-                                                        asset={assetIllustration} 
-                                                        setIllustrationRecord={setIllustrationRecord} 
-                                                        chartsBar={openChartBar}
-                                                        analyticsBar={openAnalyticsBar}
-                                                        chartsBarToggle={handleChartBarOpen}
-                                                        checkChartAnalytics={checkChartAnalytics}
-                                                        setAnalyticsBar={setAnalyticsBar}
-                                                        setChartBar={setChartBar}
-                                                        fullScreen={handleClickOpenFullscreen}
-                                                        pdfModal={true}
-                                                        gap={gap}
-                                                        viewOnly={true}
-                                                    />
+                                                    !isFullscreenOpen
+                                                    ?
+                                                        <IllustrationContainer 
+                                                            isFullscreenOpen={isFullscreenOpen} 
+                                                            asset={assetIllustration} 
+                                                            setIllustrationRecord={setIllustrationRecord} 
+                                                            chartsBar={openChartBar}
+                                                            analyticsBar={openAnalyticsBar}
+                                                            chartsBarToggle={handleChartBarOpen}
+                                                            checkChartAnalytics={checkChartAnalytics}
+                                                            setAnalyticsBar={setAnalyticsBar}
+                                                            setChartBar={setChartBar}
+                                                            fullScreen={handleClickOpenFullscreen}
+                                                            pdfModal={true}
+                                                            gap={gap}
+                                                            viewOnly={true}
+                                                            shareButton={false}
+                                                            usptoButton={false}
+                                                            connectionSelection={false}
+                                                        />
+                                                    :
+                                                        <FullScreen 
+                                                            componentItems={illustrationMenuItems} 
+                                                            showScreen={isFullscreenOpen} 
+                                                            setScreen={handleClickOpenFullscreen} 
+                                                            showClose={false}
+                                                        />
                                                 :
                                                     selectedAssetsLegalEvents != null && Object.keys(selectedAssetsLegalEvents).length > 0
                                                     ?
@@ -828,6 +943,7 @@ const GlobalScreen = ({
                                                 parentBarDrag={setVisualizerBarSize}
                                                 parentBar={setVisualizeOpenBar}
                                                 primary={'second'}
+                                                setIllustrationRecord={setIllustrationRecord} 
                                                 illustrationData={illustrationRecord}
                                                 chartBar={openChartBar}
                                                 analyticsBar={openAnalyticsBar}
@@ -836,7 +952,12 @@ const GlobalScreen = ({
                                                 illustrationBar={openIllustrationBar}
                                                 customerBarSize={customerBarSize}
                                                 companyBarSize={companyBarSize}
+                                                chartsBarToggle={handleChartBarOpen}
+                                                checkChartAnalytics={checkChartAnalytics}
+                                                setAnalyticsBar={setAnalyticsBar}
+                                                setChartBar={setChartBar}
                                                 isDragging={isDragging}
+                                                gap={gap}
                                                 type={type}
                                             />
                                         }                                            

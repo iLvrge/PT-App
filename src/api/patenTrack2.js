@@ -21,7 +21,7 @@ const getCookie = name => {
 
 const getToken = () => {
   let token = null
-  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD') {
+  if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') {
     token = localStorage.getItem('auth_signature')
   } else {
     token = localStorage.getItem('token')
@@ -70,9 +70,10 @@ const getFormUrlHeader = () => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest, cancelAllDashboardCountRequest;
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineActivity,cancelTimelineSecurity, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelSatusCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest, cancelAllDashboardCountRequest, cancelStatus, cancelAssetTypeAssignmentAllAssetsWithFamily, cancelDashboardPartiesData, cancelDashboardPartiesAssignorData, cancelAgentsData, cancelCollectionIllustration, cancelInventorGeoLocation, cancelAbandoned, cancelAllAbandonedAssetsYears, cancelAllAbandonedAssetsAges;
 
-class PatenTrackApi {
+
+class PatenTrackApi { 
 
   static getDocumentIdentifierFile(identifier) {
     return axios.get(`https://developer.uspto.gov/ptab-api/documents/${identifier}/download`, getBlobHeader())
@@ -88,6 +89,10 @@ class PatenTrackApi {
 
   static getCompaniesList() {
     return axios.get(`${base_new_api_url}/companies`, getHeader())
+  } 
+
+  static updateCompany(companyId, form) {
+    return axios.put(`${base_new_api_url}/companies/${companyId}`, form, getFormUrlHeader())
   }
 
   static getChildCompanies(companyID, offset = 0 ) {
@@ -249,11 +254,65 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/customers/asset_types/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
   }
 
+  static getAssetTypeAllAssets(companies, tabs, customers, category) { 
+    return axios.get(`${base_new_api_url}/customers/asset_types/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&type=${category}`, getHeader())
+  }
+  
+
+  static getInventorGeoLocation(form) { 
+    let header = getFormUrlHeader()  
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelInventorGeoLocation = c
+    })
+    return axios.post(`${base_new_api_url}/customers/asset_types/inventors/location`, form, header)
+  }
+
+  static cancelInventorGeoLocationRequest() {
+    if (cancelInventorGeoLocation !== undefined && typeof cancelInventorGeoLocation == 'function') {
+      try{
+        throw cancelInventorGeoLocation('Cancelled request manually.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
   static getAssetTypeAssignmentAllAssetsWithFamily(form) { 
-    let header = getFormUrlHeader()
-    
+    let header = getFormUrlHeader()  
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelAssetTypeAssignmentAllAssetsWithFamily = c
+    })
     return axios.post(`${base_new_api_url}/customers/asset_types/assets/family`, form, header)
   }
+
+  static cancelAssetTypeAssignmentAllAssetsWithFamilyRequest() {
+    if (cancelAssetTypeAssignmentAllAssetsWithFamily !== undefined && typeof cancelAssetTypeAssignmentAllAssetsWithFamily == 'function') {
+      try{
+        throw cancelAssetTypeAssignmentAllAssetsWithFamily('Cancelled request manually.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  } 
+  
+  static getAgentsData(form) { 
+    let header = getFormUrlHeader() 
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelAgentsData = c
+    })
+    return axios.post(`${base_new_api_url}/customers/asset_types/assets/agents`, form, header)
+  }
+
+  static cancelAgentsDataRequest() {
+    if (cancelAgentsData !== undefined && typeof cancelAgentsData == 'function') {
+      try{
+        throw cancelAgentsData('Request cancelled for agents')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  } 
+
   
 
   static getRestoreOwnershipAssets(companies, tabs, customers, rfIDs) { 
@@ -278,10 +337,10 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/share/${shareCode}/${type}`, header)
   }
 
-  static cancelAssets() {
-    if (cancelAssets !== undefined) {
+  static cancelAssetsRequest() {
+    if (cancelAssets !== undefined && typeof cancelAssets == 'function') {
       try{
-        throw cancelAssets('Operation canceled by the user.')
+        throw cancelAssets('Cancel asset request.')
       } catch (e){
         console.log('cancelRequest->', e)
       }
@@ -296,7 +355,7 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/share/dashboard/list/${shareCode}`, header)
   }
 
-  static cancelShareDashboard() {
+  static cancelShareDashboardRequest() {
     if (cancelShareDashboard !== undefined) {
       try{
         throw cancelShareDashboard('Operation canceled by the user.')
@@ -314,8 +373,8 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/share/timeline/list/${shareCode}`, header)
   }
 
-  static cancelShareTimeline() {
-    if (cancelShareTimeline !== undefined) {
+  static cancelShareTimelineRequest() {
+    if (cancelShareTimeline !== undefined && typeof cancelShareTimeline == 'function') {
       try{
         throw cancelShareTimeline('Operation canceled by the user.')
       } catch (e){
@@ -333,9 +392,27 @@ class PatenTrackApi {
   }
 
   static cancelLifeSpanRequest() {
-    if (cancelLifeSpan !== undefined) {
+    if (cancelLifeSpan !== undefined && typeof cancelLifeSpan == 'function') {
       try{
         throw cancelLifeSpan('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
+  static getAssetAbandondSpan( form ) { 
+    let header = getFormUrlHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelAbandoned = c
+    })
+    return axios.post(`${base_new_api_url}/events/abandoned/assets`, form, header)
+  }
+
+  static cancelAssetAbandondRequest() {
+    if (cancelAbandoned !== undefined && typeof cancelAbandoned == 'function') {
+      try{
+        throw cancelAbandoned('Operation canceled by the user.')
       } catch (e){
         console.log('cancelRequest->', e)
       }
@@ -351,7 +428,7 @@ class PatenTrackApi {
   }
 
   static cancelCPCRequest() {
-    if (cancelCPC !== undefined) {
+    if (cancelCPC !== undefined && typeof cancelCPC == 'function') {
       try{
         throw cancelCPC('Operation canceled by the user.')
       } catch (e){
@@ -369,7 +446,7 @@ class PatenTrackApi {
   }
 
   static cancelDownloadRequest() {
-    if (cancelDownloadURL !== undefined) {
+    if (cancelDownloadURL !== undefined && typeof cancelDownloadURL == 'function') {
       try{
         throw cancelDownloadURL('Operation canceled by the user.') 
       } catch (e){
@@ -384,6 +461,10 @@ class PatenTrackApi {
 
   static moveAssetForSale(form) { 
     return axios.post(`${base_new_api_url}/assets/assets_for_sale/`, form, getFormUrlHeader())
+  }
+
+  static assetForMaintainence(form) { 
+    return axios.post(`${base_new_api_url}/assets/maintainence/`, form, getFormUrlHeader())
   }
 
   static saveForeignAssets(form) { 
@@ -411,7 +492,7 @@ class PatenTrackApi {
     return axios.post(`${base_new_api_url}/assets/external_assets/sheets`, form, header)
   }
 
-  static cancelForeignAssetsSheet() { 
+  static cancelForeignAssetsSheetRequest() { 
     if (cancelForeignAssetsSheet !== undefined) {
       try{
         throw cancelForeignAssetsSheet('Operation canceled by the user.') 
@@ -429,7 +510,7 @@ class PatenTrackApi {
     return axios.post(`${base_new_api_url}/assets/external_assets/sheets/assets`, form, header)
   } 
 
-  static cancelForeignAssetsBySheet() {
+  static cancelForeignAssetsBySheetRequest() {
     if (cancelForeignAssetsBySheet !== undefined) {
       try{
         throw cancelForeignAssetsBySheet('Operation canceled by the user.') 
@@ -447,7 +528,7 @@ class PatenTrackApi {
     return axios.post(`${base_new_api_url}/assets/external_assets/sheets/timeline`, form, header)
   } 
 
-  static cancelForeignAssetTimeline() {
+  static cancelForeignAssetTimelineRequest() {
     if (cancelForeignAssetTimeline !== undefined) {
       try{
         throw cancelForeignAssetTimeline('Operation canceled by the user.') 
@@ -456,6 +537,8 @@ class PatenTrackApi {
       }  
     } 
   }
+
+  
   
 
   static getAssetsByCPCCode( year, cpcCode, form ) { 
@@ -474,12 +557,17 @@ class PatenTrackApi {
     return axios.post(`${base_new_api_url}/customers/transactions/queues/name`, form, getFormUrlHeader())
   }
 
+  static findInventor( inventorID ) {  
+    return axios.get(`${base_new_api_url}/dashboards/parties/inventor/${inventorID}`, getHeader())
+  } 
+
   static getCustomerAddressByCompanyIDs( companies) {  
     return axios.get(`${base_new_api_url}/address/companies?companies=${JSON.stringify(companies)}`, getHeader())
   } 
 
-  static getCustomerTransactions(type, companies, tabs, customers) { 
-    return axios.get(`${base_new_api_url}/customers/${type}/transactions?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}`, getHeader())
+  static getCustomerTransactions(type, companies, tabs, customers, lawfirm) { 
+    console.log('TRansactionssss')
+    return axios.get(`${base_new_api_url}/customers/${type}/transactions?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&lawfirm=${lawfirm}`, getHeader())
   } 
 
   static getCustomerParties(type, companies, tabs, customerType) {  
@@ -488,6 +576,10 @@ class PatenTrackApi {
 
   static getCustomerAddressTransactions( companies, tabs, customers) {  
     return axios.get(`${base_new_api_url}/customers/transactions/address?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}`, getHeader())
+  } 
+  
+  static getIncorrectNames( companies) {  
+    return axios.get(`${base_new_api_url}/customers/incorrectnames?companies=${JSON.stringify(companies)}`, getHeader())
   } 
 
   static getCustomerNormalizeNameTransactions( companies, tabs, customers) {  
@@ -650,11 +742,26 @@ class PatenTrackApi {
   }
 
   static getCollectionIllustration(rfID) {
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelCollectionIllustration = c
+    })
     return axios.get(
       `${base_new_api_url}/collections/${rfID}/illustration`,
-      getHeader()
+      header
     )
   }
+
+  static cancelCollectionIllustrationRequest() {
+    if (cancelCollectionIllustration !== undefined && typeof cancelCollectionIllustration == 'function') {
+      try{
+        throw cancelCollectionIllustration('Request cancelled for illustration.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+  
 
   static geteAssetUSPTOByPatentNumber(type, patentNumber, flag) {
     return axios.get(
@@ -675,8 +782,8 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/timeline/item/${itemID}`, header)
   }
 
-  static cancelTimelineItem() {
-    if (cancelTimelineItem !== undefined) {
+  static cancelTimelineItemRequest() {
+    if (cancelTimelineItem !== undefined && typeof cancelTimelineItem == 'function') {
       try{
         throw cancelTimelineItem('Operation canceled by the user.')
       } catch (e){
@@ -685,24 +792,66 @@ class PatenTrackApi {
     } 
   }
 
-  static getActivitiesTimelineData(companies, tabs, customers, rfIDs = [], layout, exclude) {
+
+  static allAssetsSurchargeLegalEvents(companies) { 
+    return axios.get(`${base_new_api_url}/events/all/assets/surcharge?companies=${JSON.stringify(companies)}`, getHeader())
+  } 
+
+  static allFilledAssetsEvents(companies) { 
+    return axios.get(`${base_new_api_url}/events/all/assets/to_record?companies=${JSON.stringify(companies)}`, getHeader())
+  } 
+
+  static allFilledAssetsEventsDetails(application) { 
+    return axios.get(`${base_new_api_url}/events/all/assets/to_record/detail/${application}`, getHeader())
+  }
+
+  static getActivitiesTimelineData(companies, tabs, customers, rfIDs = [], layout, exclude, start='', end='') { 
+    let header = getHeader() 
+    header['cancelToken'] = new CancelToken(function executor(c) { 
+      cancelTimelineActivity = c 
+    })
+    return axios.get(`${base_new_api_url}/customers/timeline?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}&start=${start}&end=${end}`, header)
+  }
+
+  static cancelTimelineActivityRequest() { 
+    if (cancelTimelineActivity !== undefined && typeof cancelTimelineActivity === 'function') { 
+      try {
+        console.log('Cancelling timeline old request')
+        throw cancelTimelineActivity('Cancel timeline request')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      } 
+    } 
+  }
+
+  static getFilledAssetsTimelineData(companies, tabs, customers, rfIDs = [], layout, exclude, start='', end='') {
     let header = getHeader()
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelTimeline = c
     })
-    return axios.get(`${base_new_api_url}/customers/timeline?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}`, header)
+    return axios.get(`${base_new_api_url}/customers/timeline/filling_assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}&start=${start}&end=${end}`, header)
   }
 
   static getTimelineSecurityData(companies, tabs, customers, rfIDs = [], layout) {
     let header = getHeader()
     header['cancelToken'] = new CancelToken(function executor(c) {
-      cancelTimeline = c
-    })
+      cancelTimelineSecurity = c 
+    }) 
     return axios.get(`${base_new_api_url}/customers/timeline/security?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}`, header)
   }
 
-  static cancelTimeline() {
-    if (cancelTimeline !== undefined) {
+  static cancelTimelineSecurityRequest() {
+    if (cancelTimelineSecurity !== undefined && typeof cancelTimelineSecurity == 'function') {
+      try{
+        throw cancelTimelineSecurity('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
+  static cancelTimelineRequest() {
+    if (cancelTimeline !== undefined && typeof cancelTimeline == 'function') {
       try{
         throw cancelTimeline('Operation canceled by the user.')
       } catch (e){
@@ -769,9 +918,9 @@ class PatenTrackApi {
 
   
   static cancelAllDashboardToken = () => {
-    if (cancelAllDashboardRequest !== undefined) {
+    if (cancelAllDashboardRequest !== undefined && typeof cancelAllDashboardRequest == 'function') {
       try{
-        cancelAllDashboardRequest.cancel(`Dashboard request aborted`)        
+        cancelAllDashboardRequest(`Dashboard request aborted`)        
       } catch (e){
         console.log('cancelInitiated->', e)
       }
@@ -786,9 +935,9 @@ class PatenTrackApi {
   }
   
   static cancelAllDashboardCountToken = () => {
-    if (cancelAllDashboardCountRequest !== undefined) {
+    if (cancelAllDashboardCountRequest !== undefined && typeof cancelAllDashboardCountRequest == 'function') {
       try{
-        cancelAllDashboardCountRequest.cancel(`Dashboard request aborted`)        
+        cancelAllDashboardCountRequest(`Dashboard request aborted`)        
       } catch (e){
         console.log('cancelInitiated->', e)
       }
@@ -809,9 +958,9 @@ class PatenTrackApi {
   }
 
   static cancelAllDashboardTimelineToken = () => {
-    if (cancelAllDashboardTimelineRequest !== undefined) {
+    if (cancelAllDashboardTimelineRequest !== undefined && typeof cancelAllDashboardTimelineRequest == 'function') {
       try{
-        cancelAllDashboardTimelineRequest.cancel(`Dashboard timeline request aborted`)        
+        cancelAllDashboardTimelineRequest(`Dashboard timeline request aborted`)        
       } catch (e){
         console.log('cancelInitiated->', e)
       }
@@ -823,16 +972,45 @@ class PatenTrackApi {
   }
 
   static getDashboardPartiesData(formData) {
-    return axios.post(`${base_new_api_url}/dashboards/parties`, formData, getFormUrlHeader())
+    let header = getFormUrlHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelDashboardPartiesData = c
+    })
+    return axios.post(`${base_new_api_url}/dashboards/parties`, formData, header)
   }
 
-  static getDashboardPartiesAssignorData(formData) {
-    return axios.post(`${base_new_api_url}/dashboards/parties/assignor`, formData, getFormUrlHeader())
+  static cancelDashboardPartiesDataRequest(){
+    if (cancelDashboardPartiesData !== undefined && typeof cancelDashboardPartiesData == 'function') {
+      try{
+        cancelDashboardPartiesData(`Request cancelled for invented, acquired`)        
+      } catch (e){
+        console.log('cancelInitiated->', e)
+      }
+    }
   }
   
 
-  static getLawFirmsByCompany(companies) {
-    return axios.get(`${base_new_api_url}/customers/lawfirm?companies=${JSON.stringify(companies)}`, getHeader())
+  static getDashboardPartiesAssignorData(formData) {
+    let header = getFormUrlHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelDashboardPartiesAssignorData = c
+    })
+    return axios.post(`${base_new_api_url}/dashboards/parties/assignor`, formData, header)
+  }
+
+  static cancelDashboardPartiesAssignorDataRequest(){
+    if (cancelDashboardPartiesAssignorData !== undefined && typeof cancelDashboardPartiesAssignorData == 'function') {
+      try{
+        cancelDashboardPartiesAssignorData(`Request cancelled for assignors`)        
+      } catch (e){
+        console.log('cancelInitiated->', e)
+      }
+    }
+  }
+  
+
+  static getLawFirmsByCompany(companies, rfID) {
+    return axios.get(`${base_new_api_url}/customers/lawfirm?companies=${JSON.stringify(companies)}&rfID=${rfID}`, getHeader())
   }
 
   static getLawFirms() {
@@ -853,7 +1031,7 @@ class PatenTrackApi {
 
   static deleteLawFirmAddress(addressId) {
     return axios.delete(`${base_new_api_url}/lawfirm_address/${addressId}`, getHeader())
-  }
+  } 
   
   static addCompanyAddress(address) {
     return axios.post(`${base_new_api_url}/address`, address, getFormUrlHeader())
@@ -1002,7 +1180,7 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/assets/${assets}/files/${channelID}/slack/${code}?type=${type}&companies=${JSON.stringify(companies)}&layout=${layoutID}&g=${gToken}&ga=${gAccount}&activities=${JSON.stringify(assetTypesSelected)}&parties=${JSON.stringify(selectedAssetCompanies)}&rfIDs=${JSON.stringify(selectedAssetAssignments)}&patents=${JSON.stringify(selectedAssetsPatents)}`, header)
   } 
 
-  static cancelInitiated () {
+  static cancelInitiatedRequest() {
     if (cancelInitiated !== undefined) {
       try{
         throw cancelInitiated('Operation canceled by the user.')
@@ -1012,7 +1190,7 @@ class PatenTrackApi {
     } 
   }
 
-  static cancelRecords () {
+  static cancelRecordsRequest() {
     if (cancelRecords !== undefined) {
       try{
         throw cancelRecords('Operation canceled by the user.')
@@ -1094,7 +1272,7 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/documents/repo_folder?user_account=${userAccount}`,  header)
   }
 
-  static cancelGetRepoFolder() {
+  static cancelGetRepoFolderRequest() {
     if (cancelGetRepoFolder !== undefined) {
       try{
         throw cancelGetRepoFolder('Operation canceled by the user.') 
@@ -1134,6 +1312,10 @@ class PatenTrackApi {
 
   static getConnectionData( popup ) {
     return axios.get(`${base_new_api_url}/connection/${popup}`,  getHeader())
+  }
+
+  static getConnectionDataFromAsset( asset, companies ) {
+    return axios.get(`${base_new_api_url}/connection/asset/${asset}?companies=${JSON.stringify(companies)}`,  getHeader())
   }
   
   static moveAssetToLayout( data ) {
@@ -1200,7 +1382,7 @@ class PatenTrackApi {
   } 
 
   static cancelClaimsData () {
-    if (cancelClaims !== undefined) {
+    if (cancelClaims !== undefined && typeof cancelClaims == 'function') {
       try{
         throw cancelClaims('Operation canceled by the user.')
       } catch (e){
@@ -1217,8 +1399,8 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/family/claims/${encodeURIComponent(applicationNumber)}?counter=true`,  header)
   } 
 
-  static cancelClaimsCounter () {
-    if (cancelClaimsCounter !== undefined) {
+  static cancelClaimsCounterRequest() {
+    if (cancelClaimsCounter !== undefined && typeof cancelClaimsCounter == 'function') {
       try{
         throw cancelClaimsCounter('Operation canceled by the user.')
       } catch (e){
@@ -1236,7 +1418,7 @@ class PatenTrackApi {
   }
 
   static cancelSpecificationData () {
-    if (cancelSpecifications !== undefined) {
+    if (cancelSpecifications !== undefined && typeof cancelSpecifications == 'function') {
       try{
         throw cancelSpecifications('Operation canceled by the user.')
       } catch (e){
@@ -1254,7 +1436,7 @@ class PatenTrackApi {
   }
 
   static cancelFamilyData() {
-    if (cancelFamily !== undefined) {
+    if (cancelFamily !== undefined && typeof cancelFamily == 'function') {
       try{
         throw cancelFamily('Operation canceled by the user.')
       } catch (e){
@@ -1271,8 +1453,8 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/family/images/${encodeURIComponent(applicationNumber)}?counter=true`,  header)
   }
 
-  static cancelFiguresCounter() {
-    if (cancelFiguresCounter !== undefined) {
+  static cancelFiguresCounterRequest() {
+    if (cancelFiguresCounter !== undefined && typeof cancelFiguresCounter == 'function') {
       try{
         throw cancelFiguresCounter('Operation canceled by the user.')
       } catch (e){
@@ -1289,8 +1471,8 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/ptab/${asset}`,  header)
   } 
   
-  static cancelPtab () {
-    if (cancelPtab !== undefined) {
+  static cancelPtabRequest() {
+    if (cancelPtab !== undefined && typeof cancelPtab == 'function') {
       try{
         throw cancelPtab('Operation canceled by the user.')
       } catch (e){
@@ -1307,8 +1489,8 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/ptab/${encodeURIComponent(asset)}?counter=true`,  header)
   } 
   
-  static cancelPtabCounter () {
-    if (cancelPtabCounter !== undefined) {
+  static cancelPtabCounterRequest() {
+    if (cancelPtabCounter !== undefined && typeof cancelPtabCounter == 'function') {
       try{
         throw cancelPtabCounter('Operation canceled by the user.')
       } catch (e){
@@ -1325,8 +1507,8 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/citation/${encodeURIComponent(asset)}`,  header)
   } 
   
-  static cancelCitationData () {
-    if (cancelCitationData !== undefined) {
+  static cancelCitationDataRequest() {
+    if (cancelCitationData !== undefined && typeof cancelCitationData == 'function') {
       try{
         throw cancelCitationData('Operation canceled by the user.')  
       } catch (e){
@@ -1341,12 +1523,48 @@ class PatenTrackApi {
       cancelAllAssetsCitationData = c
     })
     return axios.post(`${base_new_api_url}/citation`,  form, header)
-  }  
+  } 
   
-  static cancelAllAssetsCitationData () {
-    if (cancelAllAssetsCitationData !== undefined) {
+  static cancelAllAssetsCitationDataRequest() {
+    if (cancelAllAssetsCitationData !== undefined && typeof cancelAllAssetsCitationData == 'function') {
       try{
         throw cancelAllAssetsCitationData('Cancelled old request.')  
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  } 
+
+  static getAllAbandonedAssetsYears( form ) {
+    let header = getFormUrlHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelAllAbandonedAssetsYears = c
+    })
+    return axios.post(`${base_new_api_url}/events/abandoned/yearly/assets`,  form, header)
+  } 
+  
+  static cancelAllAbandonedAssetsYearsRequest() {
+    if (cancelAllAbandonedAssetsYears !== undefined && typeof cancelAllAbandonedAssetsYears == 'function') {
+      try{
+        throw cancelAllAbandonedAssetsYears('Cancelled old request.')  
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
+  static getAllAbandonedAssetsAges( form ) {
+    let header = getFormUrlHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelAllAbandonedAssetsAges = c
+    })
+    return axios.post(`${base_new_api_url}/events/abandoned/maintainence/assets`,  form, header)
+  } 
+
+  static cancelAllAbandonedAssetsAgesRequest() {
+    if (cancelAllAbandonedAssetsAges !== undefined && typeof cancelAllAbandonedAssetsAges == 'function') {
+      try{
+        throw cancelAllAbandonedAssetsAges('Cancelled old request.')  
       } catch (e){
         console.log('cancelRequest->', e)
       }
@@ -1361,10 +1579,46 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/citation/${encodeURIComponent(asset)}?counter=true`,  header)
   } 
   
-  static cancelCitationCounter () {
-    if (cancelCitationCounter !== undefined) {
+  static cancelCitationCounterRequest() {
+    if (cancelCitationCounter !== undefined && typeof cancelCitationCounter == 'function') {
       try{
         throw cancelCitationCounter('Operation canceled by the user.')  
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
+  static getStatusData( applicationNumber ) {
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelStatus = c
+    })
+    return axios.get(`${base_new_api_url}/events/assets/status/${applicationNumber}`,  header)
+  } 
+  
+  static cancelStatusData () {
+    if (cancelStatus !== undefined && typeof cancelStatus == 'function') {
+      try{
+        throw cancelStatus('Operation canceled by the user.')
+      } catch (e){
+        console.log('cancelRequest->', e)
+      }
+    } 
+  }
+
+  static getStatusCounter( applicationNumber ) {
+    let header = getHeader()
+    header['cancelToken'] = new CancelToken(function executor(c) {
+      cancelSatusCounter = c
+    })
+    return axios.get(`${base_new_api_url}/events/assets/status/${applicationNumber}?counter=true`,  header)
+  } 
+  
+  static cancelStatusCounterRequest() {
+    if (cancelSatusCounter !== undefined && typeof cancelSatusCounter == 'function') {
+      try{
+        throw cancelSatusCounter('Operation canceled by the user.')  
       } catch (e){
         console.log('cancelRequest->', e)
       }
@@ -1379,8 +1633,8 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/family/${encodeURIComponent(applicationNumber)}?counter=true`, getHeader())
   }
 
-  static cancelFamilyCounter () {
-    if (cancelFamilyCounter !== undefined) {
+  static cancelFamilyCounterRequest() {
+    if (cancelFamilyCounter !== undefined && typeof cancelFamilyCounter == 'function') {
       try{
         throw cancelFamilyCounter('Operation canceled by the user.')  
       } catch (e){
@@ -1401,8 +1655,8 @@ class PatenTrackApi {
     return axios.post(`${base_new_api_url}/dashboards/share`,  form, getFormUrlHeader())
   }
 
-  static cancelFeesCounter () {
-    if (cancelFeesCounter !== undefined) {
+  static cancelFeesCounterRequest() {
+    if (cancelFeesCounter !== undefined && typeof cancelFeesCounter == 'function') {
       try{
         throw cancelFeesCounter('Operation canceled by the user.')  
       } catch (e){

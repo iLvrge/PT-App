@@ -8,7 +8,7 @@ import React, {
 import { useSelector, useDispatch } from "react-redux";
 import {useLocation} from 'react-router-dom'
 import { Paper, Popover, Box, Rating } from "@mui/material";
-import { Clear, NotInterested, KeyboardArrowDown, MonetizationOn } from '@mui/icons-material';
+import { Clear, NotInterested, KeyboardArrowDown, MonetizationOn, StarOutline, StarOutlineOutlined, PendingActionsOutlined } from '@mui/icons-material';  
 import moment from "moment";
 import Loader from "../Loader";
 import useStyles from "./styles";
@@ -52,7 +52,8 @@ import {
   setAssetTableScrollPos,
   resetAssetDetails,
   getAssetDetails,
-  setSelectedMaintainenceAssetsList
+  setSelectedMaintainenceAssetsList,
+  setAssetsIllustrationData
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -80,7 +81,7 @@ import  { controlList } from '../../../utils/controlList'
 
 import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/numbers";
 
-import { getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
+import { getAuthConnectToken, getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
 
 import PatenTrackApi from '../../../api/patenTrack2'
 
@@ -145,6 +146,7 @@ const AssetsTable = ({
   const [defaultViewFlag, setDefaultViewFlag] = useState(0)
   const [assetRows, setAssetRows] = useState([])
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState(true)
+  const [ selectedDefaultItem, setSelectedDefaultItem ] = useState(false)
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
   const google_profile = useSelector(state => state.patenTrack2.google_profile)
   const openModal = Boolean(anchorEl);
@@ -209,7 +211,9 @@ const AssetsTable = ({
   const link_assets_sheet_type = useSelector(state => state.patenTrack2.link_assets_sheet_type)
   const switch_button_assets = useSelector(state => state.patenTrack2.switch_button_assets)
   const foreignAssets = useSelector(state => state.patenTrack2.foreignAssets)
-  const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
+  const dashboardScreen = useSelector(state => state.ui.dashboardScreen) 
+  const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
+
   const Clipboard = () => {
     return (
       <svg xmlns="http://www.w3.org/2000/svg" className='clipboard' fill="#fff" enableBackground="new 0 0 80 80" viewBox="0 0 80 80"><path d="M40,5c-3.3085938,0-6,2.6914062-6,6v3h-5c-0.4199219,0-0.7949219,0.262207-0.9394531,0.6567383l-0.880188,2.4077148	h-9.0836792C16.9404297,17.0644531,16,18.0048828,16,19.1611328v53.7421875C16,74.0595703,16.9404297,75,18.0966797,75h43.8066406
@@ -252,6 +256,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         <span className={classes.rating_label}><label>{props.label}</label></span>
         <Rating
           name={props.name}
+          className={props.class}
           onChangeActive={(event, newValue) => onHandleRating(event, newValue, props)}
           value={findValue}
         />
@@ -263,6 +268,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     return (
       <RatingBox
         label={`Important`}
+        class={classes.yellow}
         name={`virtual-rating-important`}
         data={props.item}
       />
@@ -274,19 +280,41 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     return (
       <RatingBox
         label={`Necessary`}
+        class={classes.blue}
         name={`virtual-rating-necessary`}
         data={props.item}
       />
     )
   }
 
+  const TeamBarIcon = () => {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 64 64" className="team"><path d="M53.55,37.65H45.92v2H60V37.46a13.61,13.61,0,0,0-3.06-8.67c-.24-.3-.5-.58-.78-.87a12.52,12.52,0,0,0-1.78-1.58l-.4-.31-.51-.31A13.4,13.4,0,0,0,52.2,25a14.77,14.77,0,0,0-2.47-.94A7.17,7.17,0,0,0,50.93,23a7.65,7.65,0,0,0,2-4.49,4.23,4.23,0,0,0,.07-.89v-.28a7.88,7.88,0,0,0-2-5A7.57,7.57,0,0,0,49.49,11,7.91,7.91,0,0,0,39,12.55,7.93,7.93,0,0,0,39.27,23a8.8,8.8,0,0,0,1.11,1,12.31,12.31,0,0,0-2.72,1,8.61,8.61,0,0,0-1.11.61,7.92,7.92,0,0,0-4.35-1.3,8,8,0,0,0-4.54,1.42l-.09-.05A13.4,13.4,0,0,0,26.35,25a15,15,0,0,0-2.46-.94A7.59,7.59,0,0,0,25.09,23a7.71,7.71,0,0,0,2.05-4.49,6.23,6.23,0,0,0,.06-.89v-.28a7.83,7.83,0,0,0-2-5A7.72,7.72,0,0,0,23.65,11a8,8,0,0,0-8.94.12,8.43,8.43,0,0,0-1.53,1.39A7.95,7.95,0,0,0,13.42,23a8.8,8.8,0,0,0,1.11,1,12.78,12.78,0,0,0-2.73,1,9.1,9.1,0,0,0-1.14.63l-.51.31-.39.3a13.74,13.74,0,0,0-1.87,1.63,9.42,9.42,0,0,0-.78.88,13.61,13.61,0,0,0-3.06,8.67v2.19h14v-2H10.46V31.3l-1.12-2a11.08,11.08,0,0,1,1.71-1.49l.55-.36.32-.19A10.9,10.9,0,0,1,14.84,26a5,5,0,0,0,8.48,0,12.44,12.44,0,0,1,2.81,1.16,7.95,7.95,0,0,0,.21,10.48H20.08v2h4.66a10.59,10.59,0,0,0-1.14.63l-.51.31-.39.3a13.16,13.16,0,0,0-1.87,1.64,8.18,8.18,0,0,0-.78.87A13.61,13.61,0,0,0,17,52.08v2.19H31v-2H23.4V45.92l-1.12-2A11.08,11.08,0,0,1,24,42.41l.55-.36.32-.19a10.9,10.9,0,0,1,2.92-1.23,5,5,0,0,0,8.48,0,12.29,12.29,0,0,1,3,1.27l.32.18.53.39a9.85,9.85,0,0,1,1.65,1.44l-1.12,2v6.35H33v2H47V52.08A13.61,13.61,0,0,0,44,43.41c-.25-.3-.5-.58-.77-.87A12.51,12.51,0,0,0,41.42,41L41,40.65l-.52-.31a13.4,13.4,0,0,0-1.22-.68h4.63v-2H38.05a7.88,7.88,0,0,0,2-4.48,5,5,0,0,0,.06-.88V32a7.83,7.83,0,0,0-2-4.95h0a10.57,10.57,0,0,1,2.52-1,5,5,0,0,0,8.49,0,12.13,12.13,0,0,1,3,1.27l.31.18.54.39a10.72,10.72,0,0,1,1.65,1.44l-1.12,2Zm-45.09,0H6.05v-.19A11.83,11.83,0,0,1,8,31l.48.83Zm4.86-20v0a5.83,5.83,0,0,1,1.52-3.95,5.93,5.93,0,0,1,1.58-1.28,6,6,0,0,1,2.84-.71,5.84,5.84,0,0,1,2.6.6,5.94,5.94,0,0,1,1.67,1.22A5.85,5.85,0,0,1,25,16.21l-2.45-1-2.56-1-2.54-1-.12.14-1.81,1.94Zm3.78,8c.26,0,.51,0,.79,0h2.37c.27,0,.54,0,.79,0A3.06,3.06,0,0,1,17.1,25.63Zm4.07-2.34a6.07,6.07,0,0,1-1.91.32A5.91,5.91,0,0,1,17,23.16a1.13,1.13,0,0,1-.21-.12,6.12,6.12,0,0,1-2-1.5,5.87,5.87,0,0,1-.94-1.49l.94-1,2.43-2.62,0-.05.78-.83.84.35.56.21,1.32.54.43.15,2.22.88,1.77.73a5.89,5.89,0,0,1-1.77,3.52A5.78,5.78,0,0,1,21.17,23.29Zm.23,29H19v-.19a11.82,11.82,0,0,1,1.94-6.49l.48.83Zm21.24-5.85.47-.83a11.74,11.74,0,0,1,1.94,6.49v.19H42.64ZM26.26,32.3h0a5.84,5.84,0,0,1,1.52-4h0a5.7,5.7,0,0,1,1.57-1.27h0a6.18,6.18,0,0,1,5.43-.12h0a6.22,6.22,0,0,1,1.65,1.21l0,0A5.85,5.85,0,0,1,38,30.83l-2.45-1h0l-2.53-1h0l-2.5-1L30.3,28l-1.81,1.94-.06.06ZM30,40.24H34A3,3,0,0,1,30,40.24Zm6.29-3.69,0,0a6,6,0,0,1-2.19,1.33h0a6.06,6.06,0,0,1-1.9.32,5.91,5.91,0,0,1-2.28-.45h0a1.28,1.28,0,0,1-.2-.11,6.12,6.12,0,0,1-2-1.5h0a6.13,6.13,0,0,1-.93-1.49l.93-1h0l2.38-2.56.09-.12.78-.82.82.34h0l.56.21,1.3.53h0l.41.14h0l2.19.87h0L38.1,33A5.89,5.89,0,0,1,36.33,36.55Zm2.84-18.87v0a5.83,5.83,0,0,1,1.51-3.95,6.13,6.13,0,0,1,1.59-1.28,6,6,0,0,1,2.84-.71,5.92,5.92,0,0,1,2.61.6,5.75,5.75,0,0,1,1.66,1.22,5.85,5.85,0,0,1,1.5,2.67l-2.46-1-2.56-1-2.52-1-.13.14-1.8,1.94Zm3.78,8c.26,0,.52,0,.78,0h2.38c.27,0,.54,0,.79,0A3.06,3.06,0,0,1,43,25.63ZM47,23.29a6,6,0,0,1-1.91.32,5.82,5.82,0,0,1-2.27-.45,1,1,0,0,1-.23-.12,5.88,5.88,0,0,1-2.94-3l.94-1,2.44-2.62.05-.05.76-.83.86.35.55.21,1.33.54.42.15,2.21.88,1.78.73a5.85,5.85,0,0,1-1.78,3.52A5.74,5.74,0,0,1,47,23.29Zm8.53,8.51L56,31A11.76,11.76,0,0,1,58,37.46v.19H55.55Z" ></path></svg>
+    )
+}
+
   const Slack = () => {
+    
     return (
       <Box className={classes.slack_container}>
-        <svg version="1.1" width="36px" height="36px" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 270 270"><g><g><path fill="#E01E5A" d="M99.4,151.2c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h12.9V151.2z"></path><path fill="#E01E5A" d="M105.9,151.2c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v32.3c0,7.1-5.8,12.9-12.9,12.9s-12.9-5.8-12.9-12.9V151.2z"></path></g><g><path fill="#36C5F0" d="M118.8,99.4c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v12.9H118.8z"></path><path fill="#36C5F0" d="M118.8,105.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9H86.5c-7.1,0-12.9-5.8-12.9-12.9s5.8-12.9,12.9-12.9H118.8z"></path></g><g><path fill="#2EB67D" d="M170.6,118.8c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9h-12.9V118.8z"></path><path fill="#2EB67D" d="M164.1,118.8c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9V86.5c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9V118.8z"></path></g><g><path fill="#ECB22E" d="M151.2,170.6c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9v-12.9H151.2z"></path><path fill="#ECB22E" d="M151.2,164.1c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h32.3c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9H151.2z"></path></g></g></svg>
+        {
+          getAuthConnectToken() === 2 
+          ?
+              <svg fill="#fff" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 64 64" width="21px" height="21px"><path d="M26 21H12c-.552 0-1 .448-1 1s.448 1 1 1h6v19c0 .552.447 1 1 1s1-.448 1-1V23h6c.552 0 1-.448 1-1S26.552 21 26 21zM55.5 27c3.033 0 5.5-2.467 5.5-5.5S58.533 16 55.5 16 50 18.467 50 21.5 52.467 27 55.5 27zM55.5 18c1.93 0 3.5 1.57 3.5 3.5S57.43 25 55.5 25 52 23.43 52 21.5 53.57 18 55.5 18z"/><path d="M46 27h-8c0 0 0 0 0 0v-4.261C38.951 23.526 40.171 24 41.5 24c3.033 0 5.5-2.467 5.5-5.5S44.533 13 41.5 13c-1.329 0-2.549.474-3.5 1.261V6.384c0-.889-.391-1.727-1.071-2.298-.682-.572-1.57-.812-2.45-.657L5.305 8.578C3.39 8.916 2 10.572 2 12.517l0 38.966c0 1.945 1.39 3.602 3.305 3.939l29.174 5.148c.175.031.35.046.523.046.699 0 1.381-.245 1.927-.703.68-.57 1.071-1.408 1.071-2.297v-8.16C38.901 49.803 39.896 50 41 50c4.573 0 6.559-3.112 6.97-4.757C47.99 45.163 48 45.082 48 45V29C48 27.897 47.103 27 46 27zM41.5 15c1.93 0 3.5 1.57 3.5 3.5S43.43 22 41.5 22 38 20.43 38 18.5 39.57 15 41.5 15zM35.643 58.382c-.133.112-.422.29-.816.219L5.652 53.453C4.695 53.284 4 52.456 4 51.483V12.517c0-.973.695-1.801 1.652-1.97l29.174-5.148c.394-.069.683.106.816.219C35.775 5.731 36 5.978 36 6.384l0 51.232C36 58.022 35.776 58.27 35.643 58.382zM46 44.855C45.82 45.396 44.756 48 41 48c-1.167 0-2.174-.245-3-.73V29h8V44.855zM60 29h-8c-1.103 0-2 .897-2 2v14c0 .39.226.744.58.907C51.401 46.288 53.542 47 55 47c4.573 0 6.559-3.112 6.97-4.757C61.99 42.163 62 42.082 62 42V31C62 29.897 61.103 29 60 29zM60 41.855C59.82 42.396 58.756 45 55 45c-.837 0-2.146-.364-3-.674V31h8V41.855z"/></svg>
+          :
+              getAuthConnectToken() === 1
+              ?
+                <svg version="1.1" width="36px" height="36px" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 270 270"><g><g><path fill="#E01E5A" d="M99.4,151.2c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h12.9V151.2z"></path><path fill="#E01E5A" d="M105.9,151.2c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v32.3c0,7.1-5.8,12.9-12.9,12.9s-12.9-5.8-12.9-12.9V151.2z"></path></g><g><path fill="#36C5F0" d="M118.8,99.4c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v12.9H118.8z"></path><path fill="#36C5F0" d="M118.8,105.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9H86.5c-7.1,0-12.9-5.8-12.9-12.9s5.8-12.9,12.9-12.9H118.8z"></path></g><g><path fill="#2EB67D" d="M170.6,118.8c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9h-12.9V118.8z"></path><path fill="#2EB67D" d="M164.1,118.8c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9V86.5c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9V118.8z"></path></g><g><path fill="#ECB22E" d="M151.2,170.6c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9v-12.9H151.2z"></path><path fill="#ECB22E" d="M151.2,164.1c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h32.3c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9H151.2z"></path></g></g></svg> 
+              :
+                  <TeamBarIcon/>  
+        }
       </Box>
     )
   }
+
+  const companyname = useMemo(() => {
+    return selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])
+  }, [selectedCompanies, companiesList])
 
 
   const actionList = [
@@ -302,21 +330,21 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       icon: <KeyboardArrowDown />,
       image: ''
     },
-    {
+    /* {
       id: 0,
       name: 'Remove from this list', 
       icon: <Clear />,
       image: ''
-    },
+    }, */
     {
       id: 2,
-      name: 'Move to Sale',
+      name: 'Sell',
       image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/sell.png',
       icon: ''
     }, 
     {
       id: 4,
-      name: 'Move to License-Out',
+      name: 'License-Out',
       image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/licenseout.png',
       icon: ''
     },
@@ -324,20 +352,20 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       id: 5,
       name: 'Add to Clipboard',
       image: '',
-      icon: <Clipboard />
+      icon: <PendingActionsOutlined />
     },
     {
       id: 6,
       name: <RatingNecessary item={assetRating}/>,
       image: '',
-      icon: <Clipboard />,
+      icon: <StarOutline />,
       item: false
     },
     {
       id: 7,
       name: <RatingImportant item={assetRating}/>,
       image: '',
-      icon: <Clipboard />,
+      icon: <StarOutlineOutlined />,
       item: false
     },
     {
@@ -380,21 +408,21 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       icon: <KeyboardArrowDown />,
       image: ''
     },
-    {
+    /* {
       id: 0,
       name: 'Abandon', 
       icon: <Clear />,
       image: ''
-    },
+    }, */
     {
       id: 2,
-      name: 'Move to Sale',
+      name: 'Sell',
       image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/sell.png',
       icon: ''
     }, 
     {
       id: 4,
-      name: 'Move to License-Out',
+      name: 'License-Out',
       image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/licenseout.png',
       icon: ''
     },
@@ -402,27 +430,27 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       id: 5,
       name: 'Add to Clipboard',
       image: '',
-      icon: <Clipboard />
+      icon: <PendingActionsOutlined />
     },
     {
       id: 6,
       name: <RatingNecessary item={assetRating}/>,
       image: '',
-      icon: <Clipboard />,
+      icon: <StarOutline />,
       item: false
     },
     {
       id: 7,
       name: <RatingImportant item={assetRating}/>,
       image: '',
-      icon: <Clipboard />,
+      icon: <StarOutlineOutlined />,
       item: false
     },
     {
       id: 9,
-      name: <Slack label={'Add a task/review'}/>,
+      name:  'Add a task/review',
       image: '',
-      icon: '',
+      icon: <Slack />,
       item: false
     },
     {
@@ -464,7 +492,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
 
 
   useEffect(() => {
-    if(display_sales_assets === true) {
+    if(display_sales_assets > 0) {
       dropdownList.splice(3,2)
     } else {
       dropdownList = selectedCategory == 'pay_maintainence_fee' ? [...maintainanceActionList] : [...actionList]
@@ -493,8 +521,15 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   }, [ move_assets ])  
 
   useEffect(() => {
-
-  }, [assets])
+    if(assetRows.length > 0 && (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE')) {
+      if(assetRows.length == 1 && selectedDefaultItem === false) {
+        setSelectedDefaultItem(true)
+        dispatch(setAssetTypesPatentsSelected([assetRows[0].asset]))
+        setSelectItems([assetRows[0].asset])
+        handleOnClick(assetRows[0])
+      }
+    }
+  }, [assetRows, selectedDefaultItem])
 
   useEffect(() => {
     assetsAssignmentRef.current = assetTypeAssignmentAssets
@@ -584,6 +619,19 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       }
   }
 
+  const getSlackToken = () => {
+    let token =  '';
+    const slackToken = getTokenStorage( 'slack_auth_token_info' )
+    if(slackToken && slackToken!= '' && slackToken!= null && slackToken!= 'null' ) {
+      token = JSON.parse(slackToken)
+        
+      if(typeof token === 'string') {
+        token = JSON.parse(token)
+      }
+    }
+    return token
+  }
+
   const onHandleDropDownlist = async(event, asset, row ) => { 
     if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
       alert('Message....')
@@ -614,7 +662,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       } else {
         if(type === 9 && event.target.value === 0) {
           /***
-          * Asset remove from sreadsheet
+          * Asset remove from spreadsheet
           */
           const googleToken = getTokenStorage( 'google_auth_token_info' )
           const googleProfile = getTokenStorage('google_profile_info')
@@ -660,15 +708,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
              * Assets for Sale or LicenseOut
              * Check Slack Auth
              */
-            let token =  '';
-            const slackToken = getTokenStorage( 'slack_auth_token_info' )
-            if(slackToken && slackToken!= '' && slackToken!= null && slackToken!= 'null' ) {
-              token = JSON.parse(slackToken)
-               
-              if(typeof token === 'string') {
-                token = JSON.parse(token)
-              }
-            }
+            let token =  getSlackToken();
 
             if(token !== '') {
               const { access_token, bot_token, bot_user_id } = JSON.parse(token)
@@ -711,6 +751,12 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
               
               if(findIndex !== -1) {
                 const items = [...prevItems]
+                if(items[findIndex].move_category === 10) {
+                  /**
+                   * Pay Maintainence Fee
+                   */
+                  updateMaintainenceSelection(asset, row)
+                }
                 items.splice( findIndex, 1 )
                 return items
               } else {
@@ -725,7 +771,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
                 } else {
                   return prevItems
                 }              
-              }
+              } 
             })      
           }
         }        
@@ -734,40 +780,83 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   }
 
   const updateMaintainenceSelection = (asset, row) => {
-    let updateSelected = [];
-    setMaintainenceItems(prevItems => {
-      updateSelected = [...prevItems];
-      const findIndex = prevItems.findIndex( r => r.asset == asset)
-      if( findIndex !== -1 ) {
-        updateSelected = maintainenceItems.filter(
-          asset => asset[1] !== parseInt(row.appno_doc_num),
-        );
-      } else {
-        updateSelected.push([
-          row.grant_doc_num,
-          row.appno_doc_num,
-          "",
-          row.fee_code,
-          row.fee_amount,
-        ]);
-        const todayDate = moment(new Date()).format("YYYY-MM-DD");
-        if (
-          new Date(todayDate).getTime() >=
-          new Date(row.payment_grace).getTime()
-        ) {
+    let token =  getSlackToken();
+
+    if(token !== '') {
+      let updateSelected = [];
+      const { access_token, bot_token, bot_user_id } = JSON.parse(token)
+      let message = `${row.grant_doc_num != '' ? numberWithCommas(row.grant_doc_num) : applicationFormat(row.appno_doc_num)} `
+      setMaintainenceItems(prevItems => {
+        updateSelected = [...prevItems];
+        const findIndex = prevItems.findIndex( r => r.asset == asset)
+        if( findIndex !== -1 ) {
+          message += `removed `
+          updateSelected = maintainenceItems.filter(
+            item => item[1] !== parseInt(row.appno_doc_num)
+          );
+        } else {
+          message += `added `
           updateSelected.push([
             row.grant_doc_num,
             row.appno_doc_num,
             "",
-            row.fee_code_surcharge,
-            row.fee_surcharge,
+            row.fee_code,
+            row.fee_amount,
           ]);
+          const todayDate = moment(new Date()).format("YYYY-MM-DD");
+          if (
+            new Date(todayDate).getTime() >=
+            new Date(row.payment_grace).getTime()
+          ) {
+            updateSelected.push([
+              row.grant_doc_num,
+              row.appno_doc_num,
+              "",
+              row.fee_code_surcharge,
+              row.fee_surcharge,
+            ]);
+          }
         }
-      }
-      return updateSelected
-    })   
+        return updateSelected
+      }) 
+      message += ` to maintainence list. `  
+      
+      
+      dispatch(setSelectedMaintainenceAssetsList(updateSelected));
 
-    dispatch(setSelectedMaintainenceAssetsList(updateSelected));
+      (async() => {
+        let name = companyname[0].original_name
+        let formattedName = name.replace(/\s/g,'').replace(/["']/g, "").trim().substr(0, 20)
+
+        let channelID = ''
+        if(slack_channel_list.length > 0 && formattedName != '') {
+          const findIndex = slack_channel_list.findIndex( channel => channel.name == formattedName.toString().toLocaleLowerCase())
+      
+          if( findIndex !== -1) {
+            channelID = slack_channel_list[findIndex].id
+          }
+        }
+        const formData = new FormData()
+        formData.append('text',  message)
+        formData.append('asset', name)
+        formData.append('asset_format', formattedName.toLocaleLowerCase())
+        formData.append('user', '')
+        formData.append('reply', '' )
+        formData.append('edit', '')
+        formData.append('file', '')
+        formData.append('remote_file', '')
+        formData.append('channel_id', channelID)
+        formData.append('auth', bot_token)
+        formData.append('auth_id', bot_user_id)
+        const { data } = await PatenTrackApi.sendMessage(access_token, formData) 
+        console.log(`maintainenece`, data)
+      })() 
+    } else {
+      /**
+       * Alert user to login with slack first
+      */
+      alert("Please login to slack first");
+    }
   }
 
   const COLUMNS = [
@@ -907,6 +996,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   const [ tableColumns, setTableColumns ] = useState( selectedCategory == 'pay_maintainence_fee' ? MAINTAINCE_COLUMNS : COLUMNS)
 
   useEffect(() => {
+    //console.log('ASSETS', display_clipboard, selectedAssetCompanies, selectedAssetCompaniesAll)
     if(display_clipboard === false) {
       setTableColumns(selectedCategory == 'pay_maintainence_fee' ? [...MAINTAINCE_COLUMNS] : [...COLUMNS])
       setWidth(1500)
@@ -932,7 +1022,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
           }          
         }  else {
-          if(assetTypeAssignmentAssets.length === 0 ) {
+          console.log('selectedAssetCompanies', selectedAssetCompanies)
+          if(assetTypeAssignmentAssets.length === 0 && assetTypeAssignmentAssetsLoading === false) { 
             loadDataFromServer(offsetWithLimit[0], offsetWithLimit[1], sortField, sortOrder)   
           }         
           if(selectedCategory == 'restore_ownership') {    
@@ -943,8 +1034,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             setTableColumns(cols) */
           }
         }
-        
       } else {
+        console.log('Assets FromTransaction', transactionId)
         if (transactionId != null) {
           dispatch(getAssetTypeAssignmentAssets(transactionId, false));
         } 
@@ -1037,7 +1128,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         staticIcon: "",
         format: capitalize
       }]
-      tableColumns[3].label = 'Clipboard'
+      tableColumns[2].label = 'Clipboard'
+      tableColumns.splice(3,1)
       setTableColumns(tableColumns)
       setWidth(1500)
       dispatch(setAssetTypeAssignmentAllAssets({list: clipboard_assets, total_records: clipboard_assets.length}))
@@ -1162,13 +1254,15 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   }, [ assetTypeAssignmentAssets ]) 
 
   const loadDataFromServer = (startIndex, endIndex, column, direction) => {
+    
     const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
           tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
           customers = selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
           assignments = selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;   
      
     if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-      if (auth_token != null) {          
+      if (auth_token != null && assetTypeAssignmentAssetsLoading === false ) {  
+        console.log('ASSETS LOAD loadDataFromServer')        
         dispatch(
           process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD'
           ? 
@@ -1195,7 +1289,9 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
       }
     } else {
-      if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
+      if ((selectedCompaniesAll === true || selectedCompanies.length > 0) && assetTypeAssignmentAssetsLoading === false ) {
+        console.log('ASSETS LOAD loadDataFromServer')
+        PatenTrackApi.cancelAssetsRequest()
         dispatch(
           getCustomerAssets(
             selectedCategory == '' ? '' : selectedCategory,
@@ -1252,25 +1348,58 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           dispatch(linkWithSheetSelectedAsset('products', encodeURIComponent(grant_doc_num  == '' ? `US${applicationFormat(appno_doc_num)}` : `US${numberWithCommas(grant_doc_num)}`)))     
         }
         callSelectedAssets({ grant_doc_num, appno_doc_num, asset });
-        if(selectedCategory == 'pay_maintainence_fee' || selectedCategory == 'late_maintainance' || selectedCategory == 'ptab'){
+        if(defaultViewFlag === 0) {
+          let changeBar = false
+          if(openIllustrationBar === false) {
+            changeBar = true
+            handleIllustrationBarOpen() 
+          }
+          if(commentBar === false) {
+            changeBar = true
+            handleCommentBarOpen() 
+          }
+          if(openChartBar === false) {
+            changeBar = true
+            handleChartBarOpen()
+          }
+          if(openAnalyticsBar === false) {
+            changeBar = true
+            handleAnalyticsBarOpen()
+          }
+
+          if(changeBar === true) {
+            handleVisualBarSize(true, true, true, true)
+          }
+          setDefaultViewFlag(1)
+        }
+        if(selectedCategory == 'incorrect_names' || selectedCategory == 'pay_maintainence_fee' || selectedCategory == 'late_maintainance' || selectedCategory == 'ptab' || selectedCategory == 'to_be_monitized' ){
           /**
            * Check if Right Pane is close then open it and close the TV
            */
-          if(defaultViewFlag === 0) {
-            if(openChartBar === false) {
-              handleChartBarOpen()
-            }
-            if(openAnalyticsBar === false) {
-              handleAnalyticsBarOpen()
-            }
-            if(openIllustrationBar === true) {
-              handleIllustrationBarOpen('100%')
-              handleVisualBarSize(false, true, false, false)
+          /* if(defaultViewFlag === 0) {
+            if(selectedCategory == 'to_be_monitized') {
+              if(openChartBar === true) {
+                handleChartBarOpen()
+              }
+              if(openAnalyticsBar === false) {
+                handleAnalyticsBarOpen()
+              }
+            } else {
+              if(openChartBar === false) {
+                handleChartBarOpen()
+              }
+              if(openAnalyticsBar === false) {
+                handleAnalyticsBarOpen()
+              }
+              if(openIllustrationBar === true && selectedCategory != 'late_maintainance') {
+                handleIllustrationBarOpen('100%')
+                handleVisualBarSize(false, true, false, false)
+              }
             }
             setDefaultViewFlag(1)
-          } 
+          }  */
         } else if (selectedCategory == 'top_non_us_members') {
-          if(defaultViewFlag === 0) {
+          /* if(defaultViewFlag === 0) {
             if(openChartBar === false) {
               handleChartBarOpen()
               if(openIllustrationBar === true) {
@@ -1279,7 +1408,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
               }
             }
             setDefaultViewFlag(1)
-          }
+          } */
         }
         setCheckBar(!checkBar)        
         dispatch(setChildSelectedAssetsPatents([]));
@@ -1300,12 +1429,13 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         dispatch(toggleLifeSpanMode(false));
         dispatch(toggleFamilyMode(true));
         dispatch(toggleFamilyItemMode(true));
-        PatenTrackApi.cancelFamilyCounter()
-        PatenTrackApi.cancelClaimsCounter()
-        PatenTrackApi.cancelFiguresCounter()
-        PatenTrackApi.cancelPtabCounter()
-        PatenTrackApi.cancelCitationCounter()
-        PatenTrackApi.cancelFeesCounter()
+        PatenTrackApi.cancelFamilyCounterRequest()
+        PatenTrackApi.cancelClaimsCounterRequest()
+        PatenTrackApi.cancelFiguresCounterRequest()
+        PatenTrackApi.cancelPtabCounterRequest()
+        PatenTrackApi.cancelCitationCounterRequest()
+        PatenTrackApi.cancelFeesCounterRequest()
+        PatenTrackApi.cancelStatusCounterRequest()
         dispatch(getAssetDetails(appno_doc_num, grant_doc_num))
         dispatch(
           setPDFFile(
@@ -1330,10 +1460,12 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             id: grant_doc_num || appno_doc_num,
         }),
         );
+        
+
         dispatch(assetFamilySingle(appno_doc_num))
-        dispatch(assetLegalEvents(appno_doc_num, grant_doc_num));
-        dispatch(assetFamily(appno_doc_num));
-        dispatch(setSlackMessages({ messages: [], users: [] }));
+        dispatch(assetLegalEvents(appno_doc_num, grant_doc_num))
+        dispatch(assetFamily(appno_doc_num))
+        dispatch(setSlackMessages({ messages: [], users: [] }))
         const channelID = findChannelID(grant_doc_num != '' ? grant_doc_num : appno_doc_num)        
         if( channelID != '') {
           dispatch(setChannelID({channel_id: channelID}))
@@ -1345,9 +1477,22 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       } else {
         setCheckBar(!checkBar)
         resetAll()
+        console.log('selectedCategory', selectedCategory)
         if(selectedCategory == 'restore_ownership') {
           dispatch(setAssetTypesPatentsSelected([]))
           setSelectItems([])
+        } else if (selectedCategory == 'incorrect_names') {
+          console.log('selectedCategory', openChartBar, openAnalyticsBar, openIllustrationBar)
+          /* if(openChartBar === true) {
+            handleChartBarOpen()
+          }
+          if(openAnalyticsBar === true) {
+            handleAnalyticsBarOpen()
+          }
+          if(openIllustrationBar === false) {
+            handleIllustrationBarOpen('0%')
+            handleVisualBarSize(false, false, false, true)
+          } */
         }
       }
     },
@@ -1357,17 +1502,18 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
 const resetAll = useCallback(() => {
     setSelectedRow([])
     dispatch(setAssetsIllustration(null))
+    dispatch(setAssetsIllustrationData(null))
     dispatch(setSelectedAssetsPatents([]))
     dispatch(setAssetFamily([]))
     dispatch(setFamilyItemDisplay({}))
     dispatch(setChannelID(''))
-    dispatch(setConnectionBoxView(false));
-    dispatch(setPDFView(false));
+    dispatch(setConnectionBoxView(false))
+    dispatch(setPDFView(false))
 
-    dispatch(toggleUsptoMode(false));
-    dispatch(toggleLifeSpanMode(true));
-    dispatch(toggleFamilyMode(false));
-    dispatch(toggleFamilyItemMode(false));
+    dispatch(toggleUsptoMode(false))
+    dispatch(toggleLifeSpanMode(true))
+    dispatch(toggleFamilyMode(false))
+    dispatch(toggleFamilyItemMode(false))
 
     dispatch(setDriveTemplateFrameMode(false))
 
@@ -1506,6 +1652,7 @@ const updateTableColumn = (ratingItems) => {
           dispatch(setDashboardScreen(false))
         }
         let oldSelection = [...selectItems];
+        console.log('cntrlKey', cntrlKey)
         if(cntrlKey !== undefined) {
           if(selectedCategory == 'restore_ownership' && display_clipboard === false) {
             dispatch(setAssetTypesPatentsSelected([row.asset]))
@@ -1657,52 +1804,55 @@ const updateTableColumn = (ratingItems) => {
   }, [ tableColumns ] )
 
   const loadMoreRows =  (startIndex, endIndex) => {
-    setOffsetWithLimit([startIndex, endIndex])
-    const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-          tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-          customers =
-            selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
-          assignments =
-            selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
-    if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-      if (auth_token != null) {
-        dispatch(
-          process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
-          getCustomerAssets(
-            selectedCategory == '' ? '' : selectedCategory,
-            companies,
-            tabs,
-            customers,
-            assignments,
-            true,
-            startIndex,
-            endIndex,
-            sortField,
-            sortOrder,
-            assetTableScrollPosition
-          )
-          : 
-          getCustomerSelectedAssets(location.pathname.replace('/', ''))
-        );
-      }
-    } else {
-      if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
-        dispatch(
-          getCustomerAssets(
-            selectedCategory == '' ? '' : selectedCategory,
-            companies,
-            tabs,
-            customers,
-            assignments,
-            true,
-            startIndex,
-            endIndex,
-            sortField,
-            sortOrder,
-            assetTableScrollPosition,
-            display_sales_assets
-          ),
-        );
+   
+    if(startIndex != endIndex && startIndex < totalRecords ) {
+      setOffsetWithLimit([startIndex, endIndex])
+      const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
+            tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+            customers =
+              selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
+            assignments =
+              selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
+      if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+        if (auth_token != null) {
+          dispatch(
+            process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
+            getCustomerAssets(
+              selectedCategory == '' ? '' : selectedCategory,
+              companies,
+              tabs,
+              customers,
+              assignments,
+              true,
+              startIndex,
+              endIndex,
+              sortField,
+              sortOrder,
+              assetTableScrollPosition
+            )
+            : 
+            getCustomerSelectedAssets(location.pathname.replace('/', ''))
+          );
+        }
+      } else {
+        if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
+          dispatch(
+            getCustomerAssets(
+              selectedCategory == '' ? '' : selectedCategory,
+              companies,
+              tabs,
+              customers,
+              assignments,
+              true,
+              startIndex,
+              endIndex,
+              sortField,
+              sortOrder,
+              assetTableScrollPosition,
+              display_sales_assets
+            ),
+          );
+        }
       }
     }
   }

@@ -33,6 +33,16 @@ export default makeStyles(theme => ({
                     stroke: 'currentColor',
                 }
             }
+        },
+        
+    },
+    title:{
+        whiteSpace: 'nowrap', 
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        '& span':{
+            textTransform:'uppercase',
+            marginLeft: 24
         }
     },
     headerClassAction1: {
@@ -68,7 +78,7 @@ export default makeStyles(theme => ({
         alignItems: 'center',
         width: '14rem', 
         justifyContent: 'flex-start', 
-        cursor: 'pointer',
+        /* cursor: 'pointer', */
         overflow: 'hidden',
         '@media (max-width: 70em)': {
         //paddingLeft: 15
@@ -106,14 +116,18 @@ export default makeStyles(theme => ({
         marginLeft: `calc(${LEFT_PANEL_WIDTH}% - ${LOGO_WIDTH + ((HEADER_MARGIN + HEADER_PADDING) / 2)}px)`,
     },
     userLogoOfficial: {
-        height: '2rem', /*28px */
+        height: '2.5rem', /*28px */
         marginRight: 15
     }, 
     organizationName: {
         marginLeft: 5,
         fontSize: 15,
     },
-
+    middleContainer: {
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden'
+    },
     toolbar: {
         padding: 0,
         height: 43,
@@ -517,7 +531,8 @@ export default makeStyles(theme => ({
         '&:hover':{
             color: '#E60000',
             backgroundColor: 'transparent', 
-        } */      
+        } */     
+        cursor: 'default' 
     },
     actionMenuList: {
         '& .MuiPaper-root':{
@@ -606,6 +621,17 @@ export default makeStyles(theme => ({
         '& svg' : {
             width: '1rem !important', 
             height: '1rem !important'
+        }
+    },
+    breadcrumbHeadingIcon: {
+        '& svg': {
+            marginRight: 5,
+            display: 'inline-block',
+            position: 'absolute',
+            bottom: 7
+        },
+        '& span':{
+            marginLeft: 25
         }
     }
 }))

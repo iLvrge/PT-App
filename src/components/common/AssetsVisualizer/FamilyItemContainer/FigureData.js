@@ -5,11 +5,11 @@ import Loader from "../../Loader"
 import PatenTrackApi from '../../../../api/patenTrack2'
 
 
-const FigureData = ( { analyticsBar, illustrationBar, visualizerBarSize, data, number } ) => {
+const FigureData = ( { analyticsBar, illustrationBar, visualizerBarSize, data, number, standalone } ) => {
     const classes = useStyles()
     const [ loading, setLoading ] = useState(false)
     const [ figures, setFigures ] = useState([])
-    const [ visible, setVisible ] = useState(true)
+    const [ visible, setVisible ] = useState(true) 
 
     useEffect(() => {
         let parseData = data
@@ -27,7 +27,9 @@ const FigureData = ( { analyticsBar, illustrationBar, visualizerBarSize, data, n
 
     useEffect(() => {
         getFamilyData()
-    }, [number])
+    }, [number]) 
+
+    console.log("NUMBER", number)
 
     const getFamilyData = async () => {
         setLoading(true)
@@ -48,16 +50,15 @@ const FigureData = ( { analyticsBar, illustrationBar, visualizerBarSize, data, n
     }
 
     if(loading) return <Loader/> 
-    console.log('figure')
-
+    console.log('standalone', standalone)
     return (
         <div className={classes.container}>    
-            <div className={classes.inlineContainer} id='container'></div>
+            <div className={classes.inlineContainer} id={`container`}></div>
             {
                 Array.isArray(figures) && figures.length > 0 && (
                     <Viewer
                         visible={visible}
-                        container={document.getElementById("container")}
+                        container={typeof standalone !== 'undefined' && standalone === true ? document.querySelector('.fullscreenModal #container') : document.getElementById('container')}
                         images={figures}
                         defaultScale={1}
                         minScale={1}

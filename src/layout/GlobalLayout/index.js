@@ -3,7 +3,7 @@ import React, { useEffect, useLayoutEffect, useState, useCallback, createContext
 import { useDispatch, useSelector } from 'react-redux'
 
 import { 
-    useHistory,
+    useHistory, useLocation,
   } from 'react-router-dom'  
 
 import { Grid} from '@mui/material'
@@ -50,7 +50,8 @@ import { toggleUsptoMode,
     setTimelineScreen,
     setDriveTemplateMode,
     setDashboardScreen, 
-    setDashboardPanel} from '../../actions/uiActions'
+    setDashboardPanel,
+    setViewDashboardIntial} from '../../actions/uiActions'
 
 import PatenTrackApi from '../../api/patenTrack2' 
 
@@ -58,18 +59,19 @@ const GlobalLayout = (props) => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
+    const location = useLocation()
     const BarContext = createContext()
     const [ openBar, setOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? false : true)
     const [ openTypeBar, setTypeOpenBar ] = useState(false)
     const [ openOtherPartyBar, setOtherPartyOpenBar ] = useState(false)
     const [ openInventorBar, setInventorOpenBar ] = useState(false)
     const [ openAssignmentBar, setAssignmentOpenBar ] = useState(true) 
-    const [ openCustomerBar, setCustomerOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
+    const [ openCustomerBar, setCustomerOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
     const [ openIllustrationBar, setIllustrationBar ] = useState(true)
-    const [ openCommentBar, setCommentBar ] = useState(false/* isMobile ? false : true */)
-    const [ openChartBar, setChartBar ] = useState(false)
-    const [ openAnalyticsBar, setAnalyticsBar ] = useState(false)
-    const [ openVisualizerBar, setVisualizeOpenBar ] = useState(false)
+    const [ openCommentBar, setCommentBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false/* isMobile ? false : true */)
+    const [ openChartBar, setChartBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
+    const [ openAnalyticsBar, setAnalyticsBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
+    const [ openVisualizerBar, setVisualizeOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
 
     const [ toggleButtonType, setToggleButtonType ] = useState(true)
     const [ toggleTypeButtonType, setToggleTypeButtonType ] = useState(true)
@@ -92,17 +94,17 @@ const GlobalLayout = (props) => {
         bar50: '50%'
     } 
     
-    const [ companyBarSize, setCompanyBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? 0 : 210) 
+    const [ companyBarSize, setCompanyBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? 0 : 210) 
     const [ typeBarSize, setTypeBarSize ] = useState(0) 
     const [ otherPartyBarSize, setOtherPartyBarSize ] = useState(0)
     const [ partyBarSize, setPartyBarSize ] = useState('50%')
     const [ driveBarSize, setDriveBarSize ] = useState('50%')
     const [ assignmentBarSize, setAssignmentBarSize ] = useState(180)  
     const [ addressBarSize, setAddressBarSize ] = useState(450)
-    const [ customerBarSize, setCustomerBarSize ] = useState(0)
-    const [ commentBarSize , setCommentBarSize ] = useState('0%'/* '30%' */)
+    const [ customerBarSize, setCustomerBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? 120 : 0)
+    const [ commentBarSize , setCommentBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? '30%' : '0%')
     const [ illustrationBarSize , setIllustrationBarSize ] = useState('50%')
-    const [ visualizerBarSize , setVisualizerBarSize ] = useState('0%')
+    const [ visualizerBarSize , setVisualizerBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? '40.1%' : '0%')
 
     const [ assetTableFocus, setAssetTableFocus ] = useState( false )
     const [ companyButtonVisible, setCompanyButtonVisible ] = useState(false)
@@ -157,8 +159,7 @@ const GlobalLayout = (props) => {
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
     const timelineScreen = useSelector(state => state.ui.timelineScreen)
     const patentScreen = useSelector(state => state.ui.patentScreen)
-
-
+  
     useEffect(() => {
         if(openVisualizerBar === false && visualizerBarSize != '0%') {
             setVisualizerBarSize('0%')
@@ -218,16 +219,22 @@ const GlobalLayout = (props) => {
     }, [props.type])
 
     useEffect(() => {
-        if(patentScreen === true && openCustomerBar === false) {
+        if(dashboardScreen === false && patentScreen === true && openCustomerBar === false) {
             handleCustomersBarOpen()
         }
     }, [patentScreen])  
 
     useEffect(() => {
-        if(dashboardScreen === true && profile?.user && profile.user?.organisation && profile.user.organisation.organisation_type == 'Bank' && props.type != 9 && openOtherPartyBar === false) {
+        if((dashboardScreen === true || location.pathname == '/dashboard' ) && profile?.user && profile.user?.organisation && profile.user.organisation.organisation_type == 'Bank' && props.type != 9 && openOtherPartyBar === false) {
             handleOtherPartyBarOpen()
         }
     }, [dashboardScreen]) 
+
+    useEffect(() => { 
+        if( location.pathname == '/dashboard') { 
+            handleResetScreen('Dashboard', null)
+        }
+    }, [location, openCustomerBar])
     
 
     /**
@@ -514,36 +521,39 @@ const GlobalLayout = (props) => {
         }        
     } */
 
-    const getWindowDimensions = () => {
+    const getWindowDimensions = useCallback(() => { 
         const hasWindow = typeof window !== 'undefined';
-        let percentage = '76%'
-        const informationContainer = document.getElementById('information_container')
-        if(informationContainer != null && dashboardScreen === true) {
-            const parentContainer = informationContainer.parentNode.parentNode
-            const parentWidth = parentContainer.clientWidth
-            percentage = `${((parentWidth - 250) / parentWidth) * 100}%`
-        } else {
-            const width = hasWindow ? window.innerWidth : null;
-            if(width > 1400) {
-                percentage = '76%'
-            } else if(width < 1400 && width > 1279) {
-                percentage = '69%'
-            } else if(width < 1280 && width > 1151) {
-                percentage = '67%'
+        let percentage = '40%'
+        if( location.pathname == '/patent_assets') { 
+            percentage = '40%'
+        } else { 
+            const informationContainer = document.getElementById('information_container')
+            const dashboardContainer = document.getElementById('dashboard')
+            if(informationContainer != null && dashboardContainer !== null) {
+                const parentContainer = informationContainer.parentNode.parentNode
+                const parentWidth = parentContainer.clientWidth
+                percentage = `${((parentWidth - 250) / parentWidth) * 100}%`
             } else {
-                percentage = '64%'
-            }  
+                /* const width = hasWindow ? window.innerWidth : null;
+                if(width > 1400) {
+                    percentage = '76%'
+                } else if(width < 1400 && width > 1279) {
+                    percentage = '69%'
+                } else if(width < 1280 && width > 1151) {
+                    percentage = '67%'
+                } else {
+                    percentage = '64%'
+                }   */
+            }
         }
         return percentage      
-    }
+    }, [dashboardScreen])
 
     const handleKeyEvent = (event) => {  
         //event.preventDefault()
-        
         if(event.key === 'ArrowDown' || event.key === 'ArrowUp' ) {
             let tableContainer = document.getElementById('assets_type_assignment_all_assets'), findActiveRow = null
-            if(tableContainer !== null) {
-                console.log(12345678)
+            if(tableContainer !== null) { 
                 /* findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightWithCol.Mui-selected') */
                 findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightRow.Mui-selected')
                 if(findActiveRow === null) {
@@ -558,9 +568,19 @@ const GlobalLayout = (props) => {
                             if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
                                 findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
                             } else {
-                                tableContainer = document.getElementById('main_companies')
-                                if(tableContainer !== null) {
+                                tableContainer = document.getElementById('lawfirms_container')
+                                if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
                                     findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                                } else {
+                                    tableContainer = document.getElementById('layout_templates')
+                                    if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
+                                        findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                                    } else {
+                                        tableContainer = document.getElementById('main_companies')
+                                        if(tableContainer !== null) {
+                                            findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                                        }
+                                    }
                                 }
                             }
                         } 
@@ -575,9 +595,19 @@ const GlobalLayout = (props) => {
                     if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
                         findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
                     } else {
-                        tableContainer = document.getElementById('main_companies')
-                        if(tableContainer !== null) {
-                            findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')                            
+                        tableContainer = document.getElementById('lawfirms_container')
+                        if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
+                            findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                        } else {
+                            tableContainer = document.getElementById('layout_templates')
+                            if(tableContainer !== null && tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected') !== null) {
+                                findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                            } else {
+                                tableContainer = document.getElementById('main_companies')
+                                if(tableContainer !== null) {
+                                    findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')                            
+                                }
+                            }
                         }
                     }
                 }
@@ -608,6 +638,13 @@ const GlobalLayout = (props) => {
             }
         }
     }
+
+    /* useEffect(() => {
+        console.log('Layout openChartBar BAR CHANGES', openChartBar, openAnalyticsBar)
+    }, [ openChartBar])
+    useEffect(() => {
+        console.log('Layout openAnalyticsBar BAR CHANGES',  openChartBar, openAnalyticsBar)
+    }, [ openAnalyticsBar]) */   
 
     const handleCompanyBarOpen = (event) => {
         if(props.type === 9) {
@@ -818,7 +855,7 @@ const GlobalLayout = (props) => {
     }
 
     const changeVisualBar = (chart, analytics, comment, illustration) => {
-        /* console.log("changeVisualBar") */
+        console.log("changeVisualBar", dashboardScreen, chart, analytics, comment, illustration)
         let barOpen = true, barSize = '40.1%'    
         
         if(chart === false && analytics === false && (comment === true || illustration === true) && usptoMode === false && connectionBoxView === false){
@@ -836,6 +873,7 @@ const GlobalLayout = (props) => {
         if(chart === true && barOpen === true && barSize == '40.1%') {
             checkPDFHeight()
         }    
+        console.log('changeVisualBar', barSize, barOpen, chart, analytics, comment, illustration)
         editorBar()
         setVisualizeOpenBar(barOpen)  
         setVisualizerBarSize(barSize)
@@ -848,7 +886,7 @@ const GlobalLayout = (props) => {
             barSize = '100%'
 
         } else if((!bar === false && openCommentBar === false) || (!bar === true && openCommentBar === false)) {
-            barSize = 0  
+            barSize = '0%'  
             
         }
         if(!bar === true) {
@@ -859,14 +897,16 @@ const GlobalLayout = (props) => {
             }            
         }
         setCommentBarSize(barSize)
+        console.log('LUUSTRATION_OPEN _ 900')
         changeVisualBar(openChartBar, openAnalyticsBar, openCommentBar, !bar)
     }
 
     const handleCommentBarOpen = () => {
+        /* console.log('handleCommentBarOpen 884') */
         let bar = openCommentBar, barSize = '30%'
         setCommentBar( !bar )
         if((!bar === false && openIllustrationBar === false) || (!bar === false && openIllustrationBar === true)) {
-            barSize = 0    
+            barSize = '0%'    
 
         } else if(!bar === true && openIllustrationBar === false) {
             barSize = '100%'
@@ -878,13 +918,15 @@ const GlobalLayout = (props) => {
                 setChartBar(false)
                 setAnalyticsBar(false)
             }            
-        }
+        } 
         setCommentBarSize(barSize)
+        console.log('handleCommentBarOpen _ 900')
         changeVisualBar(openChartBar, openAnalyticsBar, !bar, openIllustrationBar)
     }  
 
     const handleChartBarOpen = () => { 
-        let bar = openChartBar, barSize = '50%'
+        console.log('handleChartBarOpen entered', openChartBar)
+        let bar = openChartBar, barSize = '40.1%'
         setChartBar( !bar )
         if(!bar === false && openAnalyticsBar === true) {
             barSize = '100%'
@@ -904,10 +946,13 @@ const GlobalLayout = (props) => {
         if(usptoMode === false && lifeSpanMode === false && familyItemMode === false && pdfView === false && !bar === true) {
             dispatch( toggleLifeSpanMode( true ) )
         }
+        console.log('handleChartBarOpen927', !bar, openAnalyticsBar, openCommentBar, openIllustrationBar, barSize)
+        changeHeight('analyticsBar', barSize == 0 ? '0px': barSize)
         changeVisualBar(!bar, openAnalyticsBar, openCommentBar, openIllustrationBar)
     }
 
     const handleAnalyticsBarOpen = () => {  
+        /* console.log('handleAnalyticsBarOpen entered')   */
         let bar = openAnalyticsBar, barSize = '50%'
         setAnalyticsBar( !bar )
         if((!bar === false && openChartBar === false) || (openChartBar === true && !bar === false)) {
@@ -928,7 +973,16 @@ const GlobalLayout = (props) => {
             dispatch( toggleLifeSpanMode( true ) )
         }    
         setIllustrationBarSize(barSize)
+        changeHeight('analyticsBar', barSize == 0 ? '0px': barSize)
+        console.log('handleAnalyticsBarOpen 954', openChartBar, !bar, openCommentBar, openIllustrationBar, barSize)
         changeVisualBar(openChartBar, !bar, openCommentBar, openIllustrationBar)
+    }
+
+    const changeHeight = (container, height) => {
+        const element = document.getElementById(container)
+        if(element !== null) {
+            element.parentElement.style.height = height
+        }
     }
 
     const checkPDFHeight = () => {
@@ -946,6 +1000,7 @@ const GlobalLayout = (props) => {
     } 
 
     const openAnalyticsAndCharBar = () => {
+        console.log('openAnalyticsAndCharBar 1003')
         setChartBar( true )
         setAnalyticsBar( true )
         setIllustrationBarSize( '50%' )
@@ -953,6 +1008,7 @@ const GlobalLayout = (props) => {
     }
 
     const closeAnalyticsAndCharBar = () => {  
+        console.log('closeAnalyticsAndCharBar 1011') 
         setChartBar( false )
         setAnalyticsBar( false )
         setIllustrationBarSize( '50%' )
@@ -985,6 +1041,7 @@ const GlobalLayout = (props) => {
     }
 
     const checkChartAnalytics = useCallback(async (pdfFile, connectionBoxData, usptoMode) => {
+        console.log('checkChartAnalytics 1031', pdfFile, connectionBoxData, usptoMode, dashboardScreen)
         if( pdfFile != null && Object.keys(pdfFile).length > 0 ) {
             setChartBar( true )
             setVisualizeOpenBar( true )
@@ -1030,7 +1087,7 @@ const GlobalLayout = (props) => {
             }
         } else if( typeof usptoMode !== 'undefined' && usptoMode === false ) {
             /* console.log('usptoMode', usptoMode, openChartBar, openAnalyticsBar, openCommentBar, openIllustrationBar, illustrationBarSize) */
-            let barSize = '0%', chartPrevItem = false, analyticsPrevItem = false
+            let barSize = '0%', chartPrevItem = false, analyticsPrevItem = false, illustrationPrevItem = false, commentPrevItem = false
             await setChartBar(prevItem => {
                 chartPrevItem = prevItem
                 return prevItem
@@ -1039,11 +1096,20 @@ const GlobalLayout = (props) => {
                 analyticsPrevItem = prevItem
                 return prevItem
             })
-            if((chartPrevItem === true || analyticsPrevItem === true) && (openCommentBar === true || openIllustrationBar === true)){
+            await setIllustrationBar(prevItem => {
+                illustrationPrevItem = prevItem
+                return prevItem
+            })
+            await setCommentBar(prevItem => {
+                commentPrevItem = prevItem
+                return prevItem
+            })
+            if((chartPrevItem === true || analyticsPrevItem === true) && (commentPrevItem === true || illustrationPrevItem === true)){
                 barSize = dashboardScreen === true ? getWindowDimensions() : visualizerBarSize !== '0%' ?  visualizerBarSize :  '40.1%'
-            } else if (openCommentBar === false && openIllustrationBar === false && ( chartPrevItem === true ||  analyticsPrevItem === true )) {
+            } else if (commentPrevItem === false && illustrationPrevItem === false && ( chartPrevItem === true ||  analyticsPrevItem === true )) {
                 barSize = '100%'  
             }
+            console.log('barSize', barSize)
             if(barSize === '0%') {
                 setVisualizeOpenBar( false )
             }
@@ -1062,9 +1128,11 @@ const GlobalLayout = (props) => {
     }, [openChartBar, openAnalyticsBar, openCommentBar, openIllustrationBar, dashboardScreen])
 
 
-    const handleOpenSettings = useCallback(() => {
-        dispatch(setDashboardScreen(false))
-        history.push('/settings/templates')
+    const handleOpenSettings = useCallback((event) => {
+        dispatch(setDashboardScreen(false)) 
+        dispatch(setViewDashboardIntial(false)) 
+        checkChartAnalytics(null, null, false)
+        history.push('/settings/companies/names')
     }, [ history ])
 
     const handleAlertPop = () => {
@@ -1072,7 +1140,8 @@ const GlobalLayout = (props) => {
     }    
 
     const handleResetScreen = (type, event) => {
-        if(type == 'Dashboard') {
+        if(type == 'Dashboard') { 
+            /* console.log('RESET1108') */
             if(openCustomerBar === true){
                 handleCustomersBarOpen(event)
             }  
@@ -1118,6 +1187,7 @@ const GlobalLayout = (props) => {
             if(openCommentBar === true){
                 handleCommentBarOpen(event)
             }
+            console.log('1174=>', openChartBar, openAnalyticsBar, visualizerBarSize)
             if(openChartBar === true){
                 handleChartBarOpen(event)
             }
@@ -1125,19 +1195,33 @@ const GlobalLayout = (props) => {
                 handleAnalyticsBarOpen(event)
             }
         } else {
+            console.log('RESET1186') 
             if(openCustomerBar === false && timelineScreen === false && type !== 'Timeline'){ 
                 handleCustomersBarOpen(event)
             }
-            if(openAssignmentBar === false && timelineScreen === false && type == 'Timeline'){
+            if(selectedCategory != 'top_law_firms' && openAssignmentBar === false && timelineScreen === false && type == 'Timeline'){
                 handleAssignmentBarOpen(event)
             }
-            if(openCommentBar === false){
-                handleCommentBarOpen(event)
+            console.log(selectedCategory, openOtherPartyBar, openAssignmentBar)
+            if(selectedCategory == 'top_law_firms' && openOtherPartyBar === false && timelineScreen === false && type == 'Timeline'){
+                handleOtherPartyBarOpen(event)
+                if(openAssignmentBar === true) {
+                    handleAssignmentBarOpen(event)
+                }
             }
+            if(selectedCategory == 'proliferate_inventors' && openInventorBar === false && timelineScreen === false && type == 'Timeline'){
+                handleInventorBarOpen(event) 
+                if(openOtherPartyBar === true) {
+                    handleOtherPartyBarOpen(event)
+                }
+            }
+            /* if(openCommentBar === false){
+                handleCommentBarOpen(event)
+            } */
             if(openChartBar === true || openAnalyticsBar === true) {
                 /* setVisualizeOpenBar(false)  
                 setVisualizerBarSize('0%') */
-                if(openChartBar === true){
+                /* if(openChartBar === true){
                     handleChartBarOpen(event)
                 }
                 if(openAnalyticsBar === true){
@@ -1146,7 +1230,7 @@ const GlobalLayout = (props) => {
 
                 if(openChartBar === true && openAnalyticsBar === true){
                     changeVisualBar(false, false, true, true)
-                }
+                } */
             }
         }
     }
@@ -1164,7 +1248,7 @@ const GlobalLayout = (props) => {
         {
             tooltip: 'Settings',
             bar: false,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleOpenSettings,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? handleAlertPop : handleOpenSettings,
             t: 0,
             label: 'Settings',
             margin: true,
@@ -1186,26 +1270,26 @@ const GlobalLayout = (props) => {
             ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
         },
         {
-            tooltip: 'Filter by Parties',
+            tooltip: selectedCategory === 'top_law_firms' ? 'Filter by Law Firms' : 'Filter by Parties',
             bar: openOtherPartyBar,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleOtherPartyBarOpen,
             t: 3,
-            label: 'Select Parties',
+            label: selectedCategory === 'top_law_firms' ? 'Filter by Law Firms' : 'Filter by Parties',
             ...((props.type === 9 || (dashboardScreen === true && profile?.user?.organisation?.organisation_type !== 'Bank')) && {disabled: true})
         },
         {
-            tooltip: 'Filter by Employees', 
+            tooltip:  selectedCategory === 'proliferate_inventors' ? 'Filter by Inventors' : 'Filter by Employees', 
             bar: openInventorBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleInventorBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? handleAlertPop : handleInventorBarOpen,
             t: 11,
             margin: true,
-            label: 'Employees',
+            label: selectedCategory === 'proliferate_inventors' ? 'Filter by Inventors' : 'Filter by Employees', 
             ...((props.type === 9 || (dashboardScreen === true && profile?.user?.organisation?.organisation_type !== 'Bank')) && {disabled: true})
         },
         {
             tooltip: 'Filter by Transactions',
             bar: openAssignmentBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleAssignmentBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? handleAlertPop : handleAssignmentBarOpen,
             t: 4,
             label: 'Transactions',
             ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
@@ -1213,7 +1297,7 @@ const GlobalLayout = (props) => {
         {
             tooltip: 'Assets',
             bar: openCustomerBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleCustomersBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? handleAlertPop : handleCustomersBarOpen,
             t: 5,
             margin: true,
             label: 'Assets' ,
@@ -1222,19 +1306,19 @@ const GlobalLayout = (props) => {
         {
             tooltip: 'Recorded Documents',
             bar: assetFilesBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleAssetFileBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? handleAlertPop : handleAssetFileBarOpen,
             t: 10,
             label: 'Recorded Documents',
             ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
         },
-        {
+        /* {
             tooltip: 'Initiated Documents',
             bar: openGoogleDriveBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleGoogleDriveBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? handleAlertPop : handleGoogleDriveBarOpen,
             t: 12,
             label: 'Initiated Documents',
             ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
-        },
+        }, */
     ]
 
     const bottomToolBar = [
@@ -1274,7 +1358,7 @@ const GlobalLayout = (props) => {
         {
             tooltip: 'Create a New Secured Transaction',
             bar: false,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleSecuredTransactionAssets,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD'  || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? handleAlertPop : handleSecuredTransactionAssets,
             t: 45,
             label: 'Create a New Secured Transaction',
             margin: true,
@@ -1451,6 +1535,15 @@ const GlobalLayout = (props) => {
         }
         return child
     })
+
+    const originalWarn = console.warn;
+
+    console.warn = function (...args) {
+        const arg = args && args[0] 
+        const messageQuill = 'quill:toolbar', messageGoogleChart = 'Attempting to load version \'51\' of Google Charts', messageCellPosition = 'Rendered cell should include style property for positioning.'
+        if (arg && (arg.includes(messageQuill) || arg.includes(messageGoogleChart) || arg.includes(messageCellPosition))) return;
+        originalWarn(...args);
+    };
  
     return (
         <div className={classes.root} id='main'>
@@ -1460,10 +1553,12 @@ const GlobalLayout = (props) => {
                     <MobileHeader/>
                 :
                     <NewHeader 
+                        openIllustrationBar={openIllustrationBar}
                         openCommentBar={openCommentBar}
                         openCustomerBar={openCustomerBar}
                         openChartBar={openChartBar}
                         openAnalyticsBar={openAnalyticsBar}
+                        handleIllustrationBarOpen={handleIllustrationBarOpen}
                         handleCommentBarOpen={handleCommentBarOpen}
                         handleCustomersBarOpen={handleCustomersBarOpen}
                         checkChartAnalytics={checkChartAnalytics}

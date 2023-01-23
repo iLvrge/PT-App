@@ -7,9 +7,19 @@ export default makeStyles(theme => ({
         display: 'block',        
     },
     paddingLeft: {
-        paddingLeft: 16
+        paddingLeft: 16,
+        paddingTop: 7
     },
     underline: {
         textDecoration: 'underline'
-    }
-}));
+    },
+    relative: {
+        position: 'relative', 
+        width: '100%'
+    },
+    absolute: {
+        position: 'absolute',
+        width: '100%',
+        zIndex: 9999
+    } 
+}));  

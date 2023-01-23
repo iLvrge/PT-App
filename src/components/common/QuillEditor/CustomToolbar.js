@@ -14,6 +14,7 @@ import {
 import { getTokenStorage } from '../../../utils/tokenStorage'
 
 import useStyles from './styles'
+import { warnConsole } from '../../../utils/hashLocation'
 const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, onDocument, onAttachmentOpenedFile, onAttachmentOpenedFileAndEmail, onAttachmentFile, onAttachmentDriveFile, onMaintainenceFeeReview, onMaintainenceFeeFile, onSubmitUSPTO, onCorrectAddress, onChangeAddress, onCorrectName, onChangeName, onSalesAssets, loadingUSPTO, category, driveBtnActive, maintainenceMode, selectedAssets, driveTemplateMode, onShare, addressQueuesDisplay, nameQueuesDisplay, onHandleSubmitAddressUSPTO, onHandleAddressCancel, onHandleSubmitNamesUSPTO, onHandleNamesCancel, onHandleLinkAssetWithSheet, linkAssetsSheetDisplay, linkAssetsSelected  }) => {
   const classes = useStyles()
   const toolBarRef = useRef(null) 
@@ -61,7 +62,7 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
       italic.querySelector('svg').setAttribute('class', 'MuiSvgIcon-root')
     }
   }, [ toolBarRef ]) */
-
+ 
   const createTemplate = () => {
     if( selectedAssets.length > 0 ) {
       const googleToken = getTokenStorage( 'google_auth_token_info' )

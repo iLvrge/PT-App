@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody'
@@ -12,9 +13,10 @@ import { Add, Remove } from '@mui/icons-material'
 import moment from 'moment'
 import useStyles from './styles'
 import FullWidthSwitcher from '../FullWidthSwitcher'
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import { setConnectionData,  setConnectionBoxView } from '../../../actions/patenTrackActions'
 import PatenTrackApi from '../../../api/patenTrack2';
+import clsx from 'clsx';
 
 /*let pdfFile = "";*/
 
@@ -22,24 +24,40 @@ function ConnectionBox(props) {
   const classes = useStyles()
   const [ showSwitcher, setShowSwitcher ] = useState(0)
   const [ boxData, setBoxData ] = useState({})
-  const [ assetData, setAssetData ] = useState({})
+  const [ assetData, setAssetData ] = useState({popup: []})
   const [ fullView, setFullView ] = useState('')
   const [ visibility, setVisibility] = useState(false)
-  
+  const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
+  const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
+  const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
+  const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
+
+console.log(assetData)
   useEffect(() => {
     
     /* if(props.assets) {
       setAssetData(props.assets)
     } */
-    if(typeof props.connectionBoxData != 'undefined'){
+    if(typeof props.connectionBoxData != 'undefined' || selectedCategory == 'incorrect_names'){
+      
       (async () => {
-        const { data } = await PatenTrackApi.getConnectionData(props.connectionBoxData.popuptop)
-        const oldAssetsData = props.assets
-        if(typeof data.popup != 'undefined' ){
-          oldAssetsData.popup = data.popup
+        if(typeof props.assets != undefined ) {
+          setAssetData(props.assets)
         }
-        setAssetData(oldAssetsData)
-        setBoxData(data)
+        if(selectedCategory == 'incorrect_names') {
+          const { data } = await PatenTrackApi.getConnectionDataFromAsset(selectedAssetsPatents[1], selectedCompanies)
+          console.log('data', data)
+          if(typeof data.popup != 'undefined' ){
+            setAssetData(data)
+            setBoxData(data)
+          }
+        } else {
+          const { data } = await PatenTrackApi.getConnectionData(props.connectionBoxData.popuptop)
+          if(typeof data.popup != 'undefined' ){
+            setAssetData(data)
+            setBoxData(data)
+          }
+        }
       })();
     }
     if(props.connectionBoxView == 'true') {
@@ -49,7 +67,7 @@ function ConnectionBox(props) {
     return (() => {
 
     })
-  },[ classes.fullView, props.assets, props.connectionBoxData, props.connectionBoxView ])
+  },[ classes.fullView, props.assets, props.connectionBoxData, props.connectionBoxView, selectedAssetsPatents ])
 
   const closeViewer = () => {
     props.setConnectionData({})
@@ -70,9 +88,9 @@ function ConnectionBox(props) {
   }
 
   const RetreieveBoxData = (props) => {
-    const info = assetData.popup && assetData.popup.filter(p => {
+    const info = typeof props.popup != undefined && assetData != undefined ? assetData.popup && assetData.popup.filter(p => {
       return p.id == props.popup.id
-    })
+    }) : assetData != undefined ? assetData.popup[0] : null
     
     return (
       <Paper className={classes.rootContainer} square>
@@ -94,7 +112,7 @@ function ConnectionBox(props) {
                   <ShowText classes={classes.red} data={`Assignors`}/>
                   {
                     info[0].patAssignorName.map( (assignor, index) =>(
-                      <ShowText key={`assignor-${index}`} className={index > 0 && index < info[0].patAssignorName.length ? classes.marginBottom : ''} data={assignor.recorded_name}/>
+                      <ShowText key={`assignor-${index}`} classes={index > 0 && index < info[0].patAssignorName.length ? classes.marginBottom : ''} data={assignor.recorded_name}/>
                     ))
                   }
                 </TableCell>
@@ -102,7 +120,7 @@ function ConnectionBox(props) {
                   <ShowText classes={classes.red} data={`Assignees`}/>
                   {
                     info[0].patAssigneeName.map( (assignee, index) =>(
-                      <ShowText key={`assignee-${index}`} className={index > 0 && index < info[0].patAssigneeName.length ? classes.marginBottom : ''} data={assignee.recorded_name} />
+                      <ShowText key={`assignee-${index}`} classes={clsx({[classes.marginBottom]: index > 0 && index < info[0].patAssigneeName.length}, {[classes.highlight]: selectedCategory == 'incorrect_names'})} data={assignee.recorded_name} />
                     ))
                   }
                 </TableCell>
@@ -110,7 +128,7 @@ function ConnectionBox(props) {
                   <ShowText classes={classes.red} data={`Assignee's Address`}/>
                   {
                     info[0].patAssigneeName.map( (assignee, index) => (
-                      <div  key={`address-${index}`}className={index > 0 && index < info[0].patAssigneeName.length ? classes.marginBottom : ''}>
+                      <div  key={`address-${index}`} className={index > 0 && index < info[0].patAssigneeName.length ? classes.marginBottom : ''}>
                         <ShowText data={info[0].patAssigneeAddress1[index]}/>
                         <ShowText data={`${info[0].patAssigneeCity[index]} ${info[0].patAssigneeState[index]} ${info[0].patAssigneePostcode[index]}`}/>
                       </div>

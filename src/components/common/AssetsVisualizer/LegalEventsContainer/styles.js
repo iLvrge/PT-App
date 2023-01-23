@@ -65,6 +65,7 @@ export default makeStyles(theme => ({
     position: 'relative',
     flex: 1,
     display: 'flex',
+    flexDirection: 'column',
   },  
   fullscreenBtn: {
     position: 'absolute',
@@ -75,11 +76,15 @@ export default makeStyles(theme => ({
   tab: {
     minWidth: '25%',
     minHeight: 47,
-    fontSize: '1.1rem'
+    fontSize: '1.1rem', 
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow:'ellipsis'
   },
   tabs: {
     minHeight: 47,
     display: 'flex',
+    width: '94%'
     /* '& .MuiTab-root': {
       fontSize: '1.1rem'
     } */
@@ -89,6 +94,65 @@ export default makeStyles(theme => ({
     zIndex: 100,
     top: '50%',
     left: '50%',
+  },
+  timelineStatus: {
+    height: '100%', 
+    width: '100%',
+    '& .vis-panel.vis-center':{
+      borderTop: 0
+    },
+    '& .vis-timeline':{
+      border: 0,
+      borderTop:`1px solid ${theme.palette.divider}`, 
+      borderBottom:`1px solid ${theme.palette.divider}`, 
+      backgroundColor: `${theme.palette.background.paper}!important`,
+      '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground':{
+        /* backgroundColor: '#424242 !important', */
+      }
+    },
+    '& .vis-left.vis-panel.vis-vertical-scroll, .vis-right.vis-panel.vis-vertical-scroll':{
+      overflowY: 'hidden'
+    },
+    '& .vis-item ':{
+      textAlign: 'left'
+    },
+    '& .vis-itemset .vis-background':{
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      overflow: 'visible',
+    },
+    '& .vis-item.vis-line':{
+      zIndex: 9999
+    },
+    '& .vis-item.yellowBorder':{
+      backgroundColor: '#FFAA00', 
+      borderColor: '#FFAA00', 
+      color: '#fff !important',
+    },
+    '& .vis-item.greenLight':{
+      backgroundColor: '#CEE7FC',
+      color: '#fff !important',
+    },
+    '& .vis-item.green':{
+      backgroundColor: '#ABD7FC',
+      color: '#fff !important',
+    },
+    '& .vis-item.grey':{
+      backgroundColor: '#ABB3BA',
+      color: '#fff !important',
+    },
+    '& .vis-item.greenBorder':{
+      borderColor: '#1565C0',
+      backgroundColor: '#1565C0',
+      color: '#fff !important',
+      zIndex: 99999
+    },
+    '& .vis-item.redBorder':{
+      backgroundColor: '#E60000', 
+      borderColor: '#E60000', 
+      color: '#fff !important',
+    },
   },
   timeline: { 
     height: '100%', 
@@ -145,6 +209,25 @@ export default makeStyles(theme => ({
       background: '#E60000 !important',
       opacity: '1'
     },
+    '& .vis-item.asset-type-status':{
+      backgroundColor: 'rgba(34,34,34, 0.75)', 
+      border: '1px solid #545454',
+      /* padding: '4px 0px 2px 4px',  */
+      color: '#fff !important',
+      width: '100%',
+      borderRadius: '3px', 
+      '& .vis-item-content':{ 
+      }
+    },
+    '& .vis-item.yellow':{
+      backgroundColor: '#FFAA00', 
+    },
+    '& .vis-item.green':{
+      backgroundColor: '#70A800', 
+    },
+    '& .vis-item.red':{
+      backgroundColor: '#E60000', 
+    },
     '& .vis-item.vis-box': {      
       '&.asset-type-default': {
         backgroundColor: 'rgba(34,34,34, 0.75)',
@@ -176,6 +259,11 @@ export default makeStyles(theme => ({
             textAlign: 'left',
             width: '57%',
             lineHeight: 1.1
+          },
+          '& .first.limit':{
+            height: 29,
+            overflow: 'hidden',
+            alignItems: 'flex-start'
           },
           '& .second':{            
             fontSize: '0.875rem',
@@ -237,6 +325,9 @@ export default makeStyles(theme => ({
               },
               '& path.svg_green': {
                 fill: '#70A800' 
+              },
+              '& path.none': {
+                fill: 'none' 
               }
             }
           },
@@ -264,7 +355,7 @@ export default makeStyles(theme => ({
     width: '100%',
     '& .custom_tooltip':{
       position:'absolute',  
-      width:'150px',
+      width:'200px',
       /* height:'150px', */
       background: theme.palette.background.default,
       border:`1px solid ${theme.palette.divider}`, 
@@ -366,8 +457,10 @@ export default makeStyles(theme => ({
       overflow: 'hidden'
     },
     '& .vis-timeline':{
-      border: '0 !important',
-      /* backgroundColor: '#424242 !important', */
+      border: 0,
+      borderTop:`1px solid ${theme.palette.divider}`, 
+      borderBottom:`1px solid ${theme.palette.divider}`, 
+      backgroundColor: `${theme.palette.background.paper}!important`,
       '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground':{
         /* backgroundColor: '#424242 !important', */
       }
@@ -409,7 +502,7 @@ export default makeStyles(theme => ({
       borderColor: indigo[500],
       backgroundColor: indigo[500],
       '&.asset-type-default': {
-        backgroundColor: theme.palette.background.default,
+        backgroundColor: /* theme.palette.background.default */ 'unset',
         border: 0,
         width: '9.6rem',
         borderRadius: '3px',
@@ -559,5 +652,10 @@ export default makeStyles(theme => ({
       wordBreak: 'keep-all',
       color: theme.palette.text.secondary 
     }    
+  },
+  redColor: {
+    '& .MuiBadge-badge':{
+      color: '#E60000'
+    }
   }
 }))

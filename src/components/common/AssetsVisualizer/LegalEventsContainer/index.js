@@ -3,19 +3,21 @@ import { useSelector } from 'react-redux'
 import { Tab, Tabs, Paper, Badge, IconButton } from '@mui/material'
 import { Fullscreen as FullscreenIcon } from '@mui/icons-material'
 import Fees from './Fees'
-import Events from './Events'
+import Status from './Status'
 import Litigation from './Litigation'
 import Ptab from './Ptab'
 import Citation from './Citation'
 import useStyles from './styles'
 import FullScreen from '../../FullScreen'
 import { numberWithCommas, applicationFormat, capitalize } from "../../../../utils/numbers";
+import clsx from 'clsx'
 
 const LegalEventsContainer = ({ events, type, standalone, activeTab }) => {
   const classes = useStyles()
   const [ fullScreen, setFullScreen ] = useState(false)
   const [ selectedTab, setSelectedTab ] = useState(typeof activeTab !== 'undefined' ? activeTab : 0)
   const [ eventsData, setEventsData ] = useState([])
+  const [ eventsStatusData, setEventsStatusData ] = useState([])
   const [ litigationData, setLitigationData ] = useState([])
   const [ ptabRawData, setPtabRawData ] = useState([])
   const [ citationData, setCitationData ] = useState([])
@@ -25,6 +27,7 @@ const LegalEventsContainer = ({ events, type, standalone, activeTab }) => {
   const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
   const auth_token = useSelector(state => state.patenTrack2.auth_token)
   const asset_details = useSelector(state => state.patenTrack2.asset_details)
+  const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
   const fullScreenItems = [
     {
       id: 1,
@@ -50,19 +53,23 @@ const LegalEventsContainer = ({ events, type, standalone, activeTab }) => {
     return (
         label === 'M.Fees'
         ?
-          <span className={classes.containerRelative}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.fees)} showZero={false}></Badge></span>
+          <span className={clsx(classes.containerRelative, {[classes.redColor]: asset_details.fees > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.fees)} showZero={false}></Badge></span>
         :
             label === 'Cited by'
             ?
-              <span className={classes.containerRelative}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.citations)} showZero={false}></Badge></span>
+              <span className={clsx(classes.containerRelative, {[classes.redColor]: asset_details.citations > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.citations)} showZero={false}></Badge></span>
             :
                 label === 'PTAB'
                 ?
-                  <span className={classes.containerRelative}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.ptab)} showZero={false}></Badge></span>
+                  <span className={clsx(classes.containerRelative, {[classes.redColor]: asset_details.ptab > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.ptab)} showZero={false}></Badge></span>
                 :
                   label == 'Litigation'
                   ?
-                    <span className={classes.containerRelative}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.litigation)} showZero={false}></Badge></span>
+                    <span className={clsx(classes.containerRelative, {[classes.redColor]: asset_details.litigation > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.litigation)} showZero={false}></Badge></span>
+                  :
+                  label == 'Status'
+                  ?
+                    <span className={clsx(classes.containerRelative, {[classes.redColor]: asset_details.status > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.status)} showZero={false}></Badge></span>
                   :
                   label
     )
@@ -84,7 +91,7 @@ const LegalEventsContainer = ({ events, type, standalone, activeTab }) => {
             }
             <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
               {
-                [`M.Fees`, `Cited by`, /* 'Events',  */`PTAB`, `Litigation`].map( (item, index) => (
+                [`M.Fees`, `Cited by`, `PTAB`, `Litigation`, `Status`].map( (item, index) => (
                   <Tab
                     key={index}
                     className={classes.tab} 
@@ -98,7 +105,7 @@ const LegalEventsContainer = ({ events, type, standalone, activeTab }) => {
               {selectedTab === 1 && <Citation updateCitationRawData={setCitationData} number={selectedNumber} />}   
               {selectedTab === 2 && <Ptab number={selectedNumber} updateRawData={setPtabRawData}/>}   
               {selectedTab === 3 && <Litigation data={litigationData} number={selectedNumber} />}   
-              {selectedTab === 4 && <Events data={eventsData} number={selectedNumber} />}  
+              {selectedTab === 4 && <Status data={eventsData} number={selectedNumber} updateRawData={setEventsStatusData}/>}  
             </div>      
             {  
               fullScreen === true && (

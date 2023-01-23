@@ -13,6 +13,7 @@ import React, {
   import PatenTrackApi, { DEFAULT_CUSTOMERS_LIMIT } from "../../../api/patenTrack2";
   import {capitalizeEachWord} from '../../../utils/numbers'
   import Loader from "../Loader";
+import { setAssetTypeAssignmentAllAssets, setAssetTypeAssignments, setAssetTypesPatentsSelected, setCPCData, setLineChartRequest, setLineChartReset, setSelectAssignments, setSelectedAssetsPatents, setSelectedAssetsTransactions, setSelectLawFirm } from "../../../actions/patentTrackActions2";
   
   const LawFirmTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaultLoad, type }) => {
     const classes = useStyles();
@@ -110,9 +111,11 @@ import React, {
     
     useEffect(() => {
         const getLawFirmList = async() => {
+          if(selectedCompanies.length > 0) {
             const {data} = await PatenTrackApi.getLawFirmsByCompany(selectedCompanies)
             setRows(data)
             setGrandTotal(data.length)
+          }
         }
         getLawFirmList()
     }, [selectedCompanies])
@@ -128,8 +131,32 @@ import React, {
   const onHandleClickRow = useCallback(
     (e, row) => {
       e.preventDefault();
+      dispatch(setAssetTypesPatentsSelected([]))
+      dispatch(setSelectedAssetsPatents([]))
+      dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false)) 
+      
+      let oldItems = [...selectItems], ID = 0 , allIDs = [];
+      if(!oldItems.includes(row.id)) { 
+        oldItems = [row.id]
+        ID = row.id
+        if(typeof row.grp != 'undefined' && typeof row.grp != '') {
+          allIDs = row.grp.toString().split(',');
+        } else {
+          allIDs.push(ID)
+        }
+      } else {
+        oldItems = []
+      }
+      setSelectItems(oldItems)
+      dispatch(setSelectLawFirm(ID))
+      dispatch(setAssetTypeAssignments({ list: [], total_records: 0 }, false))
+      dispatch(setCPCData({list:[], group: [], sales: []}))
+      dispatch(setLineChartReset()) 
+      /* dispatch(setSelectedAssetsTransactions(allIDs))
+      dispatch(setSelectAssignments(allIDs)) */
+
     },
-    [dispatch]
+    [dispatch, selectItems]
   );
   
     const resizeColumnsWidth = useCallback((dataKey, data) => {
@@ -180,7 +207,7 @@ import React, {
           showIsIndeterminate={false}
           defaultSortField={`lawfirm`}
           defaultSortDirection={`asc`}
-          totalRows={totalRecords}
+          totalRows={grandTotal}
           grandTotal={grandTotal}
           noBorderLines={true}
           width={width}

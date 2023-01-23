@@ -7,56 +7,24 @@ import moment from 'moment'
 import _debounce from 'lodash/debounce'
 import { DataSet } from 'vis-data-71/esnext'
 import { Timeline } from 'vis-timeline/esnext'
-import { Typography, Tooltip, Zoom, CircularProgress, IconButton, Paper, Modal, TableContainer, Table, TableBody, TableRow, TableCell } from '@mui/material';
+import { Typography, CircularProgress, IconButton, Paper, Modal, TableContainer, Table, TableBody, TableRow, TableCell } from '@mui/material';
 import { Close, Fullscreen } from '@mui/icons-material' 
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import useStyles from './styles'
 import clsx from 'clsx'
 import { numberWithCommas, capitalize } from '../../utils/numbers'
-import { assetsTypesWithKey, convertTabIdToAssetType, oldConvertTabIdToAssetType } from '../../utils/assetTypes'
+import { assetsTypesWithKey, convertTabIdToAssetType } from '../../utils/assetTypes'
+import { timelineOptions } from '../../utils/options'
 import PatenTrackApi from '../../api/patenTrack2'
 import themeMode from '../../themes/themeMode'
 import AddToolTip from './AddToolTip'
 import { setConnectionBoxView, setConnectionData, setPDFFile, setPDFView } from '../../actions/patenTrackActions'
-import { retrievePDFFromServer, setAssetsIllustration, setSelectAssignmentCustomerName } from '../../actions/patentTrackActions2'
+import { retrievePDFFromServer, setAssetsIllustration } from '../../actions/patentTrackActions2'
 import PdfViewer from '../common/PdfViewer'
 import FullScreen from '../common/FullScreen'
 import { setDashboardPanel } from '../../actions/uiActions'
 
 
-/**
- * Default options parameter for the Timeline
- */
-
-const options = {
-    height: '100%',
-    autoResize: true,
-    stack: true,
-    orientation: 'both',
-    zoomKey: 'ctrlKey',
-    moveable: true,
-    zoomable: true,
-    horizontalScroll: true,
-    verticalScroll: true,
-    zoomFriction: 30,
-    zoomMin: 1000 * 60 * 60 * 24 * 7, // 7 days
-    /* showTooltips: true, */
-    /* zoomMax: 1000 * 60 * 60 * 24 * 30 * 3, */ // 3months
-    /* cluster: {
-    //   titleTemplate: 'Cluster containing {count} events.<br/> Zoom in to see the individual events.',
-      showStipes: false,
-      clusterCriteria: (firstItem, secondItem) => {
-        return ( firstItem.rawData.company === secondItem.rawData.company &&  firstItem.rawData.tab_id == secondItem.rawData.tab_id)
-      }
-    }, */
-    template: function(item, element, data) {
-        if (data.isCluster) {
-            return `<span class="cluster-header">${data.items[0].customerName}(${data.items.length})</span>`
-        } else { 
-            return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
-        }
-    },
-}
 
 const TIME_INTERVAL = 1000
 var tootlTip = ''
@@ -66,6 +34,16 @@ const TimelineChart = (props) => {
     const timelineRef = useRef() //timeline Object ref
     const timelineContainerRef = useRef() //div container ref
     const items = useRef(new DataSet()) // timeline items dataset
+    const [options, setTimelineOptions] = useState({
+        ...timelineOptions,
+        template: function(item, element, data) {
+            if (data.isCluster) {
+                return `<span class="cluster-header">Cluster containing ${data.items.length} events.</span>`
+            } else { 
+                return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
+            }
+        },
+    })
     const [ isLoadingTimelineData, setIsLoadingTimelineData ] = useState(false)
     const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(false)
     const [ fullScreen, setFullScreen ] = useState(false)
@@ -135,12 +113,15 @@ const TimelineChart = (props) => {
         const {nodeName} = event.target.parentNode 
         const item = timelineRef.current.itemsData.get(items) 
         if(item.length > 0) {
-            console.log('onSelect', item);
             const {security_pdf, release_pdf,  rawData} = item[0];
             const {all_release_ids, id} = rawData
+            /* setSelectTransaction(id)
+            dispatch(setDashboardPanel(true))  
+            props.checkChartAnalytics(null, null, true)
+            dispatch(setAssetsIllustration({ type: "transaction", id })); */
             /* if(all_release_ids != null && all_release_ids != '' ) {
                 setOpenModal(true)
-                setItemData(JSON.parse(all_release_ids))
+                setItemData(JSON.parse(all_release_ids))     
             } */
             if(selectTransaction != id) {
                 setSelectTransaction(id)
@@ -152,7 +133,7 @@ const TimelineChart = (props) => {
                 dispatch(setDashboardPanel(false))  
                 dispatch(setAssetsIllustration(null))
                 props.checkChartAnalytics(null, null, false)
-            }
+            } 
 
             /* const pdfFile = nodeName == "TT" ? security_pdf : nodeName == "EM" ? release_pdf : ''
             if(pdfFile !== '' && pdfFile != undefined) {
@@ -178,10 +159,10 @@ const TimelineChart = (props) => {
                 }
             } */
         } else {
-            setSelectTransaction(null)
-            props.checkChartAnalytics(null, null, false)
+            /* setSelectTransaction(null)
+            props.checkChartAnalytics(null, null, false) */
         }
-    })
+    }, [selectTransaction])
 
     const findImageColor = (item) => {
         let image = '', color ='';
@@ -256,7 +237,7 @@ const TimelineChart = (props) => {
         setTimeout(() => {
         if(tootlTip === item.id) {
             PatenTrackApi
-            .cancelTimelineItem()
+            .cancelTimelineItemRequest()
             PatenTrackApi
             .getTimelineItemData(item.id)
             .then( response => {
@@ -280,7 +261,11 @@ const TimelineChart = (props) => {
                 if((calcTop + 160) > screenHeight) {
                     calcTop = screenHeight - 350
                 }
-                let tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${calcTop}px;left:${calcLeft}px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
+                const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
+                const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector(`#timeline-${props.id}`) : document.getElementById(`timeline-${props.id}`);  
+                const getPosition = element.getBoundingClientRect();  
+                
+                let tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${getPosition.y + 5}px;left:${getPosition.x}px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
                 <div style='display:flex;'><div style='display:flex;flex-direction: column;${typeof data.releaseAssignor != 'undefined' && data.releaseAssignor.length > 0 ? "max-width: 48%;margin-right: 10px;" : "" } '>                            
                 <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
                                             <div>
@@ -352,7 +337,7 @@ const TimelineChart = (props) => {
 
     const onItemout = () => {
          tootlTip = ''
-        PatenTrackApi.cancelTimelineItem()
+        PatenTrackApi.cancelTimelineItemRequest()
         resetTooltipContainer()
         setToolTipItem([]) 
         
@@ -369,6 +354,7 @@ const TimelineChart = (props) => {
 
     useEffect(() => {
         timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
+        return (() => {})
     }, [])
 
     /**
@@ -415,6 +401,7 @@ const TimelineChart = (props) => {
             }
         }   
         setTimelineRawData(list)
+        return (() => {})
     }, [props])
 
     //Item for the timeline
@@ -429,6 +416,7 @@ const TimelineChart = (props) => {
             type: 'point',
             start: new Date(assetsCustomer.exec_dt),
             customerName: `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
+            customerNameCluster: customerFirstName,
             assetType,
             companyName,
             rawData: assetsCustomer,
@@ -480,21 +468,40 @@ const TimelineChart = (props) => {
     setTimelineItems(convertedItems)
     items.current = new DataSet()
     let start =  new moment(), end =  props.type === 4 ? new moment(new Date('2500-01-01')) : new moment().add(1, 'year')   
-    if(timelineRef.current !== null) {
+    /* if(timelineRef.current !== null) {
         timelineRef.current.destroy()
         timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
         timelineRef.current.on('select', onSelect)
         timelineRef.current.on('itemover', onItemover)
         timelineRef.current.on('itemout', onItemout)
-    } 
+    }  */
     
     if (convertedItems.length > 0) {
-        start = props.type === 5 ? new moment(convertedItems[0].start).subtract(1, 'week') : props.type === 4 ? new moment(new Date('1900-01-01')) : new moment(convertedItems[convertedItems.length - 1].start).subtract(1, 'week')
+        /* start = props.type === 5 ? new moment(convertedItems[0].start).subtract(1, 'week') : props.type === 4 ? new moment(new Date('1900-01-01')) : new moment(convertedItems[convertedItems.length - 1].start).subtract(1, 'week') */
+        start = new Date()
+        end = new Date()
+        const promise = convertedItems.map( (c, index) => {
+            let newDate = new Date(c.start);
+            if(index === 0) {
+                end = newDate
+            }
+            if(newDate.getTime() < start.getTime()) {
+                start = newDate
+            }
+            if(newDate.getTime() > end.getTime()) {
+                end = newDate
+            }
+            return c
+        })
+        Promise.all(promise) 
+        start = new moment(start).subtract(20, 'months') 
+        end = new moment(end).add(20, 'months')
         items.current.add(convertedItems)   
     }
     
     timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1400-01-01')), max: new moment(new Date('2500-01-01'))})
-    timelineRef.current.setItems(items.current)   
+    timelineRef.current.setItems(items.current)  
+    return (() => {}) 
     }, [ timelineRawData ])
     return (
         <Paper className={clsx(classes.container, classes.columnDirection)} square>
@@ -522,6 +529,7 @@ const TimelineChart = (props) => {
             }
             <div className={clsx(classes.timelineContainer,{[classes.timelineContainerFullheight]: typeof props.standalone !== 'undefined' ? props.standalone : props.card.type === 7 ? true : false})}>
                 <div
+                    id={`timeline-${props.id}`}
                     style={{ 
                         filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
                     }}  

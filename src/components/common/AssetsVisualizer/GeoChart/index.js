@@ -1,26 +1,30 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import useStyles from './styles'
-import { pink } from '@mui/material/colors'
-
+import useStyles from './styles' 
+import { 
+    Fullscreen as FullscreenIcon} from '@mui/icons-material'  
 import FullScreen from '../../FullScreen'
-import { Chart } from "react-google-charts";
-import themeMode from '../../../../themes/themeMode';
-import { Tabs, Tab, Paper } from '@mui/material'
+import { Chart } from "react-google-charts"; 
+import { Tabs, Tab, Paper, IconButton, Box } from '@mui/material'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import {
-    getCustomerAssets,
+    getCustomerAssets, setJurisdictionData, setJurisdictionRequest,
 } from '../../../../actions/patentTrackActions2'
 import Loader from '../../Loader'
 import TitleBar from '../../TitleBar'
+import InventionVisualizer from '../InventionVisualizer' 
+import AgentsVisualizer from '../AgentsVisualizer' 
+import SankeyChart from '../SankeyChart' 
+import LabelWithIcon from '../../LabelWithIcon' 
 
-const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, tab, titleBar }) => {
+const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openCustomerBar, tab, titleBar, disableOtherTabs, activeTab }) => {
     const containerRef = useRef(null)
     const dispatch = useDispatch()
+    const [ fullScreen, setFullScreen ] = useState(false)
     const [loading, setLoading] = useState(false)
     const [assetRequest, setAssetRequest] = useState(false)
-    const [selectedTab, setSelectedTab ] = useState(0)
-    const [chartTabs, setChartTabs ] = useState(['Jurisdictions'])
+    const [selectedTab, setSelectedTab ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? 0 : typeof activeTab != 'undefined' ? activeTab : 1)
+    const [chartTabs, setChartTabs ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? ['Jurisdictions'] :  ['Innovations', 'Jurisdictions', 'Invented', 'Acquired', 'Filling', 'Assignments'])
     const [data, setData] = useState([])
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
@@ -38,6 +42,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
     const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
 
     
+    const assetsListLoading = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.loading) 
     const assetsList = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list) //Assets List
     const assetsTotal = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.total_records) //Assets records
     const maintainenceAssetsList = useSelector( state => state.patenTrack2.maintainenceAssetsList.list )
@@ -45,6 +50,8 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
     const selectedMaintainencePatents = useSelector( state => state.patenTrack2.selectedMaintainencePatents )
     const assetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected) //Assets Selected   
     const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
+    const jurisdictionData = useSelector(state => state.patenTrack2.jurisdictionData)
+    const jurisdiction_request = useSelector(state => state.patenTrack2.jurisdiction_request)
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
 
     const classes = useStyles() 
@@ -55,7 +62,8 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
             component: GeoChart,
             standalone: true,
             chartBar, 
-            visualizerBarSize
+            visualizerBarSize,
+            activeTab: selectedTab
         }
     ]
     const [height, setHeight] = useState('100%');
@@ -63,28 +71,37 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
     const [option, setOption] = useState({
         legend: { position: 'none' },
         backgroundColor: 'transparent',
+        displayMode: 'regions',
         chartArea: {
             width: '83%',
             height: '92%',
             left:40,
             top:15,
         },
-        colorAxis: {colors: ['#FFAA00', '#70A800', '#1565C0']}
+        colorAxis: {colors: ['#3366cc', '#dc3912', '#ff9900', '#109618', '#990099', '#0099c6', '#dd4477', '#66aa00', '#b82e2e', '#316395', '#994499', '#22aa99', '#aaaa11', '#6633cc', '#e67300', '#8b0707', '#651067', '#329262', '#5574a6', '#3b3eac', '#b77322', '#16d620', '#b91383', '#f4359e', '#9c5935', '#a9c413', '#2a778d', '#668d1c', '#bea413', '#0c5922', '#743411']}
     });
 
+
     useEffect(() => {
+        if(selectedCategory == 'proliferate_inventors') {
+            setChartTabs(['Innovations', 'Location'])
+        }
+    }, [selectedCategory ])
+ 
+   /*  useEffect(() => {
         let isSubscribed = true;
         if(isSubscribed && dashboardScreen === true) {
             callChartData([], 0)
         }            
         return () => (isSubscribed = false)
-    }, [selectedCompanies])
+    }, [selectedCompanies]) */
+
 
     useEffect(() => {
         let isSubscribed = true;
         const getAssetsForEachCountry = async() => {
             try {
-                setData([])
+                
                 const list = [];
                 let totalRecords = 0;
                 if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {
@@ -113,7 +130,6 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                         totalRecords = list.length
                     }
                 } else {
-                    
                     if( assetsList.length > 0 || maintainenceAssetsList.length > 0 ) {
                         if( assetsList.length > 0 ) {
                             const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
@@ -125,7 +141,6 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                             totalRecords = maintainenceAssetsTotal
                         }
                     } else {
-                        
                         /**
                          * Check which layout and get the assets list first and then 
                          */
@@ -155,8 +170,8 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                                         getCustomerSelectedAssets(location.pathname.replace('/', ''))
                                     );
                                 } */
-                            } else {
-                                if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0) && assetRequest === false) {
+                            } else { 
+                                if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0) && assetRequest === false && assetsListLoading === false) { 
                                     setAssetRequest(true)
                                     dispatch(
                                         getCustomerAssets(
@@ -180,7 +195,13 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                         }
                     }                
                 } 
-                if(list.length > 0 ) {
+                /* if(list.length > 0 ) {
+                    callChartData(list, totalRecords)
+                } else {
+                    setData([])
+                } */
+                if(jurisdiction_request === false && selectedCompanies.length > 0) {
+                    dispatch(setJurisdictionRequest(true))
                     callChartData(list, totalRecords)
                 }
             } catch(err) {
@@ -191,12 +212,12 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
             getAssetsForEachCountry()
         }
         return () => (isSubscribed = false)
-    }, [selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, selectedAssetAssignmentsAll, selectedAssetAssignments, display_sales_assets, search_string, auth_token])
+    }, [selectedCompanies, selectedAssetsPatents, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelected, selectedAssetAssignments, display_sales_assets, search_string, auth_token, assetsListLoading])
     
     
     useEffect(() => {    
         if(chartBar === false) {
-            setHeight('97%')
+            setHeight('100%')
             const opt = {...option}
             opt.chartArea.height = '92%'
             if(visualizerBarSize == '100%'){
@@ -206,7 +227,7 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
             }
             setOption(opt)
         } else {
-            setHeight('92%')
+            setHeight('100%')
             const opt = {...option}
             opt.chartArea.height = '91%'
             if(visualizerBarSize == '100%'){
@@ -234,41 +255,64 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
         setAssetRequest(false)
         setLoading(true)
         setData([])
+        dispatch(setJurisdictionData([]))
         const form = new FormData()
         form.append("list", JSON.stringify(list))
         form.append("total", totalRecords)
         form.append('selectedCompanies', JSON.stringify(selectedCompanies))
         form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
-        form.append('customers', JSON.stringify(assetTypesCompaniesSelectAll === true ? [] : assetTypesCompaniesSelected))
-        form.append('assignments', JSON.stringify(selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments))
+        form.append('customers', JSON.stringify(assetTypesCompaniesSelected))
+        form.append('assignments', JSON.stringify(selectedAssetAssignments))
         form.append('other_mode', display_sales_assets)
         form.append('data_type', dashboardScreen === true ? 1 : 0)
         form.append('type', selectedCategory)
-        const { data } = await PatenTrackApi.getAssetTypeAssignmentAllAssetsWithFamily(form)
-        setLoading(false)
-        setData(data)
+        if(selectedCategory == 'proliferate_inventors') {
+            //PatenTrackApi.cancelInventorGeoLocationRequest()
+            const { data } = await PatenTrackApi.getInventorGeoLocation(form)
+            setLoading(false)
+            setData(data)
+            dispatch(setJurisdictionData(data))
+        } else {
+            //PatenTrackApi.cancelAssetTypeAssignmentAllAssetsWithFamilyRequest()
+            const { data } = await PatenTrackApi.getAssetTypeAssignmentAllAssetsWithFamily(form)
+            setLoading(false) 
+            if( assetsList.length > 0 || assetsSelected.length > 0 || maintainenceAssetsList.length > 0 ||  selectedMaintainencePatents.length == 0  ) {
+                setData(data)
+                dispatch(setJurisdictionData(data))
+            } 
+        }
     }
+
 
     const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
 
 
     const DisplayChart = () => {
-        if(loading) return <Loader/>
-        if(data.length < 2) return null
+        if(loading && jurisdictionData.length == 0) return <Loader/>
+        if(jurisdictionData.length < 2) return null
         return (
             <Chart
                 width={'100%'}
                 height={height}
                 chartType="GeoChart"
                 loader={<div>Loading...</div>}
-                data={data}
+                data={jurisdictionData}
                 options={option}
             />
         )
     }
 
+ 
+
     return (
-        <Paper className={classes.root} square>  
+        <Paper className={classes.root} square style={{overflow: 'hidden'}}>  
+            {
+                ( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) && fullScreen === false && typeof standalone === 'undefined' && (
+                    <IconButton size="small" className={classes.fullscreenBtn} onClick={() => setFullScreen(!fullScreen)}>
+                        <FullscreenIcon />
+                    </IconButton>
+                )
+            }  
             {
                 typeof tab == 'undefined' || tab === true 
                 ?
@@ -284,6 +328,8 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                                 <Tab
                                     key={tab}
                                     label={tab}
+                                    icon={<LabelWithIcon label={tab}/>}
+                                    iconPosition="start"
                                     classes={{ root: classes.tab }}
                                 />
                             )) 
@@ -292,28 +338,66 @@ const GeoChart = ({ chartBar, visualizerBarSize, standalone, openCustomerBar, ta
                 :
                     ''
             }
-            {
-                typeof titleBar !== 'undefined' && titleBar === true && (
-                    <TitleBar title={loading === false && data.length < 2 ? `The company has no non-expired USA patents filed after 1997, and no foreign counterparts.` : `Non expired US patents filed after 1997 and their foreign counterparts:`} enablePadding={false}  underline={false}/>   
-                )
-            } 
-            
-            {
-                typeof standalone === 'undefined' && (
-                    <div className={classes.fullScreenContainer}>
-                        <FullScreen componentItems={menuItems}/>
-                    </div>
-                )
-            } 
-            {
-                selectedTab === 0
-                ?
-                    <div className={classes.graphContainer} ref={containerRef}>  
+            <Box className={classes.graphContainer} ref={containerRef} sx={{p: 2}}>  
+                {
+                    typeof titleBar !== 'undefined' && titleBar === true && ((typeof disableOtherTabs !== 'undefined' && disableOtherTabs === true ) || selectedTab === 1) && (
+                        <TitleBar title={loading === false && data.length < 2 ? `The company has no non-expired USA patents filed after 1999, and no foreign counterparts.` : `Non expired US patents filed after 1999 and their foreign counterparts:`} enablePadding={false}  underline={false} typography={true}/>   
+                    )
+                }  
+                {
+                    typeof disableOtherTabs !== 'undefined' && disableOtherTabs === true 
+                    ?
                         <DisplayChart />
-                    </div> 
-                :
-                    ''
-            }
+                        :
+                            selectedTab === 0 
+                            ?
+                                <InventionVisualizer 
+                                    visualizerBarSize={visualizerBarSize} 
+                                    tab={false} 
+                                    standalone={true}  
+                                    side={ selectedCategory == 'divested' ? false : true }
+                                />
+                            :
+                                selectedTab === 1
+                                ?
+                                    <DisplayChart />
+                                :
+                                    selectedTab === 2
+                                    ?
+                                        <SankeyChart 
+                                            type={'filled'}
+                                            layout={true}
+                                            chartBar={chartBar} 
+                                        />
+                                    :
+                                        selectedTab === 3
+                                        ?
+                                            <SankeyChart 
+                                                type={'acquired'}
+                                                layout={true}
+                                                chartBar={chartBar} 
+                                            />
+                                        :
+                                            selectedTab === 4
+                                            ?
+                                                <AgentsVisualizer type='1' analyticsBar={analyticsBar}/>
+                                            :
+                                                selectedTab === 5
+                                                ?
+                                                    <AgentsVisualizer type='2' analyticsBar={analyticsBar}/>
+                                                :
+                                                    ''
+                } 
+            </Box> 
+            {  
+                ( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) )  && fullScreen === true && (
+                    <FullScreen 
+                        componentItems={menuItems} 
+                        showScreen={fullScreen} 
+                        setScreen={setFullScreen}
+                    /> 
+                )
+            } 
         </Paper>  
     )
 }
