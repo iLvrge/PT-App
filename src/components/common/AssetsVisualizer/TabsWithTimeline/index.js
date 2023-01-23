@@ -62,6 +62,13 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
         } else { 
           return `<span class="lawfirm">${data.customerName}</span>`
         }
+      },
+      cluster: {
+        clusterCriteria: (firstItem, secondItem) => {
+          /* return ( firstItem.rawData.lawfirm.toString().toLowerCase() == secondItem.rawData.lawfirm.toString().toLowerCase()  ||  ( firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID)) */
+
+          return  (firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID)
+        }
       }
     })
   const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
@@ -657,12 +664,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
         start, 
         end,
         min: new Date('1999-01-01'), 
-        max: new moment().add(1, 'year'),
-        cluster: {
-          clusterCriteria: (firstItem, secondItem) => {
-            return ( firstItem.rawData.law_firm_id === secondItem.rawData.law_firm_id  ||  ( firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID))
-          }
-        }
+        max: new moment().add(1, 'year')
       })  
       timelineRef.current.setItems(items.current)   
       setPreviousLoad(true)
