@@ -55,7 +55,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
   const groups = useRef(new DataSet()) // timeline groups dataset
   const [options, setOptions] = useState({
       ...timelineOptions, 
-      type: 'point',
+      type: 'point', 
       template: function(item, element, data) {
         if (data.isCluster) {
           return `<span class="cluster-header">${data.items[0].rawData.lawfirm} (${data.items.length})</span>`
@@ -64,6 +64,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
         }
       },
       cluster: {
+        maxItems: 6,
         clusterCriteria: (firstItem, secondItem) => {
           /* return ( firstItem.rawData.lawfirm.toString().toLowerCase() == secondItem.rawData.lawfirm.toString().toLowerCase()  ||  ( firstItem.rawData.repID > 0 && secondItem.rawData.repID > 0 && firstItem.rawData.repID == secondItem.rawData.repID)) */
 
@@ -131,6 +132,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
   const convertDataToItem = (assetsCustomer) => {   
     const customerFirstName =  assetsCustomer.lawfirm
     const item = { 
+      type: 'point',
       start: new Date(assetsCustomer.exec_dt),
       customerName: `${customerFirstName}`,
       rawData: assetsCustomer, 

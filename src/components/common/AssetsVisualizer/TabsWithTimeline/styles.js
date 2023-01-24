@@ -56,7 +56,7 @@ export default makeStyles(theme => ({
     left: '50%',
   },
   timeline: {
-    height: '90%',
+    height: '92%',
     width: '100%',
     // '& .vis-center .vis-content': {
     //   transform: 'translateY(0px) !important',
@@ -158,13 +158,13 @@ export default makeStyles(theme => ({
       '& .vis-dot':{ 
         backgroundColor: 'inherit',
         borderColor: 'inherit',
-        width: 24,
-        height: 24, 
-        top: '1px !important',
-        left: -5, 
+        width: 20,
+        height: 20, 
+        top: '4px !important',
+        left: 3, 
         border: 0,       
         backgroundRepeat: 'no-repeat',
-        backgroundSize: 24
+        backgroundSize: 20
       },
       '& .vis-dot.asset-type-default': {
         borderColor: indigo[500],
