@@ -297,15 +297,39 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         clearInterval(interval)
     } 
     useEffect(() => {
+        let tabName = 'Innovation'
+        if(typeof side == 'undefined') {
+            switch (selectedCategory) {
+                case 'filled':
+                    tabName = 'Invented'
+                    break
+                case 'acquired':
+                    tabName = 'Acquired'
+                    break;
+                case 'maintenance_budget':
+                    tabName = 'Maintenance Fee Due'
+                    break; 
+                case 'abandoned':
+                    tabName = 'Abandoned'
+                    break; 
+                case 'restore_ownership':
+                    tabName = 'Chain-of-Title'
+                    break; 
+                case 'unnecessary_patents':
+                    tabName = 'To Divest'
+                    break; 
+            }
+        }
         if(selectedCategory == 'assigned' && selectedRow.length == 0) {
            /*  setInventionTabs([ 'Innovation', 'For Sale', 'To License Out']) */
-            setInventionTabs([ 'Innovation'])
+            setInventionTabs([ tabName ])
         } else if(selectedRow.length  === 0) {
-            setInventionTabs([ 'Innovation'])
+            
+            setInventionTabs([ tabName ])
             setSelectedTab(0)
         } else if(( connectionBoxView === true || selectedRow.length > 0 ) && selectedCategory != 'top_law_firms') {
             /* setInventionTabs([ 'Innovation', 'Agreement', 'Form', 'Main' ]) */
-            setInventionTabs([ 'Innovation', 'Agreement'])
+            setInventionTabs([ tabName, 'Agreement'])
             //setSelectedTab(1)
         }
     }, [ connectionBoxView, selectedRow, selectedCategory ])
@@ -1150,7 +1174,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                 <Tab
                                     key={tab}
                                     label={tab == 'For Sale' || tab == 'To License Out' ? <TabLabel label={tab} /> : tab}
-                                    {...(typeof tab != 'For Sale' && tab != 'To License Out'  ? {icon: <LabelWithIcon label={tab}/>} : {})} 
+                                    {...(typeof tab != 'For Sale' && tab != 'To License Out'  ? {icon: <LabelWithIcon label={tab} otherName={true}/>} : {})} 
                                     iconPosition='start'
                                     classes={{ root: classes.tab }}
                                 />
