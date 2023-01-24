@@ -67,7 +67,7 @@ const AgentsVisualizer = (props) => {
         backgroundColor: 'transparent',
         chartArea: {
             width: '67%',
-            height: '90%',
+            height: '89%',
             left: 40,
             top: 10,
         },
@@ -142,7 +142,7 @@ const AgentsVisualizer = (props) => {
             setOption({...option, chartArea: {...option.chartArea, height: '93%'}})
         } else {
             setHeight('98%')
-            setOption({...option, chartArea: {...option.chartArea, height: '90%'}})
+            setOption({...option, chartArea: {...option.chartArea, height: '89%'}})
         }
     }, [props])
 
