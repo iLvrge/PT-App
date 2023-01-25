@@ -16,7 +16,7 @@ const HistogramYears = () => {
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const [option, setOption] = useState({
         legend: { position: 'none' },
-        bar: { groupWidth: '98%' },
+        bar: { groupWidth: '100%' },
         isStacked: false,
         backgroundColor: 'transparent',
         hAxis: {
@@ -25,12 +25,12 @@ const HistogramYears = () => {
             textStyle: {
                 color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
                 fontSize: 12,
-                fontFamily: 'Roboto'
+                fontName: 'Roboto'
             },
             titleTextStyle: {
                 color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
                 fontSize: 12,
-                fontFamily: 'Roboto'
+                fontName: 'Roboto'
             },
             gridlines: {
                 color: 'transparent',
@@ -46,12 +46,12 @@ const HistogramYears = () => {
             textStyle: {
                 color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
                 fontSize: 12,
-                fontFamily: 'Roboto'
+                fontName: 'Roboto'
             },
             titleTextStyle: {
                 color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
                 fontSize: 12,
-                fontFamily: 'Roboto'
+                fontName: 'Roboto'
             },
             gridlines: {
                 /* color: isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider, */
@@ -70,12 +70,12 @@ const HistogramYears = () => {
         },
         chartArea: {
             width: '83%',
-            height: '80%',
+            height: '83%',
             left:40,
             top:15,
         }
     });
-    const [height, setHeight] = useState('95%')
+    const [height, setHeight] = useState('100%')
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const assetTypesSelectAll = useSelector(state => state.patenTrack2.assetTypes.selectAll)

@@ -411,7 +411,7 @@ const Acknowledgements = () => {
                     if(convertedItems.length > 100) {
                       start = new Date(convertedItems[99].start)
                     } else {
-                      start = new moment(start).subtract(5, 'month') 
+                      start = new moment(start).subtract(8, 'month') 
                     }
                 } else {
                     if(convertedItems.length > 0) {
@@ -420,7 +420,7 @@ const Acknowledgements = () => {
                 }
                   
                 if(scrollNewRequest === false) {
-                    end = new moment(end).add(5, 'month')
+                    end = new moment(end).add(8, 'month')
                 }  
                 /* const startIndex = convertedItems.length < 100 ? (convertedItems.length - 1) : 99
                 items.current.add(convertedItems.slice(0, startIndex))   */

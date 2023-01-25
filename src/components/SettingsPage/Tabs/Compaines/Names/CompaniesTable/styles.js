@@ -33,6 +33,7 @@ export default makeStyles(theme => ({
     '& th': {
       fontSize: '1.1rem',
       backgroundColor: 'inherit',
+      fontWeight: 400,
       '&.MuiTableCell-stickyHeader': {
         /* backgroundColor: '#292929', */
       },

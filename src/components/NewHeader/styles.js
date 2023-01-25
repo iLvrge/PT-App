@@ -76,7 +76,7 @@ export default makeStyles(theme => ({
     companyLogoCon: {
         display: 'flex',
         alignItems: 'center',
-        width: '14rem', 
+        /* width: '14rem',  */
         justifyContent: 'flex-start', 
         /* cursor: 'pointer', */
         overflow: 'hidden',
