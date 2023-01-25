@@ -8,6 +8,9 @@ export default makeStyles(() => ({
     padding: 0,
     /* backgroundColor: 'rgb(41 41 41)', */
     paddingLeft: '36px !important',
+    '& td':{
+      padding: 0
+    }
   },
   cell: {
     padding: 8

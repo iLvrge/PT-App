@@ -16,7 +16,7 @@ const SteppedAges = () => {
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const [option, setOption] = useState({
         legend: { position: 'none' },
-        bar: { groupWidth: '98%' },
+        bar: { groupWidth: '100%' },
         isStacked: false,
         backgroundColor: 'transparent',
         hAxis: {
@@ -25,12 +25,12 @@ const SteppedAges = () => {
             textStyle: {
                 color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
                 fontSize: 12,
-                fontFamily: 'Roboto'
+                fontName: 'Roboto'
             },
             titleTextStyle: {
                 color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
                 fontSize: 12,
-                fontFamily: 'Roboto'
+                fontName: 'Roboto'
             },
             gridlines: {
                 color: 'transparent',
@@ -46,12 +46,12 @@ const SteppedAges = () => {
             textStyle: {
                 color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
                 fontSize: 12,
-                fontFamily: 'Roboto'
+                fontName: 'Roboto'
             },
             titleTextStyle: {
                 color: isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary,
                 fontSize: 12,
-                fontFamily: 'Roboto'
+                fontName: 'Roboto'
             },
             gridlines: {
                 /* color: isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider, */
@@ -70,7 +70,7 @@ const SteppedAges = () => {
         },
         chartArea: {
             width: '83%',
-            height: '80%',
+            height: '83%',
             left:40,
             top:15,
         }

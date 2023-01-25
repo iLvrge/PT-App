@@ -21,7 +21,7 @@ const SplitPaneDrawer = ({ open, drawerChildren, mainChildren, defaultSize }) =>
         onDragFinished={onDragFinished}
         split="vertical"
         defaultSize={defaultSize || 400}
-        minSize={250}
+        minSize={315}
         maxSize={700}
       >
         <CustomDrawer open={open}>

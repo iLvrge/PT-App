@@ -52,65 +52,104 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
   };
 
   const onHandleDropDown = (event, item) => {
-    console.log('onHandleDropDown', event, event.target.value, item)
-    moveItem(event.target.value, item) 
+    const groupName = event.target.innerText
+    let targetValue = 0
+    if(groupName != '') {
+      if(companiesList.length > 0) { 
+        const filterList = companiesList.filter(company => {
+          if(company.type == 1) {
+            const name = company.representative_name === null
+            ? company.original_name
+            : company.representative_name
+            return groupName == name
+          }
+        }) 
+        if(filterList.length > 0) {
+          targetValue = filterList[0].id
+        }
+      }
+    } 
+    setDropdownOpen(!dropdownOpen)
+    moveItem(targetValue, item) 
   }
 
-  const ShowDropDown = ({item}) => { 
-    return (
-      <Select
-        labelId='dropdown-open-select-label'
-        id='dropdown-open-select'
-        IconComponent={(props) => (
-          dropdownOpen ? <ExpandLessIcon {...props} /> : <ChevronRightIcon {...props}/>
-        )}
-        open={ dropdownOpen && item.id == dropdownValue.id}
-        MenuProps={{
-          anchorOrigin: {
-            vertical: "bottom",
-            horizontal: "left"
-          },
-          transformOrigin: {
-            vertical: "top",
-            horizontal: "left"
-          },
-          getContentAnchorEl: null
-        }}
-        onClose={handleDropdownClose}
-        onOpen={() => handleDropdownOpen(item)}  
-        onChange={(event) =>  onHandleDropDown(event, item) }
-        value={''}
-      >
-        <MenuItem key={-99} value={-99}>
-            <ListItemIcon>
-              
-            </ListItemIcon>
-            <ListItemText className={'heading'}>
-              Move Outside 
-            </ListItemText> 
-        </MenuItem>
-        {
-          (companiesList || []).map(company => {
-            return company.type == 1 
-              ?
-                <MenuItem key={company.id} value={company.id}>
-                    <ListItemIcon>
-                      
-                    </ListItemIcon>
-                    <ListItemText className={'heading'}>
-                      {
-                        company.representative_name === null
-                        ? company.original_name
-                        : company.representative_name}
-                    </ListItemText> 
-                </MenuItem>
-              :
-                ''
-          })
-          
+  const ShowDropDown = ({item, parent}) => { 
+    const groups = [];
+    if(companiesList.length > 0) { 
+      companiesList.map(company => {
+        if(company.type == 1) {
+          groups.push(company)
         }
-      </Select> 
-    )
+      })
+    }
+    
+    let entry = true;
+    if(typeof parent != 'undefined' && parent === true) {
+      if(groups.length === 0) {
+        entry = false
+      }
+    }  
+    if(entry === true) {
+      return (
+        <Select
+          labelId='dropdown-open-select-label'
+          id='dropdown-open-select'
+          IconComponent={(props) => (
+            dropdownOpen ? <ExpandLessIcon {...props} /> : <ChevronRightIcon {...props}/>
+          )}
+          open={ dropdownOpen && item.id == dropdownValue.id}
+          MenuProps={{
+            anchorOrigin: {
+              vertical: "bottom",
+              horizontal: "left"
+            },
+            transformOrigin: {
+              vertical: "top",
+              horizontal: "left"
+            },
+            getContentAnchorEl: null
+          }}
+          onClose={handleDropdownClose}
+          onOpen={() => handleDropdownOpen(item)}  
+          onClick={(event) =>  onHandleDropDown(event, item) }
+          value={''}
+        >
+          {
+            typeof parent == 'undefined' 
+            ?
+              <MenuItem key={-99} value={-99}> 
+                <ListItemText className={'heading'}>
+                  Move outside this group
+                </ListItemText> 
+              </MenuItem>
+            :
+              ''
+          }
+          {
+            groups.length > 0 
+            ?
+              <GetChildItems list={groups}/>
+            :
+              ''
+          } 
+        </Select> 
+      )
+    }
+  }
+
+  const GetChildItems = ({list}) => { 
+    return ( 
+      list.map(company =>  (
+        <MenuItem key={company.id} value={company.id}> 
+          <ListItemText className={'heading'}>
+            {
+              company.representative_name === null
+              ? company.original_name
+              : company.representative_name}
+          </ListItemText> 
+        </MenuItem>
+      )) 
+    ) 
   }
 
   return (
@@ -134,8 +173,7 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
                 {open ? <ExpandMoreIcon /> : <ChevronRightIcon />}
               </IconButton>
             : 
-              ''
-             /*  <ShowDropDown item={row}/> */
+              <ShowDropDown item={row} parent={true}/> 
           }
           
         </TableCell>
@@ -221,13 +259,13 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
                               disabled={isSelected(row.id)}
                             />
                           </TableCell>    */}
-                          <TableCell>
+                          <TableCell style={{width: 50}}>
                             <ShowDropDown item={company}/>
                           </TableCell>
                           <TableCell className={classes.padLR0}>
                             {company.original_name}
                           </TableCell> 
-                          <TableCell align={'center'}>
+                          <TableCell align={'center'} style={{width: 155}}>
                             {company.counter}
                           </TableCell>
                         </TableRow>

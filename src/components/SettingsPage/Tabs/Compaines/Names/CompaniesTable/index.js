@@ -156,7 +156,7 @@ function CompaniesTable({
 
   const moveItem = async(parentId, item) => {
     const form = new FormData()
-    form.append('parent_id', parentId > 0 ? parentId : 0) 
+    form.append('parent_id', parentId > 0 ? parentId : 0)  
     const { data } = await PatenTrackApi.updateCompany(item.id, form) 
     if( data != null && data.length > 0) {
       dispatch(setCompanies(data))
