@@ -109,7 +109,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             minWidth: 200,
             oldWidth: 200,
             draggable: true,
-            label: 'Employees',             
+            label: 'Inventors',             
             dataKey: 'entityName', 
             show_selection_count: true,   
             badge: true,           
@@ -155,7 +155,7 @@ const InventorTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         if(standalone) {         
             const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
                 tabs = assetTypesSelectAll === true ? [] : assetTypesSelected
-            if((selectedCompaniesAll === true || selectedCompanies.length > 0) && tabs.includes(10)) {
+            if((selectedCompaniesAll === true || selectedCompanies.length > 0) && (tabs.includes(10) || selectedCategory == 'proliferate_inventors')) {
                 dispatch(
                     getCustomerParties(
                         selectedCategory == '' ? '' : selectedCategory,

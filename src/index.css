@@ -912,7 +912,7 @@ svg.clipboard  {
   display: inline-grid;
 }
 .claim-text{
-  display: grid;
+  /* display: grid; */
 }
 
 .claim-dependent{
