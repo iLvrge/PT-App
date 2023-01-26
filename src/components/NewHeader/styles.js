@@ -94,7 +94,7 @@ export default makeStyles(theme => ({
         }
     },
     logoContainer: {
-        width: '18.5rem',
+        width: '260px',
         display: 'flex' 
     },
     siteLogo: {
@@ -166,7 +166,7 @@ export default makeStyles(theme => ({
         '& .MuiBadge-anchorOriginTopRightRectangular.MuiBadge-invisible': {
             transform: 'scale(0) translate(50%, -50%)'
         },
-        minWidth: '21%'
+        minWidth: 340
     },
     breadcrumbs: {
         display: 'flex',
