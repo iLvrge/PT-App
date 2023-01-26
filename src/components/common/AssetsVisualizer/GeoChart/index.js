@@ -84,7 +84,7 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
 
     useEffect(() => {
         if(selectedCategory == 'proliferate_inventors') {
-            setChartTabs(['Innovations', 'Location'])
+            setChartTabs(['Owned', 'Location'])
         }
     }, [selectedCategory ])
  
@@ -356,6 +356,7 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
                                     tab={false} 
                                     standalone={true}  
                                     side={ selectedCategory == 'divested' ? false : true }
+                                    {...(selectedCategory != 'assigned' && selectedCategory != 'divested' ? {onSelect: false} : {})}  
                                 />
                             :
                                 selectedTab === 1

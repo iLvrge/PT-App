@@ -349,7 +349,7 @@ const AssetDetailsContainer = ({
                         type={type}
                         titleBar={true}
                         activeTab={1}
-                      />
+                      /> 
                     :  
                       timelineScreen === true  && assetIllustration == null && selectedCategory == 'top_law_firms'
                       ?
@@ -452,7 +452,6 @@ const AssetDetailsContainer = ({
                           customerBarSize={customerBarSize} 
                           companyBarSize={companyBarSize}
                           type={type} 
-                          onSelect={false}
                           titleBar={true}
                           tab={true}
                         />
