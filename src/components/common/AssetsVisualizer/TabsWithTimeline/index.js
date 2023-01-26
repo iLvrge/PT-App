@@ -429,7 +429,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
       if(filter.length == 0) {
         filter =  timelineItems.filter(row => new Date(row.start) > new Date(properties.end) && new Date(properties.end) <= new Date() )
       }
-      if(filter.length == 0) {
+      if(filter.length == 0  && timelineItems.length > 499) {
         if(selectedTab === 1) { 
           setScrollNewRequest(true)
           await assignmentData(moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))
