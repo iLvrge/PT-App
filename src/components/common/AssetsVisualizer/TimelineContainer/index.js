@@ -146,7 +146,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       companyName,
       rawData: assetsCustomer,
       category: selectedCategory,
-      className: `asset-type-${assetType} ${assetsCustomer.release_exec_dt != null && assetsCustomer.release_exec_dt != '' ? assetsCustomer.partial_transaction == 1 ? 'asset-type-security-release-partial' : 'asset-type-security-release' : ''}`,
+      className: `asset-type-${assetType} ${selectedCategory == 'late_recording' ? 'recordings' : ''} ${assetsCustomer.release_exec_dt != null && assetsCustomer.release_exec_dt != '' ? assetsCustomer.partial_transaction == 1 ? 'asset-type-security-release-partial' : 'asset-type-security-release' : ''}`,
       collection: [ { id: assetsCustomer.id, totalAssets: assetsCustomer.totalAssets } ],
       showTooltips: false
     }
@@ -295,7 +295,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
                                               Exected: ${ executionDate != '' ? moment(executionDate).format('ll') : ''}
                                             </div> `
                 if(selectedCategory == 'late_recording' ){
-                  tootltipTemplate += `<div>Recorded:$ { recordedDate != '' ? moment(recordedDate).format('ll') : ''}
+                  tootltipTemplate += `<div>Recorded: ${ recordedDate != '' ? moment(recordedDate).format('ll') : ''}
                   </div> <div>Lapsed: ${dateDifference(executionDate, recordedDate)} days</div>`
                 }                       
                 tootltipTemplate += `<div>
@@ -396,16 +396,20 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
    * this call when Timeline rangechanged
    */
 
-  const onRangeChanged = useCallback(_debounce(async(properties) => {
-    console.log('onRangeChanged', properties) 
+  const onRangeChanged = useCallback( async(properties) => {
     items.current = new DataSet()
     items.current.add(timelineItems)
     timelineRef.current.setItems(items.current) 
-    if(properties.byUser === true) {    
-      await getTimelineRawData(moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))   
-    } 
-    
-  }, 1000), [ timelineItems ])
+    if(properties.byUser === true) {  
+      let filter =  timelineItems.filter(row => new Date(row.start) < new Date(properties.start) )
+      if(filter.length == 0) {
+        filter =  timelineItems.filter(row => new Date(row.start) > new Date(properties.end) && new Date(properties.end) <= new Date() )
+      }
+      if(filter.length == 0 && timelineItems.length > 499) {
+        await getTimelineRawData(moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))  
+      } 
+    }
+  }, [ timelineItems ])
 
 
   const getTimelineRawData = async(start, end) => {
@@ -531,7 +535,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     }
     return () => (isSubscribed = false)
     
-  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors, auth_token, switch_button_assets, selectedCategory ])
+  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors, auth_token, switch_button_assets, selectedCategory, timelineRequest ])
 
   useEffect(() => {
     if(typeof timelineData !== 'undefined') {
@@ -624,8 +628,16 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
         return c
       })
       Promise.all(promise) 
-      start = new moment(start).subtract(3, 'year') 
-      end = new moment(end).add(3, 'year')
+      if(convertedItems.length > 100) {
+        start = new Date(convertedItems[99].start)
+      } else {
+        start = new moment(start).subtract(3, 'year') 
+      }
+      if(convertedItems.length > 0) {
+        end = new moment(end).add(1, 'year')
+      } else {
+        end = new moment(end).add(3, 'year')
+      }
       /* const startIndex = convertedItems.length < 201 ? (convertedItems.length - 1) : 199
       items.current.add(convertedItems.slice(0, startIndex))  */   
       items.current.add(convertedItems)  
@@ -636,8 +648,8 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
         ...options, 
         start, 
         end,
-        min: new moment(new Date('1998-01-01')), 
-        max: new moment().add(3, 'year')
+        min: new Date('1999-01-01'), 
+        max: new moment().add(2, 'year')
       })  
       timelineRef.current.setItems(items.current)   
       setPreviousLoad(true) 

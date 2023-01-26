@@ -668,35 +668,41 @@ useEffect(() => {
     const convertedItems = timelineRawData.map((event) => convertDataToItem(event, allIcons))
 
     items.current = new DataSet()
-    let start = new moment().subtract(2, 'year')
-    let end = new moment().add(2, 'year')
-    let min = start.format('YYYY-MM-DD'), max = end.format('YYYY-MM-DD') 
+    let start = '', end = '',  min = '', max = ''
     if (convertedItems.length > 0) {      
       convertedItems.map( (item, index) => {
         if(index == 0) {
-          min = new moment(item.start).format('YYYY-MM-DD')
+          start = item.start
+          min = new moment(start).format('YYYY-MM-DD')
           const date = typeof item.rawData.eventdate != 'undefined' && item.rawData.eventdate != '' ? item.rawData.eventdate : item.rawData.end_date
-          if(new moment(date).isAfter(max)) {
-            max = new moment(date).format('YYYY-MM-DD')
-          }
+          end = date
+          max = new moment(end).format('YYYY-MM-DD')
+          end = new moment(end)
         } else {
           if( new moment(item.start).isBefore(min) ) {
             min = new moment(item.start).format('YYYY-MM-DD')
-          } else {
-            const date = typeof item.rawData.end_date != 'undefined' && item.rawData.end_date != '' ? item.rawData.end_date : item.rawData.eventdate
-            if(new moment(date).isAfter(max)) {
-              max = new moment(date).format('YYYY-MM-DD')
-            }
+          } 
+          const date  = typeof item.rawData.end_date != 'undefined' && item.rawData.end_date != '' ? item.rawData.end_date : item.rawData.eventdate
+          if(new moment(date).isAfter(max)) {
+            end = date
+            max = new moment(end).format('YYYY-MM-DD')
+            end = new moment(end)
           } 
         }        
       })
+      console.log("Status End Date", end.format('YYYY-MM-DD'))
       start = new moment(min).subtract(3, 'year').format('YYYY-MM-DD')
-      end = new moment(max).add(4, 'year').format('YYYY-MM-DD')
+      end = new moment(end).add(4, 'year').format('YYYY-MM-DD')
       min = start
       max = end
       items.current.add(convertedItems)
       setDisplay('block')      
-    } 
+    } else {
+      start = new moment().subtract(2, 'year')
+      end = new moment().add(2, 'year')
+      min = start.format('YYYY-MM-DD')
+      max = end.format('YYYY-MM-DD') 
+    }
     timelineRef.current.setItems(items.current)  
     timelineRef.current.setOptions({ ...options, start, end, min, max  }) 
     

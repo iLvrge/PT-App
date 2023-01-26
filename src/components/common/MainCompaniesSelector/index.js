@@ -835,8 +835,14 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                         dispatch( setMainCompaniesAllSelected( updateSelected.length === totalRecords ? true : false ) )
                         dispatch(setCPCRequest(false))
                         dispatch(setJurisdictionRequest(false))
+                        dispatch(setTimelineRequest(false))
+                        dispatch(setTimelineData([]))
+                        dispatch(setCPCData({list:[], group: [], sales: []}))
+                        dispatch(setCPCSecondData({list:[], group: [], sales: []}))
+                        dispatch(setLineChartReset())
+                        dispatch(setJurisdictionData([]))
                         resetAll() 
-                        clearOtherItems() 
+                        clearOtherItems()
                     } 
                 }
             }          

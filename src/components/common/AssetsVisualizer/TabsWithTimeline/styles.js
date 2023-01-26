@@ -160,8 +160,8 @@ export default makeStyles(theme => ({
         borderColor: 'inherit',
         width: 20,
         height: 20, 
-        top: '4px !important',
-        left: 3, 
+        top: '1px !important',
+        left: 0, 
         border: 0,       
         backgroundRepeat: 'no-repeat',
         backgroundSize: 20

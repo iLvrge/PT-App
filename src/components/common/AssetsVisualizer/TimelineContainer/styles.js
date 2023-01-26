@@ -59,8 +59,9 @@ export default makeStyles(theme => ({
         color: theme.palette.text.primary,
         '& .vis-item-content':{
           /* width: '95px', */
+          width: 'auto !important',
           whiteSpace: 'normal',
-          padding: '5px 10px 5px 3px',
+          padding: '5px 5px 5px 0px', 
           '& .cluster-header':{
             width: '100%',
             textAlign: 'left',
@@ -198,11 +199,14 @@ export default makeStyles(theme => ({
       overflowY: 'hidden',
     },
     '& .vis-cluster': {
-      background: 'none',
-      border: '0px',
+      backgroundColor: '#222222', 
+      padding: 5,
+      width: '100% !important',
       '& .vis-item-content':{
         padding: 0,
-        width: '112px !important'
+        width: 'auto !important',
+        textAlign: 'left',
+        padding: '0 !important'
       }
     },
     '& .vis-dot': {
@@ -277,6 +281,11 @@ export default makeStyles(theme => ({
         overflow: 'visible',
       }
     },
+    '& .vis-item.vis-range.recordings':{ 
+      '& .vis-item-overflow':{
+        minHeight: 40,
+      }
+    },
     '& .vis-item.vis-range':{
       border: 0,
       '& .vis-item-overflow':{
@@ -284,7 +293,7 @@ export default makeStyles(theme => ({
         minHeight: 28,
         '& .vis-item-content':{
           width: '100%',
-          position: 'relative',
+          position: 'absolute',
           '& span':{
             whiteSpace: 'nowrap',
             display: 'block',

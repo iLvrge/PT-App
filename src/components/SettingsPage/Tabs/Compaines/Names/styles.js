@@ -11,8 +11,8 @@ export default makeStyles(theme => ({
   },
   dialogButton: {
     flex: '1 1 100%',
-    display: 'flex',
-    margin: '0 10px',
+    display: 'inline',
+    margin: '0 10px 0 50px',
     '& .MuiInputLabel-shrink': {
       fontSize: 16
     }
