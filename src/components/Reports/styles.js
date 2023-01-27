@@ -624,6 +624,9 @@ export default makeStyles(theme => ({
     },
     headingContainer:{
       padding: '2.5vh 0 0',
+      '& span': {
+        display: 'flex'
+      }
     },
     headerContainerPosition: {
       position: 'absolute',
@@ -654,5 +657,8 @@ export default makeStyles(theme => ({
     flexDirection: 'column',
     justifyContent:'center',
     alignItems: 'center'
+  },
+  btnContainer: {
+    display: 'flex'
   }
 }));

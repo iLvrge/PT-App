@@ -116,7 +116,7 @@ export default makeStyles(theme => ({
         alignItems: 'center',
         flexDirection: 'column',
         width: '100%',
-        pading: '100%'
+        height: '100%'
     },
     graphContainer: {
         flex: 1,

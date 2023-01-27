@@ -27,6 +27,7 @@ import TimelineSecurity from "../AssetsVisualizer/TimelineSecurity"
 import ErrorBoundary from '../ErrorBoundary'
 import LawFirmNames from "../AssetsVisualizer/NamesContainer/LawFirmNames"
 import SankeyChart from "../AssetsVisualizer/SankeyChart"
+import AgentsVisualizer from "../AssetsVisualizer/AgentsVisualizer"
 
 const AssetDetailsContainer = ({
   cls,
@@ -381,6 +382,7 @@ const AssetDetailsContainer = ({
                           type={type} 
                           tab={true}
                           side={true}
+                          {...(selectedCategory == 'top_lenders' ? {onSelect: false} : {})}  
                         />
                     ) : familyItemMode === true ? 
                           selectedCategory == 'incorrect_names'
@@ -439,7 +441,7 @@ const AssetDetailsContainer = ({
                           fullScreen={true}
                           standalone={true}
                         />
-                      :
+                      : 
                       timelineScreen === true  && assetIllustration == null && (selectedCategory == 'top_law_firms' || selectedCategory == 'proliferate_inventors' )
                       ?
                         <InventionVisualizer 
@@ -456,7 +458,7 @@ const AssetDetailsContainer = ({
                           tab={true}
                         />
                       :
-                      timelineScreen === true  && assetIllustration == null && (selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording')
+                      timelineScreen === true  && assetIllustration == null && (selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording' || selectedCategory == 'top_lenders')
                       ?
                         <LifeSpanContainer
                           chartBar={chartBar} 

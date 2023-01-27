@@ -65,6 +65,7 @@ import PdfViewer from '../common/PdfViewer'
 import IllustrationPdf from '../common/AssetDetailsContainer/IllustrationPdf'
 import PatenTrackApi from '../../api/patenTrack2'
 import LawFirmTable from '../common/LawFirmTable';
+import Lenders from '../common/Lenders';
 import FamilyContainer from '../common/AssetsVisualizer/FamilyContainer';
 import SecuredAssets from '../common/SecuredAssets';
 import FullScreen from '../common/FullScreen';
@@ -292,7 +293,7 @@ const GlobalScreen = ({
         }
         /* console.log('timelineScreen', selectedCategory, dashboardScreen, timelineScreen, openCommentBar, openIllustrationBar, openChartBar, openAnalyticsBar) */
         if(timelineScreen === true) {
-            if(selectedCategory === 'top_law_firms' && openOtherPartyBar === false) {
+            if((selectedCategory === 'top_law_firms' || selectedCategory == 'top_lenders') && openOtherPartyBar === false) {
                 handleOtherPartyBarOpen()
                 if(openAssignmentBar === true) {
                     handleAssignmentBarOpen()
@@ -599,6 +600,16 @@ const GlobalScreen = ({
                                                         defaultLoad={type === 2 ? false : true} 
                                                     />
                                                 :
+                                                    selectedCategory === 'top_lenders'
+                                                    ?
+                                                        <Lenders 
+                                                            checkChartAnalytics={checkChartAnalytics}
+                                                            chartsBar={openChartBar}
+                                                            analyticsBar={openAnalyticsBar}
+                                                            type={type} 
+                                                            defaultLoad={type === 2 ? false : true} 
+                                                        />
+                                                    :
                                                     <CustomerTable 
                                                         standalone={true}
                                                         parentBarDrag={setVisualizerBarSize}

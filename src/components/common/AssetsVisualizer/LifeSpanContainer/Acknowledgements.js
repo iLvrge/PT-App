@@ -305,7 +305,7 @@ const Acknowledgements = () => {
                             );
                         } 
                     } else {
-                        dispatch(
+                        /* dispatch(
                             getCustomerAssets(
                                 selectedCategory == '' ? '' : selectedCategory,
                                 companies,
@@ -320,12 +320,12 @@ const Acknowledgements = () => {
                                 -1, 
                                 display_sales_assets
                             ),
-                        );
+                        ); */
                     }
                 }
             }                
         }
-        if( list.length > 0 ) {
+        if( list.length > 0 || selectedCategory != '') {
             const form = new FormData()
             form.append("list", JSON.stringify(list)) 
             form.append("total", totalRecords)
