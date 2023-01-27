@@ -1199,11 +1199,11 @@ const GlobalLayout = (props) => {
             if(openCustomerBar === false && timelineScreen === false && type !== 'Timeline'){ 
                 handleCustomersBarOpen(event)
             }
-            if(selectedCategory != 'top_law_firms' && openAssignmentBar === false && timelineScreen === false && type == 'Timeline'){
+            if(selectedCategory != 'top_law_firms' && selectedCategory != 'top_lenders' && openAssignmentBar === false && timelineScreen === false && type == 'Timeline'){
                 handleAssignmentBarOpen(event)
             }
             console.log(selectedCategory, openOtherPartyBar, openAssignmentBar)
-            if(selectedCategory == 'top_law_firms' && openOtherPartyBar === false && timelineScreen === false && type == 'Timeline'){
+            if((selectedCategory == 'top_law_firms' || selectedCategory == 'top_lenders') && openOtherPartyBar === false && timelineScreen === false && type == 'Timeline'){
                 handleOtherPartyBarOpen(event)
                 if(openAssignmentBar === true) {
                     handleAssignmentBarOpen(event)
@@ -1270,11 +1270,11 @@ const GlobalLayout = (props) => {
             ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
         },
         {
-            tooltip: selectedCategory === 'top_law_firms' ? 'Filter by Law Firms' : 'Filter by Parties',
+            tooltip: selectedCategory === 'top_law_firms' ? 'Filter by Law Firms' : selectedCategory == 'top_lenders' ? 'Filter by Lenders' : 'Filter by Parties',
             bar: openOtherPartyBar,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleOtherPartyBarOpen,
             t: 3,
-            label: selectedCategory === 'top_law_firms' ? 'Filter by Law Firms' : 'Filter by Parties',
+            label: selectedCategory === 'top_law_firms' ? 'Filter by Law Firms' : selectedCategory == 'top_lenders' ? 'Filter by Lenders'  : 'Filter by Parties',
             ...((props.type === 9 || (dashboardScreen === true && profile?.user?.organisation?.organisation_type !== 'Bank')) && {disabled: true})
         },
         {

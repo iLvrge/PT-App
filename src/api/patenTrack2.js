@@ -1013,6 +1013,10 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/customers/lawfirm?companies=${JSON.stringify(companies)}&rfID=${rfID}`, getHeader())
   }
 
+  static getLendersByCompany(companies, rfID) {
+    return axios.get(`${base_new_api_url}/customers/lenders?companies=${JSON.stringify(companies)}&rfID=${rfID}`, getHeader())
+  }
+
   static getLawFirms() {
     return axios.get(`${base_new_api_url}/lawfirm`, getHeader())
   }

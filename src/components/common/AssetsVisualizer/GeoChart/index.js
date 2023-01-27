@@ -85,6 +85,12 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
     useEffect(() => {
         if(selectedCategory == 'proliferate_inventors') {
             setChartTabs(['Owned', 'Location'])
+        } else {
+            if(chartTabs.length > 1 && selectedCategory != 'assigned'  && selectedCategory != 'divested' ) {
+                const oldTabs = [...chartTabs]
+                oldTabs[0] = 'Owned'
+                setChartTabs(oldTabs)
+            }
         }
     }, [selectedCategory ])
  
@@ -173,7 +179,7 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
                             } else { 
                                 if (openCustomerBar === false && (selectedCompaniesAll === true || selectedCompanies.length > 0) && assetRequest === false && assetsListLoading === false) { 
                                     setAssetRequest(true)
-                                    dispatch(
+                                    /* dispatch(
                                         getCustomerAssets(
                                             selectedCategory == '' ? '' : selectedCategory,
                                             companies,
@@ -189,7 +195,7 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
                                             display_sales_assets,
                                             setAssetRequest
                                         ),
-                                    );
+                                    ); */
                                 }
                             }                        
                         }
@@ -328,7 +334,7 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
                                 <Tab
                                     key={tab}
                                     label={tab}
-                                    icon={<LabelWithIcon label={tab}/>}
+                                    icon={<LabelWithIcon label={tab} />}
                                     iconPosition="start"
                                     classes={{ root: classes.tab }}
                                 />

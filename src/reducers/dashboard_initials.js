@@ -61,7 +61,7 @@ export default {
     jurisdiction_request: false,
     timeline_request: false,
     timeline_data: [], 
-    line_chart_data: {1: {loading: false, data: []}, 2: {loading: false, data: []}},
+    line_chart_data: {1: {loading: false, data: []}, 2: {loading: false, data: []}, 3: {loading: false, data: []}},
     cpc_request: false, 
     abandoned_year_request: false,
     abandoned_year_data: [],

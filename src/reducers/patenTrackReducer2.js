@@ -81,7 +81,7 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
     case types.SET_LINE_CHART_RESET:  
       return { 
         ...state, 
-        line_chart_data: {1: {loading: false, data: []}, 2: {loading: false, data: []}}
+        line_chart_data: {1: {loading: false, data: []}, 2: {loading: false, data: []}, 3: {loading: false, data: []}}
       }
     case types.SET_AUTHENTICATE_AUTH_TOKEN:
       return {

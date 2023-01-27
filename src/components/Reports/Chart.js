@@ -27,7 +27,7 @@ const Chart = (props) => {
                     placement={'bottom'}
                     grid={props.grid}
                 >
-                    <span>
+                    <span className={classes.btnContainer}>
                         <Button 
                             size="small" 
                             variant="outlined" 
@@ -39,7 +39,7 @@ const Chart = (props) => {
                         >
                             { props.card.title }
                         </Button> 
-                    </span>
+                    </span>  
                 </AddToolTip>  
             </div>
             {
