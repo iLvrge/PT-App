@@ -202,8 +202,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                         }
                     }
                 }                
-            }
-            console.log('list', list, selectedCategory, selectedTab) 
+            } 
             if( list.length > 0 || (selectedCategory == 'top_law_firms' || selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording' || selectedCategory == 'top_lenders' || selectedCategory == 'collaterlized')) {
                 setFilterList(list)
                 const form = new FormData()
