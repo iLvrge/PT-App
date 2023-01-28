@@ -81,7 +81,7 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
         },
         chartArea: {
             width: '83%',
-            height: '92%',
+            height: '90%',
             left:40,
             top:15,
         }
@@ -101,6 +101,27 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
         opt.vAxis.baselineColor = isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider
         opt.vAxis.textStyle.color = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
         opt.vAxis.titleTextStyle.color = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
+        if(chart.length > 1) { 
+            opt.vAxis = {
+                ...opt.vAxis,
+                viewWindowMode: 'explicit',
+                viewWindow: {
+                    max: chart[1][1],
+                    min: chart[chart.length - 1][1]
+                }
+            } 
+            opt.axes = {
+                y: {
+                    all: {
+                        range: {
+                            max: chart[1][1],
+                            min: chart[chart.length - 1][1]
+                        }
+                    }
+                }
+            }
+        }
+        console.log('opt', opt)
         /* opt.vAxis.gridlines.color = isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider */
         setOption(opt)
     }, [isDarkTheme])

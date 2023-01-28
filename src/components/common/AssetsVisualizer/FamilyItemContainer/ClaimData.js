@@ -89,6 +89,14 @@ const ClaimData = ({ data, number }) => {
                     }                
                 }) 
             }
+            let findImages = node.querySelectorAll('img')
+            if(findImages.length > 0) {
+                for( let i = 0; i < findImages.length; i++) {
+                    findImages[i].setAttribute('height', findImages[i].getAttribute('he'))
+                    findImages[i].setAttribute('width', findImages[i].getAttribute('wi'))
+                    findImages[i].setAttribute('src', `https://s3.us-west-1.amazonaws.com/static.patentrack.com/figures/${findImages[i].getAttribute('file').replace('TIF','png')}`)
+                }
+            }
         }
     }, []);
 
