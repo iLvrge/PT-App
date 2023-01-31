@@ -552,6 +552,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
 
 
   const assignmentData = async(start, end) => {
+    setTimelineRawData([])
     const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
         tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
         customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
@@ -565,6 +566,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
 
 
   const fillingData = async(start, end) => {
+    setTimelineRawData([])
     const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
               tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
               customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,

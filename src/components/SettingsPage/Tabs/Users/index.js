@@ -57,7 +57,6 @@ const Users = () => {
   }, [])
 
   const removeFromWorkSpace = (row) => {
-    console.log('removeFromWorkSpace', row)
   }
 
   

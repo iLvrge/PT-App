@@ -266,4 +266,14 @@ export default makeStyles(theme => ({
       background: '#78787826',
     },
   },
+  '@keyframes blinker': {
+    from: { opacity: 1 },
+    to: { opacity: 0 },
+  },
+  blinkText: { 
+    animationName: '$blinker',
+    animationDuration: '1s',
+    animationTimingFunction: 'linear',
+    animationIterationCount: 'infinite',
+  } 
 }))

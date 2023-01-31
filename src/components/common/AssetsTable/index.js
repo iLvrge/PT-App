@@ -849,7 +849,6 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         formData.append('auth', bot_token)
         formData.append('auth_id', bot_user_id)
         const { data } = await PatenTrackApi.sendMessage(access_token, formData) 
-        console.log(`maintainenece`, data)
       })() 
     } else {
       /**
@@ -1021,8 +1020,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             );
             dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
           }          
-        }  else {
-          console.log('selectedAssetCompanies', selectedAssetCompanies)
+        }  else { 
           if(assetTypeAssignmentAssets.length === 0 && assetTypeAssignmentAssetsLoading === false) { 
             loadDataFromServer(offsetWithLimit[0], offsetWithLimit[1], sortField, sortOrder)   
           }         
@@ -1034,8 +1032,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             setTableColumns(cols) */
           }
         }
-      } else {
-        console.log('Assets FromTransaction', transactionId)
+      } else { 
         if (transactionId != null) {
           dispatch(getAssetTypeAssignmentAssets(transactionId, false));
         } 
@@ -1262,7 +1259,6 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
      
     if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
       if (auth_token != null && assetTypeAssignmentAssetsLoading === false ) {  
-        console.log('ASSETS LOAD loadDataFromServer')        
         dispatch(
           process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD'
           ? 
@@ -1476,13 +1472,11 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         } */
       } else {
         setCheckBar(!checkBar)
-        resetAll()
-        console.log('selectedCategory', selectedCategory)
+        resetAll() 
         if(selectedCategory == 'restore_ownership') {
           dispatch(setAssetTypesPatentsSelected([]))
           setSelectItems([])
-        } else if (selectedCategory == 'incorrect_names') {
-          console.log('selectedCategory', openChartBar, openAnalyticsBar, openIllustrationBar)
+        } else if (selectedCategory == 'incorrect_names') { 
           /* if(openChartBar === true) {
             handleChartBarOpen()
           }
@@ -1585,9 +1579,7 @@ const retrieveSlackMessages = async(asset) => {
           data.messages.forEach( item => {
             if(item.type == 'message') {
               const {text} = item
-              if(text != '') {
-                console.log(text, text.toLowerCase().indexOf('necessary'), text.indexOf('via PatenTrack'))
-                console.log(text, text.toLowerCase().indexOf('important'), text.indexOf('via PatenTrack'))
+              if(text != '') { 
                 if(text.toLowerCase().indexOf('necessary') !== -1 && text.indexOf('via PatenTrack') !== -1) {
                   /**
                    * Find Necessary
@@ -1651,8 +1643,7 @@ const updateTableColumn = (ratingItems) => {
           dispatch(setTimelineScreen(true))
           dispatch(setDashboardScreen(false))
         }
-        let oldSelection = [...selectItems];
-        console.log('cntrlKey', cntrlKey)
+        let oldSelection = [...selectItems]; 
         if(cntrlKey !== undefined) {
           if(selectedCategory == 'restore_ownership' && display_clipboard === false) {
             dispatch(setAssetTypesPatentsSelected([row.asset]))

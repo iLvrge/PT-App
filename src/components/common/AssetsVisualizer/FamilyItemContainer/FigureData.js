@@ -28,8 +28,7 @@ const FigureData = ( { analyticsBar, illustrationBar, visualizerBarSize, data, n
     useEffect(() => {
         getFamilyData()
     }, [number]) 
-
-    console.log("NUMBER", number)
+ 
 
     const getFamilyData = async () => {
         setLoading(true)

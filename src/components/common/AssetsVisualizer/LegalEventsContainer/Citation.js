@@ -123,8 +123,7 @@ const Citation = ({ number, citationRawData, updateCitationRawData }) => {
     const showTooltip = (item, event) => {    
         setTimeout(() => {
             if(tootlTip === item.id) {    
-                const checkFullScreen = document.getElementsByClassName('fullscreenModal');
-                console.log('FullScreen', checkFullScreen)
+                const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
                 const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector('#citationTimeline') : document.getElementById('citationTimeline');
                 const getPosition = element.getBoundingClientRect();    
                 const color = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary

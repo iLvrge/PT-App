@@ -51,6 +51,7 @@ const IllustrationContainer = ({
   const usptoMode = useSelector(state => state.ui.usptoMode)
   const showThirdParties = useSelector(state => state.ui.showThirdParties)
   const isLoadingAssetIllustration = useSelector(state => state.patenTrack2.loadingAssetIllustration)
+  const assetIllustrationData = useSelector(state => state.patenTrack2.assetIllustrationData)
   const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
 
   const fullScreenItems = [
@@ -101,6 +102,7 @@ const IllustrationContainer = ({
       } else if (asset.type === 'transaction') {
         try {
           const { data } = await PatenTrackApi.getCollectionIllustration(asset.id, axiosCancelToken.token)
+          
           setIllustrationData(data != '' ? data : null)
           dispatch(setAssetsIllustrationData(data != '' ? data : null))
           if(setIllustrationRecord) { setIllustrationRecord(data) }
@@ -130,6 +132,12 @@ const IllustrationContainer = ({
       axiosCancelToken.cancel()
     }
   }, [ asset, dispatch])
+
+  useEffect(() => {
+    if(assetIllustrationData != null){
+      setIllustrationData(assetIllustrationData)
+    }
+  }, [assetIllustrationData])
 
   const handlePdfView = useCallback((obj) => {
     if (Object.keys(obj).length > 0 && typeof obj.document_file != 'undefined') {
@@ -218,8 +226,7 @@ const IllustrationContainer = ({
     }
   }
   
-  const handleComment = (obj) => {
-    console.log('handleComment ', obj)
+  const handleComment = (obj) => { 
   }
 
 

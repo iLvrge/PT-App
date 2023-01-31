@@ -66,8 +66,7 @@ function Charts(props) {
   })
 
   const callChart = useCallback(() => {
-    const container = document.getElementById('graphChart')
-    console.log('container', container)
+    const container = document.getElementById('graphChart') 
     if (container != null && container !== undefined) {
       let newOption
       if (isExpaned) {
@@ -99,8 +98,7 @@ function Charts(props) {
           const value = custom(x, y)
           tempData.add({ x: x, y: y, z: value })
         }
-      }
-      console.log(tempData)
+      } 
       setData(tempData)
       if (chartTab === 'tab2') {
         callChart()

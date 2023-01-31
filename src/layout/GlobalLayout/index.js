@@ -872,8 +872,7 @@ const GlobalLayout = (props) => {
         
         if(chart === true && barOpen === true && barSize == '40.1%') {
             checkPDFHeight()
-        }    
-        console.log('changeVisualBar', barSize, barOpen, chart, analytics, comment, illustration)
+        }     
         editorBar()
         setVisualizeOpenBar(barOpen)  
         setVisualizerBarSize(barSize)
@@ -896,8 +895,7 @@ const GlobalLayout = (props) => {
                 setAnalyticsBar(false)
             }            
         }
-        setCommentBarSize(barSize)
-        console.log('LUUSTRATION_OPEN _ 900')
+        setCommentBarSize(barSize) 
         changeVisualBar(openChartBar, openAnalyticsBar, openCommentBar, !bar)
     }
 
@@ -919,13 +917,11 @@ const GlobalLayout = (props) => {
                 setAnalyticsBar(false)
             }            
         } 
-        setCommentBarSize(barSize)
-        console.log('handleCommentBarOpen _ 900')
+        setCommentBarSize(barSize) 
         changeVisualBar(openChartBar, openAnalyticsBar, !bar, openIllustrationBar)
     }  
 
-    const handleChartBarOpen = () => { 
-        console.log('handleChartBarOpen entered', openChartBar)
+    const handleChartBarOpen = () => {  
         let bar = openChartBar, barSize = '40.1%'
         setChartBar( !bar )
         if(!bar === false && openAnalyticsBar === true) {
@@ -945,8 +941,7 @@ const GlobalLayout = (props) => {
         setIllustrationBarSize(barSize)  
         if(usptoMode === false && lifeSpanMode === false && familyItemMode === false && pdfView === false && !bar === true) {
             dispatch( toggleLifeSpanMode( true ) )
-        }
-        console.log('handleChartBarOpen927', !bar, openAnalyticsBar, openCommentBar, openIllustrationBar, barSize)
+        } 
         changeHeight('analyticsBar', barSize == 0 ? '0px': barSize)
         changeVisualBar(!bar, openAnalyticsBar, openCommentBar, openIllustrationBar)
     }
@@ -973,8 +968,7 @@ const GlobalLayout = (props) => {
             dispatch( toggleLifeSpanMode( true ) )
         }    
         setIllustrationBarSize(barSize)
-        changeHeight('analyticsBar', barSize == 0 ? '0px': barSize)
-        console.log('handleAnalyticsBarOpen 954', openChartBar, !bar, openCommentBar, openIllustrationBar, barSize)
+        changeHeight('analyticsBar', barSize == 0 ? '0px': barSize) 
         changeVisualBar(openChartBar, !bar, openCommentBar, openIllustrationBar)
     }
 
@@ -999,16 +993,14 @@ const GlobalLayout = (props) => {
         }, 1000)  */        
     } 
 
-    const openAnalyticsAndCharBar = () => {
-        console.log('openAnalyticsAndCharBar 1003')
+    const openAnalyticsAndCharBar = () => { 
         setChartBar( true )
         setAnalyticsBar( true )
         setIllustrationBarSize( '50%' )
         changeVisualBar(true, true, openCommentBar, openIllustrationBar)
     }
 
-    const closeAnalyticsAndCharBar = () => {  
-        console.log('closeAnalyticsAndCharBar 1011') 
+    const closeAnalyticsAndCharBar = () => {   
         setChartBar( false )
         setAnalyticsBar( false )
         setIllustrationBarSize( '50%' )
@@ -1040,8 +1032,7 @@ const GlobalLayout = (props) => {
         setCustomerButtonVisible( flag )
     }
 
-    const checkChartAnalytics = useCallback(async (pdfFile, connectionBoxData, usptoMode) => {
-        console.log('checkChartAnalytics 1031', pdfFile, connectionBoxData, usptoMode, dashboardScreen)
+    const checkChartAnalytics = useCallback(async (pdfFile, connectionBoxData, usptoMode) => { 
         if( pdfFile != null && Object.keys(pdfFile).length > 0 ) {
             setChartBar( true )
             setVisualizeOpenBar( true )
@@ -1108,8 +1099,7 @@ const GlobalLayout = (props) => {
                 barSize = dashboardScreen === true ? getWindowDimensions() : visualizerBarSize !== '0%' ?  visualizerBarSize :  '40.1%'
             } else if (commentPrevItem === false && illustrationPrevItem === false && ( chartPrevItem === true ||  analyticsPrevItem === true )) {
                 barSize = '100%'  
-            }
-            console.log('barSize', barSize)
+            } 
             if(barSize === '0%') {
                 setVisualizeOpenBar( false )
             }
@@ -1187,7 +1177,6 @@ const GlobalLayout = (props) => {
             if(openCommentBar === true){
                 handleCommentBarOpen(event)
             }
-            console.log('1174=>', openChartBar, openAnalyticsBar, visualizerBarSize)
             if(openChartBar === true){
                 handleChartBarOpen(event)
             }
@@ -1195,15 +1184,13 @@ const GlobalLayout = (props) => {
                 handleAnalyticsBarOpen(event)
             }
         } else {
-            console.log('RESET1186') 
             if(openCustomerBar === false && timelineScreen === false && type !== 'Timeline'){ 
                 handleCustomersBarOpen(event)
             }
-            if(selectedCategory != 'top_law_firms' && openAssignmentBar === false && timelineScreen === false && type == 'Timeline'){
+            if(selectedCategory != 'top_law_firms' && selectedCategory != 'top_lenders' && openAssignmentBar === false && timelineScreen === false && type == 'Timeline'){
                 handleAssignmentBarOpen(event)
-            }
-            console.log(selectedCategory, openOtherPartyBar, openAssignmentBar)
-            if(selectedCategory == 'top_law_firms' && openOtherPartyBar === false && timelineScreen === false && type == 'Timeline'){
+            } 
+            if((selectedCategory == 'top_law_firms' || selectedCategory == 'top_lenders') && openOtherPartyBar === false && timelineScreen === false && type == 'Timeline'){
                 handleOtherPartyBarOpen(event)
                 if(openAssignmentBar === true) {
                     handleAssignmentBarOpen(event)
@@ -1270,11 +1257,11 @@ const GlobalLayout = (props) => {
             ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
         },
         {
-            tooltip: selectedCategory === 'top_law_firms' ? 'Filter by Law Firms' : 'Filter by Parties',
+            tooltip: selectedCategory === 'top_law_firms' ? 'Filter by Law Firms' : selectedCategory == 'top_lenders' ? 'Filter by Lenders' : 'Filter by Parties',
             bar: openOtherPartyBar,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleOtherPartyBarOpen,
             t: 3,
-            label: selectedCategory === 'top_law_firms' ? 'Filter by Law Firms' : 'Filter by Parties',
+            label: selectedCategory === 'top_law_firms' ? 'Filter by Law Firms' : selectedCategory == 'top_lenders' ? 'Filter by Lenders'  : 'Filter by Parties',
             ...((props.type === 9 || (dashboardScreen === true && profile?.user?.organisation?.organisation_type !== 'Bank')) && {disabled: true})
         },
         {

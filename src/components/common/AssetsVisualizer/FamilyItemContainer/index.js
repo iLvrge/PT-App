@@ -135,8 +135,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
 
     const onHandleChange = (event) => {
         /* setUSPTO(event.target.value) */
-        if(event.target.value != '') {
-            console.log('selectedAssetsPatents', selectedAssetsPatents)
+        if(event.target.value != '') { 
             let target = event.target.value != 'Application' ? event.target.value : ''
             let url = `https://patentcenter.uspto.gov/applications/${selectedAssetsPatents[1]}${target}`
             window.open(url);

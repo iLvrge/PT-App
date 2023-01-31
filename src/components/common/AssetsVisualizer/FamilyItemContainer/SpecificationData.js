@@ -15,7 +15,6 @@ const SpecificationData = ({ data, number }) => {
         } catch(e) {
             parseData = data
         }
-        console.log("SpecificationData", parseData)
         if((Array.isArray(parseData) && parseData.length == 0) || parseData == '' || parseData == null) {            
             getSpecificationData()
         } else {

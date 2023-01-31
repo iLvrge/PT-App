@@ -3,7 +3,7 @@ import { BlurLinear } from '@mui/icons-material'
 
 export default {
     auth_token: null,
-    socialMediaConnectPopup: true,
+    socialMediaConnectPopup: false,
     familyChartVisiblity: 'hidden',
     switch_button_assets: 0,
     search_string: null,
@@ -61,7 +61,7 @@ export default {
     jurisdiction_request: false,
     timeline_request: false,
     timeline_data: [], 
-    line_chart_data: {1: {loading: false, data: []}, 2: {loading: false, data: []}},
+    line_chart_data: {1: {loading: false, data: []}, 2: {loading: false, data: []}, 3: {loading: false, data: []}},
     cpc_request: false, 
     abandoned_year_request: false,
     abandoned_year_data: [],

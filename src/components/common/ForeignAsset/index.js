@@ -174,7 +174,6 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
         const googleProfile = getTokenStorage('google_profile_info')
         const token = JSON.parse(googleToken)  
         const profile = JSON.parse(googleProfile)
-        console.log('token', token, profile)
         if( token !== null && profile !== null) {
             const { access_token } = token  
             const form = new FormData()

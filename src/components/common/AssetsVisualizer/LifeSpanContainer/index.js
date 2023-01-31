@@ -27,7 +27,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
     const dispatch = useDispatch()
     const location = useLocation()
     const [offsetWithLimit, setOffsetWithLimit] = useState([0, DEFAULT_CUSTOMERS_LIMIT])
-    const [ selectedTab, setSelectedTab ] = useState(typeof activeTab !== 'undefined' ? activeTab : 0)
+    const [ selectedTab, setSelectedTab ] = useState(0)
     const [ assets, setAssets ] = useState(null)
     const [ isFullscreenOpen, setIsFullscreenOpen ] = useState(false)
     const [ fullScreen, setFullScreen ] = useState(false)
@@ -70,27 +70,34 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
     ]
  
     useEffect(() => {
+        let tabList = []
         if(selectedRow.length  === 0) {
-            /* setLifeSpanTabs(['Lifespan', 'Acknowledgements']) */
-            if( (selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording')) {
-                setLifeSpanTabs(['Lifespan', 'Lawyers'])
+            /* setLifeSpanTabs(['Lifespan', 'Acknowledgements']) */ 
+            if( selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording') {  
+                tabList = ['Lawyers']
+            } else if( (selectedCategory == 'top_lenders')) {
+                tabList = ['Lenders']
             } else if(selectedCategory == 'abandoned'){
-                setLifeSpanTabs(['Years', 'Ages', 'Cited by', 'Salable', 'Licensable'])
+                tabList = ['Years', 'Ages', 'Cited by', 'Salable', 'Licensable']
             } else {
-                setLifeSpanTabs(['Lifespan', 'Cited by', 'Salable', 'Licensable'])
-            }
-            setSelectedTab(typeof activeTab !== 'undefined' ? activeTab : 0)
+                tabList = ['Lifespan', 'Cited by', 'Salable', 'Licensable']
+            } 
         } else if( connectionBoxView === true || selectedRow.length > 0 ) {
             /*setLifeSpanTabs([ 'Lifespan', 'Assignment', 'USPTO' ])*/
             if(selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording') { 
-                setLifeSpanTabs([ 'Lifespan', 'Rights'])
+                tabList = ['Rights']
             } else { 
-                setLifeSpanTabs([ 'Lifespan', 'Assignment'])
-            }
-            if(typeof activeTab !== 'undefined') {
-                setSelectedTab(activeTab)
+                tabList = [ 'Lifespan', 'Assignment']
             }
         }
+        setLifeSpanTabs(tabList) 
+        if(typeof activeTab !== 'undefined') {
+            if(selectedCategory == 'top_lenders' || selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording') {
+                setSelectedTab(0)
+            } else {
+                setSelectedTab(activeTab)
+            }
+        } 
     }, [ connectionBoxView, selectedRow ])
 
     useEffect(() => {
@@ -195,9 +202,8 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                         }
                     }
                 }                
-            }
-           /*  console.log('list', list) */
-            if( list.length > 0 || selectedCategory == 'top_law_firms') {
+            } 
+            if( list.length > 0 || (selectedCategory == 'top_law_firms' || selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording' || selectedCategory == 'top_lenders' || selectedCategory == 'collaterlized')) {
                 setFilterList(list)
                 const form = new FormData()
                 form.append("list", JSON.stringify(list)) 
@@ -249,36 +255,48 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
     const handleCloseFullscreen = () => {
         setIsFullscreenOpen(false)
     }
- 
+  
+    console.log('selectedCategory', selectedCategory, lifeSpanTabs, selectedTab, selectedRow)
     
     return (
         <Paper className={classes.root} square>  
             {
-                (/* selectedAssetsTransactionLifeSpan.length > 0 &&  */(process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) && fullScreen === false && typeof standalone === 'undefined' && (
-                    <IconButton size="small" className={classes.fullscreenBtn} onClick={() => setFullScreen(!fullScreen)}>
-                        <FullscreenIcon />
-                    </IconButton>
-                )
+                (selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording') && selectedRow.length > 0
+                ?
+                    ''
+                :
+                    ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) && fullScreen === false && typeof standalone === 'undefined' && (
+                        <IconButton size="small" className={classes.fullscreenBtn} onClick={() => setFullScreen(!fullScreen)}>
+                            <FullscreenIcon />
+                        </IconButton>
+                    )
             }             
-            <Tabs
-                value={selectedTab}
-                variant={'scrollable'} 
-                scrollButtons="auto"
-                className={classes.tabs}
-                onChange={handleChangeTab} 
-            >
-                {
-                    lifeSpanTabs.map((tab) => (
-                        <Tab
-                            key={tab}
-                            className={classes.tab} 
-                            icon={<LabelWithIcon label={tab}/>}
-                            label={tab} 
-                            iconPosition="start"
-                        />
-                    )) 
-                }
-            </Tabs> 
+            {
+                (selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording') && selectedRow.length > 0
+                ?
+                    ''
+                :
+                    <Tabs
+                        value={selectedTab}
+                        variant={'scrollable'} 
+                        scrollButtons="auto"
+                        className={classes.tabs}
+                        onChange={handleChangeTab} 
+                    >
+                        {
+                            lifeSpanTabs.map((tab) => (
+                                <Tab
+                                    key={tab}
+                                    className={classes.tab} 
+                                    icon={<LabelWithIcon label={tab}/>}
+                                    label={tab} 
+                                    iconPosition="start"
+                                />
+                            )) 
+                        }
+                    </Tabs> 
+            }
+            
             <Box {...( lifeSpanTabs[selectedTab] !== 'Cited by' ? {sx: {p: 2}} : {})} style={{display: 'flex', height: selectedCategory == 'abandoned' && (selectedTab == 0 || selectedTab == 1) ? '100%' : '89%'}}>  
             {
                 ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) 
@@ -288,9 +306,42 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                         selectedCategory == 'abandoned' ? 
                             <HistogramYears/>
                         :
-                            selectedAssetsTransactionLifeSpan.length > 0 && (
-                                <SpanVisualize chart={selectedAssetsTransactionLifeSpan} chartBar={chartBar} visualizerBarSize={visualizerBarSize}/>
-                            )
+                            selectedCategory == 'top_lenders' 
+                            ?
+                                <AgentsVisualizer
+                                    type={3}
+                                    chartBar={chartBar} 
+                                    analyticsBar={analyticsBar}
+                                />
+                            :
+                                selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording' 
+                                ?
+                                    selectedRow.length == 0
+                                    ?
+
+                                        <AgentsVisualizer
+                                            type={2}
+                                            chartBar={chartBar} 
+                                            analyticsBar={analyticsBar}
+                                        />
+                                    :
+                                        <IllustrationContainer 
+                                            isFullscreenOpen={isFullscreenOpen} 
+                                            asset={assetIllustration} 
+                                            setIllustrationRecord={setIllustrationRecord} 
+                                            chartsBar={chartBar}
+                                            analyticsBar={analyticsBar}
+                                            chartsBarToggle={chartsBarToggle}
+                                            checkChartAnalytics={checkChartAnalytics}
+                                            setAnalyticsBar={setAnalyticsBar}
+                                            setChartBar={setChartBar}
+                                            fullScreen={handleClickOpenFullscreen}
+                                            gap={gap}
+                                        />
+                                :
+                                selectedAssetsTransactionLifeSpan.length > 0 && (
+                                    <SpanVisualize chart={selectedAssetsTransactionLifeSpan} chartBar={chartBar} visualizerBarSize={visualizerBarSize}/>
+                                )
                     :
                         selectedRow.length == 0
                         ?
@@ -298,12 +349,6 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                                 selectedCategory == 'abandoned' 
                                 ? 
                                     <SteppedAges/>
-                                :
-                                selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording'
-                                ?
-                                    <AgentsVisualizer
-                                        type={2}
-                                    />
                                 :
                                     <Acknowledgements/>
                             :
@@ -319,24 +364,8 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                                     :
                                         ''
                         :
-                            selectedTab === 1 ? 
-                                selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording'
-                                    ?
-                                        <IllustrationContainer 
-                                            isFullscreenOpen={isFullscreenOpen} 
-                                            asset={assetIllustration} 
-                                            setIllustrationRecord={setIllustrationRecord} 
-                                            chartsBar={chartBar}
-                                            analyticsBar={analyticsBar}
-                                            chartsBarToggle={chartsBarToggle}
-                                            checkChartAnalytics={checkChartAnalytics}
-                                            setAnalyticsBar={setAnalyticsBar}
-                                            setChartBar={setChartBar}
-                                            fullScreen={handleClickOpenFullscreen}
-                                            gap={gap}
-                                        />
-                                :
-                                    <ConnectionBox display={"false"} assets={assets}/>
+                            selectedTab === 1 ?  
+                                <ConnectionBox display={"false"} assets={assets}/>
                             :
                                 selectedTab === 2 ?
                                 <USPTOContainer assets={assets}/>

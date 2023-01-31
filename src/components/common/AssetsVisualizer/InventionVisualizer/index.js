@@ -192,6 +192,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         xLabel: 'Filling',
         yLabel: 'Technologies',
         zLabel: 'Assets',
+        animationAutoStart: true,
         tooltip: function (point) {
             // parameter point contains properties x, y, z, and data
             // data is the original object passed to the point constructor
@@ -298,7 +299,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     } 
     useEffect(() => {
         let tabName = 'Innovation'
-        if(typeof side == 'undefined') {
+        if(typeof side == 'undefined') { 
             switch (selectedCategory) {
                 case 'filled':
                     tabName = 'Invented'
@@ -313,24 +314,28 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     tabName = 'Abandoned'
                     break; 
                 case 'restore_ownership':
-                    tabName = 'Chain-of-Title'
+                    tabName = 'Title'
                     break; 
                 case 'unnecessary_patents':
                     tabName = 'To Divest'
                     break; 
+                case 'top_lenders':
+                    tabName = 'Owned'
+                    break;
             }
-        }
+        } else if(selectedCategory == 'top_lenders') {
+            tabName = 'Owned'
+        } 
         if(selectedCategory == 'assigned' && selectedRow.length == 0) {
            /*  setInventionTabs([ 'Innovation', 'For Sale', 'To License Out']) */
             setInventionTabs([ tabName ])
-        } else if(selectedRow.length  === 0) {
-            
+        } else if(selectedRow.length  === 0) { 
             setInventionTabs([ tabName ])
             setSelectedTab(0)
         } else if(( connectionBoxView === true || selectedRow.length > 0 ) && selectedCategory != 'top_law_firms') {
             /* setInventionTabs([ 'Innovation', 'Agreement', 'Form', 'Main' ]) */
-            setInventionTabs([ tabName, 'Agreement'])
-            //setSelectedTab(1)
+            setInventionTabs([])
+            setSelectedTab(1)
         }
     }, [ connectionBoxView, selectedRow, selectedCategory ])
 
@@ -342,8 +347,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 if(onSelect === false && graphRawData.length > 0 && cpc_request === true) {
                     getNewData = false;
                 }
-            }
-            console.log("CPC", onSelect, getNewData, cpc_request, graphRawData )
+            } 
             if(getNewData === true) {   
                 setShowContainer(true)              
                 if (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0 && type !== 9){
@@ -1160,7 +1164,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             /* {...(typeof titleBar !== 'undefined' && titleBar === true ? {sx: {p: 2}} : {})} */
             className={classes.root} square>  
             {
-                typeof tab == 'undefined' || tab === true 
+                (typeof tab == 'undefined' || tab === true ) && inventionTabs.length > 0
                 ?
                     <Tabs
                         value={selectedTab}

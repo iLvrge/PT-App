@@ -13,15 +13,13 @@ export function useReloadLayout() {
 
     const checkPageLoad = (type) => {
         const {pathname} = location;
-        let replaceWord = type === 1 ? '/patent_assets' : '/assignments';
-        console.log("checkPageLoad", type)
+        let replaceWord = type === 1 ? '/patent_assets' : '/assignments'; 
         let loadLayoutName = pathname.replace(replaceWord, '')
         if(loadLayoutName.indexOf('/') !== -1) {
             loadLayoutName = loadLayoutName.replace('/', '')
         } 
         if(loadLayoutName != '') {
-            setIsLoaded(true)
-            console.log('loadLayoutName', loadLayoutName)
+            setIsLoaded(true) 
             let findIndex = controlList.findIndex( item => item.type == 'menu' && item.mainHeading.toLowerCase() == loadLayoutName) 
             if(loadLayoutName.indexOf('pay_maintainence_fee') !== -1) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.mainHeading.toLowerCase() == 'maintenance fee due') 

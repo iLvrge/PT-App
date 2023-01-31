@@ -161,7 +161,7 @@ const GoogleCharts = ({ chartBar, visualizerBarSize, standalone }) => {
                     height={height}
                     chartType="AreaChart"
                     loader={<div>Loading...</div>}
-                    data={data}
+                    data={data} 
                     options={option}
                     chartEvents={[
                         {
@@ -170,8 +170,7 @@ const GoogleCharts = ({ chartBar, visualizerBarSize, standalone }) => {
                                 const chart = chartWrapper.getChart();
                                 const container = chart.container
                                 const observer = new MutationObserver(function () {
-                                    Array.prototype.forEach.call(container.getElementsByTagName('path'), function(path) {
-                                        console.log("path.getAttribute('fill')", path.getAttribute('fill'))
+                                    Array.prototype.forEach.call(container.getElementsByTagName('path'), function(path) { 
                                         if (path.getAttribute('fill') === '#1565c0') {
                                             path.setAttribute('fill', 'url(#gradient-expense) #1565c0');
                                         }

@@ -65,8 +65,7 @@ export const login = user => {
   return dispatch => {
     return AuthApi.signIn(user)
       .then(res => {
-        setToken(res.data.accessToken)     
-        console.log("res.data.accessToken", res.data.accessToken)   
+        setToken(res.data.accessToken)        
         const decoded_token = jwt_decode(res.data.accessToken)
         
         dispatch(initEnvironment())
@@ -117,7 +116,7 @@ export const passwordReset = user => {
 export const signOut = () => {
   deleteCookie('token')
   localStorage.removeItem('token')
-  console.log("signOut------------------")
+  console.log("------signOut------------------")
   return dispatch => {    
     return dispatch(signOutSuccess())
   }

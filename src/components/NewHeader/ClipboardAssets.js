@@ -18,8 +18,7 @@ const ClipboardAssets = () => {
     const [selectedAssets, setSelectedAssets] = useState([])
 
     const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
-
-    console.log('clipboard_assets', clipboard_assets)
+ 
     const COLUMNS = [
         {
           width: 100,

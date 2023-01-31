@@ -282,25 +282,26 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
                     if(newDate.getTime() < start.getTime()) {
                         start = newDate
                     }
-                    if(newDate.getTime() > end.getTime()) {
-                        end = newDate
+                    if(endDate.getTime() > end.getTime()) {
+                        end = endDate
                     }
                     return c
                 })
                 Promise.all(promise)
-                start = new moment(start).subtract(3, 'year') 
-                end = new moment(end).add(3, 'year') 
+                start = new moment(start).subtract(4, 'year')  
+                end = new moment(end).add(7, 'year')  
                 items.current.add(convertedItems)
                 setDisplay('block')
             } else {
                 /* setDisplay('none') */
             }
-        }
-        /*console.log(items.current, start, end) */
+        } 
         //start = new moment(new Date('1900-01-01'))
         //end =  new moment(new Date('2200-01-01'))
         timelineRef.current.setItems(items.current)
-        timelineRef.current.setOptions({ ...options, start, end, min: start, max: end }) 
+        timelineRef.current.setOptions({ ...options, start, end,  
+            min: new Date('1999-01-01'), 
+            max: new moment().add(7, 'year') }) 
         //timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1900-01-01')), max: new moment(new Date('2200-01-01'))})
         //timelineRef.current.setOptions({})
     }, [ timelineRawData, isLoadingTimelineRawData, timelineContainerRef ])
