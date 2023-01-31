@@ -76,7 +76,6 @@ const LoadLinkAssets = ({type, asset, size}) => {
 
     const onHandleDropDownlist = async(event, asset, row) => {
         setDropOpenScoring(null)
-        console.log('asset', event.target.value, asset, row)
         let items = [...rows], scoreItems = [...selectedItemsWithScore], movedItems = [...movedProducts]
         
         const findScoreIndex = scoreItems.findIndex(item => item.name == row.name)
@@ -446,7 +445,6 @@ const LoadLinkAssets = ({type, asset, size}) => {
                 form.append('asset', decodeURIComponent(selectedAsset))
                 form.append('values', JSON.stringify(itemsWithScore))
                 const { data } = await PatenTrackApi.linkSheetUpdateData(form, type)
-                console.log('updateSheet', data)
             }      
         }
     }

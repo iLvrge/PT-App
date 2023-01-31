@@ -66,7 +66,7 @@ export default makeStyles(theme => ({
     
   },
   cellHeading:{
-    whiteSpace: 'nowrap',
+    /* whiteSpace: 'nowrap', */
     /* padding: '19px 19px 17px 19px',  */
     padding: '13px 19px', 
     '& .MuiTypography-body2':{

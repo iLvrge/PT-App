@@ -380,8 +380,7 @@ const Templates = () => {
 
     const handleClickDriveRow = useCallback(async (event, row) => {
         event.preventDefault()
-        if(row.mimeType == 'application/vnd.google-apps.folder') {
-            console.log('handleClickDriveRow=>openDriveFolder', googleToken)
+        if(row.mimeType == 'application/vnd.google-apps.folder') { 
             setClicked( prevItem => prevItem === false ? true : prevItem )
             openDriveFolder(event, row.id, row.name, 1)
         } else {
@@ -412,8 +411,7 @@ const Templates = () => {
                         formResponse = await PatenTrackApi.deleteTemplateFromLayout(JSON.stringify(selectItems), row.id, google_profile.email)
                     }
     
-                    if(formResponse) {
-                        console.log("formResponse", formResponse)
+                    if(formResponse) { 
                     } 
                 }  else {
                     alert('Please select layout first.')

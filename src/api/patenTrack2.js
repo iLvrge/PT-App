@@ -566,7 +566,6 @@ class PatenTrackApi {
   } 
 
   static getCustomerTransactions(type, companies, tabs, customers, lawfirm) { 
-    console.log('TRansactionssss')
     return axios.get(`${base_new_api_url}/customers/${type}/transactions?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&lawfirm=${lawfirm}`, getHeader())
   } 
 
@@ -816,7 +815,6 @@ class PatenTrackApi {
   static cancelTimelineActivityRequest() { 
     if (cancelTimelineActivity !== undefined && typeof cancelTimelineActivity === 'function') { 
       try {
-        console.log('Cancelling timeline old request')
         throw cancelTimelineActivity('Cancel timeline request')
       } catch (e){
         console.log('cancelRequest->', e)

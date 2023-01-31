@@ -390,7 +390,7 @@ const ActionMenu = (props) => {
      */
 
     const onMaintainenceFeeFile = useCallback(async () => {  
-        console.log('Maintainence Fee File')
+        
         if(props.dashboardScreen){
             props.setActivityTimeline()
         }
@@ -419,7 +419,7 @@ const ActionMenu = (props) => {
                             formData.append('user_account',  profileInfo.email)
                         
                             const { data } = await PatenTrackApi.createMaintainenceFeeFile( formData )
-                            console.log("data", data)
+                            
                             if( data != null && data != undefined && data.webViewLink != '') {
                                 /**
                                  * Open USPTO Maintainence Fee window
@@ -435,7 +435,7 @@ const ActionMenu = (props) => {
                 }
             } else {
                 alert("Please first login with google account")
-                console.log("Google login popup")
+                
                 openGoogleWindow()
             }
         } else {

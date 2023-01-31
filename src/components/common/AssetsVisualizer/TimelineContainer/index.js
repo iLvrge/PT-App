@@ -633,10 +633,8 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
         start = new Date(convertedItems[99].start)
       } else {
         start = new moment(start).subtract(3, 'year') 
-      }
-      console.log('end', end)
-      if(convertedItems.length > 0 && (selectedCategory != 'late_recording' && selectedCategory != 'incorrect_recording' && selectedCategory != 'top_lenders' && selectedCategory != 'collaterlized')) {
-        console.log('ad', selectedCategory)
+      } 
+      if(convertedItems.length > 0 && (selectedCategory != 'late_recording' && selectedCategory != 'incorrect_recording' && selectedCategory != 'top_lenders' && selectedCategory != 'collaterlized')) { 
         end = new moment(end).add(1, 'year')
       } else {
         end = new moment(end).add(3, 'year')
@@ -646,8 +644,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       items.current.add(convertedItems)  
     }    
     redrawTimeline()   
-    if(timelineRawData.length > 0 || previousLoad === false) { 
-      console.log('end', end.format('YYYY-MM-DD'))
+    if(timelineRawData.length > 0 || previousLoad === false) {  
       timelineRef.current.setOptions({ 
         ...options, 
         start, 

@@ -89,52 +89,51 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
         entry = false
       }
     }  
-    if(entry === true) {
-      return (
-        <Select
-          labelId='dropdown-open-select-label'
-          id='dropdown-open-select'
-          IconComponent={(props) => (
-            dropdownOpen ? <ExpandLessIcon {...props} /> : <ChevronRightIcon {...props}/>
-          )}
-          open={ dropdownOpen && item.id == dropdownValue.id}
-          MenuProps={{
-            anchorOrigin: {
-              vertical: "bottom",
-              horizontal: "left"
-            },
-            transformOrigin: {
-              vertical: "top",
-              horizontal: "left"
-            },
-            getContentAnchorEl: null
-          }}
-          onClose={handleDropdownClose}
-          onOpen={() => handleDropdownOpen(item)}  
-          onClick={(event) =>  onHandleDropDown(event, item) }
-          value={''}
-        >
-          {
-            typeof parent == 'undefined' 
-            ?
-              <MenuItem key={-99} value={-99}> 
-                <ListItemText className={'heading'}>
-                  Move outside this group
-                </ListItemText> 
-              </MenuItem>
-            :
-              ''
-          }
-          {
-            groups.length > 0 
-            ?
-              <GetChildItems list={groups}/>
-            :
-              ''
-          } 
-        </Select> 
-      )
-    }
+    if(entry === false) return ''
+    return (
+      <Select
+        labelId='dropdown-open-select-label'
+        id='dropdown-open-select'
+        IconComponent={(props) => (
+          dropdownOpen ? <ExpandLessIcon {...props} /> : <ChevronRightIcon {...props}/>
+        )}
+        open={ dropdownOpen && item.id == dropdownValue.id}
+        MenuProps={{
+          anchorOrigin: {
+            vertical: "bottom",
+            horizontal: "left"
+          },
+          transformOrigin: {
+            vertical: "top",
+            horizontal: "left"
+          },
+          getContentAnchorEl: null
+        }}
+        onClose={handleDropdownClose}
+        onOpen={() => handleDropdownOpen(item)}  
+        onClick={(event) =>  onHandleDropDown(event, item) }
+        value={''}
+      >
+        {
+          typeof parent == 'undefined' 
+          ?
+            <MenuItem key={-99} value={-99}> 
+              <ListItemText className={'heading'}>
+                Move outside this group
+              </ListItemText> 
+            </MenuItem>
+          :
+            ''
+        }
+        {
+          groups.length > 0 
+          ?
+            <GetChildItems list={groups}/>
+          :
+            ''
+        } 
+      </Select> 
+    )
   }
 
   const GetChildItems = ({list}) => { 

@@ -13,8 +13,7 @@ const ItemData = ({ data }) => {
     useEffect(() => {
         if(Object.keys(data).length === 0) return setItemData({})
 
-        const getItemDataFunction = () => {
-            console.log('itemData', data) 
+        const getItemDataFunction = () => { 
             setItemData(data)
         }
         getItemDataFunction()

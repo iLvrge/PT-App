@@ -12,8 +12,7 @@ function Reset(props) {
   const [ message, setMessage ] = useState('')
   
   
-  const onUpdatePassword = () => {
-    console.log('UPDATE PASSWORD')
+  const onUpdatePassword = () => { 
     setNotMatched( false )
     if(password.length < 8 || confirm_password.length < 8){
         setNotMatched( true )
@@ -21,8 +20,7 @@ function Reset(props) {
     } else if(password !== confirm_password){
         setNotMatched( true )
         setMessage('Password and Confirm password not matched')
-    } else {
-        console.log('Sending request')
+    } else { 
         props.passwordReset({
             code: props.code,
             password: password,

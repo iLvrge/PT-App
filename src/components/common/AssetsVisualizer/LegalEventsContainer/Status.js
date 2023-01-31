@@ -689,8 +689,7 @@ useEffect(() => {
             end = new moment(end)
           } 
         }        
-      })
-      console.log("Status End Date", end.format('YYYY-MM-DD'))
+      }) 
       start = new moment(min).subtract(3, 'year').format('YYYY-MM-DD')
       end = new moment(end).add(4, 'year').format('YYYY-MM-DD')
       min = start

@@ -127,8 +127,7 @@ const SankeyChart = (props) => {
 
     const handleSelection = useCallback(async(items, type, event) => {
         let oldItems = type == 2 ? [...assignorRawData] : [...assigneeRawData]
-        const filter = oldItems.filter( row => row.name === items[0].name)
-        console.log('handleSelection', filter, event)
+        const filter = oldItems.filter( row => row.name === items[0].name) 
         if(filter.length > 0) {
             if(props.type == 'filled') {        
                 const {data} = await PatenTrackApi.findInventor(filter[0].id)

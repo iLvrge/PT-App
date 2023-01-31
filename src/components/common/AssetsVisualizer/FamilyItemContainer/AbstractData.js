@@ -16,7 +16,6 @@ const AbstractData = ({ data, number }) => {
 
 
     useEffect(() => {
-        console.log("AbstractData", data, familyDataRetrieved)
         if(familyDataRetrieved === true) {
             if(data == null || data.toString().trim() == '') {                
                 getAbstractData()

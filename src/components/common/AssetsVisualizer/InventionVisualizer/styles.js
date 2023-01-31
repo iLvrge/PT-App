@@ -125,7 +125,8 @@ export default makeStyles(theme => ({
         alignItems: 'center',
         fontSize: 16,
         /* borderTop: `1px solid ${theme.palette.divider} !important`, */
-        overflow: 'hidden'
+        overflow: 'hidden',
+        width: '100%'
     },
     loadingIndicator: {
         position: 'absolute',
@@ -136,6 +137,7 @@ export default makeStyles(theme => ({
         position: 'absolute',
         top: -2,
         right: 0,
+        zIndex: 99999
     },
     fullscreenChartsModal: {
         display: 'flex',

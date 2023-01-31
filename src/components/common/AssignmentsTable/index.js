@@ -465,8 +465,7 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
             : assetTypesCompaniesSelected;
       if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
         if(assignmentList.length === 0) {
-          if (!ignore){
-            console.log("TRANSActionsss loading")
+          if (!ignore){ 
             dispatch(
               getCustomerTransactions(
                 selectedCategory == '' ? '' : selectedCategory, 
