@@ -972,8 +972,7 @@ export const setSelectAssignmentCustomers = (data) => {
   }
 }
 
-export const setSelectAssignmentCustomerName = (name) => {
-  console.log('setSelectAssignmentCustomerName', name)
+export const setSelectAssignmentCustomerName = (name) => { 
   return {
     type: types.SET_ASSET_TYPES_COMPANIES_SELECT_NAME,
     name
@@ -1728,7 +1727,7 @@ export const getAssetDetails = (applicationNumber, patentNumber) => {
         dispatch( setAssetDetails( { status: status.data } ) )
       }
     } catch (err) {
-      console.log('counterError ptab', err)
+      console.log('counterError status', err)
     }
 
     /* const litigation = await PatenTrackApi.getLitigationCounter( asset )    

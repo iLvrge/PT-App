@@ -52,10 +52,12 @@ console.log(assetData)
             setBoxData(data)
           }
         } else {
-          const { data } = await PatenTrackApi.getConnectionData(props.connectionBoxData.popuptop)
-          if(typeof data.popup != 'undefined' ){
-            setAssetData(data)
-            setBoxData(data)
+          if(typeof props.connectionBoxData != 'undefined' && (typeof props.connectionBoxData.popuptop != 'undefined' ||  (typeof props.connectionBoxData.popup != 'undefined' && props.connectionBoxData.popup.length > 0))) {
+            const { data } = await PatenTrackApi.getConnectionData(typeof props.connectionBoxData.popuptop != 'undefined' ? props.connectionBoxData.popuptop : props.connectionBoxData.popup[0])
+            if(typeof data.popup != 'undefined' ){
+              setAssetData(data)
+              setBoxData(data)
+            }
           }
         }
       })();

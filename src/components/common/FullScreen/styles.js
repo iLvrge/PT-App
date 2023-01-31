@@ -14,6 +14,7 @@ export default makeStyles(theme => ({
         position: 'absolute',
         top: 9,
         right: 0,
+        zIndex: 99999
     },
     fullscreenChartsModal: {
         display: 'flex',

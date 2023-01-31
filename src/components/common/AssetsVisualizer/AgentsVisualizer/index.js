@@ -64,6 +64,10 @@ const AgentsVisualizer = (props) => {
                 fontName: 'Roboto'
             }
         },
+        animation:{
+            duration: 1000,
+            easing: 'out',
+        },
         backgroundColor: 'transparent',
         chartArea: {
             width: '67%',
@@ -198,7 +202,6 @@ const AgentsVisualizer = (props) => {
 
     const callChartData = async(list, totalRecords) => {
         if(line_chart_data[props.type].loading === false) {
-            console.log("SEND REUQEST")
             dispatch(setLineChartRequest(props.type, true))
             setAssetRequest(false)
             setLoading(true)

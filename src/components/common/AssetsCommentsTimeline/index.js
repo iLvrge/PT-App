@@ -56,7 +56,8 @@ import {
   setAddressQueueDisplay,
   getNameQueue,
   setNameQueueDisplay,
-  setChannelID
+  setChannelID,
+  setSocialMediaConnectPopup
 } from '../../../actions/patentTrackActions2'
 
 import {
@@ -331,8 +332,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
       if( findIndex !== -1) {
         channelID = slack_channel_list[findIndex].id
       }
-    }
-    console.log("channelID", channelID)
+    } 
     return channelID
   }, [ slack_channel_list ])
 
@@ -828,8 +828,12 @@ const handleDriveModalClose = (event) => {
   }
 
   const handleFocus = useCallback((range, source, editor) => {
-
     const getSlackUser = getTokenStorage( 'slack_auth_token_info' ), googleToken = getTokenStorage( 'google_auth_token_info' );
+    
+    if(!getSlackUser || getSlackUser == '' || getSlackUser == null){
+      dispatch(setSocialMediaConnectPopup(true))
+    }
+
     if(getSlackUser &&  getSlackUser != '' &&  (selectedAssetsPatents.length > 0 || selectedAssetsTransactions.length > 0 || (dashboardScreen === true && mainCompaniesSelected.length > 0))) {
       editorContainerRef.current.querySelector('.editor').classList.add('focus')
     }    

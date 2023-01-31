@@ -3,7 +3,7 @@ import { BlurLinear } from '@mui/icons-material'
 
 export default {
     auth_token: null,
-    socialMediaConnectPopup: true,
+    socialMediaConnectPopup: false,
     familyChartVisiblity: 'hidden',
     switch_button_assets: 0,
     search_string: null,

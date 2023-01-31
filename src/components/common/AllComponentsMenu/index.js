@@ -71,14 +71,12 @@ const AllComponentsMenu = ({onClick}) => {
         }
     }, [callByAuthLogin, google_auth_token, google_profile])
 
-    const getSheetNames = async(gToken, gAccount) => {
-        console.log("Sheetnames", gToken, gAccount)
+    const getSheetNames = async(gToken, gAccount) => { 
         if(gToken != '' && gAccount != '') {
             const form = new FormData()
             form.append('access_token', gToken)
             form.append('user_account', gAccount)  
-            const { data } = await PatenTrackApi.getSheetDetails(form)
-            console.log('data', data)
+            const { data } = await PatenTrackApi.getSheetDetails(form) 
             if(data !== null && data.length > 0) {
                 let items = [...menus]
                 if(data.length == 3) {

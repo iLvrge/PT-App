@@ -255,8 +255,8 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
     const handleCloseFullscreen = () => {
         setIsFullscreenOpen(false)
     }
- 
-    console.log('SelecteddTab', selectedTab, activeTab)
+  
+    console.log('selectedCategory', selectedCategory, lifeSpanTabs, selectedTab, selectedRow)
     
     return (
         <Paper className={classes.root} square>  

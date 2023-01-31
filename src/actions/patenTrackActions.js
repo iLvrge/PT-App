@@ -380,8 +380,7 @@ export const allAssetsSurchargeLegalEvents = (companies) => {
     dispatch(setLegalDataEventRetrieved(true))
     return PatenTrackApi
       .allAssetsSurchargeLegalEvents(companies)
-      .then(res => {        
-        console.log('allAssetsSurchargeLegalEvents', res.data)
+      .then(res => {         
         dispatch(setLegalDataEventRetrieved(false))
         dispatch(setAssetLegalEvents(res.data))
       }) 
@@ -889,9 +888,6 @@ export const addCompany = (data) => {
     return PatenTrackApi
       .addCompany(data)
       .then(res => {        
-        if(typeof res == 'object') {
-          console.log(res.data)          
-        }
         dispatch(getCompanies())
         /* dispatch(getTimeLine(0, true))
         dispatch(getCustomers('employee', true)) */

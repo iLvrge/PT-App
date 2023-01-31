@@ -192,6 +192,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         xLabel: 'Filling',
         yLabel: 'Technologies',
         zLabel: 'Assets',
+        animationAutoStart: true,
         tooltip: function (point) {
             // parameter point contains properties x, y, z, and data
             // data is the original object passed to the point constructor
@@ -313,7 +314,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     tabName = 'Abandoned'
                     break; 
                 case 'restore_ownership':
-                    tabName = 'Chain-of-Title'
+                    tabName = 'Title'
                     break; 
                 case 'unnecessary_patents':
                     tabName = 'To Divest'

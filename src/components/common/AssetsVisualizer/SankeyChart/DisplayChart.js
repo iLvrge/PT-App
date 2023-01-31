@@ -10,6 +10,10 @@ const DisplayChart = (props) => {
     const [tooltip, setTooltip] = useState(typeof props.tooltip !== 'undefined' && props.tooltip === true ? {isHtml: true} : {})
     const [option, setOption] = useState({
         width: '100%',
+        animation:{
+            duration: 1000,
+            easing: 'out',
+        },
         sankey: {
             link: { color: { fill: "#1565C0" } },
             node: {
@@ -48,7 +52,7 @@ const DisplayChart = (props) => {
         setHeight(height)
     }, [props.data])
 
-    
+
     return (
         <React.Fragment>
             {
@@ -70,7 +74,7 @@ const DisplayChart = (props) => {
                                         const chart = chartWrapper.getChart();
                                         const selection = chart.getSelection();
                                         if(selection.length > 0) {
-                                            props.onSelect(selection, props.type)
+                                            props.onSelect(selection, props.type, e)
                                         }
                                     });
                                 }

@@ -411,8 +411,7 @@ const Repository = () => {
                         formResponse = await PatenTrackApi.deleteTemplateFromLayout(JSON.stringify(selectItems), row.id, google_profile.email)
                     }
     
-                    if(formResponse) {
-                        console.log("formResponse", formResponse)
+                    if(formResponse) { 
                     } 
                 }  else {
                     alert('Please select layout first.')

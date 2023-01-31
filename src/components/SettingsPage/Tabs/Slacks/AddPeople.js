@@ -40,8 +40,7 @@ function AddPeople(props) {
                 alert('Please select a company')
             }
         }             
-    };
-    console.log('props', props)
+    }; 
     const handleClickOpen = () => {
         setOpenDialog(true);
     };
@@ -50,8 +49,7 @@ function AddPeople(props) {
         setOpenDialog(false);
     };
 
-    const handleInputChange = (event) => {
-        console.log('event.value', event, event.target.value)
+    const handleInputChange = (event) => { 
         setInputText(event.target.value)
     }
     if(props.rows.length == 0) return null

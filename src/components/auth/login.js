@@ -22,11 +22,10 @@ function Login(props) {
       })
   }
 
-  const onReset = () => {
-    console.log('RESET')
+  const onReset = () => { 
     props.forget({
       username: forgetUsername
-    }).catch(err => {
+    }).catch(err => { 
       setError(err)
     })
   }

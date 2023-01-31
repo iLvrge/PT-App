@@ -167,8 +167,7 @@ const Acknowledgements = () => {
        * this call when Timeline rangechanged
        */
     
-    const onRangeChanged = useCallback(_debounce(async(properties) => {
-        console.log('onRangeChanged', properties) 
+    const onRangeChanged = useCallback(_debounce(async(properties) => { 
         /* items.current = new DataSet()
         items.current.add(timelineItems)
         timelineRef.current.setItems(items.current)  */
@@ -177,8 +176,7 @@ const Acknowledgements = () => {
             if(filter.length == 0) {
               filter =  timelineItems.filter(row => new Date(row.start) > new Date(properties.end) && new Date(properties.end) <= new Date() )
             }
-            if(filter.length == 0) {
-                console.log(timelineItems)
+            if(filter.length == 0) { 
                 setScrollNewRequest(true)
                 //await retrieveCitedData(moment(properties.start).format('YYYY-MM-DD'), moment(properties.end).format('YYYY-MM-DD'))  
             } 
