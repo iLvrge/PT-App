@@ -206,7 +206,7 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
                 } else {
                     setData([])
                 } */
-                if(jurisdiction_request === false && selectedCompanies.length > 0) {
+                if(jurisdiction_request === false && (selectedCompanies.length > 0 ||  (process.env.REACT_APP_ENVIROMENT_MODE != 'PRO' && list.length > 0))) {
                     dispatch(setJurisdictionRequest(true))
                     callChartData(list, totalRecords)
                 }

@@ -126,8 +126,8 @@ const AgentsVisualizer = (props) => {
         const getAssetsForEachCountry = async() => {
             try {
                 if(line_chart_data[props.type].loading === false) { 
-                    if(selectedCompanies.length > 0) { 
-                        callChartData([], 0)
+                    if(selectedCompanies.length > 0 || (process.env.REACT_APP_ENVIROMENT_MODE != 'PRO' && assetsList.length > 0)) { 
+                        callChartData(assetsList, 0)
                     }
                 } 
             } catch(err) {
