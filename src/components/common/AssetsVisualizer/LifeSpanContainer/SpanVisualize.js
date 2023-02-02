@@ -121,7 +121,7 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
                 }
             }
         }
-        console.log('opt', opt)
+        /* console.log('opt', opt) */
         /* opt.vAxis.gridlines.color = isDarkTheme ? themeMode.dark.palette.divider : themeMode.light.palette.divider */
         setOption(opt)
     }, [isDarkTheme])
