@@ -1,6 +1,7 @@
 import *as types from './actionTypes'
 import PatenTrackApi from '../api/patenTrack'
 import { toggleFamilyMode } from './uiActions'
+import { TramRounded } from '@mui/icons-material'
 
 export const setProfile = (data) => {
   return {
@@ -319,12 +320,12 @@ export const fetchMoreFixItItems = (currentTab, from, companyName) => {
 
 export const assetFamilySingle = (applicationNumber) => { 
   return dispatch => {
-    dispatch(setFamilyItemDataEventRetrieved(false))
+    dispatch(setFamilyItemDataEventRetrieved(true))
     PatenTrackApi.cancelAssetFamilySingleRequest()
     return PatenTrackApi
       .assetFamilySingle(applicationNumber)
       .then(res => {
-        dispatch(setFamilyItemDataEventRetrieved(true))
+        dispatch(setFamilyItemDataEventRetrieved(false))
         dispatch(toggleFamilyMode(true))
         dispatch(setFamilyItemDisplay(res.data))
       }) 
@@ -337,13 +338,13 @@ export const assetFamilySingle = (applicationNumber) => {
 
 export const assetFamily = (applicationNumber) => { 
   return dispatch => {
-    dispatch(setFamilyItemDataEventRetrieved(false))
+    dispatch(setFamilyItemDataEventRetrieved(true))
     PatenTrackApi.cancelAssetFamilyRequest()
     return PatenTrackApi
       .assetFamily(applicationNumber)
       .then(res => {
         dispatch(toggleFamilyMode(true))
-        dispatch(setFamilyItemDataEventRetrieved(true))
+        dispatch(setFamilyItemDataEventRetrieved(false))
         dispatch(setAssetFamily(res.data))
       }) 
       .catch(err => {

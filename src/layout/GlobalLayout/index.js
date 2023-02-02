@@ -1126,7 +1126,7 @@ const GlobalLayout = (props) => {
     }, [ history ])
 
     const handleAlertPop = () => {
-        alert('Message....')
+        alert('This is a shared view, the function you selected works in the main product.')
     }    
 
     const handleResetScreen = (type, event) => {

@@ -13,6 +13,11 @@ const arrayToObjectByKey = (array, key) =>
 
 const patenTrackReducer = (state = initialState.dashboard, action) => { 
   switch (action.type) {
+    case types.SET_FAMILY_REQUEST: 
+      return { 
+        ...state, 
+        family_request: action.flag 
+      }
     case types.SET_ABANDONED_YEAR_REQUEST: 
       return { 
         ...state, 

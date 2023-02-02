@@ -494,12 +494,21 @@ const TimelineChart = (props) => {
             return c
         })
         Promise.all(promise) 
-        start = new moment(start).subtract(20, 'months') 
-        end = new moment(end).add(20, 'months')
-        items.current.add(convertedItems)   
+        if(convertedItems.length > 100) {
+            start = new Date(convertedItems[99].start)
+        } else {
+            start = new moment(start).subtract(3, 'year') 
+        } 
+        end = new moment(end).add(3, 'year')
+        items.current.add(convertedItems) 
+        timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1400-01-01')), max: new moment(new Date('2500-01-01'))})  
+    } else {
+        start = new moment().subtract(1, 'year')  
+        end = new moment().add(1, 'year')  
+        timelineRef.current.setOptions({ ...options, start, end, min: start, max: end})
     }
     
-    timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1400-01-01')), max: new moment(new Date('2500-01-01'))})
+    
     timelineRef.current.setItems(items.current)  
     return (() => {}) 
     }, [ timelineRawData ])

@@ -84,6 +84,7 @@ const FamilyContainer = ({ family, onClose }) => {
     const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(true)
     
     const selectedAsset = useSelector(state => state.patenTrack2.selectedAssetsPatents)
+    const familyDataRetrieved = useSelector(state => state.patenTrack.familyDataRetrieved)
     
     const onSelect = useCallback((properties) => {        
         if (properties.items.length > 0)  {            
@@ -191,7 +192,12 @@ const FamilyContainer = ({ family, onClose }) => {
                     ref={timelineContainerRef}
                     className={classes.timeline}
                 />
-                {isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> } 
+                {/* {isLoadingTimelineRawData || familyDataRetrieved && <CircularProgress className={classes.loader} /> }  */}
+                {(isLoadingTimelineRawData || familyDataRetrieved ) && (
+                    <div className={classes.blinkText}>
+                        Live data is being retrieved.
+                    </div>
+                )}
             </div>
         </Paper>
     )

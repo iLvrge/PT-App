@@ -25,6 +25,7 @@ export default {
     assetTableScrollPosition: 0,
     companyTableScrollPosition: 0,
     asset_details:{asset: null, family: 0, claims: 0, figures: 0, fees: 0, citations: 0, ptab: 0, litigation: 0, status: 0},
+    family_request: false,
     ptabAssets: [],
     addressQueuesDisplay: false,
     addressQueuesLoading: false,

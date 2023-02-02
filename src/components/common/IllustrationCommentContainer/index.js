@@ -456,9 +456,18 @@ const IllustrationCommentContainer = ({
                             <LoadLinkAssets type={link_assets_sheet_type.type} asset={link_assets_sheet_type.asset}  size={size}/>
                         :
                         (selectedCategory ==  'late_recording' || selectedCategory =='incorrect_recording') && selectedAssetAssignments.length > 0 ? 
-                            <ConnectionBox 
-                                display={"false"} 
-                                assets={assetIllustration}
+                            <IllustrationContainer 
+                                isFullscreenOpen={isFullscreenOpen} 
+                                asset={assetIllustration} 
+                                setIllustrationRecord={illustrationRecord} 
+                                chartsBar={chartsBar}
+                                analyticsBar={analyticsBar}
+                                chartsBarToggle={chartsBarToggle}
+                                checkChartAnalytics={checkChartAnalytics}
+                                setAnalyticsBar={setAnalyticsBar}
+                                setChartBar={setChartBar}
+                                fullScreen={handleClickOpenFullscreen}
+                                gap={gap}
                             />
                         :
                         !isFullscreenOpen && 

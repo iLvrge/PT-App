@@ -252,7 +252,12 @@ const Citation = ({ number, citationRawData, updateCitationRawData }) => {
                     ref={timelineContainerRef}
                     className={classes.timelineCitation}
                 />
-                { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> } 
+                {/* { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> }  */}
+                {isLoadingTimelineRawData  && (
+                    <div className={classes.blinkText}>
+                        Live data is being retrieved.
+                    </div>
+                )}
         </Paper>
     )
 }
