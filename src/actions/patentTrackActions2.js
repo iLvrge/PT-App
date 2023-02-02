@@ -1884,3 +1884,10 @@ export const setAbandonedMaintainenceData = (data) => {
     data
   }
 }
+
+export const setFamilyRequest = (flag) => {  
+  return {
+    type: types.SET_FAMILY_REQUEST,  
+    flag
+  }
+}

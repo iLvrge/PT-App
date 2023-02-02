@@ -275,5 +275,11 @@ export default makeStyles(theme => ({
     animationDuration: '1s',
     animationTimingFunction: 'linear',
     animationIterationCount: 'infinite',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    flex: 1,
+    height: '100%'
   } 
 }))

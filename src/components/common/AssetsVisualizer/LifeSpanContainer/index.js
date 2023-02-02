@@ -254,9 +254,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
     
     const handleCloseFullscreen = () => {
         setIsFullscreenOpen(false)
-    }
-  
-    console.log('selectedCategory', selectedCategory, lifeSpanTabs, selectedTab, selectedRow)
+    } 
     
     return (
         <Paper className={classes.root} square>  
@@ -324,19 +322,10 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                                             chartBar={chartBar} 
                                             analyticsBar={analyticsBar}
                                         />
-                                    :
-                                        <IllustrationContainer 
-                                            isFullscreenOpen={isFullscreenOpen} 
-                                            asset={assetIllustration} 
-                                            setIllustrationRecord={setIllustrationRecord} 
-                                            chartsBar={chartBar}
-                                            analyticsBar={analyticsBar}
-                                            chartsBarToggle={chartsBarToggle}
-                                            checkChartAnalytics={checkChartAnalytics}
-                                            setAnalyticsBar={setAnalyticsBar}
-                                            setChartBar={setChartBar}
-                                            fullScreen={handleClickOpenFullscreen}
-                                            gap={gap}
+                                    :   
+                                        <ConnectionBox 
+                                            display={"false"} 
+                                            assets={assetIllustration}
                                         />
                                 :
                                 selectedAssetsTransactionLifeSpan.length > 0 && (
