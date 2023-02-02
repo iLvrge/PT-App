@@ -198,7 +198,7 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
         </TableCell> */}
 
         <TableCell 
-          className={classes.padLR0}  
+          className={clsx(classes.padLR0, row.children.length > 0 ? classes.groupHeading : '')}  
           {...(row.children.length > 0 ? {onClick: () => editColumn(row)} : {})}
         >
           {
@@ -219,7 +219,7 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
                   ? row.original_name
                   : row.representative_name
                 }
-                {row.children.length > 0 ? `(${row.children.length})` : ''}
+                {row.children.length > 0 ? ` (${row.children.length})` : ''}
               </React.Fragment> 
           }
           

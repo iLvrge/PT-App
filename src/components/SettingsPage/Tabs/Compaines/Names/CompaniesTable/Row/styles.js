@@ -28,4 +28,8 @@ export default makeStyles(() => ({
     paddingLeft: 0,
     padingRight: 0
   },
+  groupHeading: {
+    fontWeight: 500,
+    fontSize: '1.1rem'
+  }
 }))

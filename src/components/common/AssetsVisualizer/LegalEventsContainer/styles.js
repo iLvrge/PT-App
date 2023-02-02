@@ -657,5 +657,23 @@ export default makeStyles(theme => ({
     '& .MuiBadge-badge':{
       color: '#E60000'
     }
-  }
+  },
+  '@keyframes blinker': {
+    from: { opacity: 1 },
+    to: { opacity: 0 },
+  },
+  blinkText: { 
+    animationName: '$blinker',
+    animationDuration: '1s',
+    animationTimingFunction: 'linear',
+    animationIterationCount: 'infinite',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    flex: 1,
+    height: '100%' ,
+    position: 'absolute',
+    width: '100%'
+  } 
 }))

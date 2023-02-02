@@ -103,7 +103,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             disableSort: true,
             showOnCondition: '0',
             disableColumnKey:'type',
-            checkboxSelect: true
+            checkboxSelect: true,
+            group: true
         },
         {
             width: 170,  
