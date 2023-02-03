@@ -76,7 +76,7 @@ const SocialMediaConnect = () => {
                             }
                         }
                     }
-                    dispatch(setSocialMediaConnectPopup(true))
+                    dispatch(setSocialMediaConnectPopup(false))
                 }
             } else {
                 checkWindowClosedStatus(windowRef)

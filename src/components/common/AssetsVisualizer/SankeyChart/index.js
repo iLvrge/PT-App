@@ -26,6 +26,12 @@ const SankeyChart = (props) => {
     const [assignorRawData, setAssignorRawData] = useState([]);    
     const selectedCategory = useSelector(state =>  state.patenTrack2.selectedCategory )
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
+    const assetsList = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list) //Assets List
+    const assetsTotal = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.total_records) //Assets records
+    const maintainenceAssetsList = useSelector( state => state.patenTrack2.maintainenceAssetsList.list )
+    const maintainenceAssetsTotal = useSelector(state => state.patenTrack2.maintainenceAssetsList.total_records) //Assets records
+    const selectedMaintainencePatents = useSelector( state => state.patenTrack2.selectedMaintainencePatents )
+    const assetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected) //Assets Selected
 
     const fullScreenItems = [
         {
@@ -49,6 +55,50 @@ const SankeyChart = (props) => {
                 setAssignorRawData([])
                 const formData = new FormData()
                 formData.append('selectedCompanies', JSON.stringify(selectedCompanies)); 
+                if(process.env.REACT_APP_ENVIROMENT_MODE != 'PRO') {
+                    const list = [];
+                    let totalRecords = 0;
+            
+                    if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {   
+                        if( assetsSelected.length > 0 ) {
+                            const promise = assetsSelected.map(asset => {
+                                const findIndex = assetsList.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset.toString() )
+                                if( findIndex !== -1 ) {
+                                    if( assetsList[findIndex].appno_doc_num != '' ) {
+                                        list.push(assetsList[findIndex].appno_doc_num.toString())
+                                    }
+                                }
+                            })
+                            await Promise.all(promise)
+                            totalRecords = list.length
+                        } else {
+                            const promise = selectedMaintainencePatents.map(asset => {
+                                const findIndex = maintainenceAssetsList.findIndex( row => row.appno_doc_num.toString() == asset[1].toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset[0].toString() )
+                                if( findIndex !== -1 ) {
+                                    if( maintainenceAssetsList[findIndex].appno_doc_num != '' ) {
+                                        list.push(maintainenceAssetsList[findIndex].appno_doc_num.toString())
+                                    }
+                                }
+                            })
+                            await Promise.all(promise)
+                            totalRecords = list.length
+                        }                
+                    } else {
+                        if( assetsList.length > 0 || maintainenceAssetsList.length > 0 ) {
+                            if( assetsList.length > 0 ) {
+                                const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
+                                await Promise.all(promise)
+                                totalRecords = assetsTotal
+                            } else if ( maintainenceAssetsList.length > 0 ) {
+                                const promise = maintainenceAssetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
+                                await Promise.all(promise)
+                                totalRecords = maintainenceAssetsTotal
+                            }
+                        }
+                    }
+                    formData.append('list', JSON.stringify(list)); 
+                    formData.append('total', totalRecords); 
+                }
                 if(typeof props.layout != 'undefined' && props.layout !== null && props.layout === true) { 
                     formData.append('layout', selectedCategory);  
                 }

@@ -265,6 +265,7 @@ class PatentLink extends React.Component {
       dy0,
       dy1;
     let boxOffset = { x1: 0, y1: 0, x2: 0, y2: 0 };
+ 
 
     if (this.props.data.terminals[1].includes('up')) {
       range = 0.2;
@@ -274,7 +275,7 @@ class PatentLink extends React.Component {
       if (
         this.props.data.terminals[0] == 'right' ||
         this.props.data.terminals[0] == 'left'
-      ) {
+      ) { 
         this.props.data.y1 = this.props.data.y1;
         boxOffset.y1 =
           this.remapFloat(
@@ -284,7 +285,7 @@ class PatentLink extends React.Component {
             -range,
             range,
           ) * this.node.height;
-      } else {
+      } else { 
         this.props.data.x1 = this.props.data.x1;
         boxOffset.x1 =
           this.remapFloat(
@@ -416,17 +417,25 @@ class PatentLink extends React.Component {
           this.props.data.y1 * (this.node.height + this.node.gap.y) +
           this.node.height / 2;
       }
-    } else {
+    } else { 
       if (
         this.props.data.terminals[0] == 'down' ||
         this.props.data.terminals[0] == 'up'
       ) {
-        this.props.data.terminals[0] == 'up' ? (dy0 = 0) : (dy0 = 1);
-        this.props.data.x1 =
+        this.props.data.terminals[0] == 'up' ? (dy0 = 0) : (dy0 = 1); 
+        if(this.props.data.terminals[0] == 'up') {
+          this.props.data.x1 =
           this.node.leftOffset +
           this.props.data.x1 * (this.node.width + this.node.gap.x) +
           this.node.width / 2 +
           boxOffset.x1;
+        } else {
+          this.props.data.x1 =
+          this.node.leftOffset +
+          this.props.data.x1 * (this.node.width + this.node.gap.x) +
+          this.node.width / 2 ;
+        }
+        
         this.props.data.y1 =
           this.node.topOffset +
           this.props.data.y1 * (this.node.height + this.node.gap.y) +
@@ -538,10 +547,10 @@ class PatentLink extends React.Component {
     return d;
   }
 
-  lerpFloat(a_, b_, t_) {
+  lerpFloat(a_, b_, t_) { 
     return a_ + t_ * (b_ - a_);
   }
-  remapFloat(v_, min0_, max0_, min1_, max1_) {
+  remapFloat(v_, min0_, max0_, min1_, max1_) { 
     return min1_ + ((v_ - min0_) / (max0_ - min0_)) * (max1_ - min1_);
   }
   render() {
