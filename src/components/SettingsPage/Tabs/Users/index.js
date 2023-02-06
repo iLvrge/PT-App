@@ -63,12 +63,10 @@ const Users = () => {
   const COLUMNS = [
     { id: 'first_name', label: 'First Name' },
     { id: 'last_name', label: 'Last Name' },
-    { id: 'slack', label: 'Slack', render: SlackRender },
     { id: 'job_title', label: 'Title' },
     { id: 'email_address', label: 'Email' },
     { id: 'logo', label: 'Profile Pic', render: FileRender, alignCenter: true, width: 150 },
     { id: 'telephone', label: 'Telephone' },
-    { id: 'telephone1', label: 'Telephone2' },
     { id: 'role', label: 'Type' },
   ]
   

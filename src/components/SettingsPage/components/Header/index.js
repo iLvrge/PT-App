@@ -61,7 +61,7 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
             CANCEL
           </Button>
           {
-            typeof selectedType != 'undefined' && selectedType.toLowerCase() == 'companies' && (
+            (typeof selectedType != 'undefined' && selectedType.toLowerCase() == 'companies' || typeof selectedType == 'undefined') && (
               <Button onClick={onConfirmDelete} color="primary" variant={'contained'} autoFocus>
                 OK
               </Button>
