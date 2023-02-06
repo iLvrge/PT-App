@@ -19,9 +19,12 @@ import LawFirms from './Tabs/LawFirms'
 import Grid from '@mui/material/Grid'
 
 
-import { setBreadCrumbs } from  '../../actions/patentTrackActions2' 
-import { setControlModal, setDashboardScreen } from '../../actions/uiActions'
+import { setBreadCrumbs, setBreadCrumbsAndCategory, setCPCRequest, setJurisdictionRequest, setSwitchAssetButton, setTimelineData, setTimelineRequest } from  '../../actions/patentTrackActions2' 
+import { setAssetButton, setControlModal, setDashboardScreen, setTransactionButton, setViewDashboardIntial, updateViewDashboard } from '../../actions/uiActions'
+
+import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar' 
 import NavigationIcon from '../../components/NavigationIcon'
+import { controlList } from '../../utils/controlList'
 
 const TABS = [
   { label: 'Slacks', value: 'slacks', component: Slacks },
@@ -62,6 +65,7 @@ function SettingsPage() {
   const [ openLawfirmsBar, setOpenLawfirmsBar ] = useState(false)
   const [ openSlackBar, setOpenSlackBar ] = useState(false)
   const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
+  const viewDashboard = useSelector(state => state.ui.viewDashboard) 
   const currentTab = useMemo(() => {
     const splittedPathname = location.pathname.split('/')
     return splittedPathname.slice(2).join('/')
@@ -205,17 +209,41 @@ function SettingsPage() {
     history.push('/settings/lawFirms')  
   }
 
-  const handleHomeLink = useCallback(() => {    
+  const handleHomeLink = useCallback(() => {  
+    const oldViewScreen = {
+      ...viewDashboard,  
+      line: false,
+      gauge: process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? true : false,
+      jurisdictions: false,
+      invention: false,
+      sankey: false,
+      kpi: process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? false : true,
+      timeline: false 
+    }
+    resetAllRowSelect(dispatch, resetItemList.resetAll)
+    resetAllRowSelect(dispatch, resetItemList.clearOtherItems)
+    dispatch(updateViewDashboard(oldViewScreen))
+    dispatch(setViewDashboardIntial(false))  
+    dispatch(setDashboardScreen(true)) 
     history.push('/dashboard') 
-    setTimeout(() => {
+    dispatch(setAssetButton(false))
+    dispatch(setTransactionButton(false))
+    dispatch(setJurisdictionRequest(false))
+    dispatch(setCPCRequest(false))
+    dispatch(setTimelineRequest(false))
+    dispatch(setTimelineData([])) 
+    const findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'due_dilligence')
+    if( findIndex !== -1 ) {
+      //hideMenu(event, controlList[findIndex]) 
+      dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))  
+      dispatch(setSwitchAssetButton( 0 ))
+    }
+    /* setTimeout(() => {
       dispatch(
         setBreadCrumbs('')
       )
-      dispatch(setDashboardScreen(true))
-      /* dispatch(
-        setControlModal(true)
-      ) */
-    }, 500) 
+      dispatch(setDashboardScreen(true)) 
+    }, 500)  */
   }, [dispatch])
 
   const topToolBar = [
