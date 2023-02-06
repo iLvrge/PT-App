@@ -231,7 +231,7 @@ const GlobalLayout = (props) => {
     }, [dashboardScreen]) 
 
     useEffect(() => { 
-        if( location.pathname == '/dashboard') { 
+        if( location.pathname == '/dashboard') {  
             handleResetScreen('Dashboard', null)
         }
     }, [location, openCustomerBar])
@@ -1119,10 +1119,14 @@ const GlobalLayout = (props) => {
 
 
     const handleOpenSettings = useCallback((event) => {
-        dispatch(setDashboardScreen(false)) 
-        dispatch(setViewDashboardIntial(false)) 
-        checkChartAnalytics(null, null, false)
-        history.push('/settings/companies/names')
+        if(profile?.user && profile.user?.role && profile.user.role.name != 'Admin') {
+            alert('Available for admin only');
+        } else {
+            dispatch(setDashboardScreen(false)) 
+            dispatch(setViewDashboardIntial(false)) 
+            checkChartAnalytics(null, null, false)
+            history.push('/settings/companies/names')
+        } 
     }, [ history ])
 
     const handleAlertPop = () => {

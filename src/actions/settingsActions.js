@@ -82,8 +82,9 @@ export const updateUser = (user) => async dispatch => {
   const userFormData = _createFormData(user)
   await PatenTrackApi.updateUser(userFormData, user.user_id)
   const { data } = await PatenTrackApi.getUsers() 
+  dispatch(setUsers(data))
   const updatedUserList = data.map((userItem) => userItem.user_id === user.user_id ? user : userItem)
-  dispatch(setUsers(updatedUserList))
+  
 }
 
 export const deleteUser = (id) => async dispatch => {
