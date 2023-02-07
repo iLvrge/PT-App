@@ -1,18 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box } from '@mui/system';
 
 import useStyles from './styles'
 import clsx from 'clsx';
 import { IconButton, Typography } from '@mui/material';
 
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+
 const TitleBar = (props) => {
     const classes = useStyles();
+    const [enabled, setEnabled] = useState(false)
+
+    const onHandleHelpingText = () => {
+        setEnabled(!enabled)
+    }
     return(
-        <Box className={
-            clsx(
-                {[classes.relative]: typeof props.relative !== 'undefined' && props.relative === true ? true : false}
-            ) 
-        }>
+        <Box className={classes.relative}>
             <span 
                 className={
                     clsx(
@@ -23,17 +26,27 @@ const TitleBar = (props) => {
                     ) 
                 }
             >
+                <IconButton
+                    onClick={onHandleHelpingText}
+                    className={classes.btn}
+                >
+                    <HelpOutlineOutlinedIcon/>
+                </IconButton>
                 {
-                    props.typography === true
+                    enabled === true
                     ?
-                        <Typography
-                            variant="body2" 
-                            component="span"
-                        >
-                            {props.title}
-                        </Typography>
+                        props.typography === true
+                        ?
+                            <Typography
+                                variant="body2" 
+                                component="span"
+                            >
+                                {props.title}
+                            </Typography>
+                        :
+                            props.title
                     :
-                        props.title
+                        ''
                 }
                 {
                     typeof props.button != 'undefined' && (

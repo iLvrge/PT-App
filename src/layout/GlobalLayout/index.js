@@ -1119,15 +1119,15 @@ const GlobalLayout = (props) => {
 
 
     const handleOpenSettings = useCallback((event) => {
-        if(profile?.user && profile.user?.role && profile.user.role.name != 'Admin') {
-            alert('Available for admin only');
-        } else {
+        if(profile?.user && profile.user?.role && profile.user.role.name == 'Admin') {
             dispatch(setDashboardScreen(false)) 
             dispatch(setViewDashboardIntial(false)) 
             checkChartAnalytics(null, null, false)
             history.push('/settings/companies/names')
-        } 
-    }, [ history ])
+        } else {
+            alert('Available for admin only'); 
+        }
+    }, [ history, profile ])
 
     const handleAlertPop = () => {
         alert('This is a shared view, the function you selected works in the main product.')

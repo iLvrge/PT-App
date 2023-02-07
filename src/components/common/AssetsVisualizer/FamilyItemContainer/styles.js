@@ -566,6 +566,8 @@ export default makeStyles(theme => ({
     }    
   },
   dropdown: {
-
+    '& .MuiSelect-standard': {
+      paddingBottom: 10
+    }
   }
 }))

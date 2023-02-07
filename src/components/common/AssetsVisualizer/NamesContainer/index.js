@@ -9,6 +9,7 @@ import { Paper, Tab, Tabs } from '@mui/material';
 import { wordCloudOptions } from '../../../../utils/options'; 
 import TitleBar from '../../TitleBar';
 import { warnConsole } from '../../../../utils/hashLocation';
+import { Box } from '@mui/system';
 
 
 const NamesContainer = (props) => {
@@ -127,19 +128,21 @@ const NamesContainer = (props) => {
                     )) 
                 }
             </Tabs> 
-            <TitleBar 
-                title={`Select one of the incorrect names below to see the list of assets that were assigned under it. Select an asset from the list to see the details of the incorrect assignment.`} 
-                enablePadding={true} 
-                underline={false}
-                typography={true} 
-            />   
-            {
-                selectedTab === 0 && namesData.length > 0 && (
-                    <div style={{height: '100%', width: '100%', display: 'flex'}} id='cntNames'>
-                        <DrawCloudChart />
-                    </div>
-                )
-            }
+            <Box  sx={{p: 2}}  style={{display: 'flex', height: '100%', flexDirection: 'column'}}> 
+                <TitleBar 
+                    title={`Select one of the incorrect names below to see the list of assets that were assigned under it. Select an asset from the list to see the details of the incorrect assignment.`} 
+                    enablePadding={false} 
+                    underline={false}
+                    typography={true} 
+                />   
+                {
+                    selectedTab === 0 && namesData.length > 0 && (
+                        <div style={{height: '100%', width: '100%', display: 'flex'}} id='cntNames'>
+                            <DrawCloudChart />
+                        </div>
+                    )
+                }
+            </Box>
         </Paper> 
     )
 }
