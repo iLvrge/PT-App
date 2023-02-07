@@ -4,7 +4,10 @@ export default makeStyles(theme => ({
     heading: {
         fontSize: '1.1rem',
         marginBottom: 5,
-        display: 'block',        
+        display: 'block',   
+        position: 'absolute',
+        zIndex: 9999999,
+        width: '100%'     
     },
     paddingLeft: {
         paddingLeft: 16,
@@ -15,11 +18,16 @@ export default makeStyles(theme => ({
     },
     relative: {
         position: 'relative', 
-        width: '100%'
+        width: '100%',
+        zIndex: 9999999,
     },
     absolute: {
         position: 'absolute',
         width: '100%',
         zIndex: 9999
-    } 
+    },
+    btn: {
+        padding: 4,
+        marginLeft: 6
+    }
 }));  

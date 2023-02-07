@@ -161,7 +161,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                     :
                     label ===  'USPTO'
                     ?
-                        <FormControl sx={{ m: 1, minWidth: 80 }} size="small" className={classes.dropdown}>
+                        <FormControl sx={{ m: 1, minWidth: 80 }} variant="standard"  size="small" className={classes.dropdown}>
                             <InputLabel id="uspto-extra-info-label">USPTO</InputLabel>
                             <Select
                                 labelId="uspto-extra-info-label"
