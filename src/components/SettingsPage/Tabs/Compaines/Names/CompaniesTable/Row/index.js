@@ -89,7 +89,7 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
         entry = false
       }
     }  
-    if(entry === false) return ''
+    if(entry === false || item.status == 0) return ''
     return (
       <Select
         labelId='dropdown-open-select-label'
@@ -154,10 +154,10 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
   return (
     <React.Fragment>
       <TableRow
-        className={clsx({ [classes.expand]: open })}
+        className={clsx({ [classes.expand]: open, [classes.disabled] : row.status == 1 ? false : true})}
         hover
-        onClick={event => onSelect(event, row, 'parent')}
-        selected={isSelected(row.id)}
+        onClick={event => row.status == 1 ? onSelect(event, row, 'parent') : ''}
+        selected={row.status == 1 ? isSelected(row.id) : false}
         role="checkbox"
         tabIndex={-1}
         key={row.id}>
@@ -167,6 +167,7 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
             row.children.length > 0
             ?
               <IconButton
+                disabled = {row.status == 1 ? false : true}
                 onClick={toggleOpen} size="small"
               >
                 {open ? <ExpandMoreIcon /> : <ChevronRightIcon />}
@@ -207,6 +208,7 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
               <input
                 type="text"
                 autoFocus
+                disabled = {row.status == 1 ? false : true}
                 defaultValue={row.representative_name === null
                   ? row.original_name
                   : row.representative_name}
@@ -226,7 +228,7 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
         </TableCell>
 
         <TableCell align={'center'}>
-          {row.counter === null ? row.instances : row.counter}
+          {row.status == 1 ? row.counter === null ? row.instances : row.counter : ''}
         </TableCell>
       </TableRow>
       {
