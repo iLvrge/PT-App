@@ -74,13 +74,13 @@ const UserForm = ({ onChangeField, edited }) => {
       value={edited.telephone || ''}
       onChange={onChangeField('telephone')} />
 
-    <TextField
+    {/* <TextField
       size={'small'}
       variant="outlined"
       color={'secondary'}
       label="Telephone2"
       value={edited.telephone1 || ''}
-      onChange={onChangeField('telephone1')} />
+      onChange={onChangeField('telephone1')} /> */}
 
     <FormControl required variant={'outlined'} color={'secondary'} size={'small'}>
       <InputLabel id="select-role">Role</InputLabel>

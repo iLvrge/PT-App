@@ -66,6 +66,7 @@ function SettingsPage() {
   const [ openSlackBar, setOpenSlackBar ] = useState(false)
   const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
   const viewDashboard = useSelector(state => state.ui.viewDashboard) 
+  const profile = useSelector(store => (store.patenTrack.profile))
   const currentTab = useMemo(() => {
     const splittedPathname = location.pathname.split('/')
     return splittedPathname.slice(2).join('/')
@@ -76,6 +77,12 @@ function SettingsPage() {
   const [ openSubTabs, setOpenSubTabs ] = useState(initialOpenSubTabs ? [ initialOpenSubTabs ] : [])
 
   
+
+  useEffect(() => {
+    if(profile?.user && profile.user?.role && profile.user.role.name != 'Admin') {
+      handleHomeLink()
+    }
+  }, [profile])
 
   useEffect(() => {
     if(dashboardScreen === true) {
