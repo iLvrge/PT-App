@@ -32,7 +32,7 @@ const SankeyChart = (props) => {
     const maintainenceAssetsTotal = useSelector(state => state.patenTrack2.maintainenceAssetsList.total_records) //Assets records
     const selectedMaintainencePatents = useSelector( state => state.patenTrack2.selectedMaintainencePatents )
     const assetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected) //Assets Selected
-
+    const selectedAssetCompanies = useSelector( state => state.patenTrack2.assetTypeCompanies.selected );
     const fullScreenItems = [
         {
           id: 1,
@@ -175,26 +175,44 @@ const SankeyChart = (props) => {
         }
     }, [data, assignorData, props]) 
 
-    const handleSelection = useCallback(async(items, type, event) => {
-        let oldItems = type == 2 ? [...assignorRawData] : [...assigneeRawData]
-        const filter = oldItems.filter( row => row.name === items[0].name) 
-        if(filter.length > 0) {
-            if(props.type == 'filled') {        
-                const {data} = await PatenTrackApi.findInventor(filter[0].id)
-                if(data != null && data?.id && data.id > 0) {
+
+    const handleSelection = useCallback(async(items, chartType, event) => {
+        let oldItems = chartType == 2 ? [...assignorRawData] : [...assigneeRawData] 
+        const oldSelections = [...selectedAssetCompanies]
+        console.log('oldSelections', oldSelections)
+        if(items.length > 0) {
+            const filter = oldItems.filter( row => row.name === items[0].name)   
+            if(filter.length > 0) {
+                if(props.type == 'filled') {        
+                    const {data} = await PatenTrackApi.findInventor(filter[0].id)
                     dispatch(setCPCRequest(false))
-                    dispatch(setCPCData({list:[], group: [], sales: []}))
-                    dispatch(setSelectAssignmentCustomers([data.id]))
                     dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
-                }
-            } else {
-                dispatch(setCPCRequest(false))
-                dispatch(setCPCData({list:[], group: [], sales: []}))
-                dispatch(setSelectAssignmentCustomers([filter[0].id])) 
-                dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
-            } 
+                    dispatch(setCPCData({list:[], group: [], sales: []}))
+                    if(data != null && data?.id && data.id > 0 && !oldSelections.includes(data.id)) {
+                        dispatch(setSelectAssignmentCustomers([data.id]))
+                    } else {
+                        dispatch(setSelectAssignmentCustomers([])) 
+                    }
+                } else {
+                    dispatch(setCPCRequest(false))
+                    dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
+                    dispatch(setCPCData({list:[], group: [], sales: []}))
+                    if(filter[0].id > 0 && !oldSelections.includes(filter[0].id)) {
+                        dispatch(setSelectAssignmentCustomers([filter[0].id]))
+                    } else {
+                        dispatch(setSelectAssignmentCustomers([])) 
+                    } 
+                } 
+            }
+        } else {
+            dispatch(setCPCRequest(false))
+            dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
+            dispatch(setCPCData({list:[], group: [], sales: []}))
+            dispatch(setSelectAssignmentCustomers([])) 
         }
-    }, [assignorRawData, assigneeRawData]) 
+        
+    }, [assignorRawData, assigneeRawData, selectedAssetCompanies])  
+    
     return (
         <Paper {...(typeof props.showTabs == 'undefined' ? {sx: {p: 0, overflow: 'auto'}} : {overflow: 'auto'})}  className={clsx(classes.container, classes.containerTop, 'cntSankeyChart')} square ref={containerRef} >
                  
@@ -224,14 +242,14 @@ const SankeyChart = (props) => {
             <div className={clsx(classes.child, typeof props.standalone != 'undefined' && props.standalone === true ? classes.padding16 : '')} >
             {
                 ( data.length > 0   ||  assignorData.length > 0)  && (
-                    <TitleBar title="Hover over the bars for details. Select one of the colored bars to the right of each name to filter the Assets table accordingly." enablePadding={false} underline={false} typography={true}/>
+                    <TitleBar title={`Hover over the bars for details. Select one of the colored bars to the ${props.type == 'divested' ? 'right' : 'left' } of each name to filter the Assets table accordingly.`} enablePadding={false} underline={false} typography={true}/>
                 )
             }  
             {    
                 selectedCategory == 'acquired' || props.type == 'acquired' || props.type == 'filled'
                 ?
                     loading === false ?  
-                        <DisplayChart data={data} tooltip={true}  type={1} onSelect={handleSelection}/> 
+                        <DisplayChart data={data} tooltip={true}  chartType={1} onSelect={handleSelection}/> 
                     :
                         <Loader />
                     
@@ -243,7 +261,7 @@ const SankeyChart = (props) => {
                 selectedCategory == 'divested' || props.type == 'divested'
                 ?
                     loadingAssignor === false ? 
-                        <DisplayChart data={assignorData} type={2} onSelect={handleSelection}/> 
+                        <DisplayChart data={assignorData} chartType={2} onSelect={handleSelection} {...props}/> 
                     :
                     <Loader />
                 :

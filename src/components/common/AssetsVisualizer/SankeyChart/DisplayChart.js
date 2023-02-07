@@ -7,6 +7,7 @@ import { Chart } from "react-google-charts";
 const DisplayChart = (props) => {
     const CONSTANT_DECREMENT = 106;
     const [height, setHeight] = useState('100%');
+    const [tap, setTap] = useState(1);
     const [tooltip, setTooltip] = useState(typeof props.tooltip !== 'undefined' && props.tooltip === true ? {isHtml: true} : {})
     const [option, setOption] = useState({
         width: '100%',
@@ -52,35 +53,51 @@ const DisplayChart = (props) => {
         setHeight(height)
     }, [props.data])
 
+    useEffect(() => {
+        if(typeof props.chartBar != 'undefined' || typeof props.analyticsBar != 'undefined') {
+            CallChart()
+        }
+    }, [props])
+
+
+    const CallChart = () => {
+        return (
+            <Chart
+                chartType="Sankey"
+                width="100%"
+                height={height}
+                loader={<div>Loading...</div>}
+                data={props.data}
+                options={option}
+                chartEvents={[
+                    {
+                        eventName: "ready",
+                        callback: ({ chartWrapper, google }) => {
+                            const chart = chartWrapper.getChart();
+                            google.visualization.events.addListener(chart, "select", e => {
+                                const chart = chartWrapper.getChart();
+                                const selection = chart.getSelection();
+                                console.log('selection', selection)
+                                if(selection.length > 0) { 
+                                    props.onSelect(selection, props.chartType, e)
+                                } else {
+                                    props.onSelect(selection, props.chartType, e)
+                                }
+                            });
+                        }
+                    }
+                ]}
+            />
+        )
+    }
+
 
     return (
         <React.Fragment>
             {
-                props.data.length > 0
+                props.data.length > 0 && tap > 0
                 ?
-                    <Chart
-                        chartType="Sankey"
-                        width="100%"
-                        height={height}
-                        loader={<div>Loading...</div>}
-                        data={props.data}
-                        options={option}
-                        chartEvents={[
-                            {
-                                eventName: "ready",
-                                callback: ({ chartWrapper, google }) => {
-                                    const chart = chartWrapper.getChart();
-                                    google.visualization.events.addListener(chart, "select", e => {
-                                        const chart = chartWrapper.getChart();
-                                        const selection = chart.getSelection();
-                                        if(selection.length > 0) {
-                                            props.onSelect(selection, props.type, e)
-                                        }
-                                    });
-                                }
-                            }
-                        ]}
-                    />
+                    <CallChart />
                 :
                     ''
             }

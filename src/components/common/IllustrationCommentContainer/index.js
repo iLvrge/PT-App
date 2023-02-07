@@ -344,6 +344,8 @@ const IllustrationCommentContainer = ({
                                     tabText={'Divested'}
                                     fullScreen={true}
                                     standalone={true}
+                                    chartBar={chartsBar} 
+                                    analyticsBar={analyticsBar} 
                                 />
                             :
                             selectedCategory == 'incorrect_names' ?

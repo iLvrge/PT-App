@@ -1,6 +1,6 @@
 import makeStyles from '@mui/styles/makeStyles';
 
-export default makeStyles(() => ({
+export default makeStyles((theme) => ({
   expand: {
     /* backgroundColor: 'rgba(255, 255, 255, 0.08)' */
   },
@@ -31,5 +31,11 @@ export default makeStyles(() => ({
   groupHeading: {
     fontWeight: 500,
     fontSize: '1.1rem'
+  },
+  disabled: {
+    color: theme.palette.mode == 'light' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.3)',
+    '& .MuiTableCell-root':{
+      color: theme.palette.mode == 'light' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.3)'
+    }
   }
 }))
