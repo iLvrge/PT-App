@@ -7,7 +7,9 @@ export default makeStyles(theme => ({
         display: 'block',   
         position: 'absolute',
         zIndex: 9999999,
-        width: '100%'     
+        width: '100%',
+        left: -15,
+        top: -15 
     },
     paddingLeft: {
         paddingLeft: 16,
@@ -28,6 +30,5 @@ export default makeStyles(theme => ({
     },
     btn: {
         padding: 4,
-        marginLeft: 6
     }
 }));  
