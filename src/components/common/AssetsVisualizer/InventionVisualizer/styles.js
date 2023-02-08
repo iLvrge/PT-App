@@ -262,7 +262,7 @@ export default makeStyles(theme => ({
     },
     btnSetting: {
         justifyContent: 'flex-start',
-        width: 45
+        padding: 4
     },
     resizable:{
         position: "relative",
