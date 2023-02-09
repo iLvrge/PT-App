@@ -38,7 +38,6 @@ export default makeStyles(theme => ({
         display: 'flex',
         height: '100%',
         width: '100%',
-        marginBottom: 10,
         flexDirection: 'column',
         '& :last':{
           marginBottom: 0,
