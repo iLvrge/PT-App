@@ -212,10 +212,9 @@ const SankeyChart = (props) => {
         }
         
     }, [assignorRawData, assigneeRawData, selectedAssetCompanies])  
-    
+
     return (
-        <Paper {...(typeof props.showTabs == 'undefined' ? {sx: {p: 0, overflow: 'auto'}} : {overflow: 'auto'})}  className={clsx(classes.container, classes.containerTop, 'cntSankeyChart')} square ref={containerRef} >
-                 
+        <React.Fragment > 
             {
                 typeof props.showTabs != 'undefined' && props.showTabs === true && typeof props.tabText != 'undefined' && (
                     <Tabs
@@ -239,12 +238,13 @@ const SankeyChart = (props) => {
                     </Tabs> 
                 )
             } 
-            <div className={clsx(classes.child, typeof props.standalone != 'undefined' && props.standalone === true ? classes.padding16 : '')} >
             {
                 ( data.length > 0   ||  assignorData.length > 0)  && (
                     <TitleBar title={`Hover over the bars for details. Select one of the colored bars to the ${props.type == 'divested' ? 'right' : 'left' } of each name to filter the Assets table accordingly.`} enablePadding={false} underline={false} typography={true}/>
                 )
             }  
+            <div className={clsx(classes.child, typeof props.standalone != 'undefined' && props.standalone === true ? classes.padding16 : '')} >
+            
             {    
                 selectedCategory == 'acquired' || props.type == 'acquired' || props.type == 'filled'
                 ?
@@ -277,7 +277,7 @@ const SankeyChart = (props) => {
                     />
                 )
             }
-        </Paper>         
+        </React.Fragment>         
     )
 }
 
