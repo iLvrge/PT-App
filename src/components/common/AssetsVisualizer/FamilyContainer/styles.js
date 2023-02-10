@@ -281,5 +281,91 @@ export default makeStyles(theme => ({
     alignContent: 'center',
     flex: 1,
     height: '100%'
-  } 
+  } ,
+  fullScreenContainer:{
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    cursor: 'pointer',
+    zIndex: 999
+  },
+  timelineLegal: {
+    height: '100%', 
+    width: '100%', 
+    '& .vis-panel.vis-center':{
+      borderTop: 0
+    },
+    '& .vis-timeline':{
+      border: 0,
+      borderTop:`1px solid ${theme.palette.divider}`, 
+      borderBottom:`1px solid ${theme.palette.divider}`, 
+      backgroundColor: `#1D2025 !important`,
+      backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))' 
+    },
+    '& .vis-left.vis-panel.vis-vertical-scroll, .vis-right.vis-panel.vis-vertical-scroll':{
+      overflowY: 'hidden'
+    },
+    '& .asset-type-default':{
+      backgroundColor: '#1D2025 !important',
+      border: '1px solid #B9E0B4',
+      '& .vis-item-content':{
+        width: 154,
+        whiteSpace: 'initial',
+        textAlign: 'left', 
+        display: 'flex',
+        padding: 5,
+        overflow: 'hidden',
+        flexWrap: 'wrap',   
+        borderRadius: 3,       
+        justifyContent: 'flex-start',
+        flexDirection: 'column',   
+        '& .first':{
+          display: 'flex',
+          fontSize: '0.875rem',
+          fontWeight: 500,
+          overflow: 'hidden',
+          height: '100%',
+        },
+        '& .second':{
+          display:'flex',
+          flexDirection: 'column',  
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '0.65rem',
+          fontWeight: 400,
+          height: '100%',
+          width: '45%',
+          overflow: 'hidden',
+          '& div':{
+            marginLeft: '5px'
+          },
+          '& .img-holder': {
+            display: 'inline-block',
+            width: 50,
+            height: 50,
+            backgroundColor: '#fff',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          },
+          '& img':{
+            width: 50,
+            display: 'flex'
+            /* width: '3.5rem', */
+            /*width: '5rem',
+            height: '3.5rem',*/
+            /* opacity: '0.75',
+            '&:hover':{
+              opacity: 1
+            } */
+            /* maxHeight: '2.5rem' */
+          },
+          '& img.no-image':{
+            /* height: '4rem', */
+            /* maxHeight: '2.5rem' */
+          }
+        }
+      }
+    }, 
+  },
 }))

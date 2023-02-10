@@ -24,6 +24,8 @@ import { numberWithCommas } from '../../../../utils/numbers'
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
 import useStyles from './styles'
+import FullScreen from '../../FullScreen'
+import LegalData from './LegalData'
   
 const DATE_FORMAT = 'MMM DD, YYYY'
 
@@ -82,21 +84,35 @@ const FamilyContainer = ({ family, onClose }) => {
     const [ timelineItems, setTimelineItems ] = useState([])
     const [ isLoadingTimelineData, setIsLoadingTimelineData ] = useState(false)
     const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(true)
-    
+    const [ legalEvents, setLegalEvents] = useState([])
+    const [ legalModal, setLegalModal] = useState(false)
     const selectedAsset = useSelector(state => state.patenTrack2.selectedAssetsPatents)
     const familyDataRetrieved = useSelector(state => state.patenTrack.familyDataRetrieved)
+
+    const menuItems = [
+        {
+            id: 1,
+            label: 'Legal data',
+            component: LegalData,
+            standalone: true, 
+            legalEvents
+        }
+    ]
     
     const onSelect = useCallback((properties) => {        
         if (properties.items.length > 0)  {            
             const item = items.current.get(properties.items[0])
             const publicationCountry = item.rawData.publication_country
-            if(publicationCountry.toString().toLowerCase() == 'us') {
+            setLegalEvents(item.rawData.legal)
+            setLegalModal(true)
+            /* if(publicationCountry.toString().toLowerCase() == 'us') {
                 dispatch(assetLegalEvents(item.rawData.application_number, item.rawData.patent_number))
             } else {
                 dispatch(setAssetLegalEvents([]))
             }            
             dispatch(setFamilyItemDisplay(item.rawData))
-            dispatch(toggleFamilyItemMode(true))
+            dispatch(toggleFamilyItemMode(true)) */
+            console.log(item, family)
         }
     }, [ dispatch ]) 
     
@@ -106,6 +122,7 @@ const FamilyContainer = ({ family, onClose }) => {
         toggleFamilyItemMode(false)
         setFamilyItemDisplay({})*/
     }
+ 
 
     useEffect(() => {
         if(timelineContainerRef.current != null) {
@@ -180,6 +197,11 @@ const FamilyContainer = ({ family, onClose }) => {
         }, 50)
     }, [ timelineRawData, isLoadingTimelineRawData, timelineContainerRef ])
 
+    const handleCloseModal = () => {
+        setLegalEvents([])
+        setLegalModal(!legalModal)
+    }
+
     return(
         <Paper className={classes.root}>   
             <div className={classes.root}>
@@ -199,6 +221,17 @@ const FamilyContainer = ({ family, onClose }) => {
                     </div>
                 )}
             </div>
+            {
+                legalModal === true && (
+                    <div className={classes.fullScreenContainer}>
+                        <FullScreen 
+                            componentItems={menuItems}
+                            setScreen={handleCloseModal}
+                            showScreen={legalModal}
+                        />
+                    </div>
+                )
+            }
         </Paper>
     )
 }
