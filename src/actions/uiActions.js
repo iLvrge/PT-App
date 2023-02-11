@@ -121,3 +121,8 @@ export const setLoadingDashboardData = flag => ({
   type: types.SET_LOADING_DASHBOARD_DATA,
   flag, 
 })
+
+export const setFamilyLegalItemMode = flag => ({
+  type: types.SET_FAMILY_LEGAL_ITEM_MODE,
+  flag
+})

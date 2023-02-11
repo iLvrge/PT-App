@@ -1,4 +1,4 @@
-import { Paper } from '@mui/material';
+import { IconButton, Paper } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react'
 import { DataSet } from 'vis-data/esnext'
 import { Timeline } from 'vis-timeline-73/esnext'
@@ -6,6 +6,11 @@ import moment from 'moment'
 import useStyles from './styles'
 
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
+import Close from '@mui/icons-material/Close';
+import { dispatch } from 'd3';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFamilyLegalItem } from '../../../../actions/patentTrackActions2';
+import { setFamilyLegalItemMode } from '../../../../actions/uiActions';
 
 const options = {
     height: '100%',
@@ -22,9 +27,9 @@ const options = {
 
 const DATE_FORMAT = 'MMM DD, YYYY'
 
-const getTemplateContent = (item) => {
+const getTemplateContent = (item) => { 
     const templateContent = `<div class='first limit'>${item.desc}</div><div class='textColumn'>${moment(new Date(item.gazette_date)).format(DATE_FORMAT)}</div>`
-  return templateContent 
+  return templateContent   
 }
 
 const convertDataToItem = (item) => {
@@ -48,16 +53,18 @@ const LegalData = ({legalEvents}) => {
     const classes = useStyles()
     const timelineRef = useRef()   
     const timelineContainerRef = useRef()
+    const dispatch = useDispatch()
     const items = useRef(new DataSet())
     const [ timelineItems, setTimelineItems ] = useState([])
     const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(true)
     const [ display, setDisplay] = useState('block')
     const [ timelineRawData, setTimelineRawData ] = useState([])
+    const familyLegalItem = useSelector(state => state.patenTrack2.familyLegalItem)  
 
     useEffect(() => {
-        setTimelineRawData(legalEvents)
+        setTimelineRawData(familyLegalItem)
         setIsLoadingTimelineRawData(false)
-    }, [legalEvents])
+    }, [familyLegalItem])
 
     useEffect(() => {
         if(timelineContainerRef.current != null) {
@@ -92,8 +99,8 @@ const LegalData = ({legalEvents}) => {
                     return c
                 })
                 Promise.all(promise)
-                start = new moment(start).subtract(1, 'year') 
-                end = new moment(end).add(1, 'year')
+                start = new moment(start).subtract(3, 'year') 
+                end = new moment(end).add(3, 'year')
                 items.current.add(convertedItems)
             } 
 
@@ -106,8 +113,19 @@ const LegalData = ({legalEvents}) => {
         }, 50)
     }, [ timelineRawData, isLoadingTimelineRawData, timelineContainerRef ])
 
+    const handleClearEvent = () =>{
+        dispatch(setFamilyLegalItem([]))
+        dispatch(setFamilyLegalItemMode(false))
+    }
+
     return (
         <Paper className={classes.root}>    
+            <IconButton
+                className={classes.btnClose}
+                onClick={handleClearEvent}
+            >
+                <Close/>
+            </IconButton>
             <div
                 id={`familyLegalTimeline`}
                 style={{ 

@@ -1891,3 +1891,9 @@ export const setFamilyRequest = (flag) => {
     flag
   }
 }
+export const setFamilyLegalItem = (data) => {  
+  return {
+    type: types.SET_FAMILY_LEGAL_ITEM,  
+    data
+  }
+}

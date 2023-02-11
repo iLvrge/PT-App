@@ -30,6 +30,7 @@ import PatenTrackApi from '../../../api/patenTrack2'
 import ConnectionBox from '../ConnectionBox'
 import { useIsMounted } from '../../../utils/useIsMounted'
 import SankeyChart from '../AssetsVisualizer/SankeyChart'
+import LegalData from '../AssetsVisualizer/FamilyContainer/LegalData'
 
 const IllustrationCommentContainer = ({ 
     cls, 
@@ -120,6 +121,9 @@ const IllustrationCommentContainer = ({
     const link_assets_sheet_type = useSelector(state => state.patenTrack2.link_assets_sheet_type)
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
     const ptabAssets = useSelector(state => state.patenTrack2.ptabAssets)  
+
+    const familyLegalItemMode = useSelector(state => state.ui.familyLegalItemMode)
+    const familyLegalItem = useSelector(state => state.patenTrack2.familyLegalItem)  
 
     const menuItems = [
         {
@@ -346,7 +350,8 @@ const IllustrationCommentContainer = ({
                                     standalone={true}
                                     chartBar={chartsBar} 
                                     analyticsBar={analyticsBar} 
-                                />
+                                    container={true}
+                                /> 
                             :
                             selectedCategory == 'incorrect_names' ?
                                 <NamesContainer
@@ -458,19 +463,25 @@ const IllustrationCommentContainer = ({
                             <LoadLinkAssets type={link_assets_sheet_type.type} asset={link_assets_sheet_type.asset}  size={size}/>
                         :
                         (selectedCategory ==  'late_recording' || selectedCategory =='incorrect_recording') && selectedAssetAssignments.length > 0 ? 
-                            <IllustrationContainer 
-                                isFullscreenOpen={isFullscreenOpen} 
-                                asset={assetIllustration} 
-                                setIllustrationRecord={illustrationRecord} 
-                                chartsBar={chartsBar}
-                                analyticsBar={analyticsBar}
-                                chartsBarToggle={chartsBarToggle}
-                                checkChartAnalytics={checkChartAnalytics}
-                                setAnalyticsBar={setAnalyticsBar}
-                                setChartBar={setChartBar}
-                                fullScreen={handleClickOpenFullscreen}
-                                gap={gap}
-                            />
+                            familyLegalItemMode === true
+                            ?
+                                <LegalData
+                                    legalEvents={familyLegalItem}
+                                />
+                            :
+                                <IllustrationContainer 
+                                    isFullscreenOpen={isFullscreenOpen} 
+                                    asset={assetIllustration} 
+                                    setIllustrationRecord={illustrationRecord} 
+                                    chartsBar={chartsBar}
+                                    analyticsBar={analyticsBar}
+                                    chartsBarToggle={chartsBarToggle}
+                                    checkChartAnalytics={checkChartAnalytics}
+                                    setAnalyticsBar={setAnalyticsBar}
+                                    setChartBar={setChartBar}
+                                    fullScreen={handleClickOpenFullscreen}
+                                    gap={gap}
+                                />
                         :
                         !isFullscreenOpen && 
                             illustrationBar === true && 
@@ -483,6 +494,12 @@ const IllustrationCommentContainer = ({
                         ?
                             shouldShowTimeline
                             ?
+                                familyLegalItemMode === true
+                                ?
+                                    <LegalData
+                                        legalEvents={familyLegalItem}
+                                    />
+                                :
                                 selectedCategory == 'incorrect_names' ?
                                     <NamesContainer/>
                                 : 
@@ -512,7 +529,12 @@ const IllustrationCommentContainer = ({
                                     />
                                 
                             :
-                                
+                                familyLegalItemMode === true
+                                ?
+                                    <LegalData
+                                        legalEvents={familyLegalItem}
+                                    />
+                                : 
                                     <IllustrationContainer 
                                         isFullscreenOpen={isFullscreenOpen} 
                                         asset={assetIllustration} 

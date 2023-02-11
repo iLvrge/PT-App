@@ -31,5 +31,6 @@ export default {
     kpi: process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? false : true,
     timeline: false
   },
-  viewInitial: false
+  viewInitial: false,
+  familyLegalItemMode: false
 }
