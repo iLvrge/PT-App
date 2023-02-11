@@ -1,6 +1,15 @@
 import makeStyles from '@mui/styles/makeStyles';
 import { indigo, purple, blue, pink, teal, cyan, lime, green, orange, grey } from '@mui/material/colors';
 export default makeStyles(theme => ({
+    mainContainer: {
+      height: '100%',
+      flex: 1,
+      width: '100%',
+      display: 'flex',
+      position: 'relative',
+      flexDirection: 'column',
+      boxShadow: 'none'
+    },
     container: {
       height: '100%',
       flex: 1,

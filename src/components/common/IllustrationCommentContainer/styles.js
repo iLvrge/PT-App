@@ -5,6 +5,7 @@ export default makeStyles(theme => ({
     root:{
         width: '100%',
         height: '100%', 
+        position: 'relative',
         '& .MuiInputLabel-root':{
             display: 'inline-flex',
             paddingLeft: 6,

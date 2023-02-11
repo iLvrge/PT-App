@@ -113,5 +113,6 @@ export default {
     isLoadingCompActivitiesDataCount: null,
     isLoadingAssetsErrorsDataCount: null,
     assetsErrorsDataCount: 0,
-    timelineDataLoading: false
+    timelineDataLoading: false,
+    familyLegalItem: []
 }

@@ -118,7 +118,16 @@ export default makeStyles(theme => ({
             flexBasis:'100%',
             /* lineHeight: '0.875rem', */
             alignItems: 'center',
-            /* marginBottom: '2px' */
+            justifyContent: 'space-between',
+            /* marginBottom: '2px' */ 
+            '& .legal_identity':{
+              borderRadius: '50%',
+              width: 5,
+              height: 5,
+              display: 'flex',
+              background: '#ABD7FC',
+              marginRight: 10
+            }
           },
           '& .second':{
             display:'flex',
@@ -170,6 +179,10 @@ export default makeStyles(theme => ({
           }
         }
       } 
+    },
+    '& .vis-item.vis-selected': {
+      backgroundColor: '#FFAA00 !important', 
+      /* fontWeight: 'bold', */
     },
     '& .vis-item.vis-point.vis-selected': {
       backgroundColor: 'none !important',
@@ -307,9 +320,10 @@ export default makeStyles(theme => ({
     },
     '& .asset-type-default':{
       backgroundColor: '#1D2025 !important',
-      border: '1px solid #B9E0B4',
+      borderColor: '#B9E0B4',
       '& .vis-item-content':{
-        width: 154,
+        width: '9.6rem', 
+        color: '#BDBDBD',
         whiteSpace: 'initial',
         textAlign: 'left', 
         display: 'flex',
@@ -324,7 +338,7 @@ export default makeStyles(theme => ({
           fontSize: '0.875rem',
           fontWeight: 500,
           overflow: 'hidden',
-          height: '100%',
+          height: '100%', 
         },
         '& .second':{
           display:'flex',
@@ -368,4 +382,9 @@ export default makeStyles(theme => ({
       }
     }, 
   },
+  btnClose: {
+    position: 'absolute',
+    right: 0,
+    zIndex: 9999
+  }
 }))
