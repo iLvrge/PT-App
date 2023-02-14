@@ -12,7 +12,7 @@ import  { controlList } from '../../../../utils/controlList'
 
 import { capitalize, numberWithCommas } from '../../../../utils/numbers'
 
-import { getAssetDetails, setClipboardAssets, setMoveAssets, setSelectedAssetsPatents } from '../../../../actions/patentTrackActions2'
+import { getAssetDetails, setAssetsIllustration, setChannelID, setClipboardAssets, setMoveAssets, setSelectedAssetsPatents, setSlackMessages } from '../../../../actions/patentTrackActions2'
 
 import PatenTrackApi from '../../../../api/patenTrack2'
 
@@ -37,7 +37,9 @@ const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handle
     const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
     const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
- 
+    const channel_id = useSelector(state => state.patenTrack2.channel_id)
+    const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
+    const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
 
     useEffect(() => {
         if(selectedAssetsPatents.length > 0) {
@@ -248,6 +250,19 @@ const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handle
         }
     ];
 
+
+    const findChannelID = useCallback((asset) => {
+        let channelID = ''
+        if(slack_channel_list.length > 0 && asset != undefined) {
+          const findIndex = slack_channel_list.findIndex( channel => channel.name == `us${asset}`.toString().toLocaleLowerCase())
+      
+          if( findIndex !== -1) {
+            channelID = slack_channel_list[findIndex].id
+          }
+        }
+        return channelID
+    }, [ slack_channel_list ]) 
+
     /**
    * Click checkbox
    */
@@ -293,14 +308,26 @@ const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handle
                     PatenTrackApi.cancelCitationCounterRequest()
                     PatenTrackApi.cancelFeesCounterRequest() 
                     PatenTrackApi.cancelStatusCounterRequest() 
+                    dispatch(
+                        setAssetsIllustration({
+                            type: "patent",
+                            id: row.grant_doc_num || row.appno_doc_num,
+                            flag: row.grant_doc_num !== '' && row.grant_doc_num !== null ? 1 : 0
+                        }),
+                    );
                     dispatch(setSelectedAssetsPatents([row.grant_doc_num, row.appno_doc_num]))
                     dispatch(getAssetDetails(row.appno_doc_num, row.grant_doc_num))
                     dispatch(assetFamilySingle(row.appno_doc_num))
                     dispatch(assetLegalEvents(row.appno_doc_num, row.grant_doc_num))
                     dispatch(assetFamily(row.appno_doc_num))
-                    if(openChartBar === false) {
-                        handleChartBarOpen()
+                    dispatch(setSlackMessages({ messages: [], users: [] }))
+                    const channelID = findChannelID(row.grant_doc_num != '' ? row.grant_doc_num : row.appno_doc_num)        
+                    if( channelID != '') {
+                        dispatch(setChannelID({channel_id: channelID}))
                     }
+                    /* if(openChartBar === false) {
+                        handleChartBarOpen()
+                    } */
                 }
             } else {
                 if( row.asset == dropOpenAsset ) {

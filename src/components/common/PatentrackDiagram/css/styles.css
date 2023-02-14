@@ -48,14 +48,14 @@ label span{ padding: 0px 4px 0px 8px; position: relative; vertical-align: middle
     width: 30px;
     height: 30px;
     padding: 0;
-    color: #5a5a5a;
+    color: rgba(255, 255, 255, 0.5);
     background-color: transparent;
 }
 #topUIToolbarExpanded .MuiIconButton-root svg{
     width: 1em;
     height: 1em;
-    fill: #5a5a5a;
-    stroke: #5a5a5a;
+    fill: rgba(255, 255, 255, 0.5);
+    stroke: rgba(255, 255, 255, 0.5);
 }
 
 #topUIToolbarExpanded .MuiIconButton-root:hover, #topUIToolbarExpanded .MuiIconButton-root svg:hover{
