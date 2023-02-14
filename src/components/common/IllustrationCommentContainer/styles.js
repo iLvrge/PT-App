@@ -85,7 +85,16 @@ export default makeStyles(theme => ({
         top: 10,
         right: 5,
         zIndex: 1,
-        padding: 0
+        padding: 0,
+        ' & svg':{
+          fill: theme.palette.text.disabled,
+          stroke: theme.palette.text.disabled,
+          '&:hover':{
+            color: '#E60000',
+            fill: '#E60000',
+            stroke: '#E60000'
+          }
+        }
     },
     singleAssetContainer: {
         flex: 1,

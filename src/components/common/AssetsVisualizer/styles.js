@@ -51,6 +51,15 @@ export default makeStyles(theme => ({
     position: 'absolute',
     top: 0,
     right: 0,
-    zIndex: 99999
+    zIndex: 99999,
+    ' & svg':{
+      fill: theme.palette.text.disabled,
+      stroke: theme.palette.text.disabled,
+      '&:hover':{  
+        color: '#E60000',
+        fill: '#E60000',
+        stroke: '#E60000'
+      }
+    }
   }
 }))

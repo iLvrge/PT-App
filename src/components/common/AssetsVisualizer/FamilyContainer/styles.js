@@ -125,7 +125,7 @@ export default makeStyles(theme => ({
               width: 5,
               height: 5,
               display: 'flex',
-              background: '#ABD7FC',
+              background: '#FFAA00',
               marginRight: 10
             }
           },
