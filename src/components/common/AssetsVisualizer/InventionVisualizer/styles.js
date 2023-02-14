@@ -126,7 +126,8 @@ export default makeStyles(theme => ({
         fontSize: 16,
         /* borderTop: `1px solid ${theme.palette.divider} !important`, */
         overflow: 'hidden',
-        width: '100%'
+        width: '100%',
+        marginTop: 15
     },
     loadingIndicator: {
         position: 'absolute',

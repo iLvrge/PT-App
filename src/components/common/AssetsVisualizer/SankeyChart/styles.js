@@ -8,7 +8,10 @@ export default makeStyles(theme => ({
       display: 'flex',
       position: 'relative',
       flexDirection: 'column',
-      boxShadow: 'none'
+      boxShadow: 'none',
+      '& .google-visualization-tooltip p':{
+        color: '#000'
+      }
     },
     container: {
       height: '100%',
@@ -48,6 +51,7 @@ export default makeStyles(theme => ({
         height: '100%',
         width: '100%',
         flexDirection: 'column',
+        marginTop: 15,
         '& :last':{
           marginBottom: 0,
         },
