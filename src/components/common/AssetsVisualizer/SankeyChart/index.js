@@ -239,10 +239,10 @@ const SankeyChart = (props) => {
                     </Tabs> 
                 )
             } 
-            <Box sx={{p: typeof props.container != 'undefined' && props.container === true ? 2 : 0, display: 'flex', flex: 1, flexDirection: 'column'}}>
+            <Box sx={{p: typeof props.container != 'undefined' && props.container === true ? 2 : 0, display: 'flex', flex: 1, flexDirection: 'column', height: '100%'}}>
                 {
                     ( data.length > 0   ||  assignorData.length > 0)  && (
-                        <TitleBar title={`Hover over the bars for details. Select one of the colored bars to the ${props.type == 'divested' ? 'right' : 'left' } of each name to filter the Assets table accordingly.`} enablePadding={false} underline={false} typography={true}/>
+                        <TitleBar title={`Hover over the bars for details. Select one of the colored bars to the ${props.type == 'divested' ? 'right' : 'left' } of each name to filter the Assets table accordingly. To release the filter - click the selected bar.`} enablePadding={false} underline={false} typography={true}/>
                     )
                 }  
                 <div className={clsx(classes.child, typeof props.standalone != 'undefined' && props.standalone === true ? typeof props.container == 'undefined' ? classes.padding16 : '' : '')} >

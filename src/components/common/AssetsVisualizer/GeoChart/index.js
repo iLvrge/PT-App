@@ -297,14 +297,16 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
         if(loading && jurisdictionData.length == 0) return <Loader/>
         if(jurisdictionData.length < 2) return null
         return (
-            <Chart
-                width={'100%'}
-                height={height}
-                chartType="GeoChart"
-                loader={<div>Loading...</div>}
-                data={jurisdictionData}
-                options={option}
-            />
+            <div style={{marginTop: 15, display: 'flex', height: '93%', width: '100%'}}>
+                <Chart
+                    width={'100%'}
+                    height={height}
+                    chartType="GeoChart"
+                    loader={<div>Loading...</div>}
+                    data={jurisdictionData}
+                    options={option}
+                />
+            </div>
         )
     }
 

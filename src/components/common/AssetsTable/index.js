@@ -53,7 +53,8 @@ import {
   resetAssetDetails,
   getAssetDetails,
   setSelectedMaintainenceAssetsList,
-  setAssetsIllustrationData
+  setAssetsIllustrationData,
+  setFamilyLegalItem
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -74,7 +75,8 @@ import {
   toggleLifeSpanMode,
   setDriveTemplateFrameMode,
   setTimelineScreen,
-  setDashboardScreen
+  setDashboardScreen,
+  setFamilyLegalItemMode
 } from "../../../actions/uiActions";
 
 import  { controlList } from '../../../utils/controlList'
@@ -1425,6 +1427,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         dispatch(toggleLifeSpanMode(false));
         dispatch(toggleFamilyMode(true));
         dispatch(toggleFamilyItemMode(true));
+        dispatch(setFamilyLegalItem([]))
+        dispatch(setFamilyLegalItemMode(false))
         PatenTrackApi.cancelFamilyCounterRequest()
         PatenTrackApi.cancelClaimsCounterRequest()
         PatenTrackApi.cancelFiguresCounterRequest()

@@ -122,11 +122,11 @@ export default makeStyles(theme => ({
             /* marginBottom: '2px' */ 
             '& .legal_identity':{
               borderRadius: '50%',
-              width: 5,
-              height: 5,
+              width: 8,
+              height: 8,
               display: 'flex',
               background: '#FFAA00',
-              marginRight: 10
+              marginRight: 5
             }
           },
           '& .second':{
