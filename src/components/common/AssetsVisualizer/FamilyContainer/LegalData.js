@@ -99,8 +99,8 @@ const LegalData = ({legalEvents}) => {
                     return c
                 })
                 Promise.all(promise)
-                start = new moment(start).subtract(3, 'year') 
-                end = new moment(end).add(3, 'year')
+                start = new moment(start).subtract(1, 'year') 
+                end = new moment(end).add(1, 'year')
                 items.current.add(convertedItems)
             } 
 
@@ -109,7 +109,7 @@ const LegalData = ({legalEvents}) => {
         /* console.log(items.current, start, end) */
         setTimeout(() => {
             timelineRef.current.setItems(items.current)
-            timelineRef.current.setOptions({ ...options, start, end, min: start, max: end })
+            timelineRef.current.setOptions({ ...options, start, end, min: new moment().subtract(2, 'year'), max: moment(new Date()).add(1, 'year') })
         }, 50)
     }, [ timelineRawData, isLoadingTimelineRawData, timelineContainerRef ])
 
