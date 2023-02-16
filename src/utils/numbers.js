@@ -12,6 +12,10 @@ export const capitalAllWords = (s) => {
   return s.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
 }
 
+export const removeLeadingZeros = (s) => { 
+  return s.replace(/^0+/, '')
+}
+
 export const addCommas = (nStr) => {
     nStr += ''
     var x = nStr.split('.')

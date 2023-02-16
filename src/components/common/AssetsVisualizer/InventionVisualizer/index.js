@@ -313,7 +313,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     tabName = 'Maintenance Fee Due'
                     break; 
                 case 'abandoned':
-                    tabName = 'Abandoned'
+                    tabName = 'Innovation'
                     break; 
                 case 'restore_ownership':
                     tabName = 'Title'
