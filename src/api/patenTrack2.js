@@ -791,13 +791,16 @@ class PatenTrackApi {
     } 
   }
 
-
   static allAssetsSurchargeLegalEvents(companies) { 
     return axios.get(`${base_new_api_url}/events/all/assets/surcharge?companies=${JSON.stringify(companies)}`, getHeader())
   } 
 
   static allFilledAssetsEvents(companies) { 
     return axios.get(`${base_new_api_url}/events/all/assets/to_record?companies=${JSON.stringify(companies)}`, getHeader())
+  } 
+
+  static getAllAbandonedAssetsEvents(companies) { 
+    return axios.get(`${base_new_api_url}/events/all/assets/abandoned?companies=${JSON.stringify(companies)}`, getHeader())
   } 
 
   static allFilledAssetsEventsDetails(application) { 
