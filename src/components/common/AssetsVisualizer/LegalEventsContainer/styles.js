@@ -313,6 +313,7 @@ export default makeStyles(theme => ({
             position: 'absolute',
             bottom: '4px',
             fontSize: '0.65rem',
+            textAlign: 'left'
           },
           '& .absolute':{
             position: 'absolute',

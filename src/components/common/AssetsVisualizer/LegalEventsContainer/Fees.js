@@ -13,7 +13,7 @@ import Loader from '../../Loader'
 
 import useStyles from './styles'
 import { Badge, Tab, Tabs } from '@mui/material'
-import { numberWithCommas, applicationFormat } from '../../../../utils/numbers'
+import { numberWithCommas, applicationFormat, removeLeadingZeros } from '../../../../utils/numbers'
 import PatenTrackApi from '../../../../api/patenTrack2'
 
 const options = { 
@@ -30,42 +30,51 @@ const options = {
 }
 const DATE_FORMAT = 'MMM DD, YYYY'
  
-const getTemplateContent = (item, icons) => {   
-  let formatString = '';
-  if(item.event_code == '13') {
-    if(item.template_string == '0') {
-      if(item.patent != '' ) {
-        formatString = `US<br/>${numberWithCommas(item.patent)}`
-      } else {
-        formatString =  `US<br/>${applicationFormat(item.application)}`
-      }
+const getTemplateContent = (item, icons, category) => {   
+  let formatString = ''; 
+  if(typeof category != 'undefined' && category == 'abandoned') {
+    if(item.grant_doc_num != '' ) {
+      formatString = `US<br/>${numberWithCommas(removeLeadingZeros(item.grant_doc_num))}`
     } else {
-      formatString = `US<br/>${item.template_string}`
+      formatString =  `US<br/>${applicationFormat(item.appno_doc_num)}`
     }
-  } else {
-    if(typeof item.template_string != 'undefined') {
+  } else { 
+    if(item.event_code == '13') {
       if(item.template_string == '0') {
-        formatString = `US<br/>${numberWithCommas(item.grant_doc_num)}`
+        if(item.patent != '' ) {
+          formatString = `US<br/>${numberWithCommas(item.patent)}`
+        } else {
+          formatString =  `US<br/>${applicationFormat(item.application)}`
+        }
       } else {
-        formatString = item.template_string
+        formatString = `US<br/>${item.template_string}`
       }
     } else {
-      formatString = item.maintainence_code.template_string
+      if(typeof item.template_string != 'undefined') {
+        if(item.template_string == '0') {
+          formatString = `US<br/>${numberWithCommas(item.grant_doc_num)}`
+        } else {
+          formatString = item.template_string
+        }
+      } else {
+        formatString = item.maintainence_code.template_string
+      }
     }
   }
+
   /*typeof item.template_string != 'undefined' ? item.template_string == '0' ? `US<br/>${numberWithCommas(item.grant_doc_num)}` : item.event_code == '13' ? `US<br/>${item.template_string == '0' ? item.patent != '' ? numberWithCommas(item.patent) : applicationFormat(item.application) : item.template_string}` : item.template_string : item.maintainence_code.template_string*/
   const getEventIcons = icons[item.event_code] 
   const icon = getEventIcons["icon3"] != undefined ? getEventIcons["icon3"]: ''
-  const templateContent = `<div class='first'>${formatString}</div><div class='textColumn'>${item.event_code == '13' ? `<div style="text-align:left;line-height:0.7">Filed on:</div>` : ''}${moment(new Date(item.eventdate)).format(DATE_FORMAT)}</div><div class='absolute'>${icon}</div>`
+  const templateContent = `<div class='first'>${formatString}</div><div class='textColumn'>${item.event_code == '13' ? `<div style="text-align:left;line-height:0.7">${typeof category != 'undefined' && category == 'abandoned' ? 'Expired on': 'Filed on'}:</div>` : typeof category != 'undefined' && category == 'abandoned' ? 'Expired on:<br/>' : ''}${moment(new Date(item.eventdate)).format(DATE_FORMAT)}</div><div class='absolute'>${icon}</div>`
   return templateContent
 } 
 
-const convertDataToItem = (eventItem, index, type, cls, icons) => {
+const convertDataToItem = (eventItem, index, type, cls, icons, category) => {
   const assetType = type === 1 ? 'background' : 'box'
   const date = new Date( type === 0 ? eventItem.eventdate : eventItem.start )
   const item = {
     id: index + 1,
-    content: type === 1 ? `` : getTemplateContent(eventItem, icons),
+    content: type === 1 ? `` : getTemplateContent(eventItem, icons, category),
     start: date,
     type: assetType,
     rawData: eventItem,
@@ -78,7 +87,7 @@ const convertDataToItem = (eventItem, index, type, cls, icons) => {
 
   if(type === 1) {
     item.end = new Date(eventItem.end)
-    item.title = 'Payment Due / Grace Period'
+    item.title = 'Payment Due / Grace Period' 
   }
 
   return (item)
@@ -101,6 +110,7 @@ const Fees = ({ events, showTabs, tabText }) => {
   const [ timeInterval, setTimeInterval] = useState(null)
   const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
   const legalEventDataRetrieved = useSelector(state => state.patenTrack.legalEventDataRetrieved)
+  const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
 
   useEffect(() => {
       timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
@@ -246,11 +256,11 @@ const Fees = ({ events, showTabs, tabText }) => {
   useEffect(() => {
     if (isLoadingTimelineRawData) return 
    
-    const mainItems = Object.keys(events).length > 0 &&  events.main != undefined ? events.main.map((event, index) => convertDataToItem(event, index, 0, classes, events.icons)) : []
+    const mainItems = Object.keys(events).length > 0 &&  events.main != undefined ? events.main.map((event, index) => convertDataToItem(event, index, 0, classes, events.icons, selectedCategory)) : []
     let otherItems = []
      
     if( Object.keys(events).length > 0 && events.other != undefined &&  events.other.length > 0 ) {
-      otherItems = events.other.map((event, index ) => convertDataToItem(event, mainItems.length + index, 1, classes, events.icons))
+      otherItems = events.other.map((event, index ) => convertDataToItem(event, mainItems.length + index, 1, classes, events.icons, selectedCategory))
     }
 
     const convertedItems = [...mainItems, ...otherItems]
