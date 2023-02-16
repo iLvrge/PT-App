@@ -39,7 +39,16 @@ export default makeStyles(theme => ({
     position: 'absolute',
     top: 5,
     right: 0,
-    zIndex: 999
+    zIndex: 999,
+    ' & svg':{
+      fill: theme.palette.text.disabled,
+      stroke: theme.palette.text.disabled,
+      '&:hover':{
+        color: '#E60000',
+        fill: '#E60000',
+        stroke: '#E60000'
+      }
+    }
   },  
   commentEditor: {
     /* paddingLeft: 40, */

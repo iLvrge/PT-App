@@ -71,7 +71,16 @@ export default makeStyles(theme => ({
     position: 'absolute',
     top: 9,
     right: 0,
-    zIndex: 999
+    zIndex: 999,
+    ' & svg':{
+      fill: theme.palette.text.disabled,
+      stroke: theme.palette.text.disabled,
+      '&:hover':{
+        color: '#E60000',
+        fill: '#E60000',
+        stroke: '#E60000'
+      }
+    }
   },
   tab: {
     minWidth: '25%',
@@ -304,6 +313,7 @@ export default makeStyles(theme => ({
             position: 'absolute',
             bottom: '4px',
             fontSize: '0.65rem',
+            textAlign: 'left'
           },
           '& .absolute':{
             position: 'absolute',

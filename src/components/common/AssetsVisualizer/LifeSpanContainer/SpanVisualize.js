@@ -160,14 +160,16 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
     const DisplayChart = () => {
         if(chart.length === 0) return null
         return (
-            <Chart
-                width={'100%'}
-                height={height}
-                chartType="ColumnChart"
-                loader={<div>Loading...</div>}
-                data={chart}
-                options={option}
-            />
+            <div style={{marginTop: 15, display: 'flex', height: '93%', width: '100%'}}>
+                <Chart
+                    width={'100%'}
+                    height={height}
+                    chartType="ColumnChart"
+                    loader={<div>Loading...</div>}
+                    data={chart}
+                    options={option}
+                />
+            </div> 
         )
     }
 

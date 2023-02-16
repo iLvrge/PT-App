@@ -44,6 +44,7 @@ import { setFamilyActiveTab } from '../../../../actions/uiActions'
 import AssetsTable from '../../AssetsTable'
 import LabelWithIcon from '../../LabelWithIcon'
 import { Box } from '@mui/system'
+import Fees from '../LegalEventsContainer/Fees'
 
 var newRange = [1,2]
 
@@ -66,6 +67,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const [ sendAssetRequest, setSentAssetRequest ] = useState(false)
     const [ anchorEl, setAnchorEl ] = useState(null)
     const [ sliderValue, setSliderValue ] = useState(50)
+    const [ abandonedTimeline, setAbandonedTimeline ] = useState([])
     const [ assets, setAssets ] = useState([])
     const [ filterList, setFilterList ] = useState([])
     const [ filterTotal, setFilterTotal ] = useState(0)
@@ -311,7 +313,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     tabName = 'Maintenance Fee Due'
                     break; 
                 case 'abandoned':
-                    tabName = 'Abandoned'
+                    tabName = 'Innovation'
                     break; 
                 case 'restore_ownership':
                     tabName = 'Title'
@@ -326,12 +328,17 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         } else if(selectedCategory == 'top_lenders') {
             tabName = 'Owned'
         } 
-        if(selectedCategory == 'assigned' && selectedRow.length == 0) {
+        if((selectedCategory == 'assigned' && selectedRow.length == 0) || selectedRow.length  === 0) {
+            const tabArray = [ tabName ]
            /*  setInventionTabs([ 'Innovation', 'For Sale', 'To License Out']) */
-            setInventionTabs([ tabName ])
-        } else if(selectedRow.length  === 0) { 
-            setInventionTabs([ tabName ])
-            setSelectedTab(0)
+
+            if(selectedCategory == 'abandoned') {
+                tabArray.push('Timeline')
+            }
+            setInventionTabs(tabArray)
+            if(selectedRow.length  === 0) { 
+                setSelectedTab(0)
+            }
         } else if(( connectionBoxView === true || selectedRow.length > 0 ) && selectedCategory != 'top_law_firms') {
             /* setInventionTabs([ 'Innovation', 'Agreement', 'Form', 'Main' ]) */
             setInventionTabs([])
@@ -505,14 +512,26 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
 
     useEffect(() => { 
-        if(selectedCompanies.length > 0 && selectedCategory == 'due_dilligence' && cpc_request === true && cpcData.list.length == 0) { 
-            setFilterList([])
-            setFilterTotal(0)
-            findCPCList([...scopeRange], [], 0)
+        if(selectedTab == 1 && selectedCategory == 'abandoned') {
+            console.log('Request for the timeline event')
+            const getAllAbandonedAssetsEvents = async () => { 
+                const {data} = await PatenTrackApi.getAllAbandonedAssetsEvents(selectedCompanies)
+                setAbandonedTimeline(data)
+            }
+            getAllAbandonedAssetsEvents() 
         } else {
-            updateCPCData([...scopeRange], [], 0)
+            if(selectedCompanies.length > 0 && selectedCategory == 'due_dilligence' && cpc_request === true && cpcData.list.length == 0) { 
+                setFilterList([])
+                setFilterTotal(0)
+                findCPCList([...scopeRange], [], 0)
+            } else {
+                updateCPCData([...scopeRange], [], 0)
+            }
         }
-    }, [assetTypesSelectAll, selectedTab, selectedCompanies,])
+    }, [assetTypesSelectAll, selectedTab, selectedCompanies])
+
+
+    
 
     useEffect(() => {
         if(selectedCompanies.length > 0  && cpc_request === true && cpcData.list.length > 0 && graphRawData.length == 0) { 
@@ -1236,19 +1255,27 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                     :
                                         <Loader />
                                 :
-                                    selectedTab === 1
+                                    selectedTab === 1 && selectedCategory == 'abandoned' && selectedRow.length === 0
                                     ?
-                                        <PdfViewer display={true} pdfTab={0} show_tab={false}/>         
+                                        <Fees
+                                            standalone={true}
+                                            events={abandonedTimeline} 
+                                            showTabs={false}
+                                        />
                                     :
-                                        selectedTab === 2
+                                        selectedTab === 1
                                         ?
-                                            <PdfViewer display={true} pdfTab={1} show_tab={false}/>        
+                                            <PdfViewer display={true} pdfTab={0} show_tab={false}/>         
                                         :
-                                            selectedTab === 3
+                                            selectedTab === 2
                                             ?
-                                                <PdfViewer display={true} pdfTab={2} show_tab={false}/>
+                                                <PdfViewer display={true} pdfTab={1} show_tab={false}/>        
                                             :
-                                            ''
+                                                selectedTab === 3
+                                                ?
+                                                    <PdfViewer display={true} pdfTab={2} show_tab={false}/>
+                                                :
+                                                ''
                             }
                         </div>  
                       

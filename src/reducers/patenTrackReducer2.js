@@ -918,6 +918,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state, 
           jurisdictionData: action.data
         } 
+        case types.SET_FAMILY_LEGAL_ITEM: 
+        return { 
+          ...state, 
+          familyLegalItem: action.data
+        } 
         
       default:   
       return state

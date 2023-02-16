@@ -10,6 +10,7 @@ import { setAssetTypeAssignmentAllAssets, setCPCData, setCPCRequest, setSelectAs
 import FullScreen from '../../FullScreen';
 import LabelWithIcon from '../../LabelWithIcon';
 import TitleBar from '../../TitleBar';
+import { Box } from '@mui/system';
 
 
 const SankeyChart = (props) => {
@@ -214,7 +215,7 @@ const SankeyChart = (props) => {
     }, [assignorRawData, assigneeRawData, selectedAssetCompanies])  
 
     return (
-        <React.Fragment > 
+        <Paper square className={classes.mainContainer} style={{overflow: typeof props.container != 'undefined' && props.container === true ? 'auto': 'inherit'}}> 
             {
                 typeof props.showTabs != 'undefined' && props.showTabs === true && typeof props.tabText != 'undefined' && (
                     <Tabs
@@ -238,36 +239,38 @@ const SankeyChart = (props) => {
                     </Tabs> 
                 )
             } 
-            {
-                ( data.length > 0   ||  assignorData.length > 0)  && (
-                    <TitleBar title={`Hover over the bars for details. Select one of the colored bars to the ${props.type == 'divested' ? 'right' : 'left' } of each name to filter the Assets table accordingly.`} enablePadding={false} underline={false} typography={true}/>
-                )
-            }  
-            <div className={clsx(classes.child, typeof props.standalone != 'undefined' && props.standalone === true ? classes.padding16 : '')} >
-            
-            {    
-                selectedCategory == 'acquired' || props.type == 'acquired' || props.type == 'filled'
-                ?
-                    loading === false ?  
-                        <DisplayChart data={data} tooltip={true}  chartType={1} onSelect={handleSelection}/> 
+            <Box sx={{p: typeof props.container != 'undefined' && props.container === true ? 2 : 0, display: 'flex', flex: 1, flexDirection: 'column', height: '100%'}}>
+                {
+                    ( data.length > 0   ||  assignorData.length > 0)  && (
+                        <TitleBar title={`Hover over the bars for details. Select one of the colored bars to the ${props.type == 'divested' ? 'right' : 'left' } of each name to filter the Assets table accordingly. To release the filter - click the selected bar.`} enablePadding={false} underline={false} typography={true}/>
+                    )
+                }  
+                <div className={clsx(classes.child, typeof props.standalone != 'undefined' && props.standalone === true ? typeof props.container == 'undefined' ? classes.padding16 : '' : '')} >
+                
+                {    
+                    selectedCategory == 'acquired' || props.type == 'acquired' || props.type == 'filled'
+                    ?
+                        loading === false ?  
+                            <DisplayChart data={data} tooltip={true}  chartType={1} onSelect={handleSelection}/> 
+                        :
+                            <Loader />
+                        
                     :
+                    ''
+                }           
+                
+                {
+                    selectedCategory == 'divested' || props.type == 'divested'
+                    ?
+                        loadingAssignor === false ? 
+                            <DisplayChart data={assignorData} chartType={2} onSelect={handleSelection} {...props}/> 
+                        :
                         <Loader />
-                    
-                :
-                   ''
-            }           
-            
-            {
-                selectedCategory == 'divested' || props.type == 'divested'
-                ?
-                    loadingAssignor === false ? 
-                        <DisplayChart data={assignorData} chartType={2} onSelect={handleSelection} {...props}/> 
                     :
-                    <Loader />
-                :
-                    ''  
-            }
-            </div>  
+                        ''  
+                }
+                </div>  
+            </Box>
             {
                 typeof props.fullScreen != 'undefined' && props.fullScreen === true && (
                     <FullScreen 
@@ -277,7 +280,7 @@ const SankeyChart = (props) => {
                     />
                 )
             }
-        </React.Fragment>         
+        </Paper>         
     )
 }
 

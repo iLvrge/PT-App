@@ -136,6 +136,12 @@ const uiReducer = (state = initialState.ui, action) => {
         viewInitial: action.flag,  
       }
     }
+    case types.SET_FAMILY_LEGAL_ITEM_MODE: {
+      return {
+        ...state,
+        familyLegalItemMode: action.flag,  
+      }
+    }
     case types.SET_ASSET_BUTTON: {
       return {
         ...state,

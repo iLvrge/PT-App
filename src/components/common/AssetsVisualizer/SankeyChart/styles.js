@@ -1,6 +1,18 @@
 import makeStyles from '@mui/styles/makeStyles';
 import { indigo, purple, blue, pink, teal, cyan, lime, green, orange, grey } from '@mui/material/colors';
 export default makeStyles(theme => ({
+    mainContainer: {
+      height: '100%',
+      flex: 1,
+      width: '100%',
+      display: 'flex',
+      position: 'relative',
+      flexDirection: 'column',
+      boxShadow: 'none',
+      '& .google-visualization-tooltip p':{
+        color: '#000'
+      }
+    },
     container: {
       height: '100%',
       flex: 1,
@@ -39,6 +51,7 @@ export default makeStyles(theme => ({
         height: '100%',
         width: '100%',
         flexDirection: 'column',
+        marginTop: 15,
         '& :last':{
           marginBottom: 0,
         },

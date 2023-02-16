@@ -126,7 +126,8 @@ export default makeStyles(theme => ({
         fontSize: 16,
         /* borderTop: `1px solid ${theme.palette.divider} !important`, */
         overflow: 'hidden',
-        width: '100%'
+        width: '100%',
+        marginTop: 15
     },
     loadingIndicator: {
         position: 'absolute',
@@ -137,7 +138,16 @@ export default makeStyles(theme => ({
         position: 'absolute',
         top: -2,
         right: 0,
-        zIndex: 99999
+        zIndex: 99999,
+        ' & svg':{
+          fill: theme.palette.text.disabled,
+          stroke: theme.palette.text.disabled,
+          '&:hover':{
+            color: '#E60000',
+            fill: '#E60000',
+            stroke: '#E60000'
+          }
+        }
     },
     fullscreenChartsModal: {
         display: 'flex',
