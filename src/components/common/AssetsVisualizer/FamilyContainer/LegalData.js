@@ -109,7 +109,7 @@ const LegalData = ({legalEvents}) => {
         /* console.log(items.current, start, end) */
         setTimeout(() => {
             timelineRef.current.setItems(items.current)
-            timelineRef.current.setOptions({ ...options, start, end, min: new moment().subtract(2, 'year'), max: moment(new Date()).add(1, 'year') })
+            timelineRef.current.setOptions({ ...options, start, end, min: start, max: end })
         }, 50)
     }, [ timelineRawData, isLoadingTimelineRawData, timelineContainerRef ])
 
