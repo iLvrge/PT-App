@@ -684,8 +684,8 @@ const VirtualizedTable = ({
       if((optionalKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[optionalKey])) || (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey])) || (selected !== undefined && selectedKey !== undefined && highlightRow !== undefined && highlightRow === true && selected.includes(rowData[selectedKey])) || (selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey]))) {
         selectedRow = true
       }  
-      console.log("selectedRow", childRows, collapsable, selectedIndex, rowData[selectedKey], disableRow, childCounterColumn, rowData[disableRowKey] )
-      console.log('rowData', rowData)
+      /* console.log("selectedRow", childRows, collapsable, selectedIndex, rowData[selectedKey], disableRow, childCounterColumn, rowData[disableRowKey] )
+      console.log('rowData', rowData) */
      return (      
         <React.Fragment key={`${key}_${index}`}>
         <TableRow
