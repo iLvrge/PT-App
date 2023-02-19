@@ -318,12 +318,12 @@ export const fetchMoreFixItItems = (currentTab, from, companyName) => {
   }
 }
 
-export const assetFamilySingle = (applicationNumber) => { 
+export const assetFamilySingle = (applicationNumber, flag) => { 
   return dispatch => {
     dispatch(setFamilyItemDataEventRetrieved(true))
     PatenTrackApi.cancelAssetFamilySingleRequest()
     return PatenTrackApi
-      .assetFamilySingle(applicationNumber)
+      .assetFamilySingle(applicationNumber, flag)
       .then(res => {
         dispatch(setFamilyItemDataEventRetrieved(false))
         dispatch(toggleFamilyMode(true))
@@ -336,12 +336,12 @@ export const assetFamilySingle = (applicationNumber) => {
 }
 
 
-export const assetFamily = (applicationNumber) => { 
+export const assetFamily = (applicationNumber, flag) => { 
   return dispatch => {
     dispatch(setFamilyItemDataEventRetrieved(true))
     PatenTrackApi.cancelAssetFamilyRequest()
     return PatenTrackApi
-      .assetFamily(applicationNumber)
+      .assetFamily(applicationNumber, flag)
       .then(res => {
         dispatch(toggleFamilyMode(true))
         dispatch(setFamilyItemDataEventRetrieved(false))
