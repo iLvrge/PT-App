@@ -269,9 +269,9 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
             );
             
     
-            dispatch(assetFamilySingle(appno_doc_num))
+            dispatch(assetFamilySingle(appno_doc_num, grant_doc_num !== '' && grant_doc_num !== null ? 1 : 0))
             dispatch(assetLegalEvents(appno_doc_num, grant_doc_num))
-            dispatch(assetFamily(appno_doc_num))
+            dispatch(assetFamily(appno_doc_num, grant_doc_num !== '' && grant_doc_num !== null ? 1 : 0))
             dispatch(setSlackMessages({ messages: [], users: [] }))
             const channelID = findChannelID(grant_doc_num != '' ? grant_doc_num : appno_doc_num)        
             if( channelID != '') {

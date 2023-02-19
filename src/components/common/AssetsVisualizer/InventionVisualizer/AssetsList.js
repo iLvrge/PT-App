@@ -317,9 +317,9 @@ const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handle
                     );
                     dispatch(setSelectedAssetsPatents([row.grant_doc_num, row.appno_doc_num]))
                     dispatch(getAssetDetails(row.appno_doc_num, row.grant_doc_num))
-                    dispatch(assetFamilySingle(row.appno_doc_num))
+                    dispatch(assetFamilySingle(row.appno_doc_num, row.grant_doc_num !== '' && row.grant_doc_num !== null ? 1 : 0))
                     dispatch(assetLegalEvents(row.appno_doc_num, row.grant_doc_num))
-                    dispatch(assetFamily(row.appno_doc_num))
+                    dispatch(assetFamily(row.appno_doc_num, row.grant_doc_num !== '' && row.grant_doc_num !== null ? 1 : 0))
                     dispatch(setSlackMessages({ messages: [], users: [] }))
                     const channelID = findChannelID(row.grant_doc_num != '' ? row.grant_doc_num : row.appno_doc_num)        
                     if( channelID != '') {

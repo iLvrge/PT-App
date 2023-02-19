@@ -76,12 +76,12 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/profile`, getHeader()) 
   }
 
-  static assetFamily(applicationNumber) { 
+  static assetFamily(applicationNumber, flag) { 
     let header = getHeader()
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelAssetFamily = c
     })
-    return axios.get(`${base_new_api_url}/family/${applicationNumber}`, header)
+    return axios.get(`${base_new_api_url}/family/${applicationNumber}?f=${flag}`, header)
   } 
 
   static cancelAssetFamilyRequest() {
@@ -94,12 +94,12 @@ class PatenTrackApi {
     } 
   }
 
-  static assetFamilySingle(applicationNumber) { 
+  static assetFamilySingle(applicationNumber, flag) { 
     let header = getHeader()
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelAssetFamilySingle = c
     })
-    return axios.get(`${base_new_api_url}/family/single/${applicationNumber}`, header)
+    return axios.get(`${base_new_api_url}/family/single/${applicationNumber}?f=${flag}`, header)
   } 
 
   static cancelAssetFamilySingleRequest() { 
