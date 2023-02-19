@@ -157,6 +157,16 @@ const Fees = ({ events, showTabs, tabText }) => {
       /* clearInterval(timeInterval) */
   }
 
+  const onSelect =  ( properties ) => {
+    if(selectedCategory == 'abandoned') {
+      const {items, event} = properties 
+      const item = timelineRef.current.itemsData.get(items)
+      if(item.length > 0 ) {
+        console.log(item)
+      }
+    }
+  }
+
   const resetTooltipContainer = () => {  
     const findOldToolTip = document.getElementsByClassName('custom_tooltip')
     if( findOldToolTip.length > 0 ) {
@@ -245,12 +255,14 @@ const Fees = ({ events, showTabs, tabText }) => {
     timelineRef.current.setOptions(options) 
     timelineRef.current.on('itemover', onItemover)
     timelineRef.current.on('itemout', onItemout)
+    timelineRef.current.on('select', onSelect)
     return () => {
       timelineRef.current.off('itemover', onItemover) 
       timelineRef.current.off('itemout', onItemout)
+      timelineRef.current.off('select', onSelect)
       resetTooltipContainer()
     } 
-  }, [ onItemover, onItemout ]) 
+  }, [ onItemover, onItemout, onSelect ]) 
 
 
   useEffect(() => {

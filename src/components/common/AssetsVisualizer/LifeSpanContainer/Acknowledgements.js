@@ -65,7 +65,7 @@ const options = {
             }
           return `<div class="first">
                     <div class="flexMain">
-                        <div class="textColumn">${numberWithCommas(itemRaw.number)}</div>
+                        <div class="textColumn">${numberWithCommas(itemRaw.rawData.patent_number)}</div>
                         <div class="textColumn text-height" >${toTitleCase(itemRaw.rawData.assignee)}</div>
                         <div class="textColumn small-font">${moment(new Date(itemRaw.rawData.start)).format(DATE_FORMAT)}</div>
                     </div>
