@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
 
 import Paper from '@mui/material/Paper'
@@ -15,6 +15,9 @@ import useStyles from './styles'
 import { Badge, Tab, Tabs } from '@mui/material'
 import { numberWithCommas, applicationFormat, removeLeadingZeros } from '../../../../utils/numbers'
 import PatenTrackApi from '../../../../api/patenTrack2'
+import { setFamilyActiveTab, toggleFamilyItemMode, toggleFamilyMode, toggleLifeSpanMode } from '../../../../actions/uiActions'
+import { getAssetDetails, setAssetsIllustration, setChannelID, setCommentsEntity, setSelectedAssetsPatents, setSlackMessages } from '../../../../actions/patentTrackActions2'
+import { assetFamily, assetFamilySingle, assetLegalEvents } from '../../../../actions/patenTrackActions'
 
 const options = { 
     height: '100%',
@@ -97,6 +100,7 @@ var tootlTip = ''
 const TIME_INTERVAL = 1000
 
 const Fees = ({ events, showTabs, tabText }) => {
+  const dispatch = useDispatch()
   const classes = useStyles()
   const timelineRef = useRef()
   const timelineContainerRef = useRef()
@@ -111,6 +115,7 @@ const Fees = ({ events, showTabs, tabText }) => {
   const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
   const legalEventDataRetrieved = useSelector(state => state.patenTrack.legalEventDataRetrieved)
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
+  const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
 
   useEffect(() => {
       timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
@@ -157,14 +162,64 @@ const Fees = ({ events, showTabs, tabText }) => {
       /* clearInterval(timeInterval) */
   }
 
-  const onSelect =  ( properties ) => {
-    if(selectedCategory == 'abandoned') {
-      const {items, event} = properties 
-      const item = timelineRef.current.itemsData.get(items)
-      if(item.length > 0 ) {
-        console.log(item)
+  const findChannelID = useCallback((asset) => {
+    let channelID = ''
+    if(slack_channel_list.length > 0 && asset != undefined) {
+      const findIndex = slack_channel_list.findIndex( channel => channel.name == `us${asset}`.toString().toLocaleLowerCase())
+  
+      if( findIndex !== -1) {
+        channelID = slack_channel_list[findIndex].id
       }
     }
+    return channelID
+  }, [ slack_channel_list ]) 
+
+  const onSelect =  ( properties ) => { 
+    const {items, event} = properties 
+    const item = timelineRef.current.itemsData.get(items)
+    if(item.length > 0 ) { 
+      let {grant_doc_num, appno_doc_num, application, patent } = item[0].rawData
+
+      if(typeof grant_doc_num != 'undefined' && typeof appno_doc_num != 'undefined') {
+        application = appno_doc_num
+        patent = grant_doc_num
+      } 
+      patent = removeLeadingZeros( patent ) 
+      dispatch(setFamilyActiveTab(1))
+      dispatch(toggleLifeSpanMode(false));
+      dispatch(toggleFamilyItemMode(true));
+      dispatch(toggleFamilyMode(true));
+      PatenTrackApi.cancelFamilyCounterRequest()
+      PatenTrackApi.cancelClaimsCounterRequest()
+      PatenTrackApi.cancelFiguresCounterRequest()
+      PatenTrackApi.cancelPtabCounterRequest()
+      PatenTrackApi.cancelCitationCounterRequest()
+      PatenTrackApi.cancelFeesCounterRequest() 
+      PatenTrackApi.cancelStatusCounterRequest() 
+      dispatch(
+          setAssetsIllustration({
+              type: "patent",
+              id: patent || application,
+              flag: patent !== '' && patent !== null ? 1 : 0
+          }),
+      );
+      dispatch(
+        setCommentsEntity({
+            type: "asset",
+            id: patent || application,
+        }),
+        );
+      dispatch(setSelectedAssetsPatents([patent, application]))
+      dispatch(getAssetDetails(application, patent))
+      dispatch(assetFamilySingle(application, patent !== '' && patent!== null ? 1 : 0))
+      dispatch(assetLegalEvents(application, patent))
+      dispatch(assetFamily(application, patent!== '' && patent!== null ? 1 : 0))
+      dispatch(setSlackMessages({ messages: [], users: [] }))
+      const channelID = findChannelID(patent != '' ? patent: application)        
+      if( channelID != '') {
+        dispatch(setChannelID({channel_id: channelID}))
+      }
+    } 
   }
 
   const resetTooltipContainer = () => {  
