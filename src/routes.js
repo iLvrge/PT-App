@@ -30,6 +30,13 @@ let pages = [
   },
   {
     exact: false,
+    path: routeList.maintainence_share,
+    component: GlobalScreen,
+    layout: GlobalLayout,
+    type: 1
+  },
+  {
+    exact: false,
     path: routeList.duedilligence,
     component: GlobalScreen,
     layout: GlobalLayout, 
@@ -58,6 +65,13 @@ let pages = [
   },
   {
     exact: true,
+    path: routeList.standard_default,
+    component: GlobalScreen,
+    layout: GlobalLayout,
+    type: 1
+  },
+  {
+    exact: true,
     path: routeList.global,
     component: GlobalScreen,
     layout: GlobalLayout,
@@ -73,6 +87,13 @@ let pages = [
   {
     exact: false,
     path: routeList.assignments_layouts,
+    component: GlobalScreen,
+    layout: GlobalLayout,
+    type: 1
+  },
+  {
+    exact: false,
+    path: routeList.assignments_layouts_share,
     component: GlobalScreen,
     layout: GlobalLayout,
     type: 1
@@ -107,6 +128,13 @@ let pages = [
   },
   {    
     exact: true,
+    path: routeList.pay_maintainence_fee_share,
+    component: PatentLayout,
+    layout: GlobalLayout,
+    type: 0
+  },
+  {    
+    exact: true,
     path: routeList.patent_assets,
     component: PatentLayout,
     layout: GlobalLayout, 
@@ -115,6 +143,13 @@ let pages = [
   {    
     exact: false,
     path: routeList.patent_assets_layouts,
+    component: PatentLayout,
+    layout: GlobalLayout, 
+    type: 1
+  },
+  {    
+    exact: false,
+    path: routeList.patent_assets_layouts_share,
     component: PatentLayout,
     layout: GlobalLayout, 
     type: 1
@@ -159,7 +194,7 @@ if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_E
       type: 1
     },
   ] 
-} else  if(process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD'  || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') {
+} else  if(process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' /*  || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' */) {
   pages = [  
     {
       exact: true,
