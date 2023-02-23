@@ -10,7 +10,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
-import { IconButton } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import moment from 'moment'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import { getCustomerAssets, getCustomerSelectedAssets } from '../../../../actions/patentTrackActions2'
@@ -18,6 +18,7 @@ import { numberWithCommas, toTitleCase } from '../../../../utils/numbers'
 import themeMode from '../../../../themes/themeMode'
 import useStyles from './styles'
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
+import TitleBar from '../../TitleBar'
 
 const DATE_FORMAT = 'MMM DD, YYYY'
 const DATE_FORMAT_YEAR = 'YYYY'
@@ -200,7 +201,7 @@ const Acknowledgements = () => {
                 const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector('#citationTimeline') : document.getElementById('citationTimeline'); 
                 const getPosition = element.getBoundingClientRect(); 
                 const tootltipTemplate = `<div class='custom_tooltip' style='border:1px solid #fff;background:${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default} ;top:${ getPosition.y }px;left:${ getPosition.x }px;'>
-                                            <h4 style='color:${color};text-align:left;margin:0'>${numberWithCommas(item.number)}</h4>
+                                            <div><h4 style='color:${color};text-align:left;margin:0'>Citing Patent number: </h4>${numberWithCommas(item.number)}</div>
                                             <div>
                                                 <h4>Grant Date: </h4>${moment(new Date(item.start)).format(DATE_FORMAT)}
                                             </div>
@@ -466,7 +467,13 @@ const Acknowledgements = () => {
 
     return(
         <Paper className={classes.root}> 
+
             <div id="visualization">
+                <Box sx={{p: 2, position: 'absolute', zIndex: 99999}}>
+                    <React.Fragment>  
+                        <TitleBar title={`One metric of a patent’s influence is its references or citations made by an applicant, a third party, or the patent office examiner in subsequent patent applications. Economists have found that subsequent citations received by a particular patent are positively associated with metrics of market value. The selected patent has been cited in the patents below:`} enablePadding={false} underline={false} typography={true} relative={true} />
+                    </React.Fragment>
+                </Box>
                 <div className="menu">
                     <IconButton onClick={zoomIn}>
                         <ZoomInIcon/>

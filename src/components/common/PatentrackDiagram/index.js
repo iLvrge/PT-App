@@ -10,6 +10,8 @@ import React, { createRef } from 'react';
 import ReactDOM from 'react-dom';
 import config from './config.json';
 import { cloneDeep } from 'lodash';
+import { Box } from '@mui/material';
+import TitleBar from '../TitleBar';
 
 /*
 
@@ -1778,6 +1780,11 @@ class PatentrackDiagram extends React.Component {
     });
     return (
       <div id="patentrackDiagramDiv" ref={this.resizeElement}>
+        <Box sx={{p: 2, position: 'absolute', zIndex: 99999, top: 48}}>
+          <React.Fragment>  
+              <TitleBar title={`Click the arrows to see the details of each transaction. Use the buttons on the top right corner for additional functionalities.`} enablePadding={false} underline={false} typography={true} relative={true} />
+          </React.Fragment>
+        </Box> 
         <PatentTopTitle
           width={this.props.parentWidth}
           titleTop={this.props.titleTop}

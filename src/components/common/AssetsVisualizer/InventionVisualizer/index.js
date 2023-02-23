@@ -886,8 +886,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
 
     useEffect(() => {
-        if( !isLoadingCharts && graphRawData.length > 0 && graphRawGroupData.length > 0 && graphContainerRef.current !== null ) {
-            if( graphContainerRef.current.childNodes.length == 0 ) { // if comes from different tab
+        if( !isLoadingCharts && graphRawData.length > 0 && graphRawGroupData.length > 0 && graphContainerRef.current !== null && graphContainerRef.current != undefined ) { 
+            if(  graphContainerRef.current != undefined &&  typeof  graphContainerRef.current.childNodes != 'undefined' && graphContainerRef.current.childNodes.length == 0 ) { // if comes from different tab
                 generateChart()
             }
         }
