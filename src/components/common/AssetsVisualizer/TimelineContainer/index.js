@@ -17,6 +17,8 @@ import ClickAwayListener from '@mui/base'
 import themeMode from '../../../../themes/themeMode';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import { 
+  setAssetTypeAssignmentAllAssets,
+  setAssetTypesAssignmentsAllAssetsLoading,
   setTimelineData,
   setTimelineRequest,
   transactionRowClick
@@ -338,10 +340,15 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       const item = items.current.get(properties.items[0])
       setSelectedAsset({ type: 'transaction', id: item.rawData.id })
       setSelectedItem(item)
-      dispatch(transactionRowClick(item.rawData.id, slack_channel_list, false, search_string))
-      if(assignmentBar === false) {
-        assignmentBarToggle()  
+      if(selectedCategory == 'collaterlized') {
+        dispatch(setAssetTypesAssignmentsAllAssetsLoading( false ) )
+        dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false)) 
       }
+      dispatch(transactionRowClick(item.rawData.id, slack_channel_list, true, search_string))
+      
+      /* if(assignmentBar === false) {
+        assignmentBarToggle()  
+      } */
       //history.push(routes.review3)
     }
   }, [ ])

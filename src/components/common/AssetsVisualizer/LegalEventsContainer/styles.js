@@ -12,7 +12,7 @@ export default makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     '& .vis-time-axis .vis-text, .vis-item, .vis-y-axis':{
-      color: theme.palette.text.primary,
+      color: `${theme.palette.text.primary} !important` ,
     },
     '& .vis-timeline, .vis-panel.vis-center':{
       border: `1px solid ${theme.palette.divider}`
@@ -66,6 +66,12 @@ export default makeStyles(theme => ({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
+    '& .vis-time-axis .vis-text, .vis-item, .vis-y-axis':{
+      color: `${theme.palette.text.primary} !important` ,
+    },
+    '& .vis-timeline, .vis-panel.vis-center':{
+      border: `1px solid ${theme.palette.divider}`
+    },
   },  
   fullscreenBtn: {
     position: 'absolute',
@@ -184,9 +190,9 @@ export default makeStyles(theme => ({
     },
     '& .vis-timeline':{
       border: 0,
-      borderTop:`1px solid ${theme.palette.divider}`, 
+      /* borderTop:`1px solid ${theme.palette.divider}`, 
       borderBottom:`1px solid ${theme.palette.divider}`, 
-      backgroundColor: `${theme.palette.background.paper}!important`,
+      backgroundColor: `${theme.palette.background.paper}!important`, */
       '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground':{
         /* backgroundColor: '#424242 !important', */
       }

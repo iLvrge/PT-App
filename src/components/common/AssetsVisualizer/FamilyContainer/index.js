@@ -90,6 +90,7 @@ const FamilyContainer = ({ family, onClose }) => {
     const [ legalModal, setLegalModal] = useState(false)
     const selectedAsset = useSelector(state => state.patenTrack2.selectedAssetsPatents)
     const familyDataRetrieved = useSelector(state => state.patenTrack.familyDataRetrieved)
+    const familyLegalItem = useSelector(state => state.patenTrack2.familyLegalItem) 
 
     const menuItems = [
         {
@@ -123,6 +124,15 @@ const FamilyContainer = ({ family, onClose }) => {
         toggleFamilyItemMode(false)
         setFamilyItemDisplay({})*/
     }
+
+
+    useEffect(() => {
+        if(familyLegalItem.length == 0) {
+            if(timelineRef !== null && timelineRef.current != null && timelineRef.current != undefined) {
+                timelineRef.current.setSelection([])
+            }
+        }
+    }, [familyLegalItem, timelineRef])
  
 
     useEffect(() => {
