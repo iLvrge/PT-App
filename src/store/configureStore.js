@@ -20,12 +20,13 @@ if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_AP
   
   if(location && location != 'blank') {
     (async() => {
-      location = location.replace('/', '')
+      location = location.split('/').pop()[0]
+      console.log('location', location) 
       if( location != '') {
-        const { data } = await AuthApi.signInWithShareCode(location.replace('/', ''), (process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') ? 9 : process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 0 : 2)
+        const { data } = await AuthApi.signInWithShareCode(location, (process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') ? 9 : process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 0 : 2)
       
         if( data && data != null ) { 
-          if(data.accessToken != null ) {
+          if(data.accessToken != null ) {   
             const decoded_token = jwt_decode(data.accessToken)            
             localStorage.setItem('auth_signature', data.accessToken)
             store.dispatch(setAuthenticateAuthToken(data.accessToken))

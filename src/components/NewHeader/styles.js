@@ -166,7 +166,7 @@ export default makeStyles(theme => ({
         '& .MuiBadge-anchorOriginTopRightRectangular.MuiBadge-invisible': {
             transform: 'scale(0) translate(50%, -50%)'
         },
-        minWidth: 340
+        minWidth: 150
     },
     breadcrumbs: {
         display: 'flex',

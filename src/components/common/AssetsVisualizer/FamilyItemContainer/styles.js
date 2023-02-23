@@ -577,6 +577,9 @@ export default makeStyles(theme => ({
   dropdown: {
     '& .MuiSelect-standard': {
       paddingBottom: 10
-    }
+    },
+    '& .MuiInputLabel-root, .MuiSvgIcon-root': {
+      top: -4
+    } 
   }
 }))

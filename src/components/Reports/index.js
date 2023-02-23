@@ -1114,7 +1114,7 @@ const Reports = (props) => {
     }, [dispatch, activeId, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, cardList])
 
     const onHandleList = useCallback((id) => {
-        if(process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') {
+        if(process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD'/*  || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' */) {
             alert('Please activate your account.')
         } else {
             let subscription = parseInt(profile?.user?.organisation?.subscribtion), timeline = false, patent = false, maintainence = false
@@ -1237,14 +1237,17 @@ const Reports = (props) => {
                         dispatch(setDashboardScreen(false))
                         dispatch(setTimelineScreen(timeline))
                         dispatch(setPatentScreen(patent))
+                        let location = window.location.pathname
+                            location = location.split('/').pop()
+
                         if(patent === true) {
-                            history.push(`${routeList.patent_assets}/${controlList[findIndex].mainHeading.toLowerCase()}`)  
+                            history.push(`${routeList.patent_assets}/${controlList[findIndex].mainHeading.toLowerCase()}${process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? location != '' ? '/'+location : '' : ''}`)  
                         }
                         if(timeline === true) {
-                            history.push(`${routeList.assignments}/${controlList[findIndex].mainHeading.toLowerCase()}`)  
+                            history.push(`${routeList.assignments}/${controlList[findIndex].mainHeading.toLowerCase()}${process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? location != '' ? '/'+location : '' : ''}`)  
                         }
                         if(maintainence === true) {
-                            history.push(routeList.pay_maintainence_fee)  
+                            history.push(`${routeList.pay_maintainence_fee}${process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? location != '' ? '/'+location : '' : ''}`)  
                         }
                         if(props.openCustomerBar === false && timeline === false){
                             props.handleCustomersBarOpen()
