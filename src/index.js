@@ -11,7 +11,7 @@ import * as serviceWorker from './serviceWorker'
 import store from './reducers/store/configureStore'
 import './index.css'
 
-Sentry.init({
+/* Sentry.init({
   dsn: "https://9b208378541b4e1ca9201363140d27f4@o4504419505012736.ingest.sentry.io/4504419571466240",
   integrations: [
     new Integrations.BrowserTracing(),
@@ -20,7 +20,7 @@ Sentry.init({
   // We recommend adjusting this value in production, or using tracesSampler
   // for finer control
   tracesSampleRate: 1.0,
-}); 
+});  */
 
 
 

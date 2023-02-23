@@ -153,9 +153,10 @@ const ViewIcons = (props) => {
     }
 
     const onHandleDashboard = () => {
-        
+        let location = window.location.pathname
+            location = location.split('/').pop()
         if(path.indexOf('/dashboard') == -1) {
-            history.push('/dashboard') 
+            history.push(`/dashboard${process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? location != '' ? '/'+location : '' : ''}`) 
         }
         setPatentView(false)
         setTimelineView(false)
@@ -291,7 +292,7 @@ const ViewIcons = (props) => {
                             <IconButton 
                                 size="small"
                                 className={clsx(classes.actionIcon, {[classes.active]: props.dashboardScreen === true && viewDashboard.kpi})}
-                                onClick={() => process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert() :  onHandleKPI()}
+                                onClick={() => process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? onHandleAlert() :  onHandleKPI()}
                                 disabled={loadingDashboardData}
                             >
                                 <AppsOutage/>
@@ -309,7 +310,7 @@ const ViewIcons = (props) => {
                     <IconButton 
                         size="small"
                         className={clsx(classes.actionIcon, {[classes.active]:  props.dashboardScreen === true && !viewDashboard.line && viewDashboard.jurisdictions == false && viewDashboard.invention === false && viewDashboard.sankey === false && viewDashboard.kpi === false && viewDashboard.timeline === false})}
-                        onClick={() => process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert() :  changeGraph(false)}
+                        onClick={() => process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? onHandleAlert() :  changeGraph(false)}
                         disabled={loadingDashboardData}
                     >
                         <Speed/> 
@@ -328,20 +329,24 @@ const ViewIcons = (props) => {
                     <AutoGraph/>
                 </IconButton> 
             </AddToolTip> */}
-            <AddToolTip
-                tooltip={'Transactional activities such as acquisition, divestitures, collateralization and releases.'}
-                placement='bottom'
-            >
-                <IconButton 
-                    size="small"
-                    className={clsx(classes.actionIcon, {[classes.active]: props.dashboardScreen === true && viewDashboard.timeline})}
-                    onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : onHandleTimeline}
-                >
-                    <ViewTimeline/>
-                </IconButton> 
-            </AddToolTip>
             {
-                profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'
+                process.env.REACT_APP_ENVIROMENT_MODE !== 'KPI' && (
+                    <AddToolTip
+                        tooltip={'Transactional activities such as acquisition, divestitures, collateralization and releases.'}
+                        placement='bottom'
+                    >
+                        <IconButton 
+                            size="small"
+                            className={clsx(classes.actionIcon, {[classes.active]: props.dashboardScreen === true && viewDashboard.timeline})}
+                            onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : onHandleTimeline}
+                        >
+                            <ViewTimeline/>
+                        </IconButton> 
+                    </AddToolTip>
+                )
+            }
+            {
+                profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank' &&  process.env.REACT_APP_ENVIROMENT_MODE !== 'KPI'
                 && (
                     <React.Fragment>
                         {/* <AddToolTip
@@ -382,6 +387,7 @@ const ViewIcons = (props) => {
                                 </svg>
                             </IconButton>
                         </AddToolTip>  */}
+                        
                         <AddToolTip
                             tooltip={'All Assets (Since 1998)'}
                             placement='bottom'
