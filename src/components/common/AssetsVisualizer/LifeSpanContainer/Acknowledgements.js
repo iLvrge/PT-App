@@ -201,16 +201,16 @@ const Acknowledgements = () => {
                 const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector('#citationTimeline') : document.getElementById('citationTimeline'); 
                 const getPosition = element.getBoundingClientRect(); 
                 const tootltipTemplate = `<div class='custom_tooltip' style='border:1px solid #fff;background:${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default} ;top:${ getPosition.y }px;left:${ getPosition.x }px;'>
-                                            <div><h4 style='color:${color};text-align:left;margin:0'>Citing Patent number: </h4>${numberWithCommas(item.number)}</div>
+                                            <div><h4 style='color:${color};text-align:left;margin:0'>Cites patent: </h4>${numberWithCommas(item.number)}</div>
                                             <div>
-                                                <h4>Grant Date: </h4>${moment(new Date(item.start)).format(DATE_FORMAT)}
+                                                <h4>Was granted on: </h4>${moment(new Date(item.start)).format(DATE_FORMAT)}
                                             </div>
                                             <div>
-                                                <h4>Assignees:</h4>
+                                                <h4>Owned by:</h4>
                                                 <div>${item.all_assignee}</div>
                                             </div>
                                             <div>
-                                                <h4>Cited a Total of: </h4>
+                                                <h4>Is cited by: </h4>
                                                 ${item.combined} patent assets
                                             </div>
                                         </div>` 
