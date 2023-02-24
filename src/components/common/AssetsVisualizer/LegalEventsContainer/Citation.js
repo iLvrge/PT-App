@@ -128,18 +128,18 @@ const Citation = ({ number, citationRawData, updateCitationRawData }) => {
                 const getPosition = element.getBoundingClientRect();    
                 const color = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary
                 const tootltipTemplate = `<div class='custom_tooltip' style='background:${isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default} ;top:${ getPosition.y }px;left:${ getPosition.x }px;'>
-                                            <h4 style='color:${color};text-align:left;margin:0'>${numberWithCommas(item.number)}</h4>
+                <div><h4 style='color:${color};text-align:left;margin:0'>Cites patent: </h4>${numberWithCommas(item.number)}</div>
                                             <div>
-                                                <h4>Grant Date: </h4>${moment(new Date(item.start)).format(DATE_FORMAT)}
+                                                <h4>Was granted on: </h4>${moment(new Date(item.start)).format(DATE_FORMAT)}
                                             </div>
                                             <div>
-                                                <h4>Assignees:</h4>
+                                                <h4>Owned by:</h4>
                                                 ${item.all_assignee.map(name => (
                                                     '<div>'+ toTitleCase(name.assignee_organization) +'</div>'
                                                 )).join('')}
                                             </div>
                                             <div>
-                                                <h4>Cited a Total of: </h4>
+                                                <h4>Is cited by:  </h4>
                                                 ${item.combined} patent assets
                                             </div>
                                         </div>` 

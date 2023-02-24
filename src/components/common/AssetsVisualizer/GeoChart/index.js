@@ -349,7 +349,7 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
             <Box className={classes.graphContainer} ref={containerRef} sx={{p: 2}}>  
                 {
                     typeof titleBar !== 'undefined' && titleBar === true && ((typeof disableOtherTabs !== 'undefined' && disableOtherTabs === true ) || selectedTab === 1) && (
-                        <TitleBar title={loading === false && data.length < 2 ? `The company has no non-expired USA patents filed after 1999, and no foreign counterparts.` : `Non expired US patents filed after 1999 and their foreign counterparts:`} enablePadding={false}  underline={false} typography={true}/>   
+                        <TitleBar title={loading === false && data.length < 2 ? `The company has no non-expired USA patents filed after 1999, and no foreign counterparts.` : `The assets in the Assets list on the left have family members in the following jurisdictions. Hover over the colored countries to see the number of family members.`} enablePadding={false}  underline={false} typography={true}/>   
                     )
                 }  
                 {

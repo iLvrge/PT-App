@@ -13,6 +13,8 @@ import { setTokenStorage, getTokenStorage } from '../../utils/tokenStorage'
 
 import AuthApi from '../../api/authApi'
 
+const MAIN_WEBSITE = 'https://patentrack.com'
+
 /*const store = createStore(rootReducer, applyMiddleware(thunk, logger )) */
 const store = createStore(rootReducer, applyMiddleware(thunk)) 
 
@@ -69,17 +71,17 @@ if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_AP
               }
             } 
           } else {
-            window.location.href = 'https://patentrack.com'
+            window.location.href = MAIN_WEBSITE
           }      
         } else {
-          window.location.href = 'https://patentrack.com'
+          window.location.href = MAIN_WEBSITE
         }
       } else {
-        window.location.href = 'https://patentrack.com'
+        window.location.href = MAIN_WEBSITE
       }    
     })()
   } else {
-    window.location.href = 'https://patentrack.com'
+    window.location.href = MAIN_WEBSITE
   } 
 } else {
   let token = localStorage.getItem('token')

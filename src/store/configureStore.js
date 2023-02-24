@@ -22,7 +22,7 @@ if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_AP
     (async() => {
       location = location.split('/').pop()[0]
       console.log('location', location) 
-      if( location != '') {
+      if( location != '' && location != 'auth') {
         const { data } = await AuthApi.signInWithShareCode(location, (process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') ? 9 : process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 0 : 2)
       
         if( data && data != null ) { 
@@ -74,7 +74,7 @@ if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_AP
         } else {
           window.location.href = 'https://patentrack.com'
         }
-      } else {
+      } else if(location != 'auth'){
         window.location.href = 'https://patentrack.com'
       }    
     })()

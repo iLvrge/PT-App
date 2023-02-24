@@ -65,13 +65,6 @@ let pages = [
   },
   {
     exact: true,
-    path: routeList.standard_default,
-    component: GlobalScreen,
-    layout: GlobalLayout,
-    type: 1
-  },
-  {
-    exact: true,
     path: routeList.global,
     component: GlobalScreen,
     layout: GlobalLayout,
@@ -204,6 +197,15 @@ if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_E
       type: 1
     },
   ] 
+} else if (process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') {
+  pages.push(
+    {
+      exact: true,
+      path: routeList.standard_default,
+      component: GlobalScreen,
+      layout: GlobalLayout,
+      type: 1
+    })
 }
 
 
@@ -230,9 +232,9 @@ export default (
       process.env.REACT_APP_ENVIROMENT_MODE === 'PRO'
       ?
         <>
-        <Route path="/settings" component={Settings} />
-        <Route path="/reset/:token" component={Auth} />
-        <Route path="/auth" component={Auth} />        
+          <Route path="/settings" component={Settings} />
+          <Route path="/reset/:token" component={Auth} />
+          <Route path="/auth" component={Auth} />        
         </>
       :
       ''
