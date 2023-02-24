@@ -208,6 +208,7 @@ if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_E
     })
 }
 
+console.log('pages', pages)
 
 export default (
   <Switch>
