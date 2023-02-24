@@ -40,7 +40,7 @@ function Auth(props) {
     setPassReset(1)
     setShowLogin(true)
   }
-
+ 
 
   if (props.auth.authenticated) return <Redirect to={'/dashboard'} />
   return (
