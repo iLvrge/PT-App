@@ -155,9 +155,10 @@ const ViewIcons = (props) => {
     const onHandleDashboard = () => {
         let location = window.location.pathname
             location = location.split('/').pop()
+            console.log('path', path)
         if(path.indexOf('/dashboard') == -1) {
             history.push(`/dashboard${process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? location != '' ? '/'+location : '' : ''}`) 
-        }
+        } 
         setPatentView(false)
         setTimelineView(false)
         dispatch(setAssetButton(false))

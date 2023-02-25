@@ -218,7 +218,7 @@ const GlobalScreen = ({
         if((process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') && auth_token !== null) {
             let url = location.pathname
             if(url != '' && location != 'blank') {
-                url = url.replace('/', '')
+                url = url.split('/').pop()
                 if(url != '') {
                     const getDashboardData = async() => {
                         PatenTrackApi.cancelShareDashboardRequest()
