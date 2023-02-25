@@ -1118,12 +1118,17 @@ const GlobalLayout = (props) => {
     }, [openChartBar, openAnalyticsBar, openCommentBar, openIllustrationBar, dashboardScreen])
 
 
-    const handleOpenSettings = useCallback((event) => {
+    const handleOpenSettings = useCallback((event) => { 
         if(profile?.user && profile.user?.role && profile.user.role.name == 'Admin') {
             dispatch(setDashboardScreen(false)) 
             dispatch(setViewDashboardIntial(false)) 
             checkChartAnalytics(null, null, false)
-            history.push('/settings/companies/names')
+            let codeShare = ''
+            if(process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') {
+                const locationShare = window.location.pathname
+                codeShare = '/' + locationShare.split('/').pop()
+            }  
+            history.push(`/settings/companies/names${codeShare}`)
         } else {
             alert('Available for admin only'); 
         }

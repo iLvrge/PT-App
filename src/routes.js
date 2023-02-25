@@ -207,8 +207,7 @@ if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_E
       type: 1
     })
 }
-
-console.log('pages', pages)
+ 
 
 export default (
   <Switch>
@@ -230,10 +229,11 @@ export default (
     )}
     <Route path="/slack" component={AuthSlack} />
     {
-      process.env.REACT_APP_ENVIROMENT_MODE === 'PRO'
+      process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI'
       ?
         <>
           <Route path="/settings" component={Settings} />
+          
           <Route path="/reset/:token" component={Auth} />
           <Route path="/auth" component={Auth} />        
         </>

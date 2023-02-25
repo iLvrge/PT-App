@@ -32,11 +32,13 @@ const TABS = [
   { label: 'Repository', value: 'repository', component: Repository },
   { label: 'Utilities', value: 'utilities', component: Utilities },
   { label: 'Users', value: 'users', component: Users },
+  { label: 'Users', value: 'users/:code', component: Users },
   { label: 'Professionals', value: 'professionals', component: Professionals },
   { label: 'Documents', value: 'documents', component: Documents },
   {
     label: 'Companies', value: 'companies', children: [
       { label: 'Names', value: 'companies/names', component: CompaniesNames },
+      { label: 'Names', value: 'companies/names:code', component: CompaniesNames },
       { label: 'Addresses', value: 'companies/addresses', component: CompaniesAdresses },
       { label: 'Law Firms', value: 'companies/lawFirms', component: CompaniesLawFirms },
     ],
@@ -68,11 +70,13 @@ function SettingsPage() {
   const viewDashboard = useSelector(state => state.ui.viewDashboard) 
   const profile = useSelector(store => (store.patenTrack.profile))
   const currentTab = useMemo(() => {
-    const splittedPathname = location.pathname.split('/')
+    let splittedPathname = location.pathname.split('/')
+    if(process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') {
+      splittedPathname.splice(splittedPathname.length - 1 , 1 ) 
+    }
     return splittedPathname.slice(2).join('/')
   }, [ location ])
-
-
+ 
   const initialOpenSubTabs = findTabViaChild(currentTab)
   const [ openSubTabs, setOpenSubTabs ] = useState(initialOpenSubTabs ? [ initialOpenSubTabs ] : [])
 
@@ -183,7 +187,12 @@ function SettingsPage() {
   const handleUsersLink = () => {
     resetAll()
     setOpenTeamBar(true)
-    history.push('/settings/users')  
+    let codeShare = ''
+    if(process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') {
+      const locationShare = window.location.pathname
+      codeShare = '/' + locationShare.split('/').pop()
+    }  
+    history.push(`/settings/users${codeShare}`)  
   }
 
   const handleProfessionalsLink = () => {
@@ -232,7 +241,12 @@ function SettingsPage() {
     dispatch(updateViewDashboard(oldViewScreen))
     dispatch(setViewDashboardIntial(false))  
     dispatch(setDashboardScreen(true)) 
-    history.push('/dashboard') 
+    let codeShare = ''
+    if(process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') {
+      const locationShare = window.location.pathname
+      codeShare = '/' + locationShare.split('/').pop()
+    } 
+    history.push(`/dashboard${codeShare}`) 
     dispatch(setAssetButton(false))
     dispatch(setTransactionButton(false))
     dispatch(setJurisdictionRequest(false))
