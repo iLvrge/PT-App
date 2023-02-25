@@ -15,9 +15,15 @@ export function useReloadLayout() {
         const {pathname} = location;
         let replaceWord = type === 1 ? '/patent_assets' : '/assignments'; 
         let loadLayoutName = pathname.replace(replaceWord, '')
+        if(process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' && loadLayoutName != '') {
+            if(location.pathname.split('/').length == 4) {
+                const code = loadLayoutName.split('/').pop()
+                loadLayoutName = loadLayoutName.replace(code, '') 
+            }
+        }
         if(loadLayoutName.indexOf('/') !== -1) {
-            loadLayoutName = loadLayoutName.replace('/', '')
-        } 
+            loadLayoutName = loadLayoutName.replace(/\//g, '')
+        }  
         if(loadLayoutName != '') {
             setIsLoaded(true) 
             let findIndex = controlList.findIndex( item => item.type == 'menu' && item.mainHeading.toLowerCase() == loadLayoutName) 
