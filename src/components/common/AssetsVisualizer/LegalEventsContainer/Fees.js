@@ -33,9 +33,9 @@ const options = {
 }
 const DATE_FORMAT = 'MMM DD, YYYY'
  
-const getTemplateContent = (item, icons, category) => {   
+const getTemplateContent = (item, icons, showAbandoned) => {   
   let formatString = ''; 
-  if(typeof category != 'undefined' && category == 'abandoned') {
+  if(typeof showAbandoned != 'undefined' && showAbandoned == 'abandoned') {
     if(item.grant_doc_num != '' ) {
       formatString = `US<br/>${numberWithCommas(removeLeadingZeros(item.grant_doc_num))}`
     } else {
@@ -68,16 +68,17 @@ const getTemplateContent = (item, icons, category) => {
   /*typeof item.template_string != 'undefined' ? item.template_string == '0' ? `US<br/>${numberWithCommas(item.grant_doc_num)}` : item.event_code == '13' ? `US<br/>${item.template_string == '0' ? item.patent != '' ? numberWithCommas(item.patent) : applicationFormat(item.application) : item.template_string}` : item.template_string : item.maintainence_code.template_string*/
   const getEventIcons = icons[item.event_code] 
   const icon = getEventIcons["icon3"] != undefined ? getEventIcons["icon3"]: ''
-  const templateContent = `<div class='first'>${formatString}</div><div class='textColumn'>${item.event_code == '13' ? `<div style="text-align:left;line-height:0.7">${typeof category != 'undefined' && category == 'abandoned' ? 'Expired on': 'Filed on'}:</div>` : typeof category != 'undefined' && category == 'abandoned' ? 'Expired on:<br/>' : ''}${moment(new Date(item.eventdate)).format(DATE_FORMAT)}</div><div class='absolute'>${icon}</div>`
+  
+  const templateContent = `<div class='first'>${formatString}</div><div class='textColumn'>${item.event_code == '13' ? `<div style="text-align:left;line-height:0.7">${typeof showAbandoned != 'undefined' && showAbandoned == 'abandoned' ? 'Expired on': 'Filed on'}:</div>` : typeof showAbandoned != 'undefined' && showAbandoned == 'abandoned' ? 'Expired on:<br/>' : ''}${moment(new Date(item.eventdate)).format(DATE_FORMAT)}</div><div class='absolute'>${icon}</div>`
   return templateContent
 } 
 
-const convertDataToItem = (eventItem, index, type, cls, icons, category) => {
+const convertDataToItem = (eventItem, index, type, cls, icons, showAbandoned) => {
   const assetType = type === 1 ? 'background' : 'box'
   const date = new Date( type === 0 ? eventItem.eventdate : eventItem.start )
   const item = {
     id: index + 1,
-    content: type === 1 ? `` : getTemplateContent(eventItem, icons, category),
+    content: type === 1 ? `` : getTemplateContent(eventItem, icons, showAbandoned),
     start: date,
     type: assetType,
     rawData: eventItem,
@@ -99,7 +100,7 @@ const convertDataToItem = (eventItem, index, type, cls, icons, category) => {
 var tootlTip = ''
 const TIME_INTERVAL = 1000
 
-const Fees = ({ events, showTabs, tabText }) => {
+const Fees = ({ events, showTabs, tabText, showAbandoned }) => {
   const dispatch = useDispatch()
   const classes = useStyles()
   const timelineRef = useRef()
@@ -323,11 +324,11 @@ const Fees = ({ events, showTabs, tabText }) => {
   useEffect(() => {
     if (isLoadingTimelineRawData) return 
    
-    const mainItems = Object.keys(events).length > 0 &&  events.main != undefined ? events.main.map((event, index) => convertDataToItem(event, index, 0, classes, events.icons, selectedCategory)) : []
+    const mainItems = Object.keys(events).length > 0 &&  events.main != undefined ? events.main.map((event, index) => convertDataToItem(event, index, 0, classes, events.icons, showAbandoned)) : []
     let otherItems = []
      
     if( Object.keys(events).length > 0 && events.other != undefined &&  events.other.length > 0 ) {
-      otherItems = events.other.map((event, index ) => convertDataToItem(event, mainItems.length + index, 1, classes, events.icons, selectedCategory))
+      otherItems = events.other.map((event, index ) => convertDataToItem(event, mainItems.length + index, 1, classes, events.icons, showAbandoned))
     }
 
     const convertedItems = [...mainItems, ...otherItems]
