@@ -468,14 +468,16 @@ const TimelineChart = (props) => {
     setTimelineItems(convertedItems)
     items.current = new DataSet()
     let start =  new moment(), end =  props.type === 4 ? new moment(new Date('2500-01-01')) : new moment().add(1, 'year')   
-    /* if(timelineRef.current !== null) {
+    /* if(timelineRef.current !== null && convertedItems.length > 0) {
         timelineRef.current.destroy()
         timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
+        timelineRef.current.setOptions(options) 
         timelineRef.current.on('select', onSelect)
         timelineRef.current.on('itemover', onItemover)
         timelineRef.current.on('itemout', onItemout)
-    }  */
-    
+        console.log("timelineRef", timelineRef)
+    } */  
+     
     if (convertedItems.length > 0) {
         /* start = props.type === 5 ? new moment(convertedItems[0].start).subtract(1, 'week') : props.type === 4 ? new moment(new Date('1900-01-01')) : new moment(convertedItems[convertedItems.length - 1].start).subtract(1, 'week') */
         start = new Date()
@@ -500,18 +502,35 @@ const TimelineChart = (props) => {
             start = new moment(start).subtract(3, 'year') 
         } 
         end = new moment(end).add(3, 'year')
-        items.current.add(convertedItems) 
-        timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1400-01-01')), max: new moment(new Date('2500-01-01'))})  
+        
+        if(timelineRef.current !== null && timelineRef.current != undefined && typeof timelineRef.current.destroy === 'function') {
+            timelineRef.current.destroy()
+            timelineRef.current = new Timeline(timelineContainerRef.current, [], options)  
+            setTimeout(() => {
+                drawTimeline(start, end, convertedItems)  
+            }, 1)
+        } else {
+            items.current.add(convertedItems) 
+            timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1400-01-01')), max: new moment(new Date('2500-01-01'))}) 
+            timelineRef.current.setItems(items.current)  
+        }
+        
     } else {
         start = new moment().subtract(1, 'year')  
         end = new moment().add(1, 'year')  
         timelineRef.current.setOptions({ ...options, start, end, min: start, max: end})
-    }
-    
-    
-    timelineRef.current.setItems(items.current)  
+    } 
+     
     return (() => {}) 
     }, [ timelineRawData ])
+
+
+    const drawTimeline = (start, end, convertedItems) => {
+        items.current.add(convertedItems) 
+        console.log('drawTimeline', options, timelineRef.current, start, end, items.current)
+        timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1400-01-01')), max: new moment(new Date('2500-01-01'))}) 
+        timelineRef.current.setItems(items.current)
+    }
     return (
         <Paper className={clsx(classes.container, classes.columnDirection)} square>
             {

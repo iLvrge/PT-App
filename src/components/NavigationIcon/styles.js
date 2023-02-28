@@ -21,8 +21,9 @@ export default makeStyles(theme => ({
             '& svg':{
                 fill: theme.palette.text.disabled,
                 stroke: theme.palette.text.disabled,
-                /* width: '2rem',
-                height: '2rem' */  
+                width: '1em',
+                height: '1em',
+                fontSize: '1.5rem'
             },
             '& svg.noStroke':{
                 stroke: 'none !important'
