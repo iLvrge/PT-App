@@ -1241,14 +1241,14 @@ const GlobalLayout = (props) => {
     }
 
     const topToolBar = [
-        {
+        /* {
             tooltip: 'Settings',
             bar: false,
             click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD'  ? handleAlertPop : handleOpenSettings,
             t: 0,
             label: 'Settings',
             margin: true,
-        },
+        }, */
         {
             tooltip: 'Filter by Companies',
             bar: props.type === 9 ? false : openBar,

@@ -10,10 +10,10 @@ export default makeStyles(theme => ({
         overflowY: 'hidden',
         padding: '5px' ,
         '& .MuiIconButton-root':{
-            '& svg':{
+            /* '& svg':{
                 width: '1.5rem',
                 height: '1.5rem'
-            }
+            } */
         } ,
         '& .MuiPaper-root':{
             /* backgroundImage: 'none' */

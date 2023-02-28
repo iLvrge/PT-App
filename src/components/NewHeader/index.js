@@ -23,14 +23,19 @@ import {
         Divider, 
         Typography,
         Tooltip,
-        Zoom, 
+        Zoom,
+        Badge,
+        Box, 
       } from '@mui/material'
 
 import { Menu as MenuIcon,  
         Business as BusinessIcon,  
         LockOpen as LockOpenIcon,  
         LightModeOutlined as LightModeOutlinedIcon,
-        DarkModeOutlined as DarkModeOutlinedIcon, 
+        DarkModeOutlined as DarkModeOutlinedIcon,
+        Settings as SettingsIcon,
+        PendingActionsOutlined,
+        ManageSearch, 
       } from '@mui/icons-material'
 
 import routeList from '../../routeList'
@@ -43,7 +48,7 @@ import CompanySummary from '../common/CompanySummary'
 import ActionMenu from './ActionMenu'
 /* import ClipboardAssets from './ClipboardAssets' */
 import FullScreen from '../common/FullScreen'
-
+import AddToolTip from '../Reports/AddToolTip'
 import { signOut, deleteCookie } from '../../actions/authActions'
 import { getTokenStorage, removeTokenStorage } from '../../utils/tokenStorage'
 
@@ -85,7 +90,11 @@ import { setAssetTypeAssignments,
   setSlackProfileData,
   setSlackUsers,
   setSocialMediaConnectPopup,
-  setSelectedMaintainenceAssetsList
+  setSelectedMaintainenceAssetsList,
+  setCPCRequest, 
+  setJurisdictionRequest, 
+  setTimelineData, 
+  setTimelineRequest
  } from '../../actions/patentTrackActions2'
 
  import {  
@@ -109,12 +118,20 @@ import {
   setTimelineScreen,
   setDashboardScreen,
   setPatentScreen,
-  setMaintainenceFeeFrameMode
+  setAssetButton, 
+  setTransactionButton,
+  setMaintainenceFeeFrameMode,
+  setViewDashboardIntial
 } from '../../actions/uiActions'
 import Scheduling from './Scheduling'
 import ViewIcons from './ViewIcons'
 import SocialMediaConnect from '../common/SocialMediaConnect'
 import { stubTrue } from 'lodash'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faShareAlt } from '@fortawesome/free-solid-svg-icons'
+import { copyToClipboard } from '../../utils/html_encode_decode'
+ 
+import PatenTrackApi from '../../api/patenTrack2' 
 
 const NewHeader = (props) => {
   const classes = useStyles()
@@ -122,6 +139,7 @@ const NewHeader = (props) => {
   const history = useHistory()
   const location = useLocation();
   const isDarkTheme = useSelector( state => state.ui.isDarkTheme )
+  const viewDashboard = useSelector(state => state.ui.viewDashboard) 
   const slack_profile_data = useSelector( state => state.patenTrack2.slack_profile_data )
   const google_profile = useSelector( state => state.patenTrack2.google_profile )
   const slack_auth_token = useSelector(state => state.patenTrack2.slack_auth_token)
@@ -137,7 +155,23 @@ const NewHeader = (props) => {
   const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
   const timelineScreen = useSelector(state => state.ui.timelineScreen)
   const patentScreen = useSelector(state => state.ui.patentScreen)
+  const [timelineView, setTimelineView] = useState(false)
+  const [patentView, setPatentView] = useState(false)
+
   const socialMediaConnectPopup = useSelector(state => state.patenTrack2.socialMediaConnectPopup)
+
+  const category = useSelector(state => state.patenTrack2.selectedCategory)
+  const maintainencePatentsList = useSelector(state => state.patenTrack2.maintainenceAssetsList.list)
+  const mainCompaniesSelected = useSelector(state => state.patenTrack2.mainCompaniesList.selected)
+  const assetTypeAssignmentAssetsList = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list)
+  const selectedAssetsTransactions = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
+  const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
+  const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
+  const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected);
+  const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected);
+  const SHARE_URL_MESSAGE = 'A sharing URL was added to your clipboard.'
+
+  
   const [layoutName, setLayoutName] = useState(null)
   const [ isClipboardActive, setIsClipboardActive ] = useState(false)
   const [ isCompanyMenuOpen, setCompanyMenuOpen ] = useState(false)
@@ -620,6 +654,123 @@ const resetAllActivity = (category) => {
 const onHandlleSetSocialMediaPopup = (flag) => {
   dispatch(setSocialMediaConnectPopup(flag))
 }
+
+const onHandleAlert = () => {
+  alert('Please activate your account.')
+}
+
+
+
+const shareDashboard = async() => {
+  /**
+   * get selected companies and selected transaction types
+   * and create shareable dashboard url
+   */ 
+  if(mainCompaniesSelected.length > 0) {
+      const formData = new FormData()
+      formData.append('selectedCompanies', JSON.stringify(mainCompaniesSelected));
+      formData.append('tabs', profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? 5 : JSON.stringify(assetTypesSelected));
+      formData.append('customers', JSON.stringify(selectedAssetCompanies));
+      formData.append('share_button', viewDashboard.kpi === true ? 1 : viewDashboard.gauge === true ? 2 : 0);
+      const {data} = await PatenTrackApi.shareDashboard(formData)
+      if( data !== null){
+          copyToClipboard(data, SHARE_URL_MESSAGE)
+      }
+  } else {
+      alert("Please select a company first")
+  }
+}
+
+const onShare = useCallback(async () => {
+  if (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'){
+      alert('Message..')
+  } else {
+      if(props.dashboardScreen === true) { 
+          shareDashboard()
+      } else {
+          let selectAssetsList = [], selectedTransactions = []
+
+          let list = maintainencePatentsList.length > 0 ? [...maintainencePatentsList] : [...assetTypeAssignmentAssetsList]
+  
+          let selectedItems = selectedMaintainencePatents.length > 0 ? [...selectedMaintainencePatents] : [...assetTypeAssignmentAssetsSelected]
+  
+          if(selectedItems.length > 0) {
+              selectedItems.forEach( item => {
+                  const findIndex = list.findIndex( row => row.asset == item)
+                  if(findIndex !== -1) {
+                  selectAssetsList.push({asset: item, flag: list[findIndex].grant_doc_num !== '' && list[findIndex].grant_doc_num !== null ? 4 : 5})
+                  }
+              }) 
+          } else {
+              selectedTransactions = [...selectedAssetsTransactions]
+          }
+          if( selectedTransactions.length == 0 &&  selectAssetsList.length == 0 ) {
+              alert(`Please select one or more ${props.timelineScreen === true ? 'transactions' : 'assets'} to share`)
+          } else {
+              // Share list of assets and create share link 
+              let form = new FormData()
+              form.append('assets', JSON.stringify(selectAssetsList))
+              form.append('transactions', JSON.stringify(selectedTransactions))
+              form.append('type', 2)      
+              const {data} = await PatenTrackApi.shareIllustration(form)
+              if (data.indexOf('sample') >= 0) {
+                  /**
+                   * just for temporary replacing
+                   * open share url new tab
+                   */
+                  //const shareURL = data.replace('https://share.patentrack.com','http://167.172.195.92:3000')
+                  
+                  /* if(window.confirm("Copy a sharing link to your clipboard.")){
+                      copy(data)
+                  } */
+                  if( data !== null){
+                      copyToClipboard(data, SHARE_URL_MESSAGE)
+                  }
+                  //window.open(data,'_BLANK')
+              } 
+          }
+      }
+  }        
+}, [ dispatch, category, mainCompaniesSelected, selectedMaintainencePatents, assetTypeAssignmentAssetsSelected, selectedAssetsTransactions ])
+
+const onHandleTransactions = () => {
+  dispatch(setAssetButton(false))
+  dispatch(setTransactionButton(true))
+  setPatentView(false)
+  setTimelineView(true)
+  resetAllActivity('due_dilligence')
+  onHandleTimelineScreen()
+} 
+
+const onHandlePatentAssets = () => {
+  dispatch(setAssetButton(true))
+  dispatch(setTransactionButton(false))
+  setPatentView(true)
+  setTimelineView(false)
+  dispatch(setJurisdictionRequest(false))
+  dispatch(setCPCRequest(false))
+  dispatch(setTimelineRequest(false))
+  dispatch(setTimelineData([]))
+  resetAllActivity('due_dilligence')
+  onHandlePatentAssetsScreen()
+}
+
+const handleOpenSettings = useCallback((event) => { 
+  if(profile?.user && profile.user?.role && profile.user.role.name == 'Admin') {
+      dispatch(setDashboardScreen(false)) 
+      dispatch(setViewDashboardIntial(false)) 
+      props.checkChartAnalytics(null, null, false)
+      let codeShare = ''
+      if(process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') {
+          const locationShare = window.location.pathname
+          codeShare = '/' + locationShare.split('/').pop()
+      }  
+      history.push(`/settings/companies/names${codeShare}`)
+  } else {
+      alert('Available for admin only'); 
+  }
+}, [ history, profile ])
+
   return (
     <AppBar className={classes.root} color='transparent' position='relative'>
       <Toolbar className={classes.toolbar}>
@@ -686,6 +837,8 @@ const onHandlleSetSocialMediaPopup = (flag) => {
               openIllustrationBar={props.openIllustrationBar}
               handleIllustrationBarOpen={props.handleIllustrationBarOpen}
             />
+
+            
 
             {
               !googleAuthLogin
@@ -788,7 +941,7 @@ const onHandlleSetSocialMediaPopup = (flag) => {
               className={`${classes.buttonIcon} ${classes.menuButton}`}
               color='inherit'
               aria-label='open drawer'
-              onClick={(event) => {toggleDrawer(event, true)}}
+              onClick={(event) => {toggleDrawer(event, !openDrawer.right)}}
               size="large">
               <MenuIcon />
             </IconButton>
@@ -808,7 +961,85 @@ const onHandlleSetSocialMediaPopup = (flag) => {
                       </ListItemIcon>
                       <ListItemText primary={`Sign Out`} />
                   </ListItem>
-                  <ListItem onClick={handleThemeMode} button disabled>
+                  
+                  {
+                profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank' &&  process.env.REACT_APP_ENVIROMENT_MODE !== 'KPI'
+                && (
+                    <React.Fragment>
+                      <AddToolTip
+                        tooltip={'Share Dashboard/Transactions/Assets'}
+                        placement='bottom'
+                      >
+                        <ListItem 
+                          onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : onShare}
+                          button>
+                          <ListItemIcon  color='inherit' >
+                            <FontAwesomeIcon
+                              icon={faShareAlt}
+                            />
+                          </ListItemIcon>
+                          <ListItemText primary={`Share Dashboard/Transactions/Assets`} />
+                        </ListItem>   
+                      </AddToolTip> 
+                      <ListItem 
+                        className={`${clipboard_assets.length > 0 ? classes.clipIconActive : ''} ${ props.display_clipboard === true ? classes.clipIconIsActive : ''}`}
+                        onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : handleClipboard}
+                        button>
+                          <ListItemIcon  color='inherit' >
+                            <Badge badgeContent={clipboard_assets.length} color="secondary">    
+                              <PendingActionsOutlined/>
+                            </Badge>
+                          </ListItemIcon>
+                          <ListItemText primary={`Clipboard`} />
+                      </ListItem> 
+                      <AddToolTip
+                          tooltip={'All Assets (Since 1998)'}
+                          placement='bottom'
+                      >
+                        <ListItem 
+                            className={classes.borderItem}
+                            onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : onHandlePatentAssets} 
+                            button>
+                          <ListItemIcon  color='inherit' >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  className={classes.svgIcon}><path d="M0 0h24v24H0V0z" fill="none"/><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 4h2v5l-1-.75L9 9V4zm9 16H6V4h1v9l3-2.25L13 13V4h5v16z"/></svg>
+                          </ListItemIcon>
+                          <ListItemText primary={`All Assets (Since 1998)`} />
+                        </ListItem> 
+                      </AddToolTip> 
+                      <AddToolTip
+                          tooltip={'All Transactions (Since 1998)'}
+                          placement='bottom'
+                      >
+                        <ListItem 
+                          onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : onHandleTransactions}
+                          button>
+                          <ListItemIcon  color='inherit' >
+                            <svg id="icons" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" className={classes.svgIcon}><path d="M52,7H12a6,6,0,0,0-6,6V51a6,6,0,0,0,6,6H52a6,6,0,0,0,6-6V13A6,6,0,0,0,52,7Zm2,44a2,2,0,0,1-2,2H12a2,2,0,0,1-2-2V13a2,2,0,0,1,2-2H52a2,2,0,0,1,2,2Z"/><path d="M45,29a2,2,0,0,0,0-4H22.83l2.58-2.59a2,2,0,0,0-2.82-2.82l-6,6a2,2,0,0,0-.44,2.18A2,2,0,0,0,18,29Z"/><path d="M47,36H20a2,2,0,0,0,0,4H42.17l-2.58,2.59a2,2,0,1,0,2.82,2.82l6-6a2,2,0,0,0,.44-2.18A2,2,0,0,0,47,36Z"/></svg>
+                          </ListItemIcon>
+                          <ListItemText primary={`All Transactions (Since 1998)`} />
+                        </ListItem>  
+                      </AddToolTip> 
+                      <ListItem  
+                        className={classes.borderItem}
+                        onClick={handleOpenSettings}
+                        button>
+                        <ListItemIcon  color='inherit' >
+                          <SettingsIcon className={`noStroke`}/>
+                        </ListItemIcon>
+                        <ListItemText primary={`Settings`} />
+                      </ListItem>  
+                      <ListItem   
+                        onClick={() => window.open('https://ppubs.uspto.gov/pubwebapp/')}
+                        button>
+                        <ListItemIcon  color='inherit' >
+                          <ManageSearch/>
+                        </ListItemIcon>
+                        <ListItemText primary={`Search at USPTO`} />
+                      </ListItem>    
+                    </React.Fragment>
+                )
+            } 
+                  {/* <ListItem onClick={handleThemeMode} button disabled>
                     <ListItemIcon  color='inherit' >
                         {
                           isDarkTheme ?
@@ -818,7 +1049,7 @@ const onHandlleSetSocialMediaPopup = (flag) => {
                         }
                     </ListItemIcon>
                     <ListItemText primary={isDarkTheme ? `Light Mode` : `Dark Mode` } />
-                  </ListItem>
+                  </ListItem> */}
                   
                   {
                     !googleAuthLogin
@@ -841,7 +1072,7 @@ const onHandlleSetSocialMediaPopup = (flag) => {
                   {
                     process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' 
                     ?
-                      <>
+                      <Box style={{position: 'absolute', bottom: -50}}>
                         <ListItem className={`children`} button style={{marginTop: '50px'}}>
                           <ListItemIcon aria-label='Account Scope' color='inherit' className={`children`}>
                               <BusinessIcon className={`children`}/>
@@ -850,7 +1081,7 @@ const onHandlleSetSocialMediaPopup = (flag) => {
                         </ListItem>   
                         <Divider />   
                         <CompanySummary />
-                      </>
+                      </Box>
                     :
                     ''
                   }
