@@ -24,7 +24,7 @@ export default makeStyles(theme => ({
         //padding: `0px ${HEADER_PADDING}px`,
         overflow: 'hidden',
         padding: '0 10px',
-        boxShadow: 'none',
+        boxShadow: 'none',  
         '& .iconItem':{
             width: 90,
             '& .MuiListItemIcon-root':{
@@ -204,15 +204,18 @@ export default makeStyles(theme => ({
         alignItems: 'center',
     },
     rightMenu:{
+        position: 'relative',
+        height: '100%',
         '& .MuiList-root':{
-            paddingLeft: '20px',
-            paddingRight: '20px'
+            paddingLeft: 20,
+            paddingRight: 20,
+            height: '100%'
         },
         '& .MuiListItem-gutters':{
-            paddingRight: '70px'
+            paddingRight: 70
         },
         '& .MuiListItemIcon-root':{
-            minWidth: '35px'
+            minWidth: 35
         }
     },
     childMenu:{
@@ -292,8 +295,18 @@ export default makeStyles(theme => ({
     },
     drawer:{
         '& .MuiDrawer-paper':{
-            top: '42px'
+            top: 53
         }
+    },
+    borderItem: {
+        borderTop: '1px solid #545454',
+        marginTop: 20
+    },
+    svgIcon: {
+        fontSize: '1.5rem',
+        width: '1em',
+        height: '1em',
+        fill: 'currentColor',
     },
     item:{
         background: '#222222',
@@ -591,6 +604,11 @@ export default makeStyles(theme => ({
         display: 'inline-block',
         userSelect: 'none'
     },
+    actionIconDashboard: {
+        '& svg' : {
+            fontSize: '2.5rem'
+        }
+    },
     actionIcon: {
         /* '& svg':{
             width: '1rem !important',
@@ -598,9 +616,7 @@ export default makeStyles(theme => ({
         } */
         color: theme.palette.text.disabled,
         '& svg' : {
-          fill: theme.palette.text.disabled,
-          width: '1.5rem !important', 
-          height: '1.5rem !important'
+          fill: theme.palette.text.disabled, 
         },
         '&:hover':{
             color: pink['A400'] ,
