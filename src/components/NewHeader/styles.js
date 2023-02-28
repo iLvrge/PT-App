@@ -23,7 +23,7 @@ export default makeStyles(theme => ({
         marginBottom: '5px',
         //padding: `0px ${HEADER_PADDING}px`,
         overflow: 'hidden',
-        padding: '0 10px',
+        padding: '0 0 0 10px',
         boxShadow: 'none',  
         '& .iconItem':{
             width: 90,
@@ -606,7 +606,7 @@ export default makeStyles(theme => ({
     },
     actionIconDashboard: {
         '& svg' : {
-            fontSize: '2.5rem'
+            fontSize: '2.5rem !important'
         }
     },
     actionIcon: {
@@ -614,9 +614,11 @@ export default makeStyles(theme => ({
             width: '1rem !important',
             height: '1rem !important'
         } */
+        margin: '0 5px',
         color: theme.palette.text.disabled,
         '& svg' : {
           fill: theme.palette.text.disabled, 
+          fontSize: '2rem'
         },
         '&:hover':{
             color: pink['A400'] ,

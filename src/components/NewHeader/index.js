@@ -36,6 +36,9 @@ import { Menu as MenuIcon,
         Settings as SettingsIcon,
         PendingActionsOutlined,
         ManageSearch, 
+        DescriptionOutlined as DescriptionOutlinedIcon,
+        HandshakeOutlined as HandshakeOutlinedIcon,
+        ShareOutlined as ShareOutlinedIcon
       } from '@mui/icons-material'
 
 import routeList from '../../routeList'
@@ -974,9 +977,7 @@ const handleOpenSettings = useCallback((event) => {
                           onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : onShare}
                           button>
                           <ListItemIcon  color='inherit' >
-                            <FontAwesomeIcon
-                              icon={faShareAlt}
-                            />
+                            <ShareOutlinedIcon/>
                           </ListItemIcon>
                           <ListItemText primary={`Share Dashboard/Transactions/Assets`} />
                         </ListItem>   
@@ -1001,7 +1002,7 @@ const handleOpenSettings = useCallback((event) => {
                             onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : onHandlePatentAssets} 
                             button>
                           <ListItemIcon  color='inherit' >
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  className={classes.svgIcon}><path d="M0 0h24v24H0V0z" fill="none"/><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 4h2v5l-1-.75L9 9V4zm9 16H6V4h1v9l3-2.25L13 13V4h5v16z"/></svg>
+                            <DescriptionOutlinedIcon />
                           </ListItemIcon>
                           <ListItemText primary={`All Assets (Since 1998)`} />
                         </ListItem> 
@@ -1014,7 +1015,7 @@ const handleOpenSettings = useCallback((event) => {
                           onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : onHandleTransactions}
                           button>
                           <ListItemIcon  color='inherit' >
-                            <svg id="icons" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" className={classes.svgIcon}><path d="M52,7H12a6,6,0,0,0-6,6V51a6,6,0,0,0,6,6H52a6,6,0,0,0,6-6V13A6,6,0,0,0,52,7Zm2,44a2,2,0,0,1-2,2H12a2,2,0,0,1-2-2V13a2,2,0,0,1,2-2H52a2,2,0,0,1,2,2Z"/><path d="M45,29a2,2,0,0,0,0-4H22.83l2.58-2.59a2,2,0,0,0-2.82-2.82l-6,6a2,2,0,0,0-.44,2.18A2,2,0,0,0,18,29Z"/><path d="M47,36H20a2,2,0,0,0,0,4H42.17l-2.58,2.59a2,2,0,1,0,2.82,2.82l6-6a2,2,0,0,0,.44-2.18A2,2,0,0,0,47,36Z"/></svg>
+                            <HandshakeOutlinedIcon />
                           </ListItemIcon>
                           <ListItemText primary={`All Transactions (Since 1998)`} />
                         </ListItem>  
