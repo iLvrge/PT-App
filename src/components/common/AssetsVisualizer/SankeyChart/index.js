@@ -185,20 +185,12 @@ const SankeyChart = (props) => {
             const filter = oldItems.filter( row => row.name === items[0].name)   
             if(filter.length > 0) {
                 if(props.type == 'filled') {        
-                    /* const {data} = await PatenTrackApi.findInventor(filter[0].id)
+                    const {data} = await PatenTrackApi.findInventor(filter[0].id)
                     dispatch(setCPCRequest(false))
                     dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
                     dispatch(setCPCData({list:[], group: [], sales: []}))
                     if(data != null && data?.id && data.id > 0 && !oldSelections.includes(data.id)) {
-                        dispatch(setSelectAssignmentCustomers([data.id]))
-                    } else {
-                        dispatch(setSelectAssignmentCustomers([])) 
-                    } */
-                    dispatch(setCPCRequest(false))
-                    dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
-                    dispatch(setCPCData({list:[], group: [], sales: []}))
-                    if(filter[0].id > 0 && !oldSelections.includes(filter[0].id)) {
-                        dispatch(setSelectAssignmentCustomers([filter[0].id]))
+                        dispatch(setSelectAssignmentCustomers([data.id, filter[0].id]))
                     } else {
                         dispatch(setSelectAssignmentCustomers([])) 
                     } 

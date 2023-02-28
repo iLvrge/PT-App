@@ -1261,6 +1261,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                             standalone={true}
                                             events={abandonedTimeline} 
                                             showTabs={false}
+                                            showAbandoned={true}
                                         />
                                     :
                                         selectedTab === 1
