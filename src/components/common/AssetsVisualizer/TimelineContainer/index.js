@@ -650,8 +650,9 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       items.current.add(convertedItems.slice(0, startIndex))  */   
       items.current.add(convertedItems)  
     }    
-    redrawTimeline()   
+    //redrawTimeline()   
     if(timelineRawData.length > 0 || previousLoad === false) {  
+      console.log('convertedItems', convertedItems)
       timelineRef.current.setOptions({ 
         ...options, 
         start, 
