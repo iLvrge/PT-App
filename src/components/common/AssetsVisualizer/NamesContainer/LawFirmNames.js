@@ -205,6 +205,7 @@ const LawFirmNames = (props) => {
                         tab={false}
                         standalone={true}
                         top={true}
+                        pad={true}
                     />
                 )
             }
