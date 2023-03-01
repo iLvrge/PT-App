@@ -319,12 +319,12 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/customers/restore_ownership/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
   }
 
-  static getCustomerAssets(type, companies, tabs, customers, rfIDs, startIndex, endIndex, column, direction, salesAssets) { 
+  static getCustomerAssets(type, companies, tabs, customers, rfIDs, startIndex, endIndex, column, direction, salesAssets, lawyers) { 
     let header = getHeader()
     header['cancelToken'] = new CancelToken(function executor(c) { 
       cancelAssets = c
     })
-    return axios.get(`${base_new_api_url}/customers/${type}/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}&offset=${startIndex}&limit=${endIndex}&column=${column}&direction=${direction}&other_mode=${salesAssets}`, header)
+    return axios.get(`${base_new_api_url}/customers/${type}/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}&offset=${startIndex}&limit=${endIndex}&column=${column}&direction=${direction}&other_mode=${salesAssets}&lawyers=${lawyers}`, header)
   } 
 
   static getCustomerSelectedAssets(shareCode) { 
@@ -791,12 +791,12 @@ class PatenTrackApi {
     } 
   }
 
-  static allAssetsSurchargeLegalEvents(companies) { 
-    return axios.get(`${base_new_api_url}/events/all/assets/surcharge?companies=${JSON.stringify(companies)}`, getHeader())
+  static allAssetsSurchargeLegalEvents(companies, customers) { 
+    return axios.get(`${base_new_api_url}/events/all/assets/surcharge?companies=${JSON.stringify(companies)}&customers=${JSON.stringify(customers)}`, getHeader())
   } 
 
-  static allFilledAssetsEvents(companies) { 
-    return axios.get(`${base_new_api_url}/events/all/assets/to_record?companies=${JSON.stringify(companies)}`, getHeader())
+  static allFilledAssetsEvents(companies, customers) { 
+    return axios.get(`${base_new_api_url}/events/all/assets/to_record?companies=${JSON.stringify(companies)}&customers=${JSON.stringify(customers)}`, getHeader())
   } 
 
   static getAllAbandonedAssetsEvents(companies) { 
@@ -1172,7 +1172,7 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/assets/${assets}/files`, getHeader())
   }
 
-  static getDriveAndAssetFiles(type, channelID, code, assets, companies, layoutID, gToken, gAccount, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedAssetsPatents ) {
+  static getDriveAndAssetFiles(type, channelID, code, assets, companies, layoutID, gToken, gAccount, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedAssetsPatents, lawyers ) {
     let header = getHeader()
     header['cancelToken'] = new CancelToken(function executor(c) {
       if(type == 1) {
@@ -1182,7 +1182,7 @@ class PatenTrackApi {
       }
     })
 
-    return axios.get(`${base_new_api_url}/assets/${assets}/files/${channelID}/slack/${code}?type=${type}&companies=${JSON.stringify(companies)}&layout=${layoutID}&g=${gToken}&ga=${gAccount}&activities=${JSON.stringify(assetTypesSelected)}&parties=${JSON.stringify(selectedAssetCompanies)}&rfIDs=${JSON.stringify(selectedAssetAssignments)}&patents=${JSON.stringify(selectedAssetsPatents)}`, header)
+    return axios.get(`${base_new_api_url}/assets/${assets}/files/${channelID}/slack/${code}?type=${type}&companies=${JSON.stringify(companies)}&layout=${layoutID}&g=${gToken}&ga=${gAccount}&activities=${JSON.stringify(assetTypesSelected)}&parties=${JSON.stringify(selectedAssetCompanies)}&rfIDs=${JSON.stringify(selectedAssetAssignments)}&patents=${JSON.stringify(selectedAssetsPatents)}&lawyers=${lawyers}`, header)
   } 
 
   static cancelInitiatedRequest() {

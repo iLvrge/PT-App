@@ -14,6 +14,7 @@ import React, {
   import {capitalizeEachWord} from '../../../utils/numbers'
   import Loader from "../Loader";
 import { setAssetTypeAssignmentAllAssets, setAssetTypeAssignments, setAssetTypesPatentsSelected, setCPCData, setLineChartRequest, setLineChartReset, setSelectAssignments, setSelectedAssetsPatents, setSelectedAssetsTransactions, setSelectLawFirm } from "../../../actions/patentTrackActions2";
+
   
   const LawFirmTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaultLoad, type }) => {
     const classes = useStyles();
@@ -29,6 +30,7 @@ import { setAssetTypeAssignmentAllAssets, setAssetTypeAssignments, setAssetTypes
     const [counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT);
     const [ grandTotal, setGrandTotal ] = useState( 0 )
     const [data, setData] = useState([]);
+    const [loadingData, setLoadingData] = useState(false);
     const [initialize, setIntialize] = useState(false);
     const [selectedAll, setSelectAll] = useState(false);
     const [selectItems, setSelectItems] = useState([]);
@@ -36,53 +38,10 @@ import { setAssetTypeAssignmentAllAssets, setAssetTypeAssignments, setAssetTypes
     const [scrollToIndex, setScrollToIndex] = useState(0);
     const [rows, setRows] = useState([]);
     const [childSelected, setCheckedSelected] = useState(0);
-    const [currentSelection, setCurrentSelection] = useState(null);
-    const search_string = useSelector(state => state.patenTrack2.search_string)
+    const [currentSelection, setCurrentSelection] = useState(null); 
     const selectedCompanies = useSelector(
       state => state.patenTrack2.mainCompaniesList.selected,
-    );
-    const selectedCompaniesAll = useSelector(
-      state => state.patenTrack2.mainCompaniesList.selectAll,
-    );
-    const assetTypesSelected = useSelector(
-      state => state.patenTrack2.assetTypes.selected,
-    );
-    const assetTypesSelectAll = useSelector(
-      state => state.patenTrack2.assetTypes.selectAll,
-    );
-    const assetTypesCompaniesSelected = useSelector(
-      state => state.patenTrack2.assetTypeCompanies.selected,
-    );
-    const assetTypesCompaniesSelectAll = useSelector(
-      state => state.patenTrack2.assetTypeCompanies.selectAll,
-    );
-    const assignmentList = useSelector(
-      state => state.patenTrack2.assetTypeAssignments.list,
-    );
-    const totalRecords = useSelector(
-      state => state.patenTrack2.assetTypeAssignments.total_records,
-    );
-    const assignmentListLoading = useSelector(
-      state => state.patenTrack2.assetTypeAssignments.loading,
-    );
-    const selectedAssetsTransactions = useSelector(
-      state => state.patenTrack2.assetTypeAssignments.selected,
-    );
-  
-    const currentRowSelection = useSelector(
-      state => state.patenTrack2.selectedAssetsTransactions
-    )
-  
-    const selectedAssetsPatents = useSelector(
-      state => state.patenTrack2.selectedAssetsPatents,
-    );
-    const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
-    const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
-    const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
-    const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
-    const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
-    const channel_id = useSelector(state => state.patenTrack2.channel_id)
-    const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
+    );  
   
     const COLUMNS = [
         {
@@ -112,7 +71,9 @@ import { setAssetTypeAssignmentAllAssets, setAssetTypeAssignments, setAssetTypes
     useEffect(() => {
         const getLawFirmList = async() => {
           if(selectedCompanies.length > 0) {
+            setLoadingData(true)
             const {data} = await PatenTrackApi.getLawFirmsByCompany(selectedCompanies)
+            setLoadingData(false)
             setRows(data)
             setGrandTotal(data.length)
           }
@@ -180,7 +141,7 @@ import { setAssetTypeAssignmentAllAssets, setAssetTypeAssignments, setAssetTypes
       setHeaderColumns(previousColumns)
   }, [ headerColumns ] )
   
-    if (assignmentListLoading ) return <Loader />;
+    if (loadingData ) return <Loader />;
   
     return (
       <Paper className={classes.root} square id={`lawfirms_container`}>
