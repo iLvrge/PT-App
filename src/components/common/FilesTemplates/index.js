@@ -99,7 +99,7 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
             minWidth: 130,
             oldWidth: 130,
             draggable: true,
-            label: 'Recorded',
+            label: 'Records',
             dataKey: 'date', 
             badge: true,   
             show_selection_count: true,  

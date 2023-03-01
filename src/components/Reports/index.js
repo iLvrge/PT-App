@@ -672,8 +672,7 @@ const Reports = (props) => {
             }
         }  else { 
             if(selectedCompanies.length > 0 ) { 
-                if(viewDashboard.timeline === true && timelineList.length > 0) {
-                    console.log('675')
+                if(viewDashboard.timeline === true && timelineList.length > 0) { 
                     callTimelineData()
                 } else if(cardList.length > 0){
                     findDashboardData()
@@ -689,13 +688,7 @@ const Reports = (props) => {
             }
         } 
     },  [
-            selectedCompanies, 
-            assetTypesSelected, 
-            selectedAssetCompanies, 
-            selectedAssetAssignments, 
-            assetTypeAssignmentAssets, 
-            assetTypeCompanies,
-            profile
+            selectedCompanies 
         ]
     )
 
