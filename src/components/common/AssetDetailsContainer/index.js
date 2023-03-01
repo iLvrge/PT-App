@@ -456,6 +456,7 @@ const AssetDetailsContainer = ({
                           type={type} 
                           titleBar={true}
                           tab={true}
+                          side={true}
                         />
                       :
                       timelineScreen === true  && assetIllustration == null && (selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording' || selectedCategory == 'top_lenders')

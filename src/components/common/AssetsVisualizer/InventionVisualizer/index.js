@@ -462,8 +462,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         }
                     }
                 } 
-                if( selectedCategory == 'top_law_firms' || (typeof licensable != 'undefined' && licensable === true) || (typeof salable != 'undefined' && salable === true)) { 
-                    console.log("CPC", cpc_request, cpcData, typeof side, typeof top, cpcSecondData)
+                if( selectedCategory == 'top_law_firms' || (typeof licensable != 'undefined' && licensable === true) || (typeof salable != 'undefined' && salable === true)) {  
                     if(cpc_request === false || (cpcData.list.length == 0 || (typeof side != 'undefined' && side === true && cpcSecondData.list.length == 0))) {  
                         setGraphRawData([])
                         setGraphRawGroupData([])    
@@ -676,10 +675,10 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     
             //PatenTrackApi.cancelCPCRequest()
             const {data} = await PatenTrackApi.getCPC(form)  
-            setIsLoadingCharts(false)
-            if(typeof side != 'undefined' && side === true) {
+            setIsLoadingCharts(false) 
+            if(typeof side != 'undefined' && side === true) { 
                 dispatch(setCPCSecondData(data)) 
-            } else { 
+            } else {  
                 dispatch(setCPCData(data)) 
             }
             if( typeof year === 'undefined' &&  data.list.length > 0 ) {

@@ -49,14 +49,14 @@ const SankeyChart = (props) => {
     
     useEffect(() => {
         const getPartiesData = async() => {
-            if(loading === false) {    
+            if(loading === false ) {   
                 setData([])
                 setAssignorData([])
                 setAssigneeRawData([])
                 setAssignorRawData([])
                 const formData = new FormData()
                 formData.append('selectedCompanies', JSON.stringify(selectedCompanies)); 
-                if(process.env.REACT_APP_ENVIROMENT_MODE != 'PRO') {
+                if(process.env.REACT_APP_ENVIROMENT_MODE != 'PRO' && process.env.REACT_APP_ENVIROMENT_MODE != 'KPI') {
                     const list = [];
                     let totalRecords = 0;
             
@@ -179,8 +179,7 @@ const SankeyChart = (props) => {
 
     const handleSelection = useCallback(async(items, chartType, event) => {
         let oldItems = chartType == 2 ? [...assignorRawData] : [...assigneeRawData] 
-        const oldSelections = [...selectedAssetCompanies]
-        console.log('oldSelections', oldSelections)
+        const oldSelections = [...selectedAssetCompanies] 
         if(items.length > 0) {
             const filter = oldItems.filter( row => row.name === items[0].name)   
             if(filter.length > 0) {
