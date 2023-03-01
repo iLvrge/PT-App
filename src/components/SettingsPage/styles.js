@@ -9,12 +9,12 @@ export default makeStyles(theme => ({
     overflowX: 'hidden',
     overflowY: 'hidden',
     padding: 5,
-    '& .MuiIconButton-root':{
+    /* '& .MuiIconButton-root':{
       '& svg':{
           width: '1.5rem',
           height: '1.5rem'
       }
-    }
+    } */
   },
   settings: {
     flex: 1,

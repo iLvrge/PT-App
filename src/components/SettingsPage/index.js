@@ -268,12 +268,12 @@ function SettingsPage() {
   }, [dispatch])
 
   const topToolBar = [
-    {
+    /* {
       tooltip: 'Home',
       bar: openBar,
       click: handleHomeLink,
       t: 40
-    },
+    }, */
     {
       tooltip: 'Companies',
       bar: openCompanyBar,

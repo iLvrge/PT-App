@@ -65,7 +65,9 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
     const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
     const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
     const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
-    
+    const selectedLawFirm = useSelector(
+        state => state.patenTrack2.selectedLawFirm 
+      );
     const ASSET_COLUMNS = [  
         {
             width: 10, 
@@ -273,14 +275,14 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
                     setAssetFiles(data.assets_files)
                 } else  */if(selectedCompanies.length > 0 || assetTypesSelected.length > 0 || selectedAssetCompanies.length > 0 || selectedAssetAssignments.length > 0 || selectedAssetsPatents.length > 0){
                     setLoading(true)
-                    const { data } = await PatenTrackApi.getDriveAndAssetFiles(0, 'undefined', 'undefined', 'undefined', selectedCompanies, selectedCategory, '', '', assetTypesSelected, selectedAssetCompanies, selectedAssetsTransactions.length > 0 ? selectedAssetsTransactions : selectedAssetAssignments, selectedAssetsPatents.length > 0 ? [selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString()] : [])
+                    const { data } = await PatenTrackApi.getDriveAndAssetFiles(0, 'undefined', 'undefined', 'undefined', selectedCompanies, selectedCategory, '', '', assetTypesSelected, selectedAssetCompanies, selectedAssetsTransactions.length > 0 ? selectedAssetsTransactions : selectedAssetAssignments, selectedAssetsPatents.length > 0 ? [selectedAssetsPatents[0] != '' ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString()] : [], selectedLawFirm)
                     setLoading(false)
                     setAssetFiles(data.assets_files)
                 }
             }
         }
         getDriveAndAssetFiles()
-    }, [ type, selectedAssetsPatents, channel_id, selectedCompanies, selectedCompaniesAll, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssetsSelected, selectedCategory, selectedAssetsTransactions ])
+    }, [ type, selectedAssetsPatents, channel_id, selectedCompanies, selectedCompaniesAll, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, assetTypeAssignmentAssetsSelected, selectedCategory, selectedAssetsTransactions, selectedLawFirm ])
 
     useEffect(() => {
         if(callByAuthLogin === true) {

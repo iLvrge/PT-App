@@ -580,6 +580,9 @@ export default makeStyles(theme => ({
     },
     '& .MuiInputLabel-root, .MuiSvgIcon-root': {
       top: -4
-    } 
+    },
+    '& .MuiInputBase-root:before':{
+      borderBottom: '0 !important'
+    }
   }
 }))

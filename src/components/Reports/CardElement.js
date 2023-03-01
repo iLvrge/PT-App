@@ -32,16 +32,20 @@ const CardElement = (props) => {
                 {
                     typeof props.timeline !== 'undefined' && props.timeline === true
                     ?
-                        props.card.standalone === true
-                        ?
-                            <FullScreen 
-                                componentItems={menuItems} 
-                                showScreen={true} 
-                                setScreen={props.timeline.handleTimelineFullScreen} 
-                                showClose={false}
-                            />
-                        :
+                        <React.Fragment>
+                            {
+                                props.card.standalone === true && (
+                                    <FullScreen 
+                                        componentItems={menuItems} 
+                                        showScreen={true} 
+                                        setScreen={props.timeline.handleTimelineFullScreen} 
+                                        showClose={false}
+                                    /> 
+                                )
+                            }
+                            
                             <TimelineChart {...props} />
+                        </React.Fragment>
                     :
                         typeof props.kpiEnable !== 'undefined' && props.kpiEnable === true
                         ?
