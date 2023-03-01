@@ -154,6 +154,12 @@ const uiReducer = (state = initialState.ui, action) => {
         transactionButton: action.flag,
       }
     }
+    case types.SET_SANKEY_FILTER_ACTIVE: {
+      return {
+        ...state,
+        sankeyFilterActive: action.flag,
+      }
+    }
     case types.SET_RESET_UI_ALL: { 
       return {
         ...state,

@@ -40,6 +40,7 @@ import { setAssetTypeAssignments,
     toggleFamilyItemMode,
     toggleUsptoMode,
     toggleLifeSpanMode,
+    setSankeyFilterActive,
   } from '../actions/uiActions'
 
 
@@ -147,6 +148,9 @@ export const resetItemList = {
         },
         {
             callback: setSelectedMaintainenceAssetsList([])
+        },
+        {
+            callback: setSankeyFilterActive(false)
         },
     ],
     clearOtherItems: [

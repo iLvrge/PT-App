@@ -32,5 +32,6 @@ export default {
     timeline: false
   },
   viewInitial: false,
-  familyLegalItemMode: false
+  familyLegalItemMode: false,
+  sankeyFilterActive: false
 }
