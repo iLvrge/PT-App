@@ -141,9 +141,9 @@ console.log(assetData)
               <TableRow>
                 <TableCell className={classes.fixedWidth}>
                   <ShowText classes={classes.red} data={`Executed`}/>
-                  <ShowText data={moment(new Date(info[0].patAssignorEarliestExDate)).format('MMM. DD YYYY')} classes={classes.marginBottom}/>
+                  <ShowText data={moment(new Date(info[0].patAssignorEarliestExDate + ' 00:00:00')).format('MMM. DD YYYY')} classes={classes.marginBottom}/>
                   <ShowText classes={classes.red} data={`Recorded`}/>
-                  <ShowText data={moment(new Date(info[0].recordedDate)).format('MMM. DD YYYY')}/>                  
+                  <ShowText data={moment(new Date(info[0].recordedDate + ' 00:00:00')).format('MMM. DD YYYY')}/>                  
                 </TableCell>
                 <TableCell className={classes.fixedWidth}>    
                   <ShowText classes={classes.red} data={`Lapsed`}/>

@@ -333,6 +333,12 @@ export default makeStyles(theme => ({
         }
       } 
     },
+    '& .vis-panel.vis-top':{
+      visibility: 'hidden',
+      '& .vis-time-axis':{
+        height: '1px !important'
+      }
+    },
     '& .vis-top':{
       '& .vis-foreground':{
         /* top: '-15px',

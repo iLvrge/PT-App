@@ -43,6 +43,12 @@ const TimelineChart = (props) => {
                 return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
             }
         },
+        cluster: {
+            maxItems: typeof props.standalone != 'undefined' && props.standalone === true ? 10 : 6,
+            clusterCriteria: (firstItem, secondItem) => { 
+              return  (firstItem.rawData.customerName.toString().toLowerCase() == secondItem.rawData.customerName.toString().toLowerCase())
+            }
+        }
     })
     const [ isLoadingTimelineData, setIsLoadingTimelineData ] = useState(false)
     const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(false)
@@ -112,55 +118,8 @@ const TimelineChart = (props) => {
         const {items, event} = properties
         const {nodeName} = event.target.parentNode 
         const item = timelineRef.current.itemsData.get(items) 
-        if(item.length > 0) {
-            const {security_pdf, release_pdf,  rawData} = item[0];
-            const {all_release_ids, id} = rawData
-            /* setSelectTransaction(id)
-            dispatch(setDashboardPanel(true))  
-            props.checkChartAnalytics(null, null, true)
-            dispatch(setAssetsIllustration({ type: "transaction", id })); */
-            /* if(all_release_ids != null && all_release_ids != '' ) {
-                setOpenModal(true)
-                setItemData(JSON.parse(all_release_ids))     
-            } */
-            if(selectTransaction != id) {
-                setSelectTransaction(id)
-                dispatch(setDashboardPanel(true))  
-                props.checkChartAnalytics(null, null, true)
-                dispatch(setAssetsIllustration({ type: "transaction", id }));
-            } else {
-                setSelectTransaction(null)
-                dispatch(setDashboardPanel(false))  
-                dispatch(setAssetsIllustration(null))
-                props.checkChartAnalytics(null, null, false)
-            } 
-
-            /* const pdfFile = nodeName == "TT" ? security_pdf : nodeName == "EM" ? release_pdf : ''
-            if(pdfFile !== '' && pdfFile != undefined) {
-                console.log('props.checkChartAnalytics', props.checkChartAnalytics)
-                props.checkChartAnalytics(null, null, true)
-                dispatch(
-                    setPDFView(true)
-                )
-                dispatch(
-                    setConnectionBoxView(true)
-                )
-                if(pdfFile.indexOf('legacy-assignments.uspto.gov') !== -1) {
-                    const retrievePDF = {rf_id: nodeName == "TT" ? rawData.id : rawData.release_rf_id}
-                    dispatch(retrievePDFFromServer(retrievePDF))  
-                } else {
-                    dispatch(
-                        setPDFFile({ 
-                            document: pdfFile, 
-                            form: pdfFile,
-                            agreement: pdfFile
-                        })
-                    ) 
-                }
-            } */
-        } else {
-            /* setSelectTransaction(null)
-            props.checkChartAnalytics(null, null, false) */
+        if(item.length > 0) { 
+            showTooltip(item[0], event, true)
         }
     }, [selectTransaction])
 
@@ -233,9 +192,9 @@ const TimelineChart = (props) => {
     }
       // Custom ToolTip
 
-    const showTooltip = (item, event) => {    
+    const showTooltip = (item, event, onselect) => {    
         setTimeout(() => {
-        if(tootlTip === item.id) {
+        if(tootlTip === item.id || (typeof onselect !== 'undefined' && onselect === true)) {
             PatenTrackApi
             .cancelTimelineItemRequest()
             PatenTrackApi
@@ -484,34 +443,33 @@ const TimelineChart = (props) => {
         end = new Date()
         const promise = convertedItems.map( (c, index) => {
             let newDate = new Date(c.start);
+            let endDate = typeof c.end != 'undefined' && c.end != null ? new Date(c.end) : newDate
             if(index === 0) {
-                end = newDate
+                end = endDate
             }
             if(newDate.getTime() < start.getTime()) {
                 start = newDate
             }
-            if(newDate.getTime() > end.getTime()) {
-                end = newDate
-            }
+            if(endDate.getTime() > end.getTime()) {
+                end = endDate
+            } 
             return c
         })
         Promise.all(promise) 
         if(convertedItems.length > 100) {
             start = new Date(convertedItems[99].start)
-        } else {
-            start = new moment(start).subtract(3, 'year') 
         } 
-        end = new moment(end).add(3, 'year')
-        
-        if(timelineRef.current !== null && timelineRef.current != undefined && typeof timelineRef.current.destroy === 'function') {
+        start = new moment(start).subtract(3, 'year')  
+        end = new moment(end).add(3, 'year')  
+        if(timelineRef.current !== null && timelineRef.current != undefined && typeof timelineRef.current.destroy === 'function' && typeof props.standalone !== 'undefined') {
             timelineRef.current.destroy()
-            timelineRef.current = new Timeline(timelineContainerRef.current, [], options)  
+            timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
             setTimeout(() => {
                 drawTimeline(start, end, convertedItems)  
             }, 1)
         } else {
             items.current.add(convertedItems) 
-            timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1400-01-01')), max: new moment(new Date('2500-01-01'))}) 
+            timelineRef.current.setOptions({ ...options, start, end, min: props.card.type == 4 ? start : new moment(new Date('1400-01-01')), max: props.card.type == 4 ? end : new moment(new Date('2500-01-01'))}) 
             timelineRef.current.setItems(items.current)  
         }
         
@@ -527,8 +485,7 @@ const TimelineChart = (props) => {
 
     const drawTimeline = (start, end, convertedItems) => {
         items.current.add(convertedItems) 
-        console.log('drawTimeline', options, timelineRef.current, start, end, items.current)
-        timelineRef.current.setOptions({ ...options, start, end, min: new moment(new Date('1400-01-01')), max: new moment(new Date('2500-01-01'))}) 
+        timelineRef.current.setOptions({ ...options, start, end, min: props.card.type == 4 ? start : new moment(new Date('1400-01-01')), max: props.card.type == 4 ? end : new moment(new Date('2500-01-01'))}) 
         timelineRef.current.setItems(items.current)
     }
     return (

@@ -171,22 +171,22 @@ class PatentNode extends React.Component {
 
     let executionDate =
       this.props.data.executionDate != ''
-        ? this.dateFormat(new Date(this.props.data.executionDate))
+        ? this.dateFormat(new Date(this.props.data.executionDate + ' 00:00:00'))
         : 'N/A';
     let recordedDate =
       this.props.data.recordedDate != ''
-        ? this.dateFormat(new Date(this.props.data.recordedDate))
+        ? this.dateFormat(new Date(this.props.data.recordedDate + ' 00:00:00'))
         : 'N/A';
 
     let filledDate =
       this.props.data.filledDate != undefined &&
       this.props.data.filledDate != ''
-        ? this.dateFormat(new Date(this.props.data.filledDate))
+        ? this.dateFormat(new Date(this.props.data.filledDate + ' 00:00:00'))
         : 'N/A';
     let grantedDate =
       this.props.data.grantedDate != undefined &&
       this.props.data.grantedDate != ''
-        ? this.dateFormat(new Date(this.props.data.grantedDate))
+        ? this.dateFormat(new Date(this.props.data.grantedDate + ' 00:00:00'))
         : 'N/A';
 
     if (this.props.data.type < 3) {

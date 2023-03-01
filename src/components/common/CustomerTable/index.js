@@ -78,7 +78,9 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
     const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
-
+    const selectedLawFirm = useSelector(
+        state => state.patenTrack2.selectedLawFirm 
+      );
     const [ data, setData ] = useState( [] )
 
     const COLUMNS = [
@@ -301,7 +303,8 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
                 'asset',
                 'DESC',
                 -1, 
-                display_sales_assets
+                display_sales_assets,
+                selectedLawFirm
             ),
         );                   
     }

@@ -111,8 +111,9 @@ const IllustrationCommentContainer = ({
     const template_document_url = useSelector(state => state.patenTrack2.template_document_url)
     const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
     const selectedAssetAssignments = useSelector( state => state.patenTrack2.assetTypeAssignments.selected ) 
-
+    const selectedAssetCompanies = useSelector( state => state.patenTrack2.assetTypeCompanies.selected )
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected ) 
+
     const search_string = useSelector(state => state.patenTrack2.search_string)   
     const addressQueuesDisplay = useSelector(state => state.patenTrack2.addressQueuesDisplay)   
     const nameQueuesDisplay = useSelector(state => state.patenTrack2.nameQueuesDisplay)
@@ -206,7 +207,7 @@ const IllustrationCommentContainer = ({
     useEffect(() => { 
         if(selectedCategory === 'late_maintainance' && maintainence === true && selectedCompanies.length > 0 && assetIllustration == null ){
             const getAllSurchargeAssetsEvents = async () => { 
-                const {data} = await PatenTrackApi.allAssetsSurchargeLegalEvents(selectedCompanies)
+                const {data} = await PatenTrackApi.allAssetsSurchargeLegalEvents(selectedCompanies, selectedAssetCompanies)
                 if (isMounted.current) { 
                     setAllAssetsEvents(data)
                 }
@@ -215,7 +216,7 @@ const IllustrationCommentContainer = ({
             //dispatch(allAssetsSurchargeLegalEvents(selectedCompanies))
         } else if(selectedCategory === 'missed_monetization' && record === true && selectedCompanies.length > 0 && assetIllustration == null ){
             const getAllRecordAssetsEvents = async () => { 
-                const {data} = await PatenTrackApi.allFilledAssetsEvents(selectedCompanies)
+                const {data} = await PatenTrackApi.allFilledAssetsEvents(selectedCompanies, selectedAssetCompanies)
                 if (isMounted.current) { 
                     setAllAssetsEvents(data)
                 }
@@ -223,7 +224,7 @@ const IllustrationCommentContainer = ({
             getAllRecordAssetsEvents() 
             //dispatch(allAssetsSurchargeLegalEvents(selectedCompanies))
         } 
-    }, [ maintainence, record, assetIllustration, selectedCompanies, selectedCategory])
+    }, [ maintainence, record, assetIllustration, selectedCompanies, selectedCategory, selectedAssetCompanies])
 
     const handleCommentButton = (event, flag) => {
         event.preventDefault()

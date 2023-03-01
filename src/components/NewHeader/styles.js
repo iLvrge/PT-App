@@ -606,7 +606,7 @@ export default makeStyles(theme => ({
     },
     actionIconDashboard: {
         '& svg' : {
-            fontSize: '2.5rem !important'
+            fontSize: '2.3rem !important'
         }
     },
     actionIcon: {

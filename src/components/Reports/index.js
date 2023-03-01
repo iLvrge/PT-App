@@ -618,6 +618,7 @@ const Reports = (props) => {
             if(selectedCompanies.length > 0) {
                 if (isMounted.current) {
                     if(viewDashboard.timeline === true && timelineList.length > 0) {
+                        console.log('621')
                         callTimelineData()
                     } else if(cardList.length > 0){
                         findDashboardData()
@@ -672,6 +673,7 @@ const Reports = (props) => {
         }  else { 
             if(selectedCompanies.length > 0 ) { 
                 if(viewDashboard.timeline === true && timelineList.length > 0) {
+                    console.log('675')
                     callTimelineData()
                 } else if(cardList.length > 0){
                     findDashboardData()

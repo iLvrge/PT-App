@@ -59,7 +59,8 @@ import {
     toggleUsptoMode, 
     toggleFamilyMode,
     toggleFamilyItemMode,
-    toggleLifeSpanMode
+    toggleLifeSpanMode,
+    setSankeyFilterActive
   } from "../../../actions/uiActions";
 
 import { DEFAULT_CUSTOMERS_LIMIT } from '../../../api/patenTrack2'
@@ -664,6 +665,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
 	    dispatch(setSelectAssignments([]))	
         dispatch(setSelectAssignmentCustomers([]))
         dispatch(setAllAssignmentCustomers(false))
+        dispatch(setSankeyFilterActive(false))
     }
 
     const clearOtherItems = () => {

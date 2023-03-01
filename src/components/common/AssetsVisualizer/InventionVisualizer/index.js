@@ -48,7 +48,7 @@ import Fees from '../LegalEventsContainer/Fees'
 
 var newRange = [1,2]
 
-const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, tab, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal, titleBar, middle, openChartBar, handleChartBarOpen, salable, licensable, onSelect, top, side }) => {
+const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, tab, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal, titleBar, middle, openChartBar, handleChartBarOpen, salable, licensable, onSelect, top, side, pad }) => {
     
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -322,6 +322,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     tabName = 'To Divest'
                     break; 
                 case 'top_lenders':
+                case 'top_law_firms':
                     tabName = 'Owned'
                     break;
             }
@@ -461,7 +462,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         }
                     }
                 } 
-                if( selectedCategory == 'top_law_firms' || (typeof licensable != 'undefined' && licensable === true) || (typeof salable != 'undefined' && salable === true)) { 
+                if( selectedCategory == 'top_law_firms' || (typeof licensable != 'undefined' && licensable === true) || (typeof salable != 'undefined' && salable === true)) {  
                     if(cpc_request === false || (cpcData.list.length == 0 || (typeof side != 'undefined' && side === true && cpcSecondData.list.length == 0))) {  
                         setGraphRawData([])
                         setGraphRawGroupData([])    
@@ -674,10 +675,10 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     
             //PatenTrackApi.cancelCPCRequest()
             const {data} = await PatenTrackApi.getCPC(form)  
-            setIsLoadingCharts(false)
-            if(typeof side != 'undefined' && side === true) {
+            setIsLoadingCharts(false) 
+            if(typeof side != 'undefined' && side === true) { 
                 dispatch(setCPCSecondData(data)) 
-            } else { 
+            } else {  
                 dispatch(setCPCData(data)) 
             }
             if( typeof year === 'undefined' &&  data.list.length > 0 ) {
@@ -1206,7 +1207,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 :
                     ''
             } 
-            <Box {...(typeof tab != 'undefined' && tab === true ? {sx: {p: 2}} : {})}  className={classes.boxContainer}>
+            <Box {...(((typeof tab != 'undefined' && tab === true) || typeof pad != 'undefined' && pad === true) ? {sx: {p: 2}} : {})}  className={classes.boxContainer}>
             {
                 showContainer === true && (
                     <React.Fragment>  
