@@ -205,6 +205,32 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
         dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
       }
       clearSelections()
+    } else if(hash != '' && hash.indexOf('&assignment') !== -1 && selectedAssetsPatents.length == 0) {
+      const explodeHash = hash.split('&') 
+      if(explodeHash.length > 0) {
+        const findIndex = explodeHash.findIndex( row => row.indexOf('assignment=') !== -1 ? row : null) 
+        if(findIndex != null) {
+          const explodeFindIndex = explodeHash[findIndex].split('=') 
+          if(explodeFindIndex.length == 2) { 
+            const findRowIndex = rows.findIndex( item =>  decodeURIComponent(explodeFindIndex[1]) ==  item.rf_id.toString()) 
+            if(findRowIndex >= 0) {
+              if(display_clipboard === false) {
+                dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
+                dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+              }
+              dispatch(setChannelID(''))
+              dispatch(setSelectedAssetsPatents([]))
+              getTransactionData(dispatch, rows[findRowIndex].rf_id, defaultLoad, search_string)                    
+              dispatch(setDriveTemplateFrameMode(false));
+              dispatch(setDriveTemplateFile(null));
+              dispatch(setTemplateDocument(null));
+              setSelectAll(false);
+              setSelectItems([rows[findRowIndex].rf_id])
+              dispatch(setSelectAssignments([rows[findRowIndex].rf_id]));
+            }
+          }
+        }
+      } 
     }
   }, [location])
 
