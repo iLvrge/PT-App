@@ -232,6 +232,22 @@ const AssetsTable = ({
     const {hash} = location
     if(hash == '' && selectedAssetsPatents.length > 0) {
       clearSelections()
+    } else if(hash != '' && hash.indexOf('&asset') !== -1 && selectedAssetsPatents.length == 0) {
+      const explodeHash = hash.split('&') 
+      if(explodeHash.length > 0) {
+        const findIndex = explodeHash.findIndex( row => row.indexOf('asset=') !== -1 ? row : null) 
+        if(findIndex != null) {
+          const explodeFindIndex = explodeHash[findIndex].split('=') 
+          if(explodeFindIndex.length == 2) { 
+            const findRowIndex = assetRows.findIndex( item =>  decodeURIComponent(explodeFindIndex[1]) ==  item.asset.toString()) 
+            if(findRowIndex >= 0) {
+              dispatch(setAssetTypesPatentsSelected([assetRows[findRowIndex].asset]))
+              setSelectItems([assetRows[findRowIndex].asset])
+              handleOnClick(assetRows[findRowIndex])
+            }
+          }
+        }
+      } 
     }
   }, [location])
 

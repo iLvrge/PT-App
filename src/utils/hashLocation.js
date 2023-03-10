@@ -4,8 +4,8 @@ export const updateHashLocation = ( location, findString, selectedData ) => {
     let explodeHash = hash.split('&')
     if(hash.indexOf(findString) >= 0) {
         explodeHash  = explodeHash.filter( param =>  param.indexOf(findString) < 0)
-    }
-    explodeHash.push(`${findString}=${JSON.stringify(selectedData)}`)
+    } 
+    explodeHash.push(`${findString}=${Array.isArray(selectedData) ? JSON.stringify(selectedData) : selectedData}`)
     return explodeHash
 }
 
