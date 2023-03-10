@@ -1075,8 +1075,8 @@ const handleOpenSettings = useCallback((event) => {
                   {
                     process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' 
                     ?
-                      <Box style={{position: 'absolute', bottom: -50}}>
-                        <ListItem className={`children`} button style={{marginTop: '50px'}}>
+                      <Box style={{position: 'absolute', bottom: 0}}>
+                        <ListItem className={`children`} button style={{marginTop: 50}}>
                           <ListItemIcon aria-label='Account Scope' color='inherit' className={`children`}>
                               <BusinessIcon className={`children`}/>
                           </ListItemIcon>
