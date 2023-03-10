@@ -1,6 +1,7 @@
 import * as types from './settingsTypes'
 import PatenTrackApi from '../api/patenTrack2'
 import store from '../reducers/store/configureStore'
+import { dispatch } from 'd3'
 
 export const DATA_KEYS = {
   USERS: 'users',
@@ -76,7 +77,60 @@ export const addUser = (user) => async dispatch => {
   const { list } = store.getState().settings.users
   const updatedUserList = [ ...list, data ]
   dispatch(setUsers(updatedUserList))
-} 
+}  
+
+export const addCategoryProduct = (category_product) => async dispatch => {
+  const categoryProductFormData = _createFormData(category_product) 
+  const { data } = await PatenTrackApi.addCategoryProduct(categoryProductFormData) 
+  dispatch(fetchCategories()) 
+}
+
+export const fetchCategories = () => async dispatch => {
+  const { data } = await PatenTrackApi.getCategories()
+  dispatch(setCategories(data)) 
+  dispatch(setProducts([]))
+}
+
+export const deleteCategory = (categoryID) => async dispatch => {
+  const { data } = await PatenTrackApi.deleteCategory(categoryID)
+  dispatch(fetchCategories()) 
+  dispatch(setProducts([]))
+}
+
+export const getProducts = (categoryID) => async dispatch => {
+  if(categoryID > 0) {
+    const { data } = await PatenTrackApi.getProductsByCategory(categoryID)
+    dispatch(setProducts(data))
+  } else {
+    dispatch(setProducts([]))
+  }
+}
+
+export const deleteProduct = (categoryID, productID) => async dispatch => {
+  const { data } = await PatenTrackApi.deleteProduct(productID)
+  dispatch(getProducts(categoryID))  
+}
+
+export const setCategories = (list) => {
+  return {
+    type: types.SET_CATEGORIES,
+    list
+  } 
+}
+
+export const setProducts = (data) => {
+  return {
+    type: types.SET_PRODUCTS,
+    data
+  } 
+}
+
+export const setSelectedCategory = (categoryID) => {
+  return {
+    type: types.SET_SELECT_CATEGORY,
+    categoryID
+  } 
+}
 
 export const updateUser = (user) => async dispatch => {
   const userFormData = _createFormData(user)

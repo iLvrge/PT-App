@@ -128,5 +128,22 @@ export default makeStyles((theme) => ({
             bottom: 0,
             fill: '#fff'
         }
+    },
+    productDropdown: {
+        '& .MuiSelect-select': {
+            height: 'auto',
+            minHeight: '1.4375em',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden'
+        }
+    },
+    chip: {
+        '& .MuiPaper-root':{
+            justifyContent: 'flex-start'
+        },
+        '& .MuiListItem-root':{
+            width: 'auto'
+        }
     }
 }))

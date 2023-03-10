@@ -541,7 +541,7 @@ const GlobalScreen = ({
             <SplitPane
                 className={classes.splitPane}
                 split="vertical"
-                size={typeBarSize}
+                size={dashboardScreen === false ? typeBarSize : 0}
                 onChange={(size) => { 
                     setTypeBarSize(size > 900 ? 900 : size)
                 }}
@@ -568,7 +568,7 @@ const GlobalScreen = ({
                 <SplitPane
                     className={classes.splitPane}
                     split="vertical"
-                    size={otherPartyBarSize}
+                    size={dashboardScreen === false ? otherPartyBarSize : 0}
                     onChange={(size) => { 
                         setOtherPartyBarSize(size > 900 ? 900 : size)
                     }} 
@@ -651,7 +651,7 @@ const GlobalScreen = ({
                     <SplitPane
                         className={classes.splitPane}
                         split="vertical"
-                        size={assignmentBarSize}
+                        size={dashboardScreen === false ? assignmentBarSize : 0}
                         onChange={(size) => { 
                             setAssignmentBarSize(size > 900 ? 900 : size)
                         }} 
@@ -676,7 +676,7 @@ const GlobalScreen = ({
                         <SplitPane
                             className={classes.splitPane}
                             split="vertical"
-                            size={customerBarSize}
+                            size={dashboardScreen === false ? customerBarSize : 0}
                             onChange={(size) => { 
                                 setCustomerBarSize(size > 900 ? 900 : size)
                             }} 
@@ -746,7 +746,7 @@ const GlobalScreen = ({
                             <SplitPane
                                 className={classes.splitPane}
                                 split="vertical"
-                                size={assetFilesBarSize}
+                                size={dashboardScreen === false ? assetFilesBarSize : 0}
                                 ref={assetFileRef}
                                 onDragStarted={() => {
                                     setIsDragging(!isDragging)
@@ -785,7 +785,7 @@ const GlobalScreen = ({
                                 <SplitPane
                                     className={classes.splitPane}
                                     split="vertical"
-                                    size={driveTemplateBarSize}
+                                    size={dashboardScreen === false ? driveTemplateBarSize : 0}
                                     ref={templateFileRef}
                                     onDragStarted={() => {
                                         setIsDragging(!isDragging)

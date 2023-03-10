@@ -18,6 +18,7 @@ const DEFAULT_SERIALIZE = (t) => t
 export default function Page({
   loading,
   childComponent,
+  headerChildComponent,
   className,
   title = '',
   columns = [],
@@ -25,10 +26,10 @@ export default function Page({
   idKey,
   name,
   fieldsComponent,
-  checkbox,
+  checkbox, 
   actions = {},
 }) {
-  const { fetchItems, deleteItem, deleteItems, addItem, updateItem,  serialize = DEFAULT_SERIALIZE, deserialize = DEFAULT_SERIALIZE } = actions
+  const { fetchItems, deleteItem, deleteItems, addItem, updateItem, serialize = DEFAULT_SERIALIZE, deserialize = DEFAULT_SERIALIZE } = actions
   
   const expandable = !!childComponent
   const editable = !!updateItem
@@ -112,7 +113,9 @@ export default function Page({
             numSelected={selected.length}
             onCheckable={checkbox ? true : false}
             onDelete={selectable && onDelete}
-            onAdd={addable && onAdd} />
+            onAdd={addable && onAdd} 
+            childComponent={headerChildComponent}
+          />
 
           <BaseTable
             loading={loading}

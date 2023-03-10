@@ -19,3 +19,12 @@ export const warnConsole = (message) => {
         originalWarn(...args);
     };
 }
+
+export const getShareLocationCode = () => {
+    let codeShare = ''
+    if(process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') {
+      const locationShare = window.location.pathname
+      codeShare = locationShare.split('/').pop()
+    }
+    return codeShare
+}

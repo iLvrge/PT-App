@@ -202,6 +202,26 @@ class PatenTrackApi {
     return axios.post(`${base_new_api_url}/users`, user, getMultiFormUrlHeader())
   }
 
+  static addCategoryProduct(form) {
+    return axios.post(`${base_new_api_url}/category_products`, form, getMultiFormUrlHeader())
+  }
+
+  static getCategories() {
+    return axios.get(`${base_new_api_url}/category_products`, getHeader())
+  }
+
+  static getProductsByCategory(categoryID) {
+    return axios.get(`${base_new_api_url}/category_products/${categoryID}/products`, getHeader())
+  }
+
+  static deleteCategory(categoryID) {
+    return axios.delete(`${base_new_api_url}/category_products/${categoryID}`, getHeader())
+  }
+
+  static deleteProduct(productID) {
+    return axios.delete(`${base_new_api_url}/category_products/products/${productID}`, getHeader())
+  }
+
   static updateUser( user, ID ) {
     return axios.put(`${base_new_api_url}/users/${ID}`, user, getMultiFormUrlHeader())
   }
@@ -1154,6 +1174,10 @@ class PatenTrackApi {
 
   static deleteSlackMessage( code, channelID, messageID ) {
     return axios.delete(`${base_new_api_url}/slacks/conversations/message/${code}/${channelID}/${messageID}`, getHeader())
+  }
+
+  static getSearchAssignedMessages( code ) {
+    return axios.get(`${base_new_api_url}/slacks/conversations/search/assigned/${code}`, getHeader())
   }
 
   static getSlackUsersList(code) {

@@ -7,7 +7,13 @@ const settingsReducer = (state = initialState.settings, action) => {
       return {
         ...state,
         [action.key]: { ...state[action.key], loading: true, list: [] }
+      } 
+    case types.SET_PRODUCTS:{
+      return {
+        ...state,
+        products: { loading: false, list: [ ...action.data ], initialized: true },
       }
+    }  
     case types.SET_USERS_LIST:
       return {
         ...state,
@@ -63,6 +69,18 @@ const settingsReducer = (state = initialState.settings, action) => {
       return {
         ...state,
         selected_companies_list: action.companyID
+      }
+    }  
+    case types.SET_CATEGORIES:{
+      return {
+        ...state,
+        categories: action.list
+      }
+    }  
+    case types.SET_SELECT_CATEGORY:{
+      return {
+        ...state,
+        selectedCategory: action.categoryID
       }
     }  
     case types.SET_COMPANY_TO_ADD_LAW_FIRM:

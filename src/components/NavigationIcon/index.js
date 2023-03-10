@@ -13,7 +13,8 @@ import {
     Settings as SettingsIcon,
     Home as HomeIcon,
     Add as AddIcon,
-    CropSquare as CropSquareIcon
+    CropSquare as CropSquareIcon,
+    AccountTreeOutlined as AccountTreeOutlinedIcon 
 } from '@mui/icons-material' 
 
 import useStyles from './styles'
@@ -222,6 +223,10 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
                                 ?
                                     <AddIcon />
                                 :
+                                    t === 46
+                                    ?
+                                        <AccountTreeOutlinedIcon />
+                                    :
                                     ''
                         }
                         { 

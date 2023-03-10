@@ -690,53 +690,53 @@ const onShare = useCallback(async () => {
   if (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'){
       alert('Message..')
   } else {
-      if(props.dashboardScreen === true) { 
-          shareDashboard()
-      } else {
-          let selectAssetsList = [], selectedTransactions = []
+    if(dashboardScreen === true) { 
+      shareDashboard()
+    } else {
+      let selectAssetsList = [], selectedTransactions = []
 
-          let list = maintainencePatentsList.length > 0 ? [...maintainencePatentsList] : [...assetTypeAssignmentAssetsList]
-  
-          let selectedItems = selectedMaintainencePatents.length > 0 ? [...selectedMaintainencePatents] : [...assetTypeAssignmentAssetsSelected]
-  
-          if(selectedItems.length > 0) {
-              selectedItems.forEach( item => {
-                  const findIndex = list.findIndex( row => row.asset == item)
-                  if(findIndex !== -1) {
-                  selectAssetsList.push({asset: item, flag: list[findIndex].grant_doc_num !== '' && list[findIndex].grant_doc_num !== null ? 4 : 5})
-                  }
-              }) 
-          } else {
-              selectedTransactions = [...selectedAssetsTransactions]
-          }
-          if( selectedTransactions.length == 0 &&  selectAssetsList.length == 0 ) {
-              alert(`Please select one or more ${props.timelineScreen === true ? 'transactions' : 'assets'} to share`)
-          } else {
-              // Share list of assets and create share link 
-              let form = new FormData()
-              form.append('assets', JSON.stringify(selectAssetsList))
-              form.append('transactions', JSON.stringify(selectedTransactions))
-              form.append('type', 2)      
-              const {data} = await PatenTrackApi.shareIllustration(form)
-              if (data.indexOf('sample') >= 0) {
-                  /**
-                   * just for temporary replacing
-                   * open share url new tab
-                   */
-                  //const shareURL = data.replace('https://share.patentrack.com','http://167.172.195.92:3000')
-                  
-                  /* if(window.confirm("Copy a sharing link to your clipboard.")){
-                      copy(data)
-                  } */
-                  if( data !== null){
-                      copyToClipboard(data, SHARE_URL_MESSAGE)
-                  }
-                  //window.open(data,'_BLANK')
-              } 
-          }
+      let list = maintainencePatentsList.length > 0 ? [...maintainencePatentsList] : [...assetTypeAssignmentAssetsList]
+
+      let selectedItems = selectedMaintainencePatents.length > 0 ? [...selectedMaintainencePatents] : [...assetTypeAssignmentAssetsSelected]
+
+      if(selectedItems.length > 0) {
+          selectedItems.forEach( item => {
+              const findIndex = list.findIndex( row => row.asset == item)
+              if(findIndex !== -1) {
+              selectAssetsList.push({asset: item, flag: list[findIndex].grant_doc_num !== '' && list[findIndex].grant_doc_num !== null ? 4 : 5})
+              }
+          }) 
+      } else {
+          selectedTransactions = [...selectedAssetsTransactions]
       }
+      if( selectedTransactions.length == 0 &&  selectAssetsList.length == 0 ) {
+          alert(`Please select one or more ${props.timelineScreen === true ? 'transactions' : 'assets'} to share`)
+      } else {
+          // Share list of assets and create share link 
+          let form = new FormData()
+          form.append('assets', JSON.stringify(selectAssetsList))
+          form.append('transactions', JSON.stringify(selectedTransactions))
+          form.append('type', 2)      
+          const {data} = await PatenTrackApi.shareIllustration(form)
+          if (data.indexOf('sample') >= 0) {
+              /**
+               * just for temporary replacing
+               * open share url new tab
+               */
+              //const shareURL = data.replace('https://share.patentrack.com','http://167.172.195.92:3000')
+              
+              /* if(window.confirm("Copy a sharing link to your clipboard.")){
+                  copy(data)
+              } */
+              if( data !== null){
+                  copyToClipboard(data, SHARE_URL_MESSAGE)
+              }
+              //window.open(data,'_BLANK')
+          } 
+      }
+    }
   }        
-}, [ dispatch, category, mainCompaniesSelected, selectedMaintainencePatents, assetTypeAssignmentAssetsSelected, selectedAssetsTransactions ])
+}, [ dispatch, dashboardScreen, category, mainCompaniesSelected, selectedMaintainencePatents, assetTypeAssignmentAssetsSelected, selectedAssetsTransactions ])
 
 const onHandleTransactions = () => {
   dispatch(setAssetButton(false))

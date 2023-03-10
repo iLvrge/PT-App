@@ -605,7 +605,7 @@ const VirtualizedTable = ({
             ref={rowRef}
             style={{
               marginRight: "auto",
-              marginLeft: typeof childInModal === 'undefined' ? 18 : 0,
+              marginLeft: typeof childInModal === 'undefined' ? 33 : 0,
               height:
                 disableRow === true
                 ?

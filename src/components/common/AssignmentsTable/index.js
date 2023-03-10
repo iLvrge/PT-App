@@ -193,6 +193,22 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
   const [headerColumns, setHeaderColumns] = useState(COLUMNS)
 
   useEffect(() => {
+    const {hash} = location 
+    if(hash == '' && selectedAssetsTransactions.length > 0) {
+      setSelectItems([])
+      setCurrentSelection(null)
+      setSelectedRow([])
+    	dispatch(setSelectAssignments([]));
+      dispatch(setSelectedAssetsTransactions([]));
+      if(display_clipboard === false) {
+        dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
+        dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+      }
+      clearSelections()
+    }
+  }, [location])
+
+  useEffect(() => {
     if( selectedCompanies.length > 0  || selectedCompaniesAll === true ) {
       setRows(assignmentList)
       if(assignmentList.length > 0 ) {
@@ -587,33 +603,7 @@ const onHandleClickRow = useCallback(
         //dispatch(setDocumentTransaction([]));   
         //dispatch(getChannelIDTransaction(row.rf_id));
       } else {
-        dispatch(setChannelID(''))
-        setSelectedRow([])
-        dispatch(setAssetsIllustration(null))
-        dispatch(setAssetsIllustrationData(null))
-        dispatch(setSelectedAssetsTransactions([]))
-        dispatch(setSelectedAssetsPatents([]))   
-        dispatch(
-          setConnectionBoxView(false)
-        )
-        dispatch(
-          setConnectionData({})
-        )
-        dispatch(
-          setPDFFile(
-            { 
-              document: '',  
-              form: '', 
-              agreement: '' 
-            } 
-          )
-        )
-        dispatch(
-          setPDFView(false)
-        )
-        dispatch(toggleLifeSpanMode(true));
-        dispatch(toggleFamilyMode(false));
-        dispatch(toggleFamilyItemMode(false));
+        clearSelections()
         /* console.log("connectionBoxView", connectionBoxView) */
         /* if(connectionBoxView === true) {
           checkChartAnalytics(null, null, false)
@@ -626,6 +616,36 @@ const onHandleClickRow = useCallback(
   },
   [dispatch, connectionBoxView, dashboardScreen, selectedCategory, selectItems, currentSelection, selectedRow, defaultLoad, search_string, display_clipboard],
 );
+
+const clearSelections = () => {
+  dispatch(setChannelID(''))
+  setSelectedRow([])
+  dispatch(setAssetsIllustration(null))
+  dispatch(setAssetsIllustrationData(null))
+  dispatch(setSelectedAssetsTransactions([]))
+  dispatch(setSelectedAssetsPatents([]))   
+  dispatch(
+    setConnectionBoxView(false)
+  )
+  dispatch(
+    setConnectionData({})
+  )
+  dispatch(
+    setPDFFile(
+      { 
+        document: '',  
+        form: '', 
+        agreement: '' 
+      } 
+    )
+  )
+  dispatch(
+    setPDFView(false)
+  )
+  dispatch(toggleLifeSpanMode(true));
+  dispatch(toggleFamilyMode(false));
+  dispatch(toggleFamilyItemMode(false));
+}
 
 const findChannelID = useCallback((rfID) => {
   let channelID = ''
