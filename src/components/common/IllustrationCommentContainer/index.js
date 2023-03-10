@@ -563,9 +563,14 @@ const IllustrationCommentContainer = ({
                         className={classes.fullscreenCharts} 
                         square
                     >
-                        <IconButton onClick={handleCloseFullscreen}  className={clsx(classes.right, {[classes.frameButton]: (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null) ? true : false})} size="large">
-                            <Close /> 
-                        </IconButton> 
+                        {
+                            illustrationBar === false && (
+                                <IconButton onClick={handleCloseFullscreen}  className={clsx(classes.right, {[classes.frameButton]: (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null) ? true : false})} size="large">
+                                    <Close /> 
+                                </IconButton> 
+                            )
+                        }
+                        
                         {
                             
                             shouldShowTimeline === true ? 
@@ -602,6 +607,7 @@ const IllustrationCommentContainer = ({
                                             checkChartAnalytics={checkChartAnalytics}
                                             setAnalyticsBar={setAnalyticsBar}
                                             setChartBar={setChartBar}
+                                            fullScreen={handleCloseFullscreen} 
                                         />
                                 )
                                 :

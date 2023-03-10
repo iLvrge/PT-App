@@ -2,8 +2,10 @@ export default {
   // Roots
   insights: '/insight',
   resources: '/resources', 
-  maintainence: '/dashboard/',
-  maintainence_share: '/dashboard/:code',
+  dashboard_kpi: '/dashboard/',
+  dashboard_attention: '/dashboard/attention',
+  dashboard_activity: '/dashboard/activity',
+  dashboard_share: '/dashboard/:code',
   restore_ownership: '/mainenance/restore_ownership',
   clear_encumbrances: '/mainenance/clear_encumbrances',
   pay_maintainence_fee: '/mainenance/pay_maintainence_fee',

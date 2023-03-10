@@ -26,7 +26,8 @@ import {
     setIsSalesAssetsDisplay,
     setCPCRequest,
     setCPCData,
-    setCPCSecondData
+    setCPCSecondData,
+    setSocialMediaConnectPopup
 } from '../../../../actions/patentTrackActions2'
 import { setPDFFile, setPdfTabIndex } from '../../../../actions/patenTrackActions' 
 import PatenTrackApi from '../../../../api/patenTrack2'
@@ -45,6 +46,7 @@ import AssetsTable from '../../AssetsTable'
 import LabelWithIcon from '../../LabelWithIcon'
 import { Box } from '@mui/system'
 import Fees from '../LegalEventsContainer/Fees'
+import { getTokenStorage } from '../../../../utils/tokenStorage'
 
 var newRange = [1,2]
 
@@ -80,8 +82,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const [ xy, setXY] = useState({x: dashboardScreen === true ? '0px' : '-85px', y: '35px'})
     const [ valueScope, setValueScope ] = useState(dashboardScreen === true ? [...dashboardScope] : [1, 2])
     const [ valueScopeLabel, setValueScopeLabel ] = useState([])
-    const [ valueRange, setValueRange ] = useState(4)/**dashboardScreen === true ? 4 : 3 */
-    const [ preValueRange, setPreValueRange ] = useState(4)
+    const [ valueRange, setValueRange ] = useState(3)/**dashboardScreen === true ? 4 : 3 */
+    const [ preValueRange, setPreValueRange ] = useState(3)
     const [ scopeRange, setScopeRange ] = useState([])
     const [ depthRange, setDepthRange ] = useState([
         {
@@ -335,6 +337,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
             if(selectedCategory == 'abandoned') {
                 tabArray.push('Timeline')
+            } else {
+                /* tabArray.push('With Products') */
             }
             setInventionTabs(tabArray)
             if(selectedRow.length  === 0) { 
@@ -566,7 +570,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             setValueYear([yearLabelList[0].value, yearLabelList[yearLabelList.length - 1].value]) 
         }
         if( typeof range === 'undefined' && typeof scope ===  'undefined'  && data.group.length > 0 && dashboardScreen === false) {
-            setValueRange(4) 
+            setValueRange(3) 
             setValueScope([ data.group[0].id, data.group[data.group.length - 1].id ])
             newRange = [ data.group[0].id, data.group[data.group.length - 1].id ]
         }    
@@ -698,7 +702,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             }
              
             if( typeof range === 'undefined' && typeof scope ===  'undefined'  && data.group.length > 0 && dashboardScreen === false) {
-                setValueRange(4) 
+                setValueRange(3) 
                 setValueScope([ data.group[0].id, data.group[data.group.length - 1].id ])
                 newRange = [ data.group[0].id, data.group[data.group.length - 1].id ]
             }    
@@ -878,6 +882,36 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         if(selectedTab === 0 && selectedCategory == 'assigned' && selectedRow.length == 0 && display_sales_assets > 0) {
             dispatch(setIsSalesAssetsDisplay(0))
             dispatch(setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }))
+        } else if (selectedTab === 1 && selectedCategory == 'assigned' && selectedRow.length == 0) {
+            /**
+             * Get data from slack and find assigned assets products
+             * first check user is login with slack. if not then prompt
+             * get all the channels and find all the channel IDs
+             * send request for converstations for each channel to get the list of products
+             * make a cube based on the products
+             */
+            const getSearchedMessages = async () => {
+                const getSlackToken = getTokenStorage("slack_auth_token_info");
+                if(!getSlackToken || getSlackToken == '' || getSlackToken == null){
+                    dispatch(setSocialMediaConnectPopup(true))
+                } else {
+                    const { access_token, bot_token, bot_user_id } = JSON.parse(getSlackToken)
+                    if(access_token != '' && access_token != null && access_token != undefined) { 
+                        const {data} = await PatenTrackApi.getSearchAssignedMessages(access_token)
+        
+                        if(data.length > 0) {
+                            /**
+                             * Check Messages and make a product group 
+                             * and assets product group
+                             */
+
+                        }
+                    } else {
+                        dispatch(setSocialMediaConnectPopup(true))
+                    }
+                } 
+            }
+            getSearchedMessages()
         }
     }, [selectedTab])
 
@@ -1171,8 +1205,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         setFilterDrag([0,0])
         setValueYear([1,2])
         setValueScope([1,2])
-        setValueRange(4)
-        setPreValueRange(4)
+        setValueRange(3)
+        setPreValueRange(3)
         setScopeRange([])
         findCPCList([], filterList, filterTotal)  
     }
@@ -1265,6 +1299,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                             showAbandoned={true}
                                         />
                                     :
+                                        
                                         selectedTab === 1
                                         ?
                                             <PdfViewer display={true} pdfTab={0} show_tab={false}/>         

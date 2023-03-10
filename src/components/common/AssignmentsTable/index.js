@@ -193,6 +193,48 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
   const [headerColumns, setHeaderColumns] = useState(COLUMNS)
 
   useEffect(() => {
+    const {hash} = location 
+    if(hash == '' && selectedAssetsTransactions.length > 0) {
+      setSelectItems([])
+      setCurrentSelection(null)
+      setSelectedRow([])
+    	dispatch(setSelectAssignments([]));
+      dispatch(setSelectedAssetsTransactions([]));
+      if(display_clipboard === false) {
+        dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
+        dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+      }
+      clearSelections()
+    } else if(hash != '' && hash.indexOf('&assignment') !== -1 && selectedAssetsPatents.length == 0) {
+      const explodeHash = hash.split('&') 
+      if(explodeHash.length > 0) {
+        const findIndex = explodeHash.findIndex( row => row.indexOf('assignment=') !== -1 ? row : null) 
+        if(findIndex != null) {
+          const explodeFindIndex = explodeHash[findIndex].split('=') 
+          if(explodeFindIndex.length == 2) { 
+            const findRowIndex = rows.findIndex( item =>  decodeURIComponent(explodeFindIndex[1]) ==  item.rf_id.toString()) 
+            if(findRowIndex >= 0) {
+              if(display_clipboard === false) {
+                dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
+                dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+              }
+              dispatch(setChannelID(''))
+              dispatch(setSelectedAssetsPatents([]))
+              getTransactionData(dispatch, rows[findRowIndex].rf_id, defaultLoad, search_string)                    
+              dispatch(setDriveTemplateFrameMode(false));
+              dispatch(setDriveTemplateFile(null));
+              dispatch(setTemplateDocument(null));
+              setSelectAll(false);
+              setSelectItems([rows[findRowIndex].rf_id])
+              dispatch(setSelectAssignments([rows[findRowIndex].rf_id]));
+            }
+          }
+        }
+      } 
+    }
+  }, [location])
+
+  useEffect(() => {
     if( selectedCompanies.length > 0  || selectedCompaniesAll === true ) {
       setRows(assignmentList)
       if(assignmentList.length > 0 ) {
@@ -587,33 +629,7 @@ const onHandleClickRow = useCallback(
         //dispatch(setDocumentTransaction([]));   
         //dispatch(getChannelIDTransaction(row.rf_id));
       } else {
-        dispatch(setChannelID(''))
-        setSelectedRow([])
-        dispatch(setAssetsIllustration(null))
-        dispatch(setAssetsIllustrationData(null))
-        dispatch(setSelectedAssetsTransactions([]))
-        dispatch(setSelectedAssetsPatents([]))   
-        dispatch(
-          setConnectionBoxView(false)
-        )
-        dispatch(
-          setConnectionData({})
-        )
-        dispatch(
-          setPDFFile(
-            { 
-              document: '',  
-              form: '', 
-              agreement: '' 
-            } 
-          )
-        )
-        dispatch(
-          setPDFView(false)
-        )
-        dispatch(toggleLifeSpanMode(true));
-        dispatch(toggleFamilyMode(false));
-        dispatch(toggleFamilyItemMode(false));
+        clearSelections()
         /* console.log("connectionBoxView", connectionBoxView) */
         /* if(connectionBoxView === true) {
           checkChartAnalytics(null, null, false)
@@ -626,6 +642,36 @@ const onHandleClickRow = useCallback(
   },
   [dispatch, connectionBoxView, dashboardScreen, selectedCategory, selectItems, currentSelection, selectedRow, defaultLoad, search_string, display_clipboard],
 );
+
+const clearSelections = () => {
+  dispatch(setChannelID(''))
+  setSelectedRow([])
+  dispatch(setAssetsIllustration(null))
+  dispatch(setAssetsIllustrationData(null))
+  dispatch(setSelectedAssetsTransactions([]))
+  dispatch(setSelectedAssetsPatents([]))   
+  dispatch(
+    setConnectionBoxView(false)
+  )
+  dispatch(
+    setConnectionData({})
+  )
+  dispatch(
+    setPDFFile(
+      { 
+        document: '',  
+        form: '', 
+        agreement: '' 
+      } 
+    )
+  )
+  dispatch(
+    setPDFView(false)
+  )
+  dispatch(toggleLifeSpanMode(true));
+  dispatch(toggleFamilyMode(false));
+  dispatch(toggleFamilyItemMode(false));
+}
 
 const findChannelID = useCallback((rfID) => {
   let channelID = ''

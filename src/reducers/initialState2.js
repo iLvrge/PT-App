@@ -19,7 +19,10 @@ export default {
     selected_law_firm: [],
     selected_companies_list: [],
     selectedPortfolio: null,
-    companies_to_add_lawfirm: [] 
+    companies_to_add_lawfirm: [],
+    categories: [],
+    products: {loading: true, list: [], initialized: false },
+    selectedCategory: 0
   },
   ui: uiInitial,
   assets: {

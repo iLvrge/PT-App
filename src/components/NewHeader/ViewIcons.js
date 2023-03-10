@@ -29,26 +29,24 @@ const ViewIcons = (props) => {
     const [patentView, setPatentView] = useState(false)
     const [openSearch, setOpenSearch] = useState(false) 
     const profile = useSelector(state => (state.patenTrack.profile))  
-    const viewDashboard = useSelector(state => state.ui.viewDashboard) 
-    const assetButton = useSelector(state => state.ui.assetButton) 
-    const transactionButton = useSelector(state => state.ui.transactionButton) 
-    const loadingDashboardData = useSelector( state => state.ui.loadingDashboardData);
-    const category = useSelector(state => state.patenTrack2.selectedCategory)
-    const maintainencePatentsList = useSelector(state => state.patenTrack2.maintainenceAssetsList.list)
-    const mainCompaniesSelected = useSelector(state => state.patenTrack2.mainCompaniesList.selected)
-    const assetTypeAssignmentAssetsList = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list)
-    const selectedAssetsTransactions = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
-    const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
-    const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
-    const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected);
-    const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected);
-    const SHARE_URL_MESSAGE = 'A sharing URL was added to your clipboard.'
+    const viewDashboard = useSelector(state => state.ui.viewDashboard)  
+    const loadingDashboardData = useSelector( state => state.ui.loadingDashboardData); 
     const path = location.pathname
  
 
+    useEffect(() => {
+        const {pathname} = location; 
+        if(pathname == '/dashboard/attention' ||  pathname ==  '/dashboard/activity' ||  pathname ==  '/dashboard' ||  pathname ==  '') { 
+            if(props.dashboardScreen === false) {
+                console.log("IN LOCATION")
+                pathname == '/dashboard/attention' ? changeGraph(false) : pathname ==  '/dashboard/activity' ? onHandleTimeline() : onHandleKPI()
+            }
+        }
+    }, [location])
+
     const changeGraph = async(flag) => {
         //setCardList(LIST)
-        onHandleDashboard()
+        onHandleDashboard('attention')
         const oldViewScreen = {
             ...viewDashboard, 
             line: flag, 
@@ -110,7 +108,7 @@ const ViewIcons = (props) => {
     }
 
     const onHandleKPI = async() => {
-        onHandleDashboard()
+        onHandleDashboard('')
         const oldViewScreen = {
             ...viewDashboard, 
             line: false, 
@@ -128,7 +126,7 @@ const ViewIcons = (props) => {
     const onHandleTimeline = () => {
         setPatentView(false)
         setTimelineView(false)
-        onHandleDashboard()
+        onHandleDashboard('activity')
         const oldViewScreen = {
             ...viewDashboard, 
             line: false, 
@@ -152,13 +150,16 @@ const ViewIcons = (props) => {
         props.setActivityTimeline()
     }
 
-    const onHandleDashboard = () => {
+    const onHandleDashboard = (btn) => {
         let location = window.location.pathname
-            location = location.split('/').pop()
-            console.log('path', path)
-        if(path.indexOf('/dashboard') == -1) {
-            history.push(`/dashboard${process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? location != '' ? '/'+location : '' : ''}`) 
-        } 
+            location = location.split('/').pop() 
+        if(path.indexOf('/dashboard') == -1) { 
+            history.push(`/dashboard${process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? location != '' ? '/' + location : typeof btn !== 'undefined' && btn != '' ? '/' + btn : '' : typeof btn !== 'undefined' && btn != '' ? '/' + btn : '' }`) 
+        } else {
+            if(typeof btn !== 'undefined') {
+                history.push(`/dashboard${btn != '' ? '/' + btn : ''}`)
+            }
+        }
         setPatentView(false)
         setTimelineView(false)
         dispatch(setAssetButton(false))

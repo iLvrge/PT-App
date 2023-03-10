@@ -23,14 +23,35 @@ let pages = [
   
   {
     exact: false,
-    path: routeList.maintainence,
+    path: routeList.dashboard_kpi,
+    component: GlobalScreen,
+    layout: GlobalLayout,
+    type: 1
+  },
+  {
+    exact: true,
+    path: routeList.dashboard_attention,
+    component: GlobalScreen,
+    layout: GlobalLayout,
+    type: 1
+  },
+  {
+    exact: true,
+    path: routeList.dashboard_activity,
+    component: GlobalScreen,
+    layout: GlobalLayout,
+    type: 1
+  },
+  {
+    exact: true,
+    path: routeList.default,
     component: GlobalScreen,
     layout: GlobalLayout,
     type: 1
   },
   {
     exact: false,
-    path: routeList.maintainence_share,
+    path: routeList.dashboard_share,
     component: GlobalScreen,
     layout: GlobalLayout,
     type: 1
@@ -55,13 +76,6 @@ let pages = [
     component: GlobalScreen,
     layout: GlobalLayout,
     type: 3
-  },
-  {
-    exact: true,
-    path: routeList.default,
-    component: GlobalScreen,
-    layout: GlobalLayout,
-    type: 1
   },
   {
     exact: true,
