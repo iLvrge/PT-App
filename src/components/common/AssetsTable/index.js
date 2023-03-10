@@ -6,9 +6,9 @@ import React, {
   useMemo
 } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {useLocation} from 'react-router-dom'
-import { Paper, Popover, Box, Rating } from "@mui/material";
-import { Clear, NotInterested, KeyboardArrowDown, MonetizationOn, StarOutline, StarOutlineOutlined, PendingActionsOutlined } from '@mui/icons-material';  
+import {useHistory, useLocation} from 'react-router-dom'
+import { Paper, Popover, Box, Rating, Dialog, DialogTitle, DialogContent, DialogActions, Button, Badge } from "@mui/material";
+import { Clear, NotInterested, KeyboardArrowDown, MonetizationOn, StarOutline, StarOutlineOutlined, PendingActionsOutlined, AccountTreeOutlined   } from '@mui/icons-material';  
 import moment from "moment";
 import Loader from "../Loader";
 import useStyles from "./styles";
@@ -88,7 +88,9 @@ import { getAuthConnectToken, getTokenStorage, setTokenStorage } from "../../../
 import PatenTrackApi from '../../../api/patenTrack2'
 
 import ChildTable from "./ChildTable";
+import Category from "./Category";
 import clsx from "clsx";
+import { updateHashLocation } from "../../../utils/hashLocation";
 
 var applicationNumber = null, assetNumber = null, hoverTimer = null
 
@@ -117,6 +119,7 @@ const AssetsTable = ({
   }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
+  const history = useHistory();
   const location = useLocation()
   const tableRef = useRef()
   const assetsAssignmentRef = useRef()
@@ -135,6 +138,7 @@ const AssetsTable = ({
   const [childSelected, setCheckedSelected] = useState(0);
   const [currentSelection, setCurrentSelection] = useState(null);
   const [asset, setAsset] = useState(null);
+  const [openCategoryModal, setOpenCategoryModal] = useState(false);
   const [selectedAll, setSelectAll] = useState(false);
   const [selectItems, setSelectItems] = useState([]);
   const [selectedRow, setSelectedRow] = useState([]);
@@ -149,6 +153,8 @@ const AssetsTable = ({
   const [assetRows, setAssetRows] = useState([])
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState(true)
   const [ selectedDefaultItem, setSelectedDefaultItem ] = useState(false)
+  const [ selectedCategoryRow, setSelectedCategoryRow ] = useState(null)
+  const [ selectedCategoryProducts, setSelectCategoryProducts ] = useState([])
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
   const google_profile = useSelector(state => state.patenTrack2.google_profile)
   const openModal = Boolean(anchorEl);
@@ -221,6 +227,13 @@ const AssetsTable = ({
   const foreignAssets = useSelector(state => state.patenTrack2.foreignAssets)
   const dashboardScreen = useSelector(state => state.ui.dashboardScreen) 
   const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
+
+  useEffect(() => {
+    const {hash} = location
+    if(hash == '' && selectedAssetsPatents.length > 0) {
+      clearSelections()
+    }
+  }, [location])
 
   const Clipboard = () => {
     return (
@@ -383,6 +396,13 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       icon: <Slack />,
       item: false
     },
+    {
+      id: 11,
+      name:  'Assigned Category/Product',
+      image: '',
+      icon: <AccountTreeOutlined />,
+      item: false
+    },
     /* {
       id: 6,
       name: 'Link to Our Products',
@@ -466,7 +486,14 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       name: 'Pay Maintainence Fee', 
       icon: <MonetizationOn />,
       image: ''
-    }
+    },
+    {
+      id: 11,
+      name:  'Assigned Category/Product',
+      image: '',
+      icon: <AccountTreeOutlined />, 
+      item: false
+    },
     /* {
       id: 6,
       name: 'Link to Our Products',
@@ -640,7 +667,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     return token
   }
 
-  const onHandleDropDownlist = async(event, asset, row ) => { 
+  const onHandleDropDownlist = async(event, asset, row ) => {  
     if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
       alert('Message....')
     } else {
@@ -668,7 +695,10 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           }
         })    
       } else {
-        if(type === 9 && event.target.value === 0) {
+        if(event.target.value == 11) {
+          setSelectedCategoryRow(row)
+          setOpenCategoryModal(!openCategoryModal)
+        } else if(type === 9 && event.target.value === 0) {
           /***
           * Asset remove from spreadsheet
           */
@@ -1345,6 +1375,13 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     ({ grant_doc_num, appno_doc_num, asset }) => {     
       /*TV, Comment, Family, FamilyItem, getChannelID Legal Events */
       if(!selectedRow.includes(asset)) {
+        history.push({
+          hash: updateHashLocation(location, "asset", asset ).join(
+              "&",
+          ),
+        });
+
+
         if(selectedCategory == 'restore_ownership') {
           dispatch(setAssetTypesPatentsSelected([asset]))
           setSelectItems([asset])
@@ -1570,7 +1607,7 @@ const checkMouseStillOnHover = (e, number) => {
 }
 
 /**
- * Retireve slack messages and also retrieve Rating and Necessary
+ * Retireve slack messages and also retrieve Rating and Necessary and Assigned
  * @param {*} asset 
  */
 const retrieveSlackMessages = async(asset) => {
@@ -1591,6 +1628,7 @@ const retrieveSlackMessages = async(asset) => {
           data.messages.forEach( item => {
             if(item.type == 'message') {
               const {text} = item
+              console.log('text', text)
               if(text != '') { 
                 if(text.toLowerCase().indexOf('necessary') !== -1 && text.indexOf('via PatenTrack') !== -1) {
                   /**
@@ -1613,9 +1651,22 @@ const retrieveSlackMessages = async(asset) => {
                     value
                   })
                 }
+                console.log('text', text.indexOf('via PatenTrack'), text.indexOf('assigned to this asset'))
+                if(text.indexOf('via PatenTrack') !== -1 && text.indexOf('assigned to this asset') !== -1){
+                  console.log('ASSIGNED')
+                  let messageTest = text.replace('products are assigned to this asset via PatenTrack', '')
+                  messageTest = text.replace('product is assigned to this asset via PatenTrack', '')
+                  if(messageTest != '') {
+                    ratingItems.push({
+                      name: 'Assigned',
+                      value: messageTest.split('@@').length
+                    })
+                  }
+                }
               }
             }
           });
+          console.log('ratingItems', ratingItems)
           if(ratingItems.length > 0) {
             updateTableColumn(ratingItems)
           }
@@ -1635,6 +1686,17 @@ const updateTableColumn = (ratingItems) => {
   if(findIndex !== -1) {
     dropdownList[findIndex].name = <RatingImportant item={ratingItems} />
   }
+
+  findIndex = dropdownList.findIndex( item => item.id == 11)
+  if(findIndex !== -1) {
+    const findAssignedIndex = ratingItems.findIndex( item => item.name == 'Assigned')
+    if(findAssignedIndex !== -1) {
+      dropdownList[findIndex].name =  <Badge color="secondary" badgeContent={ratingItems[findAssignedIndex].value}>
+      Assigned Category/Product
+     </Badge>
+    } 
+  }
+
   let previousColumns = [...tableColumns]
   const columnIndex = previousColumns.findIndex(item => item.role == 'static_dropdown')
   if(columnIndex !== -1) {
@@ -1926,6 +1988,73 @@ const updateTableColumn = (ratingItems) => {
     setAsset(null)
   }
 
+  const handleCloseCategoryModal = () => {
+    setOpenCategoryModal(!openCategoryModal)
+  }
+
+  const handleSubmitCategoryForm = async() => { 
+    console.log('handleSubmitCategoryForm', selectedCategoryProducts, selectedCategoryRow) 
+    const getSlackToken = getTokenStorage("slack_auth_token_info");
+    if (getSlackToken && getSlackToken != "") {
+      /**
+       * Find slack channel 
+       * send message to this channel
+       */
+      const channelID = findChannelID(selectedCategoryRow.asset)
+      if(channelID != '') {
+        dispatch(setChannelID({channel_id: channelID}))          
+      }
+      const allProducts = []
+      selectedCategoryProducts.forEach( item => {
+        allProducts.push(item.name)
+      })
+      if(allProducts.length > 0) {
+        const formData = new FormData()
+        formData.append('text',  `${allProducts.join(' @@ ')} product${allProducts.length > 1 ? 's are ' : ' is '} assigned to this asset via PatenTrack` )
+        formData.append('asset', selectedCategoryRow.asset)
+        formData.append('asset_format', `us${selectedCategoryRow.asset}`)
+        formData.append('user', '')
+        formData.append('reply', '' )
+        formData.append('edit', '')
+        formData.append('file', '')
+        formData.append('remote_file', '')
+        formData.append('channel_id', channelID)
+        const slackToken = getTokenStorage( 'slack_auth_token_info' )
+        if( slackToken  && slackToken != null ) {
+          const { access_token, bot_token, bot_user_id } = JSON.parse(slackToken)
+          if( access_token != undefined) {  
+            formData.append('auth', bot_token)
+            formData.append('auth_id', bot_user_id)
+            const { data } = await PatenTrackApi.sendMessage(access_token, formData)             
+            if(data != '' && Object.keys(data).length > 0) {
+              setSelectCategoryProducts([])
+              setSelectedCategoryRow(null)
+              if(channelID == '') {
+                dispatch(getChannels(access_token))
+                /* const {status, channel} = data
+
+                if(status != undefined && status != null && status == 'Message sent') {
+                  dispatch(setChannelID({channel_id: channel}))    
+                  dispatch(getSlackMessages(channel));
+                } */
+              }  else {
+                //dispatch(getSlackMessages(channelID));
+              }
+            }
+          }
+          setOpenCategoryModal(!openCategoryModal)
+        }
+      } else {
+        alert('Please select product first.')
+      }
+    } else {
+      /**
+       * Alert user to login with slack first
+       */
+      alert("Please login to slack first");
+    }
+  }
+
   if (
     (!standalone && assetTypeAssignmentLoadingAssets) ||
     (standalone && assetTypeAssignmentAssetsLoading)
@@ -2013,6 +2142,24 @@ const updateTableColumn = (ratingItems) => {
         :
         ''
       }      
+      {
+        openCategoryModal && (
+        <Dialog disableEscapeKeyDown open={openCategoryModal} onClose={handleCloseCategoryModal}>
+          <DialogTitle>Assign asset to category/product</DialogTitle>
+          <DialogContent>
+            <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap', p: 2}}>
+              <Category 
+                handleSelectedCategoryProduct={setSelectCategoryProducts}
+              />
+              {/* */}
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseCategoryModal}>Cancel</Button>
+            <Button onClick={handleSubmitCategoryForm}>Ok</Button>
+          </DialogActions>
+        </Dialog>)
+      }
     </Paper>
   );
 };

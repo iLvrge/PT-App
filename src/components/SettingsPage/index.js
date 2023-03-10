@@ -25,6 +25,8 @@ import { setAssetButton, setControlModal, setDashboardScreen, setTransactionButt
 import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar' 
 import NavigationIcon from '../../components/NavigationIcon'
 import { controlList } from '../../utils/controlList'
+import CategoryProducts from './Tabs/CategoryProducts'
+import { getShareLocationCode } from '../../utils/hashLocation'
 
 const TABS = [
   { label: 'Slacks', value: 'slacks', component: Slacks },
@@ -35,6 +37,7 @@ const TABS = [
   { label: 'Users', value: 'users/:code', component: Users },
   { label: 'Professionals', value: 'professionals', component: Professionals },
   { label: 'Documents', value: 'documents', component: Documents },
+  { label: 'Category', value: 'category', component: CategoryProducts },
   {
     label: 'Companies', value: 'companies', children: [
       { label: 'Names', value: 'companies/names', component: CompaniesNames },
@@ -60,6 +63,7 @@ function SettingsPage() {
   const [ openBar, setOpenBar ] = useState(false)
   const [ openCompanyBar, setOpenCompanyBar ] = useState(false)
   const [ openTeamBar, setOpenTeamBar ] = useState(false)
+  const [ openCategoryBar, setOpenCategoryBar ] = useState(false)
   const [ openTemplateBar, setOpenTemplateBar ] = useState(false)
   const [ openDocumentBar, setOpenDocumentBar ] = useState(false)
   const [ openUtilitiesBar, setOpenUtilitiesBar ] = useState(false)
@@ -80,7 +84,7 @@ function SettingsPage() {
   const initialOpenSubTabs = findTabViaChild(currentTab)
   const [ openSubTabs, setOpenSubTabs ] = useState(initialOpenSubTabs ? [ initialOpenSubTabs ] : [])
 
-  
+  console.log('currentTab', currentTab)
 
   useEffect(() => {
     if(profile?.user && profile.user?.role && profile.user.role.name != 'Admin') {
@@ -105,6 +109,9 @@ function SettingsPage() {
         break;
       case 'users':
         setOpenTeamBar(true)
+        break;
+      case 'category':
+        setOpenCategoryBar(true)
         break;
       case 'templates':
         setOpenTemplateBar(true)
@@ -152,6 +159,7 @@ function SettingsPage() {
     setOpenBar(false)
     setOpenCompanyBar(false)
     setOpenTeamBar(false)
+    setOpenCategoryBar(false)
     setOpenTemplateBar(false)
     setOpenDocumentBar(false)
     setOpenUtilitiesBar(false)
@@ -187,12 +195,15 @@ function SettingsPage() {
   const handleUsersLink = () => {
     resetAll()
     setOpenTeamBar(true)
-    let codeShare = ''
-    if(process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') {
-      const locationShare = window.location.pathname
-      codeShare = '/' + locationShare.split('/').pop()
-    }  
-    history.push(`/settings/users${codeShare}`)  
+    let codeShare = getShareLocationCode()
+    history.push(`/settings/users${codeShare != '' ? '/'+codeShare : ''}`)  
+  }
+
+  const handleCategoryLink = () => {
+    resetAll()
+    setOpenCategoryBar(true)
+    let codeShare = getShareLocationCode()
+    history.push(`/settings/category${codeShare != '' ? '/'+codeShare : ''}`)  
   }
 
   const handleProfessionalsLink = () => {
@@ -206,7 +217,8 @@ function SettingsPage() {
   const handleCompanyNamesLink = () => {
     resetAll()
     setOpenCompanyBar(true)
-    history.push('/settings/companies/names')  
+    let codeShare = getShareLocationCode()
+    history.push(`/settings/companies/names${codeShare != '' ? '/'+codeShare : ''}`)  
   }
 
   const handleCompanyAddressLink = () => {
@@ -285,7 +297,13 @@ function SettingsPage() {
       bar: openTeamBar,
       click: handleUsersLink,
       t: 33
-    },    
+    },   
+    {
+      tooltip: 'Categories',
+      bar: openCategoryBar,
+      click: handleCategoryLink,
+      t: 46
+    },  
     /* {
       tooltip: 'Templates',
       bar: openTemplateBar,

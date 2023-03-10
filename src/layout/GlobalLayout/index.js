@@ -230,8 +230,8 @@ const GlobalLayout = (props) => {
         }
     }, [dashboardScreen]) 
 
-    useEffect(() => { 
-        if( location.pathname == '/dashboard') {  
+    useEffect(() => {  
+        if( location.pathname.indexOf('/dashboard') !== -1 || location.pathname == '') {   
             handleResetScreen('Dashboard', null)
         }
     }, [location, openCustomerBar])

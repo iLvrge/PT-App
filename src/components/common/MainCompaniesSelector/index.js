@@ -333,9 +333,9 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                     name = ''
                     const findIndex = oldCompanies.findIndex(company => {
                         if(company.type == 1) {
-                            const child = JSON.parse(company.child)
-                            if(child.length > 0) {
-                                const mapIndex = child.findIndex(childCompany => childCompany.representative_name.toString().replace(/ /g,'').toLowerCase() == channelAsset.name)
+                            const child = JSON.parse(company.child_full_detail)
+                            if(child.length > 0) { 
+                                const mapIndex = child.findIndex(childCompany => childCompany?.representative_name.toString().replace(/ /g,'').toLowerCase() == channelAsset.name)
                                 if(mapIndex !== -1) {
                                     name = channelAsset.name
                                     return true
