@@ -5,21 +5,11 @@ import {
   } from "react-router-dom";
 import SplitPane from 'react-split-pane'
 
-
-import ArrowButton from '../common/ArrowButton'
-import MainCompaniesSelector from '../common/MainCompaniesSelector'
-import AssignmentsType from '../common/AssignmentsType'
-import CustomerTable from '../common/CustomerTable'
-import InventorTable from '../common/InventorTable'
-import CorrectAddressTable from '../common/CorrectAddressTable'
-import AssignmentsTable from '../common/AssignmentsTable'
-import AssetsTable from '../common/AssetsTable'
+ 
+import MainCompaniesSelector from '../common/MainCompaniesSelector' 
 import IllustrationCommentContainer from '../common/IllustrationCommentContainer'
-import AssetDetailsContainer from '../common/AssetDetailsContainer'
-import MaintainenceAssetsList from '../common/MaintainenceAssetsList'
-import LayoutTemplates from '../common/LayoutTemplates'
-import FilesTemplates from '../common/FilesTemplates'
-import ForeignAsset from '../common/ForeignAsset'
+
+
 import { resizePane, resizePane2, editorBar } from '../../utils/splitpane'
 import { updateResizerBar } from '../../utils/resizeBar'
 import config from "../common/PatentrackDiagram/config.json";
@@ -58,18 +48,33 @@ import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpan
 
 import useStyles from './styles'
 import clsx from 'clsx'
-import IllustrationContainer from '../common/AssetsVisualizer/IllustrationContainer'
-import LegalEventsContainer from '../common/AssetsVisualizer/LegalEventsContainer'
-import ConnectionBox from '../common/ConnectionBox'
-import PdfViewer from '../common/PdfViewer'
-import IllustrationPdf from '../common/AssetDetailsContainer/IllustrationPdf'
-import PatenTrackApi from '../../api/patenTrack2'
-import LawFirmTable from '../common/LawFirmTable';
-import Lenders from '../common/Lenders';
-import FamilyContainer from '../common/AssetsVisualizer/FamilyContainer';
-import SecuredAssets from '../common/SecuredAssets';
 import FullScreen from '../common/FullScreen';
-import { useReloadLayout } from '../../utils/useReloadLayout';
+import PatenTrackApi from '../../api/patenTrack2'
+import { useReloadLayout } from '../../utils/useReloadLayout'; 
+import Loader from '../common/Loader';
+
+
+// Load component dynamically
+const AssetDetailsContainer = React.lazy(() => import('../common/AssetDetailsContainer'));
+const IllustrationPdf = React.lazy(() => import('../common/AssetDetailsContainer/IllustrationPdf'));
+const LegalEventsContainer = React.lazy(() => import('../common/AssetsVisualizer/LegalEventsContainer'));
+const IllustrationContainer = React.lazy(() => import('../common/AssetsVisualizer/IllustrationContainer'));
+const FamilyContainer = React.lazy(() => import('../common/AssetsVisualizer/FamilyContainer'));
+const LayoutTemplates = React.lazy(() => import('../common/LayoutTemplates'));
+const FilesTemplates = React.lazy(() => import('../common/FilesTemplates'));
+const AssetsTable = React.lazy(() => import('../common/AssetsTable'));
+const MaintainenceAssetsList = React.lazy(() => import('../common/MaintainenceAssetsList'));
+const AssignmentsTable = React.lazy(() => import('../common/AssignmentsTable'));
+const SecuredAssets = React.lazy(() => import('../common/SecuredAssets'));
+const InventorTable = React.lazy(() => import('../common/InventorTable'));
+const CustomerTable = React.lazy(() => import('../common/CustomerTable'));
+const Lenders = React.lazy(() => import('../common/Lenders'));
+const LawFirmTable = React.lazy(() => import('../common/LawFirmTable'));
+const AssignmentsType = React.lazy(() => import('../common/AssignmentsType'));
+const ForeignAsset = React.lazy(() => import('../common/ForeignAsset'));
+
+
+
 
 const GlobalScreen = ({
     type,
@@ -538,448 +543,497 @@ const GlobalScreen = ({
                     ''
                 }
             </div>
-            <SplitPane
-                className={classes.splitPane}
-                split="vertical"
-                size={dashboardScreen === false ? typeBarSize : 0}
-                onChange={(size) => { 
-                    setTypeBarSize(size > 900 ? 900 : size)
-                }}
-                onDragFinished={(size) => resizePane('split9', size > 900 ? 900 : size, setTypeBarSize)}
-                ref={assignmentTypeRef}
-            >
-                <div id={`activity_container`} style={{ height: '100%'}}>
-                    { 
-                        openTypeBar === true 
-                        ? 
-                            <>
-                                {/* <ArrowButton arrowId={`arrow_activity`} handleClick={handleTypeBarOpen} buttonType={toggleTypeButtonType} buttonVisible={typeButtonVisible}/> */}
-                                <AssignmentsType
-                                    parentBarDrag={setVisualizerBarSize}
-                                    parentBar={setVisualizeOpenBar}
-                                    type={type}
-                                    {...(type === 2 && {defaultLoad: false})}
-                                />  
-                            </>
-                        : 
-                        '' 
-                    }
-                </div>
-                <SplitPane
-                    className={classes.splitPane}
-                    split="vertical"
-                    size={dashboardScreen === false ? otherPartyBarSize : 0}
-                    onChange={(size) => { 
-                        setOtherPartyBarSize(size > 900 ? 900 : size)
-                    }} 
-                    onDragFinished={(size) => resizePane('split7', size > 900 ? 900 : size, setOtherPartyBarSize)}
-                    ref={otherPartyRef}
-                >
-                    <div id={`parties_container`}  style={{ height: '100%'}}>
-                        { 
-                            openOtherPartyBar === true || openInventorBar === true
-                            ? 
-                                <React.Fragment>
-                                    {/* <ArrowButton arrowId={`arrow_parties`} handleClick={handleOtherPartyBarOpen} buttonType={toggleOtherPartyButtonType} buttonVisible={otherPartyButtonVisible}/> */}
-                                    <SplitPane
-                                        className={classes.splitPane}
-                                        split={`horizontal`}
-                                        size={partyBarSize}
-                                        ref={entityRef}
-                                    >
-                                        {
-                                            openOtherPartyBar === true 
-                                            ?
-                                                selectedCategory === 'top_law_firms'
-                                                ?
-                                                    <LawFirmTable 
-                                                        checkChartAnalytics={checkChartAnalytics}
-                                                        chartsBar={openChartBar}
-                                                        analyticsBar={openAnalyticsBar}
-                                                        type={type} 
-                                                        defaultLoad={type === 2 ? false : true} 
-                                                    />
-                                                :
-                                                    selectedCategory === 'top_lenders'
-                                                    ?
-                                                        <Lenders 
-                                                            checkChartAnalytics={checkChartAnalytics}
-                                                            chartsBar={openChartBar}
-                                                            analyticsBar={openAnalyticsBar}
-                                                            type={type} 
-                                                            defaultLoad={type === 2 ? false : true} 
-                                                        />
-                                                    :
-                                                    <CustomerTable 
-                                                        standalone={true}
-                                                        parentBarDrag={setVisualizerBarSize}
-                                                        parentBar={setVisualizeOpenBar}
-                                                        type={type}
-                                                        customerType={0}
-                                                    />
-                                            :
-                                            <div></div>
-                                        }
-
-                                        {
-                                            openInventorBar === true 
-                                            ?
-                                                <InventorTable 
-                                                    standalone={true}
-                                                    parentBarDrag={setVisualizerBarSize}
-                                                    parentBar={setVisualizeOpenBar}
-                                                    type={type}
-                                                    customerType={1}
-                                                />
-                                            :
-                                                securedTransactionAssets === true 
-                                                ?
-                                                    <SecuredAssets
-                                                        sheetName={sheetName} 
-                                                        handleSheetName={handleTextChange}
-                                                    />
-                                                :
-                                                    <div></div>
-                                        }
-                                    </SplitPane>
-                                </React.Fragment>
-                            : 
-                            ''
-                        }
-                        
+            {
+                dashboardScreen === true 
+                ?
+                    <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}} >
+                        <IllustrationCommentContainer 
+                            cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPane1OverflowUnset, classes.paneHeightZero, { [classes.minimized]: assetsCommentsTimelineMinimized })}
+                            split={`horizontal`} 
+                            minSize={50}
+                            maxSize={-200}
+                            defaultSize={commentBarSize}
+                            fn={resizePane}
+                            fnParams={setCommentBarSize}
+                            commentBar={openCommentBar}
+                            openCustomerBar={openCustomerBar}
+                            illustrationBar={openIllustrationBar}
+                            fnVarName={`split5`}
+                            fn2={resizePane2}
+                            fn2Params={setSize}
+                            primary={'second'}
+                            illustrationRecord={setIllustrationRecord}
+                            channel_id={channel_id}
+                            setChannel={setChannelID}
+                            size={size}
+                            gap={gap}
+                            cube={false}
+                            templateButton={false}
+                            maintainenceButton={false}
+                            visualizerBarSize={visualizerBarSize}
+                            chartsBar={openChartBar}
+                            analyticsBar={openAnalyticsBar}
+                            chartsBarToggle={handleChartBarOpen}
+                            checkChartAnalytics={checkChartAnalytics}
+                            type={type}
+                            assignmentBar={openAssignmentBar}
+                            assignmentBarToggle={handleAssignmentBarOpen}
+                            setAnalyticsBar={setAnalyticsBar}
+                            setChartBar={setChartBar}
+                            handleCommentBarOpen={handleCommentBarOpen}
+                            handleCustomersBarOpen={handleCustomersBarOpen}
+                            openInventorBar={openInventorBar}
+                            handleInventorBarOpen={handleInventorBarOpen}  
+                            openOtherPartyBar={openOtherPartyBar}
+                            handleOtherPartyBarOpen={handleOtherPartyBarOpen}
+                            parentBarDrag={setVisualizerBarSize}
+                            parentBar={setVisualizeOpenBar}
+                        /> 
                     </div>
-                    <SplitPane
-                        className={classes.splitPane}
-                        split="vertical"
-                        size={dashboardScreen === false ? assignmentBarSize : 0}
-                        onChange={(size) => { 
-                            setAssignmentBarSize(size > 900 ? 900 : size)
-                        }} 
-                        onDragFinished={(size) => resizePane('split8', size > 900 ? 900 : size, setAssignmentBarSize)}
-                        ref={assignmentRef}
-                    >
-                        <div id={`transaction_container`} style={{ height: '100%'}}>
-                            { 
-                                openAssignmentBar === true 
-                                ?  
-                                    <AssignmentsTable 
-                                        checkChartAnalytics={checkChartAnalytics}
-                                        chartsBar={openChartBar}
-                                        analyticsBar={openAnalyticsBar}
-                                        type={type} 
-                                        defaultLoad={type === 2 ? false : true} 
-                                    />
-                                : 
-                                ''
-                            }
-                        </div>
+                :
+                    <React.Suspense fallback={<Loader />}> 
                         <SplitPane
                             className={classes.splitPane}
                             split="vertical"
-                            size={dashboardScreen === false ? customerBarSize : 0}
+                            size={dashboardScreen === false ? typeBarSize : 0}
                             onChange={(size) => { 
-                                setCustomerBarSize(size > 900 ? 900 : size)
-                            }} 
-                            onDragFinished={(size) => resizePane('split2', size > 900 ? 900 : size, setCustomerBarSize)}
-                            ref={assetRef}
+                                setTypeBarSize(size > 900 ? 900 : size)
+                            }}
+                            onDragFinished={(size) => resizePane('split9', size > 900 ? 900 : size, setTypeBarSize)}
+                            ref={assignmentTypeRef}
                         >
-                            <div id={`assets_container`} style={{ height: '100%'}}>
+                            <div id={`activity_container`} style={{ height: '100%'}}>
+                                
                                 { 
-                                    openCustomerBar === true 
+                                    openTypeBar === true 
                                     ? 
-                                        <>
-                                            {/* <ArrowButton 
-                                                arrowId={`arrow_assets`} 
-                                                handleClick={handleCustomersBarOpen} 
-                                                buttonType={toggleCustomerButtonType} 
-                                                buttonVisible={customerButtonVisible}/> */}
-                                            {
-                                                type == 0 ? (
-                                                    <MaintainenceAssetsList 
-                                                        assets={maintainenceAssetsList} 
-                                                        isLoading={maintainenceAssetsLoadingMore} 
-                                                        loadMore={getMaintainenceAssetsList} 
-                                                        toggleLifeSpanMode={toggleLifeSpanMode}
-                                                        setAssetsIllustration={setAssetsIllustration}
-                                                        setSelectedAssetsPatents={setSelectedAssetsPatents} 
-                                                        setCommentsEntity={setCommentsEntity}
-                                                        assetLegalEvents={assetLegalEvents}
-                                                        assetFamily={assetFamily}
-                                                        setSelectedMaintainenceAssetsList={setSelectedMaintainenceAssetsList}
-                                                        selectedMaintainencePatents={selectedMaintainencePatents}
-                                                        channel_id={channel_id}
-                                                        getChannelID={getChannelID}
-                                                        selectedAssetsPatents={selectedAssetsPatents}
-                                                        getSlackMessages={getSlackMessages}
-                                                        openChartBar={openChartBar}
-                                                        openAnalyticsBar={openAnalyticsBar}
-                                                        openAnalyticsAndCharBar={openAnalyticsAndCharBar}
-                                                        closeAnalyticsAndCharBar={closeAnalyticsAndCharBar}
-                                                        openIllustrationBar={openIllustrationBar}
-                                                        handleAnalyticsBarOpen={handleAnalyticsBarOpen}
-                                                        handleIllustrationBarOpen={handleIllustrationBarOpen}
-                                                    />
-                                                )
-                                                :
-                                                type == 5 ? 
-                                                    <></>
-                                                :
-                                                <AssetsTable 
-                                                    standalone={true} 
-                                                    type={type} 
-                                                    openChartBar={openChartBar}
-                                                    openAnalyticsBar={openAnalyticsBar}
-                                                    openAnalyticsAndCharBar={openAnalyticsAndCharBar}
-                                                    closeAnalyticsAndCharBar={closeAnalyticsAndCharBar}
-                                                    changeVisualBar={setVisualizerBarSize}
-                                                    openIllustrationBar={openIllustrationBar}
-                                                    handleAnalyticsBarOpen={handleAnalyticsBarOpen}
-                                                    handleIllustrationBarOpen={handleIllustrationBarOpen}
-                                                />
-                                            } 
-                                            
-                                        </>
+                                        <AssignmentsType
+                                            parentBarDrag={setVisualizerBarSize}
+                                            parentBar={setVisualizeOpenBar}
+                                            type={type}
+                                            {...(type === 2 && {defaultLoad: false})}
+                                        />  
                                     : 
-                                    ''
-                                }
+                                        '' 
+                                } 
                             </div>
                             <SplitPane
                                 className={classes.splitPane}
                                 split="vertical"
-                                size={dashboardScreen === false ? assetFilesBarSize : 0}
-                                ref={assetFileRef}
-                                onDragStarted={() => {
-                                    setIsDragging(!isDragging)
-                                }}
-                                onDragFinished={(size) => {
-                                    //resizePane('split10', size, setAssetFilesBarSize)
-                                    setIsDragging(!isDragging)
-                                }}
-                                pane2Style={{
-                                    pointerEvents: isDragging === true ? 'none' : 'auto',
-                                }}  
+                                size={dashboardScreen === false ? otherPartyBarSize : 0}
+                                onChange={(size) => { 
+                                    setOtherPartyBarSize(size > 900 ? 900 : size)
+                                }} 
+                                onDragFinished={(size) => resizePane('split7', size > 900 ? 900 : size, setOtherPartyBarSize)}
+                                ref={otherPartyRef}
                             >
-                                <div id={`assets_files_container`} style={{ height: '100%'}}>
-                                    <SplitPane
-                                        className={classes.splitPane}
-                                        split={`horizontal`}
-                                        size={driveBarSize}
-                                        ref={fileBarRef}
-                                    >
-                                        {
-                                            assetFilesBar === true
-                                            ?
-                                                <FilesTemplates type={0}/>
-                                            :
-                                            <div></div>
-                                        }  
-                                        {
-                                            openGoogleDriveBar === true
-                                            ?
-                                                <FilesTemplates type={1}/>
-                                            :
-                                            <div></div>
-                                        }
-                                    </SplitPane>                                    
-                                </div> 
+                                <div id={`parties_container`}  style={{ height: '100%'}}>
+                                    { 
+                                        openOtherPartyBar === true || openInventorBar === true
+                                        ? 
+                                            <React.Fragment>
+                                                {/* <ArrowButton arrowId={`arrow_parties`} handleClick={handleOtherPartyBarOpen} buttonType={toggleOtherPartyButtonType} buttonVisible={otherPartyButtonVisible}/> */}
+                                                <SplitPane
+                                                    className={classes.splitPane}
+                                                    split={`horizontal`}
+                                                    size={partyBarSize}
+                                                    ref={entityRef}
+                                                >
+                                                    {
+                                                        openOtherPartyBar === true 
+                                                        ?
+                                                            selectedCategory === 'top_law_firms'
+                                                            ?
+                                                                <LawFirmTable 
+                                                                    checkChartAnalytics={checkChartAnalytics}
+                                                                    chartsBar={openChartBar}
+                                                                    analyticsBar={openAnalyticsBar}
+                                                                    type={type} 
+                                                                    defaultLoad={type === 2 ? false : true} 
+                                                                />
+                                                            :
+                                                                selectedCategory === 'top_lenders'
+                                                                ?
+                                                                    <Lenders 
+                                                                        checkChartAnalytics={checkChartAnalytics}
+                                                                        chartsBar={openChartBar}
+                                                                        analyticsBar={openAnalyticsBar}
+                                                                        type={type} 
+                                                                        defaultLoad={type === 2 ? false : true} 
+                                                                    />
+                                                                :
+                                                                <CustomerTable 
+                                                                    standalone={true}
+                                                                    parentBarDrag={setVisualizerBarSize}
+                                                                    parentBar={setVisualizeOpenBar}
+                                                                    type={type}
+                                                                    customerType={0}
+                                                                />
+                                                        :
+                                                        <div></div>
+                                                    }
+
+                                                    {
+                                                        openInventorBar === true 
+                                                        ?
+                                                            <InventorTable 
+                                                                standalone={true}
+                                                                parentBarDrag={setVisualizerBarSize}
+                                                                parentBar={setVisualizeOpenBar}
+                                                                type={type}
+                                                                customerType={1}
+                                                            />
+                                                        :
+                                                            securedTransactionAssets === true 
+                                                            ?
+                                                                <SecuredAssets
+                                                                    sheetName={sheetName} 
+                                                                    handleSheetName={handleTextChange}
+                                                                />
+                                                            :
+                                                                <div></div>
+                                                    }
+                                                </SplitPane>
+                                            </React.Fragment>
+                                        : 
+                                        ''
+                                    }
+                                    
+                                </div>
                                 <SplitPane
                                     className={classes.splitPane}
                                     split="vertical"
-                                    size={dashboardScreen === false ? driveTemplateBarSize : 0}
-                                    ref={templateFileRef}
-                                    onDragStarted={() => {
-                                        setIsDragging(!isDragging)
-                                    }}
-                                    onDragFinished={(size) => {
-                                        /* resizePane('split4', size, setVisualizerBarSize) */
-                                        setIsDragging(!isDragging)
-                                    }}
-                                    pane2Style={{
-                                        pointerEvents: isDragging === true ? 'none' : 'auto',
-                                    }}  
+                                    size={dashboardScreen === false ? assignmentBarSize : 0}
+                                    onChange={(size) => { 
+                                        setAssignmentBarSize(size > 900 ? 900 : size)
+                                    }} 
+                                    onDragFinished={(size) => resizePane('split8', size > 900 ? 900 : size, setAssignmentBarSize)}
+                                    ref={assignmentRef}
                                 >
-                                    <div id={`layout_templates_container`} style={{ height: '100%'}}>
-                                        {
-                                            driveTemplateMode === true
-                                            ?
-                                                <LayoutTemplates />
-                                            :
+                                    <div id={`transaction_container`} style={{ height: '100%'}}>
+                                        { 
+                                            openAssignmentBar === true 
+                                            ?  
+                                                <AssignmentsTable 
+                                                    checkChartAnalytics={checkChartAnalytics}
+                                                    chartsBar={openChartBar}
+                                                    analyticsBar={openAnalyticsBar}
+                                                    type={type} 
+                                                    defaultLoad={type === 2 ? false : true} 
+                                                />
+                                            : 
                                             ''
                                         }
                                     </div>
                                     <SplitPane
-                                        className={`${classes.splitPane} ${classes.splitPane2}  ${classes.splitPane3} ${classes.splitPane2OverflowUnset}`}
+                                        className={classes.splitPane}
                                         split="vertical"
-                                        minSize={100}
-                                        maxSize={-270}  
-                                        size={visualizerBarSize}
+                                        size={dashboardScreen === false ? customerBarSize : 0}
                                         onChange={(size) => { 
-                                            setVisualizerBarSize(size)
-                                            //editorBar(1) 
-                                            
+                                            setCustomerBarSize(size > 900 ? 900 : size)
                                         }} 
-                                        onDragStarted={() => {
-                                            setIsDragging(!isDragging)
-                                        }}
-                                        onDragFinished={(size) => {
-                                            resizePane('split4', size, setVisualizerBarSize)
-                                            setIsDragging(!isDragging)
-                                        }}
-                                        pane1Style={{  
-                                            pointerEvents: isDragging === true ? 'none' : 'auto',
-                                        }}
-                                        pane2Style={{
-                                            pointerEvents: isDragging === true ? 'none' : 'auto',
-                                        }}
-                                        ref={mainContainerRef}
-                                        primary={'second'}                                
+                                        onDragFinished={(size) => resizePane('split2', size > 900 ? 900 : size, setCustomerBarSize)}
+                                        ref={assetRef}
                                     >
-                                        <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}} >
-                                            <IllustrationCommentContainer 
-                                                cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPane1OverflowUnset, classes.paneHeightZero, { [classes.minimized]: assetsCommentsTimelineMinimized })}
-                                                split={`horizontal`} 
-                                                minSize={50}
-                                                maxSize={-200}
-                                                defaultSize={commentBarSize}
-                                                fn={resizePane}
-                                                fnParams={setCommentBarSize}
-                                                commentBar={openCommentBar}
-                                                openCustomerBar={openCustomerBar}
-                                                illustrationBar={openIllustrationBar}
-                                                fnVarName={`split5`}
-                                                fn2={resizePane2}
-                                                fn2Params={setSize}
-                                                primary={'second'}
-                                                illustrationRecord={setIllustrationRecord}
-                                                channel_id={channel_id}
-                                                setChannel={setChannelID}
-                                                size={size}
-                                                gap={gap}
-                                                cube={false}
-                                                templateButton={false}
-                                                maintainenceButton={false}
-                                                visualizerBarSize={visualizerBarSize}
-                                                chartsBar={openChartBar}
-                                                analyticsBar={openAnalyticsBar}
-                                                chartsBarToggle={handleChartBarOpen}
-                                                checkChartAnalytics={checkChartAnalytics}
-                                                type={type}
-                                                assignmentBar={openAssignmentBar}
-                                                assignmentBarToggle={handleAssignmentBarOpen}
-                                                setAnalyticsBar={setAnalyticsBar}
-                                                setChartBar={setChartBar}
-                                                handleCommentBarOpen={handleCommentBarOpen}
-                                                handleCustomersBarOpen={handleCustomersBarOpen}
-                                                openInventorBar={openInventorBar}
-                                                handleInventorBarOpen={handleInventorBarOpen}  
-                                                openOtherPartyBar={openOtherPartyBar}
-                                                handleOtherPartyBarOpen={handleOtherPartyBarOpen}
-                                                parentBarDrag={setVisualizerBarSize}
-                                                parentBar={setVisualizeOpenBar}
-                                            /> 
+                                        <div id={`assets_container`} style={{ height: '100%'}}>
+                                            { 
+                                                openCustomerBar === true 
+                                                ? 
+                                                    <>
+                                                        {/* <ArrowButton 
+                                                            arrowId={`arrow_assets`} 
+                                                            handleClick={handleCustomersBarOpen} 
+                                                            buttonType={toggleCustomerButtonType} 
+                                                            buttonVisible={customerButtonVisible}/> */}
+                                                        {
+                                                            type == 0 ? (
+                                                                <MaintainenceAssetsList 
+                                                                    assets={maintainenceAssetsList} 
+                                                                    isLoading={maintainenceAssetsLoadingMore} 
+                                                                    loadMore={getMaintainenceAssetsList} 
+                                                                    toggleLifeSpanMode={toggleLifeSpanMode}
+                                                                    setAssetsIllustration={setAssetsIllustration}
+                                                                    setSelectedAssetsPatents={setSelectedAssetsPatents} 
+                                                                    setCommentsEntity={setCommentsEntity}
+                                                                    assetLegalEvents={assetLegalEvents}
+                                                                    assetFamily={assetFamily}
+                                                                    setSelectedMaintainenceAssetsList={setSelectedMaintainenceAssetsList}
+                                                                    selectedMaintainencePatents={selectedMaintainencePatents}
+                                                                    channel_id={channel_id}
+                                                                    getChannelID={getChannelID}
+                                                                    selectedAssetsPatents={selectedAssetsPatents}
+                                                                    getSlackMessages={getSlackMessages}
+                                                                    openChartBar={openChartBar}
+                                                                    openAnalyticsBar={openAnalyticsBar}
+                                                                    openAnalyticsAndCharBar={openAnalyticsAndCharBar}
+                                                                    closeAnalyticsAndCharBar={closeAnalyticsAndCharBar}
+                                                                    openIllustrationBar={openIllustrationBar}
+                                                                    handleAnalyticsBarOpen={handleAnalyticsBarOpen}
+                                                                    handleIllustrationBarOpen={handleIllustrationBarOpen}
+                                                                />
+                                                            )
+                                                            :
+                                                            type == 5 ? 
+                                                                <></>
+                                                            :
+                                                            <AssetsTable 
+                                                                standalone={true} 
+                                                                type={type} 
+                                                                openChartBar={openChartBar}
+                                                                openAnalyticsBar={openAnalyticsBar}
+                                                                openAnalyticsAndCharBar={openAnalyticsAndCharBar}
+                                                                closeAnalyticsAndCharBar={closeAnalyticsAndCharBar}
+                                                                changeVisualBar={setVisualizerBarSize}
+                                                                openIllustrationBar={openIllustrationBar}
+                                                                handleAnalyticsBarOpen={handleAnalyticsBarOpen}
+                                                                handleIllustrationBarOpen={handleIllustrationBarOpen}
+                                                            />
+                                                        } 
+                                                        
+                                                    </>
+                                                : 
+                                                ''
+                                            }
                                         </div>
-                                        <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}} id={`information_container`}>
-                                        {
-                                            dashboardScreen === true && dashboardPanel === true && type !== 9  
-                                            ? 
-                                                selectedAssetsFamily.length > 0 
-                                                ?
-                                                    <FamilyContainer
-                                                        family={selectedAssetsFamily}
-                                                    />
-                                                :
-                                                assetIllustration != null 
-                                                ?
-                                                    !isFullscreenOpen
-                                                    ?
-                                                        <IllustrationContainer 
-                                                            isFullscreenOpen={isFullscreenOpen} 
-                                                            asset={assetIllustration} 
-                                                            setIllustrationRecord={setIllustrationRecord} 
+                                        <SplitPane
+                                            className={classes.splitPane}
+                                            split="vertical"
+                                            size={dashboardScreen === false ? assetFilesBarSize : 0}
+                                            ref={assetFileRef}
+                                            onDragStarted={() => {
+                                                setIsDragging(!isDragging)
+                                            }}
+                                            onDragFinished={(size) => {
+                                                //resizePane('split10', size, setAssetFilesBarSize)
+                                                setIsDragging(!isDragging)
+                                            }}
+                                            pane2Style={{
+                                                pointerEvents: isDragging === true ? 'none' : 'auto',
+                                            }}  
+                                        >
+                                            <div id={`assets_files_container`} style={{ height: '100%'}}>
+                                                <SplitPane
+                                                    className={classes.splitPane}
+                                                    split={`horizontal`}
+                                                    size={driveBarSize}
+                                                    ref={fileBarRef}
+                                                >
+                                                    {
+                                                        assetFilesBar === true
+                                                        ?
+                                                            <FilesTemplates type={0}/>
+                                                        :
+                                                        <div></div>
+                                                    }  
+                                                    {
+                                                        openGoogleDriveBar === true
+                                                        ?
+                                                            <FilesTemplates type={1}/>
+                                                        :
+                                                        <div></div>
+                                                    }
+                                                </SplitPane>                                    
+                                            </div> 
+                                            <SplitPane
+                                                className={classes.splitPane}
+                                                split="vertical"
+                                                size={dashboardScreen === false ? driveTemplateBarSize : 0}
+                                                ref={templateFileRef}
+                                                onDragStarted={() => {
+                                                    setIsDragging(!isDragging)
+                                                }}
+                                                onDragFinished={(size) => {
+                                                    /* resizePane('split4', size, setVisualizerBarSize) */
+                                                    setIsDragging(!isDragging)
+                                                }}
+                                                pane2Style={{
+                                                    pointerEvents: isDragging === true ? 'none' : 'auto',
+                                                }}  
+                                            >
+                                                <div id={`layout_templates_container`} style={{ height: '100%'}}>
+                                                    {
+                                                        driveTemplateMode === true
+                                                        ?
+                                                            <LayoutTemplates />
+                                                        :
+                                                        ''
+                                                    }
+                                                </div>
+                                                <SplitPane
+                                                    className={`${classes.splitPane} ${classes.splitPane2}  ${classes.splitPane3} ${classes.splitPane2OverflowUnset}`}
+                                                    split="vertical"
+                                                    minSize={100}
+                                                    maxSize={-270}  
+                                                    size={visualizerBarSize}
+                                                    onChange={(size) => { 
+                                                        setVisualizerBarSize(size)
+                                                        //editorBar(1) 
+                                                        
+                                                    }} 
+                                                    onDragStarted={() => {
+                                                        setIsDragging(!isDragging)
+                                                    }}
+                                                    onDragFinished={(size) => {
+                                                        resizePane('split4', size, setVisualizerBarSize)
+                                                        setIsDragging(!isDragging)
+                                                    }}
+                                                    pane1Style={{  
+                                                        pointerEvents: isDragging === true ? 'none' : 'auto',
+                                                    }}
+                                                    pane2Style={{
+                                                        pointerEvents: isDragging === true ? 'none' : 'auto',
+                                                    }}
+                                                    ref={mainContainerRef}
+                                                    primary={'second'}                                
+                                                >
+                                                    <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}} >
+                                                        <IllustrationCommentContainer 
+                                                            cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPane1OverflowUnset, classes.paneHeightZero, { [classes.minimized]: assetsCommentsTimelineMinimized })}
+                                                            split={`horizontal`} 
+                                                            minSize={50}
+                                                            maxSize={-200}
+                                                            defaultSize={commentBarSize}
+                                                            fn={resizePane}
+                                                            fnParams={setCommentBarSize}
+                                                            commentBar={openCommentBar}
+                                                            openCustomerBar={openCustomerBar}
+                                                            illustrationBar={openIllustrationBar}
+                                                            fnVarName={`split5`}
+                                                            fn2={resizePane2}
+                                                            fn2Params={setSize}
+                                                            primary={'second'}
+                                                            illustrationRecord={setIllustrationRecord}
+                                                            channel_id={channel_id}
+                                                            setChannel={setChannelID}
+                                                            size={size}
+                                                            gap={gap}
+                                                            cube={false}
+                                                            templateButton={false}
+                                                            maintainenceButton={false}
+                                                            visualizerBarSize={visualizerBarSize}
                                                             chartsBar={openChartBar}
                                                             analyticsBar={openAnalyticsBar}
                                                             chartsBarToggle={handleChartBarOpen}
                                                             checkChartAnalytics={checkChartAnalytics}
+                                                            type={type}
+                                                            assignmentBar={openAssignmentBar}
+                                                            assignmentBarToggle={handleAssignmentBarOpen}
                                                             setAnalyticsBar={setAnalyticsBar}
                                                             setChartBar={setChartBar}
-                                                            fullScreen={handleClickOpenFullscreen}
-                                                            pdfModal={true}
-                                                            gap={gap}
-                                                            viewOnly={true}
-                                                            shareButton={false}
-                                                            usptoButton={false}
-                                                            connectionSelection={false}
-                                                        />
-                                                    :
-                                                        <FullScreen 
-                                                            componentItems={illustrationMenuItems} 
-                                                            showScreen={isFullscreenOpen} 
-                                                            setScreen={handleClickOpenFullscreen} 
-                                                            showClose={false}
-                                                        />
-                                                :
-                                                    selectedAssetsLegalEvents != null && Object.keys(selectedAssetsLegalEvents).length > 0
-                                                    ?
-                                                        <LegalEventsContainer
-                                                            events={selectedAssetsLegalEvents} 
-                                                            type={type}/>  
-                                                    :
-                                                        connectionBoxView === true 
-                                                        ?
-                                                            <IllustrationPdf 
-                                                                cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPaneMainOverflowUnset, { [classes.minimized]: assetsCommentsTimelineMinimized })}
-                                                                split={`horizontal`}
-                                                                primary={'second'}
-                                                                illustrationData={connectionBoxData}
-                                                                dragStart={setIsDrag}
-                                                                dragFinished={setIsDrag}    
-                                                                analyticsBar={openAnalyticsBar}
-                                                                type={type}
-                                                            />
+                                                            handleCommentBarOpen={handleCommentBarOpen}
+                                                            handleCustomersBarOpen={handleCustomersBarOpen}
+                                                            openInventorBar={openInventorBar}
+                                                            handleInventorBarOpen={handleInventorBarOpen}  
+                                                            openOtherPartyBar={openOtherPartyBar}
+                                                            handleOtherPartyBarOpen={handleOtherPartyBarOpen}
+                                                            parentBarDrag={setVisualizerBarSize}
+                                                            parentBar={setVisualizeOpenBar}
+                                                        /> 
+                                                    </div>
+                                                    <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}} id={`information_container`}>
+                                                    {
+                                                        dashboardScreen === true && dashboardPanel === true && type !== 9  
+                                                        ? 
+                                                            selectedAssetsFamily.length > 0 
+                                                            ?
+                                                                <FamilyContainer
+                                                                    family={selectedAssetsFamily}
+                                                                />
+                                                            :
+                                                            assetIllustration != null 
+                                                            ?
+                                                                !isFullscreenOpen
+                                                                ?
+                                                                    <IllustrationContainer 
+                                                                        isFullscreenOpen={isFullscreenOpen} 
+                                                                        asset={assetIllustration} 
+                                                                        setIllustrationRecord={setIllustrationRecord} 
+                                                                        chartsBar={openChartBar}
+                                                                        analyticsBar={openAnalyticsBar}
+                                                                        chartsBarToggle={handleChartBarOpen}
+                                                                        checkChartAnalytics={checkChartAnalytics}
+                                                                        setAnalyticsBar={setAnalyticsBar}
+                                                                        setChartBar={setChartBar}
+                                                                        fullScreen={handleClickOpenFullscreen}
+                                                                        pdfModal={true}
+                                                                        gap={gap}
+                                                                        viewOnly={true}
+                                                                        shareButton={false}
+                                                                        usptoButton={false}
+                                                                        connectionSelection={false}
+                                                                    />
+                                                                :
+                                                                    <FullScreen 
+                                                                        componentItems={illustrationMenuItems} 
+                                                                        showScreen={isFullscreenOpen} 
+                                                                        setScreen={handleClickOpenFullscreen} 
+                                                                        showClose={false}
+                                                                    />
+                                                            :
+                                                                selectedAssetsLegalEvents != null && Object.keys(selectedAssetsLegalEvents).length > 0
+                                                                ?
+                                                                    <LegalEventsContainer
+                                                                        events={selectedAssetsLegalEvents} 
+                                                                        type={type}/>  
+                                                                :
+                                                                    connectionBoxView === true 
+                                                                    ?
+                                                                        <IllustrationPdf 
+                                                                            cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPaneMainOverflowUnset, { [classes.minimized]: assetsCommentsTimelineMinimized })}
+                                                                            split={`horizontal`}
+                                                                            primary={'second'}
+                                                                            illustrationData={connectionBoxData}
+                                                                            dragStart={setIsDrag}
+                                                                            dragFinished={setIsDrag}    
+                                                                            analyticsBar={openAnalyticsBar}
+                                                                            type={type}
+                                                                        />
+                                                                    :
+                                                                        ''
                                                         :
-                                                            ''
-                                            :
-                                            <AssetDetailsContainer 
-                                                cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPaneMainOverflowUnset, { [classes.minimized]: assetsCommentsTimelineMinimized })}
-                                                split={`horizontal`}
-                                                minSize={10}
-                                                defaultSize={illustrationBarSize}
-                                                fn={resizePane}
-                                                fnParams={setIllustrationBarSize}
-                                                fnVarName={`split6`}
-                                                dragStart={setIsDrag}
-                                                dragFinished={setIsDrag}
-                                                bar={openVisualizerBar}
-                                                visualizerBarSize={visualizerBarSize}
-                                                parentBarDrag={setVisualizerBarSize}
-                                                parentBar={setVisualizeOpenBar}
-                                                primary={'second'}
-                                                setIllustrationRecord={setIllustrationRecord} 
-                                                illustrationData={illustrationRecord}
-                                                chartBar={openChartBar}
-                                                analyticsBar={openAnalyticsBar}
-                                                openCustomerBar={openCustomerBar}
-                                                commentBar={openCommentBar}
-                                                illustrationBar={openIllustrationBar}
-                                                customerBarSize={customerBarSize}
-                                                companyBarSize={companyBarSize}
-                                                chartsBarToggle={handleChartBarOpen}
-                                                checkChartAnalytics={checkChartAnalytics}
-                                                setAnalyticsBar={setAnalyticsBar}
-                                                setChartBar={setChartBar}
-                                                isDragging={isDragging}
-                                                gap={gap}
-                                                type={type}
-                                            />
-                                        }                                            
-                                        </div>
+                                                        <AssetDetailsContainer 
+                                                            cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPaneMainOverflowUnset, { [classes.minimized]: assetsCommentsTimelineMinimized })}
+                                                            split={`horizontal`}
+                                                            minSize={10}
+                                                            defaultSize={illustrationBarSize}
+                                                            fn={resizePane}
+                                                            fnParams={setIllustrationBarSize}
+                                                            fnVarName={`split6`}
+                                                            dragStart={setIsDrag}
+                                                            dragFinished={setIsDrag}
+                                                            bar={openVisualizerBar}
+                                                            visualizerBarSize={visualizerBarSize}
+                                                            parentBarDrag={setVisualizerBarSize}
+                                                            parentBar={setVisualizeOpenBar}
+                                                            primary={'second'}
+                                                            setIllustrationRecord={setIllustrationRecord} 
+                                                            illustrationData={illustrationRecord}
+                                                            chartBar={openChartBar}
+                                                            analyticsBar={openAnalyticsBar}
+                                                            openCustomerBar={openCustomerBar}
+                                                            commentBar={openCommentBar}
+                                                            illustrationBar={openIllustrationBar}
+                                                            customerBarSize={customerBarSize}
+                                                            companyBarSize={companyBarSize}
+                                                            chartsBarToggle={handleChartBarOpen}
+                                                            checkChartAnalytics={checkChartAnalytics}
+                                                            setAnalyticsBar={setAnalyticsBar}
+                                                            setChartBar={setChartBar}
+                                                            isDragging={isDragging}
+                                                            gap={gap}
+                                                            type={type}
+                                                        />
+                                                    }                                            
+                                                    </div>
+                                                </SplitPane>
+                                            </SplitPane>
+                                        </SplitPane>
                                     </SplitPane>
                                 </SplitPane>
                             </SplitPane>
-                        </SplitPane>
-                    </SplitPane>
-                </SplitPane>
-            </SplitPane>
+                        </SplitPane> 
+                    </React.Suspense> 
+            }
         </SplitPane>
     )
 
