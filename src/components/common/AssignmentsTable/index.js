@@ -205,7 +205,7 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
         dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
       }
       clearSelections()
-    } else if(hash != '' && hash.indexOf('&assignment') !== -1 && selectedAssetsPatents.length == 0) {
+    } else if(hash != '' && hash.indexOf('&assignment') !== -1 && selectedAssetsPatents.length == 0 && rows.length > 0) {
       const explodeHash = hash.split('&') 
       if(explodeHash.length > 0) {
         const findIndex = explodeHash.findIndex( row => row.indexOf('assignment=') !== -1 ? row : null) 
@@ -232,7 +232,7 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
         }
       } 
     }
-  }, [location])
+  }, [location, rows])
 
   useEffect(() => {
     if( selectedCompanies.length > 0  || selectedCompaniesAll === true ) {
