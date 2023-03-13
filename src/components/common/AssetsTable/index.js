@@ -232,15 +232,21 @@ const AssetsTable = ({
     const {hash} = location
     if(hash == '' && selectedAssetsPatents.length > 0) {
       clearSelections()
-    } else if(hash != '' && hash.indexOf('&asset') !== -1 && selectedAssetsPatents.length == 0) {
+    } else if(hash != '' && hash.indexOf('&asset') !== -1 && selectedAssetsPatents.length == 0 && assetRows.length > 0) {
+      console.log(1);
       const explodeHash = hash.split('&') 
       if(explodeHash.length > 0) {
+        console.log(2);
         const findIndex = explodeHash.findIndex( row => row.indexOf('asset=') !== -1 ? row : null) 
+        console.log(3);
         if(findIndex != null) {
+          console.log(4);
           const explodeFindIndex = explodeHash[findIndex].split('=') 
           if(explodeFindIndex.length == 2) { 
+            console.log(5);
             const findRowIndex = assetRows.findIndex( item =>  decodeURIComponent(explodeFindIndex[1]) ==  item.asset.toString()) 
             if(findRowIndex >= 0) {
+              console.log(6);
               dispatch(setAssetTypesPatentsSelected([assetRows[findRowIndex].asset]))
               setSelectItems([assetRows[findRowIndex].asset])
               handleOnClick(assetRows[findRowIndex])
@@ -249,7 +255,7 @@ const AssetsTable = ({
         }
       } 
     }
-  }, [location])
+  }, [location, assetRows])
 
   const Clipboard = () => {
     return (

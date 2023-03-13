@@ -3,59 +3,66 @@ import React, { Fragment } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import Settings from './components/SettingsPage'
 
-
-import Search from './components/Search'
+ 
 import Reports from './components/Reports'
-import GlobalScreen from './components/GlobalScreen'
-import CorrectLayout from './components/CorrectLayout' 
-import PatentLayout from './components/PatentLayout' 
+import MainDashboard from './components/MainDashboard' 
+
+import routeList from './routeList'
+
+
+/* import CorrectLayout from './components/CorrectLayout'  */
+
 import Googlelogin from './components/common/Googlelogin' 
 
 import Auth from './components/auth'
-import AuthSlack from './components/AuthSlack'
-
-import routeList from './routeList'
+import AuthSlack from './components/AuthSlack' 
 import GlobalLayout from './layout/GlobalLayout'
 import BlankLayout from './layout/BlankLayout'
+import PatentLayout from './components/PatentLayout' 
+import GlobalScreen from './components/GlobalScreen'
 
-let pages = [
-  //Authenticated  pages   
-  
+let dashboardPages = [
   {
     exact: false,
+    path: routeList.dashboard_share,
+    component: MainDashboard,
+    layout: GlobalLayout,
+    type: 1
+  },
+  {
+    exact: true,
     path: routeList.dashboard_kpi,
-    component: GlobalScreen,
+    component: MainDashboard,
     layout: GlobalLayout,
     type: 1
   },
   {
     exact: true,
     path: routeList.dashboard_attention,
-    component: GlobalScreen,
+    component: MainDashboard,
     layout: GlobalLayout,
     type: 1
   },
   {
     exact: true,
     path: routeList.dashboard_activity,
-    component: GlobalScreen,
+    component: MainDashboard,
     layout: GlobalLayout,
     type: 1
   },
   {
     exact: true,
     path: routeList.default,
-    component: GlobalScreen,
+    component: MainDashboard,
     layout: GlobalLayout,
     type: 1
   },
-  {
-    exact: false,
-    path: routeList.dashboard_share,
-    component: GlobalScreen,
-    layout: GlobalLayout,
-    type: 1
-  },
+  
+]
+
+let pages = [
+  //Authenticated  pages    
+  
   {
     exact: false,
     path: routeList.duedilligence,
@@ -161,7 +168,7 @@ let pages = [
     layout: GlobalLayout, 
     type: 1
   },
-  {    
+  /* {    
     exact: true,
     path: routeList.correct_details,
     component: CorrectLayout,
@@ -174,7 +181,7 @@ let pages = [
     component: CorrectLayout,
     layout: GlobalLayout, 
     type: 1
-  },
+  }, */
   {    
     exact: true,
     path: routeList.review_foreign_assets,
@@ -206,7 +213,7 @@ if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_E
     {
       exact: true,
       path: routeList.standard_default,
-      component: GlobalScreen,
+      component: MainDashboard,
       layout: GlobalLayout,
       type: 1
     },
@@ -216,7 +223,7 @@ if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_E
     {
       exact: true,
       path: routeList.standard_default,
-      component: GlobalScreen,
+      component: MainDashboard,
       layout: GlobalLayout,
       type: 1
     })
@@ -227,7 +234,7 @@ export default (
   <Switch>
     {/* <Route path="/dashboard" component={DashBoard} />
     <Route path="/dashboard2" component={DashBoard2} /> */}
-    {pages.map(
+    {dashboardPages.map(
       ({ exact, path, type, childWindow, component: Component, layout: Layout }, index) => (
         <Route
           key={index}
@@ -241,16 +248,30 @@ export default (
         />
       )
     )}
+    {pages.map(
+      ({ exact, path, type, childWindow, component: Component, layout: Layout }, index) => ( 
+          <Route
+            key={index}
+            exact={exact}
+            path={path}
+            render={props => (
+              <Layout history={props.history} type={type} standalone={childWindow}>
+                <Component {...props} type={type} />
+              </Layout>
+            )}
+          />  
+      )
+    )}
     <Route path="/slack" component={AuthSlack} />
     {
-      process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI'
+      ['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE)
       ?
-        <>
+        <Fragment>
           <Route path="/settings" component={Settings} />
           
           <Route path="/reset/:token" component={Auth} />
           <Route path="/auth" component={Auth} />        
-        </>
+        </Fragment>
       :
       ''
     }        
