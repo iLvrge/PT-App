@@ -199,6 +199,7 @@ let pages = [
 ] 
 
 if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') {
+  dashboardPages = []
   pages = [  
     {
       exact: true,
@@ -218,8 +219,8 @@ if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_E
       type: 1
     },
   ] 
-} else if (process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') {
-  pages.push(
+} else if (process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') { 
+  dashboardPages.push(
     {
       exact: true,
       path: routeList.standard_default,
