@@ -248,24 +248,22 @@ const ViewIcons = (props) => {
                     </IconButton>
                 </span>
             </AddToolTip>
-            {
-                process.env.REACT_APP_ENVIROMENT_MODE !== 'KPI' && (
-                    <AddToolTip
-                        tooltip={'Transactional activities such as acquisition, divestitures, collateralization and releases.'}
-                        placement='bottom'
+            { 
+                <AddToolTip
+                    tooltip={'Transactional activities such as acquisition, divestitures, collateralization and releases.'}
+                    placement='bottom'
+                >
+                    <IconButton 
+                        size="small"
+                        className={clsx(classes.actionIcon, classes.actionIconDashboard, {[classes.active]: props.dashboardScreen === true && viewDashboard.timeline})}
+                        onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD'  ? onHandleAlert : onHandleTimeline}
                     >
-                        <IconButton 
-                            size="small"
-                            className={clsx(classes.actionIcon, classes.actionIconDashboard, {[classes.active]: props.dashboardScreen === true && viewDashboard.timeline})}
-                            onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : onHandleTimeline}
-                        >
-                            <ViewTimeline/>
-                        </IconButton> 
-                    </AddToolTip>
-                )
+                        <ViewTimeline/>
+                    </IconButton> 
+                </AddToolTip> 
             }
             {
-                profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank' &&  process.env.REACT_APP_ENVIROMENT_MODE !== 'KPI'
+                profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank' 
                 && (
                     <React.Fragment>
                         <AddToolTip
