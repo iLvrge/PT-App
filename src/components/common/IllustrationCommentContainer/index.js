@@ -14,6 +14,7 @@ import ErrorBoundary from '../ErrorBoundary'
 import FullScreen from '../FullScreen'
 import Reports from '../../Reports'
 import AssetsCommentsTimeline from '../AssetsCommentsTimeline'
+import Loader from '../Loader'
 
 const IllustrationContainer = lazy(() => import('../AssetsVisualizer/IllustrationContainer'));
 const TimelineContainer = lazy(() => import('../AssetsVisualizer/TimelineContainer'));
@@ -308,7 +309,7 @@ const IllustrationCommentContainer = ({
             }}
         >         
             <div style={{display: 'unset'}}>   
-                <ErrorBoundary>
+                
                 {
                     illustrationBar === true && ( typeof cube == 'undefined' || (typeof cube !== 'undefined' && cube === false))  && dashboardScreen === false && !isFullscreenOpen && shouldShowTimeline === true
                     ?
@@ -365,196 +366,203 @@ const IllustrationCommentContainer = ({
                             handleOtherPartyBarOpen={handleOtherPartyBarOpen}
                         /> 
                     :
-                        illustrationBar === true && (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' ||  type === 9 || ((process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') && auth_token !== null))
-                        ?
-                            (maintainence  === true || record === true) && assetIllustration === null
-                            ?
-                                <Fees
-                                    standalone={true}
-                                    events={allAssetsEvents}
-                                    tabText={maintainence  === true ? 'M.Fees' : 'To Record'}
-                                    showTabs={true}
-                                />
-                            :    
-                            ptab === true && assetIllustration === null
-                            ?
-                                <Ptab 
-                                    rawData={ptabAssets}
-                                    standalone={true}
-                                />
-                            :
-                            cube === true && maintainenceFrameMode === false && assetIllustration === null
-                            ?
-                                selectedCategory == 'divested'
-                                ?
-                                    <SankeyChart
-                                        type={'divested'} 
-                                        showTabs={true}
-                                        tabText={'Divested'}
-                                        fullScreen={true}
-                                        standalone={true}
-                                        chartBar={chartsBar} 
-                                        analyticsBar={analyticsBar} 
-                                        container={true}
-                                    /> 
-                                :
-                                selectedCategory == 'incorrect_names' ?
-                                    <NamesContainer
-                                    visualizerBarSize={visualizerBarSize}/>
-                                :
-                                selectedCategory == 'collaterlized' || selectedCategory == 'clear_encumbrances' ?
-                                    <TimelineContainer 
-                                        assignmentBar={assignmentBar} 
-                                        assignmentBarToggle={assignmentBarToggle} 
-                                        type={type}
-                                        updateTimelineRawData={setTimelineRawData}
-                                    />
-                                :
-                                    selectedCategory == 'top_non_us_members' ?
-                                        <GeoChart
-                                            chartBar={chartsBar} 
-                                            openCustomerBar={openCustomerBar} 
-                                            visualizerBarSize={visualizerBarSize}
-                                            type={type}
-                                            titleBar={true}
-                                            disableOtherTabs={true}
-                                        /> 
-                                    :
-                                        <InventionVisualizer 
-                                            defaultSize={illustrationBarSize} 
-                                            visualizerBarSize={visualizerBarSize} 
-                                            analyticsBar={analyticsBar} 
-                                            openCustomerBar={openCustomerBar} 
-                                            commentBar={commentBar} 
-                                            illustrationBar={illustrationBar} 
-                                            customerBarSize={customerBarSize} 
-                                            companyBarSize={companyBarSize}
-                                            openChartBar={chartsBar}
-                                            handleChartBarOpen={chartsBarToggle}
-                                            type={type}  
-                                            middle={true}
-                                            tab={true}
-                                        />
-                            : 
-                            showManualComponent === true && menuComponent.length > 0
-                            ?                        
-                                menuComponent.map(
-                                    ({component: Component, ...props }, index) => (
-                                        <Component key={index} {...props} size={size}/>
-                                    )
-                                )
-                            :
-                            driveTemplateFrameMode === true && (templateURL != 'about:blank' && templateURL != null)
-                            ?
-                                <iframe src={templateURL} className={classes.templateFrame}></iframe>
-                            :                  
-                            maintainenceFrameMode === true
-                            ?
-                                <LoadMaintainenceAssets 
-                                    rows={selectedMaintainencePatents} onChangeFileName={onChangeFileName}/>
-                            :
-                            addressQueuesDisplay === true
-                            ?
-                                <LoadTransactionQueues />
-                            :
-                            nameQueuesDisplay === true || selectedCategory === 'correct_names' 
-                            ?
-                                <LoadTransactionNameQueues />
-                            :
-                            link_assets_sheet_display === true || selectedCategory === 'technical_scope'
-                            ?
-                                <LoadLinkAssets type={link_assets_sheet_type.type} asset={link_assets_sheet_type.asset}  size={size}/>
-                            :
-                            (selectedCategory ==  'late_recording' || selectedCategory =='incorrect_recording') && selectedAssetAssignments.length > 0 ? 
-                                familyLegalItemMode === true
-                                ?
-                                    <LegalData
-                                        legalEvents={familyLegalItem}
-                                    />
-                                :
-                                    <IllustrationContainer 
-                                        isFullscreenOpen={isFullscreenOpen} 
-                                        asset={assetIllustration} 
-                                        setIllustrationRecord={illustrationRecord} 
-                                        chartsBar={chartsBar}
-                                        analyticsBar={analyticsBar}
-                                        chartsBarToggle={chartsBarToggle}
-                                        checkChartAnalytics={checkChartAnalytics}
-                                        setAnalyticsBar={setAnalyticsBar}
-                                        setChartBar={setChartBar}
-                                        fullScreen={handleClickOpenFullscreen}
-                                        gap={gap}
-                                    />
-                            :
-                            !isFullscreenOpen && 
-                                illustrationBar === true && 
-                                (   search_string != '' || 
-                                    /*assetCompaniesRowSelect.length > 0 || 
-                                    selectedCompaniesAll === true || 
-                                    selectedCompanies.length > 0 || */
-                                    type === 9
-                                ) 
-                            ?
-                                shouldShowTimeline
-                                ?
-                                    familyLegalItemMode === true
+                        <ErrorBoundary>
+                            <Suspense fallback={<Loader/>}>
+                                {
+                                    illustrationBar === true && (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' ||  type === 9 || ((process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') && auth_token !== null))
                                     ?
-                                        <LegalData
-                                            legalEvents={familyLegalItem}
-                                        />
+                                        (maintainence  === true || record === true) && assetIllustration === null
+                                        ?
+                                            <Fees
+                                                standalone={true}
+                                                events={allAssetsEvents}
+                                                tabText={maintainence  === true ? 'M.Fees' : 'To Record'}
+                                                showTabs={true}
+                                            />
+                                        :    
+                                        ptab === true && assetIllustration === null
+                                        ?
+                                            <Ptab 
+                                                rawData={ptabAssets}
+                                                standalone={true}
+                                            />
+                                        :
+                                        cube === true && maintainenceFrameMode === false && assetIllustration === null
+                                        ?
+                                            selectedCategory == 'divested'
+                                            ?
+                                                <SankeyChart
+                                                    type={'divested'} 
+                                                    showTabs={true}
+                                                    tabText={'Divested'}
+                                                    fullScreen={true}
+                                                    standalone={true}
+                                                    chartBar={chartsBar} 
+                                                    analyticsBar={analyticsBar} 
+                                                    container={true}
+                                                /> 
+                                            :
+                                            selectedCategory == 'incorrect_names' ?
+                                                <NamesContainer
+                                                visualizerBarSize={visualizerBarSize}/>
+                                            :
+                                            selectedCategory == 'collaterlized' || selectedCategory == 'clear_encumbrances' ?
+                                                <TimelineContainer 
+                                                    assignmentBar={assignmentBar} 
+                                                    assignmentBarToggle={assignmentBarToggle} 
+                                                    type={type}
+                                                    updateTimelineRawData={setTimelineRawData}
+                                                />
+                                            :
+                                                selectedCategory == 'top_non_us_members' ?
+                                                    <GeoChart
+                                                        chartBar={chartsBar} 
+                                                        openCustomerBar={openCustomerBar} 
+                                                        visualizerBarSize={visualizerBarSize}
+                                                        type={type}
+                                                        titleBar={true}
+                                                        disableOtherTabs={true}
+                                                    /> 
+                                                :
+                                                    <InventionVisualizer 
+                                                        defaultSize={illustrationBarSize} 
+                                                        visualizerBarSize={visualizerBarSize} 
+                                                        analyticsBar={analyticsBar} 
+                                                        openCustomerBar={openCustomerBar} 
+                                                        commentBar={commentBar} 
+                                                        illustrationBar={illustrationBar} 
+                                                        customerBarSize={customerBarSize} 
+                                                        companyBarSize={companyBarSize}
+                                                        openChartBar={chartsBar}
+                                                        handleChartBarOpen={chartsBarToggle}
+                                                        type={type}  
+                                                        middle={true}
+                                                        tab={true}
+                                                    />
+                                        : 
+                                        showManualComponent === true && menuComponent.length > 0
+                                        ?                        
+                                            menuComponent.map(
+                                                ({component: Component, ...props }, index) => (
+                                                    <Component key={index} {...props} size={size}/>
+                                                )
+                                            )
+                                        :
+                                        driveTemplateFrameMode === true && (templateURL != 'about:blank' && templateURL != null)
+                                        ?
+                                            <iframe src={templateURL} className={classes.templateFrame}></iframe>
+                                        :                  
+                                        maintainenceFrameMode === true
+                                        ?
+                                            <LoadMaintainenceAssets 
+                                                rows={selectedMaintainencePatents} onChangeFileName={onChangeFileName}/>
+                                        :
+                                        addressQueuesDisplay === true
+                                        ?
+                                            <LoadTransactionQueues />
+                                        :
+                                        nameQueuesDisplay === true || selectedCategory === 'correct_names' 
+                                        ?
+                                            <LoadTransactionNameQueues />
+                                        :
+                                        link_assets_sheet_display === true || selectedCategory === 'technical_scope'
+                                        ?
+                                            <LoadLinkAssets type={link_assets_sheet_type.type} asset={link_assets_sheet_type.asset}  size={size}/>
+                                        :
+                                        (selectedCategory ==  'late_recording' || selectedCategory =='incorrect_recording') && selectedAssetAssignments.length > 0 ? 
+                                            familyLegalItemMode === true
+                                            ?
+                                                <LegalData
+                                                    legalEvents={familyLegalItem}
+                                                />
+                                            :
+                                                <IllustrationContainer 
+                                                    isFullscreenOpen={isFullscreenOpen} 
+                                                    asset={assetIllustration} 
+                                                    setIllustrationRecord={illustrationRecord} 
+                                                    chartsBar={chartsBar}
+                                                    analyticsBar={analyticsBar}
+                                                    chartsBarToggle={chartsBarToggle}
+                                                    checkChartAnalytics={checkChartAnalytics}
+                                                    setAnalyticsBar={setAnalyticsBar}
+                                                    setChartBar={setChartBar}
+                                                    fullScreen={handleClickOpenFullscreen}
+                                                    gap={gap}
+                                                />
+                                        :
+                                        !isFullscreenOpen && 
+                                            illustrationBar === true && 
+                                            (   search_string != '' || 
+                                                /*assetCompaniesRowSelect.length > 0 || 
+                                                selectedCompaniesAll === true || 
+                                                selectedCompanies.length > 0 || */
+                                                type === 9
+                                            ) 
+                                        ?
+                                            shouldShowTimeline
+                                            ?
+                                                familyLegalItemMode === true
+                                                ?
+                                                    <LegalData
+                                                        legalEvents={familyLegalItem}
+                                                    />
+                                                :
+                                                selectedCategory == 'incorrect_names' ?
+                                                    <NamesContainer/>
+                                                : 
+                                                    selectedCategory == 'incorrect_address'
+                                                ?
+                                                    <CorrectAddressTable 
+                                                        standalone={true}
+                                                        parentBarDrag={parentBarDrag}
+                                                        parentBar={parentBar}
+                                                        type={type}
+                                                    />
+                                                :
+                                                    selectedCategory == 'top_law_firms'
+                                                ?
+                                                    <TabsWithTimeline 
+                                                        assignmentBar={assignmentBar} 
+                                                        assignmentBarToggle={assignmentBarToggle} 
+                                                        type={type} 
+                                                        updateTimelineRawData={setTimelineRawData}
+                                                    />
+                                                :
+                                                    <TimelineContainer 
+                                                        assignmentBar={assignmentBar} 
+                                                        assignmentBarToggle={assignmentBarToggle} 
+                                                        type={type}
+                                                        updateTimelineRawData={setTimelineRawData}
+                                                    />
+                                                
+                                            :
+                                                familyLegalItemMode === true
+                                                ?
+                                                    <LegalData
+                                                        legalEvents={familyLegalItem}
+                                                    />
+                                                : 
+                                                    <IllustrationContainer 
+                                                        isFullscreenOpen={isFullscreenOpen} 
+                                                        asset={assetIllustration} 
+                                                        setIllustrationRecord={illustrationRecord} 
+                                                        chartsBar={chartsBar}
+                                                        analyticsBar={analyticsBar}
+                                                        chartsBarToggle={chartsBarToggle}
+                                                        checkChartAnalytics={checkChartAnalytics}
+                                                        setAnalyticsBar={setAnalyticsBar}
+                                                        setChartBar={setChartBar}
+                                                        fullScreen={handleClickOpenFullscreen}
+                                                        gap={gap}
+                                                    />
+                                        :
+                                        ''
                                     :
-                                    selectedCategory == 'incorrect_names' ?
-                                        <NamesContainer/>
-                                    : 
-                                        selectedCategory == 'incorrect_address'
-                                    ?
-                                        <CorrectAddressTable 
-                                            standalone={true}
-                                            parentBarDrag={parentBarDrag}
-                                            parentBar={parentBar}
-                                            type={type}
-                                        />
-                                    :
-                                        selectedCategory == 'top_law_firms'
-                                    ?
-                                        <TabsWithTimeline 
-                                            assignmentBar={assignmentBar} 
-                                            assignmentBarToggle={assignmentBarToggle} 
-                                            type={type} 
-                                            updateTimelineRawData={setTimelineRawData}
-                                        />
-                                    :
-                                        <TimelineContainer 
-                                            assignmentBar={assignmentBar} 
-                                            assignmentBarToggle={assignmentBarToggle} 
-                                            type={type}
-                                            updateTimelineRawData={setTimelineRawData}
-                                        />
-                                    
-                                :
-                                    familyLegalItemMode === true
-                                    ?
-                                        <LegalData
-                                            legalEvents={familyLegalItem}
-                                        />
-                                    : 
-                                        <IllustrationContainer 
-                                            isFullscreenOpen={isFullscreenOpen} 
-                                            asset={assetIllustration} 
-                                            setIllustrationRecord={illustrationRecord} 
-                                            chartsBar={chartsBar}
-                                            analyticsBar={analyticsBar}
-                                            chartsBarToggle={chartsBarToggle}
-                                            checkChartAnalytics={checkChartAnalytics}
-                                            setAnalyticsBar={setAnalyticsBar}
-                                            setChartBar={setChartBar}
-                                            fullScreen={handleClickOpenFullscreen}
-                                            gap={gap}
-                                        />
-                            :
-                            ''
-                        :
-                        '' 
+                                    '' 
+                                }
+                            </Suspense> 
+                        </ErrorBoundary>
+                        
                 } 
                 <Modal
                     className={classes.fullscreenChartsModal}
@@ -625,8 +633,7 @@ const IllustrationCommentContainer = ({
                         showClose={false}
                     />
                     )
-                }
-                </ErrorBoundary>
+                } 
             </div>
             <div 
                 className={classes.commentContainer}
