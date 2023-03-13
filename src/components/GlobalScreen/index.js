@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react'
+import React, { Suspense, useRef, useState, useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
     useLocation
@@ -591,7 +591,7 @@ const GlobalScreen = ({
                         /> 
                     </div>
                 :
-                    <React.Suspense fallback={<Loader />}> 
+                    <Suspense fallback={<Loader />}> 
                         <SplitPane
                             className={classes.splitPane}
                             split="vertical"
@@ -1032,7 +1032,7 @@ const GlobalScreen = ({
                                 </SplitPane>
                             </SplitPane>
                         </SplitPane> 
-                    </React.Suspense> 
+                    </Suspense> 
             }
         </SplitPane>
     )
