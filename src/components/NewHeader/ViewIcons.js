@@ -154,7 +154,8 @@ const ViewIcons = (props) => {
         let location = window.location.pathname
             location = location.split('/').pop() 
         if(path.indexOf('/dashboard') == -1) { 
-            history.push(`/dashboard${process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? location != '' ? '/' + location : typeof btn !== 'undefined' && btn != '' ? '/' + btn : '' : typeof btn !== 'undefined' && btn != '' ? '/' + btn : '' }`) 
+            let urlAdd = `/dashboard${typeof btn !== 'undefined' && btn != '' ? '/' + btn : ''}${process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' && location != '' ? '/' + location : ''}` 
+            history.push(urlAdd) 
         } else {
             if(typeof btn !== 'undefined') {
                 history.push(`/dashboard${btn != '' ? '/' + btn : ''}`)

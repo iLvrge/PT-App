@@ -1,25 +1,25 @@
-import React, { Fragment, Suspense, lazy } from 'react'
+import React, { Fragment } from 'react'
 
 import { Switch, Route } from 'react-router-dom'
 import Settings from './components/SettingsPage'
 
  
 import Reports from './components/Reports'
-import MainDashboard from './components/MainDashboard'
-import Loader from './components/common/Loader'
+import MainDashboard from './components/MainDashboard' 
 
 import routeList from './routeList'
 
 
 /* import CorrectLayout from './components/CorrectLayout'  */
-const Googlelogin = lazy(() => import('./components/common/Googlelogin'));
-const Auth = lazy(() => import('./components/auth'));
-const AuthSlack = lazy(() => import('./components/AuthSlack'));
-const GlobalLayout = lazy(() => import('./layout/GlobalLayout'));
-const BlankLayout = lazy(() => import('./layout/BlankLayout'));
-const PatentLayout = lazy(() => import('./components/PatentLayout'));
-const GlobalScreen = lazy(() => import('./components/GlobalScreen'));
- 
+
+import Googlelogin from './components/common/Googlelogin' 
+
+import Auth from './components/auth'
+import AuthSlack from './components/AuthSlack' 
+import GlobalLayout from './layout/GlobalLayout'
+import BlankLayout from './layout/BlankLayout'
+import PatentLayout from './components/PatentLayout' 
+import GlobalScreen from './components/GlobalScreen'
 
 let dashboardPages = [
   {
@@ -229,18 +229,27 @@ if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_E
     })
 }
  
-console.log('dashboardPages', dashboardPages)
 
 export default (
   <Switch>
     {/* <Route path="/dashboard" component={DashBoard} />
     <Route path="/dashboard2" component={DashBoard2} /> */}
-    
-    <Suspense 
-      fallback={<Loader/>}
-    >
-      {dashboardPages.map(
+    {dashboardPages.map(
       ({ exact, path, type, childWindow, component: Component, layout: Layout }, index) => (
+        <Route
+          key={index}
+          exact={exact}
+          path={path}
+          render={props => (
+            <Layout history={props.history} type={type} standalone={childWindow}>
+              <Component {...props} type={type} />
+            </Layout>
+          )}
+        />
+      )
+    )}
+    {pages.map(
+      ({ exact, path, type, childWindow, component: Component, layout: Layout }, index) => ( 
           <Route
             key={index}
             exact={exact}
@@ -250,24 +259,9 @@ export default (
                 <Component {...props} type={type} />
               </Layout>
             )}
-          />
-        )
-      )}
-      {pages.map(
-        ({ exact, path, type, childWindow, component: Component, layout: Layout }, index) => ( 
-            <Route
-              key={index}
-              exact={exact}
-              path={path}
-              render={props => (
-                <Layout history={props.history} type={type} standalone={childWindow}>
-                  <Component {...props} type={type} />
-                </Layout>
-              )}
-            /> 
-        )
-      )} 
-    </Suspense> 
+          />  
+      )
+    )}
     <Route path="/slack" component={AuthSlack} />
     {
       ['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE)
