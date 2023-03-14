@@ -443,16 +443,16 @@ const TimelineChart = (props) => {
         end = new Date()
         const promise = convertedItems.map( (c, index) => {
             let newDate = new Date(c.start);
-            let endDate = typeof c.end != 'undefined' && c.end != null ? new Date(c.end) : newDate
-            if(index === 0) {
+            //let endDate = typeof c.end != 'undefined' && c.end != null ? new Date(c.end) : newDate
+            /* if(index === 0) {
                 end = endDate
-            }
+            } */
             if(newDate.getTime() < start.getTime()) {
                 start = newDate
             }
-            if(endDate.getTime() > end.getTime()) {
+           /*  if(endDate.getTime() > end.getTime()) {
                 end = endDate
-            } 
+            }  */
             return c
         })
         Promise.all(promise) 
@@ -461,13 +461,13 @@ const TimelineChart = (props) => {
         } 
         start = new moment(start).subtract(3, 'year')  
         end = new moment(end).add(3, 'year')  
-        if(timelineRef.current !== null && timelineRef.current != undefined && typeof timelineRef.current.destroy === 'function' && typeof props.standalone !== 'undefined') {
+        if(timelineRef.current !== null && timelineRef.current != undefined && typeof timelineRef.current.destroy === 'function' && typeof props.standalone !== 'undefined') { 
             timelineRef.current.destroy()
             timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
             setTimeout(() => {
                 drawTimeline(start, end, convertedItems)  
             }, 1)
-        } else {
+        } else { 
             items.current.add(convertedItems) 
             timelineRef.current.setOptions({ ...options, start, end, min: props.card.type == 4 ? start : new moment(new Date('1400-01-01')), max: props.card.type == 4 ? end : new moment(new Date('2500-01-01'))}) 
             timelineRef.current.setItems(items.current)  
@@ -475,7 +475,7 @@ const TimelineChart = (props) => {
         
     } else {
         start = new moment().subtract(1, 'year')  
-        end = new moment().add(1, 'year')  
+        end = new moment().add(3, 'months')  
         timelineRef.current.setOptions({ ...options, start, end, min: start, max: end})
     } 
      
@@ -483,7 +483,7 @@ const TimelineChart = (props) => {
     }, [ timelineRawData ])
 
 
-    const drawTimeline = (start, end, convertedItems) => {
+    const drawTimeline = (start, end, convertedItems) => { 
         items.current.add(convertedItems) 
         timelineRef.current.setOptions({ ...options, start, end, min: props.card.type == 4 ? start : new moment(new Date('1400-01-01')), max: props.card.type == 4 ? end : new moment(new Date('2500-01-01'))}) 
         timelineRef.current.setItems(items.current)

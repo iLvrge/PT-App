@@ -36,10 +36,15 @@ const ViewIcons = (props) => {
 
     useEffect(() => {
         const {pathname} = location; 
-        if(pathname == '/dashboard/attention' ||  pathname ==  '/dashboard/activity' ||  pathname ==  '/dashboard' ||  pathname ==  '') { 
-            if(props.dashboardScreen === false) {
-                console.log("IN LOCATION")
+        if(pathname == '/dashboard/attention' ||  pathname ==  '/dashboard/activity' ||  pathname ==  '/dashboard' ||  pathname ==  '') {  
+            if(props.dashboardScreen === false) { 
                 pathname == '/dashboard/attention' ? changeGraph(false) : pathname ==  '/dashboard/activity' ? onHandleTimeline() : onHandleKPI()
+            } else { 
+                if(pathname == '/dashboard/attention' && !viewDashboard.gauge) {
+                    changeGraph(false)
+                } else if(pathname ==  '/dashboard/activity' && !viewDashboard.timeline) {
+                    onHandleTimeline()
+                } 
             }
         }
     }, [location])
@@ -158,7 +163,7 @@ const ViewIcons = (props) => {
             history.push(urlAdd) 
         } else {
             if(typeof btn !== 'undefined') {
-                history.push(`/dashboard${btn != '' ? '/' + btn : ''}`)
+                history.push(`/dashboard${btn != '' ? '/' + btn : ''}${process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' && location != '' ? '/' + location : ''}`)
             }
         }
         setPatentView(false)

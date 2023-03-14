@@ -294,7 +294,7 @@ const IllustrationContainer = ({
             }
           )
         )
-        checkChartAnalytics(null, null, true)
+        checkChartAnalytics(null, null, false)
       }
     }
   }, [ linkId, click, dispatch ])
