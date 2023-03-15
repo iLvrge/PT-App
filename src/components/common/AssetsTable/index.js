@@ -232,7 +232,7 @@ const AssetsTable = ({
     const {hash} = location
     if(hash == '' && selectedAssetsPatents.length > 0) {
       clearSelections()
-    } else if(hash != '' && hash.indexOf('&asset') !== -1 && selectedAssetsPatents.length == 0 && assetRows.length > 0) {
+    } else if(hash != '' && hash.indexOf('&asset') !== -1 &&  assetRows.length > 0) {
       console.log(1);
       const explodeHash = hash.split('&') 
       if(explodeHash.length > 0) {
@@ -245,7 +245,7 @@ const AssetsTable = ({
           if(explodeFindIndex.length == 2) { 
             console.log(5);
             const findRowIndex = assetRows.findIndex( item =>  decodeURIComponent(explodeFindIndex[1]) ==  item.asset.toString()) 
-            if(findRowIndex >= 0) {
+            if(findRowIndex >= 0 && !selectedAssetsPatents.includes(assetRows[findRowIndex].asset)) {
               console.log(6);
               dispatch(setAssetTypesPatentsSelected([assetRows[findRowIndex].asset]))
               setSelectItems([assetRows[findRowIndex].asset])
