@@ -126,6 +126,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
     const assetIllustration = useSelector( state => state.patenTrack2.assetIllustration )
     const assetIllustrationData = useSelector( state => state.patenTrack2.assetIllustrationData )
+    const selectedLawFirm = useSelector(state => state.patenTrack2.selectedLawFirm)
     const selectedRow = useSelector( state => state.patenTrack2.selectedAssetsTransactions )
     const connectionBoxView = useSelector( state => state.patenTrack.connectionBoxView)
     const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
@@ -133,7 +134,6 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const cpc_request = useSelector(state => state.patenTrack2.cpc_request) 
     const cpcData = useSelector(state => state.patenTrack2.cpcData) 
     const cpcSecondData = useSelector(state => state.patenTrack2.cpcSecondData) 
-    
     const [ graphRawData, setGraphRawData ] = useState([])
     const [ salesData, setSalesData ] = useState([])
     const [ graphRawGroupData, setGraphRawGroupData ] = useState([])  
@@ -328,7 +328,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     tabName = 'Owned'
                     break;
             }
-        } else if(selectedCategory == 'top_lenders') {
+        } else if(selectedCategory == 'top_lenders' || (selectedCategory == 'top_law_firms' && typeof side != 'undefined')) {
             tabName = 'Owned'
         } 
         if((selectedCategory == 'assigned' && selectedRow.length == 0) || selectedRow.length  === 0) {
@@ -653,6 +653,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
             form.append('customers', JSON.stringify( selectedAssetCompanies))
             form.append('assignments', JSON.stringify( selectedAssetAssignments))
+            form.append('lawfirm', selectedLawFirm)
             form.append('other_mode', display_sales_assets)
             form.append('type', typeof side != 'undefined' && side === true ? 'assigned' : selectedCategory)
             form.append('data_type', dashboardScreen === true ? 1 : 0)

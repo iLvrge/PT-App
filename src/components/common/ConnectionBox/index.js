@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-
-import PerfectScrollbar from 'react-perfect-scrollbar'
+ 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -11,8 +10,7 @@ import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import { Add, Remove } from '@mui/icons-material'
 import moment from 'moment'
-import useStyles from './styles'
-import FullWidthSwitcher from '../FullWidthSwitcher'
+import useStyles from './styles' 
 import { connect, useSelector } from 'react-redux'
 import { setConnectionData,  setConnectionBoxView } from '../../../actions/patenTrackActions'
 import PatenTrackApi from '../../../api/patenTrack2';
@@ -31,8 +29,7 @@ function ConnectionBox(props) {
   const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
   const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
   const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
-
-console.log(assetData)
+ 
   useEffect(() => {
     
     /* if(props.assets) {
