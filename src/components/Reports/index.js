@@ -617,8 +617,7 @@ const Reports = (props) => {
         if(viewInitial === false) {
             if(selectedCompanies.length > 0) {
                 if (isMounted.current) {
-                    if(viewDashboard.timeline === true && timelineList.length > 0) {
-                        console.log('621')
+                    if(viewDashboard.timeline === true && timelineList.length > 0) { 
                         callTimelineData()
                     } else if(cardList.length > 0){
                         findDashboardData()
@@ -727,9 +726,28 @@ const Reports = (props) => {
     const formattedCompanyname = useMemo(() => {
         let name = ''
         let filterList =  selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])
+        console.log('filterList', filterList)
         if(filterList.length == 0) { 
-            const findCompany = selectedCompanies.length > 0 && child_list.filter( company => company.representative_id === selectedCompanies[0])
-            if(findCompany.length > 0) {
+            let findCompany = selectedCompanies.length > 0 && child_list.filter( company => company.representative_id === selectedCompanies[0])
+            console.log('findCompany', findCompany, selectedCompanies, child_list)
+            if(findCompany.length == 0 && child_list.length == 0) {
+                companiesList.map( company => {
+                    if(company.type == 1) {
+                        if(company.child != '') {
+                            const companyChildIDs = JSON.parse(company.child)
+                            if(companyChildIDs.includes(selectedCompanies[0])) {
+                                const childs = JSON.parse(company.child_full_detail)
+                                if(childs.length > 0) {
+                                    findCompany = childs.filter( cmp => cmp.representative_id === selectedCompanies[0])
+                                    if(findCompany.length > 0) {
+                                        name = `${company.original_name} : ${findCompany[0].original_name}`
+                                    }
+                                }
+                            }
+                        }
+                    }
+                })
+            } else if(findCompany.length > 0) {
                 if(childID > 0) { 
                     const findGroup =  companiesList.filter( company => company.representative_id === childID)
                     if(findGroup.length > 0) {
@@ -950,7 +968,7 @@ const Reports = (props) => {
         let oldList = [...timelineList]
         const findIndex = oldList.findIndex( item => item.type === type)
         if(findIndex !== -1) {
-            if( requestData !== null && requestData.data != null && requestData.data.length > 0) {
+            if( requestData !== null && requestData.data != null /* && requestData.data.length > 0 */) { 
                 oldList[findIndex].list = [...requestData.data]
             }
         }

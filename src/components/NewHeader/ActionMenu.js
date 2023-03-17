@@ -701,8 +701,25 @@ const ActionMenu = (props) => {
         let name = ''
         let filterList =  mainCompaniesSelected.length > 0 && companiesList.filter( company => company.representative_id === mainCompaniesSelected[0])
         if(filterList.length == 0) { 
-            const findCompany = mainCompaniesSelected.length > 0 && child_list.filter( company => company.representative_id === mainCompaniesSelected[0])
-            if(findCompany.length > 0) {
+            let findCompany = mainCompaniesSelected.length > 0 && child_list.filter( company => company.representative_id === mainCompaniesSelected[0])
+            if(findCompany.length == 0 && child_list.length == 0) {
+                companiesList.map( company => {
+                    if(company.type == 1) {
+                        if(company.child != '') {
+                            const companyChildIDs = JSON.parse(company.child)
+                            if(companyChildIDs.includes(mainCompaniesSelected[0])) {
+                                const childs = JSON.parse(company.child_full_detail)
+                                if(childs.length > 0) {
+                                    findCompany = childs.filter( cmp => cmp.representative_id === mainCompaniesSelected[0])
+                                    if(findCompany.length > 0) {
+                                        name = `${company.original_name} : ${findCompany[0].original_name}`
+                                    }
+                                }
+                            }
+                        }
+                    }
+                })
+            } else if(findCompany.length > 0) {
                 if(childID > 0) { 
                     const findGroup =  companiesList.filter( company => company.representative_id === childID)
                     if(findGroup.length > 0) {

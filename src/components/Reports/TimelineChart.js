@@ -460,7 +460,7 @@ const TimelineChart = (props) => {
             start = new Date(convertedItems[99].start)
         } 
         start = new moment(start).subtract(3, 'year')  
-        end = new moment(end).add(3, 'year')  
+        end = new moment().add(1, 'year')   
         if(timelineRef.current !== null && timelineRef.current != undefined && typeof timelineRef.current.destroy === 'function' && typeof props.standalone !== 'undefined') { 
             timelineRef.current.destroy()
             timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
@@ -469,13 +469,14 @@ const TimelineChart = (props) => {
             }, 1)
         } else { 
             items.current.add(convertedItems) 
-            timelineRef.current.setOptions({ ...options, start, end, min: props.card.type == 4 ? start : new moment(new Date('1400-01-01')), max: props.card.type == 4 ? end : new moment(new Date('2500-01-01'))}) 
+            timelineRef.current.setOptions({ ...options, start, end, min: start, max: end}) 
             timelineRef.current.setItems(items.current)  
         }
-        
     } else {
         start = new moment().subtract(1, 'year')  
-        end = new moment().add(3, 'months')  
+        end = new moment().add(1, 'year')  
+        items.current.add([])  
+        timelineRef.current.setItems(items.current)
         timelineRef.current.setOptions({ ...options, start, end, min: start, max: end})
     } 
      
@@ -485,9 +486,9 @@ const TimelineChart = (props) => {
 
     const drawTimeline = (start, end, convertedItems) => { 
         items.current.add(convertedItems) 
-        timelineRef.current.setOptions({ ...options, start, end, min: props.card.type == 4 ? start : new moment(new Date('1400-01-01')), max: props.card.type == 4 ? end : new moment(new Date('2500-01-01'))}) 
+        timelineRef.current.setOptions({ ...options, start, end, min: start, max: end}) 
         timelineRef.current.setItems(items.current)
-    }
+    } 
     return (
         <Paper className={clsx(classes.container, classes.columnDirection)} square>
             {
