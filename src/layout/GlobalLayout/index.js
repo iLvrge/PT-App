@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState, useCallback, createContext  } from "react"
 
-import { useDispatch, useSelector } from 'react-redux'
+import { ReactReduxContext, useDispatch, useSelector } from 'react-redux'
 
 import { 
     useHistory, useLocation,
@@ -22,7 +22,7 @@ import NavigationIcon from '../../components/NavigationIcon'
 import MobileHeader from '../../components/MobileHeader'
 import MobileFooter from '../../components/MobileFooter'
 
-import { loginRedirect } from  '../../utils/tokenStorage'
+import { getTokenStorage, loginRedirect } from  '../../utils/tokenStorage'
 import { editorBar } from  '../../utils/splitpane'
 
 import { 
@@ -39,6 +39,7 @@ import {
 } from '../../actions/patentTrackActions2' 
 
 import { 
+    getProfile,
     setConnectionBoxView,
     setPDFView,
 } from '../../actions/patenTrackActions'
@@ -126,6 +127,8 @@ const GlobalLayout = (props) => {
     const [ illustrationRecord, setIllustrationRecord ] = useState()
     const authenticated = useSelector(store => store.auth.authenticated)
     
+    const auth_token = useSelector(state => state.patenTrack2.auth_token)
+
     const search_string = useSelector(state => state.patenTrack2.search_string)
     const driveTemplateFrameMode = useSelector(state => state.ui.driveTemplateFrameMode)
     const driveTemplateMode = useSelector(state => state.ui.driveTemplateMode)
@@ -159,6 +162,27 @@ const GlobalLayout = (props) => {
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
     const timelineScreen = useSelector(state => state.ui.timelineScreen)
     const patentScreen = useSelector(state => state.ui.patentScreen)
+
+
+    /**
+   * Get the Loggedin User Profile data
+   */
+
+    useEffect(() => {
+        if (!profile) {
+            let token = process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' ?  getTokenStorage( 'token' ) :  getTokenStorage( 'auth_signature' )
+            
+            if(token !== '' || token !== null) {
+                dispatch(getProfile(true))
+            }     
+        }
+    }, [ dispatch, profile ])
+
+    useEffect(() => {
+        if(auth_token != null && typeof profile == 'undefined') {
+            dispatch(getProfile(true))
+        }
+    }, [dispatch, auth_token, profile])
   
     useEffect(() => {
         if(openVisualizerBar === false && visualizerBarSize != '0%') {
@@ -496,6 +520,8 @@ const GlobalLayout = (props) => {
         setDriveTemplateBarSize( driveTemplateMode === true ? 200 : 0)
         editorBar()
     }, [ driveTemplateMode ])
+
+
 
 
 
@@ -1540,9 +1566,11 @@ const GlobalLayout = (props) => {
         if (arg && (arg.includes(messageQuill) || arg.includes(messageGoogleChart) || arg.includes(messageCellPosition))) return;
         originalWarn(...args);
     };
- 
-    return (
-        <div className={classes.root} id='main'>
+
+    if(profile == undefined) return null  
+    return ( 
+            <div className={classes.root} id='main'>
+    
             {
                 isMobile
                 ?
@@ -1568,11 +1596,7 @@ const GlobalLayout = (props) => {
                     {
                         isMobile 
                         ?
-                            mobileWrapper.map(
-                                ({component: Component, ...props }, index) => (
-                                    <Component key={index} {...props} />
-                                )
-                            ) 
+                            'Please open PatenTrack on a non-mobile device.'
                         :
                             <React.Fragment>
                                 <div className={clsx(classes.filterToolbar)}> 
@@ -1608,15 +1632,16 @@ const GlobalLayout = (props) => {
                     } 
                 </Grid>
             </Grid>
-            {
+            {/* {
                 isMobile && (
                     <MobileFooter
                         bottomToolBar={bottomToolBar}
                         topToolBar={topToolBar}   
                     />
                 )
-            }
-        </div>
+            } */}
+        </div> 
+       
     )
 }
 export default GlobalLayout;

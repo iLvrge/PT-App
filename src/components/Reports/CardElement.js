@@ -25,7 +25,7 @@ const CardElement = (props) => {
             type: props.type,
             grid: props.grid
         }
-    ] : [] 
+    ] : []  
     return (
         <Card variant="outlined" className={clsx(classes.card, {[classes.alignTop]: typeof props.timeline !== 'undefined' && props.timeline === true ? true : false})} square={true}>
             <CardContent>  
