@@ -155,7 +155,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
 
     if([5,12].includes(parseInt(assetsCustomer.tab_id)) ||  selectedCategory == 'late_recording') {            
       item.type = 'range';
-      item['end'] = selectedCategory == 'late_recording' ? assetsCustomer.record_dt != null ? assetsCustomer.record_dt : new Date() : assetsCustomer.release_exec_dt != null ? new Date(assetsCustomer.release_exec_dt) : new Date()
+      item['end'] = selectedCategory == 'late_recording' ? assetsCustomer.record_dt != null && assetsCustomer.record_dt != '' ? assetsCustomer.record_dt : new Date() : assetsCustomer.release_exec_dt != null && assetsCustomer.release_exec_dt != ''? new Date(assetsCustomer.release_exec_dt) : new Date()
       if([5,12].includes(parseInt(assetsCustomer.tab_id))) {
         const securityPDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.reel_no}-${assetsCustomer.frame_no}.pdf`
         item['security_pdf'] = securityPDF
@@ -620,10 +620,10 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
 
     if (convertedItems.length > 0) {
       start = new Date()
-      end = new Date()
+      end = new Date() 
       const promise = convertedItems.map( (c, index) => {
         let newDate = new Date(c.start);
-        let endDate = typeof c.end != 'undefined' && c.end != null ? new Date(c.end) : newDate
+        let endDate = typeof c.end != 'undefined' && c.end != null ? new Date(c.end) : newDate 
         if(index === 0) {
           end = endDate
         }
@@ -640,7 +640,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
         start = new Date(convertedItems[99].start)
       } else {
         start = new moment(start).subtract(3, 'year') 
-      } 
+      }  
       if(convertedItems.length > 0 && (selectedCategory != 'late_recording' && selectedCategory != 'incorrect_recording' && selectedCategory != 'top_lenders' /* && selectedCategory != 'collaterlized' */)) { 
         end = new moment(end).add(1, 'year')
       } else {
@@ -657,7 +657,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       setTimeout(() => {
         drawTimeline(start, end, convertedItems)  
       }, 1)
-    } else {
+    } else { 
       if(timelineRawData.length > 0 || previousLoad === false) {   
         items.current.add(convertedItems)  
         timelineRef.current.setOptions({ 
