@@ -479,9 +479,9 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
 
   //Timeline list from server
   useEffect(() => {
-    let isSubscribed = true;
-    if(typeof timelineData !== 'undefined') {
-      setTimelineRawData(timelineData)
+    let isSubscribed = true;  
+    if((typeof timelineData !== 'undefined' &&  timelineData.length > 0 ) || timelineRequestData.length > 0) {
+      setTimelineRawData(typeof timelineData !== 'undefined' &&  timelineData.length > 0 ? timelineData : timelineRequestData)
     } else {
       /**
            * return empty if no company selected
@@ -513,7 +513,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
             }       
           } else {
             if(type !== 9)  {
-              if( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
+              if( ['PRO', 'KPI', 'STANDARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
                 //setIsLoadingTimelineData(true) 
                 if(timelineRequest === false) {
                   setTimelineRawGroups([]) //groups
@@ -542,10 +542,10 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     }
     return () => (isSubscribed = false)
     
-  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors, auth_token, switch_button_assets, selectedCategory, timelineRequest ])
+  }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors, auth_token, switch_button_assets, selectedCategory, timelineRequest, timelineRequestData ])
 
   useEffect(() => {
-    if(typeof timelineData !== 'undefined') {
+    if(typeof timelineData !== 'undefined' && timelineData.length > 0) {
       setTimelineRawData(timelineData)
     } else {
       const getForeignAssetTimelineData = async(foreignAssets, assetTypeAssignmentAssets) => {
@@ -641,29 +641,52 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       } else {
         start = new moment(start).subtract(3, 'year') 
       } 
-      if(convertedItems.length > 0 && (selectedCategory != 'late_recording' && selectedCategory != 'incorrect_recording' && selectedCategory != 'top_lenders' && selectedCategory != 'collaterlized')) { 
+      if(convertedItems.length > 0 && (selectedCategory != 'late_recording' && selectedCategory != 'incorrect_recording' && selectedCategory != 'top_lenders' /* && selectedCategory != 'collaterlized' */)) { 
         end = new moment(end).add(1, 'year')
       } else {
         end = new moment(end).add(3, 'year')
       }
       /* const startIndex = convertedItems.length < 201 ? (convertedItems.length - 1) : 199
       items.current.add(convertedItems.slice(0, startIndex))  */   
-      items.current.add(convertedItems)  
+      
     }    
-    //redrawTimeline()   
-    if(timelineRawData.length > 0 || previousLoad === false) {   
-      timelineRef.current.setOptions({ 
-        ...options, 
-        start, 
-        end,
-        min: new Date('1999-01-01'), 
-        max: new moment().add( selectedCategory != 'late_recording' && selectedCategory != 'incorrect_recording' && selectedCategory != 'top_lenders' && selectedCategory != 'collaterlized' ? 2 : 4, 'year')
-      })  
-      timelineRef.current.setItems(items.current)   
-      setPreviousLoad(true) 
+    const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
+    if(checkFullScreen.length > 0) { 
+      timelineRef.current.destroy()
+      timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
+      setTimeout(() => {
+        drawTimeline(start, end, convertedItems)  
+      }, 1)
+    } else {
+      if(timelineRawData.length > 0 || previousLoad === false) {   
+        items.current.add(convertedItems)  
+        timelineRef.current.setOptions({ 
+          ...options, 
+          start, 
+          end,
+          min: new Date('1999-01-01'), 
+          max: new moment().add( selectedCategory != 'late_recording' && selectedCategory != 'incorrect_recording' && selectedCategory != 'top_lenders' && selectedCategory != 'collaterlized' ? 2 : 4, 'year')
+        })  
+        timelineRef.current.setItems(items.current)   
+        setPreviousLoad(true) 
+      }
     }
+    
     //checkCurrentDateStatus()
   }, [ timelineRawData ])
+
+  const drawTimeline = (start, end, convertedItems) => {  
+    items.current.add(convertedItems) 
+    timelineRef.current.setOptions({ 
+      ...options, 
+      start, 
+      end,
+      min: new Date('1999-01-01'), 
+      max: new moment().add( selectedCategory != 'late_recording' && selectedCategory != 'incorrect_recording' && selectedCategory != 'top_lenders' && selectedCategory != 'collaterlized' ? 2 : 4, 'year')
+    })  
+    timelineRef.current.setItems(items.current)   
+    setPreviousLoad(true) 
+  }
 
   const move  = (percentage) => {
     var range = timelineRef.current.getWindow();

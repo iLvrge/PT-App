@@ -556,15 +556,15 @@ const IllustrationCommentContainer = ({
                 }
                 
                 <Modal
-                    className={classes.fullscreenChartsModal}
+                    className={clsx(classes.fullscreenChartsModal, 'fullscreenModal')}
                     open={isFullscreenOpen}
                 > 
                     <Paper 
-                        className={classes.fullscreenCharts} 
+                        className={classes.fullscreenCharts}  
                         square
                     >
                         {
-                            illustrationBar === false && (
+                            (illustrationBar === false || shouldShowTimeline === true ) && (
                                 <IconButton onClick={handleCloseFullscreen}  className={clsx(classes.right, {[classes.frameButton]: (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null) ? true : false})} size="large">
                                     <Close /> 
                                 </IconButton> 

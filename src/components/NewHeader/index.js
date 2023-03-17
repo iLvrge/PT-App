@@ -54,10 +54,7 @@ import FullScreen from '../common/FullScreen'
 import AddToolTip from '../Reports/AddToolTip'
 import { signOut, deleteCookie } from '../../actions/authActions'
 import { getTokenStorage, removeTokenStorage } from '../../utils/tokenStorage'
-
-import { 
-        getProfile, 
-      } from '../../actions/patenTrackActions'
+ 
 
 import { setAssetTypeAssignments, 
   setSelectedAssetsTransactions, 
@@ -295,25 +292,7 @@ const NewHeader = (props) => {
     setLayoutName(dashboardScreen === true ? 'Dashboard' : patentScreen === true ? breadcrumbs !== '' ? breadcrumbs : 'Patent Assets' : selectedCategory != 'due_dilligence' ? findIndex !== -1 ? controlList[findIndex].mainHeading : '' : '')
   }, [ dashboardScreen, patentScreen,  selectedCategory ])    
 
-  /**
-   * Get the Loggedin User Profile data
-   */
-
-  useEffect(() => {
-    if (!profile) {
-      let token = process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' ?  getTokenStorage( 'token' ) :  getTokenStorage( 'auth_signature' )
-      
-      if(token !== '' || token !== null) {
-        dispatch(getProfile(true))
-      }     
-    }
-  }, [ dispatch, profile ])
-
-  useEffect(() => {
-    if(auth_token != null && typeof profile == 'undefined') {
-      dispatch(getProfile(true))
-    }
-  }, [dispatch, auth_token, profile])
+  
 
   /**
    * To check buttons for the Google and Slack
