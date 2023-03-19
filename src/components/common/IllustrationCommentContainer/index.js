@@ -278,7 +278,7 @@ const IllustrationCommentContainer = ({
         fn(fnVarName, size, fnParams)   
     }, 1), [  ]) 
 
-     
+    console.log('COMMEN', illustrationBar, cube, dashboardScreen, !isFullscreenOpen, shouldShowTimeline )
     return (
         <SplitPane
             className={cls}
@@ -307,11 +307,11 @@ const IllustrationCommentContainer = ({
                 <ErrorBoundary>
                 {/* <AllComponentsMenu onClick={onHandleComponentMenuItem}/> */}
                 {
-                    illustrationBar === true && ( typeof cube == 'undefined' || (typeof cube !== 'undefined' && cube === false))  && dashboardScreen === false && !isFullscreenOpen && shouldShowTimeline === true
+                    illustrationBar === true && ( typeof cube == 'undefined' || (typeof cube !== 'undefined' && cube === false) || ((maintainence  === true || record === true) && assetIllustration === null))  && dashboardScreen === false && !isFullscreenOpen && shouldShowTimeline === true
                     ?
                         <IconButton 
                             size="small" 
-                            className={clsx(classes.fullscreenBtn, {[classes.frameButton]: (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null) ? true : false})} 
+                            className={clsx(classes.fullscreenBtn, 'full_screen_btn', {[classes.frameButton]: (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null) ? true : false})} 
                             onClick={handleClickOpenFullscreen}
                         >
                             <Fullscreen />
@@ -574,6 +574,15 @@ const IllustrationCommentContainer = ({
                         {
                             
                             shouldShowTimeline === true ? 
+                                ((maintainence  === true || record === true) && assetIllustration === null)
+                                ?
+                                    <Fees
+                                        standalone={true}
+                                        events={allAssetsEvents}
+                                        tabText={maintainence  === true ? 'M.Fees' : 'To Record'}
+                                        showTabs={true}
+                                    />
+                                :
                                 selectedCategory == 'top_law_firms'
                                 ?
                                     <TabsWithTimeline 

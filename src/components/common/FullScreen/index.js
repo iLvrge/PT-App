@@ -28,7 +28,7 @@ const FullScreen = ({componentItems, setScreen, showScreen, paper, share, handle
         <React.Fragment>    
             {
                 !isFullscreenOpen  && (
-                    <IconButton size="small" className={classes.fullscreenBtn} onClick={handleClickOpenCloseFullscreen}>
+                    <IconButton size="small" className={clsx(classes.fullscreenBtn, 'full_screen_btn')} onClick={handleClickOpenCloseFullscreen}>
                         <Fullscreen />
                     </IconButton>
                 )

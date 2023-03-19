@@ -15,6 +15,7 @@ import {checkFileContent} from '../../../utils/html_encode_decode'
 import { connect } from 'react-redux'
 import { setPDFFile,  setPDFView, setPdfTabIndex, setPDFViewModal } from '../../../actions/patenTrackActions'
 import { Typography } from '@mui/material'
+import clsx from 'clsx'
 
 /*let pdfFile = "";*/
 
@@ -144,7 +145,7 @@ function PdfViewer(props) {
           </IconButton>
         }
         {
-          props.display === "false" && <IconButton size="small" className={classes.fullscreenBtn} onClick={handleClickOpenFullscreen}>
+          props.display === "false" && <IconButton size="small" className={clsx(classes.fullscreenBtn, 'full_screen_btn')} onClick={handleClickOpenFullscreen}>
           <FullscreenIcon />
           </IconButton>
         }

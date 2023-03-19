@@ -362,7 +362,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             } 
             if(getNewData === true) {   
                 setShowContainer(true)              
-                if (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0 && type !== 9){
+                if (['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE) && selectedCompanies.length === 0 && type !== 9){
                     setShowContainer(false)
                     return null
                 } else if ( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token === null){
@@ -477,6 +477,11 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         findCPCList([...scopeRange], [], 0)
                     } else if(cpcData.list.length > 0 || cpcSecondData.list.length > 0) { 
                         updateCPCData([...scopeRange], list, totalRecords)
+                    } else if (cpcData.list.length == 0 && cpcSecondData.list.length == 0){
+                        setGraphRawData([])
+                        setGraphRawGroupData([])  
+                        setIsLoadingCharts(false)
+                        setSalesData([])  
                     }
                 } else if(dashboardScreen === true  ||   /* list.length > 0 */ selectedCategory != 'due_dilligence'  || (dashboardScreen === false && selectedCategory == 'due_dilligence')) { 
                     if(cpc_request === false || (cpcData.list.length == 0 || (typeof side != 'undefined' && side === true && cpcSecondData.list.length == 0))) { 

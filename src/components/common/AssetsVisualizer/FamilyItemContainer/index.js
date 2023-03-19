@@ -13,6 +13,7 @@ import { numberWithCommas, applicationFormat, capitalize } from "../../../../uti
 
 import useStyles from './styles'
 import { setAssetsUSPTO } from '../../../../actions/patentTrackActions2'
+import clsx from 'clsx'
 
 const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrationBar, visualizerBarSize, type, standalone, activeTab }) => {
 
@@ -197,7 +198,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                     <>
                         {
                             fullScreen === false && typeof standalone === 'undefined' && (
-                                <IconButton size="small" className={classes.fullscreenBtn} onClick={() => setFullScreen(!fullScreen)}>
+                                <IconButton size="small" className={clsx(classes.fullscreenBtn, 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
                                     <FullscreenIcon />
                                 </IconButton>
                             )

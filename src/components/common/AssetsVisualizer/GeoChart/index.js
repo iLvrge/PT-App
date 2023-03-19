@@ -16,6 +16,7 @@ import InventionVisualizer from '../InventionVisualizer'
 import AgentsVisualizer from '../AgentsVisualizer' 
 import SankeyChart from '../SankeyChart' 
 import LabelWithIcon from '../../LabelWithIcon' 
+import clsx from 'clsx'
 
 const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openCustomerBar, tab, titleBar, disableOtherTabs, activeTab }) => {
     const containerRef = useRef(null)
@@ -315,8 +316,8 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
     return (
         <Paper className={classes.root} square style={{overflow: 'hidden'}}>  
             {
-                ( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) && fullScreen === false && typeof standalone === 'undefined' && (
-                    <IconButton size="small" className={classes.fullscreenBtn} onClick={() => setFullScreen(!fullScreen)}>
+                ( (['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE) || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) && fullScreen === false && typeof standalone === 'undefined' && (
+                    <IconButton size="small" className={clsx(classes.fullscreenBtn, 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
                         <FullscreenIcon />
                     </IconButton>
                 )
