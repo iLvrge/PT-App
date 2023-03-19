@@ -352,10 +352,16 @@ const Fees = ({ events, showTabs, tabText, showAbandoned }) => {
           }
         }        
       })
+      if(typeof tabText != 'undefined' && tabText == 'To Record') {
+        if(convertedItems.length > 16) {
+          min = new Date(convertedItems[16].start)
+        }
+      }
       start = new moment(min).subtract(3, 'year') 
       end = new moment(max).add(3, 'year') 
       min = start
       max = end
+      
       items.current.add(convertedItems)
       setDisplay('block')      
     } else {

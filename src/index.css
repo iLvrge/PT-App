@@ -153,6 +153,13 @@ span {
   color: #ff0000;
 }
 
+@supports (-ms-ime-align: auto) {
+  .full_screen svg{
+    fill: '#000';
+    stroke: '#000'
+  }
+}
+
 @-webkit-keyframes animatetop {
   from {
     top: -300px;

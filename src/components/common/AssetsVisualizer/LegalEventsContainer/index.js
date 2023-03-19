@@ -84,7 +84,7 @@ const LegalEventsContainer = ({ events, type, standalone, activeTab }) => {
           <>
             {
               fullScreen === false && typeof standalone === 'undefined' && (
-                  <IconButton size="small" className={classes.fullscreenBtn} onClick={() => setFullScreen(!fullScreen)}>
+                  <IconButton size="small" className={clsx(classes.fullscreenBtn, 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
                     <FullscreenIcon />
                   </IconButton>
               )
