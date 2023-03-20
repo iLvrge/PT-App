@@ -199,9 +199,10 @@ export default makeStyles(theme => ({
       overflowY: 'hidden',
     },
     '& .vis-cluster': {
-      backgroundColor: '#222222', 
+      backgroundColor: '#222222',
+      border: '1px solid #545454 !important',
+      borderRadius: 3, 
       padding: 5,
-      width: '100% !important',
       '& .vis-item-content':{
         padding: 0,
         width: 'auto !important',

@@ -331,8 +331,16 @@ export default makeStyles(theme => ({
         }
       },
       '& .vis-cluster': {
-        background: 'none',
-        border: '0px',
+        backgroundColor: '#222222',
+        border: '1px solid #545454 !important',
+        borderRadius: 3, 
+        padding: 5,
+        '& .vis-item-content':{
+          padding: 0,
+          width: 'auto !important',
+          textAlign: 'left',
+          padding: '0 !important'
+        }
       },
       '& .vis-dot':{ 
         backgroundColor: 'inherit',
