@@ -1851,7 +1851,7 @@ export const setLineChartData = (chartType, data) => {
   }
 }
 
-export const setLineChartReset = () => {  
+export const setLineChartReset = () => {   
   return {
     type: types.SET_LINE_CHART_RESET 
   }
