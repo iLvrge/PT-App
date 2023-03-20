@@ -304,6 +304,12 @@ const Fees = ({ events, showTabs, tabText, showAbandoned }) => {
   }
 
 
+  const onRangeChanged = useCallback( async(properties) => {
+    items.current = new DataSet()
+    items.current.add(timelineItems)
+    timelineRef.current.setItems(items.current)  
+  }, [ timelineItems ])
+
   /**
   * Intial timline items dataset and ref setup
   */
@@ -312,13 +318,15 @@ const Fees = ({ events, showTabs, tabText, showAbandoned }) => {
     timelineRef.current.on('itemover', onItemover)
     timelineRef.current.on('itemout', onItemout)
     timelineRef.current.on('select', onSelect)
+    timelineRef.current.on('rangechanged', onRangeChanged)
     return () => {
       timelineRef.current.off('itemover', onItemover) 
       timelineRef.current.off('itemout', onItemout)
       timelineRef.current.off('select', onSelect)
+      timelineRef.current.off('rangechanged', onRangeChanged)
       resetTooltipContainer()
     } 
-  }, [ onItemover, onItemout, onSelect ]) 
+  }, [ onItemover, onItemout, onSelect, onRangeChanged ]) 
 
 
   useEffect(() => {
@@ -352,9 +360,11 @@ const Fees = ({ events, showTabs, tabText, showAbandoned }) => {
           }
         }        
       })
+      let startIndex = convertedItems.length - 1;
       if(typeof tabText != 'undefined' && tabText == 'To Record') {
         if(convertedItems.length > 16) {
-          min = new Date(convertedItems[16].start)
+          min = new Date(convertedItems[15].start)
+          startIndex = 15
         }
       }
       start = new moment(min).subtract(3, 'year') 
@@ -362,7 +372,8 @@ const Fees = ({ events, showTabs, tabText, showAbandoned }) => {
       min = start
       max = end
       
-      items.current.add(convertedItems)
+      //items.current.add(convertedItems)
+      items.current.add(convertedItems.slice(0, startIndex))    
       setDisplay('block')      
     } else {
       /* setDisplay('none') */
