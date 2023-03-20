@@ -636,10 +636,8 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
         return c
       })
       Promise.all(promise) 
-      let startIndex = convertedItems.length - 1;
       if(convertedItems.length > 100) {
         start = new Date(convertedItems[99].start)
-        startIndex = 99
       } else {
         start = new moment(start).subtract(3, 'year') 
       }  
@@ -648,8 +646,8 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       } else {
         end = new moment(end).add(3, 'year')
       }
-      /* const startIndex = convertedItems.length < 201 ? (convertedItems.length - 1) : 199 */   
-      items.current.add(convertedItems.slice(0, startIndex)) 
+      /* const startIndex = convertedItems.length < 201 ? (convertedItems.length - 1) : 199
+      items.current.add(convertedItems.slice(0, startIndex))  */   
       
     }    
     const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
