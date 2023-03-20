@@ -668,6 +668,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         dispatch(setAllAssignmentCustomers(false))
         dispatch(setSankeyFilterActive(false))
         dispatch(setSelectLawFirm(0))
+        dispatch(setLineChartReset())
     }
 
     const clearOtherItems = () => {
@@ -803,7 +804,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             dispatch(setTimelineRequest(false))
             dispatch(setTimelineData([]))
             dispatch(setCPCData({list:[], group: [], sales: []}))
-            dispatch(setCPCSecondData({list:[], group: [], sales: []}))
+            dispatch(setCPCSecondData({list:[], group: [], sales: []})) 
             dispatch(setLineChartReset())
             dispatch(setJurisdictionData([]))
             resetAll() 
@@ -843,7 +844,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                         dispatch(setTimelineRequest(false))
                         dispatch(setTimelineData([]))
                         dispatch(setCPCData({list:[], group: [], sales: []}))
-                        dispatch(setCPCSecondData({list:[], group: [], sales: []}))
+                        dispatch(setCPCSecondData({list:[], group: [], sales: []})) 
                         dispatch(setLineChartReset())
                         dispatch(setJurisdictionData([]))
                         resetAll() 

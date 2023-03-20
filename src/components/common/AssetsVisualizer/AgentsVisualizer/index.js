@@ -124,9 +124,9 @@ const AgentsVisualizer = (props) => {
     useEffect(() => {
         let isSubscribed = true;
         const getAssetsForEachCountry = async() => {
-            try {
+            try { 
                 if(line_chart_data[props.type].loading === false) { 
-                    if(selectedCompanies.length > 0 || (process.env.REACT_APP_ENVIROMENT_MODE != 'PRO' && assetsList.length > 0)) { 
+                    if(selectedCompanies.length > 0 || (['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE) && assetsList.length > 0)) { 
                         callChartData(assetsList, 0)
                     }
                 } 
@@ -138,7 +138,7 @@ const AgentsVisualizer = (props) => {
             getAssetsForEachCountry()
         }
         return () => (isSubscribed = false)
-    }, [selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, selectedAssetAssignmentsAll, selectedAssetAssignments, display_sales_assets, search_string, auth_token, props.type])
+    }, [selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, selectedAssetAssignmentsAll, selectedAssetAssignments, display_sales_assets, search_string, auth_token, props.type], line_chart_data)
 
     useEffect(() => {
         if(props.analyticsBar === false) {
@@ -201,7 +201,7 @@ const AgentsVisualizer = (props) => {
     }, [line_chart_data])
 
     const callChartData = async(list, totalRecords) => {
-        if(line_chart_data[props.type].loading === false) {
+        if(line_chart_data[props.type].loading === false) { 
             dispatch(setLineChartRequest(props.type, true))
             setAssetRequest(false)
             setLoading(true)
