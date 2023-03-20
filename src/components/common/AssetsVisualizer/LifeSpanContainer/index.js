@@ -21,6 +21,7 @@ import AgentsVisualizer from '../AgentsVisualizer'
 import LabelWithIcon from '../../LabelWithIcon'
 import HistogramYears from './HistogramYears'
 import SteppedAges from './SteppedAges'
+import clsx from 'clsx'
 
 const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerBarSize, type, standalone, activeTab, setIllustrationRecord, chartsBarToggle, checkChartAnalytics, setAnalyticsBar, setChartBar, gap}) => {
     const classes = useStyles() 
@@ -263,8 +264,8 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                 ?
                     ''
                 :
-                    ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) && fullScreen === false && typeof standalone === 'undefined' && (
-                        <IconButton size="small" className={classes.fullscreenBtn} onClick={() => setFullScreen(!fullScreen)}>
+                    ((['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE)  || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) && fullScreen === false && typeof standalone === 'undefined' && (
+                        <IconButton size="small" className={clsx(classes.fullscreenBtn, 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
                             <FullscreenIcon />
                         </IconButton>
                     )

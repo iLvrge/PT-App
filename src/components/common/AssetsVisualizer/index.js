@@ -10,6 +10,7 @@ import FullscreenIcon from '@mui/icons-material/Fullscreen'
 import { ExpandLess, Close } from '@mui/icons-material'
 import Modal from '@mui/material/Modal'
 import Tooltip from '@mui/material/Tooltip'
+import clsx from 'clsx'
 
 const AssetsVisualizer = ({ toggleMinimize, isMinimized, setIllustrationRecord }) => {
   const classes = useStyles()
@@ -53,7 +54,7 @@ const AssetsVisualizer = ({ toggleMinimize, isMinimized, setIllustrationRecord }
   return (
     <Paper className={classes.root} square>
       {renderComponent()}
-      <IconButton size="small" className={classes.fullscreenBtn} onClick={handleClickOpenFullscreen}>
+      <IconButton size="small" className={clsx(classes.fullscreenBtn, 'full_screen_btn')} onClick={handleClickOpenFullscreen}>
         <FullscreenIcon />
       </IconButton>
 
