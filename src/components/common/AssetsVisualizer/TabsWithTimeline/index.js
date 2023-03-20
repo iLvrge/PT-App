@@ -637,9 +637,11 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
         return c
       })
       Promise.all(promise) 
+      let startIndex = convertedItems.length - 1;
       if(scrollNewRequest === false) {
-        if(convertedItems.length > 24) {
-          start = new Date(convertedItems[24].start)
+        if(convertedItems.length > 50) {
+          start = new Date(convertedItems[49].start)
+          startIndex = 49
         } else {
           start = new moment(start).subtract(3, 'year') 
         }
@@ -654,7 +656,8 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
       }  
       /* const startIndex = convertedItems.length < 201 ? (convertedItems.length - 1) : 199
       items.current.add(convertedItems.slice(0, startIndex))  */   
-      items.current.add(convertedItems)  
+      items.current.add(convertedItems.slice(0, startIndex))    
+      //items.current.add(convertedItems)  
     }    
    
     /* const min = new moment(start).subtract(20, 'months') 
