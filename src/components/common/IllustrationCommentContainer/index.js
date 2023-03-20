@@ -276,9 +276,8 @@ const IllustrationCommentContainer = ({
     const changePane =  useCallback(_debounce((size) => {
         fn2(size, fn2Params)
         fn(fnVarName, size, fnParams)   
-    }, 1), [  ]) 
-
-    console.log('COMMEN', illustrationBar, cube, dashboardScreen, !isFullscreenOpen, shouldShowTimeline )
+    }, 1), [  ])  
+    
     return (
         <SplitPane
             className={cls}
