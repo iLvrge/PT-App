@@ -712,7 +712,7 @@ const ActionMenu = (props) => {
                                 if(childs.length > 0) {
                                     findCompany = childs.filter( cmp => cmp.representative_id === mainCompaniesSelected[0])
                                     if(findCompany.length > 0) {
-                                        name = `${company.original_name} : ${findCompany[0].original_name}`
+                                        name = `${company.original_name} > ${findCompany[0].original_name}`
                                     }
                                 }
                             }
@@ -723,7 +723,7 @@ const ActionMenu = (props) => {
                 if(childID > 0) { 
                     const findGroup =  companiesList.filter( company => company.representative_id === childID)
                     if(findGroup.length > 0) {
-                        name = `${findGroup[0].original_name} : ${findCompany[0].original_name}`
+                        name = `${findGroup[0].original_name} > ${findCompany[0].original_name}`
                     } else {
                         name = findCompany[0].original_name
                     }
@@ -741,13 +741,13 @@ const ActionMenu = (props) => {
         return (
             <React.Fragment>
                 {
-                    layoutName == 'Owned' || layoutName == 'Invented' || layoutName == 'Acquired' || layoutName == 'Collaterlized' || layoutName == 'Maintenance Fee Due' || layoutName == 'Challenged (PTAB)' || layoutName == 'Divested' || layoutName == 'Abandoned' || layoutName == 'Members of Owned USA' || layoutName == 'Proliferate Inventors' || layoutName == 'Law Firms' || layoutName == 'Lenders'
+                    ['Owned', 'Invented', 'Acquired', 'Collaterlized', 'Maintenance Fee Due', 'Challenged (PTAB)', 'Divested', 'Abandoned', 'Members of Owned USA', 'Proliferate Inventors', 'Law Firms', 'Lenders'].includes(layoutName) 
                     ? 
                         <span className={classes.breadcrumbHeadingIcon}>
                             <AppsOutage/>  <span>{layoutName}</span>
                         </span>
                     :
-                        layoutName == 'Chain-of-Title' || layoutName == 'To Assign' || layoutName == 'To Divest' || layoutName == 'To Monetize' || layoutName == 'Names' || layoutName == 'Addresses' || layoutName == 'Deflated Collateral' || layoutName == 'Encumbrances' || layoutName == 'Maintainance' || layoutName == 'Recordings' || layoutName == 'Corrections'
+                    ['Chain-of-Title', 'To Assign', 'To Divest', 'To Monetize', 'Names', 'Addresses', 'Deflated Collateral', 'Encumbrances', 'Maintainance', 'Recordings', 'Corrections'].includes(layoutName) 
                         ?
                             <span className={classes.breadcrumbHeadingIcon}>
                                 <Speed/>  <span>{layoutName}</span>

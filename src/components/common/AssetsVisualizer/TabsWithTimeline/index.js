@@ -639,9 +639,9 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
       Promise.all(promise) 
       let startIndex = convertedItems.length - 1;
       if(scrollNewRequest === false) {
-        if(convertedItems.length > 50) {
-          start = new Date(convertedItems[49].start)
-          startIndex = 49
+        if(convertedItems.length > 25) {
+          start = new Date(convertedItems[24].start)
+          startIndex = 24
         } else {
           start = new moment(start).subtract(3, 'year') 
         }

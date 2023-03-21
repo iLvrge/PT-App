@@ -659,7 +659,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       }, 1)
     } else { 
       if(timelineRawData.length > 0 || previousLoad === false) {   
-        items.current.add(convertedItems)  
+        items.current.add(convertedItems.slice(0, convertedItems.length > 50 ? 49 : convertedItems.length - 1))  
         timelineRef.current.setOptions({ 
           ...options, 
           start, 
@@ -676,7 +676,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
   }, [ timelineRawData ])
 
   const drawTimeline = (start, end, convertedItems) => {  
-    items.current.add(convertedItems) 
+    items.current.add(convertedItems.slice(0, convertedItems.length > 50 ? 49 : convertedItems.length - 1)) 
     timelineRef.current.setOptions({ 
       ...options, 
       start, 

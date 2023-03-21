@@ -132,8 +132,7 @@ function PdfViewer(props) {
       </div>
     )
   } */
-
-  
+ 
   return (
     <div
       className={classes.pdfContainer}
