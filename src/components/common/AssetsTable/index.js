@@ -232,21 +232,15 @@ const AssetsTable = ({
     const {hash} = location
     if(hash == '' && selectedAssetsPatents.length > 0) {
       clearSelections()
-    } else if(hash != '' && hash.indexOf('&asset') !== -1 &&  assetRows.length > 0) {
-      console.log(1);
+    } else if(hash != '' && hash.indexOf('&asset') !== -1 &&  assetRows.length > 0) { 
       const explodeHash = hash.split('&') 
-      if(explodeHash.length > 0) {
-        console.log(2);
-        const findIndex = explodeHash.findIndex( row => row.indexOf('asset=') !== -1 ? row : null) 
-        console.log(3);
-        if(findIndex != null) {
-          console.log(4);
+      if(explodeHash.length > 0) { 
+        const findIndex = explodeHash.findIndex( row => row.indexOf('asset=') !== -1 ? row : null)  
+        if(findIndex != null) { 
           const explodeFindIndex = explodeHash[findIndex].split('=') 
-          if(explodeFindIndex.length == 2) { 
-            console.log(5);
+          if(explodeFindIndex.length == 2) {  
             const findRowIndex = assetRows.findIndex( item =>  decodeURIComponent(explodeFindIndex[1]) ==  item.asset.toString()) 
-            if(findRowIndex >= 0 && !selectedAssetsPatents.includes(assetRows[findRowIndex].asset)) {
-              console.log(6);
+            if(findRowIndex >= 0 && !selectedAssetsPatents.includes(assetRows[findRowIndex].asset)) { 
               dispatch(setAssetTypesPatentsSelected([assetRows[findRowIndex].asset]))
               setSelectItems([assetRows[findRowIndex].asset])
               handleOnClick(assetRows[findRowIndex])
@@ -2024,8 +2018,7 @@ const updateTableColumn = (ratingItems) => {
     setOpenCategoryModal(!openCategoryModal)
   }
 
-  const handleSubmitCategoryForm = async() => { 
-    console.log('handleSubmitCategoryForm', selectedCategoryProducts, selectedCategoryRow) 
+  const handleSubmitCategoryForm = async() => {  
     const getSlackToken = getTokenStorage("slack_auth_token_info");
     if (getSlackToken && getSlackToken != "") {
       /**

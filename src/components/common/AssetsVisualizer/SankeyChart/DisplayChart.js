@@ -26,11 +26,11 @@ const DisplayChart = (props) => {
         },
         tooltip
     });
-    
+    const selectedAssetCompanies = useSelector( state => state.patenTrack2.assetTypeCompanies.selected );
     const screenHeight = useSelector(state => state.patenTrack.screenHeight);
 
     useEffect(() => {
-        let height = '100%'
+        let height = '100%' 
         if(props.data.length > 10) {
             const chartHeight = props.data.length * 20
             setOption(prevItem => {
@@ -74,6 +74,16 @@ const DisplayChart = (props) => {
                         eventName: "ready",
                         callback: ({ chartWrapper, google }) => {
                             const chart = chartWrapper.getChart();
+                            /* if(selectedAssetCompanies.length > 0){
+                                const rawData = [...props.rawItem]
+                                const findIndex = rawData.findIndex(row => row.id == selectedAssetCompanies[0])
+                                if(findIndex !== -1) {
+
+                                } 
+                                const newSelection = [props.data[1][props.chartType == 2 ? 1 : 0]];
+                                console.log('newSelection', newSelection, props.data)
+                                chart.setSelection(newSelection);
+                            } */
                             google.visualization.events.addListener(chart, "select", e => {
                                 const chart = chartWrapper.getChart();
                                 const selection = chart.getSelection();

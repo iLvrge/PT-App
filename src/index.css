@@ -21,9 +21,9 @@ body {
 }
 
 /* Hide the default Edge scrollbar */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   display: none;
-}
+} */
 
 /* Style the Chrome-like scrollbar */
 ::-webkit-scrollbar-track {
@@ -152,13 +152,7 @@ span {
 .pdf-red {
   color: #ff0000;
 }
-
-@supports (-ms-ime-align: auto) {
-  .full_screen svg{
-    fill: '#000';
-    stroke: '#000'
-  }
-}
+ 
 
 @-webkit-keyframes animatetop {
   from {

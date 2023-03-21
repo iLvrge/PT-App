@@ -372,15 +372,15 @@ const Fees = ({ events, showTabs, tabText, showAbandoned }) => {
       let startIndex = convertedItems.length - 1;
       if(typeof tabText != 'undefined' && tabText == 'To Record') {
         if(convertedItems.length > 16) {
-          min = new Date(convertedItems[15].start)
           startIndex = 15
+          min = new Date(convertedItems[0].start) 
         }
       }
       start = new moment(min).subtract(3, 'year') 
       end = new moment(max).add(3, 'year') 
       min = start
       max = end
-      
+      console.log('startIndex', startIndex, convertedItems.length)
       //items.current.add(convertedItems)
       items.current.add(convertedItems.slice(0, startIndex))    
       setDisplay('block')      

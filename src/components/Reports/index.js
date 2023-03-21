@@ -725,11 +725,9 @@ const Reports = (props) => {
 
     const formattedCompanyname = useMemo(() => {
         let name = ''
-        let filterList =  selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])
-        console.log('filterList', filterList)
+        let filterList =  selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0]) 
         if(filterList.length == 0) { 
-            let findCompany = selectedCompanies.length > 0 && child_list.filter( company => company.representative_id === selectedCompanies[0])
-            console.log('findCompany', findCompany, selectedCompanies, child_list)
+            let findCompany = selectedCompanies.length > 0 && child_list.filter( company => company.representative_id === selectedCompanies[0]) 
             if(findCompany.length == 0 && child_list.length == 0) {
                 companiesList.map( company => {
                     if(company.type == 1) {
@@ -740,7 +738,7 @@ const Reports = (props) => {
                                 if(childs.length > 0) {
                                     findCompany = childs.filter( cmp => cmp.representative_id === selectedCompanies[0])
                                     if(findCompany.length > 0) {
-                                        name = `${company.original_name} : ${findCompany[0].original_name}`
+                                        name = `${company.original_name} > ${findCompany[0].original_name}`
                                     }
                                 }
                             }
@@ -751,7 +749,7 @@ const Reports = (props) => {
                 if(childID > 0) { 
                     const findGroup =  companiesList.filter( company => company.representative_id === childID)
                     if(findGroup.length > 0) {
-                        name = `${findGroup[0].original_name} : ${findCompany[0].original_name}`
+                        name = `${findGroup[0].original_name} > ${findCompany[0].original_name}`
                     } else {
                         name = findCompany[0].original_name
                     }
