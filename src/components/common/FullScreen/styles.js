@@ -16,13 +16,14 @@ export default makeStyles(theme => ({
         right: 0,
         zIndex: 99999,
         ' & svg':{
-          fill: theme.palette.text.disabled,
-          stroke: theme.palette.text.disabled,
+            fill: '#6d6d6d',
+            stroke: '#6d6d6d',
           '&:hover':{
             color: '#E60000',
             fill: '#E60000',
             stroke: '#E60000'
-          }
+          },
+          
         }
     },
     fullscreenChartsModal: {

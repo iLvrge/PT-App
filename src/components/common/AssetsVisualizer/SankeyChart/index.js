@@ -48,7 +48,7 @@ const SankeyChart = (props) => {
     ]
     
     useEffect(() => {
-        const getPartiesData = async() => {
+        const getPartiesData = async() => { 
             if(loading === false ) {   
                 setData([])
                 setAssignorData([])
@@ -56,7 +56,7 @@ const SankeyChart = (props) => {
                 setAssignorRawData([])
                 const formData = new FormData()
                 formData.append('selectedCompanies', JSON.stringify(selectedCompanies)); 
-                if(process.env.REACT_APP_ENVIROMENT_MODE != 'PRO' && process.env.REACT_APP_ENVIROMENT_MODE != 'KPI') {
+                if(['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE)) {
                     const list = [];
                     let totalRecords = 0;
             
@@ -159,7 +159,7 @@ const SankeyChart = (props) => {
     }, [selectedCompanies, props.type])
 
     useEffect(() => {
-        if((data.length > 0 || assignorData.length > 0) && containerRef != null && containerRef.current != null) { 
+        if((data.length > 0 || assignorData.length > 0) && containerRef != null && containerRef.current != null) {  
             const element = containerRef.current.parentElement
             if(element != null) { 
                 const childElement = document.querySelectorAll('.cntSankeyChart') 
@@ -192,7 +192,7 @@ const SankeyChart = (props) => {
                         dispatch(setSelectAssignmentCustomers([data.id, filter[0].id]))
                     } else {
                         dispatch(setSelectAssignmentCustomers([])) 
-                    } 
+                    }  
                 } else {
                     dispatch(setCPCRequest(false))
                     dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
@@ -250,7 +250,7 @@ const SankeyChart = (props) => {
                     selectedCategory == 'acquired' || props.type == 'acquired' || props.type == 'filled'
                     ?
                         loading === false ?  
-                            <DisplayChart data={data} tooltip={true}  chartType={1} onSelect={handleSelection}/> 
+                            <DisplayChart data={data} tooltip={true}  chartType={1} rawItem={assigneeRawData} onSelect={handleSelection}/> 
                         :
                             <Loader />
                         
@@ -262,7 +262,7 @@ const SankeyChart = (props) => {
                     selectedCategory == 'divested' || props.type == 'divested'
                     ?
                         loadingAssignor === false ? 
-                            <DisplayChart data={assignorData} chartType={2} onSelect={handleSelection} {...props}/> 
+                            <DisplayChart data={assignorData} chartType={2} rawItem={assignorRawData} onSelect={handleSelection} {...props}/> 
                         :
                         <Loader />
                     :

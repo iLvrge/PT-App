@@ -469,7 +469,7 @@ const TimelineChart = (props) => {
             }, 1)
         } else { 
             items.current.add(convertedItems) 
-            timelineRef.current.setOptions({ ...options, start, end, min: start, max: end}) 
+            timelineRef.current.setOptions({ ...options, start, end, min: start, max: end }) 
             timelineRef.current.setItems(items.current)  
         }
     } else {
