@@ -53,15 +53,9 @@ const MobileHeader = () => {
                         alt={''} 
                         />
                 </span>
-                <div 
-                    className={classes.rightPanel}
-                > 
-                    {/* <SearchBar/>    */}    
-                    <HeaderIcons 
-                        icons={iconsList}
-                    />  
+                <span  className={classes.companyLogoCon}>
                     <CustomerLogo />  
-                </div>
+                </span> 
             </Toolbar>
         </AppBar>
     )

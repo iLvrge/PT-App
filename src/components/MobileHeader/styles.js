@@ -26,14 +26,26 @@ export default makeStyles(theme => ({
         position: 'relative', 
     },
     logoContainer: {
-        width: '18.5rem',
+        width: 230,
+        display: 'flex' 
     },    
     siteLogo: {
         /* width: LOGO_WIDTH,
         maxWidth: 'calc(100% - 30px)', */
         height: '1.5rem',
         marginRight: 15    
-    }, 
+    },  
+    companyLogoCon: {
+        display: 'flex',
+        alignItems: 'center',
+        /* width: '14rem',  */
+        justifyContent: 'flex-start', 
+        /* cursor: 'pointer', */
+        overflow: 'hidden',
+        '@media (max-width: 70em)': {
+        //paddingLeft: 15
+        },
+    },
     rightPanel: {
         marginLeft: 'auto',
         display: 'flex',
