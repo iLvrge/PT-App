@@ -82,5 +82,12 @@ export default makeStyles(theme => ({
                 margin: '0px !important'
             }
         }
+    },
+    infoMessage:{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%' 
     }
 }))

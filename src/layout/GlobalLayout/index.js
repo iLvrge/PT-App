@@ -55,6 +55,7 @@ import { toggleUsptoMode,
     setViewDashboardIntial} from '../../actions/uiActions'
 
 import PatenTrackApi from '../../api/patenTrack2' 
+import { Box } from "@mui/system"
 
 const GlobalLayout = (props) => {
     const classes = useStyles()
@@ -1596,7 +1597,9 @@ const GlobalLayout = (props) => {
                     {
                         isMobile 
                         ?
-                            'Please open PatenTrack on a non-mobile device.'
+                            <Box className={classes.infoMessage}>
+                                Please open PatenTrack on a non-mobile device.
+                            </Box>
                         :
                             <React.Fragment>
                                 <div className={clsx(classes.filterToolbar)}> 
