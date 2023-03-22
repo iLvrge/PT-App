@@ -167,9 +167,7 @@ const GlobalLayout = (props) => {
 
     
     const checkWidthBrowser = () => { 
-        const {innerWidth, innerHeight} = window
-        alert(`Width: ${innerWidth}`)
-        if(window.innerWidth <= 768) { 
+        if(window.innerWidth < 1200) { 
             setShowMobileWarning(true)
         } /* else {
             setShowMobileWarning(false)
