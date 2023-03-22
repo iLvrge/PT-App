@@ -8,7 +8,7 @@ import {
 
 import { Grid} from '@mui/material'
 
-import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect'
+import { BrowserView, MobileView, isBrowser, isMobile, isTablet, isIOS, isAndroid } from 'react-device-detect'
 
 import clsx from 'clsx'
 import useStyles from './styles'
@@ -55,6 +55,7 @@ import { toggleUsptoMode,
     setViewDashboardIntial} from '../../actions/uiActions'
 
 import PatenTrackApi from '../../api/patenTrack2' 
+import { Box } from "@mui/system"
 
 const GlobalLayout = (props) => {
     const classes = useStyles()
@@ -80,6 +81,7 @@ const GlobalLayout = (props) => {
     const [ toggleAssignmentButtonType, setToggleAssignmentButtonType ] = useState(true)
     const [ toggleCustomerButtonType, setToggleCustomerButtonType ] = useState(true)  
     const [ securedTransactionAssets, setSecuredTransactionAssets ] = useState(false)
+    const [ showMobileWarning, setShowMobileWarning ] = useState(false)
     const DEFAULT_SCREEN_SIZE = {
         companyBar: 210,
         typeBar: 0,
@@ -163,7 +165,20 @@ const GlobalLayout = (props) => {
     const timelineScreen = useSelector(state => state.ui.timelineScreen)
     const patentScreen = useSelector(state => state.ui.patentScreen)
 
+    
+    const checkWidthBrowser = () => { 
+        if(window.innerWidth <= 768) { 
+            setShowMobileWarning(true)
+        } /* else {
+            setShowMobileWarning(false)
+        } */
+    }
 
+    useEffect(() => {
+        checkWidthBrowser()
+        window.addEventListener("resize", checkWidthBrowser) // add on resize window 
+        return () => window.removeEventListener("resize", checkWidthBrowser)
+    }, [])
     /**
    * Get the Loggedin User Profile data
    */
@@ -1572,7 +1587,7 @@ const GlobalLayout = (props) => {
             <div className={classes.root} id='main'>
     
             {
-                isMobile
+                isMobile || isTablet || showMobileWarning
                 ?
                     <MobileHeader/>
                 :
@@ -1594,9 +1609,11 @@ const GlobalLayout = (props) => {
             <Grid container className={clsx(classes.dashboardWarapper, {[classes.mobileDashboardWrapper]: isMobile})} id="mainContainer">
                 <Grid container className={clsx(classes.dashboard)}>       
                     {
-                        isMobile 
+                        isMobile || isTablet || showMobileWarning || isAndroid || isIOS
                         ?
-                            'Please open PatenTrack on a non-mobile device.'
+                            <Box className={classes.infoMessage}>
+                                Please open PatenTrack on a non-mobile device.
+                            </Box>
                         :
                             <React.Fragment>
                                 <div className={clsx(classes.filterToolbar)}> 
