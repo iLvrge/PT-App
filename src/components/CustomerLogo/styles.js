@@ -9,7 +9,7 @@ export default makeStyles(theme => ({
     companyLogoCon: {
         display: 'flex',
         alignItems: 'center',
-        maxWidth: '12rem', 
+        maxWidth: '13rem', 
         justifyContent: 'flex-start', 
         cursor: 'pointer',
         '@media (max-width: 70em)': {
@@ -17,7 +17,7 @@ export default makeStyles(theme => ({
         }, 
     },
     userLogoOfficial: {
-        height: '2rem', /*28px */
+        height: '1.2rem', /*28px */
         marginRight: 15,
     }, 
     organizationName: {
