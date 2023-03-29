@@ -1628,14 +1628,7 @@ const GlobalLayout = (props) => {
                                     align="center"  
                                 >
                                     In the meanwhile, you can access it on your desktop
-                                </Typography>
-                                <Button 
-                                    sx={{mt: 4, textTransform: 'initial', width: 200}}
-                                    variant="contained"
-                                    color="primary"
-                                    size="large"
-                                    onClick={closeWindow}
-                                >Got it</Button>
+                                </Typography> 
                             </Box>
                         :
                             <React.Fragment>
