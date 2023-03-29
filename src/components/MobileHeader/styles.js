@@ -26,7 +26,7 @@ export default makeStyles(theme => ({
         position: 'relative', 
     },
     logoContainer: {
-        width: 230,
+        width: 170,
         display: 'flex' 
     },    
     siteLogo: {

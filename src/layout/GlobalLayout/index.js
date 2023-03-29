@@ -6,7 +6,7 @@ import {
     useHistory, useLocation,
   } from 'react-router-dom'  
 
-import { Grid} from '@mui/material'
+import { Button, Grid, Typography} from '@mui/material'
 
 import { BrowserView, MobileView, isBrowser, isMobile, isTablet, isIOS, isAndroid } from 'react-device-detect'
 
@@ -1582,6 +1582,10 @@ const GlobalLayout = (props) => {
         originalWarn(...args);
     };
 
+    const closeWindow = (event) => {
+        history.goBack()
+    }
+
     if(profile == undefined) return null  
     return ( 
             <div className={classes.root} id='main'>
@@ -1612,7 +1616,26 @@ const GlobalLayout = (props) => {
                         isMobile || isTablet || showMobileWarning || isAndroid || isIOS
                         ?
                             <Box className={classes.infoMessage}>
-                                Please open PatenTrack on a non-mobile device.
+                                <Typography
+                                    variant="h4" 
+                                    align="center" 
+                                >
+                                    This content is currently not supported on mobile
+                                </Typography>
+                                <Typography 
+                                    mt={1}
+                                    variant="h5"  
+                                    align="center"  
+                                >
+                                    In the meanwhile, you can access it on your desktop
+                                </Typography>
+                                <Button 
+                                    sx={{mt: 4, textTransform: 'initial', width: 200}}
+                                    variant="contained"
+                                    color="primary"
+                                    size="large"
+                                    onClick={closeWindow}
+                                >Got it</Button>
                             </Box>
                         :
                             <React.Fragment>
