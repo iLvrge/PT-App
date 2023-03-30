@@ -122,7 +122,7 @@ const Reports = (props) => {
             id: 8
         },
         {
-            title: 'Maintainance',
+            title: 'Maintenance',
             tooltip: 'Patents for which the company paid surcharge fees due to late payment of maintenance fees.',
             number: 0,
             patent: '',
@@ -351,7 +351,7 @@ const Reports = (props) => {
             currency: true
         },
         {
-            title: 'Challenged (PTAB)',
+            title: 'Challenged',
             tooltip: 'USA assets under past or present PTAB proceedings.',
             number: 0,
             other_number: 0,
@@ -381,7 +381,7 @@ const Reports = (props) => {
             type: 36
         },
         {
-            title: 'Non-U.S. Members',
+            title: 'Non-U.S.',
             tooltip: 'Owned USA assets, which have non-U.S.A. members.',
             number: 0,
             patent: '',
@@ -391,7 +391,7 @@ const Reports = (props) => {
             list: []
         },
         {
-            title: 'Proliferate Inventors',
+            title: 'Inventors',
             tooltip: 'Company\’s employees with the largest number of inventions.',
             number: 0,
             patent: '',
@@ -401,7 +401,7 @@ const Reports = (props) => {
             list: []
         },
         {
-            title: 'Law Firms',
+            title: 'Managers',
             tooltip: 'The company\’s law firms with the largest number of recorded transactions.',
             number: 0,
             patent: '',
