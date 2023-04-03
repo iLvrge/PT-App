@@ -158,6 +158,10 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             middle,
             salable, 
             licensable,
+            onSelect, 
+            top, 
+            side, 
+            pad,
             gRawData: graphRawData, 
             gRawGroupData: graphRawGroupData, 
             sData: salesData, 
@@ -467,7 +471,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     }
                 } 
                 if( selectedCategory == 'top_law_firms' || (typeof licensable != 'undefined' && licensable === true) || (typeof salable != 'undefined' && salable === true)) {  
-                    if(cpc_request === false || (cpcData.list.length == 0 || (typeof side != 'undefined' && side === true && cpcSecondData.list.length == 0))) {  
+                    if(cpc_request === false || (cpcData.list.length == 0 || (typeof side != 'undefined' && side === true && cpcSecondData.list.length == 0))) {   
                         setGraphRawData([])
                         setGraphRawGroupData([])    
                         setIsLoadingCharts(true)   
@@ -475,16 +479,16 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         setFilterList([])
                         setFilterTotal(0)
                         findCPCList([...scopeRange], [], 0)
-                    } else if(cpcData.list.length > 0 || cpcSecondData.list.length > 0) { 
+                    } else if(cpcData.list.length > 0 || cpcSecondData.list.length > 0) {  
                         updateCPCData([...scopeRange], list, totalRecords)
-                    } else if (cpcData.list.length == 0 && cpcSecondData.list.length == 0){
+                    } else if (cpcData.list.length == 0 && cpcSecondData.list.length == 0){ 
                         setGraphRawData([])
                         setGraphRawGroupData([])  
                         setIsLoadingCharts(false)
                         setSalesData([])  
                     }
                 } else if(dashboardScreen === true  ||   /* list.length > 0 */ selectedCategory != 'due_dilligence'  || (dashboardScreen === false && selectedCategory == 'due_dilligence')) { 
-                    if(cpc_request === false || (cpcData.list.length == 0 || (typeof side != 'undefined' && side === true && cpcSecondData.list.length == 0))) { 
+                    if(cpc_request === false || (cpcData.list.length == 0 || (typeof side != 'undefined' && side === true && cpcSecondData.list.length == 0))) {  
                         setGraphRawData([])
                         setGraphRawGroupData([])    
                         setIsLoadingCharts(true)   
@@ -495,7 +499,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     } else if(cpcData.list.length > 0 || cpcSecondData.list.length > 0) { 
                         updateCPCData([...scopeRange], list, totalRecords)
                     }
-                } else { 
+                } else {  
                     setGraphRawData([])
                     setGraphRawGroupData([])
                     setSalesData([])
@@ -503,7 +507,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 }
             }
         }
-        if(typeof gRawData !== 'undefined') {
+        if(typeof gRawData !== 'undefined') { 
             setGraphRawData(gRawData)
             setGraphRawGroupData(gRawGroupData)
             setSalesData(sData)
@@ -522,8 +526,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
 
     useEffect(() => { 
-        if(selectedTab == 1 && selectedCategory == 'abandoned') {
-            console.log('Request for the timeline event')
+        if(selectedTab == 1 && selectedCategory == 'abandoned') { 
             const getAllAbandonedAssetsEvents = async () => { 
                 const {data} = await PatenTrackApi.getAllAbandonedAssetsEvents(selectedCompanies)
                 setAbandonedTimeline(data)
@@ -636,12 +639,12 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     dispatch(setCPCData({list: [], group: [], sales: []}))
                     findCPCList(oldScopeRange, list, totalRecords, year, range, scopeList) 
                 }  
-            } else { 
+            } else {  
                 setGraphRawData(data.list)
                 setGraphRawGroupData(data.group)
                 setSalesData(data.sales)
             }
-        } else { 
+        } else {  
             setGraphRawData(data.list)
             setGraphRawGroupData(data.group)
             setSalesData(data.sales)
@@ -769,12 +772,12 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         dispatch(setCPCData({list: [], group: [], sales: []}))
                         findCPCList(oldScopeRange, list, totalRecords, year, range, scopeList) 
                     }  
-                } else { 
+                } else {  
                     setGraphRawData(data.list)
                     setGraphRawGroupData(data.group)
                     setSalesData(data.sales)
                 }
-            } else { 
+            } else {  
                 setGraphRawData(data.list)
                 setGraphRawGroupData(data.group)
                 setSalesData(data.sales)
@@ -1160,7 +1163,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 }
             })
             findCPCList([...scopeRange], filterList, filterTotal, yearList, range, scope)  
-        } else {
+        } else { 
             setGraphRawData([])
         }
               
@@ -1216,8 +1219,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         setScopeRange([])
         findCPCList([], filterList, filterTotal)  
     }
- 
-    
+  
     return (
         <Paper 
             /* {...(typeof titleBar !== 'undefined' && titleBar === true ? {sx: {p: 2}} : {})} */

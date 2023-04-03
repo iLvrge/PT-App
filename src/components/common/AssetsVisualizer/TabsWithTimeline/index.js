@@ -495,7 +495,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
             if(type !== 9)  {
               
       
-              if( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
+              if(['PRO', 'KPI', 'STANDARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
                 if(selectedTab === 1) {
                   await assignmentData()
                 } else {
