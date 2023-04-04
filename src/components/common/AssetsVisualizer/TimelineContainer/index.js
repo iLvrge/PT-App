@@ -27,7 +27,7 @@ import {
 import PatenTrackApi from '../../../../api/patenTrack2'
 import { convertTabIdToAssetType, assetsTypesWithKey } from '../../../../utils/assetTypes'
 import { numberWithCommas, applicationFormat, capitalize } from '../../../../utils/numbers'
-import { timelineOptions } from '../../../../utils/options'
+import { timelineOptions, timelineWithoutClusterOptions } from '../../../../utils/options'
  
 
 import useStyles from './styles'
@@ -66,7 +66,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
         return `<span class="cluster-header">${data.items[0].clusterHeading} (${data.items.length})</span>`
       } else { 
         if(data.category == 'late_recording' && ![5,12].includes(parseInt(data.rawData.tab_id))) {
-          return `<span class="${data.assetType} ${data.rawData.tab_id}"><span class="name">Assignor: ${data.customerName}</span><span class="recordby">Recorded By: ${data.recorded_by}</span></span>`
+          return `<span class="${data.assetType} ${data.rawData.tab_id}"><span class="name">Assignor: ${data.customerName}</span><span class="recordby">Recorded by: ${data.recorded_by}</span></span>`
         } else { 
           return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
         }
@@ -169,7 +169,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
         item['customerName'] = name
       } else {
         item['recorded_by'] = assetsCustomer.recorded_by
-        item['customerName'] = assetsCustomer.assignors
+        item['customerName'] = assetsCustomer.assignors.split(',')[0]
         item['clusterHeading'] = assetsCustomer.assignors
       }
       
@@ -179,7 +179,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
 
   const dateDifference = (date1, date2) => {
     const diffTime = Math.abs(new Date(date2) - new Date(date1))
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+    return numberWithCommas(Math.ceil(diffTime / (1000 * 60 * 60 * 24)))
   }
 
   // Custom ToolTip 
@@ -584,7 +584,11 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
   useEffect(() => {
     items.current = new DataSet()
     groups.current = new DataSet()
-    timelineRef.current.setOptions(options) 
+    let constantOptions = {...options}
+    if(['late_recording', 'incorrect_recording'].includes(selectedCategory)){ 
+      constantOptions = {...timelineWithoutClusterOptions}
+    } 
+    timelineRef.current.setOptions(constantOptions) 
     timelineRef.current.on('select', onSelect)
     timelineRef.current.on('itemover', onItemover)
     timelineRef.current.on('itemout', onItemout)
@@ -651,6 +655,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       
     }    
     const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
+    
     if(checkFullScreen.length > 0) { 
       timelineRef.current.destroy()
       timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
@@ -660,12 +665,16 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     } else { 
       if(timelineRawData.length > 0 || previousLoad === false) {   
         items.current.add(convertedItems.slice(0, convertedItems.length > 50 ? 49 : convertedItems.length - 1))  
+        let constantOptions = {...options}
+        if(['late_recording', 'incorrect_recording'].includes(selectedCategory)){ 
+          constantOptions = {...timelineWithoutClusterOptions}
+        } 
         timelineRef.current.setOptions({ 
-          ...options, 
+          ...constantOptions, 
           start, 
           end,
           min: new Date('1999-01-01'), 
-          max: new moment().add( selectedCategory != 'late_recording' && selectedCategory != 'incorrect_recording' && selectedCategory != 'top_lenders' && selectedCategory != 'collaterlized' ? 2 : 4, 'year')
+          max: new moment().add(!['late_recording', 'incorrect_recording', 'top_lenders', 'collaterlized'].includes(selectedCategory) ? 2 : 4, 'year')
         })  
         timelineRef.current.setItems(items.current)   
         setPreviousLoad(true) 
@@ -677,12 +686,16 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
 
   const drawTimeline = (start, end, convertedItems) => {  
     items.current.add(convertedItems.slice(0, convertedItems.length > 50 ? 49 : convertedItems.length - 1)) 
+    let constantOptions = {...options}
+    if(['late_recording', 'incorrect_recording'].includes(selectedCategory)){ 
+      constantOptions = {...timelineWithoutClusterOptions}
+    } 
     timelineRef.current.setOptions({ 
-      ...options, 
+      ...constantOptions, 
       start, 
       end,
       min: new Date('1999-01-01'), 
-      max: new moment().add( selectedCategory != 'late_recording' && selectedCategory != 'incorrect_recording' && selectedCategory != 'top_lenders' && selectedCategory != 'collaterlized' ? 2 : 4, 'year')
+      max: new moment().add(!['late_recording', 'incorrect_recording', 'top_lenders', 'collaterlized'].includes(selectedCategory) ? 2 : 4, 'year')
     })  
     timelineRef.current.setItems(items.current)   
     setPreviousLoad(true) 
