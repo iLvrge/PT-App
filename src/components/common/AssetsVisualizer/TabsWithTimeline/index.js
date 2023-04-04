@@ -654,9 +654,13 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
       if(scrollNewRequest === false) {
         end = new moment(end).add(1, 'year')
       }  
+
+      console.log("startIndex", startIndex)
       /* const startIndex = convertedItems.length < 201 ? (convertedItems.length - 1) : 199
       items.current.add(convertedItems.slice(0, startIndex))  */   
-      items.current.add(convertedItems.slice(0, startIndex))    
+      const spliceItems = convertedItems.slice(0, startIndex);
+      console.log('spliceItems', spliceItems, start, end.format('DD-MM-YYYY'))
+      items.current.add(spliceItems)    
       //items.current.add(convertedItems)  
     }    
    
