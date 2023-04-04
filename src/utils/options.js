@@ -45,3 +45,17 @@ export const timelineOptions = {
       fitOnDoubleClick: false */
     }
 }
+
+export const timelineWithoutClusterOptions = {
+  height: '100%',
+  autoResize: true,
+  stack: true,
+  orientation: 'both',
+  zoomKey: 'ctrlKey',
+  moveable: true,
+  zoomable: true,
+  horizontalScroll: true,
+  verticalScroll: true,
+  zoomFriction: 150,
+  zoomMin: 1000 * 60 * 60 * 24 * 7  
+}
