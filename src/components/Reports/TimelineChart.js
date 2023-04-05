@@ -5,26 +5,30 @@ import {
 } from 'react-redux'
 import moment from 'moment'
 import _debounce from 'lodash/debounce'
-import { DataSet } from 'vis-data-71/esnext'
-import { Timeline } from 'vis-timeline/esnext'
+/* import { DataSet } from 'vis-data-71/esnext'
+import { Timeline } from 'vis-timeline/esnext' */
+
+import { DataSet } from 'vis-data/esnext'
+import { Timeline } from 'vis-timeline-73/esnext'
 import { Typography, CircularProgress, IconButton, Paper, Modal, TableContainer, Table, TableBody, TableRow, TableCell } from '@mui/material';
 import { Close, Fullscreen } from '@mui/icons-material' 
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import useStyles from './styles'
 import clsx from 'clsx'
-import { numberWithCommas, capitalize } from '../../utils/numbers'
+import { numberWithCommas, capitalize, toTitleCase } from '../../utils/numbers'
 import { assetsTypesWithKey, convertTabIdToAssetType } from '../../utils/assetTypes'
-import { timelineOptions } from '../../utils/options'
+import { timelineOptions, timelineWithoutClusterOptions } from '../../utils/options'
 import PatenTrackApi from '../../api/patenTrack2'
 import themeMode from '../../themes/themeMode'
 import AddToolTip from './AddToolTip'
 import { setConnectionBoxView, setConnectionData, setPDFFile, setPDFView } from '../../actions/patenTrackActions'
 import { retrievePDFFromServer, setAssetsIllustration } from '../../actions/patentTrackActions2'
 import PdfViewer from '../common/PdfViewer'
-import FullScreen from '../common/FullScreen'
-import { setDashboardPanel } from '../../actions/uiActions'
+import FullScreen from '../common/FullScreen' 
 
-
+const DATE_FORMAT = 'MMM DD, YYYY'
+const CDN_PATH_LOGO = process.env.REACT_APP_COMPANY_PATH
+const NO_IMAGE_AVAILABLE = 'no_image_available.jpg'
 
 const TIME_INTERVAL = 1000
 var tootlTip = ''
@@ -40,15 +44,36 @@ const TimelineChart = (props) => {
             if (data.isCluster) {
                 return `<span class="cluster-header">Cluster containing ${data.items.length} events.</span>`
             } else { 
-                return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
+                if(data.rawData.tab_id != 10) {
+                    let image = data.rawData.logo
+                    if(image !== '' && image !== null && image != undefined) {
+                        if( image.indexOf('http') === -1 ) {
+                            image = CDN_PATH_LOGO + image
+                        } 
+                    } else {
+                        image = CDN_PATH_LOGO + NO_IMAGE_AVAILABLE
+                    }
+                    return `<div class="first" style="display: flex;">
+                            <div class="flexMain">
+                                <div class="textColumn text-height" >${toTitleCase(data.rawData.customerName)}</div>
+                                <div class="textColumn">${numberWithCommas(data.rawData.totalAssets)} Asset${data.rawData.totalAssets > 1 ? 's':''}</div>
+                                <div class="textColumn small-font">${moment(new Date(data.start)).format(DATE_FORMAT)}</div>
+                            </div>
+                        </div>
+                        <div class="second"><span class="img-holder">
+                            <img class="${data.rawData.logo == '' || data.rawData.logo == null ? 'no-image' : ''}" src='${image}' /></span>
+                        </div>`
+                } else { 
+                    return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
+                }
             }
         },
-        cluster: {
+        /* cluster: {
             maxItems: typeof props.standalone != 'undefined' && props.standalone === true ? 10 : 6,
             clusterCriteria: (firstItem, secondItem) => { 
               return  (firstItem.rawData.customerName.toString().toLowerCase() == secondItem.rawData.customerName.toString().toLowerCase())
             }
-        }
+        } */
     })
     const [ isLoadingTimelineData, setIsLoadingTimelineData ] = useState(false)
     const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(false)
