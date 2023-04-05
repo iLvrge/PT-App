@@ -451,7 +451,7 @@ const Reports = (props) => {
             list: []
         },
         {
-            title: 'Invention',
+            title: 'Inventing',
             standalone: false,
             rf_id: '',
             type: 5,

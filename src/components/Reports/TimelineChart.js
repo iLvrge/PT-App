@@ -520,7 +520,7 @@ const TimelineChart = (props) => {
                 props.card.title != '' && (
                     <div className={clsx(classes.timelineHeading, 'full_heading')}>
                         <Typography variant="h6" component="div" align="center" className={clsx(classes.border, classes.border1)}>
-                            {props.card.title}
+                            {props.card.title} - {numberWithCommas(timelineRawData.length)}
                         </Typography>
                         <div className={classes.fullscreenButton}> 
                             <AddToolTip
