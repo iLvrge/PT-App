@@ -2,6 +2,8 @@ import React, {useMemo, useState, useCallback, useEffect, useRef} from 'react'
 import { useHistory } from 'react-router-dom'
 import { Grid, IconButton, Paper}  from '@mui/material'
 import { useSelector, useDispatch, ReactReduxContext } from 'react-redux'
+import { Steps } from 'intro.js-react';
+import 'intro.js/introjs.css';
 import useStyles from './styles'
 import clsx from 'clsx'
 import moment from 'moment'
@@ -500,6 +502,16 @@ const Reports = (props) => {
     }
     const KPI_TYPE = [30,31,32,33,34,35,36,37,38,39,40,41]
     const GAUGE_TYPE = [1, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+    const STEPS = [
+        {
+            element: document.querySelector('.box-selector-30'),
+            title: 'Welcome',
+            intro: 'Hello World! 👋',
+            position: 'right',
+            tooltipClass: 'dashboardIntroTooltip',
+            highlightClass: 'myHighlightClass',
+        },
+    ]
     const classes = useStyles()
     const history = useHistory()
     const dispatch = useDispatch()
@@ -1336,6 +1348,10 @@ const Reports = (props) => {
             />
         </Grid>
     })
+
+    const onExit = () => {
+
+    }
     
     return (
         <Grid
@@ -1442,6 +1458,12 @@ const Reports = (props) => {
                     }
                 </Grid>                
             </Grid>
+            <Steps 
+                enabled={true}
+                steps={STEPS}
+                initialStep={0}
+                onExit={onExit}
+            />
         </Grid>
     );
 }
