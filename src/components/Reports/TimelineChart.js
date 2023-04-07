@@ -39,7 +39,7 @@ const TimelineChart = (props) => {
     const timelineContainerRef = useRef() //div container ref
     const items = useRef(new DataSet()) // timeline items dataset
     const [options, setTimelineOptions] = useState({
-        ...timelineOptions,
+        ...timelineWithoutClusterOptions,
         template: function(item, element, data) {
             if (data.isCluster) {
                 return `<span class="cluster-header">Cluster containing ${data.items.length} events.</span>`
