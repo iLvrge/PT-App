@@ -1593,7 +1593,7 @@ const GlobalLayout = (props) => {
             <div className={classes.root} id='main'>
     
             {
-                !isMobile || !isTablet || showMobileWarning || !isAndroid || !isIOS
+                isMobile || isTablet || showMobileWarning
                 ?
                     <MobileHeader/>
                 :
@@ -1615,7 +1615,7 @@ const GlobalLayout = (props) => {
             <Grid container className={clsx(classes.dashboardWarapper, {[classes.mobileDashboardWrapper]: isMobile})} id="mainContainer">
                 <Grid container className={clsx(classes.dashboard)}>       
                     {
-                        !isMobile || !isTablet || showMobileWarning || !isAndroid || !isIOS
+                        isMobile || isTablet || showMobileWarning || isAndroid || isIOS
                         ?
                             <Box className={classes.infoMessage}>
                                 <Typography
