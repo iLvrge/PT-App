@@ -91,7 +91,7 @@ const LegalEventsContainer = ({ events, type, standalone, activeTab }) => {
             }
             <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
               {
-                [`M.Fees`, `Cited by`, `PTAB`, `Litigation`, `Status`].map( (item, index) => (
+                [`M.Fees`, `Cited by`, `Status`, `PTAB`, `Litigation`].map( (item, index) => (
                   <Tab
                     key={index}
                     className={classes.tab} 
@@ -103,9 +103,9 @@ const LegalEventsContainer = ({ events, type, standalone, activeTab }) => {
             <div className={classes.graphContainer}>  
               {selectedTab === 0 && <Fees events={events} number={selectedNumber} />}
               {selectedTab === 1 && <Citation updateCitationRawData={setCitationData} number={selectedNumber} />}   
-              {selectedTab === 2 && <Ptab number={selectedNumber} updateRawData={setPtabRawData}/>}   
-              {selectedTab === 3 && <Litigation data={litigationData} number={selectedNumber} />}   
-              {selectedTab === 4 && <Status data={eventsData} number={selectedNumber} updateRawData={setEventsStatusData}/>}  
+              {selectedTab === 2 && <Status data={eventsData} number={selectedNumber} updateRawData={setEventsStatusData}/>}  
+              {selectedTab === 3 && <Ptab number={selectedNumber} updateRawData={setPtabRawData}/>}   
+              {selectedTab === 4 && <Litigation data={litigationData} number={selectedNumber} />}   
             </div>      
             {  
               fullScreen === true && (
