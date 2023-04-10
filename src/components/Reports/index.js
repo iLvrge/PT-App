@@ -1,26 +1,24 @@
 import React, {useMemo, useState, useCallback, useEffect, useRef} from 'react'
 import { useHistory } from 'react-router-dom'
 import { Grid, IconButton, Paper}  from '@mui/material'
-import { useSelector, useDispatch, ReactReduxContext } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Steps } from 'intro.js-react';
 import 'intro.js/introjs.css';
 import useStyles from './styles'
 import clsx from 'clsx'
 import moment from 'moment'
 import CardElement from './CardElement'
-import { Fullscreen, Close, Public, BarChart, AutoGraph, BubbleChart, Speed, AppsOutage, ViewTimeline, TryRounded} from '@mui/icons-material';
+import { Fullscreen, Close, Reviews } from '@mui/icons-material';
 
 import { 
     setDashboardPanel,
     setTimelineScreen,
     setDashboardScreen,
     setPatentScreen, 
-    toggleFamilyItemMode,
-    updateViewDashboard,
     setViewDashboardIntial,
     setLoadingDashboardData} from '../../actions/uiActions'
 import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId,  retrievePDFFromServer, setAssetTypesSelect, setSelectedAssetsPatents, getAssetDetails  } from '../../actions/patentTrackActions2'
-import { assetLegalEvents, setAssetLegalEvents, setPDFView, setPDFFile, setConnectionData, setConnectionBoxView, assetFamilySingle, assetFamily,   } from '../../actions/patenTrackActions';
+import { assetLegalEvents, setAssetLegalEvents, setPDFView, setPDFFile, setConnectionData, setConnectionBoxView, assetFamily,   } from '../../actions/patenTrackActions';
 import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar'
 import { controlList } from "../../utils/controlList"
 
@@ -29,7 +27,6 @@ import routeList from '../../routeList'
 import GeoChart from '../common/AssetsVisualizer/GeoChart'
 import InventionVisualizer from '../common/AssetsVisualizer/InventionVisualizer'
 import SankeyChart from './SankeyChart'
-import Loader from '../common/Loader'
 import AddToolTip from './AddToolTip'
 import { useIsMounted } from '../../utils/useIsMounted'
 
@@ -504,9 +501,25 @@ const Reports = (props) => {
     const GAUGE_TYPE = [1, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
     const STEPS = [
         {
-            element: document.querySelector('.box-selector-30'),
-            title: 'Welcome',
-            intro: 'Hello World! 👋',
+            element: document.querySelector('.step-1'),
+            title: 'Step 1',
+            intro: 'From the list of companies included in your account, select one you\'d like to review. (You can add to the list of companies as many companies you\'d like, including competitors)',
+            position: 'right',
+            tooltipClass: 'dashboardIntroTooltip',
+            highlightClass: 'myHighlightClass',
+        },
+        {
+            element: document.querySelector('.step-2'),
+            title: 'Step 2',
+            intro: 'Select one of the three dashboards to see information relating to: <div>Key perfomance indicators</div><div>Matters calling for attentions, and</div><div>Transactional activities</div>',
+            position: 'right',
+            tooltipClass: 'dashboardIntroTooltip',
+            highlightClass: 'myHighlightClass',
+        },
+        {
+            element: document.querySelector('.step-3'),
+            title: 'Step 3',
+            intro: 'Don\'t hesitate to schedule a quick call with us with any question. ',
             position: 'right',
             tooltipClass: 'dashboardIntroTooltip',
             highlightClass: 'myHighlightClass',
@@ -520,6 +533,8 @@ const Reports = (props) => {
     const ref = useRef();
     let resizeObserver = null
     const [loading, setLoading] = useState(false)    
+    const [enableStep, setEnableStep] = useState(false)    
+    const [enableStepInitial, setEnableStepIntial] = useState(false)    
     const [timeLineLoading, setTimeLineLoading] = useState(false)    
     const [timelineGrid, setTimelineGrid] = useState(TIMELINE_ITEM)
     const [grid, setGrid] = useState(GRID_ITEM)
@@ -527,8 +542,7 @@ const Reports = (props) => {
     const [activeId, setActiveId] = useState(-1)
     const profile = useSelector(state => (state.patenTrack.profile))    
     const [cardList, setCardList] = useState([])
-    const [timelineList, setTimelineList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_TIMELINE_LIST : TIMELINE_LIST)
-    const auth_token = useSelector(state => state.patenTrack2.auth_token)
+    const [timelineList, setTimelineList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_TIMELINE_LIST : TIMELINE_LIST) 
     const viewDashboard = useSelector(state => state.ui.viewDashboard)
     const viewInitial = useSelector(state => state.ui.viewInitial)
     const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list)
@@ -540,10 +554,7 @@ const Reports = (props) => {
     const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected)
     const selectedAssetAssignments = useSelector(
         state => state.patenTrack2.assetTypeAssignments.selected,
-    )
-    const assetTypeAssignmentAssets = useSelector(
-        state => state.patenTrack2.assetTypeAssignmentAssets.list,
-    ) //Assets List 
+    ) 
     const dashboardPanelActiveButtonId = useSelector(state => state.patenTrack2.dashboardPanelActiveButtonId) 
      
     useEffect(() => {
@@ -638,7 +649,6 @@ const Reports = (props) => {
             }
         }
     }, [cardList, timelineList])
-
     
 
     /* useEffect(() => {
@@ -815,6 +825,7 @@ const Reports = (props) => {
                         return item
                     })                
                     await Promise.all(dashboardRequest)
+
                 }
             } else {
                 const type = viewDashboard.kpi === true ? [...KPI_TYPE] : [...GAUGE_TYPE]
@@ -888,6 +899,10 @@ const Reports = (props) => {
                             })
                             await Promise.all(dashboardPromise)
                             setCardList(oldList)
+                            if(enableStepInitial === false) {
+                                setEnableStepIntial(true)
+                                setEnableStep(true)
+                            }
                             if(typeof props.updateDashboardData !== 'undefined') {
                                 props.updateDashboardData(oldList)
                             }
@@ -1350,7 +1365,7 @@ const Reports = (props) => {
     })
 
     const onExit = () => {
-
+        setEnableStep(false)
     }
     
     return (
@@ -1378,11 +1393,15 @@ const Reports = (props) => {
                 item lg={12} md={12} sm={12} xs={12} 
             >
                 <Paper className={classes.titleContainer} square>
-                    <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{formattedCompanyname}</span> {
-                        profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' && selectedAssetCompanies.length == 1 && (
-                            <span className={classes.headingName}>{partyName[0].entityName}</span>
-                        ) 
-                    }</span>
+                    <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{formattedCompanyname}</span> 
+                        <span className={clsx(classes.headingName, 'step-1')}>
+                            {
+                                profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' && selectedAssetCompanies.length == 1 && (
+                                    partyName[0].entityName
+                                ) 
+                            }
+                        </span>
+                    </span>
                     <div className={classes.toolbar}> 
 
                         {
@@ -1459,7 +1478,7 @@ const Reports = (props) => {
                 </Grid>                
             </Grid>
             <Steps 
-                enabled={true}
+                enabled={enableStep}
                 steps={STEPS}
                 initialStep={0}
                 onExit={onExit}

@@ -78,6 +78,7 @@ import ChildTable from './ChildTable'
 
 import Loader from '../Loader'
 import { resetAllRowSelect } from '../../../utils/resizeBar'
+import clsx from 'clsx'
 
 
 

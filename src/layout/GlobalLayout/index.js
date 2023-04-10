@@ -1586,7 +1586,6 @@ const GlobalLayout = (props) => {
         history.goBack()
     }
 
-    console.log("aa", isMobile, isTablet, showMobileWarning)
 
     if(profile == undefined) return null  
     return ( 
