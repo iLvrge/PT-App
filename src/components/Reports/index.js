@@ -500,27 +500,43 @@ const Reports = (props) => {
     const KPI_TYPE = [30,31,32,33,34,35,36,37,38,39,40,41]
     const GAUGE_TYPE = [1, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
     const STEPS = [
+        { 
+            title: 'Welcome to PatenTrack! 👋', 
+            intro: `<p>We are very happy you are here.</p><p>Patentrack is a rather simple application that is made of 3 dashboards  dedicated to each company in this account. Click Next to start your walkthrough</p>`, 
+            tooltipClass: 'dashboardIntroTooltip',
+            highlightClass: 'myHighlightClass',
+        },
         {
             element: document.querySelector('.step-1'),
-            title: 'Step 1',
-            intro: 'From the list of companies included in your account, select one you\'d like to review. (You can add to the list of companies as many companies you\'d like, including competitors)',
+            title: 'Your companies',
+            intro: `The Companies table lists the entities included in your account.
+            You may add as many as you'd like, including competitors.
+            Select one to review.`,
             position: 'right',
             tooltipClass: 'dashboardIntroTooltip',
             highlightClass: 'myHighlightClass',
         },
         {
             element: document.querySelector('.step-2'),
-            title: 'Step 2',
-            intro: 'Select one of the three dashboards to see information relating to: <div>Key perfomance indicators</div><div>Matters calling for attentions, and</div><div>Transactional activities</div>',
+            title: 'Your 3 dashboards',
+            intro: 'Select one of the three dashboards to see information relating to: <ul><li>Key perfomance indicators</li><li>Matters calling for attentions, and</li><li>Transactional activities</li></ul>',
+            position: 'bottom',
+            tooltipClass: 'dashboardIntroTooltip',
+            highlightClass: 'myHighlightClass',
+        },
+        {
+            element: document.querySelector('.dashboard_buttons'),
+            title: 'Simple Tooltips',
+            intro: `Hover over the headings to see tooltips with explanations about what each button is about. <p>Click this button if you'd like to see the underling data. You can always return to the dashboards by clicking the buttons at the top right corner.</p>`,
             position: 'right',
             tooltipClass: 'dashboardIntroTooltip',
             highlightClass: 'myHighlightClass',
         },
         {
             element: document.querySelector('.step-3'),
-            title: 'Step 3',
-            intro: 'Don\'t hesitate to schedule a quick call with us with any question. ',
-            position: 'right',
+            title: 'Contact us!',
+            intro: `<div>That's it, take the helm!</div><div>You are now in full control over your organisation's most strategic assets. <p>Do not hesitate to schedule a quick call with any question.</p></div>`,
+            position: 'bottom',
             tooltipClass: 'dashboardIntroTooltip',
             highlightClass: 'myHighlightClass',
         },
