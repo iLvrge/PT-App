@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {  
     useHistory,
@@ -8,16 +8,10 @@ import { setAssetButton, setTransactionButton, setViewDashboardIntial, updateVie
 import useStyles from './styles'
 import clsx from 'clsx'
 import AddToolTip from '../Reports/AddToolTip'
-import { IconButton, Badge, InputBase, Button } from '@mui/material'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {
-  faShareAlt, faCalendar
-} from "@fortawesome/free-solid-svg-icons"
-import { AppsOutage, AutoGraph, Public, Speed, ViewTimeline, Search, NotificationsNone, ManageSearch, SupportAgent, PendingActionsOutlined } from '@mui/icons-material' 
-import PatenTrackApi from '../../api/patenTrack2'
-import { copyToClipboard } from '../../utils/html_encode_decode'
-import { setCPCRequest, setJurisdictionRequest, setSwitchAssetButton, setTimelineData, setTimelineRequest } from '../../actions/patentTrackActions2'
-import { setCompanies } from '../../actions/patenTrackActions'
+import { IconButton} from '@mui/material'
+import { AppsOutage, Speed, ViewTimeline, SupportAgent } from '@mui/icons-material' 
+import { setCPCRequest, setJurisdictionRequest, setTimelineData, setTimelineRequest } from '../../actions/patentTrackActions2'
+
 import Maintainance from '../common/Maintainence'
 
 const ViewIcons = (props) => {
@@ -217,6 +211,7 @@ const ViewIcons = (props) => {
         <React.Fragment>
            {/*  <Button onClick={getUnCollatealized}>Uncollateralized</Button> */}
             <Maintainance/>
+            <div className={`step-2`}>
             {
                 profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'
                 && (
@@ -252,25 +247,24 @@ const ViewIcons = (props) => {
                         <Speed/> 
                     </IconButton>
                 </span>
-            </AddToolTip>
-            { 
-                <AddToolTip
-                    tooltip={'Transactional activities such as acquisition, divestitures, collateralization and releases.'}
-                    placement='bottom'
+            </AddToolTip> 
+            <AddToolTip
+                tooltip={'Transactional activities such as acquisition, divestitures, collateralization and releases.'}
+                placement='bottom'
+            >
+                <IconButton 
+                    size="small"
+                    className={clsx(classes.actionIcon, classes.actionIconDashboard, {[classes.active]: props.dashboardScreen === true && viewDashboard.timeline})}
+                    onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD'  ? onHandleAlert : onHandleTimeline}
                 >
-                    <IconButton 
-                        size="small"
-                        className={clsx(classes.actionIcon, classes.actionIconDashboard, {[classes.active]: props.dashboardScreen === true && viewDashboard.timeline})}
-                        onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD'  ? onHandleAlert : onHandleTimeline}
-                    >
-                        <ViewTimeline/>
-                    </IconButton> 
-                </AddToolTip> 
-            }
+                    <ViewTimeline/>
+                </IconButton> 
+            </AddToolTip>  
+            </div>
             {
                 profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank' 
                 && (
-                    <React.Fragment>
+                    <div className={`step-3`}>
                         <AddToolTip
                             tooltip={`Schedule a ${process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'd' : 'D' }emo ${process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'for Pro version' : '' }`}
                             placement='bottom'
@@ -284,7 +278,7 @@ const ViewIcons = (props) => {
                                <SupportAgent/>
                             </IconButton>
                         </AddToolTip> 
-                    </React.Fragment>
+                    </div>
                 )
             } 
         </React.Fragment>

@@ -155,7 +155,7 @@ const MainDashboard = ({
             ref={companyRef}
         >
             <div 
-                className={classes.companyBar}
+                className={clsx(classes.companyBar, 'step-1')}
                 id={`company_container`} >
                 { 
                     openBar === true 
