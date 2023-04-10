@@ -156,6 +156,9 @@ span {
 .dashboardIntroTooltip .introjs-tooltip-title, .dashboardIntroTooltip .introjs-tooltiptext{
   color: #000
 }
+.dashboardIntroTooltip ul {
+  padding-left: 20px;
+}
 
 @-webkit-keyframes animatetop {
   from {
