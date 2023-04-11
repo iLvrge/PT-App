@@ -263,22 +263,20 @@ const ViewIcons = (props) => {
             </div>
             {
                 profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank' 
-                && (
-                    <div className={`step-3`}>
-                        <AddToolTip
-                            tooltip={`Schedule a ${process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'd' : 'D' }emo ${process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'for Pro version' : '' }`}
-                            placement='bottom'
+                && ( 
+                    <AddToolTip
+                        tooltip={`Schedule a ${process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'd' : 'D' }emo ${process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'for Pro version' : '' }`}
+                        placement='bottom'
+                    >
+                        <IconButton 
+                            size="small"
+                            className={clsx(classes.actionIcon, `step-3`)}
+                            onClick={() => {props.setScheduling(!props.scheduling)}}
+                            style={{marginLeft: 62}}
                         >
-                            <IconButton 
-                                size="small"
-                                className={clsx(classes.actionIcon)}
-                                onClick={() => {props.setScheduling(!props.scheduling)}}
-                                style={{marginLeft: 62}}
-                            >
-                               <SupportAgent/>
-                            </IconButton>
-                        </AddToolTip> 
-                    </div>
+                            <SupportAgent/>
+                        </IconButton>
+                    </AddToolTip>  
                 )
             } 
         </React.Fragment>
