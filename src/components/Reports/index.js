@@ -509,8 +509,7 @@ const Reports = (props) => {
             element: document.querySelector('.step-1'),
             title: 'Your Companies',
             intro: `The Companies table lists the entities included in your account.
-            You may add as many as you'd like, including competitors.
-            Select one to review.`,
+            You may add as many as you'd like, including competitors.`,
             position: 'right',
             tooltipClass: 'dashboardIntroTooltip',
             highlightClass: 'dashboardHighlightClass',
@@ -518,14 +517,14 @@ const Reports = (props) => {
         {
             element: document.querySelector('.step-2'),
             title: 'Your 3 Dashboards',
-            intro: 'Select one of the three dashboards to see information relating to: <ul><li>Key perfomance indicators</li><li>Matters calling for attentions, and</li><li>Transactional activities</li></ul>',
+            intro: 'Select one of the three dashboards to see information relating to: <div><span><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="AppsOutageIcon"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6 6h4v-4h-4v4zm3-20c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm.5 8h-1V7h1v1zm0-2h-1V2h1v4zM16 14h4v-2.07c-.33.05-.66.07-1 .07-1.07 0-2.09-.24-3-.68V14zM10 4v4h2.68c-.44-.91-.68-1.93-.68-3 0-.34.02-.67.07-1H10z"></path></svg></span> Key perfomance indicators</div><div><span><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SpeedIcon"><path d="m20.38 8.57-1.23 1.85a8 8 0 0 1-.22 7.58H5.07A8 8 0 0 1 15.58 6.85l1.85-1.23A10 10 0 0 0 3.35 19a2 2 0 0 0 1.72 1h13.85a2 2 0 0 0 1.74-1 10 10 0 0 0-.27-10.44zm-9.79 6.84a2 2 0 0 0 2.83 0l5.66-8.49-8.49 5.66a2 2 0 0 0 0 2.83z"></path></svg></span> Matters calling for attentions</div><div><span><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SpeedIcon"><path d="m20.38 8.57-1.23 1.85a8 8 0 0 1-.22 7.58H5.07A8 8 0 0 1 15.58 6.85l1.85-1.23A10 10 0 0 0 3.35 19a2 2 0 0 0 1.72 1h13.85a2 2 0 0 0 1.74-1 10 10 0 0 0-.27-10.44zm-9.79 6.84a2 2 0 0 0 2.83 0l5.66-8.49-8.49 5.66a2 2 0 0 0 0 2.83z"></path></svg></span> Transactional activities</div>',
             position: 'bottom',
             tooltipClass: 'dashboardIntroTooltip',
             highlightClass: 'dashboardHighlightClass',
         },
         {
             element: document.querySelector('.dashboard_buttons'),
-            title: 'Simple Tooltips',
+            title: 'What It\'s About',
             intro: `Hover over the headings to see explanations about each component. <p>Click it if you'd like to see the underlying data.</p><p>You can always return to the dashboards by clicking the buttons at the top right corner.</p>`,
             position: 'right',
             tooltipClass: 'dashboardIntroTooltip',
@@ -534,7 +533,7 @@ const Reports = (props) => {
         {
             element: document.querySelector('.step-3'),
             title: 'Contact Us!',
-            intro: `<div>That's it, take the helm!</div><div>You are now in full control over your organization's most strategic assets. <p>Do not hesitate to schedule a quick call with any question.</p></div>`,
+            intro: `<div>That's it, take the helm!</div><div>You are now in full control over your organization's most strategic assets.</p><p>Just select a company from the Companies table on the left and check its dashboards.<p>Do not hesitate to schedule a quick call with any question.</p></div>`,
             position: 'bottom',
             tooltipClass: 'dashboardIntroTooltip',
             highlightClass: 'dashboardHighlightClass',

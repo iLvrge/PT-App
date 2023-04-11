@@ -162,6 +162,16 @@ span {
 .dashboardIntroTooltip .introjs-tooltiptext {
   font-size: 20px;
 }
+.introjs-tooltiptext span{
+  display: inline-block;
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+.introjs-tooltiptext span svg{
+  position: absolute;
+  top: 7px;
+}
 .dashboardIntroTooltip {
   min-width: 450px;
   max-width: 500px;
