@@ -156,8 +156,24 @@ span {
 .dashboardIntroTooltip .introjs-tooltip-title, .dashboardIntroTooltip .introjs-tooltiptext{
   color: #000
 }
+.dashboardIntroTooltip .introjs-tooltip-title {
+  font-size: 2rem;
+}
+.dashboardIntroTooltip .introjs-tooltiptext {
+  font-size: 1.5rem;
+}
+.dashboardIntroTooltip {
+  min-width: 450px;
+  max-width: 500px;
+}
 .dashboardIntroTooltip ul {
   padding-left: 20px;
+}
+.dashboardHighlightClass{
+  border: 1px solid #E60000;
+}
+.introjs-arrow.top-right{
+  right: 25px
 }
 
 @-webkit-keyframes animatetop {
