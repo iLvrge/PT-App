@@ -526,7 +526,7 @@ const Reports = (props) => {
         {
             element: document.querySelector('.dashboard_buttons'),
             title: 'Simple Tooltips',
-            intro: `Hover over the headings to see tooltips with explanations about what it is about. <p>Click it if you'd like to see the underlying data.</p><p>You can always return to the dashboards by clicking the buttons at the top right corner.</p>`,
+            intro: `Hover over the headings to see explanations about each component. <p>Click it if you'd like to see the underlying data.</p><p>You can always return to the dashboards by clicking the buttons at the top right corner.</p>`,
             position: 'right',
             tooltipClass: 'dashboardIntroTooltip',
             highlightClass: 'dashboardHighlightClass',
