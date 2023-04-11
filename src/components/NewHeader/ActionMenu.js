@@ -805,17 +805,17 @@ const ActionMenu = (props) => {
                                         ?
                                             viewDashboard.kpi === true
                                             ?
-                                                'KPI'
+                                                'Key Perfomance Indicators'
                                             :
                                                 viewDashboard.gauge === true
                                                 ?
-                                                    'Attention'
+                                                    'Matters Calling for Attention'
                                                 :
                                                     viewDashboard.timeline === true
                                                     ?
-                                                        'Activites'
+                                                        'Transactional Activities'
                                                     :
-                                                        'Dashboard'
+                                                        'Key Perfomance Indicators'
                                         :
                                             props.timelineScreen === true
                                             ?

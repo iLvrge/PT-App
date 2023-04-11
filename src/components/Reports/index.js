@@ -16,7 +16,8 @@ import {
     setDashboardScreen,
     setPatentScreen, 
     setViewDashboardIntial,
-    setLoadingDashboardData} from '../../actions/uiActions'
+    setLoadingDashboardData,
+    setViewIntro} from '../../actions/uiActions'
 import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId,  retrievePDFFromServer, setAssetTypesSelect, setSelectedAssetsPatents, getAssetDetails  } from '../../actions/patentTrackActions2'
 import { assetLegalEvents, setAssetLegalEvents, setPDFView, setPDFFile, setConnectionData, setConnectionBoxView, assetFamily,   } from '../../actions/patenTrackActions';
 import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar'
@@ -531,9 +532,14 @@ const Reports = (props) => {
             highlightClass: 'dashboardHighlightClass',
         },
         {
+            title: 'You Are Ready!',
+            intro: `<div>That's it, take the helm!</div><p>You are now in full control over your organization's most strategic assets.</p><p>Just select a company from the Companies table on the left and check its dashboards.</p>`, 
+            tooltipClass: 'dashboardIntroTooltip', 
+        },
+        {
             element: document.querySelector('.step-3'),
             title: 'Contact Us!',
-            intro: `<div>That's it, take the helm!</div><div>You are now in full control over your organization's most strategic assets.</p><p>Just select a company from the Companies table on the left and check its dashboards.<p>Do not hesitate to schedule a quick call with any question.</p></div>`,
+            intro: `<div>Do not hesitate to schedule a quick call with any question.</div>`,
             position: 'bottom',
             tooltipClass: 'dashboardIntroTooltip',
             highlightClass: 'dashboardHighlightClass',
@@ -547,8 +553,7 @@ const Reports = (props) => {
     const ref = useRef();
     let resizeObserver = null
     const [loading, setLoading] = useState(false)    
-    const [enableStep, setEnableStep] = useState(false)    
-    const [enableStepInitial, setEnableStepIntial] = useState(false)    
+    const [enableStep, setEnableStep] = useState(false)       
     const [timeLineLoading, setTimeLineLoading] = useState(false)    
     const [timelineGrid, setTimelineGrid] = useState(TIMELINE_ITEM)
     const [grid, setGrid] = useState(GRID_ITEM)
@@ -559,6 +564,7 @@ const Reports = (props) => {
     const [timelineList, setTimelineList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_TIMELINE_LIST : TIMELINE_LIST) 
     const viewDashboard = useSelector(state => state.ui.viewDashboard)
     const viewInitial = useSelector(state => state.ui.viewInitial)
+    const viewIntro = useSelector(state => state.ui.viewIntro)
     const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list)
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected)
     const childID = useSelector( state => state.patenTrack2.mainCompaniesList.childID)
@@ -913,8 +919,8 @@ const Reports = (props) => {
                             })
                             await Promise.all(dashboardPromise)
                             setCardList(oldList)
-                            if(enableStepInitial === false) {
-                                setEnableStepIntial(true)
+                            if(viewIntro === false) {
+                                dispatch(setViewIntro(true))
                                 setEnableStep(true)
                             }
                             if(typeof props.updateDashboardData !== 'undefined') {

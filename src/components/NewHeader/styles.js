@@ -126,7 +126,9 @@ export default makeStyles(theme => ({
     middleContainer: {
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        width: 500,
+        textAlign: 'right'
     },
     toolbar: {
         padding: 0,
@@ -545,7 +547,9 @@ export default makeStyles(theme => ({
             color: '#E60000',
             backgroundColor: 'transparent', 
         } */     
-        cursor: 'default' 
+        cursor: 'default' ,
+        fontSize: '1.1rem',
+        color: `${theme.palette.text.primary}`
     },
     actionMenuList: {
         '& .MuiPaper-root':{
