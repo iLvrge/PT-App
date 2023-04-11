@@ -34,6 +34,12 @@ const uiReducer = (state = initialState.ui, action) => {
         dashboardPanel: action.flag 
       }
     }
+    case types.SET_VIEW_INTRO: {
+      return { 
+        ...state,
+        viewIntro: action.flag 
+      }
+    }
     case types.SET_LOADING_DASHBOARD_DATA: {
       return { 
         ...state,

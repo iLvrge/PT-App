@@ -126,7 +126,13 @@ export const setFamilyLegalItemMode = flag => ({
   type: types.SET_FAMILY_LEGAL_ITEM_MODE,
   flag
 })
+
 export const setSankeyFilterActive = flag => ({
   type: types.SET_SANKEY_FILTER_ACTIVE,
+  flag
+})
+
+export const setViewIntro = flag => ({
+  type: types.SET_VIEW_INTRO,
   flag
 })

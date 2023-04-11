@@ -33,5 +33,6 @@ export default {
   },
   viewInitial: false,
   familyLegalItemMode: false,
-  sankeyFilterActive: false
+  sankeyFilterActive: false,
+  viewIntro: false
 }
