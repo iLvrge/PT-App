@@ -501,8 +501,8 @@ const Reports = (props) => {
     const GAUGE_TYPE = [1, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
     const STEPS = [
         { 
-            title: 'Welcome to PatenTrack! 👋', 
-            intro: `<p>We are very happy you are here.</p><p>Patentrack is a rather simple application that is made of 3 dashboards  dedicated to each company in this account. Click Next to start your walkthrough</p>`, 
+            title: 'Welcome to PatenTrack!', 
+            intro: `<p>We are very happy you are here. 👋</p><p>For each of the companies in your account we created 3 dashboards with the most important aspects of its patents.</p><p>Let's start your walkthrough...</p>`, 
             tooltipClass: 'dashboardIntroTooltip', 
         },
         {
