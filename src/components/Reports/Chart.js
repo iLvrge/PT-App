@@ -31,7 +31,7 @@ const Chart = (props) => {
                         <Button 
                             size="small" 
                             variant="outlined" 
-                            className={clsx(classes.actionButton)} 
+                            className={clsx(classes.actionButton, 'dashboard_buttons')} 
                             onClick={() => props.handleList(props.id, props.card.type)}
                             disabled={
                                 (parseInt(props.card?.number) > 0 || (props.card?.list && props.card.list.length > 0)) ? false : true
