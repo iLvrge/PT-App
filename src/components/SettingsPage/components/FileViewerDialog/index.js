@@ -1,6 +1,6 @@
 import _last from 'lodash/last'
 import Dialog from '@mui/material/Dialog'
-import FileViewer from 'react-file-viewer'
+/* import FileViewer from 'react-file-viewer' */
 import React from 'react'
 import useStyles from './styles'
 
@@ -10,7 +10,8 @@ const FileViewerDialog = ({ viewerSrc, setViewerSrc }) => {
     console.log(e, 'error')
     //logger.logError(e, 'error in file-viewer');
   }
-  return (
+  return null
+  /* return (
     <Dialog
       classes={{ paper: classes.paper }}
       open={!!viewerSrc}
@@ -27,7 +28,7 @@ const FileViewerDialog = ({ viewerSrc, setViewerSrc }) => {
         )
       }
     </Dialog>
-  )
+  ) */
 }
 
 export default FileViewerDialog

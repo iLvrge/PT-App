@@ -16,6 +16,7 @@ import Googlelogin from './components/common/Googlelogin'
 
 import Auth from './components/auth'
 import AuthSlack from './components/AuthSlack' 
+import AuthMicrosoft from './components/AuthMicrosoft' 
 import GlobalLayout from './layout/GlobalLayout'
 import BlankLayout from './layout/BlankLayout'
 import PatentLayout from './components/PatentLayout' 
@@ -264,6 +265,7 @@ export default (
       )
     )}
     <Route path="/slack" component={AuthSlack} />
+    <Route path="/microsoft" component={AuthMicrosoft} />
     {
       ['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE)
       ?
@@ -271,7 +273,7 @@ export default (
           <Route path="/settings" component={Settings} />
           
           <Route path="/reset/:token" component={Auth} />
-          <Route path="/auth" component={Auth} />        
+          <Route path="/auth" component={Auth} />       
         </Fragment>
       :
       ''

@@ -42,7 +42,10 @@ import { IconButton } from '@mui/material';
  * item data to dsplay for the timeline and for the tooltip
  */
 
-
+const dateDifference = (date1, date2) => {
+  const diffTime = Math.abs(new Date(date2) - new Date(date1))
+  return numberWithCommas(Math.ceil(diffTime / (1000 * 60 * 60 * 24)))
+}
 
 
 const TIME_INTERVAL = 1000
@@ -65,8 +68,8 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
       if (data.isCluster) {
         return `<span class="cluster-header">${data.items[0].clusterHeading} (${data.items.length})</span>`
       } else { 
-        if(data.category == 'late_recording' && ![5,12].includes(parseInt(data.rawData.tab_id))) {
-          return `<span class="${data.assetType} ${data.rawData.tab_id}"><span class="name">Assignor: ${data.customerName}</span><span class="recordby">Recorded by: ${data.recorded_by}</span></span>`
+        if(data.category == 'late_recording' && ![5,12].includes(parseInt(data.rawData.tab_id))) {  
+          return `<span class="${data.assetType} ${data.rawData.tab_id}"><span class="name">Assignor: ${data.customerName}</span><span class="recordby">Recorded by: ${data.recorded_by}</span><span class="recordby">Days from Execution to Recording: ${dateDifference(data.rawData.exec_dt, data.rawData.record_dt)} </span></span>`
         } else { 
           return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
         }
@@ -177,10 +180,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     return item
   }
 
-  const dateDifference = (date1, date2) => {
-    const diffTime = Math.abs(new Date(date2) - new Date(date1))
-    return numberWithCommas(Math.ceil(diffTime / (1000 * 60 * 60 * 24)))
-  }
+  
 
   // Custom ToolTip 
   

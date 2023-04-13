@@ -1,24 +1,25 @@
 import React, {useMemo, useState, useCallback, useEffect, useRef} from 'react'
 import { useHistory } from 'react-router-dom'
 import { Grid, IconButton, Paper}  from '@mui/material'
-import { useSelector, useDispatch, ReactReduxContext } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { Steps } from 'intro.js-react';
+import 'intro.js/introjs.css';
 import useStyles from './styles'
 import clsx from 'clsx'
 import moment from 'moment'
 import CardElement from './CardElement'
-import { Fullscreen, Close, Public, BarChart, AutoGraph, BubbleChart, Speed, AppsOutage, ViewTimeline, TryRounded} from '@mui/icons-material';
+import { Fullscreen, Close, Reviews } from '@mui/icons-material';
 
 import { 
     setDashboardPanel,
     setTimelineScreen,
     setDashboardScreen,
     setPatentScreen, 
-    toggleFamilyItemMode,
-    updateViewDashboard,
     setViewDashboardIntial,
-    setLoadingDashboardData} from '../../actions/uiActions'
+    setLoadingDashboardData,
+    setViewIntro} from '../../actions/uiActions'
 import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId,  retrievePDFFromServer, setAssetTypesSelect, setSelectedAssetsPatents, getAssetDetails  } from '../../actions/patentTrackActions2'
-import { assetLegalEvents, setAssetLegalEvents, setPDFView, setPDFFile, setConnectionData, setConnectionBoxView, assetFamilySingle, assetFamily,   } from '../../actions/patenTrackActions';
+import { assetLegalEvents, setAssetLegalEvents, setPDFView, setPDFFile, setConnectionData, setConnectionBoxView, assetFamily,   } from '../../actions/patenTrackActions';
 import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar'
 import { controlList } from "../../utils/controlList"
 
@@ -27,7 +28,6 @@ import routeList from '../../routeList'
 import GeoChart from '../common/AssetsVisualizer/GeoChart'
 import InventionVisualizer from '../common/AssetsVisualizer/InventionVisualizer'
 import SankeyChart from './SankeyChart'
-import Loader from '../common/Loader'
 import AddToolTip from './AddToolTip'
 import { useIsMounted } from '../../utils/useIsMounted'
 
@@ -451,7 +451,7 @@ const Reports = (props) => {
             list: []
         },
         {
-            title: 'Invention',
+            title: 'Inventing',
             standalone: false,
             rf_id: '',
             type: 5,
@@ -500,6 +500,51 @@ const Reports = (props) => {
     }
     const KPI_TYPE = [30,31,32,33,34,35,36,37,38,39,40,41]
     const GAUGE_TYPE = [1, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+    const STEPS = [
+        { 
+            title: 'Welcome to PatenTrack!', 
+            intro: `<p>We are very happy you are here. 👋</p><p>For each of the companies in your account we created 3 dashboards with the most important aspects of its patents.</p><p>Let's start your walkthrough...</p>`, 
+            tooltipClass: 'dashboardIntroTooltip', 
+        },
+        {
+            element: document.querySelector('.step-1'),
+            title: 'Your Companies',
+            intro: `The Companies table lists the entities included in your account.
+            You may add as many as you'd like, including competitors.`,
+            position: 'right',
+            tooltipClass: 'dashboardIntroTooltip',
+            highlightClass: 'dashboardHighlightClass',
+        },
+        {
+            element: document.querySelector('.step-2'),
+            title: 'Your 3 Dashboards',
+            intro: 'Select one of the three dashboards to see information relating to: <div><span><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="AppsOutageIcon"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6 6h4v-4h-4v4zm3-20c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm.5 8h-1V7h1v1zm0-2h-1V2h1v4zM16 14h4v-2.07c-.33.05-.66.07-1 .07-1.07 0-2.09-.24-3-.68V14zM10 4v4h2.68c-.44-.91-.68-1.93-.68-3 0-.34.02-.67.07-1H10z"></path></svg></span> Key perfomance indicators</div><div><span><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SpeedIcon"><path d="m20.38 8.57-1.23 1.85a8 8 0 0 1-.22 7.58H5.07A8 8 0 0 1 15.58 6.85l1.85-1.23A10 10 0 0 0 3.35 19a2 2 0 0 0 1.72 1h13.85a2 2 0 0 0 1.74-1 10 10 0 0 0-.27-10.44zm-9.79 6.84a2 2 0 0 0 2.83 0l5.66-8.49-8.49 5.66a2 2 0 0 0 0 2.83z"></path></svg></span> Matters calling for attention</div><div><span><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ViewTimelineIcon"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H6v-2h6v2zm3-4H9v-2h6v2zm3-4h-6V7h6v2z"></path></svg></span> Transactional activities</div>',
+            position: 'bottom',
+            tooltipClass: 'dashboardIntroTooltip',
+            highlightClass: 'dashboardHighlightClass',
+        },
+        {
+            element: document.querySelector('.dashboard_buttons'),
+            title: 'What It\'s About',
+            intro: `Hover over the headings to see explanations about each component. <p>Click it if you'd like to see the underlying data.</p><p>You can always return to the dashboards by clicking the buttons at the top right corner.</p>`,
+            position: 'right',
+            tooltipClass: 'dashboardIntroTooltip',
+            highlightClass: 'dashboardHighlightClass',
+        },
+        {
+            title: 'You Are Ready!',
+            intro: `<div>That's it, take the helm!</div><p>You are now in full control over your organization's most strategic assets.</p><p>Just select a company from the Companies table on the left and check its dashboards.</p>`, 
+            tooltipClass: 'dashboardIntroTooltip', 
+        },
+        {
+            element: document.querySelector('.step-3'),
+            title: 'Contact Us!',
+            intro: `<div>Do not hesitate to schedule a quick call with any question.</div>`,
+            position: 'bottom',
+            tooltipClass: 'dashboardIntroTooltip',
+            highlightClass: 'dashboardHighlightClass',
+        },
+    ]
     const classes = useStyles()
     const history = useHistory()
     const dispatch = useDispatch()
@@ -508,6 +553,7 @@ const Reports = (props) => {
     const ref = useRef();
     let resizeObserver = null
     const [loading, setLoading] = useState(false)    
+    const [enableStep, setEnableStep] = useState(false)       
     const [timeLineLoading, setTimeLineLoading] = useState(false)    
     const [timelineGrid, setTimelineGrid] = useState(TIMELINE_ITEM)
     const [grid, setGrid] = useState(GRID_ITEM)
@@ -515,10 +561,10 @@ const Reports = (props) => {
     const [activeId, setActiveId] = useState(-1)
     const profile = useSelector(state => (state.patenTrack.profile))    
     const [cardList, setCardList] = useState([])
-    const [timelineList, setTimelineList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_TIMELINE_LIST : TIMELINE_LIST)
-    const auth_token = useSelector(state => state.patenTrack2.auth_token)
+    const [timelineList, setTimelineList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_TIMELINE_LIST : TIMELINE_LIST) 
     const viewDashboard = useSelector(state => state.ui.viewDashboard)
     const viewInitial = useSelector(state => state.ui.viewInitial)
+    const viewIntro = useSelector(state => state.ui.viewIntro)
     const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list)
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected)
     const childID = useSelector( state => state.patenTrack2.mainCompaniesList.childID)
@@ -528,10 +574,7 @@ const Reports = (props) => {
     const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected)
     const selectedAssetAssignments = useSelector(
         state => state.patenTrack2.assetTypeAssignments.selected,
-    )
-    const assetTypeAssignmentAssets = useSelector(
-        state => state.patenTrack2.assetTypeAssignmentAssets.list,
-    ) //Assets List 
+    ) 
     const dashboardPanelActiveButtonId = useSelector(state => state.patenTrack2.dashboardPanelActiveButtonId) 
      
     useEffect(() => {
@@ -626,7 +669,6 @@ const Reports = (props) => {
             }
         }
     }, [cardList, timelineList])
-
     
 
     /* useEffect(() => {
@@ -803,6 +845,7 @@ const Reports = (props) => {
                         return item
                     })                
                     await Promise.all(dashboardRequest)
+
                 }
             } else {
                 const type = viewDashboard.kpi === true ? [...KPI_TYPE] : [...GAUGE_TYPE]
@@ -876,6 +919,10 @@ const Reports = (props) => {
                             })
                             await Promise.all(dashboardPromise)
                             setCardList(oldList)
+                            if(viewIntro === false) {
+                                dispatch(setViewIntro(true))
+                                setEnableStep(true)
+                            }
                             if(typeof props.updateDashboardData !== 'undefined') {
                                 props.updateDashboardData(oldList)
                             }
@@ -1336,6 +1383,10 @@ const Reports = (props) => {
             />
         </Grid>
     })
+
+    const onExit = () => {
+        setEnableStep(false)
+    }
     
     return (
         <Grid
@@ -1362,11 +1413,15 @@ const Reports = (props) => {
                 item lg={12} md={12} sm={12} xs={12} 
             >
                 <Paper className={classes.titleContainer} square>
-                    <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{formattedCompanyname}</span> {
-                        profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' && selectedAssetCompanies.length == 1 && (
-                            <span className={classes.headingName}>{partyName[0].entityName}</span>
-                        ) 
-                    }</span>
+                    <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{formattedCompanyname}</span> 
+                        <span className={clsx(classes.headingName, 'step-1')}>
+                            {
+                                profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' && selectedAssetCompanies.length == 1 && (
+                                    partyName[0].entityName
+                                ) 
+                            }
+                        </span>
+                    </span>
                     <div className={classes.toolbar}> 
 
                         {
@@ -1442,6 +1497,12 @@ const Reports = (props) => {
                     }
                 </Grid>                
             </Grid>
+            <Steps 
+                enabled={enableStep}
+                steps={STEPS}
+                initialStep={0}
+                onExit={onExit}
+            />
         </Grid>
     );
 }

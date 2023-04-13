@@ -1,0 +1,13 @@
+{
+    "algorithms": [
+        "br",
+        "gz"
+    ],
+    "filetypes": [
+        ".html",
+        ".js",
+        ".ts",
+        ".css"
+    ],
+    "directory": "/build"
+}

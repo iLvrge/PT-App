@@ -354,37 +354,37 @@ export default makeStyles(theme => ({
         backgroundSize: 15
       },
       '& .vis-dot.asset-type-acquisitions,  .cluster-acquisitions': {
-        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/acquisition.svg)',
+        //backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/acquisition.svg)',
       },
       '& .vis-dot.asset-type-sales, .cluster-sales': {
-        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/sales.svg)',
+        //backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/sales.svg)',
       },
       '& .vis-dot.asset-type-licenseIn, .cluster-licenseIn': {
-        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/licensein.svg)',
+        //backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/licensein.svg)',
       },
       '& .vis-dot.asset-type-licenseOut, .cluster-licenseOut': {
-        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/licenseout.svg)',
+        //backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/licenseout.svg)',
       },
       '& .vis-dot.asset-type-mergersIn, .cluster-mergersIn': { 
-        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png)',
+        //backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png)',
       },
       '& .vis-dot.asset-type-mergersOut, .cluster-mergersOut': {
-        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png)',
+        //backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png)',
       },
       '& .vis-dot.asset-type-correct, .cluster-correct': {
-        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/correction.svg)',
+        //backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/correction.svg)',
       },
       '& .vis-dot.asset-type-options, .cluster-options': {
-        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/options.svg)',
+        //backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/options.svg)',
       },
       '& .vis-dot.asset-type-courtOrders, .cluster-courtOrders': {
-        backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/courtorder.svg)',
+        //backgroundImage: 'url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/courtorder.svg)',
       },
       '& .vis-dot.asset-type-employees, .cluster-employees': {
         backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png)',
       },
       '& .vis-dot.asset-type-other, .cluster-other': {
-        backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png)', 
+        //backgroundImage: 'url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png)', 
       },
       '&.vis-panel .vis-shadow':{
         /*height: 0*/
@@ -393,70 +393,267 @@ export default makeStyles(theme => ({
         padding: '1px 3px'
       },
       '& .vis-item.asset-type-security-release':{
-        backgroundColor: '#70A800 !important'
+        borderBottom: '3px solid#70A800 !important'
       },
       '& .vis-item.asset-type-security-release-partial':{
-        backgroundColor: '#228DE8 !important'
+        borderBottom: '3px solid#228DE8 !important'
       },
       '& .vis-item.asset-type-lending':{
-        backgroundColor: '#FFAA00'
+        borderBottom: '3px solid #FFAA00 !important'
       },
       '& .vis-item.asset-type-borrowing':{
-        backgroundColor: '#FFAA00'
+        borderBottom: '3px solid #FFAA00 !important'
       },
       '& .vis-item':{
         '& .vis-item-overflow':{
           overflow: 'visible',
         }
       },
+      '& .vis-item.vis-point':{
+        backgroundColor: /* theme.palette.background.default */ 'unset',
+        border: 0,
+        width: '9.6rem',
+        borderRadius: '3px',
+        height: '4.4rem',
+        '&.vis-selected':{
+          '& .vis-item-content':{
+            border: '1px solid #e60000 !important',
+          }
+        },
+        '& .vis-item-content':{
+          color: '#BDBDBD',
+          width:'100%',
+          border: '1px solid #545454',
+          height:'100%',          
+          display: 'flex',
+          padding: 5,
+          overflow: 'hidden',
+          flexWrap: 'wrap',   
+          borderRadius: 3,       
+          justifyContent: 'flex-start',
+          flexDirection: 'column',           
+          '& .maxHeight':{
+            maxHeight: '51px',
+            overflow: 'hidden',
+            justifyContent: 'flex-start',
+            paddingBottom: '0.15rem'
+          },
+          '& .first':{
+            display: 'flex',
+            fontSize: '0.875rem',
+            fontWeight: 500,
+            overflow: 'hidden',
+            height: '100%',
+            width:'55%',
+            marginRight: 3
+          },
+          '& .second':{
+            display:'flex',
+            flexDirection: 'column',  
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '0.65rem',
+            fontWeight: 400,
+            height: '100%',
+            width: '45%',
+            overflow: 'hidden',
+            '& div':{
+              marginLeft: '5px'
+            },
+            '& .img-holder': {
+              display: 'inline-block',
+              width: 50,
+              height: 50,
+              backgroundColor: '#fff',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            },
+            '& img':{
+              width: 50,
+              display: 'flex'
+              /* width: '3.5rem', */
+              /*width: '5rem',
+              height: '3.5rem',*/
+              /* opacity: '0.75',
+              '&:hover':{
+                opacity: 1
+              } */
+              /* maxHeight: '2.5rem' */
+            },
+            '& img.no-image':{
+              /* height: '4rem', */
+              /* maxHeight: '2.5rem' */
+            }
+          },
+          '& .flexMain':{
+              display: 'flex',
+              overflow: 'hidden',
+              flexGrow: 1,
+              alignItems: 'flex-start',
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
+              height: '100%',
+              '&.alignBaseline':{
+                alignItems: 'baseline',
+                '& .textColumn':{
+                  '& .absolute':{
+                    bottom: 7
+                  }
+                }
+              },
+            '& img':{
+              width: '4.3rem'
+            },
+            '& .textColumn':{
+              display: 'flex',
+              lineHeight: '1.1',
+              '& .absolute':{
+                position: 'absolute',
+                bottom: 0
+              }
+            },
+            '& .small-font':{                
+              fontSize: '0.65rem',  
+              marginTop: 2,
+              lineHeight: '0.81'
+            },
+            '& .text-height':{
+              whiteSpace: 'initial',
+              textAlign: 'left',
+              marginTop: 1,
+              lineHeight: '1.025',
+              overflow: 'hidden',
+              height: '130px !important'
+            }
+          }
+        },
+        '&.asset-type-employees':{
+          width: 'auto',
+          height: 'auto',
+          '& .vis-item-content':{
+            border: 0,
+            width: 'auto',
+            height: 'auto'
+          }
+        }
+      },
+      '& .vis-item.vis-range.vis-cluster':{
+        '& .vis-item-content':{
+          border: '0px !important', 
+          height: 'auto !important'
+        }
+      },
       '& .vis-item.vis-range':{
         border: 0,
-        '& .vis-item-overflow':{
-          position: 'unset',
-          minHeight: 28,
-          '& .vis-item-content':{
-            width: '100%',
-            position: 'absolute',
-            boxSizing: 'border-box',
-            whiteSpace: 'nowrap',
-            display: 'inline-block',
-            '& span':{
-              whiteSpace: 'nowrap',
+        backgroundColor: 'unset',
+        '& .vis-item-content':{
+          color: '#BDBDBD',
+          width: '9.6rem',
+          borderRadius: '3px',
+          height: '4.4rem',
+          border: '1px solid #545454', 
+          borderBottom: 0,
+          display: 'flex',
+          padding: 5,
+          overflow: 'hidden',
+          flexWrap: 'wrap',   
+          borderRadius: 3,       
+          justifyContent: 'flex-start',
+          flexDirection: 'column',           
+          '& .maxHeight':{
+            maxHeight: '51px',
+            overflow: 'hidden',
+            justifyContent: 'flex-start',
+            paddingBottom: '0.15rem'
+          },
+          '& .first':{
+            display: 'flex',
+            fontSize: '0.875rem',
+            fontWeight: 500,
+            overflow: 'hidden',
+            height: '100%',
+            width:'55%',
+            marginRight: 3
+          },
+          '& .second':{
+            display:'flex',
+            flexDirection: 'column',  
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '0.65rem',
+            fontWeight: 400,
+            height: '100%',
+            width: '45%',
+            overflow: 'hidden',
+            '& div':{
+              marginLeft: '5px'
+            },
+            '& .img-holder': {
+              display: 'inline-block',
+              width: 50,
+              height: 50,
+              backgroundColor: '#fff',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            },
+            '& img':{
+              width: 50,
+              display: 'flex'
+              /* width: '3.5rem', */
+              /*width: '5rem',
+              height: '3.5rem',*/
+              /* opacity: '0.75',
+              '&:hover':{
+                opacity: 1
+              } */
+              /* maxHeight: '2.5rem' */
+            },
+            '& img.no-image':{
+              /* height: '4rem', */
+              /* maxHeight: '2.5rem' */
+            }
+          },
+          '& .flexMain':{
               display: 'flex',
-              width: '100%',
-              position: 'relative'
-            },
-            '& tt':{
-              marginRight: 10,
-              cursor: 'pointer',
-              '& img':{
-                width: 16
-              }
-            },
-            '& dd':{
-              marginInlineStart: 0,
-              whiteSpace: 'nowrap',
               overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              maxWidth: 130,
-              marginRight: 3
-            },
-            '& em':{
-              display: 'flex',
-              position: 'absolute',
-              right: 7,
-              cursor: 'pointer',
-              '& img':{
-                width: 16,
-                display: 'flex',
-                marginRight: 3
+              flexGrow: 1,
+              alignItems: 'flex-start',
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
+              height: '100%',
+              '&.alignBaseline':{
+                alignItems: 'baseline',
+                '& .textColumn':{
+                  '& .absolute':{
+                    bottom: 7
+                  }
+                }
               },
-              '& span':{
-                /* position: 'absolute',
-                right: 35,
-                textAlign: 'right' */
-                display: 'flex'
+            '& img':{
+              width: '4.3rem'
+            },
+            '& .textColumn':{
+              display: 'flex',
+              lineHeight: '1.1',
+              '& .absolute':{
+                position: 'absolute',
+                bottom: 0
               }
+            },
+            '& .small-font':{                
+              fontSize: '0.65rem',  
+              marginTop: 2,
+              lineHeight: '0.81'
+            },
+            '& .text-height':{
+              whiteSpace: 'initial',
+              textAlign: 'left',
+              marginTop: 1,
+              lineHeight: '1.025',
+              overflow: 'hidden',
+              height: '130px !important'
             }
           }
         } 

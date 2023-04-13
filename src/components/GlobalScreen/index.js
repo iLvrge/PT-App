@@ -512,8 +512,8 @@ const GlobalScreen = ({
             ref={companyRef}
         >
             <div 
-                className={classes.companyBar}
-                id={`company_container`} >
+                className={clsx(classes.companyBar, 'step-1')}
+                id={`company_container`} >  
                 { 
                     openBar === true 
                     ? 

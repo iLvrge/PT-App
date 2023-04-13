@@ -1,26 +1,24 @@
-import React, { useEffect, useLayoutEffect, useState, useCallback, createContext  } from "react"
+import React, { useEffect,  useState, useCallback, createContext  } from "react"
 
-import { ReactReduxContext, useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { 
     useHistory, useLocation,
   } from 'react-router-dom'  
 
-import { Button, Grid, Typography} from '@mui/material'
+import {  Grid, Typography} from '@mui/material'
 
-import { BrowserView, MobileView, isBrowser, isMobile, isTablet, isIOS, isAndroid } from 'react-device-detect'
+import { isMobile, isTablet, isIOS, isAndroid } from 'react-device-detect'
 
 import clsx from 'clsx'
 import useStyles from './styles'
 
-import NewHeader from '../../components/NewHeader'
-import Loader from '../../components/common/Loader'
+import NewHeader from '../../components/NewHeader' 
 
 import MobileScreen from '../../components/MobileScreen'
 
 import NavigationIcon from '../../components/NavigationIcon'
-import MobileHeader from '../../components/MobileHeader'
-import MobileFooter from '../../components/MobileFooter'
+import MobileHeader from '../../components/MobileHeader' 
 
 import { getTokenStorage, loginRedirect } from  '../../utils/tokenStorage'
 import { editorBar } from  '../../utils/splitpane'
@@ -30,12 +28,9 @@ import {
     setAssetTypesAssignmentsLoading,
     setAssetTypeAssignments,
     setSearchRfIDs,
-    setAssetTypeInventor,
-    setAssetTypeCompanies,
-    setAllAssetTypes,
+    setAssetTypeInventor, 
     setAssetTypesSelect,
-    setMainCompaniesSelected,
-    getCustomerAssets
+    setMainCompaniesSelected, 
 } from '../../actions/patentTrackActions2' 
 
 import { 
@@ -47,8 +42,7 @@ import {
 import { toggleUsptoMode, 
     toggleFamilyMode, 
     toggleFamilyItemMode, 
-    toggleLifeSpanMode,
-    setTimelineScreen,
+    toggleLifeSpanMode, 
     setDriveTemplateMode,
     setDashboardScreen, 
     setDashboardPanel,
@@ -1585,6 +1579,7 @@ const GlobalLayout = (props) => {
     const closeWindow = (event) => {
         history.goBack()
     }
+
 
     if(profile == undefined) return null  
     return ( 
