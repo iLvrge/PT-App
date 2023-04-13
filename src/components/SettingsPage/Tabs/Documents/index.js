@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { addDocument, deleteDocument, fetchDocuments } from '../../../../actions/settingsActions'
 import { setPDFFile, setPDFViewModal, setPdfTabIndex } from '../../../../actions/patenTrackActions' 
 import DocumentForm from './DocumentForm'
-import FileViewerDialog from '../../components/FileViewerDialog'
+/* import FileViewerDialog from '../../components/FileViewerDialog' */
 import PdfViewer from '../../../common/PdfViewer'
 import { FaFile } from 'react-icons/fa'
 import Tooltip from '@mui/material/Tooltip'

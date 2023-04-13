@@ -1,7 +1,10 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux' 
 
 import { Box, Button, Paper, Tooltip, Typography, Zoom } from '@mui/material'
+
+import { PublicClientApplication } from "@azure/msal-browser";
+import { msalConfig, loginRequest, graphConfig } from "./authConfig";
 
 import useStyles from './styles'
 
@@ -22,7 +25,9 @@ import TitleBar from '../TitleBar'
 const SocialMediaConnect = () => {
 
     const classes = useStyles()
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const msalInstance = new PublicClientApplication(msalConfig);
+    const MICROSOFT_SCOPES = ['https://graph.microsoft.com/Team.Create', 'https://graph.microsoft.com/Directory.ReadWrite.All', 'https://graph.microsoft.com/Group.ReadWrite.All', 'https://graph.microsoft.com/Channel.Create', 'https://graph.microsoft.com/Channel.ReadBasic.All', 'https://graph.microsoft.com/Team.ReadBasic.All', 'https://graph.microsoft.com/TeamMember.ReadWrite.All', 'https://graph.microsoft.com/User.Read']
     const onHandleSlackLogin = (w,h) => {    
         const dualScreenLeft = window.screenLeft !==  undefined ? window.screenLeft : window.screenX
         const dualScreenTop = window.screenTop !==  undefined   ? window.screenTop  : window.screenY
@@ -41,9 +46,34 @@ const SocialMediaConnect = () => {
         } 
     }
 
-    const onHandleMicrosoftLogin = (w,h) => {
+    const handleResponse = (response) => {
+        console.log('handleResponse', response)
+    }
+
+    const onHandleMicrosoftLogin = (w,h) => {    
+        /* const dualScreenLeft = window.screenLeft !==  undefined ? window.screenLeft : window.screenX
+        const dualScreenTop = window.screenTop !==  undefined   ? window.screenTop  : window.screenY
+    
+        const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : window.screen.width
+        const height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : window.screen.height
+    
+        const systemZoom = width / window.screen.availWidth
+        const left = (width - w) / 2 / systemZoom + dualScreenLeft
+        const top = (height - h) / 2 / systemZoom + dualScreenTop
+    
+        const windowOpen = window.open(`https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${process.env.REACT_APP_MICROSOFT_CLIENTID}&scope=${MICROSOFT_SCOPES}&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fmicrosoft&client-request-id=c8dddcc9-1925-49ed-8678-444998d243ee&response_mode=fragment&response_type=code&x-client-SKU=msal.js.browser&x-client-VER=2.34.0&client_info=1&code_challenge=MhiCfYJ_NJ9odwPB99U5Q58Cczv4-jmNYG6XwMJsSD8&code_challenge_method=S256&nonce=5e7f20b1-394b-4aa4-980e-bf651f688e72&state=eyJpZCI6IjU3ZDhjY2M3LTdjMzgtNGRkYS1iMWMzLWE1MDUzMTJkOWU5NyIsIm1ldGEiOnsiaW50ZXJhY3Rpb25UeXBlIjoicG9wdXAifX0%3D`, 'Micosoft Login', `width=${w / systemZoom},height=${h / systemZoom},top=${top},left=${left}`) */
+
+
+        
+        msalInstance.loginPopup(loginRequest).then(handleResponse).catch(e => {
+            console.log(e);
+        });
         
     }
+
+    /* const onHandleMicrosoftLogin = (err, data) => {
+        console.log('onHandleMicrosoftLogin', err, data);
+    }  */
 
     const onUpdateTeamID = async(team) => {
         const form = new FormData()
@@ -101,60 +131,43 @@ const SocialMediaConnect = () => {
             />              
         )
     }
-
+    console.log("MICROSOFT_SCOPES", MICROSOFT_SCOPES)
     return (
         <Paper className={classes.root} square>
-            <Box style={{width: '100%'}}>
+            <Box style={{width: '100%'}}> 
                 <TitleBar
-                    title={`Please log in: `}
+                    title={`Log in will enable you to create and manage a team conversation channel dedicated to each patent asset, transaction, and company. All your team members' input will be secured within these channels.`}
                     enablePadding={true} 
                     underline={false} 
+                    typography={true}
                 />
             </Box>
             <Box className={classes.box}>
-                <Tooltip 
-                    title={
-                    <Typography color="inherit" variant='body2'>{/* Once you sign in to your Slack Workspace, we will create for you a dedicated channel in your Workspace for each of the patents and application in the Assets list. Just select an asset and start writing to your Workspace members in the text bar below.<br/>Whatever you write will be saved only in your Slack Workspace. */}Sign in to your Slack account</Typography>
-                    } 
-                    className={classes.tooltip}  
-                    placement='top'
-                    enterDelay={0}
-                    TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
-                > 
-                    <Button
-                        color="inherit" 
-                        onClick={() => onHandleSlackLogin(900, 830) }
-                        className={classes.button}
-                        startIcon={<SlackIcon className={classes.icon} />} 
-                    >
-                        Slack
-                    </Button>
-                </Tooltip>
-                <Tooltip 
-                    title={
-                    <Typography color="inherit" variant='body2'>{/* Once you sign in to your Slack Workspace, we will create for you a dedicated channel in your Workspace for each of the patents and application in the Assets list. Just select an asset and start writing to your Workspace members in the text bar below.<br/>Whatever you write will be saved only in your Slack Workspace. */}Sign in to your Microsoft account</Typography>
-                    } 
-                    className={classes.tooltip}  
-                    placement='top'
-                    enterDelay={0}
-                    TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
+                <Button
+                    color="inherit" 
+                    onClick={() => onHandleSlackLogin(900, 830) }
+                    className={classes.button}
+                    startIcon={<SlackIcon className={classes.icon} />} 
                 >
-                    <Button
-                        color="inherit" 
-                        onClick={() => onHandleMicrosoftLogin(900, 830) }
-                        className={classes.button}
-                        startIcon={<MicrosoftIcon className={classes.icon} />} 
-                    >
-                        Microsoft
-                    </Button>
-                </Tooltip>
+                    Slack
+                </Button>
+                <Button
+                    color="inherit" 
+                    onClick={() => onHandleMicrosoftLogin(900, 830) }
+                    className={classes.button}
+                    startIcon={<MicrosoftIcon className={classes.icon} />} 
+                >
+                    Slack
+                </Button>
+                {/* <MicrosoftLogin 
+                    clientId={process.env.REACT_APP_MICROSOFT_CLIENTID} 
+                    authCallback={onHandleMicrosoftLogin} 
+                    withUserData={true}
+                    buttonTheme={'dark'} 
+                    graphScopes={MICROSOFT_SCOPES}
+                    prompt={'consent'}
+                /> */}
             </Box>
-            <TitleBar
-                title={`Log in will enable you to create and manage a team conversation channel dedicated to each patent asset, transaction, and company. All your team members' input will be secured within these channels.`}
-                enablePadding={true} 
-                underline={false} 
-                typography={true}
-            />
         </Paper>
     )
 }
