@@ -72,7 +72,7 @@ export const unsetAllFunction = ( dispatch,  resetList) => {
     resetList.forEach( item => dispatch( item ))
 }
 
-export const resetAllRowSelect = ( dispatch, resetList, skipIndex) => {
+export const resetAllRowSelect = ( dispatch, resetList, skipIndex) => { 
     resetList.forEach( (item, index) => typeof skipIndex === 'undefined' || (typeof skipIndex != 'undefined'  && !skipIndex.includes(index)) ? dispatch( item.callback) : '')
 } 
 
@@ -158,55 +158,55 @@ export const resetItemList = {
         },
     ],
     clearOtherItems: [
-        {
+        {   //0
             callback: setAssetsIllustration(null)
         }, 
-        {
+        {  //1
             callback: setAssetsIllustrationData(null)
         }, 
-        {
+        {  //2
             callback: setSelectedAssetsTransactions([])
         },
-        {
+        {  //3
             callback: setSelectedAssetsPatents([])
         },
-        {
+        {  //4
             callback: setChannelID(null)
         },
-        {
+        {  //5
             callback: setSlackMessages({ messages: [], users: [] })
         },
-        {
+        {  //6
             callback: setPDFFile({ document: '', form: '', agreement: '' })
         },
-        {
+        {  //7
             callback: setPDFView(false)
         },
-        {
+        {  //8
             callback: setAssetsIllustration(null)
         },                 
-        {
+        {  //9
             callback: toggleLifeSpanMode(true)
         }, 
-        {
+        {  //10
             callback: toggleFamilyMode(false)
         }, 
-        {
+        {  //11
             callback: toggleUsptoMode(false)
         }, 
-        {
+        {  //12
             callback: toggleFamilyItemMode(false)
         }, 
-        {
+        {  //13
             callback: setAllAssetTypes(false)
         }, 
-        {
+        {  //14
             callback: setAssetTypesSelect([])
         },
-        {
+        {  //15
             callback: setAllAssignmentCustomers(false)
         }, 
-        {
+        {  //16
             callback: setSelectAssignmentCustomers([])
         },
     ]

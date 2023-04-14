@@ -779,7 +779,14 @@ const ActionMenu = (props) => {
                         <CheckCircleOutlineIcon />
                     </Fab>  
                 :
-                    <React.Fragment>
+                    <React.Fragment> 
+                        {
+                            props.dashboardScreen === false && (
+                                <span className={classes.title}>
+                                    <span>{formattedCompanyname}</span> 
+                                </span>
+                            )
+                        }
                         <Button
                             id="action-menu"
                             variant="text"
@@ -837,13 +844,6 @@ const ActionMenu = (props) => {
                                 } 
                             </span>
                         </Button> 
-                        {
-                            props.dashboardScreen === false && (
-                                <span className={classes.title}>
-                                    <span>{formattedCompanyname}</span> 
-                                </span>
-                            )
-                        }
                     </React.Fragment>
             }            
             
