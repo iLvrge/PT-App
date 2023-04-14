@@ -494,7 +494,6 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
         getTransactionData(dispatch, selectedAssetsTransactions.length > 0 ? selectedAssetsTransactions[0] : selectedRow[0], defaultLoad) 
     }
   }, [dispatch, assignmentList, defaultLoad, selectedRow, selectedAssetsTransactions, initialize, search_string, selectedAssetsPatents, assetIllustration]);  
-
   
   useEffect(() => {
     let ignore = false;
@@ -505,9 +504,10 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
           assetTypesCompaniesSelectAll === true
             ? []
             : assetTypesCompaniesSelected;
-      if (selectedCompaniesAll === true || selectedCompanies.length > 0) {
+            
+      if (selectedCompaniesAll === true || selectedCompanies.length > 0) { 
         if(assignmentList.length === 0) {
-          if (!ignore){ 
+          if (!ignore){  
             dispatch(
               getCustomerTransactions(
                 selectedCategory == '' ? '' : selectedCategory, 
