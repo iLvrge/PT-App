@@ -163,9 +163,9 @@ const GlobalLayout = (props) => {
     const checkWidthBrowser = () => { 
         if(window.innerWidth < 800) { 
             setShowMobileWarning(true)
-        } /* else {
+        } else {
             setShowMobileWarning(false)
-        } */
+        }
     }
 
     useEffect(() => {
@@ -173,6 +173,7 @@ const GlobalLayout = (props) => {
         window.addEventListener("resize", checkWidthBrowser) // add on resize window 
         return () => window.removeEventListener("resize", checkWidthBrowser)
     }, [])
+
     /**
    * Get the Loggedin User Profile data
    */
