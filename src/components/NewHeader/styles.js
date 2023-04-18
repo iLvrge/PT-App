@@ -40,6 +40,7 @@ export default makeStyles(theme => ({
         whiteSpace: 'nowrap', 
         overflow: 'hidden',
         textOverflow: 'ellipsis',
+        fontSize: '1.1rem',
         '& span':{
             textTransform:'uppercase',
             marginLeft: 24
@@ -128,7 +129,10 @@ export default makeStyles(theme => ({
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         width: 500,
-        textAlign: 'right'
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+        /* textAlign: 'right' */
     },
     toolbar: {
         padding: 0,
@@ -650,10 +654,14 @@ export default makeStyles(theme => ({
             marginRight: 5,
             display: 'inline-block',
             position: 'absolute',
-            bottom: 7
+            bottom: 10
         },
         '& span':{
             marginLeft: 25
         }
+    },
+    noStrokeHeightWidth: {
+        width: '1em',
+        height: '1em'
     }
 }))

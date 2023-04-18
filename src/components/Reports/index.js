@@ -18,7 +18,7 @@ import {
     setViewDashboardIntial,
     setLoadingDashboardData,
     setViewIntro} from '../../actions/uiActions'
-import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId,  retrievePDFFromServer, setAssetTypesSelect, setSelectedAssetsPatents, getAssetDetails  } from '../../actions/patentTrackActions2'
+import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId,  retrievePDFFromServer, setAssetTypesSelect, setSelectedAssetsPatents, getAssetDetails, setAllAssetTypes  } from '../../actions/patentTrackActions2'
 import { assetLegalEvents, setAssetLegalEvents, setPDFView, setPDFFile, setConnectionData, setConnectionBoxView, assetFamily,   } from '../../actions/patenTrackActions';
 import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar'
 import { controlList } from "../../utils/controlList"
@@ -424,6 +424,7 @@ const Reports = (props) => {
     const TIMELINE_LIST = [
         {
             title: 'Acquisitions',
+            tooltip: 'Tooltip',
             standalone: false,
             rf_id: '',
             type: 1,
@@ -431,6 +432,7 @@ const Reports = (props) => {
         },
         {
             title: 'Divestitures',
+            tooltip: 'Tooltip',
             standalone: false,
             rf_id: '',
             type: 2,
@@ -438,6 +440,7 @@ const Reports = (props) => {
         },
         {
             title: 'Licensing',
+            tooltip: 'Tooltip',
             standalone: false,
             rf_id: '',
             type: 3,
@@ -445,6 +448,7 @@ const Reports = (props) => {
         },
         {
             title: 'Collateralization',
+            tooltip: 'Tooltip',
             standalone: false,
             rf_id: '',
             type: 4,
@@ -452,6 +456,7 @@ const Reports = (props) => {
         },
         {
             title: 'Inventing',
+            tooltip: 'Tooltip',
             standalone: false,
             rf_id: '',
             type: 5,
@@ -459,6 +464,7 @@ const Reports = (props) => {
         },
         {
             title: 'Litigation',
+            tooltip: 'Tooltip',
             standalone: false,
             rf_id: '',
             type: 6,
@@ -469,6 +475,7 @@ const Reports = (props) => {
     const BANK_TIMELINE_LIST = [
         {
             title: '',
+            tooltip: 'Tooltip',
             standalone: false,
             rf_id: '',
             type: 7,
@@ -1171,7 +1178,7 @@ const Reports = (props) => {
         }
     }, [dispatch, activeId, props.chartsBar, props.analyticsBar, props.checkChartAnalytics, cardList])
 
-    const onHandleList = useCallback((id) => {
+    const onHandleList = useCallback((id, boxType, gridType) => {
         if(process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD'/*  || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' */) {
             alert('Please activate your account.')
         } else {
@@ -1179,90 +1186,128 @@ const Reports = (props) => {
             
             if( subscription === 2 || subscription === 3 ) {
                 let findIndex = -1
-                if(id === 1 && viewDashboard.kpi === false) {                
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
-                    patent = true
-                } else if(id === 17 /* && subscription > 2 */  && viewDashboard.kpi === false) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_names')
-                    patent = true
-                } else if(id === 18 /* && subscription > 2 */  && viewDashboard.kpi === false) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'clear_encumbrances')
-                    patent = true
-                } else if(id === 19 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_address')
+                let activityIDs = [], transactionCategory = ''
+                if(typeof gridType != 'undefined') {
+                    switch(parseInt(boxType)) {
+                        case 1:
+                            activityIDs = [1, 6]
+                            transactionCategory = 'acquisition_transactions'
+                            break
+                        case 2:
+                            activityIDs = [2, 7]
+                            transactionCategory = 'divestitures_transactions'
+                            break
+                        case 3:
+                            activityIDs = [3, 4]
+                            transactionCategory = 'licensing_transactions'
+                            break
+                        case 4:
+                            activityIDs = [5, 12]
+                            transactionCategory = 'collateralization_transactions'
+                            break
+                        case 5:
+                            activityIDs = [10]
+                            transactionCategory = 'inventing_transactions'
+                            break
+                        case 6:
+                            activityIDs = [9]
+                            transactionCategory = 'litigation_transactions'
+                            break
+                        case 7:
+                            activityIDs = [1,6,2,7,3,4,5,12,13,11,9]
+                            transactionCategory = ''
+                            break
+                    }
                     timeline = true
-                } else if(id === 20 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'to_be_monitized')
-                    patent = true
-                } else if(id === 21 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'unnecessary_patents')
-                    patent = true
-                } else if(id === 22 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'missed_monetization')
-                    patent = true
-                } else if(id === 23 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'late_maintainance')
-                    patent = true
-                } else if(id === 24 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_recording')
-                    timeline = true
-                } else if(id === 25 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'late_recording')
-                    timeline = true
-                } else if(id === 26 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'deflated_collaterals')
-                    patent = true
-                } else if(id === 30 && subscription > 1  && viewDashboard.kpi === true) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'assigned')
-                    patent = true
-                } else if(id === 31 && subscription > 1  && viewDashboard.kpi === true) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'filled')
-                    patent = true
-                } else if(id === 32 && subscription > 1  && viewDashboard.kpi === true) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'acquired')
-                    patent = true
-                } else if(id === 33 && subscription > 1  && viewDashboard.kpi === true) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'divested')
-                    patent = true
-                } else if(id === 34 && subscription > 1  && viewDashboard.kpi === true) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'collaterlized')
-                    patent = true
-                } else if(id === 36 && subscription > 1 && viewDashboard.kpi === true) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'abandoned')
-                    patent = true
-                } else if(id === 37 && subscription > 1  && viewDashboard.kpi === true) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'ptab')
-                    patent = true
-                } else if(id === 35 && subscription > 1  && viewDashboard.kpi === true) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'pay_maintainence_fee')
-                    maintainence = true
-                } else if(id === 38 && subscription > 1  && viewDashboard.kpi === true) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_non_us_members')
-                    patent = true
-                } else if(id === 39 && subscription > 1  && viewDashboard.kpi === true) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'proliferate_inventors')
-                    timeline = true
-                } else if(id === 40 && subscription > 1  && viewDashboard.kpi === true) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_law_firms')
-                    timeline = true
-                } else if(id === 41 && subscription > 1  && viewDashboard.kpi === true) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_lenders')
-                    timeline = true
-                } /*else if(id === 8 && subscription > 2) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'pay_maintainence_fee')
-                    patent = true
-                } else if(id === 3 && subscription > 2) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'clear_encumbrances')
-                    timeline = true
-                } else if(id === 4 && subscription > 2) {
-                    findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'correct_names')
-                    timeline = true
-                }*/
+                    if(transactionCategory != '') {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == transactionCategory)  
+                    } 
+                } else {
+                    if(id === 1 && viewDashboard.kpi === false) {                
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'restore_ownership')
+                        patent = true
+                    } else if(id === 17 /* && subscription > 2 */  && viewDashboard.kpi === false) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_names')
+                        patent = true
+                    } else if(id === 18 /* && subscription > 2 */  && viewDashboard.kpi === false) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'clear_encumbrances')
+                        patent = true
+                    } else if(id === 19 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_address')
+                        timeline = true
+                    } else if(id === 20 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'to_be_monitized')
+                        patent = true
+                    } else if(id === 21 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'unnecessary_patents')
+                        patent = true
+                    } else if(id === 22 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'missed_monetization')
+                        patent = true
+                    } else if(id === 23 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'late_maintainance')
+                        patent = true
+                    } else if(id === 24 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_recording')
+                        timeline = true
+                    } else if(id === 25 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'late_recording')
+                        timeline = true
+                    } else if(id === 26 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'deflated_collaterals')
+                        patent = true
+                    } else if(id === 30 && subscription > 1  && viewDashboard.kpi === true) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'assigned')
+                        patent = true
+                    } else if(id === 31 && subscription > 1  && viewDashboard.kpi === true) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'filled')
+                        patent = true
+                    } else if(id === 32 && subscription > 1  && viewDashboard.kpi === true) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'acquired')
+                        patent = true
+                    } else if(id === 33 && subscription > 1  && viewDashboard.kpi === true) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'divested')
+                        patent = true
+                    } else if(id === 34 && subscription > 1  && viewDashboard.kpi === true) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'collaterlized')
+                        patent = true
+                    } else if(id === 36 && subscription > 1 && viewDashboard.kpi === true) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'abandoned')
+                        patent = true
+                    } else if(id === 37 && subscription > 1  && viewDashboard.kpi === true) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'ptab')
+                        patent = true
+                    } else if(id === 35 && subscription > 1  && viewDashboard.kpi === true) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'pay_maintainence_fee')
+                        maintainence = true
+                    } else if(id === 38 && subscription > 1  && viewDashboard.kpi === true) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_non_us_members')
+                        patent = true
+                    } else if(id === 39 && subscription > 1  && viewDashboard.kpi === true) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'proliferate_inventors')
+                        timeline = true
+                    } else if(id === 40 && subscription > 1  && viewDashboard.kpi === true) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_law_firms')
+                        timeline = true
+                    } else if(id === 41 && subscription > 1  && viewDashboard.kpi === true) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'top_lenders')
+                        timeline = true
+                    } /*else if(id === 8 && subscription > 2) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'pay_maintainence_fee')
+                        patent = true
+                    } else if(id === 3 && subscription > 2) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'clear_encumbrances')
+                        timeline = true
+                    } else if(id === 4 && subscription > 2) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'correct_names')
+                        timeline = true
+                    }*/
+                }
                 
                 if( findIndex !== -1 ) {
                     dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))   
                     resetAllRowSelect(dispatch, resetItemList.resetAll, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [1, 9, 10] :  [])
-                    resetAllRowSelect(dispatch, resetItemList.clearOtherItems, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [14, 15] :  controlList[findIndex].category == 'proliferate_inventors' || controlList[findIndex].category == 'top_lenders' ? [14, 15] :  [])
+                    resetAllRowSelect(dispatch, resetItemList.clearOtherItems, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [14, 15] :  controlList[findIndex].category == 'proliferate_inventors' || controlList[findIndex].category == 'top_lenders' ? [14, 15] : activityIDs.length > 0 ? [13, 14] : [])
                     setTimeout(() => { 
                         dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))                
                         if(id === 0) {
@@ -1292,6 +1337,10 @@ const Reports = (props) => {
                                 props.handleOtherPartyBarOpen()
                             }
                         }
+                        if(activityIDs.length > 0) {
+                            dispatch( setAllAssetTypes(false) )
+                            dispatch( setAssetTypesSelect(activityIDs) )
+                        }
                         dispatch(setDashboardScreen(false))
                         dispatch(setTimelineScreen(timeline))
                         dispatch(setPatentScreen(patent))
@@ -1310,6 +1359,8 @@ const Reports = (props) => {
                         if(props.openCustomerBar === false && timeline === false){
                             props.handleCustomersBarOpen()
                         }
+
+                       
                         /* if(props.openCommentBar === false){
                             props.handleCommentBarOpen()
                         }  */  

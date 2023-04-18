@@ -5,7 +5,7 @@ import moment from 'moment'
 import _debounce from 'lodash/debounce'
 import { useDispatch, useSelector } from 'react-redux'
 import { DataSet } from 'vis-data-71/esnext'
-import { Timeline } from 'vis-timeline/esnext'
+import { Timeline } from 'vis-timeline-73/esnext'
 import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
@@ -48,9 +48,13 @@ const dateDifference = (date1, date2) => {
 }
 
 
+const DATE_FORMAT = 'MMM DD, YYYY'
+const CDN_PATH_LOGO = process.env.REACT_APP_COMPANY_PATH
+const NO_IMAGE_AVAILABLE = 'no_image_available.jpg'
 const TIME_INTERVAL = 1000
+
 var tootlTip = ''
-const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, timelineData, updateTimelineRawData }) => {
+const TimelineWithLogo = ({ data, assignmentBar, assignmentBarToggle, type, timelineData, updateTimelineRawData }) => {
   
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -67,11 +71,28 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     template: function(item, element, data) {
       if (data.isCluster) {
         return `<span class="cluster-header">${data.items[0].clusterHeading} (${data.items.length})</span>`
-      } else { 
-        if(data.category == 'late_recording' && ![5,12].includes(parseInt(data.rawData.tab_id))) {  
-          return `<span class="${data.assetType} ${data.rawData.tab_id}"><span class="name">Assignor: ${data.customerName}</span><span class="recordby">Recorded by: ${data.recorded_by}</span><span class="recordby">Days from Execution to Recording: ${dateDifference(data.rawData.exec_dt, data.rawData.record_dt)} </span></span>`
-        } else { 
-          return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
+      } else {  
+        if (data.rawData.tab_id != 10) {
+            let image = data.rawData.logo
+            if (image !== '' && image !== null && image != undefined) {
+                if (image.indexOf('http') === -1) {
+                    image = CDN_PATH_LOGO + image
+                }
+            } else {
+                image = CDN_PATH_LOGO + NO_IMAGE_AVAILABLE
+            }
+            return `<div class="first" style="display: flex;">
+                    <div class="flexMain">
+                        <div class="textColumn text-height" >${toTitleCase(data.rawData.customerName)}</div>
+                        <div class="textColumn">${numberWithCommas(data.rawData.totalAssets)} Asset${data.rawData.totalAssets > 1 ? 's' : ''}</div>
+                        <div class="textColumn small-font">${moment(new Date(data.start)).format(DATE_FORMAT)}</div>
+                    </div>
+                </div>
+                <div class="second"><span class="img-holder">
+                    <img class="${data.rawData.logo == '' || data.rawData.logo == null ? 'no-image' : ''}" src='${image}' /></span>
+                </div>`
+        } else {
+            return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
         }
       }
     },
@@ -774,4 +795,4 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
   ) 
 }
 
-export default TimelineContainer
+export default TimelineWithLogo

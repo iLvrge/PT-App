@@ -289,7 +289,7 @@ const NewHeader = (props) => {
 
   useEffect(() => {
     const findIndex =  controlList.findIndex( item => item.type == 'menu' && item.category == selectedCategory)
-    setLayoutName(dashboardScreen === true ? 'Dashboard' : patentScreen === true ? breadcrumbs !== '' ? breadcrumbs : 'Patent Assets' : selectedCategory != 'due_dilligence' ? findIndex !== -1 ? controlList[findIndex].mainHeading : '' : '')
+    setLayoutName(dashboardScreen === true ? 'Dashboard' : patentScreen === true  || (timelineScreen === true && ['acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'inventing_transactions', 'litigation_transactions'].includes(selectedCategory) ) ? breadcrumbs !== '' ? breadcrumbs : 'Patent Assets' : selectedCategory != 'due_dilligence' ? findIndex !== -1 ? controlList[findIndex].mainHeading : '' : '')
   }, [ dashboardScreen, patentScreen,  selectedCategory ])    
 
   
@@ -589,7 +589,7 @@ const onHandleTimelineScreen = /* useCallback( */(event) => {
   resetAllRowSelect(dispatch, resetItemList.clearOtherItems) */
   props.checkChartAnalytics(null, null, false)
   props.resetScreen('Timeline', event)
-  history.push("/")
+  history.push(routeList.assignments)
   
 }/* , [dispatch]) */
 
