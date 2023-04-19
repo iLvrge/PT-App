@@ -131,6 +131,7 @@ export default makeStyles(theme => ({
         overflow: 'hidden',
         minWidth: 595,
         display: 'flex',
+        flexGrow: 1,
         alignItems: 'center',
         justifyContent: 'flex-end'
         /* textAlign: 'right' */
