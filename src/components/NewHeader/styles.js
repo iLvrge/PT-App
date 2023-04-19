@@ -41,6 +41,7 @@ export default makeStyles(theme => ({
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         fontSize: '1.1rem',
+        marginRight: 'auto',
         '& span':{
             textTransform:'uppercase',
             marginLeft: 24
@@ -128,10 +129,11 @@ export default makeStyles(theme => ({
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-        width: 500,
+        minWidth: 595,
         display: 'flex',
+        flexGrow: 1,
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'flex-end'
         /* textAlign: 'right' */
     },
     toolbar: {
@@ -163,6 +165,9 @@ export default makeStyles(theme => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        maxWidth: 465,
         '& .MuiBadge-anchorOriginTopRightRectangular': {
             transform: 'scale(1) translate(27%, 0%)',
             padding: '0 3px',
@@ -553,6 +558,8 @@ export default makeStyles(theme => ({
         } */     
         cursor: 'default' ,
         fontSize: '1.1rem',
+        fontWeight: 200,
+        textTransform: 'initial',
         color: `${theme.palette.text.primary}`
     },
     actionMenuList: {
