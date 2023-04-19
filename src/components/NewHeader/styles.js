@@ -129,8 +129,8 @@ export default makeStyles(theme => ({
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-        minWidth: 475,  
-        display: 'flex',
+        minWidth: 475,
+        display: 'flex',   
         flexGrow: 1,
         alignItems: 'center',
         justifyContent: 'flex-end'
