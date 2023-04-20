@@ -514,7 +514,7 @@ const TimelineChart = (props) => {
                 min = start
             }
             //
-            end = new moment().add(1, 'year')
+            end = new moment().add(3, 'year')
             if (timelineRef.current !== null && timelineRef.current != undefined && typeof timelineRef.current.destroy === 'function' && typeof props.standalone !== 'undefined') {
                 timelineRef.current.destroy()
                 timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
