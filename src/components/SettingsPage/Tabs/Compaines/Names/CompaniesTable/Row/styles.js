@@ -9,7 +9,7 @@ export default makeStyles((theme) => ({
     /* backgroundColor: 'rgb(41 41 41)', */
     paddingLeft: '36px !important',
     '& td':{
-      padding: 0
+      //padding: 0
     }
   },
   cell: {
@@ -26,7 +26,7 @@ export default makeStyles((theme) => ({
   },
   padLR0:{
     paddingLeft: 0,
-    padingRight: 0
+    paddingRight: 0
   },
   groupHeading: {
     fontWeight: 500,
