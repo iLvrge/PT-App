@@ -24,7 +24,7 @@ const AddToolTip = (props) => {
             TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
             classes={{ 
                 tooltip: clsx(classes.tooltip, typeof props.grid !== 'undefined' ?  `tooltip${props.grid.lg}` : '')
-            }} 
+            }}
         >
             {props.children}
         </Tooltip>

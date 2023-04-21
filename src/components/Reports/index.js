@@ -426,6 +426,7 @@ const Reports = (props) => {
             title: 'Acquisitions',
             tooltip: 'Tooltip',
             standalone: false,
+            button: true,
             rf_id: '',
             type: 1,
             list: [] 
@@ -434,6 +435,7 @@ const Reports = (props) => {
             title: 'Divestitures',
             tooltip: 'Tooltip',
             standalone: false,
+            button: true,
             rf_id: '',
             type: 2,
             list: []
@@ -442,6 +444,7 @@ const Reports = (props) => {
             title: 'Licensing',
             tooltip: 'Tooltip',
             standalone: false,
+            button: true,
             rf_id: '',
             type: 3,
             list: []
@@ -450,6 +453,7 @@ const Reports = (props) => {
             title: 'Collateralization',
             tooltip: 'Tooltip',
             standalone: false,
+            button: true,
             rf_id: '',
             type: 4,
             list: []
@@ -458,6 +462,7 @@ const Reports = (props) => {
             title: 'Inventing',
             tooltip: 'Tooltip',
             standalone: false,
+            button: true,
             rf_id: '',
             type: 5,
             list: []
@@ -466,6 +471,7 @@ const Reports = (props) => {
             title: 'Litigation',
             tooltip: 'Tooltip',
             standalone: false,
+            button: true,
             rf_id: '',
             type: 6,
             list: []
