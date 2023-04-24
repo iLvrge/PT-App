@@ -218,7 +218,7 @@ export default makeStyles(theme => ({
     '&.6': {
       maxWidth: 300
     },
-    '& .MuiTypography-root': {
+    '& .MuiTypography-root': {  
       fontSize: 18
     } 
   },

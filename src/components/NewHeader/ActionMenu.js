@@ -714,7 +714,7 @@ const ActionMenu = (props) => {
                                     if(findCompany.length > 0) {
                                         name = `${company.original_name} <i class="fa fa-sm fa-angle-double-right"></i> ${findCompany[0].original_name}`
                                     }
-                                }
+                                } 
                             }
                         }
                     }
