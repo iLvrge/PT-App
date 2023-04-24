@@ -4,6 +4,11 @@ export default makeStyles((theme) => ({
   expand: {
     /* backgroundColor: 'rgba(255, 255, 255, 0.08)' */
   },
+  tableRow: {
+    '& .MuiOutlinedInput-root':{
+      height: 21
+    }
+  },
   collapsedCell: {
     padding: 0,
     /* backgroundColor: 'rgb(41 41 41)', */

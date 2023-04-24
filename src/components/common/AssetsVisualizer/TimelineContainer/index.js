@@ -431,6 +431,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
                 tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
                 customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
                 rfIDs = selectedAssetAssignments.length > 0 ? selectedAssetAssignments : []; 
+      console.log('TIMELINE', companies, tabs, customers, rfIDs, selectedCategory, assetTypesSelected, assetTypesSelectAll)
       const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined, start, end) 
       setIsLoadingTimelineData(false)
       let list = removeSecurityRelease(data.list)

@@ -1646,7 +1646,7 @@ const GlobalLayout = (props) => {
                                                 ''
                                         }
                                     </div>
-                                    <div className={clsx(classes.flex, classes.bottom)}>
+                                    <div className={clsx(classes.flex, classes.bottom, 'inner-step-2')}>
                                         {
                                             bottomToolBar.map( (item, index) => (
                                                 <NavigationIcon key={index} {...item}/>

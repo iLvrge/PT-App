@@ -125,12 +125,13 @@ function CompaniesTable({
   }, [ handleRequestSort ])
 
   const onSelect = useCallback((event, row, type) => {
-    console.log('onSelect Event', row, type)
     if (type === 'parent') {
       setSelected((selected) => selected.includes(row.id) ? selected.filter(_id => _id !== row.id) : [ ...selected, row.id ])
-      setChildCompaniesSelected((childCompaniesSelected) => childCompaniesSelected.filter(_id => row.children.findIndex(item => item.id === _id) === -1))
+      setChildCompaniesSelected((selection) => selection.filter(_id => row.children.findIndex(item => item.id === _id) === -1))
     } else {
-      setChildCompaniesSelected((childCompaniesSelected) => childCompaniesSelected.includes(row.id) ? childCompaniesSelected.filter(_id => _id !== row.id) : [ ...childCompaniesSelected, row.id ])
+      if(event.target.nodeName != 'DIV') { 
+        setChildCompaniesSelected((selection) => selection.includes(row.id) ? selection.filter(_id => _id !== row.id) : [ ...selection, row.id ])
+      }
     }
   }, [ setSelected, setChildCompaniesSelected ])
 

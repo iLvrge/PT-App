@@ -510,11 +510,15 @@ const TimelineChart = (props) => {
                 start = new Date(convertedItems[25].start)
                 min = new Date(convertedItems[convertedItems.length - 1].start)
             } else {
-                start = new moment(start).subtract(3, 'year')
-                min = start
+                start = new moment(start).subtract(1, 'year')
             }
             //
-            end = new moment().add(1, 'year')
+            if(props.type != 5) {
+                end = new moment().add(6, 'month')
+            } else {
+                end = new Date()
+            }
+            
             if (timelineRef.current !== null && timelineRef.current != undefined && typeof timelineRef.current.destroy === 'function' && typeof props.standalone !== 'undefined') {
                 timelineRef.current.destroy()
                 timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
@@ -528,7 +532,7 @@ const TimelineChart = (props) => {
             }
         } else {
             start = new moment().subtract(1, 'year')
-            end = new moment().add(1, 'year')
+            end = new moment().add(6, 'month')
             items.current.add([])
             timelineRef.current.setItems(items.current)
             timelineRef.current.setOptions({ ...options, start, end, min: start, max: end })
@@ -558,8 +562,8 @@ const TimelineChart = (props) => {
                                     size="small" 
                                     variant="outlined" 
                                     className={clsx(classes.actionButton, 'dashboard_buttons')} 
-                                    onClick={() => props.handleList(props.id, props.type, 'timeline')}
-                                    disabled={ timelineRawData.length == 0 ? true : false }
+                                    onClick={() => props.handleList(props.id, props.card.type, 'timeline')}
+                                    disabled={ timelineRawData.length == 0 || props.button === false ? true : false }
                                 >
                                     {props.card.title} - {numberWithCommas(timelineRawData.length)}    
                                 </Button> 

@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useHistory } from "react-router-dom";
-import routes from "../../../../routeList"; 
 import moment from 'moment'
 import _debounce from 'lodash/debounce'
 import { useDispatch, useSelector } from 'react-redux'
-import { DataSet } from 'vis-data-71/esnext'
+import { DataSet } from 'vis-data/esnext'
 import { Timeline } from 'vis-timeline-73/esnext'
 import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -13,7 +12,6 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
-import ClickAwayListener from '@mui/base'
 import themeMode from '../../../../themes/themeMode';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import { 
@@ -26,8 +24,8 @@ import {
 
 import PatenTrackApi from '../../../../api/patenTrack2'
 import { convertTabIdToAssetType, assetsTypesWithKey } from '../../../../utils/assetTypes'
-import { numberWithCommas, applicationFormat, capitalize } from '../../../../utils/numbers'
-import { timelineOptions, timelineWithoutClusterOptions } from '../../../../utils/options'
+import { numberWithCommas, applicationFormat, capitalize, toTitleCase } from '../../../../utils/numbers'
+import { timelineWithoutClusterOptions } from '../../../../utils/options'
  
 
 import useStyles from './styles'
@@ -52,11 +50,12 @@ const DATE_FORMAT = 'MMM DD, YYYY'
 const CDN_PATH_LOGO = process.env.REACT_APP_COMPANY_PATH
 const NO_IMAGE_AVAILABLE = 'no_image_available.jpg'
 const TIME_INTERVAL = 1000
-
 var tootlTip = ''
-const TimelineWithLogo = ({ data, assignmentBar, assignmentBarToggle, type, timelineData, updateTimelineRawData }) => {
-  
-  const classes = useStyles()
+
+
+
+const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
+    const classes = useStyles()
   const dispatch = useDispatch()
   const location = useLocation()
   const history = useHistory()
@@ -67,37 +66,41 @@ const TimelineWithLogo = ({ data, assignmentBar, assignmentBarToggle, type, time
   const items = useRef(new DataSet()) // timeline items dataset
   const groups = useRef(new DataSet()) // timeline groups dataset
   const [options, setTimelineOptions] = useState({
-    ...timelineOptions,
+    ...timelineWithoutClusterOptions,
     template: function(item, element, data) {
       if (data.isCluster) {
         return `<span class="cluster-header">${data.items[0].clusterHeading} (${data.items.length})</span>`
-      } else {  
-        if (data.rawData.tab_id != 10) {
-            let image = data.rawData.logo
-            if (image !== '' && image !== null && image != undefined) {
-                if (image.indexOf('http') === -1) {
-                    image = CDN_PATH_LOGO + image
-                }
-            } else {
-                image = CDN_PATH_LOGO + NO_IMAGE_AVAILABLE
-            }
-            return `<div class="first" style="display: flex;">
-                    <div class="flexMain">
-                        <div class="textColumn text-height" >${toTitleCase(data.rawData.customerName)}</div>
-                        <div class="textColumn">${numberWithCommas(data.rawData.totalAssets)} Asset${data.rawData.totalAssets > 1 ? 's' : ''}</div>
-                        <div class="textColumn small-font">${moment(new Date(data.start)).format(DATE_FORMAT)}</div>
-                    </div>
-                </div>
-                <div class="second"><span class="img-holder">
-                    <img class="${data.rawData.logo == '' || data.rawData.logo == null ? 'no-image' : ''}" src='${image}' /></span>
-                </div>`
+      } else { 
+        if(['due_dilligence', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'litigation_transactions'].includes(data.category)) {
+          let image = data.rawData.logo
+          if (image !== '' && image !== null && image != undefined) {
+              if (image.indexOf('http') === -1) {
+                  image = CDN_PATH_LOGO + image
+              }
+          } else {
+              image = CDN_PATH_LOGO + NO_IMAGE_AVAILABLE
+          }
+          return `<div class="first" style="display: flex;">
+              <div class="flexMain">
+                  <div class="textColumn text-height" >${toTitleCase(data.rawData.customerName)}</div>
+                  <div class="textColumn">${numberWithCommas(data.rawData.totalAssets)} Asset${data.rawData.totalAssets > 1 ? 's' : ''}</div>
+                  <div class="textColumn small-font">${moment(new Date(data.start)).format(DATE_FORMAT)}</div>
+              </div>
+          </div>
+          <div class="second"><span class="img-holder">
+              <img class="${data.rawData.logo == '' || data.rawData.logo == null ? 'no-image' : ''}" src='${image}' /></span>
+          </div>`
         } else {
+          if(data.category == 'late_recording' && ![5,12].includes(parseInt(data.rawData.tab_id))) {  
+            return `<span class="${data.assetType} ${data.rawData.tab_id}"><span class="name">Assignor: ${data.customerName}</span><span class="recordby">Recorded by: ${data.recorded_by}</span><span class="recordby">Days from Execution to Recording: ${dateDifference(data.rawData.exec_dt, data.rawData.record_dt)} </span></span>`
+          } else { 
             return `<span class="${data.assetType} ${data.rawData.tab_id}">${data.customerName}</span>`
-        }
+          }
+        } 
       }
     },
   })
-  const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
+    const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
   const assetTypesSelectAll = useSelector(state => state.patenTrack2.assetTypes.selectAll)
   const companies = useSelector( state => state.patenTrack2.mainCompaniesList.list )
   const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
@@ -172,7 +175,7 @@ const TimelineWithLogo = ({ data, assignmentBar, assignmentBarToggle, type, time
       companyName,
       rawData: assetsCustomer,
       category: selectedCategory,
-      className: `asset-type-${assetType} ${selectedCategory == 'late_recording' ? 'recordings' : ''} ${assetsCustomer.release_exec_dt != null && assetsCustomer.release_exec_dt != '' ? assetsCustomer.partial_transaction == 1 ? 'asset-type-security-release-partial' : 'asset-type-security-release' : ''}`,
+      className: `asset-type-${assetType} ${selectedCategory == 'late_recording' ? 'recordings' : ''} ${assetsCustomer.release_exec_dt != null && assetsCustomer.release_exec_dt != '' ? assetsCustomer.partial_transaction == 1 ? 'asset-type-security-release-partial' : 'asset-type-security-release' : ['due_dilligence', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'litigation_transactions'].includes(selectedCategory) ? 'item_with_logo' :''}`,
       collection: [ { id: assetsCustomer.id, totalAssets: assetsCustomer.totalAssets } ],
       showTooltips: false
     }
@@ -207,27 +210,7 @@ const TimelineWithLogo = ({ data, assignmentBar, assignmentBarToggle, type, time
   
   const showTooltip = (item, event) => {    
       setTimeout(() => {
-        if(tootlTip === item.id) {
-          if(selectedCategory == 'proliferate_inventors') {
-            const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
-            const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector(`#all_timeline`) : document.getElementById(`all_timeline`);   
-            const getPosition = element.getBoundingClientRect();  
-            const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid #fff;top:${ getPosition.y }px;left:${ getPosition.x }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
-                                        <h4 style='text-align:left; margin:0;'>US${item.patent != '' ? numberWithCommas(item.patent) : applicationFormat(item.application)}</h4>
-                                        <div>
-                                          ${item.exec_dt != '' ? moment(item.exec_dt).format('ll') : ''}
-                                        </div>
-                                        <div>
-                                          <h4>Inventors:</h4>
-                                          ${item.all_inventors}
-                                        </div> 
-                                      </div>` 
-              resetTooltipContainer() 
-            if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
-              document.body.insertAdjacentHTML('beforeend',tootltipTemplate)
-              //timelineContainerRef.current.childNodes[0].insertAdjacentHTML('beforeend',tootltipTemplate)
-            }
-          } else {
+        if(tootlTip === item.id) { 
             PatenTrackApi
             .cancelTimelineItemRequest()
             PatenTrackApi
@@ -310,7 +293,7 @@ const TimelineWithLogo = ({ data, assignmentBar, assignmentBarToggle, type, time
                     break;
                 }
                 const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
-                const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector(`#all_timeline`) : document.getElementById(`all_timeline`);   
+                const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector(`#all_timeline_logo`) : document.getElementById(`all_timeline_logo`);   
                 const getPosition = element.getBoundingClientRect();  
                 let tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${ getPosition.y }px;left:${ getPosition.x }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
                                             <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
@@ -342,9 +325,7 @@ const TimelineWithLogo = ({ data, assignmentBar, assignmentBarToggle, type, time
               } else {
                 resetTooltipContainer()
               }
-            })
-          }
-          
+            }) 
         }                
       }, TIME_INTERVAL) 
   } 
@@ -779,7 +760,7 @@ const TimelineWithLogo = ({ data, assignmentBar, assignmentBarToggle, type, time
           </div>
         </div>        
         <div
-          id={`all_timeline`}
+          id={`all_timeline_logo`}
           style={{ 
             filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
           }}  
@@ -794,5 +775,4 @@ const TimelineWithLogo = ({ data, assignmentBar, assignmentBarToggle, type, time
       </Paper>
   ) 
 }
-
 export default TimelineWithLogo

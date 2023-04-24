@@ -11,6 +11,7 @@ import { ExpandLess, Close } from '@mui/icons-material'
 import Modal from '@mui/material/Modal'
 import Tooltip from '@mui/material/Tooltip'
 import clsx from 'clsx'
+import TimelineWithLogo from './TimelineWithLogo'
 
 const AssetsVisualizer = ({ toggleMinimize, isMinimized, setIllustrationRecord }) => {
   const classes = useStyles()
@@ -42,8 +43,8 @@ const AssetsVisualizer = ({ toggleMinimize, isMinimized, setIllustrationRecord }
   }
 
   const renderComponent = (wherefrom) => {
-    if (shouldShowTimeline) {
-      return <TimelineContainer />
+    if (shouldShowTimeline) {  
+        return <TimelineContainer /> 
     } else if((!wherefrom && !isFullscreenOpen) || (wherefrom && isFullscreenOpen)) {
       return <div className={classes.singleAssetContainer}>
           <IllustrationContainer isFullscreenOpen={isFullscreenOpen} asset={assetIllustration} setIllustrationRecord={setIllustrationRecord} />

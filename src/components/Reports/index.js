@@ -783,7 +783,7 @@ const Reports = (props) => {
         let filterList =  selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0]) 
         if(filterList.length == 0) { 
             let findCompany = selectedCompanies.length > 0 && child_list.filter( company => company.representative_id === selectedCompanies[0]) 
-            if(findCompany.length == 0 && child_list.length == 0) {
+            if(findCompany.length == 0) {
                 companiesList.map( company => {
                     if(company.type == 1) {
                         if(company.child != '') {
@@ -793,7 +793,7 @@ const Reports = (props) => {
                                 if(childs.length > 0) {
                                     findCompany = childs.filter( cmp => cmp.representative_id === selectedCompanies[0])
                                     if(findCompany.length > 0) {
-                                        name = `${company.original_name} > ${findCompany[0].original_name}`
+                                        name = `${company.original_name} <i class="fa fa-sm fa-angle-double-right"></i> ${findCompany[0].original_name}`
                                     }
                                 }
                             }
@@ -804,7 +804,7 @@ const Reports = (props) => {
                 if(childID > 0) { 
                     const findGroup =  companiesList.filter( company => company.representative_id === childID)
                     if(findGroup.length > 0) {
-                        name = `${findGroup[0].original_name} > ${findCompany[0].original_name}`
+                        name = `${findGroup[0].original_name} <i class="fa fa-sm fa-angle-double-right"></i> ${findCompany[0].original_name}`
                     } else {
                         name = findCompany[0].original_name
                     }
@@ -1470,7 +1470,7 @@ const Reports = (props) => {
                 item lg={12} md={12} sm={12} xs={12} 
             >
                 <Paper className={classes.titleContainer} square>
-                    <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{formattedCompanyname}</span> 
+                    <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span dangerouslySetInnerHTML={{__html: formattedCompanyname}}/>
                         <span className={clsx(classes.headingName, 'step-1')}>
                             {
                                 profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' && selectedAssetCompanies.length == 1 && (

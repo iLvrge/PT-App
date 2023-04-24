@@ -1885,6 +1885,12 @@ export const setAbandonedMaintainenceData = (data) => {
   }
 }
 
+export const setViewEnableStep = (flag) => {  
+  return {
+    type: types.SET_VIEW_STEPS,  
+    flag
+  }
+}
 export const setFamilyRequest = (flag) => {  
   return {
     type: types.SET_FAMILY_REQUEST,  

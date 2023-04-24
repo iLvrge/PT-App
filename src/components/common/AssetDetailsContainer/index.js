@@ -330,17 +330,17 @@ const AssetDetailsContainer = ({
                         activeTab={selectedCategory == 'filled' ? 2 : selectedCategory == 'acquired' ? 3 : (selectedCategory == 'top_non_us_members' || selectedCategory == 'divested') ? 0 : 1}
                       />
                     :
-                    timelineScreen === true  && assetIllustration == null && selectedCategory == 'due_dilligence'
+                    timelineScreen === true  && assetIllustration == null && (['due_dilligence', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions'].includes(selectedCategory))
                     ?
                       <SankeyChart
-                        type={'acquired'} 
+                        type={['due_dilligence', 'acquisition_transactions'].includes(selectedCategory) ? 'acquired' : ['licensing_transactions'].includes(selectedCategory) ? 'license_out' : ['collateralization_transactions'].includes(selectedCategory) ? 'lenders' : 'divested'} 
                         showTabs={true}
-                        tabText={'Acquired'}
+                        tabText={['due_dilligence', 'acquisition_transactions'].includes(selectedCategory) ? 'Acquired' : ['licensing_transactions'].includes(selectedCategory) ? 'License Out' : ['collateralization_transactions'].includes(selectedCategory) ? 'Lenders' : 'Divested'}
                         fullScreen={true}
                         standalone={true}
                       />
                     : 
-                    timelineScreen === true  && assetIllustration == null && selectedCategory == 'proliferate_inventors'
+                    timelineScreen === true  && assetIllustration == null && ['proliferate_inventors', 'inventing_transactions'].includes(selectedCategory)
                     ?
                       <GeoChart
                         chartBar={chartBar} 
@@ -432,17 +432,17 @@ const AssetDetailsContainer = ({
                 {
                   analyticsBar === true 
                     ? 
-                      timelineScreen === true  && assetIllustration == null && selectedCategory == 'due_dilligence'
+                      timelineScreen === true  && assetIllustration == null && ['due_dilligence', 'licensing_transactions'].includes(selectedCategory)
                       ?
                         <SankeyChart
-                          type={'divested'}
+                          type={['licensing_transactions'].includes(selectedCategory) ? 'license_in' : 'divested'}
                           showTabs={true}
-                          tabText={'Divested'}
+                          tabText={['licensing_transactions'].includes(selectedCategory) ? 'License In' : 'Divested'}
                           fullScreen={true}
                           standalone={true}
                         />
                       : 
-                      timelineScreen === true  && assetIllustration == null && (selectedCategory == 'top_law_firms' || selectedCategory == 'proliferate_inventors' )
+                      timelineScreen === true  && assetIllustration == null && (['top_law_firms', 'proliferate_inventors', 'acquisition_transactions', 'divestitures_transactions', 'inventing_transactions'].includes(selectedCategory))
                       ?
                         <InventionVisualizer 
                           defaultSize={defaultSize} 
@@ -459,7 +459,7 @@ const AssetDetailsContainer = ({
                           side={true}
                         />
                       :
-                      timelineScreen === true  && assetIllustration == null && (selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording' || selectedCategory == 'top_lenders')
+                      timelineScreen === true  && assetIllustration == null && (['late_recording', 'incorrect_recording', 'top_lenders', 'collateralization_transactions'].includes(selectedCategory))
                       ?
                         <LifeSpanContainer
                           chartBar={chartBar} 
@@ -473,7 +473,7 @@ const AssetDetailsContainer = ({
                           setChartBar={setChartBar}
                           gap={gap}
                           type={type}
-                          activeTab={1}
+                          activeTab={['collateralization_transactions'].includes(selectedCategory) ? 0 : 1}
                         />
                         
                       :

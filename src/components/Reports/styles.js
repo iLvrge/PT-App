@@ -220,7 +220,7 @@ export default makeStyles(theme => ({
     },
     '& .MuiTypography-root': {
       fontSize: 18
-    }
+    } 
   },
   mobileTooltip: {
     flex: '1 1 100%',
