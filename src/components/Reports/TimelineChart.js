@@ -530,7 +530,7 @@ const TimelineChart = (props) => {
                 timelineRef.current.setOptions({ ...options, start, end, min, max: end })
                 timelineRef.current.setItems(items.current)
             }
-        } else {
+        } else { 
             start = new moment().subtract(1, 'year')
             end = new moment().add(6, 'month')
             items.current.add([])

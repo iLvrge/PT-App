@@ -791,7 +791,7 @@ const PatentLayout = ({
             initialStep={0}
             onExit={onExit}
         />
-        </React.Fragment>
+        </React.Fragment> 
     )
 }
 

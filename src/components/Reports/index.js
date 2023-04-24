@@ -786,7 +786,7 @@ const Reports = (props) => {
             if(findCompany.length == 0) {
                 companiesList.map( company => {
                     if(company.type == 1) {
-                        if(company.child != '') {
+                        if(company.child != '') { 
                             const companyChildIDs = JSON.parse(company.child)
                             if(companyChildIDs.includes(selectedCompanies[0])) {
                                 const childs = JSON.parse(company.child_full_detail)

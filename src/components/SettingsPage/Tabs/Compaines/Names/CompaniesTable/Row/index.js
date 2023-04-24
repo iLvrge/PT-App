@@ -226,7 +226,7 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
                           onClick={event => company.status == 1 ? onSelect(event, company, 'child') : ''}
                           aria-checked={isChildSelected(company.id)}
                           tabIndex={-1}
-                          key={`${company.id}_child`}
+                          key={`${company.id}_child`} 
                           selected={company.status == 0 ? false : isChildSelected(company.id)} 
                         >
                           {/* <TableCell className={classes.actionCell}>
