@@ -699,10 +699,10 @@ const ActionMenu = (props) => {
 
     const formattedCompanyname = useMemo(() => {
         let name = ''
-        let filterList =  mainCompaniesSelected.length > 0 && companiesList.filter( company => company.representative_id === mainCompaniesSelected[0])
+        let filterList =  mainCompaniesSelected.length > 0 && companiesList.filter( company => company.representative_id === mainCompaniesSelected[0]) 
         if(filterList.length == 0) { 
-            let findCompany = mainCompaniesSelected.length > 0 && child_list.filter( company => company.representative_id === mainCompaniesSelected[0])
-            if(findCompany.length == 0 && child_list.length == 0) {
+            let findCompany = mainCompaniesSelected.length > 0 && child_list.filter( company => company.representative_id === mainCompaniesSelected[0]) 
+            if(findCompany.length == 0) { 
                 companiesList.map( company => {
                     if(company.type == 1) {
                         if(company.child != '') {
@@ -712,7 +712,7 @@ const ActionMenu = (props) => {
                                 if(childs.length > 0) {
                                     findCompany = childs.filter( cmp => cmp.representative_id === mainCompaniesSelected[0])
                                     if(findCompany.length > 0) {
-                                        name = `${company.original_name} > ${findCompany[0].original_name}`
+                                        name = `${company.original_name} <i class="fa fa-sm fa-angle-double-right"></i> ${findCompany[0].original_name}`
                                     }
                                 }
                             }
@@ -723,7 +723,7 @@ const ActionMenu = (props) => {
                 if(childID > 0) { 
                     const findGroup =  companiesList.filter( company => company.representative_id === childID)
                     if(findGroup.length > 0) {
-                        name = `${findGroup[0].original_name} > ${findCompany[0].original_name}`
+                        name = `${findGroup[0].original_name} <i class="fa fa-sm fa-angle-double-right"></i> ${findCompany[0].original_name}`
                     } else {
                         name = findCompany[0].original_name
                     }
@@ -783,7 +783,7 @@ const ActionMenu = (props) => {
                         {
                             props.dashboardScreen === false && (
                                 <span className={classes.title}>
-                                    <span>{formattedCompanyname}</span> 
+                                    <span dangerouslySetInnerHTML={{__html: formattedCompanyname}}/>
                                 </span>
                             )
                         }

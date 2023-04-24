@@ -2,8 +2,7 @@ import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {  useLocation } from "react-router-dom";
 
-import SplitPane from 'react-split-pane'
-import ArrowButton from '../common/ArrowButton'
+import SplitPane from 'react-split-pane' 
 import MainCompaniesSelector from '../common/MainCompaniesSelector'
 import AssignmentsType from '../common/AssignmentsType'
 import CustomerTable from '../common/CustomerTable'
@@ -16,8 +15,8 @@ import LayoutTemplates from '../common/LayoutTemplates'
 import FilesTemplates from '../common/FilesTemplates'
 import ForeignAsset from '../common/ForeignAsset'
 import { resizePane, resizePane2, editorBar } from '../../utils/splitpane'
-import { updateResizerBar } from '../../utils/resizeBar'
-import { controlList } from '../../utils/controlList'
+import { updateResizerBar } from '../../utils/resizeBar' 
+import { Steps } from 'intro.js-react';
 import config from "../common/PatentrackDiagram/config.json";
 
 import { 
@@ -44,7 +43,8 @@ import {
     setSlackMessages,
     setBreadCrumbs,
     setSelectedCategory,
-    setBreadCrumbsAndCategory
+    setBreadCrumbsAndCategory,
+    setViewEnableStep
 } from '../../actions/patentTrackActions2'
 
 import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpanMode, setMaintainenceFeeFrameMode, setPatentScreen, setDashboardScreen, setTimelineScreen } from '../../actions/uiActions'
@@ -147,11 +147,10 @@ const PatentLayout = ({
     const [sheetName, setSheetName] = useState('')
     const [isLoaded, checkPageLoad] = useReloadLayout()
     const [ gap, setGap ] = useState( { x: '14.1rem', y: '7.5rem'} )
-    const [ isDragging, setIsDragging] = useState(false)
+    const [ isDragging, setIsDragging] = useState(false) 
     const [ isFullscreenOpen, setIsFullscreenOpen] = useState(false)
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false)
-    const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
-    const dashboardPanel = useSelector(state => state.ui.dashboardPanel)
+    const viewEnableSteps = useSelector(state => state.patenTrack2.viewEnableSteps);
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const selectedMainCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
@@ -161,10 +160,24 @@ const PatentLayout = ({
     
 
     const maintainenceAssetsList = useSelector( state => state.patenTrack2.maintainenceAssetsList )
-    const maintainenceAssetsLoadingMore = useSelector( state => state.patenTrack2.maintainenceAssetsLoadingMore )
-    const selectedMaintainencePatents = useSelector( state => state.patenTrack2.selectedMaintainencePatents )
-    const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
+    const assetTypeAssignmentAssets = useSelector( state => state.patenTrack2.assetTypeAssignmentAssets )
     const channel_id = useSelector( state => state.patenTrack2.channel_id )   
+    const STEPS = [ 
+        {
+            element: document.querySelector('.inner-step-1'), 
+            intro: `The Assets table lists the patent and patent applications filtered under the category you just selected.`,
+            position: 'right',
+            tooltipClass: 'dashboardIntroTooltip',
+            highlightClass: 'dashboardHighlightClass',
+        },
+        {
+            element: document.querySelector('.inner-step-2'),
+            intro: 'Use these 4 buttons to open and close the 4 windows in this view.<ul><li> - main window</li><li> - group chatting. We dedicated a Slack/Teams channel for each patent assets in which your team can collaborate.</li><li> - analytical data</li><li> - additional analytical data</li></ul>',
+            position: 'right',
+            tooltipClass: 'dashboardIntroTooltip',
+            highlightClass: 'dashboardHighlightClass',
+        }
+    ]
     const checkContainer = () => {
         /* setTimeout(() => {
             if( mainContainerRef.current != null  && mainContainerRef.current != undefined) {                
@@ -193,61 +206,13 @@ const PatentLayout = ({
         if(!isLoaded) { 
             checkPageLoad(1)
         }
-    }, [])
+    }, []) 
 
-    // useEffect(() => {
-    //     if(selectedCategory == 'correct_details') {
-    //         if(openAssignmentBar === false) {
-    //             handleAssignmentBarOpen()
-    //         }
-    //         if(openCustomerBar === true) {
-    //             handleCustomersBarOpen()
-    //         }
-    //     } else if(selectedCategory == 'pay_maintainence_fee' || selectedCategory == 'deflated_collaterals') {
-    //         let statusChange = false;
-    //         if(openIllustrationBar === false) {
-    //             statusChange = true
-    //             handleIllustrationBarOpen()
-    //         }
-    //         if(openAssignmentBar === true) {
-    //             handleAssignmentBarOpen()
-    //         }
-    //         if( openAnalyticsBar === false ) {
-    //             statusChange = true
-    //             handleAnalyticsBarOpen()
-    //         }
-    //         if(statusChange === true) {
-    //             changeVisualBar(false, true, false, false)
-    //         }
-    //     } else if (selectedCategory == 'acquired') {
-    //         let statusChange = false;
-    //         if(openAssignmentBar === true) {
-    //             handleAssignmentBarOpen()
-    //         }
-    //         if( openCommentBar === false ) {
-    //             handleCommentBarOpen()
-    //         }
-    //         if( openChartBar === false ) {
-    //             statusChange = true
-    //             handleChartBarOpen()
-    //         }
-    //         if( openAnalyticsBar === false ) {
-    //             statusChange = true
-    //             handleAnalyticsBarOpen()
-    //         }
-    //         if(statusChange === true) {
-    //             changeVisualBar(false, true, false, false)
-    //         }
-
-    //     } else {
-    //         if(openAssignmentBar === true) {
-    //             handleAssignmentBarOpen()
-    //         }
-    //         /* if(openCustomerBar === false && dashboardScreen === false) {
-    //             handleCustomersBarOpen()
-    //         } */
-    //     }
-    // }, [selectedCategory])
+    useEffect(() => {
+        if((maintainenceAssetsList.list.length > 0 || assetTypeAssignmentAssets.list.length > 0) && viewEnableSteps === false) {
+            dispatch(setViewEnableStep(true))
+        }
+    }, [maintainenceAssetsList, assetTypeAssignmentAssets])
 
     useEffect(() => {
         if(openAssignmentBar === true) {
@@ -356,10 +321,6 @@ const PatentLayout = ({
         updateResizerBar(templateFileRef, driveTemplateMode)
     }, [ templateFileRef, driveTemplateMode ])    
 
-    useEffect(() => {
-        
-    }, [selectedCategory])
-
     const resetAll = (dispatch) => {
         dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
         dispatch( setSelectedAssetsPatents( [] ) )
@@ -421,6 +382,10 @@ const PatentLayout = ({
 
     const handleClickOpenFullscreen = () => {
         setIsFullscreenOpen(true)
+    }
+
+    const onExit = () => {
+        dispatch(setViewEnableStep(false))
     }
 
 
@@ -582,7 +547,7 @@ const PatentLayout = ({
                             onDragFinished={(size) => resizePane('split2', size > 900 ? 900 : size, setCustomerBarSize)}
                             ref={assetRef}
                         >
-                            <div id={`assets_container`} style={{ height: '100%'}}>
+                            <div id={`assets_container`} style={{ height: '100%'}} className={'inner-step-1'}>
                                 { 
                                     openCustomerBar === true 
                                     ? 
@@ -796,6 +761,12 @@ const PatentLayout = ({
                 </SplitPane>
             </SplitPane>
         </SplitPane>
+        <Steps 
+            enabled={viewEnableSteps}
+            steps={STEPS}
+            initialStep={0}
+            onExit={onExit}
+        />
         </React.Fragment>
     )
 }

@@ -31,6 +31,7 @@ import ConnectionBox from '../ConnectionBox'
 import { useIsMounted } from '../../../utils/useIsMounted'
 import SankeyChart from '../AssetsVisualizer/SankeyChart'
 import LegalData from '../AssetsVisualizer/FamilyContainer/LegalData'
+import TimelineWithLogo from '../AssetsVisualizer/TimelineWithLogo'
 
 const IllustrationCommentContainer = ({ 
     cls, 
@@ -320,7 +321,7 @@ const IllustrationCommentContainer = ({
                 }                
                                               
                 {  
-                    illustrationBar === true && (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' ||  type === 9 || ((process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') && auth_token !== null))
+                    illustrationBar === true && (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' ||  type === 9 || (['SAMPLE', 'STANDARD', 'DASHBOARD', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE) && auth_token !== null))
                     ?
                         (maintainence  === true || record === true) && assetIllustration === null
                         ?
@@ -521,12 +522,21 @@ const IllustrationCommentContainer = ({
                                         updateTimelineRawData={setTimelineRawData}
                                     />
                                 :
-                                    <TimelineContainer 
-                                        assignmentBar={assignmentBar} 
-                                        assignmentBarToggle={assignmentBarToggle} 
-                                        type={type}
-                                        updateTimelineRawData={setTimelineRawData}
-                                    />
+                                    ['due_dilligence', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'litigation_transactions'].includes(selectedCategory)
+                                    ?
+                                        <TimelineWithLogo 
+                                            assignmentBar={assignmentBar} 
+                                            assignmentBarToggle={assignmentBarToggle} 
+                                            type={type}
+                                            updateTimelineRawData={setTimelineRawData}
+                                        />
+                                    :
+                                        <TimelineContainer 
+                                            assignmentBar={assignmentBar} 
+                                            assignmentBarToggle={assignmentBarToggle} 
+                                            type={type}
+                                            updateTimelineRawData={setTimelineRawData}
+                                        />
                                 
                             :
                                 familyLegalItemMode === true

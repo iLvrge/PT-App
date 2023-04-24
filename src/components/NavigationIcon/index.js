@@ -49,7 +49,7 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
 
     const dashboardICONS = [0, 1, 7, 45]
-    const removeFilterICONS = selectedCategory == 'late_recording' || selectedCategory == 'top_law_firms' || selectedCategory == 'top_lenders' ? [2, 11] : selectedCategory == 'proliferate_inventors' ? [2, 3, 4, 5, 10] : ['acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'inventing_transactions', 'litigation_transactions'].includes(selectedCategory)  ? [2, 3, 11] : [2, 3, 4, 11]
+    const removeFilterICONS = selectedCategory == 'top_law_firms' || selectedCategory == 'top_lenders' ? [2, 11] : selectedCategory == 'proliferate_inventors' ? [2, 3, 4, 5, 10] : ['late_recording', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'inventing_transactions', 'litigation_transactions'].includes(selectedCategory)  ? [2, 3, 11] : [2, 3, 4, 11]
 
 
     const TeamBarIcon = () => {

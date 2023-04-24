@@ -13,6 +13,11 @@ const arrayToObjectByKey = (array, key) =>
 
 const patenTrackReducer = (state = initialState.dashboard, action) => { 
   switch (action.type) {
+    case types.SET_VIEW_STEPS: 
+      return { 
+        ...state, 
+        viewEnableSteps: action.flag 
+      }
     case types.SET_FAMILY_REQUEST: 
       return { 
         ...state, 

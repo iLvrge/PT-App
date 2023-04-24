@@ -20,6 +20,7 @@ const SankeyChart = (props) => {
     const [loading, setLoading] = useState(false);
     const [loadingAssignor, setLoadingAssingor] = useState(false);
     const [ fullScreen, setFullScreen ] = useState(false)
+    const [tabs, setTabs] = useState([props.tabText])
     const [data, setData] = useState([]);
     const [height, setHeight] = useState('100%');
     const [assignorData, setAssignorData] = useState([]);    
@@ -109,7 +110,7 @@ const SankeyChart = (props) => {
                 } else {
                     formData.append('type', selectedCategory);   
                 }
-                if((typeof props.type != 'undefined' && (props.type == 'acquired' || props.type == 'filled')) || (selectedCategory == 'acquired')) {
+                if((typeof props.type != 'undefined' && ['acquired', 'filled', 'license_out'].includes(props.type)) || ['acquired', 'collateralization_transactions', 'license_out'].includes(selectedCategory)) {
                     setLoading(true)
                     PatenTrackApi.cancelDashboardPartiesDataRequest()
                     const {data} = await PatenTrackApi.getDashboardPartiesData(formData) 
@@ -130,7 +131,7 @@ const SankeyChart = (props) => {
                     }
                 }
                 
-                if((typeof props.type != 'undefined' && props.type == 'divested')) {
+                if((typeof props.type != 'undefined' && ['license_in', 'divested'].includes(props.type))) {
                     setLoadingAssingor(true) 
                     PatenTrackApi.cancelDashboardPartiesAssignorDataRequest()
                     const getAssignorData = await PatenTrackApi.getDashboardPartiesAssignorData(formData)  
@@ -157,6 +158,12 @@ const SankeyChart = (props) => {
         getPartiesData()
         return (() => {})
     }, [selectedCompanies, props.type])
+
+    useEffect(() => {
+        if(['acquisition_transactions', 'divestitures_transactions'].includes(selectedCategory)) {
+            setTabs([props.tabText, 'Owned'])
+        }
+    }, [selectedCategory])
 
     useEffect(() => {
         if((data.length > 0 || assignorData.length > 0) && containerRef != null && containerRef.current != null) {  
@@ -224,7 +231,7 @@ const SankeyChart = (props) => {
                         className={classes.tabs} 
                     >
                         {
-                            [props.tabText].map((tab) => (
+                            tabs.map((tab) => (
                                 <Tab
                                     key={tab}
                                     className={classes.tab} 
@@ -247,7 +254,7 @@ const SankeyChart = (props) => {
                 <div className={clsx(classes.child, typeof props.standalone != 'undefined' && props.standalone === true ? typeof props.container == 'undefined' ? classes.padding16 : '' : '')} >
                 
                 {    
-                    selectedCategory == 'acquired' || props.type == 'acquired' || props.type == 'filled'
+                    ['acquired', 'collateralization_transactions'].includes(selectedCategory) || ['filled', 'acquired', 'license_out'].includes(props.type)
                     ?
                         loading === false ?  
                             <DisplayChart data={data} tooltip={true}  chartType={1} rawItem={assigneeRawData} onSelect={handleSelection}/> 
@@ -259,7 +266,7 @@ const SankeyChart = (props) => {
                 }           
                 
                 {
-                    selectedCategory == 'divested' || props.type == 'divested'
+                    selectedCategory == 'divested' || ['divested', 'license_in'].includes(props.type)
                     ?
                         loadingAssignor === false ? 
                             <DisplayChart data={assignorData} chartType={2} rawItem={assignorRawData} onSelect={handleSelection} {...props}/> 
