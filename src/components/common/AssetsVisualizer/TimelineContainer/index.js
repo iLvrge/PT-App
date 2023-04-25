@@ -9,7 +9,7 @@ import { Timeline } from 'vis-timeline/esnext'
 import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
 
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'; 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';

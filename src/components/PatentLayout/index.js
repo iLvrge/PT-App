@@ -178,7 +178,7 @@ const PatentLayout = ({
             tooltipClass: 'dashboardIntroTooltip2',
             highlightClass: 'dashboardHighlightClass',
         } 
-    ]
+    ] 
     const checkContainer = () => {
         /* setTimeout(() => {
             if( mainContainerRef.current != null  && mainContainerRef.current != undefined) {                
