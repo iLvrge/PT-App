@@ -64,7 +64,7 @@ export default makeStyles(theme => ({
         position: 'absolute'
     },
     bottom: {
-        bottom: 0
+        bottom: 10
     },
     view: {
         display: 'flex',
