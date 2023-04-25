@@ -153,13 +153,13 @@ span {
   color: #ff0000;
 }
  
-.dashboardIntroTooltip .introjs-tooltip-title, .dashboardIntroTooltip .introjs-tooltiptext{
+.dashboardIntroTooltip .introjs-tooltip-title, .dashboardIntroTooltip .introjs-tooltiptext, .dashboardIntroTooltip2 .introjs-tooltip-title, .dashboardIntroTooltip2 .introjs-tooltiptext{
   color: #000
 }
-.dashboardIntroTooltip .introjs-tooltip-title {
+.dashboardIntroTooltip .introjs-tooltip-title, .dashboardIntroTooltip2 .introjs-tooltip-title  {
   font-size: 24px;
 }
-.dashboardIntroTooltip .introjs-tooltiptext {
+.dashboardIntroTooltip .introjs-tooltiptext, .dashboardIntroTooltip2 .introjs-tooltiptext {
   font-size: 20px;
 }
 .introjs-tooltiptext span{
@@ -181,7 +181,11 @@ span {
   min-width: 450px;
   max-width: 500px;
 }
-.dashboardIntroTooltip ul {
+.dashboardIntroTooltip2 {
+  min-width: 1150px;
+  max-width: 1100px;
+}
+.dashboardIntroTooltip ul, .dashboardIntroTooltip2 ul {
   padding-left: 20px;
 }
 .dashboardHighlightClass{
