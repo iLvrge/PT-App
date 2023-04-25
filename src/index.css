@@ -173,6 +173,10 @@ span {
   top: 4px;
   fill: #f50057;
 }
+.introjs-tooltiptext span svg.strokeWidth{
+  stroke: #f50057;
+  stroke-width: 27px;
+}
 .dashboardIntroTooltip {
   min-width: 450px;
   max-width: 500px;
