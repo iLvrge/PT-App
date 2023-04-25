@@ -382,10 +382,10 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, itemCallback, groups, 
             let updateSelected =  [parseInt(row.representative_id)]
             setSelectItems(updateSelected)
             let group = [...groups]
-            itemCallback(updateSelected, groups)
+            itemCallback(updateSelected, [parentCompanyId])
             //checkAllChildCompany(companies, updateSelected)
             updateUserCompanySelection(updateSelected)
-            dispatch( setMainCompaniesSelected( updateSelected, [...new Set(group)] ) )     
+            dispatch( setMainCompaniesSelected( updateSelected, [parentCompanyId] ) )     
             dispatch( setNamesTransactionsSelectAll( false ) )
             dispatch( setSelectedNamesTransactions([]) )
             reset() 
