@@ -162,11 +162,14 @@ span {
 .dashboardIntroTooltip .introjs-tooltiptext, .dashboardIntroTooltip2 .introjs-tooltiptext {
   font-size: 20px;
 }
-.introjs-tooltiptext span{
+.introjs-tooltiptext span, .svgIcon{
   display: inline-block;
-  position: relative;
+  position: relative;  
   width: 21px;
   height: 21px;
+}
+.introjs-tooltiptext span img{
+  width: 21px;
 }
 .introjs-tooltiptext span svg{
   position: absolute;
@@ -188,11 +191,29 @@ span {
 .dashboardIntroTooltip ul, .dashboardIntroTooltip2 ul {
   padding-left: 20px;
 }
-.dashboardHighlightClass{
+.dashboardHighlightClass, .dashboardHighlightClass1{
   border: 1px solid #FFAA00;
+}
+.dashboardHighlightClass1{
+  border-bottom: 0px
 }
 .introjs-arrow.top-right{
   right: 25px
+}
+.introjs-tooltipbuttons{
+  padding: 5px 10px;
+}
+.introjs-tooltiptext{
+  padding: 10px 20px
+}
+.introjs-bullets{
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.teamBar svg, .svgIcon{
+  fill: #fff;
+  left: 0px !important
 }
 
 @-webkit-keyframes animatetop {

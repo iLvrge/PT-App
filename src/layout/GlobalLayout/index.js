@@ -306,7 +306,7 @@ const GlobalLayout = (props) => {
                             }
                         })
                         
-                        const { data } = await PatenTrackApi.getUserCompanySelections();
+                        const { data } = await PatenTrackApi.getUserCompanySelections(); 
                         setRequest(true)
                         if(data != null && data.list.length > 0) {
                             let oldItems = [], groups = []
@@ -327,11 +327,18 @@ const GlobalLayout = (props) => {
                                         }
                                     } else {
                                         if(activeItems.includes(parseInt(representative.representative_id))) {
-                                            oldItems = [parseInt(representative.representative_id)]       
+                                            oldItems = [parseInt(representative.representative_id)]    
+                                            if(parentChild.length > 0) {
+                                                parentChild.map( item => {
+                                                    if(item.child.length > 0 && item.child.includes(representative.representative_id)){
+                                                        groups.push(item.parent)
+                                                    }
+                                                })
+                                            }     
                                         }       
                                     }
                                 })
-                                await Promise.all(promise)
+                                await Promise.all(promise) 
                                 dispatch(setMainCompaniesSelected(oldItems, groups))
                             }
                         }       

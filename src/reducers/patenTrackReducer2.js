@@ -2,7 +2,6 @@ import * as types from '../actions/actionTypes2'
 import initialState from './initialState2'
 
 import dashboardIntial from './dashboard_initials'
-import { ConstructionOutlined } from '@mui/icons-material'
 
 
 const arrayToObjectByKey = (array, key) =>
@@ -838,7 +837,8 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
               breadcrumbs = {...state.breadCrumbs},
               selectedCategory = {...state.category},
               layout_id = {...state.layout_id},
-              clipboard_assets = [...state.clipboard_assets]
+              clipboard_assets = [...state.clipboard_assets],
+              viewEnableSteps = {...state.viewEnableSteps}
         return {
           ...state,
           ...dashboardIntial,
@@ -846,7 +846,8 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           breadcrumbs,
           selectedCategory,
           layout_id,
-          clipboard_assets 
+          clipboard_assets ,
+          viewEnableSteps
         }
       case types.SET_MOVE_ASSETS:
         return {

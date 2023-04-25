@@ -132,6 +132,7 @@ import { faShareAlt } from '@fortawesome/free-solid-svg-icons'
 import { copyToClipboard } from '../../utils/html_encode_decode'
  
 import PatenTrackApi from '../../api/patenTrack2' 
+import { ASSET } from '../../utils/icons'
 
 const NewHeader = (props) => {
   const classes = useStyles()
@@ -928,14 +929,14 @@ const handleOpenSettings = useCallback((event) => {
                 </Avatar>
             }
             <IconButton
-              className={`${classes.buttonIcon} ${classes.menuButton}`}
+              className= {`${classes.buttonIcon} ${classes.menuButton}`}
               color='inherit'
-              aria-label='open drawer' 
+              aria-label='open drawer'
               onClick={(event) => {
                 return process.env.REACT_APP_ENVIROMENT_MODE == 'PRO' ? toggleDrawer(event, !openDrawer.right) :  null
               }}
               size="large">
-              <MenuIcon />
+              <MenuIcon  className={'menuButton'}/>
             </IconButton>
             <Drawer anchor={'right'} open={openDrawer['right']} onClose={(event) => {toggleDrawer(event, false)}} className={classes.drawer}>
               <div
@@ -987,7 +988,7 @@ const handleOpenSettings = useCallback((event) => {
                           <ListItemText primary={`Clipboard`} />
                       </ListItem> 
                       <AddToolTip
-                          tooltip={'All Assets (Since 1998)'}
+                          tooltip={'All Assets (Since 1999)'}
                           placement='bottom'
                       >
                         <ListItem 
@@ -995,9 +996,9 @@ const handleOpenSettings = useCallback((event) => {
                             onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : onHandlePatentAssets} 
                             button>
                           <ListItemIcon  color='inherit' >
-                            <DescriptionOutlinedIcon />
+                            <ASSET />
                           </ListItemIcon>
-                          <ListItemText primary={`All Assets (Since 1998)`} />
+                          <ListItemText primary={`All Assets (Since 1999)`} />
                         </ListItem> 
                       </AddToolTip> 
                       <AddToolTip
