@@ -132,10 +132,7 @@ export default makeStyles(theme => ({
       top: 5,
       display: 'none',
       borderRadius: 'inherit',
-<<<<<<< HEAD
       fontSize: '1.1rem',
-=======
->>>>>>> 7967add (Added react-compress)
       '&.MuiIconButton-root svg': {
         width: '1.2rem',
         height: '1.2rem',
@@ -220,14 +217,10 @@ export default makeStyles(theme => ({
     },
     '&.6': {
       maxWidth: 300
-<<<<<<< HEAD
     },
     '& .MuiTypography-root': {  
       fontSize: 18
     } 
-=======
-    }
->>>>>>> 7967add (Added react-compress)
   },
   mobileTooltip: {
     flex: '1 1 100%',
