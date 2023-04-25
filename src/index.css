@@ -165,6 +165,9 @@ span {
 .introjs-tooltiptext div{
   margin-bottom: 10px;
 }
+.introjs-tooltiptext span {
+  margin-right: 12px
+}
 .introjs-tooltiptext span, .svgIcon{
   display: inline-block;
   position: relative;  
