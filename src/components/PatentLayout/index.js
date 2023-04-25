@@ -177,7 +177,7 @@ const PatentLayout = ({
             position: 'right',
             tooltipClass: 'dashboardIntroTooltip2',
             highlightClass: 'dashboardHighlightClass',
-        } 
+        }
     ] 
     const checkContainer = () => {
         /* setTimeout(() => {
