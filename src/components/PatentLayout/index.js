@@ -54,7 +54,7 @@ import clsx from 'clsx'
 import IllustrationContainer from '../common/AssetsVisualizer/IllustrationContainer'
 import Maintainance from '../common/Maintainence'
 import { useReloadLayout } from '../../utils/useReloadLayout';
-import {ANALYTICS_STRING, CHART_STRING, DISCUSSION_STRING, TV_STRING } from '../../utils/icons';
+import {ANALYTICS_STRING, ASSETS_STRING, CHART_STRING, CLIPBOARD_STRING, DISCUSSION_STRING, LOCK_STRING, SETTING_STRING, SHARE_STRING, STAR_STRING, TV_STRING } from '../../utils/icons';
 
 const PatentLayout = ({
     type,
@@ -169,13 +169,34 @@ const PatentLayout = ({
             intro: `The Assets table lists the patent and patent applications filtered under the category you just selected.`,
             position: 'right',
             tooltipClass: 'dashboardIntroTooltip',
-            highlightClass: 'dashboardHighlightClass',
+            highlightClass: 'dashboardHighlightClass1',
         },
         {
             element: document.querySelector('.inner-step-2'),
-            intro: `Use these 4 buttons to open and close the 4 windows in this view.<ul style="margin: 0"><li><div><span>${TV_STRING}</span> - main window</div></li><li><div><span>${DISCUSSION_STRING}</span> - group chatting. We dedicated a Slack/Teams channel for each patent assets in which your team can collaborate.</div></li><li><div><span>${CHART_STRING}</span> - analytical data</div></li><li><div><span>${ANALYTICS_STRING}</span> - additional analytical data</div></li></ul>`,
-            position: 'right',
+            intro: `Use these 4 buttons to open and close the 4 windows in this view.<ul style="margin: 0"><li><div><span>${TV_STRING}</span> - main window</div></li><li><div><span>${DISCUSSION_STRING}</span> - group chatting. We dedicated a Slack/Teams channel for each patent assets in which your team can collaborate</div></li><li><div><span>${CHART_STRING}</span> - analytical data</div></li><li><div><span>${ANALYTICS_STRING}</span> - additional analytical data</div></li></ul>`,
+            position: 'top',
             tooltipClass: 'dashboardIntroTooltip2',
+            highlightClass: 'dashboardHighlightClass1',
+        },
+        {
+            element: document.querySelector('.inner-step-1 .rowIndex_0'),
+            intro: `Select any asset to view its details`,
+            position: 'right',
+            tooltipClass: 'dashboardIntroTooltip',
+            highlightClass: 'dashboardHighlightClass',
+        },
+        {
+            element: document.querySelector('.inner-step-1 .rowIndex_0 .selectedIcon .MuiSvgIcon-root'),
+            intro: `Click the arrowhead next to any of the asset in order to: <ul><li><div><span><img src="https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/sell.png"/></span> Move the asset to the For Sale list, in case you decide to sell it</div></li><li><div><span><img src="https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/licenseout.png"/></span> Move the asset to the License-Out list</div></li><li><div><span>${CLIPBOARD_STRING}</span> Add the asset number to the Clipboard</div></li><li><div><span>${STAR_STRING}</span> Rank how necessary the asset is</div></li><li><div><span>${STAR_STRING}</span> Rank how important the asset is</div></li><li><div><span>${DISCUSSION_STRING}</span> Add a task to any of your team members</div></li></ul>`,
+            position: 'bottom',
+            tooltipClass: 'dashboardIntroTooltip',
+            highlightClass: 'dashboardHighlightClass',
+        },
+        {
+            element: document.querySelector('.menuButton'),
+            intro: `Click the menu to see details about your account, and to: <ul><li><div><span>${LOCK_STRING}</span>Sign out</div></li><li><div><span>${SHARE_STRING}</span>Share the Dashboard or any of the Transactions or Assets</div></li><li><div><span>${CLIPBOARD_STRING}</span>View assets you previously added to the Clipboard</div></li><li><div><span>${ASSETS_STRING}</span>View a list of all the assets or transactions the selected company was part of</div></li><li><div><span>${SETTING_STRING}</span>Add companies to your account, manage users, and add categories to your patent/product review</div></li></ul>`,
+            position: 'top',
+            tooltipClass: 'dashboardIntroTooltip',
             highlightClass: 'dashboardHighlightClass',
         }
     ]
@@ -211,7 +232,9 @@ const PatentLayout = ({
 
     useEffect(() => {
         if((maintainenceAssetsList.list.length > 0 || assetTypeAssignmentAssets.list.length > 0) && viewEnableSteps === false) {
-            dispatch(setViewEnableStep(true))
+            setTimeout(() => { 
+                dispatch(setViewEnableStep(true))
+            }, 1000)
         }
     }, [maintainenceAssetsList, assetTypeAssignmentAssets])
 

@@ -77,6 +77,7 @@ const VirtualizedTable = ({
   grandTotal,
   grandTotalAssets,
   forceChildWaitCall,
+  onFlyForChildWaitCall,
   backgroundRow,
   backgroundRowKey,
   defaultSortField,
@@ -113,6 +114,7 @@ const VirtualizedTable = ({
   const [sortBy, setSortBy] = useState("");
   const [filters, setFilters] = useState([]);
   const [collapseRowHeight, setCollapseRowHeight] = useState(100);
+  const [runCollapseTable, setRunCollapseTable] = useState(false)
   const [dropdownValue, setDropdownValue] = useState('')
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [noOfSelectedItems, setNoOfSelectedItems] = useState([])
@@ -140,6 +142,19 @@ const VirtualizedTable = ({
   useEffect(() => {
     setNoOfSelectedItems([...selected])
   }, [ selected ])  
+
+
+  
+  useEffect(() => { 
+    if(onFlyForChildWaitCall === true && selected.length > 0) { 
+      setRunCollapseTable(true)
+      if(tableRef.current != null) {
+        setTimeout(() => { 
+          updateNewHeight(0)
+        }, 5000)
+      } 
+    }
+  }, [onFlyForChildWaitCall, selectedGroup])
 
   const createSortHandler = useCallback(
     property => () => {
@@ -686,10 +701,12 @@ const VirtualizedTable = ({
       }  
       /* console.log("selectedRow", childRows, collapsable, selectedIndex, rowData[selectedKey], disableRow, childCounterColumn, rowData[disableRowKey] )
       console.log('rowData', rowData) */
+      
+      
      return (      
         <React.Fragment key={`${key}_${index}`}>
         <TableRow
-          className={clsx(className, `rowIndex_${index}`, {['noBorderLines']: typeof noBorderLines !== 'undefined' ? true : false}, { ['highlightRow']: highlightRow !== undefined && highlightRow === true && selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey]) ? true : false }, {['highlightWithCol']: highlightRow !== undefined && highlightRow === true &&  !selected.includes(rowData[selectedKey]) && ( (optionalKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[optionalKey])) || (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey]))) ? true : false }) }
+          className={clsx(className, `rowIndex_${index}`, `item_${rowData[selectedKey]}`, {['openRow']: selectedRow}, {['noBorderLines']: typeof noBorderLines !== 'undefined' ? true : false}, { ['highlightRow']: highlightRow !== undefined && highlightRow === true && selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey]) ? true : false }, {['highlightWithCol']: highlightRow !== undefined && highlightRow === true &&  !selected.includes(rowData[selectedKey]) && ( (optionalKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[optionalKey])) || (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey]))) ? true : false }) }
           style={{
             ...style,
             height:
