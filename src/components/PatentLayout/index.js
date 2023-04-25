@@ -173,7 +173,7 @@ const PatentLayout = ({
         },
         {
             element: document.querySelector('.inner-step-2'),
-            intro: `Use these 4 buttons to open and close the 4 windows in this view.<ul style="margin: 0"><li><div><span>${TV_STRING}</span> - main window</div></li><li><div><span>${DISCUSSION_STRING}</span> - group chatting. We dedicated a Slack/Teams channel for each patent assets in which your team can collaborate</div></li><li><div><span>${CHART_STRING}</span> - analytical data</div></li><li><div><span>${ANALYTICS_STRING}</span> - additional analytical data</div></li></ul>`,
+            intro: `Use these 4 buttons to open and close the 4 windows in this view.<div><span>${TV_STRING}</span> - main window</div><div><span>${DISCUSSION_STRING}</span> - group chatting. We dedicated a Slack/Teams channel for each patent assets in which your team can collaborate</div><div><span>${CHART_STRING}</span> - analytical data</div><div><span>${ANALYTICS_STRING}</span> - additional analytical data</div>`,
             position: 'top',
             tooltipClass: 'dashboardIntroTooltip2',
             highlightClass: 'dashboardHighlightClass1',
@@ -187,16 +187,17 @@ const PatentLayout = ({
         },
         {
             element: document.querySelector('.inner-step-1 .rowIndex_0 .selectedIcon .MuiSvgIcon-root'),
-            intro: `Click the arrowhead next to any of the asset in order to: <ul><li><div><span><img src="https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/sell.png"/></span> Move the asset to the For Sale list, in case you decide to sell it</div></li><li><div><span><img src="https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/licenseout.png"/></span> Move the asset to the License-Out list</div></li><li><div><span>${CLIPBOARD_STRING}</span> Add the asset number to the Clipboard</div></li><li><div><span>${STAR_STRING}</span> Rank how necessary the asset is</div></li><li><div><span>${STAR_STRING}</span> Rank how important the asset is</div></li><li><div><span>${DISCUSSION_STRING}</span> Add a task to any of your team members</div></li></ul>`,
+            intro: `Click the arrowhead next to any of the asset in order to: <div><span><img src="https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/sell.png"/></span> Move the asset to the For Sale list, in case you decide to sell it</div><div><span><img src="https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/licenseout.png"/></span> Move the asset to the License-Out list</div><div><span>${CLIPBOARD_STRING}</span> Add the asset number to the Clipboard</div><div><span>${STAR_STRING}</span> Rank how necessary the asset is</div><div><span>${STAR_STRING}</span> Rank how important the asset is</div><div><span>${DISCUSSION_STRING}</span> Add a task to any of your team members</div>`,
             position: 'bottom',
             tooltipClass: 'dashboardIntroTooltip',
             highlightClass: 'dashboardHighlightClass',
         },
         {
             element: document.querySelector('.menuButton'),
-            intro: `Click the menu to see details about your account, and to: <ul><li><div><span>${LOCK_STRING}</span>Sign out</div></li><li><div><span>${SHARE_STRING}</span>Share the Dashboard or any of the Transactions or Assets</div></li><li><div><span>${CLIPBOARD_STRING}</span>View assets you previously added to the Clipboard</div></li><li><div><span>${ASSETS_STRING}</span>View a list of all the assets or transactions the selected company was part of</div></li><li><div><span>${SETTING_STRING}</span>Add companies to your account, manage users, and add categories to your patent/product review</div></li></ul>`,
+            title: 'Settings, sharing, and more', 
+            intro: `Click the menu to see details about your account, and to: <div><span>${LOCK_STRING}</span> Sign out</div><div><span>${SHARE_STRING}</span> Share the Dashboard or any of the Transactions or Assets</div><div><span>${CLIPBOARD_STRING}</span> View assets you previously added to the Clipboard</div><div><span>${ASSETS_STRING}</span> View a list of all the assets or transactions the selected company was part of</div><div><span>${SETTING_STRING}</span> Add companies to your account, manage users, and add categories to your patent/product review</div>`,
             position: 'top',
-            tooltipClass: 'dashboardIntroTooltip',
+            tooltipClass: 'dashboardIntroTooltip dashboardIntroTooltip4',
             highlightClass: 'dashboardHighlightClass',
         }
     ] 
