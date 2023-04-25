@@ -10,7 +10,7 @@ import { Timeline } from 'vis-timeline/esnext' */
 
 import { DataSet } from 'vis-data/esnext'
 import { Timeline } from 'vis-timeline-73/esnext'
-import { Typography, CircularProgress, IconButton, Paper, Modal, TableContainer, Table, TableBody, TableRow, TableCell } from '@mui/material';
+import { Typography, CircularProgress, IconButton, Paper, Modal, TableContainer, Table, TableBody, TableRow, TableCell, Button } from '@mui/material';
 import { Close, Fullscreen } from '@mui/icons-material'
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import useStyles from './styles'
@@ -552,9 +552,27 @@ const TimelineChart = (props) => {
             {
                 props.card.title != '' && (
                     <div className={clsx(classes.timelineHeading, 'full_heading')}>
-                        <Typography variant="h6" component="div" align="center" className={clsx(classes.border, 'dashboard_buttons', classes.border1)}>
+                        <AddToolTip
+                            tooltip={props.card.tooltip}
+                            placement='bottom'
+                            grid={props.grid}
+                        >
+                            <span className={classes.buttonContainer}>
+                                <Button 
+                                    size="small" 
+                                    variant="outlined" 
+                                    className={clsx(classes.actionButton, 'dashboard_buttons')} 
+                                    onClick={() => props.handleList(props.id, props.type, 'timeline')}
+                                    disabled={ timelineRawData.length == 0 ? true : false }
+                                >
+                                    {props.card.title} - {numberWithCommas(timelineRawData.length)}    
+                                </Button> 
+                            </span>
+                        </AddToolTip>  
+                        
+                        {/* <Typography variant="h6" component="div" align="center" className={clsx(classes.border, 'dashboard_buttons', classes.border1)}>
                             {props.card.title} - {numberWithCommas(timelineRawData.length)}
-                        </Typography>
+                        </Typography> */}
                         <div className={classes.fullscreenButton}>
                             <AddToolTip
                                 tooltip={typeof props.standalone !== 'undefined' ? 'Close big screen view.' : 'Big screen view.'}
