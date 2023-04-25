@@ -54,6 +54,7 @@ import clsx from 'clsx'
 import IllustrationContainer from '../common/AssetsVisualizer/IllustrationContainer'
 import Maintainance from '../common/Maintainence'
 import { useReloadLayout } from '../../utils/useReloadLayout';
+import {ANALYTICS_STRING, CHART_STRING, DISCUSSION_STRING, TV_STRING } from '../../utils/icons';
 
 const PatentLayout = ({
     type,
@@ -172,11 +173,11 @@ const PatentLayout = ({
         },
         {
             element: document.querySelector('.inner-step-2'),
-            intro: 'Use these 4 buttons to open and close the 4 windows in this view.<ul><li> - main window</li><li> - group chatting. We dedicated a Slack/Teams channel for each patent assets in which your team can collaborate.</li><li> - analytical data</li><li> - additional analytical data</li></ul>',
+            intro: `Use these 4 buttons to open and close the 4 windows in this view.<ul><li><div><span>${TV_STRING}</span> - main window</div></li><li><div><span>${DISCUSSION_STRING}</span> - group chatting. We dedicated a Slack/Teams channel for each patent assets in which your team can collaborate.</div></li><li><div><span>${CHART_STRING}</span> - analytical data</div></li><li><div><span>${ANALYTICS_STRING}</span> - additional analytical data</div></li></ul>`,
             position: 'right',
             tooltipClass: 'dashboardIntroTooltip',
             highlightClass: 'dashboardHighlightClass',
-        }
+        } 
     ]
     const checkContainer = () => {
         /* setTimeout(() => {
