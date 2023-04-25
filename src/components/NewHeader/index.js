@@ -133,6 +133,7 @@ import { copyToClipboard } from '../../utils/html_encode_decode'
  
 import PatenTrackApi from '../../api/patenTrack2' 
 import { ASSET } from '../../utils/icons'
+import clsx from 'clsx'
 
 const NewHeader = (props) => {
   const classes = useStyles()
@@ -833,7 +834,7 @@ const handleOpenSettings = useCallback((event) => {
                   aria-label="Google Logout"
                   component="span"
                   onClick={onHandleGoogleSignout}
-                  size="large">
+                  size="small">
                   <Tooltip 
                     title={
                       <Typography color="inherit" variant='body2'>
@@ -871,7 +872,7 @@ const handleOpenSettings = useCallback((event) => {
                   component="span"
                   onClick={onHandleSlackSignout}
                   style={{marginRight: 6}}
-                  size="large">
+                  size="small">
                   <Tooltip 
                     title={
                       <Typography color="inherit" variant='body2'>
@@ -918,24 +919,24 @@ const handleOpenSettings = useCallback((event) => {
             {
               slack_profile_data != null && Object.keys(slack_profile_data).length > 0
               ?
-                <Avatar className={classes.buttonIcon} alt={`${slack_profile_data.real_name != '' ? slack_profile_data.real_name : slack_profile_data.profile.real_name != '' ? slack_profile_data.profile.real_name : slack_profile_data.profile.display_name}`} src={slack_profile_data.profile != null && slack_profile_data.profile.hasOwnProperty('image_24') && slack_profile_data.profile.image_24 != '' ? slack_profile_data.profile.image_24 : user && user.logo != '' ? user.logo : slack_profile_data.real_name.toString().substring(0,1).toLocaleUpperCase() } />
+                <Avatar className={clsx(classes.actionIcon)} alt={`${slack_profile_data.real_name != '' ? slack_profile_data.real_name : slack_profile_data.profile.real_name != '' ? slack_profile_data.profile.real_name : slack_profile_data.profile.display_name}`} src={slack_profile_data.profile != null && slack_profile_data.profile.hasOwnProperty('image_24') && slack_profile_data.profile.image_24 != '' ? slack_profile_data.profile.image_24 : user && user.logo != '' ? user.logo : slack_profile_data.real_name.toString().substring(0,1).toLocaleUpperCase() } />
               :
                 user && user.logo != ''
                 ?
-                <Avatar className={classes.buttonIcon} alt={`${user ? user.first_name + ' ' + user.last_name : ''}`} src={user.logo} />
+                <Avatar className={clsx(classes.actionIcon)} alt={`${user ? user.first_name + ' ' + user.last_name : ''}`} src={user.logo} />
                 : 
-                <Avatar className={classes.buttonIcon}>
+                <Avatar className={clsx(classes.actionIcon)}>
                   {user.first_name.toString().substring(0,1).toLocaleUpperCase()}
                 </Avatar>
             }
             <IconButton
-              className= {`${classes.buttonIcon} ${classes.menuButton}`}
+              className= {clsx(classes.actionIcon)}
               color='inherit'
               aria-label='open drawer'
               onClick={(event) => {
                 return process.env.REACT_APP_ENVIROMENT_MODE == 'PRO' ? toggleDrawer(event, !openDrawer.right) :  null
               }}
-              size="large">
+              size="small">
               <MenuIcon  className={'menuButton'}/>
             </IconButton>
             <Drawer anchor={'right'} open={openDrawer['right']} onClose={(event) => {toggleDrawer(event, false)}} className={classes.drawer}>

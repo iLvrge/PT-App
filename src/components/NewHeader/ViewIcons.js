@@ -404,7 +404,7 @@ const ViewIcons = (props) => {
                                 </svg>
                             </IconButton>
                         </AddToolTip>  */}
-                        <AddToolTip
+                        {/* <AddToolTip
                             tooltip={'All Assets (Since 1998)'}
                             placement='bottom'
                         >
@@ -427,7 +427,7 @@ const ViewIcons = (props) => {
                             >
                                <svg id="icons" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" className={clsx(classes.noStrokeHeightWidth, `noStroke`)}><path d="M52,7H12a6,6,0,0,0-6,6V51a6,6,0,0,0,6,6H52a6,6,0,0,0,6-6V13A6,6,0,0,0,52,7Zm2,44a2,2,0,0,1-2,2H12a2,2,0,0,1-2-2V13a2,2,0,0,1,2-2H52a2,2,0,0,1,2,2Z"/><path d="M45,29a2,2,0,0,0,0-4H22.83l2.58-2.59a2,2,0,0,0-2.82-2.82l-6,6a2,2,0,0,0-.44,2.18A2,2,0,0,0,18,29Z"/><path d="M47,36H20a2,2,0,0,0,0,4H42.17l-2.58,2.59a2,2,0,1,0,2.82,2.82l6-6a2,2,0,0,0,.44-2.18A2,2,0,0,0,47,36Z"/></svg>
                             </IconButton>
-                        </AddToolTip> 
+                        </AddToolTip>  */}
                         <AddToolTip
                             tooltip={'Share Dashboard/Transactions/Assets'}
                             placement='bottom'
@@ -443,9 +443,10 @@ const ViewIcons = (props) => {
                             </IconButton>
                         </AddToolTip> 
                         <IconButton
-                            className={`${classes.buttonIcon} ${props.clipboard_assets.length > 0 ? classes.clipIconActive : ''} ${ props.display_clipboard === true ? classes.clipIconIsActive : ''}`}
+                            size="small"
+                            className={clsx(classes.actionIcon, {[classes.clipIconActive]: props.clipboard_assets.length > 0 ? true : false }, {[classes.clipIconActive]: props.clipboard_assets.length > 0 ? true : false } , {[classes.clipIconIsActive] : props.display_clipboard})}
                             onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : props.handleClipboard}
-                            size="large">
+                        >
                             <Badge badgeContent={props.clipboard_assets.length} color="secondary">    
                                 <svg xmlns="http://www.w3.org/2000/svg" className={clsx(classes.noStrokeHeightWidth, `noStroke`)} enableBackground="new 0 0 80 80" viewBox="0 0 80 80"><path d="M40,5c-3.3085938,0-6,2.6914062-6,6v3h-5c-0.4199219,0-0.7949219,0.262207-0.9394531,0.6567383l-0.880188,2.4077148	h-9.0836792C16.9404297,17.0644531,16,18.0048828,16,19.1611328v53.7421875C16,74.0595703,16.9404297,75,18.0966797,75h43.8066406
                                 C63.0595703,75,64,74.0595703,64,72.9033203V19.1611328c0-1.15625-0.9404297-2.0966797-2.0966797-2.0966797H52.755188
@@ -459,37 +460,6 @@ const ViewIcons = (props) => {
                                 s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z"  className="color000 svgShape"></path><path d="M23,38h8V28h-8V38z M25,30h4v6h-4V30z"  className="color000 svgShape"></path><rect width="23" height="2" x="34" y="32"  className="color000 svgShape"></rect><rect width="17" height="2" x="23" y="44"  className="color000 svgShape"></rect><rect width="34" height="2" x="23" y="54"  className="color000 svgShape"></rect><rect width="34" height="2" x="23" y="64"  className="color000 svgShape"></rect><rect width="2" height="4" x="38.968" y="9"  className="color000 svgShape"></rect></svg>
                             </Badge>
                         </IconButton> 
-                        {/* <IconButton className={classes.buttonIcon} size="large">
-                            <Badge badgeContent={0} color="secondary"> 
-                                <NotificationsNone/>
-                            </Badge>         
-                        </IconButton>  */}
-                        <AddToolTip
-                            tooltip={`Search at USPTO`}
-                            placement='bottom'
-                        >  
-                            <IconButton 
-                                size="small"
-                                className={clsx(classes.actionIcon, {[classes.active]: openSearch})}
-                                /* onClick={onHandleSearch} */
-                                onClick={() => window.open('https://ppubs.uspto.gov/pubwebapp/')}
-                            >
-                               <ManageSearch/>
-                            </IconButton>
-                        </AddToolTip> 
-                        {/* <div className={clsx(classes.search, {[classes.searchEnable]: openSearch})}>
-                            <InputBase
-                                placeholder='Search…'
-                                classes={{
-                                    root: classes.inputRoot,
-                                    input: classes.inputInput,
-                                }}
-                                defaultValue={ props.search_string != null ? props.search_string : ''}
-                                inputProps={{ 'aria-label': 'search' }}
-                                onKeyDown={props.handleKeyDown}
-                                disabled 
-                            />
-                        </div> */}
                         <AddToolTip
                             tooltip={`Schedule a ${process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'd' : 'D' }emo ${process.env.REACT_APP_ENVIROMENT_MODE !== 'PRO' ? 'for Pro version' : '' }`}
                             placement='bottom'
