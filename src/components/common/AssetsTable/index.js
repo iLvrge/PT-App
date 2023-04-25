@@ -54,7 +54,7 @@ import {
   getAssetDetails,
   setSelectedMaintainenceAssetsList,
   setAssetsIllustrationData,
-  setFamilyLegalItem
+  setFamilyLegalItem 
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -1435,7 +1435,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           }
           setDefaultViewFlag(1)
         }
-        if(selectedCategory == 'incorrect_names' || selectedCategory == 'pay_maintainence_fee' || selectedCategory == 'late_maintainance' || selectedCategory == 'ptab' || selectedCategory == 'to_be_monitized' ){
+        if(['incorrect_names', 'pay_maintainence_fee', 'late_maintainance', 'ptab', 'to_be_monitized'].includes(selectedCategory)){
           /**
            * Check if Right Pane is close then open it and close the TV
            */
