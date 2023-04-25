@@ -146,6 +146,7 @@ const PatentLayout = ({
     const fileBarRef = useRef()
     const templateFileRef = useRef()
     const [sheetName, setSheetName] = useState('')
+    const [enableStep, setEnableStep] = useState(false)
     const [isLoaded, checkPageLoad] = useReloadLayout()
     const [ gap, setGap ] = useState( { x: '14.1rem', y: '7.5rem'} )
     const [ isDragging, setIsDragging] = useState(false) 
@@ -166,6 +167,7 @@ const PatentLayout = ({
     const STEPS = [ 
         {
             element: document.querySelector('.inner-step-1'), 
+            title: 'The Assets Table', 
             intro: `The Assets table lists the patent and patent applications filtered under the category you just selected.`,
             position: 'right',
             tooltipClass: 'dashboardIntroTooltip',
@@ -174,7 +176,7 @@ const PatentLayout = ({
         {
             element: document.querySelector('.inner-step-2'),
             title: 'Control your Screen', 
-            intro: `Use these 4 buttons to open and close the 4 windows in this view.<div><span>${TV_STRING}</span> Top left window - Main View</div><div><span>${DISCUSSION_STRING}</span> Bottom left window - Group chatting. We dedicated a Slack/Teams channel for each patent asset, in which your team can collaborate.</div><div><span>${CHART_STRING}</span> Top right window - Analytical data</div><div><span>${ANALYTICS_STRING}</span> Bottom right window Additional analytical data</div>`,
+            intro: `Use these 4 buttons to open and close the 4 windows in this view:<br/><div><span>${TV_STRING}</span>Top left window - Main View</div><div><span>${DISCUSSION_STRING}</span>Bottom left window - Group chatting. We dedicated a Slack/Teams channel for each patent asset, in which your team can collaborate.</div><div><span>${CHART_STRING}</span>Top right window - Analytical data</div><div><span>${ANALYTICS_STRING}</span>Bottom right window - Additional analytical data</div>`,
             position: 'right',
             tooltipClass: 'dashboardIntroTooltip dashboardIntroTooltip2',
             highlightClass: 'dashboardHighlightClass1',
@@ -190,7 +192,7 @@ const PatentLayout = ({
         {
             element: document.querySelector('.inner-step-1 .rowIndex_0 .selectedIcon .MuiSvgIcon-root'),
             title: 'Patent Review and Action', 
-            intro: `Click the arrowhead next to any of the asset in order to: <div><span><img src="https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/sell.png"/></span> Move the asset to the For Sale list, in case you decide to sell it</div><div><span><img src="https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/licenseout.png"/></span> Move the asset to the License-Out list</div><div><span>${CLIPBOARD_STRING}</span> Add the asset number to the Clipboard</div><div><span>${STAR_STRING}</span> Rank how necessary the asset is</div><div><span>${STAR_STRING}</span> Rank how important the asset is</div><div><span>${DISCUSSION_STRING}</span> Add a task to any of your team members</div>`,
+            intro: `Click the arrowhead next to any of the asset in order to:<br/> <div><span><img src="https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/sell.png"/></span>Move the asset to the For Sale list, in case you decide to sell it</div><div><span><img src="https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/licenseout.png"/></span>Move the asset to the License-Out list</div><div><span>${CLIPBOARD_STRING}</span>Add the asset number to the Clipboard</div><div><span>${STAR_STRING}</span>Rank how necessary the asset is</div><div><span>${STAR_STRING}</span>Rank how important the asset is</div><div><span>${DISCUSSION_STRING}</span>Add a task to any of your team members</div>`,
             position: 'right',
             tooltipClass: 'dashboardIntroTooltip dashboardIntroTooltip3',
             highlightClass: 'dashboardHighlightClass',
@@ -198,7 +200,7 @@ const PatentLayout = ({
         {
             element: document.querySelector('.menuButton'),
             title: 'Settings, sharing, and more', 
-            intro: `Click the menu to see details about your account, and to: <div><span>${LOCK_STRING}</span> Sign out</div><div><span>${SHARE_STRING}</span> Share the Dashboard or any of the Transactions or Assets</div><div><span>${CLIPBOARD_STRING}</span> View assets you previously added to the Clipboard</div><div><span>${ASSETS_STRING}</span> View a list of all the assets or transactions the selected company was part of</div><div><span>${SETTING_STRING}</span> Add companies to your account, manage users, and add categories to your patent/product review</div>`,
+            intro: `Click the menu to see details about your account, and to:<br/> <div><span>${LOCK_STRING}</span>Sign out</div><div><span>${SHARE_STRING}</span>Share the Dashboard or any of the Transactions or Assets.</div><div><span>${CLIPBOARD_STRING}</span>View assets you previously added to the Clipboard.</div><div><span>${ASSETS_STRING}</span>View a list of all the assets or transactions the selected company was part of.</div><div><span>${SETTING_STRING}</span>Add companies to your account, manage users, and add categories to your patent/product review.</div>`,
             position: 'left',
             tooltipClass: 'dashboardIntroTooltip dashboardIntroTooltip4',
             highlightClass: 'dashboardHighlightClass',  
@@ -235,15 +237,15 @@ const PatentLayout = ({
     }, []) 
 
     const checkDataWithTour = useCallback(() => { 
-        if((maintainenceAssetsList.list.length > 0 || assetTypeAssignmentAssets.list.length > 0) && viewEnableSteps === false) {
-            dispatch(setViewEnableStep(true))
-        } else if(viewEnableSteps === false){
+        if((maintainenceAssetsList.list.length > 0 || assetTypeAssignmentAssets.list.length > 0) && viewEnableSteps === true) {
+            setEnableStep(true)
+        } else if(viewEnableSteps === true){
             waitAndCall()
         } 
     }, [maintainenceAssetsList, assetTypeAssignmentAssets, viewEnableSteps])
 
     useEffect(() => {
-        if(viewEnableSteps === false) {
+        if(viewEnableSteps === true) {
             waitAndCall()
         }
     }, [maintainenceAssetsList, assetTypeAssignmentAssets])
@@ -253,7 +255,7 @@ const PatentLayout = ({
             checkDataWithTour();
         }, 2000);
     }, [maintainenceAssetsList, assetTypeAssignmentAssets, viewEnableSteps])
-    
+
     useEffect(() => {
         if(openAssignmentBar === true) {
             handleAssignmentBarOpen()
@@ -802,7 +804,7 @@ const PatentLayout = ({
             </SplitPane>
         </SplitPane>
         <Steps 
-            enabled={viewEnableSteps}
+            enabled={viewEnableSteps && enableStep}
             steps={STEPS}
             initialStep={0}
             onExit={onExit}
