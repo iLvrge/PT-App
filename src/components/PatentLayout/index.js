@@ -234,14 +234,26 @@ const PatentLayout = ({
         }
     }, []) 
 
-    useEffect(() => {
+    const checkDataWithTour = useCallback(() => { 
         if((maintainenceAssetsList.list.length > 0 || assetTypeAssignmentAssets.list.length > 0) && viewEnableSteps === false) {
-            setTimeout(() => { 
-                dispatch(setViewEnableStep(true))
-            }, 1000)
+            dispatch(setViewEnableStep(true))
+        } else if(viewEnableSteps === false){
+            waitAndCall()
+        } 
+    }, [maintainenceAssetsList, assetTypeAssignmentAssets, viewEnableSteps])
+
+    useEffect(() => {
+        if(viewEnableSteps === false) {
+            waitAndCall()
         }
     }, [maintainenceAssetsList, assetTypeAssignmentAssets])
 
+    const waitAndCall = useCallback(() => { 
+        setTimeout(() => {
+            checkDataWithTour();
+        }, 2000);
+    }, [maintainenceAssetsList, assetTypeAssignmentAssets, viewEnableSteps])
+    
     useEffect(() => {
         if(openAssignmentBar === true) {
             handleAssignmentBarOpen()
