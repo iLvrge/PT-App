@@ -42,8 +42,7 @@ const KpiBox = (props) => {
                 </List>
             </Paper>
         )
-    }
-    
+    } 
     return (
         <div className={clsx(classes.chartContainer, classes.widthResponsive, classes.fixKPI)}>
             <div className={classes.headingContainer}>
@@ -59,7 +58,7 @@ const KpiBox = (props) => {
                             className={clsx(classes.actionButton, 'dashboard_buttons')} 
                             onClick={() => props.handleList(props.id, props.card.type)}
                             disabled={
-                                (parseInt(props.card?.number) == 0 && typeof props.card.list == 'undefined') || (props.card?.list && props.card.list.length == 0) ? true : false
+                                ((parseInt(props.card?.number) == 0 || props.card?.number == null) && parseInt(props.card?.other_number) == 0 && typeof props.card.list == 'undefined') || (props.card?.list && props.card.list.length == 0) ? true : false
                             }
                         >
                             {props.card.title}           
