@@ -652,8 +652,8 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
       /* if(scrollNewRequest === false) {
         end = new moment(end).add(6, 'months')
       }  */ 
-      start = new moment(start).subtract(3, 'months') 
-      end = new moment().add(6, 'months')
+      start = new moment(start).subtract(6, 'months') 
+      end = new moment().add(9, 'months')
       /* const startIndex = convertedItems.length < 201 ? (convertedItems.length - 1) : 199
       items.current.add(convertedItems.slice(0, startIndex))  */   
       const spliceItems = convertedItems.slice(0, startIndex); 
