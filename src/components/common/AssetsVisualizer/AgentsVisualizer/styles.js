@@ -1,3 +1,4 @@
+import { pink } from '@mui/material/colors';
 import makeStyles from '@mui/styles/makeStyles';
 
 export default makeStyles((theme) => ({
@@ -58,4 +59,14 @@ export default makeStyles((theme) => ({
         cursor: 'pointer',
         zIndex: 999
     },
+    boxMessage: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        width: '100%',
+        height: '100%',
+        color: pink[500],
+        fontSize: '1.1rem'
+    }
 }))
