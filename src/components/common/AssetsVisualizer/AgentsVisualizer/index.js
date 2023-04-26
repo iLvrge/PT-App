@@ -232,7 +232,7 @@ const AgentsVisualizer = (props) => {
 
     const DisplayChart = () => {
         if(loading) return <Loader/>
-        if(data.length == 0) return null
+        if(data.length == 0) return 'No transactions in the past 11 years.'
         return (
             <Chart
                 width={'100%'}
