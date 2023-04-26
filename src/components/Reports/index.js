@@ -910,7 +910,7 @@ const Reports = (props) => {
                                         oldList[findIndex].rf_id = ''
                                         oldList[findIndex].total = item.total  
                                         oldList[findIndex].number = 0           
-                                    } else if( item?.number) {
+                                    } else if( item.hasOwnProperty('number') ) { 
                                         oldList[findIndex].number = item.number
                                         oldList[findIndex].patent = ''
                                         oldList[findIndex].application = ''                            
@@ -930,7 +930,7 @@ const Reports = (props) => {
                                     }
                                 }
                             })
-                            await Promise.all(dashboardPromise)
+                            await Promise.all(dashboardPromise) 
                             setCardList(oldList)
                             if(viewIntro === false) {
                                 dispatch(setViewIntro(true))
