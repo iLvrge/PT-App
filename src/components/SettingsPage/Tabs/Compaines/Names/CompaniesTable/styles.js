@@ -11,7 +11,7 @@ export default makeStyles(theme => ({
     overflow: 'hidden',
     '& .font12Rem':{
       fontSize: '1rem'
-    }
+    } 
   },
   tableHeading: {
     backgroundColor: '#282B30',

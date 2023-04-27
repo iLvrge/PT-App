@@ -132,6 +132,7 @@ export default makeStyles(theme => ({
       top: 5,
       display: 'none',
       borderRadius: 'inherit',
+      fontSize: '1.1rem',
       '&.MuiIconButton-root svg': {
         width: '1.2rem',
         height: '1.2rem',
@@ -216,7 +217,10 @@ export default makeStyles(theme => ({
     },
     '&.6': {
       maxWidth: 300
-    }
+    },
+    '& .MuiTypography-root': {  
+      fontSize: 18
+    } 
   },
   mobileTooltip: {
     flex: '1 1 100%',

@@ -156,35 +156,78 @@ span {
 .dashboardIntroTooltip .introjs-tooltip-title, .dashboardIntroTooltip .introjs-tooltiptext{
   color: #000
 }
-.dashboardIntroTooltip .introjs-tooltip-title {
+.dashboardIntroTooltip .introjs-tooltip-title{
   font-size: 24px;
 }
-.dashboardIntroTooltip .introjs-tooltiptext {
+.dashboardIntroTooltip .introjs-tooltiptext{
   font-size: 20px;
 }
-.introjs-tooltiptext span{
+.introjs-tooltiptext div{
+  margin-bottom: 10px;
+}
+.introjs-tooltiptext span {
+  margin-right: 12px
+}
+.introjs-tooltiptext span, .svgIcon{
   display: inline-block;
-  position: relative;
+  position: relative;  
   width: 21px;
   height: 21px;
+}
+.introjs-tooltiptext span img{
+  width: 21px;
 }
 .introjs-tooltiptext span svg{
   position: absolute;
   top: 4px;
   fill: #f50057;
 }
+.introjs-tooltiptext span svg.strokeWidth{
+  stroke: #f50057;
+  stroke-width: 27px;
+}
 .dashboardIntroTooltip {
   min-width: 450px;
   max-width: 500px;
 }
+.dashboardIntroTooltip2 {
+  min-width: 1290px;
+  max-width: 1290px;
+}
+.dashboardIntroTooltip4 {
+  min-width: 975px;
+  max-width: 975px;
+}
+.dashboardIntroTooltip3 {
+  min-width: 650px;
+  max-width: 650px;
+}
 .dashboardIntroTooltip ul {
   padding-left: 20px;
 }
-.dashboardHighlightClass{
+.dashboardHighlightClass, .dashboardHighlightClass1{
   border: 1px solid #FFAA00;
+}
+.dashboardHighlightClass1{
+  border-bottom: 0px
 }
 .introjs-arrow.top-right{
   right: 25px
+}
+.introjs-tooltipbuttons{
+  padding: 5px 10px;
+}
+.introjs-tooltiptext{
+  padding: 10px 20px
+}
+.introjs-bullets{
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.teamBar svg, .svgIcon{
+  fill: #fff;
+  left: 0px !important
 }
 
 @-webkit-keyframes animatetop {

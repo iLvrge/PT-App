@@ -983,7 +983,7 @@ export const setAssetTypeCustomerSelectedRow = (data) => {
   return {
     type: types.SET_ASSET_TYPES_COMPANIES_ROW_SELECT,
     data 
-  }
+  } 
 } 
 
 export const setAssetTypeChildCustomerSelectedRow = (data) => {
@@ -1885,6 +1885,12 @@ export const setAbandonedMaintainenceData = (data) => {
   }
 }
 
+export const setViewEnableStep = (flag) => {  
+  return {
+    type: types.SET_VIEW_STEPS,  
+    flag
+  }
+}
 export const setFamilyRequest = (flag) => {  
   return {
     type: types.SET_FAMILY_REQUEST,  

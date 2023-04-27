@@ -68,7 +68,6 @@ import { DEFAULT_CUSTOMERS_LIMIT } from '../../../api/patenTrack2'
 
 import PatenTrackApi from '../../../api/patenTrack2'
 
-import { numberWithCommas } from '../../../utils/numbers'
 import { getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
 import {
     updateHashLocation
@@ -77,8 +76,6 @@ import {
 import ChildTable from './ChildTable'
 
 import Loader from '../Loader'
-import { resetAllRowSelect } from '../../../utils/resizeBar'
-import clsx from 'clsx'
 
 
 
@@ -213,12 +210,11 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const [ headerRowHeight, setHeaderRowHeight ] = useState(47)
     const [ rowHeight, setRowHeight ] = useState(40)
     const [ selectItems, setSelectItems] = useState( [] )
-    const [ selectNames, setSelectNames] = useState( [] )
     const [ selectedRow, setSelectedRow] = useState( [] )   
     const [ companyColWidth, setCompanyColWidth] = useState( COLUMNS[2].width )   
     const [ currentSelection, setCurrentSelection ] = useState(null)   
     const [ intialization, setInitialization ] = useState( false ) 
-    const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
+    const [ waitForChildWaitCall, setWaitForChildWaitCall ] = useState( false ) 
     const [sortField, setSortField] = useState(`original_name`)
     const [sortOrder, setSortOrder] = useState(`ASC`)
     const [ companiesList, setCompaniesList ] = useState([])
@@ -227,7 +223,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const isLoadingCompanies = useSelector( state => state.patenTrack2.mainCompaniesLoadingMore )
     const selected = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
-    const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
     const selectedGroups = useSelector( state => state.patenTrack2.mainCompaniesList.selectedGroups)
     const childID = useSelector( state => state.patenTrack2.mainCompaniesList.chilID)
     const childList = useSelector( state => state.patenTrack2.mainCompaniesList.child_list)
@@ -238,7 +233,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
     const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
     const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
-    const channel_id = useSelector(state => state.patenTrack2.channel_id)
     const dashboard_share_selected_data = useSelector(state => state.patenTrack2.dashboard_share_selected_data)
     const companyTableScrollPosition = useSelector(
         state => state.patenTrack2.companyTableScrollPosition,
@@ -293,6 +287,15 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             setHeaderColumns(headerColumns)
         }
     }, [isMobile])
+
+    useEffect(() => { 
+        if(selectedGroups.length > 0 && waitForChildWaitCall === false){ 
+            setWaitForChildWaitCall(true)
+            if(currentSelection === null) {
+                setCurrentSelection(selectedGroups[0])
+            }
+        }
+    }, [selectedGroups, waitForChildWaitCall])
 
     /**
      * Get Slack channels
@@ -486,21 +489,32 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                                     oldItems = filterItems.length > 0 ? [parseInt(filterItems[0])] : []                                   
                                 }  
                             } else {
-                                if(activeItems.includes(parseInt(representative.representative_id))) {
+                                if(activeItems.includes(parseInt(representative.representative_id))) { 
                                    /*  if(dashboardScreen === true) {
                                         oldItems = [parseInt(representative.representative_id)]
                                     } else {
                                         oldItems.push(parseInt(representative.representative_id))
                                     } */        
-                                    oldItems = [parseInt(representative.representative_id)]                            
+                                    oldItems = [parseInt(representative.representative_id)]   
+                                    if(parentChild.length > 0) {
+                                        parentChild.map( item => {
+                                            if(item.child.length > 0 && item.child.includes(representative.representative_id)){
+                                                groups.push(item.parent)
+                                            }
+                                        })
+                                    }                         
                                 }
                             }
                         })
                         await Promise.all(promise)
-                        //setSelectGroups(groups) 
+                        //setSelectGroups(groups)  
                         if(isSubscribed) {
                             setSelectItems(oldItems)
                             dispatch(setMainCompaniesSelected(oldItems, groups))
+                            if(groups.length > 0) {
+                                setCurrentSelection(groups[0])
+                                setWaitForChildWaitCall(true)
+                            }
                         }                        
                     } 
                 } 
@@ -738,7 +752,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
      * @param {*} defaultSelect 
      * @param {*} currentSelection 
      */
-    const updateCompanySelection = async(event, dispatch, row, cntrlKey, selected, defaultSelect, currentSelection) => {
+    const updateCompanySelection = async(event, dispatch, row, cntrlKey, selected, defaultSelect, currentSelection) => { 
         if(cntrlKey !== undefined) {
             let updateSelected = [...selected], sendRequest = false , updateGroup = [...selectedGroup] 
             if(!updateSelected.includes(parseInt( row.representative_id ))) {
@@ -762,8 +776,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                             const parseChild =  typeof row.child != 'undefined' ? JSON.parse(row.child) : childList
                             if(dashboardScreen === true) {
                                 updateSelected = [parseInt( parseChild[0] )]
+                                updateGroup.push(row.representative_id)
                             } else {
                                 updateSelected = [parseInt( parseChild[0] )]
+                                updateGroup.push(row.representative_id)
                                 /* if(!updateSelected.includes(parseInt(parseChild[0]))) {
                                     updateSelected = [...updateSelected, ...parseChild]
                                     updateSelected = [...new Set(updateSelected)]
@@ -803,8 +819,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             })
             dispatch(setMainCompaniesRowSelect([]))
             setSelectItems(updateSelected)
+            setWaitForChildWaitCall(false)
             //setSelectGroups(updateGroup)
             updateUserCompanySelection(updateSelected)
+            
             dispatch( setMainCompaniesSelected( updateSelected, updateGroup ) ) 
             dispatch( setNamesTransactionsSelectAll( false ) )
             dispatch( setSelectedNamesTransactions([]) )
@@ -813,13 +831,15 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             clearOtherItems()
         } else {
             if(row.status == 1) {
-                if(parseInt(row.type) === 1) {
+                let updateGroup = [...selectedGroup] 
+                if(parseInt(row.type) === 1) { 
                     if(currentSelection != row.representative_id) {
                         setCurrentSelection(row.representative_id)
+                        updateGroup = [row.representative_id]
                     } else { 
                         setCurrentSelection(null)
                     }
-                } else {
+                } else { 
                     const element = event.target.closest('div.ReactVirtualized__Table__rowColumn')
                     let index = -1
                     if(element !== null ) {
@@ -837,7 +857,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                         setSelectItems(updateSelected)
                         //setSelectGroups(updateGroup)
                         updateUserCompanySelection(updateSelected)
-                        dispatch( setMainCompaniesSelected( updateSelected, [] ) ) 
+                        dispatch( setMainCompaniesSelected( updateSelected, updateGroup ) ) 
                         dispatch( setNamesTransactionsSelectAll( false ) )
                         dispatch( setSelectedNamesTransactions([]) )
                         dispatch( setMainCompaniesAllSelected( updateSelected.length === totalRecords ? true : false ) ) 
@@ -865,7 +885,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         } 
         if(dashboardScreen === true) {
             checkChartAnalytics(null, null, false)
-        }
+        } 
         updateCompanySelection(event, dispatch, row, cntrlKey, selected, defaultSelect, currentSelection)
     }, [ dispatch, selected, display_clipboard, currentSelection ])
 
@@ -953,9 +973,10 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const handleChildCallback = useCallback((items, groups) => {        
         //setSelectGroups([...groups])
         setSelectItems([...items])
-        if(selectedGroups.length != groups.length) {
+        /* if(selectedGroups.length != groups.length) {
             dispatch(setMainCompaniesSelected([...new Set(items)], [...new Set(groups)]))
-        }
+        } */ 
+        dispatch(setMainCompaniesSelected([...new Set(items)], [...new Set(groups)]))
     }, [dispatch, selectedGroups])
 
     const handleSortData = (direction, column) => {
@@ -1000,6 +1021,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         childRows={childList}
         /* childCounterColumn={`child_total`} */
         forceChildWaitCall={true}
+        onFlyForChildWaitCall={waitForChildWaitCall}
         renderCollapsableComponent={
             <ChildTable parentCompanyId={currentSelection} headerRowDisabled={true} itemCallback={handleChildCallback} groups={selectedGroup} companyColWidth={companyColWidth} isMobile={isMobile} reset={resetAll} cleared={clearOtherItems}/>
         }

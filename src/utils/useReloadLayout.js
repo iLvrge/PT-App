@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import {  useLocation } from "react-router-dom";
 import { useDispatch } from 'react-redux'
-import { setBreadCrumbsAndCategory } from "../actions/patentTrackActions2";
+import { setAllAssetTypes, setAssetTypesSelect, setBreadCrumbsAndCategory } from "../actions/patentTrackActions2";
 import { controlList } from "./controlList";
 import { setDashboardScreen, setTimelineScreen } from '../actions/uiActions';
 
@@ -30,7 +30,36 @@ export function useReloadLayout() {
             if(loadLayoutName.indexOf('pay_maintainence_fee') !== -1) {
                 findIndex = controlList.findIndex( item => item.type == 'menu' && item.mainHeading.toLowerCase() == 'maintenance fee due') 
             }
+            
             if(findIndex !== -1){
+                if(['due_dilligence', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'litigation_transactions'].includes(controlList[findIndex].mainHeading)) {
+                    let activityIDs = []
+                    switch(controlList[findIndex].mainHeading) {
+                        case 'acquisition_transactions':
+                            activityIDs = [1, 6] 
+                            break
+                        case 'divestitures_transactions':
+                            activityIDs = [2, 7] 
+                            break
+                        case 'licensing_transactions':
+                            activityIDs = [3, 4] 
+                            break
+                        case 'collateralization_transactions':
+                            activityIDs = [5, 12] 
+                            break
+                        case 'inventing_transactions':
+                            activityIDs = [10] 
+                            break
+                        case 'litigation_transactions':
+                            activityIDs = [9] 
+                            break
+                        default:
+                            activityIDs = [] 
+                            break
+                    }
+                    dispatch( setAllAssetTypes(activityIDs.length > 0 ? false : true) )
+                    dispatch( setAssetTypesSelect(activityIDs) )
+                }
                 dispatch(setBreadCrumbsAndCategory(controlList[findIndex])) 
                 if(type !== 1) {
                     dispatch(setDashboardScreen(false))

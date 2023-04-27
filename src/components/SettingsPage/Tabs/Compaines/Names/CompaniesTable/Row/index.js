@@ -69,8 +69,10 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
         }
       }
     } 
-    setDropdownOpen(!dropdownOpen)
-    moveItem(targetValue, item) 
+    setDropdownOpen(!dropdownOpen) 
+    if(targetValue != '') {
+      moveItem(targetValue, item) 
+    }
   }
 
   const ShowDropDown = ({item, parent}) => { 
@@ -106,12 +108,11 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
           transformOrigin: {
             vertical: "top",
             horizontal: "left"
-          },
-          getContentAnchorEl: null
+          }
         }}
         onClose={handleDropdownClose}
         onOpen={() => handleDropdownOpen(item)}  
-        onClick={(event) =>  onHandleDropDown(event, item) }
+        onClick={(event) => onHandleDropDown(event, item) }
         value={''}
       >
         {
@@ -177,27 +178,6 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
           }
           
         </TableCell>
-
-        {/* <TableCell className={classes.actionTh} padding="none">
-          <Checkbox
-            checked={isSelected(row.id)}
-            value={row.id}
-          />
-        </TableCell> */}
-
-        {/* <TableCell>
-          {row.slack !== ''
-            ? 
-              <a onClick={() => removeFromSlack(row.id)}>
-                <span className={`MuiButtonBase-root MuiIconButton-root headingIcon slackIcon`}>
-                  <span className={`MuiIconButton-label`}>
-                    <svg style={{width: '24px', height: '24px'}} version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 270 270"><g><g><path fill="#E01E5A" d="M99.4,151.2c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h12.9V151.2z"></path><path fill="#E01E5A" d="M105.9,151.2c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v32.3c0,7.1-5.8,12.9-12.9,12.9s-12.9-5.8-12.9-12.9V151.2z"></path></g><g><path fill="#36C5F0" d="M118.8,99.4c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v12.9H118.8z"></path><path fill="#36C5F0" d="M118.8,105.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9H86.5c-7.1,0-12.9-5.8-12.9-12.9s5.8-12.9,12.9-12.9H118.8z"></path></g><g><path fill="#2EB67D" d="M170.6,118.8c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9h-12.9V118.8z"></path><path fill="#2EB67D" d="M164.1,118.8c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9V86.5c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9V118.8z"></path></g><g><path fill="#ECB22E" d="M151.2,170.6c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9v-12.9H151.2z"></path><path fill="#ECB22E" d="M151.2,164.1c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h32.3c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9H151.2z"></path></g></g></svg>
-                  </span>
-                </span>
-              </a>
-            : ''}
-        </TableCell> */}
-
         <TableCell 
           className={clsx(classes.padLR0, row.children.length > 0 ? classes.groupHeading : '')}  
           {...(row.children.length > 0 ? {onClick: () => editColumn(row)} : {})}
@@ -241,13 +221,13 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
                     <TableBody>
                       {row.children.map((company, idx) => (
                         <TableRow
-                          hover
-                          onClick={event => !(isSelected(row.id)) && onSelect(event, company, 'child')}
-                          role="checkbox"
+                        className={clsx(classes.tableRow, {[classes.disabled]: company.status == 0 ? true : false})}
+                          hover={company.status == 0 ? false : true} 
+                          onClick={event => company.status == 1 ? onSelect(event, company, 'child') : ''}
                           aria-checked={isChildSelected(company.id)}
                           tabIndex={-1}
-                          key={`${company.id}_child`}
-                          selected={isChildSelected(company.id)}
+                          key={`${company.id}_child`} 
+                          selected={company.status == 0 ? false : isChildSelected(company.id)} 
                         >
                           {/* <TableCell className={classes.actionCell}>
                             <Checkbox

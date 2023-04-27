@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Paper } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
  
 import useStyles from "./styles";
 import { useDispatch, useSelector } from 'react-redux'; 
@@ -9,6 +9,7 @@ import { Chart } from "react-google-charts";
 import PatenTrackApi from '../../../../api/patenTrack2' 
 import themeMode from '../../../../themes/themeMode';
 import { setLineChartData, setLineChartRequest } from '../../../../actions/patentTrackActions2';
+import { Box } from '@mui/system';
 
 const AgentsVisualizer = (props) => { 
     const containerRef = useRef(null)
@@ -223,16 +224,25 @@ const AgentsVisualizer = (props) => {
             setLoading(false)
             setRawData(data)
             dispatch(setLineChartData(props.type,  data))
-        }
-        
-        if( assetsList.length > 0 || assetsSelected.length > 0 || maintainenceAssetsList.length > 0 ||  selectedMaintainencePatents.length == 0  ) {
-            
         } 
+    }
+
+    const EmptyMessage = () => {
+        return(
+            <Box className={classes.boxMessage}>
+                <Typography
+                    variant="h6" 
+                    component="span"
+                >
+                    No transactions in the past 11 years.
+                </Typography> 
+            </Box>
+        )
     }
 
     const DisplayChart = () => {
         if(loading) return <Loader/>
-        if(data.length == 0) return null
+        if(data.length == 0) return <EmptyMessage/>
         return (
             <Chart
                 width={'100%'}

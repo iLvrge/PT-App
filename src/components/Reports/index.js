@@ -426,6 +426,7 @@ const Reports = (props) => {
             title: 'Acquisitions',
             tooltip: 'Tooltip',
             standalone: false,
+            button: true,
             rf_id: '',
             type: 1,
             list: [] 
@@ -434,6 +435,7 @@ const Reports = (props) => {
             title: 'Divestitures',
             tooltip: 'Tooltip',
             standalone: false,
+            button: true,
             rf_id: '',
             type: 2,
             list: []
@@ -442,6 +444,7 @@ const Reports = (props) => {
             title: 'Licensing',
             tooltip: 'Tooltip',
             standalone: false,
+            button: true,
             rf_id: '',
             type: 3,
             list: []
@@ -450,6 +453,7 @@ const Reports = (props) => {
             title: 'Collateralization',
             tooltip: 'Tooltip',
             standalone: false,
+            button: true,
             rf_id: '',
             type: 4,
             list: []
@@ -458,6 +462,7 @@ const Reports = (props) => {
             title: 'Inventing',
             tooltip: 'Tooltip',
             standalone: false,
+            button: true,
             rf_id: '',
             type: 5,
             list: []
@@ -466,6 +471,7 @@ const Reports = (props) => {
             title: 'Litigation',
             tooltip: 'Tooltip',
             standalone: false,
+            button: true,
             rf_id: '',
             type: 6,
             list: []
@@ -525,7 +531,7 @@ const Reports = (props) => {
         {
             element: document.querySelector('.step-2'),
             title: 'Your 3 Dashboards',
-            intro: 'Select one of the three dashboards to see information relating to: <div><span><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="AppsOutageIcon"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6 6h4v-4h-4v4zm3-20c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm.5 8h-1V7h1v1zm0-2h-1V2h1v4zM16 14h4v-2.07c-.33.05-.66.07-1 .07-1.07 0-2.09-.24-3-.68V14zM10 4v4h2.68c-.44-.91-.68-1.93-.68-3 0-.34.02-.67.07-1H10z"></path></svg></span> Key perfomance indicators</div><div><span><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SpeedIcon"><path d="m20.38 8.57-1.23 1.85a8 8 0 0 1-.22 7.58H5.07A8 8 0 0 1 15.58 6.85l1.85-1.23A10 10 0 0 0 3.35 19a2 2 0 0 0 1.72 1h13.85a2 2 0 0 0 1.74-1 10 10 0 0 0-.27-10.44zm-9.79 6.84a2 2 0 0 0 2.83 0l5.66-8.49-8.49 5.66a2 2 0 0 0 0 2.83z"></path></svg></span> Matters calling for attention</div><div><span><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ViewTimelineIcon"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H6v-2h6v2zm3-4H9v-2h6v2zm3-4h-6V7h6v2z"></path></svg></span> Transactional activities</div>',
+            intro: 'Select one of the three dashboards to see information relating to: <div><span><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="AppsOutageIcon"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6 6h4v-4h-4v4zm3-20c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm.5 8h-1V7h1v1zm0-2h-1V2h1v4zM16 14h4v-2.07c-.33.05-.66.07-1 .07-1.07 0-2.09-.24-3-.68V14zM10 4v4h2.68c-.44-.91-.68-1.93-.68-3 0-.34.02-.67.07-1H10z"></path></svg></span>Key perfomance indicators</div><div><span><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="SpeedIcon"><path d="m20.38 8.57-1.23 1.85a8 8 0 0 1-.22 7.58H5.07A8 8 0 0 1 15.58 6.85l1.85-1.23A10 10 0 0 0 3.35 19a2 2 0 0 0 1.72 1h13.85a2 2 0 0 0 1.74-1 10 10 0 0 0-.27-10.44zm-9.79 6.84a2 2 0 0 0 2.83 0l5.66-8.49-8.49 5.66a2 2 0 0 0 0 2.83z"></path></svg></span>Matters calling for attention</div><div><span><svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="ViewTimelineIcon"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H6v-2h6v2zm3-4H9v-2h6v2zm3-4h-6V7h6v2z"></path></svg></span>Transactional activities</div>',
             position: 'bottom',
             tooltipClass: 'dashboardIntroTooltip',
             highlightClass: 'dashboardHighlightClass',
@@ -777,17 +783,17 @@ const Reports = (props) => {
         let filterList =  selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0]) 
         if(filterList.length == 0) { 
             let findCompany = selectedCompanies.length > 0 && child_list.filter( company => company.representative_id === selectedCompanies[0]) 
-            if(findCompany.length == 0 && child_list.length == 0) {
+            if(findCompany.length == 0) {
                 companiesList.map( company => {
                     if(company.type == 1) {
-                        if(company.child != '') {
+                        if(company.child != '') { 
                             const companyChildIDs = JSON.parse(company.child)
                             if(companyChildIDs.includes(selectedCompanies[0])) {
                                 const childs = JSON.parse(company.child_full_detail)
                                 if(childs.length > 0) {
                                     findCompany = childs.filter( cmp => cmp.representative_id === selectedCompanies[0])
                                     if(findCompany.length > 0) {
-                                        name = `${company.original_name} > ${findCompany[0].original_name}`
+                                        name = `${company.original_name} <i class="fa fa-sm fa-angle-double-right"></i> ${findCompany[0].original_name}`
                                     }
                                 }
                             }
@@ -798,7 +804,7 @@ const Reports = (props) => {
                 if(childID > 0) { 
                     const findGroup =  companiesList.filter( company => company.representative_id === childID)
                     if(findGroup.length > 0) {
-                        name = `${findGroup[0].original_name} > ${findCompany[0].original_name}`
+                        name = `${findGroup[0].original_name} <i class="fa fa-sm fa-angle-double-right"></i> ${findCompany[0].original_name}`
                     } else {
                         name = findCompany[0].original_name
                     }
@@ -904,7 +910,7 @@ const Reports = (props) => {
                                         oldList[findIndex].rf_id = ''
                                         oldList[findIndex].total = item.total  
                                         oldList[findIndex].number = 0           
-                                    } else if( item?.number) {
+                                    } else if( item.hasOwnProperty('number') ) { 
                                         oldList[findIndex].number = item.number
                                         oldList[findIndex].patent = ''
                                         oldList[findIndex].application = ''                            
@@ -924,7 +930,7 @@ const Reports = (props) => {
                                     }
                                 }
                             })
-                            await Promise.all(dashboardPromise)
+                            await Promise.all(dashboardPromise) 
                             setCardList(oldList)
                             if(viewIntro === false) {
                                 dispatch(setViewIntro(true))
@@ -1464,7 +1470,7 @@ const Reports = (props) => {
                 item lg={12} md={12} sm={12} xs={12} 
             >
                 <Paper className={classes.titleContainer} square>
-                    <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span>{formattedCompanyname}</span> 
+                    <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span dangerouslySetInnerHTML={{__html: formattedCompanyname}}/>
                         <span className={clsx(classes.headingName, 'step-1')}>
                             {
                                 profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' && selectedAssetCompanies.length == 1 && (

@@ -2,17 +2,21 @@ import * as types from '../actions/actionTypes2'
 import initialState from './initialState2'
 
 import dashboardIntial from './dashboard_initials'
-import { ConstructionOutlined } from '@mui/icons-material'
 
 
 const arrayToObjectByKey = (array, key) =>
   array.reduce((result, item) => {
     result[item[key]] = item
     return result
-  }, {})
+  }, {}) 
 
 const patenTrackReducer = (state = initialState.dashboard, action) => { 
   switch (action.type) {
+    case types.SET_VIEW_STEPS: 
+      return { 
+        ...state, 
+        viewEnableSteps: action.flag 
+      }
     case types.SET_FAMILY_REQUEST: 
       return { 
         ...state, 
@@ -833,7 +837,8 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
               breadcrumbs = {...state.breadCrumbs},
               selectedCategory = {...state.category},
               layout_id = {...state.layout_id},
-              clipboard_assets = [...state.clipboard_assets]
+              clipboard_assets = [...state.clipboard_assets],
+              viewEnableSteps = {...state.viewEnableSteps}
         return {
           ...state,
           ...dashboardIntial,
@@ -841,7 +846,8 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           breadcrumbs,
           selectedCategory,
           layout_id,
-          clipboard_assets 
+          clipboard_assets ,
+          viewEnableSteps
         }
       case types.SET_MOVE_ASSETS:
         return {

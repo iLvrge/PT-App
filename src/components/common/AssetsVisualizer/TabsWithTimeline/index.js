@@ -640,26 +640,23 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
       let startIndex = convertedItems.length - 1;
       if(scrollNewRequest === false) {
         if(convertedItems.length > 25) {
-          start = new Date(convertedItems[24].start)
+          start = new Date(convertedItems[24].start) 
           startIndex = 24
-        } else {
-          start = new moment(start).subtract(3, 'year') 
-        }
+        } 
       } else {
         if(convertedItems.length > 0) {
-          start = new Date(convertedItems[convertedItems.length - 1].start)
+          start = new Date(convertedItems[convertedItems.length - 1].start) 
         }
       }
       
-      if(scrollNewRequest === false) {
-        end = new moment(end).add(1, 'year')
-      }  
-
-      console.log("startIndex", startIndex)
+      /* if(scrollNewRequest === false) {
+        end = new moment(end).add(6, 'months')
+      }  */ 
+      start = new moment(start).subtract(6, 'months') 
+      end = new moment().add(9, 'months')
       /* const startIndex = convertedItems.length < 201 ? (convertedItems.length - 1) : 199
       items.current.add(convertedItems.slice(0, startIndex))  */   
-      const spliceItems = convertedItems.slice(0, startIndex);
-      console.log('spliceItems', spliceItems, start, end.format('DD-MM-YYYY'))
+      const spliceItems = convertedItems.slice(0, startIndex); 
       items.current.add(spliceItems)    
       //items.current.add(convertedItems)  
     }    
