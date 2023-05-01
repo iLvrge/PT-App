@@ -9,14 +9,11 @@ import ConnectionBox from '../../ConnectionBox'
 import USPTOContainer from '../USPTOContainer'
 import FullScreen from '../../FullScreen'
 import { setConnectionData } from '../../../../actions/patenTrackActions' 
-import { setAssetsIllustrationData, setAssetsTransactionsLifeSpan, getCustomerAssets, getCustomerSelectedAssets } from '../../../../actions/patentTrackActions2' 
+import { setAssetsIllustrationData, setAssetsTransactionsLifeSpan} from '../../../../actions/patentTrackActions2' 
 import PatenTrackApi from '../../../../api/patenTrack2'
 import { DEFAULT_CUSTOMERS_LIMIT } from "../../../../api/patenTrack2";
 
 import useStyles from './styles'
-import InventionVisualizer from '../InventionVisualizer'
-import Citation from '../LegalEventsContainer/Citation' 
-import IllustrationContainer from '../IllustrationContainer'
 import AgentsVisualizer from '../AgentsVisualizer'
 import LabelWithIcon from '../../LabelWithIcon'
 import HistogramYears from './HistogramYears'
@@ -72,12 +69,14 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
  
     useEffect(() => {
         let tabList = []
-        if(selectedRow.length  === 0) {
+        if(selectedRow.length  === 0) { 
             /* setLifeSpanTabs(['Lifespan', 'Acknowledgements']) */ 
-            if( selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording') {  
+            if( ['incorrect_recording', 'late_recording'].includes(selectedCategory)) {  
                 tabList = ['Lawyers']
-            } else if( (selectedCategory == 'top_lenders')) {
+            } else if(selectedCategory == 'top_lenders') {
                 tabList = ['Lenders']
+            } else if(selectedCategory == 'collateralization_transactions') {
+                tabList = ['Lifespan']
             } else if(selectedCategory == 'abandoned'){
                 tabList = ['Years', 'Ages', 'Cited by', 'Salable', 'Licensable']
             } else {
@@ -85,7 +84,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
             } 
         } else if( connectionBoxView === true || selectedRow.length > 0 ) {
             /*setLifeSpanTabs([ 'Lifespan', 'Assignment', 'USPTO' ])*/
-            if(selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording') { 
+            if(['incorrect_recording', 'late_recording'].includes(selectedCategory)) { 
                 tabList = ['Rights']
             } else { 
                 tabList = [ 'Lifespan', 'Assignment']
@@ -93,7 +92,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
         }
         setLifeSpanTabs(tabList) 
         if(typeof activeTab !== 'undefined') {
-            if(selectedCategory == 'top_lenders' || selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording') {
+            if(['top_lenders', 'late_recording', 'incorrect_recording', 'collateralization_transactions'].includes(selectedCategory)) {
                 setSelectedTab(0)
             } else {
                 setSelectedTab(activeTab)
@@ -103,7 +102,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
 
     useEffect(() => {
         const getChartData = async () => {
-            if ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' && selectedCompanies.length === 0) || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token === null)){
+            if ((['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE) && selectedCompanies.length === 0) || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token === null)){
                 dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, 0, []))
                 return null
             } 
@@ -204,7 +203,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                     }
                 }                
             } 
-            if( list.length > 0 || (selectedCategory == 'top_law_firms' || selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording' || selectedCategory == 'top_lenders' || selectedCategory == 'collaterlized')) {
+            if( list.length > 0 || (['top_law_firms', 'late_recording', 'incorrect_recording', 'top_lenders', 'collaterlized', 'collateralization_transactions'].includes(selectedCategory))) {
                 setFilterList(list)
                 const form = new FormData()
                 form.append("list", JSON.stringify(list)) 
@@ -264,7 +263,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                 ?
                     ''
                 :
-                    ((['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE)  || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) && fullScreen === false && typeof standalone === 'undefined' && (
+                    ((['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE))  || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null))  && fullScreen === false && typeof standalone === 'undefined' && (
                         <IconButton size="small" className={clsx(classes.fullscreenBtn, 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
                             <FullscreenIcon />
                         </IconButton>
@@ -298,7 +297,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
             
             <Box {...( lifeSpanTabs[selectedTab] !== 'Cited by' ? {sx: {p: 2}} : {})} style={{display: 'flex', height: selectedCategory == 'abandoned' && (selectedTab == 0 || selectedTab == 1) ? '100%' : '89%'}}>  
             {
-                ((process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) 
+                ((['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE)) || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null))  
                 ?
                     selectedTab === 0 
                     ?
@@ -366,7 +365,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
             }
             </Box>
             {  
-                ( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) )  && fullScreen === true && (
+                ( (['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE)  || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) )  && fullScreen === true && (
                     <FullScreen 
                         componentItems={fullScreenItems} 
                         showScreen={fullScreen} 

@@ -103,7 +103,7 @@ const SankeyChart = (props) => {
                 }
                 if(typeof props.layout != 'undefined' && props.layout !== null && props.layout === true) { 
                     formData.append('layout', selectedCategory);  
-                }
+                } 
                 if(typeof props.type != 'undefined' && props.type !== null && props.type != '') {
                     formData.append('type', props.type);  
                     //formData.append('search', 'all');  
