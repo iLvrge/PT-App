@@ -509,16 +509,13 @@ const TimelineChart = (props) => {
             if (convertedItems.length > 26) {
                 start = new Date(convertedItems[25].start)
                 min = new Date(convertedItems[convertedItems.length - 1].start)
-            } else {
-                start = new moment(start).subtract(1, 'year')
-            }
+            }  
             //
-            if(props.type != 5) {
-                end = new moment().add(6, 'month')
-            } else {
-                end = new Date()
+            start = new moment(start).subtract(1, 'year')
+            end = new moment().add(6, 'month') 
+            if (convertedItems.length < 25) {
+                min = start
             }
-            
             if (timelineRef.current !== null && timelineRef.current != undefined && typeof timelineRef.current.destroy === 'function' && typeof props.standalone !== 'undefined') {
                 timelineRef.current.destroy()
                 timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
