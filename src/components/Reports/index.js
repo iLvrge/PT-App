@@ -8,7 +8,7 @@ import useStyles from './styles'
 import clsx from 'clsx'
 import moment from 'moment'
 import CardElement from './CardElement'
-import { Fullscreen, Close, Reviews } from '@mui/icons-material';
+import { Fullscreen, Close, Reviews, Speed, ViewTimeline, AppsOutage } from '@mui/icons-material';
 
 import { 
     setDashboardPanel,
@@ -424,7 +424,7 @@ const Reports = (props) => {
     const TIMELINE_LIST = [
         {
             title: 'Acquisitions',
-            tooltip: 'Tooltip',
+            tooltip: 'The most recent transactions and other assignments transferring patent ownership rights to the selected company.',
             standalone: false,
             button: true,
             rf_id: '',
@@ -433,7 +433,7 @@ const Reports = (props) => {
         },
         {
             title: 'Divestitures',
-            tooltip: 'Tooltip',
+            tooltip: 'The most recent transactions and other assignments transferring patent ownership rights from the selected company.',
             standalone: false,
             button: true,
             rf_id: '',
@@ -442,7 +442,7 @@ const Reports = (props) => {
         },
         {
             title: 'Licensing',
-            tooltip: 'Tooltip',
+            tooltip: 'The most recent transactions under which the selected company granted or was granted patent licenses.',
             standalone: false,
             button: true,
             rf_id: '',
@@ -451,7 +451,7 @@ const Reports = (props) => {
         },
         {
             title: 'Collateralization',
-            tooltip: 'Tooltip',
+            tooltip: 'The most recent transactions in which the selected company used patent and patent applications as collateral to secure loans. If the company defaults on the loan, the lender may seize and sell the patent asset to offset their loss. Green bars denote released security transactions.',
             standalone: false,
             button: true,
             rf_id: '',
@@ -460,7 +460,7 @@ const Reports = (props) => {
         },
         {
             title: 'Inventing',
-            tooltip: 'Tooltip',
+            tooltip: 'Most employment agreements obligate employees to assign their inventions to their employer. This timeline shows the most recent recorded transfers of ownership rights from the company’s employees-inventors to the company.',
             standalone: false,
             button: true,
             rf_id: '',
@@ -469,7 +469,7 @@ const Reports = (props) => {
         },
         {
             title: 'Litigation',
-            tooltip: 'Tooltip',
+            tooltip: 'US Courts and Patent Trial and Appeal Board (PTAB) proceedings involving patents owned by the selected company. ',
             standalone: false,
             button: true,
             rf_id: '',
@@ -1445,6 +1445,14 @@ const Reports = (props) => {
         setEnableStep(false)
     }
     
+    const ShowDahboardLayout = (props) => {
+        return (
+            <span className={classes.breadcrumbHeadingIcon}>
+                <i class="fa fa-sm fa-angle-double-right"></i> {props.icon}  <span>{props.layout_name}</span>
+            </span> 
+        )
+    }
+
     return (
         <Grid
             container
@@ -1470,23 +1478,42 @@ const Reports = (props) => {
                 item lg={12} md={12} sm={12} xs={12} 
             >
                 <Paper className={classes.titleContainer} square>
-                    <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}  <span dangerouslySetInnerHTML={{__html: formattedCompanyname}}/>
+                    <span className={clsx('title', {['small']: smallScreen})}><span dangerouslySetInnerHTML={{__html: formattedCompanyname}}/>
                         <span className={clsx(classes.headingName, 'step-1')}>
                             {
                                 profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' && selectedAssetCompanies.length == 1 && (
                                     partyName[0].entityName
                                 ) 
-                            }
+                            } 
+                            { 
+                                viewDashboard.gauge === true
+                                ?
+                                    <ShowDahboardLayout 
+                                        icon = {<Speed/>}
+                                        layout_name = 'Matters Calling for Attention'
+                                    />
+                                :
+                                    viewDashboard.timeline === true
+                                    ?
+                                        <ShowDahboardLayout 
+                                            icon = {<ViewTimeline/>}
+                                            layout_name = 'Transactional Activities'
+                                        /> 
+                                    :
+                                        <ShowDahboardLayout 
+                                            icon = {<AppsOutage/>}
+                                            layout_name = 'Key Perfomance Indicators'
+                                        />  
+                            }  
                         </span>
                     </span>
                     <div className={classes.toolbar}> 
-
                         {
                             loading && (
                                 <span>Loading...</span>
                             )
                         }
-                        
+                        <span className={clsx('title', {['small']: smallScreen})}>{ moment(new Date()).format(DATE_FORMAT)}</span>
                         <AddToolTip
                             tooltip={'Big screen view.'}
                             placement='bottom'

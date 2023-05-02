@@ -591,7 +591,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     items.current = new DataSet()
     groups.current = new DataSet()
     let constantOptions = {...options}
-    if(['late_recording', 'incorrect_recording'].includes(selectedCategory)){ 
+    if(['late_recording', 'incorrect_recording', 'collaterlized', 'deflated_collaterals'].includes(selectedCategory)){ 
       constantOptions = {...timelineWithoutClusterOptions}
     } 
     timelineRef.current.setOptions(constantOptions) 
