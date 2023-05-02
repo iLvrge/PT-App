@@ -879,13 +879,18 @@ export default makeStyles(theme => ({
   breadcrumbHeadingIcon: {
     marginLeft: '0 !important',
     position: 'relative',
+    textTransform: 'initial !important',
     '& svg': {
       marginRight: 5,
       display: 'inline-block',
       position: 'absolute', 
     },
     '& span': {
-      marginLeft: '25px !important'
+      marginLeft: '25px !important',
+      textTransform: 'initial !important'
     }
   },
+  padding: {
+    padding: '5px 8px'
+  }
 }));

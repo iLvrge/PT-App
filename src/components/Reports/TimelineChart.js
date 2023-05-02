@@ -545,7 +545,7 @@ const TimelineChart = (props) => {
         timelineRef.current.setItems(items.current)
     }
     return (
-        <Paper className={clsx(classes.container, classes.columnDirection)} square>
+        <Paper className={clsx(classes.container, classes.columnDirection, {[classes.padding]: typeof props.padding != 'undefined' ? props.padding : false})} square>
             {
                 props.card.title != '' && (
                     <div className={clsx(classes.timelineHeading, 'full_heading')}>
