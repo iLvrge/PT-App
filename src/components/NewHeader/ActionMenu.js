@@ -751,7 +751,7 @@ const ActionMenu = (props) => {
                     ['Chain-of-Title', 'To Assign', 'To Divest', 'To Monetize', 'Names', 'Addresses', 'Deflated Collateral', 'Encumbrances', 'Maintainance', 'Recordings', 'Corrections'].includes(layoutName) 
                         ?
                             <span className={classes.breadcrumbHeadingIcon}>
-                                <Speed/>  <span>{layoutName}</span>
+                                <i class="fa fa-sm fa-angle-double-right"></i> <Speed/>  <span>{layoutName}</span>
                             </span>
                         :
                             ['Acquisitions', 'Divestitures', 'Licensing', 'Collateralization', 'Inventing'].includes(layoutName) 
