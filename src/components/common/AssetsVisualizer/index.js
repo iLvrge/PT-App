@@ -43,8 +43,12 @@ const AssetsVisualizer = ({ toggleMinimize, isMinimized, setIllustrationRecord }
   }
 
   const renderComponent = (wherefrom) => {
-    if (shouldShowTimeline) {  
-        return <TimelineContainer /> 
+    if (shouldShowTimeline) {
+      if(['due_dilligence', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'inventing_transactions', 'litigation_transactions'].includes(selectedCategory)){
+        return <TimelineWithLogo />
+      } else { 
+        return <TimelineContainer />
+      }
     } else if((!wherefrom && !isFullscreenOpen) || (wherefrom && isFullscreenOpen)) {
       return <div className={classes.singleAssetContainer}>
           <IllustrationContainer isFullscreenOpen={isFullscreenOpen} asset={assetIllustration} setIllustrationRecord={setIllustrationRecord} />

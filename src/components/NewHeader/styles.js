@@ -657,14 +657,17 @@ export default makeStyles(theme => ({
         }
     },
     breadcrumbHeadingIcon: {
+        marginLeft: 5,
         '& svg': {
             marginRight: 5,
             display: 'inline-block',
             position: 'absolute',
-            bottom: 10
+            bottom: 10,
+            fill: pink[500],
         },
         '& span':{
-            marginLeft: 25
+            marginLeft: 25,
+            color: pink[500],
         }
     },
     noStrokeHeightWidth: {

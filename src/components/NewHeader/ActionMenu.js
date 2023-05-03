@@ -794,17 +794,6 @@ const ActionMenu = (props) => {
                                 </span>
                             )
                         }
-                        <Button
-                            id="action-menu"
-                            variant="text"
-                            aria-controls="app-patentrack-action-menu"
-                            aria-haspopup="true"
-                            aria-expanded={open ? 'true' : undefined}
-                            disableElevation
-                            /* onClick={handleClick}
-                            startIcon={open === false ? <KeyboardArrowDown /> : <KeyboardArrowUp/>} */
-                            className={classes.btnActionMenu}
-                        >
                             <span style={{whiteSpace: 'nowrap'}}>
                                 {
                                     props.display_sales_assets == true 
@@ -838,8 +827,7 @@ const ActionMenu = (props) => {
                                                     :
                                                         ''
                                 } 
-                            </span>
-                        </Button> 
+                            </span> 
                     </React.Fragment>
             }            
             
