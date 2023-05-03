@@ -683,7 +683,9 @@ export default makeStyles(theme => ({
     textTransform: 'initial',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
-    fontSize: '1.2vw'
+    fontSize: '1.2vw',
+    marginBottom: 5,
+    marginTop: 5,
   },
   shareIcon: {
     '& svg': {
