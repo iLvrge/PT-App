@@ -81,7 +81,7 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
                     </Typography>
                 } 
                 placement='right' 
-                enterDelay={0}
+                enterDelay={500}
                 TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
                 classes={{ 
                     tooltip: clsx(classes.tooltip, {[classes.mobileTooltip]: typeof isMobile !== 'undefined' && isMobile === true})
