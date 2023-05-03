@@ -302,13 +302,13 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
                   </div> <div>Lapsed: ${dateDifference(executionDate, recordedDate)} days</div>`
                 }                       
                 tootltipTemplate += `<div>
-                                              <h4>Assignors:</h4>
+                                            <h4>${selectedCategory == 'collaterlized' ? 'Borrower' : 'Assignors'}:</h4>
                                               ${data.assignor.map(or => ( 
                                                 '<div>'+or.original_name+'</div>'
                                               )).join('')}
                                             </div>
                                             <div>
-                                              <h4>Assignees:</h4>
+                                              <h4>${selectedCategory == 'collaterlized' ? 'Lender' : 'Assignees'}:</h4>
                                               ${data.assignee.map(ee => (
                                                 '<div>'+ee.original_name+'</div>'
                                               )).join('')}
