@@ -38,7 +38,8 @@ import {
     Tv as TvIcon,
     Check,
     AppsOutage,
-    Speed
+    Speed,
+    ViewTimeline
 } from '@mui/icons-material'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -744,7 +745,7 @@ const ActionMenu = (props) => {
                     ['Owned', 'Invented', 'Acquired', 'Collaterlized', 'Maintenance Fee Due', 'Challenged (PTAB)', 'Divested', 'Abandoned', 'Members of Owned USA', 'Proliferate Inventors', 'Law Firms', 'Lenders'].includes(layoutName) 
                     ? 
                         <span className={classes.breadcrumbHeadingIcon}>
-                            <AppsOutage/>  <span>{layoutName}</span>
+                            <i class="fa fa-sm fa-angle-double-right"></i> <AppsOutage/>  <span>{layoutName}</span>
                         </span>
                     :
                     ['Chain-of-Title', 'To Assign', 'To Divest', 'To Monetize', 'Names', 'Addresses', 'Deflated Collateral', 'Encumbrances', 'Maintainance', 'Recordings', 'Corrections'].includes(layoutName) 
@@ -753,7 +754,13 @@ const ActionMenu = (props) => {
                                 <Speed/>  <span>{layoutName}</span>
                             </span>
                         :
-                            layoutName
+                            ['Acquisitions', 'Divestitures', 'Licensing', 'Collateralization', 'Inventing'].includes(layoutName) 
+                            ?
+                                <span className={classes.breadcrumbHeadingIcon}>
+                                    <i class="fa fa-sm fa-angle-double-right"></i> <ViewTimeline/>  <span>{layoutName}</span>
+                                </span>
+                            :
+                                layoutName
                 } 
             </React.Fragment>
         )
@@ -808,39 +815,28 @@ const ActionMenu = (props) => {
                                             :
                                                 'Our Assets for Sale'
                                     :
-                                        props.dashboardScreen === true
+                                        
+                                        props.timelineScreen === true
                                         ?
-                                            viewDashboard.kpi === true
-                                            ?
-                                                'Key Perfomance Indicators'
-                                            :
-                                                viewDashboard.gauge === true
-                                                ?
-                                                    'Matters Calling for Attention'
-                                                :
-                                                    viewDashboard.timeline === true
-                                                    ?
-                                                        'Transactional Activities'
-                                                    :
-                                                        'Key Perfomance Indicators'
+                                            props.layoutName != '' ? <ShowIcon  layoutName={props.layoutName} /> : 'Transactions'
                                         :
-                                            props.timelineScreen === true
+                                            props.patentScreen === true
                                             ?
-                                                props.layoutName != '' ? <ShowIcon  layoutName={props.layoutName} /> : 'Transactions'
-                                            :
-                                                props.patentScreen === true
+                                                props.layoutName != '' && props.layoutName != 'Due Diligence > Legal Ownership'
                                                 ?
-                                                    props.layoutName != '' && props.layoutName != 'Due Diligence > Legal Ownership'
-                                                    ?
-                                                        <ShowIcon  layoutName={props.layoutName} />
-                                                    :
-                                                        'Assets'
+                                                    <ShowIcon  layoutName={props.layoutName} />
                                                 :
-                                                    props.selectedCategory !== 'due_dilligence'
-                                                    ? 
-                                                        <ShowIcon  layoutName={props.layoutName} />
-                                                    : 
+                                                    'Assets'
+                                            :
+                                                props.selectedCategory !== 'due_dilligence'
+                                                ? 
+                                                    <ShowIcon  layoutName={props.layoutName} />
+                                                : 
+                                                    props.dashboardScreen !== true
+                                                    ?
                                                         'Action' 
+                                                    :
+                                                        ''
                                 } 
                             </span>
                         </Button> 

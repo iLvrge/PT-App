@@ -285,8 +285,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
    */
 
   const onSelect = useCallback(async (properties) => {
-    resetTooltipContainer()
-    console.log(selectedItem, properties.items)
+    resetTooltipContainer() 
     if (properties.items.length === 0 || selectedItem === properties.items[0]) {
       setSelectedItem(null)
       dispatch(

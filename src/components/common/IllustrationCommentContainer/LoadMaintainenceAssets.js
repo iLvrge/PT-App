@@ -169,8 +169,7 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
      * Create Maintainance CSV file and open USPTO window to upload file
      */
 
-    const onMaintainenceFeeFile = useCallback(async () => {  
-        console.log('Maintainence Fee File')
+    const onMaintainenceFeeFile = useCallback(async () => {   
         if(selectedMaintainencePatents.length > 0) {
             createCSVFile(selectedMaintainencePatents);
             /**

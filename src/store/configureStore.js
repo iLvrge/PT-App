@@ -20,8 +20,7 @@ if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_AP
   
   if(location && location != 'blank') {
     (async() => {
-      location = location.split('/').pop()[0]
-      console.log('location', location) 
+      location = location.split('/').pop()[0] 
       if( location != '' && location != 'auth') {
         const { data } = await AuthApi.signInWithShareCode(location, (process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') ? 9 : process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 0 : 2)
       

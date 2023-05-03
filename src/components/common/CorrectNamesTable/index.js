@@ -156,8 +156,7 @@ const CorrectNamesTable = ({ assetType, standalone, headerRowDisabled, parentBar
         }
     }, [ dispatch, selectedCompanies, selectedCompaniesAll ]) 
 
-    useEffect(() => {
-        console.log("NamesGroup", mainCompaniesSelected, assetTypeNamesGroups)
+    useEffect(() => { 
         if(mainCompaniesSelected.length > 0 && assetTypeNamesGroups.length > 0) {
             onHandleGetNameQueue()
         } else {

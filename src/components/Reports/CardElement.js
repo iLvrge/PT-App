@@ -16,14 +16,15 @@ const CardElement = (props) => {
             label: 'Timeline',
             component: TimelineChart,
             card: props.card,
-            id: props.id,
+            id: props.id, 
             active: props.active,
             standalone: true,
             handleClick: props.handleClick,
             handleList: props.handleList,
             handleFullScreen: props.handleFullScreen,
             type: props.type,
-            grid: props.grid
+            grid: props.grid,
+            padding: true
         }
     ] : []  
     return (
