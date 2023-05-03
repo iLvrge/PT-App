@@ -556,8 +556,8 @@ const TimelineChart = (props) => {
                         >
                             <span className={classes.buttonContainer}>
                                 <Button 
-                                    size="small" 
-                                    variant="outlined" 
+                                    size='large'
+                                    variant='outlined'
                                     className={clsx(classes.actionButton, 'dashboard_buttons')} 
                                     onClick={() => props.handleList(props.id, props.card.type, 'timeline')}
                                     disabled={ timelineRawData.length == 0 || props.button === false ? true : false }
