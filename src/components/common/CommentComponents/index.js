@@ -120,8 +120,7 @@ function CommentComponents(props) {
   )
 }
 
-const mapStateToProps = (state) => {
-  console.log('COMMENTS',state.patenTrack.comments)
+const mapStateToProps = (state) => { 
   return {
     comments: state.patenTrack.comments,
     record_item: state.patenTrack.record_item,

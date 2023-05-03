@@ -19,6 +19,7 @@ import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import { 
   setAssetTypeAssignmentAllAssets,
   setAssetTypesAssignmentsAllAssetsLoading,
+  setSelectAssignments,
   setTimelineData,
   setTimelineRequest,
   transactionRowClick
@@ -34,6 +35,7 @@ import useStyles from './styles'
 import { setTimelineSelectedItem, setTimelineSelectedAsset } from '../../../../actions/uiActions'
 import clsx from 'clsx';
 import { IconButton } from '@mui/material';
+import { updateHashLocation } from '../../../../utils/hashLocation';
  
 
 /**
@@ -189,8 +191,8 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
         if(tootlTip === item.id) {
           if(selectedCategory == 'proliferate_inventors') {
             const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
-            const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector(`#all_timeline`) : document.getElementById(`all_timeline`);   
-            const getPosition = element.getBoundingClientRect();  
+            const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector(`#all_timeline`) : document.getElementById(`all_timeline`);    
+            const getPosition = element != null ? element.getBoundingClientRect() : {y: 0, x: 0};  
             const tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid #fff;top:${ getPosition.y }px;left:${ getPosition.x }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
                                         <h4 style='text-align:left; margin:0;'>US${item.patent != '' ? numberWithCommas(item.patent) : applicationFormat(item.application)}</h4>
                                         <div>
@@ -203,9 +205,8 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
                                       </div>` 
               resetTooltipContainer() 
             if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
-              document.body.insertAdjacentHTML('beforeend',tootltipTemplate)
-              //timelineContainerRef.current.childNodes[0].insertAdjacentHTML('beforeend',tootltipTemplate)
-            }
+              document.body.insertAdjacentHTML('beforeend',tootltipTemplate) 
+            } 
           } else {
             PatenTrackApi
             .cancelTimelineItemRequest()
@@ -336,11 +337,21 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     resetTooltipContainer()
     if (properties.items.length === 0) {
       setSelectedItem()
+      history.push({
+        hash: updateHashLocation(location, "assignments", []).join(
+            "&",
+        ),
+      });
     } else {
       const item = items.current.get(properties.items[0])
       setSelectedAsset({ type: 'transaction', id: item.rawData.id })
-      setSelectedItem(item)
-      if(selectedCategory == 'collaterlized') {
+      setSelectedItem(item) 
+      history.push({
+        hash: updateHashLocation(location, "assignments", [item.rawData.id]).join(
+            "&",
+        ),
+      }); 
+      if(['collaterlized', 'deflated_collaterals'].includes(selectedCategory)) {
         dispatch(setAssetTypesAssignmentsAllAssetsLoading( false ) )
         dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false)) 
       }

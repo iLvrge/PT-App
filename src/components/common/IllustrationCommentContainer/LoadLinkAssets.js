@@ -75,8 +75,7 @@ const LoadLinkAssets = ({type, asset, size}) => {
     ]
 
     const onHandleDropDownlist = async(event, asset, row) => {
-        setDropOpenScoring(null)
-        console.log('asset', event.target.value, asset, row)
+        setDropOpenScoring(null) 
         let items = [...rows], scoreItems = [...selectedItemsWithScore], movedItems = [...movedProducts]
         
         const findScoreIndex = scoreItems.findIndex(item => item.name == row.name)

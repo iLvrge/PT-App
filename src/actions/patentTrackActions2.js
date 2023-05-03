@@ -1032,7 +1032,7 @@ export const setAllAssignments = (flag) => {
   }
 }
 
-export const setSelectAssignments = (data) => {
+export const setSelectAssignments = (data) => { 
   return {
     type: types.SET_ASSET_TYPE_ASSIGNMENTS_SELECT,
     data
@@ -1531,7 +1531,7 @@ export const transactionRowClick = (rf_id, slackChannelList, defaultLoad, search
     dispatch(setAssetTypeCustomerSelectedRow([]))
     dispatch(setChildSelectedAssetsTransactions([]))
     dispatch(setChildSelectedAssetsPatents([]))
-    dispatch(setSelectedAssetsPatents([]))
+    dispatch(setSelectedAssetsPatents([])) 
     dispatch(setSelectedAssetsTransactions([rf_id]))
     dispatch(setSelectAssignments([rf_id]))
     if(typeof defaultLoad !== 'undefined' && defaultLoad === false){

@@ -307,7 +307,7 @@ const IllustrationCommentContainer = ({
                 <ErrorBoundary>
                 {/* <AllComponentsMenu onClick={onHandleComponentMenuItem}/> */}
                 {
-                    illustrationBar === true && ( typeof cube == 'undefined' || (typeof cube !== 'undefined' && cube === false) || ((maintainence  === true || record === true) && assetIllustration === null))  && dashboardScreen === false && !isFullscreenOpen && shouldShowTimeline === true
+                    illustrationBar === true && ( typeof cube == 'undefined' || (typeof cube !== 'undefined' && cube === false) || ((maintainence  === true || record === true) && assetIllustration === null))  && dashboardScreen === false && !isFullscreenOpen && shouldShowTimeline === true || ['deflated_collaterals'].includes(selectedCategory)
                     ?
                         <IconButton 
                             size="small" 

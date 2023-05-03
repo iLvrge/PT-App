@@ -41,7 +41,7 @@ export default makeStyles(theme => ({
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         fontSize: '1.1rem',
-        marginRight: 'auto',
+        /* marginRight: 'auto', */
         '& span':{
             textTransform:'uppercase',
             marginLeft: 24
@@ -133,7 +133,7 @@ export default makeStyles(theme => ({
         display: 'flex',
         flexGrow: 1,
         alignItems: 'center',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-start'
         /* textAlign: 'right' */
     },
     toolbar: {

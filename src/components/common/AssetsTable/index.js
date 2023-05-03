@@ -1652,8 +1652,7 @@ const retrieveSlackMessages = async(asset) => {
           const ratingItems = []
           data.messages.forEach( item => {
             if(item.type == 'message') {
-              const {text} = item
-              console.log('text', text)
+              const {text} = item 
               if(text != '') { 
                 if(text.toLowerCase().indexOf('necessary') !== -1 && text.indexOf('via PatenTrack') !== -1) {
                   /**
@@ -1675,10 +1674,8 @@ const retrieveSlackMessages = async(asset) => {
                     name: 'Important',
                     value
                   })
-                }
-                console.log('text', text.indexOf('via PatenTrack'), text.indexOf('assigned to this asset'))
-                if(text.indexOf('via PatenTrack') !== -1 && text.indexOf('assigned to this asset') !== -1){
-                  console.log('ASSIGNED')
+                } 
+                if(text.indexOf('via PatenTrack') !== -1 && text.indexOf('assigned to this asset') !== -1){ 
                   let messageTest = text.replace('products are assigned to this asset via PatenTrack', '')
                   messageTest = text.replace('product is assigned to this asset via PatenTrack', '')
                   if(messageTest != '') {
@@ -1690,8 +1687,7 @@ const retrieveSlackMessages = async(asset) => {
                 }
               }
             }
-          });
-          console.log('ratingItems', ratingItems)
+          }); 
           if(ratingItems.length > 0) {
             updateTableColumn(ratingItems)
           }

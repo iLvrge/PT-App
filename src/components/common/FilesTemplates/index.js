@@ -435,8 +435,7 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
             dispatch(setTemplateDocument(null))
             setSelectedDocumentRow([])
             setCurrentDocumentSelection(null)
-        } else {
-            console.log('item', item)
+        } else { 
             if(item.external_type == 'gdrive' || item.external_type == 'usptodrive') {
                 dispatch(setDriveTemplateFrameMode(true))
                 let webLink = item.url_private

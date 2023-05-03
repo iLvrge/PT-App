@@ -86,8 +86,7 @@ const DisplayChart = (props) => {
                             } */
                             google.visualization.events.addListener(chart, "select", e => {
                                 const chart = chartWrapper.getChart();
-                                const selection = chart.getSelection();
-                                console.log('selection', selection)
+                                const selection = chart.getSelection(); 
                                 if(selection.length > 0) { 
                                     props.onSelect(selection, props.chartType, e)
                                 } else {

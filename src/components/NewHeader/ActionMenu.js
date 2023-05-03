@@ -745,7 +745,7 @@ const ActionMenu = (props) => {
                     ['Owned', 'Invented', 'Acquired', 'Collaterlized', 'Maintenance Fee Due', 'Challenged (PTAB)', 'Divested', 'Abandoned', 'Members of Owned USA', 'Proliferate Inventors', 'Law Firms', 'Lenders'].includes(layoutName) 
                     ? 
                         <span className={classes.breadcrumbHeadingIcon}>
-                            <AppsOutage/>  <span>{layoutName}</span>
+                            <i class="fa fa-sm fa-angle-double-right"></i> <AppsOutage/>  <span>{layoutName}</span>
                         </span>
                     :
                     ['Chain-of-Title', 'To Assign', 'To Divest', 'To Monetize', 'Names', 'Addresses', 'Deflated Collateral', 'Encumbrances', 'Maintainance', 'Recordings', 'Corrections'].includes(layoutName) 
@@ -754,10 +754,10 @@ const ActionMenu = (props) => {
                                 <Speed/>  <span>{layoutName}</span>
                             </span>
                         :
-                            ['Acquisitions', 'Divestitures', 'Licensing', 'Collaterialization', 'Inventing'].includes(layoutName) 
+                            ['Acquisitions', 'Divestitures', 'Licensing', 'Collateralization', 'Inventing'].includes(layoutName) 
                             ?
                                 <span className={classes.breadcrumbHeadingIcon}>
-                                    <ViewTimeline/>  <span>{layoutName}</span>
+                                    <i class="fa fa-sm fa-angle-double-right"></i> <ViewTimeline/>  <span>{layoutName}</span>
                                 </span>
                             :
                                 layoutName
