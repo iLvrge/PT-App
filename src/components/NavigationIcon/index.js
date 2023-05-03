@@ -71,14 +71,21 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
         
     return (
         <div className={clsx(classes.showIcon, {[classes.marginBottom25]: typeof margin !== 'undefined' && margin === true && typeof isMobile !== 'undefined' && isMobile === false, [classes.mobile]: typeof isMobile !== 'undefined' && isMobile === true})}> 
-            <Tooltip 
+            <Tooltip   
                 title={
-                    <Typography color="inherit" variant='body2'>{tooltip}</Typography>
+                    <Typography 
+                        color="inherit" 
+                        variant='body2'
+                    >
+                        {tooltip}
+                    </Typography>
                 } 
-                className={clsx(classes.tooltip, {[classes.mobileTooltip]: typeof isMobile !== 'undefined' && isMobile === true})}  
-                placement='right'
+                placement='right' 
                 enterDelay={0}
                 TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
+                classes={{ 
+                    tooltip: clsx(classes.tooltip, {[classes.mobileTooltip]: typeof isMobile !== 'undefined' && isMobile === true})
+                }}
             >
                 <span> 
                     <IconButton

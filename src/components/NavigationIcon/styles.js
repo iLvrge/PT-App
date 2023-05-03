@@ -67,7 +67,10 @@ export default makeStyles(theme => ({
         marginBottom: 25
     },
     tooltip:{
-        fontSize: '1rem'
+        fontSize: '1rem',
+        '& .MuiTypography-root': {
+            fontSize: 18
+        }
     },
     noStroke: {
         stroke: 'none !important'

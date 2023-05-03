@@ -379,8 +379,7 @@ const Fees = ({ events, showTabs, tabText, showAbandoned }) => {
       start = new moment(min).subtract(3, 'year') 
       end = new moment(max).add(3, 'year') 
       min = start
-      max = end
-      console.log('startIndex', startIndex, convertedItems.length)
+      max = end 
       //items.current.add(convertedItems)
       items.current.add(convertedItems.slice(0, startIndex))    
       setDisplay('block')      

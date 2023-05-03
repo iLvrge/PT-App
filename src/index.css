@@ -1127,7 +1127,8 @@ div#draggable-illustration-menu-item div[aria-hidden='true']{
 }
 
 .MuiTooltip-tooltip.tooltip6 {
-  max-width: 240px;
+  /*max-width: 240px;*/
+  max-width: 350px;
 }
 
 .MuiTooltip-tooltip.tooltip12 {

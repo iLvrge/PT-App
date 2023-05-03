@@ -48,8 +48,7 @@ const FigureData = ( { analyticsBar, illustrationBar, visualizerBarSize, data, n
         } 
     }
 
-    if(loading) return <Loader/> 
-    console.log('standalone', standalone)
+    if(loading) return <Loader/>  
     return (
         <div className={classes.container}>    
             <div className={classes.inlineContainer} id={`container`}></div>

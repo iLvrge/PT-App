@@ -42,8 +42,7 @@ function ConnectionBox(props) {
           setAssetData(props.assets)
         }
         if(selectedCategory == 'incorrect_names') {
-          const { data } = await PatenTrackApi.getConnectionDataFromAsset(selectedAssetsPatents[1], selectedCompanies)
-          console.log('data', data)
+          const { data } = await PatenTrackApi.getConnectionDataFromAsset(selectedAssetsPatents[1], selectedCompanies) 
           if(typeof data.popup != 'undefined' ){
             setAssetData(data)
             setBoxData(data)

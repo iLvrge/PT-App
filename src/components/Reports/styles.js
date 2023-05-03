@@ -220,7 +220,7 @@ export default makeStyles(theme => ({
     },
     '& .MuiTypography-root': {  
       fontSize: 18
-    } 
+    }
   },
   mobileTooltip: {
     flex: '1 1 100%',
@@ -683,7 +683,9 @@ export default makeStyles(theme => ({
     textTransform: 'initial',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
-    fontSize: '1.2vw'
+    fontSize: '1.2vw',
+    marginBottom: 5,
+    marginTop: 5,
   },
   shareIcon: {
     '& svg': {
@@ -825,7 +827,7 @@ export default makeStyles(theme => ({
     maxWidth: 500
   },
   headingName: {
-    marginLeft: 10
+    marginLeft: '10px !important'
   },
   fixKPI: {
     flexDirection: 'column',
@@ -874,6 +876,23 @@ export default makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    width: '100%' 
+    width: '100%'
+  },
+  breadcrumbHeadingIcon: {
+    marginLeft: '0 !important',
+    position: 'relative',
+    textTransform: 'initial !important',
+    '& svg': {
+      marginRight: 5,
+      display: 'inline-block',
+      position: 'absolute', 
+    },
+    '& span': {
+      marginLeft: '25px !important',
+      textTransform: 'initial !important'
+    }
+  },
+  padding: {
+    padding: '5px 8px'
   }
 }));

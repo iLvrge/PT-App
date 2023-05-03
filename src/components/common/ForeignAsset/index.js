@@ -213,8 +213,7 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
                                 sheet_id: filterSheet[0].sheet_id,
                                 delete_item: deleteItem
                             }
-                            const {data} = await PatenTrackApi.deleteItemFromExternalSheet(form)
-                            console.log('Return Delete Item', data)
+                            const {data} = await PatenTrackApi.deleteItemFromExternalSheet(form) 
                         }
                     }
                 }
