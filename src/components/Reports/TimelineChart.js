@@ -536,7 +536,7 @@ const TimelineChart = (props) => {
         }
 
         return (() => { })
-    }, [timelineRawData])
+    }, [timelineRawData])  
 
 
     const drawTimeline = (start, end, min, convertedItems) => {
