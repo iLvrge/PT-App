@@ -748,7 +748,7 @@ const ActionMenu = (props) => {
                             <i class="fa fa-sm fa-angle-double-right"></i> <AppsOutage/>  <span>{layoutName}</span>
                         </span>
                     :
-                    ['Chain-of-Title', 'To Assign', 'To Divest', 'To Monetize', 'Names', 'Addresses', 'Deflated Collateral', 'Encumbrances', 'Maintainance', 'Recordings', 'Corrections'].includes(layoutName) 
+                    ['Chain-of-Title', 'To Assign', 'To Record', 'To Divest', 'To Monetize', 'Names', 'Addresses', 'Deflated Collateral', 'Encumbrances', 'Maintainance', 'Recordings', 'Corrections'].includes(layoutName) 
                         ?
                             <span className={classes.breadcrumbHeadingIcon}>
                                 <i class="fa fa-sm fa-angle-double-right"></i> <Speed/>  <span>{layoutName}</span>
