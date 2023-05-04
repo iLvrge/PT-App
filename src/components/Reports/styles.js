@@ -886,10 +886,13 @@ export default makeStyles(theme => ({
       marginRight: 5,
       display: 'inline-block',
       position: 'absolute', 
+      fill: pink[500]
     },
     '& span': {
       marginLeft: '25px !important',
-      textTransform: 'initial !important'
+      textTransform: 'initial !important',
+      fontSize: '0.875rem',
+      color: pink[500]
     }
   },
   padding: {
