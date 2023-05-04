@@ -22,7 +22,7 @@ import {
 import PatenTrackApi from '../../../../api/patenTrack2'
 import { convertTabIdToAssetType, assetsTypesWithKey } from '../../../../utils/assetTypes'
 import { numberWithCommas, capitalize, applicationFormat} from '../../../../utils/numbers'
-import { timelineOptions } from '../../../../utils/options'
+import { timelineOptions, timelineWithoutClusterOptions } from '../../../../utils/options'
 
 
 import useStyles from './styles'
@@ -454,7 +454,11 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
   }, [ selectedItem, timelineRef ])
 
   useEffect(() => {
-    timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
+    let constantOptions = {...options}  
+    if(selectedTab == 1) {
+      constantOptions = {...timelineWithoutClusterOptions}
+    }
+    timelineRef.current = new Timeline(timelineContainerRef.current, [], constantOptions)
   }, [])
 
   //Timeline list from server
@@ -545,7 +549,11 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
   const redrawTimeline = () => {
     if(timelineRef.current !== null) {
       timelineRef.current.destroy()
-      timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
+      let constantOptions = {...options}  
+      if(selectedTab == 1) {
+        constantOptions = {...timelineWithoutClusterOptions}
+      }
+      timelineRef.current = new Timeline(timelineContainerRef.current, [], constantOptions)
     }
   }
 
@@ -585,7 +593,12 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
    */
   useEffect(() => {
     items.current = new DataSet()
-    timelineRef.current.setOptions(options) 
+    let constantOptions = {...options} 
+    timelineRef.current.setOptions(constantOptions) 
+    if(selectedTab == 1) {
+      constantOptions = {...timelineWithoutClusterOptions}
+    }
+    timelineRef.current.setOptions(constantOptions) 
     timelineRef.current.on('select', onSelect)
     timelineRef.current.on('itemover', onItemover)
     timelineRef.current.on('itemout', onItemout) 
@@ -666,8 +679,12 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
     start = new moment(end).subtract(12, 'months')  */
     redrawTimeline()  
     if(timelineRawData.length > 0 || previousLoad === false) { 
+      let constantOptions = {...options}  
+      if(selectedTab == 1) {
+        constantOptions = {...timelineWithoutClusterOptions}
+      }
       timelineRef.current.setOptions({ 
-        ...options, 
+        ...constantOptions, 
         start, 
         end,
         min: new Date('1999-01-01'), 
