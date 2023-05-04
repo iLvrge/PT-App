@@ -890,8 +890,7 @@ export default makeStyles(theme => ({
     },
     '& span': {
       marginLeft: '25px !important',
-      textTransform: 'initial !important',
-      fontSize: '0.875rem',
+      textTransform: 'initial !important', 
       color: pink[500]
     }
   },

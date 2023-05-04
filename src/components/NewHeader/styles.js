@@ -668,7 +668,7 @@ export default makeStyles(theme => ({
         '& span':{
             marginLeft: 25,
             color: pink[500],
-            fontSize: '0.875rem',
+            fontSize: '1.1rem',
         }
     },
     noStrokeHeightWidth: {
