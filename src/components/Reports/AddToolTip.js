@@ -20,7 +20,7 @@ const AddToolTip = (props) => {
                 </Typography>
             } 
             placement={props.placement}
-            enterDelay={500}
+            enterDelay={1500}
             TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
             classes={{ 
                 tooltip: clsx(classes.tooltip, typeof props.grid !== 'undefined' ?  `tooltip${props.grid.lg}` : '')
