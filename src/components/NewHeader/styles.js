@@ -662,7 +662,7 @@ export default makeStyles(theme => ({
             marginRight: 5,
             display: 'inline-block',
             position: 'absolute',
-            bottom: 10,
+            bottom: 12,
             fill: pink[500],
         },
         '& span':{
