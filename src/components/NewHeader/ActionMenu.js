@@ -763,7 +763,7 @@ const ActionMenu = (props) => {
                                 </span>
                             :
                             <span className={classes.breadcrumbHeadingIcon}>
-                                <i class="fa fa-sm fa-angle-double-right"></i>  {layoutName == 'Transactions' ? <HandshakeOutlined /> : layoutName == 'Patent Assets' ? <ASSET_ICON_SPAN/>  : layoutName == 'Settings > Companies' ? <Settings/> : ''}  <span>{layoutName}</span>
+                                <i class="fa fa-sm fa-angle-double-right"></i>  {layoutName == 'Transactions' ? <HandshakeOutlined /> : layoutName == 'Patent Assets' ? <ASSET_ICON_SPAN/>  : ['Settings > Companies', 'Settings > Users', 'Settings > Category'].includes(layoutName) ? <Settings/> : ''}  <span>{layoutName}</span>
                             </span>
                                 
                 } 
