@@ -229,7 +229,7 @@ const onHandleAddCompany = useCallback(async(event) => {
     const formData = new FormData();
     formData.append('name', searchTxtField.current.querySelector('input[type="text"]').value)
     const requestData = await PatenTrackApi.addCompanyRequest(formData)
-    console.log('requestData', requestData)
+    //console.log('requestData', requestData)
 
     if(requestData) {
       searchTxtField.current.querySelector('input[type="text"]').value = ''
