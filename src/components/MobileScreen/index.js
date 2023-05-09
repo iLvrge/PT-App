@@ -352,7 +352,6 @@ const MobileScreen = (props) => {
                                 ) : lifeSpanMode === true ? (
                                     <InventionVisualizer 
                                         defaultSize={props.openCommentBarSize} 
-                                        illustrationBar={props.openIllustrationBar} 
                                         visualizerBarSize={props.visualizerBarSize} 
                                         analyticsBar={props.openAnalyticsBar} 
                                         openCustomerBar={props.openCustomerBar} 

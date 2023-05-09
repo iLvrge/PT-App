@@ -36,8 +36,6 @@ const Header = (callback, deps) => {
   useEffect(() => {
     if (!profile) {
       dispatch(getProfile(true))
-    } else {
-      console.log('Profile')
     }
   }, [ dispatch, profile ])
 
