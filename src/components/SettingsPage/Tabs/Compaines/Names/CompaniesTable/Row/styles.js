@@ -46,7 +46,7 @@ export default makeStyles((theme) => ({
   highlightRow: {
     backgroundColor: 'rgba(144, 202, 249, 0.16)',
     '&:hover':{
-      backgroundColor: 'rgba(144, 202, 249, 0.16)',
+      backgroundColor: 'rgba(144, 202, 249, 0.16) !important',
     }
   }
 }))
