@@ -233,6 +233,7 @@ function CompaniesTable({
                     <Row
                       key={row.id}
                       row={row}
+                      selected={selected}
                       onSelect={onSelect}
                       isSelected={isSelected}
                       isChildSelected={isChildSelected}

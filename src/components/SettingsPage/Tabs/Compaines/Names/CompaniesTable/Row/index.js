@@ -16,7 +16,7 @@ import Box from '@mui/material/Box'
 import { ListItemIcon, ListItemText, MenuItem, Select } from '@mui/material'
 import { useSelector } from 'react-redux'
 
-function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem }) {
+function Row({ selected, onSelect, isSelected, isChildSelected, row, updateData, moveItem }) {
   const [ open, setOpen ] = useState(false)
   const [dropdownValue, setDropdownRowItem] = useState(null)
   const [dropdownOpen, setDropdownOpen] = useState(false)
@@ -152,12 +152,19 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
     ) 
   }
 
+  const rowOnClick = (event, row, type) => {
+    if(selected.includes(row.id)) {
+      setEditableRow(null)
+    } 
+    onSelect(event, row, type)
+  }
+
   return (
     <React.Fragment>
       <TableRow
         className={clsx({ [classes.expand]: open, [classes.disabled] : row.status == 1 ? false : true})}
         hover
-        onClick={event => row.status == 1 ? onSelect(event, row, 'parent') : ''}
+        onClick={event => row.status == 1 ? rowOnClick(event, row, 'parent') : ''}
         selected={row.status == 1 ? isSelected(row.id) : false}
         role="checkbox"
         tabIndex={-1}
@@ -179,8 +186,7 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
           
         </TableCell>
         <TableCell 
-          className={clsx(classes.padLR0, row.children.length > 0 ? classes.groupHeading : '')}  
-          {...(row.children.length > 0 ? {onClick: () => editColumn(row)} : {})}
+          className={clsx(classes.padLR0, row.children.length > 0 ? classes.groupHeading : '')}   
         >
           {
             editableRow !== null && row.id == editableRow.id
@@ -195,14 +201,16 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
                   onKeyDown={e => onHandleChangeName(e)}
               />
             :
-              <React.Fragment>
+              <span
+                {...(row.children.length > 0 ? {onClick: () => editColumn(row)} : {})}
+              >
                 {
                   row.representative_name === null
                   ? row.original_name
                   : row.representative_name
                 }
                 {row.children.length > 0 ? ` (${row.children.length})` : ''}
-              </React.Fragment> 
+              </span> 
           }
           
         </TableCell>
@@ -223,7 +231,7 @@ function Row({ onSelect, isSelected, isChildSelected, row, updateData, moveItem 
                         <TableRow
                         className={clsx(classes.tableRow, {[classes.disabled]: company.status == 0 ? true : false})}
                           hover={company.status == 0 ? false : true} 
-                          onClick={event => company.status == 1 ? onSelect(event, company, 'child') : ''}
+                          onClick={event => company.status == 1 ? rowOnClick(event, company, 'child') : ''}
                           aria-checked={isChildSelected(company.id)}
                           tabIndex={-1}
                           key={`${company.id}_child`} 
