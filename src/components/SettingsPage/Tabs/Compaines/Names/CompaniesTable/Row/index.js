@@ -162,9 +162,10 @@ function Row({ selected, onSelect, isSelected, isChildSelected, row, updateData,
   return (
     <React.Fragment>
       <TableRow
-        className={clsx({ [classes.expand]: open, [classes.disabled] : row.status == 1 ? false : true})}
+        className={clsx({ [classes.expand]: open, [classes.disabled] : row.status == 1 ? false : true, [classes.highlightRow]: row.status == 0 && isSelected(row.id)})}
         hover
-        onClick={event => row.status == 1 ? rowOnClick(event, row, 'parent') : ''}
+        /* onClick={event => row.status == 1 ? rowOnClick(event, row, 'parent') : ''} */
+        onClick={event => rowOnClick(event, row, 'parent')}
         selected={row.status == 1 ? isSelected(row.id) : false}
         role="checkbox"
         tabIndex={-1}
