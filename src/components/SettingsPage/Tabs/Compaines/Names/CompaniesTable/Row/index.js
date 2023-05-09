@@ -68,9 +68,9 @@ function Row({ selected, onSelect, isSelected, isChildSelected, row, updateData,
           targetValue = filterList[0].id
         }
       }
-    } 
+    }  
     setDropdownOpen(!dropdownOpen) 
-    if(targetValue != '') {
+    if(targetValue >= 0) { 
       moveItem(targetValue, item) 
     }
   }
