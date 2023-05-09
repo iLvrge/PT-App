@@ -187,7 +187,7 @@ function Row({ selected, onSelect, isSelected, isChildSelected, row, updateData,
           
         </TableCell>
         <TableCell 
-          className={clsx(classes.padLR0, row.children.length > 0 ? classes.groupHeading : '')}   
+          className={clsx(classes.padLR0, row.type == 1 ? classes.groupHeading : '')}   
         >
           {
             editableRow !== null && row.id == editableRow.id
