@@ -27,6 +27,7 @@ import NavigationIcon from '../../components/NavigationIcon'
 import { controlList } from '../../utils/controlList'
 import CategoryProducts from './Tabs/CategoryProducts'
 import { getShareLocationCode } from '../../utils/hashLocation'
+import { getProfile } from '../../actions/patenTrackActions'
 
 const TABS = [
   { label: 'Slacks', value: 'slacks', component: Slacks },
@@ -84,7 +85,11 @@ function SettingsPage() {
   const initialOpenSubTabs = findTabViaChild(currentTab)
   const [ openSubTabs, setOpenSubTabs ] = useState(initialOpenSubTabs ? [ initialOpenSubTabs ] : [])
 
-  console.log('currentTab', currentTab)
+  useEffect(() => {
+    if (!profile) {
+      dispatch(getProfile(true))
+    }
+  }, [ dispatch, profile ])
 
   useEffect(() => {
     if(profile?.user && profile.user?.role && profile.user.role.name != 'Admin') {

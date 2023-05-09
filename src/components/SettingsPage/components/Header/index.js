@@ -28,11 +28,10 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
     setOpenDialog(false)
   }, [])
 
-  const onConfirmDelete = useCallback(() => {
+  const onConfirmDelete = useCallback((event) => {
     setOpenDialog(false)
-    onDelete()
-  }, [ onDelete ])
-  
+    onDelete(event)
+  }, [ onDelete ]) 
   return (
     <Fragment>
 

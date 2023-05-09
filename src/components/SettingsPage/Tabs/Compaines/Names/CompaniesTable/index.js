@@ -150,16 +150,18 @@ function CompaniesTable({
     const form = new FormData()
     form.append('name', name)  
     const { data } = await PatenTrackApi.updateCompany(row.id, form) 
-    if( data != null && data.length > 0) {
+    if( data != null && data.length > 0) { 
+      setSelected([])
       dispatch(setCompanies(data))
     }
   }
 
-  const moveItem = async(parentId, item) => {
+  const moveItem = async(parentId, item) => { 
     const form = new FormData()
     form.append('parent_id', parentId > 0 ? parentId : 0)  
     const { data } = await PatenTrackApi.updateCompany(item.id, form) 
     if( data != null && data.length > 0) {
+      setSelected([])
       dispatch(setCompanies(data))
     }
   }
@@ -231,6 +233,7 @@ function CompaniesTable({
                     <Row
                       key={row.id}
                       row={row}
+                      selected={selected}
                       onSelect={onSelect}
                       isSelected={isSelected}
                       isChildSelected={isChildSelected}

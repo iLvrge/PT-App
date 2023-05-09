@@ -39,7 +39,9 @@ import {
     Check,
     AppsOutage,
     Speed,
-    ViewTimeline
+    ViewTimeline,
+    HandshakeOutlined,
+    Settings
 } from '@mui/icons-material'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -51,10 +53,10 @@ import useStyles from './styles'
 import AssetSwitchButton from './AssetSwitchButton'
 import UserInputForm from '../common/QuillEditor/UserInputForm'
 import CustomerAddress from '../common/CustomerAddress'
-import { controlList } from "../../utils/controlList"
+import { controlList } from "../../utils/controlList" 
 import { downloadFile, copyToClipboard } from '../../utils/html_encode_decode'
 import { setTokenStorage, getTokenStorage } from '../../utils/tokenStorage'
-import { TransactionIcon } from '../../utils/icons'
+import { TransactionIcon, ASSET_ICON_SPAN } from '../../utils/icons'
 
 import { 
     setBreadCrumbsAndCategory,  
@@ -748,7 +750,7 @@ const ActionMenu = (props) => {
                             <i class="fa fa-sm fa-angle-double-right"></i> <AppsOutage/>  <span>{layoutName}</span>
                         </span>
                     :
-                    ['Chain-of-Title', 'To Assign', 'To Record', 'To Divest', 'To Monetize', 'Names', 'Addresses', 'Deflated Collateral', 'Encumbrances', 'Maintainance', 'Recordings', 'Corrections'].includes(layoutName) 
+                        ['Chain-of-Title', 'To Assign', 'To Record', 'To Divest', 'To Monetize', 'Names', 'Addresses', 'Deflated Collateral', 'Encumbrances', 'Maintainance', 'Recordings', 'Corrections'].includes(layoutName) 
                         ?
                             <span className={classes.breadcrumbHeadingIcon}>
                                 <i class="fa fa-sm fa-angle-double-right"></i> <Speed/>  <span>{layoutName}</span>
@@ -760,7 +762,10 @@ const ActionMenu = (props) => {
                                     <i class="fa fa-sm fa-angle-double-right"></i> <ViewTimeline/>  <span>{layoutName}</span>
                                 </span>
                             :
-                                layoutName
+                            <span className={classes.breadcrumbHeadingIcon}>
+                                <i class="fa fa-sm fa-angle-double-right"></i>  {layoutName == 'Transactions' ? <HandshakeOutlined /> : layoutName == 'Patent Assets' ? <ASSET_ICON_SPAN/>  : ['Settings > Companies', 'Settings > Users', 'Settings > Category'].includes(layoutName) ? <Settings/> : ''}  <span>{layoutName}</span>
+                            </span>
+                                
                 } 
             </React.Fragment>
         )
@@ -807,25 +812,22 @@ const ActionMenu = (props) => {
                                         
                                         props.timelineScreen === true
                                         ?
-                                            props.layoutName != '' ? <ShowIcon  layoutName={props.layoutName} /> : 'Transactions'
+                                            <ShowIcon  layoutName={props.layoutName != '' ? props.layoutName : 'Transactions'} />
                                         :
                                             props.patentScreen === true
                                             ?
-                                                props.layoutName != '' && props.layoutName != 'Due Diligence > Legal Ownership'
+                                                <ShowIcon  layoutName={props.layoutName != '' ? props.layoutName : 'Assets'} />
+                                            : 
+                                                props.layoutName != 'Dashboard' && props.breadcrumbs != 'Dashboard'
                                                 ?
-                                                    <ShowIcon  layoutName={props.layoutName} />
+                                                    <ShowIcon  layoutName={props.layoutName != '' ? props.layoutName : props.breadcrumbs} /> 
                                                 :
-                                                    'Assets'
-                                            :
-                                                props.selectedCategory !== 'due_dilligence'
-                                                ? 
-                                                    <ShowIcon  layoutName={props.layoutName} />
-                                                : 
-                                                    props.dashboardScreen !== true
+                                                    ''
+                                                    /* props.dashboardScreen !== true
                                                     ?
                                                         'Action' 
                                                     :
-                                                        ''
+                                                        '' */
                                 } 
                             </span> 
                     </React.Fragment>

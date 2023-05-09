@@ -78,6 +78,19 @@ export const ASSET = () => {
     )
 }
 
+export const ASSET_ICON_SPAN = () => {
+    return (
+        <span dangerouslySetInnerHTML={{__html: ASSETS_SVG }} style={{
+            position: 'absolute',
+            margin: 0,
+            width: 21,
+            height: 21,
+            display: 'inline-block',
+            top: 23
+        }}/>
+    )
+}
+
 
 const LOCK_SVG = '<svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="LockOpenIcon"><path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"></path></svg>'
 
