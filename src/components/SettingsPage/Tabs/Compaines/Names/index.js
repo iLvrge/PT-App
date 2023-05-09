@@ -9,6 +9,7 @@ import SplitPaneDrawer from '../../../../SplitPaneDrawer'
 import Header from '../../../components/Header'
 import Group from './Group'
 import { Paper } from '@mui/material'
+import MoveItems from './MoveItems'
 
 
 
@@ -59,14 +60,25 @@ function Companies() {
     }
   }, [ searchSelected ])
 
+  /*useEffect(() => {
+    setChildComponentList([{
+      component: Group,      
+    }/* , {
+      component: MoveItems,
+      companies: companiesSelected,
+      child: childCompaniesSelected,
+      list: companiesList
+    } ])
+  }, [companiesSelected, childCompaniesSelected])*/
+
   useEffect(() => {
     setChildComponentList([{
       component: Group,      
-    }])
+    } ])
   }, [])
 
   useEffect(() => {
-    if(companiesSelected.length > 0) {
+    if(companiesSelected.length > 0) { 
       let type = ''
       const promises = companiesSelected.map( row => {
         companiesList.forEach(company => {
@@ -81,8 +93,10 @@ function Companies() {
       })
       Promise.all(promises)
       setSelectedType(type === '' ? 'companies' : type)
+    } else if(childCompaniesSelected.length > 0) {
+      setSelectedType('companies')
     }
-  }, [companiesSelected])
+  }, [companiesSelected, childCompaniesSelected])
 
   return (
     <SplitPaneDrawer
@@ -96,7 +110,7 @@ function Companies() {
           <Header
             title={'Companies'}
             onDelete={onDeleteCompanies}
-            numSelected={companiesSelected.length + childCompaniesSelected.length}
+            numSelected={companiesSelected.length + childCompaniesSelected.length} 
             search={search}
             setSearch={setSearch} 
             selectedType={selectedType}
