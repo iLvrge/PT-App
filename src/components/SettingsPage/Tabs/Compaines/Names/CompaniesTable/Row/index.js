@@ -71,11 +71,10 @@ function Row({ selected, onSelect, isSelected, isChildSelected, row, updateData,
     } else {
       targetValue = -1
     }
-    setDropdownOpen(!dropdownOpen) 
-    console.log(`Group name: ${groupName} IS`, targetValue, event, event.target.value)
-    /* if(targetValue >= 0) { 
+    setDropdownOpen(!dropdownOpen)  
+    if(targetValue >= 0) { 
       moveItem(targetValue, item) 
-    } */
+    }
   }
 
   const ShowDropDown = ({item, parent}) => { 
