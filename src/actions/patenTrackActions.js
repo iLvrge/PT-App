@@ -801,9 +801,9 @@ export const getCompanies = () => {
   }
 }
 
-export const deleteCompany = (list) => {
+export const deleteCompany = (list, type) => {
   return dispatch => {
-    return PatenTrackApi.deleteCompany(list)
+    return PatenTrackApi.deleteCompany(list, type)
       .then(res => {
         dispatch(getCompanies())
       })
