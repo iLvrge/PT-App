@@ -32,9 +32,10 @@ function Companies() {
     dispatch(fetchCompaniesList())
   }, [ dispatch ])
 
-  const onDeleteCompanies = useCallback(() => {
-    if (companiesSelected.length) {
-      dispatch(deleteCompany(companiesSelected.join(',')))
+  const onDeleteCompanies = useCallback((event) => {
+    if (companiesSelected.length) { 
+      let removeEntites = event.target.innerText == 'REMOVE THE GROUP BUT KEEP ITS ENTITIES' ? 1 : 0
+      dispatch(deleteCompany(companiesSelected.join(','), removeEntites))
     }
     
     if (childCompaniesSelected.length) {

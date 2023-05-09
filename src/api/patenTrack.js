@@ -186,8 +186,8 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/companies`, getHeader())
   }
 
-  static deleteCompany( companiesList ) {
-    return axios.delete(`${base_new_api_url}/companies?companies=[${encodeURI(companiesList)}]`, getHeader())
+  static deleteCompany( companiesList, type ) {
+    return axios.delete(`${base_new_api_url}/companies?companies=[${encodeURI(companiesList)}]&type=${type}`, getHeader())
   }
 
   static getSubCompanies( name ) {
