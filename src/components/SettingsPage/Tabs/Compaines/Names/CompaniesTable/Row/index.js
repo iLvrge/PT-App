@@ -68,11 +68,14 @@ function Row({ selected, onSelect, isSelected, isChildSelected, row, updateData,
           targetValue = filterList[0].id
         }
       }
-    }  
-    setDropdownOpen(!dropdownOpen) 
-    if(targetValue >= 0) { 
-      moveItem(targetValue, item) 
+    } else {
+      targetValue = -1
     }
+    setDropdownOpen(!dropdownOpen) 
+    console.log(`Group name: ${groupName} IS`, targetValue, event, event.target.value)
+    /* if(targetValue >= 0) { 
+      moveItem(targetValue, item) 
+    } */
   }
 
   const ShowDropDown = ({item, parent}) => { 
