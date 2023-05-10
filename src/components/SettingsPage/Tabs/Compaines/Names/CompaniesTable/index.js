@@ -152,6 +152,7 @@ function CompaniesTable({
     const { data } = await PatenTrackApi.updateCompany(row.id, form) 
     if( data != null && data.length > 0) { 
       setSelected([])
+      setChildCompaniesSelected([])
       dispatch(setCompanies(data))
     }
   }
@@ -162,6 +163,7 @@ function CompaniesTable({
     const { data } = await PatenTrackApi.updateCompany(item.id, form) 
     if( data != null && data.length > 0) {
       setSelected([])
+      setChildCompaniesSelected([])
       dispatch(setCompanies(data))
     }
   }
