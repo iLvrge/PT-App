@@ -227,9 +227,9 @@ export default makeStyles(theme => ({
     fontSize: '20px !important'
   },
   active: {
-    color: pink['A400'],
+    color: pink['500'],
     '& svg': {
-      fill: pink['A400'],
+      fill: pink['500'],
     }
   },
   list: {
