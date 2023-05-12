@@ -64,7 +64,7 @@ const SteppedAges = () => {
         annotations: {
             style: 'line',
             stem: {
-                color: pink[500],
+                color: isDarkTheme ? themeMode.dark.palette.secondary.main : themeMode.light.palette.secondary.main,
                 length: 50
             }
         },

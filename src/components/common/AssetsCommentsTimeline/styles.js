@@ -44,9 +44,9 @@ export default makeStyles(theme => ({
       fill: '#6d6d6d',
       stroke: '#6d6d6d',
       '&:hover':{
-        color: '#E60000',
-        fill: '#E60000',
-        stroke: '#E60000'
+        color: theme.palette.secondary.main,
+        fill: theme.palette.secondary.main,
+        stroke: theme.palette.secondary.main
       }
     }
   },  
@@ -68,8 +68,8 @@ export default makeStyles(theme => ({
       stroke: theme.palette.action.active
     },
 	'& .focus .ql-snow.ql-toolbar button:hover, .focus .ql-snow.ql-toolbar button svg:focus, .focus .ql-snow.ql-toolbar button svg:hover, .focus .ql-snow.ql-toolbar button.ql-bold:hover svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-bold:focus svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-italic:hover svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-italic:focus svg.MuiSvgIcon-root .ql-stroke':{
-      color: pink[500],
-      stroke: pink[500]
+      color: theme.palette.secondary.main,
+      stroke: theme.palette.secondary.main
     },
   },
   commentEditorActive:{
@@ -104,7 +104,7 @@ export default makeStyles(theme => ({
       display: 'block'
     },
     '& .active_link':{
-      color: pink[500]
+      color: theme.palette.secondary.main
     }
   },
   minimizeButton: {
@@ -127,7 +127,7 @@ export default makeStyles(theme => ({
     borderRadius: 0,
     textTransform: 'capitalize',
     '&:hover':{
-      color: '#e60000' 
+      color: theme.palette.secondary.main
     },
     '& img':{
       marginRight: 5,
@@ -318,7 +318,7 @@ export default makeStyles(theme => ({
     borderLeft: `1px dashed ${theme.palette.action.disabled}`
   },
   active: {
-    /* color: pink[500] */
+    /* color: theme.palette.secondary.main */
   },
   close: {
     opacity: 0.3,

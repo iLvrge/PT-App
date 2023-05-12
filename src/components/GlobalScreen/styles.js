@@ -29,7 +29,7 @@ export default makeStyles(theme => ({
             backgroundClip: 'padding-box',
             /* background: theme.palette.action.disabled, */
             '&:hover':{
-              background: pink[500],
+              background: theme.palette.secondary.main,
             },
             '&.horizontal': {
                 height: '3px',

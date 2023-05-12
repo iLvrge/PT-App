@@ -173,7 +173,7 @@ const TimelineChart = (props) => {
         switch (parseInt(item.tab_id)) {
             case 1:
                 image = 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/acquisition.png'
-                color = '#E60000'
+                color = isDarkTheme ? themeMode.dark.palette.secondary.main : themeMode.light.palette.secondary.main
                 break;
             case 2:
                 image = 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png'
@@ -205,7 +205,7 @@ const TimelineChart = (props) => {
                 break;
             case 9:
                 image = 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/courtorder.png'
-                color = '#E60000'
+                color = isDarkTheme ? themeMode.dark.palette.secondary.main : themeMode.light.palette.secondary.main
                 break;
             case 10:
                 image = 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png'

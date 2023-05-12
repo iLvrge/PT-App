@@ -436,7 +436,7 @@ export default makeStyles(theme => ({
                 backgroundColor: blue[500],
             },
             '&.asset-type-licenseOut': {
-                backgroundColor: pink[500],
+                backgroundColor: theme.palette.secondary.main,
             },
             '&.asset-type-securities': {
                 backgroundColor: teal[500],
@@ -462,7 +462,7 @@ export default makeStyles(theme => ({
         }, 
         '& .vis-item.vis-point.vis-selected': {
             backgroundColor: 'inherit',
-            color: pink[500],
+            color: theme.palette.secondary.main,
             fontWeight: 'bold',
         },
         '& .vis-item': {
@@ -513,7 +513,7 @@ export default makeStyles(theme => ({
             backgroundColor: blue[500],
         },
         '&.asset-type-licenseOut': {
-            backgroundColor: pink[500],
+            backgroundColor: theme.palette.secondary.main,
         },
         '&.asset-type-securities': {
             backgroundColor: teal[500],

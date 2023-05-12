@@ -112,7 +112,7 @@ export default makeStyles(theme => ({
     },
   },
   selected_company: {
-    color: '#E60000',
+    color: theme.palette.secondary.main,
     fontWeight: 'bold',
   },
   selected_sub_company: {
@@ -125,7 +125,7 @@ export default makeStyles(theme => ({
     marginTop: '7px',
   },
   delete: {
-    color: '#E60000',
+    color: theme.palette.secondary.main,
     cursor: 'pointer',
   },
   scrollbar: {

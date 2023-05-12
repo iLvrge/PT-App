@@ -243,7 +243,7 @@ export default makeStyles(theme => ({
         marginRight: '10px'
     },
     activeButton: {
-        color: '#e60000',
+        color: theme.palette.secondary.main,
         textDecoration: 'underline'
     },
     search: {
@@ -468,10 +468,10 @@ export default makeStyles(theme => ({
                 fill: 'rgb(230, 0, 0)',
                 stroke: 'rgb(230, 0, 0)',
             } */
-            color: pink['500'] ,
+            color: theme.palette.secondary.main ,
             '& svg':{
-                fill: pink['500'],
-                /* stroke: pink['500'], */
+                fill: theme.palette.secondary.main,
+                /* stroke: theme.palette.secondary.main, */
             }
         }
     },
@@ -522,7 +522,7 @@ export default makeStyles(theme => ({
         padding: '3px 5px',
         '&:hover':{
             border:'1px solid #e60000 !important',
-            color: '#e60000 !important'
+            color: `${theme.palette.secondary.main} !important`
         },
         '&:first':{
             marginLeft: 5
@@ -553,7 +553,7 @@ export default makeStyles(theme => ({
         /* backgroundColor: 'transparent',
         color: '#FFF',
         '&:hover':{
-            color: '#E60000',
+            color: theme.palette.secondary.main,
             backgroundColor: 'transparent', 
         } */     
         cursor: 'default' ,
@@ -636,18 +636,18 @@ export default makeStyles(theme => ({
           fontSize: '2rem'
         },
         '&:hover':{
-            color: pink['500'] ,
+            color: theme.palette.secondary.main ,
             '& svg':{
-                fill: pink['500'],
-                /* stroke: pink['500'], */
+                fill: theme.palette.secondary.main,
+                /* stroke: theme.palette.secondary.main, */
             }
         },
     }, 
     active: {
-        color: pink['500'],
+        color: theme.palette.secondary.main,
         '& svg':{
-            fill: pink['500'],
-            /* stroke: pink['500'], */
+            fill: theme.palette.secondary.main,
+            /* stroke: theme.palette.secondary.main, */
         }
     },
     shareIcon: {
@@ -663,11 +663,11 @@ export default makeStyles(theme => ({
             display: 'inline-block',
             position: 'absolute',
             bottom: 12,
-            fill: pink[500],
+            fill: theme.palette.secondary.main,
         },
         '& span':{
             marginLeft: 25,
-            color: pink[500],
+            color: theme.palette.secondary.main,
             fontSize: '1.1rem',
         }
     },

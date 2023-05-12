@@ -12,10 +12,10 @@ export default makeStyles(theme => ({
             borderRadius: 0,
             color: theme.palette.text.disabled,
             '&:hover':{
-                color: pink['500'] ,
+                color: theme.palette.secondary.main ,
                 '& svg':{
-                    fill: pink['500'],
-                    stroke: pink['500'],
+                    fill: theme.palette.secondary.main,
+                    stroke: theme.palette.secondary.main,
                 }
             },
             '& svg':{
@@ -29,19 +29,19 @@ export default makeStyles(theme => ({
                 stroke: 'none !important'
             },
             '&.active':{
-                color: `${pink['500']} !important` ,
+                color: `${theme.palette.secondary.main} !important` ,
                 '& svg':{ 
-                    fill: `${pink['500']} !important` ,
-                    stroke: `${pink['500']} !important` ,
+                    fill: `${theme.palette.secondary.main} !important` ,
+                    stroke: `${theme.palette.secondary.main} !important` ,
                 },
                 '& svg.noStroke':{
                     stroke: 'none !important'
                 },
                 '&:hover':{
-                    color: pink['500'] ,
+                    color: theme.palette.secondary.main ,
                     '& svg':{
-                        fill: pink['500'],
-                        stroke: pink['500'],
+                        fill: theme.palette.secondary.main,
+                        stroke: theme.palette.secondary.main,
                     },
                     '& svg.noStroke':{
                         stroke: 'none !important'
@@ -50,7 +50,7 @@ export default makeStyles(theme => ({
             },
             '&.selection_indicator':{
                 '& svg':{
-                    fill: pink['500'] ,
+                    fill: theme.palette.secondary.main ,
                 }
             }
         }

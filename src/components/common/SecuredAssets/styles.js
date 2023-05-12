@@ -71,7 +71,7 @@ export default makeStyles(theme => ({
         },
         '&:hover':{
             /* border:'1px solid #e60000 !important', */
-            color: '#e60000 !important'
+            color: `${theme.palette.secondary.main} !important`
         },
         '&:first':{
             marginLeft: 5
@@ -144,7 +144,7 @@ export default makeStyles(theme => ({
         
     },
     item_error: {
-        color: '#E60000'
+        color: theme.palette.secondary.main
     },
     close: { 
         position: 'absolute', 
