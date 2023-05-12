@@ -12,10 +12,10 @@ export default makeStyles(theme => ({
             borderRadius: 0,
             color: theme.palette.text.disabled,
             '&:hover':{
-                color: pink['A400'] ,
+                color: pink['500'] ,
                 '& svg':{
-                    fill: pink['A400'],
-                    stroke: pink['A400'],
+                    fill: pink['500'],
+                    stroke: pink['500'],
                 }
             },
             '& svg':{
@@ -38,10 +38,10 @@ export default makeStyles(theme => ({
                     stroke: 'none !important'
                 },
                 '&:hover':{
-                    color: pink['A400'] ,
+                    color: pink['500'] ,
                     '& svg':{
-                        fill: pink['A400'],
-                        stroke: pink['A400'],
+                        fill: pink['500'],
+                        stroke: pink['500'],
                     },
                     '& svg.noStroke':{
                         stroke: 'none !important'
@@ -50,7 +50,7 @@ export default makeStyles(theme => ({
             },
             '&.selection_indicator':{
                 '& svg':{
-                    fill: pink['100'] ,
+                    fill: pink['500'] ,
                 }
             }
         }

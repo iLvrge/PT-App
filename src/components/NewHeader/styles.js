@@ -468,10 +468,10 @@ export default makeStyles(theme => ({
                 fill: 'rgb(230, 0, 0)',
                 stroke: 'rgb(230, 0, 0)',
             } */
-            color: pink['A400'] ,
+            color: pink['500'] ,
             '& svg':{
-                fill: pink['A400'],
-                /* stroke: pink['A400'], */
+                fill: pink['500'],
+                /* stroke: pink['500'], */
             }
         }
     },
@@ -636,18 +636,18 @@ export default makeStyles(theme => ({
           fontSize: '2rem'
         },
         '&:hover':{
-            color: pink['A400'] ,
+            color: pink['500'] ,
             '& svg':{
-                fill: pink['A400'],
-                /* stroke: pink['A400'], */
+                fill: pink['500'],
+                /* stroke: pink['500'], */
             }
         },
     }, 
     active: {
-        color: pink['A400'],
+        color: pink['500'],
         '& svg':{
-            fill: pink['A400'],
-            /* stroke: pink['A400'], */
+            fill: pink['500'],
+            /* stroke: pink['500'], */
         }
     },
     shareIcon: {
