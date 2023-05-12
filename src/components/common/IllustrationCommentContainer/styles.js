@@ -90,9 +90,9 @@ export default makeStyles(theme => ({
             fill: '#6d6d6d',
             stroke: '#6d6d6d',
           '&:hover':{
-            color: '#E60000',
-            fill: '#E60000',
-            stroke: '#E60000'
+            color: theme.palette.secondary.main,
+            fill: theme.palette.secondary.main,
+            stroke: theme.palette.secondary.main
           }
         }
     },
@@ -125,7 +125,7 @@ export default makeStyles(theme => ({
         zIndex: 1,
         right: 30,
         top: 0,
-        color: '#E60000'
+        color: theme.palette.secondary.main
     },
     iframe: {
         width: '100%',
@@ -138,9 +138,9 @@ export default makeStyles(theme => ({
         },        
     },
     active: {
-        color: '#E60000'
+        color: theme.palette.secondary.main
     },
     frameButton: {
-        color: pink[500]
+        color: theme.palette.secondary.main
     },
 }))

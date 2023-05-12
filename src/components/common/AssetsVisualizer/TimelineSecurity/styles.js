@@ -121,7 +121,7 @@ export default makeStyles(theme => ({
           }         
         },
         '& .cluster-employees, .cluster-acqusitions, .cluster-sales, .cluster-courtOrders, .cluster-mergersIn, .cluster-mergersOut':{
-          borderColor: '#e60000'
+          borderColor: theme.palette.secondary.main
         },
         '& .cluster-releaseIn, .cluster-releaseOut':{
           borderColor: '#70A800'
@@ -218,7 +218,7 @@ export default makeStyles(theme => ({
         backgroundColor: blue[500],
       },
       '&.asset-type-licenseOut': {
-        backgroundColor: pink[500],
+        backgroundColor: theme.palette.secondary.main,
       },
       '&.asset-type-securities': {
         backgroundColor: teal[500],
@@ -244,7 +244,7 @@ export default makeStyles(theme => ({
     },
     '& .vis-item.vis-point.vis-selected': {
       backgroundColor: 'inherit',
-      color: pink[500],
+      color: theme.palette.secondary.main,
       fontWeight: 'bold',
     },
     '& .vis-item.vis-range.asset-type-borrowing':{
@@ -323,7 +323,7 @@ export default makeStyles(theme => ({
       backgroundColor: blue[500],
     },
     '&.asset-type-licenseOut': {
-      backgroundColor: pink[500],
+      backgroundColor: theme.palette.secondary.main,
     },
     '&.asset-type-securities': {
       backgroundColor: teal[500],

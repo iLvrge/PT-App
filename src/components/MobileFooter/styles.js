@@ -66,11 +66,11 @@ export default makeStyles(theme => ({
             }
         },
         '& .MuiIconButton-root.active':{
-            color: '#E60000 !important'
+            color: `${theme.palette.secondary.main} !important`
         },
         '& .MuiIconButton-root.active svg':{
-            fill: '#E60000 !important',
-            stroke: '#E60000 !important',
+            fill: `${theme.palette.secondary.main} !important`,
+            stroke: `${theme.palette.secondary.main} !important`
         },
     },
     floatingContainer: {

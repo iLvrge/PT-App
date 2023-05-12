@@ -57,7 +57,7 @@ export default makeStyles(theme => ({
     width:220
   },
   red: {
-    color: '#e60000'
+    color: theme.palette.secondary.main
   },
   table:{
     tableLayout: 'fixed'

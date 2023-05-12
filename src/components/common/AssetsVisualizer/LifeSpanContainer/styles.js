@@ -84,9 +84,9 @@ export default makeStyles(theme => ({
           fill: '#6d6d6d',
           stroke: '#6d6d6d',
           '&:hover':{
-            color: '#E60000',
-            fill: '#E60000',
-            stroke: '#E60000'
+            color: theme.palette.secondary.main,
+            fill: theme.palette.secondary.main,
+            stroke: theme.palette.secondary.main
           }
         }
     },
@@ -309,7 +309,7 @@ export default makeStyles(theme => ({
         },
         '& .vis-item.vis-point.vis-selected': {
           backgroundColor: 'none !important',
-          color: '#e60000',
+          color: theme.palette.secondary.main
           /* fontWeight: 'bold', */
         }, 
     },

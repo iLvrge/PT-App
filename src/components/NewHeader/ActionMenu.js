@@ -90,6 +90,7 @@ import {
 import PatenTrackApi from '../../api/patenTrack2'
 import clsx from 'clsx'
 import Googlelogin from '../common/Googlelogin'
+import themeMode from '../../themes/themeMode'
 
 const ActionMenu = (props) => {
     const classes = useStyles()
@@ -109,6 +110,7 @@ const ActionMenu = (props) => {
     const [ changeNameModal, setChangeNameModal ] = useState(false)
     const [ modalOpen, setModalOpen] = useState(false)
     const [ newCompanyName, setNewCompanyName] = useState('')  
+    const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const layout_id = useSelector(state => state.patenTrack2.layout_id)
     const driveTemplateMode = useSelector(state => state.ui.driveTemplateMode)
     const maintainenceFrameMode = useSelector(state => state.ui.maintainenceFrameMode)
@@ -777,7 +779,7 @@ const ActionMenu = (props) => {
                 props.t == 1
                 ?
                     <Fab 
-                        style={{backgroundColor: '#e60000', color: '#fff'}}  
+                        style={{backgroundColor: isDarkTheme ? themeMode.dark.palette.secondary.main : themeMode.light.palette.secondary.main, color: '#fff'}}  
                         aria-label="Action"
                         id="action-menu"
                         aria-controls={props.t == 0 ? "app-patentrack-action-menu" : "app-patentrack-action-mobile-menu"}
