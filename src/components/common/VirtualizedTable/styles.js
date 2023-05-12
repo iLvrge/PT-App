@@ -80,6 +80,9 @@ const styles = makeStyles((theme) => ({
     '&.noBorderLines':{
       border: 0
     },
+    '& .MuiTableCell-root':{
+      fontSize: '1rem !important'
+    },
     '&.highlightRow':{
       '& .MuiTableCell-root.highlightColumn': {
         '& span': {
