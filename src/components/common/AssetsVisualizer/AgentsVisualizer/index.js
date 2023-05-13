@@ -184,11 +184,11 @@ const AgentsVisualizer = (props) => {
                         yearsData.push(parseInt(year))
                         const promiseNames = agentsNames.map( name => {
                             const findIndex = rawData.findIndex( item => item.year == year && name == item.name)
-                            let nameNumber = 0
+                            let nameNumber = null
                             if(findIndex !== -1) {
-                                nameNumber = rawData[findIndex].counter
+                                nameNumber = parseInt(rawData[findIndex].counter)
                             }
-                            yearsData.push(parseInt(nameNumber))
+                            yearsData.push(nameNumber)
                         })
                         await Promise.all(promiseNames)
                         chartData.push(yearsData)
