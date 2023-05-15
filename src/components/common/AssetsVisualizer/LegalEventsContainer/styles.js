@@ -82,9 +82,9 @@ export default makeStyles(theme => ({
       fill: '#6d6d6d',
       stroke: '#6d6d6d',
       '&:hover':{
-        color: '#E60000',
-        fill: '#E60000',
-        stroke: '#E60000'
+        color: theme.palette.secondary.main,
+        fill: theme.palette.secondary.main,
+        stroke: theme.palette.secondary.main
       }
     }
   },
@@ -164,8 +164,8 @@ export default makeStyles(theme => ({
       zIndex: 99999
     },
     '& .vis-item.redBorder':{
-      backgroundColor: '#E60000', 
-      borderColor: '#E60000', 
+      backgroundColor: theme.palette.secondary.main, 
+      borderColor: theme.palette.secondary.main, 
       color: '#fff !important',
     },
   },
@@ -221,7 +221,7 @@ export default makeStyles(theme => ({
       opacity: '1'
     },
     '& .vis-item.vis-background.red.negative': {
-      background: '#E60000 !important',
+      background: `${theme.palette.secondary.main} !important`,
       opacity: '1'
     },
     '& .vis-item.asset-type-status':{
@@ -241,7 +241,7 @@ export default makeStyles(theme => ({
       backgroundColor: '#70A800', 
     },
     '& .vis-item.red':{
-      backgroundColor: '#E60000', 
+      backgroundColor: theme.palette.secondary.main, 
     },
     '& .vis-item.vis-box': {      
       '&.asset-type-default': {
@@ -298,7 +298,7 @@ export default makeStyles(theme => ({
                 fill: '#fff' 
               },
               '& path.svg_red': {
-                fill: '#E60000' 
+                fill: theme.palette.secondary.main 
               },
               '& path.svg_blue': {
                 fill: '#00A9E6' 
@@ -334,7 +334,7 @@ export default makeStyles(theme => ({
                 fill: '#fff' 
               },
               '& path.svg_red': {
-                fill: '#E60000' 
+                fill: theme.palette.secondary.main 
               },
               '& path.svg_blue': {
                 fill: '#00A9E6' 
@@ -640,7 +640,7 @@ export default makeStyles(theme => ({
     },
     '& .vis-item.vis-point.vis-selected': {
       backgroundColor: 'none !important',
-      color: '#e60000',
+      color: theme.palette.secondary.main
       /* fontWeight: 'bold', */
     },
   },
@@ -655,7 +655,7 @@ export default makeStyles(theme => ({
     lineHeight: 1, 
     bottom: '-8px',
     alignItems: 'center',
-    color: '#E60000',
+    color: theme.palette.secondary.main,
   },
   badge: {
     position: 'absolute',
@@ -671,7 +671,7 @@ export default makeStyles(theme => ({
   },
   redColor: {
     '& .MuiBadge-badge':{
-      color: '#E60000'
+      color: theme.palette.secondary.main
     }
   },
   '@keyframes blinker': {

@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'inherit',
       right: 'inherit',
       transform: 'none',
-      color: pink[500]
+      color: theme.palette.secondary.main
     }   
   },
   labelPos: {

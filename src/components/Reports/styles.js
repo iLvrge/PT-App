@@ -227,9 +227,9 @@ export default makeStyles(theme => ({
     fontSize: '20px !important'
   },
   active: {
-    color: pink['A400'],
+    color: theme.palette.secondary.main,
     '& svg': {
-      fill: pink['A400'],
+      fill: theme.palette.secondary.main,
     }
   },
   list: {
@@ -720,7 +720,7 @@ export default makeStyles(theme => ({
     overflow: 'hidden'
   },
   active: {
-    color: pink[500]
+    color: theme.palette.secondary.main
   },
   maxChildHeight: {
     /* maxHeight: '80vh',
@@ -886,12 +886,12 @@ export default makeStyles(theme => ({
       marginRight: 5,
       display: 'inline-block',
       position: 'absolute', 
-      fill: pink[500]
+      fill: theme.palette.secondary.main
     },
     '& span': {
       marginLeft: '25px !important',
       textTransform: 'initial !important', 
-      color: pink[500]
+      color: theme.palette.secondary.main
     }
   },
   padding: {

@@ -88,9 +88,9 @@ export default makeStyles(theme => ({
       fill: '#6d6d6d',
       stroke: '#6d6d6d',
       '&:hover':{
-        color: '#E60000',
-        fill: '#E60000',
-        stroke: '#E60000'
+        color: theme.palette.secondary.main,
+        fill: theme.palette.secondary.main,
+        stroke: theme.palette.secondary.main
       }
     }
   },
@@ -485,7 +485,7 @@ export default makeStyles(theme => ({
     },
     '& .vis-item.vis-point.vis-selected': {
       backgroundColor: 'none !important',
-      color: '#e60000',
+      color: theme.palette.secondary.main
       /* fontWeight: 'bold', */
     },
   },
@@ -499,7 +499,7 @@ export default makeStyles(theme => ({
     top: 40,
     zIndex: 1,
     left: 32,
-    color: '#e60000'
+    color: theme.palette.secondary.main
   },
   figures: {
     width: '100%',
@@ -560,7 +560,7 @@ export default makeStyles(theme => ({
     lineHeight: 1,
     bottom: '-8px',
     alignItems: 'center',
-    /* color: '#E60000', */
+    /* color: theme.palette.secondary.main, */
   },
   badge: {
     position: 'absolute',

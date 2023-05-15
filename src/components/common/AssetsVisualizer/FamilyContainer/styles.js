@@ -186,7 +186,7 @@ export default makeStyles(theme => ({
     },
     '& .vis-item.vis-point.vis-selected': {
       backgroundColor: 'none !important',
-      color: '#e60000',
+      color: theme.palette.secondary.main
       /* fontWeight: 'bold', */
     },
   },

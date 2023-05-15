@@ -35,11 +35,11 @@ export default makeStyles(theme => ({
       color: theme.palette.background.default
     },
     '& .focus .ql-snow.ql-toolbar button:hover, .focus .ql-snow.ql-toolbar button svg:focus, .focus .ql-snow.ql-toolbar button svg:hover, .focus .ql-snow.ql-toolbar button.ql-bold:hover svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-bold:focus svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-italic:hover svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-italic:focus svg.MuiSvgIcon-root .ql-stroke':{
-      color: pink[500],
-      stroke: pink[500]
+      color: theme.palette.secondary.main,
+      stroke: theme.palette.secondary.main
     },
     '& .ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow .ql-toolbar button:focus, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active, .ql-snow.ql-toolbar .ql-picker-item:hover, .ql-snow .ql-toolbar .ql-picker-item:hover, .ql-snow.ql-toolbar .ql-picker-item.ql-selected, .ql-snow .ql-toolbar .ql-picker-item.ql-selected, .ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover,  .ql-snow .ql-toolbar button:focus, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active': {
-      color: pink[500]
+      color: theme.palette.secondary.main
     },
     '& .ql-editor.ql-blank::before':{
       fontStyle: 'initial',
@@ -83,8 +83,8 @@ export default makeStyles(theme => ({
     width: 'auto !important',
     padding: '3px 5px !important',
     '&:hover':{
-      border:`1px solid ${pink['500']} !important`,
-      color: `${pink['500']} !important`
+      border:`1px solid ${theme.palette.secondary.main} !important`,
+      color: `${theme.palette.secondary.main} !important`
     },
     '&:first-child':{
       /* marginLeft: 20,
@@ -95,9 +95,9 @@ export default makeStyles(theme => ({
     }
   }, 
   active: {
-    border:`1px solid ${pink['500']} !important`,
+    border:`1px solid ${theme.palette.secondary.main} !important`,
     '& .MuiButton-label': {
-      color: pink['500']
+      color: theme.palette.secondary.main
     }    
   },
   buttonProgress: {
