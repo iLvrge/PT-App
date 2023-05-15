@@ -151,7 +151,7 @@ const VirtualizedTable = ({
       if(tableRef.current != null) {
         setTimeout(() => { 
           updateNewHeight(0)
-        }, 5000)
+        }, 10)
       } 
     }
   }, [onFlyForChildWaitCall, selectedGroup])
@@ -613,6 +613,7 @@ const VirtualizedTable = ({
     ({ className, columns, index, key, rowData, style }) => { 
       let childComponent = '', selectedRow = false
       if(collapsable === true && selectedIndex == rowData[selectedKey]) {
+        console.log("typeof childCounterColumn", typeof childCounterColumn, rowData[childCounterColumn], rowData[childCounterColumn] * rowHeight, childHeight)
         const positions = tableRef.current.Grid._scrollingContainer.parentElement.getBoundingClientRect()
         childComponent = (
           <div
@@ -720,15 +721,15 @@ const VirtualizedTable = ({
                     ? 
                       rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
                       ?
-                        rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0) 
+                        rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
                       : 
                         childRows.length > 0 
                         ?
-                          childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
+                          childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
                         : 
-                        childHeight + rowHeight
+                        childHeight + rowHeight 
                     :
-                      childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
+                      childCounterColumn * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
                   :
                     rowData[disableRowKey] * rowHeight < childHeight && rowData[disableRowKey] > childRows.length 
                     ? 
@@ -746,13 +747,13 @@ const VirtualizedTable = ({
                     ? 
                       rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
                       ?
-                        rowHeight + rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0) 
+                        rowHeight + rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
                       :  
                         childRows.length > 0 
                         ?
-                          childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
+                          childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
                         : 
-                        childHeight - rowHeight
+                        childHeight + rowHeight
                     :
                       rowHeight + childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
                   :
@@ -913,7 +914,7 @@ const VirtualizedTable = ({
               ? 
                 rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
                 ?
-                  rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0) 
+                  rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
                 :  
                   childRows.length > 0 
                   ?
