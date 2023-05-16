@@ -1068,15 +1068,17 @@ const handleOpenSettings = useCallback((event) => {
                   {
                     process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' 
                     ?
-                      <Box style={{position: 'absolute', bottom: 0}}>
-                        <ListItem className={`children`} button style={{marginTop: 50}}>
-                          <ListItemIcon aria-label='Account Scope' color='inherit' className={`children`}>
-                              <BusinessIcon className={`children`}/>
-                          </ListItemIcon>
-                          <ListItemText primary={`Account Scope`} className={`children`}/>                                            
-                        </ListItem>   
-                        <Divider />   
-                        <CompanySummary />
+                      <Box className={classes.settingsContainer}>
+                        <Box style={{position: 'absolute', bottom: 0}}>
+                          <ListItem className={`children`} button style={{marginTop: 50}}>
+                            <ListItemIcon aria-label='Account Scope' color='inherit' className={`children`}>
+                                <BusinessIcon className={`children`}/>
+                            </ListItemIcon>
+                            <ListItemText primary={`Account Scope`} className={`children`}/>                                            
+                          </ListItem>   
+                          <Divider />   
+                          <CompanySummary />
+                        </Box>
                       </Box>
                     :
                     ''

@@ -674,5 +674,11 @@ export default makeStyles(theme => ({
     noStrokeHeightWidth: {
         width: '1em',
         height: '1em'
+    },
+    settingsContainer: {
+        position: 'relative',
+        display: 'flex',
+        minHeight: 425, 
+        flexDirection: 'column'
     }
 }))
