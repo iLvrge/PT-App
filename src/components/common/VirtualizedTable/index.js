@@ -146,7 +146,7 @@ const VirtualizedTable = ({
 
   
   useEffect(() => { 
-    if(onFlyForChildWaitCall === true && selected.length > 0) { 
+    if(onFlyForChildWaitCall === true && runCollapseTable == false && selected.length > 0) { 
       setRunCollapseTable(true)
       if(tableRef.current != null) {
         setTimeout(() => { 
@@ -613,7 +613,6 @@ const VirtualizedTable = ({
     ({ className, columns, index, key, rowData, style }) => { 
       let childComponent = '', selectedRow = false
       if(collapsable === true && selectedIndex == rowData[selectedKey]) {
-        console.log("typeof childCounterColumn", typeof childCounterColumn, rowData[childCounterColumn], rowData[childCounterColumn] * rowHeight, childHeight)
         const positions = tableRef.current.Grid._scrollingContainer.parentElement.getBoundingClientRect()
         childComponent = (
           <div
