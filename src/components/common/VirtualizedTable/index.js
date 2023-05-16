@@ -613,7 +613,6 @@ const VirtualizedTable = ({
     ({ className, columns, index, key, rowData, style }) => { 
       let childComponent = '', selectedRow = false
       if(collapsable === true && selectedIndex == rowData[selectedKey]) {
-        console.log("typeof childCounterColumn", typeof childCounterColumn, rowData[childCounterColumn], rowData[childCounterColumn] * rowHeight, childHeight)
         const positions = tableRef.current.Grid._scrollingContainer.parentElement.getBoundingClientRect()
         childComponent = (
           <div
