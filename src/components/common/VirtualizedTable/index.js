@@ -146,7 +146,7 @@ const VirtualizedTable = ({
 
   
   useEffect(() => { 
-    if(onFlyForChildWaitCall === true && selected.length > 0) { 
+    if(onFlyForChildWaitCall === true && runCollapseTable == false && selected.length > 0) { 
       setRunCollapseTable(true)
       if(tableRef.current != null) {
         setTimeout(() => { 
