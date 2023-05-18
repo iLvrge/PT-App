@@ -934,7 +934,7 @@ const handleOpenSettings = useCallback((event) => {
               color='inherit'
               aria-label='open drawer'
               onClick={(event) => {
-                return process.env.REACT_APP_ENVIROMENT_MODE == 'PRO' ? toggleDrawer(event, !openDrawer.right) :  null
+                return ['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? toggleDrawer(event, !openDrawer.right) :  null
               }}
               size="small">
               <MenuIcon  className={'menuButton'}/>
@@ -969,7 +969,7 @@ const handleOpenSettings = useCallback((event) => {
                         placement='bottom'
                       >
                         <ListItem 
-                          onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : onShare}
+                          onClick={ ['STANDARD', 'SAMPLE', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert : onShare}
                           button>
                           <ListItemIcon  color='inherit' >
                             <ShareOutlinedIcon/>
@@ -979,7 +979,7 @@ const handleOpenSettings = useCallback((event) => {
                       </AddToolTip> 
                       <ListItem 
                         className={`${clipboard_assets.length > 0 ? classes.clipIconActive : ''} ${ props.display_clipboard === true ? classes.clipIconIsActive : ''}`}
-                        onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : handleClipboard}
+                        onClick={ ['STANDARD', 'SAMPLE', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert : handleClipboard}
                         button>
                           <ListItemIcon  color='inherit' >
                             <Badge badgeContent={clipboard_assets.length} color="secondary">    
@@ -994,7 +994,7 @@ const handleOpenSettings = useCallback((event) => {
                       >
                         <ListItem 
                             className={classes.borderItem}
-                            onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : onHandlePatentAssets} 
+                            onClick={ ['STANDARD', 'SAMPLE', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert : onHandlePatentAssets} 
                             button>
                           <ListItemIcon  color='inherit' >
                             <ASSET />
@@ -1007,7 +1007,7 @@ const handleOpenSettings = useCallback((event) => {
                           placement='bottom'
                       >
                         <ListItem 
-                          onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : onHandleTransactions}
+                          onClick={ ['STANDARD', 'SAMPLE', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert : onHandleTransactions}
                           button>
                           <ListItemIcon  color='inherit' >
                             <HandshakeOutlinedIcon />

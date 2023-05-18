@@ -437,8 +437,9 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
 
     useEffect(() => {
         let isSubscribed = true;
-        const getSelectedCompanies = async() => {
+        const getSelectedCompanies = async() => { 
             if( companies.list.length > 0 && selected.length == 0 && process.env.REACT_APP_ENVIROMENT_MODE != 'DASHBOARD') {
+
                 /**
                  * Send Request to server
                  */
@@ -463,7 +464,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                         }
                     }
                 })
-                const { data } = await PatenTrackApi.getUserCompanySelections();
+                const { data } = await PatenTrackApi.getUserCompanySelections(); 
                 if(data != null && data.list.length > 0) {
                     let insert = false, oldItems = [], groups = []
                     if(selectedCategory === 'correct_names') { 
@@ -524,12 +525,13 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             getSelectedCompanies()    
         }            
         return () => (isSubscribed = false)
-    }, [ companies.list ])
+    }, [ companies.list, dispatch ])
     
 
 
-    useEffect(() => {   
-        if(dashboard_share_selected_data != undefined && Object.keys(dashboard_share_selected_data).length > 0 && (process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI')) {
+    /*useEffect(() => {   
+        if(dashboard_share_selected_data != undefined && Object.keys(dashboard_share_selected_data).length > 0 && ['DASHBOARD', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE)) {
+            console.log('typeof useDispatchCompanies List', typeof useDispatch)
             let { selectedCompanies, tabs, customers } = dashboard_share_selected_data
             if(typeof selectedCompanies != 'undefined' && selectedCompanies != '') {
                 try{
@@ -557,13 +559,13 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                                 dispatch( setSelectAssignmentCustomers(customers) )
                             }
                         }
-                    }                    
+                    }               
                 } catch (e){
                     console.log(e)
                 }
             }
         }
-    }, [dashboard_share_selected_data, dispatch])
+    }, [dashboard_share_selected_data, dispatch])*/
 
     /**
      * Get list of user activity
