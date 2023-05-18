@@ -311,7 +311,7 @@ const ViewIcons = (props) => {
                             <IconButton 
                                 size="small"
                                 className={clsx(classes.actionIcon, {[classes.active]: props.dashboardScreen === true && viewDashboard.kpi})}
-                                onClick={() => process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert() :  onHandleKPI()}
+                                onClick={() => ['STANDARD', 'SAMPLE', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert() :  onHandleKPI()}
                                 disabled={loadingDashboardData}
                             >
                                 <AppsOutage/>
@@ -327,7 +327,7 @@ const ViewIcons = (props) => {
                     <IconButton 
                         size="small"
                         className={clsx(classes.actionIcon, {[classes.active]:  props.dashboardScreen === true && !viewDashboard.line && viewDashboard.jurisdictions == false && viewDashboard.invention === false && viewDashboard.sankey === false && viewDashboard.kpi === false && viewDashboard.timeline === false})}
-                        onClick={() => process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert() :  changeGraph(false)}
+                        onClick={() => ['STANDARD', 'SAMPLE', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert() :  changeGraph(false)}
                         disabled={loadingDashboardData}
                     >
                         <Speed/> 
@@ -340,7 +340,7 @@ const ViewIcons = (props) => {
                 <IconButton 
                     size="small"
                     className={clsx(classes.actionIcon, {[classes.active]: props.dashboardScreen === true && viewDashboard.line && viewDashboard.jurisdictions == false && viewDashboard.invention === false && viewDashboard.sankey === false && viewDashboard.kpi === false && viewDashboard.timeline === false})}
-                    onClick={() => process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert() : changeGraph(true)}
+                    onClick={() => ['STANDARD', 'SAMPLE', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert() : changeGraph(true)}
                 >
                     <AutoGraph/>
                 </IconButton> 
@@ -352,7 +352,7 @@ const ViewIcons = (props) => {
                 <IconButton 
                     size="small"
                     className={clsx(classes.actionIcon, {[classes.active]: props.dashboardScreen === true && viewDashboard.timeline})}
-                    onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : onHandleTimeline}
+                    onClick={ ['STANDARD', 'SAMPLE', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert : onHandleTimeline}
                 >
                     <ViewTimeline/>
                 </IconButton> 
@@ -431,7 +431,7 @@ const ViewIcons = (props) => {
                             <IconButton 
                                 size="small"
                                 className={clsx(classes.actionIcon, classes.shareIcon)}
-                                onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : onShare}
+                                onClick={ ['STANDARD', 'SAMPLE', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert : onShare}
                             >
                                 <FontAwesomeIcon
                                     icon={faShareAlt}
@@ -441,7 +441,7 @@ const ViewIcons = (props) => {
                         <IconButton
                             size="small"
                             className={clsx(classes.actionIcon, {[classes.clipIconActive]: props.clipboard_assets.length > 0 ? true : false }, {[classes.clipIconActive]: props.clipboard_assets.length > 0 ? true : false } , {[classes.clipIconIsActive] : props.display_clipboard})}
-                            onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : props.handleClipboard}
+                            onClick={ ['STANDARD', 'SAMPLE', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert : props.handleClipboard}
                         >
                             <Badge badgeContent={props.clipboard_assets.length} color="secondary">    
                                 <svg xmlns="http://www.w3.org/2000/svg" className={clsx(classes.noStrokeHeightWidth, `noStroke`)} enableBackground="new 0 0 80 80" viewBox="0 0 80 80"><path d="M40,5c-3.3085938,0-6,2.6914062-6,6v3h-5c-0.4199219,0-0.7949219,0.262207-0.9394531,0.6567383l-0.880188,2.4077148	h-9.0836792C16.9404297,17.0644531,16,18.0048828,16,19.1611328v53.7421875C16,74.0595703,16.9404297,75,18.0966797,75h43.8066406
