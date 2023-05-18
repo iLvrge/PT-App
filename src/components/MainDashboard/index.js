@@ -86,45 +86,26 @@ const MainDashboard = ({
 
     
 
-    useEffect(() => {
-        if((process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI') && auth_token !== null) {
+    /* useEffect(() => {
+        if(['DASHBOARD', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE) && auth_token !== null) {
             let url = location.pathname
             if(url != '' && location != 'blank') {
                 url = url.split('/').pop()
                 if(url != '') {
+                    console.log('typeof useDispatch1', typeof useDispatch)
                     const getDashboardData = async() => {
                         PatenTrackApi.cancelShareDashboardRequest()
                         const {data} = await PatenTrackApi.getShareDashboardList(url)
                         if(data != null && Object.keys(data).length > 0) {
                             let { selectedCompanies, tabs, customers, share_button } = data
                             if(typeof selectedCompanies != 'undefined' && selectedCompanies != '') {
-                                try{
-                                    dispatch(setDashboardShareData(data))
-                                    selectedCompanies = JSON.parse(selectedCompanies) 
-                                    if(selectedCompanies.length > 0) {
-                                        dispatch(setMainCompaniesSelected(selectedCompanies, []))
-                                        (async () => {
-                                            const promise = companies.map((row, index) => {
-                                                if(!selectedCompanies.includes(row.representative_id)) {
-                                                    companies[index].status = 0
-                                                }
-                                            })
-                                            await Promise.all(promise)
-                                            dispatch(setMainCompanies(companies, { append: false }))
-                                        })()
-                    
-                                        if(typeof tabs != 'undefined' && tabs != '') {
-                                            dispatch( setAssetTypesSelect([tabs]) )
-                                        }
-                                        if(typeof customers != 'undefined' && customers != '') {
-                                            customers = JSON.parse(customers)
-                                            if(customers.length > 0) {
-                                                dispatch(setSelectAssignmentCustomers(customers) )
-                                            }
-                                        }
-                                    }                    
-                                } catch (e){
-                                    console.log(e)
+                                try {
+                                    if(typeof dispatch === "function") {
+                                        dispatch(setDashboardShareData(data))
+                                    }
+                                    console.log('typeof selectedCompanies', typeof selectedCompanies)
+                                } catch(e) {
+                                    console.log("Error", e)
                                 }
                             }
                         }
@@ -132,10 +113,8 @@ const MainDashboard = ({
                     getDashboardData()
                 }
             } 
-        }
-        /* return (() => {
-        }) */
-    }, [auth_token, dispatch]) 
+        } 
+    }, [auth_token, dispatch])  */
 
       
     useEffect(() => {
