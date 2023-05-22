@@ -27,7 +27,8 @@ import {
     setCPCRequest,
     setCPCData,
     setCPCSecondData,
-    setSocialMediaConnectPopup
+    setSocialMediaConnectPopup,
+    getChannels
 } from '../../../../actions/patentTrackActions2'
 import { setPDFFile, setPdfTabIndex } from '../../../../actions/patenTrackActions' 
 import PatenTrackApi from '../../../../api/patenTrack2'
@@ -46,7 +47,8 @@ import AssetsTable from '../../AssetsTable'
 import LabelWithIcon from '../../LabelWithIcon'
 import { Box } from '@mui/system'
 import Fees from '../LegalEventsContainer/Fees'
-import { getTokenStorage } from '../../../../utils/tokenStorage'
+import { getSlackToken, getTokenStorage } from '../../../../utils/tokenStorage'
+import GraphProduct from './GraphProduct'
 
 var newRange = [1,2]
 
@@ -62,8 +64,10 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const dashboardScope = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
     const [offsetWithLimit, setOffsetWithLimit] = useState([0, DEFAULT_CUSTOMERS_LIMIT])
     const [ isLoadingCharts, setIsLoadingCharts ] = useState(false)
+    const [ loadingProduct, setLoadingProducts ] = useState(false)
     const [ openModal, setModalOpen ] = useState(false)
     const [ assetLoading, setAssetsLoading ] = useState(false)
+    const [ openProductCategoryFilter, setProductCategoryFilter ] = useState(false)       
     const [ openFilter, setOpenFilter ] = useState(false)       
     const [ showContainer, setShowContainer ] = useState(true)
     const [ sendAssetRequest, setSentAssetRequest ] = useState(false)
@@ -75,6 +79,12 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const [ filterTotal, setFilterTotal ] = useState(0)
     const [ filterYear, setFilterYear ] = useState([])
     const [ selectedTab, setSelectedTab ] = useState(0)
+    const [ selectedTabName, setSelectedTabName ] = useState('')
+    const [ graphRawData, setGraphRawData ] = useState([])
+    const [ salesData, setSalesData ] = useState([])
+    const [ productItems, setProductItems ] = useState([])  
+    const [ productGroups, setProductGroups ] = useState([])  
+    const [ graphRawGroupData, setGraphRawGroupData ] = useState([])  
     const [ resizableWidthHeight, setResizableWidthHeight ] = useState([665, 350])
     const [ filterDrag, setFilterDrag ] =  useState([0, 0])
     const [ valueYear, setValueYear ] = useState([1, 2])
@@ -134,9 +144,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const cpc_request = useSelector(state => state.patenTrack2.cpc_request) 
     const cpcData = useSelector(state => state.patenTrack2.cpcData) 
     const cpcSecondData = useSelector(state => state.patenTrack2.cpcSecondData) 
-    const [ graphRawData, setGraphRawData ] = useState([])
-    const [ salesData, setSalesData ] = useState([])
-    const [ graphRawGroupData, setGraphRawGroupData ] = useState([])  
+    const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
+    const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
+
     let interval;
     const menuItems = [
         {
@@ -342,7 +352,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             if(selectedCategory == 'abandoned') {
                 tabArray.push('Timeline')
             } else {
-                /* tabArray.push('With Products') */
+                tabArray.push('With Products')
             }
             setInventionTabs(tabArray)
             if(selectedRow.length  === 0) { 
@@ -524,8 +534,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         //console.log( "getChartData", selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments )
     }, [/* openCustomerBar,  */selectedCompanies, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, auth_token, display_clipboard, salable, licensable ]) 
 
-
-    useEffect(() => { 
+    useEffect(() => {  
+        if(selectedTab == 1)
         if(selectedTab == 1 && selectedCategory == 'abandoned') { 
             const getAllAbandonedAssetsEvents = async () => { 
                 const {data} = await PatenTrackApi.getAllAbandonedAssetsEvents(selectedCompanies)
@@ -541,10 +551,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 updateCPCData([...scopeRange], [], 0)
             }
         }
-    }, [assetTypesSelectAll, selectedTab, selectedCompanies])
-
-
-    
+    }, [assetTypesSelectAll, selectedTab, selectedCompanies]) 
 
     useEffect(() => {
         if(selectedCompanies.length > 0  && cpc_request === true && cpcData.list.length > 0 && graphRawData.length == 0) { 
@@ -558,7 +565,136 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         }
     }, [cpcSecondData])
 
+    useEffect(() => {
+        if(selectedTabName == 'With Products') {
+            /**
+             * Send request to slack to get list of assets channel and find products
+             */
+            
+            const getToken = getSlackToken()
+            if(getToken != '') {
+                setLoadingProducts(true)
+                const { access_token, bot_token, bot_user_id } = getToken
+                if(slack_channel_list_loading === false && slack_channel_list.length == 0) { 
+                    dispatch(getChannels(access_token))
+                } else {
+                    /**
+                     * Filter channel list from assets list
+                     * Send request to slack one by one for finding product data
+                     * get the filling date for product assets
+                     * create cube based on product and filling date
+                     */
+                    (async () => {
+                        if(slack_channel_list.length > 0) { 
+                            let productsAssets = [], products = [], productGroups = [], groups = []
+                            const findRetreiveMessage = slack_channel_list.map( async channel => {
+                                const { data } = await PatenTrackApi.getMessages( access_token, channel.id);
+                                if(data.messages.length > 0) {
+                                    data.messages.forEach( item => {
+                                        if(item.type == 'message') {
+                                            const {text} = item 
+                                            if(text != '') { 
+                                                if(text.indexOf('via PatenTrack') !== -1 && text.indexOf('assigned to this asset') !== -1){ 
+                                                    let messageTest = text.replace('products are assigned to this asset via PatenTrack', '')
+                                                    messageTest = messageTest.replace('products are  assigned to this asset via PatenTrack', '')
+                                                    messageTest = messageTest.replace('products is  assigned to this asset via PatenTrack', '')
+                                                    messageTest = messageTest.replace('product is assigned to this asset via PatenTrack', '') 
+                                                    if(messageTest != '') {
+                                                        const splitProducts = messageTest.split('@@')
+                                                        const selectedAsset = channel.name.toLowerCase().replace('us', '').replace(/[, /\/]+/g, '')
+                                                        splitProducts.map( pg => {
+                                                            productGroups.push(pg.trim())
+                                                        })
+                                                        products.push({
+                                                            asset: selectedAsset,
+                                                            products: splitProducts
+                                                        })
+                                                        productsAssets.push(selectedAsset)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    })
+                                }
+                            })
+                            await Promise.all(findRetreiveMessage) 
+                            productGroups = [...new Set(productGroups)]
+                            productGroups.forEach( (item, index) => {
+                                groups.push({
+                                    id: index + 1,
+                                    name: item
+                                })
+                            })
+                            setProductGroups(groups)
+                            if(productsAssets.length > 0) {
+                                const form = new FormData()
+                                form.append("list", JSON.stringify(productsAssets))
+                                const {data} = await PatenTrackApi.getCategoriesProducts(form)  
+                                const productWithGroups = []
+                                if(data != null && data?.list != undefined && data.list.length > 0) { 
+                                    data.list.forEach( row => {
+                                        const findIndex = products.findIndex( productRow => productRow.asset == row.grant_doc_num)
+                                        if(findIndex !== -1) {
+                                            if(products[findIndex].products.length > 0) {
+                                                products[findIndex].products.map( item => {
+                                                    if(productWithGroups.length == 0) {
+                                                        productWithGroups.push({
+                                                            year: row.year,
+                                                            category: item.trim(),
+                                                            countAssets: 1
+                                                        })
+                                                    } else {
+                                                        let itemFound = false, foundIndex = -1
+                                                        productWithGroups.forEach( (groupItem, index) => { 
+                                                            if(groupItem.year == row.year && groupItem.category == item.trim()) { 
+                                                                itemFound = true
+                                                                foundIndex = index 
+                                                            }  
+                                                        })
+                                                        if(itemFound  === false) {
+                                                            productWithGroups.push({
+                                                                year: row.year,
+                                                                category: item.trim(),
+                                                                countAssets: 1
+                                                            })
+                                                        } else { 
+                                                            productWithGroups[foundIndex].countAssets = productWithGroups[foundIndex].countAssets + 1
+                                                        }
+                                                    }
+                                                })
+                                            }
+                                        }
+                                    }) 
+                                    setProductItems(productWithGroups)
+                                } 
+                                setLoadingProducts(false)
+                                /* const form = new FormData()
+                                form.append("list", JSON.stringify(productsAssets))
+                                form.append("total", productsAssets.length)
+                                form.append('selectedCompanies', JSON.stringify(selectedCompanies))
+                                form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
+                                form.append('customers', JSON.stringify( selectedAssetCompanies))
+                                form.append('assignments', JSON.stringify( selectedAssetAssignments))
+                                form.append('lawfirm', selectedLawFirm)
+                                form.append('other_mode', display_sales_assets)
+                                form.append('type', selectedCategory)
+                                form.append('data_type', dashboardScreen === true ? 1 : 0)
+                                const {data} = await PatenTrackApi.getCustomerAssets( selectedCategory, selectedCompanies, assetTypesSelectAll === true ? [] : assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, 0, 0, 'asset', 'ASC', [], selectedLawFirm )
     
+                                if(data.length > 0) {
+    
+                                } */
+                            }
+                        } else {
+                            setLoadingProducts(false)
+                        }
+                    })();
+                }
+            } else {
+                setSocialMediaConnectPopup(true)
+            }
+        }
+    }, [selectedTabName, slack_channel_list])  
 
     const updateCPCData = async(oldScopeRange, list, totalRecords, year, range, scope) => {  
         const data = typeof side != 'undefined' && side === true ? { ...cpcSecondData } : { ...cpcData }
@@ -1001,11 +1137,21 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     }, [ assetIllustration, assetIllustrationData, selectedAssetAssignments, selectedRow, selectedCategory ])
 
     const handleOpenFilter = () => {
+        /* if(selectedTab === 1 && selectedTabName == 'With Products') {
+            setProductCategoryFilter(true)
+        } else { 
+            setOpenFilter(true);
+        } */
         setOpenFilter(true);
         //onChangeScopeSlider(valueRange, valueScope)
     };
     
     const handleCloseFilter = () => {
+        /* if(selectedTab === 1 && selectedTabName == 'With Products') {
+            setProductCategoryFilter(false)
+        } else { 
+            setOpenFilter(false);
+        } */
         setOpenFilter(false);
     };
 
@@ -1070,7 +1216,10 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     }
 
     /* const handleChangeTab = (e, newTab) => setSelectedTab(previousTab => (newTab == 1 || newTab == 2 ) && (selectedCategory == 'assigned' && selectedRow.length == 0) ? previousTab : newTab) */
-    const handleChangeTab = (e, newTab) => setSelectedTab( newTab )
+    const handleChangeTab = (e, newTab) => {
+        setSelectedTab( newTab )
+        setSelectedTabName(e.target.innerText)
+    }
 
     const yearRangeText = (value)=> {
         const findIndex = filterYear.findIndex( range => range.value === value)
@@ -1115,7 +1264,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         findCPCList([...scopeRange], filterList, filterTotal, yearList, range)      
     }, [filterList, filterTotal, filterYear])
 
-    const onChangeRangeSlider = useCallback(async (year, range, ) => {
+    const onChangeRangeSlider = useCallback(async (year, range ) => {
         // Depth
         setPreValueRange(prevItem => prevItem != valueRange ? valueRange : prevItem)
         setValueRange(range) 
@@ -1259,7 +1408,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                             )
                         }  */}
                         {
-                            selectedTab === 0 && (
+                            (selectedTab === 0 /* || (selectedTab === 1 && selectedTabName == 'With Products') */) && (
                                 <React.Fragment>  
                                     <TitleBar title={`Hover over the bars for details. Select a bar to see the list of the underlying patents, and to act upon them. Click the menu icon to filter the results.`} enablePadding={typeof titleBar !== 'undefined' && titleBar === true ? false : false} underline={false} typography={true} relative={true} button={
                                         {
@@ -1278,6 +1427,10 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         } 
                         <div className={classes.graphContainer}> 
                             {
+                                selectedTab === 1 && selectedTabName == 'With Products'
+                                ?
+                                    <GraphProduct loading={loadingProduct} productItems={productItems} productGroups={productGroups} visualizerBarSize={visualizerBarSize}/>
+                                :
                                 selectedTab === 0 || ((selectedTab === 1 || selectedTab === 2) && (selectedCategory == 'assigned' && selectedRow.length == 0))
                                 ?
                                     !isLoadingCharts
@@ -1298,7 +1451,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                     :
                                         <Loader />
                                 :
-                                    selectedTab === 1 && selectedCategory == 'abandoned' && selectedRow.length === 0
+                                    selectedTab === 1 && selectedTabName != 'With Products' && selectedCategory == 'abandoned' && selectedRow.length === 0
                                     ?
                                         <Fees
                                             standalone={true}
@@ -1308,7 +1461,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                         />
                                     :
                                         
-                                        selectedTab === 1
+                                        selectedTab === 1 && selectedTabName != 'With Products'
                                         ?
                                             <PdfViewer display={true} pdfTab={0} show_tab={false}/>         
                                         :
