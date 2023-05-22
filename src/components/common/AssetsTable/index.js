@@ -54,7 +54,8 @@ import {
   getAssetDetails,
   setSelectedMaintainenceAssetsList,
   setAssetsIllustrationData,
-  setFamilyLegalItem 
+  setFamilyLegalItem, 
+  setSocialMediaConnectPopup
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -83,7 +84,7 @@ import  { controlList } from '../../../utils/controlList'
 
 import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/numbers";
 
-import { getAuthConnectToken, getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
+import { getAuthConnectToken, getSlackToken, getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
 
 import PatenTrackApi from '../../../api/patenTrack2'
 
@@ -416,13 +417,13 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       icon: <Slack />,
       item: false
     },
-    /* {
+    {
       id: 11,
       name:  'Assigned Category/Product',
       image: '',
       icon: <AccountTreeOutlined />,
       item: false
-    }, */
+    },
     /* {
       id: 6,
       name: 'Link to Our Products',
@@ -507,13 +508,13 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       icon: <MonetizationOn />,
       image: ''
     },
-    /* {
+    {
       id: 11,
       name:  'Assigned Category/Product',
       image: '',
       icon: <AccountTreeOutlined />, 
       item: false
-    }, */
+    }, 
     /* {
       id: 6,
       name: 'Link to Our Products',
@@ -673,19 +674,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           setTimeout(openGoogleWindow, 1000)
       }
   }
-
-  const getSlackToken = () => {
-    let token =  '';
-    const slackToken = getTokenStorage( 'slack_auth_token_info' )
-    if(slackToken && slackToken!= '' && slackToken!= null && slackToken!= 'null' ) {
-      token = JSON.parse(slackToken)
-        
-      if(typeof token === 'string') {
-        token = JSON.parse(token)
-      }
-    }
-    return token
-  }
+ 
 
   const onHandleDropDownlist = async(event, asset, row ) => {  
     if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
@@ -2077,6 +2066,7 @@ const updateTableColumn = (ratingItems) => {
        * Alert user to login with slack first
        */
       alert("Please login to slack first");
+      dispatch(setSocialMediaConnectPopup(true))
     }
   }
 

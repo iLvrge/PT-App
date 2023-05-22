@@ -157,7 +157,7 @@ const SocialMediaConnect = () => {
                     className={classes.button}
                     startIcon={<MicrosoftIcon className={classes.icon} />} 
                 >
-                    Slack
+                    Microsoft
                 </Button>
                 {/* <MicrosoftLogin 
                     clientId={process.env.REACT_APP_MICROSOFT_CLIENTID} 
