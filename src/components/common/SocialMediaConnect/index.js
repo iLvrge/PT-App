@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux' 
 
 import { Box, Button, Paper, Tooltip, Typography, Zoom } from '@mui/material'
@@ -18,6 +18,7 @@ import { getAuthConnectToken, getTokenStorage } from '../../../utils/tokenStorag
 import PatenTrackApi from '../../../api/patenTrack2';
 
 import TitleBar from '../TitleBar'
+import clsx from 'clsx';
 
 
 
@@ -26,6 +27,7 @@ const SocialMediaConnect = () => {
 
     const classes = useStyles()
     const dispatch = useDispatch();
+    const [boxOpened, setBoxOpened] = useState(false)
     const msalInstance = new PublicClientApplication(msalConfig);
     const MICROSOFT_SCOPES = ['https://graph.microsoft.com/Team.Create', 'https://graph.microsoft.com/Directory.ReadWrite.All', 'https://graph.microsoft.com/Group.ReadWrite.All', 'https://graph.microsoft.com/Channel.Create', 'https://graph.microsoft.com/Channel.ReadBasic.All', 'https://graph.microsoft.com/Team.ReadBasic.All', 'https://graph.microsoft.com/TeamMember.ReadWrite.All', 'https://graph.microsoft.com/User.Read']
     const onHandleSlackLogin = (w,h) => {    
@@ -130,16 +132,20 @@ const SocialMediaConnect = () => {
                 src='https://patentrack.com/wp-content/uploads/2022/01/microsoft-logo.svg' 
             />              
         )
+    } 
+
+    const onClickHandler = (flag) => {
+        setBoxOpened(flag)
     }
-    console.log("MICROSOFT_SCOPES", MICROSOFT_SCOPES)
     return (
         <Paper className={classes.root} square>
-            <Box style={{width: '100%'}}> 
+            <Box className={clsx(classes.boxTitle, {[classes.flexBox]: boxOpened})}> 
                 <TitleBar
                     title={`Log in will enable you to create and manage a team conversation channel dedicated to each patent asset, transaction, and company. All your team members' input will be secured within these channels.`}
                     enablePadding={true} 
                     underline={false} 
                     typography={true}
+                    callback={onClickHandler}
                 />
             </Box>
             <Box className={classes.box}>
