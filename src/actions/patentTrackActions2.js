@@ -498,7 +498,7 @@ export const setMainCompanies = (data, { append = false }) => {
   }
 }
 
-export const setMainCompaniesSelected = (selected, groups) => {
+export const setMainCompaniesSelected = (selected, groups) => { 
   return {
     type: types.SET_MAIN_COMPANIES_SELECTED,
     selected,

@@ -190,7 +190,13 @@ const styles = makeStyles((theme) => ({
     width: 24,
     height: 24,
     fill: '#fff'
-  }
+  },
+  tooltip: {
+    fontSize: '1rem',
+    '& .MuiTypography-root': {
+      fontSize: 18
+    }
+  },
 }))
 
 export default styles

@@ -34,5 +34,12 @@ export default makeStyles(theme => ({
     },
     icon: {
         marginRight: 5
+    },
+    boxTitle: {
+        width: '100%'
+    },
+    flexBox: {
+        display: 'flex',
+        flexGrow: 1
     }
 }))

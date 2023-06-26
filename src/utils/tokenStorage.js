@@ -62,3 +62,16 @@ export const getAuthConnectToken = () => {
     }
     return tokenType
 }
+
+export const getSlackToken = () => {
+    let token =  '';
+    const slackToken = getTokenStorage( 'slack_auth_token_info' )
+    if(slackToken && slackToken!= '' && slackToken!= null && slackToken!= 'null' ) {
+      token = JSON.parse(slackToken)
+        
+      if(typeof token === 'string') {
+        token = JSON.parse(token)
+      }
+    }
+    return token
+}

@@ -54,7 +54,8 @@ import {
   getAssetDetails,
   setSelectedMaintainenceAssetsList,
   setAssetsIllustrationData,
-  setFamilyLegalItem 
+  setFamilyLegalItem, 
+  setSocialMediaConnectPopup
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -83,7 +84,7 @@ import  { controlList } from '../../../utils/controlList'
 
 import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/numbers";
 
-import { getAuthConnectToken, getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
+import { getAuthConnectToken, getSlackToken, getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
 
 import PatenTrackApi from '../../../api/patenTrack2'
 
@@ -363,13 +364,15 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       id: 99,
       name: 'No action' ,
       icon: <NotInterested />,
-      image: ''
+      image: '',
+      tooltip: 'Tooltip'
     },
     {
       id: -1,
       name: '', 
       icon: <KeyboardArrowDown />,
-      image: ''
+      image: '',
+      tooltip: 'Tooltip'
     },
     /* {
       id: 0,
@@ -381,48 +384,55 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       id: 2,
       name: 'Sell',
       image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/sell.png',
-      icon: ''
+      icon: '',
+      tooltip: 'Tooltip'
     }, 
     {
       id: 4,
       name: 'License-Out',
       image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/licenseout.png',
-      icon: ''
+      icon: '',
+      tooltip: 'Tooltip'
     },
     {
       id: 5,
       name: 'Add to Clipboard',
       image: '',
-      icon: <PendingActionsOutlined />
+      icon: <PendingActionsOutlined />,
+      tooltip: 'Tooltip'
     },
     {
       id: 6,
       name: <RatingNecessary item={assetRating}/>,
       image: '',
       icon: <StarOutline />,
-      item: false
+      item: false,
+      tooltip: 'Tooltip'
     },
     {
       id: 7,
       name: <RatingImportant item={assetRating}/>,
       image: '',
       icon: <StarOutlineOutlined />,
-      item: false
+      item: false,
+      tooltip: 'Tooltip'
     },
     {
       id: 9,
       name:  'Add a task/review',
       image: '',
       icon: <Slack />,
-      item: false
+      item: false,
+      tooltip: 'Tooltip'
     },
-    /* {
+    {
       id: 11,
       name:  'Assigned Category/Product',
       image: '',
       icon: <AccountTreeOutlined />,
-      item: false
-    }, */
+      item: false,
+      tooltip: 'Tooltip'
+    },
     /* {
       id: 6,
       name: 'Link to Our Products',
@@ -448,13 +458,15 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       id: 99,
       name: 'No action' ,
       icon: <NotInterested />,
-      image: ''
+      image: '',
+      tooltip: 'Tooltip'
     },
     {
       id: -1,
       name: '', 
       icon: <KeyboardArrowDown />,
-      image: ''
+      image: '',
+      tooltip: 'Tooltip'
     },
     /* {
       id: 0,
@@ -466,54 +478,62 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       id: 2,
       name: 'Sell',
       image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/sell.png',
-      icon: ''
+      icon: '',
+      tooltip: 'Tooltip'
     }, 
     {
       id: 4,
       name: 'License-Out',
       image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/licenseout.png',
-      icon: ''
+      icon: '',
+      tooltip: 'Tooltip'
     },
     {
       id: 5,
       name: 'Add to Clipboard',
       image: '',
-      icon: <PendingActionsOutlined />
+      icon: <PendingActionsOutlined />,
+      tooltip: 'Tooltip'
     },
     {
       id: 6,
       name: <RatingNecessary item={assetRating}/>,
       image: '',
       icon: <StarOutline />,
-      item: false
+      item: false,
+      tooltip: 'Tooltip'
     },
     {
       id: 7,
       name: <RatingImportant item={assetRating}/>,
       image: '',
       icon: <StarOutlineOutlined />,
-      item: false
+      item: false,
+      tooltip: 'Tooltip'
     },
     {
       id: 9,
       name:  'Add a task/review',
       image: '',
       icon: <Slack />,
-      item: false
+      item: false,
+      tooltip: 'Tooltip'
     },
     {
       id: 10,
       name: 'Pay Maintainence Fee', 
       icon: <MonetizationOn />,
-      image: ''
+      image: '',
+      tooltip: 'Tooltip'
     },
-    /* {
+    {
       id: 11,
       name:  'Assigned Category/Product',
       image: '',
       icon: <AccountTreeOutlined />, 
-      item: false
-    }, */
+      item: false,
+      tooltip: 'Tooltip'
+    }, 
     /* {
       id: 6,
       name: 'Link to Our Products',
@@ -644,8 +664,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       formData.append('file', '')
       formData.append('remote_file', '')
       formData.append('channel_id', channelID)
-      const slackToken = getTokenStorage( 'slack_auth_token_info' )
-      if( slackToken  && slackToken != null ) {
+      const slackToken = getSlackToken()
+      if( slackToken  && slackToken != '') {
         const { access_token, bot_token, bot_user_id } = JSON.parse(slackToken)
         if( access_token != undefined) {  
           formData.append('auth', bot_token)
@@ -655,6 +675,9 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             setRatingOnFly({})
           }
         }
+      } else {
+        alert("Please login to slack first");
+        dispatch(setSocialMediaConnectPopup(true))
       }
     } catch( err ) {
       console.error(err)
@@ -673,19 +696,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           setTimeout(openGoogleWindow, 1000)
       }
   }
-
-  const getSlackToken = () => {
-    let token =  '';
-    const slackToken = getTokenStorage( 'slack_auth_token_info' )
-    if(slackToken && slackToken!= '' && slackToken!= null && slackToken!= 'null' ) {
-      token = JSON.parse(slackToken)
-        
-      if(typeof token === 'string') {
-        token = JSON.parse(token)
-      }
-    }
-    return token
-  }
+ 
 
   const onHandleDropDownlist = async(event, asset, row ) => {  
     if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
@@ -936,7 +947,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       dataKey: "asset",
       role: "static_dropdown",
       list: dropdownList,
-      onClick: onHandleDropDownlist
+      onClick: onHandleDropDownlist  
     },
     /* {
       width: 20,
@@ -2077,6 +2088,7 @@ const updateTableColumn = (ratingItems) => {
        * Alert user to login with slack first
        */
       alert("Please login to slack first");
+      dispatch(setSocialMediaConnectPopup(true))
     }
   }
 

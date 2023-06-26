@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/system';
 
 import useStyles from './styles'
@@ -13,8 +13,14 @@ const TitleBar = (props) => {
     const [enabled, setEnabled] = useState(false)
 
     const onHandleHelpingText = () => {
-        setEnabled(!enabled)
+        setEnabled(!enabled) 
     }
+
+    useEffect(() => {
+        if(typeof props.callback != 'undefined') {
+            props.callback(enabled)
+        }
+    }, [enabled])
     return(
         <Box className={classes.relative}>
             <span 

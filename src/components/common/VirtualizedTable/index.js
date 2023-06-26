@@ -24,7 +24,7 @@ import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import { TableCell, Avatar, Modal, ListItemText, ListItemIcon } from '@mui/material'
+import { TableCell, Avatar, Modal, ListItemText, ListItemIcon, Zoom } from '@mui/material'
 import {
   ArrowKeyStepper,
   AutoSizer,
@@ -344,8 +344,7 @@ const VirtualizedTable = ({
             }
           }
         }
-      }
-      
+      } 
       if(((selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey])) || selected.includes(rowData.id))  && highlightRow !== undefined && highlightRow === true  && higlightColums.includes(columnIndex)) {
         selectedRow = true
       }
@@ -421,13 +420,33 @@ const VirtualizedTable = ({
               >
                 {
                   list.map( (c, idx) => (
-                    <MenuItem key={idx} value={c.id} className={clsx(`iconItem`, {['visibilityHidden']: c.id === -1 ? true : false})}>
+                    <MenuItem key={idx} value={c.id} className={clsx(`iconItem`, {['visibilityHidden']: c.id === -1 ? true : false})}>   
                       <ListItemIcon>
                         {
                           c.icon != '' ? c.icon : c.image != '' ? <img src={c.image} style={{width: '21px'}}/> : ''
                         }
                       </ListItemIcon>
-                      <ListItemText className={'heading'}>{c.name}</ListItemText>
+                      
+                        <Tooltip
+                          /* disableHoverListener={typeof c.tooltip != 'undefined' ? true : false} */
+                          enterDelay={1500}
+                          TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
+                          classes={{ 
+                            tooltip: classes.tooltip
+                          }}
+                          title={
+                            typeof c.tooltip != 'undefined' ? 
+                              <Typography 
+                                color="inherit" 
+                                variant='body2'
+                              >
+                                { c.tooltip }
+                              </Typography>
+                            : ''
+                          }
+                        >  
+                          <ListItemText className={'heading'}><div>{c.name} </div> </ListItemText>
+                        </Tooltip> 
                     </MenuItem> 
                   ))
                 }  
