@@ -82,6 +82,7 @@ export default makeStyles(theme => ({
         justifyContent: 'flex-start', 
         /* cursor: 'pointer', */
         overflow: 'hidden',
+        minWidth: 150,
         '@media (max-width: 70em)': {
         //paddingLeft: 15
         },
@@ -96,8 +97,9 @@ export default makeStyles(theme => ({
         }
     },
     logoContainer: {
-        width: '260px',
-        display: 'flex' 
+        width: 260,
+        display: 'flex',
+        maxWidth: 260
     },
     siteLogo: {
         /* width: LOGO_WIDTH,
