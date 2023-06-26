@@ -961,7 +961,7 @@ const handleOpenSettings = useCallback((event) => {
                   
                   
                   {
-                profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank' &&  process.env.REACT_APP_ENVIROMENT_MODE !== 'KPI'
+                profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'
                 && (
                     <React.Fragment>
                       <AddToolTip
