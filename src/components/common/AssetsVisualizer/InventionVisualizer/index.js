@@ -352,7 +352,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             if(selectedCategory == 'abandoned') {
                 tabArray.push('Timeline')
             } else {
-                //tabArray.push('With Products')
+                tabArray.push('With Products')
             }
             setInventionTabs(tabArray)
             if(selectedRow.length  === 0) { 
