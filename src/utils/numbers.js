@@ -1,5 +1,10 @@
 export const numberWithCommas = (x) => {
-    return x != undefined ? x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '';
+    let nString =  x != undefined ? x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '';
+
+    if(isNaN(nString.substr(0,1).toLowerCase())) {
+      nString = nString.replace(',', '');
+    }
+    return nString;
 }
 
 export const capitalize = (s) => {
