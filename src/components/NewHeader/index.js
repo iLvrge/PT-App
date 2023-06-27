@@ -934,7 +934,7 @@ const handleOpenSettings = useCallback((event) => {
               color='inherit'
               aria-label='open drawer'
               onClick={(event) => {
-                return ['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? toggleDrawer(event, !openDrawer.right) :  null
+                return ['PRO'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? toggleDrawer(event, !openDrawer.right) :  null
               }}
               size="small">
               <MenuIcon  className={'menuButton'}/>
