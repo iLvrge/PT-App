@@ -1903,3 +1903,18 @@ export const setFamilyLegalItem = (data) => {
     data
   }
 }
+export const setSankeyAssigneeData = (data) => {  
+  console.log('setSankeyAssigneeData', data)
+  return {
+    type: types.SET_SANKEY_ASSIGNEE_DATA,  
+    data
+  }
+}
+
+export const setSankeyAssignorData = (data) => {  
+  console.log('setSankeyAssignorData', data)
+  return {
+    type: types.SET_SANKEY_ASSIGNOR_DATA,  
+    data
+  }
+}
