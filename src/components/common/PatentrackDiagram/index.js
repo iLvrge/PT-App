@@ -1782,7 +1782,7 @@ class PatentrackDiagram extends React.Component {
       <div id="patentrackDiagramDiv" ref={this.resizeElement}>
         <Box sx={{p: 2, position: 'absolute', zIndex: 99999, top: 48}}> 
           <div style={{width: 720}}> 
-            <TitleBar title={`Click the arrows to see the details of each transaction. Use the buttons on the top right corner for additional functionalities.`} enablePadding={false} underline={false} typography={true} relative={true} /> 
+            <TitleBar title={`Click the connecting arrows to see the transaction's details. Use the top right corner buttons for additional functionalities.`} enablePadding={false} underline={false} typography={false} /> 
           </div>
         </Box> 
         <PatentTopTitle

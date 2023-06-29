@@ -27,7 +27,9 @@ import { setAssetTypeAssignments,
     setTimelineData,
     setCPCSecondData,
     setLineChartReset,
-    setSelectLawFirm
+    setSelectLawFirm,
+    setSankeyAssigneeData,
+    setSankeyAssignorData
    } from '../actions/patentTrackActions2'
   
    import {  
@@ -155,6 +157,12 @@ export const resetItemList = {
         },
         {
             callback:  setSelectLawFirm(0) 
+        },
+        {
+            callback:  setSankeyAssigneeData([]) 
+        },
+        {
+            callback:  setSankeyAssignorData([]) 
         },
     ],
     clearOtherItems: [
