@@ -8,7 +8,7 @@ import { Chart } from "react-google-charts";
 import { Tabs, Tab, Paper, IconButton, Box } from '@mui/material'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import {
-    getCustomerAssets, setJurisdictionData, setJurisdictionRequest,
+    getCustomerAssets, setJurisdictionData, setJurisdictionRequest, setSankeyAssigneeData, setSankeyAssignorData,
 } from '../../../../actions/patentTrackActions2'
 import Loader from '../../Loader'
 import TitleBar from '../../TitleBar'
@@ -64,7 +64,8 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
             standalone: true,
             chartBar, 
             visualizerBarSize,
-            activeTab: selectedTab
+            activeTab: selectedTab,
+            activeFullScreen: true
         }
     ]
     const [height, setHeight] = useState('100%');
@@ -81,7 +82,6 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
         },
         colorAxis: {colors: ['#3366cc', '#dc3912', '#ff9900', '#109618', '#990099', '#0099c6', '#dd4477', '#66aa00', '#b82e2e', '#316395', '#994499', '#22aa99', '#aaaa11', '#6633cc', '#e67300', '#8b0707', '#651067', '#329262', '#5574a6', '#3b3eac', '#b77322', '#16d620', '#b91383', '#f4359e', '#9c5935', '#a9c413', '#2a778d', '#668d1c', '#bea413', '#0c5922', '#743411']}
     });
-
 
     useEffect(() => {
         if(selectedCategory == 'proliferate_inventors') {
@@ -291,7 +291,13 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
     }
 
 
-    const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
+    const handleChangeTab = (e, newTab) => {
+        if([2, 3].includes(newTab)){
+            dispatch(setSankeyAssignorData([]))
+            dispatch(setSankeyAssigneeData([]))
+        }
+        setSelectedTab(newTab)
+    }
 
 
     const DisplayChart = () => {
@@ -378,6 +384,8 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
                                             type={'filled'}
                                             layout={true}
                                             chartBar={chartBar} 
+                                            activeFullScreen={true}
+                                            /* {...(fullScreen === true ? {activeFullScreen: true} : {})}  */
                                         />
                                     :
                                         selectedTab === 3
@@ -385,7 +393,8 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
                                             <SankeyChart 
                                                 type={'acquired'}
                                                 layout={true}
-                                                chartBar={chartBar} 
+                                                chartBar={chartBar}  
+                                                activeFullScreen={true}
                                             />
                                         :
                                             selectedTab === 4
@@ -400,7 +409,7 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
                 } 
             </Box> 
             {  
-                ( (process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) )  && fullScreen === true && (
+                ( (['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE) || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) )  && fullScreen === true && (
                     <FullScreen 
                         componentItems={menuItems} 
                         showScreen={fullScreen} 

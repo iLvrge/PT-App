@@ -24,6 +24,7 @@ const FullScreen = ({componentItems, setScreen, showScreen, paper, share, handle
         }
         setIsFullscreenOpen(!isFullscreenOpen)
     }
+ 
     return (
         <React.Fragment>    
             {
@@ -74,7 +75,7 @@ const FullScreen = ({componentItems, setScreen, showScreen, paper, share, handle
                     {
                         componentItems.map(
                             ({component: Component, ...props }, index) => (
-                                <Component key={index} {...props} />
+                                <Component key={index} {...props} activeFullScreen={true}/>
                             )
                         )
                     }

@@ -13,12 +13,12 @@ import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import { Box, IconButton } from '@mui/material';
 import moment from 'moment'
 import PatenTrackApi from '../../../../api/patenTrack2'
-import { getCustomerAssets, getCustomerSelectedAssets } from '../../../../actions/patentTrackActions2'
+import { getCustomerAssets, getCustomerSelectedAssets, setCitationTimelineData } from '../../../../actions/patentTrackActions2'
 import { numberWithCommas, toTitleCase } from '../../../../utils/numbers'
 import themeMode from '../../../../themes/themeMode'
 import useStyles from './styles'
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
-import TitleBar from '../../TitleBar'
+import TitleBar from '../../TitleBar' 
 
 const DATE_FORMAT = 'MMM DD, YYYY'
 const DATE_FORMAT_YEAR = 'YYYY'
@@ -96,7 +96,7 @@ const convertDataToItem = (item) => {
 }
 
 
-const Acknowledgements = () => {
+const Acknowledgements = (props) => {
     const classes = useStyles()
     const timelineRef = useRef()
     const timelineContainerRef = useRef()
@@ -132,8 +132,9 @@ const Acknowledgements = () => {
     const selectedAssetAssignmentsAll = useSelector( state => state.patenTrack2.assetTypeAssignments.selectAll )
     const connectionBoxView = useSelector( state => state.patenTrack.connectionBoxView)
     const display_sales_assets = useSelector( state => state.patenTrack2.display_sales_assets)
+    const citationTimelineData = useSelector( state => state.patenTrack2.citationTimelineData)
 
-
+    console.log("Acknowledge Props", props)
    /**
    * on Itemover for the tooltip data
    */
@@ -340,13 +341,19 @@ const Acknowledgements = () => {
             setIsLoadingTimelineRawData(false)
             if(data !== null ) {
                 setTimelineRawData(data)
+                dispatch(setCitationTimelineData(data));
             }
         }       
     }
 
     useEffect(() => {
         const getAcknowledgementData = async() => {
-            retrieveCitedData()     
+            if(typeof props.activeFullScreen != 'undefined' && props.activeFullScreen === true && citationTimelineData.length > 0) {
+                setIsLoadingTimelineRawData(false)
+                setTimelineRawData(citationTimelineData)
+            } else {
+                retrieveCitedData()     
+            }
         }
         getAcknowledgementData()
     }, [selectedCategory,  selectedCompanies, assetsList, maintainenceAssetsList, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedCompaniesAll, assetTypesSelectAll, selectedAssetCompaniesAll, selectedAssetAssignmentsAll, auth_token, display_sales_assets])
