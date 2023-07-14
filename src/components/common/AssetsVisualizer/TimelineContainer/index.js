@@ -431,6 +431,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
 
 
   const getTimelineRawData = async(start, end) => {
+    console.log("selectedCategory", selectedCategory)
     let entered = true;
     if(['acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'inventing_transactions', 'litigation_transactions'].includes(selectedCategory) && assetTypesSelected.length == 0) {
       entered = false;
@@ -528,13 +529,15 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
                 updateTimelineRawData(list)
               }
             }       
-          } else {
+          } else { 
             if(type !== 9)  {
               if( ['PRO', 'KPI', 'STANDARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
                 //setIsLoadingTimelineData(true) 
-                if(timelineRequest === false) {
+                if(timelineRequest === false) { 
+                  dispatch(setTimelineData([])) //items
                   setTimelineRawGroups([]) //groups
                   setTimelineRawData([]) //items
+                  redrawTimeline()
                   getTimelineRawData();
                 } 
                 //setIsLoadingTimelineData(false)
@@ -560,6 +563,8 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     return () => (isSubscribed = false)
     
   }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors, auth_token, switch_button_assets, selectedCategory, timelineRequest, timelineRequestData ])
+
+  console.log("Tap1")
 
   useEffect(() => {
     if(typeof timelineData !== 'undefined' && timelineData.length > 0) {

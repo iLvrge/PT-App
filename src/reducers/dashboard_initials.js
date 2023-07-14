@@ -118,4 +118,5 @@ export default {
     familyLegalItem: [],
     sankeyAssigneeData: [],
     sankeyAssignorData: [],
+    citationTimelineData: [],
 }
