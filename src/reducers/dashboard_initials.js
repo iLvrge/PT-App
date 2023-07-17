@@ -115,5 +115,8 @@ export default {
     isLoadingAssetsErrorsDataCount: null,
     assetsErrorsDataCount: 0,
     timelineDataLoading: false,
-    familyLegalItem: []
+    familyLegalItem: [],
+    sankeyAssigneeData: [],
+    sankeyAssignorData: [],
+    citationTimelineData: [],
 }

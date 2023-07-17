@@ -595,7 +595,7 @@ const GlobalLayout = (props) => {
     const handleKeyEvent = (event) => {  
         //event.preventDefault()
         if(event.key === 'ArrowDown' || event.key === 'ArrowUp' ) {
-            let tableContainer = document.getElementById('assets_type_assignment_all_assets'), findActiveRow = null
+            let tableContainer = document.getElementById('assets_type_assignment_all_assets'), findActiveRow = null, findChildContainer = null
             if(tableContainer !== null) { 
                 /* findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightWithCol.Mui-selected') */
                 findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightRow.Mui-selected')
@@ -621,7 +621,12 @@ const GlobalLayout = (props) => {
                                     } else {
                                         tableContainer = document.getElementById('main_companies')
                                         if(tableContainer !== null) {
-                                            findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')
+                                            findChildContainer = tableContainer.querySelector('#child_companies')
+                                            if(findChildContainer != null) {
+                                                findActiveRow = findChildContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')                            
+                                            } else {
+                                                findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')       
+                                            }
                                         }
                                     }
                                 }
@@ -648,7 +653,12 @@ const GlobalLayout = (props) => {
                             } else {
                                 tableContainer = document.getElementById('main_companies')
                                 if(tableContainer !== null) {
-                                    findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')                            
+                                    findChildContainer = tableContainer.querySelector('#child_companies')
+                                    if(findChildContainer != null) {
+                                        findActiveRow = findChildContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')                            
+                                    } else {
+                                        findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')       
+                                    }
                                 }
                             }
                         }
@@ -658,25 +668,37 @@ const GlobalLayout = (props) => {
 
 
             if(findActiveRow !== null) {
-                const classList = findActiveRow.className.split(/\s+/);
-                const findClass = classList.filter( c => c.indexOf('rowIndex_') !== -1 ? c : '')
-                if(findClass.length > 0) {
-                    let index = findClass[0].toString().replace('rowIndex_', '')
-                    if(index !== '' && !isNaN(index)){
-                        index = Number(index) 
-                        if (event.key === 'ArrowUp' ) {
-                            index = index - 1 
-                        } else if(event.key === 'ArrowDown') {
-                            index = index + 1 
-                        }
-                    }  
-                    if(index >= 0) {
-                        const findNextRow =  tableContainer.querySelector(`.rowIndex_${index}`)
-                        if(findNextRow !== null) {
-                            findNextRow.focus()
-                            findNextRow.click()  
-                        }
-                    }
+                moveSteps(tableContainer, findChildContainer, findActiveRow, event)
+            }
+        }
+    }
+
+    const moveSteps = (tableContainer, findChildContainer, findActiveRow, event) => { 
+        const classList = findActiveRow.className.split(/\s+/);
+        const findClass = classList.filter( c => c.indexOf('rowIndex_') !== -1 ? c : '')
+        if(findClass.length > 0) {
+            let index = findClass[0].toString().replace('rowIndex_', '')
+            if(index !== '' && !isNaN(index)){
+                index = Number(index) 
+                if (event.key === 'ArrowUp' ) {
+                    index = index - 1 
+                } else if(event.key === 'ArrowDown') {
+                    index = index + 1 
+                }
+            }  
+            if(index >= 0) {
+                let findNextRow =  null
+                if(findChildContainer != null) {
+                    findNextRow = findChildContainer.querySelector(`.rowIndex_${index}`)
+                } else {
+                    findNextRow = tableContainer.querySelector(`.rowIndex_${index}`)
+                }
+                if(findNextRow !== null) {
+                    findNextRow.focus()
+                    findNextRow.click()  
+                } else if(findChildContainer != null) {
+                    const parentActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')      
+                    moveSteps(tableContainer, null, parentActiveRow, event)
                 }
             }
         }

@@ -1903,3 +1903,23 @@ export const setFamilyLegalItem = (data) => {
     data
   }
 }
+export const setSankeyAssigneeData = (data) => {   
+  return {
+    type: types.SET_SANKEY_ASSIGNEE_DATA,  
+    data
+  }
+}
+
+export const setSankeyAssignorData = (data) => {   
+  return {
+    type: types.SET_SANKEY_ASSIGNOR_DATA,  
+    data
+  }
+} 
+
+export const setCitationTimelineData = (data) => {   
+  return {
+    type: types.SET_CITATION_TIMELINE_DATA,  
+    data
+  }
+}

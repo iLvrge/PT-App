@@ -6,11 +6,12 @@ import useStyles from './styles'
 import clsx from 'clsx';
 import PatenTrackApi from '../../../../api/patenTrack2'; 
 import Loader from '../../Loader';
-import { setAssetTypeAssignmentAllAssets, setCPCData, setCPCRequest, setSelectAssignmentCustomers } from '../../../../actions/patentTrackActions2'; 
+import { setAssetTypeAssignmentAllAssets, setCPCData, setCPCRequest, setSankeyAssigneeData, setSankeyAssignorData, setSelectAssignmentCustomers } from '../../../../actions/patentTrackActions2'; 
 import FullScreen from '../../FullScreen';
 import LabelWithIcon from '../../LabelWithIcon';
 import TitleBar from '../../TitleBar';
 import { Box } from '@mui/system';
+import { consoleSandbox } from '@sentry/utils';
 
 
 const SankeyChart = (props) => {
@@ -35,6 +36,8 @@ const SankeyChart = (props) => {
     const selectedMaintainencePatents = useSelector( state => state.patenTrack2.selectedMaintainencePatents )
     const assetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected) //Assets Selected
     const selectedAssetCompanies = useSelector( state => state.patenTrack2.assetTypeCompanies.selected );
+    const sankeyAssigneeData = useSelector( state => state.patenTrack2.sankeyAssigneeData );
+    const sankeyAssignorData = useSelector( state => state.patenTrack2.sankeyAssignorData );
     const fullScreenItems = [
         {
           id: 1,
@@ -44,120 +47,126 @@ const SankeyChart = (props) => {
           showTabs: props.showTabs,
           tabText: props.tabText,
           standalone: true,
-          activeTab: 0
+          activeTab: 0,
+          activeFullScreen: true
         }
     ]
     
     useEffect(() => {
         const getPartiesData = async() => { 
-            if(loading === false ) {   
-                setData([])
-                setAssignorData([])
-                setAssigneeRawData([])
-                setAssignorRawData([])
-                const formData = new FormData()
-                formData.append('selectedCompanies', JSON.stringify(selectedCompanies)); 
-                if(['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE)) {
-                    const list = [];
-                    let totalRecords = 0;
-            
-                    if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {   
-                        if( assetsSelected.length > 0 ) {
-                            const promise = assetsSelected.map(asset => {
-                                const findIndex = assetsList.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset.toString() )
-                                if( findIndex !== -1 ) {
-                                    if( assetsList[findIndex].appno_doc_num != '' ) {
-                                        list.push(assetsList[findIndex].appno_doc_num.toString())
+            if(loading === false && selectedCompanies.length > 0 ) {    
+                if((sankeyAssigneeData.length > 0 || sankeyAssignorData.length > 0) && typeof props.activeFullScreen != 'undefined' && props.activeFullScreen === true) {
+                    if(sankeyAssigneeData.length > 0) { 
+                        setAssigneeRawData(sankeyAssigneeData)
+                        refineAssigneeData(sankeyAssigneeData)
+                    } else if(sankeyAssignorData.length > 0) {
+                        setAssignorRawData(sankeyAssignorData)
+                        refineAssignorData(sankeyAssignorData)
+                    }
+                } else {  
+                    setData([])
+                    setAssignorData([])
+                    setAssigneeRawData([])
+                    setAssignorRawData([])
+                    const formData = new FormData()
+                    formData.append('selectedCompanies', JSON.stringify(selectedCompanies)); 
+                    if(['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE)) {
+                        const list = [];
+                        let totalRecords = 0;
+                
+                        if( (assetsList.length > 0 && assetsSelected.length > 0 && assetsList.length != assetsSelected.length ) || ( maintainenceAssetsList.length > 0 &&  selectedMaintainencePatents.length > 0 && selectedMaintainencePatents.length != maintainenceAssetsList.length ) ) {   
+                            if( assetsSelected.length > 0 ) {
+                                const promise = assetsSelected.map(asset => {
+                                    const findIndex = assetsList.findIndex( row => row.appno_doc_num.toString() == asset.toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset.toString() )
+                                    if( findIndex !== -1 ) {
+                                        if( assetsList[findIndex].appno_doc_num != '' ) {
+                                            list.push(assetsList[findIndex].appno_doc_num.toString())
+                                        }
                                     }
-                                }
-                            })
-                            await Promise.all(promise)
-                            totalRecords = list.length
+                                })
+                                await Promise.all(promise)
+                                totalRecords = list.length
+                            } else {
+                                const promise = selectedMaintainencePatents.map(asset => {
+                                    const findIndex = maintainenceAssetsList.findIndex( row => row.appno_doc_num.toString() == asset[1].toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset[0].toString() )
+                                    if( findIndex !== -1 ) {
+                                        if( maintainenceAssetsList[findIndex].appno_doc_num != '' ) {
+                                            list.push(maintainenceAssetsList[findIndex].appno_doc_num.toString())
+                                        }
+                                    }
+                                })
+                                await Promise.all(promise)
+                                totalRecords = list.length
+                            }                
                         } else {
-                            const promise = selectedMaintainencePatents.map(asset => {
-                                const findIndex = maintainenceAssetsList.findIndex( row => row.appno_doc_num.toString() == asset[1].toString() || row.grant_doc_num != null && row.grant_doc_num.toString() == asset[0].toString() )
-                                if( findIndex !== -1 ) {
-                                    if( maintainenceAssetsList[findIndex].appno_doc_num != '' ) {
-                                        list.push(maintainenceAssetsList[findIndex].appno_doc_num.toString())
-                                    }
+                            if( assetsList.length > 0 || maintainenceAssetsList.length > 0 ) {
+                                if( assetsList.length > 0 ) {
+                                    const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
+                                    await Promise.all(promise)
+                                    totalRecords = assetsTotal
+                                } else if ( maintainenceAssetsList.length > 0 ) {
+                                    const promise = maintainenceAssetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
+                                    await Promise.all(promise)
+                                    totalRecords = maintainenceAssetsTotal
                                 }
-                            })
-                            await Promise.all(promise)
-                            totalRecords = list.length
-                        }                
-                    } else {
-                        if( assetsList.length > 0 || maintainenceAssetsList.length > 0 ) {
-                            if( assetsList.length > 0 ) {
-                                const promise = assetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
-                                await Promise.all(promise)
-                                totalRecords = assetsTotal
-                            } else if ( maintainenceAssetsList.length > 0 ) {
-                                const promise = maintainenceAssetsList.map(row => row.appno_doc_num != '' ? list.push(row.appno_doc_num.toString()) : '')
-                                await Promise.all(promise)
-                                totalRecords = maintainenceAssetsTotal
                             }
                         }
+                        formData.append('list', JSON.stringify(list)); 
+                        formData.append('total', totalRecords); 
                     }
-                    formData.append('list', JSON.stringify(list)); 
-                    formData.append('total', totalRecords); 
-                }
-                if(typeof props.layout != 'undefined' && props.layout !== null && props.layout === true) { 
-                    formData.append('layout', selectedCategory);  
-                } 
-                if(typeof props.type != 'undefined' && props.type !== null && props.type != '') {
-                    formData.append('type', props.type);  
-                    //formData.append('search', 'all');  
-                } else {
-                    formData.append('type', selectedCategory);   
-                }
-                if((typeof props.type != 'undefined' && ['acquired', 'filled', 'license_out'].includes(props.type)) || ['acquired', 'collateralization_transactions', 'license_out'].includes(selectedCategory)) {
-                    setLoading(true)
-                    PatenTrackApi.cancelDashboardPartiesDataRequest()
-                    const {data} = await PatenTrackApi.getDashboardPartiesData(formData) 
-                    setLoading(false)
-                    const loadData = []
-                    if(data.length > 0) {
-                        setAssigneeRawData(data)
-                        loadData.push([{ type: 'string', label: "From"}, { type: 'string', label: "To"}, { type: 'number', label: "Assets"}, { type: 'string', role: 'tooltip'}])
-                        data.forEach( item => {
-                            loadData.push([
-                                item.name,
-                                item.assignee,
-                                item.name == 'Employees' ? 10 : parseInt(item.number),
-                                `<p style="padding: 10px; margin: 0px;width: 238px;">${item.name} -> ${item.assignee}<br/> Assets: ${parseInt(item.number)}</p>`
-                            ]) 
-                        });    
-                        setData(loadData)
+                    if(typeof props.layout != 'undefined' && props.layout !== null && props.layout === true) { 
+                        formData.append('layout', selectedCategory);  
+                    } 
+                    if(typeof props.type != 'undefined' && props.type !== null && props.type != '') {
+                        formData.append('type', props.type);  
+                        //formData.append('search', 'all');  
+                    } else {
+                        formData.append('type', selectedCategory);   
                     }
-                }
-                
-                if((typeof props.type != 'undefined' && ['license_in', 'divested'].includes(props.type))) {
-                    setLoadingAssingor(true) 
-                    PatenTrackApi.cancelDashboardPartiesAssignorDataRequest()
-                    const getAssignorData = await PatenTrackApi.getDashboardPartiesAssignorData(formData)  
-                    setLoadingAssingor(false)
-                    if(getAssignorData.data != null) {
-                        const aorData  = getAssignorData.data   
-                        const loadAssignorData = []
-                        if(aorData.length > 0) {
-                            setAssignorRawData(aorData)
-                            loadAssignorData.push(["From", "To", "Assets"])
-                            aorData.forEach( item => {
-                                loadAssignorData.push([
-                                    item.assignor,
-                                    item.name,
-                                    parseInt(item.number)
-                                ])
-                            });  
-                        }  
-                        setAssignorData(loadAssignorData)
+                    if((typeof props.type != 'undefined' && ['acquired', 'filled', 'license_out'].includes(props.type)) || ['acquired', 'collateralization_transactions', 'license_out'].includes(selectedCategory)) {
+                        setLoading(true)
+                        PatenTrackApi.cancelDashboardPartiesDataRequest()
+                        const {data} = await PatenTrackApi.getDashboardPartiesData(formData) 
+                        setLoading(false)
+                        if(data.length > 0) {
+                            setAssigneeRawData(data)
+                            dispatch(setSankeyAssigneeData(data))
+                        }
+                        refineAssigneeData(data)
                     }
-                } 
+                    
+                    if((typeof props.type != 'undefined' && ['license_in', 'divested'].includes(props.type))) {
+                        setLoadingAssingor(true) 
+                        PatenTrackApi.cancelDashboardPartiesAssignorDataRequest()
+                        const getAssignorData = await PatenTrackApi.getDashboardPartiesAssignorData(formData)  
+                        setLoadingAssingor(false)
+                        if(getAssignorData.data != null) {
+                            const aorData  = getAssignorData.data   
+                            if(aorData.length > 0) {
+                                setAssignorRawData(aorData)
+                                dispatch(setSankeyAssignorData(aorData))
+                            }  
+                            refineAssignorData(aorData)
+                        }
+                    } 
+                }
             }
         }
         getPartiesData()
         return (() => {})
-    }, [selectedCompanies, props.type])
+    }, [selectedCompanies, props.type, dispatch])
+
+    useEffect(() => {  
+        if((sankeyAssigneeData.length > 0 || sankeyAssignorData.length > 0) && typeof props.activeFullScreen != 'undefined' && props.activeFullScreen === true) { 
+            if(sankeyAssigneeData.length > 0) {
+                setAssigneeRawData(sankeyAssigneeData)
+                refineAssigneeData(sankeyAssigneeData)
+            } else if(sankeyAssignorData.length > 0) {  
+                setAssignorRawData(sankeyAssignorData)
+                refineAssignorData(sankeyAssignorData)
+            }
+        }
+    }, [sankeyAssignorData, sankeyAssigneeData])
 
     useEffect(() => {
         if(['acquisition_transactions', 'divestitures_transactions'].includes(selectedCategory)) {
@@ -182,6 +191,37 @@ const SankeyChart = (props) => {
             }
         }
     }, [data, assignorData, props]) 
+
+    const refineAssigneeData = (data) => {
+        const loadData = []
+        if(data.length > 0) {
+            loadData.push([{ type: 'string', label: "From"}, { type: 'string', label: "To"}, { type: 'number', label: "Assets"}, { type: 'string', role: 'tooltip'}])
+            data.forEach( item => {
+                loadData.push([
+                    item.name,
+                    item.assignee,
+                    item.name == 'Employees' ? 10 : parseInt(item.number),
+                    `<p style="padding: 10px; margin: 0px;width: 238px;">${item.name} -> ${item.assignee}<br/> Assets: ${parseInt(item.number)}</p>`
+                ]) 
+            });    
+        } 
+        setData(loadData)
+    }
+
+    const refineAssignorData = (aorData) => {
+        const loadAssignorData = []
+        if(aorData.length > 0) {
+            loadAssignorData.push(["From", "To", "Assets"])
+            aorData.forEach( item => {
+                loadAssignorData.push([
+                    item.assignor,
+                    item.name,
+                    parseInt(item.number)
+                ])
+            });     
+        }    
+        setAssignorData(loadAssignorData)
+    }
 
 
     const handleSelection = useCallback(async(items, chartType, event) => {

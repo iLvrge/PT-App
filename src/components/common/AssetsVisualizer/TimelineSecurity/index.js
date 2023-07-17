@@ -308,6 +308,7 @@ const TimelineSecurity = ({ data, assignmentBar, assignmentBarToggle, type, stan
     timelineRef.current = new Timeline(timelineContainerRef.current, [], options)
   }, [])
 
+
   //Timeline list from server
   useEffect(() => {
     /**

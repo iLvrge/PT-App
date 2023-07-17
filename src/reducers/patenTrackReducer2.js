@@ -929,6 +929,21 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state, 
           familyLegalItem: action.data
         } 
+        case types.SET_SANKEY_ASSIGNOR_DATA: 
+        return { 
+          ...state, 
+          sankeyAssignorData: action.data
+        } 
+        case types.SET_SANKEY_ASSIGNEE_DATA: 
+        return { 
+          ...state, 
+          sankeyAssigneeData: action.data
+        } 
+        case types.SET_CITATION_TIMELINE_DATA: 
+        return { 
+          ...state, 
+          citationTimelineData: action.data
+        }
         
       default:   
       return state

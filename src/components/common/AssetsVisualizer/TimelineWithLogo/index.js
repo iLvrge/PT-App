@@ -205,7 +205,6 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
     return item
   }
 
-  
 
   // Custom ToolTip 
   
