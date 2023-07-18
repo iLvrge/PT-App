@@ -54,7 +54,7 @@ import {
     setDashboardShareData
 } from '../../actions/patentTrackActions2'
 
-import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpanMode, setMaintainenceFeeFrameMode, setTimelineScreen, updateViewDashboard } from '../../actions/uiActions'
+import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpanMode, setMaintainenceFeeFrameMode, setTimelineScreen, updateViewDashboard, setFirstBarSize } from '../../actions/uiActions'
 
 import useStyles from './styles'
 import clsx from 'clsx'
@@ -70,6 +70,7 @@ import FamilyContainer from '../common/AssetsVisualizer/FamilyContainer';
 import SecuredAssets from '../common/SecuredAssets';
 import FullScreen from '../common/FullScreen';
 import { useReloadLayout } from '../../utils/useReloadLayout';
+import { set } from 'lodash';
 
 const GlobalScreen = ({
     type,
@@ -190,6 +191,7 @@ const GlobalScreen = ({
     const dashboard_share_selected_data = useSelector(state => state.patenTrack2.dashboard_share_selected_data)
     const selectedAssetsFamily = useSelector(state => state.patenTrack.assetFamily) 
     const viewDashboard = useSelector(state => state.patenTrack.viewDashboard) 
+    const firstBarSize = useSelector(state => state.ui.firstBarSize) 
     const checkContainer = () => {
         /* setTimeout(() => {
             if( mainContainerRef.current != null  && mainContainerRef.current != undefined) {                
@@ -499,13 +501,14 @@ const GlobalScreen = ({
             connectionSelection: false
         }
     ]
- 
+    
     return (
         <SplitPane
             className={classes.splitPane}
             split="vertical"
-            size={companyBarSize}
+            size={firstBarSize}
             onChange={(size) => { 
+                dispatch(setFirstBarSize(size > 900 ? 900 : size))
                 setCompanyBarSize(size > 900 ? 900 : size)
             }}
             onDragFinished={(size) => resizePane('split1', size, setCompanyBarSize)}

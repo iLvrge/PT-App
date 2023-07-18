@@ -34,5 +34,6 @@ export default {
   viewInitial: false,
   familyLegalItemMode: false,
   sankeyFilterActive: false,
-  viewIntro: false
+  viewIntro: false, 
+  firstBarSize: 250
 }

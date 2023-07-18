@@ -172,6 +172,12 @@ const uiReducer = (state = initialState.ui, action) => {
         ...uiInitial
       }
     }
+
+    case types.SET_FIRST_BAR_SIZE:
+      return {
+        ...state, 
+        firstBarSize: action.size
+      }
     default:
       return state
   }

@@ -47,7 +47,7 @@ import {
     setViewEnableStep
 } from '../../actions/patentTrackActions2'
 
-import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpanMode, setMaintainenceFeeFrameMode, setPatentScreen, setDashboardScreen, setTimelineScreen } from '../../actions/uiActions'
+import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpanMode, setMaintainenceFeeFrameMode, setPatentScreen, setDashboardScreen, setTimelineScreen, setFirstBarSize } from '../../actions/uiActions'
 
 import useStyles from './styles'
 import clsx from 'clsx'
@@ -156,7 +156,7 @@ const PatentLayout = ({
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
     const selectedMainCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
-
+    const firstBarSize = useSelector(state => state.ui.firstBarSize) 
     
     const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents )
     
@@ -430,14 +430,15 @@ const PatentLayout = ({
         dispatch(setViewEnableStep(false))
     }
 
-
+    
     return (
         <React.Fragment>
         <SplitPane
             className={classes.splitPane}
             split="vertical"
-            size={companyBarSize}
+            size={firstBarSize}
             onChange={(size) => { 
+                dispatch(setFirstBarSize(size > 900 ? 900 : size))
                 setCompanyBarSize(size > 900 ? 900 : size)
             }}
             onDragFinished={(size) => resizePane('split1', size, setCompanyBarSize)}
