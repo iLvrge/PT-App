@@ -20,7 +20,7 @@ import {
     setMainCompaniesSelected,
     setAssetTypesSelect,
     setSelectAssignmentCustomers,
-    setDashboardShareData
+    setDashboardShareData 
 } from '../../actions/patentTrackActions2'
 
 
@@ -28,6 +28,7 @@ import useStyles from './styles'
 import clsx from 'clsx' 
 import PatenTrackApi from '../../api/patenTrack2'
 import { useReloadLayout } from '../../utils/useReloadLayout';  
+import { setFirstBarSize } from '../../actions/uiActions';
 
 
 
@@ -73,7 +74,7 @@ const MainDashboard = ({
     const [ isDragging, setIsDragging] = useState(false) 
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false) 
     const companies = useSelector( state => state.patenTrack2.mainCompaniesList.list) 
-     
+    const firstBarSize = useSelector(state => state.ui.firstBarSize) 
     const channel_id = useSelector( state => state.patenTrack2.channel_id )    
     const auth_token = useSelector(state => state.patenTrack2.auth_token) 
      
@@ -126,8 +127,9 @@ const MainDashboard = ({
         <SplitPane
             className={classes.splitPane}
             split="vertical"
-            size={companyBarSize}
+            size={firstBarSize}
             onChange={(size) => { 
+                dispatch(setFirstBarSize(size > 900 ? 900 : size))
                 setCompanyBarSize(size > 900 ? 900 : size)
             }}
             onDragFinished={(size) => resizePane('split1', size, setCompanyBarSize)}

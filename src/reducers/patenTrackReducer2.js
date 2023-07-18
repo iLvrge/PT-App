@@ -944,7 +944,6 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state, 
           citationTimelineData: action.data
         }
-        
       default:   
       return state
   } 
