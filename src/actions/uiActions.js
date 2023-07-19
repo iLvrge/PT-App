@@ -136,3 +136,10 @@ export const setViewIntro = flag => ({
   type: types.SET_VIEW_INTRO,
   flag
 })
+
+export const setFirstBarSize = (size) => {   
+  return {
+    type: types.SET_FIRST_BAR_SIZE,  
+    size
+  }
+}
