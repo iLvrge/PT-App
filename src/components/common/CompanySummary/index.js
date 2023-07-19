@@ -93,18 +93,29 @@ const CompanySummary = () => {
         await PatenTrackApi.cancelSummaryRequest()
         const { data } = await PatenTrackApi.getCompanySummary( access_token, user_email )
         if( data != null ) {
-           
-            if( Object.keys(data).length > 0 ) {
-                let summaryData = [];
-                Object.keys(data).forEach( key => { 
+            let {report, reportActive} = data
+            let summaryData = [];
+            if( Object.keys(report).length > 0 ) {
+                Object.keys(report).forEach( key => { 
                     summaryData.push({
                         name: capitalize(key == 'entities' ? '3rd Parties' : key == 'parties' ? 'Parties' : key),
-                        number: numberWithCommas(data[key]),
+                        number: numberWithCommas(report[key]),
                         iconLink: `https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/${key == 'entities' ? 'parties' : key}.svg`
                     })
-                })                
-                setCompanyData(summaryData)
+                })    
             }
+            if( Object.keys(reportActive).length > 0 ) {
+                Object.keys(reportActive).forEach( key => { 
+                    if(key == 'rightsActive') {
+                        summaryData.push({
+                            name: 'Rights (Active)',
+                            number: numberWithCommas(reportActive['rightsActive']),
+                            iconLink: `https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/rights.svg`
+                        })
+                    } 
+                })    
+            }
+            setCompanyData(summaryData)
         }  
     }
 
