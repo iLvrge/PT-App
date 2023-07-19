@@ -46,7 +46,8 @@ import { toggleUsptoMode,
     setDriveTemplateMode,
     setDashboardScreen, 
     setDashboardPanel,
-    setViewDashboardIntial} from '../../actions/uiActions'
+    setViewDashboardIntial,
+    setFirstBarSize} from '../../actions/uiActions'
 
 import PatenTrackApi from '../../api/patenTrack2' 
 import { Box } from "@mui/system"
@@ -595,7 +596,7 @@ const GlobalLayout = (props) => {
     const handleKeyEvent = (event) => {  
         //event.preventDefault()
         if(event.key === 'ArrowDown' || event.key === 'ArrowUp' ) {
-            let tableContainer = document.getElementById('assets_type_assignment_all_assets'), findActiveRow = null, findChildContainer = null
+            let tableContainer = document.getElementById('assets_type_assignment_all_assets'), findActiveRow = null, findChildContainer = null, stepdown = -1
             if(tableContainer !== null) { 
                 /* findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightWithCol.Mui-selected') */
                 findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.highlightRow.Mui-selected')
@@ -655,7 +656,17 @@ const GlobalLayout = (props) => {
                                 if(tableContainer !== null) {
                                     findChildContainer = tableContainer.querySelector('#child_companies')
                                     if(findChildContainer != null) {
-                                        findActiveRow = findChildContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')                            
+                                        findActiveRow = findChildContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')   
+                                        if(findActiveRow == null) {
+                                            const childRows = findChildContainer.querySelectorAll('.ReactVirtualized__Table__row')
+                                            if(childRows.length > 0) {
+                                                findActiveRow = childRows[0]
+                                                stepdown = 0
+                                            } else {
+                                                findActiveRow = findChildContainer.parentElement.previousElementSibling    
+                                                findChildContainer = null 
+                                            } 
+                                        }                         
                                     } else {
                                         findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')       
                                     }
@@ -665,41 +676,41 @@ const GlobalLayout = (props) => {
                     }
                 }
             }
-
-
+ 
             if(findActiveRow !== null) {
-                moveSteps(tableContainer, findChildContainer, findActiveRow, event)
-            }
+                moveSteps(tableContainer, findChildContainer, findActiveRow, event, stepdown)
+            } 
         }
     }
 
-    const moveSteps = (tableContainer, findChildContainer, findActiveRow, event) => { 
+    const moveSteps = (tableContainer, findChildContainer, findActiveRow, event, stepdown = -1) => { 
         const classList = findActiveRow.className.split(/\s+/);
-        const findClass = classList.filter( c => c.indexOf('rowIndex_') !== -1 ? c : '')
+        const findClass = classList.filter( c => c.indexOf('rowIndex_') !== -1 ? c : '') 
         if(findClass.length > 0) {
             let index = findClass[0].toString().replace('rowIndex_', '')
-            if(index !== '' && !isNaN(index)){
+            if(index !== '' && !isNaN(index) && stepdown == -1){
                 index = Number(index) 
                 if (event.key === 'ArrowUp' ) {
                     index = index - 1 
                 } else if(event.key === 'ArrowDown') {
                     index = index + 1 
                 }
-            }  
-            if(index >= 0) {
-                let findNextRow =  null
-                if(findChildContainer != null) {
-                    findNextRow = findChildContainer.querySelector(`.rowIndex_${index}`)
-                } else {
-                    findNextRow = tableContainer.querySelector(`.rowIndex_${index}`)
-                }
-                if(findNextRow !== null) {
-                    findNextRow.focus()
-                    findNextRow.click()  
-                } else if(findChildContainer != null) {
-                    const parentActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')      
-                    moveSteps(tableContainer, null, parentActiveRow, event)
-                }
+            }    
+            if((index === '' && findChildContainer != null) || stepdown == 0) {
+                index = 0
+            }
+            let findNextRow =  null
+            if(findChildContainer != null) {
+                findNextRow = findChildContainer.querySelector(`.rowIndex_${index}`)
+            } else {
+                findNextRow = tableContainer.querySelector(`.rowIndex_${index}`)
+            }
+            if(findNextRow !== null) {
+                findNextRow.focus()
+                findNextRow.click()  
+            } else if(findChildContainer != null) {
+                let parentActiveRow = findActiveRow.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.previousSibling   
+                moveSteps(tableContainer, null, parentActiveRow, event)
             }
         }
     }
@@ -719,8 +730,10 @@ const GlobalLayout = (props) => {
         setOpenBar( !openBar )
         if(!openBar === false) {
             setCompanyBarSize(0)  
+            dispatch(setFirstBarSize(0))
         } else {
-            setCompanyBarSize(210)
+            setCompanyBarSize(250)
+            dispatch(setFirstBarSize(250))
             if(isMobile){ 
                 setTypeOpenBar( false )
                 setOtherPartyOpenBar( false )

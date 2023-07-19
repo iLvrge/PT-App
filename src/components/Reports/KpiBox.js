@@ -47,7 +47,7 @@ const KpiBox = (props) => {
         <div className={clsx(classes.chartContainer, classes.widthResponsive, classes.fixKPI)}>
             <div className={classes.headingContainer}>
                 <AddToolTip
-                    tooltip={props.card.tooltip}
+                    tooltip={parseInt(profile?.user?.organisation?.subscribtion) == 1 ? 'Available in Pro and Enterprise accounts only.' : props.card.tooltip}
                     placement='bottom'
                     grid={props.grid}
                 >
