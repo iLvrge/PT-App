@@ -143,3 +143,10 @@ export const setFirstBarSize = (size) => {
     size
   }
 }
+
+export const setCompanyColWidth = (size) => {   
+  return {
+    type: types.SET_COMPANY_COL_WIDTH,  
+    size
+  }
+}

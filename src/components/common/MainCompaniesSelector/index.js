@@ -61,7 +61,8 @@ import {
     toggleFamilyMode,
     toggleFamilyItemMode,
     toggleLifeSpanMode,
-    setSankeyFilterActive
+    setSankeyFilterActive,
+    setCompanyColWidth
   } from "../../../actions/uiActions";
 
 import { DEFAULT_CUSTOMERS_LIMIT } from '../../../api/patenTrack2'
@@ -211,7 +212,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const [ rowHeight, setRowHeight ] = useState(40)
     const [ selectItems, setSelectItems] = useState( [] )
     const [ selectedRow, setSelectedRow] = useState( [] )   
-    const [ companyColWidth, setCompanyColWidth] = useState( COLUMNS[2].width )   
+    /* const [ companyColWidth, setCompanyColWidth] = useState( COLUMNS[2].width )    */
     const [ currentSelection, setCurrentSelection ] = useState(null)   
     const [ intialization, setInitialization ] = useState( false ) 
     const [ waitForChildWaitCall, setWaitForChildWaitCall ] = useState( false ) 
@@ -231,6 +232,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const assetTypesSelected = useSelector(state => state.patenTrack2.assetTypes.selected)
     const assetTypesSelectAll = useSelector(state => state.patenTrack2.assetTypes.selectAll)
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
+    const companyColWidth = useSelector(state => state.ui.companyColWidth)
     const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
     const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
     const dashboard_share_selected_data = useSelector(state => state.patenTrack2.dashboard_share_selected_data)
@@ -626,6 +628,15 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         }
     }, [ dispatch, selectAll ])
 
+
+    useEffect(() => {
+        const headerCols = [...headerColumns]
+        if(headerCols[2].width != companyColWidth) {
+            headerCols[2].width = companyColWidth
+            setHeaderColumns(headerCols) 
+        }
+    }, [companyColWidth])
+
     /**
      * If redux item is not equal to local selected items
      */
@@ -954,7 +965,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             previousColumns[findIndex].width =  previousColumns[findIndex].oldWidth + data.x
             previousColumns[findIndex].minWidth = previousColumns[findIndex].oldWidth + data.x
             if(findIndex === 2) {
-                setCompanyColWidth(previousColumns[findIndex].width)
+                //setCompanyColWidth(previousColumns[findIndex].width)
+                dispatch(setCompanyColWidth(previousColumns[findIndex].width))
             }
         }
         setHeaderColumns(previousColumns)
@@ -966,7 +978,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         if( findIndex !== -1 ) {
             previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width 
             if(findIndex === 2) {
-                setCompanyColWidth(previousColumns[findIndex].width)
+                //setCompanyColWidth(previousColumns[findIndex].width)
+                dispatch(setCompanyColWidth(previousColumns[findIndex].width))
             }
         }
         setHeaderColumns(previousColumns)

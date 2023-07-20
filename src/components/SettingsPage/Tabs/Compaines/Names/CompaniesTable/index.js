@@ -18,10 +18,11 @@ import PatenTrackApi from '../../../../../../api/patenTrack2'
 import { setCompanies } from '../../../../../../actions/patenTrackActions'
 
 function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
+  const item1 = !isNaN(Number(a[orderBy])) ? Number(a[orderBy]) : a[orderBy], item2 = !isNaN(Number(b[orderBy])) ? Number(b[orderBy]) : b[orderBy]
+  if (item2 < item1) {
     return -1
   }
-  if (b[orderBy] > a[orderBy]) {
+  if (item2 > item1) {
     return 1
   }
   return 0
