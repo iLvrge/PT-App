@@ -35,5 +35,6 @@ export default {
   familyLegalItemMode: false,
   sankeyFilterActive: false,
   viewIntro: false, 
-  firstBarSize: 250
+  firstBarSize: 250,
+  companyColWidth: 170
 }
