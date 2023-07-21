@@ -430,8 +430,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
   }, [ timelineItems ])
 
 
-  const getTimelineRawData = async(start, end) => {
-    console.log("selectedCategory", selectedCategory)
+  const getTimelineRawData = async(start, end) => { 
     let entered = true;
     if(['acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'inventing_transactions', 'litigation_transactions'].includes(selectedCategory) && assetTypesSelected.length == 0) {
       entered = false;
@@ -563,8 +562,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
     return () => (isSubscribed = false)
     
   }, [ selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, selectedAssetAssignments, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, search_string, assetTypeInventors, auth_token, switch_button_assets, selectedCategory, timelineRequest, timelineRequestData ])
-
-  console.log("Tap1")
+ 
 
   useEffect(() => {
     if(typeof timelineData !== 'undefined' && timelineData.length > 0) {
