@@ -1040,6 +1040,7 @@ const VirtualizedTable = ({
       onScrollTable(scrollTop)
     }
   }
+  
   return (
     <div ref={containerRef} className={classes.tableRootContainer}>
       <InfiniteLoader
@@ -1066,7 +1067,7 @@ const VirtualizedTable = ({
               }`}
               rowCount={items.length}
               /* {...(typeof scrollToIndex !== 'undefined' && scrollToIndex === true ? {scrollToIndex: getSelectedItemIndex} : {})}    */
-              scrollToIndex={ scrollToIndex === true ? getSelectedItemIndex : currentScrollIndex}                     
+              /* scrollToIndex={ scrollToIndex === true ? getSelectedItemIndex : currentScrollIndex}    */                
               {...tableProps}
               sortBy={sortBy}
               sortDirection={sortDirection}  

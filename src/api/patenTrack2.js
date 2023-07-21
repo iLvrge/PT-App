@@ -470,7 +470,7 @@ class PatenTrackApi {
       try{
         throw cancelCategoryProduct('Operation canceled by the user.')
       } catch (e){
-        console.log('cancelRequest->', e)
+        //console.log('cancelRequest->', e)
       }
     } 
   }
@@ -488,7 +488,7 @@ class PatenTrackApi {
       try{
         throw cancelDownloadURL('Operation canceled by the user.') 
       } catch (e){
-        console.log('cancelRequest->', e)
+        //console.log('cancelRequest->', e)
       }  
     } 
   }
@@ -535,7 +535,7 @@ class PatenTrackApi {
       try{
         throw cancelForeignAssetsSheet('Operation canceled by the user.') 
       } catch (e){
-        console.log('cancelRequest->', e)
+        //console.log('cancelRequest->', e)
       }  
     } 
   }
@@ -553,7 +553,7 @@ class PatenTrackApi {
       try{
         throw cancelForeignAssetsBySheet('Operation canceled by the user.') 
       } catch (e){
-        console.log('cancelRequest->', e)
+        //console.log('cancelRequest->', e)
       }  
     } 
   }
@@ -571,7 +571,7 @@ class PatenTrackApi {
       try{
         throw cancelForeignAssetTimeline('Operation canceled by the user.') 
       } catch (e){
-        console.log('cancelRequest->', e)
+        //console.log('cancelRequest->', e)
       }  
     } 
   }
@@ -680,7 +680,7 @@ class PatenTrackApi {
       try{
         throw cancelSummary('Operation canceled by the user.')
       } catch (e){
-        console.log('cancelRequest->', e)
+        //console.log('cancelRequest->', e)
       }
     } 
   }
@@ -794,7 +794,7 @@ class PatenTrackApi {
       try{
         throw cancelCollectionIllustration('Request cancelled for illustration.')
       } catch (e){
-        console.log('cancelRequest->', e)
+        //console.log('cancelRequest->', e)
       }
     } 
   }
@@ -824,7 +824,7 @@ class PatenTrackApi {
       try{
         throw cancelTimelineItem('Operation canceled by the user.')
       } catch (e){
-        console.log('cancelRequest->', e)
+        //console.log('cancelRequest->', e)
       }
     } 
   }
@@ -858,7 +858,7 @@ class PatenTrackApi {
       try {
         throw cancelTimelineActivity('Cancel timeline request')
       } catch (e){
-        console.log('cancelRequest->', e)
+        //console.log('cancelRequest->', e)
       } 
     } 
   }
