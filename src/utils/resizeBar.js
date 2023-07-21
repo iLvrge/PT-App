@@ -29,7 +29,8 @@ import { setAssetTypeAssignments,
     setLineChartReset,
     setSelectLawFirm,
     setSankeyAssigneeData,
-    setSankeyAssignorData
+    setSankeyAssignorData,
+    setTemplateDocument
    } from '../actions/patentTrackActions2'
   
    import {  
@@ -45,10 +46,7 @@ import { setAssetTypeAssignments,
     toggleLifeSpanMode,
     setSankeyFilterActive,
   } from '../actions/uiActions'
-
-
-
-
+ 
 
 export const updateResizerBar = (ref, bar, t = 0, defaultSize) => {
     if( ref.current != null ) {

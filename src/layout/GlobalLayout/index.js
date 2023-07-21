@@ -99,7 +99,7 @@ const GlobalLayout = (props) => {
     const [ driveBarSize, setDriveBarSize ] = useState('50%')
     const [ assignmentBarSize, setAssignmentBarSize ] = useState(180)  
     const [ addressBarSize, setAddressBarSize ] = useState(450)
-    const [ customerBarSize, setCustomerBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? 120 : 0)
+    const [ customerBarSize, setCustomerBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? 180 : 0)
     const [ commentBarSize , setCommentBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? '30%' : '0%')
     const [ illustrationBarSize , setIllustrationBarSize ] = useState('50%')
     const [ visualizerBarSize , setVisualizerBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? '40.1%' : '0%')
@@ -401,7 +401,7 @@ const GlobalLayout = (props) => {
                     setCustomerBarSize(180)
                 }
                 if(openAssignmentBar === true && assignmentBarSize === '100%') {
-                    setAssignmentBarSize(120)
+                    setAssignmentBarSize(180)
                 }
                 if ((openOtherPartyBar === true || openInventorBar === true) && otherPartyBarSize === '100%') {
                     setOtherPartyBarSize(120)
@@ -461,7 +461,7 @@ const GlobalLayout = (props) => {
             } else if(customerBarSize === '100%') {
                 setCustomerBarSize(180)
             } else if(assignmentBarSize === '100%') {
-                setAssignmentBarSize(120)
+                setAssignmentBarSize(180)
             } else if(otherPartyBarSize === '100%') {
                 setOtherPartyBarSize(120)
             } else if(typeBarSize === '100%') {
@@ -489,7 +489,7 @@ const GlobalLayout = (props) => {
             setAnalyticsBar(true)
             setCompanyBarSize(0) // company bar size
             setCustomerBarSize(180)
-            setAssignmentBarSize(120)
+            setAssignmentBarSize(180)
 
 
             dispatch(setConnectionBoxView( false ))
@@ -624,7 +624,17 @@ const GlobalLayout = (props) => {
                                         if(tableContainer !== null) {
                                             findChildContainer = tableContainer.querySelector('#child_companies')
                                             if(findChildContainer != null) {
-                                                findActiveRow = findChildContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')                            
+                                                findActiveRow = findChildContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')        
+                                                if(findActiveRow == null) {
+                                                    const childRows = findChildContainer.querySelectorAll('.ReactVirtualized__Table__row')
+                                                    if(childRows.length > 0) {
+                                                        findActiveRow = childRows[0]
+                                                        stepdown = 0
+                                                    } else {
+                                                        findActiveRow = findChildContainer.parentElement.previousElementSibling    
+                                                        findChildContainer = null 
+                                                    } 
+                                                }                        
                                             } else {
                                                 findActiveRow = tableContainer.querySelector('.ReactVirtualized__Table__row.Mui-selected')       
                                             }

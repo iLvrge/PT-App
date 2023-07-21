@@ -242,7 +242,7 @@ const AssetsTable = ({
           const explodeFindIndex = explodeHash[findIndex].split('=') 
           if(explodeFindIndex.length == 2) {  
             const findRowIndex = assetRows.findIndex( item =>  decodeURIComponent(explodeFindIndex[1]) ==  item.asset.toString()) 
-            if(findRowIndex >= 0 && !selectedAssetsPatents.includes(assetRows[findRowIndex].asset)) { 
+            if(findRowIndex >= 0 && !selectItems.includes(assetRows[findRowIndex].asset)) {  
               dispatch(setAssetTypesPatentsSelected([assetRows[findRowIndex].asset]))
               setSelectItems([assetRows[findRowIndex].asset])
               handleOnClick(assetRows[findRowIndex])
@@ -1744,7 +1744,8 @@ const updateTableColumn = (ratingItems) => {
     (e, row) => {
         e.preventDefault()
         const { checked } = e.target
-        let cntrlKey = e.ctrlKey ? e.ctrlKey : e.metaKey ? e.metaKey : undefined;
+        
+        let cntrlKey = e.ctrlKey ? e.ctrlKey : e.metaKey ? e.metaKey : undefined; 
         if(dashboardScreen === true) {
           dispatch(setTimelineScreen(true))
           dispatch(setDashboardScreen(false))
@@ -1755,8 +1756,9 @@ const updateTableColumn = (ratingItems) => {
             dispatch(setAssetTypesPatentsSelected([row.asset]))
             setSelectItems([row.asset])
             handleOnClick(row)
-          } else {
-            let oldSelection = [...selectItems], newItem = false
+          } else { 
+            oldSelection = [...selectItems]
+            let newItem = false
             if (!oldSelection.includes(row.asset)) {
               oldSelection.push(row.asset);
               newItem = true
@@ -1764,14 +1766,13 @@ const updateTableColumn = (ratingItems) => {
               oldSelection = oldSelection.filter(
                 asset => asset != row.asset,
               );
-            }
-            
+            } 
             dispatch(setAssetTypesPatentsSelected(oldSelection))
             setSelectItems(prevItems =>
                 prevItems.includes(row.asset)
                 ? prevItems.filter(item => item !== row.asset)
                 : [...prevItems, row.asset],
-            );  
+            );   
             if(oldSelection.length == 1) {
               if(newItem === true){
                 handleOnClick(row)
@@ -1825,7 +1826,7 @@ const updateTableColumn = (ratingItems) => {
           }                         
         }         
     },
-    [dispatch, dashboardScreen, selectedAssetsPatents, selectItems, currentSelection, dropOpenAsset],
+    [dispatch, dashboardScreen, selectedAssetsPatents, assetTypeAssignmentAssetsSelected, selectItems, currentSelection, dropOpenAsset],
   );
 
 
