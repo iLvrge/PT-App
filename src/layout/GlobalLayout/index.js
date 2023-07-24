@@ -175,6 +175,13 @@ const GlobalLayout = (props) => {
         return () => window.removeEventListener("resize", checkWidthBrowser)
     }, [])
 
+
+    useEffect(() => {
+        if(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') {
+            dispatch(setFirstBarSize(0))
+        }
+    }, [])
+
     /**
    * Get the Loggedin User Profile data
    */
