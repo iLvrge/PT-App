@@ -213,7 +213,7 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
           const explodeFindIndex = explodeHash[findIndex].split('=') 
           if(explodeFindIndex.length == 2) { 
             const findRowIndex = rows.findIndex( item =>  decodeURIComponent(explodeFindIndex[1]) ==  item.rf_id.toString()) 
-            if(findRowIndex >= 0) {
+            if(findRowIndex >= 0 && selectedAssetsTransactions.length == 0) {
               if(display_clipboard === false) {
                 dispatch( setMaintainenceAssetsList( {list: [], total_records: 0}, {append: false} ))
                 dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
