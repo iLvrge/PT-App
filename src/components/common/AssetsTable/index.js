@@ -55,7 +55,8 @@ import {
   setSelectedMaintainenceAssetsList,
   setAssetsIllustrationData,
   setFamilyLegalItem, 
-  setSocialMediaConnectPopup
+  setSocialMediaConnectPopup,
+  transactionRowClick
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -1808,6 +1809,7 @@ const updateTableColumn = (ratingItems) => {
                     handleOnClick(row)
                   } else {
                     clearSelections()
+                    checkTransactionRow()
                   }                  
                 }
             } else {
@@ -1820,6 +1822,7 @@ const updateTableColumn = (ratingItems) => {
                   handleOnClick(row)
                 } else {
                   clearSelections()
+                  checkTransactionRow()
                 }  
               }
             }
@@ -1829,6 +1832,14 @@ const updateTableColumn = (ratingItems) => {
     [dispatch, dashboardScreen, selectedAssetsPatents, assetTypeAssignmentAssetsSelected, selectItems, currentSelection, dropOpenAsset],
   );
 
+  const checkTransactionRow = () => {
+    if(selectedAssetAssignments.length > 0) {
+      const findTable = document.getElementById('assets_assignments')
+      if(findTable == null) {
+        dispatch(transactionRowClick(selectedAssetAssignments[0], slack_channel_list, false, ''))
+      }
+    }
+  }
 
   const clearSelections = () => {
     history.push({
