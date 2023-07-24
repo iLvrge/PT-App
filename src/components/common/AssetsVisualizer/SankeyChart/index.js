@@ -11,7 +11,6 @@ import FullScreen from '../../FullScreen';
 import LabelWithIcon from '../../LabelWithIcon';
 import TitleBar from '../../TitleBar';
 import { Box } from '@mui/system';
-import { consoleSandbox } from '@sentry/utils';
 
 
 const SankeyChart = (props) => {
@@ -54,7 +53,7 @@ const SankeyChart = (props) => {
     
     useEffect(() => {
         const getPartiesData = async() => { 
-            if(loading === false && selectedCompanies.length > 0 ) {    
+            if(loading === false && (selectedCompanies.length > 0 || process.env.REACT_APP_ENVIROMENT_MODE == 'SAMPLE')) {    
                 if((sankeyAssigneeData.length > 0 || sankeyAssignorData.length > 0) && typeof props.activeFullScreen != 'undefined' && props.activeFullScreen === true) {
                     if(sankeyAssigneeData.length > 0) { 
                         setAssigneeRawData(sankeyAssigneeData)
@@ -70,7 +69,7 @@ const SankeyChart = (props) => {
                     setAssignorRawData([])
                     const formData = new FormData()
                     formData.append('selectedCompanies', JSON.stringify(selectedCompanies)); 
-                    if(['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE)) {
+                    if(['PRO', 'KPI', 'SAMPLE'].includes(process.env.REACT_APP_ENVIROMENT_MODE)) {
                         const list = [];
                         let totalRecords = 0;
                 
