@@ -127,8 +127,18 @@ const AgentsVisualizer = (props) => {
         const getAssetsForEachCountry = async() => {
             try { 
                 if(line_chart_data[props.type].loading === false) { 
-                    if(selectedCompanies.length > 0 || (['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE) && assetsList.length > 0)) { 
-                        callChartData(assetsList, 0)
+                    if(selectedCompanies.length > 0 || (['PRO', 'KPI', 'SAMPLE'].includes(process.env.REACT_APP_ENVIROMENT_MODE) && assetsList.length > 0)) { 
+                        let list = [], totalRecords = 0
+                        if(assetsList.length > 0) {
+                            const promise = assetsList.map(asset => {
+                                if( asset.appno_doc_num != '' ) {
+                                    list.push(asset.appno_doc_num.toString())
+                                }                      
+                            })
+                            await Promise.all(promise)  
+                            totalRecords = list.length
+                        } 
+                        callChartData(list, totalRecords)
                     }
                 } 
             } catch(err) {
@@ -219,6 +229,7 @@ const AgentsVisualizer = (props) => {
             form.append('other_mode', display_sales_assets) 
             form.append('type', selectedCategory)
             form.append('data_type', props.type)
+            form.append('check', process.env.REACT_APP_ENVIROMENT_MODE == 'SAMPLE' ? 1 : 0)
             /* PatenTrackApi.cancelAgentsDataRequest() */
             const { data } = await PatenTrackApi.getAgentsData(form)
             setLoading(false)
