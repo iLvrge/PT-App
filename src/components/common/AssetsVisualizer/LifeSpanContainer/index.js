@@ -205,7 +205,7 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                         }
                     }                
                 } 
-                if( list.length > 0 || (['top_law_firms', 'late_recording', 'incorrect_recording', 'top_lenders', 'collaterlized', 'collateralization_transactions', 'incorrect_address', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'inventing_transactions', 'litigation_transactions'].includes(selectedCategory))) {
+                if( list.length > 0 || (['top_law_firms', 'late_recording', 'incorrect_recording', 'top_lenders', 'collaterlized', 'collateralization_transactions', 'incorrect_address', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'inventing_transactions', 'litigation_transactions', 'due_dilligence'].includes(selectedCategory))) {
                     setFilterList(list)
                     const form = new FormData()
                     form.append("list", JSON.stringify(list)) 
