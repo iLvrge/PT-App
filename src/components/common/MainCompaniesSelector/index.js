@@ -77,10 +77,15 @@ import {
 import ChildTable from './ChildTable'
 
 import Loader from '../Loader'
-
-
+ 
 
 const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag, parentBar, isMobile, checkChartAnalytics}) => {
+    
+    const classes = useStyles()
+    const dispatch = useDispatch()
+    const history = useHistory()
+    const location = useLocation()
+    const profile = useSelector(store => (store.patenTrack.profile))
     const COLUMNS = [
         {
             width: 10,
@@ -112,7 +117,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             minWidth: 170,
             oldWidth: 170,
             draggable: true,
-            label: 'Companies',        
+            label: (profile?.user && profile.user?.organisation && (profile.user.organisation.organisation_type == 'Bank' || profile.user.organisation.organisation_type == 'Lawfirm')) ? 'Clients' : 'Companies',        
             dataKey: 'original_name',
             /* classCol: 'font12Rem', */
             showOnCondition: '0',
@@ -196,10 +201,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             justifyContent: 'flex-end'
         } */
     ] 
-    const classes = useStyles()
-    const dispatch = useDispatch()
-    const history = useHistory()
-    const location = useLocation()
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)
     const [childHeight, setChildHeight] = useState(500)
     const [childSelected, setCheckedSelected] = useState(0)
