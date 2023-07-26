@@ -791,8 +791,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const findCPCList = async(oldScopeRange, list, totalRecords, year, range, scope) => {   
         if(selectedCompanies.length > 0 || (process.env.REACT_APP_ENVIROMENT_MODE != 'PRO' && list.length > 0)) {
             const form = new FormData()
-            form.append("list", JSON.stringify(list))
-            form.append("total", totalRecords)
+            form.append("list", typeof side != 'undefined' && side === true ? [] : JSON.stringify(list))
+            form.append("total", typeof side != 'undefined' && side === true ? 0 : totalRecords)
             form.append('selectedCompanies', JSON.stringify(selectedCompanies))
             form.append('tabs', JSON.stringify(assetTypesSelectAll === true ? [] : assetTypesSelected))
             form.append('customers', JSON.stringify( selectedAssetCompanies))
@@ -801,6 +801,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             form.append('other_mode', display_sales_assets)
             form.append('type', typeof side != 'undefined' && side === true ? 'assigned' : selectedCategory)
             form.append('data_type', dashboardScreen === true ? 1 : 0)
+            form.append('check', process.env.REACT_APP_ENVIROMENT_MODE == 'SAMPLE' ? 1 : 0)
             if(typeof top != 'undefined') {
                 form.append('primary', 1)
             }
