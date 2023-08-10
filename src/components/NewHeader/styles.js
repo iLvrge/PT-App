@@ -140,14 +140,9 @@ export default makeStyles(theme => ({
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-<<<<<<< HEAD
-        minWidth: 475,
-        display: 'flex',   
-=======
         /* minWidth: 475,  */
         minWidth: 350, 
         display: 'flex',
->>>>>>> f6ea63aa8c4c6d946eb050dd13d7bfcd09fec0a3
         flexGrow: 1,
         alignItems: 'center',
         justifyContent: 'center',
