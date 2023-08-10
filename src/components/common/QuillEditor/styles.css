@@ -42,6 +42,7 @@
   padding: 4px;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
 }
 .ql-snow.ql-toolbar button svg, #toolbar button svg{
   stroke: none;
