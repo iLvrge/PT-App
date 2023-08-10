@@ -44,7 +44,6 @@ export default makeStyles(theme => ({
         /* marginRight: 'auto', */
         '& span':{
             textTransform:'uppercase',
-            marginLeft: 24
         }
     },
     headerClassAction1: {
@@ -79,10 +78,10 @@ export default makeStyles(theme => ({
         display: 'flex',
         alignItems: 'center',
         /* width: '14rem',  */
-        justifyContent: 'flex-start', 
+        justifyContent: 'space-evenly', 
         /* cursor: 'pointer', */
         overflow: 'hidden',
-        minWidth: 150,
+        minWidth: 150, 
         '@media (max-width: 70em)': {
         //paddingLeft: 15
         },
@@ -99,7 +98,11 @@ export default makeStyles(theme => ({
     logoContainer: {
         width: 260,
         display: 'flex',
-        maxWidth: 260
+        maxWidth: 260,
+        '@media (max-width: 1440px)': {
+            maxWidth: 170,
+            width: 170,
+        },
     },
     siteLogo: {
         /* width: LOGO_WIDTH,
@@ -108,6 +111,9 @@ export default makeStyles(theme => ({
         height: '3.1rem',
         marginRight: 15,
         fill: theme.palette.text.primary,
+        '@media (max-width: 1440px)': {
+            height: '2.5rem',
+        },
     }, 
     siteLogoLight:{
         height: '2rem',
@@ -121,7 +127,10 @@ export default makeStyles(theme => ({
     },
     userLogoOfficial: {
         height: '2.5rem', /*28px */
-        marginRight: 15
+        /* marginRight: 15 */
+        '@media (max-width: 1440px)': {
+            height: '2rem',
+        },
     }, 
     organizationName: {
         marginLeft: 5,
@@ -131,12 +140,19 @@ export default makeStyles(theme => ({
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
+<<<<<<< HEAD
         minWidth: 475,
         display: 'flex',   
+=======
+        /* minWidth: 475,  */
+        minWidth: 350, 
+        display: 'flex',
+>>>>>>> f6ea63aa8c4c6d946eb050dd13d7bfcd09fec0a3
         flexGrow: 1,
         alignItems: 'center',
-        justifyContent: 'flex-start'
+        justifyContent: 'center',
         /* textAlign: 'right' */
+        marginLeft: 10
     },
     toolbar: {
         padding: 0,
@@ -169,6 +185,7 @@ export default makeStyles(theme => ({
         alignItems: 'center',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
+        minWidth: 320,
         maxWidth: 465,
         '& .MuiBadge-anchorOriginTopRightRectangular': {
             transform: 'scale(1) translate(27%, 0%)',
@@ -179,7 +196,10 @@ export default makeStyles(theme => ({
         '& .MuiBadge-anchorOriginTopRightRectangular.MuiBadge-invisible': {
             transform: 'scale(0) translate(50%, -50%)'
         },
-        minWidth: 150
+        '& .MuiAvatar-root':{
+            width: 30,
+            height: 30
+        }
     },
     breadcrumbs: {
         display: 'flex',
@@ -631,7 +651,7 @@ export default makeStyles(theme => ({
             width: '1rem !important',
             height: '1rem !important'
         } */
-        margin: '0 5px',
+        margin: '0 3px',
         color: theme.palette.text.disabled,
         '& svg' : {
           fill: theme.palette.text.disabled, 

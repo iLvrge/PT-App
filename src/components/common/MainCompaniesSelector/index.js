@@ -46,6 +46,7 @@ import {
     setCPCSecondData,
     setLineChartReset,
     setSelectLawFirm,
+    setAbandonedYearsRequest,
 } from '../../../actions/patentTrackActions2'
 
 
@@ -705,6 +706,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         dispatch(setSelectAssignmentCustomers([]))
         dispatch(setAllAssignmentCustomers(false))
         dispatch(setSankeyFilterActive(false))
+        dispatch(setAbandonedYearsRequest(false))
         dispatch(setSelectLawFirm(0))
         dispatch(setLineChartReset())
     }
