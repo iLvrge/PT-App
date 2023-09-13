@@ -456,7 +456,7 @@ const AssetDetailsContainer = ({
                           type={type} 
                           titleBar={true}
                           tab={true}
-                          side={true}
+                          /* side={true} */
                         />
                       :
                       timelineScreen === true  && assetIllustration == null && (['late_recording', 'incorrect_recording', 'top_lenders', 'collateralization_transactions'].includes(selectedCategory))
