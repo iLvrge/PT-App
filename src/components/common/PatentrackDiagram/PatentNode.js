@@ -22,8 +22,8 @@ class PatentNode extends React.Component {
     let dy =
       this.props.node.topOffset +
       this.props.data.y * (this.props.node.height + this.props.node.gap.y);
-    let offsetX = '0.6rem';
-    let datesOffsetX = '2.2rem';
+    let offsetX = '9.6px'; /**0.6rem */
+    let datesOffsetX = '35.2px'; /**2.2rem */
 
     //set CSS classes for filters and playback
     let assignment_no = Array.from(
@@ -86,7 +86,7 @@ class PatentNode extends React.Component {
 
     g.append('text')
       .attr('dx', offsetX)
-      .attr('dy', '1.1rem')
+      .attr('dy', '17.6px')/**1.1rem */
       .attr('font-size', this.props.node.headerSize)
       .attr('font-weight', this.props.node.fontWeight)
       .attr('fill', this.props.data.typeID.type == "inventors" ? this.props.node.inventor.fontColor : this.props.node.fontColor)
@@ -192,7 +192,7 @@ class PatentNode extends React.Component {
     if (this.props.data.type < 3) {
       g.append('text')
         .attr('dx', datesOffsetX)
-        .attr('dy', '3.05rem')
+        .attr('dy', '48.8px') /**3.05rem */
         .attr('font-size', this.props.node.datesSize)
         .attr('fill', this.props.data.typeID.type == "inventors" ? this.props.node.inventor.fontColor : this.props.node.fontColor)
         .html(

@@ -241,6 +241,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const companyTableScrollPosition = useSelector(
         state => state.patenTrack2.companyTableScrollPosition,
     );
+
+ 
     /**
      * Intialise company list
     */
@@ -258,10 +260,9 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     /**
      * Set Total companies
      */
-
     useEffect(() => {
         setCompaniesList( companies.list )
-        let counter = 0, items = [];
+        let counter = 0
 
         if(companies.list.length > 0) {
             companies.list.map(row => {
