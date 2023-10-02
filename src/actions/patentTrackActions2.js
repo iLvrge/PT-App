@@ -468,10 +468,10 @@ export const retrievePDFFromServer = (item) => {
 export const fetchParentCompanies = ( offset = 0, sortFiled = 'original_ompany', sortorder = 'ASC' ) => {
   return async dispatch => {
     dispatch(setMainCompaniesLoadingMore(true))
-    const { data } = await PatenTrackApi.getParentCompanies(offset, sortFiled, sortorder)
+    const { data } = await PatenTrackApi.getParentCompanies(offset, sortFiled, sortorder) 
     //dispatch(getChannels())
     dispatch(setMainCompaniesLoadingMore(false))
-    dispatch(setMainCompanies(data, { append: true }))
+    dispatch(setMainCompanies(data, { append: false }))
   }
 }
 

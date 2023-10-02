@@ -342,7 +342,7 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         mainCompaniesList:  Object.assign({}, {
           ...state.mainCompaniesList,
           ['list']: action.data.list,
-          ['total_records']: action.total_records
+          ['total_records']: action.data.total_records
         })
       }
     case types.SET_MAIN_COMPANIES_SELECTED: 

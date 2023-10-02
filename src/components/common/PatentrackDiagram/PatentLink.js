@@ -64,7 +64,14 @@ class PatentLink extends React.Component {
         );
       })
       .attr('visibility', 'visible');
-
+      /**
+       * dx = 0rem
+       * dy = 1.1rem
+       * dx = -2.9rem
+       * dy = 1.1rem
+       * dx = -8.2rem
+       * dy = 1.1rem
+       */
     //backkground hitarea
     g.append('path')
       .attr('d', this.path)
@@ -80,9 +87,9 @@ class PatentLink extends React.Component {
           .attr("id", "dummy")
           .attr("font-size", this.props.config.link.tooltip.fontSize)
           /* .text(data.category); */
-          .html("<tspan dx='0rem' dy='1.1rem'>"+ this.props.data.category + "</tspan><tspan dx='-2.9rem' dy='1.1rem'>Execution: " +
+          .html("<tspan dx='0rem' dy='17.6px'>"+ this.props.data.category + "</tspan><tspan dx='-46.4px' dy='17.6px'>Execution: " +
                   this.dateFormat(new Date(this.props.data.line.date)) +
-                  '</tspan><tspan dx="-8.2rem" dy="1.1rem">' +
+                  '</tspan><tspan dx="-131.2px" dy="17.6px">' +
                   "Recorded: " +
                   this.dateFormat(new Date(this.props.data.line.recorded)) +
                   "</tspan>",
@@ -110,11 +117,11 @@ class PatentLink extends React.Component {
               this.props.data.category.slice(1).replace(" ", "")
           ])
           .attr("fill-opacity", this.props.config.node.opacity);
-        let offsetX = "0.6rem";
+        let offsetX = "7.6px"; /**0.6rem */
 
         gtooltip.append("text")
           .attr("dx", offsetX)
-          .attr("dy", "1.1rem")
+          .attr("dy", "17.6px")/**1.1rem */
           .attr("class", "link-tooltip")   
           .attr("fill", '#fff')       
           .attr("font-size", this.props.config.link.tooltip.fontSize)
@@ -122,7 +129,7 @@ class PatentLink extends React.Component {
           .text(this.props.data.category) 
         gtooltip.append("text")
           .attr("dx", offsetX)
-          .attr("dy", "3.05rem")
+          .attr("dy", "40.8px")/**3.05rem */
           .attr("class", "link-tooltip")   
           .attr("font-size", this.props.config.link.tooltip.fontSize)
           .attr("fill", '#fff')       
@@ -131,7 +138,7 @@ class PatentLink extends React.Component {
               this.dateFormat(new Date(this.props.data.line.date)) +
                   '</tspan><tspan x="' +
                   offsetX +
-                  '" dy="1.1rem">' +
+                  '" dy="17.6px">' +
                   "Recorded: " +
                   this.dateFormat(new Date(this.props.data.line.recorded)) +
                   "</tspan>"
