@@ -29,6 +29,7 @@ import clsx from 'clsx'
 import PatenTrackApi from '../../api/patenTrack2'
 import { useReloadLayout } from '../../utils/useReloadLayout';  
 import { setFirstBarSize } from '../../actions/uiActions';
+import CustomerTable from '../common/CustomerTable';
 
 
 
@@ -73,10 +74,10 @@ const MainDashboard = ({
     const [ gap, setGap ] = useState( { x: '14.1rem', y: '7.5rem'} )
     const [ isDragging, setIsDragging] = useState(false) 
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false) 
-    const companies = useSelector( state => state.patenTrack2.mainCompaniesList.list) 
     const firstBarSize = useSelector(state => state.ui.firstBarSize) 
     const channel_id = useSelector( state => state.patenTrack2.channel_id )    
     const auth_token = useSelector(state => state.patenTrack2.auth_token) 
+    const profile = useSelector(store => (store.patenTrack.profile))
      
 
     useEffect(() => {
@@ -84,9 +85,7 @@ const MainDashboard = ({
             checkPageLoad(0)
         }
     }, [])
-
     
-
     /* useEffect(() => {
         if(['DASHBOARD', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE) && auth_token !== null) {
             let url = location.pathname
@@ -120,8 +119,7 @@ const MainDashboard = ({
       
     useEffect(() => {
         updateResizerBar(companyRef, openBar)
-    }, [ companyRef, openBar ]) 
-
+    }, [ companyRef, openBar ])  
  
     return (
         <SplitPane
@@ -140,19 +138,30 @@ const MainDashboard = ({
                 id={`company_container`} >
                 { 
                     openBar === true 
-                    ? 
-                        <MainCompaniesSelector 
-                            selectAll={false} 
-                            defaultSelect={''} 
-                            addUrl={true} 
-                            parentBarDrag={setVisualizerBarSize}
-                            parentBar={setVisualizeOpenBar} 
-                            checkChartAnalytics={checkChartAnalytics}                               
-                        /> 
+                    ?  
+                        (profile?.user && profile.user?.organisation && profile.user.organisation.organisation_type == 'Bank' && type != 9)
+                        ?
+                            <CustomerTable 
+                                standalone={true}
+                                parentBarDrag={setVisualizerBarSize}
+                                parentBar={setVisualizeOpenBar}
+                                type={type}
+                                customerType={0}
+                            /> 
+                        : 
+                            <MainCompaniesSelector 
+                                selectAll={false} 
+                                defaultSelect={''} 
+                                addUrl={true} 
+                                parentBarDrag={setVisualizerBarSize}
+                                parentBar={setVisualizeOpenBar} 
+                                checkChartAnalytics={checkChartAnalytics}                               
+                            /> 
                     : 
-                    ''
+                        
+                        ''
                 }
-            </div>
+            </div> 
             <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}} >
                 <IllustrationCommentContainer 
                     cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPane1OverflowUnset, classes.paneHeightZero, { [classes.minimized]: assetsCommentsTimelineMinimized })}
