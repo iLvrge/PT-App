@@ -945,7 +945,7 @@ const handleOpenSettings = useCallback((event) => {
                 onKeyDown={(event) => { toggleDrawer(event, false)}} 
                 className={classes.rightMenu}
               >
-                
+                <div className={clsx(classes.flexDrawer, 'drawerContainer')}>
                 <List component='nav'>
                   {
                     process.env.REACT_APP_ENVIROMENT_MODE == 'PRO' && ( 
@@ -1059,6 +1059,10 @@ const handleOpenSettings = useCallback((event) => {
                     :
                     ''
                   }
+                  </List>
+                  </div>
+                  <div className={clsx(classes.flexDrawer, 'drawerContainer')}>
+                  <List component='nav'>
                   {/* <ListItem button onClick={onHandleForeignAssets}>
                     <ListItemIcon  color='inherit' >
                       <svg width="18" height="18" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="file-import" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" ><path fill="currentColor" d="M16 288c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h112v-64zm489-183L407.1 7c-4.5-4.5-10.6-7-17-7H384v128h128v-6.1c0-6.3-2.5-12.4-7-16.9zm-153 31V0H152c-13.3 0-24 10.7-24 24v264h128v-65.2c0-14.3 17.3-21.4 27.4-11.3L379 308c6.6 6.7 6.6 17.4 0 24l-95.7 96.4c-10.1 10.1-27.4 3-27.4-11.3V352H128v136c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H376c-13.2 0-24-10.8-24-24z" class=""></path></svg>
@@ -1069,8 +1073,8 @@ const handleOpenSettings = useCallback((event) => {
                     process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' 
                     ?
                       <Box className={classes.settingsContainer}>
-                        <Box style={{position: 'absolute', bottom: 0}}>
-                          <ListItem className={`children`} button style={{marginTop: 50}}>
+                        {/* <Box style={{position: 'absolute', bottom: 0}}> */}
+                          <ListItem className={`children`} button style={{marginTop: 25}}>
                             <ListItemIcon aria-label='Account Scope' color='inherit' className={`children`}>
                                 <BusinessIcon className={`children`}/>
                             </ListItemIcon>
@@ -1078,12 +1082,13 @@ const handleOpenSettings = useCallback((event) => {
                           </ListItem>   
                           <Divider />   
                           <CompanySummary />
-                        </Box>
+                        {/* </Box> */}
                       </Box>
                     :
                     ''
-                  }
-                </List>    
+                  } 
+                  </List>
+                  </div>
               </div>
             </Drawer>
         </div>
