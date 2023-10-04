@@ -139,28 +139,26 @@ const MainDashboard = ({
                 { 
                     openBar === true 
                     ?  
-                        <MainCompaniesSelector 
-                            selectAll={false} 
-                            defaultSelect={''} 
-                            addUrl={true} 
-                            parentBarDrag={setVisualizerBarSize}
-                            parentBar={setVisualizeOpenBar} 
-                            checkChartAnalytics={checkChartAnalytics}                               
-                        /> 
-
-                    : 
                         (profile?.user && profile.user?.organisation && profile.user.organisation.organisation_type == 'Bank' && type != 9)
                         ?
-                            <div id={`parties_container`}  style={{ height: '100%', width: '99%'}}>
-                                <CustomerTable 
-                                    standalone={true}
-                                    parentBarDrag={setVisualizerBarSize}
-                                    parentBar={setVisualizeOpenBar}
-                                    type={type}
-                                    customerType={0}
-                                /> 
-                            </div>
+                            <CustomerTable 
+                                standalone={true}
+                                parentBarDrag={setVisualizerBarSize}
+                                parentBar={setVisualizeOpenBar}
+                                type={type}
+                                customerType={0}
+                            /> 
                         : 
+                            <MainCompaniesSelector 
+                                selectAll={false} 
+                                defaultSelect={''} 
+                                addUrl={true} 
+                                parentBarDrag={setVisualizerBarSize}
+                                parentBar={setVisualizeOpenBar} 
+                                checkChartAnalytics={checkChartAnalytics}                               
+                            /> 
+                    : 
+                        
                         ''
                 }
             </div> 

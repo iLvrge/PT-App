@@ -128,8 +128,7 @@ const GlobalLayout = (props) => {
 
     const search_string = useSelector(state => state.patenTrack2.search_string)
     const driveTemplateFrameMode = useSelector(state => state.ui.driveTemplateFrameMode)
-    const driveTemplateMode = useSelector(state => state.ui.driveTemplateMode)
-
+    const driveTemplateMode = useSelector(state => state.ui.driveTemplateMode) 
     const usptoMode = useSelector(state => state.ui.usptoMode)
     const familyMode = useSelector(state => state.ui.familyMode)
     const familyItemMode = useSelector(state => state.ui.familyItemMode)
@@ -238,7 +237,9 @@ const GlobalLayout = (props) => {
         if(profile?.user && profile.user?.organisation) {
             if(profile.user.organisation.organisation_type == 'Bank' && props.type != 9) {
                 dispatch( setAssetTypesSelect([5, 81]) ) // always select by default lending activity
-                setOpenBar( false ) //company
+                if(dashboardScreen === false) { 
+                    setOpenBar( false ) //company
+                }
                 setTypeOpenBar( false ) //activites
                 setCustomerOpenBar( false ) //assets
                 setCompanyBarSize(0) //company container

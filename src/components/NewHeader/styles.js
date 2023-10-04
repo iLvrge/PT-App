@@ -244,6 +244,9 @@ export default makeStyles(theme => ({
         },
         '& .MuiListItemIcon-root':{
             minWidth: 35
+        },
+        '& .drawerContainer > div:not(:only-child):last-of-type':{
+            marginTop: 'auto'
         }
     },
     childMenu:{
@@ -697,5 +700,10 @@ export default makeStyles(theme => ({
         display: 'flex',
         minHeight: 425, 
         flexDirection: 'column'
+    },
+    flexDrawer: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center'
     }
 }))
