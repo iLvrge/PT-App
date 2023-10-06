@@ -154,7 +154,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
         if(standalone) {            
             const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
                 tabs = assetTypesSelectAll === true ? [] : assetTypesSelected
-            if(selectedCompaniesAll === true || selectedCompanies.length > 0) {
+            if((selectedCompaniesAll === true || selectedCompanies.length > 0) || dashboardScreen === true) {
                 dispatch(
                     getCustomerParties(
                         selectedCategory == '' ? '' : selectedCategory,
