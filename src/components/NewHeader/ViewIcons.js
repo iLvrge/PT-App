@@ -302,8 +302,8 @@ const ViewIcons = (props) => {
             <Maintainance/>
             <div className={`step-2`}>
             {
-                profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'
-                && (
+                profile?.user?.organisation?.organisation_type && /* profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'
+                && */ (
                     <AddToolTip
                         tooltip={'Key Performance Indicators such as the number of patents owned by the company.'}
                         placement='bottom'
@@ -359,8 +359,8 @@ const ViewIcons = (props) => {
             </AddToolTip>
             </div>
             {
-                profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'
-                && (
+                profile?.user?.organisation?.organisation_type && /* profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'
+                && */ (
                     <React.Fragment>
                         {/* <AddToolTip
                             tooltip={'Technologies covered by the patent portfolio as they evolved.'}

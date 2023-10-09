@@ -961,8 +961,8 @@ const handleOpenSettings = useCallback((event) => {
                   
                   
                   {
-                profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'
-                && (
+                profile?.user?.organisation?.organisation_type && /* profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'
+                && */ (
                     <React.Fragment>
                       <AddToolTip
                         tooltip={'Share Dashboard/Transactions/Assets'}
