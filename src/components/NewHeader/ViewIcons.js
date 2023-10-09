@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {  
     useHistory,
@@ -8,15 +8,10 @@ import { setAssetButton, setTransactionButton, setViewDashboardIntial, updateVie
 import useStyles from './styles'
 import clsx from 'clsx'
 import AddToolTip from '../Reports/AddToolTip'
-import { IconButton, Badge} from '@mui/material'
-import { AppsOutage, Speed, ViewTimeline, SupportAgent, ManageSearch } from '@mui/icons-material' 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {
-  faShareAlt
-} from "@fortawesome/free-solid-svg-icons"
+import { IconButton} from '@mui/material'
+import { AppsOutage, Speed, ViewTimeline, SupportAgent } from '@mui/icons-material' 
 import { setCPCRequest, setJurisdictionRequest, setTimelineData, setTimelineRequest } from '../../actions/patentTrackActions2'
-import PatenTrackApi from '../../api/patenTrack2'
-import { copyToClipboard } from '../../utils/html_encode_decode' 
+
 import Maintainance from '../common/Maintainence'
 
 const ViewIcons = (props) => {
@@ -28,20 +23,8 @@ const ViewIcons = (props) => {
     const [patentView, setPatentView] = useState(false)
     const [openSearch, setOpenSearch] = useState(false) 
     const profile = useSelector(state => (state.patenTrack.profile))  
-    const viewDashboard = useSelector(state => state.ui.viewDashboard) 
-    const assetButton = useSelector(state => state.ui.assetButton) 
-    const transactionButton = useSelector(state => state.ui.transactionButton) 
-    const loadingDashboardData = useSelector( state => state.ui.loadingDashboardData);
-    const category = useSelector(state => state.patenTrack2.selectedCategory)
-    const maintainencePatentsList = useSelector(state => state.patenTrack2.maintainenceAssetsList.list)
-    const mainCompaniesSelected = useSelector(state => state.patenTrack2.mainCompaniesList.selected)
-    const assetTypeAssignmentAssetsList = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list)
-    const selectedAssetsTransactions = useSelector(state => state.patenTrack2.assetTypeAssignments.selected)
-    const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
-    const assetTypeAssignmentAssetsSelected = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.selected)
-    const selectedAssetCompanies = useSelector(state => state.patenTrack2.assetTypeCompanies.selected);
-    const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected);
-    const SHARE_URL_MESSAGE = 'A sharing URL was added to your clipboard.'
+    const viewDashboard = useSelector(state => state.ui.viewDashboard)  
+    const loadingDashboardData = useSelector( state => state.ui.loadingDashboardData); 
     const path = location.pathname
  
 
@@ -220,85 +203,13 @@ const ViewIcons = (props) => {
         setOpenSearch(!openSearch)
     }
 
-    const shareDashboard = async() => {
-        /**
-         * get selected companies and selected transaction types
-         * and create shareable dashboard url
-         */ 
-        if(mainCompaniesSelected.length > 0) {
-            const formData = new FormData()
-            formData.append('selectedCompanies', JSON.stringify(mainCompaniesSelected));
-            formData.append('tabs', profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? 5 : JSON.stringify(assetTypesSelected));
-            formData.append('customers', JSON.stringify(selectedAssetCompanies));
-            formData.append('share_button', viewDashboard.kpi === true ? 1 : viewDashboard.gauge === true ? 2 : 0);
-            const {data} = await PatenTrackApi.shareDashboard(formData)
-            if( data !== null){
-                copyToClipboard(data, SHARE_URL_MESSAGE)
-            }
-        } else {
-            alert("Please select a company first")
-        }
-    }
-
-    const onShare = useCallback(async () => {
-        if (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'){
-            alert('Message..')
-        } else {
-            if(props.dashboardScreen === true) { 
-                shareDashboard()
-            } else {
-                let selectAssetsList = [], selectedTransactions = []
-    
-                let list = maintainencePatentsList.length > 0 ? [...maintainencePatentsList] : [...assetTypeAssignmentAssetsList]
-        
-                let selectedItems = selectedMaintainencePatents.length > 0 ? [...selectedMaintainencePatents] : [...assetTypeAssignmentAssetsSelected]
-        
-                if(selectedItems.length > 0) {
-                    selectedItems.forEach( item => {
-                        const findIndex = list.findIndex( row => row.asset == item)
-                        if(findIndex !== -1) {
-                        selectAssetsList.push({asset: item, flag: list[findIndex].grant_doc_num !== '' && list[findIndex].grant_doc_num !== null ? 4 : 5})
-                        }
-                    }) 
-                } else {
-                    selectedTransactions = [...selectedAssetsTransactions]
-                }
-                if( selectedTransactions.length == 0 &&  selectAssetsList.length == 0 ) {
-                    alert(`Please select one or more ${props.timelineScreen === true ? 'transactions' : 'assets'} to share`)
-                } else {
-                    // Share list of assets and create share link 
-                    let form = new FormData()
-                    form.append('assets', JSON.stringify(selectAssetsList))
-                    form.append('transactions', JSON.stringify(selectedTransactions))
-                    form.append('type', 2)      
-                    const {data} = await PatenTrackApi.shareIllustration(form)
-                    if (data.indexOf('sample') >= 0) {
-                        /**
-                         * just for temporary replacing
-                         * open share url new tab
-                         */
-                        //const shareURL = data.replace('https://share.patentrack.com','http://167.172.195.92:3000')
-                        
-                        /* if(window.confirm("Copy a sharing link to your clipboard.")){
-                            copy(data)
-                        } */
-                        if( data !== null){
-                            copyToClipboard(data, SHARE_URL_MESSAGE)
-                        }
-                        //window.open(data,'_BLANK')
-                    } 
-                }
-            }
-        }        
-    }, [ dispatch, category, mainCompaniesSelected, selectedMaintainencePatents, assetTypeAssignmentAssetsSelected, selectedAssetsTransactions ])
-
     const onHandleAlert = () => {
         alert('Please activate your account.')
     }
      
     return(
         <React.Fragment>
-            {/* <Button onClick={getUnCollatealized}>Uncollateralized</Button> */}
+           {/*  <Button onClick={getUnCollatealized}>Uncollateralized</Button> */}
             <Maintainance/>
             <div className={`step-2`}>
             {
@@ -310,7 +221,7 @@ const ViewIcons = (props) => {
                     > 
                             <IconButton 
                                 size="small"
-                                className={clsx(classes.actionIcon, {[classes.active]: props.dashboardScreen === true && viewDashboard.kpi})}
+                                className={clsx(classes.actionIcon, classes.actionIconDashboard, {[classes.active]: props.dashboardScreen === true && viewDashboard.kpi})}
                                 onClick={() => ['STANDARD', 'SAMPLE', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert() :  onHandleKPI()}
                                 disabled={loadingDashboardData}
                             >
@@ -326,7 +237,7 @@ const ViewIcons = (props) => {
             > 
                     <IconButton 
                         size="small"
-                        className={clsx(classes.actionIcon, {[classes.active]:  props.dashboardScreen === true && !viewDashboard.line && viewDashboard.jurisdictions == false && viewDashboard.invention === false && viewDashboard.sankey === false && viewDashboard.kpi === false && viewDashboard.timeline === false})}
+                        className={clsx(classes.actionIcon, classes.actionIconDashboard, {[classes.active]:  props.dashboardScreen === true && !viewDashboard.line && viewDashboard.jurisdictions == false && viewDashboard.invention === false && viewDashboard.sankey === false && viewDashboard.kpi === false && viewDashboard.timeline === false})}
                         onClick={() => ['STANDARD', 'SAMPLE', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert() :  changeGraph(false)}
                         disabled={loadingDashboardData}
                     >
@@ -340,7 +251,7 @@ const ViewIcons = (props) => {
                 <IconButton 
                     size="small"
                     className={clsx(classes.actionIcon, {[classes.active]: props.dashboardScreen === true && viewDashboard.line && viewDashboard.jurisdictions == false && viewDashboard.invention === false && viewDashboard.sankey === false && viewDashboard.kpi === false && viewDashboard.timeline === false})}
-                    onClick={() => ['STANDARD', 'SAMPLE', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert() : changeGraph(true)}
+                    onClick={() => process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert() : changeGraph(true)}
                 >
                     <AutoGraph/>
                 </IconButton> 
@@ -351,14 +262,14 @@ const ViewIcons = (props) => {
             >
                 <IconButton 
                     size="small"
-                    className={clsx(classes.actionIcon, {[classes.active]: props.dashboardScreen === true && viewDashboard.timeline})}
-                    onClick={ ['STANDARD', 'SAMPLE', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert : onHandleTimeline}
+                    className={clsx(classes.actionIcon, classes.actionIconDashboard, {[classes.active]: props.dashboardScreen === true && viewDashboard.timeline})}
+                    onClick={ ['STANDARD', 'SAMPLE', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE)  ? onHandleAlert : onHandleTimeline}
                 >
                     <ViewTimeline/>
                 </IconButton> 
-            </AddToolTip>
+            </AddToolTip>  
             </div>
-            {
+            { 
                 profile?.user?.organisation?.organisation_type && /* profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'
                 && */ (
                     <React.Fragment>
@@ -468,10 +379,9 @@ const ViewIcons = (props) => {
                                <SupportAgent/>
                             </IconButton>
                         </AddToolTip> 
-                    </React.Fragment>
                 )
             } 
-        </React.Fragment> 
+        </React.Fragment>
     )
 
 }

@@ -8,7 +8,7 @@ const arrayToObjectByKey = (array, key) =>
   array.reduce((result, item) => {
     result[item[key]] = item
     return result
-  }, {})
+  }, {}) 
 
 const patenTrackReducer = (state = initialState.dashboard, action) => { 
   switch (action.type) {

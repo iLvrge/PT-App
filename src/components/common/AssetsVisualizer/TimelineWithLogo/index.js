@@ -277,7 +277,7 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
                   case 12:
                     image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
                     color = '#00a9e6'
-                    break;
+                    break; 
                   case 13:
                     image =  'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png'
                     color = '#00a9e6'

@@ -85,13 +85,13 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
 
     useEffect(() => {
         if(selectedCategory == 'proliferate_inventors') {
-            setChartTabs(['Owned', 'Location'])
+            setChartTabs(['Owned', 'Location']) 
         } else {
             if(chartTabs.length > 1 && selectedCategory != 'assigned'  && selectedCategory != 'divested' ) {
                 const oldTabs = [...chartTabs]
                 oldTabs[0] = 'Owned'
                 setChartTabs(oldTabs)
-            }
+            } 
         }
     }, [selectedCategory ])
  
