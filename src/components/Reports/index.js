@@ -574,7 +574,7 @@ const Reports = (props) => {
     const [activeId, setActiveId] = useState(-1)
     const profile = useSelector(state => (state.patenTrack.profile))    
     const [cardList, setCardList] = useState([])
-    const [timelineList, setTimelineList] = useState(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_TIMELINE_LIST : TIMELINE_LIST) 
+    const [timelineList, setTimelineList] = useState(/* profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_TIMELINE_LIST : */ TIMELINE_LIST) 
     const viewDashboard = useSelector(state => state.ui.viewDashboard)
     const viewInitial = useSelector(state => state.ui.viewInitial)
     const viewIntro = useSelector(state => state.ui.viewIntro)
@@ -662,7 +662,8 @@ const Reports = (props) => {
     useEffect(() => { 
         if (isMounted.current) { 
             if(viewDashboard.timeline === true) {
-                setTimelineList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
+                /* setTimelineList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST]) */
+                setTimelineList(TIMELINE_LIST)
             } else if(viewDashboard.kpi === true || viewDashboard.line === true || viewDashboard.gauge === true){ 
                 addCardList(viewDashboard.kpi === true ? 1 : '')  
             }  
@@ -707,8 +708,10 @@ const Reports = (props) => {
     useEffect(() => {
         if (isMounted.current) { 
             if(profile?.user?.organisation?.organisation_type) {
-                setTimelineList(profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
-                setTimelineGrid(profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? BANK_TIMELINE_ITEM : TIMELINE_ITEM)
+               /*  setTimelineList(profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
+                setTimelineGrid(profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? BANK_TIMELINE_ITEM : TIMELINE_ITEM) */
+                setTimelineList(TIMELINE_LIST)
+                setTimelineGrid(TIMELINE_ITEM)
             } 
         }
     }, [profile])
@@ -734,7 +737,8 @@ const Reports = (props) => {
             } else {   
                 if(viewDashboard.timeline === true) {
                     if (isMounted.current) { 
-                        setTimelineList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST])
+                        /* setTimelineList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST]) */
+                        setTimelineList(TIMELINE_LIST)
                     }
                 } else {
                     addCardList(!viewDashboard.line && viewDashboard.jurisdictions == false && viewDashboard.invention === false && viewDashboard.sankey === false && viewDashboard.kpi === false && viewDashboard.timeline === false ? 0 : viewDashboard.kpi === true ? 1 : '')  
@@ -834,7 +838,7 @@ const Reports = (props) => {
             props.checkChartAnalytics(null, null, false) 
             dispatch(setViewDashboardIntial(true)) 
             
-            if(viewDashboard.line === true || (profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank')) {
+            /* if(viewDashboard.line === true || (profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank')) {
                 const cancelRequest = await PatenTrackApi.cancelAllDashboardToken()  
                 const CancelToken = PatenTrackApi.generateCancelToken() 
                 const source = CancelToken.source()
@@ -860,7 +864,7 @@ const Reports = (props) => {
                     await Promise.all(dashboardRequest)
 
                 }
-            } else {
+            } else { */
                 const type = viewDashboard.kpi === true ? [...KPI_TYPE] : [...GAUGE_TYPE]
                 const cancelRequest = await PatenTrackApi.cancelAllDashboardCountToken()  
                 const CancelToken = PatenTrackApi.generateCancelToken() 
@@ -953,7 +957,7 @@ const Reports = (props) => {
                         }
                     } 
                 }
-            } 
+            /* }  */
             setLoading(false)           
             dispatch(setLoadingDashboardData(false)) 
         }
@@ -982,7 +986,8 @@ const Reports = (props) => {
             return item
         })                
         Promise.allSettled(dashboardRequest).then((dashboardRequest) => {
-            const newTimeline = profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST]
+            /* const newTimeline = profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [...BANK_TIMELINE_LIST] : [...TIMELINE_LIST] */
+            const newTimeline = [...TIMELINE_LIST]
             newTimeline.forEach( (item, index) => {
                 const findIndex = dashboardRequest.findIndex( row => row.status === "fulfilled" && row.value.type === item.type ) 
 
@@ -1019,7 +1024,8 @@ const Reports = (props) => {
     }
 
     const addCardList = (t) => {
-        setCardList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_LIST : typeof t != 'undefined' && t === 1 ? KPI_LIST : LIST)
+        /* setCardList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_LIST : typeof t != 'undefined' && t === 1 ? KPI_LIST : LIST) */
+        setCardList(profile?.user?.organisation?.organisation_type && typeof t != 'undefined' && t === 1 ? KPI_LIST : LIST)
     }
 
     const updateTimelineList =  useCallback((requestData, type) => {  
@@ -1391,7 +1397,7 @@ const Reports = (props) => {
 
     const showItems = cardList.map( (card, index) => {
         let displayItems = {kpiEnable: false,  timeline: false}
-        if(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'){
+        /* if(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'){
             if(card.display_type == 'gauge') {
                 displayItems['lineGraph'] = false 
             } else if(card.display_type == 'numbers'){
@@ -1399,7 +1405,7 @@ const Reports = (props) => {
             } else if(card.display_type == 'timeline'){
                 displayItems['timeline'] = true 
             }
-        }
+        } */
         return <Grid
             item  {...grid}
             className={clsx(classes.flexColumn, `box_item`, {['activeItem']: index === activeId})}
@@ -1415,7 +1421,7 @@ const Reports = (props) => {
                 grid={grid}
                 checkChartAnalytics={props.checkChartAnalytics}
                 {...(viewDashboard.kpi === true ? {kpiEnable: true} : {lineGraph: viewDashboard.line})}
-                {...(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank') ? {...displayItems} : ''}
+                /* {...(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank') ? {...displayItems} : ''} */
             />
         </Grid>
     })
@@ -1423,7 +1429,7 @@ const Reports = (props) => {
     const showTimelineItems = timelineList.map( (card, index) => {
         return <Grid
             item  {...timelineGrid}
-            className={clsx(classes.flexColumn, {[classes.flexColumnFullHeight]: profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? true : false}, `box_item`, {['activeItem']: index === activeId})}
+            className={clsx(classes.flexColumn, /* {[classes.flexColumnFullHeight]: profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? true : false} , */ `box_item`, {['activeItem']: index === activeId})}
             key={`card_${index}`}
         >
             <CardElement 
@@ -1480,11 +1486,11 @@ const Reports = (props) => {
                 <Paper className={classes.titleContainer} square>
                     <span className={clsx('title', {['small']: smallScreen})}><span dangerouslySetInnerHTML={{__html: formattedCompanyname}}/>
                         <span className={clsx(classes.headingName, 'step-1')}>
-                            {
+                            {/* {
                                 profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' && selectedAssetCompanies.length == 1 && (
                                     partyName[0].entityName
                                 ) 
-                            } 
+                            }  */}
                             { 
                                 viewDashboard.gauge === true
                                 ?

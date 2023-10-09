@@ -1696,7 +1696,7 @@ const GlobalLayout = (props) => {
                                             ))
                                         }
 
-                                        {
+                                        {/* {
                                             profile?.user && profile.user?.organisation && profile.user.organisation.organisation_type == 'Bank' && props.type != 9
                                             ?
                                                 externalToolBar.map( (item, index) => (
@@ -1704,7 +1704,7 @@ const GlobalLayout = (props) => {
                                                 ))
                                             :
                                                 ''
-                                        }
+                                        } */}
                                     </div>
                                     <div className={clsx(classes.flex, classes.bottom, 'inner-step-2')}>
                                         {
