@@ -355,7 +355,7 @@ const ViewIcons = (props) => {
                     onClick={ ['STANDARD', 'SAMPLE', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert : onHandleTimeline}
                 >
                     <ViewTimeline/>
-                </IconButton> 
+                </IconButton>    
             </AddToolTip>
             </div>
             {
