@@ -250,7 +250,7 @@ const GlobalLayout = (props) => {
                 /* dispatch(setTimelineScreen(false)) //Disable Timeline
                 dispatch(setDashboardScreen(true)) //Show Dashboard */
                 /* handleCommentBarOpen() */ //Close comment
-            }
+            } 
         }
     }, [profile])
 
