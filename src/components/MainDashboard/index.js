@@ -15,21 +15,14 @@ import { updateResizerBar } from '../../utils/resizeBar'
  
 
 import {  
-    setChannelID,  
-    setMainCompanies,
-    setMainCompaniesSelected,
-    setAssetTypesSelect,
-    setSelectAssignmentCustomers,
-    setDashboardShareData 
+    setChannelID,   
 } from '../../actions/patentTrackActions2'
 
 
 import useStyles from './styles'
-import clsx from 'clsx' 
-import PatenTrackApi from '../../api/patenTrack2'
+import clsx from 'clsx'  
 import { useReloadLayout } from '../../utils/useReloadLayout';  
-import { setFirstBarSize } from '../../actions/uiActions';
-import CustomerTable from '../common/CustomerTable';
+import { setFirstBarSize } from '../../actions/uiActions'; 
 
 
 
@@ -75,9 +68,7 @@ const MainDashboard = ({
     const [ isDragging, setIsDragging] = useState(false) 
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false) 
     const firstBarSize = useSelector(state => state.ui.firstBarSize) 
-    const channel_id = useSelector( state => state.patenTrack2.channel_id )    
-    const auth_token = useSelector(state => state.patenTrack2.auth_token) 
-    const profile = useSelector(store => (store.patenTrack.profile))
+    const channel_id = useSelector( state => state.patenTrack2.channel_id )     
      
 
     useEffect(() => {
@@ -139,24 +130,15 @@ const MainDashboard = ({
                 { 
                     openBar === true 
                     ?  
-                        (profile?.user && profile.user?.organisation && profile.user.organisation.organisation_type == 'Bank' && type != 9)
-                        ?
-                            <CustomerTable 
-                                standalone={true}
-                                parentBarDrag={setVisualizerBarSize}
-                                parentBar={setVisualizeOpenBar}
-                                type={type}
-                                customerType={0}
-                            /> 
-                        : 
-                            <MainCompaniesSelector 
-                                selectAll={false} 
-                                defaultSelect={''} 
-                                addUrl={true} 
-                                parentBarDrag={setVisualizerBarSize}
-                                parentBar={setVisualizeOpenBar} 
-                                checkChartAnalytics={checkChartAnalytics}                               
-                            /> 
+                         
+                        <MainCompaniesSelector 
+                            selectAll={false} 
+                            defaultSelect={''} 
+                            addUrl={true} 
+                            parentBarDrag={setVisualizerBarSize}
+                            parentBar={setVisualizeOpenBar} 
+                            checkChartAnalytics={checkChartAnalytics}                               
+                        /> 
                     : 
                         
                         ''

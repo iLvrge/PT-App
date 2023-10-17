@@ -236,7 +236,7 @@ const GlobalLayout = (props) => {
     useEffect(() => {
         if(profile?.user && profile.user?.organisation) {
             if(profile.user.organisation.organisation_type == 'Bank' && props.type != 9) {
-                dispatch( setAssetTypesSelect([5, 81]) ) // always select by default lending activity
+                /* dispatch( setAssetTypesSelect([5, 81]) ) // always select by default lending activity
                 if(dashboardScreen === false) { 
                     setOpenBar( false ) //company
                 }
@@ -246,7 +246,7 @@ const GlobalLayout = (props) => {
                 setCustomerBarSize(0) // Assets Container                
                 setOtherPartyOpenBar( true ) // parties
                 setOtherPartyBarSize(150) // Parties Container
-                setPartyBarSize('100%')
+                setPartyBarSize('100%') */
                 /* dispatch(setTimelineScreen(false)) //Disable Timeline
                 dispatch(setDashboardScreen(true)) //Show Dashboard */
                 /* handleCommentBarOpen() */ //Close comment
