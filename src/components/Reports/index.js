@@ -935,6 +935,11 @@ const Reports = (props) => {
                                 }
                             })
                             await Promise.all(dashboardPromise) 
+                            if(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' && viewDashboard.gauge === true){
+                                if(oldList[2].title == 'To Divest') {
+                                    oldList[2].title = 'To Collateralized';
+                                }
+                            }
                             setCardList(oldList)
                             if(viewIntro === false) {
                                 dispatch(setViewIntro(true))
@@ -1025,7 +1030,13 @@ const Reports = (props) => {
 
     const addCardList = (t) => {
         /* setCardList(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_LIST : typeof t != 'undefined' && t === 1 ? KPI_LIST : LIST) */
-        setCardList(profile?.user?.organisation?.organisation_type && typeof t != 'undefined' && t === 1 ? KPI_LIST : LIST)
+        const cardList = profile?.user?.organisation?.organisation_type && typeof t != 'undefined' && t === 1 ? KPI_LIST : LIST 
+        if(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' && viewDashboard.gauge === true){
+            if(cardList[2].title == 'To Divest') {
+                cardList[2].title = 'To Collateralized';
+            }
+        }
+        setCardList(cardList)
     }
 
     const updateTimelineList =  useCallback((requestData, type) => {  
