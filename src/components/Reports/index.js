@@ -89,7 +89,7 @@ const Reports = (props) => {
             id: 5
         },
         {
-            title: 'Addresses',
+            title: 'To Collateralized',
             tooltip: 'Patent assets that were assigned under incorrect address of the owner or the stated corresponding agent.',
             number: 0,
             patent: '',
@@ -938,6 +938,9 @@ const Reports = (props) => {
                             if(profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' && viewDashboard.gauge === true){
                                 if(oldList[2].title == 'To Divest') {
                                     oldList[2].title = 'To Collateralized';
+                                }
+                                if(oldList[5].title == 'To Collateralized') {
+                                    oldList[5].title = 'Addresses';
                                 }
                             }
                             setCardList(oldList)
