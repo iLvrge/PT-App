@@ -10,7 +10,7 @@ import TableSortLabel from '@mui/material/TableSortLabel'
 import useStyles from './styles'
 import Loader from '../../../../../common/Loader'
 import Row from './Row'
-import _map from 'lodash/map' 
+import _map from 'lodash/map'  
 
 import SlackImage from '../../../../../common/SlackImage'
 import { Paper } from '@mui/material'
@@ -132,7 +132,7 @@ function CompaniesTable({
     } else {
       if(event.target.nodeName != 'DIV') { 
         setChildCompaniesSelected((selection) => selection.includes(row.id) ? selection.filter(_id => _id !== row.id) : [ ...selection, row.id ])
-      }
+      } 
     }
   }, [ setSelected, setChildCompaniesSelected ])
 
