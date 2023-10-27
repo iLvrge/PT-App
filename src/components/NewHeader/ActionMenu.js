@@ -767,7 +767,7 @@ const ActionMenu = (props) => {
                             <span className={classes.breadcrumbHeadingIcon}>
                                 <i className="fa fa-sm fa-angle-double-right"></i>  {layoutName == 'Transactions' ? <HandshakeOutlined /> : layoutName == 'Patent Assets' ? <ASSET_ICON_SPAN/>  : ['Settings > Companies', 'Settings > Users', 'Settings > Category'].includes(layoutName) ? <Settings/> : ''}  <span>{layoutName}</span>
                             </span>
-                                
+                                  
                 } 
             </React.Fragment>
         )
