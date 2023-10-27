@@ -504,7 +504,7 @@ const IllustrationCommentContainer = ({
                                 selectedCategory == 'incorrect_names' ?
                                     <NamesContainer/>
                                 : 
-                                    selectedCategory == 'incorrect_address'
+                                   /*  selectedCategory == 'incorrect_address'
                                 ?
                                     <CorrectAddressTable 
                                         standalone={true}
@@ -512,7 +512,7 @@ const IllustrationCommentContainer = ({
                                         parentBar={parentBar}
                                         type={type}
                                     />
-                                :
+                                : */
                                     selectedCategory == 'top_law_firms'
                                 ?
                                     <TabsWithTimeline 

@@ -89,7 +89,7 @@ const Reports = (props) => {
             id: 5
         },
         {
-            title: 'To Collateralized',
+            title: 'To Collateralize',
             tooltip: 'Patent assets that were assigned under incorrect address of the owner or the stated corresponding agent.',
             number: 0,
             patent: '',
@@ -939,7 +939,7 @@ const Reports = (props) => {
                                 if(oldList[2].title == 'To Divest') {
                                     oldList[2].title = 'To Collateralized';
                                 }
-                                if(oldList[5].title == 'To Collateralized') {
+                                if(oldList[5].title == 'To Collateralize') {
                                     oldList[5].title = 'Addresses';
                                 }
                             }
@@ -1260,7 +1260,8 @@ const Reports = (props) => {
                         patent = true
                     } else if(id === 19 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
                         findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'incorrect_address')
-                        timeline = true
+                        //timeline = true
+                        patent = true
                     } else if(id === 20 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
                         findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'to_be_monitized')
                         patent = true
