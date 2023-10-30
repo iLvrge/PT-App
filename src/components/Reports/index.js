@@ -915,7 +915,7 @@ const Reports = (props) => {
                                         oldList[findIndex].total = item.total  
                                         oldList[findIndex].number = 0           
                                     } else if( item.hasOwnProperty('number') ) { 
-                                        oldList[findIndex].number = item.number
+                                        oldList[findIndex].number = item.number == null || item.number == '' || item.number == undefined ? 0 : item.number
                                         oldList[findIndex].patent = ''
                                         oldList[findIndex].application = ''                            
                                         oldList[findIndex].rf_id = ''                            
@@ -1078,7 +1078,7 @@ const Reports = (props) => {
                     oldList[findIndex].application = ''
                     oldList[findIndex].rf_id = 0
                 }
-            } else { 
+            } else {  
                 if( requestData !== null && requestData.data != null && Array.isArray(requestData.data) && requestData.data.length > 0) {
                     oldList[findIndex].list = [...requestData.data]
                     oldList[findIndex].patent = requestData.data[0].patent
@@ -1086,8 +1086,8 @@ const Reports = (props) => {
                     oldList[findIndex].rf_id = requestData.data[0].rf_id
                     oldList[findIndex].total = requestData.data[0].total  
                     oldList[findIndex].number = 0           
-                } else if( requestData !== null && requestData?.data && requestData?.data?.number){
-                    oldList[findIndex].number = requestData.data.number
+                } else if( requestData !== null && requestData?.data && requestData?.data?.number){ 
+                    oldList[findIndex].number = requestData.data.number == null ? 0 : requestData.data.number
                     oldList[findIndex].patent = requestData.data.patent != '' ? requestData.data.patent : ''
                     oldList[findIndex].application = requestData.data.application != '' ? requestData.data.application : ''                            
                     oldList[findIndex].rf_id = requestData.data.rf_id != '' ? requestData.data.rf_id : ''                            
