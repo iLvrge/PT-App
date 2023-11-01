@@ -10,7 +10,7 @@ import VirtualizedTable from '../../VirtualizedTable'
 
 import  { controlList } from '../../../../utils/controlList'
 
-import { capitalize, numberWithCommas } from '../../../../utils/numbers'
+import { capitalize, numberWithCommas, applicationFormat } from '../../../../utils/numbers'
 
 import { getAssetDetails, setAssetsIllustration, setChannelID, setClipboardAssets, setMoveAssets, setSelectedAssetsPatents, setSlackMessages } from '../../../../actions/patentTrackActions2'
 
@@ -231,14 +231,17 @@ const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handle
             onClickHeadDropdown: onHandleHeadDropDownlist
         },
         {
-          width: 120,
-          label: "Assets",
-          dataKey: "asset",
-          staticIcon: "US",
-          format: numberWithCommas,
-          align: "left",
-          paddingLeft: '20px'   ,
-          badge: true, 
+            width: 120,
+            label: "Assets",
+            dataKey: "asset",
+            staticIcon: "US",
+            format: numberWithCommas,
+            formatCondition: 'asset_type',
+            formatDefaultValue: 0,
+            secondaryFormat: applicationFormat, 
+            align: "left",
+            paddingLeft: '20px'   ,
+            badge: true, 
         },
         {
             width: 671,

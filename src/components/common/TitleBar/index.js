@@ -39,7 +39,7 @@ const TitleBar = (props) => {
                 >
                     <span>
                         <IconButton
-                            onClick={onHandleHelpingText}
+                            /* onClick={onHandleHelpingText} */
                             className={classes.btn}
                         >
                             <HelpOutlineOutlinedIcon/>
