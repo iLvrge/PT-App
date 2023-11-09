@@ -36,6 +36,7 @@ const CompanySummary = () => {
             justifyContent: 'flex-end' 
         }
     ]
+    
     const [companyData, setCompanyData] = useState([])
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)
     const [ width, setWidth ] = useState( 200 )
@@ -100,17 +101,17 @@ const CompanySummary = () => {
                     summaryData.push({
                         name: capitalize(key == 'entities' ? '3rd Parties' : key == 'parties' ? 'Parties' : key),
                         number: numberWithCommas(report[key]),
-                        iconLink: `https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/${key == 'entities' ? 'parties' : key}.svg`
+                        iconLink: `${process.env.REACT_APP_BUCKET_PATH}icons/svg/${key == 'entities' ? 'parties' : key}.svg`
                     })
                 })    
             }
-            if( Object.keys(reportActive).length > 0 ) {
+            if(reportActive != null && Object.keys(reportActive).length > 0 ) {
                 Object.keys(reportActive).forEach( key => { 
                     if(key == 'rightsActive') {
                         summaryData.push({
                             name: 'Rights (Active)',
                             number: numberWithCommas(reportActive['rightsActive']),
-                            iconLink: `https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/rights.svg`
+                            iconLink: `${process.env.REACT_APP_BUCKET_PATH}icons/svg/rights.svg`
                         })
                     } 
                 })    

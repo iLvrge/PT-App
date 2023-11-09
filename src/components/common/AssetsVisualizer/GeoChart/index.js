@@ -312,6 +312,17 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
                     loader={<div>Loading...</div>}
                     data={jurisdictionData}
                     options={option}
+                    chartEvents={[
+                        {
+                            eventName: "ready",
+                            callback: ({ chartWrapper, google }) => {
+                                const chart = chartWrapper.getChart();
+                                const container = chart.container
+                                const getGElement = container.getElementsByTagName('g') 
+                                getGElement[10].remove() /**Remove ColoAxis */
+                            }
+                        }
+                    ]}
                 />
             </div>
         )
