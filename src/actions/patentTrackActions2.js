@@ -1170,7 +1170,8 @@ export const getCustomerSelectedAssets = ( shareCode, append = false ) => {
 export const getCustomerTransactions = ( type, companies, tabs, customers, lawfirm, append = false ) => {
   return async dispatch => {
     dispatch( setAssetTypesAssignmentsLoading( true ) )
-    const { data } = await PatenTrackApi.getCustomerTransactions( type, companies, ['due_dilligence', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'inventing_transactions', 'litigation_transactions'].includes(type) ? tabs : [], type == 'due_dilligence' ? customers : [], lawfirm)    
+    console.log('Type', type, customers)
+    const { data } = await PatenTrackApi.getCustomerTransactions( type, companies, ['due_dilligence', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'inventing_transactions', 'litigation_transactions'].includes(type) ? tabs : [], ['due_dilligence', 'top_lenders'].includes(type) ? customers : [], lawfirm)    
     dispatch( setAssetTypeAssignments(data, append) )
     dispatch( setAssetTypesAssignmentsLoading( false ) )
   } 
