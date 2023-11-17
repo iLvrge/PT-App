@@ -136,8 +136,7 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
   const channel_id = useSelector(state => state.patenTrack2.channel_id)
   const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
   const connectionBoxView = useSelector(state => state.patenTrack.connectionBoxView)
-  const selectedLawFirm = useSelector( state => state.patenTrack2.selectedLawFirm)
-
+  const selectedLawFirm = useSelector( state => state.patenTrack2.selectedLawFirm) 
   const COLUMNS = [
     {
       width: 10,
@@ -498,13 +497,14 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
   useEffect(() => {
     let ignore = false;
     if (defaultLoad === true || defaultLoad === undefined) {
+      console.log('assetTypesCompaniesSelected', assetTypesCompaniesSelected)
       const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
         tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
         customers =
           assetTypesCompaniesSelectAll === true
             ? []
             : assetTypesCompaniesSelected;
-            
+            console.log('assetTypesCompaniesSelected', assetTypesCompaniesSelected, customers, assetTypesCompaniesSelectAll)
       if (selectedCompaniesAll === true || selectedCompanies.length > 0) { 
         if(assignmentList.length === 0) {
           if (!ignore){  
