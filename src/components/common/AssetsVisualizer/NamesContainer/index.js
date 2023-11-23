@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import { Chart, registerables } from 'chart.js';
 import { WordCloudController, WordElement } from 'chartjs-chart-wordcloud';
 import ReactWordcloud from 'react-wordcloud';
+import { select } from 'd3-selection';
 import { useDispatch, useSelector } from 'react-redux'
 import PatenTrackApi from '../../../../api/patenTrack2';
 import useStyles from './styles';
@@ -10,6 +11,7 @@ import { wordCloudOptions } from '../../../../utils/options';
 import TitleBar from '../../TitleBar';
 import { warnConsole } from '../../../../utils/hashLocation';
 import { Box } from '@mui/system';
+import { setAssetTypeAssignmentAllAssets, setAssetTypeAssignments, setSelectAssignmentCustomers } from '../../../../actions/patentTrackActions2';
 
 
 const NamesContainer = (props) => {
@@ -95,13 +97,44 @@ const NamesContainer = (props) => {
             }
         }
     }, [options]) 
- 
+
+    function getCallback(callback) {
+        return function (word, event) {
+            const isActive = callback !== "onWordMouseOut";
+            const element = event.target;
+            const text = select(element);
+            text
+            .on("click", () => {
+                if (isActive) { 
+                    const findRow = rawData.findIndex( row => row.name == word.text)
+                    if(findRow != -1) {
+                        /**
+                         * Send request for filter assets
+                         */  
+                        dispatch( setSelectAssignmentCustomers([rawData[findRow].id]) )
+                        dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+                        dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
+                    }
+                }
+            })
+            /* .transition()
+            .attr("font-size", isActive ? "300%" : "100%") */ 
+            .attr("text-decoration", isActive ? "underline" : "none");
+        };
+      }
+      
+    const callbacks = {  
+        onWordClick: getCallback("onWordClick"),
+        onWordMouseOut: getCallback("onWordMouseOut"),
+        onWordMouseOver: getCallback("onWordMouseOver")
+    };
 
     const DrawCloudChart =  () => {  
         return (
             <ReactWordcloud 
                 words={namesData} 
                 options={options}
+                callbacks={callbacks}
             />
         )
     } 
