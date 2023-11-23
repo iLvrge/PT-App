@@ -1469,7 +1469,7 @@ const Reports = (props) => {
     const ShowDahboardLayout = (props) => {
         return (
             <span className={classes.breadcrumbHeadingIcon}>
-                <i class="fa fa-sm fa-angle-double-right"></i> {props.icon}  <span>{props.layout_name}</span>
+                <i className="fa fa-sm fa-angle-double-right"></i> {props.icon}  <span>{props.layout_name}</span>
             </span> 
         )
     }
