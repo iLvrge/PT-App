@@ -6,7 +6,7 @@ import useStyles from './styles'
 import clsx from 'clsx';
 import PatenTrackApi from '../../../../api/patenTrack2'; 
 import Loader from '../../Loader';
-import { setAssetTypeAssignmentAllAssets, setCPCData, setCPCRequest, setSankeyAssigneeData, setSankeyAssignorData, setSelectAssignmentCustomers } from '../../../../actions/patentTrackActions2'; 
+import { setAssetTypeAssignmentAllAssets, setCPCData, setCPCRequest, setSankeyAssigneeData, setSankeyAssignorData, setSelectAssignmentCustomers, setRefreshSankeyChart } from '../../../../actions/patentTrackActions2'; 
 import FullScreen from '../../FullScreen';
 import LabelWithIcon from '../../LabelWithIcon';
 import TitleBar from '../../TitleBar';
@@ -37,6 +37,7 @@ const SankeyChart = (props) => {
     const selectedAssetCompanies = useSelector( state => state.patenTrack2.assetTypeCompanies.selected );
     const sankeyAssigneeData = useSelector( state => state.patenTrack2.sankeyAssigneeData );
     const sankeyAssignorData = useSelector( state => state.patenTrack2.sankeyAssignorData );
+    const sankeyRefreshChart = useSelector( state => state.patenTrack2.sankeyRefreshChart );
     const fullScreenItems = [
         {
           id: 1,
@@ -196,7 +197,7 @@ const SankeyChart = (props) => {
 
     const refineAssigneeData = (data) => {
         const loadData = []
-        if(data.length > 0) {
+        if(data.length > 0 && sankeyRefreshChart === true ) {
             loadData.push([{ type: 'string', label: "From"}, { type: 'string', label: "To"}, { type: 'number', label: "Assets"}, { type: 'string', role: 'tooltip'}])
             data.forEach( item => {
                 loadData.push([
@@ -212,7 +213,7 @@ const SankeyChart = (props) => {
 
     const refineAssignorData = (aorData) => {
         const loadAssignorData = []
-        if(aorData.length > 0) {
+        if(aorData.length > 0 && sankeyRefreshChart === true) {
             loadAssignorData.push(["From", "To", "Assets"])
             aorData.forEach( item => {
                 loadAssignorData.push([
@@ -232,6 +233,7 @@ const SankeyChart = (props) => {
         if(items.length > 0) {
             const filter = oldItems.filter( row => row.name === items[0].name)   
             if(filter.length > 0) {
+                dispatch(setRefreshSankeyChart(false))
                 if(props.type == 'filled') {        
                     const {data} = await PatenTrackApi.findInventor(filter[0].id)
                     dispatch(setCPCRequest(false))
@@ -254,6 +256,7 @@ const SankeyChart = (props) => {
                 } 
             }
         } else {
+            dispatch(setRefreshSankeyChart(true))
             dispatch(setCPCRequest(false))
             dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false))  
             dispatch(setCPCData({list:[], group: [], sales: []}))
@@ -298,7 +301,7 @@ const SankeyChart = (props) => {
                 {    
                     ['acquired', 'collateralization_transactions'].includes(selectedCategory) || ['filled', 'acquired', 'license_out'].includes(props.type)
                     ?
-                        loading === false ?  
+                        loading === false && (containerRef != null && containerRef.current == null) ?  
                             <DisplayChart data={data} tooltip={true}  chartType={1} rawItem={assigneeRawData} onSelect={handleSelection}/> 
                         :
                             <Loader />
@@ -310,7 +313,7 @@ const SankeyChart = (props) => {
                 {
                     selectedCategory == 'divested' || ['divested', 'license_in'].includes(props.type)
                     ?
-                        loadingAssignor === false ? 
+                        loadingAssignor === false && (containerRef != null && containerRef.current == null) ? 
                             <DisplayChart data={assignorData} chartType={2} rawItem={assignorRawData} onSelect={handleSelection} {...props}/> 
                         :
                         <Loader />

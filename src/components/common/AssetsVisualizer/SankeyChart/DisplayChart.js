@@ -7,7 +7,7 @@ import { Chart } from "react-google-charts";
 const DisplayChart = (props) => {
     const CONSTANT_DECREMENT = 106; 
     const containerRef = useRef(null)
-    const [height, setHeight] = useState('100%');
+    const [height, setHeight] = useState('98%');
     const [tap, setTap] = useState(1);
     const [tooltip, setTooltip] = useState(typeof props.tooltip !== 'undefined' && props.tooltip === true ? {isHtml: true} : {})
     const [option, setOption] = useState({
@@ -30,7 +30,7 @@ const DisplayChart = (props) => {
     const screenHeight = useSelector(state => state.patenTrack.screenHeight);
 
     useEffect(() => {
-        let height = '100%' 
+        let height = '98%' 
         if(props.data.length > 10) {
             const chartHeight = props.data.length * 20
             setOption(prevItem => {
