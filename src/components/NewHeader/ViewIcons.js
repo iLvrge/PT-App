@@ -308,6 +308,7 @@ const ViewIcons = (props) => {
                         tooltip={'Key Performance Indicators such as the number of patents owned by the company.'}
                         placement='bottom'
                     > 
+                        <span>
                             <IconButton 
                                 size="small"
                                 className={clsx(classes.actionIcon, {[classes.active]: props.dashboardScreen === true && viewDashboard.kpi})}
@@ -316,6 +317,7 @@ const ViewIcons = (props) => {
                             >
                                 <AppsOutage/>
                             </IconButton>  
+                        </span> 
                     </AddToolTip>
                 )
             }
@@ -324,6 +326,7 @@ const ViewIcons = (props) => {
                 tooltip={'Matters that require attention such as patents with defective ownership.'}
                 placement='bottom'
             > 
+                <span>
                     <IconButton 
                         size="small"
                         className={clsx(classes.actionIcon, {[classes.active]:  props.dashboardScreen === true && !viewDashboard.line && viewDashboard.jurisdictions == false && viewDashboard.invention === false && viewDashboard.sankey === false && viewDashboard.kpi === false && viewDashboard.timeline === false})}
@@ -332,6 +335,7 @@ const ViewIcons = (props) => {
                     >
                         <Speed/> 
                     </IconButton> 
+                </span> 
             </AddToolTip>
             {/* <AddToolTip
                 tooltip={'Changes in matters requiring attention along a timeline.'}

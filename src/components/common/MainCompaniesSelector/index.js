@@ -114,9 +114,9 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             group: true
         },
         {
-            width: 170,  
-            minWidth: 170,
-            oldWidth: 170,
+            width: 210,  
+            minWidth: 210,
+            oldWidth: 210,
             draggable: true,
             label: (profile?.user && profile.user?.organisation && (profile.user.organisation.organisation_type == 'Bank' || profile.user.organisation.organisation_type == 'Lawfirm')) ? 'Clients' : 'Companies',        
             dataKey: 'original_name',

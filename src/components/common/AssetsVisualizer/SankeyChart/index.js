@@ -165,12 +165,14 @@ const SankeyChart = (props) => {
                 refineAssignorData(sankeyAssignorData)
             }
         }
+        return (() => {})
     }, [sankeyAssignorData, sankeyAssigneeData])
 
     useEffect(() => {
         if(['acquisition_transactions', 'divestitures_transactions'].includes(selectedCategory)) {
             setTabs([props.tabText, 'Owned'])
         }
+        return (() => {})
     }, [selectedCategory])
 
     useEffect(() => {
@@ -189,6 +191,7 @@ const SankeyChart = (props) => {
                 } 
             }
         }
+        return (() => {})
     }, [data, assignorData, props]) 
 
     const refineAssigneeData = (data) => {
@@ -203,8 +206,8 @@ const SankeyChart = (props) => {
                     `<p style="padding: 10px; margin: 0px;width: 238px;">${item.name} -> ${item.assignee}<br/> Assets: ${parseInt(item.number)}</p>`
                 ]) 
             });    
-        } 
-        setData(loadData)
+        }  
+        setData(loadData) 
     }
 
     const refineAssignorData = (aorData) => {
@@ -218,12 +221,12 @@ const SankeyChart = (props) => {
                     parseInt(item.number)
                 ])
             });     
-        }    
-        setAssignorData(loadAssignorData)
+        }     
+        setAssignorData(loadAssignorData) 
     }
 
 
-    const handleSelection = useCallback(async(items, chartType, event) => {
+    const handleSelection = useCallback(async(items, chartType) => {
         let oldItems = chartType == 2 ? [...assignorRawData] : [...assigneeRawData] 
         const oldSelections = [...selectedAssetCompanies] 
         if(items.length > 0) {
