@@ -43,28 +43,46 @@ const KpiBox = (props) => {
             </Paper>
         )
     } 
+
+    const ButtonWithTooltip = () => {
+        const onClick = () => {
+            props.handleList(props.id, props.card.type)
+        }
+
+        const disableButton = ((parseInt(props.card?.number) == 0 || props.card?.number == null) && parseInt(props.card?.other_number) == 0 && typeof props.card.list == 'undefined') || (props.card?.list && props.card.list.length == 0) ? true : false
+        const adjustedButtonProps = {
+            disabled: disableButton,
+            component: disableButton ? "span" : undefined,
+            onClick: disableButton ? undefined : onClick 
+        };
+
+        const other = {
+            size: "small",
+            variant: "outlined"
+        }
+
+        const tooltipMessage = parseInt(profile?.user?.organisation?.subscribtion) == 1 ? 'Available in Pro and Enterprise accounts only.' : props.card.tooltip
+        const {grid} = props
+        return (
+            <AddToolTip
+                tooltip={tooltipMessage}
+                placement='bottom'
+                grid={grid}
+            > 
+                <Button 
+                    className={clsx(classes.actionButton, 'dashboard_buttons')} 
+                    {...adjustedButtonProps}  {...other} 
+                >
+                    {props.card.title}           
+                </Button>  
+            </AddToolTip>  
+        )
+    }
+
     return (
         <div className={clsx(classes.chartContainer, classes.widthResponsive, classes.fixKPI)}>
             <div className={classes.headingContainer}>
-                <AddToolTip
-                    tooltip={parseInt(profile?.user?.organisation?.subscribtion) == 1 ? 'Available in Pro and Enterprise accounts only.' : props.card.tooltip}
-                    placement='bottom'
-                    grid={props.grid}
-                >
-                    <span>
-                        <Button 
-                            size="small" 
-                            variant="outlined" 
-                            className={clsx(classes.actionButton, 'dashboard_buttons')} 
-                            onClick={() => props.handleList(props.id, props.card.type)}
-                            disabled={
-                                ((parseInt(props.card?.number) == 0 || props.card?.number == null) && parseInt(props.card?.other_number) == 0 && typeof props.card.list == 'undefined') || (props.card?.list && props.card.list.length == 0) ? true : false
-                            }
-                        >
-                            {props.card.title}           
-                        </Button> 
-                    </span>
-                </AddToolTip>  
+                <ButtonWithTooltip />
             </div>  
             {
                 props.card?.list
