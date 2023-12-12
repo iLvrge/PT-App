@@ -789,8 +789,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
 
 
     const findCPCList = async(oldScopeRange, list, totalRecords, year, range, scope) => {   
-        if(selectedCompanies.length > 0 || (process.env.REACT_APP_ENVIROMENT_MODE != 'PRO' && list.length > 0)) {
-            console.log(typeof side, selectedCategory)
+        if(selectedCompanies.length > 0 || (process.env.REACT_APP_ENVIROMENT_MODE != 'PRO' && list.length > 0)) { 
             const form = new FormData()
             form.append("list", typeof side != 'undefined' && side === true ? [] : JSON.stringify(list))
             form.append("total", typeof side != 'undefined' && side === true ? 0 : totalRecords)

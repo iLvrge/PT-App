@@ -56,7 +56,7 @@ const Chart = (props) => {
                         nrOfLevels={420}
                         arcsLength={arcs}
                         colors={['#5BE12C', '#F5CD19', '#EA4228']}
-                        percent={ props.card.number > 0 ? parseInt(props.card.number) > TOTAL ? 1 : parseFloat(props.card.number / TOTAL).toFixed(2) : 0 }
+                        percent={ props.card.number > 0 ? parseInt(props.card.number) > TOTAL ? 1 : parseInt(parseFloat(props.card.number / TOTAL).toFixed(2)) : 0 }
                         arcPadding={0.02}
                         marginInPercent={0.03}
                         className={'gauge'}

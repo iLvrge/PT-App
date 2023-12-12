@@ -67,9 +67,9 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, itemCallback, groups, 
             /* showOnCondition: '1' */ 
         },
         {
-            width: 170,  
-            minWidth: 170,
-            oldWidth: 170,
+            width: 190,  
+            minWidth: 190,
+            oldWidth: 190,
             draggable: true,
             label: 'Companies',        
             dataKey: 'original_name',

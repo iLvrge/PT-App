@@ -1,11 +1,12 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect,   useRef,   useState} from 'react'
 import { useSelector } from 'react-redux'
 import { Chart } from "react-google-charts";
 
 
 
 const DisplayChart = (props) => {
-    const CONSTANT_DECREMENT = 106;
+    const CONSTANT_DECREMENT = 106; 
+    const containerRef = useRef(null)
     const [height, setHeight] = useState('100%');
     const [tap, setTap] = useState(1);
     const [tooltip, setTooltip] = useState(typeof props.tooltip !== 'undefined' && props.tooltip === true ? {isHtml: true} : {})
@@ -25,8 +26,7 @@ const DisplayChart = (props) => {
             }
         },
         tooltip
-    });
-    const selectedAssetCompanies = useSelector( state => state.patenTrack2.assetTypeCompanies.selected );
+    }); 
     const screenHeight = useSelector(state => state.patenTrack.screenHeight);
 
     useEffect(() => {
@@ -59,8 +59,23 @@ const DisplayChart = (props) => {
         }
     }, [props])
 
-
-    const CallChart = () => {
+    const chartEvents = [
+        {
+            eventName: "select",
+            callback({ chartWrapper }) {
+                const chart = chartWrapper.getChart();
+                const selection = chart.getSelection();  
+                if(selection.length > 0) { 
+                    props.onSelect(selection, props.chartType)
+                } else {
+                    props.onSelect(selection, props.chartType)
+                }
+            }
+        }
+    ];
+  
+     
+    const CallChart = () => {  
         return (
             <Chart
                 chartType="Sankey"
@@ -69,33 +84,7 @@ const DisplayChart = (props) => {
                 loader={<div>Loading...</div>}
                 data={props.data}
                 options={option}
-                chartEvents={[
-                    {
-                        eventName: "ready",
-                        callback: ({ chartWrapper, google }) => {
-                            const chart = chartWrapper.getChart();
-                            /* if(selectedAssetCompanies.length > 0){
-                                const rawData = [...props.rawItem]
-                                const findIndex = rawData.findIndex(row => row.id == selectedAssetCompanies[0])
-                                if(findIndex !== -1) {
-
-                                } 
-                                const newSelection = [props.data[1][props.chartType == 2 ? 1 : 0]];
-                                console.log('newSelection', newSelection, props.data)
-                                chart.setSelection(newSelection);
-                            } */
-                            google.visualization.events.addListener(chart, "select", e => {
-                                const chart = chartWrapper.getChart();
-                                const selection = chart.getSelection(); 
-                                if(selection.length > 0) { 
-                                    props.onSelect(selection, props.chartType, e)
-                                } else {
-                                    props.onSelect(selection, props.chartType, e)
-                                }
-                            });
-                        }
-                    }
-                ]}
+                chartEvents={chartEvents}
             />
         )
     }
@@ -104,7 +93,7 @@ const DisplayChart = (props) => {
     return (
         <React.Fragment>
             {
-                props.data.length > 0 && tap > 0
+                props.data.length > 0 && tap > 0  && containerRef != null && containerRef.current == null
                 ?
                     <CallChart />
                 :
