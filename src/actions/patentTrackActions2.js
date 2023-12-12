@@ -1925,5 +1925,10 @@ export const setCitationTimelineData = (data) => {
   }
 }
 
-
+export const setRefreshSankeyChart = (flag) => {
+  return {
+    type: types.SET_REFRESH_SANKEY_CHART,
+    flag
+  }
+}
 

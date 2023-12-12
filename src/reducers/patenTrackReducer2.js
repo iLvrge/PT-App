@@ -944,6 +944,11 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state, 
           citationTimelineData: action.data
         }
+        case types.SET_REFRESH_SANKEY_CHART: 
+        return { 
+          ...state, 
+          sankeyRefreshChart: action.flag
+        }
       default:   
       return state
   } 
