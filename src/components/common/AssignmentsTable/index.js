@@ -496,15 +496,13 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
   
   useEffect(() => {
     let ignore = false;
-    if (defaultLoad === true || defaultLoad === undefined) {
-      console.log('assetTypesCompaniesSelected', assetTypesCompaniesSelected)
+    if (defaultLoad === true || defaultLoad === undefined) { 
       const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
         tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
         customers =
           assetTypesCompaniesSelectAll === true
             ? []
-            : assetTypesCompaniesSelected;
-            console.log('assetTypesCompaniesSelected', assetTypesCompaniesSelected, customers, assetTypesCompaniesSelectAll)
+            : assetTypesCompaniesSelected; 
       if (selectedCompaniesAll === true || selectedCompanies.length > 0) { 
         if(assignmentList.length === 0) {
           if (!ignore){  

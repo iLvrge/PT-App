@@ -119,4 +119,5 @@ export default {
     sankeyAssigneeData: [],
     sankeyAssignorData: [],
     citationTimelineData: [],
+    sankeyRefreshChart: true
 }
