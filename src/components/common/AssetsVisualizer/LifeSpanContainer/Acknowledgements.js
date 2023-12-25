@@ -134,7 +134,6 @@ const Acknowledgements = (props) => {
     const display_sales_assets = useSelector( state => state.patenTrack2.display_sales_assets)
     const citationTimelineData = useSelector( state => state.patenTrack2.citationTimelineData)
 
-    console.log("Acknowledge Props", props)
    /**
    * on Itemover for the tooltip data
    */
