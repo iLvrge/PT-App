@@ -62,6 +62,11 @@ export default makeStyles(theme => ({
       '& svg': {
         display: 'flex',
         /* height: '70%' */
+      },
+      '& .needle': {
+        '& path, & circle': {
+          fill: '#90caf9',
+        }
       }
     },
     '& .MuiCard-root': {
