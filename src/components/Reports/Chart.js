@@ -18,7 +18,7 @@ const Chart = (props) => {
     const displayNumber = (value) => {
         return `${ props.card.display_value == '%' ? parseFloat(props.card.number).toFixed(1) : numberWithCommas(props.card.number)}${typeof props.card.display_value != 'undefined' ? numberWithCommas(props.card.display_value)  : ''}`
     }
-    const total = props.card.total || TOTAL;
+    const total = props.card.total || 200;
     const percent = props.card.number < 0 ? 0 : (parseFloat(props.card.number / total).toFixed(2));
 
     return (
