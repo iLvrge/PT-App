@@ -62,7 +62,7 @@ const AssetsVisualizer = ({ toggleMinimize, isMinimized, setIllustrationRecord }
       <IconButton size="small" className={clsx(classes.fullscreenBtn, 'full_screen_btn', 'tack')} onClick={handleClickOpenFullscreen}>
         <FullscreenIcon />   
       </IconButton>
-
+ 
       {
         isMinimized && (
           <Tooltip title={'Shop Assets Timeline'}>

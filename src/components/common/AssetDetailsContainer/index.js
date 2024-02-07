@@ -331,7 +331,7 @@ const AssetDetailsContainer = ({
                       />
                     :
                     timelineScreen === true  && assetIllustration == null && (['due_dilligence', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions'].includes(selectedCategory))
-                    ?
+                    ? 
                       <SankeyChart
                         type={['due_dilligence', 'acquisition_transactions'].includes(selectedCategory) ? 'acquired' : ['licensing_transactions'].includes(selectedCategory) ? 'license_out' : ['collateralization_transactions'].includes(selectedCategory) ? 'lenders' : 'divested'} 
                         showTabs={true}

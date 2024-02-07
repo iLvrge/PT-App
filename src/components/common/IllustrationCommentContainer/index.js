@@ -278,7 +278,7 @@ const IllustrationCommentContainer = ({
         fn2(size, fn2Params)
         fn(fnVarName, size, fnParams)   
     }, 1), [  ])  
-    
+     
     return (
         <SplitPane
             className={cls}
