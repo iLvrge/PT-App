@@ -20,6 +20,7 @@ const Chart = (props) => {
     }
     const total = props.card.total || 200;
     const percent = props.card.number < 0 ? 0 : (parseFloat(props.card.number / total).toFixed(2));
+
     return (
         <div className={clsx(classes.chartContainer, {[classes.widthResponsive]: props.lineGraph})}>
             <div className={clsx(classes.headingContainer )}>
