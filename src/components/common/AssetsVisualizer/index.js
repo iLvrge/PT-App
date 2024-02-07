@@ -59,8 +59,8 @@ const AssetsVisualizer = ({ toggleMinimize, isMinimized, setIllustrationRecord }
   return (
     <Paper className={classes.root} square>
       {renderComponent()}
-      <IconButton size="small" className={clsx(classes.fullscreenBtn, 'full_screen_btn')} onClick={handleClickOpenFullscreen}>
-        <FullscreenIcon />
+      <IconButton size="small" className={clsx(classes.fullscreenBtn, 'full_screen_btn', 'tack')} onClick={handleClickOpenFullscreen}>
+        <FullscreenIcon />   
       </IconButton>
 
       {

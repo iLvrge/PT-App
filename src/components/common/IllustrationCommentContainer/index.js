@@ -601,6 +601,16 @@ const IllustrationCommentContainer = ({
                                         timelineData={timelineRawData}
                                     />
                                 :
+                                ['due_dilligence', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'litigation_transactions'].includes(selectedCategory)
+                                ?
+                                    <TimelineWithLogo 
+                                        assignmentBar={assignmentBar} 
+                                        assignmentBarToggle={assignmentBarToggle} 
+                                        type={type}
+                                        timelineData={timelineRawData}
+                                    />
+                                :
+                                     
                                     <TimelineContainer 
                                         assignmentBar={assignmentBar} 
                                         assignmentBarToggle={assignmentBarToggle} 

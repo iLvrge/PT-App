@@ -12,13 +12,12 @@ import AddToolTip from './AddToolTip';
 import { numberWithCommas } from '../../utils/numbers';
 const Chart = (props) => {
     const [arcs, setArcs] = useState([0.5, 0.3, 0.2])
-    const classes = useStyles();
-    const profile = useSelector(store => (store.patenTrack.profile))
+    const classes = useStyles(); 
     const TOTAL = 200
     const displayNumber = (value) => {
         return `${ props.card.display_value == '%' ? parseFloat(props.card.number).toFixed(1) : numberWithCommas(props.card.number)}${typeof props.card.display_value != 'undefined' ? numberWithCommas(props.card.display_value)  : ''}`
     }
-    const total = props.card.total || 200;
+    const total = props.card.total || TOTAL;
     const percent = props.card.number < 0 ? 0 : (parseFloat(props.card.number / total).toFixed(2));
 
     return (
