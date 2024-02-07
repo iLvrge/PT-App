@@ -682,7 +682,8 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
       }, 1)
     } else { 
       if(timelineRawData.length > 0 || previousLoad === false) {   
-        items.current.add(convertedItems.slice(0, convertedItems.length > 50 ? 49 : convertedItems.length - 1))  
+        drawTimeline(start, end, convertedItems)  
+        /* items.current.add(convertedItems.slice(0, convertedItems.length > 50 ? 49 : convertedItems.length - 1))  
         let constantOptions = {...options}
         if(['late_recording', 'incorrect_recording'].includes(selectedCategory)){ 
           constantOptions = {...timelineWithoutClusterOptions}
@@ -695,7 +696,7 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
           max: new moment().add(!['late_recording', 'incorrect_recording', 'top_lenders', 'collaterlized'].includes(selectedCategory) ? 2 : 4, 'year')
         })  
         timelineRef.current.setItems(items.current)   
-        setPreviousLoad(true) 
+        setPreviousLoad(true)  */
       }
     }
     
@@ -703,7 +704,8 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
   }, [ timelineRawData ])
 
   const drawTimeline = (start, end, convertedItems) => {  
-    items.current.add(convertedItems.slice(0, convertedItems.length > 50 ? 49 : convertedItems.length - 1)) 
+    console.log('convertedItems.length', convertedItems.length)
+    items.current.add(convertedItems.slice(0, convertedItems.length > 10 ? 10 : convertedItems.length - 1)) 
     let constantOptions = {...options}
     if(['late_recording', 'incorrect_recording'].includes(selectedCategory)){ 
       constantOptions = {...timelineWithoutClusterOptions}
