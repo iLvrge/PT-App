@@ -155,13 +155,13 @@ const SankeyChart = (props) => {
         getPartiesData()
         return (() => {})
     }, [selectedCompanies, props.type, dispatch])
-
+    
     useEffect(() => {  
         if((sankeyAssigneeData.length > 0 || sankeyAssignorData.length > 0) && typeof props.activeFullScreen != 'undefined' && props.activeFullScreen === true) { 
-            if(sankeyAssigneeData.length > 0) {
+            if(sankeyAssigneeData.length > 0 && (typeof props.type != 'undefined' && ['acquired', 'filled', 'license_out'].includes(props.type)) || ['acquired', 'collateralization_transactions', 'license_out'].includes(selectedCategory)) {
                 setAssigneeRawData(sankeyAssigneeData)
                 refineAssigneeData(sankeyAssigneeData)
-            } else if(sankeyAssignorData.length > 0) {  
+            } else if(sankeyAssignorData.length > 0 && (typeof props.type != 'undefined' && ['license_in', 'divested'].includes(props.type))) {  
                 setAssignorRawData(sankeyAssignorData)
                 refineAssignorData(sankeyAssignorData)
             }
