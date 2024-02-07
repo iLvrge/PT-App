@@ -338,6 +338,7 @@ const AssetDetailsContainer = ({
                         tabText={['due_dilligence', 'acquisition_transactions'].includes(selectedCategory) ? 'Acquired' : ['licensing_transactions'].includes(selectedCategory) ? 'License Out' : ['collateralization_transactions'].includes(selectedCategory) ? 'Lenders' : 'Divested'}
                         fullScreen={true}
                         standalone={true}
+                        container={true}
                       />
                     : 
                     timelineScreen === true  && assetIllustration == null && ['proliferate_inventors', 'inventing_transactions'].includes(selectedCategory)
@@ -439,6 +440,7 @@ const AssetDetailsContainer = ({
                           showTabs={true}
                           tabText={['licensing_transactions'].includes(selectedCategory) ? 'License In' : 'Divested'}
                           fullScreen={true}
+                          container={true}
                           standalone={true}
                         />
                       : 
