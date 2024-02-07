@@ -68,3 +68,21 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `yarn build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+
+New Section for Development, Staging, and Production
+
+PT-APP
+
+For Development
+
+Server path /var/www/html/development
+
+From local push code to GitHub branch NewDevelopment
+
+If you have to show in staging, then first merge the NewDevelopment branch with the Staging branch from Github or you can do it from the terminal as well then you have to merge the Staging branch with the Master branch and then download the master branch to the server and the path is /var/www/html/staging1
+
+If everything is okay then pull the master branch code to the server production app folder i.e /var/www/html/PT-App
+
+
