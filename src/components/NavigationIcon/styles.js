@@ -50,7 +50,7 @@ export default makeStyles(theme => ({
             },
             '&.selection_indicator':{
                 '& svg':{
-                    fill: pink[500],
+                    fill: '#E60000',
                 }
             }
         }
