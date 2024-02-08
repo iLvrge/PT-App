@@ -68,9 +68,18 @@ const getFormUrlHeader = () => {
   } 
 }
 
+const getHeaderWithCancelToken = (referenceVariable) => {
+  const header = getHeader() 
+  header['cancelToken'] = new CancelToken(function executor(c) {  
+    referenceVariable.cancelToken = c  
+  })
+  return header
+}
+
 var CancelToken = axios.CancelToken
 
 var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineActivity,cancelTimelineSecurity, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelSatusCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest, cancelAllDashboardCountRequest, cancelStatus, cancelAssetTypeAssignmentAllAssetsWithFamily, cancelDashboardPartiesData, cancelDashboardPartiesAssignorData, cancelAgentsData, cancelCollectionIllustration, cancelInventorGeoLocation, cancelAbandoned, cancelAllAbandonedAssetsYears, cancelAllAbandonedAssetsAges, cancelCategoryProduct;
+var cancelCustomerTransactions = {cancelToken: null};
 
 
 class PatenTrackApi { 
@@ -603,9 +612,20 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/address/companies?companies=${JSON.stringify(companies)}`, getHeader())
   } 
 
-  static getCustomerTransactions(type, companies, tabs, customers, lawfirm) { 
-    return axios.get(`${base_new_api_url}/customers/${type}/transactions?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&lawfirm=${lawfirm}`, getHeader())
+  static getCustomerTransactions(type, companies, tabs, customers, lawfirm) {  
+    const headerWithCancelationToken = getHeaderWithCancelToken(cancelCustomerTransactions) 
+    return axios.get(`${base_new_api_url}/customers/${type}/transactions?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&lawfirm=${lawfirm}`, headerWithCancelationToken)
   } 
+
+  static cancelCustomerTransactionsRequest() {  
+    if (cancelCustomerTransactions.cancelToken !== null && typeof cancelCustomerTransactions.cancelToken === 'function') { 
+      try {
+        throw cancelCustomerTransactions.cancelToken('Cancel transactions request')
+      } catch (e){
+        //console.log('cancelRequest->', e)
+      } 
+    } 
+  }
 
   static getCustomerParties(type, companies, tabs, customerType) {  
     return axios.get(`${base_new_api_url}/customers/${type}/parties?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&t=${customerType}`, getHeader())
