@@ -703,8 +703,7 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
     //checkCurrentDateStatus()
   }, [ timelineRawData ])
 
-  const drawTimeline = (start, end, convertedItems) => {  
-    console.log('convertedItems.length', convertedItems.length)
+  const drawTimeline = (start, end, convertedItems) => {   
     items.current.add(convertedItems.slice(0, convertedItems.length > 10 ? 10 : convertedItems.length - 1)) 
     let constantOptions = {...options}
     if(['late_recording', 'incorrect_recording'].includes(selectedCategory)){ 

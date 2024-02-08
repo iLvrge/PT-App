@@ -1,7 +1,7 @@
 import tinycolor from 'tinycolor2'
 
 const primary = '#536DFE'
-const secondary = '#E60000'
+const secondary = '#90CAF9'
 
 const lightenRate = 7.5
 const darkenRate = 15
@@ -24,12 +24,12 @@ export default {
       dark: tinycolor(primary)
         .darken(darkenRate)
         .toHexString(),
-    },
+    },  
     secondary: {
       main: secondary
     },
     background: {
-      default: '#F6F7FF',
+      default: '#F6F7FF',   
       light: '#F3F5FF',
       dark: '#222222'
     },

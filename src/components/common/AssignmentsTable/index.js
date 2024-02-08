@@ -11,7 +11,7 @@ import { Paper } from "@mui/material";
 import useStyles from "./styles";
 import VirtualizedTable from "../VirtualizedTable";
 import ChildTable from "./ChildTable";
-import { DEFAULT_CUSTOMERS_LIMIT } from "../../../api/patenTrack2";
+import PatenTrackApi, { DEFAULT_CUSTOMERS_LIMIT } from "../../../api/patenTrack2";
 import {
   getCustomerTransactions,
   setAssetTypeAssignments,
@@ -506,6 +506,7 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
       if (selectedCompaniesAll === true || selectedCompanies.length > 0) { 
         if(assignmentList.length === 0) {
           if (!ignore){  
+            PatenTrackApi.cancelCustomerTransactionsRequest()
             dispatch(
               getCustomerTransactions(
                 selectedCategory == '' ? '' : selectedCategory, 
