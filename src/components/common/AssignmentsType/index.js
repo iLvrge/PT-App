@@ -356,9 +356,9 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
             dispatch( setAssetTypeAssignments({ list: [], total_records: 0 }) )
             dispatch( setAssetTypeCompanies({ list: [], total_records: 0 }) )
             dispatch( setAssetTypeInventor({ list: [], total_records: 0 }) )
-            /* history.push({
+            history.push({
                 hash: updateHashLocation(location, 'activities', [row.tab_id]).join('&')
-            }) */
+            })
             if(!selectItems.includes(row.tab_id) || assetTypesSelectAll === true) {
                 setSelectItems([row.tab_id])
                 setSelectedRow([row.tab_id])

@@ -106,6 +106,8 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
   const companies = useSelector( state => state.patenTrack2.mainCompaniesList.list )
   const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
   const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
+   
+  
   const selectedWithName = useSelector( state => state.patenTrack2.mainCompaniesList.selectedWithName)
   const selectedAssetAssignments = useSelector( state => state.patenTrack2.assetTypeAssignments.selected )
   const assetTypeInventors = useSelector(state => state.patenTrack2.assetTypeInventors.list)
@@ -513,6 +515,7 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
 
       const getTimelineRawDataFunction = async () => {
         //search
+        console.log('getTimelineRawDataFunction', isSubscribed)
         if(isSubscribed) {
           resetTooltipContainer()
           if(search_string != '' && search_string != null){

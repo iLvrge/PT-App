@@ -26,7 +26,9 @@ import {
     setAssetTypeAssignmentAllAssets,
     setAssetTypeAssignments,
     getCustomerAssets,
-    setSelectAssignmentCustomerName
+    setSelectAssignmentCustomerName,
+    setTimelineRequest,
+    setTimelineData
   } from '../../../actions/patentTrackActions2'
 
   import {
@@ -260,6 +262,8 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             setSelectAll(false)
             dispatch( setAllAssignmentCustomers(assetTypeCompanies.length == oldSelection.length ||  data.length == oldSelection.length ? true : false ) )
             dispatch( setSelectAssignmentCustomers(oldSelection) )
+            dispatch(setTimelineRequest(false))
+            dispatch(setTimelineData([]))
         }
 
         
