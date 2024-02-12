@@ -29,19 +29,19 @@ export default makeStyles(theme => ({
                 stroke: 'none !important'
             },
             '&.active':{
-                color: `${theme.palette.secondary.main} !important` ,
+                color: `${theme.palette.secondary.buttonActive} !important` ,
                 '& svg':{ 
-                    fill: `${theme.palette.secondary.main} !important` ,
-                    stroke: `${theme.palette.secondary.main} !important` ,
+                    fill: `${theme.palette.secondary.buttonActive} !important` ,
+                    stroke: `${theme.palette.secondary.buttonActive} !important` ,
                 },
                 '& svg.noStroke':{
                     stroke: 'none !important'
                 },
                 '&:hover':{
-                    color: theme.palette.secondary.main ,
+                    color: theme.palette.secondary.buttonActive ,
                     '& svg':{
-                        fill: theme.palette.secondary.main,
-                        stroke: theme.palette.secondary.main,
+                        fill: theme.palette.secondary.buttonActive,
+                        stroke: theme.palette.secondary.buttonActive,
                     },
                     '& svg.noStroke':{
                         stroke: 'none !important'
@@ -50,7 +50,7 @@ export default makeStyles(theme => ({
             },
             '&.selection_indicator':{
                 '& svg':{
-                    fill: '#E60000',
+                    fill: theme.palette.secondary.main
                 }
             }
         }

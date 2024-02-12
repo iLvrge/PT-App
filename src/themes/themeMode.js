@@ -15,7 +15,8 @@ const themeMode = {
             },
             divider: 'rgba(0, 0, 0, 0.12)',
             secondary: {
-                main: '#90caf9'
+                main: '#E60000',
+                buttonActive: '#90CAF9'
             }
         },
         typography: {
@@ -41,7 +42,8 @@ const themeMode = {
             },
             divider: 'rgba(255, 255, 255, 0.12)',
             secondary: {
-                main: '#90caf9'
+                main: '#E60000',
+                buttonActive: '#90CAF9'
             }
         },
         typography: {
