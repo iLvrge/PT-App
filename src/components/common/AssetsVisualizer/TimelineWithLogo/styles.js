@@ -52,18 +52,15 @@ export default makeStyles(theme => ({
         height: '100%',
         width: '100%',
         '& .vis-content': {
-            color: '#000000',
-            '& .vis-item.asset-type-security-release, .vis-item.vis-point.asset-type-releaseOut .vis-item-content': {
-                borderBottom: '3px solid #70A800 !important'
-            },
-            '& .vis-item.asset-type-security-release-partial': {
+            color: '#000000', 
+            '& .vis-item.vis-point.asset-type-security-release-partial': {
                 borderBottom: '3px solid #228DE8 !important'
             },
-            '& .vis-item.asset-type-lending': {
+            '& .vis-item.vis-range.asset-type-lending, .vis-item.vis-point.asset-type-lending, .vis-item.vis-point.asset-type-borrowing': {
                 borderBottom: '3px solid #FFAA00 !important'
             },
-            '& .vis-item.asset-type-borrowing': {
-                borderBottom: '3px solid #FFAA00 !important'
+            '& .vis-item.vis-point.asset-type-security-release, .vis-item.vis-point.asset-type-releaseOut': {
+                borderBottom: '3px solid #70A800 !important'
             },
             '& .vis-item': {
                 fontSize: 12,
@@ -217,9 +214,10 @@ export default makeStyles(theme => ({
                             whiteSpace: 'initial',
                             textAlign: 'left',
                             marginTop: 1,
+                            marginBottom: 1,
                             lineHeight: '1.025',
                             overflow: 'hidden',
-                            height: '130px !important'
+                            height: '27px !important'
                         }
                     }
                 },
@@ -345,10 +343,11 @@ export default makeStyles(theme => ({
                         '& .text-height': {
                             whiteSpace: 'initial',
                             textAlign: 'left',
-                            marginTop: 1,
+                            marginTop: 1, 
+                            marginBottom: 1,
                             lineHeight: '1.025',
                             overflow: 'hidden',
-                            height: '130px !important'
+                            height: '27px !important'
                         }
                     }
                 }
