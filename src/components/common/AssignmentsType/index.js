@@ -27,7 +27,9 @@ import {
     setAssetTypeAssignmentAllAssets,
     setAssetTypeAssignments,
     setAssetTypeInventor,
-    setAssetTypeCompanies
+    setAssetTypeCompanies,
+    setTimelineRequest,
+    setTimelineData
 } from '../../../actions/patentTrackActions2'
 
 import {
@@ -371,6 +373,8 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
                 deleteAssetTypeSelected( row.tab_id )
                 selectedAllActiveItems()
             }
+            dispatch(setTimelineRequest(false))
+            dispatch(setTimelineData([]))
 
             /* if( checked !== undefined) {
                 if(display_clipboard === false) {

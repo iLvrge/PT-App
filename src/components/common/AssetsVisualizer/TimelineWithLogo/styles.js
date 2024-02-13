@@ -53,7 +53,7 @@ export default makeStyles(theme => ({
         width: '100%',
         '& .vis-content': {
             color: '#000000',
-            '& .vis-item.asset-type-security-release': {
+            '& .vis-item.asset-type-security-release, .vis-item.vis-point.asset-type-releaseOut .vis-item-content': {
                 borderBottom: '3px solid #70A800 !important'
             },
             '& .vis-item.asset-type-security-release-partial': {
