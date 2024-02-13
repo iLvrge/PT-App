@@ -78,8 +78,8 @@ const getHeaderWithCancelToken = (referenceVariable) => {
 
 var CancelToken = axios.CancelToken
 
-var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline, cancelTimelineActivity,cancelTimelineSecurity, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelSatusCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest, cancelAllDashboardCountRequest, cancelStatus, cancelAssetTypeAssignmentAllAssetsWithFamily, cancelDashboardPartiesData, cancelDashboardPartiesAssignorData, cancelAgentsData, cancelCollectionIllustration, cancelInventorGeoLocation, cancelAbandoned, cancelAllAbandonedAssetsYears, cancelAllAbandonedAssetsAges, cancelCategoryProduct;
-var cancelCustomerTransactions = {cancelToken: null};
+var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline,cancelTimelineSecurity, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelSatusCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest, cancelAllDashboardCountRequest, cancelStatus, cancelAssetTypeAssignmentAllAssetsWithFamily, cancelDashboardPartiesData, cancelDashboardPartiesAssignorData, cancelAgentsData, cancelCollectionIllustration, cancelInventorGeoLocation, cancelAbandoned, cancelAllAbandonedAssetsYears, cancelAllAbandonedAssetsAges, cancelCategoryProduct;
+var cancelCustomerTransactions = {cancelToken: null}, cancelTimelineActivity = {cancelToken: null};
 
 
 class PatenTrackApi { 
@@ -865,18 +865,15 @@ class PatenTrackApi {
     return axios.get(`${base_new_api_url}/events/all/assets/to_record/detail/${application}`, getHeader())
   }
 
-  static getActivitiesTimelineData(companies, tabs, customers, rfIDs = [], layout, exclude, start='', end='') { 
-    let header = getHeader() 
-    header['cancelToken'] = new CancelToken(function executor(c) { 
-      cancelTimelineActivity = c 
-    })
-    return axios.get(`${base_new_api_url}/customers/timeline?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}&start=${start}&end=${end}`, header)
+  static getActivitiesTimelineData(companies, tabs, customers, rfIDs = [], layout, exclude, start='', end='') {  
+    const headerWithCancelationToken = getHeaderWithCancelToken(cancelTimelineActivity)
+    return axios.get(`${base_new_api_url}/customers/timeline?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}&start=${start}&end=${end}`, headerWithCancelationToken)
   }
 
   static cancelTimelineActivityRequest() { 
-    if (cancelTimelineActivity !== undefined && typeof cancelTimelineActivity === 'function') { 
+    if (cancelTimelineActivity.cancelToken !== undefined && typeof cancelTimelineActivity.cancelToken === 'function') { 
       try {
-        throw cancelTimelineActivity('Cancel timeline request')
+        throw cancelTimelineActivity.cancelToken('Cancel timeline request')
       } catch (e){
         //console.log('cancelRequest->', e)
       } 
