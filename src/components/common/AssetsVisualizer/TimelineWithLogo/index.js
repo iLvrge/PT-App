@@ -294,6 +294,7 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
                     color = '#FFFFFF'
                     break;
                 }
+                color = '#FFFFFF'
                 const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
                 const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector(`#all_timeline_logo`) : document.getElementById(`all_timeline_logo`);   
                 const getPosition = element != null ? element.getBoundingClientRect() : {y: 0, x: 0};  
