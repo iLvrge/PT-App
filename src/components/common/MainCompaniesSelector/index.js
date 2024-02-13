@@ -590,6 +590,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                             dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
                             dispatch( setAssetTypesSelect([data.activity_id]) )
                             dispatch( setAllAssetTypes( false ) )
+                            dispatch(setTimelineRequest(false))
+                            dispatch(setTimelineData([]))
                         } else {
                             dispatch( setAssetTypesSelect([]) )
                             dispatch( setAllAssetTypes( true ) )

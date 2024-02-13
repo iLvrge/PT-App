@@ -446,6 +446,7 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
                 tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
                 customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
                 rfIDs = selectedAssetAssignments.length > 0 ? selectedAssetAssignments : []; 
+      PatenTrackApi.cancelTimelineActivityRequest()
       const { data } = await PatenTrackApi.getActivitiesTimelineData(companies, tabs, customers, rfIDs, selectedCategory, (assetTypeInventors.length > 0 || tabs.includes(10)) ? true : undefined, start, end) 
       setIsLoadingTimelineData(false)
       let list = removeSecurityRelease(data.list)
