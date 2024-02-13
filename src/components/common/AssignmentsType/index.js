@@ -275,6 +275,8 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
                     dispatch( setAssetTypeCompanies({ list: [], total_records: 0 }) )
                     dispatch( setAssetTypeInventor({ list: [], total_records: 0 }) )
                     dispatch( setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }) )
+                    dispatch(setTimelineRequest(false))
+                    dispatch(setTimelineData([]))
                     setSelectItems([5, 81])
                     setSelectedRow([5, 81])
                     dispatch( setAssetTypesSelect([5, 81]) )
@@ -293,6 +295,8 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
                                 setSelectItems([data.activity_id])
                                 setSelectedRow([data.activity_id])
                                 dispatch( setAssetTypesSelect([data.activity_id]) )
+                                dispatch(setTimelineRequest(false))
+                                dispatch(setTimelineData([]))
                             } else {
                                 selectedAllActiveItems()
                             }
