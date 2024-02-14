@@ -67,7 +67,7 @@ export default makeStyles(theme => ({
             '& .vis-item.vis-range.asset-type-lending, .vis-item.vis-range.asset-type-borrowing, .vis-item.vis-box.asset-type-lending, .vis-item.vis-box.asset-type-borrowing': {
                 borderBottom: '3px solid #FFAA00 !important'
             },
-            '& .vis-item.vis-box.asset-type-security-release, .vis-item.vis-box.asset-type-releaseOut': {
+            '& .vis-item.vis-range.asset-type-security-release, .vis-item.vis-box.asset-type-security-release, .vis-item.vis-box.asset-type-releaseOut': {
                 borderBottom: '3px solid #70A800 !important'
             },
             '& .vis-item': {
