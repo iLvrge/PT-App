@@ -61,7 +61,7 @@ export default makeStyles(theme => ({
         }, 
         '& .vis-content': {
             color: '#000000', 
-            '& .vis-item.vis-box.asset-type-security-release-partial': {
+            '& .vis-item.vis-range.asset-type-security-release-partial, .vis-item.vis-box.asset-type-security-release-partial': {
                 borderBottom: '3px solid #228DE8 !important'
             },
             '& .vis-item.vis-range.asset-type-lending, .vis-item.vis-range.asset-type-borrowing, .vis-item.vis-box.asset-type-lending, .vis-item.vis-box.asset-type-borrowing': {
