@@ -67,7 +67,17 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
   const items = useRef(new DataSet()) // timeline items dataset
   const groups = useRef(new DataSet()) // timeline groups dataset
   const [options, setTimelineOptions] = useState({
-    ...timelineWithoutClusterOptions,
+    /* ...timelineWithoutClusterOptions, */
+    height: '100%',
+    autoResize: true,
+    orientation: 'bottom',
+    zoomKey: 'ctrlKey',
+    moveable: true,
+    zoomable: true,
+    horizontalScroll: true,
+    verticalScroll: true,
+    zoomFriction: 30,
+    zoomMin: 1000 * 60 * 60 * 24 * 7,  
     template: function(item, element, data) {
       if (data.isCluster) {
         return `<span class="cluster-header">${data.items[0].clusterHeading} (${data.items.length})</span>`
@@ -170,7 +180,8 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
     const companyName =  selectedWithName.filter( company => assetsCustomer.company == company.id ? company.name : '')
     const customerFirstName = assetsCustomer.tab_id == 10 ? assetsCustomer.customerName.split(' ')[0] : assetsCustomer.customerName
     const item = {
-      type: 'point', 
+      type: 'box', 
+      zoomMin: 3456e5,
       start: new Date(assetsCustomer.exec_dt),
       customerName: selectedCategory == 'proliferate_inventors' ? assetsCustomer.customerName : `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
       assetType,

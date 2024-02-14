@@ -51,15 +51,23 @@ export default makeStyles(theme => ({
     timeline: {
         height: '100%',
         width: '100%',
+        '& .vis-dot': {
+            background: 'none !important',
+            border: 'none !important',
+        },
+        '& .vis-line':{
+            border: 0,
+            backgroundColor: 'unset'
+        }, 
         '& .vis-content': {
             color: '#000000', 
-            '& .vis-item.vis-point.asset-type-security-release-partial': {
+            '& .vis-item.vis-box.asset-type-security-release-partial': {
                 borderBottom: '3px solid #228DE8 !important'
             },
-            '& .vis-item.vis-range.asset-type-lending, .vis-item.vis-point.asset-type-lending, .vis-item.vis-point.asset-type-borrowing': {
+            '& .vis-item.vis-range.asset-type-lending, .vis-item.vis-box.asset-type-lending, .vis-item.vis-box.asset-type-borrowing': {
                 borderBottom: '3px solid #FFAA00 !important'
             },
-            '& .vis-item.vis-point.asset-type-security-release, .vis-item.vis-point.asset-type-releaseOut': {
+            '& .vis-item.vis-box.asset-type-security-release, .vis-item.vis-box.asset-type-releaseOut': {
                 borderBottom: '3px solid #70A800 !important'
             },
             '& .vis-item': {
@@ -100,6 +108,131 @@ export default makeStyles(theme => ({
                 '&.vis-dot.asset-type-default': {
                     borderColor: indigo[500],
                 },
+            }, 
+            '& .vis-item.vis-box': {
+                backgroundColor: /* theme.palette.background.default */ 'unset',
+                border: 0,
+                width: '9.6rem',
+                borderRadius: '3px',
+                height: '4.4rem',
+                '&.vis-selected':{
+                    '& .vis-item-content':{
+                        border: '1px solid #e60000 !important',
+                    }
+                },
+                '& .vis-item-content':{
+                    color: '#BDBDBD',
+                    width:'100%',
+                    border: '1px solid #545454',
+                    height:'100%',          
+                    display: 'flex',
+                    padding: 5,
+                    overflow: 'hidden',
+                    flexWrap: 'wrap',   
+                    borderRadius: 3,       
+                    justifyContent: 'flex-start',
+                    flexDirection: 'column',           
+                    '& .maxHeight':{
+                      maxHeight: '51px',
+                      overflow: 'hidden',
+                      justifyContent: 'flex-start',
+                      paddingBottom: '0.15rem'
+                    },
+                    '& .first':{
+                      display: 'flex',
+                      fontSize: '0.875rem',
+                      fontWeight: 500,
+                      overflow: 'hidden',
+                      height: '100%',
+                      width:'55%',
+                      marginRight: 3
+                    },
+                    '& .second':{
+                      display:'flex',
+                      flexDirection: 'column',  
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '0.65rem',
+                      fontWeight: 400,
+                      height: '100%',
+                      width: '45%',
+                      overflow: 'hidden',
+                      '& div':{
+                        marginLeft: '5px'
+                      },
+                      '& .img-holder': {
+                        display: 'inline-block',
+                        width: 50,
+                        height: 50,
+                        backgroundColor: '#fff',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      },
+                      '& img':{
+                        width: 50,
+                        display: 'flex'
+                        /* width: '3.5rem', */
+                        /*width: '5rem',
+                        height: '3.5rem',*/
+                        /* opacity: '0.75',
+                        '&:hover':{
+                          opacity: 1
+                        } */
+                        /* maxHeight: '2.5rem' */
+                      },
+                      '& img.no-image':{
+                        /* height: '4rem', */
+                        /* maxHeight: '2.5rem' */
+                      }
+                    },
+                    '& .flexMain':{
+                        display: 'flex',
+                        overflow: 'hidden',
+                        flexGrow: 1,
+                        alignItems: 'flex-start',
+                        flexDirection: 'column',
+                        justifyContent: 'flex-start',
+                        height: '100%',
+                        '&.alignBaseline':{
+                          alignItems: 'baseline',
+                          '& .textColumn':{
+                            '& .absolute':{
+                              bottom: 7
+                            }
+                          }
+                        },
+                      '& img':{
+                        width: '4.3rem'
+                      },
+                      '& .textColumn':{
+                        display: 'flex',
+                        lineHeight: '1.1',
+                        '& .absolute':{
+                          position: 'absolute',
+                          bottom: 0
+                        }
+                      },
+                      '& .small-font':{                
+                        fontSize: '0.65rem',  
+                        marginTop: 2,
+                        lineHeight: '0.81'
+                      },
+                      '& .text-height':{
+                        whiteSpace: 'initial',
+                        textAlign: 'left',
+                        marginTop: 1,
+                        lineHeight: '1.025',
+                        overflow: 'hidden',
+                        height: '130px !important'
+                      }
+                    }
+                }
+            },
+            '& .vis-item.vis-point.vis-selected': {
+                backgroundColor: 'none !important',
+                color: theme.palette.secondary.main
+                /* fontWeight: 'bold', */
             },
             '& .vis-item.vis-point': {
                 backgroundColor: /* theme.palette.background.default */ 'unset',
@@ -415,10 +548,10 @@ export default makeStyles(theme => ({
                 padding: '0 !important'
             }
         },
-        '& .vis-dot': {
+        /* '& .vis-dot': {
             borderColor: indigo[500],
             backgroundColor: indigo[500],
-        },
+        }, */
         '& .vis-item.vis-box': {
             borderColor: indigo[500],
             backgroundColor: indigo[500],
