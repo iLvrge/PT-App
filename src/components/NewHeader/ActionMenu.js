@@ -41,7 +41,8 @@ import {
     Speed,
     ViewTimeline,
     HandshakeOutlined,
-    Settings
+    Settings,
+    NoBackpackSharp
 } from '@mui/icons-material'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -765,7 +766,14 @@ const ActionMenu = (props) => {
                                 </span>
                             :
                             <span className={classes.breadcrumbHeadingIcon}>
-                                <i className="fa fa-sm fa-angle-double-right"></i>  {layoutName == 'Transactions' ? <HandshakeOutlined /> : layoutName == 'Patent Assets' ? <ASSET_ICON_SPAN/>  : ['Settings > Companies', 'Settings > Users', 'Settings > Category'].includes(layoutName) ? <Settings/> : ''}  <span>{layoutName}</span>
+                                {
+                                    !['Settings > Companies', 'Settings > Users', 'Settings > Category'].includes(layoutName) 
+                                    ?
+                                        <i className="fa fa-sm fa-angle-double-right rightSpace"></i>
+                                    :
+                                        ''
+                                }
+                                  {layoutName == 'Transactions' ? <HandshakeOutlined /> : layoutName == 'Patent Assets' ? <ASSET_ICON_SPAN/>  : ['Settings > Companies', 'Settings > Users', 'Settings > Category'].includes(layoutName) ? <Settings/> : ''}  <span>{layoutName}</span>
                             </span>
                                   
                 } 
@@ -795,7 +803,7 @@ const ActionMenu = (props) => {
                 :
                     <React.Fragment> 
                         {
-                            props.dashboardScreen === false && (
+                            props.dashboardScreen === false && (props.layoutName !== null && props.layoutName.indexOf('Settings') == -1) && (
                                 <span className={classes.title}>
                                     <span dangerouslySetInnerHTML={{__html: formattedCompanyname}}/>
                                 </span>

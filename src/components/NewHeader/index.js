@@ -589,8 +589,10 @@ const onHandleTimelineScreen = /* useCallback( */(event) => {
   dispatch(setAssetsIllustrationData(null))
   /* resetAllRowSelect(dispatch, resetItemList.resetAll)
   resetAllRowSelect(dispatch, resetItemList.clearOtherItems) */
-  props.checkChartAnalytics(null, null, false)
-  props.resetScreen('Timeline', event)
+  if(typeof props.checkChartAnalytics == 'function' && typeof props.resetScreen == 'function') { 
+    props.checkChartAnalytics(null, null, false)
+    props.resetScreen('Timeline', event)
+  }
   history.push(routeList.assignments)
   
 }/* , [dispatch]) */
