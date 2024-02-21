@@ -175,6 +175,10 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
 
   //Item for the timeline
 
+  const getDateWithTime = (dateTime) =>{
+    return dateTime + ' 00:00:00'
+  }
+
   const convertDataToItem = (assetsCustomer) => {
     const assetType = Number.isInteger(assetsCustomer.tab_id) ? convertTabIdToAssetType(assetsCustomer.tab_id) : 'default'
     const companyName =  selectedWithName.filter( company => assetsCustomer.company == company.id ? company.name : '')
@@ -182,7 +186,7 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
     const item = {
       type: 'box', 
       zoomMin: 3456e5,
-      start: new Date(assetsCustomer.exec_dt),
+      start: new Date(getDateWithTime(assetsCustomer.exec_dt)),
       customerName: selectedCategory == 'proliferate_inventors' ? assetsCustomer.customerName : `${customerFirstName} (${numberWithCommas(assetsCustomer.totalAssets)})`,
       assetType,
       clusterHeading:  assetsCustomer.customerName ,
@@ -195,8 +199,8 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
     }
 
     if([5,12].includes(parseInt(assetsCustomer.tab_id)) ||  selectedCategory == 'late_recording') {            
-      item.type = 'range';
-      item['end'] = selectedCategory == 'late_recording' ? assetsCustomer.record_dt != null && assetsCustomer.record_dt != '' ? assetsCustomer.record_dt : new Date() : assetsCustomer.release_exec_dt != null && assetsCustomer.release_exec_dt != '' && assetsCustomer.partial_transaction != 1 ? new Date(assetsCustomer.release_exec_dt) : new Date()
+      item.type = 'range'; 
+      item['end'] = selectedCategory == 'late_recording' ? assetsCustomer.record_dt != null && assetsCustomer.record_dt != '' ? getDateWithTime(assetsCustomer.record_dt) : new Date() : assetsCustomer.release_exec_dt != null && assetsCustomer.release_exec_dt != '' && assetsCustomer.partial_transaction != 1 ? new Date(getDateWithTime(assetsCustomer.release_exec_dt)) : new Date()
       if([5,12].includes(parseInt(assetsCustomer.tab_id))) {
         const securityPDF = `https://s3-us-west-1.amazonaws.com/static.patentrack.com/assignments/var/www/html/beta/resources/shared/data/assignment-pat-${assetsCustomer.reel_no}-${assetsCustomer.frame_no}.pdf`
         item['security_pdf'] = securityPDF
@@ -527,8 +531,7 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
       */
 
       const getTimelineRawDataFunction = async () => {
-        //search
-        console.log('getTimelineRawDataFunction', isSubscribed)
+        //search 
         if(isSubscribed) {
           resetTooltipContainer()
           if(search_string != '' && search_string != null){
