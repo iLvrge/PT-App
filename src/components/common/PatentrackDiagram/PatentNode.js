@@ -7,7 +7,7 @@ import pdfIcon from './assets/pdf.svg';
 class PatentNode extends React.Component {
   constructor(props_) {
     super(props_);
-
+    this.config = props_.config;
     this.dateFormat = d3.timeFormat('%m/%d/%Y');
   }
 
@@ -94,31 +94,20 @@ class PatentNode extends React.Component {
       .attr('class', 'wrapText')
       .attr('title', typeof this.props.data.json != 'undefined' && typeof this.props.data.json.original_name !== 'undefined' && this.props.data.json.original_name != '' && this.props.data.json.original_name !== null ? this.props.data.json.original_name : this.props.data.name)
       .on("mouseover", () => {
-        //let dx = d3.event.offsetX, dy = d3.event.offsetY
-        /* let fromElement = d3.event.fromElement
-        if(fromElement != null && fromElement.nodeName != 'rect') {
-          const path =  d3.event.path
-          if(path.length > 0) {
-            const findIndex = path.findIndex( r => r.nodeName == 'g' && r.id.indexOf('PatentrackNode') !== -1)
-            if(findIndex !== 1) {
-              fromElement = path[findIndex].querySelector('rect')
-            }
-          } 
-        }
-        const getBoundElementRec = fromElement.getBoundingClientRect() */
-        //let pos = d3.select(d3.event.fromElement).node().getBoundingClientRect();
-
+        
+        
         d3.select("#patentrackDiagramDiv")
           .append("div")	
           .attr("class", "tooltip_title MuiTooltip-tooltip")	
           .attr("style", `background: ${this.props.isDarkTheme ? this.props.themeMode.dark.palette.background.default : this.props.themeMode.light.palette.background.default};`)
           .html(typeof this.props.data.json != 'undefined' && typeof this.props.data.json.original_name !== 'undefined' && this.props.data.json.original_name != '' && this.props.data.json.original_name !== null ? this.props.data.json.original_name : this.props.data.name)
-          /* .style('left', `${pos['x']}px`)
-          .style('top', `${(window.pageYOffset  + pos['y'] - 100)}px`); */
+          .style('left', `${dx}px`)
+          .style('top', `${d3.event.pageY}px`)
           /* .style("left", `${d3.event.pageX }px`)		
           .style("top", `${d3.event.pageY }px`);	  */
-          .style("left", `${d3.event.offsetX + 30}px`)		
-          .style("top", `${(d3.event.offsetY)}px`);	  
+          //.attr("transform", `translate(${dx + 30}, ${dy})`)
+         /*  .style("left", `${dx + 30}px`)		
+          .style("top", `${(dy)}px`);	   */
       })
       .on("mouseout", () => {
         d3.selectAll(".tooltip_title").remove();

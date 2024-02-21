@@ -850,7 +850,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
             clearOtherItems()
         } else {
             if(row.status == 1) {
-                let updateGroup = [...selectedGroup] 
+                let updateGroup = [...selectedGroup]  
                 if(parseInt(row.type) === 1) { 
                     if(currentSelection != row.representative_id) {
                         setCurrentSelection(row.representative_id)
@@ -859,30 +859,33 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                         setCurrentSelection(null)
                     }
                 } else { 
+
                     const element = event.target.closest('div.ReactVirtualized__Table__rowColumn')
                     let index = -1
                     if(element !== null ) {
                         index = element.getAttribute("aria-colindex");
-                    } 
-                    if(index == 2) {
+                    }  
+                    /* if(index == 2) {
                         if(currentSelection != row.representative_id) {
                             setCurrentSelection(row.representative_id)
                         } else { 
                             setCurrentSelection(null)
                         }
-                    } else {
-                        const updateSelected = [parseInt(row.representative_id)]
-                        dispatch(setMainCompaniesRowSelect([]))
-                        setSelectItems(updateSelected)
-                        //setSelectGroups(updateGroup)
-                        updateUserCompanySelection(updateSelected)
-                        dispatch( setMainCompaniesSelected( updateSelected, updateGroup ) ) 
-                        dispatch( setNamesTransactionsSelectAll( false ) )
-                        dispatch( setSelectedNamesTransactions([]) )
-                        dispatch( setMainCompaniesAllSelected( updateSelected.length === totalRecords ? true : false ) ) 
-                        resetAll() 
-                        clearOtherItems()
-                    } 
+                    } else { */ 
+                        if(!selected.includes(row.representative_id)) {
+                            const updateSelected = [parseInt(row.representative_id)]
+                            dispatch(setMainCompaniesRowSelect([]))
+                            setSelectItems(updateSelected)
+                            //setSelectGroups(updateGroup)
+                            updateUserCompanySelection(updateSelected)
+                            dispatch( setMainCompaniesSelected( updateSelected, updateGroup ) ) 
+                            dispatch( setNamesTransactionsSelectAll( false ) )
+                            dispatch( setSelectedNamesTransactions([]) )
+                            dispatch( setMainCompaniesAllSelected( updateSelected.length === totalRecords ? true : false ) ) 
+                            resetAll() 
+                            clearOtherItems()
+                        }
+                    /* }  */
                 }
             }          
         }

@@ -1425,24 +1425,24 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         callSelectedAssets({ grant_doc_num, appno_doc_num, asset });
         if(defaultViewFlag === 0) {
           let changeBar = false
-          if(openIllustrationBar === false) {
+          if(openIllustrationBar === false && typeof handleIllustrationBarOpen == 'function') {
             changeBar = true
             handleIllustrationBarOpen() 
           }
-          if(commentBar === false) {
+          if(commentBar === false && typeof handleCommentBarOpen == 'function') {
             changeBar = true
             handleCommentBarOpen() 
           }
-          if(openChartBar === false) {
+          if(openChartBar === false && typeof handleChartBarOpen == 'function') {
             changeBar = true
             handleChartBarOpen()
           }
-          if(openAnalyticsBar === false) {
+          if(openAnalyticsBar === false && typeof handleAnalyticsBarOpen == 'function') {
             changeBar = true
             handleAnalyticsBarOpen()
           }
 
-          if(changeBar === true) {
+          if(changeBar === true && typeof handleVisualBarSize == 'function') {
             handleVisualBarSize(true, true, true, true)
           }
           setDefaultViewFlag(1)
