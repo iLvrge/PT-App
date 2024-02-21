@@ -101,8 +101,8 @@ class PatentNode extends React.Component {
           .attr("class", "tooltip_title MuiTooltip-tooltip")	
           .attr("style", `background: ${this.props.isDarkTheme ? this.props.themeMode.dark.palette.background.default : this.props.themeMode.light.palette.background.default};`)
           .html(typeof this.props.data.json != 'undefined' && typeof this.props.data.json.original_name !== 'undefined' && this.props.data.json.original_name != '' && this.props.data.json.original_name !== null ? this.props.data.json.original_name : this.props.data.name)
-          .style('left', `${dx}px`)
-          .style('top', `${d3.event.pageY}px`)
+          .style('left', `${dx + this.props.node.width + 1}px`)
+          .style('top', `${d3.event.pageY - 70}px`)
           /* .style("left", `${d3.event.pageX }px`)		
           .style("top", `${d3.event.pageY }px`);	  */
           //.attr("transform", `translate(${dx + 30}, ${dy})`)

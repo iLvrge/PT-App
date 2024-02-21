@@ -19,6 +19,7 @@ import { setCompanies } from '../../../../../../actions/patenTrackActions'
 
 function descendingComparator(a, b, orderBy) {
   const item1 = !isNaN(Number(a[orderBy])) ? Number(a[orderBy]) : a[orderBy], item2 = !isNaN(Number(b[orderBy])) ? Number(b[orderBy]) : b[orderBy]
+  console.log(item1, item2)
   if (item2 < item1) {
     return -1
   }
