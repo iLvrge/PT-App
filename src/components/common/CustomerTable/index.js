@@ -122,6 +122,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
             label: 'Assignments',
             dataKey: 'totalTransactions', 
             showGrandTotal: true,  
+            grandTotalField: 'grandTotal',
             align: 'center'             
         },     
         {
