@@ -82,7 +82,7 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
       if (data.isCluster) {
         return `<span class="cluster-header">${data.items[0].clusterHeading} (${data.items.length})</span>`
       } else { 
-        if(['due_dilligence', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'litigation_transactions'].includes(data.category)) {
+        if(['due_dilligence', 'collaterlized', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'litigation_transactions'].includes(data.category)) {
           let image = data.rawData.logo
           if (image !== '' && image !== null && image != undefined) {
               if (image.indexOf('http') === -1) {
@@ -451,9 +451,10 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
 
   const getTimelineRawData = async(start, end) => {
     let entered = true;
-    if(['acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'inventing_transactions', 'litigation_transactions'].includes(selectedCategory) && assetTypesSelected.length == 0) {
+    /* if(['acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'inventing_transactions', 'litigation_transactions'].includes(selectedCategory) && assetTypesSelected.length == 0) {
       entered = false;
-    }
+    } */
+    //console.log(`getTimelineRawData ${entered} ${assetTypesSelected.length}`);
     if(entered === true) {
       dispatch(setTimelineRequest(true))
       setIsLoadingTimelineData(true) 
