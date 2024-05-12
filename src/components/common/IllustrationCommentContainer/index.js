@@ -358,7 +358,7 @@ const IllustrationCommentContainer = ({
                                 <NamesContainer
                                 visualizerBarSize={visualizerBarSize}/>
                             :
-                                selectedCategory == 'collaterlized' ?
+                                ['deflated_collaterals', 'collaterlized'].includes(selectedCategory)  ?
                                     <TimelineWithLogo 
                                         assignmentBar={assignmentBar} 
                                         assignmentBarToggle={assignmentBarToggle} 
@@ -367,7 +367,7 @@ const IllustrationCommentContainer = ({
                                     />
                                 :
 
-                            ['clear_encumbrances', 'deflated_collaterals'].includes(selectedCategory)?
+                            ['clear_encumbrances'].includes(selectedCategory)?
                                 <TimelineContainer 
                                     assignmentBar={assignmentBar} 
                                     assignmentBarToggle={assignmentBarToggle} 

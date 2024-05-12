@@ -82,7 +82,7 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
       if (data.isCluster) {
         return `<span class="cluster-header">${data.items[0].clusterHeading} (${data.items.length})</span>`
       } else { 
-        if(['due_dilligence', 'collaterlized', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'litigation_transactions'].includes(data.category)) {
+        if(['due_dilligence', 'collaterlized', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'litigation_transactions', 'deflated_collaterals'].includes(data.category)) {
           let image = data.rawData.logo
           if (image !== '' && image !== null && image != undefined) {
               if (image.indexOf('http') === -1) {
@@ -193,7 +193,7 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
       companyName,
       rawData: assetsCustomer,
       category: selectedCategory,
-      className: `asset-type-${assetType} ${selectedCategory == 'late_recording' ? 'recordings' : ''} ${assetsCustomer.release_exec_dt != null && assetsCustomer.release_exec_dt != '' ? assetsCustomer.partial_transaction == 1 ? 'asset-type-security-release-partial' : 'asset-type-security-release' : ['due_dilligence', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'litigation_transactions'].includes(selectedCategory) ? 'item_with_logo' :''}`,
+      className: `asset-type-${assetType} ${selectedCategory == 'late_recording' ? 'recordings' : ''} ${assetsCustomer.release_exec_dt != null && assetsCustomer.release_exec_dt != '' ? assetsCustomer.partial_transaction == 1 ? 'asset-type-security-release-partial' : 'asset-type-security-release' : ['due_dilligence', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'litigation_transactions', 'collaterlized', 'deflated_collaterals'].includes(selectedCategory) ? 'item_with_logo' :''}`,
       collection: [ { id: assetsCustomer.id, totalAssets: assetsCustomer.totalAssets } ],
       showTooltips: false
     }
