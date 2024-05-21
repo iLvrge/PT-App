@@ -90,7 +90,7 @@ const Reports = (props) => {
         },
         {
             title: 'To Collateralize',
-            tooltip: 'Patent assets that were assigned under incorrect address of the owner or the stated corresponding agent.',
+            tooltip: 'Assets that have not been pledged as collateral under its security agreements.',
             number: 0,
             patent: '',
             application: '',
