@@ -419,7 +419,14 @@ const TimelineChart = (props) => {
         const assetType = Number.isInteger(assetsCustomer.tab_id) ? convertTabIdToAssetType(assetsCustomer.tab_id) : 'default'
         const companyName = selectedWithName.filter(company => assetsCustomer.company == company.id ? company.name : '')
         const customerFirstName = assetsCustomer.tab_id == 10 ? assetsCustomer.customerName.split(' ')[0] : assetsCustomer.customerName;
-
+        let className = `asset-type-${assetType}`
+        if(assetsCustomer.release_exec_dt != null) {
+            if(assetsCustomer.partial_transaction == 1) {
+                className = 'asset-type-security-release-partial'
+            } else {
+                className = 'asset-type-security-release'
+            }
+        }
         const item = {
             type: 'point',
             start: new Date(assetsCustomer.exec_dt),
@@ -428,7 +435,7 @@ const TimelineChart = (props) => {
             assetType,
             companyName,
             rawData: assetsCustomer,
-            className: `asset-type-${assetType} ${assetsCustomer.release_exec_dt != null ? assetsCustomer.partial_transaction == 1 ? 'asset-type-security-release-partial' : 'asset-type-security-release' : ''}`,
+            className: className,
             collection: [{ id: assetsCustomer.id, totalAssets: assetsCustomer.totalAssets }],
             showTooltips: false
         }
