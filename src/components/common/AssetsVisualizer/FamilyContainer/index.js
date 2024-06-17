@@ -208,6 +208,12 @@ const FamilyContainer = ({ family, onClose }) => {
         }, 50)
     }, [ timelineRawData, isLoadingTimelineRawData, timelineContainerRef ])
 
+    useEffect(() => {
+        if(familyDataRetrieved == false) {
+            setIsLoadingTimelineRawData(false)
+        }
+    }, [familyDataRetrieved])
+
     const handleCloseModal = () => {
         setLegalEvents([])
         setLegalModal(!legalModal)
