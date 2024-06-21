@@ -610,7 +610,7 @@ const IllustrationCommentContainer = ({
                                         timelineData={timelineRawData}
                                     />
                                 :
-                                ['due_dilligence', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'litigation_transactions'].includes(selectedCategory)
+                                ['due_dilligence', 'acquisition_transactions', 'divestitures_transactions', 'licensing_transactions', 'collateralization_transactions', 'litigation_transactions', 'deflated_collaterals', 'collaterlized'].includes(selectedCategory)
                                 ?
                                     <TimelineWithLogo 
                                         assignmentBar={assignmentBar} 
