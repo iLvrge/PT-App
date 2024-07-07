@@ -96,7 +96,7 @@
   },
   "scripts": {
     "start": "react-scripts  --openssl-legacy-provider start",
-    "build": "GENERATE_SOURCEMAP=false react-scripts  build && react-compress",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build && react-compress && node addVersion.js $(node -p \"require('./package.json').version\")",
     "test": "react-scripts  --openssl-legacy-provider test",
     "eject": "react-scripts  --openssl-legacy-provider eject"
   },
