@@ -249,43 +249,7 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
       default:
         return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png', color: '#FFFFFF' };
     }
-  };
-  
-
-  const getColorAndImage = (tabId, isDarkTheme, themeMode) => {
-    const themePalette = isDarkTheme ? themeMode.dark.palette : themeMode.light.palette;
-    switch (parseInt(tabId)) {
-      case 1:
-        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/acquisition.png', color: themePalette.secondary.main };
-      case 2:
-        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png', color: '#70A800' };
-      case 3:
-        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licensein.png', color: '#E69800' };
-      case 4:
-        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licenseout.png', color: '#E69800' };
-      case 5:
-        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png', color: '#00a9e6' };
-      case 6:
-        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png', color: '#FFFFFF' };
-      case 7:
-        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png', color: '#FFFFFF' };
-      case 8:
-        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/options.png', color: '#000000' };
-      case 9:
-        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/courtorder.png', color: themePalette.secondary.main };
-      case 10:
-        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png', color: '#FFFFFF' };
-      case 11:
-        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/release.png', color: '#00a9e6' };
-      case 12:
-        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png', color: '#00a9e6' };
-      case 13:
-        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png', color: '#00a9e6' };
-      case 14:
-      default:
-        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png', color: '#FFFFFF' };
-    }
-  };
+  }; 
 
   const createTooltipTemplate = (data, transactionType, color, isDarkTheme, themeMode, executionDate, recordedDate, selectedCategory) => {
     const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
