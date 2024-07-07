@@ -252,6 +252,60 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
   };
   
 
+  const getColorAndImage = (tabId, isDarkTheme, themeMode) => {
+    const themePalette = isDarkTheme ? themeMode.dark.palette : themeMode.light.palette;
+    switch (parseInt(tabId)) {
+      case 1:
+        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/acquisition.png', color: themePalette.secondary.main };
+      case 2:
+        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/sales.png', color: '#70A800' };
+      case 3:
+        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licensein.png', color: '#E69800' };
+      case 4:
+        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/licenseout.png', color: '#E69800' };
+      case 5:
+        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png', color: '#00a9e6' };
+      case 6:
+        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png', color: '#FFFFFF' };
+      case 7:
+        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png', color: '#FFFFFF' };
+      case 8:
+        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/options.png', color: '#000000' };
+      case 9:
+        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/courtorder.png', color: themePalette.secondary.main };
+      case 10:
+        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png', color: '#FFFFFF' };
+      case 11:
+        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/release.png', color: '#00a9e6' };
+      case 12:
+        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png', color: '#00a9e6' };
+      case 13:
+        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/secure.png', color: '#00a9e6' };
+      case 14:
+      default:
+        return { image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png', color: '#FFFFFF' };
+    }
+  };
+
+  const createTooltipTemplate = (data, transactionType, color, isDarkTheme, themeMode, executionDate, recordedDate, selectedCategory) => {
+    const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
+    const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector(`#all_timeline_logo`) : document.getElementById(`all_timeline_logo`);   
+    const getPosition = element != null ? element.getBoundingClientRect() : {y: 0, x: 0};  
+    const themePalette = isDarkTheme ? themeMode.dark.palette : themeMode.light.palette;
+    let tooltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color};top:${ getPosition.y }px;left:${ getPosition.x }px;background:${themePalette.background.paper};color:${themePalette.text.primary}'>
+                            <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
+                            <div>Exected: ${executionDate ? moment(executionDate).format('ll') : ''}</div>`;
+    if (selectedCategory === 'late_recording') {
+      tooltipTemplate += `<div>Recorded: ${recordedDate ? moment(recordedDate).format('ll') : ''}</div>
+                          <div>Lapsed: ${dateDifference(executionDate, recordedDate)} days</div>`;
+    }
+    tooltipTemplate += `<div><h4>${selectedCategory === 'collaterlized' ? 'Borrower' : 'Assignors'}:</h4>
+                        ${data.assignor.map(or => `<div>${or.original_name}</div>`).join('')}</div>
+                        <div><h4>${selectedCategory === 'collaterlized' ? 'Lender' : 'Assignees'}:</h4>
+                        ${data.assignee.map(ee => `<div>${ee.original_name}</div>`).join('')}</div></div>`;
+    return tooltipTemplate;
+  };
+
   // Custom ToolTip 
   
   const showTooltip = (item, event) => {    
@@ -264,47 +318,21 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
             .then( response => {
               const { data } = response
               if( data != null && ( data.assignor.length > 0 || data.assignee.length > 0 ) && tootlTip === data.assignment.rf_id) {
-                const executionDate = data.assignor.length > 0 ? data.assignor[0].exec_dt : ''
-                const recordedDate = typeof data.assignment != 'undefined' ? data.assignment.record_dt  : ''
-                let transactionType = convertTabIdToAssetType(item.tab_id)
-                const findIndex = assetsTypesWithKey.findIndex( row => row.type == transactionType)
-  
-                if(findIndex !== -1) {
-                  transactionType = assetsTypesWithKey[findIndex].name
-                } else {
-                  transactionType = capitalize(transactionType)
-                }
+                const executionDate = data.assignor.length > 0 ? data.assignor[0].exec_dt : '';
+                const recordedDate = data.assignment ? data.assignment.record_dt : '';
+                let transactionType = convertTabIdToAssetType(item.tab_id);
+                const findIndex = assetsTypesWithKey.findIndex(row => row.type === transactionType);
+        
+                transactionType = findIndex !== -1 ? assetsTypesWithKey[findIndex].name : capitalize(transactionType);
                 let { image, color } = getColorAndImage(item.tab_id, isDarkTheme, themeMode); 
                 color = '#FFFFFF'
-                const checkFullScreen = document.getElementsByClassName('fullscreenModal'); 
-                const element = checkFullScreen.length > 0 ? checkFullScreen[0].querySelector(`#all_timeline_logo`) : document.getElementById(`all_timeline_logo`);   
-                const getPosition = element != null ? element.getBoundingClientRect() : {y: 0, x: 0};  
-                let tootltipTemplate = `<div class='custom_tooltip' style='border: 1px solid ${color} ;top:${ getPosition.y }px;left:${ getPosition.x }px;background:${isDarkTheme ? themeMode.dark.palette.background.paper : themeMode.light.palette.background.paper};color:${isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary}'>
-                                            <h4 style='color:${color};text-align:left;margin:0'>${transactionType}</h4>
-                                            <div>
-                                              Exected: ${ executionDate != '' ? moment(executionDate).format('ll') : ''}
-                                            </div> `
-                if(selectedCategory == 'late_recording' ){
-                  tootltipTemplate += `<div>Recorded: ${ recordedDate != '' ? moment(recordedDate).format('ll') : ''}
-                  </div> <div>Lapsed: ${dateDifference(executionDate, recordedDate)} days</div>`
-                }                       
-                tootltipTemplate += `<div>
-                                              <h4>${selectedCategory == 'collaterlized' ? 'Borrower' : 'Assignors'}:</h4>
-                                              ${data.assignor.map(or => ( 
-                                                '<div>'+or.original_name+'</div>'
-                                              )).join('')}
-                                            </div>
-                                            <div>
-                                              <h4>${selectedCategory == 'collaterlized' ? 'Lender' : 'Assignees'}:</h4>
-                                              ${data.assignee.map(ee => (
-                                                '<div>'+ee.original_name+'</div>'
-                                              )).join('')}
-                                            </div>
-                                          </div>` 
-                  resetTooltipContainer() 
-                if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) {
-                  document.body.insertAdjacentHTML('beforeend',tootltipTemplate)
-                  //timelineContainerRef.current.childNodes[0].insertAdjacentHTML('beforeend',tootltipTemplate)
+                
+                let tooltipTemplate = createTooltipTemplate(data, transactionType, color, isDarkTheme, themeMode, executionDate, recordedDate, selectedCategory); 
+                 
+                resetTooltipContainer() 
+                if(timelineContainerRef.current != null && timelineContainerRef.current.childNodes != null) { 
+                  document.body.insertAdjacentHTML('beforeend',tooltipTemplate)
+                  //timelineContainerRef.current.childNodes[0].insertAdjacentHTML('beforeend',tooltipTemplate)
                 }
               } else {
                 resetTooltipContainer()
