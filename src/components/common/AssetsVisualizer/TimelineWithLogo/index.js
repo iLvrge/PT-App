@@ -521,6 +521,7 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
                 if(timelineRequest === false) {
                   setTimelineRawGroups([]) //groups
                   setTimelineRawData([]) //items
+                  setPreviousLoad(false) 
                   getTimelineRawData();
                 } 
                 //setIsLoadingTimelineData(false)
@@ -529,6 +530,7 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
                 //setIsLoadingTimelineData(true)
                 setTimelineRawGroups([]) //groups
                 setTimelineRawData([]) //items
+                setPreviousLoad(false) 
                 const { data } = await PatenTrackApi.getShareTimelineList(location.pathname.replace('/', ''))
                 let list = removeSecurityRelease(data.list)
                 setTimelineRawData(list) //items
