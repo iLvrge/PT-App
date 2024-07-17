@@ -840,8 +840,8 @@ const Reports = (props) => {
             
             /* if(viewDashboard.line === true || (profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank')) {
                 const cancelRequest = await PatenTrackApi.cancelAllDashboardToken()  
-                const CancelToken = PatenTrackApi.generateCancelToken() 
-                const source = CancelToken.source()
+                
+                const source = PatenTrackApi.generateCancelToken() 
                 if (isMounted.current) { 
                     const dashboardRequest = cardList.map(async item => {
                         const formData = new FormData()
@@ -867,8 +867,8 @@ const Reports = (props) => {
             } else { */
                 const type = viewDashboard.kpi === true ? [...KPI_TYPE] : [...GAUGE_TYPE]
                 const cancelRequest = await PatenTrackApi.cancelAllDashboardCountToken()  
-                const CancelToken = PatenTrackApi.generateCancelToken() 
-                const source = CancelToken.source()
+                
+                const source = PatenTrackApi.generateCancelToken() 
                 if (isMounted.current) { 
                     const formData = new FormData()
                     formData.append('list', JSON.stringify(list));
@@ -956,8 +956,8 @@ const Reports = (props) => {
                         if(viewDashboard.kpi === true) {
                             formData.delete('type')
                             formData.append('type', 37)
-                            const CancelToken = PatenTrackApi.generateCancelToken() 
-                            const source = CancelToken.source()
+                            
+                            const source = PatenTrackApi.generateCancelToken() 
                             const newRequestData = await PatenTrackApi.getDashboardData(formData, source)
                             if( newRequestData !== null){
                                 updateList(newRequestData, 37)
@@ -977,8 +977,8 @@ const Reports = (props) => {
         resetAll(false)
         setTimeLineLoading(true) 
         const cancelRequest = await PatenTrackApi.cancelAllDashboardTimelineToken()  
-        const CancelToken = PatenTrackApi.generateCancelToken() 
-        const source = CancelToken.source()
+        
+        const source = PatenTrackApi.generateCancelToken() 
         dispatch(setViewDashboardIntial(true))
         const dashboardRequest = timelineList.map(async item => {
             const formData = new FormData()
