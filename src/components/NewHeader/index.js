@@ -471,8 +471,8 @@ const NewHeader = (props) => {
         dispatch(setChannelID(null))
         dispatch(setConnectionBoxView(false))
         dispatch(setPDFView(false))
-        dispatch(toggleUsptoMode(false))
-        dispatch(toggleLifeSpanMode(false))
+        //dispatch(toggleUsptoMode(false))
+        //dispatch(toggleLifeSpanMode(false))
         dispatch(toggleFamilyMode(false))
         dispatch(toggleFamilyItemMode(false))
         dispatch(setDriveTemplateFrameMode(false))
@@ -793,6 +793,7 @@ const handleOpenSettings = useCallback((event) => {
           clearOtherItems={clearOtherItems}
           layoutName={layoutName}
           breadcrumbs={breadcrumbs}
+          clipboardActive={display_clipboard}
           selectedCategory={selectedCategory}
           display_sales_assets={display_sales_assets}
           resetAllActivity={resetAllActivity}

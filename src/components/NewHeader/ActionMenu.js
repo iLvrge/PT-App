@@ -750,19 +750,19 @@ const ActionMenu = (props) => {
                     ['Owned', 'Invented', 'Acquired', 'Collaterlized', 'Maintenance Fee Due', 'Challenged (PTAB)', 'Divested', 'Abandoned', 'Members of Owned USA', 'Proliferate Inventors', 'Law Firms', 'Lenders'].includes(layoutName) 
                     ? 
                         <span className={classes.breadcrumbHeadingIcon}>
-                            <i className="fa fa-sm fa-angle-double-right"></i> <AppsOutage/>  <span>{layoutName}</span>
+                            <i className="fa fa-sm fa-angle-double-right"></i> <AppsOutage/>  <span>{props.clipboardActive === true ? 'Clipboard' : layoutName}</span>
                         </span>
                     :
                         ['Chain-of-Title', 'To Assign', 'To Record', 'To Divest', 'To Monetize', 'Names', 'To Collateralize', 'Deflated Collateral', 'Encumbrances', 'Maintainance', 'Recordings', 'Corrections'].includes(layoutName) 
                         ?
                             <span className={classes.breadcrumbHeadingIcon}>
-                                <i className="fa fa-sm fa-angle-double-right"></i> <Speed/>  <span>{layoutName}</span>
+                                <i className="fa fa-sm fa-angle-double-right"></i> <Speed/>  <span>{props.clipboardActive === true ? 'Clipboard' : layoutName}</span>
                             </span>
                         :
                             ['Acquisitions', 'Divestitures', 'Licensing', 'Collateralization', 'Inventing'].includes(layoutName) 
                             ?
                                 <span className={classes.breadcrumbHeadingIcon}>
-                                    <i className="fa fa-sm fa-angle-double-right"></i> <ViewTimeline/>  <span>{layoutName}</span>
+                                    <i className="fa fa-sm fa-angle-double-right"></i> <ViewTimeline/>  <span>{props.clipboardActive === true ? 'Clipboard' : layoutName}</span>
                                 </span>
                             :
                             <span className={classes.breadcrumbHeadingIcon}>
@@ -773,7 +773,7 @@ const ActionMenu = (props) => {
                                     :
                                         ''
                                 }
-                                  {layoutName == 'Transactions' ? <HandshakeOutlined /> : layoutName == 'Patent Assets' ? <ASSET_ICON_SPAN/>  : ['Settings > Companies', 'Settings > Users', 'Settings > Category'].includes(layoutName) ? <Settings/> : ''}  <span>{layoutName}</span>
+                                  {layoutName == 'Transactions' ? <HandshakeOutlined /> : layoutName == 'Patent Assets' ? <ASSET_ICON_SPAN/>  : ['Settings > Companies', 'Settings > Users', 'Settings > Category'].includes(layoutName) ? <Settings/> : ''}  <span>{props.clipboardActive === true ? 'Clipboard' : layoutName}</span>
                             </span>
                                   
                 } 
