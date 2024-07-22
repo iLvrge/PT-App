@@ -1753,11 +1753,11 @@ const updateTableColumn = (ratingItems) => {
         }
         let oldSelection = [...selectItems]; 
         if(cntrlKey !== undefined) {
-          if(selectedCategory == 'restore_ownership' && display_clipboard === false) {
+          /* if(selectedCategory == 'restore_ownership' && display_clipboard === false) {
             dispatch(setAssetTypesPatentsSelected([row.asset]))
             setSelectItems([row.asset])
             handleOnClick(row)
-          } else { 
+          } else { */ 
             oldSelection = [...selectItems]
             let newItem = false
             if (!oldSelection.includes(row.asset)) {
@@ -1787,7 +1787,7 @@ const updateTableColumn = (ratingItems) => {
               setCheckBar(!checkBar)
               resetAll()
             }
-          }
+          /* } */
           dispatch(setAssetTypesPatentsSelectAll(false))                      
         } else {
           if(typeof e.target.closest == 'function') {
