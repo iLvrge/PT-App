@@ -209,7 +209,7 @@ const AgentsVisualizer = (props) => {
             }
             buiildChartData()
         }
-    }, [line_chart_data])
+    }, [line_chart_data, props.type])
 
     const callChartData = async(list, totalRecords) => {
         if(line_chart_data[props.type].loading === false) { 
