@@ -53,7 +53,7 @@ function Row({ selected, onSelect, isSelected, isChildSelected, row, updateData,
 
   const onHandleDropDown = (event, item) => {
     const groupName = event.target.innerText
-    let targetValue = 0
+    let targetValue = 0 
     if(groupName != '') {
       if(companiesList.length > 0) { 
         const filterList = companiesList.filter(company => {
@@ -61,7 +61,7 @@ function Row({ selected, onSelect, isSelected, isChildSelected, row, updateData,
             const name = company.representative_name === null
             ? company.original_name
             : company.representative_name
-            return groupName == name
+            return groupName.trim() == name.trim()
           }
         }) 
         if(filterList.length > 0) {
@@ -70,7 +70,7 @@ function Row({ selected, onSelect, isSelected, isChildSelected, row, updateData,
       }
     } else {
       targetValue = -1
-    }
+    } 
     setDropdownOpen(!dropdownOpen)  
     if(targetValue >= 0) { 
       moveItem(targetValue, item) 
@@ -205,7 +205,7 @@ function Row({ selected, onSelect, isSelected, isChildSelected, row, updateData,
               />
             :
               <span
-                {...(row.children.length > 0 ? {onClick: () => editColumn(row)} : {})}
+                onClick = { () => editColumn(row)}
               >
                 {
                   row.representative_name === null
