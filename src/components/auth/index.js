@@ -44,7 +44,9 @@ function Auth(props) {
   }
  
 
-  if (props.auth.authenticated && !empty(getToken())) return <Redirect to={'/dashboard'} />
+  if (props.auth.authenticated && getToken() !== '') {
+    return <Redirect to="/dashboard" />;
+  }
   return (
     <div>
       {!props.auth.redirect_page ? (
