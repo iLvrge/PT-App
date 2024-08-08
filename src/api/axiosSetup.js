@@ -33,6 +33,7 @@ api.interceptors.response.use(
                 return Promise.reject(refreshError);
             }
         }
+        console.log('error.response', error.response)
         // Handle specific error messages for other status codes
         if (error.response.status === 403) {
             const errorMessage = error.response.data  ;
