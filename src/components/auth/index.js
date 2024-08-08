@@ -44,9 +44,8 @@ function Auth(props) {
   }
  
 
-  if (props.auth.authenticated && getToken() !== '') {
-    console.log('I am in authenticated', props.auth.authenticated, getToken())
-    //return <Redirect to="/dashboard" />;
+  if (props.auth.authenticated && getToken() !== '') { 
+    return <Redirect to="/dashboard" />;
   }
   return (
     <div>
