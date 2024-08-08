@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { base_api_url, base_new_api_url } from '../config/config'
+import getToken from './token'
 
 const getCookie = (name)=> {
     var nameEQ = name + '='
