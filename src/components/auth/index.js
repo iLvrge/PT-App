@@ -12,6 +12,8 @@ import Login from './login'
 import Reset from './reset'
 import * as authActions from '../../actions/authActions'
 
+import getToken from '../../api/token'
+
 function Auth(props) {
   const classes = useStyles()
 
@@ -42,7 +44,9 @@ function Auth(props) {
   }
  
 
-  if (props.auth.authenticated) return <Redirect to={'/dashboard'} />
+  if (props.auth.authenticated && getToken() !== '') { 
+    return <Redirect to="/dashboard" />;
+  }
   return (
     <div>
       {!props.auth.redirect_page ? (
