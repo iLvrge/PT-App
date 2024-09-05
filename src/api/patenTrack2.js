@@ -1,6 +1,7 @@
 import axios from 'axios'
 import _toLower from 'lodash/toLower'
 
+import api, { createCancelToken } from './axiosSetup';
 import { base_api_url, base_new_api_url } from '../config/config'
 import { convertAssetTypeToTabId } from '../utils/assetTypes'
 import getToken from './token'
@@ -63,23 +64,23 @@ var cancelCustomerTransactions = {cancelToken: null}, cancelTimelineActivity = {
 class PatenTrackApi { 
 
   static getDocumentIdentifierFile(identifier) {
-    return axios.get(`https://developer.uspto.gov/ptab-api/documents/${identifier}/download`, getBlobHeader())
+    return api.get(`https://developer.uspto.gov/ptab-api/documents/${identifier}/download`, getBlobHeader())
   }
 
   static getSiteLogo() {
-    return axios.get(`${base_api_url}/site_logo`, getHeader())
+    return api.get(`${base_api_url}/site_logo`, getHeader())
   }
 
   static getProfile() {  
-    return axios.get(`${base_new_api_url}/profile`, getHeader())
+    return api.get(`${base_new_api_url}/profile`, getHeader())
   }
 
   static getCompaniesList() {
-    return axios.get(`${base_new_api_url}/companies`, getHeader())
+    return api.get(`${base_new_api_url}/companies`, getHeader())
   } 
 
   static updateCompany(companyId, form) {
-    return axios.put(`${base_new_api_url}/companies/${companyId}`, form, getFormUrlHeader())
+    return api.put(`${base_new_api_url}/companies/${companyId}`, form, getFormUrlHeader())
   }
 
   static getChildCompanies(companyID, offset = 0 ) {
@@ -87,7 +88,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelChildCompaniesRequest = c
     })
-    return axios.get(`${base_new_api_url}/companies/${companyID}/list?offset=${offset}&limit=${DEFAULT_CUSTOMERS_LIMIT}`, header)
+    return api.get(`${base_new_api_url}/companies/${companyID}/list?offset=${offset}&limit=${DEFAULT_CUSTOMERS_LIMIT}`, header)
   }
 
   static cancelChildCompanies() {
@@ -101,25 +102,25 @@ class PatenTrackApi {
   }
 
   static getParentCompanies( offset = 0, column, direction ) {
-    return axios.get(`${base_new_api_url}/companies/list?offset=${offset}&limit=${DEFAULT_CUSTOMERS_LIMIT}&column=${column}&direction=${direction}`,
+    return api.get(`${base_new_api_url}/companies/list?offset=${offset}&limit=${DEFAULT_CUSTOMERS_LIMIT}&column=${column}&direction=${direction}`,
       getHeader(),
     )
   }
 
   static getMaintainenceAssetsList( representative_id, offset = 0 ) {
-    return axios.get(`${base_new_api_url}/companies/maintainence_assets?representative_id=${JSON.stringify(representative_id)}&offset=${offset}&limit=${DEFAULT_CUSTOMERS_LIMIT}`,
+    return api.get(`${base_new_api_url}/companies/maintainence_assets?representative_id=${JSON.stringify(representative_id)}&offset=${offset}&limit=${DEFAULT_CUSTOMERS_LIMIT}`,
       getHeader(),
     )
   }
 
   static getMaintainenceAssetsEventsList( representative_id) {
-    return axios.get(`${base_new_api_url}/companies/maintainence_assets_events?representative_id=${JSON.stringify(representative_id)}`,
+    return api.get(`${base_new_api_url}/companies/maintainence_assets_events?representative_id=${JSON.stringify(representative_id)}`,
       getHeader(),
     )
   }
 
   static getCompaniesUserList(companyID) {
-    return axios.get(`${base_new_api_url}/companies${companyID}/users`, getHeader())
+    return api.get(`${base_new_api_url}/companies${companyID}/users`, getHeader())
   }
 
   static linkWithSheet( type, form ) {
@@ -127,7 +128,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelLink = c
     })
-    return axios.post(`${base_new_api_url}/documents/sheet/${type}`, form, header)
+    return api.post(`${base_new_api_url}/documents/sheet/${type}`, form, header)
   }
 
   static cancelLinkRequest() {
@@ -142,11 +143,11 @@ class PatenTrackApi {
   
   static addCompanyRequest( form ) {
     let header = getFormUrlHeader()
-    return axios.post(`${base_new_api_url}/companies/request`, form, header)    
+    return api.post(`${base_new_api_url}/companies/request`, form, header)    
   }
 
   static getCompaniesRequest( ) {
-    return axios.get(`${base_new_api_url}/companies/request`, getHeader())
+    return api.get(`${base_new_api_url}/companies/request`, getHeader())
   } 
 
   static linkSheetSelectedData( type, asset, form ) {
@@ -154,7 +155,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelLink = c
     })
-    return axios.post(`${base_new_api_url}/documents/sheet/${type}/${asset}`, form, header)    
+    return api.post(`${base_new_api_url}/documents/sheet/${type}/${asset}`, form, header)    
   }
 
   static linkSheetUpdateData( form, type  ) {
@@ -162,7 +163,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelLink = c
     })
-    return axios.put(`${base_new_api_url}/documents/sheet/${type}`, form, header)
+    return api.put(`${base_new_api_url}/documents/sheet/${type}`, form, header)
   }
 
   static getSheetDetails( form ) {   
@@ -170,7 +171,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelLink = c
     })
-    return axios.post(`${base_new_api_url}/documents/sheet`, form, header)    
+    return api.post(`${base_new_api_url}/documents/sheet`, form, header)    
   }
 
   static getSheet( type, form ) {
@@ -178,91 +179,91 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelLink = c
     })
-    return axios.post(`${base_new_api_url}/documents/sheet/${type}/url`, form, header)    
+    return api.post(`${base_new_api_url}/documents/sheet/${type}/url`, form, header)    
   }
 
   static getUsers() {
-    return axios.get(`${base_new_api_url}/users`, getHeader())
+    return api.get(`${base_new_api_url}/users`, getHeader())
   }
 
   static addUser(user) {
-    return axios.post(`${base_new_api_url}/users`, user, getMultiFormUrlHeader())
+    return api.post(`${base_new_api_url}/users`, user, getMultiFormUrlHeader())
   }
 
   static addCategoryProduct(form) {
-    return axios.post(`${base_new_api_url}/category_products`, form, getMultiFormUrlHeader())
+    return api.post(`${base_new_api_url}/category_products`, form, getMultiFormUrlHeader())
   }
 
   static getCategories() {
-    return axios.get(`${base_new_api_url}/category_products`, getHeader())
+    return api.get(`${base_new_api_url}/category_products`, getHeader())
   }
 
   static getProductsByCategory(categoryID) {
-    return axios.get(`${base_new_api_url}/category_products/${categoryID}/products`, getHeader())
+    return api.get(`${base_new_api_url}/category_products/${categoryID}/products`, getHeader())
   }
 
   static deleteCategory(categoryID) {
-    return axios.delete(`${base_new_api_url}/category_products/${categoryID}`, getHeader())
+    return api.delete(`${base_new_api_url}/category_products/${categoryID}`, getHeader())
   }
 
   static deleteProduct(productID) {
-    return axios.delete(`${base_new_api_url}/category_products/products/${productID}`, getHeader())
+    return api.delete(`${base_new_api_url}/category_products/products/${productID}`, getHeader())
   }
 
   static updateUser( user, ID ) {
-    return axios.put(`${base_new_api_url}/users/${ID}`, user, getMultiFormUrlHeader())
+    return api.put(`${base_new_api_url}/users/${ID}`, user, getMultiFormUrlHeader())
   }
 
   static deleteUser( ID ) {
-    return axios.delete(`${base_new_api_url}/users/${ID}`, getFormUrlHeader())
+    return api.delete(`${base_new_api_url}/users/${ID}`, getFormUrlHeader())
   }
 
   static getLawyers() {
-    return axios.get(`${base_new_api_url}/professionals`, getHeader())
+    return api.get(`${base_new_api_url}/professionals`, getHeader())
   }
 
   static addLawyer( lawyer ) {
-    return axios.post(`${base_new_api_url}/professionals`, lawyer, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/professionals`, lawyer, getFormUrlHeader())
   }
 
   static updateLawyer( user, ID ) {
-    return axios.put(`${base_new_api_url}/professionals/${ID}`, user, getFormUrlHeader())
+    return api.put(`${base_new_api_url}/professionals/${ID}`, user, getFormUrlHeader())
   }
 
   static deleteLawyer( ID ) {
-    return axios.delete(`${base_new_api_url}/professionals/${ID}`, getFormUrlHeader())
+    return api.delete(`${base_new_api_url}/professionals/${ID}`, getFormUrlHeader())
   }
 
   static getValidateCounter(companies) { 
-    return axios.get(`${base_new_api_url}/validity_counter?companies=${companies}`, getHeader())
+    return api.get(`${base_new_api_url}/validity_counter?companies=${companies}`, getHeader())
   } 
 
   static getAssetTypes(companies) { 
-    return axios.get(`${base_new_api_url}/customers/asset_types?companies=${JSON.stringify(companies)}`, getHeader())
+    return api.get(`${base_new_api_url}/customers/asset_types?companies=${JSON.stringify(companies)}`, getHeader())
   }
 
   static getAssetTypeIDCompanies(companies, tabID, layoutID) { 
-    return axios.get(`${base_new_api_url}/customers/asset_types/${tabID}/companies?companies=${JSON.stringify(companies)}&layout=${layoutID}`, getHeader())
+    return api.get(`${base_new_api_url}/customers/asset_types/${tabID}/companies?companies=${JSON.stringify(companies)}&layout=${layoutID}`, getHeader())
   }
 
   static getAssetTypeCompanies(companies, tabs) { 
-    return axios.get(`${base_new_api_url}/customers/asset_types/companies?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}`, getHeader())
+    return api.get(`${base_new_api_url}/customers/asset_types/companies?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}`, getHeader())
   }
 
   static getAssetTypeAssignments(companies, tabs, customers, layoutID) { 
-    return axios.get(`${base_new_api_url}/customers/asset_types/assignments?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&layout=${layoutID}`, getHeader())
+    return api.get(`${base_new_api_url}/customers/asset_types/assignments?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&layout=${layoutID}`, getHeader())
   }
 
   static getAssetTypeAssignmentAssets(assignmentRFID, layoutID) { 
-    return axios.get(`${base_new_api_url}/customers/asset_types/assignments/${assignmentRFID}?layout=${layoutID}`, getHeader())
+    return api.get(`${base_new_api_url}/customers/asset_types/assignments/${assignmentRFID}?layout=${layoutID}`, getHeader())
   }
 
   static getAssetTypeAssignmentAllAssets(companies, tabs, customers, rfIDs) { 
-    return axios.get(`${base_new_api_url}/customers/asset_types/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
+    return api.get(`${base_new_api_url}/customers/asset_types/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
   }
 
   static getAssetTypeAllAssets(companies, tabs, customers, category) { 
-    return axios.get(`${base_new_api_url}/customers/asset_types/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&type=${category}`, getHeader())
+    return api.get(`${base_new_api_url}/customers/asset_types/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&type=${category}`, getHeader())
   }
   
 
@@ -271,7 +272,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelInventorGeoLocation = c
     })
-    return axios.post(`${base_new_api_url}/customers/asset_types/inventors/location`, form, header)
+    return api.post(`${base_new_api_url}/customers/asset_types/inventors/location`, form, header)
   }
 
   static cancelInventorGeoLocationRequest() {
@@ -289,7 +290,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelAssetTypeAssignmentAllAssetsWithFamily = c
     })
-    return axios.post(`${base_new_api_url}/customers/asset_types/assets/family`, form, header)
+    return api.post(`${base_new_api_url}/customers/asset_types/assets/family`, form, header)
   }
 
   static cancelAssetTypeAssignmentAllAssetsWithFamilyRequest() {
@@ -307,7 +308,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelAgentsData = c
     })
-    return axios.post(`${base_new_api_url}/customers/asset_types/assets/agents`, form, header)
+    return api.post(`${base_new_api_url}/customers/asset_types/assets/agents`, form, header)
   }
 
   static cancelAgentsDataRequest() {
@@ -323,7 +324,7 @@ class PatenTrackApi {
   
 
   static getRestoreOwnershipAssets(companies, tabs, customers, rfIDs) { 
-    return axios.get(`${base_new_api_url}/customers/restore_ownership/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
+    return api.get(`${base_new_api_url}/customers/restore_ownership/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}`, getHeader())
   }
 
   static getCustomerAssets(type, companies, tabs, customers, rfIDs, startIndex, endIndex, column, direction, salesAssets, lawyers) { 
@@ -331,7 +332,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) { 
       cancelAssets = c
     })
-    return axios.get(`${base_new_api_url}/customers/${type}/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}&offset=${startIndex}&limit=${endIndex}&column=${column}&direction=${direction}&other_mode=${salesAssets}&lawyers=${lawyers}`, header)
+    return api.get(`${base_new_api_url}/customers/${type}/assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&assignments=${JSON.stringify(rfIDs)}&offset=${startIndex}&limit=${endIndex}&column=${column}&direction=${direction}&other_mode=${salesAssets}&lawyers=${lawyers}`, header)
   } 
 
   static getCustomerSelectedAssets(shareCode) { 
@@ -341,7 +342,7 @@ class PatenTrackApi {
     })
     let type =   process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 0 : process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? 2 : 1
 
-    return axios.get(`${base_new_api_url}/share/${shareCode}/${type}`, header)
+    return api.get(`${base_new_api_url}/share/${shareCode}/${type}`, header)
   }
 
   static cancelAssetsRequest() {
@@ -359,7 +360,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelShareDashboard = c
     })
-    return axios.get(`${base_new_api_url}/share/dashboard/list/${shareCode}`, header)
+    return api.get(`${base_new_api_url}/share/dashboard/list/${shareCode}`, header)
   }
 
   static cancelShareDashboardRequest() {
@@ -377,7 +378,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelShareTimeline = c
     })
-    return axios.get(`${base_new_api_url}/share/timeline/list/${shareCode}`, header)
+    return api.get(`${base_new_api_url}/share/timeline/list/${shareCode}`, header)
   }
 
   static cancelShareTimelineRequest() {
@@ -395,7 +396,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelLifeSpan = c
     })
-    return axios.post(`${base_new_api_url}/events/assets`, form, header)
+    return api.post(`${base_new_api_url}/events/assets`, form, header)
   }
 
   static cancelLifeSpanRequest() {
@@ -413,7 +414,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelAbandoned = c
     })
-    return axios.post(`${base_new_api_url}/events/abandoned/assets`, form, header)
+    return api.post(`${base_new_api_url}/events/abandoned/assets`, form, header)
   }
 
   static cancelAssetAbandondRequest() {
@@ -431,7 +432,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelCPC = c
     })
-    return axios.post(`${base_new_api_url}/assets/cpc`, form, header)
+    return api.post(`${base_new_api_url}/assets/cpc`, form, header)
   }
 
   static cancelCPCRequest() {
@@ -449,7 +450,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelCategoryProduct = c
     })
-    return axios.post(`${base_new_api_url}/assets/categories_products`, form, header)
+    return api.post(`${base_new_api_url}/assets/categories_products`, form, header)
   }
 
   static cancelCategoryProductRequest() {
@@ -467,7 +468,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelDownloadURL = c
     })
-    return axios.get(`${base_new_api_url}/assets/download/${ID}`, header)
+    return api.get(`${base_new_api_url}/assets/download/${ID}`, header)
   }
 
   static cancelDownloadRequest() {
@@ -481,32 +482,32 @@ class PatenTrackApi {
   }
 
   static validateForeignAssets(form) {  
-    return axios.post(`${base_new_api_url}/assets/validate/`, form, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/assets/validate/`, form, getFormUrlHeader())
   }
 
   static moveAssetForSale(form) { 
-    return axios.post(`${base_new_api_url}/assets/assets_for_sale/`, form, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/assets/assets_for_sale/`, form, getFormUrlHeader())
   }
 
   static assetForMaintainence(form) { 
-    return axios.post(`${base_new_api_url}/assets/maintainence/`, form, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/assets/maintainence/`, form, getFormUrlHeader())
   }
 
   static saveForeignAssets(form) { 
-    return axios.post(`${base_new_api_url}/assets/external_assets/`, form, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/assets/external_assets/`, form, getFormUrlHeader())
   }
 
   static deleteItemFromExternalSheet(form) { 
     const header = getHeader()
-    return axios.delete(`${base_new_api_url}/assets/external_assets/`,  {headers: header.headers, data: form} )
+    return api.delete(`${base_new_api_url}/assets/external_assets/`,  {headers: header.headers, data: form} )
   }
 
   static updateItemFromExternalSheet(form) { 
-    return axios.patch(`${base_new_api_url}/assets/external_assets/`,  form, getFormUrlHeader() )
+    return api.patch(`${base_new_api_url}/assets/external_assets/`,  form, getFormUrlHeader() )
   }
  
   static appendItemFromExternalSheet(form) { 
-    return axios.put(`${base_new_api_url}/assets/external_assets/`, form, getFormUrlHeader())
+    return api.put(`${base_new_api_url}/assets/external_assets/`, form, getFormUrlHeader())
   }
 
   static getForeignAssetsSheets(form) {  
@@ -514,7 +515,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelForeignAssetsSheet = c
     })
-    return axios.post(`${base_new_api_url}/assets/external_assets/sheets`, form, header)
+    return api.post(`${base_new_api_url}/assets/external_assets/sheets`, form, header)
   }
 
   static cancelForeignAssetsSheetRequest() { 
@@ -532,7 +533,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelForeignAssetsBySheet = c
     })
-    return axios.post(`${base_new_api_url}/assets/external_assets/sheets/assets`, form, header)
+    return api.post(`${base_new_api_url}/assets/external_assets/sheets/assets`, form, header)
   } 
 
   static cancelForeignAssetsBySheetRequest() {
@@ -550,7 +551,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelForeignAssetTimeline = c
     })
-    return axios.post(`${base_new_api_url}/assets/external_assets/sheets/timeline`, form, header)
+    return api.post(`${base_new_api_url}/assets/external_assets/sheets/timeline`, form, header)
   } 
 
   static cancelForeignAssetTimelineRequest() {
@@ -567,32 +568,32 @@ class PatenTrackApi {
   
 
   static getAssetsByCPCCode( year, cpcCode, form ) { 
-    return axios.post(`${base_new_api_url}/assets/cpc/${year}/${cpcCode}`, form, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/assets/cpc/${year}/${cpcCode}`, form, getFormUrlHeader())
   }
 
   static getTransactionByRfIds( form ) { 
-    return axios.post(`${base_new_api_url}/customers/transactions/groupids`, form, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/customers/transactions/groupids`, form, getFormUrlHeader())
   }
 
   static getAddressQueue( form ) { 
-    return axios.post(`${base_new_api_url}/customers/transactions/queues/address`, form, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/customers/transactions/queues/address`, form, getFormUrlHeader())
   }
 
   static getNameQueue( form ) { 
-    return axios.post(`${base_new_api_url}/customers/transactions/queues/name`, form, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/customers/transactions/queues/name`, form, getFormUrlHeader())
   }
 
   static findInventor( inventorID ) {  
-    return axios.get(`${base_new_api_url}/dashboards/parties/inventor/${inventorID}`, getHeader())
+    return api.get(`${base_new_api_url}/dashboards/parties/inventor/${inventorID}`, getHeader())
   } 
 
   static getCustomerAddressByCompanyIDs( companies) {  
-    return axios.get(`${base_new_api_url}/address/companies?companies=${JSON.stringify(companies)}`, getHeader())
+    return api.get(`${base_new_api_url}/address/companies?companies=${JSON.stringify(companies)}`, getHeader())
   } 
 
   static getCustomerTransactions(type, companies, tabs, customers, lawfirm) {  
     const headerWithCancelationToken = getHeaderWithCancelToken(cancelCustomerTransactions) 
-    return axios.get(`${base_new_api_url}/customers/${type}/transactions?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&lawfirm=${lawfirm}`, headerWithCancelationToken)
+    return api.get(`${base_new_api_url}/customers/${type}/transactions?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&lawfirm=${lawfirm}`, headerWithCancelationToken)
   } 
 
   static cancelCustomerTransactionsRequest() {  
@@ -606,47 +607,47 @@ class PatenTrackApi {
   }
 
   static getCustomerParties(type, companies, tabs, customerType) {  
-    return axios.get(`${base_new_api_url}/customers/${type}/parties?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&t=${customerType}`, getHeader())
+    return api.get(`${base_new_api_url}/customers/${type}/parties?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&t=${customerType}`, getHeader())
   } 
 
   static getCustomerAddressTransactions( companies, tabs, customers) {  
-    return axios.get(`${base_new_api_url}/customers/transactions/address?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}`, getHeader())
+    return api.get(`${base_new_api_url}/customers/transactions/address?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}`, getHeader())
   } 
   
   static getIncorrectNames( companies) {  
-    return axios.get(`${base_new_api_url}/customers/incorrectnames?companies=${JSON.stringify(companies)}`, getHeader())
+    return api.get(`${base_new_api_url}/customers/incorrectnames?companies=${JSON.stringify(companies)}`, getHeader())
   } 
 
   static getCustomerNormalizeNameTransactions( companies, tabs, customers) {  
-    return axios.get(`${base_new_api_url}/customers/transactions/name?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}`, getHeader())
+    return api.get(`${base_new_api_url}/customers/transactions/name?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}`, getHeader())
   } 
 
   static getCustomerActivites(type, companies) { 
-    return axios.get(`${base_new_api_url}/customers/${type}/activites?companies=${JSON.stringify(companies)}`, getHeader())
+    return api.get(`${base_new_api_url}/customers/${type}/activites?companies=${JSON.stringify(companies)}`, getHeader())
   }
 
   static saveUserCompanySelection(saveUserCompanySelection) {
-    return axios.post(`${base_new_api_url}/user_company_selection`, saveUserCompanySelection, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/user_company_selection`, saveUserCompanySelection, getFormUrlHeader())
   }
 
   static getUserCompanySelections() {
-    return axios.get(`${base_new_api_url}/user_company_selection`,  getHeader())
+    return api.get(`${base_new_api_url}/user_company_selection`,  getHeader())
   }
 
   static updateAssetTypeSelected(saveUserActivitySelection) {
-    return axios.post(`${base_new_api_url}/user_activity_selection`, saveUserActivitySelection, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/user_activity_selection`, saveUserActivitySelection, getFormUrlHeader())
   } 
 
   static deleteAssetTypeSelected(saveUserActivitySelection) {
-    return axios.put(`${base_new_api_url}/user_activity_selection`, saveUserActivitySelection, getFormUrlHeader())
+    return api.put(`${base_new_api_url}/user_activity_selection`, saveUserActivitySelection, getFormUrlHeader())
   }  
 
   static getUserActivitySelection() {
-    return axios.get(`${base_new_api_url}/user_activity_selection`,  getHeader())
+    return api.get(`${base_new_api_url}/user_activity_selection`,  getHeader())
   }
 
   static getPorfolioSummary(selectedCompaniesIds) {
-    return axios.get(
+    return api.get(
       `${base_new_api_url}/customers/portfolios?portfolio=${JSON.stringify(
         selectedCompaniesIds,
       )}`,
@@ -655,14 +656,14 @@ class PatenTrackApi {
   } 
 
   static getAssetsLifeSpanSummary(selectedCompaniesIds) {
-    return axios.get(
+    return api.get(
       `${base_new_api_url}/customers/events?portfolio=${JSON.stringify(selectedCompaniesIds)}`,
       getHeader(),
     )
   }
 
   static getSearch(searchString) {
-    return axios.get(`${base_new_api_url}/search/${searchString}`, getHeader())
+    return api.get(`${base_new_api_url}/search/${searchString}`, getHeader())
   }
 
   static getCompanySummary(accessToken, userEmail) {
@@ -670,7 +671,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelSummary = c 
     })
-    return axios.get(`${base_new_api_url}/companies/summary?access_token=${accessToken}&user_account=${userEmail}`, header)
+    return api.get(`${base_new_api_url}/companies/summary?access_token=${accessToken}&user_account=${userEmail}`, header)
   }
 
   static cancelSummaryRequest() {
@@ -685,26 +686,26 @@ class PatenTrackApi {
 
   static getAssetsCompanies(assetsType) {
     const tabId = convertAssetTypeToTabId(assetsType)
-    return axios.get(`${base_new_api_url}/tabs/${tabId}`, getHeader())
+    return api.get(`${base_new_api_url}/tabs/${tabId}`, getHeader())
   }
 
   static fetchAssetsCustomers(assetsType, companyIds) {
     const tabId = convertAssetTypeToTabId(assetsType)
-    return axios.get(`${base_new_api_url}/tabs/${tabId}/customers?companiesIds=${JSON.stringify(companyIds)}&limit=${DEFAULT_CUSTOMERS_LIMIT}`,
+    return api.get(`${base_new_api_url}/tabs/${tabId}/customers?companiesIds=${JSON.stringify(companyIds)}&limit=${DEFAULT_CUSTOMERS_LIMIT}`,
       getHeader(),
     )
   }
 
   static fetchMoreAssetsCustomers(assetsType, companyIds, { offset = 0, limit = DEFAULT_CUSTOMERS_LIMIT }) {
     const tabId = convertAssetTypeToTabId(assetsType)
-    return axios.get(`${base_new_api_url}/tabs/${tabId}/customers?companiesIds=${JSON.stringify(companyIds)}&offset=${offset}&limit=${limit}`,
+    return api.get(`${base_new_api_url}/tabs/${tabId}/customers?companiesIds=${JSON.stringify(companyIds)}&offset=${offset}&limit=${limit}`,
       getHeader(),
     )
   }
 
   static getAssetsTransactions(assetsType, companyId, customerId, { offset = 0, limit = DEFAULT_TRANSACTIONS_LIMIT }) {
     const tabId = convertAssetTypeToTabId(assetsType)
-    return axios.get(
+    return api.get(
       `${base_new_api_url}/tabs/${tabId}/companies/${companyId}/customers/${customerId}?offset=${offset}&limit=${limit}`,
       getHeader(),
     )
@@ -712,7 +713,7 @@ class PatenTrackApi {
 
   static getAssetsPatents(assetsType, companyId, customerId, transactionId, { offset = 0, limit = DEFAULT_PATENTS_LIMIT }) {
     const tabId = convertAssetTypeToTabId(assetsType)
-    return axios.get(
+    return api.get(
       `${base_new_api_url}/tabs/${tabId}/companies/${companyId}/customers/${customerId}/transactions/${transactionId}?offset=${offset}&limit=${limit}`,
       getHeader(),
     )
@@ -720,19 +721,19 @@ class PatenTrackApi {
 
   static getAssetsCompaniesEvents(assetsType) {
     const tabId = convertAssetTypeToTabId(assetsType)
-    return axios.get(`${base_new_api_url}/events/tabs/${tabId}`, getHeader())
+    return api.get(`${base_new_api_url}/events/tabs/${tabId}`, getHeader())
   }
 
   static getAssetsCustomersEvents(assetsType, companyId) {
     const tabId = convertAssetTypeToTabId(assetsType)
-    return axios.get(
+    return api.get(
       `${base_new_api_url}/events/tabs/${tabId}/companies/${companyId}`,
       getHeader(),
     )
   }  
 
   static getAllAssetsTransactionsEvents(type, companies, tabs, customers, rfIDs) {
-    return axios.get(
+    return api.get(
       `${base_new_api_url}/events/tabs?type=${type}&companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}`,
       getHeader(),
     )
@@ -740,7 +741,7 @@ class PatenTrackApi {
 
   static getAssetsTransactionsEvents(assetsType, companyId, customerId, transactionId) {
     const tabId = assetsType != null ? convertAssetTypeToTabId(assetsType) : undefined
-    return axios.get(
+    return api.get(
       `${base_new_api_url}/events/tabs/${tabId}/companies/${companyId}/customers/${customerId}/transactions/${transactionId}`,
       getHeader(),
     )
@@ -748,29 +749,29 @@ class PatenTrackApi {
 
   static getAssetsPatentsEvents(assetsType, companyId, customerId, transactionId) {
     const tabId = convertAssetTypeToTabId(assetsType)
-    return axios.get(
+    return api.get(
       `${base_new_api_url}/events/tabs/${tabId}/companies/${companyId}/customers/${customerId}/transactions/${transactionId}`,
       getHeader(),
     )
   }
 
   static getAssetsByTransactionsEvents(transactionId) {
-    return axios.get(
+    return api.get(
       `${base_new_api_url}/events/transactions/${transactionId}`,
       getHeader(),
     )
   }
 
   static getAssetsByApplicationNumberEvents(applicationNumber) {
-    return axios.get(`${base_new_api_url}/events/${applicationNumber}`, getHeader())
+    return api.get(`${base_new_api_url}/events/${applicationNumber}`, getHeader())
   }
 
   // static getPorfolioDataByTabId(selectedCompaniesIds, tabId, offset = 0) {
-  //   return axios.get(`${base_new_api_url}/customers/portfolios?portfolio=${JSON.stringify(selectedCompaniesIds)}&tab_id=${tabId}&limit=100&offset=${offset}`, getHeader());
+  //   return api.get(`${base_new_api_url}/customers/portfolios?portfolio=${JSON.stringify(selectedCompaniesIds)}&tab_id=${tabId}&limit=100&offset=${offset}`, getHeader());
   // }
 
   static getAssetsByPatentNumber(patentNumber, flag) {
-    return axios.get(
+    return api.get(
       `${base_new_api_url}/assets/${encodeURIComponent(patentNumber)}?flag=${flag}`,
       getHeader()
     )
@@ -781,7 +782,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelCollectionIllustration = c
     })
-    return axios.get(
+    return api.get(
       `${base_new_api_url}/collections/${rfID}/illustration`,
       header
     )
@@ -799,14 +800,14 @@ class PatenTrackApi {
   
 
   static geteAssetUSPTOByPatentNumber(type, patentNumber, flag) {
-    return axios.get(
+    return api.get(
       `${base_new_api_url}/assets/${encodeURIComponent(patentNumber)}/${type}/outsource?flag=${flag}`,
       getHeader()
     )
   }
 
   static getTimelineData(paramsUrl) {
-    return axios.get(`${base_new_api_url}/timeline?${paramsUrl}`, getHeader())
+    return api.get(`${base_new_api_url}/timeline?${paramsUrl}`, getHeader())
   }
 
   static getTimelineItemData(itemID) {
@@ -814,7 +815,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelTimelineItem = c
     })
-    return axios.get(`${base_new_api_url}/timeline/item/${itemID}`, header)
+    return api.get(`${base_new_api_url}/timeline/item/${itemID}`, header)
   }
 
   static cancelTimelineItemRequest() {
@@ -828,24 +829,24 @@ class PatenTrackApi {
   }
 
   static allAssetsSurchargeLegalEvents(companies, customers) { 
-    return axios.get(`${base_new_api_url}/events/all/assets/surcharge?companies=${JSON.stringify(companies)}&customers=${JSON.stringify(customers)}`, getHeader())
+    return api.get(`${base_new_api_url}/events/all/assets/surcharge?companies=${JSON.stringify(companies)}&customers=${JSON.stringify(customers)}`, getHeader())
   } 
 
   static allFilledAssetsEvents(companies, customers) { 
-    return axios.get(`${base_new_api_url}/events/all/assets/to_record?companies=${JSON.stringify(companies)}&customers=${JSON.stringify(customers)}`, getHeader())
+    return api.get(`${base_new_api_url}/events/all/assets/to_record?companies=${JSON.stringify(companies)}&customers=${JSON.stringify(customers)}`, getHeader())
   } 
 
   static getAllAbandonedAssetsEvents(companies) { 
-    return axios.get(`${base_new_api_url}/events/all/assets/abandoned?companies=${JSON.stringify(companies)}`, getHeader())
+    return api.get(`${base_new_api_url}/events/all/assets/abandoned?companies=${JSON.stringify(companies)}`, getHeader())
   } 
 
   static allFilledAssetsEventsDetails(application) { 
-    return axios.get(`${base_new_api_url}/events/all/assets/to_record/detail/${application}`, getHeader())
+    return api.get(`${base_new_api_url}/events/all/assets/to_record/detail/${application}`, getHeader())
   }
 
   static getActivitiesTimelineData(companies, tabs, customers, rfIDs = [], layout, exclude, start='', end='') {  
     const headerWithCancelationToken = getHeaderWithCancelToken(cancelTimelineActivity)
-    return axios.get(`${base_new_api_url}/customers/timeline?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}&start=${start}&end=${end}`, headerWithCancelationToken)
+    return api.get(`${base_new_api_url}/customers/timeline?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}&start=${start}&end=${end}`, headerWithCancelationToken)
   }
 
   static cancelTimelineActivityRequest() { 
@@ -863,7 +864,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelTimeline = c
     })
-    return axios.get(`${base_new_api_url}/customers/timeline/filling_assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}&start=${start}&end=${end}`, header)
+    return api.get(`${base_new_api_url}/customers/timeline/filling_assets?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}&exclude=${exclude}&start=${start}&end=${end}`, header)
   }
 
   static getTimelineSecurityData(companies, tabs, customers, rfIDs = [], layout) {
@@ -871,7 +872,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelTimelineSecurity = c 
     }) 
-    return axios.get(`${base_new_api_url}/customers/timeline/security?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}`, header)
+    return api.get(`${base_new_api_url}/customers/timeline/security?companies=${JSON.stringify(companies)}&tabs=${JSON.stringify(tabs)}&customers=${JSON.stringify(customers)}&rf_ids=${JSON.stringify(rfIDs)}&layout=${layout}`, header)
   }
 
   static cancelTimelineSecurityRequest() {
@@ -895,13 +896,13 @@ class PatenTrackApi {
   }
 
   static getAssetsErrorsData(paramsUrl) {
-    return axios.get(`${base_new_api_url}/errors?${paramsUrl}`,
+    return api.get(`${base_new_api_url}/errors?${paramsUrl}`,
       getHeader()
     )
   }
 
   static getAssetsActivitiesData(type, options = { count: false }) {
-    return axios.get(
+    return api.get(
       `${base_new_api_url}/activities?type=${type}${
         options.count ? '&count=true' : ''
       }`,
@@ -910,40 +911,40 @@ class PatenTrackApi {
   }
 
   static getProfessionals() {
-    return axios.get(
+    return api.get(
       `${base_new_api_url}/professionals`,
       getHeader()
     )
   }
 
   static getDocuments() {
-    return axios.get(
+    return api.get(
       `${base_new_api_url}/documents`,
       getHeader()
     )
   }
 
   static deleteDocument(id) {
-    return axios.delete(`${base_new_api_url}/documents/${id}`, getFormUrlHeader())
+    return api.delete(`${base_new_api_url}/documents/${id}`, getFormUrlHeader())
   }
 
   static addDocument(doc) {
-    return axios.post(`${base_new_api_url}/documents`, doc, getMultiFormUrlHeader())
+    return api.post(`${base_new_api_url}/documents`, doc, getMultiFormUrlHeader())
   }
 
   static updateDocument( doc, ID ) {
-    return axios.put(`${base_new_api_url}/documents/${ID}`, doc, getMultiFormUrlHeader())
+    return api.put(`${base_new_api_url}/documents/${ID}`, doc, getMultiFormUrlHeader())
   }
 
   static getAddresses() {
-    return axios.get(`${base_new_api_url}/address`, getHeader())
+    return api.get(`${base_new_api_url}/address`, getHeader())
   }
 
   static getDashboardData(formData, source) {
     let header = getFormUrlHeader()
     header['cancelToken'] = source.token
     cancelAllDashboardRequest = source   
-    return axios.post(`${base_new_api_url}/dashboards`, formData, header)
+    return api.post(`${base_new_api_url}/dashboards`, formData, header)
   }
 
   static generateCancelToken = () => {
@@ -965,7 +966,7 @@ class PatenTrackApi {
     let header = getFormUrlHeader()
     header['cancelToken'] = source.token
     cancelAllDashboardCountRequest = source   
-    return axios.post(`${base_new_api_url}/dashboards/count`, formData, header)
+    return api.post(`${base_new_api_url}/dashboards/count`, formData, header)
   }
   
   static cancelAllDashboardCountToken = () => {
@@ -981,14 +982,14 @@ class PatenTrackApi {
 
   static findDashboardExample(formData) {
     let header = getFormUrlHeader()
-    return axios.post(`${base_new_api_url}/dashboards/example`, formData, header)
+    return api.post(`${base_new_api_url}/dashboards/example`, formData, header)
   }
 
   static getDashboardTimelineData(formData, source) {
     let header = getFormUrlHeader()
     header['cancelToken'] = source.token
     cancelAllDashboardTimelineRequest = source   
-    return axios.post(`${base_new_api_url}/dashboards/timeline`, formData, header)
+    return api.post(`${base_new_api_url}/dashboards/timeline`, formData, header)
   }
 
   static cancelAllDashboardTimelineToken = () => {
@@ -1002,7 +1003,7 @@ class PatenTrackApi {
   }
 
   static getFilledAssets(formData) {
-    return axios.post(`${base_new_api_url}/dashboards/filed_assets_events`, formData, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/dashboards/filed_assets_events`, formData, getFormUrlHeader())
   }
 
   static getDashboardPartiesData(formData) {
@@ -1010,7 +1011,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelDashboardPartiesData = c
     })
-    return axios.post(`${base_new_api_url}/dashboards/parties`, formData, header)
+    return api.post(`${base_new_api_url}/dashboards/parties`, formData, header)
   }
 
   static cancelDashboardPartiesDataRequest(){
@@ -1029,7 +1030,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelDashboardPartiesAssignorData = c
     })
-    return axios.post(`${base_new_api_url}/dashboards/parties/assignor`, formData, header)
+    return api.post(`${base_new_api_url}/dashboards/parties/assignor`, formData, header)
   }
 
   static cancelDashboardPartiesAssignorDataRequest(){
@@ -1044,64 +1045,64 @@ class PatenTrackApi {
   
 
   static getLawFirmsByCompany(companies, rfID) {
-    return axios.get(`${base_new_api_url}/customers/lawfirm?companies=${JSON.stringify(companies)}&rfID=${rfID}`, getHeader())
+    return api.get(`${base_new_api_url}/customers/lawfirm?companies=${JSON.stringify(companies)}&rfID=${rfID}`, getHeader())
   }
 
   static getLendersByCompany(companies, rfID) {
-    return axios.get(`${base_new_api_url}/customers/lenders?companies=${JSON.stringify(companies)}&rfID=${rfID}`, getHeader())
+    return api.get(`${base_new_api_url}/customers/lenders?companies=${JSON.stringify(companies)}&rfID=${rfID}`, getHeader())
   }
 
   static getLawFirms() {
-    return axios.get(`${base_new_api_url}/lawfirm`, getHeader())
+    return api.get(`${base_new_api_url}/lawfirm`, getHeader())
   }
 
   static addLawFirm(lawFirm) {
-    return axios.post(`${base_new_api_url}/lawfirm`, lawFirm, getHeader())   
+    return api.post(`${base_new_api_url}/lawfirm`, lawFirm, getHeader())   
   }
 
   static addLawFirmAddress(address) {
-    return axios.post(`${base_new_api_url}/lawfirm_address`, address, getHeader())
+    return api.post(`${base_new_api_url}/lawfirm_address`, address, getHeader())
   }
 
   static updateLawFirmAddress(addressId, changes) {
-    return axios.put(`${base_new_api_url}/lawfirm_address/${addressId}`, changes, getHeader())
+    return api.put(`${base_new_api_url}/lawfirm_address/${addressId}`, changes, getHeader())
   }
 
   static deleteLawFirmAddress(addressId) {
-    return axios.delete(`${base_new_api_url}/lawfirm_address/${addressId}`, getHeader())
+    return api.delete(`${base_new_api_url}/lawfirm_address/${addressId}`, getHeader())
   } 
   
   static addCompanyAddress(address) {
-    return axios.post(`${base_new_api_url}/address`, address, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/address`, address, getFormUrlHeader())
   }
 
   static deleteCompanyAddress(addressId) {
-    return axios.delete(`${base_new_api_url}/address/${addressId}`, getFormUrlHeader())
+    return api.delete(`${base_new_api_url}/address/${addressId}`, getFormUrlHeader())
   }
 
   static updateCompanyAddress(id, address) {
-    return axios.put(`${base_new_api_url}/address/${id}`,address, getFormUrlHeader())
+    return api.put(`${base_new_api_url}/address/${id}`,address, getFormUrlHeader())
   }
 
   static getCompanyLawyers() {
-    return axios.get(`${base_new_api_url}/companies/lawfirm`, getHeader())
+    return api.get(`${base_new_api_url}/companies/lawfirm`, getHeader())
   }
 
   static addCompanyLawyer( lawyer) {
-    return axios.post(`${base_new_api_url}/lawyer`, lawyer, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/lawyer`, lawyer, getFormUrlHeader())
   }
 
   static addCompanyLawfirm( lawyer) {
-    return axios.post(`${base_new_api_url}/companies/lawfirm`, lawyer, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/companies/lawfirm`, lawyer, getFormUrlHeader())
   }
   
 
   static deleteCompanyLawyer(companyLawyerId) {
-    return axios.delete(`${base_new_api_url}/lawyer/${companyLawyerId}`, getFormUrlHeader())
+    return api.delete(`${base_new_api_url}/lawyer/${companyLawyerId}`, getFormUrlHeader())
   }
 
   static postRecordItems(data, type) {
-    return axios.post(
+    return api.post(
       `${base_new_api_url}/activities/${type}`,
       data,
       getMultiFormUrlHeader(),
@@ -1109,7 +1110,7 @@ class PatenTrackApi {
   }
 
   static setRecordAsCompleted(id, data) {
-    return axios.put(
+    return api.put(
       `${base_new_api_url}/activities/${id}`,
       data,
       getMultiFormUrlHeader(),
@@ -1117,15 +1118,15 @@ class PatenTrackApi {
   }
 
   static getComments(level, id) {
-    return axios.get(`${base_new_api_url}/comments/${_toLower(level)}/${id}`, getHeader())
+    return api.get(`${base_new_api_url}/comments/${_toLower(level)}/${id}`, getHeader())
   }
 
   static postComment(type, id, data) {
-    return axios.post(`${base_new_api_url}/comments/${_toLower(type)}/${id}`, data, getHeader())
+    return api.post(`${base_new_api_url}/comments/${_toLower(type)}/${id}`, data, getHeader())
   }
 
   static async setCommentToEntity(type, data) {
-    return axios.post(
+    return api.post(
       `${base_new_api_url}/comments/${_toLower(type)}`,
        data,
        getFormUrlHeader() 
@@ -1133,7 +1134,7 @@ class PatenTrackApi {
   }
 
   static async updateCommentToEntity(ID, data) {
-    return axios.put(
+    return api.put(
       `${base_new_api_url}/comments/${ID}`,
        data,
        getFormUrlHeader() 
@@ -1141,72 +1142,72 @@ class PatenTrackApi {
   }
 
   static async deleteComment(ID) {
-    return axios.delete(`${base_new_api_url}/comments/${ID}`, getFormUrlHeader())
+    return api.delete(`${base_new_api_url}/comments/${ID}`, getFormUrlHeader())
   }
 
   static getCharts(option) {
-    return axios.get(`${base_new_api_url}/charts/${option}`, getHeader())
+    return api.get(`${base_new_api_url}/charts/${option}`, getHeader())
   }
 
   static getTransactions(companies) {
-    return axios.get(`${base_new_api_url}/transactions?companies=${companies}`, getHeader())
+    return api.get(`${base_new_api_url}/transactions?companies=${companies}`, getHeader())
   }
 
   static getAssignorAssigneeByTransaction(transactionId, companies) {
-    return axios.get(`${base_new_api_url}/transactions/${transactionId}`, getHeader())
+    return api.get(`${base_new_api_url}/transactions/${transactionId}`, getHeader())
   }
 
   static shareIllustration( data ) {
-    return axios.post(`${base_new_api_url}/share`, data, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/share`, data, getFormUrlHeader())
   }
   
   static getSlackAuthToken( code, redirectURI ) {
-    return axios.get(`${base_new_api_url}/slacks/conversations/auth/${code}?redirect_uri=${redirectURI}`, getHeader())
+    return api.get(`${base_new_api_url}/slacks/conversations/auth/${code}?redirect_uri=${redirectURI}`, getHeader())
   }
 
   static getSlackProfile( token, id ) {
-    return axios.get(`${base_new_api_url}/slacks/user/info/${token}/${id}`, getHeader())
+    return api.get(`${base_new_api_url}/slacks/user/info/${token}/${id}`, getHeader())
   }  
 
   static updateSlackTeam( data ) {
-    return axios.put(`${base_new_api_url}/slacks/team`, data, getFormUrlHeader())
+    return api.put(`${base_new_api_url}/slacks/team`, data, getFormUrlHeader())
   }
 
   static getChannels( token ) {
-    return axios.get(`${base_new_api_url}/slacks/channels/${token}`, getHeader()) 
+    return api.get(`${base_new_api_url}/slacks/channels/${token}`, getHeader()) 
   }
 
   static sendMessage( code, data ) {
     const header = getMultiFormUrlHeader()
-    return axios.post(`${base_new_api_url}/slacks/conversations/message/${code}`, data, header)
+    return api.post(`${base_new_api_url}/slacks/conversations/message/${code}`, data, header)
   }
 
   static getMessages( code, channelID ) {
-    return axios.get(`${base_new_api_url}/slacks/conversations/history/${code}/${channelID}`, getHeader())
+    return api.get(`${base_new_api_url}/slacks/conversations/history/${code}/${channelID}`, getHeader())
   }
 
   static deleteSlackMessage( code, channelID, messageID ) {
-    return axios.delete(`${base_new_api_url}/slacks/conversations/message/${code}/${channelID}/${messageID}`, getHeader())
+    return api.delete(`${base_new_api_url}/slacks/conversations/message/${code}/${channelID}/${messageID}`, getHeader())
   }
 
   static getSearchAssignedMessages( code ) {
-    return axios.get(`${base_new_api_url}/slacks/conversations/search/assigned/${code}`, getHeader())
+    return api.get(`${base_new_api_url}/slacks/conversations/search/assigned/${code}`, getHeader())
   }
 
   static getSlackUsersList(code) {
-    return axios.get(`${base_new_api_url}/slacks/conversations/users/${code}`, getHeader())
+    return api.get(`${base_new_api_url}/slacks/conversations/users/${code}`, getHeader())
   }
 
   static getChannelID( asset ) {
-    return axios.get(`${base_new_api_url}/slacks/asset/${asset}`, getHeader())
+    return api.get(`${base_new_api_url}/slacks/asset/${asset}`, getHeader())
   }
 
   static getChannelFiles( channelID, code ) {
-    return axios.get(`${base_new_api_url}/slacks/channel/${channelID}/files/${code}`, getHeader())
+    return api.get(`${base_new_api_url}/slacks/channel/${channelID}/files/${code}`, getHeader())
   }
 
   static getAssetFiles( assets ) {
-    return axios.get(`${base_new_api_url}/assets/${assets}/files`, getHeader())
+    return api.get(`${base_new_api_url}/assets/${assets}/files`, getHeader())
   }
 
   static getDriveAndAssetFiles(type, channelID, code, assets, companies, layoutID, gToken, gAccount, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, selectedAssetsPatents, lawyers ) {
@@ -1219,7 +1220,7 @@ class PatenTrackApi {
       }
     })
 
-    return axios.get(`${base_new_api_url}/assets/${assets}/files/${channelID}/slack/${code}?type=${type}&companies=${JSON.stringify(companies)}&layout=${layoutID}&g=${gToken}&ga=${gAccount}&activities=${JSON.stringify(assetTypesSelected)}&parties=${JSON.stringify(selectedAssetCompanies)}&rfIDs=${JSON.stringify(selectedAssetAssignments)}&patents=${JSON.stringify(selectedAssetsPatents)}&lawyers=${lawyers}`, header)
+    return api.get(`${base_new_api_url}/assets/${assets}/files/${channelID}/slack/${code}?type=${type}&companies=${JSON.stringify(companies)}&layout=${layoutID}&g=${gToken}&ga=${gAccount}&activities=${JSON.stringify(assetTypesSelected)}&parties=${JSON.stringify(selectedAssetCompanies)}&rfIDs=${JSON.stringify(selectedAssetAssignments)}&patents=${JSON.stringify(selectedAssetsPatents)}&lawyers=${lawyers}`, header)
   } 
 
   static cancelInitiatedRequest() {
@@ -1243,7 +1244,7 @@ class PatenTrackApi {
   }
 
   static getGoogleAuthToken( code ) {
-    return axios.get(`${base_new_api_url}/documents/auth_token?code=${code}`, getHeader())
+    return api.get(`${base_new_api_url}/documents/auth_token?code=${code}`, getHeader())
   } 
 
   static getGoogleProfile( token ) {
@@ -1256,7 +1257,7 @@ class PatenTrackApi {
     if(url.indexOf('REFRESH_TOKEN') >= 0) {
       url.replace('REFRESH_TOKEN', '')
     }
-    return axios.get(url, getHeader())
+    return api.get(url, getHeader())
   }
   
   static getGoogleTemplates( token, id, showFolders ) {
@@ -1277,7 +1278,7 @@ class PatenTrackApi {
       url += `&show_folders=true`
     }
 
-    return axios.get(url, getHeader())
+    return api.get(url, getHeader())
   }
 
   static getLayoutWithTemplates( token, account ) {
@@ -1290,20 +1291,20 @@ class PatenTrackApi {
     if( account != undefined && account != 'undefined' ) {
       url += `&user_account=${account}`
     }
-    return axios.get(url, getHeader())
+    return api.get(url, getHeader())
   }   
 
   static getLayoutTemplatesByID( layoutID, account ) {
     let url = `${base_new_api_url}/documents/layout/${layoutID}/?user_account=${account}`
-    return axios.get(url, getHeader())
+    return api.get(url, getHeader())
   }  
 
   static addContainerToLayout( data ) {
-    return axios.post(`${base_new_api_url}/documents/layout`, data, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/documents/layout`, data, getFormUrlHeader())
   }
 
   static deleteTemplateFromLayout( layoutID, containerID, userAccount ) {
-    return axios.delete(`${base_new_api_url}/documents/layout?layout_id=${layoutID}&container_id=${containerID}&user_account=${userAccount}`, getHeader())
+    return api.delete(`${base_new_api_url}/documents/layout?layout_id=${layoutID}&container_id=${containerID}&user_account=${userAccount}`, getHeader())
   }
 
   static getRepoFolder( userAccount ) {
@@ -1311,7 +1312,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelGetRepoFolder = c
     })
-    return axios.get(`${base_new_api_url}/documents/repo_folder?user_account=${userAccount}`,  header)
+    return api.get(`${base_new_api_url}/documents/repo_folder?user_account=${userAccount}`,  header)
   }
 
   static cancelGetRepoFolderRequest() {
@@ -1325,55 +1326,55 @@ class PatenTrackApi {
   }
 
   static addRepoFolder( data ) {
-    return axios.put(`${base_new_api_url}/documents/repo_folder`, data, getFormUrlHeader())
+    return api.put(`${base_new_api_url}/documents/repo_folder`, data, getFormUrlHeader())
   }
 
   static addTemplateFolder( data ) {
-    return axios.put(`${base_new_api_url}/documents/template_folder`, data, getFormUrlHeader())
+    return api.put(`${base_new_api_url}/documents/template_folder`, data, getFormUrlHeader())
   }
 
   static createDriveTemplateFile( data ) {
-    return axios.post(`${base_new_api_url}/documents/create_template_drive`, data, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/documents/create_template_drive`, data, getFormUrlHeader())
   }
 
   static downloadXMLFromServer( data ) {
-    return axios.post(`${base_new_api_url}/documents/downloadXML`, data, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/documents/downloadXML`, data, getFormUrlHeader())
   }
 
   static fixedTransactionAddressXML( form ) {
-    return axios.post(`${base_new_api_url}/documents/fixed_transaction_address/downloadXML`, form, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/documents/fixed_transaction_address/downloadXML`, form, getFormUrlHeader())
   }
 
   static fixedTransactionNameXML( form ) { 
-    return axios.post(`${base_new_api_url}/documents/fixed_transaction_name/downloadXML`, form, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/documents/fixed_transaction_name/downloadXML`, form, getFormUrlHeader())
   }
 
   static createMaintainenceFeeFile( data ) {
-    return axios.post(`${base_new_api_url}/documents/create_maintainence_file`, data, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/documents/create_maintainence_file`, data, getFormUrlHeader())
   } 
 
   static getConnectionData( popup ) {
-    return axios.get(`${base_new_api_url}/connection/${popup}`,  getHeader())
+    return api.get(`${base_new_api_url}/connection/${popup}`,  getHeader())
   }
 
   static getConnectionDataFromAsset( asset, companies ) {
-    return axios.get(`${base_new_api_url}/connection/asset/${asset}?companies=${JSON.stringify(companies)}`,  getHeader())
+    return api.get(`${base_new_api_url}/connection/asset/${asset}?companies=${JSON.stringify(companies)}`,  getHeader())
   }
   
   static moveAssetToLayout( data ) {
-    return axios.post(`${base_new_api_url}/assets/move`,  data, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/assets/move`,  data, getFormUrlHeader())
   } 
 
   static moveAssetRollback( IDs ) {
-    return axios.delete(`${base_new_api_url}/assets/rollback?revert=${IDs}`, getHeader())
+    return api.delete(`${base_new_api_url}/assets/rollback?revert=${IDs}`, getHeader())
   } 
 
   static addGroup( form ) {
-    return axios.post(`${base_new_api_url}/companies/group`,  form, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/companies/group`,  form, getFormUrlHeader())
   } 
 
   static inviteUserToWorkspace (form) {
-    return axios.post(`${base_new_api_url}/users/invite`,  form, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/users/invite`,  form, getFormUrlHeader())
   }  
 
   static searchEntity( searchString, type ) {
@@ -1384,7 +1385,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancel = c
     })
-    return axios.get(`${base_new_api_url}/entity/search/${encodeURIComponent(searchString)}/${type}`, header)   
+    return api.get(`${base_new_api_url}/entity/search/${encodeURIComponent(searchString)}/${type}`, header)   
   }    
 
   static cancelRequest () {
@@ -1402,7 +1403,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelAbstract = c
     })
-    return axios.get(`${base_new_api_url}/family/abstract/${encodeURIComponent(applicationNumber)}`,  header)
+    return api.get(`${base_new_api_url}/family/abstract/${encodeURIComponent(applicationNumber)}`,  header)
   }
 
   static cancelAbstractData () {
@@ -1420,7 +1421,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelClaims = c
     })
-    return axios.get(`${base_new_api_url}/family/claims/${encodeURIComponent(applicationNumber)}`,  header)
+    return api.get(`${base_new_api_url}/family/claims/${encodeURIComponent(applicationNumber)}`,  header)
   } 
 
   static cancelClaimsData () {
@@ -1438,7 +1439,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelClaimsCounter = c
     })
-    return axios.get(`${base_new_api_url}/family/claims/${encodeURIComponent(applicationNumber)}?counter=true`,  header)
+    return api.get(`${base_new_api_url}/family/claims/${encodeURIComponent(applicationNumber)}?counter=true`,  header)
   } 
 
   static cancelClaimsCounterRequest() {
@@ -1456,7 +1457,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelSpecifications = c
     })
-    return axios.get(`${base_new_api_url}/family/specifications/${encodeURIComponent(applicationNumber)}`,  header)
+    return api.get(`${base_new_api_url}/family/specifications/${encodeURIComponent(applicationNumber)}`,  header)
   }
 
   static cancelSpecificationData () {
@@ -1474,7 +1475,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelFamily = c
     })
-    return axios.get(`${base_new_api_url}/family/images/${encodeURIComponent(applicationNumber)}`,  header)
+    return api.get(`${base_new_api_url}/family/images/${encodeURIComponent(applicationNumber)}`,  header)
   }
 
   static cancelFamilyData() {
@@ -1492,7 +1493,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelFiguresCounter = c
     })
-    return axios.get(`${base_new_api_url}/family/images/${encodeURIComponent(applicationNumber)}?counter=true`,  header)
+    return api.get(`${base_new_api_url}/family/images/${encodeURIComponent(applicationNumber)}?counter=true`,  header)
   }
 
   static cancelFiguresCounterRequest() {
@@ -1510,7 +1511,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelPtab = c
     })
-    return axios.get(`${base_new_api_url}/ptab/${asset}`,  header)
+    return api.get(`${base_new_api_url}/ptab/${asset}`,  header)
   } 
   
   static cancelPtabRequest() {
@@ -1528,7 +1529,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelPtabCounter = c
     })
-    return axios.get(`${base_new_api_url}/ptab/${encodeURIComponent(asset)}?counter=true`,  header)
+    return api.get(`${base_new_api_url}/ptab/${encodeURIComponent(asset)}?counter=true`,  header)
   } 
   
   static cancelPtabCounterRequest() {
@@ -1546,7 +1547,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelCitationData = c
     })
-    return axios.get(`${base_new_api_url}/citation/${encodeURIComponent(asset)}`,  header)
+    return api.get(`${base_new_api_url}/citation/${encodeURIComponent(asset)}`,  header)
   } 
   
   static cancelCitationDataRequest() {
@@ -1564,7 +1565,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelAllAssetsCitationData = c
     })
-    return axios.post(`${base_new_api_url}/citation`,  form, header)
+    return api.post(`${base_new_api_url}/citation`,  form, header)
   } 
   
   static cancelAllAssetsCitationDataRequest() {
@@ -1582,7 +1583,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelAllAbandonedAssetsYears = c
     })
-    return axios.post(`${base_new_api_url}/events/abandoned/yearly/assets`,  form, header)
+    return api.post(`${base_new_api_url}/events/abandoned/yearly/assets`,  form, header)
   } 
   
   static cancelAllAbandonedAssetsYearsRequest() {
@@ -1600,7 +1601,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelAllAbandonedAssetsAges = c
     })
-    return axios.post(`${base_new_api_url}/events/abandoned/maintainence/assets`,  form, header)
+    return api.post(`${base_new_api_url}/events/abandoned/maintainence/assets`,  form, header)
   } 
 
   static cancelAllAbandonedAssetsAgesRequest() {
@@ -1618,7 +1619,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelCitationCounter = c
     })
-    return axios.get(`${base_new_api_url}/citation/${encodeURIComponent(asset)}?counter=true`,  header)
+    return api.get(`${base_new_api_url}/citation/${encodeURIComponent(asset)}?counter=true`,  header)
   } 
   
   static cancelCitationCounterRequest() {
@@ -1636,7 +1637,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelStatus = c
     })
-    return axios.get(`${base_new_api_url}/events/assets/status/${applicationNumber}`,  header)
+    return api.get(`${base_new_api_url}/events/assets/status/${applicationNumber}`,  header)
   } 
   
   static cancelStatusData () {
@@ -1654,7 +1655,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelSatusCounter = c
     })
-    return axios.get(`${base_new_api_url}/events/assets/status/${applicationNumber}?counter=true`,  header)
+    return api.get(`${base_new_api_url}/events/assets/status/${applicationNumber}?counter=true`,  header)
   } 
   
   static cancelStatusCounterRequest() {
@@ -1672,7 +1673,7 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelFamilyCounter = c
     })
-    return axios.get(`${base_new_api_url}/family/${encodeURIComponent(applicationNumber)}?counter=true`, getHeader())
+    return api.get(`${base_new_api_url}/family/${encodeURIComponent(applicationNumber)}?counter=true`, getHeader())
   }
 
   static cancelFamilyCounterRequest() {
@@ -1690,11 +1691,11 @@ class PatenTrackApi {
     header['cancelToken'] = new CancelToken(function executor(c) {
       cancelFeesCounter = c
     })
-    return axios.get(`${base_new_api_url}/events/${applicationNumber}/${patentNumber != '' ? encodeURIComponent(patentNumber) : applicationNumber}?counter=true`, header)
+    return api.get(`${base_new_api_url}/events/${applicationNumber}/${patentNumber != '' ? encodeURIComponent(patentNumber) : applicationNumber}?counter=true`, header)
   }
 
   static shareDashboard(form) { 
-    return axios.post(`${base_new_api_url}/dashboards/share`,  form, getFormUrlHeader())
+    return api.post(`${base_new_api_url}/dashboards/share`,  form, getFormUrlHeader())
   }
 
   static cancelFeesCounterRequest() {
