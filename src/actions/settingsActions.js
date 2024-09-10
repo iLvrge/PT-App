@@ -148,6 +148,13 @@ export const deleteUser = (id) => async dispatch => {
   dispatch(setUsers(updatedUserList))
 }
 
+export const deleteUsers = (items) => async dispatch => { 
+  await PatenTrackApi.deleteUsers(items)
+  const { list } = store.getState().settings.users
+  const updatedUserList = list.filter((userItem) => !items.includes(userItem.user_id))
+  dispatch(setUsers(updatedUserList))
+}
+
 export const fetchProfessionals = () => async dispatch => {
   dispatch(resetData(DATA_KEYS.PROFESSIONALS))
   const { data } = await PatenTrackApi.getLawyers()
