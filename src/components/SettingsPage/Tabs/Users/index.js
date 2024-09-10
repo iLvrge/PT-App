@@ -1,6 +1,6 @@
 import React, {useMemo, useEffect} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { addUser, deleteUser, fetchUsers, updateUser } from '../../../../actions/settingsActions'
+import { addUser, deleteUser, deleteUsers, fetchUsers, updateUser } from '../../../../actions/settingsActions'
 import { ROLES, ROLES_INV } from './contants'
 import UserForm from './UserForm'
 import Page from '../../components/Page'
@@ -14,7 +14,7 @@ const NAME = 'user'
 
 const ACTIONS = {
   fetchItems: fetchUsers,
-  deleteItem: deleteUser,
+  deleteItems: deleteUsers,
   addItem: addUser,
   updateItem: updateUser,
   serialize: (user) => ({

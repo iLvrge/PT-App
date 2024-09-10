@@ -218,6 +218,10 @@ class PatenTrackApi {
     return api.delete(`${base_new_api_url}/users/${ID}`, getFormUrlHeader())
   }
 
+  static deleteUsers( list ) {
+    return api.delete(`${base_new_api_url}/users?list=[${list}]`, getFormUrlHeader())
+  } 
+
   static getLawyers() {
     return api.get(`${base_new_api_url}/professionals`, getHeader())
   }
