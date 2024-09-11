@@ -34,8 +34,8 @@ const options = {
 const DATE_FORMAT = 'MMM DD, YYYY'
  
 const getTemplateContent = (item, icons, showAbandoned) => {   
-  let formatString = ''; 
-  if(typeof showAbandoned != 'undefined' && showAbandoned == 'abandoned') {
+  let formatString = '';  
+  if(typeof showAbandoned != 'undefined' && (showAbandoned == 'abandoned' || showAbandoned == true)) {
     if(item.grant_doc_num != '' ) {
       formatString = `US<br/>${numberWithCommas(removeLeadingZeros(item.grant_doc_num))}`
     } else {
@@ -62,7 +62,7 @@ const getTemplateContent = (item, icons, showAbandoned) => {
       } else {
         formatString = item.maintainence_code.template_string
       }
-    }
+    } 
   }
 
   /*typeof item.template_string != 'undefined' ? item.template_string == '0' ? `US<br/>${numberWithCommas(item.grant_doc_num)}` : item.event_code == '13' ? `US<br/>${item.template_string == '0' ? item.patent != '' ? numberWithCommas(item.patent) : applicationFormat(item.application) : item.template_string}` : item.template_string : item.maintainence_code.template_string*/
