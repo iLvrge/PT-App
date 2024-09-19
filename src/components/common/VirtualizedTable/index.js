@@ -673,30 +673,7 @@ const VirtualizedTable = ({
                       :
                       childHeight + rowHeight
                 : 
-                  childCounterColumn != undefined
-                  ?
-                    typeof childCounterColumn == 'string' 
-                    ? 
-                      rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
-                      ?
-                        rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0) 
-                      :  
-                        rowData[childCounterColumn] * rowHeight > 0 
-                        ?
-                          rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
-                        :
-                        childRows.length > 0 
-                        ?
-                          childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
-                        :
-                        childHeight - rowHeight
-                    :
-                      childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
-                  :
-                    childRows.length > 0 
-                    ?
-                      childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
-                    :
+                   
                     collapseRowHeight,
               display: "flex",
               position: "absolute",
