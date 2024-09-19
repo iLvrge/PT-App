@@ -203,7 +203,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         } */
     ] 
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)
-    const [childHeight, setChildHeight] = useState(500)
+    const [childHeight, setChildHeight] = useState(100)
     const [childSelected, setCheckedSelected] = useState(0)
     const [childCounter, setChildCounter] = useState(0)    
     const [ data, setData ] = useState( [] )
