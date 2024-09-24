@@ -12,7 +12,7 @@ api.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
   
-        if (error.response.status === 401 && !originalRequest._retry) {
+        if (error.response && error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
             try {
                 const response = await api.get('/refresh-token', {
@@ -32,10 +32,14 @@ api.interceptors.response.use(
                 console.log('CATCH', refreshError)
                 return Promise.reject(refreshError);
             }
+        } else if (!error.response) {
+            // Handle cases where error.response is undefined (e.g., request cancellations)
+            console.log('Request canceled or no response received:', error.message);
+            return Promise.reject(error);
         }
-        console.log('error.response', error.response)
+        console.log('error.response', error)
         // Handle specific error messages for other status codes
-        if (error.response.status === 403) {
+        if (error.response && error.response.status === 403) {
             const errorMessage = error.response.data  ;
             if(errorMessage == 'Refresh token failed') {
                 removeTokenStorage('token') 
