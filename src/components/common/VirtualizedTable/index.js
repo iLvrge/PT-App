@@ -409,7 +409,7 @@ const VirtualizedTable = ({
                     vertical: "top",
                     horizontal: "left"
                   },
-                  getContentAnchorEl: null
+                  /* getContentAnchorEl: null */
                 }}
                 onClose={handleDropdownClose}
                 onOpen={handleDropdownOpen} 
