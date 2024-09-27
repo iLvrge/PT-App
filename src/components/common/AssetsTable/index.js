@@ -8,7 +8,7 @@ import React, {
 import { useSelector, useDispatch } from "react-redux";
 import {useHistory, useLocation} from 'react-router-dom'
 import { Paper, Popover, Box, Rating, Dialog, DialogTitle, DialogContent, DialogActions, Button, Badge } from "@mui/material";
-import { Clear, NotInterested, KeyboardArrowDown, MonetizationOn, StarOutline, StarOutlineOutlined, PendingActionsOutlined, AccountTreeOutlined   } from '@mui/icons-material';  
+import { Clear, NotInterested, KeyboardArrowDown, MonetizationOn, StarOutline, StarOutlineOutlined, PendingActionsOutlined, AccountTreeOutlined, KeyboardArrowUp   } from '@mui/icons-material';  
 import moment from "moment";
 import Loader from "../Loader";
 import useStyles from "./styles";
@@ -366,12 +366,15 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       name: 'Remove from Clipboard' ,
       icon: <NotInterested />,
       image: '',
-      tooltip: 'Tooltip'
+      tooltip: 'Tooltip',
+      showOnlyWhenSelected: true,
+      relation_with: 5
     },
     {
       id: -1,
       name: '', 
       icon: <KeyboardArrowDown />,
+      openIcon: <KeyboardArrowUp/>,
       image: '',
       tooltip: 'Tooltip'
     },
@@ -400,7 +403,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       name: 'Add to Clipboard',
       image: '',
       icon: <PendingActionsOutlined />,
-      tooltip: 'Tooltip'
+      tooltip: 'Tooltip',
+      showOnlyWhenSelected: false,
     },
     {
       id: 6,
@@ -766,10 +770,12 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             setSelectedAssets(prevItems => {
               const findIndex = prevItems.findIndex( r => r.asset == asset)
               if( findIndex !== -1 ) {
+                setDropOpenAsset(null)
                 const items = [...prevItems]
                 items.splice( findIndex, 1 )
                 return items
               } else {
+                setDropOpenAsset(asset)
                 return [...prevItems, row]
               }
             })          
