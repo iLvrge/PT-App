@@ -45,6 +45,7 @@ import Rating from '@mui/material/Rating';
 import _orderBy  from "lodash/orderBy";
 import _sortBy  from "lodash/sortBy";
 import useHeaderRenderer from "./hooks/useHeaderRenderer";
+import { KeyboardArrowUp } from "@mui/icons-material";
 
 const VirtualizedTable = ({
   columns,
@@ -117,6 +118,7 @@ const VirtualizedTable = ({
   const [runCollapseTable, setRunCollapseTable] = useState(false)
   const [dropdownValue, setDropdownValue] = useState('')
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [openRowData, setOpenRowData] = useState(null)
   const [noOfSelectedItems, setNoOfSelectedItems] = useState([])
   /* const [currentScrollIndex, setcurrentScrollIndex] = useState(0) */
   const rowRef = useRef(null);
@@ -207,19 +209,21 @@ const VirtualizedTable = ({
 
   const handleDropdownClose = () => {
     setDropdownOpen(false);
+    setOpenRowData(null)
   };
 
-  const handleDropdownOpen = () => {
+  const handleDropdownOpen = (rowData) => {
     setDropdownOpen(true);
+    setOpenRowData(rowData)
   };
 
-  const getDropValue = (showDropValue, list, width) => {
+  const getDropValue = (showDropValue, list, width, rowData) => {
     const listIndex = list.findIndex( row => row.id == showDropValue )    
-    if(listIndex !== -1) {
+    if(listIndex !== -1) { 
       return (
-        <div /* style={{width: `${width + 10}px`}} */ className={'selectedIcon'}>
+        <div /* style={{width: `${width + 10}px`}} */ className={'selectedIcon'} >
           {
-            list[listIndex].icon != '' ? list[listIndex].icon : list[listIndex].image != '' ? <img src={list[listIndex].image} style={{width: '1.3rem', position: 'absolute', left: '0px'}}/> : showDropValue
+            list[listIndex].icon != '' ? (dropdownOpen && openRowData != null && rowData.asset == openRowData.asset && list[listIndex].openIcon ? list[listIndex].openIcon : list[listIndex].icon) : list[listIndex].image != '' ? <img src={list[listIndex].image} style={{width: '1.3rem', position: 'absolute', left: '0px'}}/> : showDropValue
           }
         </div>
       )
@@ -399,7 +403,7 @@ const VirtualizedTable = ({
                 IconComponent={(props) => (
                   openDropAsset == cellData ? <ExpandLessIcon {...props} /> : <ExpandMoreOutlinedIcon {...props}/>
                 )}
-                open={ openDropAsset == cellData ? true : false }
+                open={ openDropAsset == cellData }
                 MenuProps={{
                   anchorOrigin: {
                     vertical: "bottom",
@@ -412,15 +416,16 @@ const VirtualizedTable = ({
                   /* getContentAnchorEl: null */
                 }}
                 onClose={handleDropdownClose}
-                onOpen={handleDropdownOpen} 
+                onOpen={() => handleDropdownOpen(rowData)} 
                 value={showDropValue}
                 onChange={(event) =>  onHandleDropDown(event, onClick, cellData, rowData) }
-                renderValue={(value) => getDropValue(value, list, width)}
+                renderValue={(value) => getDropValue(value, list, width, rowData)}
 
               >
                 {
                   list.map( (c, idx) => (
-                    <MenuItem key={idx} value={c.id} className={clsx(`iconItem`, {['visibilityHidden']: c.id === -1 ? true : false})}>   
+                    <MenuItem key={idx} value={c.id} className={clsx(`iconItem`, {['visibilityHidden']: c.id === -1 ? true : false})} style={{display: (typeof c.showOnlyWhenSelected == 'undefined' || c.showOnlyWhenSelected && c.relation_with == showDropValue || !c.showOnlyWhenSelected && c.id != showDropValue)
+                    ? '' : 'none'}}>   
                       <ListItemIcon>
                         {
                           c.icon != '' ? c.icon : c.image != '' ? <img src={c.image} style={{width: '21px'}}/> : ''
@@ -447,7 +452,7 @@ const VirtualizedTable = ({
                         >  
                           <ListItemText className={'heading'}><div>{c.name} </div> </ListItemText>
                         </Tooltip> 
-                    </MenuItem> 
+                    </MenuItem>  
                   ))
                 }  
               </Select>
