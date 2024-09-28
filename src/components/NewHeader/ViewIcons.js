@@ -242,7 +242,7 @@ const ViewIcons = (props) => {
 
     const onShare = useCallback(async () => {
         if (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'){
-            alert('Message..')
+            alert('Please activate your account first.')
         } else {
             if(props.dashboardScreen === true) { 
                 shareDashboard()
