@@ -199,7 +199,7 @@ const IllustrationContainer = ({
 
   const handleShare = async (obj) => {
     if (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'){
-      alert('Message..')
+      alert('Please activate your account first.')
     } else {
       if (typeof viewOnly == 'undefined' && obj != null && typeof obj.original_number != undefined && obj.original_number != null) {
         let form = new FormData()
