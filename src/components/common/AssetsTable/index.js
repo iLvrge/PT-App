@@ -56,7 +56,8 @@ import {
   setAssetsIllustrationData,
   setFamilyLegalItem, 
   setSocialMediaConnectPopup,
-  transactionRowClick
+  transactionRowClick,
+  setClipboardAssetsDisplay
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -705,8 +706,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
 
   const onHandleDropDownlist = async(event, asset, row ) => {   
     if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-      alert('Message....')
-    } else {
+      alert('Please activate your account first')
+    } else { 
       if(event.target.value  == 9) {
         /**
          * Slack review box
@@ -773,6 +774,10 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
                 setDropOpenAsset(null)
                 const items = [...prevItems]
                 items.splice( findIndex, 1 )
+                if(items.length == 0 && display_clipboard) { 
+                  dispatch(setClipboardAssetsDisplay(false))
+                  loadDataFromServer(offsetWithLimit[0], offsetWithLimit[1], sortField, sortOrder) 
+                }
                 return items
               } else {
                 setDropOpenAsset(asset)
@@ -811,6 +816,11 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
               if( findIndex !== -1 ) {
                 const items = [...prevItems]
                 items.splice( findIndex, 1 )
+
+                if(items.length == 0 && display_clipboard) {  
+                  dispatch(setClipboardAssetsDisplay(false))
+                  loadDataFromServer(offsetWithLimit[0], offsetWithLimit[1], sortField, sortOrder) 
+                }
                 return items
               } else {
                 return [...prevItems]
