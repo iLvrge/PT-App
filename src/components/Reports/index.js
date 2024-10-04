@@ -18,7 +18,7 @@ import {
     setViewDashboardIntial,
     setLoadingDashboardData,
     setViewIntro} from '../../actions/uiActions'
-import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId,  retrievePDFFromServer, setAssetTypesSelect, setSelectedAssetsPatents, getAssetDetails, setAllAssetTypes  } from '../../actions/patentTrackActions2'
+import { setAssetsIllustration, setBreadCrumbsAndCategory, setSwitchAssetButton, setDashboardPanelActiveButtonId,  retrievePDFFromServer, setAssetTypesSelect, setSelectedAssetsPatents, getAssetDetails, setAllAssetTypes, setClipboardAssetsDisplay  } from '../../actions/patentTrackActions2'
 import { assetLegalEvents, setAssetLegalEvents, setPDFView, setPDFFile, setConnectionData, setConnectionBoxView, assetFamily,   } from '../../actions/patenTrackActions';
 import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar'
 import { controlList } from "../../utils/controlList"
@@ -1368,6 +1368,7 @@ const Reports = (props) => {
                             dispatch( setAllAssetTypes(false) )
                             dispatch( setAssetTypesSelect(activityIDs) )
                         }
+                        dispatch(setClipboardAssetsDisplay( false ))
                         dispatch(setDashboardScreen(false))
                         dispatch(setTimelineScreen(timeline))
                         dispatch(setPatentScreen(patent))
