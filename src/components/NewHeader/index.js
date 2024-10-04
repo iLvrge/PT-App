@@ -476,6 +476,8 @@ const NewHeader = (props) => {
         dispatch(toggleFamilyMode(false))
         dispatch(toggleFamilyItemMode(false))
         dispatch(setDriveTemplateFrameMode(false))
+      } else { 
+        onHandlePatentAssets()
       }
     }
   }, [ dispatch, clipboard_assets, display_clipboard ])
