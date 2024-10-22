@@ -47,6 +47,9 @@ import {
     setLineChartReset,
     setSelectLawFirm,
     setAbandonedYearsRequest,
+    setSankeyAssigneeData,
+    setSankeyAssignorData,
+    setRefreshSankeyChart,
 } from '../../../actions/patentTrackActions2'
 
 
@@ -712,6 +715,9 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
         dispatch(setAbandonedYearsRequest(false))
         dispatch(setSelectLawFirm(0))
         dispatch(setLineChartReset())
+        dispatch(setSankeyAssigneeData([]))
+        dispatch(setSankeyAssignorData([]))
+        dispatch(setRefreshSankeyChart(true))
     }
 
     const clearOtherItems = () => {
