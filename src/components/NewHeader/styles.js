@@ -470,6 +470,18 @@ export default makeStyles(theme => ({
             top: -4,
         }
     },
+    microsoftContainer: {
+        width: 35,
+        height: 30,
+        position: 'relative',
+        '& .MuiIconButton-root':{
+            marginRight: 6,
+            position: 'absolute',
+            height: 30,
+            width: 33,
+            top: 2,
+        }
+    },
     buttonIcon: {
         width: 30,
         height: 30,

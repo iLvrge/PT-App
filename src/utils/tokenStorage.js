@@ -1,3 +1,5 @@
+import PatenTrackApi from "../api/patenTrack2"
+
 export const setSlackAuthCode = (code) => {
     localStorage.setItem('slack_auth_token_info', code)
 }
@@ -24,11 +26,11 @@ export const removeGoogleAuthCode = () => {
 
 export const setTokenStorage = ( param, code ) => {
     localStorage.setItem( param , code)
-}
+} 
 
-export const getTokenStorage = ( param ) => {
-    return localStorage.getItem( param  )
-}
+export const getTokenStorage = (param) => {
+    return localStorage.getItem(param);
+};
 
 export const removeTokenStorage = ( param ) => {
     return localStorage.removeItem( param  )
@@ -38,6 +40,8 @@ export const loginRedirect = (authenticated) => {
     if (!authenticated) {
         localStorage.removeItem('google_auth_token_info')
         localStorage.removeItem('slack_auth_token_info')
+        localStorage.removeItem('microsoft_auth_token_info')
+        localStorage.removeItem('microsoft_auth_team')
         window.location.href = 'https://patentrack.com'
     }
 }
@@ -51,8 +55,8 @@ export const getAuthConnectToken = () => {
         if( tokenJSON != null ) {
             tokenType = 1
         } else {
-            const getTeamToken = localStorage.getItem('team_auth_token_info')
-            const teamTokenJSON = JSON.parse( getTeamToken )
+            const getMicrosoftToken = localStorage.getItem('microsoft_auth_token_info')
+            const teamTokenJSON = JSON.parse( getMicrosoftToken )
             if( teamTokenJSON != null ) {
                 tokenType = 2
             }
@@ -61,6 +65,19 @@ export const getAuthConnectToken = () => {
         console.warn(`Issue which retreiving token: ${err}`)
     }
     return tokenType
+}
+
+export const getMicrosoftTokenWithTeamId = () => {
+    const getMicrosoftToken = getTokenStorage('microsoft_auth_token_info');
+    const getTeamData = getTokenStorage('microsoft_auth_team')
+    const {access_token, refresh_token} = JSON.parse( getMicrosoftToken )
+    const {teamId} = JSON.parse(getTeamData)
+
+    return {
+        access_token,
+        refresh_token,
+        teamId
+    }
 }
 
 export const getSlackToken = () => {

@@ -94,7 +94,8 @@ import { setAssetTypeAssignments,
   setCPCRequest, 
   setJurisdictionRequest, 
   setTimelineData, 
-  setTimelineRequest
+  setTimelineRequest,
+  getMicrosoftProfile
  } from '../../actions/patentTrackActions2'
 
  import {  
@@ -143,8 +144,10 @@ const NewHeader = (props) => {
   const isDarkTheme = useSelector( state => state.ui.isDarkTheme )
   const viewDashboard = useSelector(state => state.ui.viewDashboard) 
   const slack_profile_data = useSelector( state => state.patenTrack2.slack_profile_data )
+  const microsoft_profile_data = useSelector( state => state.patenTrack2.microsoft_profile_data )
   const google_profile = useSelector( state => state.patenTrack2.google_profile )
   const slack_auth_token = useSelector(state => state.patenTrack2.slack_auth_token)
+  const microsoft_auth_token = useSelector(state => state.patenTrack2.microsoft_auth_token)
   const auth_token = useSelector(state => state.patenTrack2.auth_token)
   const profile = useSelector(store => (store.patenTrack.profile))
   const user = useSelector(store => (store.patenTrack.profile ? store.patenTrack.profile.user : {}))
@@ -179,6 +182,7 @@ const NewHeader = (props) => {
   const [ isCompanyMenuOpen, setCompanyMenuOpen ] = useState(false)
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState( true )
   const [ slackAuthLogin, setSlackAuthLogin ] = useState( true )
+  const [ microsoftAuthLogin, setMicrosoftAuthLogin ] = useState( true )
   const [ scheduling, setScheduling ] = useState( false )
 
   const connectMenuItems = [
@@ -249,6 +253,20 @@ const NewHeader = (props) => {
   }, [dispatch, slack_profile_data])
 
   useEffect(() => {
+    if(microsoft_profile_data) {
+      checkButtons() 
+    } else {
+      const microsoftToken = getTokenStorage( 'microsoft_auth_token_info' )
+      if(microsoftToken && microsoftToken != null && microsoftToken!= '') {
+        const { access_token, refresh_token } = microsoftToken
+        if( access_token != null && refresh_token != null ) {
+          dispatch(getMicrosoftProfile(access_token, refresh_token))
+        }
+      }
+    } 
+  }, [dispatch, microsoft_profile_data])
+
+  useEffect(() => {
     if(google_profile == null) {
       const getGoogleProfile = getTokenStorage('google_profile_info')
       if( getGoogleProfile != '' && getGoogleProfile != null ) {
@@ -277,7 +295,7 @@ const NewHeader = (props) => {
 
   useEffect(() => {
     checkButtons() 
-  }, [ google_auth_token, slack_auth_token ])
+  }, [ google_auth_token, slack_auth_token, microsoft_auth_token ])
 
  
   /**
@@ -302,8 +320,8 @@ const NewHeader = (props) => {
 
   const checkButtons = () => {
     try {      
-      const  googleToken = getTokenStorage( 'google_auth_token_info' ), slackToken = getTokenStorage( 'slack_auth_token_info' )
-      let googleLoginButton = true, slackLoginButton = true
+      const  googleToken = getTokenStorage( 'google_auth_token_info' ), slackToken = getTokenStorage( 'slack_auth_token_info' ), microsoftToken = getTokenStorage('microsoft_auth_token_info')
+      let googleLoginButton = true, slackLoginButton = true, microsoftLoginButton = true
       
       if(googleToken && googleToken != '' && googleToken != null) {
         const tokenParse = JSON.parse( googleToken )
@@ -321,6 +339,14 @@ const NewHeader = (props) => {
         }
       }
       setSlackAuthLogin(slackLoginButton)
+
+      if(microsoftToken && microsoftToken != null && microsoftToken!= 'null' && microsoftToken != '') {
+        const token = JSON.parse(microsoftToken) 
+        if( token.access_token != null && token.refresh_token != null ) {
+          microsoftLoginButton = false
+        }
+      }
+      setMicrosoftAuthLogin(microsoftLoginButton)
     } catch ( err ) {
       console.error( err )
     }
@@ -429,6 +455,22 @@ const NewHeader = (props) => {
       dispatch(setChannelsList([]))
       dispatch(setSlackProfileData(null))
       dispatch(setSlackUsers([]))
+    }
+  }
+
+  const onHandleMicrosoftSignout = () => {
+    if(window.confirm('Log Out?')){
+      removeTokenStorage('microsoft_auth_token_info')
+      removeTokenStorage('microsoft_profile_data')
+      deleteCookie('microsoft_auth_token_info')
+      setMicrosoftAuthLogin(true)
+      /* dispatch(setSlackMessages({messages: [], users: []}))
+      dispatch(setChannelID(null))
+      dispatch(setSlackAuthToken(null))
+      dispatch(setChannelLoading(false))
+      dispatch(setChannelsList([]))
+      dispatch(setSlackProfileData(null))
+      dispatch(setSlackUsers([])) */
     }
   }
 
@@ -743,8 +785,7 @@ const onHandlePatentAssets = () => {
   dispatch(setTimelineData([]))
   resetAllActivity('due_dilligence')
   onHandlePatentAssetsScreen()
-}
-
+} 
 const handleOpenSettings = useCallback((event) => { 
   if(profile?.user && profile.user?.role && profile.user.role.name == 'Admin') {
       dispatch(setDashboardScreen(false)) 
@@ -919,6 +960,37 @@ const handleOpenSettings = useCallback((event) => {
                 </IconButton>
               </div>
               :
+                !microsoftAuthLogin ?
+                <div className={classes.microsoftContainer}>
+                  <IconButton
+                    className={`${classes.buttonIcon} ${classes.padding0} ${classes.slackIcon}`}
+                    aria-label="Microsoft Logout"
+                    component="span"
+                    onClick={onHandleMicrosoftSignout}
+                    style={{marginRight: 6}}
+                    size="small">
+                    <Tooltip 
+                      title={
+                        <Typography color="inherit" variant='body2'>
+                        {
+                          microsoft_profile_data != null && Object.keys(microsoft_profile_data).length > 0
+                          ?
+                            microsoft_profile_data.user.displayName   
+                          :
+                          '' 
+                        }
+                        </Typography>
+                      } 
+                      className={classes.tooltip}  
+                      placement='bottom'
+                      enterDelay={0}
+                      TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
+                    >
+                      <svg fill="#fff" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 64 64" width="21px" height="21px"><path d="M26 21H12c-.552 0-1 .448-1 1s.448 1 1 1h6v19c0 .552.447 1 1 1s1-.448 1-1V23h6c.552 0 1-.448 1-1S26.552 21 26 21zM55.5 27c3.033 0 5.5-2.467 5.5-5.5S58.533 16 55.5 16 50 18.467 50 21.5 52.467 27 55.5 27zM55.5 18c1.93 0 3.5 1.57 3.5 3.5S57.43 25 55.5 25 52 23.43 52 21.5 53.57 18 55.5 18z"/><path d="M46 27h-8c0 0 0 0 0 0v-4.261C38.951 23.526 40.171 24 41.5 24c3.033 0 5.5-2.467 5.5-5.5S44.533 13 41.5 13c-1.329 0-2.549.474-3.5 1.261V6.384c0-.889-.391-1.727-1.071-2.298-.682-.572-1.57-.812-2.45-.657L5.305 8.578C3.39 8.916 2 10.572 2 12.517l0 38.966c0 1.945 1.39 3.602 3.305 3.939l29.174 5.148c.175.031.35.046.523.046.699 0 1.381-.245 1.927-.703.68-.57 1.071-1.408 1.071-2.297v-8.16C38.901 49.803 39.896 50 41 50c4.573 0 6.559-3.112 6.97-4.757C47.99 45.163 48 45.082 48 45V29C48 27.897 47.103 27 46 27zM41.5 15c1.93 0 3.5 1.57 3.5 3.5S43.43 22 41.5 22 38 20.43 38 18.5 39.57 15 41.5 15zM35.643 58.382c-.133.112-.422.29-.816.219L5.652 53.453C4.695 53.284 4 52.456 4 51.483V12.517c0-.973.695-1.801 1.652-1.97l29.174-5.148c.394-.069.683.106.816.219C35.775 5.731 36 5.978 36 6.384l0 51.232C36 58.022 35.776 58.27 35.643 58.382zM46 44.855C45.82 45.396 44.756 48 41 48c-1.167 0-2.174-.245-3-.73V29h8V44.855zM60 29h-8c-1.103 0-2 .897-2 2v14c0 .39.226.744.58.907C51.401 46.288 53.542 47 55 47c4.573 0 6.559-3.112 6.97-4.757C61.99 42.163 62 42.082 62 42V31C62 29.897 61.103 29 60 29zM60 41.855C59.82 42.396 58.756 45 55 45c-.837 0-2.146-.364-3-.674V31h8V41.855z"/></svg>
+                    </Tooltip>
+                  </IconButton>
+                </div>
+              :
               ''
             }
             {
@@ -926,13 +998,17 @@ const handleOpenSettings = useCallback((event) => {
               ?
                 <Avatar className={clsx(classes.actionIcon)} alt={`${slack_profile_data.real_name != '' ? slack_profile_data.real_name : slack_profile_data.profile.real_name != '' ? slack_profile_data.profile.real_name : slack_profile_data.profile.display_name}`} src={slack_profile_data.profile != null && slack_profile_data.profile.hasOwnProperty('image_24') && slack_profile_data.profile.image_24 != '' ? slack_profile_data.profile.image_24 : user && user.logo != '' ? user.logo : slack_profile_data.real_name.toString().substring(0,1).toLocaleUpperCase() } />
               :
-                user && user.logo != ''
+                microsoft_profile_data != null && Object.keys(microsoft_profile_data).length > 0
                 ?
-                <Avatar className={clsx(classes.actionIcon)} alt={`${user ? user.first_name + ' ' + user.last_name : ''}`} src={user.logo} />
-                : 
-                <Avatar className={clsx(classes.actionIcon)}>
-                  {user.first_name.toString().substring(0,1).toLocaleUpperCase()}
-                </Avatar>
+                  <Avatar className={clsx(classes.actionIcon)} alt={`${microsoft_profile_data.user.displayName != '' ? microsoft_profile_data.user.displayName : ''}`} src={ user && user.logo != '' ? user.logo : microsoft_profile_data.user.displayName.toString().substring(0,1).toLocaleUpperCase() }/>
+                :
+                  user && user.logo != ''
+                  ?
+                  <Avatar className={clsx(classes.actionIcon)} alt={`${user ? user.first_name + ' ' + user.last_name : ''}`} src={user.logo} />
+                  : 
+                  <Avatar className={clsx(classes.actionIcon)}>
+                    {user.first_name.toString().substring(0,1).toLocaleUpperCase()}
+                  </Avatar>
             }
             <IconButton
               className= {clsx(classes.actionIcon)}

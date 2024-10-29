@@ -10,7 +10,7 @@ const API_URL = 'https://graph.microsoft.com/v1.0';
  */
 export const msalConfig = {
     auth: {
-        clientId: "a0635e34-5089-4598-a76b-da2e47afbc1c",
+        clientId: "471de8e4-13c4-498d-a591-b01a002776a7",
         /* authority: "https://login.microsoftonline.com/f8cdef31-a31e-4b4a-93e4-5f571e91255a", */
         redirectUri: "http://localhost:3000/microsoft/code"
     },
@@ -50,7 +50,7 @@ export const msalConfig = {
  * https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#openid-connect-scopes
  */
 export const loginRequest = {
-    scopes: ['https://graph.microsoft.com/Team.Create', 'https://graph.microsoft.com/Directory.ReadWrite.All', 'https://graph.microsoft.com/Group.ReadWrite.All', 'https://graph.microsoft.com/Channel.Create', 'https://graph.microsoft.com/Channel.ReadBasic.All', 'https://graph.microsoft.com/Team.ReadBasic.All', 'https://graph.microsoft.com/TeamMember.ReadWrite.All', 'https://graph.microsoft.com/User.Read'], 
+    scopes: ['https://graph.microsoft.com/Team.Create', 'https://graph.microsoft.com/Directory.ReadWrite.All', 'https://graph.microsoft.com/Group.ReadWrite.All', 'https://graph.microsoft.com/Channel.Create', 'https://graph.microsoft.com/Channel.ReadBasic.All', 'https://graph.microsoft.com/Team.ReadBasic.All', 'https://graph.microsoft.com/TeamMember.ReadWrite.All', 'https://graph.microsoft.com/User.Read', 'https://graph.microsoft.com/offline_access'], 
     forceRefresh: true,
     prompt: 'consent'
 };

@@ -24,9 +24,10 @@ import {
     setAddressQueueLoading,
     setNameQueueDisplay,
     setNameQueueData,
-    setNameQueueLoading 
+    setNameQueueLoading, 
+    getMicrosoftUsersList
   } from '../../../actions/patentTrackActions2'
-import { setTokenStorage, getTokenStorage } from '../../../utils/tokenStorage'
+import { setTokenStorage, getTokenStorage, getAuthConnectToken, getMicrosoftTokenWithTeamId } from '../../../utils/tokenStorage'
 import { downloadFile } from '../../../utils/html_encode_decode'
 import 'react-quill/dist/quill.snow.css'
 import './styles.css'
@@ -42,6 +43,12 @@ class PatenTrackLineBreak extends Inline { }
 PatenTrackLineBreak.blotName = 'patentracklinebreak';
 PatenTrackLineBreak.tagName = 'patentracklinebreak';
 Quill.register(PatenTrackLineBreak);
+
+
+class MicrosoftUserMention extends Inline { }
+MicrosoftUserMention.blotName = 'microsoftat';
+MicrosoftUserMention.tagName = 'microsoftat';
+Quill.register(MicrosoftUserMention);
 
 class Span extends Inline { }
 Span.blotName = 'span';
@@ -86,6 +93,7 @@ const QuillEditor = ({
   const google_profile = useSelector(state => state.patenTrack2.google_profile)
   const category = useSelector(state => state.patenTrack2.selectedCategory)
   const slack_users = useSelector(state => state.patenTrack2.slack_users)
+  const microsoft_users = useSelector(state => state.patenTrack2.microsoft_users)
   const driveButtonActive = useSelector(state => state.ui.driveButtonActive)
   const maintainenceFrameMode = useSelector(state => state.ui.maintainenceFrameMode)
   const addressQueuesDisplay = useSelector(state => state.patenTrack2.addressQueuesDisplay)
@@ -269,6 +277,7 @@ const QuillEditor = ({
   }
 
   const GetMenuComponent = useMemo(() => {
+    const getConnectionType = getAuthConnectToken()
     return (
       <Menu
         id="users_list"
@@ -278,13 +287,18 @@ const QuillEditor = ({
         onClose={onCloseUserMenu}
       >
         {
-          slack_users.length > 0 && slack_users.map( user => {
-            return user.id != 'USLACKBOT' && user.deleted === false  ? <MenuItem key={user.id} onClick={(event) => {onUserClick(event, user)}}>{ user.real_name == undefined || user.real_name == null ? user.profile.real_name : user.real_name }</MenuItem> : ''}
+          getConnectionType == 1 && slack_users.length > 0 && slack_users.map( user => {
+            return user.id != 'USLACKBOT' && user.deleted === false  ? <MenuItem key={user.id} onClick={(event) => {onUserClick(event, user, getConnectionType)}}>{ user.real_name == undefined || user.real_name == null ? user.profile.real_name : user.real_name }</MenuItem> : ''}
           )
+        }
+        {
+          getConnectionType == 2 && microsoft_users.length > 0 && microsoft_users.map( user => (
+            <MenuItem key={user.userId} onClick={(event) => {onUserClick(event, user, getConnectionType)}}>{ user.displayName }</MenuItem>  
+          ))
         }
       </Menu>
     )
-  }, [ slack_users, userListMenu ])
+  }, [ microsoft_users, slack_users, userListMenu ])
 
   const getHtml = () => {
     return quillRef.current.editor.container.querySelector('.ql-editor').innerHTML;
@@ -305,23 +319,46 @@ const QuillEditor = ({
     setTimeout(() => editorRef.getEditor().setSelection(getHtml().length + 5), 0)
   }   
 
-  const onUserClick = useCallback((event, user) => {   
-    const name = user.real_name == undefined || user.real_name == null ? user.profile.real_name : user.real_name
-    if(quillRef.current  != null) {
-      let insertHTMl = `&nbsp;<slackusermention data-id="${user.id}" data-label="@${name}" spellcheck="false" class="c-member_slug c-member_slug--link ts_tip_texty" dir="ltr">@${name}</slackusermention><span>&nbsp;</span>`
-      insertText(insertHTMl, true)
-    }
-    onSelectUser(user.id) 
-    setUserListMenu(null);  
-  },[ quillRef ])
+  const getUserName = (user, isMicrosoft) => {
+    return isMicrosoft ? user.displayName : user.real_name || user.profile?.real_name || '';
+  };
+  
+  const getMentionTag = (user, getConnectionType) => {
+    return getConnectionType === 2
+      ? `<microsoftat id="0">${user.displayName}</microsoftat>`
+      : `@${getUserName(user, false)}`;
+  };
+  
+  const onUserClick = useCallback(
+    (event, user, getConnectionType) => {
+      const isMicrosoft = getConnectionType === 2;
+      const userId = isMicrosoft ? user.userId : user.id;
+      const name = getUserName(user, isMicrosoft);
+  
+      if (quillRef.current) {
+        const mentionHtml = isMicrosoft ? `${getMentionTag(user, getConnectionType)}<span>&nbsp;</span>` : `&nbsp;<slackusermention data-id="${userId}" data-label="@${name}" spellcheck="false" class="c-member_slug c-member_slug--link ts_tip_texty" dir="ltr">${getMentionTag(user, getConnectionType)}</slackusermention><span>&nbsp;</span>`;
+        insertText(mentionHtml, true);
+      }
+  
+      onSelectUser(userId);
+      setUserListMenu(null);
+    },
+    [quillRef]
+  );
+  
 
   const onUsersList = useCallback(( event ) => {
     /* if(quillRef.current  != null) {
       insertText('@')      
     } */    
-    dispatch(getSlackUsersList())
+    if(getAuthConnectToken() == 2) {
+      const getTokenWithTeam = getMicrosoftTokenWithTeamId()
+      dispatch(getMicrosoftUsersList(getTokenWithTeam.access_token, getTokenWithTeam.refresh_token, getTokenWithTeam.teamId))
+    } else { 
+      dispatch(getSlackUsersList())
+    }
     setUserListMenu( event.currentTarget )
-  }, [ dispatch, getSlackUsersList, quillRef ])
+  }, [ dispatch, getSlackUsersList, getMicrosoftUsersList, quillRef ])
 
   const onAttachmentOpenedFile = useCallback(() => {    
     if( template_document_url != '') {
