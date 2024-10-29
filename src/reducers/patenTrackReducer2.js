@@ -445,8 +445,18 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
         ...state,
         drive_files: action.data.list
       }
-      case types.SET_SLACK_AUTH_TOKEN:
-        localStorage.setItem('slack_auth_token_info', JSON.stringify(action.token))
+      case types.SET_MICROSOFT_AUTH_TOKEN:
+        localStorage.setItem('microsoft_auth_token_info', JSON.stringify(action.token))
+        return {
+          ...state,
+          microsoft_auth_token: action.token
+        }
+      case types.SET_MICROSOFT_PROFILE_DATA:
+        return {
+          ...state,
+          microsoft_profile_data:  action.data
+        }
+      case types.SET_SLACK_AUTH_TOKEN: 
         return {
           ...state,
           slack_auth_token:  action.token
@@ -456,6 +466,7 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state,
           slack_profile_data:  action.data
         }
+      case types.SET_MICROSOFT_MESSAGES:
       case types.SET_SLACK_MESSAGES:
         let {messages, users} = action.data
         if(messages == undefined) {
@@ -463,9 +474,16 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           users = []
         }
         messages = messages.length > 0 ? messages.reverse()  : [...messages]
-        return {
-          ...state,
-          slack_messages: {messages, users}
+        if(types.SET_MICROSOFT_MESSAGES) {
+          return {
+            ...state,
+            microsoft_messages: {messages, users}
+          }
+        } else { 
+          return {
+            ...state,
+            slack_messages: {messages, users}
+          }
         }
       case types.SET_SLACK_CHANNEL_LIST:
         /* const channelList = []
@@ -479,15 +497,35 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state,
           slack_channel_list_loading: action.flag
         }
+      case types.SET_MICROSOFT_CHANNEL_LIST:
+        return {
+          ...state,
+          microsoft_channel_list: action.data
+        }
+      case types.SET_MICROSOFT_CHANNEL_LIST_LOADING:
+        return {
+          ...state,
+          microsoft_channel_list_loading: action.flag
+        }
       case types.SET_SLACK_USERS:
         return {
           ...state,
           slack_users: action.data
         }
+      case types.SET_MICROSOFT_USERS:
+        return {
+          ...state,
+          microsoft_users: action.data
+        }
       case types.SET_CHANNEL_ID:
         return {
           ...state,
           channel_id: action.data != null && Object.keys(action.data).length > 0 && action.data.channel_id != '' ? action.data.channel_id : ''
+        }
+      case types.SET_MICROSOFT_CHANNEL_ID:
+        return {
+          ...state,
+          channel_id: action.data != null && Object.keys(action.data).length > 0 && action.data.channelId != '' && action.data.channelId != null ? action.data.channelId : ''
         }
       case types.SET_MAINTAINENCE_FEE_FILE_NAME:
         return {

@@ -57,7 +57,10 @@ import {
   setFamilyLegalItem, 
   setSocialMediaConnectPopup,
   transactionRowClick,
-  setClipboardAssetsDisplay
+  setClipboardAssetsDisplay,
+  getMicrosoftChannels,
+  getMicrosoftMessages,
+  setMicrosoftMessages
 } from "../../../actions/patentTrackActions2";
 
 import {
@@ -221,6 +224,8 @@ const AssetsTable = ({
   const channel_id = useSelector(state => state.patenTrack2.channel_id)
   const slack_channel_list = useSelector(state => state.patenTrack2.slack_channel_list)
   const slack_channel_list_loading = useSelector(state => state.patenTrack2.slack_channel_list_loading)
+  const microsoft_channel_list = useSelector(state => state.patenTrack2.microsoft_channel_list)
+  const microsoft_channel_list_loading = useSelector(state => state.patenTrack2.microsoft_channel_list_loading)
   const usptoMode = useSelector(state => state.ui.usptoMode)
   const display_clipboard = useSelector(state => state.patenTrack2.display_clipboard)
   const display_sales_assets = useSelector(state => state.patenTrack2.display_sales_assets)
@@ -1224,24 +1229,54 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
    * Adding channel to assets data
    */
 
+  const findChannelsFromSlack = () => {
+    let findChannel = false;
+    const updatedAssets = [...assetTypeAssignmentAssets];
+
+    slack_channel_list.forEach(channelAsset => {
+      updatedAssets.some(rowAsset => {
+        if (`us${rowAsset.asset}`.toString().toLowerCase() === channelAsset.name.toString().toLowerCase()) {
+          rowAsset.channel = rowAsset.asset;  
+          findChannel = true;  
+          return true;  
+        }
+        return false;  
+      });
+    });
+
+    if (findChannel) {
+        setAssetRows(updatedAssets);
+    }
+};
+
+  const findChannelsFromMicrosoft = async() => {
+    let findChannel = false;
+    const updatedAssets = [...assetTypeAssignmentAssets];
+
+    microsoft_channel_list.forEach(channelAsset => {
+      updatedAssets.some(rowAsset => { 
+        if (`us${rowAsset.asset}`.toString().toLowerCase() === channelAsset.displayName.toString().toLowerCase()) {
+          rowAsset.channel = rowAsset.asset;  
+          findChannel = true;   
+          return true;  
+        }
+        return false;   
+      });
+    });
+
+    if (findChannel) {
+      setAssetRows(updatedAssets);
+    }
+  }
+
   useEffect(() => {
     const checkAssetChannel = async () => {
-      if(assetTypeAssignmentAssets.length > 0 && slack_channel_list.length > 0) {
-        let findChannel = false, oldAssets = [...assetTypeAssignmentAssets]
-        const promises = slack_channel_list.map( channelAsset => {
-          const findIndex = oldAssets.findIndex(rowAsset => `us${rowAsset.asset}`.toString().toLowerCase() == channelAsset.name)
-          if(findIndex !== -1) {
-            oldAssets[findIndex]['channel'] = oldAssets[findIndex].asset
-
-            if(findChannel === false) {
-              findChannel = true
-            }
-          }
-        })
-        await Promise.all(promises)
-        if(findChannel === true){
-          setAssetRows(oldAssets)
-        }   
+      if(assetTypeAssignmentAssets.length > 0 && (slack_channel_list.length > 0 || microsoft_channel_list.length > 0)) {
+        if(slack_channel_list.length > 0) {
+          await findChannelsFromSlack()
+        } else if(microsoft_channel_list.length > 0) {
+          await findChannelsFromMicrosoft()
+        }
         /**
          * If asset selected find ChannelID
          */
@@ -1258,7 +1293,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       }
     }    
     checkAssetChannel()
-  },[ slack_channel_list, assetTypeAssignmentAssets, selectedRow])
+  },[ slack_channel_list, microsoft_channel_list, assetTypeAssignmentAssets, selectedRow])
 
 
   useEffect(() => {
@@ -1283,6 +1318,35 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     }
   }, [slack_channel_list, slack_channel_list_loading])
 
+  useEffect(() => {
+    if(microsoft_channel_list.length == 0 && microsoft_channel_list_loading === false) {
+      const microsoftToken = getTokenStorage( 'microsoft_auth_token_info' )
+      if(microsoftToken && microsoftToken!= '' && microsoftToken!= null && microsoftToken!= 'null' ) {
+        let token = JSON.parse(microsoftToken)
+        
+        if(typeof token === 'string') {
+          token = JSON.parse(token)
+          setTokenStorage( 'microsoft_auth_token_info', token )
+        }
+        
+        if(typeof token === 'object' && token !== null) {
+          const { access_token, refresh_token } = token          
+          if(access_token && access_token != '') { 
+            const getTeamData = getTokenStorage('microsoft_auth_team')
+            let teamID = null  
+            if(getTeamData && getTeamData != '' && getTeamData != null) {
+              const teamData = JSON.parse(getTeamData) 
+              teamID = teamData.teamId 
+            }
+            if(teamID != null) { 
+              dispatch(getMicrosoftChannels(access_token, refresh_token, teamID))
+            }
+          }
+        }
+      }      
+    }
+  }, [microsoft_channel_list, microsoft_channel_list_loading])
+
   /* useEffect(() => {
     if (standalone && assetTypeAssignmentAssets.length > 0) {
       handleOnClick(assetTypeAssignmentAssets[0]);
@@ -1291,11 +1355,22 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
 
   useEffect(() => {
     if (channel_id != "" && selectedAssetsPatents.length > 0) {
-      const getSlackToken = getTokenStorage("slack_auth_token_info");
+      const getSlackToken = getTokenStorage("slack_auth_token_info"), getMicrosoftToken = getTokenStorage("microsoft_auth_token_info")
       if (getSlackToken && getSlackToken != "") {
         dispatch(getSlackMessages(channel_id));
-      } else {
-        //alert to user for login with slack to retrieve messages
+      } else if (getMicrosoftToken && getMicrosoftToken != "") {
+        const getMicorosftTeam = getTokenStorage("microsoft_auth_team");
+        const {access_token, refresh_token} = JSON.parse(getMicrosoftToken)
+        let teamID = null;
+        if(getMicorosftTeam != '' && getMicorosftTeam != null) {
+          const { teamId } = JSON.parse(getMicorosftTeam)
+          if(teamId != undefined && teamId != '' && teamId != null) {
+            teamID = teamId
+          }
+        }
+        if(access_token != undefined && access_token != '' && refresh_token != null && refresh_token != undefined && teamID != null) { 
+          dispatch(getMicrosoftMessages(access_token, refresh_token, teamID, channel_id));
+        }
       }
     }
   }, [dispatch, channel_id]);
@@ -1559,6 +1634,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         dispatch(assetLegalEvents(appno_doc_num, grant_doc_num))
         dispatch(assetFamily(appno_doc_num))
         dispatch(setSlackMessages({ messages: [], users: [] }))
+        dispatch(setMicrosoftMessages({ messages: [], users: [] }))
         const channelID = findChannelID(grant_doc_num != '' ? grant_doc_num : appno_doc_num)        
         if( channelID != '') {
           dispatch(setChannelID({channel_id: channelID}))
@@ -1665,7 +1741,7 @@ const checkMouseStillOnHover = (e, number) => {
  */
 const retrieveSlackMessages = async(asset) => {
   const getSlackToken = getTokenStorage("slack_auth_token_info");
-  
+  const getMicrosoftToken = getTokenStorage("microsoft_auth_token_info")
   
   if (getSlackToken && getSlackToken != "") {
     const channelID = findChannelID(asset)
@@ -1673,55 +1749,73 @@ const retrieveSlackMessages = async(asset) => {
       const { access_token, bot_token, bot_user_id } = JSON.parse(getSlackToken)
       if(access_token != '' && access_token != null && access_token != undefined) {
         const { data } = await PatenTrackApi.getMessages( access_token, channelID);
-        if(data.messages.length > 0) {
-          /**
-           * Find String Necessary or Important and also via PatenTrack
-           */
-          const ratingItems = []
-          data.messages.forEach( item => {
-            if(item.type == 'message') {
-              const {text} = item 
-              if(text != '') { 
-                if(text.toLowerCase().indexOf('necessary') !== -1 && text.indexOf('via PatenTrack') !== -1) {
-                  /**
-                   * Find Necessary
-                   */
-                  const value = text.match(/\d+/)[0]
-                  ratingItems.push({
-                    name: 'Necessary',
-                    value
-                  })
-                }
-
-                if(text.toLowerCase().indexOf('important') !== -1 && text.indexOf('via PatenTrack') !== -1) {
-                  /**
-                   * Find Important
-                   */
-                  const value = text.match(/\d+/)[0]
-                  ratingItems.push({
-                    name: 'Important',
-                    value
-                  })
-                } 
-                if(text.indexOf('via PatenTrack') !== -1 && text.indexOf('assigned to this asset') !== -1){ 
-                  let messageTest = text.replace('products are assigned to this asset via PatenTrack', '')
-                  messageTest = text.replace('product is assigned to this asset via PatenTrack', '')
-                  if(messageTest != '') {
-                    ratingItems.push({
-                      name: 'Assigned',
-                      value: messageTest.split('@@').length
-                    })
-                  }
-                }
-              }
-            }
-          }); 
-          if(ratingItems.length > 0) {
-            updateTableColumn(ratingItems)
-          }
-        }        
+        loadMessages(data)        
       }       
     } 
+  } else if(getMicrosoftToken && getMicrosoftToken != "" && getMicrosoftToken != null) {
+    const channelID = findChannelID(asset)
+    if(channelID != '') {
+      const { access_token, refresh_token } = JSON.parse(getMicrosoftToken)
+      if(access_token != '' && access_token != null && access_token != undefined) {
+        const getMicrosoftTeam = getTokenStorage("microsoft_auth_team")
+        if(getMicrosoftTeam != undefined) {
+          const getTeam = JSON.parse(getMicrosoftTeam)
+          const { data } = await PatenTrackApi.getMicrosoftMessages( access_token, refresh_token, getTeam.teamId, channelID);
+          loadMessages(data)        
+        }
+      }
+    }
+  }
+}
+
+const loadMessages = (data) => {
+
+  if(data.messages.length > 0) {
+    /**
+     * Find String Necessary or Important and also via PatenTrack
+     */
+    const ratingItems = []
+    data.messages.forEach( item => {
+      if(item.type == 'message') {
+        const {text} = item 
+        if(text != '') { 
+          if(text.toLowerCase().indexOf('necessary') !== -1 && text.indexOf('via PatenTrack') !== -1) {
+            /**
+             * Find Necessary
+             */
+            const value = text.match(/\d+/)[0]
+            ratingItems.push({
+              name: 'Necessary',
+              value
+            })
+          }
+
+          if(text.toLowerCase().indexOf('important') !== -1 && text.indexOf('via PatenTrack') !== -1) {
+            /**
+             * Find Important
+             */
+            const value = text.match(/\d+/)[0]
+            ratingItems.push({
+              name: 'Important',
+              value
+            })
+          } 
+          if(text.indexOf('via PatenTrack') !== -1 && text.indexOf('assigned to this asset') !== -1){ 
+            let messageTest = text.replace('products are assigned to this asset via PatenTrack', '')
+            messageTest = text.replace('product is assigned to this asset via PatenTrack', '')
+            if(messageTest != '') {
+              ratingItems.push({
+                name: 'Assigned',
+                value: messageTest.split('@@').length
+              })
+            }
+          }
+        }
+      }
+    }); 
+    if(ratingItems.length > 0) {
+      updateTableColumn(ratingItems)
+    }
   }
 }
 
@@ -1907,9 +2001,15 @@ const updateTableColumn = (ratingItems) => {
       if( findIndex !== -1) {
         channelID = slack_channel_list[findIndex].id
       }
+    } else if(microsoft_channel_list.length > 0 && asset != undefined) {
+      const findIndex = microsoft_channel_list.findIndex( channel => channel.displayName.toString().toLocaleLowerCase() == `US${asset}`.toString().toLocaleLowerCase())
+  
+      if( findIndex !== -1) {
+        channelID = microsoft_channel_list[findIndex].id
+      }
     }
     return channelID
-  }, [ slack_channel_list ]) 
+  }, [ slack_channel_list, microsoft_channel_list ]) 
 
 
   const resizeColumnsWidth = useCallback((dataKey, data) => {

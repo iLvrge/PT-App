@@ -280,7 +280,7 @@ CustomToolbar.formats = [
   'header', 'font', 'size',
   'bold', 'italic', 'underline', 'strike', 'blockquote',
   'list', 'bullet', 'indent',
-  'link', 'image', 'color', 'slackusermention', 'span' ,'patentracklinebreak'
+  'link', 'image', 'color', 'slackusermention', 'span' ,'patentracklinebreak', 'microsoftat'
 ]
 
 export default CustomToolbar

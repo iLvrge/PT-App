@@ -47,6 +47,18 @@ const getFormUrlHeader = () => {
   } 
 }
 
+const getMicrosoftHeader = (accessToken, refreshToken, formRequest=false) => {
+  const headers = {
+    'x-auth-token': getToken(),
+    'X-Microsoft-Auth-Token': accessToken,
+    'X-Microsoft-Refresh-Token': refreshToken,
+  }   
+  if(formRequest) {
+    headers['Content-Type'] = 'application/x-www-form-urlencoded' 
+  }
+  return {headers}
+}
+
 const getHeaderWithCancelToken = (referenceVariable) => {
   const header = getHeader() 
   header['cancelToken'] = new CancelToken(function executor(c) {  
@@ -1163,6 +1175,47 @@ class PatenTrackApi {
 
   static shareIllustration( data ) {
     return api.post(`${base_new_api_url}/share`, data, getFormUrlHeader())
+  } 
+  
+  static getMicrosoftAuthToken( code, redirectURI ) {
+    return api.get(`${base_new_api_url}/microsoft/auth/${code}?redirect_uri=${redirectURI}`, getHeader())
+  }
+
+  static getMicrosoftTeam(accessToken, refreshToken) {
+    return api.get(`${base_new_api_url}/microsoft/team`, getMicrosoftHeader(accessToken, refreshToken))
+  }
+
+  static getMicrosoftProfile( accessToken, refreshToken ) {
+    console.log('getMicrosoftProfile')
+    return api.get(`${base_new_api_url}/microsoft/me`, getMicrosoftHeader(accessToken, refreshToken))
+  } 
+
+  static createMicrosoftTeam( accessToken, refreshToken ) { 
+    return api.post(`${base_new_api_url}/microsoft/team`, getMicrosoftHeader(accessToken, refreshToken))
+  }
+
+  static createMicrosoftTeamChannel( accessToken, refreshToken, teamID, formData ) { 
+    return api.post(`${base_new_api_url}/microsoft/channel/${teamID}`, formData, getMicrosoftHeader(accessToken, refreshToken, true))
+  }
+
+  static getMicrosoftChannelID( accessToken, refreshToken, teamID, name ) { 
+    return api.get(`${base_new_api_url}/microsoft/channel/${teamID}/${name}`, getMicrosoftHeader(accessToken, refreshToken, true))
+  }
+
+  static sendMicrosoftMessage(accessToken, refreshToken, teamId, channelId, formData) { 
+    return api.post(`${base_new_api_url}/microsoft/${teamId}/channels/${channelId}/messages`, formData, getMicrosoftHeader(accessToken, refreshToken, true))
+  }
+
+  static getMicrosoftMessages(accessToken, refreshToken, teamId, channelId) { 
+    return api.get(`${base_new_api_url}/microsoft/${teamId}/channels/${channelId}/messages`, getMicrosoftHeader(accessToken, refreshToken))
+  }
+
+  static getMicrosoftUsersList(accessToken, refreshToken, teamId) {
+    return api.get(`${base_new_api_url}/microsoft/${teamId}/users`, getMicrosoftHeader(accessToken, refreshToken))
+  }
+
+  static getMicrosoftChannels( accessToken, refreshToken, teamId ) {
+    return api.get(`${base_new_api_url}/microsoft/${teamId}/channels`, getMicrosoftHeader(accessToken, refreshToken)) 
   }
   
   static getSlackAuthToken( code, redirectURI ) {
