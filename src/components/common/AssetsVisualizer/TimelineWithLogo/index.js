@@ -328,10 +328,10 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
             "&",
         ),
       });
-      if(selectedCategory == 'collaterlized') {
+      /* if(selectedCategory == 'collaterlized') { */
         dispatch(setAssetTypesAssignmentsAllAssetsLoading( false ) )
         dispatch(setAssetTypeAssignmentAllAssets({list: [], total_records: 0}, false)) 
-      }
+      /* } */
       dispatch(transactionRowClick(item.rawData.id, slack_channel_list, true, search_string))
       
       /* if(assignmentBar === false) {
