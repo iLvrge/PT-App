@@ -686,6 +686,107 @@ export const setGoogleTemplateList = (data) => {
   } 
 }
 
+export const setMicirosoftAuthToken = ( token ) => {
+  return {
+    type: types.SET_MICROSOFT_AUTH_TOKEN,
+    token
+  }
+}
+
+export const getMicrosoftProfile = (accessToken, refreshToken) => {
+  return async dispatch => {
+    const { data } = await PatenTrackApi.getMicrosoftProfile( accessToken, refreshToken )
+    dispatch(setMicrosoftProfileData(data))
+  }
+}
+
+export const setMicrosoftProfileData = ( data ) => {
+  return {
+    type: types.SET_MICROSOFT_PROFILE_DATA,
+    data
+  }
+}
+
+export const getMicrosoftMessages = (accessToken, refreshToken, teamID, channelID ) => { 
+  return async dispatch => {
+    try{
+      const { data } = await PatenTrackApi.getMicrosoftMessages( accessToken, refreshToken, teamID, channelID )
+      dispatch(setMicrosoftMessages(data))
+    } catch (err) {
+      console.error(err)
+    }    
+  }
+}
+
+export const setMicrosoftMessages = (data) => {
+  return {
+    type: types.SET_MICROSOFT_MESSAGES,
+    data
+  }
+}
+
+export const getMicrosoftChannelID = ( accessToken, refreshToken, teamID, patent, application ) => {
+  if( patent != '' ) {
+    return async dispatch => {
+      const { data } = await PatenTrackApi.getMicrosoftChannelID( accessToken, refreshToken, teamID, patent )
+      if( data == null || Object.keys(data).length == 0 ) {
+        const { data } = await PatenTrackApi.getMicrosoftChannelID( accessToken, refreshToken, teamID, application )
+        dispatch(setMicrosoftChannelID(data))
+      } else {
+        dispatch(setMicrosoftChannelID(data))
+      }
+    }
+  } else {
+    return async dispatch => {
+      const { data } = await PatenTrackApi.getMicrosoftChannelID( accessToken, refreshToken, teamID, application )
+      dispatch(setMicrosoftChannelID(data))
+    }
+  }
+}
+
+export const setMicrosoftChannelID = (data) => {
+  return {
+    type: types.SET_MICROSOFT_CHANNEL_ID,
+    data
+  }
+}
+
+export const getMicrosoftUsersList = (accessToken, refreshToken, teamID) => { 
+  return async dispatch => {
+    const { data } = await PatenTrackApi.getMicrosoftUsersList(accessToken, refreshToken, teamID)
+    dispatch(setMicrosoftUsers(data))
+  }
+}
+
+export const setMicrosoftUsers = (data) => {
+  return {
+    type: types.SET_MICROSOFT_USERS,
+    data
+  }
+}
+
+export const getMicrosoftChannels = (accessToken, refreshToken, teamID) => {
+  return async dispatch => {
+    dispatch(setMicrsoftChannelLoading(true))
+    const { data } = await PatenTrackApi.getMicrosoftChannels(accessToken, refreshToken, teamID)
+    dispatch(setMicrsoftChannelLoading(true))
+    dispatch(setMicrosoftChannelsList(data))
+  }
+}
+
+export const setMicrsoftChannelLoading = (flag) => {
+  return {
+    type: types.SET_MICROSOFT_CHANNEL_LIST_LOADING,
+    flag
+  }
+}
+
+export const setMicrosoftChannelsList = (data) => {
+  return {
+    type: types.SET_MICROSOFT_CHANNEL_LIST,
+    data
+  }
+}
 
 export const getSlackAuthToken = ( code ) => {
   return async dispatch => {

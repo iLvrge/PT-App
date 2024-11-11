@@ -39,6 +39,7 @@ import FullScreen from '../FullScreen'
 import useStyles from './styles'
 import themeMode from '../../../themes/themeMode'
 import { FaChevronCircleDown } from 'react-icons/fa'
+import { getAuthConnectToken } from "../../../utils/tokenStorage";
 import {
   getGoogleAuthToken,
   getLayoutTemplatesByID,
@@ -57,7 +58,8 @@ import {
   getNameQueue,
   setNameQueueDisplay,
   setChannelID,
-  setSocialMediaConnectPopup
+  setSocialMediaConnectPopup,
+  getMicrosoftMessages
 } from '../../../actions/patentTrackActions2'
 
 import {
@@ -101,6 +103,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   const assetTransactions = useSelector(state => state.patenTrack2.assetTypeAssignments.list)
   const currentRowSelection = useSelector(state => state.patenTrack2.selectedAssetsTransactions)
   const slack_messages = useSelector(state => state.patenTrack2.slack_messages)
+  const microsoft_messages = useSelector(state => state.patenTrack2.microsoft_messages)
   const layout_id = useSelector(state => state.patenTrack2.layout_id)
   const google_profile = useSelector(state => state.patenTrack2.google_profile)
   const assetTypeAddressSelected = useSelector(state => state.patenTrack2.assetTypeAddress.selected)
@@ -114,8 +117,10 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
   const slack_auth_token = useSelector(state => state.patenTrack2.slack_auth_token) 
+  const microsoft_auth_token = useSelector(state => state.patenTrack2.microsoft_auth_token) 
   /* const slack_profile_data = useSelector( state => state.patenTrack2.slack_profile_data ) */
   const template_document_url = useSelector(state => state.patenTrack2.template_document_url)
+  const assetIllustrationData = useSelector(state => state.patenTrack2.assetIllustrationData)
   const [ selectUser, setSelectUser] = useState(null)
   const [ replyId, setReplyId ] = useState(null)
   const [ file, setFile ] = useState(null)
@@ -124,6 +129,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   const [ commentHtml, setCommentHtml ] = useState('')
   const [ newCompanyName, setNewCompanyName] = useState('')
   const [ slackAuthLogin, setSlackAuthLogin ] = useState( true )
+  const [ microsoftAuthLogin, setMicrosoftAuthLogin ] = useState( true )
   const [ googleAuthLogin, setGoogleAuthLogin ] = useState( true )
   const [ driveModal, setDriveModal ] = useState(false)
   const [ correctAddressModal, setCorrectAddressModal ] = useState(false)
@@ -164,61 +170,70 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
 
   useEffect(() => {
     checkButtons() 
-  }, [ google_auth_token, slack_auth_token ])
+  }, [ google_auth_token, slack_auth_token, microsoft_auth_token ])
+
+  const normalizeSlackMessages = async() => {
+    let messages = slack_messages?.messages && slack_messages.messages.length > 0 ? [...slack_messages.messages] : []
+    if(messages.length ===  0) return
+
+    let files = [], removeIndexID = []
+    let lastTimeStamp = 0, lastUser = null, lastIndexID = -1
+    const messagesTrimmed = messages.map((message, index) => {
+      if(!message.hasOwnProperty('subtype')) {
+        if(lastTimeStamp === 0) {
+          lastTimeStamp = Moment(new Date(message.ts * 1000)) 
+          lastUser = message.user
+          lastIndexID = index
+          if(message?.attachments && message.attachments.length > 0) {
+            files = [...files, message.attachments[0].blocks[0].file]
+          }
+        } else {
+          const time = Moment(new Date(message.ts * 1000));
+          const duration = time.diff(lastTimeStamp, 'minutes')
+          if( duration === 0 && lastUser === message.user && message?.attachments && message.attachments.length > 0 ) {
+            files = [...files, message.attachments[0].blocks[0].file]
+            removeIndexID.push(index)
+          } else {
+            if(files.length > 0 && lastIndexID != index - 1) {
+              messages[lastIndexID].files = files            
+            }
+            if(message?.attachments && message.attachments.length > 0) {
+              files = [message.attachments[0].blocks[0].file]
+            } else {
+              files = []
+            }
+            lastTimeStamp = Moment(new Date(message.ts * 1000))
+            lastUser = message.user
+            lastIndexID = index
+          }
+        }          
+      }
+    })
+    const time = Moment(new Date(messages[messages.length -1].ts * 1000));
+    if(lastIndexID !== -1 && files.length > 0 && lastUser === messages[messages.length -1].user &&  time.diff(lastTimeStamp, 'minutes') === 0) {
+      messages[lastIndexID].files = files    
+    }
+    await Promise.all(messagesTrimmed)  
+    if(removeIndexID.length > 0) {
+      messages = messages.filter( (c,index) => !removeIndexID.includes(index))
+      setCommentsData({messages, users: slack_messages.users})
+    } else {
+      setCommentsData(slack_messages)
+    }
+  }
 
   useEffect(() => {    
     const callMessageTrimmer = async() => {
-      let messages = slack_messages?.messages && slack_messages.messages.length > 0 ? [...slack_messages.messages] : []
-      if(messages.length ===  0) return
-
-      let files = [], removeIndexID = []
-      let lastTimeStamp = 0, lastUser = null, lastIndexID = -1
-      const messagesTrimmed = messages.map((message, index) => {
-        if(!message.hasOwnProperty('subtype')) {
-          if(lastTimeStamp === 0) {
-            lastTimeStamp = Moment(new Date(message.ts * 1000)) 
-            lastUser = message.user
-            lastIndexID = index
-            if(message?.attachments && message.attachments.length > 0) {
-              files = [...files, message.attachments[0].blocks[0].file]
-            }
-          } else {
-            const time = Moment(new Date(message.ts * 1000));
-            const duration = time.diff(lastTimeStamp, 'minutes')
-            if( duration === 0 && lastUser === message.user && message?.attachments && message.attachments.length > 0 ) {
-              files = [...files, message.attachments[0].blocks[0].file]
-              removeIndexID.push(index)
-            } else {
-              if(files.length > 0 && lastIndexID != index - 1) {
-                messages[lastIndexID].files = files            
-              }
-              if(message?.attachments && message.attachments.length > 0) {
-                files = [message.attachments[0].blocks[0].file]
-              } else {
-                files = []
-              }
-              lastTimeStamp = Moment(new Date(message.ts * 1000))
-              lastUser = message.user
-              lastIndexID = index
-            }
-          }          
-        }
-      })
-      const time = Moment(new Date(messages[messages.length -1].ts * 1000));
-      if(lastIndexID !== -1 && files.length > 0 && lastUser === messages[messages.length -1].user &&  time.diff(lastTimeStamp, 'minutes') === 0) {
-        messages[lastIndexID].files = files    
-      }
-      await Promise.all(messagesTrimmed)  
-      if(removeIndexID.length > 0) {
-        messages = messages.filter( (c,index) => !removeIndexID.includes(index))
-        setCommentsData({messages, users: slack_messages.users})
-      }    
+      if(slack_messages?.messages && slack_messages.messages.length > 0) {
+        normalizeSlackMessages()
+      } else if (microsoft_messages?.messages && microsoft_messages.messages.length > 0) {
+        setCommentsData(microsoft_messages)
+      } 
     }
-    callMessageTrimmer()
-    setCommentsData(slack_messages)
+    callMessageTrimmer() 
     updateHeight(size, timelineRef)  
     
-  }, [ slack_messages, size, timelineRef, standalone ])
+  }, [ slack_messages, microsoft_messages, size, timelineRef, standalone ])
 
   useEffect(() => {
     updateHeight(0, timelineRef)  
@@ -359,8 +374,8 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
   const checkButtons = () => {
     try{
       
-      const slackToken = getTokenStorage( 'slack_auth_token_info' ), googleToken = getTokenStorage( 'google_auth_token_info' )
-      let slackLoginButton = true, googleLoginButton = true
+      const slackToken = getTokenStorage( 'slack_auth_token_info' ), googleToken = getTokenStorage( 'google_auth_token_info' ), microsoftToken = getTokenStorage('microsoft_auth_token_info')
+      let slackLoginButton = true, googleLoginButton = true, microsoftLoginButton = true;
       if(slackToken && slackToken != '') {
         let token = JSON.parse(slackToken)
         
@@ -381,6 +396,27 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
           }
         }         
       }
+
+      if(microsoftToken && microsoftToken != '') {
+        let token = JSON.parse(microsoftToken)
+        
+        if(typeof token === 'string') {
+          token = JSON.parse(token)
+          setTokenStorage( 'microsoft_auth_token_info', token )
+
+        }
+        
+        if(typeof token === 'object' && token !== null) {
+          microsoftLoginButton =  false           
+          const { access_token, refresh_token } = token          
+          if(access_token && access_token != '') {
+            microsoftLoginButton =  false 
+            /* if( slack_channel_list.length == 0 && slack_channel_list_loading === false) {
+              dispatch(getChannels(access_token))
+            } */
+          }
+        }         
+      }
       
       if(googleToken && googleToken != '') {
         const tokenParse = JSON.parse( googleToken )
@@ -395,6 +431,7 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
           editorContainerRef.current.querySelector('.editor').classList.remove('attach');
         }
       }
+      setMicrosoftAuthLogin(microsoftLoginButton)
       setSlackAuthLogin(slackLoginButton)
       setGoogleAuthLogin(googleLoginButton)
     } catch ( err ) {
@@ -524,13 +561,59 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
     }
   }
 
+  const resetFormAndRefreshMessages = (provider, data, channel_id, access_token, refreshToken = null, team_id = null) => {
+    setCommentHtml('')
+    console.log('resetFormAndRefreshMessages', data, provider)
+    if(data != '' && Object.keys(data).length > 0) {
+      inputFile.current.value = ''
+      setFile(null)
+      const editor = editorContainerRef.current.querySelector('.ql-editor')
+      if(editor.parentNode.querySelector('.editor-attachment') != null) {                
+        const items = editor.parentNode.querySelectorAll('.editor-attachment')
+        
+        for(let i = 0; i < items.length; i++) {
+          editor.parentNode.removeChild(items[i])
+        }   
+        setFileRemote([])
+      } 
+      const { status, channel } = data;
+      if(status != '' && status == 'Message sent') {
+        setEditData( null )
+        if(channel_id != channel) {
+          dispatch(setChannel({channel_id}))
+          dispatch(getChannels(access_token))  
+        }
+        if(provider == 'microsoft') {
+          dispatch(getMicrosoftMessages(access_token, refreshToken, team_id, channel_id))
+        } else {
+          dispatch( getSlackMessages( data.channel ) ) 
+        }
+      }
+    } 
+  }
+
+  const addUserCounterInMentioned = (originalString) => {
+    let idCounter = 0;
+    const updatedString = originalString.replace(/<microsoftat>(.*?)<\/microsoftat>/g, (match, user) => {
+      return `<at id="${idCounter++}">${user}</at>`;
+    });
+
+    return updatedString;
+  }
+
   const handleSubmitComment = useCallback(async () => {
     if(selectedAssetsPatents.length > 0 || selectedAssetsTransactions.length > 0 || (dashboardScreen === true && mainCompaniesSelected.length > 0)) {
-      
+      const getConnectionType = getAuthConnectToken()
       const formData = new FormData()
       const cleanText = commentHtml.replace(/<\/?[^>]+(>|$)/g, "");
+      console.log('commentHtml', commentHtml)
       if(cleanText !== '' || fileRemote.length > 0 || file !== null) {
-        formData.append('text',  html.encode(commentHtml) )
+        let htmlText = commentHtml
+
+        if(getConnectionType == 2 && htmlText.indexOf('microsoftat') != -1) {
+          htmlText = addUserCounterInMentioned(htmlText)
+        }
+        formData.append('text',  getConnectionType == 2 ? htmlText : html.encode(htmlText) )
         /* if(selectedCategory == 'correct_details') {
           formData.append('transaction', selectedAssetsTransactions.length == 1 ? selectedAssetsTransactions[0] : currentRowSelection )
         } else {
@@ -570,44 +653,65 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
         formData.append('file',file == null ? '' : file)
         formData.append('remote_file',fileRemote.length > 0 ? JSON.stringify(fileRemote) : '')
         formData.append('channel_id', channel_id)
-        const slackToken = getTokenStorage( 'slack_auth_token_info' )
-        if( slackToken  && slackToken != null ) {
-          const { access_token, bot_token, bot_user_id } = JSON.parse(slackToken)
-
-          if( access_token != undefined) {  
-            formData.append('auth', bot_token)
-            formData.append('auth_id', bot_user_id)
-            const { data } = await PatenTrackApi.sendMessage(access_token, formData)
-            setCommentHtml('')
-            
-            if(data != '' && Object.keys(data).length > 0) {
-              inputFile.current.value = ''
-              setFile(null)
-              const editor = editorContainerRef.current.querySelector('.ql-editor')
-              if(editor.parentNode.querySelector('.editor-attachment') != null) {                
-                const items = editor.parentNode.querySelectorAll('.editor-attachment')
-                
-                for(let i = 0; i < items.length; i++) {
-                  editor.parentNode.removeChild(items[i])
-                }   
-                setFileRemote([])
-              } 
-              const { status, channel } = data;
-              if(status != '' && status == 'Message sent') {
-                setEditData( null )
-                if(channel_id != channel) {
-                  dispatch(setChannel({channel_id}))
-                  dispatch(getChannels(access_token))  
+        const slackToken = getTokenStorage( 'slack_auth_token_info' ),
+        microsoftToken= getTokenStorage( 'microsoft_auth_token_info' );
+        let addedLoginData = false
+        if( (slackToken  && slackToken != null) || (microsoftToken && microsoftToken != null) ) { 
+          if( slackToken  && slackToken != null ) {
+            const { access_token, bot_token, bot_user_id } = JSON.parse(slackToken)
+            if( access_token != undefined) {  
+              addedLoginData = true
+              formData.append('auth', bot_token)
+              formData.append('auth_id', bot_user_id)
+              const { data } = await PatenTrackApi.sendMessage(access_token, formData)
+              resetFormAndRefreshMessages('slack', data, channel_id, access_token)
+            } 
+          } else if(microsoftToken && microsoftToken != null) {
+            const { access_token, refresh_token } = JSON.parse(microsoftToken)
+            if( access_token != undefined) {   
+              addedLoginData = true
+              const getTeamData = getTokenStorage('microsoft_auth_team');
+              let teamID = null
+              console.log(getTeamData);
+              if(!getTeamData || getTeamData == undefined || getTeamData == null) {
+                const getTeam = await PatenTrackApi.createMicrosoftTeam(access_token, refresh_token)  
+                console.log('getTeam1', getTeam)
+                if(getTeam.data != null) {
+                  setTokenStorage('microsoft_auth_team', JSON.stringify(getTeam.data)) 
+                  teamID = getTeam.data.teamId
                 }
-                dispatch( getSlackMessages( data.channel ) ) 
+              } else if(getTeamData != '' && getTeamData != undefined && getTeamData != null) {
+                const teamData = JSON.parse(getTeamData)
+                console.log('teamData', teamData)
+                if(Object.keys(teamData).length > 0 && 'teamId' in teamData) {
+                  teamID = teamData.teamId 
+                }
               }
-            }
-          } else {
-            alert("Please login first with your Slack Account")
+              let channelID = channel_id
+              if(channelID == "" || channelID == undefined || channelID == null) {
+                const channelFormData = new FormData()
+                channelFormData.append('name', `US${assetIllustrationData.general.original_number}`)
+                channelFormData.append('desription', assetIllustrationData.general.patent_number)
+                
+                const getChannelData = await PatenTrackApi.createMicrosoftTeamChannel(access_token, refresh_token, teamID, channelFormData)
+                console.log('channelFormData', getChannelData)
+                if(getChannelData != null) {
+                  formData.set('channel_id', getChannelData.data.channelId);
+                  channelID = getChannelData.data.channelId
+                  dispatch(setChannel(getChannelData.data.channelId))
+                }
+              }
+              formData.append('auth_token', access_token)
+              formData.append('refresh_token', refresh_token)
+              formData.append('team_id', teamID)
+              const { data } = await PatenTrackApi.sendMicrosoftMessage(access_token, refresh_token, teamID, channelID, formData)
+              resetFormAndRefreshMessages('microsoft', data, channelID, access_token, refresh_token, teamID)
+            } 
           }
-        } else {
-          alert("Please login first with your Slack Account")
         }
+        if(!addedLoginData) {
+          alert("Please login first with Microsoft or Slack account")
+        } 
       } 
     }    
   }, [ dispatch, commentHtml, selectedAssetsPatents, getSlackMessages, channel_id, selectUser, replyId, editData, file, fileRemote, selectedAssetsTransactions, currentRowSelection, selectedCategory, assetTransactions, mainCompaniesList ])
@@ -828,13 +932,20 @@ const handleDriveModalClose = (event) => {
   }
 
   const handleFocus = useCallback((range, source, editor) => {
-    const getSlackUser = getTokenStorage( 'slack_auth_token_info' ), googleToken = getTokenStorage( 'google_auth_token_info' );
+    const getSlackUser = getTokenStorage( 'slack_auth_token_info' ), googleToken = getTokenStorage( 'google_auth_token_info' ), getMicrosoftUser = getTokenStorage('microsoft_auth_token_info');
     
-    if(!getSlackUser || getSlackUser == '' || getSlackUser == null){
-      dispatch(setSocialMediaConnectPopup(true))
+    let showConnectMediaPopup = true
+    if(getSlackUser && getSlackUser !== '' && getSlackUser !== null){
+      showConnectMediaPopup = false
     }
 
-    if(getSlackUser &&  getSlackUser != '' &&  (selectedAssetsPatents.length > 0 || selectedAssetsTransactions.length > 0 || (dashboardScreen === true && mainCompaniesSelected.length > 0))) {
+    if(showConnectMediaPopup === true && (getMicrosoftUser && getMicrosoftUser !== '' && getMicrosoftUser !== null)) {
+      showConnectMediaPopup = false
+    }
+
+    dispatch(setSocialMediaConnectPopup(showConnectMediaPopup))
+
+    if(((getSlackUser &&  getSlackUser != '') || (getMicrosoftUser &&  getMicrosoftUser != '')) &&  (selectedAssetsPatents.length > 0 || selectedAssetsTransactions.length > 0 || (dashboardScreen === true && mainCompaniesSelected.length > 0))) {
       editorContainerRef.current.querySelector('.editor').classList.add('focus')
     }    
 
@@ -1060,41 +1171,82 @@ const handleDriveModalClose = (event) => {
     )
   }, [ selectedAssetsPatents, selectedCommentsEntity, commentHtml, handleSubmitComment, handleCancelComment, classes ])
 
-  const ShowUser = ({users, item}) => {    
-    if(users.length === 0) return item.user
-    const checkUser = users.findIndex( user => user.id == item.user)
+  const SlackUser = (props) => {
+    const checkUser = props.users.findIndex( user => user.id == props.user)
     return (
-      <span>
+      <>
         {
           checkUser !== -1
           ?
-            users[checkUser].profile.first_name 
-            ? `${users[checkUser].profile.first_name} ${users[checkUser].profile.last_name}`
-            : users[checkUser].name
+            props.users[checkUser].profile.first_name 
+            ? `${props.users[checkUser].profile.first_name} ${props.users[checkUser].profile.last_name}`
+            : props.users[checkUser].name
           :
-          item.user
-        }
+          props.user
+        } 
         {
           checkUser !== -1 
-          ? users[checkUser].profile.title 
+          ? props.users[checkUser].profile.title 
             ? 
-            ', '+ capitalizeEachWord(users[checkUser].profile.title) 
+            ', '+ capitalizeEachWord(props.users[checkUser].profile.title) 
             : ''
           : ''
         }
-        <span className={classes.message_time}>{Moment(new Date(item.ts * 1000)).format('l HH:mm')}</span>
+      </>
+    )
+  }
+
+  const MicrosoftUser = (props) => {
+    const checkUser = props.users.findIndex( user => user.userId == props.user.id)
+    return (
+      <>
+        { 
+          props.user.displayName
+        } 
+        {
+          checkUser !== -1 
+          ? props.users[checkUser].roles[0]
+            ? 
+            ', '+ capitalizeEachWord(props.users[checkUser].roles[0]) 
+            : ''
+          : ''
+        }
+      </>
+    )
+  }
+
+  const ShowUser = ({users, item}) => {    
+    const messageUser = getAuthConnectToken() == 2 ? item.from.user : item.user
+    if(users.length === 0) return messageUser 
+    const checkUser = users.findIndex( user => user.id == item.user)
+    const sentDate = Moment(new Date(getAuthConnectToken() == 2 ? item.createdDateTime : item.ts * 1000)).format('l HH:mm')
+    return (
+      <span>
+        {
+          getAuthConnectToken() == 2
+          ?
+            <MicrosoftUser users={users} user={messageUser} />
+          :
+            <SlackUser users={users} user={messageUser} />
+          
+        } 
+        <span className={classes.message_time}>{sentDate}</span>
       </span>
     )
   }
 
 
-  const ShowUserAvtar = ({users, item}) => {
-    if(users.length === 0) return <Avatar>{`${item}`}</Avatar>
-    const checkUser = users.findIndex( user => user.id === item)
-    if(checkUser >= 0) {
-      return <Avatar alt={`${users[checkUser].profile.display_name}`} src={users[checkUser].profile.image_48} className={classes.small}/>
-    } else {
-      return <Avatar>{`${item}`}</Avatar>
+  const ShowUserAvtar = ({users, item}) => { 
+    if(getAuthConnectToken() == 2) {
+      return <Avatar>{`${item.displayName}`}</Avatar>
+    } else { 
+      if(users.length === 0) return <Avatar>{`${item}`}</Avatar>
+      const checkUser = users.findIndex( user => user.id === item)
+      if(checkUser >= 0) {
+        return <Avatar alt={`${users[checkUser].profile.display_name}`} src={users[checkUser].profile.image_48} className={classes.small}/>
+      } else {
+        return <Avatar>{`${item}`}</Avatar>
+      }
     }
   }
 
@@ -1120,7 +1272,7 @@ const handleDriveModalClose = (event) => {
     }    
   }
 
-  const FileImage = ({file}) => {
+  const FileImage = ({file, thumbnailUrl}) => {
     const fileURL = file !== 'string' && file.hasOwnProperty('external_url') ? file.external_url : ''
     let imageURL = ''
     if(fileURL.toString().indexOf('.google.com') !== -1){
@@ -1156,11 +1308,37 @@ const handleDriveModalClose = (event) => {
         }
       }
     }
+    if(thumbnailUrl){
+      imageURL = thumbnailUrl
+    }
     if(imageURL == '') return null
     return(
       imageURL != '' && (
         <img src={imageURL} />
       )
+    )
+  }
+
+  const ShowMicrosoftFiles = ({indexing, files}) => {
+    return (
+      <>
+        {
+          files.map( (file, index) => (
+            <div key={`${indexing}-${index}`} className={classes.icon}>
+              <IconButton 
+                variant="text"
+                onClick={(event) => { openFile(event, {permalink: file.contentUrl})}}
+                className={classes.fileLink}
+              >
+                <FileImage file={file.contentUrl} thumbnailUrl={file.thumbnailUrl}/>
+                <Typography variant="body2">
+                  {file.name}
+                </Typography>
+              </IconButton>
+            </div>
+          ))
+        }
+      </>
     )
   }
 
@@ -1213,9 +1391,9 @@ const handleDriveModalClose = (event) => {
   }
 
   const TimelineItem = ({users, comment}) => {
-    
+    console.log("I am in timeline comment");
     if(comment.hasOwnProperty('subtype')) return null
-    let message = comment.text
+    let message = getAuthConnectToken() == 2 ? comment.body.content  : comment.text
     message = message.replace(/&lt;br&gt;/g, "\n")
     if(message.indexOf('docs.google.com') !== -1) {      
       const urlRegex = /(?:(?:https?:\/\/)|(?:www\.))[^\s]+/g; 
@@ -1246,9 +1424,12 @@ const handleDriveModalClose = (event) => {
         }
       }
     } 
+    const getConnectionType = getAuthConnectToken()
+    const commentTime = getConnectionType == 2 ? new Date(comment.createdDateTime).getTime() : comment.ts
+    console.log('commentTime', commentTime)
     return (
       <TimelineEvent
-        key={`comment-${comment.ts}`}
+        key={`comment-${commentTime}`}
         contentStyle={{ background: isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default}}
         bubbleStyle={{ 
           background: isDarkTheme ? themeMode.dark.palette.background.default : themeMode.light.palette.background.default, 
@@ -1258,14 +1439,25 @@ const handleDriveModalClose = (event) => {
         }}
         cardHeaderStyle={{ color: 'white' }}
         title={<ShowUser users={users} item={comment} />}
-        icon={<ShowUserAvtar users={users} item={comment.user} />}
+        icon={<ShowUserAvtar users={users} item={getAuthConnectToken() == 2 ? comment.from.user : comment.user} />}
         iconStyle={{width: '36px', height: '36px'}}
       >
         <div 
           dangerouslySetInnerHTML={{ __html: message }} />
-        <ShowFiles 
-          files={comment} 
-          indexing={`file-comment-${comment.ts}`} />
+          {
+            getConnectionType == 2 
+            ?
+              <ShowMicrosoftFiles
+                files={comment.attachments} 
+                indexing={`file-comment-${comment.ts}`}
+              />
+            :
+            <ShowFiles 
+              files={comment} 
+              indexing={`file-comment-${comment.ts}`} 
+            />
+          }
+        
         {/* <ShowButtons 
           item={comment.user} 
           comment={comment} 
@@ -1275,6 +1467,7 @@ const handleDriveModalClose = (event) => {
   }
 
   const renderCommentsTimeline = useMemo(() => {
+    console.log('renderCommentsTimeline', commentsData)
     return (
       <div className={classes.commentTimelineSection} ref={timelineRef}>   
         {

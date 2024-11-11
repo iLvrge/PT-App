@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useDispatch } from 'react-redux' 
 
 import { Box, Button, Paper, Tooltip, Typography, Zoom } from '@mui/material'
@@ -10,17 +10,37 @@ import useStyles from './styles'
 
 import {
     getSlackProfile,
-    setSocialMediaConnectPopup
+    getMicrosoftProfile,
+    setSocialMediaConnectPopup,
+    getMicrosoftChannels
 } from '../../../actions/patentTrackActions2'
 
-import { getAuthConnectToken, getTokenStorage } from '../../../utils/tokenStorage'
+import { getAuthConnectToken, getTokenStorage, removeTokenStorage, setTokenStorage } from '../../../utils/tokenStorage'
 
 import PatenTrackApi from '../../../api/patenTrack2';
 
 import TitleBar from '../TitleBar'
 import clsx from 'clsx';
 
+function base64UrlEncode(str) {
+    return btoa(String.fromCharCode.apply(null, new Uint8Array(str)))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+}
 
+async function generateCodeChallenge(codeVerifier) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(codeVerifier);
+    const digest = await crypto.subtle.digest('SHA-256', data);
+    return base64UrlEncode(digest);
+}
+
+function generateCodeVerifier() {
+    const array = new Uint32Array(32);
+    window.crypto.getRandomValues(array);
+    return base64UrlEncode(array);
+}
 
 
 const SocialMediaConnect = () => {
@@ -30,6 +50,13 @@ const SocialMediaConnect = () => {
     const [boxOpened, setBoxOpened] = useState(false)
     const msalInstance = new PublicClientApplication(msalConfig);
     const MICROSOFT_SCOPES = ['https://graph.microsoft.com/Team.Create', 'https://graph.microsoft.com/Directory.ReadWrite.All', 'https://graph.microsoft.com/Group.ReadWrite.All', 'https://graph.microsoft.com/Channel.Create', 'https://graph.microsoft.com/Channel.ReadBasic.All', 'https://graph.microsoft.com/Team.ReadBasic.All', 'https://graph.microsoft.com/TeamMember.ReadWrite.All', 'https://graph.microsoft.com/User.Read']
+    const SCOPES = "openid profile offline_access";
+    const CLIENT_ID = `${process.env.REACT_APP_MICROSOFT_CLIENTID}`;
+    const TENANT_ID = `${process.env.REACT_APP_MICROSOFT_TENANTID}`;
+    const REDIRECT_URI = `${process.env.REACT_APP_MICROSOFT_REDIRECT_URL}`;
+    const AUTH_URL = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize';
+    const TOKEN_URL = 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
+
     const onHandleSlackLogin = (w,h) => {    
         const dualScreenLeft = window.screenLeft !==  undefined ? window.screenLeft : window.screenX
         const dualScreenTop = window.screenTop !==  undefined   ? window.screenTop  : window.screenY
@@ -53,7 +80,7 @@ const SocialMediaConnect = () => {
     }
 
     const onHandleMicrosoftLogin = (w,h) => {    
-        /* const dualScreenLeft = window.screenLeft !==  undefined ? window.screenLeft : window.screenX
+        const dualScreenLeft = window.screenLeft !==  undefined ? window.screenLeft : window.screenX
         const dualScreenTop = window.screenTop !==  undefined   ? window.screenTop  : window.screenY
     
         const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : window.screen.width
@@ -62,14 +89,33 @@ const SocialMediaConnect = () => {
         const systemZoom = width / window.screen.availWidth
         const left = (width - w) / 2 / systemZoom + dualScreenLeft
         const top = (height - h) / 2 / systemZoom + dualScreenTop
+        const codeVerifier = generateCodeVerifier();
+        generateCodeChallenge(codeVerifier).then((codeChallenge) => {
+            const authorizeUrl = `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/authorize?response_type=code` +
+                `&client_id=${CLIENT_ID}` +
+                `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}` +
+                `&scope=${encodeURIComponent(SCOPES)}` +
+                `&code_challenge=${codeChallenge}` +
+                `&code_challenge_method=S256`;
+        
+            // Store the code verifier in local storage to use it later during token exchange
+            localStorage.setItem('code_verifier', codeVerifier);
+        
+            // Redirect the user to the Microsoft login page
+            const windowOpen =window.open(authorizeUrl, 'Micosoft Login', `width=${w / systemZoom},height=${h / systemZoom},top=${top},left=${left}`);
+
+            if(windowOpen != null) {
+                checkWindowClosedStatus(windowOpen)
+            } 
+        });
     
-        const windowOpen = window.open(`https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${process.env.REACT_APP_MICROSOFT_CLIENTID}&scope=${MICROSOFT_SCOPES}&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fmicrosoft&client-request-id=c8dddcc9-1925-49ed-8678-444998d243ee&response_mode=fragment&response_type=code&x-client-SKU=msal.js.browser&x-client-VER=2.34.0&client_info=1&code_challenge=MhiCfYJ_NJ9odwPB99U5Q58Cczv4-jmNYG6XwMJsSD8&code_challenge_method=S256&nonce=5e7f20b1-394b-4aa4-980e-bf651f688e72&state=eyJpZCI6IjU3ZDhjY2M3LTdjMzgtNGRkYS1iMWMzLWE1MDUzMTJkOWU5NyIsIm1ldGEiOnsiaW50ZXJhY3Rpb25UeXBlIjoicG9wdXAifX0%3D`, 'Micosoft Login', `width=${w / systemZoom},height=${h / systemZoom},top=${top},left=${left}`) */
+        // const windowOpen = window.open(`https://login.microsoftonline.com/${process.env.REACT_APP_MICROSOFT_TENANTID}/oauth2/v2.0/authorize?client_id=${process.env.REACT_APP_MICROSOFT_CLIENTID}&response_type=code&redirect_uri=${encodeURIComponent(process.env.REACT_APP_MICROSOFT_REDIRECT_URL)}&response_mode=query&scope=${encodeURIComponent(SCOPES)}`, 'Micosoft Login', `width=${w / systemZoom},height=${h / systemZoom},top=${top},left=${left}`)
 
 
         
-        msalInstance.loginPopup(loginRequest).then(handleResponse).catch(e => {
+        /* msalInstance.loginPopup(loginRequest).then(handleResponse).catch(e => {
             console.log(e);
-        });
+        }); */
         
     }
 
@@ -86,6 +132,17 @@ const SocialMediaConnect = () => {
           
         }
     }
+
+    const onUpdateMicrosoftTeamID =  useCallback( async(token, refreshToken) => {
+        const {data} = await PatenTrackApi.getMicrosoftTeam(token, refreshToken)
+        console.log('onUpdateMicrosoftTeamID', data)
+        if(data != null) {  
+            dispatch(getMicrosoftChannels(token, refreshToken, data.teamId))
+            setTokenStorage('microsoft_auth_team', JSON.stringify(data)) 
+        } else {
+            removeTokenStorage('microsoft_auth_team') 
+        }
+    },[dispatch, getMicrosoftChannels])
     
     const checkWindowClosedStatus = (windowRef) => {
         setTimeout(() => {
@@ -94,6 +151,7 @@ const SocialMediaConnect = () => {
                  * CHECK SOCIAL MEDIA CONNECT AUTH TOKEN
                  */
                 const connectionType = getAuthConnectToken()
+                console.log('ConnectionType', connectionType)
                 if(connectionType > 0) {
                     if(connectionType == 1) {
                         const slackToken = getTokenStorage( 'slack_auth_token_info' )
@@ -105,6 +163,15 @@ const SocialMediaConnect = () => {
                                  */
                                 onUpdateTeamID(team)
                                 dispatch(getSlackProfile(access_token, id))
+                            }
+                        }
+                    } else if(connectionType == 2) {
+                        const microsoftTeamToken = getTokenStorage('microsoft_auth_token_info')
+                        if(microsoftTeamToken) {
+                            const { access_token, refresh_token } = JSON.parse( microsoftTeamToken )
+                            if( access_token && access_token != null ) {
+                                onUpdateMicrosoftTeamID(access_token, refresh_token)
+                                dispatch(getMicrosoftProfile(access_token, refresh_token))
                             }
                         }
                     }

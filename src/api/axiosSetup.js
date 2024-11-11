@@ -3,6 +3,7 @@ import { base_api_url, base_new_api_url } from '../config/config'
 import getToken from './token' 
 import history from '../history'
 import {removeTokenStorage, deleteCookie} from '../utils/tokenStorage'
+import { refreshMicrosoftToken } from '../components/AuthMicrosoft'
 const api = axios.create({
     baseURL: base_new_api_url,
 });
@@ -14,23 +15,43 @@ api.interceptors.response.use(
   
         if (error.response && error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
-            try {
-                const response = await api.get('/refresh-token', {
-                    headers: {
-                      'x-auth-token': getToken()
+            const errorMessage = error.response.data;
+            if(errorMessage == "Refresh microsoft token") {
+                try { 
+                    const tokenString = localStorage.getItem('microsoft_auth_token_info');
+                    const tokenData = JSON.parse(tokenString);
+                    const response = await refreshMicrosoftToken(tokenData.refresh_token); 
+                    if (response) { 
+                        localStorage.setItem('microsoft_auth_token_info', JSON.stringify(response)); 
+                        originalRequest.headers['X-Microsoft-Auth-Token'] = response.access_token 
+                        originalRequest.headers['X-microsoft-refresh-token'] = response.refresh_token 
+                        axios.defaults.headers.common['X-Microsoft-Auth-Token'] = response.access_token
+                        axios.defaults.headers.common['X-microsoft-refresh-token'] = response.refresh_token
+                        return api(originalRequest); 
                     }
-                });
-                const { accessToken } = response.data;
-
-                document.cookie = `token=${accessToken};domain=.patentrack.com`   
-                localStorage.setItem('token', accessToken)    
-                axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-                originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
-
-                return api(originalRequest);
-            } catch (refreshError) {
-                console.log('CATCH', refreshError)
-                return Promise.reject(refreshError);
+                } catch (refreshError) {
+                    console.log('microsoft CATCH', refreshError)
+                    return Promise.reject(refreshError);
+                }
+            } else { 
+                try {
+                    const response = await api.get('/refresh-token', {
+                        headers: {
+                          'x-auth-token': getToken()
+                        }
+                    });
+                    const { accessToken } = response.data;
+    
+                    document.cookie = `token=${accessToken};domain=.patentrack.com`   
+                    localStorage.setItem('token', accessToken)    
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+                    originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
+    
+                    return api(originalRequest);
+                } catch (refreshError) {
+                    console.log('CATCH', refreshError)
+                    return Promise.reject(refreshError);
+                }
             }
         } else if (!error.response) {
             // Handle cases where error.response is undefined (e.g., request cancellations)
