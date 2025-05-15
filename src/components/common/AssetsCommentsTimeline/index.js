@@ -1467,7 +1467,6 @@ const handleDriveModalClose = (event) => {
   }
 
   const renderCommentsTimeline = useMemo(() => {
-    console.log('renderCommentsTimeline', commentsData)
     return (
       <div className={classes.commentTimelineSection} ref={timelineRef}>   
         {

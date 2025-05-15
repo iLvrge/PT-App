@@ -6,9 +6,8 @@ import copy from 'copy-to-clipboard'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import PatentrackDiagram from '../../PatentrackDiagram'
 import { toggleUsptoMode, toggleFamilyMode, toggleShow3rdParities } from "../../../../actions/uiActions";
-import { setAssetsIllustrationLoading, setAssetsIllustrationData, retrievePDFFromServer } from '../../../../actions/patentTrackActions2' 
-import { setPDFFile, setPDFView, setPdfTabIndex, setConnectionData, setConnectionBoxView } from '../../../../actions/patenTrackActions' 
-
+import { setAssetsIllustrationLoading, setAssetsIllustrationData, retrievePDFFromServer, getAssetsUSPTO } from '../../../../actions/patentTrackActions2' 
+import { setPDFFile, setPDFView, setPdfTabIndex, setConnectionData, setConnectionBoxView } from '../../../../actions/patenTrackActions'
 import ErrorBoundary from '../../ErrorBoundary'
 import themeMode from '../../../../themes/themeMode';
 import axios from 'axios' 
@@ -42,6 +41,7 @@ const IllustrationContainer = ({
   const [ click, setClick ] = useState(0) 
   const [ lineId, setLineId ] = useState(0)
   const [ linkId, setLinkId ] = useState(null)
+  const [isUsptoClicked, setIsUsptoClicked] = useState(false);
   const targetRef = useRef()
   const [ fullModalScreen, setFullModalScreen ] = useState(false)
   const [ parent_width, setParentWidth ] = useState(0)
@@ -52,7 +52,9 @@ const IllustrationContainer = ({
   const showThirdParties = useSelector(state => state.ui.showThirdParties)
   const isLoadingAssetIllustration = useSelector(state => state.patenTrack2.loadingAssetIllustration)
   const assetIllustrationData = useSelector(state => state.patenTrack2.assetIllustrationData)
+  const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
   const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
+  const USPTO = useSelector(state => state.patenTrack2.assetUSPTO);
 
   const fullScreenItems = [
     {
@@ -138,6 +140,12 @@ const IllustrationContainer = ({
       setIllustrationData(assetIllustrationData)
     }
   }, [assetIllustrationData])
+
+  useEffect(() => {
+    if(isUsptoClicked && USPTO && USPTO.url) {
+      window.open(USPTO.url, "_blank");
+    }
+  }, [isUsptoClicked, USPTO])
 
   const handlePdfView = useCallback((obj) => {
     if (Object.keys(obj).length > 0 && typeof obj.document_file != 'undefined') {
@@ -301,7 +309,16 @@ const IllustrationContainer = ({
 
   const handleUSPTO = useCallback((usptoMode) => {
     if(typeof viewOnly == 'undefined') {
-      dispatch(
+      if(assetIllustration != null ) {
+        if (assetIllustration.type === 'patent') {
+          setIsUsptoClicked(true)
+          dispatch(getAssetsUSPTO(1, assetIllustration.id, assetIllustration.flag));
+        } else if (assetIllustration.type === 'transaction') {
+          setIsUsptoClicked(true)
+          dispatch(getAssetsUSPTO(0, assetIllustration.id));
+        }
+      } 
+      /* dispatch(
         toggleUsptoMode(usptoMode)
       )
       if(usptoMode === true) {
@@ -316,9 +333,9 @@ const IllustrationContainer = ({
         checkChartAnalytics(null, null, true)
       } else {
         checkChartAnalytics(null, null, true)
-      }
+      } */
     }    
-  }, [ chartsBar, analyticsBar, dispatch ])
+  }, [ chartsBar, analyticsBar, getAssetsUSPTO, assetIllustration, dispatch ])
 
   const handleToggleParties = useCallback((flag) => {
     dispatch(
