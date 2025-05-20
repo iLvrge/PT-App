@@ -832,6 +832,14 @@ const patenTrackReducer = (state = initialState.dashboard, action) => {
           ...state, 
           assetTypeAssignmentAssets: {...state.assetTypeAssignmentAssets, selectAll: action.flag}
         }  
+      case types.SET_ACTIVE_ASSETS: 
+        return {
+          ...state,
+          share_active_assets: {
+            ...state.share_active_assets, 
+            list: action.append === true ? [...state.share_active_assets.list, ...action.data.list] : action.data.list
+          }
+        }
       case types.SET_BREAD_CRUMBS:
         return {
           ...state,

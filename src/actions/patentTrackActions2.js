@@ -1249,13 +1249,34 @@ export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, appe
  * @param {*} append 
  */
 
-export const getCustomerSelectedAssets = ( shareCode, append = false ) => {
+export const getCustomerSelectedAssets = ( shareCode, append = false, assetsList = {} ) => {
   return async dispatch => {
     dispatch( setAssetTypesAssignmentsAllAssetsLoading( true ) )
     //PatenTrackApi.cancelAssetsRequest()
-    const { data } = await PatenTrackApi.getCustomerSelectedAssets( shareCode )    
-    dispatch( setAssetTypeAssignmentAllAssets(data, append) )
-    dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
+    const { data } = await PatenTrackApi.getCustomerSelectedAssets( shareCode )  
+    //console.log("Object.keys(assetsList).length", Object.keys(assetsList).length, assetsList)
+    if (Object.keys(assetsList).length && assetsList?.companies?.length){
+      dispatch( setActiveAssetsList(data, append) );
+      dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
+      const orderedKeys = [
+        "selectedCategory",
+        "companies",
+        "tabs",
+        "customers",
+        "assignments",
+        "append",
+        "startIndex",
+        "endIndex",
+        "column",
+        "direction",
+        "position"
+      ];
+      const args = orderedKeys.map(key => assetsList[key]);
+      dispatch(getCustomerAssets(...args));
+    } else {
+      //dispatch( setAssetTypeAssignmentAllAssets(data, append) )
+      dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
+    }
   } 
 }
 
@@ -1549,6 +1570,14 @@ export const setAssetTypesAssignmentsAllAssetsLoading = (flag) => {
 export const setAssetTypeAssignmentAllAssets = (data, append) => {
   return {
     type: types.SET_ASSET_TYPE_ASSIGNMENTS_ASSETS,
+    data,
+    append
+  }
+}
+
+export const setActiveAssetsList = (data, append) => {
+  return {
+    type: types.SET_ACTIVE_ASSETS,
     data,
     append
   }

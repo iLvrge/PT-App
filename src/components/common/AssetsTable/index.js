@@ -216,7 +216,9 @@ const AssetsTable = ({
     state => state.patenTrack2.selectedLawFirm 
   );
 
-  
+  const sharedActiveAssets = useSelector(
+    state => state.patenTrack2.share_active_assets.list,
+  ); //Assets List
 
   const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
   const move_assets = useSelector(state => state.patenTrack2.move_assets)
@@ -1179,6 +1181,26 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     } 
   }, [ assetTypeAssignmentAssets ])
 
+  useEffect(() => {
+    const onlySharedAssetsActive = () => {
+      const updatedAssets = assetTypeAssignmentAssets.map(item => {
+        const isMatched = sharedActiveAssets.some(shared => shared.asset === item.asset);
+        return {
+          ...item,
+          status: isMatched ? 1 : 0
+        };
+      });
+      setAssetRows(updatedAssets);
+    };
+    if (
+      process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && 
+      sharedActiveAssets.length && 
+      assetTypeAssignmentAssets.length
+    ) { 
+      onlySharedAssetsActive();
+    }
+  }, [sharedActiveAssets, assetTypeAssignmentAssets]);
+
   /* useEffect(() => {
     const getSaleOrLiceOutAssets = async () => {
       const {data} = await PatenTrackApi.getSaleOrLiceOutAssets()
@@ -1245,7 +1267,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     });
 
     if (findChannel) {
-        setAssetRows(updatedAssets);
+      setAssetRows(updatedAssets);
     }
 };
 
@@ -1287,9 +1309,11 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           }
         }   
       } else {
-        const oldAssets = [...assetTypeAssignmentAssets]
-        const newArray = oldAssets.map(({channel, ...keepOtherAttrs}) => keepOtherAttrs)
-        setAssetRows(newArray)
+        if(process.env.REACT_APP_ENVIROMENT_MODE !== 'SAMPLE') {
+          const oldAssets = [...assetTypeAssignmentAssets]
+          const newArray = oldAssets.map(({channel, ...keepOtherAttrs}) => keepOtherAttrs)
+          setAssetRows(newArray)
+        }
       }
     }    
     checkAssetChannel()
@@ -1437,7 +1461,19 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
               direction
             )
           :
-          getCustomerSelectedAssets(location.pathname.replace('/', ''))
+          getCustomerSelectedAssets(location.pathname.replace('/', ''), false, {
+            selectedCategory: selectedCategory == '' ? '' : selectedCategory,
+            companies,
+            tabs,
+            customers,
+            assignments,
+            append: true,
+            startIndex,
+            endIndex,
+            column,
+            direction,
+            position: 0
+          })
         );          
         setWidth(1900)
       } else {
@@ -2061,7 +2097,19 @@ const updateTableColumn = (ratingItems) => {
               assetTableScrollPosition
             )
             : 
-            getCustomerSelectedAssets(location.pathname.replace('/', ''))
+            getCustomerSelectedAssets(location.pathname.replace('/', ''), false, {
+              selectedCategory: selectedCategory == '' ? '' : selectedCategory,
+              companies,
+              tabs,
+              customers,
+              assignments,
+              append: true,
+              startIndex,
+              endIndex,
+              column: sortField,
+              direction: sortOrder,
+              position: assetTableScrollPosition
+            })
           );
         }
       } else {
@@ -2117,7 +2165,19 @@ const updateTableColumn = (ratingItems) => {
             direction
           )
           : 
-          getCustomerSelectedAssets(location.pathname.replace('/', ''))
+          getCustomerSelectedAssets(location.pathname.replace('/', ''), false, {
+            selectedCategory: selectedCategory == '' ? '' : selectedCategory,
+            companies,
+            tabs,
+            customers,
+            assignments,
+            append: false,
+            startIndex: 0,
+            endIndex: DEFAULT_CUSTOMERS_LIMIT,
+            column: column,
+            direction: direction,
+            position: 0
+          })
         );
       }
     } else {
@@ -2269,6 +2329,10 @@ const updateTableColumn = (ratingItems) => {
         defaultSortDirection={sortOrder}
         selectItemWithArrowKey={true}
         /* columnTextBoldList={slack_channel_list} */
+        {...(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && {
+          disableRow: true,
+          disableRowKey: 'status',
+        })}
         responsive={true}
         noBorderLines={true}
         highlightRow={true} 

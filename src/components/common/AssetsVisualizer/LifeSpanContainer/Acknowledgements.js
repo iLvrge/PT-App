@@ -300,7 +300,19 @@ const Acknowledgements = (props) => {
                                     'DESC'
                                 )
                                 : 
-                                getCustomerSelectedAssets(location.pathname.replace('/', ''))
+                                getCustomerSelectedAssets(location.pathname.replace('/', ''), false, {
+                                    selectedCategory: selectedCategory == '' ? '' : selectedCategory,
+                                    companies,
+                                    tabs,
+                                    customers,
+                                    assignments,
+                                    append: false,
+                                    startIndex: 0,
+                                    endIndex: 0,
+                                    column: 'asset',
+                                    direction:'DESC',
+                                    position: 0
+                                })
                             );
                         } 
                     } else {

@@ -23,6 +23,7 @@ export default {
     assetTypeAddress: { list: [], row_select: [], all_groups: [], total_records: 0, selected: [], selectAll: false, loading: false },
     assetTypeNames: { list: [], row_select: [], all_groups: [], total_records: 0, selected: [], selectAll: false, loading: false },
     assetTypeAssignmentAssets: { list: [], total_records: 0, selected: [], selectAll: false, loading: false},
+    share_active_assets: { list: [], },
     assetTableScrollPosition: 0,
     companyTableScrollPosition: 0,
     asset_details:{asset: null, family: 0, claims: 0, figures: 0, fees: 0, citations: 0, ptab: 0, litigation: 0, status: 0},

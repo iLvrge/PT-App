@@ -58,17 +58,17 @@ const GlobalLayout = (props) => {
     const history = useHistory()
     const location = useLocation()
     const BarContext = createContext()
-    const [ openBar, setOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? false : true)
+    const [ openBar, setOpenBar ] = useState(true)
     const [ openTypeBar, setTypeOpenBar ] = useState(false)
     const [ openOtherPartyBar, setOtherPartyOpenBar ] = useState(false)
     const [ openInventorBar, setInventorOpenBar ] = useState(false)
     const [ openAssignmentBar, setAssignmentOpenBar ] = useState(true) 
-    const [ openCustomerBar, setCustomerOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
+    const [ openCustomerBar, setCustomerOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? true : false)
     const [ openIllustrationBar, setIllustrationBar ] = useState(true)
-    const [ openCommentBar, setCommentBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false/* isMobile ? false : true */)
-    const [ openChartBar, setChartBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
-    const [ openAnalyticsBar, setAnalyticsBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
-    const [ openVisualizerBar, setVisualizeOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? true : false)
+    const [ openCommentBar, setCommentBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? true : false/* isMobile ? false : true */)
+    const [ openChartBar, setChartBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? true : false)
+    const [ openAnalyticsBar, setAnalyticsBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? true : false)
+    const [ openVisualizerBar, setVisualizeOpenBar ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? true : false)
 
     const [ toggleButtonType, setToggleButtonType ] = useState(true)
     const [ toggleTypeButtonType, setToggleTypeButtonType ] = useState(true)
@@ -92,17 +92,17 @@ const GlobalLayout = (props) => {
         bar50: '50%'
     } 
     
-    const [ companyBarSize, setCompanyBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? 0 : 210) 
+    const [ companyBarSize, setCompanyBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 0 : 210) 
     const [ typeBarSize, setTypeBarSize ] = useState(0) 
     const [ otherPartyBarSize, setOtherPartyBarSize ] = useState(0)
     const [ partyBarSize, setPartyBarSize ] = useState('50%')
     const [ driveBarSize, setDriveBarSize ] = useState('50%')
     const [ assignmentBarSize, setAssignmentBarSize ] = useState(180)  
     const [ addressBarSize, setAddressBarSize ] = useState(450)
-    const [ customerBarSize, setCustomerBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? 180 : 0)
-    const [ commentBarSize , setCommentBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? '30%' : '0%')
+    const [ customerBarSize, setCustomerBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 180 : 0)
+    const [ commentBarSize , setCommentBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? '30%' : '0%')
     const [ illustrationBarSize , setIllustrationBarSize ] = useState('50%')
-    const [ visualizerBarSize , setVisualizerBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? '40.1%' : '0%')
+    const [ visualizerBarSize , setVisualizerBarSize ] = useState(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? '40.1%' : '0%')
 
     const [ assetTableFocus, setAssetTableFocus ] = useState( false )
     const [ companyButtonVisible, setCompanyButtonVisible ] = useState(false)
@@ -176,7 +176,7 @@ const GlobalLayout = (props) => {
 
 
     useEffect(() => {
-        if(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') {
+        if(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') {
             dispatch(setFirstBarSize(0))
         }
     }, [])
@@ -214,7 +214,7 @@ const GlobalLayout = (props) => {
     }, [])
 
     useEffect(() => {
-        if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+        if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE-1' ) {
             dispatch(toggleLifeSpanMode(true))
         }
     }, [])
@@ -1348,7 +1348,7 @@ const GlobalLayout = (props) => {
         {
             tooltip: 'Filter by Companies',
             bar: props.type === 9 ? false : openBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'  ? handleAlertPop : handleCompanyBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD'  ? handleAlertPop : handleCompanyBarOpen,
             t: 1,
             label: 'Companies',
             ...(props.type === 9 && {highlight: false})
@@ -1356,7 +1356,7 @@ const GlobalLayout = (props) => {
         {
             tooltip: 'Filter by Activities',
             bar: openTypeBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleTypeBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE-1' ? handleAlertPop : handleTypeBarOpen,
             t: 2,
             label: 'Filter by Activities',
             ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
@@ -1364,7 +1364,7 @@ const GlobalLayout = (props) => {
         {
             tooltip: selectedCategory === 'top_law_firms' ? 'Filter by Law Firms' : selectedCategory == 'top_lenders' ? 'Filter by Lenders' : 'Filter by Parties',
             bar: openOtherPartyBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? handleAlertPop : handleOtherPartyBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE-1' ? handleAlertPop : handleOtherPartyBarOpen,
             t: 3,
             label: selectedCategory === 'top_law_firms' ? 'Filter by Law Firms' : selectedCategory == 'top_lenders' ? 'Filter by Lenders'  : 'Filter by Parties',
             ...((props.type === 9 || (dashboardScreen === true && profile?.user?.organisation?.organisation_type !== 'Bank')) && {disabled: true})
@@ -1372,7 +1372,7 @@ const GlobalLayout = (props) => {
         {
             tooltip:  selectedCategory === 'proliferate_inventors' ? 'Filter by Inventors' : 'Filter by Employees', 
             bar: openInventorBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD'  ? handleAlertPop : handleInventorBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE-1' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD'  ? handleAlertPop : handleInventorBarOpen,
             t: 11,
             margin: true,
             label: selectedCategory === 'proliferate_inventors' ? 'Filter by Inventors' : 'Filter by Employees', 
@@ -1381,7 +1381,7 @@ const GlobalLayout = (props) => {
         {
             tooltip: 'Filter by Transactions',
             bar: openAssignmentBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleAssignmentBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE-1' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' ? handleAlertPop : handleAssignmentBarOpen,
             t: 4,
             label: 'Transactions',
             ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
@@ -1398,7 +1398,7 @@ const GlobalLayout = (props) => {
         {
             tooltip: 'Recorded Documents',
             bar: assetFilesBar,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD'  ? handleAlertPop : handleAssetFileBarOpen,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE-1' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD'  ? handleAlertPop : handleAssetFileBarOpen,
             t: 10,
             label: 'Recorded Documents',
             ...((props.type === 9 || dashboardScreen === true) && {disabled: true})
@@ -1450,7 +1450,7 @@ const GlobalLayout = (props) => {
         {
             tooltip: 'Create a New Secured Transaction',
             bar: false,
-            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD'  ? handleAlertPop : handleSecuredTransactionAssets,
+            click: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD'  ? handleAlertPop : handleSecuredTransactionAssets,
             t: 45,
             label: 'Create a New Secured Transaction',
             margin: true,
