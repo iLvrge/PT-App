@@ -1150,7 +1150,16 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
 
 
   useEffect(() => {
-    setAssetRows(assetTypeAssignmentAssets)
+    if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') {
+      const updatedAssets = assetTypeAssignmentAssets.map(asset => ({
+        ...asset,
+        status: 0
+      }));
+      
+      setAssetRows(updatedAssets);
+    } else {
+      setAssetRows(assetTypeAssignmentAssets)
+    }
     if(assetTypeAssignmentAssets.length > 0 && assetTypeAssignmentAssetsSelected.length > 0) {
       const excludeSelections = []
       const checkElement = assetTypeAssignmentAssetsSelected.map( asset => {
