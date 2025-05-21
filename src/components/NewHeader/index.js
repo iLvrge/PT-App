@@ -358,7 +358,7 @@ const NewHeader = (props) => {
    */
 
   const hideMenu = useCallback((e, item) => {
-    if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE-1' ) {
+    if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
       alert('Please activate your account first.')
     } else {
       dispatch(setResetAll(1, item))    
@@ -714,7 +714,7 @@ const shareDashboard = async() => {
 }
 
 const onShare = useCallback(async () => {
-  if (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE-1'){
+  if (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE'){
     alert('Please activate your account first.')
   } else {
     if(dashboardScreen === true) { 
@@ -745,7 +745,7 @@ const onShare = useCallback(async () => {
           form.append('transactions', JSON.stringify(selectedTransactions))
           form.append('type', 2)      
           const {data} = await PatenTrackApi.shareIllustration(form)
-          if (data.indexOf('SAMPLE-1') >= 0) {
+          if (data.indexOf('SAMPLE') >= 0) {
               /**
                * just for temporary replacing
                * open share url new tab
@@ -1050,7 +1050,7 @@ const handleOpenSettings = useCallback((event) => {
                         placement='bottom'
                       >
                         <ListItem 
-                          onClick={ ['STANDARD', 'SAMPLE-1', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert : onShare}
+                          onClick={ ['STANDARD', 'SAMPLE', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert : onShare}
                           button>
                           <ListItemIcon  color='inherit' >
                             <ShareOutlinedIcon/>
@@ -1060,7 +1060,7 @@ const handleOpenSettings = useCallback((event) => {
                       </AddToolTip> 
                       <ListItem 
                         className={`${clipboard_assets.length > 0 ? classes.clipIconActive : ''} ${ props.display_clipboard === true ? classes.clipIconIsActive : ''}`}
-                        onClick={ ['STANDARD', 'SAMPLE-1', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert : handleClipboard}
+                        onClick={ ['STANDARD', 'SAMPLE', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert : handleClipboard}
                         button>
                           <ListItemIcon  color='inherit' >
                             <Badge badgeContent={clipboard_assets.length} color="secondary">    
@@ -1075,7 +1075,7 @@ const handleOpenSettings = useCallback((event) => {
                       >
                         <ListItem 
                             className={classes.borderItem}
-                            onClick={ ['STANDARD', 'SAMPLE-1', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert : onHandlePatentAssets} 
+                            onClick={ ['STANDARD', 'SAMPLE', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert : onHandlePatentAssets} 
                             button>
                           <ListItemIcon  color='inherit' >
                             <ASSET />
@@ -1088,7 +1088,7 @@ const handleOpenSettings = useCallback((event) => {
                           placement='bottom'
                       >
                         <ListItem 
-                          onClick={ ['STANDARD', 'SAMPLE-1', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert : onHandleTransactions}
+                          onClick={ ['STANDARD', 'SAMPLE', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert : onHandleTransactions}
                           button>
                           <ListItemIcon  color='inherit' >
                             <HandshakeOutlinedIcon />

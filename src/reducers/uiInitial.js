@@ -17,9 +17,9 @@ export default {
   patentScreen: false,
   transactionButton: false,
   timelineScreen: false,
-  dashboardScreen: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE-1' ? false : true,
+  dashboardScreen: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? false : true,
   dashboardPanel: true,
-  controlModal: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE-1' ? false : false, 
+  controlModal: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? false : false, 
   driveButtonActive: false,
   loadingDashboardData: false,
   viewDashboard: {
