@@ -1900,7 +1900,9 @@ const updateTableColumn = (ratingItems) => {
     (e, row) => {
         e.preventDefault()
         const { checked } = e.target
-        
+        if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && row.status === 0) {
+          return null;
+        }
         let cntrlKey = e.ctrlKey ? e.ctrlKey : e.metaKey ? e.metaKey : undefined; 
         if(dashboardScreen === true) {
           dispatch(setTimelineScreen(true))
