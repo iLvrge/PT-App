@@ -200,7 +200,9 @@ let pages = [
 ] 
 
 if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') {
-  dashboardPages = []
+  if(process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') {
+    dashboardPages = []
+  }
   pages = [  
     {
       exact: true,
