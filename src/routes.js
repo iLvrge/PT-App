@@ -199,7 +199,17 @@ let pages = [
   }
 ] 
 
-if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') {
+if (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') {
+  // Add the SAMPLE default route FIRST
+  pages.unshift({
+    exact: true,
+    path: routeList.standard_default,
+    component: PatentLayout,
+    layout: GlobalLayout,
+    type: 1
+  });
+
+} else if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE-1' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD') {
   dashboardPages = []
   pages = [  
     {

@@ -665,6 +665,10 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     }
   }, [ratingOnFly])
 
+  const getShareCodeFromLocation = () => {
+    return window.location.pathname.split('/').pop();
+  }
+
   const sendRatingMessageToSlack = async(channelID, rowData) => {
     try{
       const formData = new FormData()
@@ -1470,7 +1474,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
               direction
             )
           :
-          getCustomerSelectedAssets(location.pathname.replace('/', ''), false, {
+          getCustomerSelectedAssets(getShareCodeFromLocation(), false, {
             selectedCategory: selectedCategory == '' ? '' : selectedCategory,
             companies,
             tabs,
@@ -2108,7 +2112,7 @@ const updateTableColumn = (ratingItems) => {
               assetTableScrollPosition
             )
             : 
-            getCustomerSelectedAssets(location.pathname.replace('/', ''), false, {
+            getCustomerSelectedAssets(getShareCodeFromLocation(), false, {
               selectedCategory: selectedCategory == '' ? '' : selectedCategory,
               companies,
               tabs,
@@ -2176,7 +2180,7 @@ const updateTableColumn = (ratingItems) => {
             direction
           )
           : 
-          getCustomerSelectedAssets(location.pathname.replace('/', ''), false, {
+          getCustomerSelectedAssets(getShareCodeFromLocation(), false, {
             selectedCategory: selectedCategory == '' ? '' : selectedCategory,
             companies,
             tabs,
