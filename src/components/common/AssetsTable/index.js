@@ -397,21 +397,21 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       name: 'Sell',
       image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/sell.png',
       icon: '',
-      tooltip: 'Tooltip'
+      tooltip: 'Send this patent to the list of patents for sale, located on the bottom right window.'
     }, 
     {
       id: 4,
       name: 'License-Out',
       image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/licenseout.png',
       icon: '',
-      tooltip: 'Tooltip'
+      tooltip: 'Send this patent to the list of patents for license out, located on the bottom right window.'
     },
     {
       id: 5,
       name: 'Add to Clipboard',
       image: '',
       icon: <PendingActionsOutlined />,
-      tooltip: 'Tooltip',
+      tooltip: 'Send this patent to the list of patents in the clipboard, located on the top menu’s right corner.',
       showOnlyWhenSelected: false,
     },
     {
@@ -420,7 +420,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       image: '',
       icon: <StarOutline />,
       item: false,
-      tooltip: 'Tooltip'
+      tooltip: 'Assess the contribution of this patent to your organization’s patent strategy.'
     },
     {
       id: 7,
@@ -428,7 +428,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       image: '',
       icon: <StarOutlineOutlined />,
       item: false,
-      tooltip: 'Tooltip'
+      tooltip: 'Assess how strongly this patent reads on existing or future implementations.'
     },
     {
       id: 9,
@@ -436,7 +436,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       image: '',
       icon: <Slack />,
       item: false,
-      tooltip: 'Tooltip'
+      tooltip: 'Create a work task or request a review by your team member.'
     },
     {
       id: 11,
@@ -444,7 +444,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       image: '',
       icon: <AccountTreeOutlined />,
       item: false,
-      tooltip: 'Tooltip'
+      tooltip: 'Associate the patent to one or more categories and products listed in your predefined list.'
     },
     /* {
       id: 6,
@@ -492,21 +492,21 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       name: 'Sell',
       image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/sell.png',
       icon: '',
-      tooltip: 'Tooltip'
+      tooltip: 'Send this patent to the list of patents for sale, located on the bottom right window.'
     }, 
     {
       id: 4,
       name: 'License-Out',
       image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/licenseout.png',
       icon: '',
-      tooltip: 'Tooltip'
+      tooltip: 'Send this patent to the list of patents for license out, located on the bottom right window'
     },
     {
       id: 5,
       name: 'Add to Clipboard',
       image: '',
       icon: <PendingActionsOutlined />,
-      tooltip: 'Tooltip'
+      tooltip: 'Send this patent to the list of patents in the clipboard, located on the top menu’s right corner.'
     },
     {
       id: 6,
@@ -514,7 +514,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       image: '',
       icon: <StarOutline />,
       item: false,
-      tooltip: 'Tooltip'
+      tooltip: 'Assess the contribution of this patent to your organization’s patent strategy.'
     },
     {
       id: 7,
@@ -522,7 +522,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       image: '',
       icon: <StarOutlineOutlined />,
       item: false,
-      tooltip: 'Tooltip'
+      tooltip: 'Assess how strongly this patent reads on existing or future implementations.'
     },
     {
       id: 9,
@@ -530,7 +530,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       image: '',
       icon: <Slack />,
       item: false,
-      tooltip: 'Tooltip'
+      tooltip: 'Create a work task or request a review by your team member.'
     },
     {
       id: 10,
@@ -545,7 +545,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       image: '',
       icon: <AccountTreeOutlined />, 
       item: false,
-      tooltip: 'Tooltip'
+      tooltip: 'Associate the patent to one or more categories and products listed in your predefined list.'
     }, 
     /* {
       id: 6,
