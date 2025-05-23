@@ -31,6 +31,7 @@ import clsx from 'clsx';
 import { setConnectionBoxView, setConnectionData, setPDFFile, setPDFView } from '../../../../actions/patenTrackActions';
 import { Button, IconButton, Tab, Tabs } from '@mui/material';
 import LabelWithIcon from '../../LabelWithIcon';
+import { getShareCodeFromLocation } from '../../../../utils/hashLocation';
 
 /**
  * Default options parameter for the Timeline
@@ -499,14 +500,14 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
             if(type !== 9)  {
               
       
-              if(['PRO', 'KPI', 'STANDARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
+              if(['PRO', 'KPI', 'STANDARD', 'SAMPLE'].includes(process.env.REACT_APP_ENVIROMENT_MODE) && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
                 if(selectedTab === 1) {
                   await assignmentData()
                 } else {
                   await fillingData()
                 } 
-              } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null ) {
-                const { data } = await PatenTrackApi.getShareTimelineList(location.pathname.replace('/', ''))
+              } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE-1' && auth_token !== null ) {
+                const { data } = await PatenTrackApi.getShareTimelineList(getShareCodeFromLocation())
                 setTimelineRawData(data.list)     
                 if(typeof updateTimelineRawData !== 'undefined') {
                   updateTimelineRawData(data.list)

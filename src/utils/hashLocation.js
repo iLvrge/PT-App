@@ -28,3 +28,7 @@ export const getShareLocationCode = () => {
     }
     return codeShare
 }
+
+export const getShareCodeFromLocation = () => {
+    return window.location.pathname.split('/').pop();
+}

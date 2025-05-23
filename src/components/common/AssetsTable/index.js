@@ -96,7 +96,7 @@ import PatenTrackApi from '../../../api/patenTrack2'
 import ChildTable from "./ChildTable";
 import Category from "./Category";
 import clsx from "clsx";
-import { updateHashLocation } from "../../../utils/hashLocation";
+import { getShareCodeFromLocation, updateHashLocation } from "../../../utils/hashLocation";
 import { DISCUSSION } from "../../../utils/icons";
 
 var applicationNumber = null, assetNumber = null, hoverTimer = null
@@ -664,10 +664,6 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       }
     }
   }, [ratingOnFly])
-
-  const getShareCodeFromLocation = () => {
-    return window.location.pathname.split('/').pop();
-  }
 
   const sendRatingMessageToSlack = async(channelID, rowData) => {
     try{

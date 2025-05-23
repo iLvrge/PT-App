@@ -32,7 +32,7 @@ import useStyles from './styles'
 import { setTimelineSelectedItem, setTimelineSelectedAsset } from '../../../../actions/uiActions'
 import clsx from 'clsx';
 import { IconButton } from '@mui/material';
-import { updateHashLocation } from '../../../../utils/hashLocation';
+import { getShareCodeFromLocation, updateHashLocation } from '../../../../utils/hashLocation';
  
 
 /**
@@ -509,7 +509,7 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
             }       
           } else {
             if(type !== 9)  {
-              if( ['PRO', 'KPI', 'STANDARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
+              if( ['PRO', 'KPI', 'STANDARD', 'SAMPLE'].includes(process.env.REACT_APP_ENVIROMENT_MODE) && (selectedCompaniesAll === true || selectedCompanies.length > 0)) {
                 //setIsLoadingTimelineData(true) 
                 if(timelineRequest === false) {
                   setTimelineRawGroups([]) //groups
@@ -519,12 +519,12 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
                 } 
                 //setIsLoadingTimelineData(false)
                 
-              } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null ) {
+              } else if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE-1' && auth_token !== null ) {
                 //setIsLoadingTimelineData(true)
                 setTimelineRawGroups([]) //groups
                 setTimelineRawData([]) //items
                 setPreviousLoad(false) 
-                const { data } = await PatenTrackApi.getShareTimelineList(location.pathname.replace('/', ''))
+                const { data } = await PatenTrackApi.getShareTimelineList(getShareCodeFromLocation())
                 let list = removeSecurityRelease(data.list)
                 setTimelineRawData(list) //items
                 if(typeof updateTimelineRawData !== 'undefined') {

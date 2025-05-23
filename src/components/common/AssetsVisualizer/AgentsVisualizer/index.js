@@ -229,7 +229,7 @@ const AgentsVisualizer = (props) => {
             form.append('other_mode', display_sales_assets) 
             form.append('type', selectedCategory)
             form.append('data_type', props.type)
-            form.append('check', process.env.REACT_APP_ENVIROMENT_MODE == 'SAMPLE' ? 1 : 0)
+            form.append('check', process.env.REACT_APP_ENVIROMENT_MODE == 'SAMPLE-1' ? 1 : 0)
             /* PatenTrackApi.cancelAgentsDataRequest() */
             const { data } = await PatenTrackApi.getAgentsData(form)
             setLoading(false)
