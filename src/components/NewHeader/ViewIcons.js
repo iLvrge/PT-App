@@ -281,7 +281,7 @@ const ViewIcons = (props) => {
                     form.append('transactions', JSON.stringify(selectedTransactions))
                     form.append('type', 2)      
                     const {data} = await PatenTrackApi.shareIllustration(form)
-                    if (data.indexOf('SAMPLE-1') >= 0) {
+                    if (data.indexOf('sample') >= 0) {
                         /**
                          * just for temporary replacing
                          * open share url new tab
