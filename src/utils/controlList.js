@@ -23,6 +23,20 @@ export const controlList = [
     },
     {
         type: 'menu',
+        mainHeading: 'Underpaid',			
+        subHeading: 'Get a list of all patents with broken chain of title, investigate with your team, and automatically correct the records.',
+        svg: ``,
+        image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/restore_ownership.png',
+        class: 'hex-1',
+        breadCrumbs: 'Underpaid',
+        category: 'unpaid_due',
+        layout_id: 1,
+        showSvg: false,
+        mainHeadingClass: 'maintain',
+        redirect: routeList.restore_ownership
+    },
+    {
+        type: 'menu',
         mainHeading: 'Maintenance Fee Due',
         subHeading: 'Get a list of all patents due for payment, discuss with your team whether to maintain each one, and pay directly with the Patent Office.',
         svg: '',

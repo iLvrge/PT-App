@@ -154,9 +154,10 @@ const Reports = (props) => {
             id: 11
         },
         {
-            title: 'To Purchase',
+            title: 'Underpaid',
             tooltip: 'Patent assets available for you to purchase directly from other PatenTrack\'s users. These assets were selected based on the innovative focus of your patent portfolio.',
             number: 0,
+            other_number: 0,
             patent: '',
             application: '',
             rf_id: '',
@@ -1120,7 +1121,9 @@ const Reports = (props) => {
         if(findIndex !== -1) {
             card = cardList[findIndex]
         } 
-        if(card.number > 0 || (card?.list && card.list.length > 0)) {
+        const number = card.type == 27 ? card.other_number : card.number;
+        console.log("Clicked", number)
+        if(number > 0 || (card?.list && card.list.length > 0)) {
             
             let showItem = id != activeId ? true : false
             setActiveId(id != activeId ? id : -1)
@@ -1148,7 +1151,7 @@ const Reports = (props) => {
                          */
                         dispatch(setSelectedAssetsPatents([data.patent, '']));
                         dispatch(assetFamily(data.patent));
-                    } else  if(card.type == 1 || card.type == 18 || card.type == 21 || card.type == 22 || card.type > 25 ) {
+                    } else  if([1, 18, 21, 22].includes(card.type) || card.type > 25 ) {
                         dispatch(
                             setAssetsIllustration({
                                 type: "patent",
@@ -1283,6 +1286,9 @@ const Reports = (props) => {
                     } else if(id === 26 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
                         findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'deflated_collaterals')
                         patent = true
+                    } else if(id === 27 /*&& subscription > 2*/  && viewDashboard.kpi === false) {
+                        findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'unpaid_due')
+                        patent = true
                     } else if(id === 30 && subscription > 1  && viewDashboard.kpi === true) {
                         findIndex = controlList.findIndex( item => item.type == 'menu' && item.category == 'assigned')
                         patent = true
@@ -1330,7 +1336,7 @@ const Reports = (props) => {
                         timeline = true
                     }*/
                 }
-                
+                console.log("findIndex", findIndex)
                 if( findIndex !== -1 ) {
                     dispatch(setBreadCrumbsAndCategory(controlList[findIndex]))   
                     resetAllRowSelect(dispatch, resetItemList.resetAll, profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? [1, 9, 10] :  [])

@@ -15,10 +15,11 @@ const Chart = (props) => {
     const classes = useStyles(); 
     const TOTAL = 200
     const displayNumber = (value) => {
-        return `${ props.card.display_value == '%' ? parseFloat(props.card.number).toFixed(1) : numberWithCommas(props.card.number)}${typeof props.card.display_value != 'undefined' ? numberWithCommas(props.card.display_value)  : ''}`
+        return `${ props.card.display_value == '%' ? parseFloat(props.card.number).toFixed(1) : numberWithCommas(props.card.type == 27 ? props.card.other_number : props.card.number)}${typeof props.card.display_value != 'undefined' ? numberWithCommas(props.card.display_value)  : ''}`
     }
     const total = props.card.total || TOTAL;
-    const percent = props.card.number < 0 ? 0 : (parseFloat(props.card.number / total).toFixed(2)); 
+    const number = props.card.type == 27 ? props.card.other_number : props.card.number;
+    const percent = number > 0 ? (number / total) : 0; 
 
     return (
         <div className={clsx(classes.chartContainer, {[classes.widthResponsive]: props.lineGraph})}>
@@ -35,7 +36,7 @@ const Chart = (props) => {
                             className={clsx(classes.actionButton, 'dashboard_buttons')} 
                             onClick={() => props.handleList(props.id, props.card.type)}
                             disabled={
-                                (parseInt(props.card?.number) > 0 || (props.card?.list && props.card.list.length > 0)) ? false : true
+                                (number > 0 || (props.card?.list && props.card.list.length > 0)) ? false : true
                             }
                         >
                             { props.card.title }
