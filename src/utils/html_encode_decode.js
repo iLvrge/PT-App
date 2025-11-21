@@ -68,22 +68,39 @@ export const checkFileContent = async(url) => {
     return await response.text()    
 }
 
-export const copyToClipboard = (data, message) => {
-    if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(data)
-            .then(() => alert(message))
-            .catch(() => fallbackCopy(data, message));
-    } else {
-        fallbackCopy(data, message);
+export const copyToClipboard = (text, message) => {
+    try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text)
+            .then(() => {
+                alert(message);
+            })
+            .catch(() => {
+                fallbackCopy(text);
+                alert(message);
+            });
+        } else {
+            fallbackCopy(text);
+        }
+    } catch (err) {
+        // Safari throws here BEFORE reaching .catch()
+        fallbackCopy(text);
+        alert(message);
     }
-}
+};
 
-const fallbackCopy = (text, message) => {
+const fallbackCopy = (text) => {
     const textarea = document.createElement("textarea");
     textarea.value = text;
+
+    textarea.style.position = "fixed";
+    textarea.style.left = "-9999px";
+    textarea.style.opacity = "0";
+
     document.body.appendChild(textarea);
+
     textarea.select();
     document.execCommand("copy");
-    textarea.remove();
-    alert(message);
+
+    document.body.removeChild(textarea);
 };
