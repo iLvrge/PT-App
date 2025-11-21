@@ -69,16 +69,21 @@ export const checkFileContent = async(url) => {
 }
 
 export const copyToClipboard = (data, message) => {
-    //console.log('IN copyToClipboard', data)
-    navigator.clipboard.writeText(data).then(() => {
-        alert(message)
-    })
-    /* var textField = document.createElement('textarea')
-    textField.innerText = data
-    document.body.appendChild(textField)
-    textField.select()
-    document.execCommand('copy')
-    setTimeout(() => {
-        textField.remove()
-    }, 1) */
+    if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(data)
+            .then(() => alert(message))
+            .catch(() => fallbackCopy(data, message));
+    } else {
+        fallbackCopy(data, message);
+    }
 }
+
+const fallbackCopy = (text, message) => {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    textarea.remove();
+    alert(message);
+};
