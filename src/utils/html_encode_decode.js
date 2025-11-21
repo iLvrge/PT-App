@@ -69,38 +69,59 @@ export const checkFileContent = async(url) => {
 }
 
 export const copyToClipboard = (text, message) => {
+    // Create a temporary textarea element
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    
+    // Make the textarea out of viewport
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = 0;
+    
+    // Add to DOM
+    document.body.appendChild(textarea);
+    
+    // Select the text
+    textarea.select();
+    
     try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text)
-            .then(() => {
-                alert(message);
-            })
-            .catch(() => {
-                fallbackCopy(text);
-                alert(message);
+        // Try modern clipboard API first
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text).then(() => {
+                showMessage();
+            }).catch(() => {
+                fallbackCopy(textarea);
+                showMessage();
             });
         } else {
-            fallbackCopy(text);
+            // Fallback for older browsers
+            fallbackCopy(textarea);
+            showMessage();
         }
     } catch (err) {
-        // Safari throws here BEFORE reaching .catch()
-        fallbackCopy(text);
-        alert(message);
+        // Final fallback
+        fallbackCopy(textarea);
+        showMessage();
+    } finally {
+        // Clean up
+        document.body.removeChild(textarea);
     }
-};
-
-const fallbackCopy = (text) => {
-    const textarea = document.createElement("textarea");
-    textarea.value = text;
-
-    textarea.style.position = "fixed";
-    textarea.style.left = "-9999px";
-    textarea.style.opacity = "0";
-
-    document.body.appendChild(textarea);
-
-    textarea.select();
-    document.execCommand("copy");
-
-    document.body.removeChild(textarea);
+    
+    function fallbackCopy(element) {
+        try {
+            const range = document.createRange();
+            range.selectNode(element);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+        } catch (err) {
+            console.error('Fallback copy failed:', err);
+        }
+    }
+    
+    function showMessage() {
+        if (message) {
+            alert(message);
+        }
+    }
 };
