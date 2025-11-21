@@ -69,8 +69,6 @@ export const checkFileContent = async(url) => {
 }
 
 export const copyToClipboard = (text, message) => {
-    let success = false;
-    
     try {
         // Try modern clipboard API first
         if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -91,33 +89,32 @@ export const copyToClipboard = (text, message) => {
     
     function execCommandCopy(text, message) {
         try {
-            // Create a span element (more reliable than textarea in Safari)
-            const span = document.createElement('span');
-            span.textContent = text;
-            span.style.position = 'fixed';
-            span.style.top = '0';
-            span.style.clip = 'rect(0, 0, 0, 0)';
-            span.style.whiteSpace = 'pre';
-            span.style.webkitUserSelect = 'text';
-            span.style.userSelect = 'text';
+            // Create a textarea (works better with execCommand in Safari)
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
             
-            document.body.appendChild(span);
+            // Style to hide it
+            textarea.style.position = 'fixed';
+            textarea.style.top = '0';
+            textarea.style.left = '0';
+            textarea.style.opacity = '0';
+            textarea.style.pointerEvents = 'none';
             
-            const range = document.createRange();
-            const selection = window.getSelection();
+            document.body.appendChild(textarea);
             
-            range.selectNodeContents(span);
-            selection.removeAllRanges();
-            selection.addRange(range);
+            // Focus and select
+            textarea.focus();
+            textarea.select();
             
-            success = document.execCommand('copy');
+            // Try to copy
+            const successful = document.execCommand('copy');
             
-            selection.removeAllRanges();
-            document.body.removeChild(span);
+            // Remove the textarea
+            document.body.removeChild(textarea);
             
-            if (success && message) {
+            if (successful && message) {
                 alert(message);
-            } else if (!success) {
+            } else if (!successful) {
                 console.error('Copy command was unsuccessful');
             }
         } catch (err) {
