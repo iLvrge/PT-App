@@ -69,76 +69,59 @@ export const checkFileContent = async(url) => {
 }
 
 export const copyToClipboard = (text, message) => {
-    // Create a temporary textarea element
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    
-    // Make the textarea out of viewport
-    textarea.style.position = 'fixed';
-    textarea.style.opacity = 0;
-    
-    // Add to DOM
-    document.body.appendChild(textarea);
-    
-    // Select the text
-    textarea.select();
-    
-    function cleanup() {
-        try {
-            document.body.removeChild(textarea);
-        } catch (err) {
-            // Already removed
-        }
-    }
-    
-    function fallbackCopy(element) {
-        try {
-            // For textarea, use focus and select instead of range
-            if (element.tagName === 'TEXTAREA') {
-                element.focus();
-                element.select();
-            } else {
-                const range = document.createRange();
-                range.selectNodeContents(element);
-                window.getSelection().removeAllRanges();
-                window.getSelection().addRange(range);
-            }
-            document.execCommand('copy');
-            window.getSelection().removeAllRanges();
-            return true;
-        } catch (err) {
-            console.error('Fallback copy failed:', err);
-            return false;
-        }
-    }
-    
-    function showMessage() {
-        if (message) {
-            alert(message);
-        }
-    }
+    let success = false;
     
     try {
         // Try modern clipboard API first
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(text).then(() => {
-                showMessage();
-                cleanup();
+                if (message) alert(message);
             }).catch(() => {
-                fallbackCopy(textarea);
-                showMessage();
-                cleanup();
+                // Fall back to execCommand if clipboard API fails
+                execCommandCopy(text, message);
             });
-        } else {
-            // Fallback for older browsers
-            fallbackCopy(textarea);
-            showMessage();
-            cleanup();
+            return;
         }
     } catch (err) {
-        // Final fallback
-        fallbackCopy(textarea);
-        showMessage();
-        cleanup();
+        // Continue to fallback
+    }
+    
+    // Fallback for older browsers or if clipboard API not available
+    execCommandCopy(text, message);
+    
+    function execCommandCopy(text, message) {
+        try {
+            // Create a span element (more reliable than textarea in Safari)
+            const span = document.createElement('span');
+            span.textContent = text;
+            span.style.position = 'fixed';
+            span.style.top = '0';
+            span.style.clip = 'rect(0, 0, 0, 0)';
+            span.style.whiteSpace = 'pre';
+            span.style.webkitUserSelect = 'text';
+            span.style.userSelect = 'text';
+            
+            document.body.appendChild(span);
+            
+            const range = document.createRange();
+            const selection = window.getSelection();
+            
+            range.selectNodeContents(span);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            
+            success = document.execCommand('copy');
+            
+            selection.removeAllRanges();
+            document.body.removeChild(span);
+            
+            if (success && message) {
+                alert(message);
+            } else if (!success) {
+                console.error('Copy command was unsuccessful');
+            }
+        } catch (err) {
+            console.error('Fallback copy failed:', err);
+        }
     }
 };
