@@ -69,67 +69,137 @@ export const checkFileContent = async(url) => {
 }
 
 export const copyToClipboard = (text, message) => {
-    // Safari-specific fix: Use a more reliable method
-    let successful = false;
-    
-    try {
-        // Create input element instead of textarea for better Safari compatibility
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.value = text;
-        
-        // Style to hide it - use display none for Safari
-        input.style.position = 'fixed';
-        input.style.top = '-9999px';
-        input.style.left = '-9999px';
-        input.style.opacity = '0';
-        input.style.pointerEvents = 'none';
-        
-        document.body.appendChild(input);
-        
-        // Select all text
-        input.select();
-        input.setSelectionRange(0, text.length);
-        
-        // Try to copy
-        successful = document.execCommand('copy');
-        
-        // Remove the input
-        document.body.removeChild(input);
-        
-        if (successful) {
+    // Try modern Clipboard API first (works in Chrome)
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
             if (message) alert(message);
-        } else {
-            console.warn('execCommand copy returned false, trying clipboard API');
-            tryModernClipboard(text, message);
-        }
-    } catch (err) {
-        console.error('execCommand copy failed:', err);
-        tryModernClipboard(text, message);
+        }).catch((err) => {
+            console.error('Clipboard API failed:', err);
+            // Fall back to execCommand for Safari
+            execCommandCopy(text, message);
+        });
+        return;
     }
     
-    function tryModernClipboard(text, message) {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(() => {
+    // Fallback to execCommand for older browsers and Safari
+    execCommandCopy(text, message);
+    
+    function execCommandCopy(text, message) {
+        try {
+            // Create a textarea element
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            
+            // Make it visible but off-screen (Safari needs visible elements)
+            textarea.style.position = 'fixed';
+            textarea.style.top = '0';
+            textarea.style.left = '0';
+            textarea.style.opacity = '1';
+            textarea.style.pointerEvents = 'none';
+            textarea.style.zIndex = '-1';
+            
+            document.body.appendChild(textarea);
+            
+            // Focus the textarea
+            textarea.focus();
+            
+            // Select all the text
+            textarea.select();
+            
+            // Copy the selected text
+            const successful = document.execCommand('copy');
+            
+            // Remove the textarea
+            document.body.removeChild(textarea);
+            
+            if (successful) {
                 if (message) alert(message);
-            }).catch((err) => {
-                console.error('Clipboard API also failed:', err);
-                // Open in new tab as fallback
-                openInNewTab(text);
-            });
-        } else {
-            // Clipboard API not available, open in new tab
-            openInNewTab(text);
+            } else {
+                console.warn('execCommand copy returned false');
+                showFallbackModal(text);
+            }
+        } catch (err) {
+            console.error('execCommand copy failed:', err);
+            showFallbackModal(text);
         }
+    }
+    
+    function showFallbackModal(text) {
+        openInNewTab(text);
     }
     
     function openInNewTab(text) {
         try {
-            // Try to open as data URL
-            const dataUrl = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
-            window.open(dataUrl, '_blank');
+            // Create a temporary textarea to show the text
+            const modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.top = '50%';
+            modal.style.left = '50%';
+            modal.style.transform = 'translate(-50%, -50%)';
+            modal.style.backgroundColor = 'white';
+            modal.style.padding = '20px';
+            modal.style.borderRadius = '8px';
+            modal.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+            modal.style.zIndex = '10000';
+            modal.style.maxWidth = '500px';
+            modal.style.maxHeight = '400px';
+            modal.style.overflow = 'auto';
+            
+            const title = document.createElement('p');
+            title.textContent = 'Copy failed. Please copy the text below:';
+            title.style.marginTop = '0';
+            title.style.marginBottom = '10px';
+            title.style.fontWeight = 'bold';
+            
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.width = '100%';
+            textarea.style.height = '200px';
+            textarea.style.padding = '10px';
+            textarea.style.border = '1px solid #ccc';
+            textarea.style.borderRadius = '4px';
+            textarea.style.fontFamily = 'monospace';
+            textarea.style.fontSize = '12px';
+            textarea.style.marginBottom = '10px';
+            textarea.readOnly = true;
+            
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = 'Close';
+            closeBtn.style.padding = '8px 16px';
+            closeBtn.style.backgroundColor = '#007bff';
+            closeBtn.style.color = 'white';
+            closeBtn.style.border = 'none';
+            closeBtn.style.borderRadius = '4px';
+            closeBtn.style.cursor = 'pointer';
+            closeBtn.onclick = () => {
+                document.body.removeChild(modal);
+                document.body.removeChild(overlay);
+            };
+            
+            modal.appendChild(title);
+            modal.appendChild(textarea);
+            modal.appendChild(closeBtn);
+            
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            overlay.style.zIndex = '9999';
+            overlay.onclick = () => {
+                document.body.removeChild(modal);
+                document.body.removeChild(overlay);
+            };
+            
+            document.body.appendChild(overlay);
+            document.body.appendChild(modal);
+            
+            // Auto-select the text
+            textarea.select();
         } catch (err) {
-            console.error('Failed to open in new tab:', err);
+            console.error('Failed to show fallback modal:', err);
             // Last resort: show in alert
             alert('Copy failed. Here is your text:\n\n' + text);
         }
