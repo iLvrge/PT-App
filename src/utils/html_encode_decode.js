@@ -108,10 +108,16 @@ export const copyToClipboard = (text, message) => {
     
     function fallbackCopy(element) {
         try {
-            const range = document.createRange();
-            range.selectNode(element);
-            window.getSelection().removeAllRanges();
-            window.getSelection().addRange(range);
+            // For textarea, use focus and select instead of range
+            if (element.tagName === 'TEXTAREA') {
+                element.focus();
+                element.select();
+            } else {
+                const range = document.createRange();
+                range.selectNodeContents(element);
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+            }
             document.execCommand('copy');
             window.getSelection().removeAllRanges();
         } catch (err) {
