@@ -69,56 +69,63 @@ export const checkFileContent = async(url) => {
 }
 
 export const copyToClipboard = (text, message) => {
+    // Safari-specific fix: Use a more reliable method
+    let successful = false;
+    
     try {
-        // Try modern clipboard API first
+        // Create input element instead of textarea for better Safari compatibility
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = text;
+        
+        // Style to hide it - use display none for Safari
+        input.style.position = 'fixed';
+        input.style.top = '-9999px';
+        input.style.left = '-9999px';
+        input.style.opacity = '0';
+        input.style.pointerEvents = 'none';
+        
+        document.body.appendChild(input);
+        
+        // Select all text
+        input.select();
+        input.setSelectionRange(0, text.length);
+        
+        // Try to copy
+        successful = document.execCommand('copy');
+        
+        // Remove the input
+        document.body.removeChild(input);
+        
+        if (successful) {
+            if (message) alert(message);
+        } else {
+            console.warn('execCommand copy returned false, trying clipboard API');
+            tryModernClipboard(text, message);
+        }
+    } catch (err) {
+        console.error('execCommand copy failed:', err);
+        tryModernClipboard(text, message);
+    }
+    
+    function tryModernClipboard(text, message) {
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(text).then(() => {
                 if (message) alert(message);
-            }).catch(() => {
-                // Fall back to execCommand if clipboard API fails
-                execCommandCopy(text, message);
+            }).catch((err) => {
+                console.error('Clipboard API also failed:', err);
+                // Open in new tab as fallback
+                openInNewTab(text);
             });
-            return;
+        } else {
+            // Clipboard API not available, open in new tab
+            openInNewTab(text);
         }
-    } catch (err) {
-        // Continue to fallback
     }
     
-    // Fallback for older browsers or if clipboard API not available
-    execCommandCopy(text, message);
-    
-    function execCommandCopy(text, message) {
-        try {
-            // Create a textarea (works better with execCommand in Safari)
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            
-            // Style to hide it
-            textarea.style.position = 'fixed';
-            textarea.style.top = '0';
-            textarea.style.left = '0';
-            textarea.style.opacity = '0';
-            textarea.style.pointerEvents = 'none';
-            
-            document.body.appendChild(textarea);
-            
-            // Focus and select
-            textarea.focus();
-            textarea.select();
-            
-            // Try to copy
-            const successful = document.execCommand('copy');
-            
-            // Remove the textarea
-            document.body.removeChild(textarea);
-            
-            if (successful && message) {
-                alert(message);
-            } else if (!successful) {
-                console.error('Copy command was unsuccessful');
-            }
-        } catch (err) {
-            console.error('Fallback copy failed:', err);
-        }
+    function openInNewTab(text) {
+        const blob = new Blob([text], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        window.open(url, '_blank');
     }
 };
