@@ -83,27 +83,12 @@ export const copyToClipboard = (text, message) => {
     // Select the text
     textarea.select();
     
-    try {
-        // Try modern clipboard API first
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(text).then(() => {
-                showMessage();
-            }).catch(() => {
-                fallbackCopy(textarea);
-                showMessage();
-            });
-        } else {
-            // Fallback for older browsers
-            fallbackCopy(textarea);
-            showMessage();
+    function cleanup() {
+        try {
+            document.body.removeChild(textarea);
+        } catch (err) {
+            // Already removed
         }
-    } catch (err) {
-        // Final fallback
-        fallbackCopy(textarea);
-        showMessage();
-    } finally {
-        // Clean up
-        document.body.removeChild(textarea);
     }
     
     function fallbackCopy(element) {
@@ -120,8 +105,10 @@ export const copyToClipboard = (text, message) => {
             }
             document.execCommand('copy');
             window.getSelection().removeAllRanges();
+            return true;
         } catch (err) {
             console.error('Fallback copy failed:', err);
+            return false;
         }
     }
     
@@ -129,5 +116,29 @@ export const copyToClipboard = (text, message) => {
         if (message) {
             alert(message);
         }
+    }
+    
+    try {
+        // Try modern clipboard API first
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => {
+                showMessage();
+                cleanup();
+            }).catch(() => {
+                fallbackCopy(textarea);
+                showMessage();
+                cleanup();
+            });
+        } else {
+            // Fallback for older browsers
+            fallbackCopy(textarea);
+            showMessage();
+            cleanup();
+        }
+    } catch (err) {
+        // Final fallback
+        fallbackCopy(textarea);
+        showMessage();
+        cleanup();
     }
 };
