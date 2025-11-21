@@ -124,8 +124,14 @@ export const copyToClipboard = (text, message) => {
     }
     
     function openInNewTab(text) {
-        const blob = new Blob([text], { type: 'text/plain' });
-        const url = window.URL.createObjectURL(blob);
-        window.open(url, '_blank');
+        try {
+            // Try to open as data URL
+            const dataUrl = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
+            window.open(dataUrl, '_blank');
+        } catch (err) {
+            console.error('Failed to open in new tab:', err);
+            // Last resort: show in alert
+            alert('Copy failed. Here is your text:\n\n' + text);
+        }
     }
 };
