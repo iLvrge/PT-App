@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
-import { 
-    useSelector 
+import React, { useState } from 'react'
+import {
+    useSelector
 } from 'react-redux'
 import GaugeChart from 'react-gauge-chart'
 import useStyles from './styles'
@@ -11,48 +11,48 @@ import LineGraph from './LineGraph';
 import AddToolTip from './AddToolTip';
 import { numberWithCommas } from '../../utils/numbers';
 const Chart = (props) => {
-    const [arcs, setArcs] = useState([0.5, 0.3, 0.2])
-    const classes = useStyles(); 
+    const arcs = [0.5, 0.3, 0.2];
+    const classes = useStyles();
     const TOTAL = 200
     const displayNumber = (value) => {
-        return `${ props.card.display_value == '%' ? parseFloat(props.card.number).toFixed(1) : numberWithCommas(props.card.type == 27 ? props.card.other_number : props.card.number)}${typeof props.card.display_value != 'undefined' ? numberWithCommas(props.card.display_value)  : ''}`
+        return `${props.card.display_value == '%' ? parseFloat(props.card.number).toFixed(1) : numberWithCommas(props.card.type == 27 ? props.card.number || props.card.other_number : props.card.number)}${typeof props.card.display_value != 'undefined' ? numberWithCommas(props.card.display_value) : ''}`
     }
     const total = props.card.total || TOTAL;
-    const number = props.card.type == 27 ? props.card.other_number : props.card.number;
-    const percent = number > 0 ? (number / total) : 0; 
+    const number = props.card.type == 27 ? props.card.number || props.card.other_number : props.card.number;
+    const percent = number > 0 ? (number / total) : 0;
 
     return (
-        <div className={clsx(classes.chartContainer, {[classes.widthResponsive]: props.lineGraph})}>
-            <div className={clsx(classes.headingContainer )}>
+        <div className={clsx(classes.chartContainer, { [classes.widthResponsive]: props.lineGraph })}>
+            <div className={clsx(classes.headingContainer)}>
                 <AddToolTip
                     tooltip={props.card.tooltip}
                     placement={'bottom'}
                     grid={props.grid}
                 >
                     <span className={classes.btnContainer}>
-                        <Button 
-                            size="small" 
-                            variant="outlined" 
-                            className={clsx(classes.actionButton, 'dashboard_buttons')} 
+                        <Button
+                            size="small"
+                            variant="outlined"
+                            className={clsx(classes.actionButton, 'dashboard_buttons')}
                             onClick={() => props.handleList(props.id, props.card.type)}
                             disabled={
                                 (number > 0 || (props.card?.list && props.card.list.length > 0)) ? false : true
                             }
                         >
-                            { props.card.title }
-                        </Button> 
-                    </span>  
-                </AddToolTip>  
+                            {props.card.title}
+                        </Button>
+                    </span>
+                </AddToolTip>
             </div>
             {
                 props.lineGraph === true
-                ?
+                    ?
                     <LineGraph
                         id={`line-chart${props.id}`}
                         data={props.card.list}
                         lineID={props.id}
                     />
-                :
+                    :
                     <GaugeChart
                         id={`gauge-chart${props.id}`}
                         nrOfLevels={420}
@@ -62,10 +62,10 @@ const Chart = (props) => {
                         arcPadding={0.02}
                         marginInPercent={0.03}
                         className={'gauge'}
-                        animate={false} 
+                        animate={false}
                         /* hideText={true} */
                         formatTextValue={displayNumber}
-                    />    
+                    />
             }
         </div>
     )

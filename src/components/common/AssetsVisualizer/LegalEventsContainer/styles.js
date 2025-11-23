@@ -2,7 +2,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import { indigo, purple, blue, pink, teal, cyan, lime, green, orange, grey } from '@mui/material/colors'
 
 export default makeStyles(theme => ({
-   
+
   root: {
     flex: 1,
     overflow: 'auto',
@@ -11,10 +11,10 @@ export default makeStyles(theme => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    '& .vis-time-axis .vis-text, .vis-item, .vis-y-axis':{
-      color: `${theme.palette.text.primary} !important` ,
+    '& .vis-time-axis .vis-text, .vis-item, .vis-y-axis': {
+      color: `${theme.palette.text.primary} !important`,
     },
-    '& .vis-timeline, .vis-panel.vis-center':{
+    '& .vis-timeline, .vis-panel.vis-center': {
       border: `1px solid ${theme.palette.divider}`
     },
     '& .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom': {
@@ -23,13 +23,13 @@ export default makeStyles(theme => ({
       borderLeftColor: theme.palette.divider,
       borderRightColor: theme.palette.divider,
     },
-    '& .MuiTab-root':{
+    '& .MuiTab-root': {
       minWidth: 'inherit',
     },
-    '& .MuiTypography-root':{
+    '& .MuiTypography-root': {
       lineHeight: '25px'
     },
-    '& embed':{
+    '& embed': {
       height: '100%',
       width: '100%'
     },
@@ -45,10 +45,10 @@ export default makeStyles(theme => ({
         paddingLeft: '0px'
       }
     },
-    '& .MuiTabScrollButton-root':{
+    '& .MuiTabScrollButton-root': {
       width: '20px'
     },
-    
+
   },
   graphContainer: {
     flex: 1,
@@ -58,7 +58,7 @@ export default makeStyles(theme => ({
     /* background: '#222222 !important',
     border: '1px solid #5c5c5c !important', */
     overflow: 'hidden'
-  }, 
+  },
   timelineRoot: {
     height: '100%',
     width: '100%',
@@ -66,22 +66,22 @@ export default makeStyles(theme => ({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    '& .vis-time-axis .vis-text, .vis-item, .vis-y-axis':{
-      color: `${theme.palette.text.primary} !important` ,
+    '& .vis-time-axis .vis-text, .vis-item, .vis-y-axis': {
+      color: `${theme.palette.text.primary} !important`,
     },
-    '& .vis-timeline, .vis-panel.vis-center':{
+    '& .vis-timeline, .vis-panel.vis-center': {
       border: `1px solid ${theme.palette.divider}`
     },
-  },  
+  },
   fullscreenBtn: {
     position: 'absolute',
     top: 9,
     right: 0,
     zIndex: 999,
-    ' & svg':{
+    ' & svg': {
       fill: '#6d6d6d',
       stroke: '#6d6d6d',
-      '&:hover':{
+      '&:hover': {
         color: theme.palette.secondary.main,
         fill: theme.palette.secondary.main,
         stroke: theme.palette.secondary.main
@@ -91,10 +91,10 @@ export default makeStyles(theme => ({
   tab: {
     minWidth: '25%',
     minHeight: 47,
-    fontSize: '1.1rem', 
+    fontSize: '1.1rem',
     overflow: 'hidden',
     whiteSpace: 'nowrap',
-    textOverflow:'ellipsis'
+    textOverflow: 'ellipsis'
   },
   tabs: {
     minHeight: 47,
@@ -111,103 +111,103 @@ export default makeStyles(theme => ({
     left: '50%',
   },
   timelineStatus: {
-    height: '100%', 
+    height: '100%',
     width: '100%',
-    '& .vis-panel.vis-center':{
+    '& .vis-panel.vis-center': {
       borderTop: 0
     },
-    '& .vis-timeline':{
+    '& .vis-timeline': {
       border: 0,
-      borderTop:`1px solid ${theme.palette.divider}`, 
-      borderBottom:`1px solid ${theme.palette.divider}`, 
+      borderTop: `1px solid ${theme.palette.divider}`,
+      borderBottom: `1px solid ${theme.palette.divider}`,
       backgroundColor: `${theme.palette.background.paper}!important`,
-      '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground':{
+      '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground': {
         /* backgroundColor: '#424242 !important', */
       }
     },
-    '& .vis-left.vis-panel.vis-vertical-scroll, .vis-right.vis-panel.vis-vertical-scroll':{
+    '& .vis-left.vis-panel.vis-vertical-scroll, .vis-right.vis-panel.vis-vertical-scroll': {
       overflowY: 'hidden'
     },
-    '& .vis-item ':{
+    '& .vis-item ': {
       textAlign: 'left'
     },
-    '& .vis-itemset .vis-background':{
+    '& .vis-itemset .vis-background': {
       position: 'absolute',
       width: '100%',
       height: '100%',
       overflow: 'visible',
     },
-    '& .vis-item.vis-line':{
+    '& .vis-item.vis-line': {
       zIndex: 9999
     },
-    '& .vis-item.yellowBorder':{
-      backgroundColor: '#FFAA00', 
-      borderColor: '#FFAA00', 
+    '& .vis-item.yellowBorder': {
+      backgroundColor: '#FFAA00',
+      borderColor: '#FFAA00',
       color: '#fff !important',
     },
-    '& .vis-item.greenLight':{
+    '& .vis-item.greenLight': {
       backgroundColor: '#CEE7FC',
       color: '#fff !important',
     },
-    '& .vis-item.green':{
+    '& .vis-item.green': {
       backgroundColor: '#ABD7FC',
       color: '#fff !important',
     },
-    '& .vis-item.grey':{
+    '& .vis-item.grey': {
       backgroundColor: '#ABB3BA',
       color: '#fff !important',
     },
-    '& .vis-item.greenBorder':{
+    '& .vis-item.greenBorder': {
       borderColor: '#1565C0',
       backgroundColor: '#1565C0',
       color: '#fff !important',
       zIndex: 99999
     },
-    '& .vis-item.redBorder':{
-      backgroundColor: theme.palette.secondary.main, 
-      borderColor: theme.palette.secondary.main, 
+    '& .vis-item.redBorder': {
+      backgroundColor: theme.palette.secondary.main,
+      borderColor: theme.palette.secondary.main,
       color: '#fff !important',
     },
   },
-  timeline: { 
-    height: '100%', 
+  timeline: {
+    height: '100%',
     width: '100%',
-    '& .custom_tooltip':{
-      position:'absolute',  
-      width:'150px',
+    '& .custom_tooltip': {
+      position: 'absolute',
+      width: '150px',
       /* height:'150px', */
       background: theme.palette.background.default,
-      border:`1px solid ${theme.palette.divider}`, 
+      border: `1px solid ${theme.palette.divider}`,
       color: theme.palette.text.primary,
-      padding: '5px 10px' ,
-      '& h4':{
-        margin: 0 
+      padding: '5px 10px',
+      '& h4': {
+        margin: 0
       },
       overflow: 'hidden'
     },
-    '& .vis-panel.vis-center':{
+    '& .vis-panel.vis-center': {
       borderTop: 0
     },
-    '& .vis-timeline':{
+    '& .vis-timeline': {
       border: 0,
       /* borderTop:`1px solid ${theme.palette.divider}`, 
       borderBottom:`1px solid ${theme.palette.divider}`, 
       backgroundColor: `${theme.palette.background.paper}!important`, */
-      '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground':{
+      '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground': {
         /* backgroundColor: '#424242 !important', */
       }
     },
-    '& .vis-left.vis-panel.vis-vertical-scroll, .vis-right.vis-panel.vis-vertical-scroll':{
+    '& .vis-left.vis-panel.vis-vertical-scroll, .vis-right.vis-panel.vis-vertical-scroll': {
       overflowY: 'hidden'
     },
-    '& .vis-itemset .vis-background':{
+    '& .vis-itemset .vis-background': {
       position: 'absolute',
       width: '100%',
       height: '100%',
       overflow: 'visible',
     },
     '& .vis-item': {
-      '&.vis-line':{
+      '&.vis-line': {
         border: 0,
         backgroundColor: 'unset'
       }
@@ -224,45 +224,45 @@ export default makeStyles(theme => ({
       background: `${theme.palette.secondary.main} !important`,
       opacity: '1'
     },
-    '& .vis-item.asset-type-status':{
-      backgroundColor: 'rgba(34,34,34, 0.75)', 
+    '& .vis-item.asset-type-status': {
+      backgroundColor: 'rgba(34,34,34, 0.75)',
       border: '1px solid #545454',
       /* padding: '4px 0px 2px 4px',  */
       color: '#fff !important',
       width: '100%',
-      borderRadius: '3px', 
-      '& .vis-item-content':{ 
+      borderRadius: '3px',
+      '& .vis-item-content': {
       }
     },
-    '& .vis-item.yellow':{
-      backgroundColor: '#FFAA00', 
+    '& .vis-item.yellow': {
+      backgroundColor: '#FFAA00',
     },
-    '& .vis-item.green':{
-      backgroundColor: '#70A800', 
+    '& .vis-item.green': {
+      backgroundColor: '#70A800',
     },
-    '& .vis-item.red':{
-      backgroundColor: theme.palette.secondary.main, 
+    '& .vis-item.red': {
+      backgroundColor: theme.palette.secondary.main,
     },
-    '& .vis-item.vis-box': {      
+    '& .vis-item.vis-box': {
       '&.asset-type-default': {
         backgroundColor: 'rgba(34,34,34, 0.75)',
         border: 0,
         borderRadius: '3px',
         width: '9.6rem',
         height: '4.4rem',
-        '& .vis-item-content':{
-          width:'100%',
-          height:'100%',
+        '& .vis-item-content': {
+          width: '100%',
+          height: '100%',
           display: 'flex',
-          flexWrap: 'wrap',          
+          flexWrap: 'wrap',
           justifyContent: 'flex-start',
           alignItems: 'flex-start',
           border: '1px solid #545454',
-          borderRadius: '3px', 
+          borderRadius: '3px',
           padding: '4px 0px 2px 4px',
           overflow: 'hidden',
           color: '#BDBDBD',
-          '& .first':{
+          '& .first': {
             fontWeight: 500,
             fontSize: '0.875rem',
             display: 'flex',
@@ -275,12 +275,12 @@ export default makeStyles(theme => ({
             width: '57%',
             lineHeight: 1.1
           },
-          '& .first.limit':{
+          '& .first.limit': {
             height: 29,
             overflow: 'hidden',
             alignItems: 'flex-start'
           },
-          '& .second':{            
+          '& .second': {
             fontSize: '0.875rem',
             lineHeight: '1.3',
             fontWeight: 400,
@@ -289,72 +289,90 @@ export default makeStyles(theme => ({
             /* height: '100%', */
             whiteSpace: 'initial',
             textAlign: 'left',
-            '& .event_icon1':{
+            '& .event_icon1': {
               width: '100%',
               height: '100%'
             },
-            '& svg':{
+            '& svg': {
               '& path': {
-                fill: '#fff' 
+                fill: '#fff'
               },
               '& path.svg_red': {
-                fill: theme.palette.secondary.main 
+                fill: theme.palette.secondary.main
               },
               '& path.svg_blue': {
-                fill: '#00A9E6' 
+                fill: '#00A9E6'
               },
               '& path.svg_green': {
-                fill: '#70A800' 
+                fill: '#70A800'
               }
             },
-            '& div':{
+            '& div': {
               /* marginLeft: '5px' */
-            }, 
-            '& img':{
+            },
+            '& img': {
               width: '5rem',
               maxHeight: '2.5rem'
             }
           },
-          '& .textColumn':{
+          '& .textColumn': {
             position: 'absolute',
             bottom: '4px',
             fontSize: '0.65rem',
             textAlign: 'left'
           },
-          '& .absolute':{
+          '& .absolute': {
             position: 'absolute',
             top: '6px',
             right: '0px',
             width: '43%',
             height: '84%',
-            '& svg':{
+            '& svg': {
               width: '100%',
               height: '100%',
               '& path': {
-                fill: '#fff' 
+                fill: '#fff'
               },
               '& path.svg_red': {
-                fill: theme.palette.secondary.main 
+                fill: theme.palette.secondary.main
               },
               '& path.svg_blue': {
-                fill: '#00A9E6' 
+                fill: '#00A9E6'
               },
               '& path.svg_green': {
-                fill: '#70A800' 
+                fill: '#70A800'
               },
               '& path.none': {
-                fill: 'none' 
+                fill: 'none'
               }
             }
           },
-          '& .flexMain':{
-              display: 'flex',
-              overflow: 'hidden',
-              height: '34%',
-            '& img':{
+          '& .flexMain': {
+            display: 'flex',
+            overflow: 'hidden',
+            height: '34%',
+            '& img': {
               width: '4.3rem'
-            },            
-            
+            },
+
+          }
+        }
+      },
+      '&.payment-event': {
+        '& .vis-item-content': {
+          '& .second': {
+            '& svg': {
+              '& path.svg_blue': {
+                fill: theme.palette.secondary.main
+              }
+            }
+          },
+          '& .absolute': {
+            '& svg': {
+              '& path.svg_blue': {
+                fill: theme.palette.secondary.main
+              }
+            }
           }
         }
       }
@@ -363,48 +381,48 @@ export default makeStyles(theme => ({
       '&.asset-type-yellow': {
         background: 'linear-gradient(to right,  #FFFF00 0%,#FFFF00 50%,#E60000 50%,#E60000 100%)',
         opacity: '0.5',
-      } 
+      }
     },
   },
   timelinePtab: {
-    height: '100%', 
+    height: '100%',
     width: '100%',
-    '& .custom_tooltip':{
-      position:'absolute',  
-      width:'200px',
+    '& .custom_tooltip': {
+      position: 'absolute',
+      width: '200px',
       /* height:'150px', */
       background: theme.palette.background.default,
-      border:`1px solid ${theme.palette.divider}`, 
+      border: `1px solid ${theme.palette.divider}`,
       color: theme.palette.text.primary,
-      padding: '5px 10px' ,
-      '& h4':{
-        margin: 0 
+      padding: '5px 10px',
+      '& h4': {
+        margin: 0
       },
       overflow: 'hidden'
     },
-    '& .vis-panel.vis-center':{
+    '& .vis-panel.vis-center': {
       borderTop: 0
     },
-    '& .vis-timeline':{
+    '& .vis-timeline': {
       border: 0,
-      borderTop:`1px solid ${theme.palette.divider}`, 
-      borderBottom:`1px solid ${theme.palette.divider}`, 
+      borderTop: `1px solid ${theme.palette.divider}`,
+      borderBottom: `1px solid ${theme.palette.divider}`,
       backgroundColor: `${theme.palette.background.paper}!important`,
-      '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground':{
+      '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground': {
         /* backgroundColor: '#424242 !important', */
       }
     },
-    '& .vis-left.vis-panel.vis-vertical-scroll, .vis-right.vis-panel.vis-vertical-scroll':{
+    '& .vis-left.vis-panel.vis-vertical-scroll, .vis-right.vis-panel.vis-vertical-scroll': {
       overflowY: 'hidden'
     },
-    '& .vis-itemset .vis-background':{
+    '& .vis-itemset .vis-background': {
       position: 'absolute',
       width: '100%',
       height: '100%',
       overflow: 'visible',
     },
     '& .vis-item': {
-      '&.vis-line':{
+      '&.vis-line': {
         border: 0,
         backgroundColor: 'unset'
       }
@@ -413,38 +431,38 @@ export default makeStyles(theme => ({
       background: 'linear-gradient(to right,  #FFFF00 0%,#FFFF00 50%,#E60000 50%,#E60000 100%)',
       opacity: '0.5',
     },
-    '& .vis-item.vis-range.asset-type-default':{
+    '& .vis-item.vis-range.asset-type-default': {
       backgroundColor: '#228DE8 !important'
     },
-    '& .vis-item.vis-range':{
+    '& .vis-item.vis-range': {
       border: 0,
-      '& .vis-item-overflow':{
+      '& .vis-item-overflow': {
         overflow: 'visible',
         position: 'unset',
         minHeight: 28,
-        '& .vis-item-content':{
-          '& span':{
+        '& .vis-item-content': {
+          '& span': {
             whiteSpace: 'nowrap',
             display: 'block',
             width: '100%'
           },
-          '& tt':{
+          '& tt': {
             marginRight: 10,
             cursor: 'pointer',
-            '& img':{
+            '& img': {
               width: 16
             }
           },
-          '& em':{
+          '& em': {
             position: 'absolute',
             right: 7,
             cursor: 'pointer',
-            '& img':{
+            '& img': {
               width: 16
             }
           }
         }
-      } 
+      }
     }
   },
   timelineCitation: {
@@ -459,25 +477,25 @@ export default makeStyles(theme => ({
     //   overflowY: 'auto',
     //   overflowX: 'hidden',
     // },
-    '& .custom_tooltip':{
-      position:'absolute',  
-      width:'150px',
+    '& .custom_tooltip': {
+      position: 'absolute',
+      width: '150px',
       /* height:'150px', */
-      background:'#222222',
-      border:'1px solid #545454',
-      color:'#BDBDBD',
-      padding: '5px 10px' ,
-      '& h4':{
-        margin: 0 
+      background: '#222222',
+      border: '1px solid #545454',
+      color: '#BDBDBD',
+      padding: '5px 10px',
+      '& h4': {
+        margin: 0
       },
       overflow: 'hidden'
     },
-    '& .vis-timeline':{
+    '& .vis-timeline': {
       border: 0,
-      borderTop:`1px solid ${theme.palette.divider}`, 
-      borderBottom:`1px solid ${theme.palette.divider}`, 
+      borderTop: `1px solid ${theme.palette.divider}`,
+      borderBottom: `1px solid ${theme.palette.divider}`,
       backgroundColor: `${theme.palette.background.paper}!important`,
-      '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground':{
+      '& .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground, & .vis-label.vis-nested-group.vis-group-level-1, & .vis-itemset .vis-background, & .vis-itemset .vis-foreground': {
         /* backgroundColor: '#424242 !important', */
       }
     },
@@ -489,23 +507,23 @@ export default makeStyles(theme => ({
       /* backgroundColor: '#222', */
       color: '#fff',
       borderRadius: '3px',
-      '&.vis-point':{
-        maxWidth:'125px',
-        overflow:'hidden',
+      '&.vis-point': {
+        maxWidth: '125px',
+        overflow: 'hidden',
         maxHeight: '160px',
         /* minHeight: '125px' */
       },
-      '& img':{
+      '& img': {
         /*height: '100%',
-        width: '100%'*/ 
+        width: '100%'*/
       },
-      '& .vis-item-content':{
-        margin:'0px !important'
+      '& .vis-item-content': {
+        margin: '0px !important'
       },
-      '&.vis-line':{
+      '&.vis-line': {
         border: 0,
         backgroundColor: 'unset'
-      },      
+      },
     },
     '& .vis-cluster': {
       backgroundColor: '#3f51b547',
@@ -523,41 +541,41 @@ export default makeStyles(theme => ({
         width: '9.6rem',
         borderRadius: '3px',
         height: '4.4rem',
-        '&.vis-selected':{
-          '& .vis-item-content':{
+        '&.vis-selected': {
+          '& .vis-item-content': {
             border: '1px solid #e60000 !important',
           }
         },
-        '& .vis-item-content':{
+        '& .vis-item-content': {
           color: '#BDBDBD',
-          width:'100%',
+          width: '100%',
           border: '1px solid #545454',
-          height:'100%',          
+          height: '100%',
           display: 'flex',
           padding: 5,
           overflow: 'hidden',
-          flexWrap: 'wrap',   
-          borderRadius: 3,       
+          flexWrap: 'wrap',
+          borderRadius: 3,
           justifyContent: 'flex-start',
-          flexDirection: 'column',           
-          '& .maxHeight':{
+          flexDirection: 'column',
+          '& .maxHeight': {
             maxHeight: '51px',
             overflow: 'hidden',
             justifyContent: 'flex-start',
             paddingBottom: '0.15rem'
           },
-          '& .first':{
+          '& .first': {
             display: 'flex',
             fontSize: '0.875rem',
             fontWeight: 500,
             overflow: 'hidden',
             height: '100%',
-            width:'55%',
+            width: '55%',
             marginRight: 3
           },
-          '& .second':{
-            display:'flex',
-            flexDirection: 'column',  
+          '& .second': {
+            display: 'flex',
+            flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: '0.65rem',
@@ -565,7 +583,7 @@ export default makeStyles(theme => ({
             height: '100%',
             width: '45%',
             overflow: 'hidden',
-            '& div':{
+            '& div': {
               marginLeft: '5px'
             },
             '& .img-holder': {
@@ -577,7 +595,7 @@ export default makeStyles(theme => ({
               alignItems: 'center',
               justifyContent: 'center'
             },
-            '& img':{
+            '& img': {
               width: 50,
               display: 'flex'
               /* width: '3.5rem', */
@@ -589,44 +607,44 @@ export default makeStyles(theme => ({
               } */
               /* maxHeight: '2.5rem' */
             },
-            '& img.no-image':{
+            '& img.no-image': {
               /* height: '4rem', */
               /* maxHeight: '2.5rem' */
             }
           },
-          '& .flexMain':{
-              display: 'flex',
-              overflow: 'hidden',
-              flexGrow: 1,
-              alignItems: 'flex-start',
-              flexDirection: 'column',
-              justifyContent: 'flex-start',
-              height: '100%',
-              '&.alignBaseline':{
-                alignItems: 'baseline',
-                '& .textColumn':{
-                  '& .absolute':{
-                    bottom: 7
-                  }
+          '& .flexMain': {
+            display: 'flex',
+            overflow: 'hidden',
+            flexGrow: 1,
+            alignItems: 'flex-start',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            height: '100%',
+            '&.alignBaseline': {
+              alignItems: 'baseline',
+              '& .textColumn': {
+                '& .absolute': {
+                  bottom: 7
                 }
-              },
-            '& img':{
+              }
+            },
+            '& img': {
               width: '4.3rem'
             },
-            '& .textColumn':{
+            '& .textColumn': {
               display: 'flex',
               lineHeight: '1.1',
-              '& .absolute':{
+              '& .absolute': {
                 position: 'absolute',
                 bottom: 0
               }
             },
-            '& .small-font':{                
-              fontSize: '0.65rem',  
+            '& .small-font': {
+              fontSize: '0.65rem',
               marginTop: 2,
               lineHeight: '0.81'
             },
-            '& .text-height':{
+            '& .text-height': {
               whiteSpace: 'initial',
               textAlign: 'left',
               marginTop: 1,
@@ -636,7 +654,7 @@ export default makeStyles(theme => ({
             }
           }
         }
-      } 
+      }
     },
     '& .vis-item.vis-point.vis-selected': {
       backgroundColor: 'none !important',
@@ -652,25 +670,25 @@ export default makeStyles(theme => ({
   counter: {
     display: 'flex',
     position: 'absolute',
-    lineHeight: 1, 
+    lineHeight: 1,
     bottom: '-8px',
     alignItems: 'center',
     color: theme.palette.secondary.main,
   },
   badge: {
     position: 'absolute',
-    left: -4, 
+    left: -4,
     '& .MuiBadge-colorPrimary': {
       top: 16,
       backgroundColor: 'inherit',
       right: 'inherit',
       transform: 'none',
       wordBreak: 'keep-all',
-      color: theme.palette.text.secondary 
-    }    
+      color: theme.palette.text.secondary
+    }
   },
   redColor: {
-    '& .MuiBadge-badge':{
+    '& .MuiBadge-badge': {
       color: theme.palette.secondary.main
     }
   },
@@ -678,7 +696,7 @@ export default makeStyles(theme => ({
     from: { opacity: 1 },
     to: { opacity: 0 },
   },
-  blinkText: { 
+  blinkText: {
     animationName: '$blinker',
     animationDuration: '1s',
     animationTimingFunction: 'linear',
@@ -688,8 +706,8 @@ export default makeStyles(theme => ({
     alignItems: 'center',
     alignContent: 'center',
     flex: 1,
-    height: '100%' ,
+    height: '100%',
     position: 'absolute',
     width: '100%'
-  } 
+  }
 }))
