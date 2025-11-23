@@ -363,14 +363,14 @@ export default makeStyles(theme => ({
           '& .second': {
             '& svg': {
               '& path.svg_blue': {
-                fill: theme.palette.secondary.main
+                fill: `${theme.palette.secondary.main} !important`
               }
             }
           },
           '& .absolute': {
             '& svg': {
               '& path.svg_blue': {
-                fill: theme.palette.secondary.main
+                fill: `${theme.palette.secondary.main} !important`
               }
             }
           }
