@@ -9,10 +9,10 @@ import PropTypes from "prop-types";
 import clsx from "clsx";
 import {
   faFileCode,
-  faFile,  
+  faFile,
   faFileImage,
   faFilePdf,
-  faFileWord,  
+  faFileWord,
   faFilePowerpoint,
   faFileExcel,
   faChevronDown
@@ -34,7 +34,7 @@ import {
   InfiniteLoader
 } from "react-virtualized";
 import TableRow from "@mui/material/TableRow";
-import Select from '@mui/material/Select'; 
+import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import useStyles from "./styles";
@@ -42,11 +42,11 @@ import Tooltip from "@mui/material/Tooltip";
 import Checkbox from "@mui/material/Checkbox";
 import Radio from "@mui/material/Radio";
 import Rating from '@mui/material/Rating';
-import _orderBy  from "lodash/orderBy";
-import _sortBy  from "lodash/sortBy";
+import _orderBy from "lodash/orderBy";
+import _sortBy from "lodash/sortBy";
 import useHeaderRenderer from "./hooks/useHeaderRenderer";
 import { KeyboardArrowUp } from "@mui/icons-material";
-import { getAuthConnectToken  } from "../../../utils/tokenStorage";
+import { getAuthConnectToken } from "../../../utils/tokenStorage";
 
 const VirtualizedTable = ({
   columns,
@@ -136,7 +136,7 @@ const VirtualizedTable = ({
   }, [ tableRef, rowSelected, collapsable ])*/
 
   useEffect(() => {
-    if( defaultSortField != undefined && defaultSortDirection != undefined ) {
+    if (defaultSortField != undefined && defaultSortDirection != undefined) {
       setSortBy(defaultSortField)
       setSortDirection(defaultSortDirection == 'DESC' ? SortDirection.DESC : SortDirection.ASC)
     }
@@ -144,37 +144,37 @@ const VirtualizedTable = ({
 
   useEffect(() => {
     setNoOfSelectedItems([...selected])
-  }, [ selected ])  
+  }, [selected])
 
 
-  
-  useEffect(() => { 
-    if(onFlyForChildWaitCall === true && runCollapseTable == false && selected.length > 0) { 
+
+  useEffect(() => {
+    if (onFlyForChildWaitCall === true && runCollapseTable == false && selected.length > 0) {
       setRunCollapseTable(true)
-      if(tableRef.current != null) {
-        setTimeout(() => { 
+      if (tableRef.current != null) {
+        setTimeout(() => {
           updateNewHeight(0)
         }, 10)
-      } 
+      }
     }
   }, [onFlyForChildWaitCall, selectedGroup])
 
   const createSortHandler = useCallback(
     property => () => {
-      /* console.log("createSortHandler", property, sortBy, sortDirection) */ 
+      /* console.log("createSortHandler", property, sortBy, sortDirection) */
       const isAsc = sortBy === property && sortDirection === SortDirection.ASC
-      if(typeof sortDataLocal !== 'undefined' && typeof sortDataFn !== 'undefined' && property != 'channel') {
+      if (typeof sortDataLocal !== 'undefined' && typeof sortDataFn !== 'undefined' && property != 'channel') {
         sortDataFn(isAsc ? SortDirection.DESC : SortDirection.ASC, property)
       } else {
         setSortDirection(isAsc ? SortDirection.DESC : SortDirection.ASC);
         setSortBy(property);
-      } 
-      if(collapsable === true && selectedIndex !== null) {
+      }
+      if (collapsable === true && selectedIndex !== null) {
         updateNewHeight(100)
       }
     },
     [sortBy, sortDirection],
-  ); 
+  );
 
   const getRowClassName = useCallback(() => {
     return clsx(classes.tableRow, classes.flexContainer, classes.tableRowHover);
@@ -219,12 +219,12 @@ const VirtualizedTable = ({
   };
 
   const getDropValue = (showDropValue, list, width, rowData) => {
-    const listIndex = list.findIndex( row => row.id == showDropValue )    
-    if(listIndex !== -1) { 
+    const listIndex = list.findIndex(row => row.id == showDropValue)
+    if (listIndex !== -1) {
       return (
         <div /* style={{width: `${width + 10}px`}} */ className={'selectedIcon'} >
           {
-            list[listIndex].icon != '' ? (dropdownOpen && openRowData != null && rowData.asset == openRowData.asset && list[listIndex].openIcon ? list[listIndex].openIcon : list[listIndex].icon) : list[listIndex].image != '' ? <img src={list[listIndex].image} style={{width: '1.3rem', position: 'absolute', left: '0px'}}/> : showDropValue
+            list[listIndex].icon != '' ? (dropdownOpen && openRowData != null && rowData.asset == openRowData.asset && list[listIndex].openIcon ? list[listIndex].openIcon : list[listIndex].icon) : list[listIndex].image != '' ? <img src={list[listIndex].image} style={{ width: '1.3rem', position: 'absolute', left: '0px' }} /> : showDropValue
           }
         </div>
       )
@@ -232,19 +232,19 @@ const VirtualizedTable = ({
       return (
         <KeyboardArrowDown />
       )
-    }    
+    }
   }
 
   const getSocialIconImage = () => {
     return (
       <>
         {
-          getAuthConnectToken() === 2 
-          ?
-            <svg fill="#fff" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 64 64" width="21px" height="21px"><path d="M26 21H12c-.552 0-1 .448-1 1s.448 1 1 1h6v19c0 .552.447 1 1 1s1-.448 1-1V23h6c.552 0 1-.448 1-1S26.552 21 26 21zM55.5 27c3.033 0 5.5-2.467 5.5-5.5S58.533 16 55.5 16 50 18.467 50 21.5 52.467 27 55.5 27zM55.5 18c1.93 0 3.5 1.57 3.5 3.5S57.43 25 55.5 25 52 23.43 52 21.5 53.57 18 55.5 18z"/><path d="M46 27h-8c0 0 0 0 0 0v-4.261C38.951 23.526 40.171 24 41.5 24c3.033 0 5.5-2.467 5.5-5.5S44.533 13 41.5 13c-1.329 0-2.549.474-3.5 1.261V6.384c0-.889-.391-1.727-1.071-2.298-.682-.572-1.57-.812-2.45-.657L5.305 8.578C3.39 8.916 2 10.572 2 12.517l0 38.966c0 1.945 1.39 3.602 3.305 3.939l29.174 5.148c.175.031.35.046.523.046.699 0 1.381-.245 1.927-.703.68-.57 1.071-1.408 1.071-2.297v-8.16C38.901 49.803 39.896 50 41 50c4.573 0 6.559-3.112 6.97-4.757C47.99 45.163 48 45.082 48 45V29C48 27.897 47.103 27 46 27zM41.5 15c1.93 0 3.5 1.57 3.5 3.5S43.43 22 41.5 22 38 20.43 38 18.5 39.57 15 41.5 15zM35.643 58.382c-.133.112-.422.29-.816.219L5.652 53.453C4.695 53.284 4 52.456 4 51.483V12.517c0-.973.695-1.801 1.652-1.97l29.174-5.148c.394-.069.683.106.816.219C35.775 5.731 36 5.978 36 6.384l0 51.232C36 58.022 35.776 58.27 35.643 58.382zM46 44.855C45.82 45.396 44.756 48 41 48c-1.167 0-2.174-.245-3-.73V29h8V44.855zM60 29h-8c-1.103 0-2 .897-2 2v14c0 .39.226.744.58.907C51.401 46.288 53.542 47 55 47c4.573 0 6.559-3.112 6.97-4.757C61.99 42.163 62 42.082 62 42V31C62 29.897 61.103 29 60 29zM60 41.855C59.82 42.396 58.756 45 55 45c-.837 0-2.146-.364-3-.674V31h8V41.855z"/></svg>
-          : 
-            <svg version="1.1" width="36px" height="36px" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 270 270"><g><g><path fill="#E01E5A" d="M99.4,151.2c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h12.9V151.2z"></path><path fill="#E01E5A" d="M105.9,151.2c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v32.3c0,7.1-5.8,12.9-12.9,12.9s-12.9-5.8-12.9-12.9V151.2z"></path></g><g><path fill="#36C5F0" d="M118.8,99.4c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v12.9H118.8z"></path><path fill="#36C5F0" d="M118.8,105.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9H86.5c-7.1,0-12.9-5.8-12.9-12.9s5.8-12.9,12.9-12.9H118.8z"></path></g><g><path fill="#2EB67D" d="M170.6,118.8c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9h-12.9V118.8z"></path><path fill="#2EB67D" d="M164.1,118.8c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9V86.5c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9V118.8z"></path></g><g><path fill="#ECB22E" d="M151.2,170.6c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9v-12.9H151.2z"></path><path fill="#ECB22E" d="M151.2,164.1c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h32.3c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9H151.2z"></path></g></g></svg> 
-               
+          getAuthConnectToken() === 2
+            ?
+            <svg fill="#fff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="21px" height="21px"><path d="M26 21H12c-.552 0-1 .448-1 1s.448 1 1 1h6v19c0 .552.447 1 1 1s1-.448 1-1V23h6c.552 0 1-.448 1-1S26.552 21 26 21zM55.5 27c3.033 0 5.5-2.467 5.5-5.5S58.533 16 55.5 16 50 18.467 50 21.5 52.467 27 55.5 27zM55.5 18c1.93 0 3.5 1.57 3.5 3.5S57.43 25 55.5 25 52 23.43 52 21.5 53.57 18 55.5 18z" /><path d="M46 27h-8c0 0 0 0 0 0v-4.261C38.951 23.526 40.171 24 41.5 24c3.033 0 5.5-2.467 5.5-5.5S44.533 13 41.5 13c-1.329 0-2.549.474-3.5 1.261V6.384c0-.889-.391-1.727-1.071-2.298-.682-.572-1.57-.812-2.45-.657L5.305 8.578C3.39 8.916 2 10.572 2 12.517l0 38.966c0 1.945 1.39 3.602 3.305 3.939l29.174 5.148c.175.031.35.046.523.046.699 0 1.381-.245 1.927-.703.68-.57 1.071-1.408 1.071-2.297v-8.16C38.901 49.803 39.896 50 41 50c4.573 0 6.559-3.112 6.97-4.757C47.99 45.163 48 45.082 48 45V29C48 27.897 47.103 27 46 27zM41.5 15c1.93 0 3.5 1.57 3.5 3.5S43.43 22 41.5 22 38 20.43 38 18.5 39.57 15 41.5 15zM35.643 58.382c-.133.112-.422.29-.816.219L5.652 53.453C4.695 53.284 4 52.456 4 51.483V12.517c0-.973.695-1.801 1.652-1.97l29.174-5.148c.394-.069.683.106.816.219C35.775 5.731 36 5.978 36 6.384l0 51.232C36 58.022 35.776 58.27 35.643 58.382zM46 44.855C45.82 45.396 44.756 48 41 48c-1.167 0-2.174-.245-3-.73V29h8V44.855zM60 29h-8c-1.103 0-2 .897-2 2v14c0 .39.226.744.58.907C51.401 46.288 53.542 47 55 47c4.573 0 6.559-3.112 6.97-4.757C61.99 42.163 62 42.082 62 42V31C62 29.897 61.103 29 60 29zM60 41.855C59.82 42.396 58.756 45 55 45c-.837 0-2.146-.364-3-.674V31h8V41.855z" /></svg>
+            :
+            <svg version="1.1" width="36px" height="36px" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 270 270"><g><g><path fill="#E01E5A" d="M99.4,151.2c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h12.9V151.2z"></path><path fill="#E01E5A" d="M105.9,151.2c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v32.3c0,7.1-5.8,12.9-12.9,12.9s-12.9-5.8-12.9-12.9V151.2z"></path></g><g><path fill="#36C5F0" d="M118.8,99.4c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v12.9H118.8z"></path><path fill="#36C5F0" d="M118.8,105.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9H86.5c-7.1,0-12.9-5.8-12.9-12.9s5.8-12.9,12.9-12.9H118.8z"></path></g><g><path fill="#2EB67D" d="M170.6,118.8c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9h-12.9V118.8z"></path><path fill="#2EB67D" d="M164.1,118.8c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9V86.5c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9V118.8z"></path></g><g><path fill="#ECB22E" d="M151.2,170.6c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9v-12.9H151.2z"></path><path fill="#ECB22E" d="M151.2,164.1c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h32.3c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9H151.2z"></path></g></g></svg>
+
         }
       </>
     )
@@ -252,7 +252,7 @@ const VirtualizedTable = ({
 
   const cellRenderer = useCallback(
     ({ cellData, columnIndex, rowData }) => {
-      
+
       const {
         align,
         role,
@@ -284,20 +284,20 @@ const VirtualizedTable = ({
         enable,
         show
       } = columns[columnIndex];
-      
+
       let extensionIcon = '', faIcon = '', selectedRow = false
-      if(role === 'image' && extension === true ) {
+      if (role === 'image' && extension === true) {
         const urlLink = rowData['url_private'] ? rowData['url_private'] : rowData['webViewLink']
         const urlExplode = urlLink != null && urlLink != 'undefined' ? urlLink.split(/[#?]/)[0].split('.').pop().trim() : ''
         extensionIcon = urlExplode == 'pdf' ? 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/pdf_file.svg' : rowData[imageURL] != null ? rowData[imageURL] : ''
-        
-        if(extensionIcon == '' && faIcon == '') {
+
+        if (extensionIcon == '' && faIcon == '') {
           const fileType = rowData['filetype'] ? rowData['filetype'] : 'txt'
-          switch(fileType) {
+          switch (fileType) {
             case 'xml':
               faIcon = faFileCode
               break;
-            case 'svg':  
+            case 'svg':
             case 'png':
             case 'bmp':
             case 'jpg':
@@ -321,51 +321,51 @@ const VirtualizedTable = ({
               faIcon = faFilePowerpoint
               break;
             case 'gdoc':
-              extensionIcon ='https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document'
+              extensionIcon = 'https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.document'
               break;
             default:
               faIcon = faFile
               break;
           }
-        } 
-      }
-      let showDropValue = -1
-      if(role == 'static_dropdown') {
-        const index = dropdownSelections.findIndex( r => r.asset == rowData['asset'] )
-        if( index !== -1 ) {
-          showDropValue =  dropdownSelections[index].move_category
         }
       }
-      
+      let showDropValue = -1
+      if (role == 'static_dropdown') {
+        const index = dropdownSelections.findIndex(r => r.asset == rowData['asset'])
+        if (index !== -1) {
+          showDropValue = dropdownSelections[index].move_category
+        }
+      }
+
       cellData =
         validation === true
-          ? validationKey == "empty" && cellData == "" && cellData != null 
+          ? validationKey == "empty" && cellData == "" && cellData != null
             ? rowData[optionalKey]
             : cellData
-          : cellData; 
+          : cellData;
 
       let isIndeterminate =
         showIsIndeterminate &&
-        collapsable === true &&
-        selectedIndex == cellData &&
-        childSelect > 0
+          collapsable === true &&
+          selectedIndex == cellData &&
+          childSelect > 0
           ? true
           : false;
       let checkedIsInderminateCheckbox = false
-      if(typeof selectedFromChild !== 'undefined' && selectedFromChild === true) {        
+      if (typeof selectedFromChild !== 'undefined' && selectedFromChild === true) {
         const getChild = JSON.parse(rowData['child'])
-        if(getChild.length > 0 ) {
+        if (getChild.length > 0) {
           isIndeterminate = getChild.some(item => selected.includes(parseInt(item)))
-          if(isIndeterminate) {
+          if (isIndeterminate) {
             const findItems = getChild.filter(item => selected.includes(parseInt(item)))
-            if(findItems.length  === getChild.length) {
+            if (findItems.length === getChild.length) {
               isIndeterminate = false
               checkedIsInderminateCheckbox = true
             }
           }
         }
-      } 
-      if(((selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey])) || selected.includes(rowData.id))  && highlightRow !== undefined && highlightRow === true  && higlightColums.includes(columnIndex)) {
+      }
+      if (((selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey])) || selected.includes(rowData.id)) && highlightRow !== undefined && highlightRow === true && higlightColums.includes(columnIndex)) {
         selectedRow = true
       }
       return (
@@ -378,14 +378,14 @@ const VirtualizedTable = ({
             disableRow === true && rowData[disableRowKey] === 0
               ? classes.disableColumn
               : "",
-            textBold === true && columnTextBoldList.length > 0 && columnTextBoldList.includes(cellData) 
-              ? classes.textBold 
+            textBold === true && columnTextBoldList.length > 0 && columnTextBoldList.includes(cellData)
+              ? classes.textBold
               : '',
             typeof showOnCondition == 'string' && typeof classCol !== 'undefined' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition ? '' : classCol,
             selectedRow === true && (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey])) ? 'highlightColumn' : ''
           )}
           variant="body"
-          align={align}  
+          align={align}
           style={{
             height: rowHeight,
             paddingLeft: paddingLeft != undefined ? paddingLeft : "inherit",
@@ -396,161 +396,163 @@ const VirtualizedTable = ({
         >
           {
             typeof enable !== 'undefined' && enable === false
-            ?
+              ?
               ''
-            :
-            role == 'slack_image' && (rowData[formatCondition] != undefined && (cellData == rowData[formatCondition] || cellData == rowData[formatCondition].toString().replace(/ /g,'').toLowerCase())) ?
-              getSocialIconImage() 
-            :
-            role === 'rating' ?
-            (
-              <Rating
-                name="virtual-rating"
-                value={cellData}
-                onChange={(event, newValue) => onHandleRating(event, onClick, newValue, cellData, rowData) }
-              />
-            )
-            :  
-            role === 'static_dropdown' ?
-            (
-              <Select
-                labelId='dropdown-open-select-label'
-                id='dropdown-open-select'
-                IconComponent={(props) => (
-                  openDropAsset == cellData ? <ExpandLessIcon {...props} /> : <ExpandMoreOutlinedIcon {...props}/>
-                )}
-                open={ openDropAsset == cellData }
-                MenuProps={{
-                  anchorOrigin: {
-                    vertical: "bottom",
-                    horizontal: "left"
-                  },
-                  transformOrigin: {
-                    vertical: "top",
-                    horizontal: "left"
-                  },
-                  /* getContentAnchorEl: null */
-                }}
-                onClose={handleDropdownClose}
-                onOpen={() => handleDropdownOpen(rowData)} 
-                value={showDropValue}
-                onChange={(event) =>  onHandleDropDown(event, onClick, cellData, rowData) }
-                renderValue={(value) => getDropValue(value, list, width, rowData)}
-
-              >
-                {
-                  list.map( (c, idx) => (
-                    <MenuItem key={idx} value={c.id} className={clsx(`iconItem`, {['visibilityHidden']: c.id === -1 ? true : false})} style={{display: (typeof c.showOnlyWhenSelected == 'undefined' || c.showOnlyWhenSelected && c.relation_with == showDropValue || !c.showOnlyWhenSelected && c.id != showDropValue)
-                    ? '' : 'none'}}>   
-                      <ListItemIcon>
-                        {
-                          c.icon != '' ? c.icon : c.image != '' ? <img src={c.image} style={{width: '21px'}}/> : ''
-                        }
-                      </ListItemIcon>
-                      
-                        <Tooltip
-                          /* disableHoverListener={typeof c.tooltip != 'undefined' ? true : false} */
-                          enterDelay={1500}
-                          TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
-                          classes={{ 
-                            tooltip: classes.tooltip
-                          }}
-                          title={
-                            typeof c.tooltip != 'undefined' ? 
-                              <Typography 
-                                color="inherit" 
-                                variant='body2'
-                              >
-                                { c.tooltip }
-                              </Typography>
-                            : ''
-                          }
-                        >  
-                          <ListItemText className={'heading'}><div>{c.name} </div> </ListItemText>
-                        </Tooltip> 
-                    </MenuItem>  
-                  ))
-                }  
-              </Select>
-            )
-            :
-            role === "checkbox" ? (typeof showOnCondition == 'string' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition) ? '' : (
-              <Checkbox
-                checked={checkedIsInderminateCheckbox === true ? checkedIsInderminateCheckbox : selected.includes(cellData) }
-                disabled={
-                  disableRow === true && rowData[disableRowKey] === 0
-                    ? true
-                    : false
-                } 
-                indeterminate={isIndeterminate}
-              />
-            )
-            : 
-              role === "checkboxwait" ? (
-                rowData[formatCondition] === 0 
-                  ? 
-                    <HourglassBottomIcon className={classes.marginLeft10}/> 
-                  : <Checkbox
-                      checked={checkedIsInderminateCheckbox === true ? checkedIsInderminateCheckbox : selected.includes(cellData) }
-                      indeterminate={isIndeterminate}
-                    />
-              )
-            :
-            role === "radio" ? (typeof showOnCondition == 'string' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition) ? '' : 
+              :
+              role == 'slack_image' && (rowData[formatCondition] != undefined && (cellData == rowData[formatCondition] || cellData == rowData[formatCondition].toString().replace(/ /g, '').toLowerCase())) ?
+                getSocialIconImage()
+                :
+                role === 'rating' ?
                   (
-                    <Radio
-                      checked={selected.includes(cellData)}
-                      disabled={
-                        disableRow === true && rowData[disableRowKey] === 0
-                          ? true
-                          : false
-                      } 
+                    <Rating
+                      name="virtual-rating"
+                      value={cellData}
+                      onChange={(event, newValue) => onHandleRating(event, onClick, newValue, cellData, rowData)}
                     />
-                  )     
-            : role === "arrow" ? (typeof showOnCondition == 'string' && typeof disableRowKey == 'string' && (rowData[disableColumnKey] == showOnCondition) /* rowData[disableRowKey] == showOnCondition */) ? '' :(
-              selectedIndex !== cellData ? (
-                <ChevronRightIcon className={"arrow"}  style={{width: '1.5rem'}} />
-              ) : (
-                <ExpandMoreIcon className={"arrow"} style={{width: '1.5rem'}} />
-              )
-            ) : role === 'image'  ?  
-                extensionIcon != '' ?
-                <span className={classes.flexImageContainer}>
-                  <span className={classes.flexImage}><img src={extensionIcon} className={classes.smallImg}/></span>
-                  {
-                    typeof show !== 'undefined' && show === false 
-                    ?
-                      ''
+                  )
+                  :
+                  role === 'static_dropdown' ?
+                    (
+                      <Select
+                        labelId='dropdown-open-select-label'
+                        id='dropdown-open-select'
+                        IconComponent={(props) => (
+                          openDropAsset == cellData ? <ExpandLessIcon {...props} /> : <ExpandMoreOutlinedIcon {...props} />
+                        )}
+                        open={openDropAsset == cellData}
+                        MenuProps={{
+                          anchorOrigin: {
+                            vertical: "bottom",
+                            horizontal: "left"
+                          },
+                          transformOrigin: {
+                            vertical: "top",
+                            horizontal: "left"
+                          },
+                          /* getContentAnchorEl: null */
+                        }}
+                        onClose={handleDropdownClose}
+                        onOpen={() => handleDropdownOpen(rowData)}
+                        value={showDropValue}
+                        onChange={(event) => onHandleDropDown(event, onClick, cellData, rowData)}
+                        renderValue={(value) => getDropValue(value, list, width, rowData)}
+
+                      >
+                        {
+                          list.map((c, idx) => (
+                            <MenuItem key={idx} value={c.id} className={clsx(`iconItem`, { ['visibilityHidden']: c.id === -1 ? true : false })} style={{
+                              display: (typeof c.showOnlyWhenSelected == 'undefined' || c.showOnlyWhenSelected && c.relation_with == showDropValue || !c.showOnlyWhenSelected && c.id != showDropValue)
+                                ? '' : 'none'
+                            }}>
+                              <ListItemIcon>
+                                {
+                                  c.icon != '' ? c.icon : c.image != '' ? <img src={c.image} style={{ width: '21px' }} /> : ''
+                                }
+                              </ListItemIcon>
+
+                              <Tooltip
+                                /* disableHoverListener={typeof c.tooltip != 'undefined' ? true : false} */
+                                enterDelay={1500}
+                                TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
+                                classes={{
+                                  tooltip: classes.tooltip
+                                }}
+                                title={
+                                  typeof c.tooltip != 'undefined' ?
+                                    <Typography
+                                      color="inherit"
+                                      variant='body2'
+                                    >
+                                      {c.tooltip}
+                                    </Typography>
+                                    : ''
+                                }
+                              >
+                                <ListItemText className={'heading'}><div>{c.name} </div> </ListItemText>
+                              </Tooltip>
+                            </MenuItem>
+                          ))
+                        }
+                      </Select>
+                    )
                     :
-                      <span className={classes.flexData}>{(cellData == '' || cellData == null || cellData == undefined) && rowData[secondaryKey] != undefined && rowData[secondaryKey] != null ? rowData[secondaryKey] :  cellData }</span>
-                  }
-                </span>  
-                :
-                faIcon != ''
-                ?
-                  <span><FontAwesomeIcon icon={faIcon}/><span className={classes.marginLeft}>{cellData}</span></span> 
-                :
-                rowData[imageURL] ? 
-                <span className={classes.flexImageContainer}>
-                  <span className={classes.flex}><img src={rowData[imageURL]} className={classes.imgIcon}/></span>{/* <Avatar src={rowData[imageURL]} /> */}<span className={`${classes.marginLeft} ${classes.flex}`}>{cellData}</span>
-                </span> 
-                :  imageIcon != '' && imageIcon != undefined ? <span><FontAwesomeIcon icon={imageIcon}/><span className={classes.marginLeft}>{cellData}</span></span> : (
-                  cellData
-                )
-              : format != undefined 
-              ? 
-                formatCondition != undefined && rowData[formatCondition] != formatDefaultValue 
-                ? 
-                  <span>{cellData != '' && cellData != undefined && cellData != 'undefined' ? staticIcon + secondaryFormat(cellData) : ''}</span>
-                : (
-                  <span>{cellData != '' && cellData != undefined && cellData != 'undefined' ? staticIcon + format(cellData) : ''}</span>
-                ) 
-              : cellData != '' ? (
-                  <span>{cellData}</span>
-                )
-              : ''
+                    role === "checkbox" ? (typeof showOnCondition == 'string' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition) ? '' : (
+                      <Checkbox
+                        checked={checkedIsInderminateCheckbox === true ? checkedIsInderminateCheckbox : selected.includes(cellData)}
+                        disabled={
+                          disableRow === true && rowData[disableRowKey] === 0
+                            ? true
+                            : false
+                        }
+                        indeterminate={isIndeterminate}
+                      />
+                    )
+                      :
+                      role === "checkboxwait" ? (
+                        rowData[formatCondition] === 0
+                          ?
+                          <HourglassBottomIcon className={classes.marginLeft10} />
+                          : <Checkbox
+                            checked={checkedIsInderminateCheckbox === true ? checkedIsInderminateCheckbox : selected.includes(cellData)}
+                            indeterminate={isIndeterminate}
+                          />
+                      )
+                        :
+                        role === "radio" ? (typeof showOnCondition == 'string' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition) ? '' :
+                          (
+                            <Radio
+                              checked={selected.includes(cellData)}
+                              disabled={
+                                disableRow === true && rowData[disableRowKey] === 0
+                                  ? true
+                                  : false
+                              }
+                            />
+                          )
+                          : role === "arrow" ? (typeof showOnCondition == 'string' && typeof disableRowKey == 'string' && (rowData[disableColumnKey] == showOnCondition) /* rowData[disableRowKey] == showOnCondition */) ? '' : (
+                            selectedIndex !== cellData ? (
+                              <ChevronRightIcon className={"arrow"} style={{ width: '1.5rem' }} />
+                            ) : (
+                              <ExpandMoreIcon className={"arrow"} style={{ width: '1.5rem' }} />
+                            )
+                          ) : role === 'image' ?
+                            extensionIcon != '' ?
+                              <span className={classes.flexImageContainer}>
+                                <span className={classes.flexImage}><img src={extensionIcon} className={classes.smallImg} /></span>
+                                {
+                                  typeof show !== 'undefined' && show === false
+                                    ?
+                                    ''
+                                    :
+                                    <span className={classes.flexData}>{(cellData == '' || cellData == null || cellData == undefined) && rowData[secondaryKey] != undefined && rowData[secondaryKey] != null ? rowData[secondaryKey] : cellData}</span>
+                                }
+                              </span>
+                              :
+                              faIcon != ''
+                                ?
+                                <span><FontAwesomeIcon icon={faIcon} /><span className={classes.marginLeft}>{cellData}</span></span>
+                                :
+                                rowData[imageURL] ?
+                                  <span className={classes.flexImageContainer}>
+                                    <span className={classes.flex}><img src={rowData[imageURL]} className={classes.imgIcon} /></span>{/* <Avatar src={rowData[imageURL]} /> */}<span className={`${classes.marginLeft} ${classes.flex}`}>{cellData}</span>
+                                  </span>
+                                  : imageIcon != '' && imageIcon != undefined ? <span><FontAwesomeIcon icon={imageIcon} /><span className={classes.marginLeft}>{cellData}</span></span> : (
+                                    cellData
+                                  )
+                            : format != undefined
+                              ?
+                              formatCondition != undefined && rowData[formatCondition] != formatDefaultValue
+                                ?
+                                <span>{cellData != '' && cellData != undefined && cellData != 'undefined' ? staticIcon + secondaryFormat(cellData) : ''}</span>
+                                : (
+                                  <span>{cellData != '' && cellData != undefined && cellData != 'undefined' ? staticIcon + format(cellData) : ''}</span>
+                                )
+                              : cellData != '' ? (
+                                <span>{cellData}</span>
+                              )
+                                : ''
           }
-        </TableCell> 
+        </TableCell>
       );
     },
     [
@@ -579,8 +581,8 @@ const VirtualizedTable = ({
     [rows, selected],
   );
 
-  
-  
+
+
   const headerRenderer = useHeaderRenderer(
     rows,
     headerHeight,
@@ -600,30 +602,30 @@ const VirtualizedTable = ({
     noOfSelectedItems,
     selectedGroup
   );
-  const checkRowCollapse = (childInModal, collapsable, index, rowData, tableRef) => {  
+  const checkRowCollapse = (childInModal, collapsable, index, rowData, tableRef) => {
     if (collapsable && typeof childInModal === 'undefined') {
-      if(tableRef.current !== null && typeof tableRef.current.recomputeRowHeights == 'function') {
+      if (tableRef.current !== null && typeof tableRef.current.recomputeRowHeights == 'function') {
         tableRef.current.recomputeRowHeights();
-        tableRef.current.forceUpdate(); 
+        tableRef.current.forceUpdate();
       }
 
       if ((disableRow === false || disableRow == undefined) || disableRow == true) {
-       
+
         const rowContainer = tableRef.current !== null && typeof tableRef.current.Grid != 'undefined' && tableRef.current.Grid != null ? tableRef.current.Grid._scrollingContainer.querySelector(
-          `div.rowIndex_${index}`) : null; 
- 
+          `div.rowIndex_${index}`) : null;
+
         if (rowContainer !== null) {
           const nextSibling = rowContainer.nextElementSibling
           if (
             nextSibling != null && nextSibling.querySelector(".ReactVirtualized__Table__row") !== null
           ) {
-            const allRowHeight = 
+            const allRowHeight =
               nextSibling.querySelectorAll(".ReactVirtualized__Table__row")
                 .length * rowHeight;
             let updateHeight = childHeight;
             if (allRowHeight < childHeight) {
               updateHeight = allRowHeight + 10;
-            } 
+            }
             setCollapseRowHeight(updateHeight);
             updateNewHeight(499);
           } else {
@@ -632,13 +634,13 @@ const VirtualizedTable = ({
         } else {
           waitAndCall(childInModal, collapsable, index, rowData, tableRef);
         }
-      }  
+      }
     }
   };
-  const updateNewHeight = (time) => { 
+  const updateNewHeight = (time) => {
     setTimeout(() => {
       /* tableRef.current.recomputeRowHeights(index) */
-      if(tableRef.current != null) {
+      if (tableRef.current != null) {
         tableRef.current.recomputeRowHeights();
         tableRef.current.forceUpdate();
       }
@@ -650,92 +652,92 @@ const VirtualizedTable = ({
     }, 2000);
   };
   const rowRenderer = useCallback(
-    ({ className, columns, index, key, rowData, style }) => { 
+    ({ className, columns, index, key, rowData, style }) => {
       let childComponent = '', selectedRow = false
-      if(collapsable === true && selectedIndex == rowData[selectedKey]) {
+      if (collapsable === true && selectedIndex == rowData[selectedKey]) {
         const positions = tableRef.current.Grid._scrollingContainer.parentElement.getBoundingClientRect()
         childComponent = (
           <div
-            key={`child_${key}`} 
+            key={`child_${key}`}
             ref={rowRef}
             style={{
               marginRight: "auto",
               marginLeft: typeof childInModal === 'undefined' ? 33 : 0,
               height:
                 disableRow === true
-                ?
-                  childCounterColumn != undefined
                   ?
-                    typeof childCounterColumn == 'string' 
-                    ? 
-                      rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
-                      ?
-                        rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0) 
-                      : 
-                        rowData[childCounterColumn] * rowHeight > 0 
-                        ?
-                          rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
-                        :
-                        childRows.length > 0 
-                        ?
-                          childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
-                        :
-                        childHeight - rowHeight
-                    :
-                      childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
-                  :
-                    rowData[disableRowKey] * rowHeight < childHeight  && rowData[disableRowKey] > childRows.length 
-                    ? 
-                      rowData[disableRowKey] * rowHeight + rowHeight
-                    :
-                      childRows.length > 0 
-                      ?
-                        childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
-                      :
-                      childHeight + rowHeight
-                : 
                   childCounterColumn != undefined
-                  ?
-                    typeof childCounterColumn == 'string' 
-                    ? 
-                      rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
-                      ?
-                        rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0) 
-                      :  
-                        rowData[childCounterColumn] * rowHeight > 0 
-                        ?
-                          rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
-                        :
-                        childRows.length > 0 
-                        ?
-                          childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
-                        :
-                        childHeight - rowHeight
-                    :
-                      childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
-                  :
-                    childRows.length > 0 
                     ?
-                      childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
+                    typeof childCounterColumn == 'string'
+                      ?
+                      rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
+                        ?
+                        rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0)
+                        :
+                        rowData[childCounterColumn] * rowHeight > 0
+                          ?
+                          rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
+                          :
+                          childRows.length > 0
+                            ?
+                            childRows.length * rowHeight + (childHeader === true ? headerHeight : 0)
+                            :
+                            childHeight - rowHeight
+                      :
+                      childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
                     :
-                    collapseRowHeight,
+                    rowData[disableRowKey] * rowHeight < childHeight && rowData[disableRowKey] > childRows.length
+                      ?
+                      rowData[disableRowKey] * rowHeight + rowHeight
+                      :
+                      childRows.length > 0
+                        ?
+                        childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
+                        :
+                        childHeight + rowHeight
+                  :
+                  childCounterColumn != undefined
+                    ?
+                    typeof childCounterColumn == 'string'
+                      ?
+                      rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
+                        ?
+                        rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0)
+                        :
+                        rowData[childCounterColumn] * rowHeight > 0
+                          ?
+                          rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
+                          :
+                          childRows.length > 0
+                            ?
+                            childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
+                            :
+                            childHeight - rowHeight
+                      :
+                      childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
+                    :
+                    childRows.length > 0
+                      ?
+                      childRows.length * rowHeight + (childHeader === true ? headerHeight : 0)
+                      :
+                      collapseRowHeight,
               display: "flex",
               position: "absolute",
               top: typeof childInModal === 'undefined' ? style.top + rowHeight + "px" : '0px',
               width: "100%",
               overflow: "auto",
-            }} 
+            }}
           >
             {renderCollapsableComponent}
           </div>
         )
-        if(typeof childInModal !== 'undefined' && childInModal === true) {
-          childComponent =  (
+        if (typeof childInModal !== 'undefined' && childInModal === true) {
+          childComponent = (
             <Modal
               open={true}
               onClose={handleModalClose}
             >
-              <div style={{width: 250, height: 300, position: 'absolute', top: positions.top + headerHeight + style.top + "px", left: positions.left + style.width + "px", overflow: 'hidden auto', background: '#424242', padding: 10}}>
+              <div style={{ width: 250, height: 300, position: 'absolute', top: positions.top + headerHeight + style.top + "px", left: positions.left + style.width + "px", overflow: 'hidden auto', background: '#424242', padding: 10 }}>
                 {
                   childComponent
                 }
@@ -744,127 +746,127 @@ const VirtualizedTable = ({
           )
         }
       }
-      if((optionalKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[optionalKey])) || (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey])) || (selected !== undefined && selectedKey !== undefined && highlightRow !== undefined && highlightRow === true && selected.includes(rowData[selectedKey])) || (selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey]))) {
+      if ((optionalKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[optionalKey])) || (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey])) || (selected !== undefined && selectedKey !== undefined && highlightRow !== undefined && highlightRow === true && selected.includes(rowData[selectedKey])) || (selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey]))) {
         selectedRow = true
-      }  
+      }
       /* console.log("selectedRow", childRows, collapsable, selectedIndex, rowData[selectedKey], disableRow, childCounterColumn, rowData[disableRowKey] )
       console.log('rowData', rowData) */
-      
-      
-     return (      
+
+
+      return (
         <React.Fragment key={`${key}_${index}`}>
-        <TableRow
-          className={clsx(className, `rowIndex_${index}`, `item_${rowData[selectedKey]}`, {['openRow']: selectedRow}, {['noBorderLines']: typeof noBorderLines !== 'undefined' ? true : false}, { ['highlightRow']: highlightRow !== undefined && highlightRow === true && selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey]) ? true : false }, {['highlightWithCol']: highlightRow !== undefined && highlightRow === true &&  !selected.includes(rowData[selectedKey]) && ( (optionalKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[optionalKey])) || (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey]))) ? true : false }) }
-          style={{
-            ...style,
-            height:
-              collapsable === true && selectedIndex == rowData[selectedKey]
-              ? 
-                disableRow === true
-                ? 
-                  childCounterColumn != undefined
+          <TableRow
+            className={clsx(className, `rowIndex_${index}`, `item_${rowData[selectedKey]}`, { ['openRow']: selectedRow }, { ['noBorderLines']: typeof noBorderLines !== 'undefined' ? true : false }, { ['highlightRow']: highlightRow !== undefined && highlightRow === true && selected !== undefined && selectedKey !== undefined && selected.includes(rowData[selectedKey]) ? true : false }, { ['highlightWithCol']: highlightRow !== undefined && highlightRow === true && !selected.includes(rowData[selectedKey]) && ((optionalKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[optionalKey])) || (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey]))) ? true : false })}
+            style={{
+              ...style,
+              height:
+                collapsable === true && selectedIndex == rowData[selectedKey]
                   ?
-                    typeof childCounterColumn == 'string' 
-                    ? 
-                      rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
-                      ?
-                        rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
-                      : 
-                        rowData[childCounterColumn] * rowHeight > 0 
-                        ?
-                          rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
-                        :
-                        childRows.length > 0 
-                        ?
-                          childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
-                        : 
-                        childHeight + rowHeight 
-                    :
-                      childCounterColumn * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
-                  :
-                    rowData[disableRowKey] * rowHeight < childHeight && rowData[disableRowKey] > childRows.length 
-                    ? 
-                      rowData[disableRowKey] * rowHeight + rowHeight
-                    :
-                      childRows.length > 0 
-                      ?
-                        childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
-                      : 
-                      childHeight + rowHeight
-                : 
-                  childCounterColumn != undefined
-                  ?
-                    typeof childCounterColumn == 'string' 
-                    ? 
-                      rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
-                      ?
-                        rowHeight + rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
-                      :  
-                        rowData[childCounterColumn] * rowHeight > 0 
-                        ?
-                          rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
-                        :
-                        childRows.length > 0 
-                        ?
-                          childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
-                        : 
-                        childHeight + rowHeight
-                    :
-                      rowHeight + childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
-                  :
-                    childRows.length > 0 
+                  disableRow === true
                     ?
-                      childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
-                    : 
-                    collapseRowHeight
-              : rowHeight,
-            alignItems:
-              collapsable === true && selectedIndex == rowData[selectedKey]
-                ? "flex-start"
-                : "center",
-            backgroundColor:  
-              backgroundRow === true ? rowData[backgroundRowKey] : '',
-           
-          }}
-          component={"div"}
-          role={rowData.role}
-          onMouseOver = {
-            event => {
-              hover && onMouseOver(event, rowData, 0)
+                    childCounterColumn != undefined
+                      ?
+                      typeof childCounterColumn == 'string'
+                        ?
+                        rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
+                          ?
+                          rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
+                          :
+                          rowData[childCounterColumn] * rowHeight > 0
+                            ?
+                            rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
+                            :
+                            childRows.length > 0
+                              ?
+                              childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
+                              :
+                              childHeight + rowHeight
+                        :
+                        childCounterColumn * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
+                      :
+                      rowData[disableRowKey] * rowHeight < childHeight && rowData[disableRowKey] > childRows.length
+                        ?
+                        rowData[disableRowKey] * rowHeight + rowHeight
+                        :
+                        childRows.length > 0
+                          ?
+                          childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
+                          :
+                          childHeight + rowHeight
+                    :
+                    childCounterColumn != undefined
+                      ?
+                      typeof childCounterColumn == 'string'
+                        ?
+                        rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
+                          ?
+                          rowHeight + rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
+                          :
+                          rowData[childCounterColumn] * rowHeight > 0
+                            ?
+                            rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
+                            :
+                            childRows.length > 0
+                              ?
+                              childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
+                              :
+                              childHeight + rowHeight
+                        :
+                        rowHeight + childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
+                      :
+                      childRows.length > 0
+                        ?
+                        childRows.length * rowHeight + (childHeader === true ? headerHeight : 0)
+                        :
+                        collapseRowHeight
+                  : rowHeight,
+              alignItems:
+                collapsable === true && selectedIndex == rowData[selectedKey]
+                  ? "flex-start"
+                  : "center",
+              backgroundColor:
+                backgroundRow === true ? rowData[backgroundRowKey] : '',
+
+            }}
+            component={"div"}
+            role={rowData.role}
+            onMouseOver={
+              event => {
+                hover && onMouseOver(event, rowData, 0)
+              }
             }
-          } 
-          onMouseOut = {
-            event => {
-              hover && onMouseOut(event, rowData, 0)
+            onMouseOut={
+              event => {
+                hover && onMouseOut(event, rowData, 0)
+              }
             }
+            onDoubleClick={event => {
+              typeof onDoubleClick === 'function' && onDoubleClick(event, rowData)
+            }}
+            onClick={event => {
+              currentScrollIndex = index
+              onSelect(
+                event,
+                rowData,
+                collapsable === true && selectedIndex == rowData[selectedKey]
+                  ? 1
+                  : 0,
+              );
+              checkRowCollapse(childInModal, collapsable, index, rowData, tableRef)
+              if (forceChildWaitCall != undefined && forceChildWaitCall === true) {
+                updateNewHeight(2000)
+              }
+            }}
+            selected={selectedRow}
+          >
+            {columns}
+          </TableRow>
+          {
+            childComponent
           }
-          onDoubleClick = { event => {
-            typeof onDoubleClick === 'function' && onDoubleClick(event, rowData)
-          }}
-          onClick={event => {
-            currentScrollIndex = index            
-            onSelect(
-              event,
-              rowData,
-              collapsable === true && selectedIndex == rowData[selectedKey]
-                ? 1
-                : 0,
-            );
-            checkRowCollapse(childInModal, collapsable, index, rowData, tableRef)
-            if(forceChildWaitCall != undefined && forceChildWaitCall === true) {
-              updateNewHeight(2000)
-            }            
-          }}          
-          selected={selectedRow}
-        >
-          {columns}
-        </TableRow>
-        {
-          childComponent
-        }
-      </React.Fragment>
-    )
-  },
+        </React.Fragment>
+      )
+    },
     [
       selected,
       hover,
@@ -898,15 +900,15 @@ const VirtualizedTable = ({
           filter.filters.includes(row[filter.dataKey]),
       );
     });
-    if(typeof sortDataLocal !== 'undefined' && sortDataLocal === false && sortBy != 'channel') {
+    if (typeof sortDataLocal !== 'undefined' && sortDataLocal === false && sortBy != 'channel') {
       return filteredRows
     } else {
-      if(typeof sortMultiple !== 'undefined' && typeof sortMultipleConditionColumn !== 'undefined' && sortMultiple === true && sortBy === sortMultipleConditionColumn[0]) {
+      if (typeof sortMultiple !== 'undefined' && typeof sortMultipleConditionColumn !== 'undefined' && sortMultiple === true && sortBy === sortMultipleConditionColumn[0]) {
         filteredRows.sort(function (a, b) {
-          if(a['asset_type'] == 0 && b['asset_type'] == 0) {
-            const sortA = !isNaN(Number(a[sortBy])) ? Number(a[sortBy]) :  sortBy == 'date' ? new Date(a[sortBy]).getTime() : a[sortBy]
-            const sortB = !isNaN(Number(b[sortBy])) ? Number(b[sortBy]) :  sortBy == 'date' ? new Date(b[sortBy]).getTime() : b[sortBy]
-            
+          if (a['asset_type'] == 0 && b['asset_type'] == 0) {
+            const sortA = !isNaN(Number(a[sortBy])) ? Number(a[sortBy]) : sortBy == 'date' ? new Date(a[sortBy]).getTime() : a[sortBy]
+            const sortB = !isNaN(Number(b[sortBy])) ? Number(b[sortBy]) : sortBy == 'date' ? new Date(b[sortBy]).getTime() : b[sortBy]
+
             if (sortA < sortB) {
               return sortDirection === SortDirection.ASC ? -1 : 1;
             }
@@ -919,10 +921,10 @@ const VirtualizedTable = ({
           }
         });
         return filteredRows.sort(function (a, b) {
-          if(a['asset_type'] == 1 && b['asset_type'] == 1) {
-            const sortA = !isNaN(Number(a[sortBy])) ? Number(a[sortBy]) :  sortBy == 'date' ? new Date(a[sortBy]).getTime() : a[sortBy]
-            const sortB = !isNaN(Number(b[sortBy])) ? Number(b[sortBy]) :  sortBy == 'date' ? new Date(b[sortBy]).getTime() : b[sortBy]
-            
+          if (a['asset_type'] == 1 && b['asset_type'] == 1) {
+            const sortA = !isNaN(Number(a[sortBy])) ? Number(a[sortBy]) : sortBy == 'date' ? new Date(a[sortBy]).getTime() : a[sortBy]
+            const sortB = !isNaN(Number(b[sortBy])) ? Number(b[sortBy]) : sortBy == 'date' ? new Date(b[sortBy]).getTime() : b[sortBy]
+
             if (sortA < sortB) {
               return sortDirection === SortDirection.ASC ? -1 : 1;
             }
@@ -934,11 +936,11 @@ const VirtualizedTable = ({
             return 0
           }
         });
-      } else {        
+      } else {
         return filteredRows.sort((a, b) => {
-          const sortA = !isNaN(Number(a[sortBy])) && sortBy != 'channel' ? Number(a[sortBy]) :  sortBy == 'date' ? new Date(a[sortBy]).getTime() : a[sortBy]
-          const sortB = !isNaN(Number(b[sortBy])) && sortBy != 'channel' ? Number(b[sortBy]) :  sortBy == 'date' ? new Date(b[sortBy]).getTime() : b[sortBy]
-          
+          const sortA = !isNaN(Number(a[sortBy])) && sortBy != 'channel' ? Number(a[sortBy]) : sortBy == 'date' ? new Date(a[sortBy]).getTime() : a[sortBy]
+          const sortB = !isNaN(Number(b[sortBy])) && sortBy != 'channel' ? Number(b[sortBy]) : sortBy == 'date' ? new Date(b[sortBy]).getTime() : b[sortBy]
+
           if (sortA < sortB && sortA != undefined && sortB != undefined) {
             return sortDirection === SortDirection.ASC ? -1 : 1;
           }
@@ -948,7 +950,7 @@ const VirtualizedTable = ({
           return 0;
         });
       }
-    }        
+    }
   }, [rows, sortBy, sortDirection, filters]);
 
 
@@ -958,66 +960,66 @@ const VirtualizedTable = ({
   const getRowHeight = useMemo(
     () => ({ index }) => {
       const rowData = items[index];
-      let height = rowHeight 
+      let height = rowHeight
       if (collapsable === true && selectedIndex == rowData[selectedKey] && typeof childInModal === 'undefined') {
-        height = 
+        height =
           disableRow === true
-          ?
-            childCounterColumn != undefined
             ?
-              typeof childCounterColumn == 'string' 
-              ? 
-                rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
-                ?
-                  rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
-                :  
-                  rowData[childCounterColumn] * rowHeight > 0 
-                  ?
-                    rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
-                  :
-                    childRows.length > 0 
-                    ?
-                      childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
-                    : 
-                    childHeight + rowHeight
-              :
-              rowHeight + childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
-            :
-              rowData[disableRowKey] * rowHeight < childHeight  && rowData[disableRowKey] > childRows.length 
-              ? 
-                rowData[disableRowKey] * rowHeight + rowHeight
-              :
-                childRows.length > 0 
-                ?
-                  childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
-                : 
-                childHeight + rowHeight
-          : 
             childCounterColumn != undefined
-            ?
-              typeof childCounterColumn == 'string' 
-              ? 
-                rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
-                ?
-                  rowHeight + rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0) 
-                :  
-                  rowData[childCounterColumn] * rowHeight > 0 
-                  ?
-                    rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0) 
-                  :
-                  childRows.length > 0 
-                  ?
-                    childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
-                  : 
-                  childHeight - rowHeight
-              :
-                rowHeight + childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
-            :
-              childRows.length > 0 
               ?
-                childRows.length * rowHeight + (childHeader === true ? headerHeight : 0) 
-              : 
-              collapseRowHeight + rowHeight;
+              typeof childCounterColumn == 'string'
+                ?
+                rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
+                  ?
+                  rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
+                  :
+                  rowData[childCounterColumn] * rowHeight > 0
+                    ?
+                    rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
+                    :
+                    childRows.length > 0
+                      ?
+                      childRows.length * rowHeight + (childHeader === true ? headerHeight : 0)
+                      :
+                      childHeight + rowHeight
+                :
+                rowHeight + childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
+              :
+              rowData[disableRowKey] * rowHeight < childHeight && rowData[disableRowKey] > childRows.length
+                ?
+                rowData[disableRowKey] * rowHeight + rowHeight
+                :
+                childRows.length > 0
+                  ?
+                  childRows.length * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
+                  :
+                  childHeight + rowHeight
+            :
+            childCounterColumn != undefined
+              ?
+              typeof childCounterColumn == 'string'
+                ?
+                rowData[childCounterColumn] > 0 && rowData[childCounterColumn] * rowHeight < childHeight
+                  ?
+                  rowHeight + rowData[childCounterColumn] * rowHeight + (childHeader === true ? headerHeight : 0)
+                  :
+                  rowData[childCounterColumn] * rowHeight > 0
+                    ?
+                    rowData[childCounterColumn] * rowHeight + rowHeight + (childHeader === true ? headerHeight : 0)
+                    :
+                    childRows.length > 0
+                      ?
+                      childRows.length * rowHeight + (childHeader === true ? headerHeight : 0)
+                      :
+                      childHeight - rowHeight
+                :
+                rowHeight + childCounterColumn * rowHeight + (childHeader === true ? headerHeight : 0)
+              :
+              childRows.length > 0
+                ?
+                childRows.length * rowHeight + (childHeader === true ? headerHeight : 0)
+                :
+                collapseRowHeight + rowHeight;
       }
       return height
     },
@@ -1039,90 +1041,89 @@ const VirtualizedTable = ({
 
   const getSelectedItemIndex = useMemo(() => {
     let findIndex = -1
-    if( typeof rowSelected !== 'undefined' && typeof items !== 'undefined' && rowSelected.length > 0 && items.length > 0) {
+    if (typeof rowSelected !== 'undefined' && typeof items !== 'undefined' && rowSelected.length > 0 && items.length > 0) {
       findIndex = items.findIndex(row => row[selectedKey] === rowSelected[0])
     }
     return findIndex
   }, [items, rowSelected, selectedKey])
-  
 
-  const isRowLoaded =  ({ index }) => {
+
+  const isRowLoaded = ({ index }) => {
     return !!items[index]
-  } 
+  }
 
-  const loadMoreRows = ({ startIndex, stopIndex }) => { 
-    if(typeof getMoreRows !== 'undefined') {
+  const loadMoreRows = ({ startIndex, stopIndex }) => {
+    if (typeof getMoreRows !== 'undefined') {
       getMoreRows(startIndex, stopIndex)
-    }    
-  } 
+    }
+  }
 
-  const onScroll = ({scrollTop}) => {
-    if(typeof onScrollTable !== 'undefined') {
+  const onScroll = ({ scrollTop }) => {
+    if (typeof onScrollTable !== 'undefined') {
       onScrollTable(scrollTop)
     }
   }
-  
+
   return (
     <div ref={containerRef} className={classes.tableRootContainer}>
       <InfiniteLoader
         isRowLoaded={isRowLoaded}
-        loadMoreRows={loadMoreRows}  
+        loadMoreRows={loadMoreRows}
         rowCount={totalRows}
-        minimumBatchSize={500}
+        minimumBatchSize={1000}
         threshold={500}
       >
         {({ onRowsRendered, registerChild }) => (
-        <AutoSizer {...(responsive === false ? "disableWidth" : "")} ref={registerChild}>
-          {({ height, width: tableWidth }) => (
-            <Table
-              size={"small"}            
-              ref={tableRef}  
-              height={height}
-              width={responsive === false ? width : tableWidth}            
-              rowHeight={getRowHeight}
-              headerHeight={headerHeight}
-              {...(typeof scrollTop !== 'undefined'  ? {scrollTop: scrollTop} : {})}   
-              onRowsRendered={onRowsRendered}
-              className={`${classes.table} ${
-                headerRowDisabled === true ? "disable_header" : ""
-              }`}
-              rowCount={items.length}
-              /* {...(typeof scrollToIndex !== 'undefined' && scrollToIndex === true ? {scrollToIndex: getSelectedItemIndex} : {})}    */
-              /* scrollToIndex={ scrollToIndex === true ? getSelectedItemIndex : currentScrollIndex}    */                
-              {...tableProps}
-              sortBy={sortBy}
-              sortDirection={sortDirection}  
-              rowRenderer={rowRenderer}
-              rowGetter={rowGetter}
-              rowClassName={getRowClassName}
-              onScroll={onScroll}
-            >
-              {columns.map(({ dataKey, fullWidth, style, ...other }, index) => {
-                return (
-                  <Column
-                    key={dataKey}
-                    headerRenderer={headerProps =>
-                      headerRenderer({
-                        ...headerProps,
-                        columnIndex: index,
-                      })
-                    }
-                    className={classes.flexContainer} 
-                    cellRenderer={cellRenderer}
-                    dataKey={dataKey}
-                    {...other}
-                  />
-                );
-              })}
-            </Table>
-          )}
-        </AutoSizer>
+          <AutoSizer {...(responsive === false ? "disableWidth" : "")} ref={registerChild}>
+            {({ height, width: tableWidth }) => (
+              <Table
+                size={"small"}
+                ref={tableRef}
+                height={height}
+                width={responsive === false ? width : tableWidth}
+                rowHeight={getRowHeight}
+                headerHeight={headerHeight}
+                {...(typeof scrollTop !== 'undefined' ? { scrollTop: scrollTop } : {})}
+                onRowsRendered={onRowsRendered}
+                className={`${classes.table} ${headerRowDisabled === true ? "disable_header" : ""
+                  }`}
+                rowCount={items.length}
+                /* {...(typeof scrollToIndex !== 'undefined' && scrollToIndex === true ? {scrollToIndex: getSelectedItemIndex} : {})}    */
+                /* scrollToIndex={ scrollToIndex === true ? getSelectedItemIndex : currentScrollIndex}    */
+                {...tableProps}
+                sortBy={sortBy}
+                sortDirection={sortDirection}
+                rowRenderer={rowRenderer}
+                rowGetter={rowGetter}
+                rowClassName={getRowClassName}
+                onScroll={onScroll}
+              >
+                {columns.map(({ dataKey, fullWidth, style, ...other }, index) => {
+                  return (
+                    <Column
+                      key={dataKey}
+                      headerRenderer={headerProps =>
+                        headerRenderer({
+                          ...headerProps,
+                          columnIndex: index,
+                        })
+                      }
+                      className={classes.flexContainer}
+                      cellRenderer={cellRenderer}
+                      dataKey={dataKey}
+                      {...other}
+                    />
+                  );
+                })}
+              </Table>
+            )}
+          </AutoSizer>
         )}
       </InfiniteLoader>
     </div>
   );
 };
-  
+
 VirtualizedTable.propTypes = {
   classes: PropTypes.object.isRequired,
   columns: PropTypes.arrayOf(
