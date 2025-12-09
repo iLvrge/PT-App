@@ -6,14 +6,14 @@ import React, {
   useMemo
 } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {useHistory, useLocation} from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { Paper, Popover, Box, Rating, Dialog, DialogTitle, DialogContent, DialogActions, Button, Badge } from "@mui/material";
-import { Clear, NotInterested, KeyboardArrowDown, MonetizationOn, StarOutline, StarOutlineOutlined, PendingActionsOutlined, AccountTreeOutlined, KeyboardArrowUp   } from '@mui/icons-material';  
+import { Clear, NotInterested, KeyboardArrowDown, MonetizationOn, StarOutline, StarOutlineOutlined, PendingActionsOutlined, AccountTreeOutlined, KeyboardArrowUp } from '@mui/icons-material';
 import moment from "moment";
 import Loader from "../Loader";
 import useStyles from "./styles";
 import VirtualizedTable from "../VirtualizedTable";
-import Googlelogin from '../Googlelogin' 
+import Googlelogin from '../Googlelogin'
 import { DEFAULT_CUSTOMERS_LIMIT } from "../../../api/patenTrack2";
 import {
   setAssetTypesPatentsSelected,
@@ -22,8 +22,8 @@ import {
   getCustomerSelectedAssets,
   getAssetTypeAssignmentAssets,
   getAssetTypeAssignmentAllAssets,
-  setAssetTypeAssignmentAllAssets, 
-  setAssetTypesAssignmentsAllAssetsLoading, 
+  setAssetTypeAssignmentAllAssets,
+  setAssetTypesAssignmentsAllAssetsLoading,
   setAssetsIllustration,
   setSelectedAssetsPatents,
   setCommentsEntity,
@@ -54,7 +54,7 @@ import {
   getAssetDetails,
   setSelectedMaintainenceAssetsList,
   setAssetsIllustrationData,
-  setFamilyLegalItem, 
+  setFamilyLegalItem,
   setSocialMediaConnectPopup,
   transactionRowClick,
   setClipboardAssetsDisplay,
@@ -85,7 +85,7 @@ import {
   setFamilyLegalItemMode
 } from "../../../actions/uiActions";
 
-import  { controlList } from '../../../utils/controlList'
+import { controlList } from '../../../utils/controlList'
 
 import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/numbers";
 
@@ -101,29 +101,29 @@ import { DISCUSSION } from "../../../utils/icons";
 
 var applicationNumber = null, assetNumber = null, hoverTimer = null
 
-const AssetsTable = ({ 
-    type,
-    assets,
-    transactionId, 
-    standalone, 
-    openChartBar,
-    openAnalyticsBar,
-    openIllustrationBar,
-    commentBar,
-    openAnalyticsAndCharBar,
-    closeAnalyticsAndCharBar,
-    handleChartBarOpen,
-    handleAnalyticsBarOpen,
-    handleIllustrationBarOpen,
-    handleVisualBarSize,
-    setIllustrationBarSize,
-    headerRowDisabled,
-    isMobile,
-    fileBar,
-    driveBar,
-    changeVisualBar,
-    handleCommentBarOpen
-  }) => {
+const AssetsTable = ({
+  type,
+  assets,
+  transactionId,
+  standalone,
+  openChartBar,
+  openAnalyticsBar,
+  openIllustrationBar,
+  commentBar,
+  openAnalyticsAndCharBar,
+  closeAnalyticsAndCharBar,
+  handleChartBarOpen,
+  handleAnalyticsBarOpen,
+  handleIllustrationBarOpen,
+  handleVisualBarSize,
+  setIllustrationBarSize,
+  headerRowDisabled,
+  isMobile,
+  fileBar,
+  driveBar,
+  changeVisualBar,
+  handleCommentBarOpen
+}) => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const history = useHistory();
@@ -131,12 +131,13 @@ const AssetsTable = ({
   const tableRef = useRef()
   const assetsAssignmentRef = useRef()
   const googleLoginRef = useRef(null)
+  const isLoadingMoreRef = useRef(false) // Track loading state synchronously
   const [offsetWithLimit, setOffsetWithLimit] = useState([0, DEFAULT_CUSTOMERS_LIMIT])
   const [maintainenceItems, setMaintainenceItems] = useState([])
   const [ratingOnFly, setRatingOnFly] = useState({})
   const [rowHeight, setRowHeight] = useState(40)
   const [headerRowHeight, setHeaderRowHeight] = useState(47)
-  const [width, setWidth] = useState(1500) 
+  const [width, setWidth] = useState(1500)
   const [counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
   const [sortField, setSortField] = useState(`asset`)
   const [sortOrder, setSortOrder] = useState(`DESC`)
@@ -149,19 +150,19 @@ const AssetsTable = ({
   const [selectedAll, setSelectAll] = useState(false);
   const [selectItems, setSelectItems] = useState([]);
   const [selectedRow, setSelectedRow] = useState([]);
-  const [selectedAssets, setSelectedAssets] = useState([])  
-  const [movedAssets, setMovedAssets] = useState([])  
-  const [ dropOpenAsset, setDropOpenAsset ] = useState(null)
-  const [ assetRating, setAssetRating ] = useState([])
-  const [ callByAuthLogin, setCallByAuth ] = useState(false)
-  const [ anchorEl, setAnchorEl ] = useState(null)
+  const [selectedAssets, setSelectedAssets] = useState([])
+  const [movedAssets, setMovedAssets] = useState([])
+  const [dropOpenAsset, setDropOpenAsset] = useState(null)
+  const [assetRating, setAssetRating] = useState([])
+  const [callByAuthLogin, setCallByAuth] = useState(false)
+  const [anchorEl, setAnchorEl] = useState(null)
   const [optionType, setOptionType] = useState('multiple')
   const [defaultViewFlag, setDefaultViewFlag] = useState(0)
   const [assetRows, setAssetRows] = useState([])
-  const [ googleAuthLogin, setGoogleAuthLogin ] = useState(true)
-  const [ selectedDefaultItem, setSelectedDefaultItem ] = useState(false)
-  const [ selectedCategoryRow, setSelectedCategoryRow ] = useState(null)
-  const [ selectedCategoryProducts, setSelectCategoryProducts ] = useState([])
+  const [googleAuthLogin, setGoogleAuthLogin] = useState(true)
+  const [selectedDefaultItem, setSelectedDefaultItem] = useState(false)
+  const [selectedCategoryRow, setSelectedCategoryRow] = useState(null)
+  const [selectedCategoryProducts, setSelectCategoryProducts] = useState([])
   const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
   const google_profile = useSelector(state => state.patenTrack2.google_profile)
   const openModal = Boolean(anchorEl);
@@ -213,14 +214,14 @@ const AssetsTable = ({
   );
 
   const selectedLawFirm = useSelector(
-    state => state.patenTrack2.selectedLawFirm 
+    state => state.patenTrack2.selectedLawFirm
   );
 
   const sharedActiveAssets = useSelector(
     state => state.patenTrack2.share_active_assets.list,
   ); //Assets List
 
-  const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )
+  const selectedAssetsPatents = useSelector(state => state.patenTrack2.selectedAssetsPatents)
   const move_assets = useSelector(state => state.patenTrack2.move_assets)
   const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory)
   const channel_id = useSelector(state => state.patenTrack2.channel_id)
@@ -236,29 +237,29 @@ const AssetsTable = ({
   const link_assets_sheet_type = useSelector(state => state.patenTrack2.link_assets_sheet_type)
   const switch_button_assets = useSelector(state => state.patenTrack2.switch_button_assets)
   const foreignAssets = useSelector(state => state.patenTrack2.foreignAssets)
-  const dashboardScreen = useSelector(state => state.ui.dashboardScreen) 
-  const companiesList = useSelector( state => state.patenTrack2.mainCompaniesList.list);
+  const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
+  const companiesList = useSelector(state => state.patenTrack2.mainCompaniesList.list);
 
   useEffect(() => {
-    const {hash} = location
-    if(hash == '' && selectedAssetsPatents.length > 0) {
+    const { hash } = location
+    if (hash == '' && selectedAssetsPatents.length > 0) {
       clearSelections()
-    } else if(hash != '' && hash.indexOf('&asset') !== -1 &&  assetRows.length > 0) { 
-      const explodeHash = hash.split('&') 
-      if(explodeHash.length > 0) { 
-        const findIndex = explodeHash.findIndex( row => row.indexOf('asset=') !== -1 ? row : null)  
-        if(findIndex != null) { 
-          const explodeFindIndex = explodeHash[findIndex].split('=') 
-          if(explodeFindIndex.length == 2) {  
-            const findRowIndex = assetRows.findIndex( item =>  decodeURIComponent(explodeFindIndex[1]) ==  item.asset.toString()) 
-            if(findRowIndex >= 0 && !selectItems.includes(assetRows[findRowIndex].asset)) {  
+    } else if (hash != '' && hash.indexOf('&asset') !== -1 && assetRows.length > 0) {
+      const explodeHash = hash.split('&')
+      if (explodeHash.length > 0) {
+        const findIndex = explodeHash.findIndex(row => row.indexOf('asset=') !== -1 ? row : null)
+        if (findIndex != null) {
+          const explodeFindIndex = explodeHash[findIndex].split('=')
+          if (explodeFindIndex.length == 2) {
+            const findRowIndex = assetRows.findIndex(item => decodeURIComponent(explodeFindIndex[1]) == item.asset.toString())
+            if (findRowIndex >= 0 && !selectItems.includes(assetRows[findRowIndex].asset)) {
               dispatch(setAssetTypesPatentsSelected([assetRows[findRowIndex].asset]))
               setSelectItems([assetRows[findRowIndex].asset])
               handleOnClick(assetRows[findRowIndex])
             }
           }
         }
-      } 
+      }
     }
   }, [location, assetRows])
 
@@ -278,21 +279,21 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   }
 
   const onHandleRating = (event, newValue, props) => {
-    if(event.type == 'mousemove') {
-      setRatingOnFly({label: props.label, rating_value: newValue})
+    if (event.type == 'mousemove') {
+      setRatingOnFly({ label: props.label, rating_value: newValue })
     } else {
       setRatingOnFly({})
-    }    
+    }
   }
 
   const RatingBox = (props) => {
     const findValue = useMemo(() => {
-      if(typeof props.data !== 'undefined' && props.data.length > 0) {
+      if (typeof props.data !== 'undefined' && props.data.length > 0) {
         let value = 0
-        props.data.forEach( item => {
-          if(props.label == item.name && item.value != '') {
+        props.data.forEach(item => {
+          if (props.label == item.name && item.value != '') {
             value = item.value
-          } 
+          }
         })
         return value;
       } else {
@@ -337,41 +338,41 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
 
   const TeamBarIcon = () => {
     return (
-        <div className={'teamBar'}>
-          <DISCUSSION/>
-        </div>
-        
+      <div className={'teamBar'}>
+        <DISCUSSION />
+      </div>
+
     )
-}
+  }
 
   const Slack = () => {
-    
+
     return (
       <Box className={classes.slack_container}>
         {
-          getAuthConnectToken() === 2 
-          ?
-              <svg fill="#fff" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 64 64" width="21px" height="21px"><path d="M26 21H12c-.552 0-1 .448-1 1s.448 1 1 1h6v19c0 .552.447 1 1 1s1-.448 1-1V23h6c.552 0 1-.448 1-1S26.552 21 26 21zM55.5 27c3.033 0 5.5-2.467 5.5-5.5S58.533 16 55.5 16 50 18.467 50 21.5 52.467 27 55.5 27zM55.5 18c1.93 0 3.5 1.57 3.5 3.5S57.43 25 55.5 25 52 23.43 52 21.5 53.57 18 55.5 18z"/><path d="M46 27h-8c0 0 0 0 0 0v-4.261C38.951 23.526 40.171 24 41.5 24c3.033 0 5.5-2.467 5.5-5.5S44.533 13 41.5 13c-1.329 0-2.549.474-3.5 1.261V6.384c0-.889-.391-1.727-1.071-2.298-.682-.572-1.57-.812-2.45-.657L5.305 8.578C3.39 8.916 2 10.572 2 12.517l0 38.966c0 1.945 1.39 3.602 3.305 3.939l29.174 5.148c.175.031.35.046.523.046.699 0 1.381-.245 1.927-.703.68-.57 1.071-1.408 1.071-2.297v-8.16C38.901 49.803 39.896 50 41 50c4.573 0 6.559-3.112 6.97-4.757C47.99 45.163 48 45.082 48 45V29C48 27.897 47.103 27 46 27zM41.5 15c1.93 0 3.5 1.57 3.5 3.5S43.43 22 41.5 22 38 20.43 38 18.5 39.57 15 41.5 15zM35.643 58.382c-.133.112-.422.29-.816.219L5.652 53.453C4.695 53.284 4 52.456 4 51.483V12.517c0-.973.695-1.801 1.652-1.97l29.174-5.148c.394-.069.683.106.816.219C35.775 5.731 36 5.978 36 6.384l0 51.232C36 58.022 35.776 58.27 35.643 58.382zM46 44.855C45.82 45.396 44.756 48 41 48c-1.167 0-2.174-.245-3-.73V29h8V44.855zM60 29h-8c-1.103 0-2 .897-2 2v14c0 .39.226.744.58.907C51.401 46.288 53.542 47 55 47c4.573 0 6.559-3.112 6.97-4.757C61.99 42.163 62 42.082 62 42V31C62 29.897 61.103 29 60 29zM60 41.855C59.82 42.396 58.756 45 55 45c-.837 0-2.146-.364-3-.674V31h8V41.855z"/></svg>
-          :
-              getAuthConnectToken() === 1
+          getAuthConnectToken() === 2
+            ?
+            <svg fill="#fff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="21px" height="21px"><path d="M26 21H12c-.552 0-1 .448-1 1s.448 1 1 1h6v19c0 .552.447 1 1 1s1-.448 1-1V23h6c.552 0 1-.448 1-1S26.552 21 26 21zM55.5 27c3.033 0 5.5-2.467 5.5-5.5S58.533 16 55.5 16 50 18.467 50 21.5 52.467 27 55.5 27zM55.5 18c1.93 0 3.5 1.57 3.5 3.5S57.43 25 55.5 25 52 23.43 52 21.5 53.57 18 55.5 18z" /><path d="M46 27h-8c0 0 0 0 0 0v-4.261C38.951 23.526 40.171 24 41.5 24c3.033 0 5.5-2.467 5.5-5.5S44.533 13 41.5 13c-1.329 0-2.549.474-3.5 1.261V6.384c0-.889-.391-1.727-1.071-2.298-.682-.572-1.57-.812-2.45-.657L5.305 8.578C3.39 8.916 2 10.572 2 12.517l0 38.966c0 1.945 1.39 3.602 3.305 3.939l29.174 5.148c.175.031.35.046.523.046.699 0 1.381-.245 1.927-.703.68-.57 1.071-1.408 1.071-2.297v-8.16C38.901 49.803 39.896 50 41 50c4.573 0 6.559-3.112 6.97-4.757C47.99 45.163 48 45.082 48 45V29C48 27.897 47.103 27 46 27zM41.5 15c1.93 0 3.5 1.57 3.5 3.5S43.43 22 41.5 22 38 20.43 38 18.5 39.57 15 41.5 15zM35.643 58.382c-.133.112-.422.29-.816.219L5.652 53.453C4.695 53.284 4 52.456 4 51.483V12.517c0-.973.695-1.801 1.652-1.97l29.174-5.148c.394-.069.683.106.816.219C35.775 5.731 36 5.978 36 6.384l0 51.232C36 58.022 35.776 58.27 35.643 58.382zM46 44.855C45.82 45.396 44.756 48 41 48c-1.167 0-2.174-.245-3-.73V29h8V44.855zM60 29h-8c-1.103 0-2 .897-2 2v14c0 .39.226.744.58.907C51.401 46.288 53.542 47 55 47c4.573 0 6.559-3.112 6.97-4.757C61.99 42.163 62 42.082 62 42V31C62 29.897 61.103 29 60 29zM60 41.855C59.82 42.396 58.756 45 55 45c-.837 0-2.146-.364-3-.674V31h8V41.855z" /></svg>
+            :
+            getAuthConnectToken() === 1
               ?
-                <svg version="1.1" width="36px" height="36px" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 270 270"><g><g><path fill="#E01E5A" d="M99.4,151.2c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h12.9V151.2z"></path><path fill="#E01E5A" d="M105.9,151.2c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v32.3c0,7.1-5.8,12.9-12.9,12.9s-12.9-5.8-12.9-12.9V151.2z"></path></g><g><path fill="#36C5F0" d="M118.8,99.4c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v12.9H118.8z"></path><path fill="#36C5F0" d="M118.8,105.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9H86.5c-7.1,0-12.9-5.8-12.9-12.9s5.8-12.9,12.9-12.9H118.8z"></path></g><g><path fill="#2EB67D" d="M170.6,118.8c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9h-12.9V118.8z"></path><path fill="#2EB67D" d="M164.1,118.8c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9V86.5c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9V118.8z"></path></g><g><path fill="#ECB22E" d="M151.2,170.6c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9v-12.9H151.2z"></path><path fill="#ECB22E" d="M151.2,164.1c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h32.3c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9H151.2z"></path></g></g></svg> 
+              <svg version="1.1" width="36px" height="36px" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 270 270"><g><g><path fill="#E01E5A" d="M99.4,151.2c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h12.9V151.2z"></path><path fill="#E01E5A" d="M105.9,151.2c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v32.3c0,7.1-5.8,12.9-12.9,12.9s-12.9-5.8-12.9-12.9V151.2z"></path></g><g><path fill="#36C5F0" d="M118.8,99.4c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9s12.9,5.8,12.9,12.9v12.9H118.8z"></path><path fill="#36C5F0" d="M118.8,105.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9H86.5c-7.1,0-12.9-5.8-12.9-12.9s5.8-12.9,12.9-12.9H118.8z"></path></g><g><path fill="#2EB67D" d="M170.6,118.8c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9s-5.8,12.9-12.9,12.9h-12.9V118.8z"></path><path fill="#2EB67D" d="M164.1,118.8c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9V86.5c0-7.1,5.8-12.9,12.9-12.9c7.1,0,12.9,5.8,12.9,12.9V118.8z"></path></g><g><path fill="#ECB22E" d="M151.2,170.6c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9c-7.1,0-12.9-5.8-12.9-12.9v-12.9H151.2z"></path><path fill="#ECB22E" d="M151.2,164.1c-7.1,0-12.9-5.8-12.9-12.9c0-7.1,5.8-12.9,12.9-12.9h32.3c7.1,0,12.9,5.8,12.9,12.9c0,7.1-5.8,12.9-12.9,12.9H151.2z"></path></g></g></svg>
               :
-                  <TeamBarIcon/>  
+              <TeamBarIcon />
         }
       </Box>
     )
   }
 
   const companyname = useMemo(() => {
-    return selectedCompanies.length > 0 && companiesList.filter( company => company.representative_id === selectedCompanies[0])
+    return selectedCompanies.length > 0 && companiesList.filter(company => company.representative_id === selectedCompanies[0])
   }, [selectedCompanies, companiesList])
 
 
   const actionList = [
     {
       id: 99,
-      name: 'Remove from Clipboard' ,
+      name: 'Remove from Clipboard',
       icon: <NotInterested />,
       image: '',
       tooltip: 'Tooltip',
@@ -380,9 +381,9 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     },
     {
       id: -1,
-      name: '', 
+      name: '',
       icon: <KeyboardArrowDown />,
-      openIcon: <KeyboardArrowUp/>,
+      openIcon: <KeyboardArrowUp />,
       image: '',
       tooltip: 'Tooltip'
     },
@@ -398,7 +399,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/sell.png',
       icon: '',
       tooltip: 'Send this patent to the list of patents for sale, located on the bottom right window.'
-    }, 
+    },
     {
       id: 4,
       name: 'License-Out',
@@ -416,7 +417,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     },
     {
       id: 6,
-      name: <RatingNecessary item={assetRating}/>,
+      name: <RatingNecessary item={assetRating} />,
       image: '',
       icon: <StarOutline />,
       item: false,
@@ -424,7 +425,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     },
     {
       id: 7,
-      name: <RatingImportant item={assetRating}/>,
+      name: <RatingImportant item={assetRating} />,
       image: '',
       icon: <StarOutlineOutlined />,
       item: false,
@@ -432,7 +433,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     },
     {
       id: 9,
-      name:  'Add a task/review',
+      name: 'Add a task/review',
       image: '',
       icon: <Slack />,
       item: false,
@@ -440,7 +441,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     },
     {
       id: 11,
-      name:  'Assigned Category/Product',
+      name: 'Assigned Category/Product',
       image: '',
       icon: <AccountTreeOutlined />,
       item: false,
@@ -469,14 +470,14 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   const maintainanceActionList = [
     {
       id: 99,
-      name: 'No action' ,
+      name: 'No action',
       icon: <NotInterested />,
       image: '',
       tooltip: 'Tooltip'
     },
     {
       id: -1,
-      name: '', 
+      name: '',
       icon: <KeyboardArrowDown />,
       image: '',
       tooltip: 'Tooltip'
@@ -493,7 +494,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       image: 'https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/menu/sell.png',
       icon: '',
       tooltip: 'Send this patent to the list of patents for sale, located on the bottom right window.'
-    }, 
+    },
     {
       id: 4,
       name: 'License-Out',
@@ -510,7 +511,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     },
     {
       id: 6,
-      name: <RatingNecessary item={assetRating}/>,
+      name: <RatingNecessary item={assetRating} />,
       image: '',
       icon: <StarOutline />,
       item: false,
@@ -518,7 +519,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     },
     {
       id: 7,
-      name: <RatingImportant item={assetRating}/>,
+      name: <RatingImportant item={assetRating} />,
       image: '',
       icon: <StarOutlineOutlined />,
       item: false,
@@ -526,7 +527,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     },
     {
       id: 9,
-      name:  'Add a task/review',
+      name: 'Add a task/review',
       image: '',
       icon: <Slack />,
       item: false,
@@ -534,19 +535,19 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     },
     {
       id: 10,
-      name: 'Pay Maintainence Fee', 
+      name: 'Pay Maintainence Fee',
       icon: <MonetizationOn />,
       image: '',
       tooltip: 'Tooltip'
     },
     {
       id: 11,
-      name:  'Assigned Category/Product',
+      name: 'Assigned Category/Product',
       image: '',
-      icon: <AccountTreeOutlined />, 
+      icon: <AccountTreeOutlined />,
       item: false,
       tooltip: 'Associate the patent to one or more categories and products listed in your predefined list.'
-    }, 
+    },
     /* {
       id: 6,
       name: 'Link to Our Products',
@@ -570,7 +571,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   let dropdownList = selectedCategory == 'pay_maintainence_fee' ? [...maintainanceActionList] : [...actionList]
 
   useEffect(() => {
-    if(openChartBar === false && openAnalyticsBar === false && usptoMode === false) {
+    if (openChartBar === false && openAnalyticsBar === false && usptoMode === false) {
       /**
        * Change Visualbarwidth
        */
@@ -580,37 +581,37 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
 
 
   useEffect(() => {
-    if(display_sales_assets > 0) {
-      dropdownList.splice(3,2)
+    if (display_sales_assets > 0) {
+      dropdownList.splice(3, 2)
     } else {
       dropdownList = selectedCategory == 'pay_maintainence_fee' ? [...maintainanceActionList] : [...actionList]
     }
   }, [display_sales_assets])
 
   useEffect(() => {
-    if(selectedCategory == 'restore_ownership') {
-      setOptionType(prevItem => 
+    if (selectedCategory == 'restore_ownership') {
+      setOptionType(prevItem =>
         prevItem !== 'single' ? 'single' : prevItem
       )
-    } 
+    }
   }, [selectedCategory])
-    
+
   useEffect(() => {
-    
-    if(clipboard_assets.length > 0 && clipboard_assets.length != selectedAssets.length ) {      
+
+    if (clipboard_assets.length > 0 && clipboard_assets.length != selectedAssets.length) {
       setSelectedAssets([...clipboard_assets])
     }
-  }, [ clipboard_assets ])  
+  }, [clipboard_assets])
 
   useEffect(() => {
-    if(move_assets.length > 0 && move_assets.length != movedAssets.length ) {      
+    if (move_assets.length > 0 && move_assets.length != movedAssets.length) {
       setMovedAssets([...move_assets])
     }
-  }, [ move_assets ])  
+  }, [move_assets])
 
   useEffect(() => {
-    if(assetRows.length > 0 && (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE')) {
-      if(assetRows.length == 1 && selectedDefaultItem === false) {
+    if (assetRows.length > 0 && (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE')) {
+      if (assetRows.length == 1 && selectedDefaultItem === false) {
         setSelectedDefaultItem(true)
         dispatch(setAssetTypesPatentsSelected([assetRows[0].asset]))
         setSelectItems([assetRows[0].asset])
@@ -621,6 +622,10 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
 
   useEffect(() => {
     assetsAssignmentRef.current = assetTypeAssignmentAssets
+    // Reset loading ref when data loaded
+    if (assetTypeAssignmentAssets.length > 0) {
+      isLoadingMoreRef.current = false;
+    }
   }, [assetTypeAssignmentAssets])
 
   useEffect(() => {
@@ -632,8 +637,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   }, [movedAssets])
 
   useEffect(() => {
-    if(callByAuthLogin === true) {
-      if(google_auth_token !== null && google_auth_token != '' && google_profile !== null && google_profile != '' && link_assets_sheet_type.type !== null && link_assets_sheet_type.asset !== null){
+    if (callByAuthLogin === true) {
+      if (google_auth_token !== null && google_auth_token != '' && google_profile !== null && google_profile != '' && link_assets_sheet_type.type !== null && link_assets_sheet_type.asset !== null) {
         setCallByAuth(false)
         const form = new FormData()
         form.append('access_token', google_auth_token.access_token)
@@ -644,7 +649,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   }, [callByAuthLogin, google_auth_token, google_profile])
 
   useEffect(() => {
-    if(Object.keys(ratingOnFly).length > 0 && ratingOnFly?.asset != '' && ratingOnFly?.asset != undefined){
+    if (Object.keys(ratingOnFly).length > 0 && ratingOnFly?.asset != '' && ratingOnFly?.asset != undefined) {
       const getSlackToken = getTokenStorage("slack_auth_token_info");
       if (getSlackToken && getSlackToken != "") {
         /**
@@ -652,8 +657,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
          * send message to this channel
          */
         const channelID = findChannelID(ratingOnFly.asset)
-        if(channelID != '') {
-          dispatch(setChannelID({channel_id: channelID}))          
+        if (channelID != '') {
+          dispatch(setChannelID({ channel_id: channelID }))
         }
         sendRatingMessageToSlack(channelID, ratingOnFly)
       } else {
@@ -665,26 +670,26 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     }
   }, [ratingOnFly])
 
-  const sendRatingMessageToSlack = async(channelID, rowData) => {
-    try{
+  const sendRatingMessageToSlack = async (channelID, rowData) => {
+    try {
       const formData = new FormData()
-      formData.append('text',  `${rowData.label.toUpperCase()} ${rowData.rating_value} star rating applied to this asset via PatenTrack` )
+      formData.append('text', `${rowData.label.toUpperCase()} ${rowData.rating_value} star rating applied to this asset via PatenTrack`)
       formData.append('asset', rowData.asset)
       formData.append('asset_format', `us${rowData.asset}`)
       formData.append('user', '')
-      formData.append('reply', '' )
+      formData.append('reply', '')
       formData.append('edit', '')
       formData.append('file', '')
       formData.append('remote_file', '')
       formData.append('channel_id', channelID)
       const slackToken = getSlackToken()
-      if( slackToken  && slackToken != '') {
+      if (slackToken && slackToken != '') {
         const { access_token, bot_token, bot_user_id } = JSON.parse(slackToken)
-        if( access_token != undefined) {  
+        if (access_token != undefined) {
           formData.append('auth', bot_token)
           formData.append('auth_id', bot_user_id)
-          const { data } = await PatenTrackApi.sendMessage(access_token, formData)             
-          if(data != '' && Object.keys(data).length > 0) {
+          const { data } = await PatenTrackApi.sendMessage(access_token, formData)
+          if (data != '' && Object.keys(data).length > 0) {
             setRatingOnFly({})
           }
         }
@@ -692,66 +697,66 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         alert("Please login to slack first");
         dispatch(setSocialMediaConnectPopup(true))
       }
-    } catch( err ) {
+    } catch (err) {
       console.error(err)
-    }    
+    }
   }
 
   const openGoogleWindow = () => {
-      if(googleLoginRef.current != null) {
-          if(googleLoginRef.current.querySelector('button') !== null) {
-              setCallByAuth(true)
-              googleLoginRef.current.querySelector('button').click()
-          } else {
-              setTimeout(openGoogleWindow, 1000)
-          }          
+    if (googleLoginRef.current != null) {
+      if (googleLoginRef.current.querySelector('button') !== null) {
+        setCallByAuth(true)
+        googleLoginRef.current.querySelector('button').click()
       } else {
-          setTimeout(openGoogleWindow, 1000)
+        setTimeout(openGoogleWindow, 1000)
       }
+    } else {
+      setTimeout(openGoogleWindow, 1000)
+    }
   }
- 
 
-  const onHandleDropDownlist = async(event, asset, row ) => {   
-    if( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+
+  const onHandleDropDownlist = async (event, asset, row) => {
+    if (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') {
       alert('Please activate your account first')
-    } else { 
-      if(event.target.value  == 9) {
+    } else {
+      if (event.target.value == 9) {
         /**
          * Slack review box
          */
-        if(commentBar === false) {
+        if (commentBar === false) {
           handleCommentBarOpen()
           dispatch(setAssetTypesPatentsSelected([row.asset]))
           setSelectItems([row.asset])
           handleOnClick(row)
         }
-      } else if(event.target.value >= 6 && event.target.value <= 8) {
+      } else if (event.target.value >= 6 && event.target.value <= 8) {
         //6=>Product,7=>Technology,8=>Competition
         /* setDropOpenAsset(null)
         const type = event.target.value === 7 ? 'technology' : event.target.value === 8 ? 'competitors' : 'products'
         dispatch(linkWithSheetOpenPanel(true))
-        dispatch(linkWithSheetSelectedAsset(type, encodeURIComponent(row.asset_type == 1 ? `US${applicationFormat(asset)}` : `US${numberWithCommas(asset)}`))) */    
-        setRatingOnFly( previousItem => {
-          if(Object.keys(previousItem).length > 0) {
-            return {...previousItem, ...row}            
+        dispatch(linkWithSheetSelectedAsset(type, encodeURIComponent(row.asset_type == 1 ? `US${applicationFormat(asset)}` : `US${numberWithCommas(asset)}`))) */
+        setRatingOnFly(previousItem => {
+          if (Object.keys(previousItem).length > 0) {
+            return { ...previousItem, ...row }
           } else {
             return previousItem
           }
-        })    
+        })
       } else {
-        if(event.target.value == 11) {
+        if (event.target.value == 11) {
           setSelectedCategoryRow(row)
           setOpenCategoryModal(!openCategoryModal)
-        } else if(type === 9 && event.target.value === 0) {
+        } else if (type === 9 && event.target.value === 0) {
           /***
           * Asset remove from spreadsheet
           */
-          const googleToken = getTokenStorage( 'google_auth_token_info' )
+          const googleToken = getTokenStorage('google_auth_token_info')
           const googleProfile = getTokenStorage('google_profile_info')
-          const token = JSON.parse(googleToken)  
+          const token = JSON.parse(googleToken)
           const profile = JSON.parse(googleProfile)
-          if( token !== null && profile !== null) {
-            const { access_token } = token  
+          if (token !== null && profile !== null) {
+            const { access_token } = token
             const form = {
               user_account: profile.email,
               item_type: 'delete',
@@ -760,11 +765,11 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
               sheet_id: foreignAssets.selected[foreignAssets.selected.length - 1],
               delete_item: asset
             }
-            const {data} = await PatenTrackApi.deleteItemFromExternalSheet(form)
-            if(data !== null && typeof data.message !== 'undefined' && data.message == 'Row deleted') {
+            const { data } = await PatenTrackApi.deleteItemFromExternalSheet(form)
+            if (data !== null && typeof data.message !== 'undefined' && data.message == 'Row deleted') {
               const oldAssets = [...assetsAssignmentRef.current]
-              const findIndex = oldAssets.findIndex( item => item.asset == asset)
-              if(findIndex !== -1) {
+              const findIndex = oldAssets.findIndex(item => item.asset == asset)
+              if (findIndex !== -1) {
                 setDropOpenAsset(null)
                 oldAssets.splice(findIndex, 1)
                 dispatch(
@@ -774,31 +779,31 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             }
           }
         } else {
-          if(event.target.value == 5) {
+          if (event.target.value == 5) {
             setSelectedAssets(prevItems => {
-              const findIndex = prevItems.findIndex( r => r.asset == asset)
-              if( findIndex !== -1 ) {
+              const findIndex = prevItems.findIndex(r => r.asset == asset)
+              if (findIndex !== -1) {
                 setDropOpenAsset(null)
                 const items = [...prevItems]
-                items.splice( findIndex, 1 )
-                if(items.length == 0 && display_clipboard) { 
+                items.splice(findIndex, 1)
+                if (items.length == 0 && display_clipboard) {
                   dispatch(setClipboardAssetsDisplay(false))
-                  loadDataFromServer(offsetWithLimit[0], offsetWithLimit[1], sortField, sortOrder) 
+                  loadDataFromServer(offsetWithLimit[0], offsetWithLimit[1], sortField, sortOrder)
                 }
                 return items
               } else {
                 setDropOpenAsset(asset)
                 return [...prevItems, row]
               }
-            })          
+            })
           } else if (event.target.value == 2 || event.target.value == 4) {
             /**
              * Assets for Sale or LicenseOut
              * Check Slack Auth
              */
-            let token =  getSlackToken();
+            let token = getSlackToken();
 
-            if(token !== '') {
+            if (token !== '') {
               const { access_token, bot_token, bot_user_id } = JSON.parse(token)
               const formData = new FormData()
               formData.append('appno_doc_num', row.appno_doc_num)
@@ -808,8 +813,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
               formData.append('code', access_token)
               formData.append('type', event.target.value)
               const { data } = await PatenTrackApi.moveAssetForSale(formData)
-              if( data  !== null) {
-  
+              if (data !== null) {
+
               }
             } else {
               /**
@@ -819,41 +824,41 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             }
           } else if (event.target.value === 0 || event.target.value === 99) {
             setSelectedAssets(prevItems => {
-              const findIndex = prevItems.findIndex( r => r.asset == asset)
-              if( findIndex !== -1 ) {
+              const findIndex = prevItems.findIndex(r => r.asset == asset)
+              if (findIndex !== -1) {
                 const items = [...prevItems]
-                items.splice( findIndex, 1 )
+                items.splice(findIndex, 1)
 
-                if(items.length == 0 && display_clipboard) {  
+                if (items.length == 0 && display_clipboard) {
                   dispatch(setClipboardAssetsDisplay(false))
-                  loadDataFromServer(offsetWithLimit[0], offsetWithLimit[1], sortField, sortOrder) 
+                  loadDataFromServer(offsetWithLimit[0], offsetWithLimit[1], sortField, sortOrder)
                 }
                 return items
               } else {
                 return [...prevItems]
               }
-            }) 
+            })
           } else if (event.target.value === 10) {
             updateMaintainenceSelection(asset, row)
-          } 
-          const currentLayoutIndex = controlList.findIndex(r => r.type == 'menu' && r.category == selectedCategory )
-          if(currentLayoutIndex !== -1) {
+          }
+          const currentLayoutIndex = controlList.findIndex(r => r.type == 'menu' && r.category == selectedCategory)
+          if (currentLayoutIndex !== -1) {
             setDropOpenAsset(null)
             setMovedAssets(prevItems => {
               const findIndex = prevItems.findIndex(row => row.asset == asset)
-              
-              if(findIndex !== -1) {
+
+              if (findIndex !== -1) {
                 const items = [...prevItems]
-                if(items[findIndex].move_category === 10) {
+                if (items[findIndex].move_category === 10) {
                   /**
                    * Pay Maintainence Fee
                    */
                   updateMaintainenceSelection(asset, row)
                 }
-                items.splice( findIndex, 1 )
+                items.splice(findIndex, 1)
                 return items
               } else {
-                if(event.target.value !== 99) {
+                if (event.target.value !== 99) {
                   return [...prevItems, {
                     asset,
                     move_category: event.target.value,
@@ -863,26 +868,26 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
                   }]
                 } else {
                   return prevItems
-                }              
-              } 
-            })      
+                }
+              }
+            })
           }
-        }        
-      }      
-    }    
+        }
+      }
+    }
   }
 
   const updateMaintainenceSelection = (asset, row) => {
-    let token =  getSlackToken();
+    let token = getSlackToken();
 
-    if(token !== '') {
+    if (token !== '') {
       let updateSelected = [];
       const { access_token, bot_token, bot_user_id } = JSON.parse(token)
       let message = `${row.grant_doc_num != '' ? numberWithCommas(row.grant_doc_num) : applicationFormat(row.appno_doc_num)} `
       setMaintainenceItems(prevItems => {
         updateSelected = [...prevItems];
-        const findIndex = prevItems.findIndex( r => r.asset == asset)
-        if( findIndex !== -1 ) {
+        const findIndex = prevItems.findIndex(r => r.asset == asset)
+        if (findIndex !== -1) {
           message += `removed `
           updateSelected = maintainenceItems.filter(
             item => item[1] !== parseInt(row.appno_doc_num)
@@ -911,38 +916,38 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
           }
         }
         return updateSelected
-      }) 
-      message += ` to maintainence list. `  
-      
-      
+      })
+      message += ` to maintainence list. `
+
+
       dispatch(setSelectedMaintainenceAssetsList(updateSelected));
 
-      (async() => {
+      (async () => {
         let name = companyname[0].original_name
-        let formattedName = name.replace(/\s/g,'').replace(/["']/g, "").trim().substr(0, 20)
+        let formattedName = name.replace(/\s/g, '').replace(/["']/g, "").trim().substr(0, 20)
 
         let channelID = ''
-        if(slack_channel_list.length > 0 && formattedName != '') {
-          const findIndex = slack_channel_list.findIndex( channel => channel.name == formattedName.toString().toLocaleLowerCase())
-      
-          if( findIndex !== -1) {
+        if (slack_channel_list.length > 0 && formattedName != '') {
+          const findIndex = slack_channel_list.findIndex(channel => channel.name == formattedName.toString().toLocaleLowerCase())
+
+          if (findIndex !== -1) {
             channelID = slack_channel_list[findIndex].id
           }
         }
         const formData = new FormData()
-        formData.append('text',  message)
+        formData.append('text', message)
         formData.append('asset', name)
         formData.append('asset_format', formattedName.toLocaleLowerCase())
         formData.append('user', '')
-        formData.append('reply', '' )
+        formData.append('reply', '')
         formData.append('edit', '')
         formData.append('file', '')
         formData.append('remote_file', '')
         formData.append('channel_id', channelID)
         formData.append('auth', bot_token)
         formData.append('auth_id', bot_user_id)
-        const { data } = await PatenTrackApi.sendMessage(access_token, formData) 
-      })() 
+        const { data } = await PatenTrackApi.sendMessage(access_token, formData)
+      })()
     } else {
       /**
        * Alert user to login with slack first
@@ -955,7 +960,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     {
       width: 10,
       minWidth: 10,
-      label: "", 
+      label: "",
       dataKey: "asset",
       role: "checkbox",
       disableSort: true,
@@ -964,68 +969,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     {
       width: 25,
       minWidth: 25,
-      disableSort: true,
-      headingIcon: 'assets',  
-      checkboxSelect: true,
-      label: "",
-      dataKey: "asset",
-      role: "static_dropdown",
-      list: dropdownList,
-      onClick: onHandleDropDownlist  
-    },
-    /* {
-      width: 20,
-      minWidth: 20,
-      label: "",
-      dataKey: "asset",
-      role: "arrow",
       disableSort: true,
       headingIcon: 'assets',
-    },  */
-    {
-      width: isMobile === true ? 150 : 100,  
-      minWidth: isMobile === true ? 150 : 100,  
-      label: "Assets",  
-      /* dataKey: "format_asset", */
-      dataKey: "asset",
-      staticIcon: "US",
-      format: numberWithCommas,
-      formatCondition: 'asset_type',
-      formatDefaultValue: 0,
-      secondaryFormat: applicationFormat,
-      align: "center",
-      show_selection_count: true,
-      badge: true,
-      /* styleCss: true,
-      justifyContent: 'center' */
-      /* textBold: true */
-    },
-    {
-      width: isMobile === true ? 60 : 40,
-      minWidth: isMobile === true ? 60 : 40,
-      label: "",
-      dataKey: "channel", 
-      formatCondition: 'asset',
-      headingIcon: 'slack_image',
-      role: 'slack_image',      
-    }
-  ];
-
-  const MAINTAINCE_COLUMNS = [
-    {
-      width: 10,
-      minWidth: 10,
-      label: "", 
-      dataKey: "asset",
-      role: "checkbox",
-      disableSort: true,
-      enable: false
-    },
-    {
-      width: 25,
-      minWidth: 25,
-      disableSort: true,
-      headingIcon: 'assets',  
       checkboxSelect: true,
       label: "",
       dataKey: "asset",
@@ -1043,9 +988,9 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       headingIcon: 'assets',
     },  */
     {
-      width: isMobile === true ? 150 : 100,  
-      minWidth: isMobile === true ? 150 : 100,  
-      label: "Assets",  
+      width: isMobile === true ? 150 : 100,
+      minWidth: isMobile === true ? 150 : 100,
+      label: "Assets",
       /* dataKey: "format_asset", */
       dataKey: "asset",
       staticIcon: "US",
@@ -1064,10 +1009,70 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       width: isMobile === true ? 60 : 40,
       minWidth: isMobile === true ? 60 : 40,
       label: "",
-      dataKey: "channel", 
+      dataKey: "channel",
       formatCondition: 'asset',
       headingIcon: 'slack_image',
-      role: 'slack_image',      
+      role: 'slack_image',
+    }
+  ];
+
+  const MAINTAINCE_COLUMNS = [
+    {
+      width: 10,
+      minWidth: 10,
+      label: "",
+      dataKey: "asset",
+      role: "checkbox",
+      disableSort: true,
+      enable: false
+    },
+    {
+      width: 25,
+      minWidth: 25,
+      disableSort: true,
+      headingIcon: 'assets',
+      checkboxSelect: true,
+      label: "",
+      dataKey: "asset",
+      role: "static_dropdown",
+      list: dropdownList,
+      onClick: onHandleDropDownlist
+    },
+    /* {
+      width: 20,
+      minWidth: 20,
+      label: "",
+      dataKey: "asset",
+      role: "arrow",
+      disableSort: true,
+      headingIcon: 'assets',
+    },  */
+    {
+      width: isMobile === true ? 150 : 100,
+      minWidth: isMobile === true ? 150 : 100,
+      label: "Assets",
+      /* dataKey: "format_asset", */
+      dataKey: "asset",
+      staticIcon: "US",
+      format: numberWithCommas,
+      formatCondition: 'asset_type',
+      formatDefaultValue: 0,
+      secondaryFormat: applicationFormat,
+      align: "center",
+      show_selection_count: true,
+      badge: true,
+      /* styleCss: true,
+      justifyContent: 'center' */
+      /* textBold: true */
+    },
+    {
+      width: isMobile === true ? 60 : 40,
+      minWidth: isMobile === true ? 60 : 40,
+      label: "",
+      dataKey: "channel",
+      formatCondition: 'asset',
+      headingIcon: 'slack_image',
+      role: 'slack_image',
     },
     {
       width: 90,
@@ -1083,41 +1088,41 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     }
   ];
 
-  
 
-  const [ tableColumns, setTableColumns ] = useState( selectedCategory == 'pay_maintainence_fee' ? MAINTAINCE_COLUMNS : COLUMNS)
+
+  const [tableColumns, setTableColumns] = useState(selectedCategory == 'pay_maintainence_fee' ? MAINTAINCE_COLUMNS : COLUMNS)
 
   useEffect(() => {
     //console.log('ASSETS', display_clipboard, selectedAssetCompanies, selectedAssetCompaniesAll)
-    if(display_clipboard === false) {
+    if (display_clipboard === false) {
       setTableColumns(selectedCategory == 'pay_maintainence_fee' ? [...MAINTAINCE_COLUMNS] : [...COLUMNS])
       setWidth(1500)
       if (standalone) {
-        if( type === 9 ) {
-          if(foreignAssets.selected.length > 0 ) {
-            if( assetTypeAssignmentAssets.length === 0 ) {
-              const googleToken = getTokenStorage( 'google_auth_token_info' )
-              const token = JSON.parse(googleToken)  
-              const { access_token } = token  
-              if(access_token) {
+        if (type === 9) {
+          if (foreignAssets.selected.length > 0) {
+            if (assetTypeAssignmentAssets.length === 0) {
+              const googleToken = getTokenStorage('google_auth_token_info')
+              const token = JSON.parse(googleToken)
+              const { access_token } = token
+              if (access_token) {
                 const form = new FormData()
                 form.append('account', google_profile.email)
                 form.append('token', access_token)
                 form.append('sheet_names', JSON.stringify(foreignAssets.selectNames))
                 dispatch(getForeignAssetsBySheet(form))
-              }   
-            }                     
+              }
+            }
           } else {
-            dispatch(  
+            dispatch(
               setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
             );
-            dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
-          }          
-        }  else { 
-          if(assetTypeAssignmentAssets.length === 0 && assetTypeAssignmentAssetsLoading === false) { 
-            loadDataFromServer(offsetWithLimit[0], offsetWithLimit[1], sortField, sortOrder)   
-          }         
-          if(selectedCategory == 'restore_ownership') {    
+            dispatch(setAssetTypesAssignmentsAllAssetsLoading(false))
+          }
+        } else {
+          if (assetTypeAssignmentAssets.length === 0 && assetTypeAssignmentAssetsLoading === false) {
+            loadDataFromServer(offsetWithLimit[0], offsetWithLimit[1], sortField, sortOrder)
+          }
+          if (selectedCategory == 'restore_ownership') {
             /* let cols = [...COLUMNS] */
             /* cols[1].role = 'radio'
             delete cols[1].show_selection_count  */
@@ -1125,12 +1130,12 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             setTableColumns(cols) */
           }
         }
-      } else { 
+      } else {
         if (transactionId != null) {
           dispatch(getAssetTypeAssignmentAssets(transactionId, false));
-        } 
+        }
       }
-    }     
+    }
   }, [
     dispatch,
     selectedCompanies,
@@ -1138,42 +1143,42 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     assetTypesSelectAll,
     assetTypesSelected,
     selectedAssetCompanies,
-    selectedAssetCompaniesAll, 
+    selectedAssetCompaniesAll,
     selectedAssetAssignmentsAll,
     selectedAssetAssignments,
     display_clipboard,
     display_sales_assets,
     auth_token,
     switch_button_assets,
-    selectedLawFirm    
+    selectedLawFirm
   ]);
 
 
   useEffect(() => {
-    if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') {
+    if (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') {
       const updatedAssets = assetTypeAssignmentAssets.map(asset => ({
         ...asset,
         status: 0
       }));
-      
+
       setAssetRows(updatedAssets);
     } else {
       setAssetRows(assetTypeAssignmentAssets)
     }
-    if(assetTypeAssignmentAssets.length > 0 && assetTypeAssignmentAssetsSelected.length > 0) {
+    if (assetTypeAssignmentAssets.length > 0 && assetTypeAssignmentAssetsSelected.length > 0) {
       const excludeSelections = []
-      const checkElement = assetTypeAssignmentAssetsSelected.map( asset => {
+      const checkElement = assetTypeAssignmentAssetsSelected.map(asset => {
         const findIndex = assetTypeAssignmentAssets.findIndex(row => row.asset == asset)
-        if(findIndex === -1) {
+        if (findIndex === -1) {
           excludeSelections.push(asset)
         }
-      })      
+      })
       Promise.all(checkElement)
-      if(excludeSelections.length > 0) {        
+      if (excludeSelections.length > 0) {
         const newSelectedAssets = [...assetTypeAssignmentAssetsSelected]
-        const mapSelection = excludeSelections.map( asset => {
-          const findIndex = newSelectedAssets.findIndex( item => item == asset)
-          if(findIndex !== -1) {
+        const mapSelection = excludeSelections.map(asset => {
+          const findIndex = newSelectedAssets.findIndex(item => item == asset)
+          if (findIndex !== -1) {
             newSelectedAssets.splice(findIndex, 1)
           }
         })
@@ -1181,14 +1186,14 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         dispatch(setAssetTypesPatentsSelected(newSelectedAssets));
         setSelectItems(newSelectedAssets)
       }
-      if(selectedAssetsPatents.length > 0) {
+      if (selectedAssetsPatents.length > 0) {
         const findIndex = assetTypeAssignmentAssets.findIndex(row => row.asset == selectedAssetsPatents[0] || row.rf_id == selectedAssetsPatents[1])
-        if(findIndex === -1) {
+        if (findIndex === -1) {
           resetAll()
-        }        
+        }
       }
-    } 
-  }, [ assetTypeAssignmentAssets ])
+    }
+  }, [assetTypeAssignmentAssets])
 
   useEffect(() => {
     const onlySharedAssetsActive = () => {
@@ -1202,10 +1207,10 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       setAssetRows(updatedAssets);
     };
     if (
-      process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && 
-      sharedActiveAssets.length && 
+      process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' &&
+      sharedActiveAssets.length &&
       assetTypeAssignmentAssets.length
-    ) { 
+    ) {
       onlySharedAssetsActive();
     }
   }, [sharedActiveAssets, assetTypeAssignmentAssets]);
@@ -1221,7 +1226,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   }, []) */
 
   useEffect(() => {
-    if( display_clipboard === true &&  clipboard_assets.length > 0 ) {
+    if (display_clipboard === true && clipboard_assets.length > 0) {
       let tableColumns = [...COLUMNS, {
         width: 400,
         minWidth: 400,
@@ -1249,12 +1254,12 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         format: capitalize
       }]
       tableColumns[2].label = 'Clipboard'
-      tableColumns.splice(3,1)
+      tableColumns.splice(3, 1)
       setTableColumns(tableColumns)
       setWidth(1500)
-      dispatch(setAssetTypeAssignmentAllAssets({list: clipboard_assets, total_records: clipboard_assets.length}))
+      dispatch(setAssetTypeAssignmentAllAssets({ list: clipboard_assets, total_records: clipboard_assets.length }))
     }
-  }, [ dispatch,  display_clipboard, clipboard_assets])
+  }, [dispatch, display_clipboard, clipboard_assets])
 
   /**
    * Adding channel to assets data
@@ -1267,31 +1272,31 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     slack_channel_list.forEach(channelAsset => {
       updatedAssets.some(rowAsset => {
         if (`us${rowAsset.asset}`.toString().toLowerCase() === channelAsset.name.toString().toLowerCase()) {
-          rowAsset.channel = rowAsset.asset;  
-          findChannel = true;  
-          return true;  
+          rowAsset.channel = rowAsset.asset;
+          findChannel = true;
+          return true;
         }
-        return false;  
+        return false;
       });
     });
 
     if (findChannel) {
       setAssetRows(updatedAssets);
     }
-};
+  };
 
-  const findChannelsFromMicrosoft = async() => {
+  const findChannelsFromMicrosoft = async () => {
     let findChannel = false;
     const updatedAssets = [...assetTypeAssignmentAssets];
 
     microsoft_channel_list.forEach(channelAsset => {
-      updatedAssets.some(rowAsset => { 
+      updatedAssets.some(rowAsset => {
         if (`us${rowAsset.asset}`.toString().toLowerCase() === channelAsset.displayName.toString().toLowerCase()) {
-          rowAsset.channel = rowAsset.asset;  
-          findChannel = true;   
-          return true;  
+          rowAsset.channel = rowAsset.asset;
+          findChannel = true;
+          return true;
         }
-        return false;   
+        return false;
       });
     });
 
@@ -1302,81 +1307,81 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
 
   useEffect(() => {
     const checkAssetChannel = async () => {
-      if(assetTypeAssignmentAssets.length > 0 && (slack_channel_list.length > 0 || microsoft_channel_list.length > 0)) {
-        if(slack_channel_list.length > 0) {
+      if (assetTypeAssignmentAssets.length > 0 && (slack_channel_list.length > 0 || microsoft_channel_list.length > 0)) {
+        if (slack_channel_list.length > 0) {
           await findChannelsFromSlack()
-        } else if(microsoft_channel_list.length > 0) {
+        } else if (microsoft_channel_list.length > 0) {
           await findChannelsFromMicrosoft()
         }
         /**
          * If asset selected find ChannelID
          */
-        if(selectedRow.length > 0) {
+        if (selectedRow.length > 0) {
           const channelID = findChannelID(selectedRow[0])
-          if( channelID != '') {
-            dispatch(setChannelID({channel_id: channelID}))
+          if (channelID != '') {
+            dispatch(setChannelID({ channel_id: channelID }))
           }
-        }   
+        }
       } else {
-        if(process.env.REACT_APP_ENVIROMENT_MODE !== 'SAMPLE') {
+        if (process.env.REACT_APP_ENVIROMENT_MODE !== 'SAMPLE') {
           const oldAssets = [...assetTypeAssignmentAssets]
-          const newArray = oldAssets.map(({channel, ...keepOtherAttrs}) => keepOtherAttrs)
+          const newArray = oldAssets.map(({ channel, ...keepOtherAttrs }) => keepOtherAttrs)
           setAssetRows(newArray)
         }
       }
-    }    
+    }
     checkAssetChannel()
-  },[ slack_channel_list, microsoft_channel_list, assetTypeAssignmentAssets, selectedRow])
+  }, [slack_channel_list, microsoft_channel_list, assetTypeAssignmentAssets, selectedRow])
 
 
   useEffect(() => {
-    if(slack_channel_list.length == 0 && slack_channel_list_loading === false) {
-      const slackToken = getTokenStorage( 'slack_auth_token_info' )
-      if(slackToken && slackToken!= '' && slackToken!= null && slackToken!= 'null' ) {
+    if (slack_channel_list.length == 0 && slack_channel_list_loading === false) {
+      const slackToken = getTokenStorage('slack_auth_token_info')
+      if (slackToken && slackToken != '' && slackToken != null && slackToken != 'null') {
         let token = JSON.parse(slackToken)
-        
-        if(typeof token === 'string') {
+
+        if (typeof token === 'string') {
           token = JSON.parse(token)
-          setTokenStorage( 'slack_auth_token_info', token )
+          setTokenStorage('slack_auth_token_info', token)
 
         }
-        
-        if(typeof token === 'object' && token !== null) {
-          const { access_token } = token          
-          if(access_token && access_token != '') {
+
+        if (typeof token === 'object' && token !== null) {
+          const { access_token } = token
+          if (access_token && access_token != '') {
             dispatch(getChannels(access_token))
           }
         }
-      }      
+      }
     }
   }, [slack_channel_list, slack_channel_list_loading])
 
   useEffect(() => {
-    if(microsoft_channel_list.length == 0 && microsoft_channel_list_loading === false) {
-      const microsoftToken = getTokenStorage( 'microsoft_auth_token_info' )
-      if(microsoftToken && microsoftToken!= '' && microsoftToken!= null && microsoftToken!= 'null' ) {
+    if (microsoft_channel_list.length == 0 && microsoft_channel_list_loading === false) {
+      const microsoftToken = getTokenStorage('microsoft_auth_token_info')
+      if (microsoftToken && microsoftToken != '' && microsoftToken != null && microsoftToken != 'null') {
         let token = JSON.parse(microsoftToken)
-        
-        if(typeof token === 'string') {
+
+        if (typeof token === 'string') {
           token = JSON.parse(token)
-          setTokenStorage( 'microsoft_auth_token_info', token )
+          setTokenStorage('microsoft_auth_token_info', token)
         }
-        
-        if(typeof token === 'object' && token !== null) {
-          const { access_token, refresh_token } = token          
-          if(access_token && access_token != '') { 
+
+        if (typeof token === 'object' && token !== null) {
+          const { access_token, refresh_token } = token
+          if (access_token && access_token != '') {
             const getTeamData = getTokenStorage('microsoft_auth_team')
-            let teamID = null  
-            if(getTeamData && getTeamData != '' && getTeamData != null) {
-              const teamData = JSON.parse(getTeamData) 
-              teamID = teamData.teamId 
+            let teamID = null
+            if (getTeamData && getTeamData != '' && getTeamData != null) {
+              const teamData = JSON.parse(getTeamData)
+              teamID = teamData.teamId
             }
-            if(teamID != null) { 
+            if (teamID != null) {
               dispatch(getMicrosoftChannels(access_token, refresh_token, teamID))
             }
           }
         }
-      }      
+      }
     }
   }, [microsoft_channel_list, microsoft_channel_list_loading])
 
@@ -1393,15 +1398,15 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         dispatch(getSlackMessages(channel_id));
       } else if (getMicrosoftToken && getMicrosoftToken != "") {
         const getMicorosftTeam = getTokenStorage("microsoft_auth_team");
-        const {access_token, refresh_token} = JSON.parse(getMicrosoftToken)
+        const { access_token, refresh_token } = JSON.parse(getMicrosoftToken)
         let teamID = null;
-        if(getMicorosftTeam != '' && getMicorosftTeam != null) {
+        if (getMicorosftTeam != '' && getMicorosftTeam != null) {
           const { teamId } = JSON.parse(getMicorosftTeam)
-          if(teamId != undefined && teamId != '' && teamId != null) {
+          if (teamId != undefined && teamId != '' && teamId != null) {
             teamID = teamId
           }
         }
-        if(access_token != undefined && access_token != '' && refresh_token != null && refresh_token != undefined && teamID != null) { 
+        if (access_token != undefined && access_token != '' && refresh_token != null && refresh_token != undefined && teamID != null) {
           dispatch(getMicrosoftMessages(access_token, refresh_token, teamID, channel_id));
         }
       }
@@ -1409,8 +1414,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   }, [dispatch, channel_id]);
 
   useEffect(() => {
-    if (selectedAssetsPatents.length > 0 ) {
-      if(selectedRow.length == 0) {
+    if (selectedAssetsPatents.length > 0) {
+      if (selectedRow.length == 0) {
         setSelectedRow([selectedAssetsPatents[0] != "" ? selectedAssetsPatents[0].toString() : selectedAssetsPatents[1].toString()])
       }
     } else if (selectedAssetsPatents.length == 0 && selectedRow.length > 0) {
@@ -1419,44 +1424,44 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   }, [selectedAssetsPatents, selectedRow])
 
 
-  
 
-  useEffect(() => {    
-    if(assetTypeAssignmentAssetsSelected.length > 0 && (selectItems.length == 0 || selectItems.length != assetTypeAssignmentAssetsSelected.length) ){
-      setSelectItems(assetTypeAssignmentAssetsSelected)
-    } else if(assetTypeAssignmentAssetsSelected.length == 0 && selectItems.length > 0 ) {
-      setSelectItems([])
-    }
-  }, [ assetTypeAssignmentAssetsSelected, selectItems ])
 
   useEffect(() => {
-    if(assetTypeAssignmentAssetsSelectedAll !== selectedAll) {
+    if (assetTypeAssignmentAssetsSelected.length > 0 && (selectItems.length == 0 || selectItems.length != assetTypeAssignmentAssetsSelected.length)) {
+      setSelectItems(assetTypeAssignmentAssetsSelected)
+    } else if (assetTypeAssignmentAssetsSelected.length == 0 && selectItems.length > 0) {
+      setSelectItems([])
+    }
+  }, [assetTypeAssignmentAssetsSelected, selectItems])
+
+  useEffect(() => {
+    if (assetTypeAssignmentAssetsSelectedAll !== selectedAll) {
       setSelectAll(assetTypeAssignmentAssetsSelectedAll)
     }
   }, [assetTypeAssignmentAssetsSelectedAll])
 
   useEffect(() => {
-    let filter = []    
-    if(assetTypeAssignmentAssets.length > 0 && selectedAssetsPatents.length > 0) {
-      filter = assetTypeAssignmentAssets.filter( row => row.asset == selectedAssetsPatents[0].toString() || row.asset == selectedAssetsPatents[1].toString() )
-      if(filter.length === 0) {
+    let filter = []
+    if (assetTypeAssignmentAssets.length > 0 && selectedAssetsPatents.length > 0) {
+      filter = assetTypeAssignmentAssets.filter(row => row.asset == selectedAssetsPatents[0].toString() || row.asset == selectedAssetsPatents[1].toString())
+      if (filter.length === 0) {
         resetAll()
       }
     }
-  }, [ assetTypeAssignmentAssets ]) 
+  }, [assetTypeAssignmentAssets])
 
   const loadDataFromServer = (startIndex, endIndex, column, direction) => {
-    
+
     const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-          tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-          customers = selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
-          assignments = selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;   
-     
-    if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
-      if (auth_token != null && assetTypeAssignmentAssetsLoading === false ) {  
+      tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+      customers = selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
+      assignments = selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
+
+    if (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') {
+      if (auth_token != null && assetTypeAssignmentAssetsLoading === false) {
         dispatch(
           process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD'
-          ? 
+            ?
             getCustomerAssets(
               selectedCategory == '' ? '' : selectedCategory,
               companies,
@@ -1469,30 +1474,30 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
               column,
               direction
             )
-          :
-          getCustomerSelectedAssets(getShareCodeFromLocation(), false, {
-            selectedCategory: selectedCategory == '' ? '' : selectedCategory,
-            companies,
-            tabs,
-            customers,
-            assignments,
-            append: true,
-            startIndex,
-            endIndex,
-            column,
-            direction,
-            position: 0
-          })
-        );          
+            :
+            getCustomerSelectedAssets(getShareCodeFromLocation(), false, {
+              selectedCategory: selectedCategory == '' ? '' : selectedCategory,
+              companies,
+              tabs,
+              customers,
+              assignments,
+              append: false,  // Use false for initial load to prevent duplicate data
+              startIndex,
+              endIndex,
+              column,
+              direction,
+              position: 0
+            })
+        );
         setWidth(1900)
       } else {
         dispatch(
           setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
         );
-        dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) )
+        dispatch(setAssetTypesAssignmentsAllAssetsLoading(false))
       }
     } else {
-      if ((selectedCompaniesAll === true || selectedCompanies.length > 0) && assetTypeAssignmentAssetsLoading === false ) {
+      if ((selectedCompaniesAll === true || selectedCompanies.length > 0) && assetTypeAssignmentAssetsLoading === false) {
         /* console.log('ASSETS LOAD loadDataFromServer') */
         PatenTrackApi.cancelAssetsRequest()
         dispatch(
@@ -1518,11 +1523,11 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         dispatch(
           setAssetTypeAssignmentAllAssets({ list: [], total_records: 0 }),
         );
-        dispatch( setAssetTypesAssignmentsAllAssetsLoading( false ) ) 
+        dispatch(setAssetTypesAssignmentsAllAssetsLoading(false))
       }
     }
   }
-  
+
   const callSelectedAssets = useCallback(({ grant_doc_num, appno_doc_num, asset }) => {
     /* const selectedItems = [];
     if (grant_doc_num != "") {
@@ -1531,59 +1536,59 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     if (appno_doc_num != "") {
       selectedItems.push(appno_doc_num);
     } */
-    
-    setSelectedRow([asset]);    
-  }, [dispatch] );
+
+    setSelectedRow([asset]);
+  }, [dispatch]);
 
   /**
    * Row Click
    */
 
   const handleOnClick = useCallback(
-    ({ grant_doc_num, appno_doc_num, asset }) => {     
+    ({ grant_doc_num, appno_doc_num, asset }) => {
       /*TV, Comment, Family, FamilyItem, getChannelID Legal Events */
-      if(!selectedRow.includes(asset)) {
+      if (!selectedRow.includes(asset)) {
         history.push({
-          hash: updateHashLocation(location, "asset", asset ).join(
-              "&",
+          hash: updateHashLocation(location, "asset", asset).join(
+            "&",
           ),
         });
 
 
-        if(selectedCategory == 'restore_ownership') {
+        if (selectedCategory == 'restore_ownership') {
           dispatch(setAssetTypesPatentsSelected([asset]))
           setSelectItems([asset])
         }
-        if(selectedCategory == 'technical_scope') {
+        if (selectedCategory == 'technical_scope') {
           dispatch(linkWithSheetOpenPanel(true))
-          dispatch(linkWithSheetSelectedAsset('products', encodeURIComponent(grant_doc_num  == '' ? `US${applicationFormat(appno_doc_num)}` : `US${numberWithCommas(grant_doc_num)}`)))     
+          dispatch(linkWithSheetSelectedAsset('products', encodeURIComponent(grant_doc_num == '' ? `US${applicationFormat(appno_doc_num)}` : `US${numberWithCommas(grant_doc_num)}`)))
         }
         callSelectedAssets({ grant_doc_num, appno_doc_num, asset });
-        if(defaultViewFlag === 0) {
+        if (defaultViewFlag === 0) {
           let changeBar = false
-          if(openIllustrationBar === false && typeof handleIllustrationBarOpen == 'function') {
+          if (openIllustrationBar === false && typeof handleIllustrationBarOpen == 'function') {
             changeBar = true
-            handleIllustrationBarOpen() 
+            handleIllustrationBarOpen()
           }
-          if(commentBar === false && typeof handleCommentBarOpen == 'function') {
+          if (commentBar === false && typeof handleCommentBarOpen == 'function') {
             changeBar = true
-            handleCommentBarOpen() 
+            handleCommentBarOpen()
           }
-          if(openChartBar === false && typeof handleChartBarOpen == 'function') {
+          if (openChartBar === false && typeof handleChartBarOpen == 'function') {
             changeBar = true
             handleChartBarOpen()
           }
-          if(openAnalyticsBar === false && typeof handleAnalyticsBarOpen == 'function') {
+          if (openAnalyticsBar === false && typeof handleAnalyticsBarOpen == 'function') {
             changeBar = true
             handleAnalyticsBarOpen()
           }
 
-          if(changeBar === true && typeof handleVisualBarSize == 'function') {
+          if (changeBar === true && typeof handleVisualBarSize == 'function') {
             handleVisualBarSize(true, true, true, true)
           }
           setDefaultViewFlag(1)
         }
-        if(['incorrect_names', 'pay_maintainence_fee', 'late_maintainance', 'ptab', 'to_be_monitized'].includes(selectedCategory)){
+        if (['incorrect_names', 'pay_maintainence_fee', 'late_maintainance', 'ptab', 'to_be_monitized'].includes(selectedCategory)) {
           /**
            * Check if Right Pane is close then open it and close the TV
            */
@@ -1621,7 +1626,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
             setDefaultViewFlag(1)
           } */
         }
-        setCheckBar(!checkBar)        
+        setCheckBar(!checkBar)
         dispatch(setChildSelectedAssetsPatents([]));
         dispatch(setSelectedAssetsTransactions([]));
         //dispatch(setDocumentTransaction([]));
@@ -1632,10 +1637,10 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         dispatch(setAssetFamily([]));
         dispatch(setChannelID(''))
         dispatch(setDriveTemplateFrameMode(false));
-        dispatch(setDriveTemplateFile(null));  
+        dispatch(setDriveTemplateFile(null));
         dispatch(setTemplateDocument(null));
         dispatch(setConnectionBoxView(false));
-        dispatch(setPDFView(false));        
+        dispatch(setPDFView(false));
         //dispatch(toggleUsptoMode(false));  
         dispatch(toggleLifeSpanMode(false));
         dispatch(toggleFamilyMode(true));
@@ -1652,37 +1657,37 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         dispatch(getAssetDetails(appno_doc_num, grant_doc_num))
         dispatch(
           setPDFFile(
-            { 
-              document: null, 
-              form: null, 
-              agreement: null 
+            {
+              document: null,
+              form: null,
+              agreement: null
             }
           )
         )
         dispatch(setSelectedAssetsPatents([grant_doc_num, appno_doc_num]));
         dispatch(
-        setAssetsIllustration({
+          setAssetsIllustration({
             type: "patent",
             id: grant_doc_num || appno_doc_num,
             flag: grant_doc_num !== '' && grant_doc_num !== null ? 1 : 0
-        }),
+          }),
         );
         dispatch(
-        setCommentsEntity({
+          setCommentsEntity({
             type: "asset",
             id: grant_doc_num || appno_doc_num,
-        }),
+          }),
         );
-        
+
 
         dispatch(assetFamilySingle(appno_doc_num))
         dispatch(assetLegalEvents(appno_doc_num, grant_doc_num))
         dispatch(assetFamily(appno_doc_num))
         dispatch(setSlackMessages({ messages: [], users: [] }))
         dispatch(setMicrosoftMessages({ messages: [], users: [] }))
-        const channelID = findChannelID(grant_doc_num != '' ? grant_doc_num : appno_doc_num)        
-        if( channelID != '') {
-          dispatch(setChannelID({channel_id: channelID}))
+        const channelID = findChannelID(grant_doc_num != '' ? grant_doc_num : appno_doc_num)
+        if (channelID != '') {
+          dispatch(setChannelID({ channel_id: channelID }))
         }
         //dispatch(getChannelID(grant_doc_num, appno_doc_num));
         /* if(openAnalyticsBar === false || openChartBar === false) {
@@ -1690,16 +1695,16 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         } */
       } else {
         history.push({
-          hash: updateHashLocation(location, "asset", [] ).join(
+          hash: updateHashLocation(location, "asset", []).join(
             "&",
           ),
         });
         setCheckBar(!checkBar)
-        resetAll() 
-        if(selectedCategory == 'restore_ownership') {
+        resetAll()
+        if (selectedCategory == 'restore_ownership') {
           dispatch(setAssetTypesPatentsSelected([]))
           setSelectItems([])
-        } else if (selectedCategory == 'incorrect_names') { 
+        } else if (selectedCategory == 'incorrect_names') {
           /* if(openChartBar === true) {
             handleChartBarOpen()
           }
@@ -1713,10 +1718,10 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
         }
       }
     },
-    [ dispatch, defaultViewFlag, selectedAssetsPatents, selectedRow, openAnalyticsBar, openChartBar ],
+    [dispatch, defaultViewFlag, selectedAssetsPatents, selectedRow, openAnalyticsBar, openChartBar],
   );
 
-const resetAll = useCallback(() => {
+  const resetAll = useCallback(() => {
     setSelectedRow([])
     dispatch(setAssetsIllustration(null))
     dispatch(setAssetsIllustrationData(null))
@@ -1739,260 +1744,260 @@ const resetAll = useCallback(() => {
     dispatch(setLinkAssetData([]))
     dispatch(setLinkAssetListSelected([]))
     dispatch(resetAssetDetails())
-    
-}, [dispatch, openChartBar, openAnalyticsBar])
 
-/* const onDoubleClick = (e, row, flag) => {
-  setCurrentSelection(row.asset) 
-  setAsset(row.appno_doc_num)
-  setClientEvent({x: e.clientX, y: e.clientY})    
-} */
+  }, [dispatch, openChartBar, openAnalyticsBar])
 
-/**
- * On Mouseover open Child list on Modal
- */
-const onMouseOver = (e, row, flag) => {
-  applicationNumber = row.appno_doc_num
-  setAnchorEl(e.currentTarget);
-  assetNumber = row.asset 
-  if(hoverTimer !== null) {
+  /* const onDoubleClick = (e, row, flag) => {
+    setCurrentSelection(row.asset) 
+    setAsset(row.appno_doc_num)
+    setClientEvent({x: e.clientX, y: e.clientY})    
+  } */
+
+  /**
+   * On Mouseover open Child list on Modal
+   */
+  const onMouseOver = (e, row, flag) => {
+    applicationNumber = row.appno_doc_num
+    setAnchorEl(e.currentTarget);
+    assetNumber = row.asset
+    if (hoverTimer !== null) {
+      clearTimeout(hoverTimer)
+    }
+    hoverTimer = setTimeout(() => {
+      checkMouseStillOnHover(e, assetNumber)
+    }, 3000)
+  }
+
+  const onMouseOut = (e, row, flag) => {
+    setCurrentSelection(null)
+    setAsset(null)
+    setAnchorEl(null)
+    applicationNumber = null
+    assetNumber = null
     clearTimeout(hoverTimer)
-  }    
-  hoverTimer = setTimeout(() => {
-    checkMouseStillOnHover(e, assetNumber)
-  }, 3000)   
-}
-
-const onMouseOut =  (e, row, flag) => {
-  setCurrentSelection(null) 
-  setAsset(null)
-  setAnchorEl(null)
-  applicationNumber = null
-  assetNumber = null
-  clearTimeout(hoverTimer)
-}
+  }
 
 
-const checkMouseStillOnHover = (e, number) => {
-  if(number === assetNumber) {
-    setCurrentSelection(applicationNumber) 
-    setAsset(assetNumber)
-  }  
-}
+  const checkMouseStillOnHover = (e, number) => {
+    if (number === assetNumber) {
+      setCurrentSelection(applicationNumber)
+      setAsset(assetNumber)
+    }
+  }
 
-/**
- * Retireve slack messages and also retrieve Rating and Necessary and Assigned
- * @param {*} asset 
- */
-const retrieveSlackMessages = async(asset) => {
-  const getSlackToken = getTokenStorage("slack_auth_token_info");
-  const getMicrosoftToken = getTokenStorage("microsoft_auth_token_info")
-  
-  if (getSlackToken && getSlackToken != "") {
-    const channelID = findChannelID(asset)
-    if(channelID != '') {
-      const { access_token, bot_token, bot_user_id } = JSON.parse(getSlackToken)
-      if(access_token != '' && access_token != null && access_token != undefined) {
-        const { data } = await PatenTrackApi.getMessages( access_token, channelID);
-        loadMessages(data)        
-      }       
-    } 
-  } else if(getMicrosoftToken && getMicrosoftToken != "" && getMicrosoftToken != null) {
-    const channelID = findChannelID(asset)
-    if(channelID != '') {
-      const { access_token, refresh_token } = JSON.parse(getMicrosoftToken)
-      if(access_token != '' && access_token != null && access_token != undefined) {
-        const getMicrosoftTeam = getTokenStorage("microsoft_auth_team")
-        if(getMicrosoftTeam != undefined) {
-          const getTeam = JSON.parse(getMicrosoftTeam)
-          const { data } = await PatenTrackApi.getMicrosoftMessages( access_token, refresh_token, getTeam.teamId, channelID);
-          loadMessages(data)        
+  /**
+   * Retireve slack messages and also retrieve Rating and Necessary and Assigned
+   * @param {*} asset 
+   */
+  const retrieveSlackMessages = async (asset) => {
+    const getSlackToken = getTokenStorage("slack_auth_token_info");
+    const getMicrosoftToken = getTokenStorage("microsoft_auth_token_info")
+
+    if (getSlackToken && getSlackToken != "") {
+      const channelID = findChannelID(asset)
+      if (channelID != '') {
+        const { access_token, bot_token, bot_user_id } = JSON.parse(getSlackToken)
+        if (access_token != '' && access_token != null && access_token != undefined) {
+          const { data } = await PatenTrackApi.getMessages(access_token, channelID);
+          loadMessages(data)
+        }
+      }
+    } else if (getMicrosoftToken && getMicrosoftToken != "" && getMicrosoftToken != null) {
+      const channelID = findChannelID(asset)
+      if (channelID != '') {
+        const { access_token, refresh_token } = JSON.parse(getMicrosoftToken)
+        if (access_token != '' && access_token != null && access_token != undefined) {
+          const getMicrosoftTeam = getTokenStorage("microsoft_auth_team")
+          if (getMicrosoftTeam != undefined) {
+            const getTeam = JSON.parse(getMicrosoftTeam)
+            const { data } = await PatenTrackApi.getMicrosoftMessages(access_token, refresh_token, getTeam.teamId, channelID);
+            loadMessages(data)
+          }
         }
       }
     }
   }
-}
 
-const loadMessages = (data) => {
+  const loadMessages = (data) => {
 
-  if(data.messages.length > 0) {
-    /**
-     * Find String Necessary or Important and also via PatenTrack
-     */
-    const ratingItems = []
-    data.messages.forEach( item => {
-      if(item.type == 'message') {
-        const {text} = item 
-        if(text != '') { 
-          if(text.toLowerCase().indexOf('necessary') !== -1 && text.indexOf('via PatenTrack') !== -1) {
-            /**
-             * Find Necessary
-             */
-            const value = text.match(/\d+/)[0]
-            ratingItems.push({
-              name: 'Necessary',
-              value
-            })
-          }
-
-          if(text.toLowerCase().indexOf('important') !== -1 && text.indexOf('via PatenTrack') !== -1) {
-            /**
-             * Find Important
-             */
-            const value = text.match(/\d+/)[0]
-            ratingItems.push({
-              name: 'Important',
-              value
-            })
-          } 
-          if(text.indexOf('via PatenTrack') !== -1 && text.indexOf('assigned to this asset') !== -1){ 
-            let messageTest = text.replace('products are assigned to this asset via PatenTrack', '')
-            messageTest = text.replace('product is assigned to this asset via PatenTrack', '')
-            if(messageTest != '') {
+    if (data.messages.length > 0) {
+      /**
+       * Find String Necessary or Important and also via PatenTrack
+       */
+      const ratingItems = []
+      data.messages.forEach(item => {
+        if (item.type == 'message') {
+          const { text } = item
+          if (text != '') {
+            if (text.toLowerCase().indexOf('necessary') !== -1 && text.indexOf('via PatenTrack') !== -1) {
+              /**
+               * Find Necessary
+               */
+              const value = text.match(/\d+/)[0]
               ratingItems.push({
-                name: 'Assigned',
-                value: messageTest.split('@@').length
+                name: 'Necessary',
+                value
               })
+            }
+
+            if (text.toLowerCase().indexOf('important') !== -1 && text.indexOf('via PatenTrack') !== -1) {
+              /**
+               * Find Important
+               */
+              const value = text.match(/\d+/)[0]
+              ratingItems.push({
+                name: 'Important',
+                value
+              })
+            }
+            if (text.indexOf('via PatenTrack') !== -1 && text.indexOf('assigned to this asset') !== -1) {
+              let messageTest = text.replace('products are assigned to this asset via PatenTrack', '')
+              messageTest = text.replace('product is assigned to this asset via PatenTrack', '')
+              if (messageTest != '') {
+                ratingItems.push({
+                  name: 'Assigned',
+                  value: messageTest.split('@@').length
+                })
+              }
             }
           }
         }
+      });
+      if (ratingItems.length > 0) {
+        updateTableColumn(ratingItems)
       }
-    }); 
-    if(ratingItems.length > 0) {
-      updateTableColumn(ratingItems)
     }
   }
-}
 
-const updateTableColumn = (ratingItems) => {
-  setAssetRating(ratingItems)
-  let findIndex = dropdownList.findIndex( item => item.id == 6)
-  if(findIndex !== -1) {
-    dropdownList[findIndex].name = <RatingNecessary item={ratingItems} />
-  }
-  findIndex = dropdownList.findIndex( item => item.id == 7)
-  if(findIndex !== -1) {
-    dropdownList[findIndex].name = <RatingImportant item={ratingItems} />
-  }
+  const updateTableColumn = (ratingItems) => {
+    setAssetRating(ratingItems)
+    let findIndex = dropdownList.findIndex(item => item.id == 6)
+    if (findIndex !== -1) {
+      dropdownList[findIndex].name = <RatingNecessary item={ratingItems} />
+    }
+    findIndex = dropdownList.findIndex(item => item.id == 7)
+    if (findIndex !== -1) {
+      dropdownList[findIndex].name = <RatingImportant item={ratingItems} />
+    }
 
-  findIndex = dropdownList.findIndex( item => item.id == 11)
-  if(findIndex !== -1) {
-    const findAssignedIndex = ratingItems.findIndex( item => item.name == 'Assigned')
-    if(findAssignedIndex !== -1) {
-      dropdownList[findIndex].name =  <Badge color="secondary" badgeContent={ratingItems[findAssignedIndex].value}>
-      Assigned Category/Product
-     </Badge>
-    } 
-  }
+    findIndex = dropdownList.findIndex(item => item.id == 11)
+    if (findIndex !== -1) {
+      const findAssignedIndex = ratingItems.findIndex(item => item.name == 'Assigned')
+      if (findAssignedIndex !== -1) {
+        dropdownList[findIndex].name = <Badge color="secondary" badgeContent={ratingItems[findAssignedIndex].value}>
+          Assigned Category/Product
+        </Badge>
+      }
+    }
 
-  let previousColumns = [...tableColumns]
-  const columnIndex = previousColumns.findIndex(item => item.role == 'static_dropdown')
-  if(columnIndex !== -1) {
-    previousColumns[columnIndex].list = dropdownList
-    setTableColumns(previousColumns)
+    let previousColumns = [...tableColumns]
+    const columnIndex = previousColumns.findIndex(item => item.role == 'static_dropdown')
+    if (columnIndex !== -1) {
+      previousColumns[columnIndex].list = dropdownList
+      setTableColumns(previousColumns)
+    }
   }
-}
 
   /**
    * Click checkbox
    */
   const handleClickSelectCheckbox = useCallback(
     (e, row) => {
-        e.preventDefault()
-        const { checked } = e.target
-        if(process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && row.status === 0) {
-          return null;
+      e.preventDefault()
+      const { checked } = e.target
+      if (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && row.status === 0) {
+        return null;
+      }
+      let cntrlKey = e.ctrlKey ? e.ctrlKey : e.metaKey ? e.metaKey : undefined;
+      if (dashboardScreen === true) {
+        dispatch(setTimelineScreen(true))
+        dispatch(setDashboardScreen(false))
+      }
+      let oldSelection = [...selectItems];
+      if (cntrlKey !== undefined) {
+        /* if(selectedCategory == 'restore_ownership' && display_clipboard === false) {
+          dispatch(setAssetTypesPatentsSelected([row.asset]))
+          setSelectItems([row.asset])
+          handleOnClick(row)
+        } else { */
+        oldSelection = [...selectItems]
+        let newItem = false
+        if (!oldSelection.includes(row.asset)) {
+          oldSelection.push(row.asset);
+          newItem = true
+        } else {
+          oldSelection = oldSelection.filter(
+            asset => asset != row.asset,
+          );
         }
-        let cntrlKey = e.ctrlKey ? e.ctrlKey : e.metaKey ? e.metaKey : undefined; 
-        if(dashboardScreen === true) {
-          dispatch(setTimelineScreen(true))
-          dispatch(setDashboardScreen(false))
-        }
-        let oldSelection = [...selectItems]; 
-        if(cntrlKey !== undefined) {
-          /* if(selectedCategory == 'restore_ownership' && display_clipboard === false) {
-            dispatch(setAssetTypesPatentsSelected([row.asset]))
-            setSelectItems([row.asset])
+        dispatch(setAssetTypesPatentsSelected(oldSelection))
+        setSelectItems(prevItems =>
+          prevItems.includes(row.asset)
+            ? prevItems.filter(item => item !== row.asset)
+            : [...prevItems, row.asset],
+        );
+        if (oldSelection.length == 1) {
+          if (newItem === true) {
             handleOnClick(row)
-          } else { */ 
-            oldSelection = [...selectItems]
-            let newItem = false
-            if (!oldSelection.includes(row.asset)) {
-              oldSelection.push(row.asset);
-              newItem = true
+          } else {
+            const findIndex = assetRows.findIndex(item => item.asset === oldSelection[0])
+            if (findIndex !== -1) {
+              handleOnClick(assetRows[findIndex])
+            }
+          }
+        } else {
+          setCheckBar(!checkBar)
+          resetAll()
+        }
+        /* } */
+        dispatch(setAssetTypesPatentsSelectAll(false))
+      } else {
+        if (typeof e.target.closest == 'function') {
+          const element = e.target.closest('div.ReactVirtualized__Table__rowColumn')
+          if (element != null) {
+            let index = element.getAttribute('aria-colindex')
+            const findElement = element.querySelector('div.MuiSelect-select')
+            if (index == 2 && findElement != null) {
+              setDropOpenAsset(row.asset)
+              updateTableColumn([])
+              /**
+               * Retreive slack messages for this assets
+               */
+              retrieveSlackMessages(row.asset)
             } else {
-              oldSelection = oldSelection.filter(
-                asset => asset != row.asset,
-              );
-            } 
-            dispatch(setAssetTypesPatentsSelected(oldSelection))
-            setSelectItems(prevItems =>
-                prevItems.includes(row.asset)
-                ? prevItems.filter(item => item !== row.asset)
-                : [...prevItems, row.asset],
-            );   
-            if(oldSelection.length == 1) {
-              if(newItem === true){
+              if (!oldSelection.includes(`${row.asset}`)) {
+                dispatch(setAssetTypesPatentsSelected([row.asset]))
+                setSelectItems([row.asset])
                 handleOnClick(row)
               } else {
-                const findIndex = assetRows.findIndex( item => item.asset === oldSelection[0])
-                if(findIndex !== -1) {
-                  handleOnClick(assetRows[findIndex])
-                }
+                clearSelections()
+                checkTransactionRow()
               }
-            } else {
-              setCheckBar(!checkBar)
-              resetAll()
             }
-          /* } */
-          dispatch(setAssetTypesPatentsSelectAll(false))                      
-        } else {
-          if(typeof e.target.closest == 'function') {
-            const element = e.target.closest('div.ReactVirtualized__Table__rowColumn')
-            if(element != null) {
-              let index = element.getAttribute('aria-colindex')   
-              const findElement = element.querySelector('div.MuiSelect-select')
-                if( index == 2 && findElement != null ) {
-                  setDropOpenAsset(row.asset)
-                  updateTableColumn([])
-                  /**
-                   * Retreive slack messages for this assets
-                   */
-                  retrieveSlackMessages(row.asset)
-                } else {                  
-                  if (!oldSelection.includes(`${row.asset}`)) {
-                    dispatch(setAssetTypesPatentsSelected([row.asset]))
-                    setSelectItems([row.asset])
-                    handleOnClick(row)
-                  } else {
-                    clearSelections()
-                    checkTransactionRow()
-                  }                  
-                }
+          } else {
+            if (row.asset == dropOpenAsset) {
+              setDropOpenAsset(null)
             } else {
-              if( row.asset == dropOpenAsset ) {
-                setDropOpenAsset(null)
+              if (!oldSelection.includes(row.asset)) {
+                dispatch(setAssetTypesPatentsSelected([row.asset]))
+                setSelectItems([row.asset])
+                handleOnClick(row)
               } else {
-                if (!oldSelection.includes(row.asset)) {
-                  dispatch(setAssetTypesPatentsSelected([row.asset]))
-                  setSelectItems([row.asset])
-                  handleOnClick(row)
-                } else {
-                  clearSelections()
-                  checkTransactionRow()
-                }  
+                clearSelections()
+                checkTransactionRow()
               }
             }
-          }                         
-        }         
+          }
+        }
+      }
     },
     [dispatch, dashboardScreen, selectedAssetsPatents, assetTypeAssignmentAssetsSelected, selectItems, currentSelection, dropOpenAsset],
   );
 
   const checkTransactionRow = () => {
-    if(selectedAssetAssignments.length > 0) {
+    if (selectedAssetAssignments.length > 0) {
       const findTable = document.getElementById('assets_assignments')
-      if(findTable == null) {
+      if (findTable == null) {
         dispatch(transactionRowClick(selectedAssetAssignments[0], slack_channel_list, false, ''))
       }
     }
@@ -2000,12 +2005,12 @@ const updateTableColumn = (ratingItems) => {
 
   const clearSelections = () => {
     history.push({
-      hash: updateHashLocation(location, "asset", [] ).join(
+      hash: updateHashLocation(location, "asset", []).join(
         "&",
       ),
     });
     dispatch(setAssetTypesPatentsSelected([]))
-    setSelectItems([]); 
+    setSelectItems([]);
     setCheckBar(!checkBar)
     resetAll()
   }
@@ -2014,7 +2019,7 @@ const updateTableColumn = (ratingItems) => {
    */
 
   const onHandleSelectAll = useCallback(
-    async(event, row) => {
+    async (event, row) => {
       event.preventDefault();
       const { checked } = event.target;
       setSelectItems([]);
@@ -2037,90 +2042,116 @@ const updateTableColumn = (ratingItems) => {
       setSelectAll(checked);
       dispatch(setAssetTypesPatentsSelectAll(checked)) */
     },
-    [dispatch, assetRows ],
+    [dispatch, assetRows],
   );
 
   const findChannelID = useCallback((asset) => {
     let channelID = ''
-    if(slack_channel_list.length > 0 && asset != undefined) {
-      const findIndex = slack_channel_list.findIndex( channel => channel.name == `us${asset}`.toString().toLocaleLowerCase())
-  
-      if( findIndex !== -1) {
+    if (slack_channel_list.length > 0 && asset != undefined) {
+      const findIndex = slack_channel_list.findIndex(channel => channel.name == `us${asset}`.toString().toLocaleLowerCase())
+
+      if (findIndex !== -1) {
         channelID = slack_channel_list[findIndex].id
       }
-    } else if(microsoft_channel_list.length > 0 && asset != undefined) {
-      const findIndex = microsoft_channel_list.findIndex( channel => channel.displayName.toString().toLocaleLowerCase() == `US${asset}`.toString().toLocaleLowerCase())
-  
-      if( findIndex !== -1) {
+    } else if (microsoft_channel_list.length > 0 && asset != undefined) {
+      const findIndex = microsoft_channel_list.findIndex(channel => channel.displayName.toString().toLocaleLowerCase() == `US${asset}`.toString().toLocaleLowerCase())
+
+      if (findIndex !== -1) {
         channelID = microsoft_channel_list[findIndex].id
       }
     }
     return channelID
-  }, [ slack_channel_list, microsoft_channel_list ]) 
+  }, [slack_channel_list, microsoft_channel_list])
 
 
   const resizeColumnsWidth = useCallback((dataKey, data) => {
     let previousColumns = [...tableColumns]
-    const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
+    const findIndex = previousColumns.findIndex(col => col.dataKey == dataKey)
 
-    if( findIndex !== -1 ) {
-      previousColumns[findIndex].width =  previousColumns[findIndex].oldWidth + data.x
+    if (findIndex !== -1) {
+      previousColumns[findIndex].width = previousColumns[findIndex].oldWidth + data.x
       previousColumns[findIndex].minWidth = previousColumns[findIndex].oldWidth + data.x
     }
     setTableColumns(previousColumns)
-  }, [ tableColumns ] )
+  }, [tableColumns])
 
   const resizeColumnsStop = useCallback((dataKey, data) => {
     let previousColumns = [...tableColumns]
-    const findIndex = previousColumns.findIndex( col => col.dataKey == dataKey )
+    const findIndex = previousColumns.findIndex(col => col.dataKey == dataKey)
 
-    if( findIndex !== -1 ) {
-      previousColumns[findIndex].oldWidth =  previousColumns[findIndex].width 
+    if (findIndex !== -1) {
+      previousColumns[findIndex].oldWidth = previousColumns[findIndex].width
     }
     setTableColumns(previousColumns)
-  }, [ tableColumns ] )
+  }, [tableColumns])
 
-  const loadMoreRows =  (startIndex, endIndex) => {
-   
-    if(startIndex != endIndex && startIndex < totalRecords ) {
-      setOffsetWithLimit([startIndex, endIndex])
+  const loadMoreRows = (startIndex, endIndex) => {
+    // Guard 1: Synchronous ref check (prevents rapid-fire duplicates)
+    if (isLoadingMoreRef.current) {
+      return;
+    }
+
+    // Guard 2: prevent requests if already loading via Redux state
+    if (assetTypeAssignmentLoadingAssets || assetTypeAssignmentAssetsLoading) {
+      return;
+    }
+
+    // Guard 2: check if data at startIndex already exists (prevents duplicate initial load)
+    // This is the key guard that prevents InfiniteLoader from duplicating the initial load
+    if (assetTypeAssignmentAssets.length > startIndex) {
+      return;
+    }
+
+    // Use consistent batch size (DEFAULT_CUSTOMERS_LIMIT = 1000)
+    // The API expects offset and limit (count), not offset and endIndex
+    const limit = DEFAULT_CUSTOMERS_LIMIT;
+
+    if (startIndex != endIndex && startIndex < totalRecords) {
+      isLoadingMoreRef.current = true; // Block subsequent calls immediately
+
+      // Safety timeout to reset ref in case request fails or hangs
+      setTimeout(() => {
+        isLoadingMoreRef.current = false;
+      }, 5000);
+
+      setOffsetWithLimit([startIndex, limit])
       const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-            tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-            customers =
-              selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
-            assignments =
-              selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
-      if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+        tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+        customers =
+          selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
+        assignments =
+          selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
+      if (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') {
         if (auth_token != null) {
           dispatch(
-            process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
-            getCustomerAssets(
-              selectedCategory == '' ? '' : selectedCategory,
-              companies,
-              tabs,
-              customers,
-              assignments,
-              true,
-              startIndex,
-              endIndex,
-              sortField,
-              sortOrder,
-              assetTableScrollPosition
-            )
-            : 
-            getCustomerSelectedAssets(getShareCodeFromLocation(), false, {
-              selectedCategory: selectedCategory == '' ? '' : selectedCategory,
-              companies,
-              tabs,
-              customers,
-              assignments,
-              append: true,
-              startIndex,
-              endIndex,
-              column: sortField,
-              direction: sortOrder,
-              position: assetTableScrollPosition
-            })
+            process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ?
+              getCustomerAssets(
+                selectedCategory == '' ? '' : selectedCategory,
+                companies,
+                tabs,
+                customers,
+                assignments,
+                true,
+                startIndex,
+                limit,
+                sortField,
+                sortOrder,
+                assetTableScrollPosition
+              )
+              :
+              getCustomerSelectedAssets(getShareCodeFromLocation(), false, {
+                selectedCategory: selectedCategory == '' ? '' : selectedCategory,
+                companies,
+                tabs,
+                customers,
+                assignments,
+                append: true,
+                startIndex,
+                endIndex: limit,
+                column: sortField,
+                direction: sortOrder,
+                position: assetTableScrollPosition
+              })
           );
         }
       } else {
@@ -2134,7 +2165,7 @@ const updateTableColumn = (ratingItems) => {
               assignments,
               true,
               startIndex,
-              endIndex,
+              limit,
               sortField,
               sortOrder,
               assetTableScrollPosition,
@@ -2152,43 +2183,43 @@ const updateTableColumn = (ratingItems) => {
     setSortOrder(direction)
     setOffsetWithLimit([0, DEFAULT_CUSTOMERS_LIMIT])
     dispatch(setAssetTableScrollPos(0))
-    
+
     const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-          tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-          customers =
-            selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
-          assignments =
-            selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
-    if( process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ) {
+      tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
+      customers =
+        selectedAssetCompaniesAll === true ? [] : selectedAssetCompanies,
+      assignments =
+        selectedAssetAssignmentsAll === true ? [] : selectedAssetAssignments;
+    if (process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE') {
       if (auth_token != null) {
         dispatch(
-          process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ? 
-          getCustomerAssets(
-            selectedCategory == '' ? '' : selectedCategory,
-            companies,
-            tabs,
-            customers,
-            assignments,
-            false,
-            0,
-            DEFAULT_CUSTOMERS_LIMIT,
-            column,
-            direction
-          )
-          : 
-          getCustomerSelectedAssets(getShareCodeFromLocation(), false, {
-            selectedCategory: selectedCategory == '' ? '' : selectedCategory,
-            companies,
-            tabs,
-            customers,
-            assignments,
-            append: false,
-            startIndex: 0,
-            endIndex: DEFAULT_CUSTOMERS_LIMIT,
-            column: column,
-            direction: direction,
-            position: 0
-          })
+          process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' ?
+            getCustomerAssets(
+              selectedCategory == '' ? '' : selectedCategory,
+              companies,
+              tabs,
+              customers,
+              assignments,
+              false,
+              0,
+              DEFAULT_CUSTOMERS_LIMIT,
+              column,
+              direction
+            )
+            :
+            getCustomerSelectedAssets(getShareCodeFromLocation(), false, {
+              selectedCategory: selectedCategory == '' ? '' : selectedCategory,
+              companies,
+              tabs,
+              customers,
+              assignments,
+              append: false,
+              startIndex: 0,
+              endIndex: DEFAULT_CUSTOMERS_LIMIT,
+              column: column,
+              direction: direction,
+              position: 0
+            })
         );
       }
     } else {
@@ -2215,7 +2246,7 @@ const updateTableColumn = (ratingItems) => {
   }
 
   const onScrollTable = (scrollPos) => {
-    dispatch(setAssetTableScrollPos(scrollPos))   
+    dispatch(setAssetTableScrollPos(scrollPos))
   }
 
   const handleModalClose = () => {
@@ -2228,7 +2259,7 @@ const updateTableColumn = (ratingItems) => {
     setOpenCategoryModal(!openCategoryModal)
   }
 
-  const handleSubmitCategoryForm = async() => {  
+  const handleSubmitCategoryForm = async () => {
     const getSlackToken = getTokenStorage("slack_auth_token_info");
     if (getSlackToken && getSlackToken != "") {
       /**
@@ -2236,35 +2267,35 @@ const updateTableColumn = (ratingItems) => {
        * send message to this channel
        */
       const channelID = findChannelID(selectedCategoryRow.asset)
-      if(channelID != '') {
-        dispatch(setChannelID({channel_id: channelID}))          
+      if (channelID != '') {
+        dispatch(setChannelID({ channel_id: channelID }))
       }
       const allProducts = []
-      selectedCategoryProducts.forEach( item => {
+      selectedCategoryProducts.forEach(item => {
         allProducts.push(item.name)
       })
-      if(allProducts.length > 0) {
+      if (allProducts.length > 0) {
         const formData = new FormData()
-        formData.append('text',  `${allProducts.join(' @@ ')} product${allProducts.length > 1 ? 's are ' : ' is '} assigned to this asset via PatenTrack` )
+        formData.append('text', `${allProducts.join(' @@ ')} product${allProducts.length > 1 ? 's are ' : ' is '} assigned to this asset via PatenTrack`)
         formData.append('asset', selectedCategoryRow.asset)
         formData.append('asset_format', `us${selectedCategoryRow.asset}`)
         formData.append('user', '')
-        formData.append('reply', '' )
+        formData.append('reply', '')
         formData.append('edit', '')
         formData.append('file', '')
         formData.append('remote_file', '')
         formData.append('channel_id', channelID)
-        const slackToken = getTokenStorage( 'slack_auth_token_info' )
-        if( slackToken  && slackToken != null ) {
+        const slackToken = getTokenStorage('slack_auth_token_info')
+        if (slackToken && slackToken != null) {
           const { access_token, bot_token, bot_user_id } = JSON.parse(slackToken)
-          if( access_token != undefined) {  
+          if (access_token != undefined) {
             formData.append('auth', bot_token)
             formData.append('auth_id', bot_user_id)
-            const { data } = await PatenTrackApi.sendMessage(access_token, formData)             
-            if(data != '' && Object.keys(data).length > 0) {
+            const { data } = await PatenTrackApi.sendMessage(access_token, formData)
+            if (data != '' && Object.keys(data).length > 0) {
               setSelectCategoryProducts([])
               setSelectedCategoryRow(null)
-              if(channelID == '') {
+              if (channelID == '') {
                 dispatch(getChannels(access_token))
                 /* const {status, channel} = data
 
@@ -2272,7 +2303,7 @@ const updateTableColumn = (ratingItems) => {
                   dispatch(setChannelID({channel_id: channel}))    
                   dispatch(getSlackMessages(channel));
                 } */
-              }  else {
+              } else {
                 //dispatch(getSlackMessages(channelID));
               }
             }
@@ -2299,12 +2330,12 @@ const updateTableColumn = (ratingItems) => {
 
   return (
     <Paper
-      className={clsx(classes.root, {[classes.mobile]: isMobile === true && (fileBar === true || driveBar === true)})}
+      className={clsx(classes.root, { [classes.mobile]: isMobile === true && (fileBar === true || driveBar === true) })}
       square
       id={`assets_type_assignment_all_assets`}
       data_option={optionType}
     >
-      <VirtualizedTable 
+      <VirtualizedTable
         classes={classes}
         scrollTop={assetTableScrollPosition}
         openDropAsset={dropOpenAsset}
@@ -2321,7 +2352,7 @@ const updateTableColumn = (ratingItems) => {
         onSelectAll={onHandleSelectAll}
         defaultSelectAll={selectedAll}
         resizeColumnsWidth={resizeColumnsWidth}
-        resizeColumnsStop={resizeColumnsStop}        
+        resizeColumnsStop={resizeColumnsStop}
         showIsIndeterminate={false}
         /* hover={true}
         onMouseOver={onMouseOver}
@@ -2333,7 +2364,7 @@ const updateTableColumn = (ratingItems) => {
         sortDataLocal={false}
         sortDataFn={handleSortData}
         forceChildWaitCall={true}
-        totalRows={totalRecords} 
+        totalRows={totalRecords}
         getMoreRows={loadMoreRows}
         onScrollTable={onScrollTable}
         defaultSortField={sortField}
@@ -2346,7 +2377,7 @@ const updateTableColumn = (ratingItems) => {
         })}
         responsive={true}
         noBorderLines={true}
-        highlightRow={true} 
+        highlightRow={true}
         higlightColums={[2]}
         width={width}
         containerStyle={{
@@ -2360,45 +2391,45 @@ const updateTableColumn = (ratingItems) => {
       {
         googleAuthLogin && (
           <span ref={googleLoginRef}>
-            <Googlelogin/> 
+            <Googlelogin />
           </span>)
       }
       {
-        asset !== null 
-        ?
-        <Popover
-          open={openModal}
-          anchorEl={anchorEl}
-          onClose={handleModalClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }} 
-        >
-          <div style={{width: 200, height: 200, overflow: 'hidden auto', background: '#424242', padding: 10}}>
-            <ChildTable asset={asset} headerRowDisabled={true} />
-          </div>        
-        </Popover>
-        :
-        ''
-      }      
+        asset !== null
+          ?
+          <Popover
+            open={openModal}
+            anchorEl={anchorEl}
+            onClose={handleModalClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+          >
+            <div style={{ width: 200, height: 200, overflow: 'hidden auto', background: '#424242', padding: 10 }}>
+              <ChildTable asset={asset} headerRowDisabled={true} />
+            </div>
+          </Popover>
+          :
+          ''
+      }
       {
         openCategoryModal && (
-        <Dialog disableEscapeKeyDown open={openCategoryModal} onClose={handleCloseCategoryModal}>
-          <DialogTitle>Assign asset to category/product</DialogTitle>
-          <DialogContent>
-            <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap', p: 2}}>
-              <Category 
-                handleSelectedCategoryProduct={setSelectCategoryProducts}
-              />
-              {/* */}
-            </Box>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseCategoryModal}>Cancel</Button>
-            <Button onClick={handleSubmitCategoryForm}>Ok</Button>
-          </DialogActions>
-        </Dialog>)
+          <Dialog disableEscapeKeyDown open={openCategoryModal} onClose={handleCloseCategoryModal}>
+            <DialogTitle>Assign asset to category/product</DialogTitle>
+            <DialogContent>
+              <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap', p: 2 }}>
+                <Category
+                  handleSelectedCategoryProduct={setSelectCategoryProducts}
+                />
+                {/* */}
+              </Box>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseCategoryModal}>Cancel</Button>
+              <Button onClick={handleSubmitCategoryForm}>Ok</Button>
+            </DialogActions>
+          </Dialog>)
       }
     </Paper>
   );
