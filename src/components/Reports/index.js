@@ -908,6 +908,7 @@ const Reports = (props) => {
                                     if(other != '' && other !== null) {
                                         other = JSON.parse(other)
                                     }
+                                    oldList[findIndex].other = other;
                                     if( Array.isArray(other) ) {
                                         oldList[findIndex].list = other.length > 0 ? [...other] : []
                                         oldList[findIndex].patent = ''

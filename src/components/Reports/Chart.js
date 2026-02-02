@@ -10,6 +10,7 @@ import clsx from 'clsx'
 import LineGraph from './LineGraph';
 import AddToolTip from './AddToolTip';
 import { numberWithCommas } from '../../utils/numbers';
+import BreakdownDisplay from './BreakdownDisplay';
 const Chart = (props) => {
     const arcs = [0.5, 0.3, 0.2];
     const classes = useStyles();
@@ -20,7 +21,8 @@ const Chart = (props) => {
     const total = props.card.total || TOTAL;
     const number = props.card.type == 27 ? props.card.number || props.card.other_number : props.card.number;
     const percent = number > 0 ? (number / total) : 0;
-
+    const eventCountList = props.card.type == 27 ? props.card.other : null;
+    
     return (
         <div className={clsx(classes.chartContainer, { [classes.widthResponsive]: props.lineGraph })}>
             <div className={clsx(classes.headingContainer)}>
@@ -53,19 +55,24 @@ const Chart = (props) => {
                         lineID={props.id}
                     />
                     :
-                    <GaugeChart
-                        id={`gauge-chart${props.id}`}
-                        nrOfLevels={420}
-                        arcsLength={arcs}
-                        colors={['#5BE12C', '#F5CD19', '#EA4228']}
-                        percent={percent}
-                        arcPadding={0.02}
-                        marginInPercent={0.03}
-                        className={'gauge'}
-                        animate={false}
-                        /* hideText={true} */
-                        formatTextValue={displayNumber}
-                    />
+                    <>
+                        <GaugeChart
+                            id={`gauge-chart${props.id}`}
+                            nrOfLevels={420}
+                            arcsLength={arcs}
+                            colors={['#5BE12C', '#F5CD19', '#EA4228']}
+                            percent={percent}
+                            arcPadding={0.02}
+                            marginInPercent={0.03}
+                            className={'gauge'}
+                            animate={false}
+                            /* hideText={true} */
+                            formatTextValue={displayNumber}
+                        />
+                        {props.card.type === 27 && eventCountList && (
+                            <BreakdownDisplay data={eventCountList} />
+                        )}
+                    </>
             }
         </div>
     )
