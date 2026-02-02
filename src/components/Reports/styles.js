@@ -901,5 +901,54 @@ export default makeStyles(theme => ({
   },
   padding: {
     padding: '5px 8px'
+  },
+  breakdownContainer: {
+    width: '100%',
+    height: '60%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 25
+  },
+  breakdownTwoColumn: {
+    width: '100%',
+    height: '100%',
+    position: 'relative',
+  },
+  breakdownColumn: {
+    position: 'absolute',
+    top: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: theme.spacing(0.5),
+    '&:first-child': {
+      left: 0,
+    },
+    '&:last-child': {
+      right: 0,
+    },
+  },
+  breakdownList: {
+    width: '90%',
+    padding: 0,
+  },
+  breakdownItem: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: theme.spacing(0.5, 0),
+    fontSize: '1rem',
+  },
+  breakdownKey: {
+    fontWeight: 400,
+    color: theme.palette.text.primary,
+    textAlign: 'left',
+  },
+  breakdownValue: {
+    fontWeight: 400,
+    color: theme.palette.text.primary,
+    textAlign: 'right',
+    marginLeft: theme.spacing(1),
   }
 }));
