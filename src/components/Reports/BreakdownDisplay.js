@@ -8,12 +8,12 @@ const BreakdownDisplay = ({ data }) => {
     // Mapping from M-codes to friendly labels
     const getLabelForKey = (key) => {
         const labelMap = {
-            'M2551': 'M/F1st',
-            'M2552': 'M/F2nd',
-            'M2553': 'M/F3rd',
-            'M2554': 'S/C1st',
-            'M2555': 'S/C2nd',
-            'M2556': 'S/C3rd',
+            'M2551': 'M/F1',
+            'M2552': 'M/F2',
+            'M2553': 'M/F3',
+            'M2554': 'S/C1',
+            'M2555': 'S/C2',
+            'M2556': 'S/C3',
         };
         return labelMap[key] || key;
     };
