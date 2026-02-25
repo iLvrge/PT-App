@@ -959,7 +959,7 @@ export default makeStyles(theme => ({
   },
   breakdownSubValue: {
     color: '#e53935',
-    fontSize: '10px',
+    fontSize: '13px',
     fontWeight: 400,
     lineHeight: 1.2,
   }
