@@ -949,6 +949,18 @@ export default makeStyles(theme => ({
     fontWeight: 400,
     color: theme.palette.text.primary,
     textAlign: 'right',
+    display: 'block',
+  },
+  breakdownValueGroup: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
     marginLeft: theme.spacing(1),
+  },
+  breakdownSubValue: {
+    color: '#e53935',
+    fontSize: '13px',
+    fontWeight: 400,
+    lineHeight: 1.2,
   }
 }));
