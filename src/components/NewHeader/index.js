@@ -151,8 +151,8 @@ const NewHeader = (props) => {
   const auth_token = useSelector(state => state.patenTrack2.auth_token)
   const profile = useSelector(store => (store.patenTrack.profile))
   const user = useSelector(store => (store.patenTrack.profile ? store.patenTrack.profile.user : {}))
-  const siteLogo = useSelector(state => (state.patenTrack.siteLogo.site_logo ? state.patenTrack.siteLogo.site_logo.logo_big : 'https://s3.us-west-1.amazonaws.com/static.patentrack.com/logo/PatenTrack.png'))
-  const siteLogoLightMode = 'https://s3.us-west-1.amazonaws.com/static.patentrack.com/logo/PatenTrack_Light.png'
+  const siteLogo = useSelector(state => (state.patenTrack.siteLogo.site_logo ? state.patenTrack.siteLogo.site_logo.logo_big : 'https://localstaticfiles.patentrack.com/logo/PatenTrack.png'))
+  const siteLogoLightMode = 'https://localstaticfiles.patentrack.com/logo/PatenTrack_Light.png'
   const controlModal = useSelector(state => state.ui.controlModal)
   const breadcrumbs = useSelector(state =>  state.patenTrack2.breadcrumbs )
   const selectedCategory = useSelector(state =>  state.patenTrack2.selectedCategory )
