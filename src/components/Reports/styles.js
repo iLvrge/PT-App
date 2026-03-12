@@ -929,6 +929,27 @@ export default makeStyles(theme => ({
       right: 0,
     },
   },
+  breakdownContainerKpi: {
+    position: 'relative',
+    top: 'auto',
+    height: 'auto',
+    marginTop: '15px'
+  },
+  breakdownTwoColumnKpi: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  breakdownColumnKpi: {
+    position: 'relative',
+    top: 'auto',
+    '&:first-child': {
+      left: 'auto',
+    },
+    '&:last-child': {
+      right: 'auto',
+    },
+  },
   breakdownList: {
     width: '90%',
     padding: 0,
