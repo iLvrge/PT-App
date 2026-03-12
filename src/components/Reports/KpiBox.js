@@ -7,6 +7,7 @@ import { Button, Typography, Paper, List, ListItem, ListItemText } from '@mui/ma
 import clsx from 'clsx'
 import { numberWithCommas, capitalAllWords } from '../../utils/numbers';
 import AddToolTip from './AddToolTip';
+import BreakdownDisplay from './BreakdownDisplay';
 
 
 const KpiBox = (props) => {
@@ -108,6 +109,9 @@ const KpiBox = (props) => {
                             >
                                 Applications: {numberWithCommas(props.card.other_number)}
                             </Typography>
+                            {[30, 33, 36].includes(props.card.type) && props.card.other && (
+                                <BreakdownDisplay data={props.card.other} />
+                            )}
                         </div>
                     :
                         props.card.type == 35

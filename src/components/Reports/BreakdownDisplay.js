@@ -1,8 +1,9 @@
 import React from 'react';
+import clsx from 'clsx';
 import useStyles from './styles';
 import { numberWithCommas } from '../../utils/numbers';
 
-const BreakdownDisplay = ({ data }) => {
+const BreakdownDisplay = ({ data, isKpi }) => {
     const classes = useStyles();
 
     // Mapping from M-codes to friendly labels
@@ -14,8 +15,10 @@ const BreakdownDisplay = ({ data }) => {
             'M2554': 'S/C1',
             'M2555': 'S/C2',
             'M2556': 'S/C3',
+            'patent': 'Patent',
+            'application': 'Application'
         };
-        return labelMap[key] || key;
+        return labelMap[key] || (key.charAt(0).toUpperCase() + key.slice(1));
     };
 
     // Extract count from value (handles both old number format and new object format)
@@ -33,8 +36,11 @@ const BreakdownDisplay = ({ data }) => {
     const parseData = () => {
         if (!data) return {};
         try {
-            if (typeof data === 'string') return JSON.parse(data);
-            return data;
+            let parsed = typeof data === 'string' ? JSON.parse(data) : data;
+            if (parsed && parsed.ccounter) {
+                return parsed.ccounter;
+            }
+            return parsed;
         } catch (error) {
             console.error('Error parsing breakdown data:', error);
             return {};
@@ -47,12 +53,20 @@ const BreakdownDisplay = ({ data }) => {
     if (entries.length === 0) return null;
 
     // Define the correct order and sort entries
-    const keyOrder = ['M2551', 'M2552', 'M2553', 'M2554', 'M2555', 'M2556'];
-    const sortedEntries = entries.sort((a, b) => keyOrder.indexOf(a[0]) - keyOrder.indexOf(b[0]));
+    const keyOrder = ['M2551', 'M2552', 'M2553', 'M2554', 'M2555', 'M2556', 'patent', 'application'];
+    const sortedEntries = entries.sort((a, b) => {
+        const indexA = keyOrder.indexOf(a[0]);
+        const indexB = keyOrder.indexOf(b[0]);
+        if (indexA === -1 && indexB === -1) return a[0].localeCompare(b[0]);
+        if (indexA === -1) return 1;
+        if (indexB === -1) return -1;
+        return indexA - indexB;
+    });
 
-    // Split entries: first 3 for left (M/F), last 3 for right (S/C)
-    const leftColumn = sortedEntries.slice(0, 3);
-    const rightColumn = sortedEntries.slice(3, 6);
+    // Split entries: first half for left, second half for right
+    const midPoint = Math.ceil(sortedEntries.length / 2);
+    const leftColumn = sortedEntries.slice(0, midPoint);
+    const rightColumn = sortedEntries.slice(midPoint);
 
     const renderItem = ([key, value]) => (
         <div key={key} className={classes.breakdownItem}>
@@ -73,12 +87,12 @@ const BreakdownDisplay = ({ data }) => {
     );
 
     return (
-        <div className={classes.breakdownContainer}>
-            <div className={classes.breakdownTwoColumn}>
-                <div className={classes.breakdownColumn}>
+        <div className={clsx(classes.breakdownContainer, isKpi && classes.breakdownContainerKpi)}>
+            <div className={clsx(classes.breakdownTwoColumn, isKpi && classes.breakdownTwoColumnKpi)}>
+                <div className={clsx(classes.breakdownColumn, isKpi && classes.breakdownColumnKpi)}>
                     {leftColumn.map(renderItem)}
                 </div>
-                <div className={classes.breakdownColumn}>
+                <div className={clsx(classes.breakdownColumn, isKpi && classes.breakdownColumnKpi)}>
                     {rightColumn.map(renderItem)}
                 </div>
             </div>
