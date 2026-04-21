@@ -1,5 +1,4 @@
 import makeStyles from '@mui/styles/makeStyles';
-import { indigo, purple, blue, pink, teal, cyan, lime, green, orange, grey } from '@mui/material/colors';
 export default makeStyles(theme => ({
   container: {
     height: '100%',
@@ -840,6 +839,7 @@ export default makeStyles(theme => ({
   },
   headingContainer: {
     padding: '2.5vh 0 0',
+    zIndex: 9,
     '& span': {
       display: 'flex'
     }
@@ -872,7 +872,8 @@ export default makeStyles(theme => ({
     height: '100%',
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    zIndex: 1,
   },
   btnContainer: {
     display: 'flex'
