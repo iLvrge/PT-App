@@ -9,11 +9,9 @@ import { DropzoneArea } from 'react-mui-dropzone'
 import { ROLES } from '../contants'
 import InputLabel from '@mui/material/InputLabel'
 
-import useSytles from './styles'
 
 
 const UserForm = ({ onChangeField, edited }) => {
-  const classes = useSytles()
   /* const [profilePicture, setProfilePicture] = useState(null)
 
   const handleCapture = ({ target }) => {
@@ -113,7 +111,7 @@ const UserForm = ({ onChangeField, edited }) => {
         profilePicture != null && <img src={profilePicture} width={40}/>
       } */}
       <DropzoneArea
-        classes={{ root: classes.dropzoneArea }}
+        classes={{ root: "min-h-[170px] flex-1 [&_.MuiDropzonePreviewList-image]:h-auto [&_.MuiDropzonePreviewList-image]:max-h-[100px]" }}
         showFileNames
         dropzoneText='Upload user picture'
         filesLimit={1}

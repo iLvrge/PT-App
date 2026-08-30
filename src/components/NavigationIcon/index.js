@@ -1,3 +1,4 @@
+import cn from '../../ui/cn'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { IconButton, Tooltip, Typography, Zoom } from '@mui/material'
@@ -15,14 +16,12 @@ import AddIcon from '@mui/icons-material/Add'
 import CropSquareIcon from '@mui/icons-material/CropSquare'
 import AccountTreeOutlinedIcon from '@mui/icons-material/AccountTreeOutlined'
 
-import useStyles from './styles'
 import clsx from 'clsx'
 import { getAuthConnectToken } from '../../utils/tokenStorage'
 import { ANALYTICS, CHART, DISCUSSION, TV } from '../../utils/icons'
 
 {/* <IconButton onClick={click} className={(( bar === true ) || (bar === false && data.length > 0 && (selected.length > 0 || selectAll === true))) ? cl.filterButtonActive : ''}></IconButton> */}
 const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, showLabel, label, isMobile}) => {
-    const classes = useStyles() 
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
 
@@ -70,7 +69,7 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
  
          
     return (
-        <div className={clsx(classes.showIcon, {[classes.marginBottom25]: typeof margin !== 'undefined' && margin === true && typeof isMobile !== 'undefined' && isMobile === false, [classes.mobile]: typeof isMobile !== 'undefined' && isMobile === true})}> 
+        <div className={cn("flex justify-center text-[1.1rem] [&_.MuiIconButton-root]:rounded-none [&_.MuiIconButton-root]:px-2 [&_.MuiIconButton-root]:py-[11px] [&_.MuiIconButton-root]:text-black/[0.38] dark:[&_.MuiIconButton-root]:text-white/50 [&_.MuiIconButton-root_svg]:h-[1em] [&_.MuiIconButton-root_svg]:w-[1em] [&_.MuiIconButton-root_svg]:text-2xl [&_.MuiIconButton-root_svg]:fill-black/[0.38] [&_.MuiIconButton-root_svg]:stroke-black/[0.38] dark:[&_.MuiIconButton-root_svg]:fill-white/50 dark:[&_.MuiIconButton-root_svg]:stroke-white/50 hover:[&_.MuiIconButton-root]:text-secondary hover:[&_.MuiIconButton-root_svg]:fill-secondary hover:[&_.MuiIconButton-root_svg]:stroke-secondary [&_.MuiIconButton-root_svg.noStroke]:!stroke-none [&_.MuiIconButton-root.active]:!text-secondary-active [&_.MuiIconButton-root.active_svg]:!fill-secondary-active [&_.MuiIconButton-root.active_svg]:!stroke-secondary-active [&_.MuiIconButton-root.active_svg.noStroke]:!stroke-none [&_.MuiIconButton-root.selection_indicator_svg]:fill-secondary", {["mb-[25px]"]: typeof margin !== 'undefined' && margin === true && typeof isMobile !== 'undefined' && isMobile === false, ["flex-[1_1_100%] justify-start"]: typeof isMobile !== 'undefined' && isMobile === true})}> 
             <Tooltip   
                 title={
                     <Typography 
@@ -84,7 +83,7 @@ const NavigationIcon = ({click, tooltip, bar, t, disabled, highlight, margin, sh
                 enterDelay={1500}
                 TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
                 classes={{ 
-                    tooltip: clsx(classes.tooltip, {[classes.mobileTooltip]: typeof isMobile !== 'undefined' && isMobile === true})
+                    tooltip: clsx("text-base [&_.MuiTypography-root]:text-[18px]", {["flex-[1_1_100%] !text-xl"]: typeof isMobile !== 'undefined' && isMobile === true})
                 }}
             >
                 <span> 
