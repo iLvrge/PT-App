@@ -1,0 +1,6 @@
+/* The 5% white overlay is a two-stop linear-gradient. Tailwind will not parse an
+   arbitrary property whose value has nested parens with commas, so it silently
+   emits nothing - this keeps the declaration verbatim instead. */
+.pt-table-heading {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05));
+}

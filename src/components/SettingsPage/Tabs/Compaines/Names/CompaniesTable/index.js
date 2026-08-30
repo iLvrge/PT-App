@@ -1,3 +1,4 @@
+import './tableHeading.css'
 import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Table from '@mui/material/Table'
@@ -7,7 +8,6 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import TableSortLabel from '@mui/material/TableSortLabel'
-import useStyles from './styles'
 import Loader from '../../../../../common/Loader'
 import Row from './Row'
 import _map from 'lodash/map'  
@@ -100,7 +100,6 @@ function CompaniesTable({
   childCompaniesSelected,
   setChildCompaniesSelected,
 }) {
-  const classes = useStyles()
   const dispatch = useDispatch()
   const isLoading = useSelector(state => state.patenTrack.companyListLoading)
   const companiesList = useSelector(state => state.patenTrack.companiesList)
@@ -171,22 +170,22 @@ function CompaniesTable({
   }
 
   return (
-    <Paper square classes={classes.root}>
+    <Paper square classes={"flex h-full flex-1 flex-col overflow-hidden [&_.font12Rem]:text-base"}>
       {
         isLoading ? (
           <Loader />
         ) : (
-          <TableContainer className={classes.tableContainer}>
+          <TableContainer className={"h-[calc(100vh-113px)] [&_fieldset]:border-0"}>
             <Table
-              className={classes.table}
+              className={"[&_th]:bg-[inherit] [&_th]:text-[1.1rem] [&_th]:font-normal [&_th:first-child]:pl-4 [&_td:first-child]:pl-4 [&_.MuiTableRow-root]:cursor-pointer"}
               stickyHeader
               size={'medium'} 
               aria-label="collapsible table"> 
-              <TableHead className={classes.tableHeading}>
-                <TableRow className={classes.tableHeading}>
-                  <TableCell className={classes.actionTh} padding="none" />
+              <TableHead className={"pt-table-heading bg-[#282B30] text-white [box-shadow:0px_2px_1px_-1px_rgb(0_0_0/20%),0px_1px_1px_0px_rgb(0_0_0/14%),0px_1px_3px_0px_rgb(0_0_0/12%)]"}>
+                <TableRow className={"pt-table-heading bg-[#282B30] text-white [box-shadow:0px_2px_1px_-1px_rgb(0_0_0/20%),0px_1px_1px_0px_rgb(0_0_0/14%),0px_1px_3px_0px_rgb(0_0_0/12%)]"}>
+                  <TableCell className={"w-[50px]"} padding="none" />
 
-                  {/* <TableCell className={classes.actionTh} padding="none">
+                  {/* <TableCell className={"w-[50px]"} padding="none">
                     <Checkbox
                       onChange={onSelectAll}
                       checked={isAllSelected}
@@ -220,7 +219,7 @@ function CompaniesTable({
                             headCell.label
                         }
                         {orderBy === headCell.id ? (
-                          <span className={classes.visuallyHidden}>
+                          <span className={"absolute top-5 m-[-1px] h-px w-px overflow-hidden border-0 p-0 [clip:rect(0_0_0_0)]"}>
                               {order === 'desc'
                                 ? 'sorted descending'
                                 : 'sorted ascending'} 
