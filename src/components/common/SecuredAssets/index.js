@@ -18,7 +18,6 @@ import Googlelogin from '../Googlelogin'
 import VirtualizedTable from '../VirtualizedTable'
 import DialogPopup from '../DialogPopup'
 import Loader from '../Loader'
-import useStyles from "./styles"
 
 
 import {
@@ -65,7 +64,6 @@ import ImportAsset from '../ForeignAsset/ImportAsset'
 
 
 const SecuredAssets = ({sheetName, handleSheetName}) => {
-    const classes = useStyles()
     const dispatch = useDispatch()
     const textFiledRef = useRef(null)
     const selectedRef = useRef()
@@ -116,7 +114,7 @@ const SecuredAssets = ({sheetName, handleSheetName}) => {
             align: "left", 
             badge: true,
             show_button: true,
-            button: <Button onClick={onHandleImport} className={classes.btnHeader}> <Add/> <span className={classes.headerButton}>New List</span></Button>
+            button: <Button onClick={onHandleImport} className={"absolute left-[35px] top-[13px] p-0"}> <Add/> <span className={"normal-case"}>New List</span></Button>
         }
     ]
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)  
@@ -533,7 +531,7 @@ const SecuredAssets = ({sheetName, handleSheetName}) => {
     const LoadingImportButton = () => {
         return(
             <Button 
-                className={classes.button}
+                className={"ml-2.5 h-[27px] min-w-[auto] px-[5px] py-[3px] normal-case [&_.MuiButton-label]:whitespace-nowrap hover:!text-secondary"}
                 onClick={handleImport}
                 disabled={isLoading}
             >
@@ -546,16 +544,16 @@ const SecuredAssets = ({sheetName, handleSheetName}) => {
     
     const FooterItems = () => {
         return (
-            <div className={classes.footer}>
+            <div className={"ml-[30px] flex flex-[1_1_auto] items-center justify-start whitespace-nowrap pr-[50px] [&_.MuiTypography-root]:ml-2.5"}>
                 <Button
                     onClick={onHandleClearNonUSAItems}
-                    className={classes.btnClear}
+                    className={"mr-5 px-2 py-0 normal-case"}
                 >
                     <Close /> Clear non-USPTO Assets
                 </Button>
                 <Button
                     onClick={onHandleClearItems}
-                    className={classes.btnClear}
+                    className={"mr-5 px-2 py-0 normal-case"}
                 >
                     <Delete /> Clear List
                 </Button>
@@ -563,7 +561,7 @@ const SecuredAssets = ({sheetName, handleSheetName}) => {
                     Save As: 
                     <TextField  
                         variant="standard" 
-                        className={classes.txtField}
+                        className={"ml-2.5 w-[100px] [&_input]:px-0 [&_input]:pb-0 [&_input]:pt-1.5 [&_input]:text-sm"}
                         inputRef={textFiledRef}
                         defaultValue={sheetName}
                         /* onChange={handleSheetName} */
@@ -576,7 +574,7 @@ const SecuredAssets = ({sheetName, handleSheetName}) => {
 
     if (isLoadingSheets && sheets.length == 0) return <Loader />
     return (
-        <Paper className={classes.root} square id={`foreign_assets_tabs`}>
+        <Paper className={"flex h-full flex-1 flex-col overflow-x-hidden overflow-y-auto [&_.disable_header_.ReactVirtualized__Table__headerRow]:hidden [&_.MuiInputBase-multiline]:p-0 [&_.MuiInputBase-multiline]:text-sm"} square id={`foreign_assets_tabs`}>
             <VirtualizedTable
                 selected={selectItems}
                 rowSelected={selectedRow}
@@ -626,7 +624,7 @@ const SecuredAssets = ({sheetName, handleSheetName}) => {
                     setOpen(!open)
                     setSelectedRow([])
                 }}  
-                    className={classes.close}/>
+                    className={"absolute right-2.5 top-[7px] z-[999] cursor-pointer"}/>
                 <ImportAsset 
                     updateItems={setItems} 
                     updateInvalidItems={setInvalidItems} 
