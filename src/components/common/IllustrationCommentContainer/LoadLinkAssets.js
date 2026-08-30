@@ -531,7 +531,6 @@ const LoadLinkAssets = ({type, asset, size}) => {
                     :
                         <div className={classes.container}>
                             <VirtualizedTable
-                                classes={classes}
                                 selected={selectItems}
                                 rowSelected={selectedRow}
                                 selectedIndex={currentSelection}

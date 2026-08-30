@@ -576,7 +576,6 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
     return (
         <Paper className={classes.root} square id={`foreign_assets_tabs`}>
             <VirtualizedTable
-                classes={classes}
                 selected={selectItems}
                 rowSelected={selectedRow}
                 selectedIndex={currentSelection}

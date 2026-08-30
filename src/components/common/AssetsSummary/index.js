@@ -67,7 +67,7 @@ const AssetsSummary = () => {
               <Typography variant="body1">{numberWithCommas(counters.patent)}</Typography>
             </div>
             <div className={`${classes.cell} ${classes.flexEnd}`}>
-              <SummaryItemTotalGrowth classes={classes} data={parseInt(counters.difference_patent)}/>
+              <SummaryItemTotalGrowth data={parseInt(counters.difference_patent)}/>
             </div>
           </div>
         </Grid>
@@ -80,7 +80,7 @@ const AssetsSummary = () => {
               <Typography variant="body1">{numberWithCommas(counters.application)}</Typography>
             </div>
             <div className={`${classes.cell} ${classes.flexEnd}`}>
-              <SummaryItemTotalGrowth classes={classes} data={parseInt(counters.difference_application)}/>
+              <SummaryItemTotalGrowth data={parseInt(counters.difference_application)}/>
             </div>
           </div>
         </Grid>
@@ -93,7 +93,7 @@ const AssetsSummary = () => {
               <Typography variant="body1">{numberWithCommas(transactionsCounters.buy)}</Typography>
             </div>
             <div className={`${classes.cell} ${classes.flexEnd}`}>
-              <SummaryItemTotalGrowth classes={classes} data={parseInt(transactionsCounters.diff_buy_patent)}/>
+              <SummaryItemTotalGrowth data={parseInt(transactionsCounters.diff_buy_patent)}/>
             </div>
           </div>
         </Grid>
@@ -106,7 +106,7 @@ const AssetsSummary = () => {
               <Typography variant="body1">{numberWithCommas(transactionsCounters.sale)}</Typography>
             </div>
             <div className={`${classes.cell} ${classes.flexEnd}`}>
-              <SummaryItemTotalGrowth classes={classes} data={parseInt(transactionsCounters.diff_sale_patent)}/>
+              <SummaryItemTotalGrowth data={parseInt(transactionsCounters.diff_sale_patent)}/>
             </div>
           </div>
         </Grid>
@@ -119,7 +119,7 @@ const AssetsSummary = () => {
               <Typography variant="body1">{numberWithCommas(transactionsCounters.license_in)}</Typography>
             </div>
             <div className={`${classes.cell} ${classes.flexEnd}`}>
-              <SummaryItemTotalGrowth classes={classes} data={parseInt(transactionsCounters.diff_license_in_patent)}/>
+              <SummaryItemTotalGrowth data={parseInt(transactionsCounters.diff_license_in_patent)}/>
             </div>
           </div>
         </Grid>
@@ -132,7 +132,7 @@ const AssetsSummary = () => {
               <Typography variant="body1">{numberWithCommas(transactionsCounters.license_out)}</Typography>
             </div>
             <div className={`${classes.cell} ${classes.flexEnd}`}>
-              <SummaryItemTotalGrowth classes={classes} data={parseInt(transactionsCounters.diff_license_out_patent)}/>
+              <SummaryItemTotalGrowth data={parseInt(transactionsCounters.diff_license_out_patent)}/>
             </div>
           </div>
         </Grid>
@@ -145,7 +145,7 @@ const AssetsSummary = () => {
               <Typography variant="body2">{numberWithCommas(transactionsCounters.security)}</Typography>
             </div>
             <div className={`${classes.cell} ${classes.flexEnd}`}>
-              <SummaryItemTotalGrowth classes={classes} data={parseInt(transactionsCounters.diff_security_patent)}/>
+              <SummaryItemTotalGrowth data={parseInt(transactionsCounters.diff_security_patent)}/>
             </div>
           </div>
         </Grid>
@@ -158,7 +158,7 @@ const AssetsSummary = () => {
               <Typography variant="body2">{numberWithCommas(transactionsCounters.release)}</Typography>
             </div>
             <div className={`${classes.cell} ${classes.flexEnd}`}>
-              <SummaryItemTotalGrowth classes={classes} data={parseInt(transactionsCounters.diff_release_patent)}/>
+              <SummaryItemTotalGrowth data={parseInt(transactionsCounters.diff_release_patent)}/>
             </div>
           </div>
         </Grid> */}

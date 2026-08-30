@@ -275,7 +275,6 @@ const ChildTable = ({ transactionId, headerRowDisabled }) => {
   return (
     <Paper className={clsx(classes.root, classes.root_child)} square id={`assets_type_assignment_assets`}>
       <VirtualizedTable
-        classes={classes}
         selected={selectItems}
         rowSelected={selectedRow}
         selectedKey={"grant_doc_num"}

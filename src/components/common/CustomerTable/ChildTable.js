@@ -151,7 +151,6 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
     return (
         <Paper className={classes.root} square id={`assets_assignments`} style={{paddingLeft: 30}}>
             <VirtualizedTable
-            classes={classes}
             selected={selectItems}
             rowSelected={selectedRow}
             selectedKey={'rf_id'}

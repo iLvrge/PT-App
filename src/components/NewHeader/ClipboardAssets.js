@@ -50,7 +50,6 @@ const ClipboardAssets = () => {
     return (
         <Paper className={classes.rootClipboard} square id={`assets_clipboard`}>
             <VirtualizedTable
-                classes={classes}
                 selected={selectItems}
                 rowSelected={selectedRow}
                 selectedKey={"asset"}

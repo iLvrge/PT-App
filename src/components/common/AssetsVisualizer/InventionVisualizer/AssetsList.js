@@ -404,7 +404,6 @@ const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handle
     return (
         <Paper className={classes.root} square id={`assets_cpc`}>
             <VirtualizedTable
-                classes={classes}
                 openDropAsset={dropOpenAsset}
                 selected={selectItems}
                 rowSelected={selectedRow}

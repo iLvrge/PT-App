@@ -522,7 +522,6 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
                     <Loader />
                 :
                     <VirtualizedTable
-                        classes={classes}
                         selected={selectItems}
                         rowSelected={selectedRow}
                         selectedIndex={currentSelection}
@@ -560,7 +559,6 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
                     <Loader />
                 :
                     <VirtualizedTable
-                        classes={classes}
                         selected={selectDocumentItems}
                         rowSelected={selectedDocumentRow}
                         selectedIndex={currentDocumentSelection}                        

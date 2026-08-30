@@ -125,7 +125,6 @@ const LoadTransactionNameQueues = ({}) => {
             /> */}
             <div className={classes.container}>
                 <VirtualizedTable
-                    classes={classes}
                     selected={selectItems}
                     rowSelected={selectedRow}
                     selectedIndex={currentSelection}

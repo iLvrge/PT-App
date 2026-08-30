@@ -89,7 +89,6 @@ const ClientList = () => {
     return (
         <Paper className={classes.root} square id={`main_companies`} sx={{ px: 1 }}> 
             <VirtualizedTable
-            classes={classes}
             selected={selectItems}
             rowSelected={selectedRow}
             selectedIndex={currentSelection}

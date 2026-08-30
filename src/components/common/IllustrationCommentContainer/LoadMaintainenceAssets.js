@@ -249,7 +249,6 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
             </Button>
             <div className={classes.container}>
                 <VirtualizedTable
-                    classes={classes}
                     selected={selectItems}
                     rowSelected={selectedRow}
                     selectedIndex={currentSelection}

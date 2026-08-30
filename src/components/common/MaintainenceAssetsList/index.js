@@ -762,7 +762,6 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   return (
     <Paper className={clsx(classes.root, {[classes.mobile]: isMobile === true && (fileBar === true || driveBar)})} square id={`maintainence_assets`}>
       <VirtualizedTable
-        classes={classes}
         openDropAsset={dropOpenAsset}
         selected={selectItems}
         rowSelected={selectedRow}

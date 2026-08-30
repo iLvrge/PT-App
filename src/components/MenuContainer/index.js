@@ -112,8 +112,8 @@ const MenuContainer = ({open}) => {
                                                 
                                                 <Grid item xs={2} key={idx}>
                                                     <Link href="#" onClick={(e) => onRedirect(e, child.redirect)}  className={clsx(classes.item, child.mainHeadingClass )}>
-                                                        <Heading data={child.mainHeading} variant={`body1`} classes={classes} c={child.mainHeadingClass} link={child.redirect}/>
-                                                        <Heading data={child.subHeading}  variant={`body2`} classes={classes}/>
+                                                        <Heading data={child.mainHeading} variant={`body1`} c={child.mainHeadingClass} link={child.redirect}/>
+                                                        <Heading data={child.subHeading}  variant={`body2`}/>
                                                     </Link> 
                                                 </Grid>
                                             ))

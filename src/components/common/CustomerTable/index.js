@@ -319,7 +319,6 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     return (
         <Paper className={classes.root} square id={`assets_type_companies`}>
             <VirtualizedTable
-            classes={classes}
             selected={selectItems}
             rowSelected={selectedRow}
 			selectedIndex={currentSelection}

@@ -403,7 +403,6 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, itemCallback, groups, 
     return (
         <Paper className={classes.root} square id={`child_companies`}>
             <VirtualizedTable
-            classes={classes}
             scrollTop={companyTableScrollPosition}
             selected={selectItems}
             rowSelected={selectedRow}

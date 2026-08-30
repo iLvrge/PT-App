@@ -150,7 +150,6 @@ const CompanySummary = () => {
     return(
         <div style={{height: 375, marginLeft: 25}}>
             <VirtualizedTable
-                classes={classes}
                 rows={companyData}
                 rowHeight={rowHeight}
                 headerHeight={rowHeight}

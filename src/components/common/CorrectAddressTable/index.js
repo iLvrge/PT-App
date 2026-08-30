@@ -269,7 +269,6 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
     return (
         <Paper className={classes.root} square id={`assets_type_address`}>
             <VirtualizedTable
-            classes={classes}
             selected={selectItems}
             rowSelected={selectedRow}
 			selectedIndex={currentSelection}

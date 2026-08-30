@@ -146,7 +146,6 @@ import { setAssetTypeAssignmentAllAssets, setAssetTypeAssignments, setAssetTypes
     return (
       <Paper className={classes.root} square id={`lawfirms_container`}>
         <VirtualizedTable
-          classes={classes}
           selected={selectItems}
           rowSelected={selectedRow}
           selectedIndex={currentSelection}

@@ -455,7 +455,6 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
     return (
         <Paper className={classes.root} square id={`assets_type`}>
             <VirtualizedTable
-            classes={classes}
             selected={selectItems}
             rowSelected={selectedRow}
             selectedIndex={currentSelection}

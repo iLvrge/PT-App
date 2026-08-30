@@ -1024,7 +1024,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
   return (
     <Paper className={classes.root} square id={`main_companies`}>
         <VirtualizedTable
-        classes={classes}
         scrollTop={companyTableScrollPosition}
         selected={selectItems}
         rowSelected={selectedRow}

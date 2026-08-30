@@ -191,7 +191,6 @@ const ChildTable = ({ assetType, headerRowDisabled, parentBarDrag, parentBar }) 
     return (
         <Paper className={classes.root} square id={`assets_type_id_companies`}>
             <VirtualizedTable
-            classes={classes}
             selected={selectItems}
             rowSelected={selectedRow}
             selectedKey={'id'}

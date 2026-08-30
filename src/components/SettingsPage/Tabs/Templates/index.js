@@ -472,7 +472,6 @@ const Templates = () => {
             <Paper className={classes.flexColumn} square> 
                 <div className={classes.drive}  style={{height: '100vh'}}>
                     <VirtualizedTable
-                        classes={classes}
                         selected={selectItems}
                         selectedKey={'layout_id'}
                         rowSelected={selectedRow}
@@ -516,7 +515,6 @@ const Templates = () => {
                     </div>
                     <div className={classes.drive}>
                         <VirtualizedTable 
-                            classes={classes}
                             selected={selectedDriveItems}
                             selectedKey={'id'}
                             rowSelected={selectDriveRow}

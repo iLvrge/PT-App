@@ -247,7 +247,6 @@ const LayoutTemplates = () => {
             {
                 driveFiles != undefined && driveFiles != null && driveFiles.length > 0  && 
                 <VirtualizedTable
-                  classes={classes}
                   selected={selectItems}
                   rowSelected={selectedRow}
                   selectedIndex={currentSelection}

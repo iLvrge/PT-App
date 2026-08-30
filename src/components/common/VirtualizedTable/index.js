@@ -1122,7 +1122,6 @@ const VirtualizedTable = ({
 };
 
 VirtualizedTable.propTypes = {
-  classes: PropTypes.object.isRequired,
   columns: PropTypes.arrayOf(
     PropTypes.shape({
       dataKey: PropTypes.string.isRequired,

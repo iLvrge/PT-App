@@ -319,7 +319,6 @@ const onHandleAddCompany = useCallback(async(event) => {
             <Loader />
           ) : (
               <VirtualizedTable
-                classes={classes}
                 selected={selected}
                 selectedKey={"company_id"}
                 headerHeight={53.86}

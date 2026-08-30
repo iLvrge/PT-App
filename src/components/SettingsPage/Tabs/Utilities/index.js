@@ -405,7 +405,6 @@ const Utilities = () => {
                 </div>
                 <div className={classes.drive}> 
                     <VirtualizedTable
-                        classes={classes}
                         selected={selectItems}
                         selectedKey={'id'}
                         rowSelected={selectRepositoryDriveRow}
