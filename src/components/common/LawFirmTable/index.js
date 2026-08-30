@@ -1,3 +1,4 @@
+  import useLawFirmsByCompany from '../../../queries/useLawFirmsByCompany';
 import React, {
     useCallback,
     useEffect,
@@ -26,15 +27,12 @@ import { setAssetTypeAssignmentAllAssets, setAssetTypeAssignments, setAssetTypes
     const [childHeight, setChildHeight] = useState(500);
     const tableRef = useRef();
     const [counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT);
-    const [ grandTotal, setGrandTotal ] = useState( 0 )
     const [data, setData] = useState([]);
-    const [loadingData, setLoadingData] = useState(false);
     const [initialize, setIntialize] = useState(false);
     const [selectedAll, setSelectAll] = useState(false);
     const [selectItems, setSelectItems] = useState([]);
     const [selectedRow, setSelectedRow] = useState([]);
     const [scrollToIndex, setScrollToIndex] = useState(0);
-    const [rows, setRows] = useState([]);
     const [childSelected, setCheckedSelected] = useState(0);
     const [currentSelection, setCurrentSelection] = useState(null); 
     const selectedCompanies = useSelector(
@@ -66,18 +64,10 @@ import { setAssetTypeAssignmentAllAssets, setAssetTypeAssignments, setAssetTypes
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)
   
     
-    useEffect(() => {
-        const getLawFirmList = async() => {
-          if(selectedCompanies.length > 0) {
-            setLoadingData(true)
-            const {data} = await PatenTrackApi.getLawFirmsByCompany(selectedCompanies)
-            setLoadingData(false)
-            setRows(data)
-            setGrandTotal(data.length)
-          }
-        }
-        getLawFirmList()
-    }, [selectedCompanies])
+    // grandTotal only ever held rows.length, and loadingData was a hand-managed
+    // flag set either side of the await. Both are derived now.
+    const { data: rows = [], isFetching: loadingData } = useLawFirmsByCompany(selectedCompanies)
+    const grandTotal = rows.length
   
     const onHandleSelectAll = useCallback(
       (event, row) => {

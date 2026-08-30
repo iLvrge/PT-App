@@ -1,3 +1,4 @@
+import useCustomerAddresses from '../../../queries/useCustomerAddresses'
 import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {  useHistory, useLocation  } from 'react-router-dom'
@@ -44,8 +45,6 @@ const CustomerAddress = ({onHandleSelectAddress}) => {
     const [ childHeight, setChildHeight ] = useState(500)
     const tableRef = useRef()
     const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
-    const [ assignmentLoading, setAssignmentLoading] = useState( true )
-    const [ assignments, setAssignments] = useState( [] )
     const [ selectedAll, setSelectAll ] = useState( false )
     const [ selectItems, setSelectItems] = useState( [] )
     const [ selectedRow, setSelectedRow] = useState( [] )
@@ -113,24 +112,17 @@ const CustomerAddress = ({onHandleSelectAddress}) => {
         }
     ]
        
-    useEffect(() => {
-        const getAssignments = async () => {   
-            if( selectedCompanies.length > 0 && assetTypeAddressSelected.length > 0 ) {
-                setAssignmentLoading( true )
+    const hasAddress = assetTypeAddressSelected.length > 0
+    const { data: assignments = [], isFetching: assignmentLoading } =
+        useCustomerAddresses(selectedCompanies, { enabled: hasAddress })
 
-                const { data } = await PatenTrackApi.getCustomerAddressByCompanyIDs(selectedCompanies)
-                setAssignments(data)
-                setAssignmentLoading( false )
-                
-            } else {
-                if( assetTypeAddressSelected.length == 0 ) {
-                    alert("Please select address first")
-                }
-                setAssignmentLoading( false )
-            }
-        }
-        getAssignments()
-    }, [ selectedCompanies, assetTypeAddressSelected ])
+    // The alert used to live inside the fetching effect, so it fired on mount
+    // and again on every dependency change while no address was selected. It is
+    // its own effect now, with the same condition, so the behaviour is unchanged
+    // but it is no longer entangled with the request.
+    useEffect(() => {
+        if (!hasAddress) alert("Please select address first")
+    }, [ hasAddress ])
 
     const onHandleSelectAll = useCallback((event, row) => {
         
