@@ -88,12 +88,13 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "npm run check:styles && vite build && node addVersion.cjs $(node -p \"require('./package.json').version\")",
+    "build": "npm run check:styles && vite build && node scripts/check-bundle-secrets.cjs && node addVersion.cjs $(node -p \"require('./package.json').version\")",
     "test": "echo \"no tests yet\" && exit 0",
     "dev": "vite",
     "preview": "vite preview",
     "check:styles": "node scripts/check-dangling-classes.cjs && node scripts/check-dynamic-classes.cjs",
-    "check:unreachable": "node scripts/check-unreachable.cjs"
+    "check:unreachable": "node scripts/check-unreachable.cjs",
+    "check:secrets": "node scripts/check-bundle-secrets.cjs"
   },
   "eslintConfig": {
     "extends": [

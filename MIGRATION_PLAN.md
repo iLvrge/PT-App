@@ -470,8 +470,21 @@ them is a runtime error the build will not report.
 
 ## 10. Out of scope, but found along the way
 
-- `REACT_APP_MICROSOFT_SECRET_KEY` is read in client code — anything prefixed
-  `REACT_APP_` is **embedded in the JS bundle and publicly readable**. If that is a real
-  secret it is already exposed and should be rotated and moved server-side.
+- **`REACT_APP_MICROSOFT_SECRET_KEY` was shipped in the production bundle.**
+  Confirmed against the CRA build taken before any changes: the value appears in
+  two chunks (`main.*.chunk.js` and `2.*.chunk.js`). No application code reads
+  it — CRA injected the *entire* `process.env` object, so every `REACT_APP_*`
+  variable was written into the bundle whether referenced or not.
+
+  The Vite migration removed the exposure incidentally: Vite's `define` only
+  replaces identifiers that appear in source, and the current build contains
+  zero occurrences. **That does not undo anything.** The value was public in
+  every deployed build for as long as CRA was used, so it must be treated as
+  compromised: **rotate it in Azure, and move it server-side** — a client-side
+  OAuth flow should never hold a client secret.
+
+  `scripts/check-bundle-secrets.cjs` now fails the build if any credential-shaped
+  value from `.env` appears in the output. Verified against a deliberately
+  planted leak.
 - Two disconnected router histories, so the axios 401 redirect bypasses the router.
 - `node_modules/all_vis.zip` (24.4 MB) checked into the dependency tree.
