@@ -3,10 +3,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, waitFor } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import useAbandonedYears from './useAbandonedYears'
+import useAbandonedAges from './useAbandonedAges'
 import PatenTrackApi from '../api/patenTrack2'
 
 vi.mock('../api/patenTrack2', () => ({
-  default: { getAllAbandonedAssetsYears: vi.fn() },
+  default: { getAllAbandonedAssetsYears: vi.fn(), getAllAbandonedAssetsAges: vi.fn() },
 }))
 
 const probe = (args) => {
@@ -67,5 +68,24 @@ describe('useAbandonedYears', () => {
     await waitFor(() => expect(r.current.isFetching).toBe(true))
     resolve({ data: [ [ 'y', 1 ], [ '2020', 2 ] ] })
     await waitFor(() => expect(r.current.isFetching).toBe(false))
+  })
+})
+
+describe('useAbandonedAges', () => {
+  it('posts the same payload to the ages endpoint', async () => {
+    PatenTrackApi.getAllAbandonedAssetsAges.mockResolvedValue({ data: [] })
+    const result = { current: undefined }
+    const Probe = () => {
+      result.current = useAbandonedAges({ selectedCompanies: [ 4 ], selectedCategory: 'x' })
+      return null
+    }
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+    render(<QueryClientProvider client={client}><Probe /></QueryClientProvider>)
+    await waitFor(() => expect(PatenTrackApi.getAllAbandonedAssetsAges).toHaveBeenCalled())
+    const form = Object.fromEntries([ ...PatenTrackApi.getAllAbandonedAssetsAges.mock.calls[0][0].entries() ])
+    expect(form.selectedCompanies).toBe('[4]')
+    expect(form.type).toBe('x')
+    // and it must not hit the years endpoint
+    expect(PatenTrackApi.getAllAbandonedAssetsYears).not.toHaveBeenCalled()
   })
 })
