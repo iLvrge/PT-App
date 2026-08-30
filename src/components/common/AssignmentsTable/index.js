@@ -8,7 +8,6 @@ import React, {
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import { Paper } from "@mui/material";
-import useStyles from "./styles";
 import VirtualizedTable from "../VirtualizedTable";
 import ChildTable from "./ChildTable";
 import PatenTrackApi, { DEFAULT_CUSTOMERS_LIMIT } from "../../../api/patenTrack2";
@@ -68,7 +67,6 @@ import { getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
 import Loader from "../Loader";
 
 const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaultLoad, type }) => {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
@@ -717,7 +715,7 @@ const findChannelID = useCallback((rfID) => {
   if (assignmentListLoading ) return <Loader />;
 
   return (
-    <Paper className={classes.root} square id={`assets_assignments`}>
+    <Paper className={"flex h-full flex-1 flex-col overflow-x-hidden overflow-y-auto [&_.disable_header_.ReactVirtualized__Table__headerRow]:hidden"} square id={`assets_assignments`}>
       <VirtualizedTable
         selected={selectItems}
         rowSelected={selectedRow}

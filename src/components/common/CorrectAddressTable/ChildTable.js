@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {  useHistory, useLocation  } from 'react-router-dom'
 import { Paper } from '@mui/material'
-import useStyles from './styles' 
 import VirtualizedTable from '../VirtualizedTable'
 import { DEFAULT_CUSTOMERS_LIMIT } from '../../../api/patenTrack2'
 
@@ -36,7 +35,6 @@ import Loader from '../Loader'
 
 const ChildTable = ({ addressId, headerRowDisabled }) => {
 
-    const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
     const location = useLocation()
@@ -147,7 +145,7 @@ const ChildTable = ({ addressId, headerRowDisabled }) => {
     if (assignmentLoading) return <Loader />
 
     return (
-        <Paper className={classes.root} square id={`assets_address_assignments`}>
+        <Paper className={"flex h-full flex-1 flex-col overflow-x-hidden overflow-y-auto"} square id={`assets_address_assignments`}>
             <VirtualizedTable
             selected={selectItems}
             rowSelected={selectedRow}

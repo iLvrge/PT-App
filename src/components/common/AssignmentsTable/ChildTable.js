@@ -8,7 +8,6 @@ import React, {
 import { useSelector, useDispatch } from "react-redux";
 import { Paper } from "@mui/material";
 import Loader from "../Loader";
-import useStyles from "./styles";
 import VirtualizedTable from "../VirtualizedTable";
 import { DEFAULT_CUSTOMERS_LIMIT } from "../../../api/patenTrack2";
 import {
@@ -43,7 +42,6 @@ import { numberWithCommas } from "../../../utils/numbers";
 import clsx from "clsx";
 
 const ChildTable = ({ transactionId, headerRowDisabled }) => {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const [offset, setOffset] = useState(0);
   const [rowHeight, setRowHeight] = useState(40);
@@ -273,7 +271,7 @@ const ChildTable = ({ transactionId, headerRowDisabled }) => {
   if (assetTypeAssignmentLoadingAssets) return <Loader />;
 
   return (
-    <Paper className={clsx(classes.root, classes.root_child)} square id={`assets_type_assignment_assets`}>
+    <Paper className={clsx("flex h-full flex-1 flex-col overflow-x-hidden overflow-y-auto [&_.disable_header_.ReactVirtualized__Table__headerRow]:hidden", "[&_.ReactVirtualized__Table__row]:cursor-text")} square id={`assets_type_assignment_assets`}>
       <VirtualizedTable
         selected={selectItems}
         rowSelected={selectedRow}

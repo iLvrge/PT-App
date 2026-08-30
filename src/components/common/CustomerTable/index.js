@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import {  useHistory, useLocation  } from 'react-router-dom'
 import { Paper } from '@mui/material'
 import Loader from '../Loader'
-import useStyles from './styles' 
 import VirtualizedTable from '../VirtualizedTable'
 import { DEFAULT_CUSTOMERS_LIMIT } from '../../../api/patenTrack2'
 import {
@@ -46,7 +45,6 @@ import {
 import ChildTable from './ChildTable'
 
 const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag, parentBar, customerType }) => {
-    const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
     const location = useLocation()
@@ -317,7 +315,7 @@ const CustomerTable = ({ assetType, standalone, headerRowDisabled, parentBarDrag
     if ((!standalone && assetTypesCompaniesLoading) || (standalone && assetTypeCompaniesLoading)) return <Loader />
 
     return (
-        <Paper className={classes.root} square id={`assets_type_companies`}>
+        <Paper className={"flex h-full flex-1 flex-col overflow-x-hidden overflow-y-auto"} square id={`assets_type_companies`}>
             <VirtualizedTable
             selected={selectItems}
             rowSelected={selectedRow}
