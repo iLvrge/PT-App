@@ -1,0 +1,16 @@
+/* react-resizable's handle, kept as CSS because the background is a base64 SVG
+   data URI, which does not belong in a Tailwind arbitrary value. */
+.pt-resizable > .react-resizable-handle {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  bottom: 0;
+  right: 0;
+  padding: 5px;
+  box-sizing: border-box;
+  cursor: se-resize;
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  background-origin: content-box;
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3R5bGU9ImZpbGw6I2ZmZmZmZiIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyMHB4IiBoZWlnaHQ9IjIwcHgiPjxwYXRoIGQ9Ik0xOSAxMmgtMnYzaC0zdjJoNXYtNXpNNyA5aDNWN0g1djVoMlY5em0xNC02SDNjLTEuMSAwLTIgLjktMiAydjE0YzAgMS4xLjkgMiAyIDJoMThjMS4xIDAgMi0uOSAyLTJWNWMwLTEuMS0uOS0yLTItMnptMCAxNi4wMUgzVjQuOTloMTh2MTQuMDJ6Ij48L3BhdGg+PC9zdmc+');
+}

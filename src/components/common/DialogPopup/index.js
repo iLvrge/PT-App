@@ -1,15 +1,14 @@
+import './resizable.css'
 import React, {useState, useEffect} from 'react'
 
 import { Paper, Dialog, DialogContent, DialogTitle, DialogActions, IconButton, Typography  } from '@mui/material'
 import Draggable from "react-draggable"
 import CloseIcon from '@mui/icons-material/Close'
 import {ResizableBox} from "react-resizable"
-import useStyles from './styles'
 
 
 
 const DialogPopup = (props) => {
-    const classes = useStyles()
     const [minConstraints, setMinConstraints] = useState(typeof props.minConstraints !== 'undefined' ? props.minConstraints : [420, 350])
     const [maxConstraints, setMaxConstraints] = useState(typeof props.maxConstraints !== 'undefined' ? props.maxConstraints : [1500, 800])
     const [ filterDrag, setFilterDrag ] =  useState([0, 0])
@@ -37,7 +36,7 @@ const DialogPopup = (props) => {
                     width={resizableWidthHeight[0]}
                     minConstraints={minConstraints} 
                     maxConstraints={maxConstraints}
-                    className={classes.resizable}
+                    className={"pt-resizable relative flex flex-col"}
                     onResizeStop={handleResize}
                 >
                     <Paper square={true} {...props} />                    
@@ -51,7 +50,7 @@ const DialogPopup = (props) => {
         <Dialog
             open={props.open}
             onClose={props.onClose}
-            className={`${classes.modal} ${classes.modalFilter} `}
+            className={`${"[&_.react-draggable]:h-[50vh] [&_.react-draggable]:w-[800px] [&_.MuiDialog-paperWidthSm]:max-w-[inherit] [&_.MuiDialogContent-root]:overflow-x-hidden [&_.MuiDialogContent-dividers]:border-0"} ${"[&_.react-draggable]:h-[70vh] [&_.react-draggable]:w-[70vw] [&_.MuiDialog-paperWidthSm]:m-0 [&_.MuiDialog-paperWidthSm]:h-full [&_.MuiDialog-paperWidthSm]:max-h-[inherit] [&_.MuiDialog-paperWidthSm]:max-w-[inherit] [&_.MuiDialog-scrollPaper]:items-start [&_.MuiDialog-scrollPaper]:justify-start"} `}
             {...( props.resizable ===  true  ? {PaperComponent: PaperComponentFilter} : {})} 
             {...( props.scroll ===  true  ? { scroll: 'paper' } : {})}     
             
@@ -66,7 +65,7 @@ const DialogPopup = (props) => {
                 }
             </DialogTitle> 
             <DialogContent 
-                className={classes.filterContent}
+                className={"mx-10 [&_.MuiInputBase-multiline]:p-0"}
                 {...( props.scroll ===  true  ? { dividers: true } : {})}   
             >
                 {props.children}               

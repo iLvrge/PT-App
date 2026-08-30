@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react' 
-import useStyles from './styles' 
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import IconButton from '@mui/material/IconButton'
@@ -19,7 +18,6 @@ import clsx from 'clsx'
 function PdfViewer(props) {
   const viewerRef = useRef();
   const { pdfTab, setPdfTabIndex } = props
-  const classes = useStyles()
   const [ showSwitcher, setShowSwitcher ] = useState(0)
   const [ mainPdf, setMainPdf ] = useState('about:blank')
   const [ formPdf, setFormPdf ] = useState('about:blank')
@@ -51,7 +49,7 @@ function PdfViewer(props) {
 
   useEffect(()=> {     
     if(props.pdfView == 'true') {
-      setFullView(classes.fullView) 
+      setFullView("!w-full") 
     }
     if(props.pdfFile) {
       /* setMainPdf(props.pdfFile.document != '' ? props.pdfFile.document : 'about:blank')
@@ -71,7 +69,7 @@ function PdfViewer(props) {
     } else {
       setErrorMessage('')
     }
-  },[ classes.fullView, props.pdfFile, props.pdfView ])
+  },[ "!w-full", props.pdfFile, props.pdfView ])
 
   useEffect(() => {
     if(props.resize === true) {
@@ -132,21 +130,21 @@ function PdfViewer(props) {
  
   return (
     <div
-      className={classes.pdfContainer}
+      className={"relative z-[9999] flex h-full w-full items-center justify-center [&_.MuiTabScrollButton-root]:w-5 [&_.MuiTab-root]:min-w-[inherit] [&_iframe]:border-0"}
     >
-      <div className={`${classes.pdfWrapper} ${fullView}`} id={'pdfViewer'} ref={viewerRef}>
+      <div className={`${"flex flex-col bg-[rgb(82,86,89)]"} ${fullView}`} id={'pdfViewer'} ref={viewerRef}>
         {
-          props.display === "true" && <IconButton onClick={closeViewer} size="small" className={classes.close}>
+          props.display === "true" && <IconButton onClick={closeViewer} size="small" className={"absolute right-0 top-4 z-[11] cursor-pointer"}>
             <Close />
           </IconButton>
         }
         {
-          props.display === "false" && <IconButton size="small" className={clsx(classes.fullscreenBtn, 'full_screen_btn')} onClick={handleClickOpenFullscreen}>
+          props.display === "false" && <IconButton size="small" className={clsx("absolute right-0 top-[14px] z-[1] [&_svg]:fill-[#6d6d6d] [&_svg]:stroke-[#6d6d6d] hover:[&_svg]:fill-secondary hover:[&_svg]:stroke-secondary hover:[&_svg]:text-secondary", 'full_screen_btn')} onClick={handleClickOpenFullscreen}>
           <FullscreenIcon />
           </IconButton>
         }
         
-        <div className={classes.container}>
+        <div className={"relative h-full grow overflow-hidden border border-[#363636]"}>
           {
             errorMessage != '' && (
               <Typography
@@ -161,13 +159,13 @@ function PdfViewer(props) {
           {
             pdfTab === 1 && formPdf != 'about:blank'
             ?
-            <iframe id={'iframe_form'} title='form iframe' className={classes.outsource} onLoad={() => checkHeight(1)} src={formPdf}/>
+            <iframe id={'iframe_form'} title='form iframe' className={"w-full border-0"} onLoad={() => checkHeight(1)} src={formPdf}/>
             :
             pdfTab === 0 && agreementPdf != 'about:blank' 
             ? 
-            <iframe id={'iframe_agreement'} title='agreement iframe' onLoad={() => checkHeight(0)} className={classes.outsource} src={agreementPdf}/>
+            <iframe id={'iframe_agreement'} title='agreement iframe' onLoad={() => checkHeight(0)} className={"w-full border-0"} src={agreementPdf}/>
             :
-            <iframe id={'iframe_main'} title='main iframe' onLoad={() => checkHeight(2)} className={classes.outsource} src={mainPdf}/>
+            <iframe id={'iframe_main'} title='main iframe' onLoad={() => checkHeight(2)} className={"w-full border-0"} src={mainPdf}/>
           }   
         </div>
         {
@@ -176,7 +174,7 @@ function PdfViewer(props) {
             <Tabs
               value={pdfTab}
               onChange={(e, id) => setPdfTabIndex(id)}
-              className={classes.tabs}
+              className={"flex min-h-0 bg-[rgb(50,54,57)] [&_.MuiTab-root]:text-base"}
               variant={'scrollable'}
             > 
               {
@@ -184,7 +182,7 @@ function PdfViewer(props) {
                   <Tab
                     key={tab}
                     label={tab}
-                    className={classes.tab}
+                    className={"min-h-[38px]"}
                   />
                 )) 
               }
