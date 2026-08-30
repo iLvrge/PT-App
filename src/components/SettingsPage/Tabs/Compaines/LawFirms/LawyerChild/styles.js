@@ -1,19 +1,10 @@
 import makeStyles from '@mui/styles/makeStyles';
 
-export default makeStyles((theme) => ({
+export default makeStyles(() => ({
+  // Toolbar height and search visibility are now Page props. These two remain
+  // because they target ids rendered by Page's header child component.
   childrenTable: {
-    '& .MuiToolbar-regular': {
-      height: 40,
-      minHeight: 0,
-    },
-    '& [class*="makeStyles-search-"]': {
-      display: 'none',
-    },
-    '& #mutiple-checkbox-label':{
-      display: 'inline'
-    },
-    '& #mutiple-checkbox': {
-      minWidth: '100px'
-    }
+    '& #mutiple-checkbox-label': { display: 'inline' },
+    '& #mutiple-checkbox': { minWidth: '100px' },
   },
 }))

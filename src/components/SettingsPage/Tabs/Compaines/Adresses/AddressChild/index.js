@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react'
 import AddressesForm from './AdressForm'
-import useStyles from './styles'
 import { addCompanyAddress, deleteCompanyAddress } from '../../../../../../actions/settingsActions'
 import Page from '../../../../components/Page'
 
@@ -13,7 +12,6 @@ const COLUMNS = [
 const ID_KEY = 'address_id'
 
 const AddressesChild = ({ row }) => {
-  const classes = useStyles()
   const { representative_id, address, companyName } = row
   const data = useMemo(() => address.map(item => ({ ...item, companyName })), [ address, companyName ])
 
@@ -28,7 +26,8 @@ const AddressesChild = ({ row }) => {
 
   return (
     <Page
-      className={classes.childrenTable}
+      searchable={false}
+      dense
       actions={ACTIONS}
       name={NAME}
       columns={COLUMNS}

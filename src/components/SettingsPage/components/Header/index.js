@@ -15,7 +15,7 @@ import Button from '@mui/material/Button'
 import StyledSearch from '../../../common/StyledSearch'
 import clsx from 'clsx'
 
-const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setSearch, childComponent, selectedType }) => {
+const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setSearch, childComponent, selectedType, searchable = true, dense = false }) => {
   const classes = useStyles()
 
   const [ openDialog, setOpenDialog ] = useState(false)
@@ -68,7 +68,7 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
           }
         </DialogActions>
       </Dialog>
-      <Toolbar className={clsx(classes.root, /* { [classes.highlight]: numSelected > 0 } */)}>
+      <Toolbar variant={dense ? 'dense' : 'regular'} className={clsx(classes.root, dense && 'h-10 min-h-0')}>
         <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
           {numSelected > 0 ? `${numSelected} Selected` : title}
           {
@@ -93,9 +93,11 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
             </Tooltip>
           ) : (
             <Fragment>
-              <StyledSearch
-                value={search}
-                onChange={(e) => setSearch(e.target.value)} />
+              {searchable && (
+                <StyledSearch
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)} />
+              )}
 
               {
                 onAdd && (

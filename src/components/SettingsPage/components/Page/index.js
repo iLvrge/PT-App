@@ -20,6 +20,8 @@ export default function Page({
   childComponent,
   headerChildComponent,
   className,
+  searchable = true,
+  dense = false,
   title = '',
   columns = [],
   data = [],
@@ -107,6 +109,8 @@ export default function Page({
       <div className={clsx(classes.tableRoot, className)}>
         <Paper className={classes.paper} square>
           <Header
+            searchable={searchable}
+            dense={dense}
             search={search}
             setSearch={setSearch}
             title={title}

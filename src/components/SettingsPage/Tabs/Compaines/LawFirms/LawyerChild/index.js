@@ -38,6 +38,8 @@ const LawyerChild = ({ row }) => {
   return (
     <Page
       className={classes.childrenTable}
+      searchable={false}
+      dense
       actions={ACTIONS}
       name={NAME}
       columns={COLUMNS}
