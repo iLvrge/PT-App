@@ -1,8 +1,9 @@
+import { Dialog, DialogContent } from '../../../../ui/Dialog'
 import React, { Fragment, useCallback, useEffect, useState, useRef } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Box } from '@mui/material'
+import {Button, TextField, Paper, Box} from '@mui/material'
 
 import AddIcon from '@mui/icons-material/Add'
 
@@ -62,30 +63,26 @@ function AddPeople(props) {
             >
                 Invite user to your workspace
             </Button>
-            <Dialog open={openDialog} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogContent>
-                    <Box m={2} p={3}>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="email_address"
-                            label="Email Address"
-                            color='secondary'
-                            value={inputText}
-                            onChange={handleInputChange}
-                            fullWidth
-                        />   
-                    </Box>                  
-                </DialogContent>
-                <DialogActions>
-                <Button onClick={handleClose} color="inherit">
-                    Cancel
-                </Button>
-                <Button onClick={handleInvitation} color="inherit">
-                    Invite
-                </Button>
-                </DialogActions>
-          </Dialog>
+            <Dialog open={openDialog} onOpenChange={(next) => { if (!next) handleClose() }}>
+              <DialogContent description="Invite a user to your Slack workspace">
+                <Box m={2} p={3}>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="email_address"
+                        label="Email Address"
+                        color='secondary'
+                        value={inputText}
+                        onChange={handleInputChange}
+                        fullWidth
+                    />
+                </Box>
+                <div className="flex justify-end gap-2">
+                  <Button onClick={handleClose} color="inherit">Cancel</Button>
+                  <Button onClick={handleInvitation} color="inherit">Invite</Button>
+                </div>
+              </DialogContent>
+            </Dialog>
         </div>
     )
 }

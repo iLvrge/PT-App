@@ -1,3 +1,4 @@
+import { Dialog, DialogContent } from '../../../../ui/Dialog'
 import MaterialTable, {MTableToolbar} from '@material-table/core'
 import React, { forwardRef, useRef, useState } from 'react'
 import AddBox from '@mui/icons-material/AddBox'
@@ -16,7 +17,6 @@ import SaveAlt from '@mui/icons-material/SaveAlt'
 import Search from '@mui/icons-material/Search'
 import ViewColumn from '@mui/icons-material/ViewColumn'
 import HelpOutline from '@mui/icons-material/HelpOutline'
-import Modal from '@mui/material/Modal'
 
 const TABLE_ICONS = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -96,16 +96,9 @@ const StyledMaterialTable = (props) => {
         {
           props.help === true
           ?
-          <Modal
-            open={open}
-            onClose={onHandleHelpClose}
-            aria-labelledby="help-modal-title"
-            aria-describedby="help-modal-description"
-          >
-            <div>
-              Company Address
-            </div>
-          </Modal>
+          <Dialog open={open} onOpenChange={(next) => { if (!next) onHandleHelpClose() }}>
+            <DialogContent title="Company Address" />
+          </Dialog>
           :
           ''
         }        
