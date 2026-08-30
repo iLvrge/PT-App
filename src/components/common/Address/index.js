@@ -1,6 +1,5 @@
 import React, { useState, useEffect, forwardRef, useRef  } from 'react'
 import { connect } from 'react-redux'
-import useStyles from './styles'
 import Grid from '@mui/material/Grid'
 import Alert from '@mui/material/Alert'
 import List from '@mui/material/List'
@@ -14,7 +13,6 @@ import { Collapse, Button, Dialog, DialogActions, DialogContent, DialogTitle, Ty
 import { addAddress, addCompanyLawyer, addTelephone } from '../../../actions/patenTrackActions'
 
 function Address(props) {
-    const classes = useStyles()
 
     const ref = useRef(null)
 
@@ -80,9 +78,9 @@ function Address(props) {
 
   return (
     <div
-      className  = {classes.userItemsContainer}
+      className  = {"relative z-[1000] flex h-full w-full grow flex-col"}
     >
-      <div className={classes.container}>
+      <div className={"absolute bottom-0 left-[5px] right-[5px] top-[5px] flex grow text-white [&_.MuiCollapse-root]:absolute [&_.MuiCollapse-root]:right-0 [&_.MuiCollapse-root]:z-[9] [&_.MuiCollapse-root]:text-black"}>
         <Collapse in={warning}>
           <Alert severity="warning">
             {message}
@@ -113,17 +111,17 @@ function Address(props) {
                 <Button  onClick={handleClose} color="secondary">
                 Cancel
                 </Button>
-                <Button autoFocus  color="primary" className={classes.btn} onClick={() => {handleSubmit(ref.current) }}>Save</Button>
+                <Button autoFocus  color="primary" className={"cursor-pointer"} onClick={() => {handleSubmit(ref.current) }}>Save</Button>
             </DialogActions>
         </Dialog>
         <Grid
             item lg={4} md={4} sm={4} xs={4}
-            className={classes.flexColumn}
+            className={"flex flex-col"}
         >            
             <Typography variant="h6">
-                <AddBox fontSize="inherit" className={classes.btn} onClick={() => openPopup(1)}/> Address
+                <AddBox fontSize="inherit" className={"cursor-pointer"} onClick={() => openPopup(1)}/> Address
             </Typography>
-            <div className={classes.scrollbar}
+            <div className={"relative w-full grow overflow-hidden [&_.MuiPaper-root]:bg-[inherit] [&_.MuiTableCell-head]:bg-[inherit] [&_.MuiToolbar-gutters]:p-0"}
             style={{ height: props.height * 39  / 100 }}
             >
             {
@@ -133,12 +131,12 @@ function Address(props) {
         </Grid>
         <Grid
             item lg={4} md={4} sm={4} xs={4}
-            className={classes.flexColumn}
+            className={"flex flex-col"}
         >
             <Typography variant="h6" >
                 <AddBox fontSize="inherit" onClick={() => openPopup(2)}/> Lawyer
             </Typography>     
-            <div className={classes.scrollbar}
+            <div className={"relative w-full grow overflow-hidden [&_.MuiPaper-root]:bg-[inherit] [&_.MuiTableCell-head]:bg-[inherit] [&_.MuiToolbar-gutters]:p-0"}
             style={{ height: props.height * 39  / 100 }}
             >
             {
@@ -148,12 +146,12 @@ function Address(props) {
         </Grid>
         <Grid
             item lg={4} md={4} sm={4} xs={4}
-            className={classes.flexColumn}
+            className={"flex flex-col"}
         >
             <Typography variant="h6">
                 <AddBox fontSize="inherit" onClick={() => openPopup(3)}/> Telephone
             </Typography> 
-            <div className={classes.scrollbar}
+            <div className={"relative w-full grow overflow-hidden [&_.MuiPaper-root]:bg-[inherit] [&_.MuiTableCell-head]:bg-[inherit] [&_.MuiToolbar-gutters]:p-0"}
             style={{ height: props.height * 39  / 100 }}
             >
             {
