@@ -212,7 +212,6 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     const [ data, setData ] = useState( [] )
     const [ width, setWidth ] = useState( 1900 )
     const [ offset, setOffset ] = useState(0)
-    const [ totalRecords, setTotalRecords ] = useState(0)
     const [ headerRowHeight, setHeaderRowHeight ] = useState(47)
     const [ rowHeight, setRowHeight ] = useState(40)
     const [ selectItems, setSelectItems] = useState( [] )
@@ -263,24 +262,23 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     /**
      * Set Total companies
      */
+    // totalRecords was set inside this effect and only there, so it is derived.
+    // It also used to be left at its previous value when companies.list became
+    // empty, because the count sat inside an `if (length > 0)` guard - so an
+    // emptied list kept reporting the old total, which the select-all comparison
+    // at the bottom of this file reads.
+    const totalRecords = useMemo(
+        () => companies.list.reduce((count, row) => {
+            if (parseInt(row.type) !== 1) return count + 1
+            const children = JSON.parse(row.child)
+            return count + children.length
+        }, 0),
+        [ companies.list ]
+    )
+
+    // companiesList stays state: it is edited elsewhere in this component.
     useEffect(() => {
         setCompaniesList( companies.list )
-        let counter = 0
-
-        if(companies.list.length > 0) {
-            companies.list.map(row => {
-                if(parseInt(row.type) == 1) {
-                    const parseChild = JSON.parse(row.child)
-                    if(parseChild.length > 0) {
-                        counter += parseChild.length        
-                    } 
-                }  else {
-                    counter++;
-                }
-            })
-            setTotalRecords(counter)
-            
-        }
     }, [ companies.list ])
 
     /**
