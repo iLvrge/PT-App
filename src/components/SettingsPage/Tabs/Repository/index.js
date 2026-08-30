@@ -1,3 +1,6 @@
+import { driveLiteral as driveClass, headingLiteral as headingClass, frame, noWrap,
+         flexColumn, relativeLockedIcon } from '../../../../styles/driveExplorer'
+import { splitPaneCorrect } from '../../../../styles/splitPane'
 import React, {useState, useEffect, useCallback, useRef} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -12,7 +15,6 @@ import LockIcon from '@mui/icons-material/Lock'
 import LockOpenIcon from '@mui/icons-material/LockOpen'
 import SplitPane from 'react-split-pane'
 import VirtualizedTable from '../../../common/VirtualizedTable'
-import useStyles from './styles'
 import Googlelogin from '../../../common/Googlelogin'
 import { setBreadCrumbs, getLayoutWithTemplates, getGoogleTemplates, getGoogleProfile, setLayoutWithTemplatelist } from  '../../../../actions/patentTrackActions2'
 
@@ -21,7 +23,6 @@ import PatenTrackApi from '../../../../api/patenTrack2';
 import { getTokenStorage } from '../../../../utils/tokenStorage'
 
 const Repository = () => {
-    const classes = useStyles()
     const dispatch = useDispatch()
     const googleLoginRef = useRef(null)
     const [ selected, setSelected ] = useState(null)
@@ -465,7 +466,7 @@ const Repository = () => {
   
     return (
         <SplitPane
-            className={classes.splitPane}
+            className={splitPaneCorrect}
             split="vertical"	
             size={300}
             onDragStarted={() => {
@@ -478,10 +479,10 @@ const Repository = () => {
                 pointerEvents: isDrag === true ? 'none' : 'auto',
             }}
         >
-            <div className={classes.flexColumn}>
-                <div className={classes.heading}>
-                    <Typography variant="body1" component="h2" className={classes.noWrap}>
-                        {/* <span className={classes.relativeLockedIcon}>
+            <div className={flexColumn}>
+                <div className={headingClass}>
+                    <Typography variant="body1" component="h2" className={noWrap}>
+                        {/* <span className={relativeLockedIcon}>
                         {
                         repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('container_id') && repo_folder_lock === 1
                         ?
@@ -492,7 +493,7 @@ const Repository = () => {
                         </span> */} Documents Reporsitory Folder: <BreadCrumbs  type={2} click={false} /* click={repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('container_id') && repo_folder_lock === 1 ? true : false} *//>
                     </Typography>
                 </div>
-                <div className={classes.drive}>
+                <div className={driveClass}>
                     <VirtualizedTable
                         selected={selectItems}
                         selectedKey={'id'}
@@ -522,7 +523,7 @@ const Repository = () => {
                 {
                     selected != null 
                     ?
-                    <iframe src={`${selected}`} className={classes.frame}></iframe>
+                    <iframe src={`${selected}`} className={frame}></iframe>
                     :
                     ''
                 }

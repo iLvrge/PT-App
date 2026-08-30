@@ -1,3 +1,6 @@
+import { driveTokens as driveClass, headingTokens as headingClass, frame, noWrap,
+         flexColumn, relativeLockedIcon } from '../../../../styles/driveExplorer'
+import { splitPaneCorrect } from '../../../../styles/splitPane'
 import React, {useState, useEffect, useCallback, useRef} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -13,7 +16,6 @@ import LockIcon from '@mui/icons-material/Lock'
 import LockOpenIcon from '@mui/icons-material/LockOpen'
 import SplitPane from 'react-split-pane'
 import VirtualizedTable from '../../../common/VirtualizedTable'
-import useStyles from './styles'
 import Googlelogin from '../../../common/Googlelogin'
 import { setBreadCrumbs, getLayoutWithTemplates, getGoogleTemplates, getGoogleProfile, setLayoutWithTemplatelist } from  '../../../../actions/patentTrackActions2'
 
@@ -22,7 +24,6 @@ import PatenTrackApi from '../../../../api/patenTrack2';
 import { getTokenStorage } from '../../../../utils/tokenStorage'
 
 const Templates = () => {
-    const classes = useStyles()
     const dispatch = useDispatch()
     const googleLoginRef = useRef(null)
     const [ selected, setSelected ] = useState(null)
@@ -465,12 +466,12 @@ const Templates = () => {
   
     return (
         <SplitPane
-            className={classes.splitPane}
+            className={splitPaneCorrect}
             split="vertical"
             size={200}
         >
-            <Paper className={classes.flexColumn} square> 
-                <div className={classes.drive}  style={{height: '100vh'}}>
+            <Paper className={flexColumn} square> 
+                <div className={driveClass}  style={{height: '100vh'}}>
                     <VirtualizedTable
                         selected={selectItems}
                         selectedKey={'layout_id'}
@@ -495,14 +496,14 @@ const Templates = () => {
                 </div>                
             </Paper>
             <SplitPane
-            className={classes.splitPane}
+            className={splitPaneCorrect}
             split="vertical"
             size={300}	
             >
-                <Paper className={classes.flexColumn} square>
-                    <div className={classes.heading}>
-                        <Typography variant="body1" component="h2" className={classes.noWrap}>
-                            {/* <span className={classes.relativeLockedIcon}>
+                <Paper className={flexColumn} square>
+                    <div className={headingClass}>
+                        <Typography variant="body1" component="h2" className={noWrap}>
+                            {/* <span className={relativeLockedIcon}>
                             {
                                repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('template_container_id') && templates_folder_lock === 1
                                ?
@@ -513,7 +514,7 @@ const Templates = () => {
                             </span> */} Layouts Templates:  <BreadCrumbs type={1} click={false} /* click={repoFolder != '' && Object.keys(repoFolder).length > 0 && repoFolder.hasOwnProperty('template_container_id') && templates_folder_lock === 1 ? true : false} *//>
                         </Typography>
                     </div>
-                    <div className={classes.drive}>
+                    <div className={driveClass}>
                         <VirtualizedTable 
                             selected={selectedDriveItems}
                             selectedKey={'id'}
@@ -544,7 +545,7 @@ const Templates = () => {
                     {
                         selected != null 
                         ?
-                        <iframe src={`${selected}`} className={classes.frame}></iframe>
+                        <iframe src={`${selected}`} className={frame}></iframe>
                         :
                         ''
                     }
