@@ -1,3 +1,4 @@
+import cn from '../../ui/cn'
 import React, { useEffect,  useState, useCallback, createContext  } from "react"
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -1580,7 +1581,7 @@ const GlobalLayout = (props) => {
                         resetScreen={handleResetScreen}
                     />
             }
-            <Grid container className={clsx("relative z-[1] flex h-auto w-full grow flex-col items-center justify-center", {["max-h-[-webkit-fill-available] grow-[inherit] [&_.timeline_.vis-panel.vis-top]:hidden"]: isMobile})} id="mainContainer">
+            <Grid container className={cn("relative z-[1] flex h-auto w-full grow flex-col items-center justify-center", {["max-h-[-webkit-fill-available] grow-[inherit] [&_.timeline_.vis-panel.vis-top]:hidden"]: isMobile})} id="mainContainer">
                 <Grid container className={clsx("absolute inset-0")}>       
                     {
                         isMobile || isTablet || showMobileWarning || isAndroid || isIOS

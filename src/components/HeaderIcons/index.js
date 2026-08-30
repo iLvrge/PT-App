@@ -1,3 +1,4 @@
+import cn from '../../ui/cn'
 import React, 
         { useCallback, 
         } from 'react'
@@ -76,7 +77,7 @@ const HeaderIcons = (props) => {
             {
                 props.icons.map( icon => (
                     <IconButton
-                        className={clsx("h-[30px] w-[30px] rounded-none p-0 [&_svg]:fill-[#5a5a5a] [&_svg]:stroke-[#5a5a5a] hover:[&_svg]:fill-[rgb(230,0,0)] hover:[&_svg]:stroke-[rgb(230,0,0)]", { ["[&_svg]:fill-white [&_svg]:stroke-white hover:[&_svg]:fill-white hover:[&_svg]:stroke-white"]: icon.name === 'clipboard' && display_clipboard === true }, { ["[&_svg]:fill-[#f48fb1] [&_svg]:stroke-[#f48fb1]"]: icon.name === 'clipboard' && clipboard_assets.length > 0 })}
+                        className={cn("h-[30px] w-[30px] rounded-none p-0 [&_svg]:fill-[#5a5a5a] [&_svg]:stroke-[#5a5a5a] hover:[&_svg]:fill-[rgb(230,0,0)] hover:[&_svg]:stroke-[rgb(230,0,0)]", { ["[&_svg]:fill-white [&_svg]:stroke-white hover:[&_svg]:fill-white hover:[&_svg]:stroke-white"]: icon.name === 'clipboard' && display_clipboard === true }, { ["[&_svg]:fill-[#f48fb1] [&_svg]:stroke-[#f48fb1]"]: icon.name === 'clipboard' && clipboard_assets.length > 0 })}
                         {...(icon.name === 'clipboard' && { onClick: handleClipboard })}
                         size="large">
                         {

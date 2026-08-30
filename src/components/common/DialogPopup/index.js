@@ -1,3 +1,4 @@
+import cn from '../../../ui/cn'
 import './resizable.css'
 import React, {useState, useEffect} from 'react'
 
@@ -50,7 +51,20 @@ const DialogPopup = (props) => {
         <Dialog
             open={props.open}
             onClose={props.onClose}
-            className={`${"[&_.react-draggable]:h-[50vh] [&_.react-draggable]:w-[800px] [&_.MuiDialog-paperWidthSm]:max-w-[inherit] [&_.MuiDialogContent-root]:overflow-x-hidden [&_.MuiDialogContent-dividers]:border-0"} ${"[&_.react-draggable]:h-[70vh] [&_.react-draggable]:w-[70vw] [&_.MuiDialog-paperWidthSm]:m-0 [&_.MuiDialog-paperWidthSm]:h-full [&_.MuiDialog-paperWidthSm]:max-h-[inherit] [&_.MuiDialog-paperWidthSm]:max-w-[inherit] [&_.MuiDialog-scrollPaper]:items-start [&_.MuiDialog-scrollPaper]:justify-start"} `}
+            // Both class sets were applied unconditionally in the original too.
+            // They conflict on the draggable box size (50vh/800px vs 70vh/70vw);
+            // JSS resolved that by stylesheet order, which Tailwind does not, so
+            // cn() makes the later set win explicitly - matching the previous
+            // rendering rather than leaving it to CSS emission order.
+            className={cn(
+              "[&_.react-draggable]:h-[50vh] [&_.react-draggable]:w-[800px]",
+              "[&_.MuiDialog-paperWidthSm]:max-w-[inherit] [&_.MuiDialogContent-root]:overflow-x-hidden",
+              "[&_.MuiDialogContent-dividers]:border-0",
+              "[&_.react-draggable]:h-[70vh] [&_.react-draggable]:w-[70vw]",
+              "[&_.MuiDialog-paperWidthSm]:m-0 [&_.MuiDialog-paperWidthSm]:h-full",
+              "[&_.MuiDialog-paperWidthSm]:max-h-[inherit] [&_.MuiDialog-paperWidthSm]:max-w-[inherit]",
+              "[&_.MuiDialog-scrollPaper]:items-start [&_.MuiDialog-scrollPaper]:justify-start"
+            )}
             {...( props.resizable ===  true  ? {PaperComponent: PaperComponentFilter} : {})} 
             {...( props.scroll ===  true  ? { scroll: 'paper' } : {})}     
             

@@ -1,3 +1,4 @@
+import cn from '../../../ui/cn'
 import React, { useState } from 'react'
 
 
@@ -37,7 +38,7 @@ const FullScreen = ({componentItems, setScreen, showScreen, paper, share, handle
                 className={clsx("flex", 'fullscreenModal')}
                 open={isFullscreenOpen}  
             > 
-                <Paper className={clsx("relative m-7 flex flex-1 bg-bg-default [&_.full_heading_.MuiTypography-root]:mt-[15px]", typeof paper !== 'undefined' && paper === false ? "bg-none" : '', typeof full !== 'undefined' && full === false ? "mx-auto my-[50px] flex-none" : '')} square   >
+                <Paper className={cn("relative m-7 flex flex-1 bg-bg-default [&_.full_heading_.MuiTypography-root]:mt-[15px]", typeof paper !== 'undefined' && paper === false ? "bg-none" : '', typeof full !== 'undefined' && full === false ? "mx-auto my-[50px] flex-none" : '')} square   >
                     {
                         typeof showClose == 'undefined' && (
                             <IconButton

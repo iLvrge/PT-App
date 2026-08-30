@@ -1,3 +1,4 @@
+import cn from '../../../ui/cn'
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import { useSelector, useDispatch } from "react-redux"
 
@@ -505,7 +506,7 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
         setDocumentHeaderColumns(previousColumns)
     }, [ documentHeaderColumns ] )
     return (
-        <Paper className={clsx("flex h-full flex-1 flex-col overflow-x-hidden overflow-y-auto [&_.disable_header_.ReactVirtualized__Table__headerRow]:hidden", {["flex-[1_1_50%]"]: isMobile === true && assetBar === true})} square id={`layout_templates`}>
+        <Paper className={cn("flex h-full flex-1 flex-col overflow-x-hidden overflow-y-auto [&_.disable_header_.ReactVirtualized__Table__headerRow]:hidden", {["flex-[1_1_50%]"]: isMobile === true && assetBar === true})} square id={`layout_templates`}>
             {  
               googleAuthLogin && (
                 <span ref={googleLoginRef}>
