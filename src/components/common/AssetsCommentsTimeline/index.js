@@ -831,10 +831,20 @@ const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, 
     }
   }, [ editorContainerRef ])
   
-  const onHandleFileExplorer = useCallback(() => {    
+  // The change listener that builds the attachment preview used to be attached
+  // inside this click handler, so every click stacked another copy and choosing
+  // a file ran it once per click made so far. It is attached once here, with a
+  // cleanup, and the click handler only opens the picker.
+  useEffect(() => {
+    const input = inputFile.current
+    if (input == null) return undefined
+    input.addEventListener('change', onHandleFileInputChange)
+    return () => input.removeEventListener('change', onHandleFileInputChange)
+  }, [ onHandleFileInputChange ])
+
+  const onHandleFileExplorer = useCallback(() => {
     if( inputFile.current != null ) {
       inputFile.current.click()
-      inputFile.current.addEventListener('change', onHandleFileInputChange)
     }
   }, [ inputFile ])
   

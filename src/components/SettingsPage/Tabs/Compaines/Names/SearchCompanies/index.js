@@ -124,12 +124,12 @@ function SearchCompanies({ onClose, selected, setSelected }) {
   }, []);
 
   useEffect(()=>{
-    if(searchTxtField.current != null) {
-      const inputText = searchTxtField.current.querySelector('input[type="search"]')
-      if(inputText != null) {
-        inputText.addEventListener('drop', onDropContent)
-      }
-    }
+    if (searchTxtField.current == null) return undefined
+    const inputText = searchTxtField.current.querySelector('input[type="search"]')
+    if (inputText == null) return undefined
+    // Previously added with no cleanup, so the handler outlived the component.
+    inputText.addEventListener('drop', onDropContent)
+    return () => inputText.removeEventListener('drop', onDropContent)
   }, [])
 
   const createParent = useCallback(() => {

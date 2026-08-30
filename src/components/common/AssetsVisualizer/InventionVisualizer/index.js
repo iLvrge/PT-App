@@ -1015,6 +1015,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             graphRef.current.on('cameraPositionChange', onCameraPositionChange)
             if(graphContainerRef.current != null ) {
                 graphContainerRef.current.removeEventListener('mouseover', onHandleMouseOver)
+                graphContainerRef.current.removeEventListener('mouseout', onHandleMouseOut)
                 graphContainerRef.current.addEventListener('mouseout', onHandleMouseOut)
                 graphContainerRef.current.addEventListener('mouseover', onHandleMouseOver)            
             }
