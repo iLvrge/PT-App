@@ -14,10 +14,8 @@ import DescriptionIcon from '@mui/icons-material/Description'
 import ActionMenu from '../NewHeader/ActionMenu'
 import NavigationIcon from '../NavigationIcon'
 import clsx from 'clsx'
-import useStyles from './styles'
 
 const MobileFooter = (props) => {
-    const classes = useStyles() 
     const [value, setValue] = useState(null);
 
     const [state, setState] = useState({
@@ -92,7 +90,7 @@ const MobileFooter = (props) => {
     ]
 
     return(
-        <Box className={classes.root}>
+        <Box className={"z-[999] flex h-[45px] [&_svg.MuiSvgIcon-root]:h-8 [&_svg.MuiSvgIcon-root]:w-8 [&_.MuiBottomNavigationAction-root.MuiBottomNavigationAction-iconOnly]:min-w-[auto] [&_.MuiBottomNavigationAction-root.MuiBottomNavigationAction-iconOnly]:py-0 [&_.MuiBottomNavigation-root]:h-full [&_.MuiBottomNavigation-root]:w-full [&_.MuiFab-root]:z-[999] [&_.MuiFab-root]:h-[45px] [&_.MuiFab-root]:w-[45px] [&_.MuiFab-root]:min-w-[45px] [&_.MuiFab-root]:rounded-full"}>
             <BottomNavigation value={value} onChange={handleChange}>
                 {
                     leftButtons.map( (button, index) => (
@@ -129,14 +127,14 @@ const MobileFooter = (props) => {
                             onOpen={(event) => toggleDrawer(event, drawer.name, true)}
                         >     
                             <Box
-                                className={clsx(classes.drawerContainer, {[classes.alignRight]: drawer.anchor === 'top'})}
+                                className={clsx("mx-6 my-4", {["[&_.MuiBox-root]:w-full [&_.MuiBox-root]:flex-[1_1_100%] [&_.MuiBox-root]:items-center [&_.MuiBox-root]:justify-start [&_.MuiBox-root]:text-left"]: drawer.anchor === 'top'})}
                             >
                                 {
                                     drawer.name === 'dashboard'
                                     ?                                
                                         props.bottomToolBar.map( (item, index) => (
                                             <Box
-                                                className={classes.swipeButtons}
+                                                className={"flex text-xl [&_.MuiIconButton-label_svg]:h-8 [&_.MuiIconButton-label_svg]:w-8 [&_.MuiIconButton-label_svg]:fill-white [&_.MuiIconButton-label_svg]:stroke-white [&_.MuiIconButton-root]:w-full [&_.MuiIconButton-root]:min-w-full [&_.MuiIconButton-root]:justify-start [&_.MuiIconButton-root]:rounded-none [&_.MuiIconButton-root]:p-3 [&_.MuiIconButton-root]:text-[1.1em] [&_.MuiIconButton-root]:text-white [&_.MuiIconButton-root_span.text]:ml-5 [&_.MuiIconButton-root.active]:!text-secondary [&_.MuiIconButton-root.active_svg]:!fill-secondary [&_.MuiIconButton-root.active_svg]:!stroke-secondary"}
                                                 key={index} 
                                             >
                                                 <NavigationIcon {...item} showLabel={true} isMobile={true}/>
@@ -150,7 +148,7 @@ const MobileFooter = (props) => {
                                                 item.t === 1 || item.t === 2 || item.t === 3 || item.t === 11
                                                 ? (
                                                     <Box
-                                                        className={classes.swipeButtons}
+                                                        className={"flex text-xl [&_.MuiIconButton-label_svg]:h-8 [&_.MuiIconButton-label_svg]:w-8 [&_.MuiIconButton-label_svg]:fill-white [&_.MuiIconButton-label_svg]:stroke-white [&_.MuiIconButton-root]:w-full [&_.MuiIconButton-root]:min-w-full [&_.MuiIconButton-root]:justify-start [&_.MuiIconButton-root]:rounded-none [&_.MuiIconButton-root]:p-3 [&_.MuiIconButton-root]:text-[1.1em] [&_.MuiIconButton-root]:text-white [&_.MuiIconButton-root_span.text]:ml-5 [&_.MuiIconButton-root.active]:!text-secondary [&_.MuiIconButton-root.active_svg]:!fill-secondary [&_.MuiIconButton-root.active_svg]:!stroke-secondary"}
                                                         key={index} 
                                                     >
                                                         <NavigationIcon {...item} showLabel={true} isMobile={true}/>
@@ -165,7 +163,7 @@ const MobileFooter = (props) => {
                                                     item.t === 4 || item.t === 5 
                                                     ? (
                                                         <Box
-                                                            className={classes.swipeButtons}
+                                                            className={"flex text-xl [&_.MuiIconButton-label_svg]:h-8 [&_.MuiIconButton-label_svg]:w-8 [&_.MuiIconButton-label_svg]:fill-white [&_.MuiIconButton-label_svg]:stroke-white [&_.MuiIconButton-root]:w-full [&_.MuiIconButton-root]:min-w-full [&_.MuiIconButton-root]:justify-start [&_.MuiIconButton-root]:rounded-none [&_.MuiIconButton-root]:p-3 [&_.MuiIconButton-root]:text-[1.1em] [&_.MuiIconButton-root]:text-white [&_.MuiIconButton-root_span.text]:ml-5 [&_.MuiIconButton-root.active]:!text-secondary [&_.MuiIconButton-root.active_svg]:!fill-secondary [&_.MuiIconButton-root.active_svg]:!stroke-secondary"}
                                                             key={index} 
                                                         >
                                                             <NavigationIcon {...item} showLabel={true} isMobile={true}/>
@@ -180,7 +178,7 @@ const MobileFooter = (props) => {
                                                         item.t === 10 || item.t === 12 
                                                         ?  (
                                                             <Box
-                                                                className={classes.swipeButtons}
+                                                                className={"flex text-xl [&_.MuiIconButton-label_svg]:h-8 [&_.MuiIconButton-label_svg]:w-8 [&_.MuiIconButton-label_svg]:fill-white [&_.MuiIconButton-label_svg]:stroke-white [&_.MuiIconButton-root]:w-full [&_.MuiIconButton-root]:min-w-full [&_.MuiIconButton-root]:justify-start [&_.MuiIconButton-root]:rounded-none [&_.MuiIconButton-root]:p-3 [&_.MuiIconButton-root]:text-[1.1em] [&_.MuiIconButton-root]:text-white [&_.MuiIconButton-root_span.text]:ml-5 [&_.MuiIconButton-root.active]:!text-secondary [&_.MuiIconButton-root.active_svg]:!fill-secondary [&_.MuiIconButton-root.active_svg]:!stroke-secondary"}
                                                                 key={index} 
                                                             >
                                                                 <NavigationIcon {...item} showLabel={true} isMobile={true}/>
