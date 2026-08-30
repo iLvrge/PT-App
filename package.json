@@ -89,12 +89,13 @@
   "scripts": {
     "start": "vite",
     "build": "npm run check:styles && vite build && node scripts/check-bundle-secrets.cjs && node addVersion.cjs $(node -p \"require('./package.json').version\")",
-    "test": "echo \"no tests yet\" && exit 0",
+    "test": "vitest run",
     "dev": "vite",
     "preview": "vite preview",
     "check:styles": "node scripts/check-dangling-classes.cjs && node scripts/check-dynamic-classes.cjs",
     "check:unreachable": "node scripts/check-unreachable.cjs",
-    "check:secrets": "node scripts/check-bundle-secrets.cjs"
+    "check:secrets": "node scripts/check-bundle-secrets.cjs",
+    "test:watch": "vitest"
   },
   "eslintConfig": {
     "extends": [
@@ -120,10 +121,12 @@
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
     "@vitejs/plugin-react": "^4.7.0",
+    "@vitest/coverage-v8": "^4.1.11",
     "jsdom": "^29.1.1",
     "tailwindcss": "^4.3.3",
     "vite": "^7.3.6",
-    "vite-plugin-svgr": "^4.5.0"
+    "vite-plugin-svgr": "^4.5.0",
+    "vitest": "^4.1.11"
   },
   "type": "module"
 }
