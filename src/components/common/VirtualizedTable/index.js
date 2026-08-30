@@ -1,3 +1,4 @@
+import { Dialog, DialogContent } from '../../../ui/Dialog'
 import React, {
   useCallback,
   useMemo,
@@ -24,7 +25,7 @@ import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import { TableCell, Avatar, Modal, ListItemText, ListItemIcon, Zoom } from '@mui/material'
+import {TableCell, Avatar, ListItemText, ListItemIcon, Zoom} from '@mui/material'
 import {
   ArrowKeyStepper,
   AutoSizer,
@@ -729,17 +730,22 @@ const VirtualizedTable = ({
           </div>
         )
         if (typeof childInModal !== 'undefined' && childInModal === true) {
+          // A column filter anchored to its header cell, not a centred dialog:
+          // the child positions itself from computed coordinates, so the panel's
+          // centring and chrome are stripped off.
           childComponent = (
-            <Modal
-              open={true}
-              onClose={handleModalClose}
-            >
-              <div style={{ width: 250, height: 300, position: 'absolute', top: positions.top + headerHeight + style.top + "px", left: positions.left + style.width + "px", overflow: 'hidden auto', background: '#424242', padding: 10 }}>
-                {
-                  childComponent
-                }
-              </div>
-            </Modal>
+            <Dialog open={true} onOpenChange={(next) => { if (!next) handleModalClose() }}>
+              <DialogContent
+                title="Column filter"
+                className="!static !max-h-none !w-auto !max-w-none !translate-x-0 !translate-y-0 !overflow-visible !rounded-none !border-0 !bg-transparent !p-0 !shadow-none"
+              >
+                <div style={{ width: 250, height: 300, position: 'absolute', top: positions.top + headerHeight + style.top + "px", left: positions.left + style.width + "px", overflow: 'hidden auto', background: '#424242', padding: 10 }}>
+                  {
+                    childComponent
+                  }
+                </div>
+              </DialogContent>
+            </Dialog>
           )
         }
       }

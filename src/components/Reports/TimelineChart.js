@@ -1,3 +1,4 @@
+import { Dialog, DialogContent } from '../../ui/Dialog'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {
     useDispatch,
@@ -10,7 +11,7 @@ import { Timeline } from 'vis-timeline/esnext' */
 
 import { DataSet } from 'vis-data/esnext'
 import { Timeline } from 'vis-timeline/esnext'
-import { Typography, CircularProgress, IconButton, Paper, Modal, TableContainer, Table, TableBody, TableRow, TableCell, Button } from '@mui/material';
+import {Typography, CircularProgress, IconButton, Paper, TableContainer, Table, TableBody, TableRow, TableCell, Button} from '@mui/material';
 import Close from '@mui/icons-material/Close'
 import Fullscreen from '@mui/icons-material/Fullscreen'
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
@@ -609,13 +610,11 @@ const TimelineChart = (props) => {
                 }
                 {isLoadingTimelineRawData && <CircularProgress className={classes.loader} />}
             </div>
-            <Modal
-                open={openModal}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-                style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start', width: 400, position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', overflow: 'hidden auto' }}
-            >
+            <Dialog open={openModal} onOpenChange={(next) => { if (!next) handleClose() }}>
+                <DialogContent
+                    title="Timeline detail"
+                    className="!w-[400px] !max-w-none !overflow-y-auto !p-0"
+                >
                 <TableContainer component={Paper} style={{ height: '100%', border: '1px solid #0B0C0E' }}>
                     <IconButton
                         onClick={handleClose}
@@ -647,7 +646,8 @@ const TimelineChart = (props) => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-            </Modal>
+                </DialogContent>
+            </Dialog>
             {
                 fullScreen === true && (
                     <FullScreen

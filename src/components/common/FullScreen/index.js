@@ -1,3 +1,4 @@
+import { Dialog, DialogContent } from '../../../ui/Dialog'
 import cn from '../../../ui/cn'
 import React, { useState } from 'react'
 
@@ -8,7 +9,6 @@ import clsx from "clsx";
 import {IconButton, Tooltip, Typography, Zoom} from '@mui/material'
 import Fullscreen from '@mui/icons-material/Fullscreen'
 import Close from '@mui/icons-material/Close'
-import Modal from '@mui/material/Modal'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faShareAlt,
@@ -34,10 +34,17 @@ const FullScreen = ({componentItems, setScreen, showScreen, paper, share, handle
                     </IconButton>
                 )
             }            
-            <Modal
-                className={clsx("flex", 'fullscreenModal')}
-                open={isFullscreenOpen}  
-            > 
+            {/* The MUI Modal had no onClose: it is closed by its own button,
+                not by Esc or backdrop. Radix dismisses by default, so both are
+                suppressed to keep that. The content fills the viewport rather
+                than sitting in a centred panel, so the panel chrome is removed. */}
+            <Dialog open={isFullscreenOpen}>
+                <DialogContent
+                    title="Fullscreen view"
+                    className="!inset-0 !left-0 !top-0 flex !max-h-none !w-screen !max-w-none !translate-x-0 !translate-y-0 !rounded-none !border-0 !bg-transparent !p-0 !shadow-none"
+                    onEscapeKeyDown={(e) => e.preventDefault()}
+                    onPointerDownOutside={(e) => e.preventDefault()}
+                >
                 <Paper className={cn("relative m-7 flex flex-1 bg-bg-default [&_.full_heading_.MuiTypography-root]:mt-[15px]", typeof paper !== 'undefined' && paper === false ? "bg-none" : '', typeof full !== 'undefined' && full === false ? "mx-auto my-[50px] flex-none" : '')} square   >
                     {
                         typeof showClose == 'undefined' && (
@@ -80,7 +87,8 @@ const FullScreen = ({componentItems, setScreen, showScreen, paper, share, handle
                         )
                     }
                 </Paper>
-            </Modal>
+                </DialogContent>
+            </Dialog>
         </React.Fragment>
     ); 
 }
