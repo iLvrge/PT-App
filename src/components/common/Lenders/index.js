@@ -5,14 +5,12 @@ import React, {
   } from "react";
   import { useSelector, useDispatch } from "react-redux"; 
   import { Paper } from "@mui/material";
-  import useStyles from "./styles";
-  import VirtualizedTable from "../VirtualizedTable";
+    import VirtualizedTable from "../VirtualizedTable";
   import PatenTrackApi from "../../../api/patenTrack2"; 
   import Loader from "../Loader";
 import { setAllAssignmentCustomers, setAssetTypeAssignmentAllAssets, setAssetTypeAssignments, setAssetTypesPatentsSelected, setCPCData, setLineChartRequest, setLineChartReset, setSelectAssignmentCustomers, setSelectAssignments, setSelectedAssetsPatents, setSelectedAssetsTransactions, setSelectLawFirm } from "../../../actions/patentTrackActions2";
   
   const Lenders = () => {
-    const classes = useStyles();
     const dispatch = useDispatch(); 
     const [headerRowHeight, setHeaderRowHeight] = useState(47)
     const [rowHeight, setRowHeight] = useState(40);
@@ -130,7 +128,7 @@ import { setAllAssignmentCustomers, setAssetTypeAssignmentAllAssets, setAssetTyp
     if (initialize ) return <Loader />;
   
     return (
-      <Paper className={classes.root} square id={`lawfirms_container`}>
+      <Paper className={"flex h-full flex-1 flex-col overflow-hidden [&_.font12Rem]:text-base"} square id={`lawfirms_container`}>
         <VirtualizedTable
           selected={selectItems}
           rowSelected={selectedRow}

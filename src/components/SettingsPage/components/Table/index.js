@@ -7,7 +7,6 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import TableSortLabel from '@mui/material/TableSortLabel'
 import Checkbox from '@mui/material/Checkbox'
-import useStyles from './styles'
 import CircularProgress from '@mui/material/CircularProgress'
 import Row from './Row'
 import SlackImage from '../../../common/SlackImage'
@@ -78,7 +77,6 @@ export default function BaseTable({
   editedRow,
   checkbox
 }) {
-  const classes = useStyles()
   const [ order, setOrder ] = React.useState(null)
   const [ orderBy, setOrderBy ] = React.useState(null)
 
@@ -130,10 +128,10 @@ export default function BaseTable({
   }, [ rows, search, order, orderBy ])
 
   return (
-    <TableContainer className={classes.tableContainer}>
+    <TableContainer className={"flex-1"}>
       <Table
         stickyHeader
-        className={classes.table}
+        className={"bg-bg-default [&_th.MuiTableCell-stickyHeader]:bg-[#292929] [&_th:first-child]:pl-4 [&_td:first-child]:pl-4 [&_.MuiTableRow-root.Mui-selected]:bg-[inherit] [&_.MuiTableRow-root.Mui-selected:hover]:bg-[inherit]"}
         aria-labelledby="tableTitle"
         size={'medium'}
         aria-label="enhanced table">
@@ -143,7 +141,7 @@ export default function BaseTable({
               <TableRow>
                 {
                   expandable && (
-                    <TableCell className={classes.actionTh} padding="none">
+                    <TableCell className={"w-5"} padding="none">
                       <IconButton size="small" onClick={handleExpandAll}>
                         {allExpanded ? <ExpandMoreIcon /> : <ChevronRightIcon />}
                       </IconButton>
@@ -153,7 +151,7 @@ export default function BaseTable({
 
                 {
                   selectable && (
-                    <TableCell className={classes.actionTh} padding="none">
+                    <TableCell className={"w-5"} padding="none">
                       <Checkbox
                         indeterminate={selected.length > 0 && selected.length < rows.length}
                         checked={allSelected}
@@ -166,14 +164,14 @@ export default function BaseTable({
 
                 {
                   editable && (
-                    <TableCell className={classes.actionTh} padding="none" />
+                    <TableCell className={"w-5"} padding="none" />
                   )
                 }
 
                 {columns.map((column) => (
                   <TableCell
                     key={column.id}
-                    className={classes.th}
+                    className={undefined}
                     align={column.alignCenter ? 'center' : (column.numeric ? 'right' : 'left')}
                     padding={column.disablePadding ? 'none' : 'default'}
                     sortDirection={orderBy === column.id ? order : false}
@@ -192,7 +190,7 @@ export default function BaseTable({
                           column.label
                       }
                       {orderBy === column.id ? (
-                        <span className={classes.visuallyHidden}>
+                        <span className={"absolute top-5 m-[-1px] h-px w-px overflow-hidden border-0 p-0 [clip:rect(0_0_0_0)]"}>
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </span>
                       ) : null}
@@ -223,7 +221,7 @@ export default function BaseTable({
                   columns={columns}
                 />
               )) : (
-              <TableRow className={classes.emptyTable}>
+              <TableRow className={"h-20 [&_td]:text-center"}>
                 <TableCell colSpan={columns.length + 2}>
                   <div>
                     {loading ? <CircularProgress /> : 'No Results'}

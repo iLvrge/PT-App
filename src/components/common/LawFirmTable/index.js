@@ -8,8 +8,7 @@ import React, {
   import { useSelector, useDispatch } from "react-redux";
   import { useHistory, useLocation } from "react-router-dom";
   import { Paper } from "@mui/material";
-  import useStyles from "./styles";
-  import VirtualizedTable from "../VirtualizedTable";
+    import VirtualizedTable from "../VirtualizedTable";
   import PatenTrackApi, { DEFAULT_CUSTOMERS_LIMIT } from "../../../api/patenTrack2";
   import {capitalizeEachWord} from '../../../utils/numbers'
   import Loader from "../Loader";
@@ -17,7 +16,6 @@ import { setAssetTypeAssignmentAllAssets, setAssetTypeAssignments, setAssetTypes
 
   
   const LawFirmTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaultLoad, type }) => {
-    const classes = useStyles();
     const dispatch = useDispatch();
     const history = useHistory();
     const location = useLocation();
@@ -144,7 +142,7 @@ import { setAssetTypeAssignmentAllAssets, setAssetTypeAssignments, setAssetTypes
     if (loadingData ) return <Loader />;
   
     return (
-      <Paper className={classes.root} square id={`lawfirms_container`}>
+      <Paper className={"flex h-full flex-1 flex-col overflow-hidden [&_.font12Rem]:text-base"} square id={`lawfirms_container`}>
         <VirtualizedTable
           selected={selectItems}
           rowSelected={selectedRow}
