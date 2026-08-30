@@ -1,3 +1,5 @@
+import CorrectAddressDialog from '../common/dialogs/CorrectAddressDialog'
+import ChangeNameDialog from '../common/dialogs/ChangeNameDialog'
 import { Dialog, DialogContent } from '../../ui/Dialog'
 import lazyWithRetry from '../../utils/lazyWithRetry'
 import React, {useState, useCallback, useMemo, useRef, useEffect, Suspense} from 'react'
@@ -839,25 +841,20 @@ const ActionMenu = (props) => {
                     <Suspense fallback={null}><UserInputForm /></Suspense>
                 </DialogContent>
             </Dialog>
-            <Dialog open={correctAddressModal} onOpenChange={(next) => { if (!next) handleCorrectAddressModal() }}>
-                <DialogContent title="Correct address" className="!w-[600px] !max-w-none">
-                    <div style={{display: 'flex', height: '50vh'}}>
-                        <Suspense fallback={null}><CustomerAddress onHandleSelectAddress={onHandleSelectAddress}/></Suspense>
-                    </div>
-                </DialogContent>
-            </Dialog>
-            <Dialog open={changeNameModal} onOpenChange={(next) => { if (!next) handleChangeNameModal() }}>
-                <DialogContent title="Change company name" className="!w-[300px] !max-w-none !bg-[#424242] !px-2.5">
-                    <div style={{display: 'flex', height: '20vh', position: 'relative'}}>
-                    <form className={classes.root} noValidate autoComplete="off">
-                        <TextField id="change-name" label="Company Name" onChange={handleCompanyNameChange} placeholder="Enter a new company name"/>
-                    </form>
-                    <Button variant="outlined" onClick={onHandleSubmitName} className={classes.btn}>
-                        Submit
-                    </Button>
-                    </div>
-                </DialogContent>
-            </Dialog>
+<CorrectAddressDialog
+  open={correctAddressModal}
+  onClose={handleCorrectAddressModal}
+>
+  <CustomerAddress onHandleSelectAddress={onHandleSelectAddress}/>
+</CorrectAddressDialog>
+            <ChangeNameDialog
+              open={changeNameModal}
+              onClose={handleChangeNameModal}
+              onChangeName={handleCompanyNameChange}
+              onSubmit={onHandleSubmitName}
+              formClassName={classes.root}
+              buttonClassName={classes.btn}
+            />
         </div>
     );
 }

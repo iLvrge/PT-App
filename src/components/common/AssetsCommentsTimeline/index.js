@@ -1,3 +1,5 @@
+import CorrectAddressDialog from '../dialogs/CorrectAddressDialog'
+import ChangeNameDialog from '../dialogs/ChangeNameDialog'
 import { Dialog, DialogContent } from '../../../ui/Dialog'
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
@@ -1566,25 +1568,20 @@ const handleDriveModalClose = (event) => {
         </Paper>
         </DialogContent>
       </Dialog>
-      <Dialog open={correctAddressModal} onOpenChange={(next) => { if (!next) handleCorrectAddressModal() }}>
-        <DialogContent title="Correct address" className="!w-[600px] !max-w-none">
-          <div style={{display: 'flex', height: '50vh'}}>
-            <CustomerAddress onHandleSelectAddress={onHandleSelectAddress}/>
-          </div>
-        </DialogContent>
-      </Dialog>
-      <Dialog open={changeNameModal} onOpenChange={(next) => { if (!next) handleChangeNameModal() }}>
-        <DialogContent title="Change company name" className="!w-[300px] !max-w-none !bg-[#424242] !px-2.5">
-          <div style={{display: 'flex', height: '20vh', position: 'relative'}}>
-          <form className={classes.root} noValidate autoComplete="off">
-            <TextField id="change-name" label="Company Name" onChange={handleCompanyNameChange} placeholder="Enter a new company name"/>
-          </form>
-          <Button variant="outlined" onClick={onHandleSubmitName} className={classes.btn}>
-            Submit
-          </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+<CorrectAddressDialog
+  open={correctAddressModal}
+  onClose={handleCorrectAddressModal}
+>
+  <CustomerAddress onHandleSelectAddress={onHandleSelectAddress}/>
+</CorrectAddressDialog>
+      <ChangeNameDialog
+        open={changeNameModal}
+        onClose={handleChangeNameModal}
+        onChangeName={handleCompanyNameChange}
+        onSubmit={onHandleSubmitName}
+        formClassName={classes.root}
+        buttonClassName={classes.btn}
+      />
     </Paper>
   )
 }
