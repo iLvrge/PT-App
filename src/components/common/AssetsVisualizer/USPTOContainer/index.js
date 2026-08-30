@@ -5,14 +5,12 @@ import CircularProgress from '@mui/material/CircularProgress'
 import PatenTrackApi from '../../../../api/patenTrack2'
 import { getAssetsUSPTO } from '../../../../actions/patentTrackActions2'
 
-import useStyles from './styles'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 
 import axios from 'axios'
 
 const USPTOContainer = ({ asset, onClose }) => {
-  const classes = useStyles()
   const dispatch = useDispatch()
 
   const isLoadingAssetUSPTO = useSelector(state => state.patenTrack2.loadingAssetIllustration)
@@ -29,20 +27,20 @@ const USPTOContainer = ({ asset, onClose }) => {
   }, [ asset, dispatch ])
 
   return (
-    <div className={classes.root}>
+    <div className="relative h-full w-full flex-1 overflow-auto [&_iframe]:border-0">
       {/* {
         onClose && (
-          <IconButton className={classes.close} onClick={onClose} size={'small'}>
+          <IconButton className="absolute right-2.5 top-2.5 z-20 bg-[#303030] opacity-80 hover:bg-[#303030] hover:opacity-100" onClick={onClose} size={'small'}>
             <CloseIcon />
           </IconButton>
         )
       } */}
-      <div className={classes.forceStrech}>
+      <div className="absolute inset-0 h-full w-full">
         {
           isLoadingAssetUSPTO ?
-            <CircularProgress className={classes.loader} /> :
+            <CircularProgress className="absolute left-1/2 top-1/2 z-[100]" /> :
             (USPTO && (
-                <iframe className={classes.forceStrech} src={USPTO.url} title={USPTO.url} />
+                <iframe className="absolute inset-0 h-full w-full" src={USPTO.url} title={USPTO.url} />
               )
             )
         }

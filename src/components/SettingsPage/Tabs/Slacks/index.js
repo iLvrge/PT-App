@@ -1,7 +1,6 @@
 import React, {useMemo, useCallback, useEffect, useState} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Paper, TextField, FormControl, FormLabel } from "@mui/material"
-import useStyles from './styles'
 import CompaniesTable from '../Compaines/Names/CompaniesTable'
 import Header from '../../components/Header'
 
@@ -11,7 +10,6 @@ import AddPeople from './AddPeople'
 
 const Slacks = () => {
   const dispatch = useDispatch()
-  const classes = useStyles()
   const [ open, setOpen ] = useState(true)
   const [ search, setSearch ] = useState('')
   const [ companiesSelected, setCompaniesSelected ] = useState([])
@@ -44,7 +42,7 @@ const Slacks = () => {
   }
   
   return (
-    <Paper className={classes.root} square id={`layout_templates`}>
+    <Paper className="flex h-full flex-1 flex-col overflow-x-hidden overflow-y-auto" square id={`layout_templates`}>
         {/* <FormControl>
           <FormLabel>Slack TeamID:</FormLabel> 
           <TextField id="slack_team_id" variant="standard" defaultValue={slackTeamID}/>

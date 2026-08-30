@@ -1,14 +1,9 @@
 import makeStyles from '@mui/styles/makeStyles';
 
-export default makeStyles(theme => ({
-    root: {
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        flex:1,
-        overflow: 'hidden auto'           
-    },
-    btnEmail:{
+// Shared with AddPeople.js in this directory. The `root` rule moved onto the
+// Slacks component itself as utilities; only what AddPeople still uses is kept.
+export default makeStyles(() => ({
+    btnEmail: {
         padding: '0 5px',
         border: 0,
         position: 'absolute',
