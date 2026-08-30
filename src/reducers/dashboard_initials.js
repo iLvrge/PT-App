@@ -1,5 +1,5 @@
 import { assetsTypes } from '../utils/assetTypes'
-import { BlurLinear } from '@mui/icons-material'
+import BlurLinear from '@mui/icons-material/BlurLinear'
 
 export default {
     auth_token: null,

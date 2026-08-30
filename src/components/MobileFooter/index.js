@@ -7,11 +7,9 @@ import {
         Paper
     } from '@mui/material'
 
-import { 
-    Dashboard as DashboardIcon,
-    Class as ClassIcon,
-    Description as DescriptionIcon,
-} from '@mui/icons-material'
+import DashboardIcon from '@mui/icons-material/Dashboard'
+import ClassIcon from '@mui/icons-material/Class'
+import DescriptionIcon from '@mui/icons-material/Description'
 
 import ActionMenu from '../NewHeader/ActionMenu'
 import NavigationIcon from '../NavigationIcon'

@@ -8,7 +8,12 @@ import useStyles from './styles'
 import clsx from 'clsx'
 import moment from 'moment'
 import CardElement from './CardElement'
-import { Fullscreen, Close, Reviews, Speed, ViewTimeline, AppsOutage } from '@mui/icons-material';
+import Fullscreen from '@mui/icons-material/Fullscreen'
+import Close from '@mui/icons-material/Close'
+import Reviews from '@mui/icons-material/Reviews'
+import Speed from '@mui/icons-material/Speed'
+import ViewTimeline from '@mui/icons-material/ViewTimeline'
+import AppsOutage from '@mui/icons-material/AppsOutage'
 
 import { 
     setDashboardPanel,

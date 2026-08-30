@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 
 import { useSelector } from 'react-redux'
 import { Tab, Tabs, Paper, Grid, Badge, IconButton, Select, MenuItem, FormControl, InputLabel } from '@mui/material'
-import { Fullscreen as FullscreenIcon } from '@mui/icons-material'
+import FullscreenIcon from '@mui/icons-material/Fullscreen'
 import FamilyContainer from '../FamilyContainer' 
 import AbstractData from './AbstractData'
 import ClaimData from './ClaimData'

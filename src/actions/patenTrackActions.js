@@ -1,7 +1,7 @@
 import *as types from './actionTypes'
 import PatenTrackApi from '../api/patenTrack'
 import { toggleFamilyMode } from './uiActions'
-import { TramRounded } from '@mui/icons-material'
+import TramRounded from '@mui/icons-material/TramRounded'
 
 export const setProfile = (data) => {
   return {

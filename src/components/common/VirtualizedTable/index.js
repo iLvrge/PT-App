@@ -45,7 +45,7 @@ import Rating from '@mui/material/Rating';
 import _orderBy from "lodash/orderBy";
 import _sortBy from "lodash/sortBy";
 import useHeaderRenderer from "./hooks/useHeaderRenderer";
-import { KeyboardArrowUp } from "@mui/icons-material";
+import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp'
 import { getAuthConnectToken } from "../../../utils/tokenStorage";
 
 const VirtualizedTable = ({

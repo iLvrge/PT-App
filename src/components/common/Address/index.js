@@ -7,7 +7,7 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import PerfectScrollbar from 'react-perfect-scrollbar'
-import { AddBox } from '@mui/icons-material'
+import AddBox from '@mui/icons-material/AddBox'
 
 import { Collapse, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, TextField } from '@mui/material'
 

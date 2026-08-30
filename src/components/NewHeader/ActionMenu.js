@@ -26,25 +26,23 @@ import {
     Checkbox
 } from '@mui/material'
 
-import {
-    CheckCircleOutline as CheckCircleOutlineIcon,
-    Contacts as ContactsIcon,
-    LocationCity as LocationCityIcon,
-    KeyboardArrowDown,
-    KeyboardArrowUp,
-    Speed as SpeedIcon,
-    MailOutline as MailOutlineIcon,
-    FindInPage as FindInPageIcon,
-    Link as LinkIcon,
-    Tv as TvIcon,
-    Check,
-    AppsOutage,
-    Speed,
-    ViewTimeline,
-    HandshakeOutlined,
-    Settings,
-    NoBackpackSharp
-} from '@mui/icons-material'
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
+import ContactsIcon from '@mui/icons-material/Contacts'
+import LocationCityIcon from '@mui/icons-material/LocationCity'
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
+import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp'
+import SpeedIcon from '@mui/icons-material/Speed'
+import MailOutlineIcon from '@mui/icons-material/MailOutline'
+import FindInPageIcon from '@mui/icons-material/FindInPage'
+import LinkIcon from '@mui/icons-material/Link'
+import TvIcon from '@mui/icons-material/Tv'
+import Check from '@mui/icons-material/Check'
+import AppsOutage from '@mui/icons-material/AppsOutage'
+import Speed from '@mui/icons-material/Speed'
+import ViewTimeline from '@mui/icons-material/ViewTimeline'
+import HandshakeOutlined from '@mui/icons-material/HandshakeOutlined'
+import Settings from '@mui/icons-material/Settings'
+import NoBackpackSharp from '@mui/icons-material/NoBackpackSharp'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faShareAlt,

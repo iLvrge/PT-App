@@ -3,11 +3,9 @@ import DriveFilesFolders from "./DriveFilesFolders";
 import useStyle from './styles';
 import clsx from 'clsx';
 import { Typography, Grid, SvgIcon } from '@mui/material';
-import { 
-    Folder as FolderIcon,
-    FolderOpen as FolderOpenIcon,
-    InsertDriveFile as InsertDriveFileIcon,
-} from '@mui/icons-material'
+import FolderIcon from '@mui/icons-material/Folder'
+import FolderOpenIcon from '@mui/icons-material/FolderOpen'
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile'
 
 import PatenTrackApi from '../../../api/patenTrack2'
 import { getTokenStorage} from '../../../utils/tokenStorage'

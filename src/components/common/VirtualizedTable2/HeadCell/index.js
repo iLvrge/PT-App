@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { TableHeaderRow } from '@devexpress/dx-react-grid-material-ui'
-import { FilterList } from '@mui/icons-material'
+import FilterList from '@mui/icons-material/FilterList'
 import Menu from '@mui/material/Menu'
 import Fade from '@mui/material/Fade'
 import ListItemIcon from '@mui/material/ListItemIcon'

@@ -2,20 +2,18 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { IconButton, Tooltip, Typography, Zoom } from '@mui/material'
 
-import {
-    Person as PersonIcon, 
-    People as PeopleIcon, 
-    InsertDriveFile as InsertDriveFileIcon, 
-    Business as BusinessIcon, 
-    Gavel as GavelIcon, 
-    Contacts as ContactsIcon,
-    Description as DescriptionIcon,
-    Settings as SettingsIcon,
-    Home as HomeIcon,
-    Add as AddIcon,
-    CropSquare as CropSquareIcon,
-    AccountTreeOutlined as AccountTreeOutlinedIcon 
-} from '@mui/icons-material' 
+import PersonIcon from '@mui/icons-material/Person'
+import PeopleIcon from '@mui/icons-material/People'
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile'
+import BusinessIcon from '@mui/icons-material/Business'
+import GavelIcon from '@mui/icons-material/Gavel'
+import ContactsIcon from '@mui/icons-material/Contacts'
+import DescriptionIcon from '@mui/icons-material/Description'
+import SettingsIcon from '@mui/icons-material/Settings'
+import HomeIcon from '@mui/icons-material/Home'
+import AddIcon from '@mui/icons-material/Add'
+import CropSquareIcon from '@mui/icons-material/CropSquare'
+import AccountTreeOutlinedIcon from '@mui/icons-material/AccountTreeOutlined'
 
 import useStyles from './styles'
 import clsx from 'clsx'

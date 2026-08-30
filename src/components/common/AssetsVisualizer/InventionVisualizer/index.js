@@ -38,7 +38,7 @@ import useStyles from './styles'
 import { capitalize } from "../../../../utils/numbers";
 import themeMode from '../../../../themes/themeMode';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
-import { Close } from '@mui/icons-material'
+import Close from '@mui/icons-material/Close'
 import FilterDashboardCPC from './FilterDashboardCPC'
 import TitleBar from '../../TitleBar'
 import clsx from 'clsx'

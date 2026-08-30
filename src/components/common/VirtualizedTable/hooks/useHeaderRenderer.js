@@ -3,7 +3,7 @@ import TableCell from '@mui/material/TableCell'
 import clsx from 'clsx'
 import Checkbox from '@mui/material/Checkbox'
 import Radio from '@mui/material/Radio'
-import { FilterList } from '@mui/icons-material'
+import FilterList from '@mui/icons-material/FilterList'
 import Badge from '@mui/material/Badge'
 import TableSortLabel from '@mui/material/TableSortLabel'
 import Menu from '@mui/material/Menu'
@@ -21,9 +21,7 @@ import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined'
 import { pink } from '@mui/material/colors';
 
-import { 
-  CropSquare as CropSquareIcon
-} from '@mui/icons-material' 
+import CropSquareIcon from '@mui/icons-material/CropSquare'
 
 
 import { numberWithCommas } from '../../../../utils/numbers'

@@ -9,10 +9,8 @@ import {
 import { useDispatch, 
     useSelector 
 } from 'react-redux'
-import { 
-    NotificationsNone as NotificationsIcon,
-    PermContactCalendar as PermContactCalendarIcon
-  } from '@mui/icons-material'
+import NotificationsIcon from '@mui/icons-material/NotificationsNone'
+import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar'
 
  
 import useStyles from './styles'

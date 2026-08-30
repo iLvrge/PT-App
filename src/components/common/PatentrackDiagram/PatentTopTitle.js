@@ -17,7 +17,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip, Typography, Zoom, Drawer, Menu, MenuItem, ListItemIcon, ListItemText, Checkbox, Divider, IconButton, Badge, Paper } from "@mui/material";
 import Draggable from "react-draggable"
-import { Fullscreen, Close } from '@mui/icons-material'
+import Fullscreen from '@mui/icons-material/Fullscreen'
+import Close from '@mui/icons-material/Close'
 import { FaLightbulb } from "react-icons/fa";
 import * as d3 from 'd3'
 import clsx from 'clsx';

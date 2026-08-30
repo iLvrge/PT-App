@@ -7,7 +7,10 @@ import React, {
 } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Paper,  Popover, Box, Rating } from "@mui/material";
-import { Clear, NotInterested, KeyboardArrowDown, MonetizationOn} from '@mui/icons-material';
+import Clear from '@mui/icons-material/Clear'
+import NotInterested from '@mui/icons-material/NotInterested'
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
+import MonetizationOn from '@mui/icons-material/MonetizationOn'
 import moment from "moment";
 
 import useStyles from "./styles";

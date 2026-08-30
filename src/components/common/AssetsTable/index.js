@@ -8,7 +8,15 @@ import React, {
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory, useLocation } from 'react-router-dom'
 import { Paper, Popover, Box, Rating, Dialog, DialogTitle, DialogContent, DialogActions, Button, Badge } from "@mui/material";
-import { Clear, NotInterested, KeyboardArrowDown, MonetizationOn, StarOutline, StarOutlineOutlined, PendingActionsOutlined, AccountTreeOutlined, KeyboardArrowUp } from '@mui/icons-material';
+import Clear from '@mui/icons-material/Clear'
+import NotInterested from '@mui/icons-material/NotInterested'
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
+import MonetizationOn from '@mui/icons-material/MonetizationOn'
+import StarOutline from '@mui/icons-material/StarOutline'
+import StarOutlineOutlined from '@mui/icons-material/StarOutlineOutlined'
+import PendingActionsOutlined from '@mui/icons-material/PendingActionsOutlined'
+import AccountTreeOutlined from '@mui/icons-material/AccountTreeOutlined'
+import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp'
 import moment from "moment";
 import Loader from "../Loader";
 import useStyles from "./styles";

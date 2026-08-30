@@ -11,10 +11,8 @@ import {
     Avatar, Box, Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, 
 } from '@mui/material'
 
-import { 
-    Business as BusinessIcon, 
-    LockOpen as LockOpenIcon, 
-  } from '@mui/icons-material'
+import BusinessIcon from '@mui/icons-material/Business'
+import LockOpenIcon from '@mui/icons-material/LockOpen'
 
 import useStyles from './styles' 
 

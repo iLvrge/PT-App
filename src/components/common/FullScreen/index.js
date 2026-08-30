@@ -6,7 +6,8 @@ import Paper from '@mui/material/Paper'
 import useStyles from './styles'
 import clsx from "clsx";
 import {IconButton, Tooltip, Typography, Zoom} from '@mui/material'
-import { Fullscreen, Close,  } from '@mui/icons-material'
+import Fullscreen from '@mui/icons-material/Fullscreen'
+import Close from '@mui/icons-material/Close'
 import Modal from '@mui/material/Modal'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {

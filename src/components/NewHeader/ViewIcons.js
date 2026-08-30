@@ -10,7 +10,11 @@ import useStyles from './styles'
 import clsx from 'clsx'
 import AddToolTip from '../Reports/AddToolTip'
 import { IconButton, Badge} from '@mui/material'
-import { AppsOutage, Speed, ViewTimeline, SupportAgent, ManageSearch } from '@mui/icons-material' 
+import AppsOutage from '@mui/icons-material/AppsOutage'
+import Speed from '@mui/icons-material/Speed'
+import ViewTimeline from '@mui/icons-material/ViewTimeline'
+import SupportAgent from '@mui/icons-material/SupportAgent'
+import ManageSearch from '@mui/icons-material/ManageSearch'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faShareAlt

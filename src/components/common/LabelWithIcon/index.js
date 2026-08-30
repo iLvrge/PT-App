@@ -1,20 +1,18 @@
 import React from 'react';
   
-import {  
-    Battery60 as Battery60Icon, 
-    NoteAddOutlined as NoteAddOutlinedIcon,
-    HandshakeOutlined as HandshakeOutlinedIcon,
-    Badge as BadgeIcon,
-    FileOpen as FileOpenIcon,
-    Language as LanguageIcon, 
-    StackedBarChartOutlined as StackedBarChartOutlinedIcon,
-    LeaderboardOutlined as LeaderboardOutlinedIcon,
-    ShoppingCartOutlined as ShoppingCartOutlinedIcon,
-    PsychologyOutlined as PsychologyOutlinedIcon,
-    TipsAndUpdatesOutlined as TipsAndUpdatesOutlinedIcon,
-    GppGoodOutlined as GppGoodOutlinedIcon,
-    StorefrontOutlined as StorefrontOutlinedIcon
- } from '@mui/icons-material'       
+import Battery60Icon from '@mui/icons-material/Battery60'
+import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined'
+import HandshakeOutlinedIcon from '@mui/icons-material/HandshakeOutlined'
+import BadgeIcon from '@mui/icons-material/Badge'
+import FileOpenIcon from '@mui/icons-material/FileOpen'
+import LanguageIcon from '@mui/icons-material/Language'
+import StackedBarChartOutlinedIcon from '@mui/icons-material/StackedBarChartOutlined'
+import LeaderboardOutlinedIcon from '@mui/icons-material/LeaderboardOutlined'
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
+import PsychologyOutlinedIcon from '@mui/icons-material/PsychologyOutlined'
+import TipsAndUpdatesOutlinedIcon from '@mui/icons-material/TipsAndUpdatesOutlined'
+import GppGoodOutlinedIcon from '@mui/icons-material/GppGoodOutlined'
+import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined'
 import { FaLightbulb } from "react-icons/fa";
 import useStyles from './styles' 
 

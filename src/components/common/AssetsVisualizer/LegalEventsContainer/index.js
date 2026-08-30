@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { Tab, Tabs, Paper, Badge, IconButton } from '@mui/material'
-import { Fullscreen as FullscreenIcon } from '@mui/icons-material'
+import FullscreenIcon from '@mui/icons-material/Fullscreen'
 import Fees from './Fees'
 import Status from './Status'
 import Litigation from './Litigation'

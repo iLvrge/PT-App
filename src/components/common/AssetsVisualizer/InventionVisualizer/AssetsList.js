@@ -2,7 +2,9 @@ import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Paper } from '@mui/material'
 
-import { Clear, NotInterested, KeyboardArrowDown } from '@mui/icons-material';
+import Clear from '@mui/icons-material/Clear'
+import NotInterested from '@mui/icons-material/NotInterested'
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
 
 import useStyles from './styles' 
 import VirtualizedTable from '../../VirtualizedTable'

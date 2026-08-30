@@ -17,13 +17,11 @@ import { Paper,
   Zoom,
   IconButton
 } from '@mui/material'
-import { 
-  Folder as FolderIcon,
-  Close as CloseIcon,
-  InsertDriveFileOutlined as InsertDriveFileOutlinedIcon,
-  InsertDriveFile as InsertDriveFileIcon,
-  Fullscreen as FullscreenIcon
-} from '@mui/icons-material'
+import FolderIcon from '@mui/icons-material/Folder'
+import CloseIcon from '@mui/icons-material/Close'
+import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined'
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile'
+import FullscreenIcon from '@mui/icons-material/Fullscreen'
 import * as linkify from 'linkifyjs';
 import linkifyHtml from 'linkify-html';
 import { Droppable } from 'react-drag-and-drop'

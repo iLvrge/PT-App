@@ -13,7 +13,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Loader from '../../Loader'
 
 import useStyles from './styles'
-import { SettingsInputComponentSharp } from '@mui/icons-material'
+import SettingsInputComponentSharp from '@mui/icons-material/SettingsInputComponentSharp'
 
 const options = { 
     height: '100%',

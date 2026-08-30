@@ -30,18 +30,17 @@ import {
         Box, 
       } from '@mui/material'
 
-import { Menu as MenuIcon,  
-        Business as BusinessIcon,  
-        LockOpen as LockOpenIcon,  
-        LightModeOutlined as LightModeOutlinedIcon,
-        DarkModeOutlined as DarkModeOutlinedIcon,
-        Settings as SettingsIcon,
-        PendingActionsOutlined,
-        ManageSearch, 
-        DescriptionOutlined as DescriptionOutlinedIcon,
-        HandshakeOutlined as HandshakeOutlinedIcon,
-        ShareOutlined as ShareOutlinedIcon
-      } from '@mui/icons-material'
+import MenuIcon from '@mui/icons-material/Menu'
+import BusinessIcon from '@mui/icons-material/Business'
+import LockOpenIcon from '@mui/icons-material/LockOpen'
+import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined'
+import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined'
+import SettingsIcon from '@mui/icons-material/Settings'
+import PendingActionsOutlined from '@mui/icons-material/PendingActionsOutlined'
+import ManageSearch from '@mui/icons-material/ManageSearch'
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
+import HandshakeOutlinedIcon from '@mui/icons-material/HandshakeOutlined'
+import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined'
 
 import routeList from '../../routeList'
 

@@ -11,7 +11,8 @@ import { Timeline } from 'vis-timeline/esnext' */
 import { DataSet } from 'vis-data/esnext'
 import { Timeline } from 'vis-timeline-73/esnext'
 import { Typography, CircularProgress, IconButton, Paper, Modal, TableContainer, Table, TableBody, TableRow, TableCell, Button } from '@mui/material';
-import { Close, Fullscreen } from '@mui/icons-material'
+import Close from '@mui/icons-material/Close'
+import Fullscreen from '@mui/icons-material/Fullscreen'
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import useStyles from './styles'
 import clsx from 'clsx'

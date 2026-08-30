@@ -6,7 +6,7 @@ import Loader from "../Loader";
 import useStyles from "./styles";
 import VirtualizedTable from "../VirtualizedTable";
 import { numberWithCommas, applicationFormat } from "../../../utils/numbers";
-import { MonetizationOn } from '@mui/icons-material';
+import MonetizationOn from '@mui/icons-material/MonetizationOn'
 import { getTokenStorage } from '../../../utils/tokenStorage';
 import PatenTrackApi from '../../../api/patenTrack2';
 

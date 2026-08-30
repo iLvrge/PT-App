@@ -9,7 +9,10 @@ import {
     Typography,
     TextField
 } from "@mui/material"
-import { Add, Delete, Close, Save } from "@mui/icons-material"
+import Add from '@mui/icons-material/Add'
+import Delete from '@mui/icons-material/Delete'
+import Close from '@mui/icons-material/Close'
+import Save from '@mui/icons-material/Save'
 import CloseIcon from '@mui/icons-material/Close'
 import ImportAsset from './ImportAsset'
 import Googlelogin from '../Googlelogin'

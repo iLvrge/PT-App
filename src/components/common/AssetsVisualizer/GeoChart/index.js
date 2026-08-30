@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import useStyles from './styles' 
-import { 
-    Fullscreen as FullscreenIcon} from '@mui/icons-material'  
+import FullscreenIcon from '@mui/icons-material/Fullscreen'
 import FullScreen from '../../FullScreen'
 import { Chart } from "react-google-charts"; 
 import { Tabs, Tab, Paper, IconButton, Box } from '@mui/material'

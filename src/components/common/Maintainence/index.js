@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import Fab from '@mui/material/Fab';
-import { MonetizationOn } from '@mui/icons-material';
+import MonetizationOn from '@mui/icons-material/MonetizationOn'
 import { setMaintainenceFileName } from '../../../actions/patentTrackActions2';
 import FullScreen from '../FullScreen';
 import LoadMaintainenceAssets from '../IllustrationCommentContainer/LoadMaintainenceAssets';
