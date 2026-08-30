@@ -10,6 +10,13 @@ import AgentsVisualizer from '../AgentsVisualizer';
 import FullScreen from '../../FullScreen';
 import InventionVisualizer from '../InventionVisualizer';
 import LabelWithIcon from '../../LabelWithIcon';
+import useLawFirmNames from '../../../../queries/useLawFirmNames'
+
+const toWords = (rows, randomSize) =>
+  rows.map((item) => ({
+    text: item.lawfirm,
+    value: typeof item.distance !== 'undefined' ? item.distance : randomSize(),
+  }))
 
 
 const LawFirmNames = (props) => {
@@ -17,8 +24,6 @@ const LawFirmNames = (props) => {
     const [showAlert, setShowAlert] = useState(false)
     const [ tabs, setTabs ] = useState(['Names', 'Filling', 'Assignments', 'Innovations'])
     const [ selectedTab, setSelectedTab ] = useState(typeof props.activeTab != 'undefined' ? props.activeTab : 0)
-    const [ rawData, setRawData ] = useState([])
-    const [ namesData, setNamesData ] = useState([])
     const [ parentContainerSize, setParentContainerSize ] = useState(0)
     const [size, setSize] = useState([550, 400])
     //const [options, setOptions] = useState(wordCloudOptions)
@@ -42,25 +47,23 @@ const LawFirmNames = (props) => {
         const min = 25, max = 50;
         return Math.floor(Math.random() * (max - min + 1)) + min
     }
-    useEffect(() => {
-        const getLawFirmNamesData = async () => {
-            setNamesData([])
-            if(typeof props.raw != 'undefined' && props.raw.length > 0) {
-                setRawData(props.raw)
-                formatData(props.raw)
-            } else { 
-                const companies = selectedCompaniesAll === true ? [] : selectedCompanies;
-                if(selectedCompaniesAll === true || selectedCompanies.length > 0) {
-                    const {data} = await PatenTrackApi.getLawFirmsByCompany(companies, selectedLawFirm)
-                    if(data.length > 0) {
-                        setRawData(data)  
-                        formatData(data)
-                    }
-                } 
-            }
-        }
-        getLawFirmNamesData()
-    }, [selectedCompanies, selectedCompaniesAll, selectedLawFirm] )
+    const hasSuppliedRows = typeof props.raw != 'undefined' && props.raw.length > 0
+
+    const { data: fetched } = useLawFirmNames({
+        selectedCompanies,
+        selectedCompaniesAll,
+        selectedLawFirm,
+        randomSize: randomNumbers,
+    })
+
+    // Rows supplied by the parent win, as before; otherwise the fetched ones are
+    // used. The query is still made either way, matching the previous behaviour
+    // in which the effect's dependencies did not include props.raw.
+    const rawData = hasSuppliedRows ? props.raw : (fetched?.rawData ?? [])
+    const namesData = useMemo(
+        () => (hasSuppliedRows ? toWords(props.raw, randomNumbers) : (fetched?.namesData ?? [])),
+        [ hasSuppliedRows, props.raw, fetched ]
+    )
 
     useEffect(() => {
         setShowAlert(false)
@@ -103,17 +106,7 @@ const LawFirmNames = (props) => {
         } 
     }
 
-    const formatData = async(data) => {
-        const words = []
-        const promise = data.map(item => { 
-            words.push({
-                text: item.lawfirm,
-                value: typeof item.distance != 'undefined' ? item.distance : randomNumbers()
-            })
-        })
-        await Promise.all(promise)
-        setNamesData(words)
-    }
+
 
     const options = useMemo(() => {
         return wordCloudOptions
