@@ -11,11 +11,9 @@ import { fetchCompaniesList } from '../../../../../actions/patentTrackActions2'
 
 import PatenTrackApi from '../../../../../api/patenTrack2'
 
-import useStyles from './styles'
 
 
 function Groups() {
-    const classes = useStyles()
     const dispatch = useDispatch()
     const [openDialog, setOpenDialog] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -45,13 +43,13 @@ function Groups() {
     };
 
     return (
-        <div className={classes.dialogButton}>
+        <div className={"mx-2.5 ml-[50px] inline flex-[1_1_100%] [&_.MuiInputLabel-shrink]:text-base"}>
             <Button 
                 variant="outlined" 
                 color="inherit" 
                 onClick={handleClickOpen}
-                startIcon={<AddIcon className={classes.icon} />}
-                className={classes.btnGroup}
+                startIcon={<AddIcon className={undefined} />}
+                className={"absolute border-0 px-[5px] normal-case"}
             >
                 Add a New Group
             </Button>

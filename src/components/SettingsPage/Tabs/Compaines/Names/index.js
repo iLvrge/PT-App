@@ -1,6 +1,5 @@
 import React, { Fragment, useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import useStyles from './styles'
 import { fetchCompaniesList, setBreadCrumbs } from '../../../../../actions/patentTrackActions2'
 import CompaniesTable from './CompaniesTable'
 import { deleteCompany, deleteSameCompany } from '../../../../../actions/patenTrackActions'
@@ -14,7 +13,6 @@ import MoveItems from './MoveItems'
 
 
 function Companies() {
-  const classes = useStyles()
   const dispatch = useDispatch()
   const [ open, setOpen ] = useState(true)
   const [ search, setSearch ] = useState('')
@@ -106,7 +104,7 @@ function Companies() {
         <SearchCompanies onClose={toggleOpen} selected={searchSelected} setSelected={setSearchSelected} />
       }
       mainChildren={
-        <Paper className={classes.tableRoot}>
+        <Paper className={"flex h-full flex-col"}>
           <Header
             title={'Companies'}
             onDelete={onDeleteCompanies}

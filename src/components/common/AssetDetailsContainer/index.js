@@ -20,7 +20,6 @@ import {
 import { updateResizerBar } from '../../../utils/resizeBar'
 
 import ArrowButton from "../ArrowButton"
-import useStyles from "./styles"
 import GeoChart from "../AssetsVisualizer/GeoChart"
 import GoogleCharts from "../AssetsVisualizer/GoogleCharts"
 import TimelineSecurity from "../AssetsVisualizer/TimelineSecurity"
@@ -61,7 +60,6 @@ const AssetDetailsContainer = ({
   setChartBar,
   gap
 }) => { 
-  const classes = useStyles();
   const dispatch = useDispatch();
   const chartAnalyticsContainer = useRef(null);
   const [isDrag, setIsDrag] = useState(false);
@@ -217,7 +215,7 @@ const AssetDetailsContainer = ({
   };
  
   return (
-    <div style={{ height: "100%" }} className={classes.root}>
+    <div style={{ height: "100%" }} className={"[&_.Pane1]:h-0"}>
       {
         usptoMode === true && (
           <USPTOContainer
@@ -261,8 +259,8 @@ const AssetDetailsContainer = ({
               />
             </div>
             <div
-              className={`${classes.commentContainer} ${
-                isDrag === true ? classes.notInteractive : classes.isInteractive
+              className={`${"h-full w-full"} ${
+                isDrag === true ? "pointer-events-none" : "pointer-events-auto"
               }`}
             >
               <ConnectionBox display={"false"} assets={connectionBoxData} type={type}/>
@@ -305,13 +303,13 @@ const AssetDetailsContainer = ({
                   buttonType={toggleDetailsButtonType}
                   buttonVisible={detailsButtonVisible}
                   arrow={3}
-                  cls={classes.btnLeft}
+                  cls={"-left-2.5 right-[unset]"}
                 /> */}
 
                 {
                   pdfViewModal &&
-                  <Modal open={pdfViewModal} className={classes.fullscreenChartsModal} >
-                    <Paper className={classes.fullscreenCharts} square>
+                  <Modal open={pdfViewModal} className={"flex"} >
+                    <Paper className={"m-[35px] flex flex-1"} square>
                       <PdfViewer display={'true'} />
                     </Paper>
                   </Modal>
@@ -422,8 +420,8 @@ const AssetDetailsContainer = ({
               </ErrorBoundary>
             </div>
             <div
-              className={`${classes.commentContainer} ${
-                isDrag === true ? classes.notInteractive : classes.isInteractive
+              className={`${"h-full w-full"} ${
+                isDrag === true ? "pointer-events-none" : "pointer-events-auto"
               }`}
               id={`analyticsBar`}
               /* onMouseOver={event => handleIllustrationButton(event, true)}

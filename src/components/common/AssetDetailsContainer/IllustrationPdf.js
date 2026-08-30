@@ -1,6 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react'
 import SplitPane from "react-split-pane"
-import useStyles from "./styles"
 
 import { updateResizerBar } from '../../../utils/resizeBar'
 import ConnectionBox from '../ConnectionBox'
@@ -8,7 +7,6 @@ import PdfViewer from '../PdfViewer'
 
 
 const IllustrationPdf = ({split, cls, primary, illustrationData, dragStart, dragFinished, analyticsBar, type}) => {
-    const classes = useStyles();
     const [resizeFrame, setResizeFrame] = useState(false);
     const chartAnalyticsContainer = useRef(null);
     const [isDrag, setIsDrag] = useState(false);
@@ -18,7 +16,7 @@ const IllustrationPdf = ({split, cls, primary, illustrationData, dragStart, drag
     }, [ chartAnalyticsContainer ])
 
     return (
-        <div style={{ height: "100%" }} className={classes.root}>
+        <div style={{ height: "100%" }} className={"[&_.Pane1]:h-0"}>
             <SplitPane
                 className={cls}
                 split={split}
@@ -52,8 +50,8 @@ const IllustrationPdf = ({split, cls, primary, illustrationData, dragStart, drag
                 {
                     illustrationData != '' && illustrationData != null && (
                         <div
-                            className={`${classes.commentContainer} ${
-                                isDrag === true ? classes.notInteractive : classes.isInteractive
+                            className={`${"h-full w-full"} ${
+                                isDrag === true ? "pointer-events-none" : "pointer-events-auto"
                             }`}
                         >
                             <ConnectionBox display={"false"} assets={illustrationData} type={type}/>

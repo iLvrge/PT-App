@@ -1,11 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Button, ListItemText, Menu, MenuItem } from '@mui/material'
 import { Box } from '@mui/system'
-import useStyles from './styles'
 
 
 const MoveItems = (props) => {
-    const classes = useStyles()
     const [groups, setGroups] = useState([])
     const [menuAnchorEl, setMenuAnchorEl] = useState(null)
 
@@ -46,7 +44,7 @@ const MoveItems = (props) => {
             <Button
                 disabled={props.companies.length == 0 && props.child.length == 0}
                 onClick={openAddMenu}
-                className={classes.btnGroup}
+                className={"absolute border-0 px-[5px] normal-case"}
                 style={{color: '#fff'}}
             >
                 Move To
