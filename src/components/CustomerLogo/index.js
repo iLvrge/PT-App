@@ -29,7 +29,6 @@ import {
 import { signOut } from '../../actions/authActions'
 
 import { getTokenStorage, removeTokenStorage } from '../../utils/tokenStorage'
-import CompanySummary from '../common/CompanySummary'
 
 const CustomerLogo = () => {
     const classes = useStyles()

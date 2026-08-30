@@ -1,26 +1,50 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, Suspense } from 'react'
 
 import { Switch, Route } from 'react-router-dom'
-import Settings from './components/SettingsPage'
-
- 
-import Reports from './components/Reports'
-import MainDashboard from './components/MainDashboard' 
 
 import routeList from './routeList'
+import lazyWithRetry from './utils/lazyWithRetry'
+import ErrorBoundary from './components/common/ErrorBoundary'
+import RouteFallback from './components/common/RouteFallback'
+import RouteErrorFallback from './components/common/RouteErrorFallback'
 
+// Layouts stay eager: every route renders one, so deferring them would only add
+// a round trip before anything at all can paint.
+import GlobalLayout from './layout/GlobalLayout'
+import BlankLayout from './layout/BlankLayout'
+
+// Eager on purpose — splitting these would not actually move any bytes out of
+// the initial chunk, because both are already imported by eagerly-loaded modules:
+//   Googlelogin   -> imported by NewHeader/ActionMenu and two SettingsPage tabs
+//   AuthMicrosoft -> api/axiosSetup imports refreshMicrosoftToken from it
+import Googlelogin from './components/common/Googlelogin'
+import AuthMicrosoft from './components/AuthMicrosoft'
+
+// Route-level split points. Each becomes its own chunk, fetched on navigation.
+const Settings = lazyWithRetry(() => import('./components/SettingsPage'), 'SettingsPage')
+const Reports = lazyWithRetry(() => import('./components/Reports'), 'Reports')
+const MainDashboard = lazyWithRetry(() => import('./components/MainDashboard'), 'MainDashboard')
+const PatentLayout = lazyWithRetry(() => import('./components/PatentLayout'), 'PatentLayout')
+const GlobalScreen = lazyWithRetry(() => import('./components/GlobalScreen'), 'GlobalScreen')
+const Auth = lazyWithRetry(() => import('./components/auth'), 'Auth')
+const AuthSlack = lazyWithRetry(() => import('./components/AuthSlack'), 'AuthSlack')
 
 /* import CorrectLayout from './components/CorrectLayout'  */
 
-import Googlelogin from './components/common/Googlelogin' 
-
-import Auth from './components/auth'
-import AuthSlack from './components/AuthSlack' 
-import AuthMicrosoft from './components/AuthMicrosoft' 
-import GlobalLayout from './layout/GlobalLayout'
-import BlankLayout from './layout/BlankLayout'
-import PatentLayout from './components/PatentLayout' 
-import GlobalScreen from './components/GlobalScreen'
+/**
+ * Wraps a lazily-loaded route so that:
+ *  - Suspense shows a loader while the chunk downloads
+ *  - ErrorBoundary catches both a failed chunk fetch and a render error inside it
+ *
+ * The boundary sits OUTSIDE Suspense so it can catch the rejected import; the
+ * loader sits inside the layout so the header and navigation stay on screen
+ * while the route chunk is still arriving.
+ */
+const RouteBoundary = ({ children }) => (
+  <ErrorBoundary fallback={(state) => <RouteErrorFallback {...state} />}>
+    <Suspense fallback={<RouteFallback />}>{children}</Suspense>
+  </ErrorBoundary>
+)
 
 let dashboardPages = [
   {
@@ -254,7 +278,9 @@ export default (
           path={path}
           render={props => (
             <Layout history={props.history} type={type} standalone={childWindow}>
-              <Component {...props} type={type} />
+              <RouteBoundary>
+                <Component {...props} type={type} />
+              </RouteBoundary>
             </Layout>
           )}
         />
@@ -268,22 +294,52 @@ export default (
             path={path}
             render={props => (
               <Layout history={props.history} type={type} standalone={childWindow}>
-                <Component {...props} type={type} />
+                <RouteBoundary>
+                  <Component {...props} type={type} />
+                </RouteBoundary>
               </Layout>
             )}
           />  
       )
     )}
-    <Route path="/slack" component={AuthSlack} />
+    <Route
+      path="/slack"
+      render={props => (
+        <RouteBoundary>
+          <AuthSlack {...props} />
+        </RouteBoundary>
+      )}
+    />
     <Route path="/microsoft" component={AuthMicrosoft} />
     {
-      ['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE)
+      [ 'PRO', 'KPI' ].includes(process.env.REACT_APP_ENVIROMENT_MODE)
       ?
         <Fragment>
-          <Route path="/settings" component={Settings} />
-          
-          <Route path="/reset/:token" component={Auth} />
-          <Route path="/auth" component={Auth} />       
+          <Route
+            path="/settings"
+            render={props => (
+              <RouteBoundary>
+                <Settings {...props} />
+              </RouteBoundary>
+            )}
+          />
+
+          <Route
+            path="/reset/:token"
+            render={props => (
+              <RouteBoundary>
+                <Auth {...props} />
+              </RouteBoundary>
+            )}
+          />
+          <Route
+            path="/auth"
+            render={props => (
+              <RouteBoundary>
+                <Auth {...props} />
+              </RouteBoundary>
+            )}
+          />
         </Fragment>
       :
       ''

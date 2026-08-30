@@ -1,5 +1,4 @@
 import makeStyles from '@mui/styles/makeStyles';
-import autoprefixer from 'autoprefixer'
 import { pink } from '@mui/material/colors';
 export default makeStyles(theme => ({
   root: {

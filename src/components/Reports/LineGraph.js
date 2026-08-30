@@ -1,4 +1,3 @@
-import { data } from 'autoprefixer';
 import React, {useState, useRef, useEffect} from 'react'
 import { Chart } from "react-google-charts";
 import { useSelector } from 'react-redux'

@@ -1,4 +1,5 @@
-import React, {useState, useCallback, useMemo, useRef, useEffect} from 'react'
+import lazyWithRetry from '../../utils/lazyWithRetry'
+import React, {useState, useCallback, useMemo, useRef, useEffect, Suspense} from 'react'
 import { 
     useDispatch, 
     useSelector 
@@ -52,8 +53,6 @@ import copy from 'copy-to-clipboard'
 import useStyles from './styles'
 
 import AssetSwitchButton from './AssetSwitchButton'
-import UserInputForm from '../common/QuillEditor/UserInputForm'
-import CustomerAddress from '../common/CustomerAddress'
 import { controlList } from "../../utils/controlList" 
 import { downloadFile, copyToClipboard } from '../../utils/html_encode_decode'
 import { setTokenStorage, getTokenStorage } from '../../utils/tokenStorage'
@@ -92,6 +91,10 @@ import PatenTrackApi from '../../api/patenTrack2'
 import clsx from 'clsx'
 import Googlelogin from '../common/Googlelogin'
 import themeMode from '../../themes/themeMode'
+
+// Both render only inside a Modal; keep them out of the header's initial payload.
+const UserInputForm = lazyWithRetry(() => import('../common/QuillEditor/UserInputForm'), 'UserInputForm')
+const CustomerAddress = lazyWithRetry(() => import('../common/CustomerAddress'), 'CustomerAddress')
 
 const ActionMenu = (props) => {
     const classes = useStyles()
@@ -605,7 +608,7 @@ const ActionMenu = (props) => {
             const slackToken = getTokenStorage( 'slack_auth_token_info' ), googleToken = getTokenStorage( 'google_auth_token_info' )
             let slackTokenFlag = false, googleTokenFlag = false
             if(slackToken && slackToken!= '' && slackToken!= null && slackToken!= 'null' ) {
-                const token = JSON.parse(slackToken)
+                let token = JSON.parse(slackToken)
                 if(typeof token === 'string') {
                     token = JSON.parse(token)
                 }
@@ -855,7 +858,7 @@ const ActionMenu = (props) => {
                 aria-labelledby="assignor-assignee"
                 aria-describedby="">
                 <React.Fragment>
-                    <UserInputForm />
+                    <Suspense fallback={null}><UserInputForm /></Suspense>
                 </React.Fragment>
             </Modal> 
             <Modal
@@ -865,7 +868,7 @@ const ActionMenu = (props) => {
                 aria-describedby=""
             >
                 <div style={{display: 'flex', height: '50vh', width: '600px', margin: '43px auto'}}>
-                    <CustomerAddress onHandleSelectAddress={onHandleSelectAddress}/>
+                    <Suspense fallback={null}><CustomerAddress onHandleSelectAddress={onHandleSelectAddress}/></Suspense>
                 </div>
             </Modal>
             <Modal

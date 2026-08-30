@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import lazyWithRetry from '../../utils/lazyWithRetry'
+import React, { useCallback, useEffect, useState, Suspense } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {  
     useHistory,
@@ -17,7 +18,8 @@ import {
 import { setCPCRequest, setJurisdictionRequest, setTimelineData, setTimelineRequest } from '../../actions/patentTrackActions2'
 import PatenTrackApi from '../../api/patenTrack2'
 import { copyToClipboard } from '../../utils/html_encode_decode' 
-import Maintainance from '../common/Maintainence'
+
+const Maintainance = lazyWithRetry(() => import('../common/Maintainence'), 'Maintainance')
 
 const ViewIcons = (props) => {
     const dispatch = useDispatch();
@@ -308,7 +310,7 @@ const ViewIcons = (props) => {
     return(
         <React.Fragment>
             {/* <Button onClick={getUnCollatealized}>Uncollateralized</Button> */}
-            <Maintainance/>
+            <Suspense fallback={null}><Maintainance/></Suspense>
             <div className={`step-2`}>
             {
                 profile?.user?.organisation?.organisation_type && /* profile.user.organisation.organisation_type.toString().toLowerCase() != 'bank'

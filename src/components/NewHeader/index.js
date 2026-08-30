@@ -1,7 +1,9 @@
+import lazyWithRetry from '../../utils/lazyWithRetry'
 import React, 
         { useCallback, 
           useEffect, 
           useState,
+          Suspense,
         } from 'react'
 import { useDispatch, 
           useSelector 
@@ -47,7 +49,7 @@ import { controlList } from '../../utils/controlList'
 import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar' 
 import useStyles from './styles'
  
-import CompanySummary from '../common/CompanySummary'
+const CompanySummary = lazyWithRetry(() => import('../common/CompanySummary'), 'CompanySummary')
 import ActionMenu from './ActionMenu'
 /* import ClipboardAssets from './ClipboardAssets' */
 import FullScreen from '../common/FullScreen'
@@ -1162,7 +1164,9 @@ const handleOpenSettings = useCallback((event) => {
                             <ListItemText primary={`Account Scope`} className={`children`}/>                                            
                           </ListItem>   
                           <Divider />   
-                          <CompanySummary />
+                          <Suspense fallback={null}>
+                            <CompanySummary />
+                          </Suspense>
                         {/* </Box> */}
                       </Box>
                     :

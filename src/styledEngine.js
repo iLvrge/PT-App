@@ -7,6 +7,9 @@ import { CssBaseline } from "@mui/material";
 import { SnackbarProvider } from 'notistack';
 import App from './components/App';
 import themeMode from './themes/themeMode'
+import ErrorBoundary from './components/common/ErrorBoundary'
+import RouteErrorFallback from './components/common/RouteErrorFallback'
+import OfflineBanner from './components/common/OfflineBanner'
 
 export const StyledEngine = () => {
 
@@ -21,7 +24,12 @@ export const StyledEngine = () => {
             <ThemeProvider theme={theme}>
                 <SnackbarProvider maxSnack={3}>
                     <CssBaseline />
-                    <App />
+                    <OfflineBanner />
+                    {/* Last-resort boundary: catches anything thrown above the
+                        per-route boundaries so the app never renders blank. */}
+                    <ErrorBoundary fallback={(state) => <RouteErrorFallback {...state} />}>
+                        <App />
+                    </ErrorBoundary>
                 </SnackbarProvider>
             </ThemeProvider>
         </StyledEngineProvider>

@@ -54,7 +54,15 @@ api.interceptors.response.use(
                 }
             }
         } else if (!error.response) {
-            // Handle cases where error.response is undefined (e.g., request cancellations)
+            // No response at all: a cancellation, a timeout, or the network is
+            // down. Tag the error so callers can tell "you are offline" apart
+            // from "the server said no" without re-sniffing error strings.
+            // Control flow is unchanged: the rejection still propagates as before.
+            if (!axios.isCancel(error)) {
+                error.isNetworkError = true
+                error.isOffline =
+                    typeof navigator !== 'undefined' && navigator.onLine === false
+            }
             console.log('Request canceled or no response received:', error.message);
             return Promise.reject(error);
         }

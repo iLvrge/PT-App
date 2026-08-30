@@ -2,7 +2,6 @@ import { pink } from '@mui/material/colors';
 import { alpha } from '@mui/material/styles';
 
 import makeStyles from '@mui/styles/makeStyles';
-import { isValidRGBA } from 'vis-util';
 
 const LOGO_WIDTH = 120
 const HEADER_MARGIN = 5
