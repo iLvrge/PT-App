@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Fab } from '@mui/material'
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined'
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined'
@@ -6,44 +6,22 @@ import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDown
 
 import useStyles from './styles'
 
-const ArrowButton = ({arrowId, handleClick, buttonType, buttonVisible, arrow, cls}) => {
+const ArrowButton = ({ arrowId, handleClick, buttonType, arrow, cls }) => {
+    const classes = useStyles()
 
-    const classes = useStyles() 
-    const [ type, setType] = useState( true )
-    const [ visible, setVisible] = useState( false )
-    
+    const Icon =
+        buttonType === true && arrow == 2
+            ? KeyboardArrowDownOutlinedIcon
+            : buttonType === true && arrow == 3
+              ? KeyboardArrowRightOutlinedIcon
+              : KeyboardArrowLeftOutlinedIcon
 
-    useEffect(() => {
-        setType( buttonType )
-        setVisible( buttonVisible )
-    }, [ buttonType, buttonVisible ])
-
-    /* ${visible === false ? classes.disable : ''} */
-    return(
+    return (
         <div id={arrowId} className={`${classes.arrowButton} ${cls != undefined ? cls : ''}`}>
-            <Fab
-            aria-label='toggle'
-            size='small' 
-            className = {`${classes.btnColor}`}
-            onClick={handleClick} 
-            >
-                { 
-                    type === true 
-                    ? 
-                        arrow == 2
-                        ?
-                        <KeyboardArrowDownOutlinedIcon /> 
-                        :
-                        arrow == 3
-                        ?
-                        <KeyboardArrowRightOutlinedIcon /> 
-                        :
-                        <KeyboardArrowLeftOutlinedIcon /> 
-                    : 
-                        <KeyboardArrowLeftOutlinedIcon /> 
-                }
+            <Fab aria-label='toggle' size='small' className={`${classes.btnColor}`} onClick={handleClick}>
+                <Icon />
             </Fab>
-        </div>  
+        </div>
     )
 }
 

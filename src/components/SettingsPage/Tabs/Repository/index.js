@@ -25,10 +25,10 @@ const Repository = () => {
     const dispatch = useDispatch()
     const googleLoginRef = useRef(null)
     const [ selected, setSelected ] = useState(null)
-    const [ layoutDriveFiles, setLayoutDriveFiles] = useState([])
-    const [ driveFiles, setDriveFiles] = useState([])
     const templateDriveFiles = useSelector(state => state.patenTrack2.template_drive_files)
+    const layoutDriveFiles = templateDriveFiles || []
     const drive_files = useSelector(state => state.patenTrack2.drive_files)
+    const driveFiles = drive_files.files || []
     const google_profile = useSelector(state => state.patenTrack2.google_profile)
     const [ googleToken, setGoogleToken ] = useState('')
     const [ breadcrumbItems, setBreadCrumbItems ] = useState([{id: 'undefined', name: 'My Drive'}])
@@ -163,15 +163,6 @@ const Repository = () => {
             //getRepoDriveFiles()  
         }
     }, [ googleToken ])
-
-
-    useEffect(() => {
-        setLayoutDriveFiles(templateDriveFiles)
-    }, [ templateDriveFiles ])
-
-    useEffect(() => {
-        setDriveFiles(drive_files.files)
-    }, [drive_files])
 
     useEffect(() => {
         clickedRef.current = clicked

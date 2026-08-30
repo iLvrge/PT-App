@@ -149,7 +149,7 @@ const AgentsVisualizer = (props) => {
             getAssetsForEachCountry()
         }
         return () => (isSubscribed = false)
-    }, [selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, selectedAssetAssignmentsAll, selectedAssetAssignments, display_sales_assets, search_string, auth_token, props.type], line_chart_data)
+    }, [selectedCompanies, selectedCompaniesAll, selectedAssetsPatents, assetTypesSelectAll, assetTypesSelected, assetTypesCompaniesSelectAll, assetTypesCompaniesSelected, selectedAssetAssignmentsAll, selectedAssetAssignments, display_sales_assets, search_string, auth_token, props.type, line_chart_data])
 
     useEffect(() => {
         if(props.analyticsBar === false) {

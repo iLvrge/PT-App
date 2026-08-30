@@ -1066,13 +1066,16 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     }, [ isLoadingCharts, graphRawData, graphRawGroupData, graphContainerRef, defaultSize, valueScope, isDarkTheme ])
 
 
+    // generateChart is recreated every render, so it deliberately stays out of the
+    // deps; it only reads the three values listed here, and the childNodes guard
+    // keeps it idempotent when returning from another tab.
     useEffect(() => {
         if( !isLoadingCharts && graphRawData.length > 0 && graphRawGroupData.length > 0 && graphContainerRef.current !== null && graphContainerRef.current != undefined ) { 
             if(  graphContainerRef.current != undefined &&  typeof  graphContainerRef.current.childNodes != 'undefined' && graphContainerRef.current.childNodes.length == 0 ) { // if comes from different tab
                 generateChart()
             }
         }
-    })
+    }, [ isLoadingCharts, graphRawData, graphRawGroupData ])
 
     useEffect(() => {
         if( graphRef.current != undefined &&  graphRef.current !== null && graphRawGroupData.length > 0 && graphRawData.length > 0 && !isLoadingCharts ) {

@@ -111,7 +111,8 @@ const VirtualizedTable = ({
   higlightColums,
   ...tableProps
 }) => {
-  const classes = useStyles();
+  const classes = useStyles()
+  const noOfSelectedItems = useMemo(() => [ ...(selected || []) ], [ selected ])
   const [sortDirection, setSortDirection] = useState(SortDirection.ASC);
   const [sortBy, setSortBy] = useState("");
   const [filters, setFilters] = useState([]);
@@ -120,7 +121,6 @@ const VirtualizedTable = ({
   const [dropdownValue, setDropdownValue] = useState('')
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [openRowData, setOpenRowData] = useState(null)
-  const [noOfSelectedItems, setNoOfSelectedItems] = useState([])
   /* const [currentScrollIndex, setcurrentScrollIndex] = useState(0) */
   const rowRef = useRef(null);
   const tableRef = useRef();
@@ -142,9 +142,6 @@ const VirtualizedTable = ({
     }
   }, [defaultSortField, defaultSortDirection])
 
-  useEffect(() => {
-    setNoOfSelectedItems([...selected])
-  }, [selected])
 
 
 

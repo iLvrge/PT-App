@@ -18,11 +18,11 @@ const LoadTransactionNameQueues = ({}) => {
     const [headerRowHeight, setHeaderRowHeight] = useState(47)
     const [width, setWidth] = useState(1200)
     const [currentSelection, setCurrentSelection] = useState(null)
-    const [rows, setRows] = useState([])
     const [selectedAll, setSelectAll] = useState(false)
     const [selectItems, setSelectItems] = useState([])
     const [selectedRow, setSelectedRow] = useState([])
     const nameQueues = useSelector(state => state.patenTrack2.nameQueues)
+    const rows = nameQueues || []
 
     const COLUMNS = [
         { 
@@ -93,10 +93,6 @@ const LoadTransactionNameQueues = ({}) => {
             align: "left",		  
         }
     ]
-
-    useEffect(() => {        
-        setRows(nameQueues)
-    }, [ nameQueues ])
 
     const handleClickSelectCheckbox = useCallback((event, row) => {
         event.preventDefault()

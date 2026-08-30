@@ -9,11 +9,10 @@ const FilterDashboardCPC = ({ depthRange, scopeRange, yearRange, yearRangeText, 
     const scopeRef = useRef(null)
     const [ scopeValue, setScopeValue ] = useState(valueScope)
     const [ rangeValue, setRangeValue ] = useState(valueRange)
-    const [ yearValue, setYearValue ] = useState(valueYear)
+    const yearValue = valueYear
     const [dashboardYearRange, setDashboardYearRange] = useState([])
     const [dashboardDepthRange, setDashboardDepthRange] = useState([])
     const CONTANT_HEIGHT = 18
-    const [ height, setHeight] = useState('550px')
     const [ heightYear, setHeightYear] = useState('250px')
     const [filterSection, setFilterSection] = useState([
         {
@@ -49,13 +48,6 @@ const FilterDashboardCPC = ({ depthRange, scopeRange, yearRange, yearRangeText, 
             value: 'H'
         }
     ])
-    useEffect(() => {
-        setHeight(`${(scopeRange.length * CONTANT_HEIGHT) + 15}px`)
-    }, [ scopeRange ])
-
-    useEffect(() => {
-        setYearValue(valueYear)
-    }, [valueYear])
 
     useEffect(() => {
         setHeightYear(`${(yearRange.length * CONTANT_HEIGHT) + 15}px`)
