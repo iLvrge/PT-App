@@ -13,7 +13,6 @@ import NotificationsIcon from '@mui/icons-material/NotificationsNone'
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar'
 
  
-import useStyles from './styles'
 import clsx from 'clsx'
 
 import { 
@@ -40,7 +39,6 @@ import {
   } from '../../actions/uiActions'
 
 const HeaderIcons = (props) => {
-    const classes = useStyles()
     const dispatch = useDispatch()
     
     const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
@@ -78,7 +76,7 @@ const HeaderIcons = (props) => {
             {
                 props.icons.map( icon => (
                     <IconButton
-                        className={clsx(classes.buttonIcon, { [classes.clipIconIsActive]: icon.name === 'clipboard' && display_clipboard === true }, { [classes.clipIconActive]: icon.name === 'clipboard' && clipboard_assets.length > 0 })}
+                        className={clsx("h-[30px] w-[30px] rounded-none p-0 [&_svg]:fill-[#5a5a5a] [&_svg]:stroke-[#5a5a5a] hover:[&_svg]:fill-[rgb(230,0,0)] hover:[&_svg]:stroke-[rgb(230,0,0)]", { ["[&_svg]:fill-white [&_svg]:stroke-white hover:[&_svg]:fill-white hover:[&_svg]:stroke-white"]: icon.name === 'clipboard' && display_clipboard === true }, { ["[&_svg]:fill-[#f48fb1] [&_svg]:stroke-[#f48fb1]"]: icon.name === 'clipboard' && clipboard_assets.length > 0 })}
                         {...(icon.name === 'clipboard' && { onClick: handleClipboard })}
                         size="large">
                         {

@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import GoogleLogin from 'react-google-login'
-import useStyles from './styles'
 import {
     getGoogleAuthToken,
   } from '../../../actions/patentTrackActions2'
@@ -10,7 +9,6 @@ import { setTokenStorage } from '../../../utils/tokenStorage'
 
 const Googlelogin = () => {
 
-    const classes = useStyles()
     const dispatch = useDispatch()
 
     const responseGoogle = useCallback((response) => {
@@ -33,7 +31,7 @@ const Googlelogin = () => {
             responseType="code"
             onSuccess={responseGoogle}
             onFailure={responseGoogle}
-            className={`${classes.googleButton} googleButton`}  
+            className="absolute -top-[9999px] googleButton"  
             style={{width: '800px'}}            
         >
         </GoogleLogin> 
@@ -48,7 +46,6 @@ export default Googlelogin
 import React, { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import GoogleLogin from 'react-google-login'
-import useStyles from './styles'
 import {
     getGoogleAuthToken,
   } from '../../../actions/patentTrackActions2'
@@ -58,7 +55,6 @@ import clsx from 'clsx'
 
 const Googlelogin = (props) => {
     console.log("props", props)
-    const classes = useStyles()
     const dispatch = useDispatch()
 
     const responseGoogle = useCallback((response) => {
@@ -82,7 +78,7 @@ const Googlelogin = (props) => {
             responseType="code"
             onSuccess={responseGoogle}
             onFailure={responseGoogle}
-            className={clsx({[classes.googleWindowButton]: props.standalone === 1 ? true :  false}, {[classes.googleButton]: props.standalone === 1 ? false :  true}, {['googleButton']: props.standalone === 1 ? false :  true})}  
+            className={clsx({['mx-auto my-[50px] h-[42px] w-[200px]']: props.standalone === 1 ? true :  false}, {['absolute -top-[9999px]']: props.standalone === 1 ? false :  true}, {['googleButton']: props.standalone === 1 ? false :  true})}  
             style={{width: '800px'}}            
         >
         </GoogleLogin> 

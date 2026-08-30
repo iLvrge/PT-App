@@ -7,7 +7,6 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import Checkbox from '@mui/material/Checkbox'
 import EditIcon from '@mui/icons-material/Edit'
 import React, { Fragment } from 'react'
-import useStyles from './styles'
 import Collapse from '@mui/material/Collapse'
 import Box from '@mui/material/Box'
 
@@ -25,12 +24,11 @@ export default function Row({
   onEdit,
   columns,
 }) {
-  const classes = useStyles()
 
   return (
     <Fragment>
       <TableRow
-        className={clsx({ [classes.editedRow]: isEdited })}
+        className={clsx({ ["bg-white/[0.08]"]: isEdited })}
         hover
         onClick={selectable ? handleSelection : undefined}
         role="checkbox"
@@ -83,10 +81,10 @@ export default function Row({
       {
         row.expandable && (
           <TableRow>
-            <TableCell className={classes.childrenCell} colSpan={6}>
+            <TableCell className={"!p-0 bg-[#121212]"} colSpan={6}>
               <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-                <Box className={classes.box}>
-                  <ChildComponent className={classes.childrenCell} row={row} />
+                <Box className={"mb-[-1px] ml-[25px] mt-0 shadow-[-1px_0px_2px_0_#292929]"}>
+                  <ChildComponent className={"!p-0 bg-[#121212]"} row={row} />
                 </Box>
               </Collapse>
             </TableCell>

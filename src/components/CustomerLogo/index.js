@@ -14,7 +14,6 @@ import {
 import BusinessIcon from '@mui/icons-material/Business'
 import LockOpenIcon from '@mui/icons-material/LockOpen'
 
-import useStyles from './styles' 
 
 import { 
     getProfile, 
@@ -29,7 +28,6 @@ import { signOut } from '../../actions/authActions'
 import { getTokenStorage, removeTokenStorage } from '../../utils/tokenStorage'
 
 const CustomerLogo = () => {
-    const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
     const location = useLocation()
@@ -123,7 +121,7 @@ const CustomerLogo = () => {
                 display="flex"
                 onClick={(event) => {toggleDrawer(event, true)}}
             >
-                <span /* onClick={(e) => handleControlModal( e, !controlModal )} */ className={classes.companyLogoCon}>
+                <span /* onClick={(e) => handleControlModal( e, !controlModal )} */ className={"flex max-w-[13rem] cursor-pointer items-center justify-start"}>
                     {
                         user.organisation 
                         ?  
@@ -131,12 +129,12 @@ const CustomerLogo = () => {
                             ?
                                 <img 
                                     src={user.organisation.logo} 
-                                    className={classes.userLogoOfficial} 
+                                    className={"mr-[15px] h-6"} 
                                     alt={''} 
                                 />
                             :
                                 <span 
-                                    className={classes.organizationName}
+                                    className={"ml-[5px] text-[15px]"}
                                 >
                                     {user.organisation.name}
                                 </span>
@@ -148,13 +146,13 @@ const CustomerLogo = () => {
                     slack_profile_data != null && Object.keys(slack_profile_data).length > 0
                     ?
                         <Avatar 
-                            className={classes.buttonIcon} 
+                            className={"h-[30px] w-[30px] rounded-none p-0 [&_svg]:fill-[#5a5a5a] [&_svg]:stroke-[#5a5a5a] hover:[&_svg]:fill-[rgb(230,0,0)] hover:[&_svg]:stroke-[rgb(230,0,0)] max-[1199.95px]:h-[25px] max-[1199.95px]:w-[25px]"} 
                             alt={`${slack_profile_data.real_name != '' ? slack_profile_data.real_name : slack_profile_data.profile.real_name != '' ? slack_profile_data.profile.real_name : slack_profile_data.profile.display_name}`} 
                             src={slack_profile_data.profile != null && slack_profile_data.profile.hasOwnProperty('image_24') && slack_profile_data.profile.image_24 != '' ? slack_profile_data.profile.image_24 : user && user.logo != '' ? user.logo : slack_profile_data.real_name.toString().substring(0,1).toLocaleUpperCase() } 
                         />
                     :
                         <Avatar 
-                            className={classes.buttonIcon} 
+                            className={"h-[30px] w-[30px] rounded-none p-0 [&_svg]:fill-[#5a5a5a] [&_svg]:stroke-[#5a5a5a] hover:[&_svg]:fill-[rgb(230,0,0)] hover:[&_svg]:stroke-[rgb(230,0,0)] max-[1199.95px]:h-[25px] max-[1199.95px]:w-[25px]"} 
                             alt={`${user ? user.first_name + ' ' + user.last_name : ''}`} 
                             src={user && user.logo != '' ? user.logo : user.first_name.toString().substring(0,1).toLocaleUpperCase() } 
                         />
