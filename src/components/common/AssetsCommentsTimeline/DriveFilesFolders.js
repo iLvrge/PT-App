@@ -1,14 +1,13 @@
 import React, {useEffect, useState} from 'react'
 import CustomListItem from "./CustomListItem";
-import useStyle from './styles';
+import './styles.css'
 
 const DriveFilesFolders = (props) => {
 
-    const classes = useStyle();
     
     if(props.data.length == 0) return null
     return (
-        <ul className={classes.list}>
+        <ul className={'pt-list'}>
             {
                 props.data?.files && props.data.files.length > 0 && props.data.files.map((item, index) => (
                     <CustomListItem

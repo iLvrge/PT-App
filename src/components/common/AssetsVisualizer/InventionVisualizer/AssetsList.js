@@ -6,7 +6,7 @@ import Clear from '@mui/icons-material/Clear'
 import NotInterested from '@mui/icons-material/NotInterested'
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
 
-import useStyles from './styles' 
+import './styles.css'
 import VirtualizedTable from '../../VirtualizedTable'
 
 
@@ -24,7 +24,6 @@ import { setFamilyActiveTab, toggleFamilyItemMode, toggleFamilyMode, toggleLifeS
 
 const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handleChartBarOpen }) => {
 
-    const classes = useStyles()
     const dispatch = useDispatch()
     const [rowHeight, setRowHeight] = useState(40)
     const [width, setWidth] = useState(800)
@@ -402,7 +401,7 @@ const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handle
     if (loading || assets.length == 0) return <Loader />
 
     return (
-        <Paper className={classes.root} square id={`assets_cpc`}>
+        <Paper className={'pt-root'} square id={`assets_cpc`}>
             <VirtualizedTable
                 openDropAsset={dropOpenAsset}
                 selected={selectItems}

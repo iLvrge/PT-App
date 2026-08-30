@@ -22,7 +22,7 @@ import CustomerAddress from '../CustomerAddress'
 import DriveFilesFolders from './DriveFilesFolders'
 import Googlelogin from '../Googlelogin' 
 import FullScreen from '../FullScreen'
-import useStyles from './styles'
+import './styles.css'
 import themeMode from '../../../themes/themeMode'
 import { FaChevronCircleDown } from 'react-icons/fa'
 import { getAuthConnectToken } from "../../../utils/tokenStorage";
@@ -65,7 +65,6 @@ import clsx from 'clsx'
 import DisplayFile from '../IllustrationCommentContainer/DisplayFile'
 
 const AssetsCommentsTimeline = ({ toggleMinimize, size, setChannel, channel_id, illustrationBar, standalone }) => {
-  const classes = useStyles()
   const dispatch = useDispatch()
   const googleLoginRef = useRef(null)
   const inputFile = useRef(null)
@@ -1140,7 +1139,7 @@ const handleDriveModalClose = (event) => {
     //if (!selectedCommentsEntity) return null
     
     return (
-      <div className={clsx(classes.commentEditor, {[classes.commentEditorStandalone]: typeof standalone !== 'undefined' ? true : false}, {['editorFullScreen']: typeof standalone !== 'undefined' ? true : false}, {[classes.commentEditorActive]: (selectedAssetsPatents.length > 0 || selectedAssetsTransactions.length > 0 || (dashboardScreen === true && mainCompaniesSelected.length > 0)) ? true : false})} ref={editorContainerRef}> 
+      <div className={clsx('pt-comment-editor', {['pt-comment-editor-standalone']: typeof standalone !== 'undefined' ? true : false}, {['editorFullScreen']: typeof standalone !== 'undefined' ? true : false}, {['pt-comment-editor-active']: (selectedAssetsPatents.length > 0 || selectedAssetsTransactions.length > 0 || (dashboardScreen === true && mainCompaniesSelected.length > 0)) ? true : false})} ref={editorContainerRef}> 
         <QuillEditor
           value={commentHtml}
           onChange={setCommentHtml}
@@ -1226,7 +1225,7 @@ const handleDriveModalClose = (event) => {
             <SlackUser users={users} user={messageUser} />
           
         } 
-        <span className={classes.message_time}>{sentDate}</span>
+        <span className={'pt-message-time'}>{sentDate}</span>
       </span>
     )
   }
@@ -1239,7 +1238,7 @@ const handleDriveModalClose = (event) => {
       if(users.length === 0) return <Avatar>{`${item}`}</Avatar>
       const checkUser = users.findIndex( user => user.id === item)
       if(checkUser >= 0) {
-        return <Avatar alt={`${users[checkUser].profile.display_name}`} src={users[checkUser].profile.image_48} className={classes.small}/>
+        return <Avatar alt={`${users[checkUser].profile.display_name}`} src={users[checkUser].profile.image_48} className={'pt-small'}/>
       } else {
         return <Avatar>{`${item}`}</Avatar>
       }
@@ -1320,11 +1319,11 @@ const handleDriveModalClose = (event) => {
       <>
         {
           files.map( (file, index) => (
-            <div key={`${indexing}-${index}`} className={classes.icon}>
+            <div key={`${indexing}-${index}`} className={'pt-icon'}>
               <IconButton 
                 variant="text"
                 onClick={(event) => { openFile(event, {permalink: file.contentUrl})}}
-                className={classes.fileLink}
+                className={'pt-file-link'}
               >
                 <FileImage file={file.contentUrl} thumbnailUrl={file.thumbnailUrl}/>
                 <Typography variant="body2">
@@ -1345,11 +1344,11 @@ const handleDriveModalClose = (event) => {
         <>
           {
             files.files.map( (file, index) => (
-              <div key={`${indexing}-${index}`} className={classes.icon}>
+              <div key={`${indexing}-${index}`} className={'pt-icon'}>
                 <IconButton 
                   variant="text" 
                   onClick={(event) => { openFile(event, file)}} 
-                  className={classes.fileLink}
+                  className={'pt-file-link'}
                 >
                   <FileImage file={file}/>
                   <Typography variant="body2">
@@ -1366,11 +1365,11 @@ const handleDriveModalClose = (event) => {
         <React.Fragment>
           {
             files.attachments.map( (file, index) => (
-              <div key={`${indexing}-${index}`} className={classes.icon}>
+              <div key={`${indexing}-${index}`} className={'pt-icon'}>
                 <IconButton 
                   variant="text"
                   onClick={(event) => { openFile(event, file.blocks[0].file)}}
-                  className={classes.fileLink}
+                  className={'pt-file-link'}
                 >
                   <FileImage file={file.blocks[0].file}/>
                   <Typography variant="body2">
@@ -1464,14 +1463,14 @@ const handleDriveModalClose = (event) => {
 
   const renderCommentsTimeline = useMemo(() => {
     return (
-      <div className={classes.commentTimelineSection} ref={timelineRef}>   
+      <div className={'pt-comment-timeline-section'} ref={timelineRef}>   
         {
           type && isLoadingcomments ? (
-            <CircularProgress className={classes.loader} />)
+            <CircularProgress className={undefined} />)
           :
             commentsData.messages != undefined && commentsData.messages.length > 0 ? (
             <Timeline 
-              className={classes.timeline} 
+              className={'pt-timeline'} 
               lineColor={'rgb(191 191 191)'}>
               {
                 commentsData.messages.map( (comment, index) => (
@@ -1491,11 +1490,11 @@ const handleDriveModalClose = (event) => {
   if (companyListLoading) return null
 
   return (
-    <Paper className={clsx(classes.root, 'comment_root')} square>
-      <div className={classes.content}>
+    <Paper className={clsx('pt-root', 'comment_root')} square>
+      <div className={'pt-content'}>
         {
           fullScreen === false && typeof standalone === 'undefined' && (
-            <IconButton size="small" className={clsx(classes.fullscreenBtn, 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
+            <IconButton size="small" className={clsx('pt-fullscreen-btn', 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
               <FullscreenIcon />
             </IconButton>
           )
@@ -1506,13 +1505,13 @@ const handleDriveModalClose = (event) => {
         {
           displayButton === true
           ?
-          <div className={classes.button}>
+          <div className={'pt-button'}>
             {/* {
               slackAuthLogin && (<Tooltip 
                 title={
                   <Typography color="inherit" variant='body2'>Sign in  to your Slack account</Typography>
                 } 
-                className={classes.tooltip}  
+                className={'pt-tooltip'}  
                 placement='left'
                 enterDelay={0}
                 TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
@@ -1564,8 +1563,8 @@ const handleDriveModalClose = (event) => {
       </div>  
       <Dialog open={driveModal} onOpenChange={(next) => { if (!next) handleDriveModalClose() }}>
         <DialogContent title="Drive files" className="!p-0">
-        <Paper container className={classes.driveModal} square>
-          <Grid item className={classes.containerList}>
+        <Paper container className={'pt-drive-modal'} square>
+          <Grid item className={'pt-container-list'}>
             <DriveFilesFolders 
               data={driveFilesAndFolder} 
               depth={0} 
@@ -1589,8 +1588,8 @@ const handleDriveModalClose = (event) => {
         onClose={handleChangeNameModal}
         onChangeName={handleCompanyNameChange}
         onSubmit={onHandleSubmitName}
-        formClassName={classes.root}
-        buttonClassName={classes.btn}
+        formClassName={'pt-root'}
+        buttonClassName={'pt-btn'}
       />
     </Paper>
   )

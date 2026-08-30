@@ -17,7 +17,7 @@ import DisplayFile from './DisplayFile'
 import ErrorBoundary from '../ErrorBoundary'
 import { updateResizerBar } from '../../../utils/resizeBar'
  
-import useStyles from './styles'
+import './styles.css'
 import Reports from '../../Reports'
 import FullScreen from '../FullScreen'
 import clsx from 'clsx'
@@ -82,7 +82,6 @@ const IllustrationCommentContainer = ({
     maintainence,
     record
     }) => {
-    const classes = useStyles()  
     const illustrationRef = useRef()
     const isMounted = useIsMounted()
     const [ containerSize, setContainerSize] = useState(0)
@@ -313,7 +312,7 @@ const IllustrationCommentContainer = ({
                     ?
                         <IconButton 
                             size="small" 
-                            className={clsx(classes.fullscreenBtn, 'full_screen_btn', {[classes.frameButton]: (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null) ? true : false})} 
+                            className={clsx('pt-fullscreen-btn', 'full_screen_btn', {['pt-frame-button']: (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null) ? true : false})} 
                             onClick={handleClickOpenFullscreen}
                         >
                             <Fullscreen />
@@ -455,7 +454,7 @@ const IllustrationCommentContainer = ({
                         :
                         driveTemplateFrameMode === true && (templateURL != 'about:blank' && templateURL != null)
                         ?
-                            <iframe src={templateURL} className={classes.templateFrame}></iframe>
+                            <iframe src={templateURL} className={'pt-template-frame'}></iframe>
                         :                  
                         maintainenceFrameMode === true
                         ?
@@ -585,12 +584,12 @@ const IllustrationCommentContainer = ({
                         onPointerDownOutside={(e) => e.preventDefault()}
                     >
                     <Paper 
-                        className={classes.fullscreenCharts}  
+                        className={'pt-fullscreen-charts'}  
                         square
                     >
                         {
                             (illustrationBar === false || shouldShowTimeline === true ) && (
-                                <IconButton onClick={handleCloseFullscreen}  className={clsx(classes.right, {[classes.frameButton]: (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null) ? true : false})} size="large">
+                                <IconButton onClick={handleCloseFullscreen}  className={clsx('pt-right', {['pt-frame-button']: (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null) ? true : false})} size="large">
                                     <Close /> 
                                 </IconButton> 
                             )
@@ -674,7 +673,7 @@ const IllustrationCommentContainer = ({
             </div>
 
             <div 
-                className={classes.commentContainer}
+                className={'pt-comment-container'}
             >
                 <ErrorBoundary>
                     {

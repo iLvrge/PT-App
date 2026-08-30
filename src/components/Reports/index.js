@@ -4,7 +4,7 @@ import { Grid, IconButton, Paper}  from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
 import { Steps } from 'intro.js-react';
 import 'intro.js/introjs.css';
-import useStyles from './styles'
+import './styles.css'
 import clsx from 'clsx'
 import moment from 'moment'
 import CardElement from './CardElement'
@@ -564,7 +564,6 @@ const Reports = (props) => {
             highlightClass: 'dashboardHighlightClass',
         },
     ]
-    const classes = useStyles()
     const history = useHistory()
     const dispatch = useDispatch()
     const isMounted = useIsMounted()
@@ -1452,7 +1451,7 @@ const Reports = (props) => {
         } */
         return <Grid
             item  {...grid}
-            className={clsx(classes.flexColumn, `box_item`, {['activeItem']: index === activeId})}
+            className={clsx('pt-flex-column', `box_item`, {['activeItem']: index === activeId})}
             key={`card_${index}`}
         >
             <CardElement 
@@ -1473,7 +1472,7 @@ const Reports = (props) => {
     const showTimelineItems = timelineList.map( (card, index) => {
         return <Grid
             item  {...timelineGrid}
-            className={clsx(classes.flexColumn, /* {[classes.flexColumnFullHeight]: profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? true : false} , */ `box_item`, {['activeItem']: index === activeId})}
+            className={clsx('pt-flex-column', /* {['pt-flex-column-full-height']: profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? true : false} , */ `box_item`, {['activeItem']: index === activeId})}
             key={`card_${index}`}
         >
             <CardElement 
@@ -1497,7 +1496,7 @@ const Reports = (props) => {
     
     const ShowDahboardLayout = (props) => {
         return (
-            <span className={classes.breadcrumbHeadingIcon}>
+            <span className={'pt-breadcrumb-heading-icon'}>
                 <i className="fa fa-sm fa-angle-double-right"></i> {props.icon}  <span>{props.layout_name}</span>
             </span> 
         )
@@ -1506,7 +1505,7 @@ const Reports = (props) => {
     return (
         <Grid
             container
-            className={classes.container}
+            className={'pt-container'}
             justifyContent="flex-start"
             alignItems="flex-start"
             ref={ref}
@@ -1517,7 +1516,7 @@ const Reports = (props) => {
                 style={{height: '100%'}}
             >
                 <div 
-                    className={classes.companyBar}
+                    className={'pt-company-bar'}
                     id={`client_container`} >
                     {   
                         <ClientList />
@@ -1527,9 +1526,9 @@ const Reports = (props) => {
             <Grid
                 item lg={12} md={12} sm={12} xs={12} 
             >
-                <Paper className={classes.titleContainer} square>
+                <Paper className={'pt-title-container'} square>
                     <span className={clsx('title', {['small']: smallScreen})}><span dangerouslySetInnerHTML={{__html: formattedCompanyname}}/>
-                        <span className={clsx(classes.headingName, 'step-1')}>
+                        <span className={clsx('pt-heading-name', 'step-1')}>
                             {/* {
                                 profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' && selectedAssetCompanies.length == 1 && (
                                     partyName[0].entityName
@@ -1557,7 +1556,7 @@ const Reports = (props) => {
                             }  
                         </span>
                     </span>
-                    <div className={classes.toolbar}> 
+                    <div className={'pt-toolbar'}> 
                         {
                             loading && (
                                 <span>Loading...</span>
@@ -1570,7 +1569,7 @@ const Reports = (props) => {
                         >
                             <IconButton size="small"
                                 onClick={() => {props.handleFullScreen(!props.fullScreen)}}
-                                className={clsx(classes.actionIcon, typeof viewDashboard.standalone !== 'undefined' ? classes.fontStandalone : '' )}
+                                className={clsx('pt-action-icon', typeof viewDashboard.standalone !== 'undefined' ? 'pt-font-standalone' : '' )}
                             >
                                 { typeof props.standalone !== 'undefined' ? <Close/> : <Fullscreen /> }                            
                             </IconButton>   
@@ -1580,14 +1579,14 @@ const Reports = (props) => {
             </Grid>
             <Grid
                 item lg={12} md={12} sm={12} xs={12} 
-                className={clsx(classes.list, 'listItems')}
+                className={clsx('pt-list', 'listItems')}
             >
                 <Grid  
                     container
                     direction="row"
                     justifyContent="flex-start"
                     alignItems="flex-start"
-                    className={classes.container}
+                    className={'pt-container'}
                 >
                     {
                         viewDashboard.jurisdictions === true

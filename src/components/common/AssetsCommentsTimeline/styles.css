@@ -1,0 +1,256 @@
+/* Extracted from the makeStyles sheet that used to live beside this file.
+ * Theme lookups became the CSS variables generated from src/themes/tokens.js,
+ * so light and dark still resolve exactly as they did. */
+
+.pt-btn {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+
+.pt-button {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 5px;
+  padding-right: 30px;
+  position: absolute;
+  top: 0px;
+  z-index: 1;
+}
+
+.pt-button button {
+  height: 42px;
+  border-radius: 5px !important;
+  text-transform: initial;
+}
+
+.pt-button button div {
+  padding: 0px !important;
+}
+
+.pt-button button div svg {
+  padding-left: 7px;
+  width: 25px;
+}
+
+.pt-child {
+  display: flex;
+  margin-left: 17px;
+  border-left: 1px dashed var(--pt-action-disabled);
+}
+
+.pt-close {
+  opacity: 0.3;
+}
+
+.pt-comment-editor {
+  z-index: 99999;
+  position: sticky;
+  bottom: 3px;
+  width: 95% !important;
+  pointer-events: none;
+}
+
+.pt-comment-editor .focus .ql-snow .ql-stroke, .focus .ql-snow button.ql-atButton svg, .focus .ql-snow .ql-attachButton svg, .focus .ql-snow .ql-saveButton svg, .attach .ql-snow .ql-sendattachButton svg {
+  color: var(--pt-action-active);
+  pointer-events: all;
+}
+
+.pt-comment-editor .focus .ql-snow .ql-stroke, .attach .ql-snow .ql-stroke {
+  stroke: var(--pt-action-active);
+}
+
+.pt-comment-editor .focus .ql-snow.ql-toolbar button:hover, .focus .ql-snow.ql-toolbar button svg:focus, .focus .ql-snow.ql-toolbar button svg:hover, .focus .ql-snow.ql-toolbar button.ql-bold:hover svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-bold:focus svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-italic:hover svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-italic:focus svg.MuiSvgIcon-root .ql-stroke {
+  color: var(--pt-secondary-main);
+  stroke: var(--pt-secondary-main);
+}
+
+.pt-comment-editor-active {
+  pointer-events: all;
+}
+
+.pt-comment-editor-standalone {
+  bottom: 44px;
+}
+
+.pt-comment-timeline-section {
+  width: 95% !important;
+  overflow: hidden auto;
+  margin: 5px auto !Important;
+  display: flex;
+}
+
+.pt-comment-timeline-section div {
+  width: 100%;
+}
+
+.pt-container-list {
+  display: flex;
+  height: 100%;
+  overflow: hidden auto;
+}
+
+.pt-content {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  flex: 1;
+}
+
+.pt-content > div {
+  width: 100%;
+}
+
+.pt-drive-modal {
+  width: 800px;
+  height: 90vh;
+  margin: 50px auto;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.pt-drive-modal:focus {
+  outline: none;
+}
+
+.pt-file-link {
+  cursor: pointer;
+  border-radius: 0px;
+  text-transform: capitalize;
+}
+
+.pt-file-link:hover {
+  color: var(--pt-secondary-main);
+}
+
+.pt-file-link img {
+  margin-right: 5px;
+  width: 20px;
+}
+
+.pt-fullscreen-btn {
+  position: absolute;
+  top: 5px;
+  right: 0px;
+  z-index: 999;
+}
+
+.pt-fullscreen-btn  & svg {
+  fill: #6d6d6d;
+  stroke: #6d6d6d;
+}
+
+.pt-fullscreen-btn  & svg:hover {
+  color: var(--pt-secondary-main);
+  fill: var(--pt-secondary-main);
+  stroke: var(--pt-secondary-main);
+}
+
+.pt-icon {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.pt-item {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  padding: 10px 10px 0;
+  overflow: hidden;
+  height: 40px;
+  position: relative;
+  cursor: pointer;
+}
+
+.pt-item:hover {
+  background: #2d2d2d;
+}
+
+.pt-item h2.MuiTypography-root {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: flexStart;
+}
+
+.pt-item h2.MuiTypography-root span {
+  display: flex;
+  margin-left: 11px;
+}
+
+.pt-list {
+  padding: 0px !important;
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.pt-list-item {
+  cursor: pointer;
+  display: flex;
+  color: var(--pt-text-primary);
+  position: relative;
+  flex-direction: column;
+}
+
+.pt-message-time {
+  font-size: 0.65rem;
+  margin-left: 5px;
+}
+
+.pt-root {
+  height: auto;
+  min-height: 100%;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.pt-root .MuiButton-textSizeSmall {
+  padding: 0px;
+  min-width: auto;
+  margin-right: 10px;
+}
+
+.pt-small {
+  width: 36px !important;
+  height: 36px !important;
+}
+
+.pt-timeline {
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  height: auto;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.pt-timeline a {
+  color: #fff;
+}
+
+.pt-timeline span {
+  cursor: inherit !important;
+}
+
+.pt-timeline .message_link {
+  color: var(--pt-text-primary);
+  display: block;
+}
+
+.pt-timeline .active_link {
+  color: var(--pt-secondary-main);
+}
+
+.pt-tooltip {
+  font-size: 1rem;
+}

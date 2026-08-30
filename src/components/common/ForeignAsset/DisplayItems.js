@@ -2,10 +2,9 @@ import React, {useRef, useEffect, useState} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Paper, Grid, Typography, TextField, Button, CircularProgress  } from  '@mui/material'
 import Close from '@mui/icons-material/Close'
-import useStyles from "./styles"
+import './styles.css'
 
 const DisplayItems = ({items, invalidItems, updateItems, callbackDeleteItem, handlePatchItem}) => {
-    const classes = useStyles()
     const [activeItem, setActiveItem] = useState(null)
     const [currentItem, setCurrentItem] = useState(null)
 
@@ -55,15 +54,15 @@ const DisplayItems = ({items, invalidItems, updateItems, callbackDeleteItem, han
     console.log("invalidItems", invalidItems)
 
     return (
-        <Paper className={classes.items} square>
+        <Paper className={'pt-items'} square>
             {
                 items.length > 0 && items.map( (row, index) => (
                     <div 
                         key={index} 
-                        className={classes.item} 
+                        className={'pt-item'} 
                         onDoubleClick = { (event) => { onDoubleClick(event, index, row)
                       }}>                        
-                        <Typography color="inherit" variant='body2' className={invalidItems.includes(row) ? classes.item_error : classes.item_valid}>{row}</Typography>
+                        <Typography color="inherit" variant='body2' className={invalidItems.includes(row) ? 'pt-item-error' : undefined}>{row}</Typography>
                         <div className={'input_item'}>
                             {
                                 index === activeItem

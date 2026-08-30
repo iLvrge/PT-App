@@ -1,13 +1,12 @@
 import React from 'react'
 
-import useStyles from './styles'
+import './styles.css'
 
 const DisplayFile = (props) => {
 
-    const classes = useStyles() 
 
     return (
-        <iframe src={props.templateURL} className={classes.templateFrame}></iframe>
+        <iframe src={props.templateURL} className={'pt-template-frame'}></iframe>
     )
 }
 

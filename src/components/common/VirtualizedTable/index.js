@@ -38,7 +38,7 @@ import TableRow from "@mui/material/TableRow";
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
-import useStyles from "./styles";
+import './styles.css'
 import Tooltip from "@mui/material/Tooltip";
 import Checkbox from "@mui/material/Checkbox";
 import Radio from "@mui/material/Radio";
@@ -112,7 +112,6 @@ const VirtualizedTable = ({
   higlightColums,
   ...tableProps
 }) => {
-  const classes = useStyles()
   const noOfSelectedItems = useMemo(() => [ ...(selected || []) ], [ selected ])
   const [sortDirection, setSortDirection] = useState(SortDirection.ASC);
   const [sortBy, setSortBy] = useState("");
@@ -175,7 +174,7 @@ const VirtualizedTable = ({
   );
 
   const getRowClassName = useCallback(() => {
-    return clsx(classes.tableRow, classes.flexContainer, classes.tableRowHover);
+    return clsx('pt-table-row', 'pt-flex-container', undefined);
   }, [classes]);
 
   const onChangeColumnFilters = useCallback((columnKey, columnFilters) => {
@@ -371,13 +370,13 @@ const VirtualizedTable = ({
           component={"div"}
           padding={role === "checkbox" ? "none" : undefined}
           className={clsx(
-            classes.tableCell,
-            classes.flexContainer,
+            'pt-table-cell',
+            'pt-flex-container',
             disableRow === true && rowData[disableRowKey] === 0
-              ? classes.disableColumn
+              ? 'pt-disable-column'
               : "",
             textBold === true && columnTextBoldList.length > 0 && columnTextBoldList.includes(cellData)
-              ? classes.textBold
+              ? 'pt-text-bold'
               : '',
             typeof showOnCondition == 'string' && typeof classCol !== 'undefined' && typeof disableRowKey == 'string' && rowData[disableRowKey] == showOnCondition ? '' : classCol,
             selectedRow === true && (selectedKey !== undefined && rowSelected !== undefined && rowSelected.includes(rowData[selectedKey])) ? 'highlightColumn' : ''
@@ -453,7 +452,7 @@ const VirtualizedTable = ({
                                 enterDelay={1500}
                                 TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
                                 classes={{
-                                  tooltip: classes.tooltip
+                                  tooltip: 'pt-tooltip'
                                 }}
                                 title={
                                   typeof c.tooltip != 'undefined' ?
@@ -489,7 +488,7 @@ const VirtualizedTable = ({
                       role === "checkboxwait" ? (
                         rowData[formatCondition] === 0
                           ?
-                          <HourglassBottomIcon className={classes.marginLeft10} />
+                          <HourglassBottomIcon className={'pt-margin-left10'} />
                           : <Checkbox
                             checked={checkedIsInderminateCheckbox === true ? checkedIsInderminateCheckbox : selected.includes(cellData)}
                             indeterminate={isIndeterminate}
@@ -515,26 +514,26 @@ const VirtualizedTable = ({
                             )
                           ) : role === 'image' ?
                             extensionIcon != '' ?
-                              <span className={classes.flexImageContainer}>
-                                <span className={classes.flexImage}><img src={extensionIcon} className={classes.smallImg} /></span>
+                              <span className={'pt-flex-image-container'}>
+                                <span className={'pt-flex-image'}><img src={extensionIcon} className={'pt-small-img'} /></span>
                                 {
                                   typeof show !== 'undefined' && show === false
                                     ?
                                     ''
                                     :
-                                    <span className={classes.flexData}>{(cellData == '' || cellData == null || cellData == undefined) && rowData[secondaryKey] != undefined && rowData[secondaryKey] != null ? rowData[secondaryKey] : cellData}</span>
+                                    <span className={'pt-flex-data'}>{(cellData == '' || cellData == null || cellData == undefined) && rowData[secondaryKey] != undefined && rowData[secondaryKey] != null ? rowData[secondaryKey] : cellData}</span>
                                 }
                               </span>
                               :
                               faIcon != ''
                                 ?
-                                <span><FontAwesomeIcon icon={faIcon} /><span className={classes.marginLeft}>{cellData}</span></span>
+                                <span><FontAwesomeIcon icon={faIcon} /><span className={'pt-margin-left'}>{cellData}</span></span>
                                 :
                                 rowData[imageURL] ?
-                                  <span className={classes.flexImageContainer}>
-                                    <span className={classes.flex}><img src={rowData[imageURL]} className={classes.imgIcon} /></span>{/* <Avatar src={rowData[imageURL]} /> */}<span className={`${classes.marginLeft} ${classes.flex}`}>{cellData}</span>
+                                  <span className={'pt-flex-image-container'}>
+                                    <span className={'pt-flex'}><img src={rowData[imageURL]} className={'pt-img-icon'} /></span>{/* <Avatar src={rowData[imageURL]} /> */}<span className={`${'pt-margin-left'} ${'pt-flex'}`}>{cellData}</span>
                                   </span>
-                                  : imageIcon != '' && imageIcon != undefined ? <span><FontAwesomeIcon icon={imageIcon} /><span className={classes.marginLeft}>{cellData}</span></span> : (
+                                  : imageIcon != '' && imageIcon != undefined ? <span><FontAwesomeIcon icon={imageIcon} /><span className={'pt-margin-left'}>{cellData}</span></span> : (
                                     cellData
                                   )
                             : format != undefined
@@ -1068,7 +1067,7 @@ const VirtualizedTable = ({
   }
 
   return (
-    <div ref={containerRef} className={classes.tableRootContainer}>
+    <div ref={containerRef} className={'pt-table-root-container'}>
       <InfiniteLoader
         isRowLoaded={isRowLoaded}
         loadMoreRows={loadMoreRows}
@@ -1088,7 +1087,7 @@ const VirtualizedTable = ({
                 headerHeight={headerHeight}
                 {...(typeof scrollTop !== 'undefined' ? { scrollTop: scrollTop } : {})}
                 onRowsRendered={onRowsRendered}
-                className={`${classes.table} ${headerRowDisabled === true ? "disable_header" : ""
+                className={`${undefined} ${headerRowDisabled === true ? "disable_header" : ""
                   }`}
                 rowCount={items.length}
                 /* {...(typeof scrollToIndex !== 'undefined' && scrollToIndex === true ? {scrollToIndex: getSelectedItemIndex} : {})}    */
@@ -1111,7 +1110,7 @@ const VirtualizedTable = ({
                           columnIndex: index,
                         })
                       }
-                      className={classes.flexContainer}
+                      className={'pt-flex-container'}
                       cellRenderer={cellRenderer}
                       dataKey={dataKey}
                       {...other}

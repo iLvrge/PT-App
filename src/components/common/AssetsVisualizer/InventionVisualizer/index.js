@@ -33,7 +33,7 @@ import {
 import { setPDFFile, setPdfTabIndex } from '../../../../actions/patenTrackActions' 
 import PatenTrackApi from '../../../../api/patenTrack2'
 import { DEFAULT_CUSTOMERS_LIMIT } from "../../../../api/patenTrack2";
-import useStyles from './styles'
+import './styles.css'
 
 import { capitalize } from "../../../../utils/numbers";
 import themeMode from '../../../../themes/themeMode';
@@ -54,7 +54,6 @@ var newRange = [1,2]
 
 const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, openCustomerBar, commentBar, illustrationBar, customerBarSize, companyBarSize, standalone, tab, type, gRawData, gRawGroupData, sData, fYear, vYear, vScope, sRange, fList, fTotal, titleBar, middle, openChartBar, handleChartBarOpen, salable, licensable, onSelect, top, side, pad }) => {
     
-    const classes = useStyles()
     const dispatch = useDispatch()
     const graphRef = useRef()
     const settingRef = useRef()
@@ -1213,7 +1212,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     width={resizableWidthHeight[0]}
                     minConstraints={[420, 350]} 
                     maxConstraints={[1500, 800]}
-                    className={classes.resizable}
+                    className={'pt-resizable'}
                     onResizeStop={handleResize}
                 ><Paper square={true} {...props} /></ResizableBox>                
             </Draggable>
@@ -1352,7 +1351,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 selectedCategory == 'assigned' && selectedRow.length == 0
                 ?
                     <span 
-                        className={classes.button}
+                        className={'pt-button'}
                         onClick={() => {onHandleFilterAssets(label)}}>
                         {label}
                     </span>
@@ -1377,7 +1376,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     return (
         <Paper 
             /* {...(typeof titleBar !== 'undefined' && titleBar === true ? {sx: {p: 2}} : {})} */
-            className={classes.root} square>  
+            className={'pt-root'} square>  
             {
                 (typeof tab == 'undefined' || tab === true ) && inventionTabs.length > 0
                 ?
@@ -1386,7 +1385,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         variant="scrollable"
                         scrollButtons="auto"
                         onChange={handleChangeTab}
-                        className={classes.tabs}
+                        className={'pt-tabs'}
                     >
                         {
                             inventionTabs.map((tab) => (
@@ -1395,7 +1394,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                     label={tab == 'For Sale' || tab == 'To License Out' ? <TabLabel label={tab} /> : tab}
                                     {...(typeof tab != 'For Sale' && tab != 'To License Out'  ? {icon: <LabelWithIcon label={tab} otherName={true}/>} : {})} 
                                     iconPosition='start'
-                                    classes={{ root: classes.tab }}
+                                    classes={{ root: 'pt-tab' }}
                                 />
                             )) 
                         }
@@ -1403,7 +1402,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 :
                     ''
             } 
-            <Box {...(((typeof tab != 'undefined' && tab === true) || typeof pad != 'undefined' && pad === true) ? {sx: {p: 2}} : {})}  className={classes.boxContainer}>
+            <Box {...(((typeof tab != 'undefined' && tab === true) || typeof pad != 'undefined' && pad === true) ? {sx: {p: 2}} : {})}  className={'pt-box-container'}>
             {
                 showContainer === true && (
                     <React.Fragment>  
@@ -1419,7 +1418,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                         {
                                             dashboardScreen: dashboardScreen, 
                                             click: dashboardScreen === true ? toggleDrawer  :  handleOpenFilter,
-                                            class: classes.btnSetting
+                                            class: 'pt-btn-setting'
                                         }
                                     }/>
                                 </React.Fragment>
@@ -1430,7 +1429,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                 <FullScreen componentItems={menuItems}/>
                             )
                         } 
-                        <div className={classes.graphContainer}> 
+                        <div className={'pt-graph-container'}> 
                             {
                                 selectedTab === 1 && selectedTabName == 'With Products'
                                 ?
@@ -1449,7 +1448,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                                 filter: `blur(${isLoadingCharts ? '4px' : 0})`,
                                                 }}
                                                 ref={graphContainerRef}
-                                                className={classes.timeline}
+                                                className={undefined}
                                             />
                                         :
                                             ''
@@ -1485,7 +1484,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         <Dialog
                             open={openModal}
                             onClose={handleClose}
-                            className={classes.modal}
+                            className={'pt-modal'}
                             PaperComponent={PaperComponent}
                             aria-labelledby="draggable-dialog-title"
                         >
@@ -1531,16 +1530,16 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         <Dialog
                             open={openFilter}
                             onClose={handleCloseFilter}
-                            className={`${classes.modal} ${classes.modalFilter}`}
+                            className={`${'pt-modal'} ${'pt-modal-filter'}`}
                             PaperComponent={PaperComponentFilter}
                             aria-labelledby="filter-cpc"
                         >                
                             <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-filter">
                                 
                             </DialogTitle>
-                            <DialogContent className={classes.filterContent}>
-                                <CloseIcon onClick={handleCloseFilter} className={classes.close}/>
-                                <Button onClick={onHandleResetSettings} className={classes.reset}>Reset</Button>
+                            <DialogContent className={'pt-filter-content'}>
+                                <CloseIcon onClick={handleCloseFilter} className={'pt-close'}/>
+                                <Button onClick={onHandleResetSettings} className={'pt-reset'}>Reset</Button>
                                 <FilterCPC onClose={handleClose} depthRange={depthRange} scopeRange={scopeRange} yearRange={filterYear} yearRangeText={yearRangeText} depthRangeText={depthRangeText} scopeRangeText={scopeRangeText} valueScope={valueScope} valueRange={valueRange} valueYear={valueYear} onChangeRangeSlider={onChangeRangeSlider} onChangeScopeSlider={onChangeScopeSlider} onChangeYearSlider={onChangeYearSlider}/>
                             </DialogContent>
                         </Dialog> 

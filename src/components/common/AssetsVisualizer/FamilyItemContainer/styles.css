@@ -13,7 +13,7 @@
   right: inherit;
   transform: none;
   word-break: keep-all;
-  color: theme.palette.text.secondary;
+  color: var(--pt-text-secondary);
 }
 
 .pt-container {

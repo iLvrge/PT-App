@@ -1,10 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
-import useStyles from './styles';
+import './styles.css'
 import { numberWithCommas } from '../../utils/numbers';
 
 const BreakdownDisplay = ({ data, isKpi }) => {
-    const classes = useStyles();
 
     // Mapping from M-codes to friendly labels
     const getLabelForKey = (key) => {
@@ -69,16 +68,16 @@ const BreakdownDisplay = ({ data, isKpi }) => {
     const rightColumn = sortedEntries.slice(midPoint);
 
     const renderItem = ([key, value]) => (
-        <div key={key} className={classes.breakdownItem}>
-            <span className={classes.breakdownKey}>
+        <div key={key} className={'pt-breakdown-item'}>
+            <span className={'pt-breakdown-key'}>
                 {getLabelForKey(key)}:
             </span>
-            <span className={classes.breakdownValueGroup}>
-                <span className={classes.breakdownValue}>
+            <span className={'pt-breakdown-value-group'}>
+                <span className={'pt-breakdown-value'}>
                     {numberWithCommas(getCount(value))}
                 </span>
                 {getLast10Years(value) !== null && (
-                    <span className={classes.breakdownSubValue}>
+                    <span className={'pt-breakdown-sub-value'}>
                         {numberWithCommas(getLast10Years(value))}
                     </span>
                 )}
@@ -87,12 +86,12 @@ const BreakdownDisplay = ({ data, isKpi }) => {
     );
 
     return (
-        <div className={clsx(classes.breakdownContainer, isKpi && classes.breakdownContainerKpi)}>
-            <div className={clsx(classes.breakdownTwoColumn, isKpi && classes.breakdownTwoColumnKpi)}>
-                <div className={clsx(classes.breakdownColumn, isKpi && classes.breakdownColumnKpi)}>
+        <div className={clsx('pt-breakdown-container', isKpi && 'pt-breakdown-container-kpi')}>
+            <div className={clsx('pt-breakdown-two-column', isKpi && 'pt-breakdown-two-column-kpi')}>
+                <div className={clsx('pt-breakdown-column', isKpi && 'pt-breakdown-column-kpi')}>
                     {leftColumn.map(renderItem)}
                 </div>
-                <div className={clsx(classes.breakdownColumn, isKpi && classes.breakdownColumnKpi)}>
+                <div className={clsx('pt-breakdown-column', isKpi && 'pt-breakdown-column-kpi')}>
                     {rightColumn.map(renderItem)}
                 </div>
             </div>

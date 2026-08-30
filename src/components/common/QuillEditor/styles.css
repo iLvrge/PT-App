@@ -1,86 +1,157 @@
-.ql-container {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-} 
-.ql-toolbar, #toolbar {
-  /* background: rgb(48, 48, 48); */
-  border-top: none;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-.ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button, #toolbar button{
-  /* width: 32px;
-  height: 32px; */
-  width: 'auto';
-  height: 'auto';
-}
-.ql-snow .ql-stroke, .ql-snow button.ql-bold , .ql-snow button.ql-italic , .ql-snow button.ql-atButton,.ql-snow button.ql-attachButton, .ql-snow button.ql-sendattachButton svg, .ql-snow button.ql-saveButton, .ql-snow button.ql-sendattachButton, .ql-snow button.ql-share {
-  display: flex;
-  align-items: center;
-  justify-items: center;
-  flex: 0 0 2rem;
-  width: 32px;
-  height: 32px;
-}
-.ql-snow button.ql-atButton svg, .ql-snow button.ql-attachButton , .ql-snow button.ql-attachButton svg, .ql-snow button.ql-sendattachButton, .ql-snow button.ql-sendattachButton svg, .ql-snow button.ql-saveButton , .ql-snow button.ql-saveButton svg, .ql-snow button.ql-share, .ql-snow button.ql-share svg {
-  width: 20px;
-  height: 20px;
+/* Extracted from the makeStyles sheet that used to live beside this file.
+ * Theme lookups became the CSS variables generated from src/themes/tokens.js,
+ * so light and dark still resolve exactly as they did. */
+
+.pt-active {
+  border: 1px solid var(--pt-secondary-main) !important;
 }
 
-.ql-snow .ql-transparent{ 
-  opacity: 1;
+.pt-active .MuiButton-label {
+  color: var(--pt-secondary-main);
 }
-.ql-snow .ql-picker.ql-expanded .ql-picker-options{
-  bottom: 100%;
-  top: unset
-}
-.ql-editor{
-  padding: 11px 15px
-}
-.ql-toolbar.ql-snow, #toolbar{
-  border-top: 0px;
-  padding: 4px;
+
+.pt-btn {
   display: flex;
-  align-items: center;
+  height: 30px;
+  margin: 10px;
+}
+
+.pt-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  flex: 1;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+}
+
+.pt-button-progress {
+  position: absolute;
+  bottom: 10px;
+  right: 5vw;
+  color: var(--pt-text-primary);
+}
+
+.pt-flex-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.pt-form-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden auto;
+  width: 50vw;
+  margin: 50px auto;
+  height: 60vh;
+  border: 1px solid var(--pt-divider);
+}
+
+.pt-form-wrapper {
+  position: relative;
+  flex-grow: 1;
+  flex-direction: column;
+  display: flex;
+  height: auto;
   justify-content: flex-start;
-}
-.ql-snow.ql-toolbar button svg, #toolbar button svg{
-  stroke: none;
-}
-
-#toolbar button:focus{
-  outline: 0;
-}
-.ql-snow.ql-toolbar button:focus, .focus .ql-snow.ql-toolbar button:focus, #toolbar button:focus{
-  color: inherit;
-}
-.ql-editor{
-  max-height: calc(30vh - 80px)
-}
-.ql-editor slackusermention{
-  background-color: rgba(29, 155, 209, 0.25);
-  color: #abcdef;
-  padding: 0 2px 1px;
-  border-radius: 3px;
-}
-.ql-editor slackusermention:hover{
-  background-color: rgba(64, 179, 228, 0.25);  
+  align-items: center;
+  z-index: 1;
+  padding: 10px;
 }
 
-
-/* .ql-snow.ql-toolbar button svg, .ql-snow .ql-toolbar button svg{
-  width: 2rem;
-  height: 2rem;
-}  */
-.ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button, #toolbar button{
-  width: 28px;
-  min-width: auto;
-  height: 28px;
-  padding: 2px;
-  margin: 2px 6px 2px 2px;
+.pt-review {
+  border: 1px solid var(--pt-divider) !important;
+  border-radius: 4px;
+  text-transform: initial;
+  width: auto !important;
+  padding: 3px 5px !important;
 }
 
-.ql-snow.ql-toolbar button svg, #toolbar button svg{
-  width: 1.5rem;
-  height: 1.5rem; 
+.pt-review:hover {
+  border: 1px solid var(--pt-secondary-main) !important;
+  color: var(--pt-secondary-main) !important;
+}
+
+.pt-review .MuiButton-label {
+  white-space: nowrap;
+}
+
+.pt-root .ql-container, .ql-toolbar, #toolbar {
+  background: none !important;
+}
+
+.pt-root .ql-container.ql-snow, .ql-toolbar.ql-snow, #toolbar {
+  border: 0px !important;
+}
+
+.pt-root.ql-snow .ql-picker, .ql-toolbar, .ql-container, #toolbar, .ql-picker-label, .ql-picker-label svg, .ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button, .ql-snow.ql-toolbar button svg, .ql-snow .ql-toolbar button svg, .ql-snow .ql-stroke, .ql-picker-label, #toolbar button, #toolbar button svg {
+  color: var(--pt-action-active);
+  stroke: var(--pt-action-active);
+  fill: var(--pt-action-disabled)Background;
+}
+
+.pt-root.ql-snow .ql-stroke, .ql-snow button.ql-bold, .ql-snow button.ql-italic, .ql-snow button.ql-atButton, .ql-snow button.ql-atButton svg, .ql-snow button.ql-attachButton, .ql-snow button.ql-attachButton svg, .ql-snow button.ql-saveButton, .ql-snow button.ql-saveButton svg, .ql-snow button.ql-sendattachButton svg, #toolbar button svg {
+  stroke: var(--pt-action-disabled)Background;
+  color: var(--pt-action-disabled)Background;
+  fill: var(--pt-action-disabled)Background;
+  pointer-events: none;
+}
+
+.pt-root .focus .ql-snow .ql-stroke, .focus .ql-snow button.ql-atButton svg, .focus .ql-snow .ql-attachButton svg, .focus .ql-snow .ql-saveButton svg, .attach .ql-snow .ql-sendattachButton svg, .focus #toolbar svg {
+  color: var(--pt-action-active);
+  fill: var(--pt-action-active);
+  pointer-events: all;
+}
+
+.pt-root .focus .ql-snow .ql-stroke, .attach .ql-snow .ql-stroke {
+  stroke: var(--pt-action-active);
+}
+
+.pt-root .ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow.ql-toolbar button:focus, .ql-snow .ql-toolbar button:focus, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active, #toolbar button:hover, #toolbar button:focus {
+  color: var(--pt-action-active);
+}
+
+.pt-root .ql-snow .ql-picker-options .ql-picker-item, .ql-snow.ql-toolbar .ql-picker-item:hover, .ql-snow .ql-toolbar .ql-picker-item:hover, .ql-snow.ql-toolbar .ql-picker-item.ql-selected, .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
+  color: var(--pt-bg-default);
+}
+
+.pt-root .focus .ql-snow.ql-toolbar button:hover, .focus .ql-snow.ql-toolbar button svg:focus, .focus .ql-snow.ql-toolbar button svg:hover, .focus .ql-snow.ql-toolbar button.ql-bold:hover svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-bold:focus svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-italic:hover svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-italic:focus svg.MuiSvgIcon-root .ql-stroke {
+  color: var(--pt-secondary-main);
+  stroke: var(--pt-secondary-main);
+}
+
+.pt-root .ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow .ql-toolbar button:focus, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active, .ql-snow.ql-toolbar .ql-picker-item:hover, .ql-snow .ql-toolbar .ql-picker-item:hover, .ql-snow.ql-toolbar .ql-picker-item.ql-selected, .ql-snow .ql-toolbar .ql-picker-item.ql-selected, .ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow .ql-toolbar button:focus, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active {
+  color: var(--pt-secondary-main);
+}
+
+.pt-root .ql-editor.ql-blank::before {
+  font-style: initial;
+  color: var(--pt-action-disabled);
+}
+
+.pt-secondary-group {
+  display: flex;
+  padding: 0 5px;
+  flex-grow: 1;
+}
+
+.pt-seperator {
+  display: flex;
+  width: 1px;
+  height: 20px;
+  border-left: 1px solid var(--pt-divider);
+  margin-right: 6px;
+}
+
+.pt-text-editor {
+  color: var(--pt-text-primary);
+  background: var(--pt-bg-default);
+  border: 1px solid var(--pt-divider);
+  box-shadow: var(--pt-action-active) 0px 0px 7px 0px;
+  border-radius: 8px;
+  margin: 0px;
+  overflow: hidden;
 }

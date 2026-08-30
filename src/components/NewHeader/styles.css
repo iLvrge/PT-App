@@ -1,0 +1,327 @@
+/* Extracted from the makeStyles sheet that used to live beside this file.
+ * Theme lookups became the CSS variables generated from src/themes/tokens.js,
+ * so light and dark still resolve exactly as they did. */
+
+.pt-action-icon {
+  margin: 0 3px;
+  color: var(--pt-text-disabled);
+}
+
+.pt-action-icon svg {
+  fill: var(--pt-text-disabled);
+  font-size: 2rem;
+}
+
+.pt-action-icon:hover {
+  color: var(--pt-secondary-main);
+}
+
+.pt-action-icon:hover svg {
+  fill: var(--pt-secondary-main);
+}
+
+.pt-active {
+  color: var(--pt-secondary-main);
+}
+
+.pt-active svg {
+  fill: var(--pt-secondary-main);
+}
+
+.pt-border-item {
+  border-top: 1px solid #545454;
+  margin-top: 20px;
+}
+
+.pt-breadcrumb-heading-icon {
+  margin-left: 5px;
+}
+
+.pt-breadcrumb-heading-icon svg {
+  margin-right: 5px;
+  display: inline-block;
+  position: absolute;
+  bottom: 12px;
+  fill: var(--pt-secondary-main);
+}
+
+.pt-breadcrumb-heading-icon span {
+  margin-left: 25px;
+  color: var(--pt-secondary-main);
+  font-size: 1.1rem;
+}
+
+.pt-button-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 0px;
+  padding: 0px;
+}
+
+.pt-button-icon svg {
+  fill: var(--pt-text-disabled);
+}
+
+.pt-button-icon:hover {
+  background-color: unset;
+  color: var(--pt-secondary-main);
+}
+
+.pt-button-icon:hover svg {
+  fill: var(--pt-secondary-main);
+}
+
+.pt-clip-icon-active svg {
+  fill: #f48fb1;
+  stroke: #f48fb1;
+}
+
+.pt-clip-icon-is-active svg {
+  fill: #FFF;
+  stroke: #FFF;
+}
+
+.pt-clip-icon-is-active:hover svg {
+  fill: #FFF;
+  stroke: #FFF;
+}
+
+.pt-company-logo-con {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  overflow: hidden;
+  min-width: 150px;
+}
+
+.pt-drawer .MuiDrawer-paper {
+  top: 53px;
+}
+
+.pt-flex-drawer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.pt-google-tooltip span {
+  display: block;
+}
+
+.pt-logo-container {
+  width: 260px;
+  display: flex;
+  max-width: 260px;
+}
+
+.pt-logo-container @media (max-width: 1440px) {
+  max-width: 170px;
+  width: 170px;
+}
+
+.pt-m-btn {
+  position: absolute;
+}
+
+.pt-microsoft-container {
+  width: 35px;
+  height: 30px;
+  position: relative;
+}
+
+.pt-microsoft-container .MuiIconButton-root {
+  margin-right: 6px;
+  position: absolute;
+  height: 30px;
+  width: 33px;
+  top: 2px;
+}
+
+.pt-middle-container {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  min-width: 350px;
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+}
+
+.pt-modal {
+  top: 42px !important;
+}
+
+.pt-modal .MuiBackdrop-root {
+  top: 42px !important;
+}
+
+.pt-modal:focus-visible {
+  outline: 0 !important;
+}
+
+.pt-no-stroke-height-width {
+  width: 1em;
+  height: 1em;
+}
+
+.pt-organization-name {
+  margin-left: 5px;
+  font-size: 15px;
+}
+
+.pt-padding0 {
+  padding: 0px;
+}
+
+.pt-padding0 .MuiIconButton-label {
+  width: 36px;
+  height: 36px;
+}
+
+.pt-right-menu {
+  position: relative;
+  height: 100%;
+}
+
+.pt-right-menu .MuiList-root {
+  padding-left: 20px;
+  padding-right: 20px;
+  height: 100%;
+}
+
+.pt-right-menu .MuiListItem-gutters {
+  padding-right: 70px;
+}
+
+.pt-right-menu .MuiListItemIcon-root {
+  min-width: 35px;
+}
+
+.pt-right-menu .drawerContainer > div:not(:only-child):last-of-type {
+  margin-top: auto;
+}
+
+.pt-right-panel {
+  margin-left: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+  min-width: 320px;
+  max-width: 465px;
+}
+
+.pt-right-panel .MuiBadge-anchorOriginTopRightRectangular {
+  transform: scale(1) translate(27%, 0%);
+  padding: 0 3px;
+  min-width: 15px;
+  height: 15px;
+}
+
+.pt-right-panel .MuiBadge-anchorOriginTopRightRectangular.MuiBadge-invisible {
+  transform: scale(0) translate(50%, -50%);
+}
+
+.pt-right-panel .MuiAvatar-root {
+  width: 30px;
+  height: 30px;
+}
+
+.pt-root {
+  z-index: 1206;
+  position: initial;
+  width: initial;
+  margin-bottom: 5px;
+  overflow: hidden;
+  padding: 0 0 0 10px;
+  box-shadow: none;
+}
+
+.pt-root .iconItem {
+  width: 90px;
+}
+
+.pt-root .iconItem .MuiListItemIcon-root svg {
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.pt-settings-container {
+  position: relative;
+  display: flex;
+  min-height: 425px;
+  flex-direction: column;
+}
+
+.pt-share-icon svg {
+  width: 1rem !important;
+  height: 1rem !important;
+}
+
+.pt-site-logo {
+  height: 3.1rem;
+  margin-right: 15px;
+  fill: var(--pt-text-primary);
+}
+
+.pt-site-logo @media (max-width: 1440px) {
+  height: 2.5rem;
+}
+
+.pt-site-logo-light {
+  height: 2rem;
+  margin-right: 15px;
+  fill: var(--pt-text-primary);
+}
+
+.pt-slack-container {
+  width: 40px;
+  height: 30px;
+  position: relative;
+}
+
+.pt-slack-container .MuiIconButton-root {
+  margin-right: 6px;
+  position: absolute;
+  height: 40px;
+  width: 40px;
+  top: -4px;
+}
+
+.pt-slack-icon svg {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.pt-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 1.1rem;
+}
+
+.pt-title span {
+  text-transform: uppercase;
+}
+
+.pt-toolbar {
+  padding: 0px;
+  height: 43px;
+  min-height: 43px;
+  position: relative;
+}
+
+.pt-tooltip {
+  font-size: 1rem;
+}
+
+.pt-user-logo-official {
+  height: 2.5rem;
+}
+
+.pt-user-logo-official @media (max-width: 1440px) {
+  height: 2rem;
+}

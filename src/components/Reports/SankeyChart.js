@@ -4,7 +4,7 @@ import { Paper } from '@mui/material';
 import DisplayChart from './DisplayChart';
 import Loader from '../common/Loader'
 import PatenTrackApi from '../../api/patenTrack2'
-import useStyles from './styles'
+import './styles.css'
 import clsx from 'clsx';
 import TitleBar from '../common/TitleBar';
 import { setSelectAssignmentCustomers } from '../../actions/patentTrackActions2';
@@ -12,7 +12,6 @@ import { setDashboardScreen, setPatentScreen, setTimelineScreen } from '../../ac
 
 const SankeyChart = (props) => {
     const dispatch = useDispatch();
-    const classes = useStyles();
     const [loading, setLoading] = useState(false);
     const [loadingAssignor, setLoadingAssingor] = useState(false);
     const [data, setData] = useState([]);
@@ -116,7 +115,7 @@ const SankeyChart = (props) => {
     }, [ assigneeRawData, assignorRawData, dispatch ])
 
     return (
-        <Paper sx={{p: 2, overflow: 'auto'}} className={clsx(classes.container, classes.containerTop)} square>
+        <Paper sx={{p: 2, overflow: 'auto'}} className={clsx('pt-container', 'pt-container-top')} square>
             {
                 !loading && data.length === 0 && (
                     <TitleBar title="The company had no acquistions and divestitures of patent assets filled after 1999:" enablePadding={false} underline={false}/>
@@ -126,7 +125,7 @@ const SankeyChart = (props) => {
                 !loading
                 ?
                     data.length > 0 && (
-                        <div className={clsx(classes.child, {[classes.maxChildHeight]: assignorData.length > 0 ? true : false})}>
+                        <div className={clsx('pt-child', {[undefined]: assignorData.length > 0 ? true : false})}>
                             {/* <TitleBar title="Acquistions:" enablePadding={false}/> */}
                             <DisplayChart data={data} tooltip={true} type={1} onSelect={handleSelection}/>
                         </div>   
@@ -140,7 +139,7 @@ const SankeyChart = (props) => {
                 !loadingAssignor
                 ?
                     assignorData.length > 0 && (
-                        <div className={clsx(classes.child , {[classes.maxChildHeight]: data.length > 0 ? true : false})} >
+                        <div className={clsx('pt-child' , {[undefined]: data.length > 0 ? true : false})} >
                             <TitleBar title="Divestitures:" enablePadding={false}/>
                             <DisplayChart data={assignorData} type={2} onSelect={handleSelection}/>
                         </div>  

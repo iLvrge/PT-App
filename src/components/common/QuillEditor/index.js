@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import ReactQuill, {Quill} from 'react-quill'
 import {Menu, MenuItem} from '@mui/material'
 
-import useStyles from './styles'
+import './styles.css'
 import CustomToolbar from './CustomToolbar'
 import UserInputForm from './UserInputForm'
 import copy from 'copy-to-clipboard'
@@ -71,7 +71,6 @@ const QuillEditor = ({
   driveFile = ''
 }) => {
   const PLACEHOLDER_MESSSAGE = 'Select a channel (an Asset or a Transaction or the Dashboard) to send a message'
-  const classes = useStyles()
   const quillRef = useRef(null)
   const dispatch = useDispatch()
   const [placeholderMessage, setPlaceholderMessage] = useState(PLACEHOLDER_MESSSAGE)
@@ -519,8 +518,8 @@ const QuillEditor = ({
   }, [link_assets_selected, link_assets_sheet_type])
 
   return (
-    <div className={classes.root}>
-      <div className={clsx(classes.textEditor, 'editor')}>
+    <div className={'pt-root'}>
+      <div className={clsx('pt-text-editor', 'editor')}>
         <ReactQuill
           ref={quillRef}
           theme='snow'

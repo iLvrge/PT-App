@@ -12,7 +12,7 @@ import {downloadFile} from '../../../utils/html_encode_decode'
 
 import AutoCompleteSearch from './AutoCompleteSearch'
 
-import useStyles from './styles'
+import './styles.css'
 
 /***
  * User input form for selecting Assignee, Assignor, and Correspondance
@@ -22,7 +22,6 @@ import useStyles from './styles'
 
 const UserInputForm = React.forwardRef((props, ref) => {
 
-    const classes = useStyles()
     const dispatch = useDispatch()
     const [ openAssignee, setOpenAssignee ] = useState(false)
     const [ openAssignor, setOpenAssignor ] = useState(false)
@@ -249,16 +248,16 @@ const UserInputForm = React.forwardRef((props, ref) => {
     }, [])
 
     return (
-        <Paper className={classes.formContainer} square ref={ref}>
-            <Grid container className={classes.formWrapper}>
-                <Grid container className={classes.form} spacing={3}>
+        <Paper className={'pt-form-container'} square ref={ref}>
+            <Grid container className={'pt-form-wrapper'}>
+                <Grid container className={undefined} spacing={3}>
                     <Grid
                         item
                         lg={4}
                         md={4}
                         sm={4}
                         xs={4}
-                        className={classes.flexColumn} 
+                        className={'pt-flex-column'} 
                     >
                         <AutoCompleteSearch
                             value={selectedAssignee}
@@ -281,7 +280,7 @@ const UserInputForm = React.forwardRef((props, ref) => {
                         md={4}
                         sm={4}
                         xs={4}
-                        className={classes.flexColumn}
+                        className={'pt-flex-column'}
                     >
                         <AutoCompleteSearch
                             value={selectedAssignor}
@@ -304,7 +303,7 @@ const UserInputForm = React.forwardRef((props, ref) => {
                         md={4}
                         sm={4}
                         xs={4}
-                        className={classes.flexColumn}
+                        className={'pt-flex-column'}
                     >
                         <AutoCompleteSearch
                             value={selectedCorrespondence}
@@ -321,9 +320,9 @@ const UserInputForm = React.forwardRef((props, ref) => {
                             multiple={false}
                         /> 
                     </Grid> 
-                    <div className={classes.btnContainer}>
-                        <Button variant="contained" className={classes.btn} onClick={(event) => {downloadXML(event)}}>Save to hardrive</Button>
-                        <Button variant="contained" className={classes.btn} onClick={(event) => {openUSPTO(event)}}>Upload to USPTO</Button>
+                    <div className={'pt-btn-container'}>
+                        <Button variant="contained" className={'pt-btn'} onClick={(event) => {downloadXML(event)}}>Save to hardrive</Button>
+                        <Button variant="contained" className={'pt-btn'} onClick={(event) => {openUSPTO(event)}}>Upload to USPTO</Button>
                     </div>                    
                 </Grid>
             </Grid>

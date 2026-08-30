@@ -1,10 +1,9 @@
 import React, {useState, useEffect, useRef} from 'react'
 import { Typography, Slider } from '@mui/material'
 import Loader from '../../Loader'
-import useStyles from './styles'
+import './styles.css'
 
 const FilterCPC = ({ onClose, depthRange, scopeRange, yearRange, yearRangeText, depthRangeText, scopeRangeText, valueScope, valueRange, valueYear, onChangeRangeSlider, onChangeScopeSlider, onChangeYearSlider }) => {
-    const classes = useStyles()
     const scopeRef = useRef(null)
     const [ scopeValue, setScopeValue ] = useState(valueScope)
     const [ rangeValue, setRangeValue ] = useState(valueRange)
@@ -75,28 +74,28 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, yearRange, yearRangeText, 
     }
 
     return (
-        <div className={classes.displayFlex}>   
-            <div className={classes.headingContainer}>
-                <div className={`${classes.flexColumn} ${classes.flexColumnYear}`}> 
-                    <div className={classes.heading}>
+        <div className={'pt-display-flex'}>   
+            <div className={'pt-heading-container'}>
+                <div className={`${'pt-flex-column'} ${'pt-flex-column-year'}`}> 
+                    <div className={'pt-heading'}>
                         <Typography>Year:</Typography>
                     </div>
                 </div>   
-                <div className={`${classes.flexColumn} ${classes.flexColumnDepth}`}>
-                    <div className={classes.heading}>
+                <div className={`${'pt-flex-column'} ${'pt-flex-column-depth'}`}>
+                    <div className={'pt-heading'}>
                         <Typography>Depth:</Typography>
                     </div>
                 </div>   
-                <div className={`${classes.flexColumn} ${classes.flexColumnScope}`}>
-                    <div className={classes.heading}>
+                <div className={`${'pt-flex-column'} ${'pt-flex-column-scope'}`}>
+                    <div className={'pt-heading'}>
                         <Typography>Scope:</Typography> 
                     </div>    
                 </div>   
             </div>    
-            <div className={classes.mainContainer}>
-                <div className={`${classes.flexColumn} ${classes.flexColumnYear}`}>
-                    <div className={classes.selectorContainer}>
-                        <div className={`year ${classes.holder} ${classes.topMargin}`} style={{height: heightYear}}>  
+            <div className={'pt-main-container'}>
+                <div className={`${'pt-flex-column'} ${'pt-flex-column-year'}`}>
+                    <div className={'pt-selector-container'}>
+                        <div className={`year ${'pt-holder'} ${'pt-top-margin'}`} style={{height: heightYear}}>  
                             {
                                 yearRange.length > 0
                                 ?
@@ -117,7 +116,7 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, yearRange, yearRangeText, 
                         </div>             
                     </div>             
                 </div>
-                <div className={`depth ${classes.flexColumn} ${classes.flexColumnDepth} ${classes.topMargin} ${classes.customHeight}`}>
+                <div className={`depth ${'pt-flex-column'} ${'pt-flex-column-depth'} ${'pt-top-margin'} ${'pt-custom-height'}`}>
                     <Slider
                         defaultValue={valueRange}
                         orientation="vertical"
@@ -131,9 +130,9 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, yearRange, yearRangeText, 
                         track={'inverted'}  
                     />
                 </div>
-                <div className={`${classes.flexColumn} ${classes.flexColumnScope}`}>
-                    <div className={`selContainer ${classes.selectorContainer}`}>
-                        <div className={`scope ${classes.holder} ${classes.topMargin}`} style={{height}}>  
+                <div className={`${'pt-flex-column'} ${'pt-flex-column-scope'}`}>
+                    <div className={`selContainer ${'pt-selector-container'}`}>
+                        <div className={`scope ${'pt-holder'} ${'pt-top-margin'}`} style={{height}}>  
                             {
                                 scopeRange.length > 0
                                 ?

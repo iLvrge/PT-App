@@ -34,7 +34,7 @@ import {
   faShareAlt,
 } from "@fortawesome/free-solid-svg-icons"
 import copy from 'copy-to-clipboard'
-import useStyles from './styles'
+import './styles.css'
 
 import AssetSwitchButton from './AssetSwitchButton'
 import { controlList } from "../../utils/controlList" 
@@ -81,7 +81,6 @@ const UserInputForm = lazyWithRetry(() => import('../common/QuillEditor/UserInpu
 const CustomerAddress = lazyWithRetry(() => import('../common/CustomerAddress'), 'CustomerAddress')
 
 const ActionMenu = (props) => {
-    const classes = useStyles()
     const history = useHistory()
     const googleLoginRef = useRef(null)
     const [anchorEl, setAnchorEl] = useState(null)
@@ -736,23 +735,23 @@ const ActionMenu = (props) => {
                 {
                     ['Owned', 'Invented', 'Acquired', 'Collaterlized', 'Maintenance Fee Due', 'Challenged (PTAB)', 'Divested', 'Abandoned', 'Members of Owned USA', 'Proliferate Inventors', 'Law Firms', 'Lenders'].includes(layoutName) 
                     ? 
-                        <span className={classes.breadcrumbHeadingIcon}>
+                        <span className={'pt-breadcrumb-heading-icon'}>
                             <i className="fa fa-sm fa-angle-double-right"></i> <AppsOutage/>  <span>{props.clipboardActive === true ? 'Clipboard' : layoutName}</span>
                         </span>
                     :
                         ['Chain-of-Title', 'To Assign', 'To Record', 'To Divest', 'To Monetize', 'Names', 'To Collateralize', 'Deflated Collateral', 'Encumbrances', 'Maintainance', 'Recordings', 'Corrections'].includes(layoutName) 
                         ?
-                            <span className={classes.breadcrumbHeadingIcon}>
+                            <span className={'pt-breadcrumb-heading-icon'}>
                                 <i className="fa fa-sm fa-angle-double-right"></i> <Speed/>  <span>{props.clipboardActive === true ? 'Clipboard' : layoutName}</span>
                             </span>
                         :
                             ['Acquisitions', 'Divestitures', 'Licensing', 'Collateralization', 'Inventing'].includes(layoutName) 
                             ?
-                                <span className={classes.breadcrumbHeadingIcon}>
+                                <span className={'pt-breadcrumb-heading-icon'}>
                                     <i className="fa fa-sm fa-angle-double-right"></i> <ViewTimeline/>  <span>{props.clipboardActive === true ? 'Clipboard' : layoutName}</span>
                                 </span>
                             :
-                            <span className={classes.breadcrumbHeadingIcon}>
+                            <span className={'pt-breadcrumb-heading-icon'}>
                                 {
                                     !['Settings > Companies', 'Settings > Users', 'Settings > Category'].includes(layoutName) 
                                     ?
@@ -769,7 +768,7 @@ const ActionMenu = (props) => {
     }
     
     return (
-        <div className={classes.middleContainer}>
+        <div className={'pt-middle-container'}>
             {
                 props.t == 1
                 ?
@@ -783,7 +782,7 @@ const ActionMenu = (props) => {
                         variant="contained"
                         disableElevation
                         onClick={handleClick}
-                        className={classes.mBtn}
+                        className={'pt-m-btn'}
                     >
                         <CheckCircleOutlineIcon />
                     </Fab>  
@@ -791,7 +790,7 @@ const ActionMenu = (props) => {
                     <React.Fragment> 
                         {
                             props.dashboardScreen === false && (props.layoutName !== null && props.layoutName.indexOf('Settings') == -1) && (
-                                <span className={classes.title}>
+                                <span className={'pt-title'}>
                                     <span dangerouslySetInnerHTML={{__html: formattedCompanyname}}/>
                                 </span>
                             )
@@ -852,8 +851,8 @@ const ActionMenu = (props) => {
               onClose={handleChangeNameModal}
               onChangeName={handleCompanyNameChange}
               onSubmit={onHandleSubmitName}
-              formClassName={classes.root}
-              buttonClassName={classes.btn}
+              formClassName={'pt-root'}
+              buttonClassName={undefined}
             />
         </div>
     );

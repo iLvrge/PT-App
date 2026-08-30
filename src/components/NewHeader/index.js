@@ -46,7 +46,7 @@ import routeList from '../../routeList'
 
 import { controlList } from '../../utils/controlList'
 import { resetAllRowSelect, resetItemList } from '../../utils/resizeBar' 
-import useStyles from './styles'
+import './styles.css'
  
 const CompanySummary = lazyWithRetry(() => import('../common/CompanySummary'), 'CompanySummary')
 import ActionMenu from './ActionMenu'
@@ -138,7 +138,6 @@ import { ASSET } from '../../utils/icons'
 import clsx from 'clsx'
 
 const NewHeader = (props) => {
-  const classes = useStyles()
   const dispatch = useDispatch()
   const history = useHistory()
   const location = useLocation();
@@ -804,20 +803,20 @@ const handleOpenSettings = useCallback((event) => {
 }, [ history, profile ]) 
 
   return (
-    <AppBar className={classes.root} color='transparent' position='relative'>
-      <Toolbar className={classes.toolbar}>
-        <span className={classes.logoContainer}>
-          <img src={isDarkTheme ? siteLogo : siteLogoLightMode} className={isDarkTheme ? classes.siteLogo: classes.siteLogoLight} alt={''} />          
+    <AppBar className={'pt-root'} color='transparent' position='relative'>
+      <Toolbar className={'pt-toolbar'}>
+        <span className={'pt-logo-container'}>
+          <img src={isDarkTheme ? siteLogo : siteLogoLightMode} className={isDarkTheme ? 'pt-site-logo': 'pt-site-logo-light'} alt={''} />          
         </span>
-        <span onClick={(e) => handleControlModal( e, !controlModal )} className={classes.companyLogoCon}>
+        <span onClick={(e) => handleControlModal( e, !controlModal )} className={'pt-company-logo-con'}>
           {
             user.organisation 
             ?
               user.organisation.logo != ''
                 ?
-                  <img src={user.organisation.logo} className={classes.userLogoOfficial} alt={''} />
+                  <img src={user.organisation.logo} className={'pt-user-logo-official'} alt={''} />
                 :
-                  <span className={classes.organizationName}>{user.organisation.name}</span>
+                  <span className={'pt-organization-name'}>{user.organisation.name}</span>
             :
             ''
           } 
@@ -843,7 +842,7 @@ const handleOpenSettings = useCallback((event) => {
           resetAllActivity={resetAllActivity}
         />
          
-        <div className={classes.rightPanel}>  
+        <div className={'pt-right-panel'}>  
             {/* <Switch  
               color="secondary" 
               {...( isDarkTheme == 'dark' ? {checked: true} : {})} 
@@ -877,7 +876,7 @@ const handleOpenSettings = useCallback((event) => {
               !googleAuthLogin
               ?
                 <IconButton
-                  className={`${classes.buttonIcon} ${classes.padding0} ${classes.slackIcon}`}
+                  className={`${'pt-button-icon'} ${'pt-padding0'} ${'pt-slack-icon'}`}
                   aria-label="Google Logout"
                   component="span"
                   onClick={onHandleGoogleSignout}
@@ -888,7 +887,7 @@ const handleOpenSettings = useCallback((event) => {
                       {
                         google_profile != null && Object.keys(google_profile).length > 0
                         ?
-                          <span className={classes.googleTooltip}>
+                          <span className={'pt-google-tooltip'}>
                             <span>{google_profile.name}</span>
                             <span>{google_profile.email}</span>
                           </span>
@@ -897,7 +896,7 @@ const handleOpenSettings = useCallback((event) => {
                       }
                       </Typography>
                     } 
-                    className={classes.tooltip}  
+                    className={'pt-tooltip'}  
                     placement='bottom'
                     enterDelay={0}
                     TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
@@ -912,9 +911,9 @@ const handleOpenSettings = useCallback((event) => {
             {
               !slackAuthLogin
               ?
-              <div className={classes.slackContainer}>
+              <div className={'pt-slack-container'}>
                 <IconButton
-                  className={`${classes.buttonIcon} ${classes.padding0} ${classes.slackIcon}`}
+                  className={`${'pt-button-icon'} ${'pt-padding0'} ${'pt-slack-icon'}`}
                   aria-label="Slack Logout"
                   component="span"
                   onClick={onHandleSlackSignout}
@@ -932,7 +931,7 @@ const handleOpenSettings = useCallback((event) => {
                       }
                       </Typography>
                     } 
-                    className={classes.tooltip}  
+                    className={'pt-tooltip'}  
                     placement='bottom'
                     enterDelay={0}
                     TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
@@ -962,9 +961,9 @@ const handleOpenSettings = useCallback((event) => {
               </div>
               :
                 !microsoftAuthLogin ?
-                <div className={classes.microsoftContainer}>
+                <div className={'pt-microsoft-container'}>
                   <IconButton
-                    className={`${classes.buttonIcon} ${classes.padding0} ${classes.slackIcon}`}
+                    className={`${'pt-button-icon'} ${'pt-padding0'} ${'pt-slack-icon'}`}
                     aria-label="Microsoft Logout"
                     component="span"
                     onClick={onHandleMicrosoftSignout}
@@ -982,7 +981,7 @@ const handleOpenSettings = useCallback((event) => {
                         }
                         </Typography>
                       } 
-                      className={classes.tooltip}  
+                      className={'pt-tooltip'}  
                       placement='bottom'
                       enterDelay={0}
                       TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
@@ -997,22 +996,22 @@ const handleOpenSettings = useCallback((event) => {
             {
               slack_profile_data != null && Object.keys(slack_profile_data).length > 0
               ?
-                <Avatar className={clsx(classes.actionIcon)} alt={`${slack_profile_data.real_name != '' ? slack_profile_data.real_name : slack_profile_data.profile.real_name != '' ? slack_profile_data.profile.real_name : slack_profile_data.profile.display_name}`} src={slack_profile_data.profile != null && slack_profile_data.profile.hasOwnProperty('image_24') && slack_profile_data.profile.image_24 != '' ? slack_profile_data.profile.image_24 : user && user.logo != '' ? user.logo : slack_profile_data.real_name.toString().substring(0,1).toLocaleUpperCase() } />
+                <Avatar className={clsx('pt-action-icon')} alt={`${slack_profile_data.real_name != '' ? slack_profile_data.real_name : slack_profile_data.profile.real_name != '' ? slack_profile_data.profile.real_name : slack_profile_data.profile.display_name}`} src={slack_profile_data.profile != null && slack_profile_data.profile.hasOwnProperty('image_24') && slack_profile_data.profile.image_24 != '' ? slack_profile_data.profile.image_24 : user && user.logo != '' ? user.logo : slack_profile_data.real_name.toString().substring(0,1).toLocaleUpperCase() } />
               :
                 microsoft_profile_data != null && Object.keys(microsoft_profile_data).length > 0
                 ?
-                  <Avatar className={clsx(classes.actionIcon)} alt={`${microsoft_profile_data.user.displayName != '' ? microsoft_profile_data.user.displayName : ''}`} src={ user && user.logo != '' ? user.logo : microsoft_profile_data.user.displayName.toString().substring(0,1).toLocaleUpperCase() }/>
+                  <Avatar className={clsx('pt-action-icon')} alt={`${microsoft_profile_data.user.displayName != '' ? microsoft_profile_data.user.displayName : ''}`} src={ user && user.logo != '' ? user.logo : microsoft_profile_data.user.displayName.toString().substring(0,1).toLocaleUpperCase() }/>
                 :
                   user && user.logo != ''
                   ?
-                  <Avatar className={clsx(classes.actionIcon)} alt={`${user ? user.first_name + ' ' + user.last_name : ''}`} src={user.logo} />
+                  <Avatar className={clsx('pt-action-icon')} alt={`${user ? user.first_name + ' ' + user.last_name : ''}`} src={user.logo} />
                   : 
-                  <Avatar className={clsx(classes.actionIcon)}>
+                  <Avatar className={clsx('pt-action-icon')}>
                     {user.first_name.toString().substring(0,1).toLocaleUpperCase()}
                   </Avatar>
             }
             <IconButton
-              className= {clsx(classes.actionIcon)}
+              className= {clsx('pt-action-icon')}
               color='inherit'
               aria-label='open drawer'
               onClick={(event) => {
@@ -1021,13 +1020,13 @@ const handleOpenSettings = useCallback((event) => {
               size="small">
               <MenuIcon  className={'menuButton'}/>
             </IconButton>
-            <Drawer anchor={'right'} open={openDrawer['right']} onClose={(event) => {toggleDrawer(event, false)}} className={classes.drawer}>
+            <Drawer anchor={'right'} open={openDrawer['right']} onClose={(event) => {toggleDrawer(event, false)}} className={'pt-drawer'}>
               <div
                 onClick={(event) => { toggleDrawer(event, false)}}
                 onKeyDown={(event) => { toggleDrawer(event, false)}} 
-                className={classes.rightMenu}
+                className={'pt-right-menu'}
               >
-                <div className={clsx(classes.flexDrawer, 'drawerContainer')}>
+                <div className={clsx('pt-flex-drawer', 'drawerContainer')}>
                 <List component='nav'>
                   {
                     process.env.REACT_APP_ENVIROMENT_MODE == 'PRO' && ( 
@@ -1060,7 +1059,7 @@ const handleOpenSettings = useCallback((event) => {
                         </ListItem>   
                       </AddToolTip> 
                       <ListItem 
-                        className={`${clipboard_assets.length > 0 ? classes.clipIconActive : ''} ${ props.display_clipboard === true ? classes.clipIconIsActive : ''}`}
+                        className={`${clipboard_assets.length > 0 ? 'pt-clip-icon-active' : ''} ${ props.display_clipboard === true ? 'pt-clip-icon-is-active' : ''}`}
                         onClick={ ['STANDARD', 'SAMPLE-1', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert : handleClipboard}
                         button>
                           <ListItemIcon  color='inherit' >
@@ -1075,7 +1074,7 @@ const handleOpenSettings = useCallback((event) => {
                           placement='bottom'
                       >
                         <ListItem 
-                            className={classes.borderItem}
+                            className={'pt-border-item'}
                             onClick={ ['STANDARD', 'SAMPLE-1', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert : onHandlePatentAssets} 
                             button>
                           <ListItemIcon  color='inherit' >
@@ -1098,7 +1097,7 @@ const handleOpenSettings = useCallback((event) => {
                         </ListItem>  
                       </AddToolTip> 
                       <ListItem  
-                        className={classes.borderItem}
+                        className={'pt-border-item'}
                         onClick={handleOpenSettings}
                         button>
                         <ListItemIcon  color='inherit' >
@@ -1143,7 +1142,7 @@ const handleOpenSettings = useCallback((event) => {
                   }
                   </List>
                   </div>
-                  <div className={clsx(classes.flexDrawer, 'drawerContainer')}>
+                  <div className={clsx('pt-flex-drawer', 'drawerContainer')}>
                   <List component='nav'>
                   {/* <ListItem button onClick={onHandleForeignAssets}>
                     <ListItemIcon  color='inherit' >
@@ -1154,7 +1153,7 @@ const handleOpenSettings = useCallback((event) => {
                   {
                     process.env.REACT_APP_ENVIROMENT_MODE === 'PRO' || process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' 
                     ?
-                      <Box className={classes.settingsContainer}>
+                      <Box className={'pt-settings-container'}>
                         {/* <Box style={{position: 'absolute', bottom: 0}}> */}
                           <ListItem className={`children`} button style={{marginTop: 25}}>
                             <ListItemIcon aria-label='Account Scope' color='inherit' className={`children`}>
@@ -1206,7 +1205,7 @@ const handleOpenSettings = useCallback((event) => {
         BackdropProps={{
           timeout: 500,
         }}
-        className={classes.modal}
+        className={'pt-modal'}
         style={{backgroundColor: 'rgba(0, 0, 0, 0.8)'}}>
         <React.Fragment>
           <Home click={hideMenu} closeModal={handleControlModal}/> 

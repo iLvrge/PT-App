@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {  useHistory, useLocation  } from 'react-router-dom'
 import { Paper } from '@mui/material'
-import useStyles from './styles' 
+import './styles.css'
 import VirtualizedTable from '../VirtualizedTable'
 
 import {
@@ -24,7 +24,6 @@ import Loader from '../Loader'
 
 const ChildTable = ({ asset, headerRowDisabled }) => {
 
-    const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
     const location = useLocation()
@@ -103,7 +102,7 @@ const ChildTable = ({ asset, headerRowDisabled }) => {
     if (familyLoading) return <Loader />
 
     return (
-        <Paper className={classes.root} square id={`assets_family`} elevation={0}>
+        <Paper className={'pt-root'} square id={`assets_family`} elevation={0}>
             <VirtualizedTable
             selected={selectItems}
             rowSelected={selectedRow}

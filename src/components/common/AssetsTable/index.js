@@ -19,7 +19,7 @@ import AccountTreeOutlined from '@mui/icons-material/AccountTreeOutlined'
 import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp'
 import moment from "moment";
 import Loader from "../Loader";
-import useStyles from "./styles";
+import './styles.css'
 import VirtualizedTable from "../VirtualizedTable";
 import Googlelogin from '../Googlelogin'
 import { DEFAULT_CUSTOMERS_LIMIT } from "../../../api/patenTrack2";
@@ -132,7 +132,6 @@ const AssetsTable = ({
   changeVisualBar,
   handleCommentBarOpen
 }) => {
-  const classes = useStyles()
   const dispatch = useDispatch()
   const history = useHistory();
   const location = useLocation()
@@ -309,8 +308,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       }
     }, [props])
     return (
-      <Box className={classes.rating_container}>
-        <span className={classes.rating_label}><label>{props.label}</label></span>
+      <Box className={'pt-rating-container'}>
+        <span className={'pt-rating-label'}><label>{props.label}</label></span>
         <Rating
           name={props.name}
           className={props.class}
@@ -325,7 +324,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     return (
       <RatingBox
         label={`Important`}
-        class={classes.yellow}
+        class={'pt-yellow'}
         name={`virtual-rating-important`}
         data={props.item}
       />
@@ -337,7 +336,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
     return (
       <RatingBox
         label={`Necessary`}
-        class={classes.blue}
+        class={'pt-blue'}
         name={`virtual-rating-necessary`}
         data={props.item}
       />
@@ -356,7 +355,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   const Slack = () => {
 
     return (
-      <Box className={classes.slack_container}>
+      <Box className={'pt-slack-container'}>
         {
           getAuthConnectToken() === 2
             ?
@@ -2338,7 +2337,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
 
   return (
     <Paper
-      className={clsx(classes.root, { [classes.mobile]: isMobile === true && (fileBar === true || driveBar === true) })}
+      className={clsx('pt-root', { ['pt-mobile']: isMobile === true && (fileBar === true || driveBar === true) })}
       square
       id={`assets_type_assignment_all_assets`}
       data_option={optionType}

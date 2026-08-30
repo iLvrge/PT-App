@@ -1,11 +1,10 @@
 import React, {useState, useEffect, useRef} from 'react'
 import { Typography, Slider, MenuItem, ListItemIcon, Divider, ListItemText, Checkbox } from '@mui/material'
 import Loader from '../../Loader'
-import useStyles from './styles'
+import './styles.css'
 import clsx from 'clsx'
 
 const FilterDashboardCPC = ({ depthRange, scopeRange, yearRange, yearRangeText, depthRangeText, scopeRangeText, valueScope, valueRange, valueYear, onChangeRangeSlider, onChangeScopeSlider, onChangeYearSlider }) => {
-    const classes = useStyles()
     const scopeRef = useRef(null)
     const [ scopeValue, setScopeValue ] = useState(valueScope)
     const [ rangeValue, setRangeValue ] = useState(valueRange)

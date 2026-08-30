@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import DriveFilesFolders from "./DriveFilesFolders";
-import useStyle from './styles';
+import './styles.css'
 import clsx from 'clsx';
 import { Typography, Grid, SvgIcon } from '@mui/material';
 import FolderIcon from '@mui/icons-material/Folder'
@@ -13,7 +13,6 @@ import { getTokenStorage} from '../../../utils/tokenStorage'
 
 
 const CustomListItem = (props) => {
-    const classes = useStyle();
     const [ data, setData] = useState({})
 
     const isSelected = (ID) => {    
@@ -59,7 +58,7 @@ const CustomListItem = (props) => {
     const CloseSquare = (props) => {
         return (
           <SvgIcon
-            className={clsx(classes.icon, classes.close)}
+            className={clsx('pt-icon', 'pt-close')}
             fontSize="inherit"
             {...props}
           >
@@ -71,12 +70,12 @@ const CustomListItem = (props) => {
     
     return (
         <li
-            className={clsx(classes.listItem, {[classes.active]: isSelected(props.id) ? true : false })}
+            className={clsx('pt-list-item', {[undefined]: isSelected(props.id) ? true : false })}
         >
             {
                 props.mimeType == 'application/vnd.google-apps.folder'
                     ?
-                        <div key={props.id} className={classes.item} onClick={(event) => openDriveFolder(event, props.id, props.name)}>
+                        <div key={props.id} className={'pt-item'} onClick={(event) => openDriveFolder(event, props.id, props.name)}>
                             <Typography variant="body1" component="h2">
                                 {
                                     isSelected(props.id) ? <MinusSquare/> : <PlusSquare />
@@ -84,7 +83,7 @@ const CustomListItem = (props) => {
                             </Typography>
                         </div>
                     :
-                        <div key={props.id} className={classes.item} onClick={(event) => props.onSelectFile(event, {...props})}>
+                        <div key={props.id} className={'pt-item'} onClick={(event) => props.onSelectFile(event, {...props})}>
                             <Typography variant="body1" component="h2">
                                 <img src={props.iconLink}/><span>{props.name}</span>
                             </Typography>
@@ -93,7 +92,7 @@ const CustomListItem = (props) => {
             {
                 isSelected(props.id) && data?.files && data?.files.length > 0
                     ?
-                        <Grid item className={classes.child}>
+                        <Grid item className={'pt-child'}>
                             <DriveFilesFolders
                                 data={data} 
                                 parent={props.parent.length === 0 ? [...props.parent, props.id] : [...props.parent]}

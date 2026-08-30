@@ -1,0 +1,290 @@
+/* Extracted from the makeStyles sheet that used to live beside this file.
+ * Theme lookups became the CSS variables generated from src/themes/tokens.js,
+ * so light and dark still resolve exactly as they did. */
+
+.pt-box-container {
+  flex: 1;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.pt-btn-setting {
+  justify-content: flex-start;
+  padding: 4px;
+}
+
+.pt-button {
+  text-transform: initial;
+  color: inherit;
+}
+
+.pt-close {
+  position: absolute;
+  right: 10px;
+  top: 7px;
+  z-index: 999;
+  cursor: pointer;
+}
+
+.pt-custom-height {
+  height: 200px;
+}
+
+.pt-display-flex {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  width: 100%;
+}
+
+.pt-filter-content {
+  margin: 0px 40px 32px 40px;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.pt-flex-column {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.pt-flex-column-depth {
+  min-width: 135px;
+  max-width: 135px;
+}
+
+.pt-flex-column-scope {
+  flex-basis: 74%;
+}
+
+.pt-flex-column-year {
+  min-width: 135px;
+  max-width: 135px;
+}
+
+.pt-graph-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  overflow: hidden;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.pt-heading {
+  padding: 8px 15px;
+}
+
+.pt-heading .MuiTypography-body1 {
+  font-weight: 500;
+  margin-bottom: 0px;
+}
+
+.pt-heading-container {
+  display: flex;
+  height: 37px;
+}
+
+.pt-holder {
+  display: flex;
+  width: 100%;
+}
+
+.pt-main-container {
+  display: flex;
+  height: 94%;
+}
+
+.pt-modal .react-draggable {
+  width: 800px;
+  height: 50vh;
+}
+
+.pt-modal .MuiDialog-paperWidthSm {
+  max-width: inherit;
+}
+
+.pt-modal .MuiDialogContent-root {
+  padding: 0px;
+  overflow-x: hidden;
+}
+
+.pt-modal .MuiDialogTitle-root {
+  background: transparent;
+}
+
+.pt-modal-filter .react-draggable {
+  width: 70vw;
+  height: 70vh;
+}
+
+.pt-modal-filter .MuiDialog-paperWidthSm {
+  max-width: inherit;
+  max-height: inherit;
+  height: 100%;
+  margin: 0px;
+}
+
+.pt-modal-filter .MuiDialog-scrollPaper {
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.pt-reset {
+  position: absolute;
+  right: 30px;
+  top: 2px;
+  z-index: 999;
+  cursor: pointer;
+  color: #fff;
+}
+
+.pt-resizable {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.pt-resizable .react-resizable-handle {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  bottom: 0px;
+  right: 0px;
+  background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3R5bGU9ImZpbGw6I2ZmZmZmZiIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyMHB4IiBoZWlnaHQ9IjIwcHgiPjxwYXRoIGQ9Ik0xOSAxMmgtMnYzaC0zdjJoNXYtNXpNNyA5aDNWN0g1djVoMlY5em0xNC02SDNjLTEuMSAwLTIgLjktMiAydjE0YzAgMS4xLjkgMiAyIDJoMThjMS4xIDAgMi0uOSAyLTJWNWMwLTEuMS0uOS0yLTItMnptMCAxNi4wMUgzVjQuOTloMTh2MTQuMDJ6Ij48L3BhdGg+PC9zdmc+');
+  background-position: bottom right;
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  box-sizing: border-box;
+  cursor: se-resize;
+  padding: 5px;
+}
+
+.pt-root {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: none;
+}
+
+.pt-root fieldset {
+  border: 0px;
+}
+
+.pt-root .MuiTab-root {
+  min-width: inherit;
+  max-width: 150px;
+}
+
+.pt-root .vis-panel.vis-background.vis-horizontal .vis-grid {
+  border-color: #e5e5e51c;
+}
+
+.pt-root .MuiTableCell-root .MuiSelect-select.MuiSelect-select {
+  padding-right: 0px;
+}
+
+.pt-root .MuiListItem-root svg.clipboard {
+  width: 24px;
+  height: 24px;
+}
+
+.pt-root .MuiTableCell-root .MuiSelect-select.MuiSelect-select {
+  padding-right: 0px;
+}
+
+.pt-root .ReactVirtualized__Table__headerRow .selectedIcon .MuiSvgIcon-root {
+  font-size: 20px;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  font-size: 20px;
+  left: 2px;
+  top: 17px  !important;
+}
+
+.pt-root .ReactVirtualized__Table__rowColumn .MuiSvgIcon-root {
+  font-size: 20px;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  top: 5px;
+}
+
+.pt-root .ReactVirtualized__Table__rowColumn .MuiTableCell-root span {
+  padding: 6px;
+}
+
+.pt-root .MuiSelect-select:focus {
+  background: none;
+}
+
+.pt-root svg.MuiSelect-icon {
+  font-size: 1.7rem;
+  top: 3px;
+  opacity: 0;
+}
+
+.pt-root .MuiInput-underline:hover:not(.Mui-disabled):before, .MuiInput-underline:before, .MuiInput-underline:after {
+  border: 0px;
+}
+
+.pt-root .selectedIcon svg {
+  position: absolute;
+  font-size: 1.3rem;
+  width: 1.3rem;
+  left: 2px;
+  top: 17px  !important;
+}
+
+.pt-root .selectedIcon svg.clipboard {
+  width: 17px;
+  height: 17px;
+}
+
+.pt-root .MuiSlider-rail {
+  color: #Ef0000;
+}
+
+.pt-root .MuiSlider-thumb {
+  background-color: #Ef0000;
+}
+
+.pt-root .MuiSlider-markActive {
+  background-color: #Ef0000;
+}
+
+.pt-root .MuiTab-wrapper {
+  white-space: nowrap;
+}
+
+.pt-selector-container {
+  display: flex;
+  height: 93%;
+  overflow: hidden auto;
+}
+
+.pt-tab {
+  flex: 1;
+  min-width: 25%;
+  min-height: 47px;
+  font-size: 1.1rem;
+}
+
+.pt-tabs {
+  min-height: 47px;
+  width: 94%;
+}
+
+.pt-top-margin {
+  margin-top: 15px;
+}

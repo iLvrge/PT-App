@@ -6,7 +6,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import useStyles from "./styles";
+import './styles.css'
 import { Checkbox, Chip, ListItem, ListItemText, Paper } from '@mui/material';
 
 const ITEM_HEIGHT = 48;
@@ -21,7 +21,6 @@ const MenuProps = {
 };
 
 const Category = ({handleSelectedCategoryProduct}) => { 
-    const classes = useStyles()
     const [ category, setCategory] = useState('')
     const [ products, setProducts] = useState([])
     const [ selectedProducts, setSelectedProducts] = useState([])
@@ -84,7 +83,7 @@ const Category = ({handleSelectedCategoryProduct}) => {
                         } 
                     </Select>
             </FormControl>
-            <FormControl sx={{ m: 1, width: 300  }} className={classes.productDropdown}>
+            <FormControl sx={{ m: 1, width: 300  }} className={'pt-product-dropdown'}>
                 <InputLabel id="dialog-select-product">Products</InputLabel>
                 <Select
                     labelId="dialog-select-product"
@@ -120,7 +119,7 @@ const Category = ({handleSelectedCategoryProduct}) => {
             </FormControl> 
             {
                 selectedProducts.length > 0 && (
-                    <FormControl sx={{ m: 1, width: 300  }} className={classes.chip}> 
+                    <FormControl sx={{ m: 1, width: 300  }} className={'pt-chip'}> 
                         <Paper
                             sx={{
                                 display: 'flex',

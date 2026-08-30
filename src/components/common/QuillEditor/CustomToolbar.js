@@ -13,10 +13,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 import { getTokenStorage } from '../../../utils/tokenStorage'
 
-import useStyles from './styles'
+import './styles.css'
 import { warnConsole } from '../../../utils/hashLocation'
 const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, onDocument, onAttachmentOpenedFile, onAttachmentOpenedFileAndEmail, onAttachmentFile, onAttachmentDriveFile, onMaintainenceFeeReview, onMaintainenceFeeFile, onSubmitUSPTO, onCorrectAddress, onChangeAddress, onCorrectName, onChangeName, onSalesAssets, loadingUSPTO, category, driveBtnActive, maintainenceMode, selectedAssets, driveTemplateMode, onShare, addressQueuesDisplay, nameQueuesDisplay, onHandleSubmitAddressUSPTO, onHandleAddressCancel, onHandleSubmitNamesUSPTO, onHandleNamesCancel, onHandleLinkAssetWithSheet, linkAssetsSheetDisplay, linkAssetsSelected  }) => {
-  const classes = useStyles()
   const toolBarRef = useRef(null) 
 
   const useStylesTooltip = makeStyles((theme) => ({
@@ -153,7 +152,7 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
           <SendIcon />   
         </IconButton> 
       </Tooltip>     
-      {/* <span className={classes.seperator}></span>     
+      {/* <span className={'pt-seperator'}></span>     
       <Tooltip 
         title={
           <Typography color="inherit" variant='body2'>Attach the open document and send email</Typography>
@@ -179,14 +178,14 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
           />
         </IconButton>
       </Tooltip>   
-      <span className={classes.seperator}></span>  
+      <span className={'pt-seperator'}></span>  
 
-      <div className={classes.secondaryGroup}>
-      {loadingUSPTO && <CircularProgress size={24} className={classes.buttonProgress} />}
+      <div className={'pt-secondary-group'}>
+      {loadingUSPTO && <CircularProgress size={24} className={'pt-button-progress'} />}
       {
         linkAssetsSheetDisplay === true && linkAssetsSelected.length > 0  
         ?
-        <Button className={classes.review} onClick={onHandleLinkAssetWithSheet}>Process Selections</Button>  
+        <Button className={'pt-review'} onClick={onHandleLinkAssetWithSheet}>Process Selections</Button>  
         :
         ''
       }
@@ -196,19 +195,19 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
           maintainenceMode === false
           ? 
             <>
-              <Button className={classes.review} onClick={onMaintainenceFeeReview}>Process Selections</Button>
+              <Button className={'pt-review'} onClick={onMaintainenceFeeReview}>Process Selections</Button>
             </>
           :
             <>
-              <Button className={classes.review} onClick={onMaintainenceFeeFile}>Pay Maintenance Fees</Button>
-              <Button className={classes.review} onClick={onMaintainenceFeeReview}>Cancel</Button>
+              <Button className={'pt-review'} onClick={onMaintainenceFeeFile}>Pay Maintenance Fees</Button>
+              <Button className={'pt-review'} onClick={onMaintainenceFeeReview}>Cancel</Button>
             </>
         :
         category == 'restore_ownership' || category == 'correct_details'
         ?
           <>
-            <Button className={`${classes.review} ${driveTemplateMode === true ? classes.active : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
-            <Button className={classes.review} onClick={onSubmitUSPTO} disabled={loadingUSPTO}>Submit to USPTO</Button>
+            <Button className={`${'pt-review'} ${driveTemplateMode === true ? 'pt-active' : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
+            <Button className={'pt-review'} onClick={onSubmitUSPTO} disabled={loadingUSPTO}>Submit to USPTO</Button>
           </>
         :
         category == 'correct_address' 
@@ -216,27 +215,27 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
           addressQueuesDisplay === true
           ?
           <>
-            <Button className={classes.review} onClick={onHandleSubmitAddressUSPTO}>Submit to USPTO</Button>
-            <Button className={classes.review} onClick={onHandleAddressCancel}>Cancel</Button>
+            <Button className={'pt-review'} onClick={onHandleSubmitAddressUSPTO}>Submit to USPTO</Button>
+            <Button className={'pt-review'} onClick={onHandleAddressCancel}>Cancel</Button>
           </>
           :
           <>
-            <Button className={classes.review} onClick={onCorrectAddress}>Correct Addresses</Button>
-            <Button className={classes.review} onClick={onChangeAddress}>Change Addresses</Button>
+            <Button className={'pt-review'} onClick={onCorrectAddress}>Correct Addresses</Button>
+            <Button className={'pt-review'} onClick={onChangeAddress}>Change Addresses</Button>
           </>
         :
         category == 'correct_names' 
         ?
           <>
-            <Button className={classes.review} onClick={onHandleSubmitNamesUSPTO}>Submit to USPTO</Button>
-            <Button className={classes.review} onClick={onChangeName}>Change Name</Button>
+            <Button className={'pt-review'} onClick={onHandleSubmitNamesUSPTO}>Submit to USPTO</Button>
+            <Button className={'pt-review'} onClick={onChangeName}>Change Name</Button>
           </>
         :
         category == 'sell_payments' 
         ?
-          <Button className={classes.review} onClick={onSalesAssets}>Select Assets and Click Here</Button>
+          <Button className={'pt-review'} onClick={onSalesAssets}>Select Assets and Click Here</Button>
         :
-        <Button className={`${classes.review} ${driveTemplateMode === true ? classes.active : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
+        <Button className={`${'pt-review'} ${driveTemplateMode === true ? 'pt-active' : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
       }      
       </div> */}
                

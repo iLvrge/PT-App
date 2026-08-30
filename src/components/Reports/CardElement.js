@@ -1,14 +1,13 @@
 import React from 'react'
 import { Card, CardContent, CardActions }  from '@mui/material'
 import Chart from './Chart'
-import useStyles from './styles'
+import './styles.css'
 import KpiBox from './KpiBox'
 import TimelineChart from './TimelineChart'
 import clsx from 'clsx'
 import FullScreen from '../common/FullScreen'
 
 const CardElement = (props) => {
-    const classes = useStyles();
 
     const menuItems = typeof props.timeline !== 'undefined' ? [
         {
@@ -28,7 +27,7 @@ const CardElement = (props) => {
         }
     ] : []  
     return (
-        <Card variant="outlined" className={clsx(classes.card, {[classes.alignTop]: typeof props.timeline !== 'undefined' && props.timeline === true ? true : false})} square={true}>
+        <Card variant="outlined" className={clsx('pt-card', {['pt-align-top']: typeof props.timeline !== 'undefined' && props.timeline === true ? true : false})} square={true}>
             <CardContent className={`box-selector-${props.type}`}>  
                 {
                     typeof props.timeline !== 'undefined' && props.timeline === true

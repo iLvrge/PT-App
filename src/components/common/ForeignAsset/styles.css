@@ -1,0 +1,176 @@
+/* Extracted from the makeStyles sheet that used to live beside this file.
+ * Theme lookups became the CSS variables generated from src/themes/tokens.js,
+ * so light and dark still resolve exactly as they did. */
+
+.pt-btn-clear {
+  padding: 0 8px;
+  text-transform: initial;
+  margin-right: 20px;
+}
+
+.pt-btn-clear:last {
+  margin: 0px;
+}
+
+.pt-btn-header {
+  position: absolute;
+  top: 13px;
+  left: 35px;
+  padding: 0px;
+}
+
+.pt-button {
+  margin-left: 10px;
+  text-transform: initial;
+  padding: 3px 5px;
+  min-width: auto;
+  height: 27px;
+}
+
+.pt-button .MuiButton-label {
+  white-space: nowrap;
+}
+
+.pt-button:hover {
+  color: var(--pt-secondary-main) !important;
+}
+
+.pt-button:first {
+  margin-left: 5px;
+}
+
+.pt-close {
+  position: absolute;
+  right: 10px;
+  top: 7px;
+  z-index: 999;
+  cursor: pointer;
+}
+
+.pt-footer {
+  display: flex;
+  flex: 1 1 auto;
+  white-space: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: 30px;
+  padding-right: 50px;
+}
+
+.pt-footer .MuiTypography-root {
+  margin-left: 10px;
+}
+
+.pt-header-button {
+  text-transform: initial;
+}
+
+.pt-import-container {
+  display: flex;
+  width: 100%;
+  box-shadow: none;
+}
+
+.pt-item {
+  position: relative;
+  display: flex;
+  flex-basis: 100px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  background: #292929;
+  border: 1px solid #5c5c5c;
+  padding: 0 3px;
+  margin: 0 10px 5px 0;
+}
+
+.pt-item:hover {
+  background: #303030;
+}
+
+.pt-item:hover .closeBtn {
+  display: block;
+}
+
+.pt-item.active .input_item {
+  display: ;
+}
+
+.pt-item .closeBtn {
+  position: absolute;
+  min-width: 15px;
+  height: auto;
+  right: 0px;
+  top: 0px;
+  display: none;
+  background: none;
+  padding: 0px;
+  line-height: 1;
+}
+
+.pt-item .closeBtn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.pt-item .input_item {
+  display: none;
+}
+
+.pt-item .MuiButton-root:hover {
+  color: #5c5c5c;
+}
+
+.pt-item input {
+  width: 100px;
+}
+
+.pt-item-error {
+  color: var(--pt-secondary-main);
+}
+
+.pt-items {
+  display: flex;
+  max-height: 100%;
+  overflow: auto;
+  overflow-x: hidden;
+  justify-content: start;
+  flex-wrap: wrap;
+  box-shadow: none;
+}
+
+.pt-root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden auto;
+}
+
+.pt-root .disable_header .ReactVirtualized__Table__headerRow {
+  display: none;
+}
+
+.pt-root .MuiInputBase-multiline {
+  padding: 0px;
+  font-size: 0.875rem;
+}
+
+.pt-rows {
+  margin-top: 25px;
+  display: flex;
+}
+
+.pt-txt-field {
+  width: 100px;
+  margin-left: 10px;
+}
+
+.pt-txt-field input {
+  padding: 6px 0 0;
+  font-size: 0.875rem;
+}
+
+.pt-typography {
+  margin-top: 10px;
+}

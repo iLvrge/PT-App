@@ -3,7 +3,7 @@ import {
     useSelector
 } from 'react-redux'
 import GaugeChart from 'react-gauge-chart'
-import useStyles from './styles'
+import './styles.css'
 import { IconButton, Button, Typography, Tooltip, Zoom } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import clsx from 'clsx'
@@ -13,7 +13,6 @@ import { numberWithCommas } from '../../utils/numbers';
 import BreakdownDisplay from './BreakdownDisplay';
 const Chart = (props) => {
     const arcs = [0.5, 0.3, 0.2];
-    const classes = useStyles();
     const TOTAL = 200
     const displayNumber = (value) => {
         return `${props.card.display_value == '%' ? parseFloat(props.card.number).toFixed(1) : numberWithCommas(props.card.type == 27 ? props.card.number || props.card.other_number : props.card.number)}${typeof props.card.display_value != 'undefined' ? numberWithCommas(props.card.display_value) : ''}`
@@ -24,18 +23,18 @@ const Chart = (props) => {
     const eventCountList = props.card.type == 27 ? props.card.other : null;
     
     return (
-        <div className={clsx(classes.chartContainer, { [classes.widthResponsive]: props.lineGraph })}>
-            <div className={clsx(classes.headingContainer)}>
+        <div className={clsx('pt-chart-container', { ['pt-width-responsive']: props.lineGraph })}>
+            <div className={clsx('pt-heading-container')}>
                 <AddToolTip
                     tooltip={props.card.tooltip}
                     placement={'bottom'}
                     grid={props.grid}
                 >
-                    <span className={classes.btnContainer}>
+                    <span className={'pt-btn-container'}>
                         <Button
                             size="small"
                             variant="outlined"
-                            className={clsx(classes.actionButton, 'dashboard_buttons')}
+                            className={clsx('pt-action-button', 'dashboard_buttons')}
                             onClick={() => props.handleList(props.id, props.card.type)}
                             disabled={
                                 (number > 0 || (props.card?.list && props.card.list.length > 0)) ? false : true

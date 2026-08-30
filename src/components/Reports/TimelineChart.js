@@ -15,7 +15,7 @@ import {Typography, CircularProgress, IconButton, Paper, TableContainer, Table, 
 import Close from '@mui/icons-material/Close'
 import Fullscreen from '@mui/icons-material/Fullscreen'
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
-import useStyles from './styles'
+import './styles.css'
 import clsx from 'clsx'
 import { numberWithCommas, capitalize, toTitleCase } from '../../utils/numbers'
 import { assetsTypesWithKey, convertTabIdToAssetType } from '../../utils/assetTypes'
@@ -36,7 +36,6 @@ const TIME_INTERVAL = 1000
 var tootlTip = ''
 const TimelineChart = (props) => {
     const dispatch = useDispatch()
-    const classes = useStyles()
     const timelineRef = useRef() //timeline Object ref
     const timelineContainerRef = useRef() //div container ref
     const items = useRef(new DataSet()) // timeline items dataset
@@ -554,20 +553,20 @@ const TimelineChart = (props) => {
         timelineRef.current.setItems(items.current)
     }
     return (
-        <Paper className={clsx(classes.container, classes.columnDirection, {[classes.padding]: typeof props.padding != 'undefined' ? props.padding : false})} square>
+        <Paper className={clsx('pt-container', 'pt-column-direction', {['pt-padding']: typeof props.padding != 'undefined' ? props.padding : false})} square>
             {
                 props.card.title != '' && (
-                    <div className={clsx(classes.timelineHeading, 'full_heading')}>
+                    <div className={clsx('pt-timeline-heading', 'full_heading')}>
                         <AddToolTip
                             tooltip={props.card.tooltip}
                             placement='bottom'
                             grid={props.grid}
                         >
-                            <span className={classes.buttonContainer}>
+                            <span className={'pt-button-container'}>
                                 <Button 
                                     size='large'
                                     variant='outlined'
-                                    className={clsx(classes.actionButton, 'dashboard_buttons')} 
+                                    className={clsx('pt-action-button', 'dashboard_buttons')} 
                                     onClick={() => props.handleList(props.id, props.card.type, 'timeline')}
                                     disabled={ timelineRawData.length == 0 || props.button === false ? true : false }
                                 >
@@ -576,17 +575,17 @@ const TimelineChart = (props) => {
                             </span>
                         </AddToolTip>  
                         
-                        {/* <Typography variant="h6" component="div" align="center" className={clsx(classes.border, 'dashboard_buttons', classes.border1)}>
+                        {/* <Typography variant="h6" component="div" align="center" className={clsx('pt-border', 'dashboard_buttons', 'pt-border1')}>
                             {props.card.title} - {numberWithCommas(timelineRawData.length)}
                         </Typography> */}
-                        <div className={classes.fullscreenButton}>
+                        <div className={'pt-fullscreen-button'}>
                             <AddToolTip
                                 tooltip={typeof props.standalone !== 'undefined' ? 'Close big screen view.' : 'Big screen view.'}
                                 placement='bottom'
                             >
                                 <IconButton size="small"
                                     onClick={() => props.handleFullScreen(props.type)}
-                                    className={clsx(classes.actionIcon, typeof props.standalone !== 'undefined' ? classes.fontStandalone : '')}
+                                    className={clsx('pt-action-icon', typeof props.standalone !== 'undefined' ? 'pt-font-standalone' : '')}
                                 >
                                     {typeof props.standalone !== 'undefined' ? <Close /> : <Fullscreen />}
                                 </IconButton>
@@ -595,20 +594,20 @@ const TimelineChart = (props) => {
                     </div>
                 )
             }
-            <div className={clsx(classes.timelineContainer, { [classes.timelineContainerFullheight]: typeof props.standalone !== 'undefined' ? props.standalone : props.card.type === 7 ? true : false })}>
+            <div className={clsx('pt-timeline-container', { ['pt-timeline-container-fullheight']: typeof props.standalone !== 'undefined' ? props.standalone : props.card.type === 7 ? true : false })}>
                 <div
                     id={`timeline-${props.id}`}
                     style={{
                         filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
                     }}
                     ref={timelineContainerRef}
-                    className={clsx(classes.timeline, 'timeline')}
+                    className={clsx('pt-timeline', 'timeline')}
                 />
                 {
                     isLoadingTimelineData &&
-                    <CircularProgress size={15} color={'secondary'} className={classes.timelineProcessingIndicator} />
+                    <CircularProgress size={15} color={'secondary'} className={'pt-timeline-processing-indicator'} />
                 }
-                {isLoadingTimelineRawData && <CircularProgress className={classes.loader} />}
+                {isLoadingTimelineRawData && <CircularProgress className={'pt-loader'} />}
             </div>
             <Dialog open={openModal} onOpenChange={(next) => { if (!next) handleClose() }}>
                 <DialogContent
@@ -618,7 +617,7 @@ const TimelineChart = (props) => {
                 <TableContainer component={Paper} style={{ height: '100%', border: '1px solid #0B0C0E' }}>
                     <IconButton
                         onClick={handleClose}
-                        className={clsx(classes.right)}
+                        className={clsx('pt-right')}
                         size="large">
                         <Close />
                     </IconButton>

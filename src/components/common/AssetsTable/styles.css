@@ -1,0 +1,112 @@
+/* Extracted from the makeStyles sheet that used to live beside this file.
+ * Theme lookups became the CSS variables generated from src/themes/tokens.js,
+ * so light and dark still resolve exactly as they did. */
+
+.pt-blue .MuiSvgIcon-root {
+  fill: #228DE8;
+}
+
+.pt-chip .MuiPaper-root {
+  justify-content: flex-start;
+}
+
+.pt-chip .MuiListItem-root {
+  width: auto;
+}
+
+.pt-mobile {
+  flex: 1 1 50%;
+}
+
+.pt-product-dropdown .MuiSelect-select {
+  height: auto;
+  min-height: 1.4375em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.pt-rating-container .MuiRating-root {
+  top: 3px;
+}
+
+.pt-rating-label {
+  display: inline-block;
+  position: relative;
+  width: 75px;
+  height: 21px;
+}
+
+.pt-rating-label label {
+  position: absolute;
+  top: 1px;
+}
+
+.pt-root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden auto;
+}
+
+.pt-root .MuiTableCell-root .MuiSelect-select.MuiSelect-select {
+  padding-right: 0px;
+}
+
+.pt-root .ReactVirtualized__Table__rowColumn .MuiSvgIcon-root {
+  font-size: 20px;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  top: 5px;
+}
+
+.pt-root .ReactVirtualized__Table__rowColumn .MuiTableCell-root span {
+  padding: 6px;
+}
+
+.pt-root .MuiSelect-select:focus {
+  background: none;
+}
+
+.pt-root svg.MuiSelect-icon {
+  font-size: 1.7rem;
+  top: 3px;
+  opacity: 0;
+}
+
+.pt-root .MuiInput-underline:hover:not(.Mui-disabled):before, .MuiInput-underline:before, .MuiInput-underline:after {
+  border: 0px;
+}
+
+.pt-root .selectedIcon svg {
+  position: absolute;
+  font-size: 1.3rem;
+  width: 1.3rem;
+  left: 2px;
+  top: 17px  !important;
+}
+
+.pt-slack-container {
+  position: relative;
+  display: flex;
+  width: 24px;
+  height: 24px;
+}
+
+.pt-slack-container svg {
+  position: absolute;
+  left: -6px;
+  bottom: -4px;
+}
+
+.pt-slack-container svg.team {
+  left: 0px;
+  bottom: 0px;
+  fill: #fff;
+}
+
+.pt-yellow .MuiSvgIcon-root {
+  fill: #FFAA00;
+}

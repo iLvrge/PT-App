@@ -1,0 +1,129 @@
+/* Extracted from the makeStyles sheet that used to live beside this file.
+ * Theme lookups became the CSS variables generated from src/themes/tokens.js,
+ * so light and dark still resolve exactly as they did. */
+
+.pt-active {
+  color: var(--pt-secondary-main);
+}
+
+.pt-button-menu {
+  border-radius: 0px;
+}
+
+.pt-button-menu .MuiTypography-body2 {
+  margin-left: 5px;
+}
+
+.pt-comment-container {
+  width: 100%;
+}
+
+.pt-container {
+  width: 100%;
+  height: 100%;
+}
+
+.pt-container .ReactVirtualized__Table__row {
+  cursor: default;
+}
+
+.pt-float-icon {
+  position: absolute;
+  right: 25px;
+  z-index: 9999;
+}
+
+.pt-frame-button {
+  color: var(--pt-secondary-main);
+}
+
+.pt-fullscreen-btn {
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  z-index: 1;
+  padding: 0px;
+}
+
+.pt-fullscreen-btn  & svg {
+  fill: #6d6d6d;
+  stroke: #6d6d6d;
+}
+
+.pt-fullscreen-btn  & svg:hover {
+  color: var(--pt-secondary-main);
+  fill: var(--pt-secondary-main);
+  stroke: var(--pt-secondary-main);
+}
+
+.pt-fullscreen-charts {
+  margin: 53px 35px;
+  flex: 1;
+  display: flex;
+  position: relative;
+}
+
+.pt-header-container {
+  position: absolute;
+  z-index: 1;
+  right: 30px;
+  top: 0px;
+  color: var(--pt-secondary-main);
+}
+
+.pt-iframe {
+  width: 100%;
+  margin-top: 47px;
+}
+
+.pt-right {
+  position: absolute;
+  right: 5px;
+  top: 11px;
+  width: 20px;
+  height: 20px;
+  z-index: 1;
+  border-radius: 0px;
+}
+
+.pt-root {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.pt-root .MuiInputLabel-root {
+  display: inline-flex;
+  padding-left: 6px;
+  padding-top: 10px;
+}
+
+.pt-root .MuiFormControl-root {
+  width: 90%;
+}
+
+.pt-root .MuiInput-underline:before {
+  border-bottom-color: #5c5c5c;
+}
+
+.pt-root .MuiInput-underline:after {
+  border-bottom-color: #5c5c5c;
+}
+
+.pt-root .MuiInput-underline:hover {
+  border-bottom-color: #5c5c5c;
+}
+
+.pt-root .MuiInputBase-input {
+  height: 21px;
+}
+
+.pt-root iframe {
+  border: 0px;
+}
+
+.pt-template-frame {
+  width: 100%;
+  height: 100vh;
+  border: 0px;
+}

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Paper, Button, Typography } from "@mui/material";
 import Loader from "../Loader";
 import Googlelogin from '../Googlelogin' 
-import useStyles from "./styles";
+import './styles.css'
 import VirtualizedTable from "../VirtualizedTable";
 import MenuButtons from "./MenuButtons";
 import { getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
@@ -16,7 +16,6 @@ import {
   } from '../../../actions/patentTrackActions2'
 
 const LoadLinkAssets = ({type, asset, size}) => {
-    const classes = useStyles()
     const dispatch = useDispatch()
     const googleLoginRef = useRef(null)
     const viewerRef = useRef(null)
@@ -515,7 +514,7 @@ const LoadLinkAssets = ({type, asset, size}) => {
     return ( 
         <Paper
             ref={viewerRef}
-            className={classes.root}
+            className={'pt-root'}
             square
             id={`link_assets_to_product_technology_competition`}
         >       
@@ -523,13 +522,13 @@ const LoadLinkAssets = ({type, asset, size}) => {
             {
                 editSheet === true && sheetUrl !== null
                 ?
-                    <iframe className={classes.iframe} src={sheetUrl} onLoad={findHeightContainer}></iframe>
+                    <iframe className={'pt-iframe'} src={sheetUrl} onLoad={findHeightContainer}></iframe>
                 :
                     loadingData === true
                     ?
                         <Loader/>  
                     :
-                        <div className={classes.container}>
+                        <div className={'pt-container'}>
                             <VirtualizedTable
                                 selected={selectItems}
                                 rowSelected={selectedRow}

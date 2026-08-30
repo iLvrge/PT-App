@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import moment from 'moment'
 import { Paper, TextField, InputLabel, Fab, Button } from "@mui/material";
 import Loader from "../Loader";
-import useStyles from "./styles";
+import './styles.css'
 import VirtualizedTable from "../VirtualizedTable";
 import { numberWithCommas, applicationFormat } from "../../../utils/numbers";
 import MonetizationOn from '@mui/icons-material/MonetizationOn'
@@ -11,7 +11,6 @@ import { getTokenStorage } from '../../../utils/tokenStorage';
 import PatenTrackApi from '../../../api/patenTrack2';
 
 const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
-    const classes = useStyles();
     const [rowHeight, setRowHeight] = useState(40)
     const [headerRowHeight, setHeaderRowHeight] = useState(47)
     const [width, setWidth] = useState(800);
@@ -226,7 +225,7 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
     
     return (
         <Paper
-            className={classes.root}
+            className={'pt-root'}
             square
             id={`pay_maintainence_assets_to_uspto`}
             >
@@ -238,16 +237,16 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
                 defaultValue={name} 
                 onChange={onChangeFileName}
             /> */}
-            {/* <Fab size="small" aria-label='Pay Maintainence Due' color='primary' onClick={onHandleMaintainence} className={classes.floatIcon}>
+            {/* <Fab size="small" aria-label='Pay Maintainence Due' color='primary' onClick={onHandleMaintainence} className={'pt-float-icon'}>
                 <MonetizationOn/>
             </Fab> */}
             <Button 
-                className={classes.floatIcon}
+                className={'pt-float-icon'}
                 onClick={onMaintainenceFeeFile}
             >
                 Pay USPTO
             </Button>
-            <div className={classes.container}>
+            <div className={'pt-container'}>
                 <VirtualizedTable
                     selected={selectItems}
                     rowSelected={selectedRow}

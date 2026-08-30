@@ -4,11 +4,10 @@ import { DataSet } from 'vis-data/esnext'
 import { Graph3d } from 'vis-graph3d/esnext'
 import Loader from '../../Loader' 
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
-import useStyles from './styles'
+import './styles.css'
 
 const GraphProduct = ({loading, productItems, productGroups, visualizerBarSize}) => { 
     const graphContainerRef = useRef()  
-    const classes = useStyles()
     const graphRef = useRef()
     const items = useRef(new DataSet()) 
 
@@ -166,7 +165,7 @@ const GraphProduct = ({loading, productItems, productGroups, visualizerBarSize})
                     filter: 0,
                 }}
                 ref={graphContainerRef}
-                className={classes.timeline}
+                className={undefined}
             />
 
     )

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import moment from 'moment'
 import { Paper, TextField, InputLabel } from "@mui/material";
 import Loader from "../Loader";
-import useStyles from "./styles";
+import './styles.css'
 import VirtualizedTable from "../VirtualizedTable";
 import { numberWithCommas, applicationFormat } from "../../../utils/numbers";
 
@@ -12,7 +12,6 @@ import {
   } from '../../../actions/patentTrackActions2'
 
 const LoadTransactionNameQueues = ({}) => {
-    const classes = useStyles()
     const dispatch = useDispatch()
     const [rowHeight, setRowHeight] = useState(40)
     const [headerRowHeight, setHeaderRowHeight] = useState(47)
@@ -111,7 +110,7 @@ const LoadTransactionNameQueues = ({}) => {
     
     return (
         <Paper
-            className={classes.root}
+            className={'pt-root'}
             square
             id={`pay_maintainence_assets_to_uspto`}
             >
@@ -123,7 +122,7 @@ const LoadTransactionNameQueues = ({}) => {
                 defaultValue={name} 
                 onChange={onChangeFileName}
             /> */}
-            <div className={classes.container}>
+            <div className={'pt-container'}>
                 <VirtualizedTable
                     selected={selectItems}
                     rowSelected={selectedRow}

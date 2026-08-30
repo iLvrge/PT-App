@@ -5,10 +5,9 @@ import DisplayItems from './DisplayItems'
 import PatenTrackApi from '../../../api/patenTrack2'
 
 import { getTokenStorage } from '../../../utils/tokenStorage'
-import useStyles from "./styles"
+import './styles.css'
 
 const ImportAsset = ({items, invalidItems, updateItems, updateInvalidItems, deleteItem, handlePatchItem}) => {
-    const classes = useStyles()
     
     const textAreaRef  = useRef(null)
     const textFiledRef = useRef(null)
@@ -137,24 +136,24 @@ const ImportAsset = ({items, invalidItems, updateItems, updateInvalidItems, dele
     
 
     return (
-        <Paper className={classes.importContainer} square id={`import_container`}>
-            <Grid container className={classes.dashboard}>
-                <Grid item lg={12} md={12} sm={12} xs={12} className={classes.flexColumn} p={2}>
-                    <Typography color="inherit" variant='body2' component="div" className={classes.typography}>
+        <Paper className={'pt-import-container'} square id={`import_container`}>
+            <Grid container className={undefined}>
+                <Grid item lg={12} md={12} sm={12} xs={12} className={undefined} p={2}>
+                    <Typography color="inherit" variant='body2' component="div" className={'pt-typography'}>
                         Paste here the list of external assets: 
                         <TextField 
                             variant="standard" 
                             multiline
                             rows={1}
                             value={currentItem}
-                            className={classes.txtField}
+                            className={'pt-txt-field'}
                             onChange={handleChange}
                             onKeyPress={onAddNewItemKeyPress}
                             ref={textAreaRef}                       
                         />
                     </Typography>
-                    <div className={classes.rows}>    
-                        <Grid item lg={12} md={12} sm={12} xs={9} className={classes.flexColumn}>
+                    <div className={'pt-rows'}>    
+                        <Grid item lg={12} md={12} sm={12} xs={9} className={undefined}>
                             <DisplayItems items={assetsValue} invalidItems={invalidAssets} updateItems={onHandleChangeItem} callbackDeleteItem={deleteItem} handlePatchItem={handlePatchItem}/>
                         </Grid>
                     </div>                    

@@ -1,0 +1,188 @@
+/* Extracted from the makeStyles sheet that used to live beside this file.
+ * Theme lookups became the CSS variables generated from src/themes/tokens.js,
+ * so light and dark still resolve exactly as they did. */
+
+.pt-disable-column {
+  color: var(--pt-muted);
+}
+
+.pt-flex {
+  display: flex;
+}
+
+.pt-flex-container {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.pt-flex-container.MuiTableCell-head {
+  min-width: 35px;
+}
+
+.pt-flex-container .ReactVirtualized__Table__headerColumn {
+  position: relative;
+}
+
+.pt-flex-container .ReactVirtualized__Table__headerColumn .DragHandle {
+  flex: 0 0 16px;
+  z-index: 2;
+  cursor: col-resize;
+  position: absolute;
+  right: 10px;
+}
+
+.pt-flex-data {
+  display: flex;
+  align-items: center;
+}
+
+.pt-flex-image {
+  display: flex;
+  width: 21px;
+  height: 21px;
+  align-items: center;
+}
+
+.pt-flex-image-container {
+  display: flex;
+  align-items: center;
+}
+
+.pt-img-icon {
+  width: 18.375px;
+  height: 18.375px;
+  margin-right: 5px;
+}
+
+.pt-margin-left {
+  margin-left: 5px;
+}
+
+.pt-margin-left10 {
+  margin-left: 10px;
+}
+
+.pt-small-img {
+  width: 18.375px;
+  height: 18.375px;
+  margin-right: 5px;
+}
+
+.pt-table-cell {
+  flex: 1;
+  border: none;
+  align-items: center;
+  padding: 0px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.pt-table-cell .MuiSvgIcon-root {
+  font-size: 1rem;
+}
+
+.pt-table-cell fieldset {
+  border: 0px;
+}
+
+.pt-table-root-container {
+  display: flex;
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.pt-table-root-container .headingIcon {
+  width: 1.2rem;
+  height: 1.2rem;
+  padding: 0px;
+  margin-right: 5px;
+}
+
+.pt-table-row {
+  cursor: pointer;
+  border-bottom: 1px solid var(--pt-divider);
+}
+
+.pt-table-row:hover {
+  background-color: var(--pt-action-hover);
+}
+
+.pt-table-row.ReactVirtualized__Table__headerRow .MuiSvgIcon-root {
+  font-size: 1rem;
+  width: 1rem;
+  height: 1rem;
+}
+
+.pt-table-row.ReactVirtualized__Table__headerRow .MuiTableCell-head {
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+.pt-table-row.ReactVirtualized__Table__headerRow .MuiTableCell-head .headingIcon {
+  width: 1.35rem;
+}
+
+.pt-table-row.ReactVirtualized__Table__headerRow .MuiTableCell-head .slackIcon span.MuiIconButton-label {
+  width: 32px;
+  height: 32px;
+}
+
+.pt-table-row.ReactVirtualized__Table__headerRow .MuiTableCell-head .slackIcon span.MuiIconButton-label svg {
+  width: 32px;
+  height: 32px;
+}
+
+.pt-table-row.noBorderLines {
+  border: 0px;
+}
+
+.pt-table-row .MuiTableCell-root {
+  font-size: 1rem !important;
+}
+
+.pt-table-row.highlightRow .MuiTableCell-root.highlightColumn span {
+  color: pink[500];
+}
+
+.pt-table-row.highlightWithCol.Mui-selected {
+  background-color: inherit !important;
+}
+
+.pt-table-row.highlightWithCol.Mui-selected .MuiTableCell-root span {
+  color: pink[500];
+}
+
+.pt-table-row.highlightWithCol.Mui-selected .MuiTableCell-root.highlightColumn span {
+  color: pink[500];
+}
+
+.pt-table-row .ReactVirtualized__Table__rowColumn .MuiSvgIcon-root {
+  font-size: 1rem;
+  width: 1rem;
+  height: 1rem;
+}
+
+.pt-table-row .ReactVirtualized__Table__rowColumn svg.MuiSelect-icon {
+  top: 3px;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.pt-table-row .ReactVirtualized__Table__rowColumn .fa-chevron-down {
+  top: 7px;
+  position: absolute;
+}
+
+.pt-text-bold {
+  text-decoration: underline;
+}
+
+.pt-tooltip {
+  font-size: 1rem;
+}
+
+.pt-tooltip .MuiTypography-root {
+  font-size: 18px;
+}

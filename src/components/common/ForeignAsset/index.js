@@ -19,7 +19,7 @@ import Googlelogin from '../Googlelogin'
 import VirtualizedTable from '../VirtualizedTable'
 import DialogPopup from '../DialogPopup'
 import Loader from '../Loader'
-import useStyles from "./styles"
+import './styles.css'
 
 
 import {
@@ -65,7 +65,6 @@ import { getTokenStorage } from '../../../utils/tokenStorage'
 
 
 const ForeignAsset = ({sheetName, handleSheetName}) => {
-    const classes = useStyles()
     const dispatch = useDispatch()
     const textFiledRef = useRef(null)
     const selectedRef = useRef()
@@ -116,7 +115,7 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
             align: "left", 
             badge: true,
             show_button: true,
-            button: <Button onClick={onHandleImport} className={classes.btnHeader}> <Add/> <span className={classes.headerButton}>New List</span></Button>
+            button: <Button onClick={onHandleImport} className={'pt-btn-header'}> <Add/> <span className={'pt-header-button'}>New List</span></Button>
         }
     ]
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)  
@@ -531,7 +530,7 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
     const LoadingImportButton = () => {
         return(
             <Button 
-                className={classes.button}
+                className={'pt-button'}
                 onClick={handleImport}
                 disabled={isLoading}
             >
@@ -544,16 +543,16 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
     
     const FooterItems = () => {
         return (
-            <div className={classes.footer}>
+            <div className={'pt-footer'}>
                 <Button
                     onClick={onHandleClearNonUSAItems}
-                    className={classes.btnClear}
+                    className={'pt-btn-clear'}
                 >
                     <Close /> Clear non-USPTO Assets
                 </Button>
                 <Button
                     onClick={onHandleClearItems}
-                    className={classes.btnClear}
+                    className={'pt-btn-clear'}
                 >
                     <Delete /> Clear List
                 </Button>
@@ -561,7 +560,7 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
                     Save As: 
                     <TextField  
                         variant="standard" 
-                        className={classes.txtField}
+                        className={'pt-txt-field'}
                         inputRef={textFiledRef}
                         defaultValue={sheetName}
                         /* onChange={handleSheetName} */
@@ -574,7 +573,7 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
 
     if (isLoadingSheets && sheets.length == 0) return <Loader />
     return (
-        <Paper className={classes.root} square id={`foreign_assets_tabs`}>
+        <Paper className={'pt-root'} square id={`foreign_assets_tabs`}>
             <VirtualizedTable
                 selected={selectItems}
                 rowSelected={selectedRow}
@@ -624,7 +623,7 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
                     setOpen(!open)
                     setSelectedRow([])
                 }}  
-                    className={classes.close}/>
+                    className={'pt-close'}/>
                 <ImportAsset 
                     updateItems={setItems} 
                     updateInvalidItems={setInvalidItems} 

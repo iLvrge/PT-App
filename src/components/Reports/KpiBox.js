@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import { 
     useSelector 
 } from 'react-redux'
-import useStyles from './styles'
+import './styles.css'
 import { Button, Typography, Paper, List, ListItem, ListItemText } from '@mui/material'; 
 import clsx from 'clsx'
 import { numberWithCommas, capitalAllWords } from '../../utils/numbers';
@@ -11,7 +11,6 @@ import BreakdownDisplay from './BreakdownDisplay';
 
 
 const KpiBox = (props) => {
-    const classes = useStyles();
     const profile = useSelector(store => (store.patenTrack.profile))
     const [addWrapper, setAddWrapper] = useState(true)
 
@@ -24,17 +23,17 @@ const KpiBox = (props) => {
     const ShowTable = (props) => {
         if(props.data.length === 0) return ''
         return (
-            <Paper className={classes.tableContainer}>
+            <Paper className={'pt-table-container'}>
                 <List>
                     {
                         props.data.map( (item, index) => (
                             <ListItem key={index}>
-                                <ListItemText className={classes.itemContainer} disableTypography={true}>
+                                <ListItemText className={'pt-item-container'} disableTypography={true}>
                                     <Typography
                                         variant="body2" 
                                         component="div"
                                     >
-                                        <span className={clsx(classes.itemHeading, {[classes.wraper]: addWrapper})} title={item.name}>{item.name != undefined && item.name != null ? capitalAllWords(item.name.toLowerCase()) : ''}</span><span className={classes.itemText}>{numberWithCommas(item.number)}</span>
+                                        <span className={clsx('pt-item-heading', {[undefined]: addWrapper})} title={item.name}>{item.name != undefined && item.name != null ? capitalAllWords(item.name.toLowerCase()) : ''}</span><span className={'pt-item-text'}>{numberWithCommas(item.number)}</span>
                                     </Typography>                                    
                                 </ListItemText>
                             </ListItem>
@@ -71,7 +70,7 @@ const KpiBox = (props) => {
                 grid={grid}
             > 
                 <Button 
-                    className={clsx(classes.actionButton, 'dashboard_buttons')} 
+                    className={clsx('pt-action-button', 'dashboard_buttons')} 
                     {...adjustedButtonProps}  {...other} 
                 >
                     {props.card.title}           
@@ -81,8 +80,8 @@ const KpiBox = (props) => {
     }
 
     return (
-        <div className={clsx(classes.chartContainer, classes.widthResponsive, classes.fixKPI)}>
-            <div className={classes.headingContainer}>
+        <div className={clsx('pt-chart-container', 'pt-width-responsive', 'pt-fix-k-p-i')}>
+            <div className={'pt-heading-container'}>
                 <ButtonWithTooltip />
             </div>  
             {
@@ -94,18 +93,18 @@ const KpiBox = (props) => {
                 :
                     [30, 31, 32, 33, 34, 36, 37, 17, 26].includes(props.card.type)
                     ?
-                        <div className={classes.boxContainer}>
+                        <div className={'pt-box-container'}>
                             <Typography
                                 variant="h5" 
                                 component="div"
-                                className={clsx(classes.kpiNumberSmall)}
+                                className={clsx('pt-kpi-number-small')}
                             >
                                 Patents: {numberWithCommas(props.card?.number)}
                             </Typography>
                             <Typography
                                 variant="h5"  
                                 component="div"
-                                className={classes.kpiNumberSmall}
+                                className={'pt-kpi-number-small'}
                             >
                                 Applications: {numberWithCommas(props.card.other_number)}
                             </Typography>
@@ -116,18 +115,18 @@ const KpiBox = (props) => {
                     :
                         props.card.type == 35
                         ?
-                            <div className={classes.boxContainer}>
+                            <div className={'pt-box-container'}>
                                 <Typography
                                     variant="h5" 
                                     component="div"
-                                    className={clsx(classes.kpiNumberSmall)}
+                                    className={clsx('pt-kpi-number-small')}
                                 >
                                     Patents: {numberWithCommas(props.card?.total)}
                                 </Typography>
                                 <Typography
                                     variant="h5"  
                                     component="div"
-                                    className={classes.kpiNumberSmall}
+                                    className={'pt-kpi-number-small'}
                                 >
                                     {
                                         props.card?.number > 1000 
@@ -142,7 +141,7 @@ const KpiBox = (props) => {
                             <Typography 
                                 variant="h5" 
                                 component="div"
-                                className={classes.kpiNumber}
+                                className={'pt-kpi-number'}
                             >
                                 {
                                 

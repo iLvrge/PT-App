@@ -1,7 +1,7 @@
 import React from 'react'
 
 import LinkIcon from '@mui/icons-material/Link';
-import useStyles from './styles'
+import './styles.css'
 import { MenuItem, ListItemIcon, ListItemText } from '@mui/material';
 
 const AssetSwitchButton = (props) => {

@@ -2,13 +2,12 @@ import React, {useState, useRef, useEffect} from 'react'
 import { Chart } from "react-google-charts";
 import { useSelector } from 'react-redux'
 import themeMode from '../../themes/themeMode';
-import useStyles from './styles'
+import './styles.css'
 
 const LineGraph = (props) => {
     const containerRef = useRef(null)
     const gradientID = `gradient-expense-${props.lineID}`
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
-    const classes = useStyles()
     const [height, setHeight] = useState('100%');
     const [option, setOption] = useState({
         legend: { position: 'none' },
@@ -109,7 +108,7 @@ const LineGraph = (props) => {
 
 
     return (
-        <div className={classes.graphContainer} ref={containerRef} style={{height: '90%'}}>  
+        <div className={'pt-graph-container'} ref={containerRef} style={{height: '90%'}}>  
             <DisplayChart />
         </div> 
     )
