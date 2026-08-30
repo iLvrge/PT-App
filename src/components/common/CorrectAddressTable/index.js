@@ -49,7 +49,6 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
     const [ width, setWidth ] = useState( 1500 ) 
     const tableRef = useRef()
     const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
-    const [ grandTotal, setGrandTotal ] = useState( 0 )
     const [ childSelected, setCheckedSelected] = useState( 0 )
     const [ currentSelection, setCurrentSelection] = useState(null)    
     const [ selectedRow, setSelectedRow] = useState( [] )
@@ -109,13 +108,11 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
         }
     ]
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)
-    useEffect(() => {
-        if( assetTypeAddress.length > 0 ) {
-            setGrandTotal(assetTypeAddress[assetTypeAddress.length - 1].grand_total)
-        } else {
-            setGrandTotal(0)
-        }
-    }, [ assetTypeAddress ]) 
+    // grandTotal is a function of assetTypeAddress, so it is derived rather than
+    // mirrored into state by an effect.
+    const grandTotal = assetTypeAddress.length > 0
+        ? assetTypeAddress[assetTypeAddress.length - 1].grand_total
+        : 0
     
 
     useEffect(() => {
@@ -125,23 +122,17 @@ const CorrectAddressTable = ({ assetType, standalone, headerRowDisabled, parentB
     }, [ assetTypeAddressSelected, selectItems ]) 
 
 
+    // This was an async function awaiting Promise.all over the result of a map
+    // whose callback returned nothing - an array of undefined - while collecting
+    // ids by mutating a closure variable. It is a synchronous flatMap.
     useEffect(() => {
-        const getAllGroupIDs = async() => {
-            if(assetTypeAddressSelected.length > 0) {
-                let allRFIDS = [];
-                const promise =  assetTypeAddressSelected.map( id => {
-                    const findIndex = assetTypeAddress.findIndex( address => address.id == id)
-                    if(findIndex !== -1) {
-                        const groupIDs = assetTypeAddress[findIndex].group_ids.toString().split(',')
-                        allRFIDS = [...allRFIDS, ...groupIDs]
-                    }
-                })
-                await Promise.all(promise)
-                dispatch(setAllGroupRfIDs(allRFIDS))
-            }
-        }
-        getAllGroupIDs()
-    }, [ dispatch, assetTypeAddressSelected ])
+        if (assetTypeAddressSelected.length === 0) return
+        const allRFIDS = assetTypeAddressSelected.flatMap((id) => {
+            const found = assetTypeAddress.find((address) => address.id == id)
+            return found ? found.group_ids.toString().split(',') : []
+        })
+        dispatch(setAllGroupRfIDs(allRFIDS))
+    }, [ dispatch, assetTypeAddressSelected, assetTypeAddress ])
 
     useEffect(() => {
         if(standalone) {            
