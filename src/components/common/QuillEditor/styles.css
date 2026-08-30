@@ -155,3 +155,14 @@
   margin: 0px;
   overflow: hidden;
 }
+
+/* Was a makeStyles call inside the CustomToolbar component body, so a new JSS
+   stylesheet was created on every render. MUI's Tooltip classes prop takes class
+   name strings, so plain CSS does the same job. */
+.pt-tooltip-black {
+  background-color: #000;
+}
+
+.pt-tooltip-black-arrow {
+  color: #000;
+}

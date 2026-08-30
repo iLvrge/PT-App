@@ -1,0 +1,71 @@
+/* Extracted from the makeStyles block that was defined at the top of
+   useHeaderRenderer.js. */
+
+.pt-hdr-badge {
+  position: absolute;
+  left: 25px;
+  bottom: 11px;
+}
+
+.pt-hdr-badge .MuiBadge-colorPrimary {
+  top: 4px;
+  background-color: inherit;
+  right: inherit;
+  transform: none;
+  color: var(--pt-text-primary);
+}
+
+.pt-hdr-badge-selection {
+  position: absolute;
+}
+
+.pt-hdr-badge-selection .MuiBadge-colorPrimary {
+  top: 4px;
+  background-color: inherit;
+  right: inherit;
+  transform: none;
+  color: var(--pt-secondary-main);
+}
+
+.pt-hdr-chip {
+  margin-left: 15px;
+}
+
+.pt-hdr-filter-list {
+  margin-right: 3px;
+  font-size: 13px;
+}
+
+.pt-hdr-flex-container {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.pt-hdr-label-pos {
+  position: absolute;
+  top: 13px;
+  left: 13px;
+}
+
+.pt-hdr-list-item-icon {
+  min-width: 0px;
+}
+
+.pt-hdr-paper {
+  max-height: 300px;
+  overflow: auto;
+}
+
+.pt-hdr-table-cell {
+  flex: 1;
+  white-space: nowrap;
+  border: none;
+  align-items: center;
+  padding: 0px;
+}
+
+.pt-hdr-th {
+  display: flex;
+  border: none;
+}

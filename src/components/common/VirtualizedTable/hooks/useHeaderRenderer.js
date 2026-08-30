@@ -1,3 +1,4 @@
+import './headerRenderer.css'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import TableCell from '@mui/material/TableCell'
 import clsx from 'clsx'
@@ -15,7 +16,6 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import Draggable from "react-draggable"
 import _groupBy from 'lodash/groupBy'
-import makeStyles from '@mui/styles/makeStyles';
 import Chip from '@mui/material/Chip'
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined'
@@ -27,66 +27,6 @@ import CropSquareIcon from '@mui/icons-material/CropSquare'
 import { numberWithCommas } from '../../../../utils/numbers'
 import { getAuthConnectToken } from '../../../../utils/tokenStorage'
 
-const useStyles = makeStyles((theme) => ({
-  listItemIcon: {
-    minWidth: 0,
-  },
-  filterList: {
-    marginRight: 3,
-    fontSize: 13,
-  },
-  th: {
-    display: 'flex',
-    border: 'none',
-  },
-  flexContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    boxSizing: 'border-box',
-  },
-  tableCell: {
-    flex: 1,
-    whiteSpace: 'nowrap',
-    border: 'none',
-    alignItems: 'center',
-    padding: '0',
-  },
-  paper: {
-    maxHeight: 300,
-    overflow: 'auto',
-  },
-  chip: {
-    marginLeft: 15,
-  },
-  badge: {
-    position: 'absolute',
-    left: 25, 
-    bottom: 11,
-    '& .MuiBadge-colorPrimary': {
-      top: 4,
-      backgroundColor: 'inherit',
-      right: 'inherit',
-      transform: 'none',
-      color: theme.palette.text.primary
-    }    
-  },
-  badgeSelection: {
-    position: 'absolute',
-    /* left: 'calc(100% - 83%)',  */
-    '& .MuiBadge-colorPrimary': {
-      top: 4,
-      backgroundColor: 'inherit',
-      right: 'inherit',
-      transform: 'none',
-      color: theme.palette.secondary.main
-    }   
-  },
-  labelPos: {
-    position: 'absolute',
-    top: 13,
-    left: 13,
-  }
-}))
 
 const HeadCell = ({
   headerHeight,
@@ -116,7 +56,6 @@ const HeadCell = ({
   /* if(typeof selectedGroup !== 'undefined') {
     console.log('LIBRARY1', selectedItems, selectedGroup, typeof selectedGroup, typeof selectedGroup !== 'undefined')
   } */
-  const classes = useStyles()
   const { align, headerAlign, role, disableSort, filterable, paddingLeft, badge, showGrandTotal, grandTotalField, draggable, headingIcon, show_selection_count, secondLabel, show, showDropdown, list, onClickHeadDropdown, show_button, button, checkboxSelect } = columns[columnIndex]
   const [ anchorEl, setAnchorEl ] = useState(null)
   const [ columnFilters, setColumnFilters ] = useState([])
@@ -165,7 +104,7 @@ const HeadCell = ({
     <TableCell
       component={'div'}
       padding={role === 'checkbox' ? 'none' : undefined}
-      className={clsx(classes.tableCell, classes.flexContainer, classes.th)}
+      className={clsx('pt-hdr-table-cell', 'pt-hdr-flex-container', 'pt-hdr-th')}
       variant="head"
       style={{ height: headerHeight, paddingLeft: paddingLeft != undefined ? paddingLeft : 'inherit' }}
       align={typeof headerAlign !== 'undefined' ? headerAlign : align}>
@@ -182,7 +121,7 @@ const HeadCell = ({
               {
                 show_selection_count === true && selectedItems.length > 0 
                 ?
-                <Badge color='primary' max={99999} className={classes.badgeSelection} badgeContent={numberWithCommas(typeof selectedGroup !== 'undefined' ? selectedItems.length - selectedGroup.length : selectedItems.length)} showZero={false}></Badge>
+                <Badge color='primary' max={99999} className={'pt-hdr-badge-selection'} badgeContent={numberWithCommas(typeof selectedGroup !== 'undefined' ? selectedItems.length - selectedGroup.length : selectedItems.length)} showZero={false}></Badge>
                 :
                 ''
               } 
@@ -196,7 +135,7 @@ const HeadCell = ({
             {
               show_selection_count === true && selectedItems.length > 0
               ?
-              <Badge color='primary' max={99999} className={classes.badgeSelection} badgeContent={numberWithCommas(typeof selectedGroup !== 'undefined' ? selectedItems.length - selectedGroup.length : selectedItems.length)} showZero={false}></Badge>
+              <Badge color='primary' max={99999} className={'pt-hdr-badge-selection'} badgeContent={numberWithCommas(typeof selectedGroup !== 'undefined' ? selectedItems.length - selectedGroup.length : selectedItems.length)} showZero={false}></Badge>
               :
               ''
             }
@@ -224,7 +163,7 @@ const HeadCell = ({
               onOpen={handleDropdownOpen} 
               value={-1}
               onChange={onClickHeadDropdown}
-              className={classes.headDropdown}
+              className={undefined}
               renderValue={(value) => getDropValue(value, list)}
             >
               {
@@ -243,7 +182,7 @@ const HeadCell = ({
             {
               filterable && (
                 <FilterList
-                  className={classes.filterList}
+                  className={'pt-hdr-filter-list'}
                   color={columnFilters.length ? 'secondary' : 'inherit'}
                   size={'small'}
                   onClick={openMenu} />
@@ -351,22 +290,22 @@ const HeadCell = ({
                     {
                       show_selection_count === true && selectedItems.length > 0
                       ?
-                      <Badge color='primary' max={99999} className={classes.badgeSelection} badgeContent={numberWithCommas(typeof selectedGroup !== 'undefined' ? selectedItems.length - selectedGroup.length : selectedItems.length)} showZero={false}></Badge>
+                      <Badge color='primary' max={99999} className={'pt-hdr-badge-selection'} badgeContent={numberWithCommas(typeof selectedGroup !== 'undefined' ? selectedItems.length - selectedGroup.length : selectedItems.length)} showZero={false}></Badge>
                       :
                       ''
                     }            
-                    {badge === true && totalRows > 0 ? <Badge color='primary' max={9999999} className={classes.badge} badgeContent={`${numberWithCommas(totalRows)} ${ secondLabel !== undefined ? secondLabel : ''}`} showZero></Badge> : ''}
+                    {badge === true && totalRows > 0 ? <Badge color='primary' max={9999999} className={'pt-hdr-badge'} badgeContent={`${numberWithCommas(totalRows)} ${ secondLabel !== undefined ? secondLabel : ''}`} showZero></Badge> : ''}
                     {
                       showGrandTotal === true && 
                         ( grandTotal > 0 || rows.length > 0 && rows[rows.length - 1].grand_total > 0 || (typeof grandTotalField !== 'undefined')) ? 
                           <Badge 
                             color='primary' 
                             max={9999999} 
-                            className={classes.badge} 
+                            className={'pt-hdr-badge'} 
                             badgeContent={`${numberWithCommas((typeof grandTotalField !== 'undefined') ? rows.length > 0 && rows[rows.length - 1]['grandTotalField'] : grandTotal > 0 ? grandTotal : rows.length > 0 && rows[rows.length - 1].grand_total ? rows[rows.length - 1].grand_total : 0)} ${ secondLabel !== undefined ? secondLabel : ''}`} showZero>
 
                             </Badge> : ''}
-                    { badge === false && showGrandTotal === false &&  secondLabel !== undefined ? <div className={classes.labelPos}>{secondLabel}</div> : ''}
+                    { badge === false && showGrandTotal === false &&  secondLabel !== undefined ? <div className={'pt-hdr-label-pos'}>{secondLabel}</div> : ''}
                     { show_button === true ? button : '' }
                 </TableSortLabel>
               )
@@ -377,7 +316,7 @@ const HeadCell = ({
                   anchorEl={anchorEl}
                   open={!!anchorEl}
                   onClose={closeMenu}
-                  classes={{ paper: classes.paper }}
+                  classes={{ paper: 'pt-hdr-paper' }}
                   getContentAnchorEl={null}
                   anchorOrigin={{
                     vertical: 'bottom',
@@ -392,7 +331,7 @@ const HeadCell = ({
                     filterValues.map(({ key, count }) => {
                       return (
                         <MenuItem key={key} onClick={onChangeFilter(key)}>
-                          <ListItemIcon className={classes.listItemIcon}>
+                          <ListItemIcon className={'pt-hdr-list-item-icon'}>
                             <Checkbox
                               checked={columnFilters.includes(key)}
                               edge="start"
@@ -402,7 +341,7 @@ const HeadCell = ({
                             />
                           </ListItemIcon>
                           <ListItemText id={'labelId'} primary={key} />
-                          <Chip className={classes.chip} label={count} size={'small'} variant={'outlined'} />
+                          <Chip className={'pt-hdr-chip'} label={count} size={'small'} variant={'outlined'} />
                         </MenuItem>
                       )
                     })

@@ -5,7 +5,6 @@ import SendIcon from '@mui/icons-material/Send'
 import FormatBoldIcon from '@mui/icons-material/FormatBold'
 import FormatItalicIcon from '@mui/icons-material/FormatItalic'
 import { IconButton, Tooltip, Typography, Zoom, Button, CircularProgress }  from '@mui/material'
-import makeStyles from '@mui/styles/makeStyles';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -15,19 +14,12 @@ import { getTokenStorage } from '../../../utils/tokenStorage'
 
 import './styles.css'
 import { warnConsole } from '../../../utils/hashLocation'
+
+// Created once, rather than by a makeStyles call inside the component body.
+const classesTooltip = { tooltip: 'pt-tooltip-black', arrow: 'pt-tooltip-black-arrow' }
 const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, onDocument, onAttachmentOpenedFile, onAttachmentOpenedFileAndEmail, onAttachmentFile, onAttachmentDriveFile, onMaintainenceFeeReview, onMaintainenceFeeFile, onSubmitUSPTO, onCorrectAddress, onChangeAddress, onCorrectName, onChangeName, onSalesAssets, loadingUSPTO, category, driveBtnActive, maintainenceMode, selectedAssets, driveTemplateMode, onShare, addressQueuesDisplay, nameQueuesDisplay, onHandleSubmitAddressUSPTO, onHandleAddressCancel, onHandleSubmitNamesUSPTO, onHandleNamesCancel, onHandleLinkAssetWithSheet, linkAssetsSheetDisplay, linkAssetsSelected  }) => {
   const toolBarRef = useRef(null) 
 
-  const useStylesTooltip = makeStyles((theme) => ({
-    tooltip: {
-      backgroundColor: '#000'
-    },
-    arrow: {
-      color: '#000'
-    }  
-  }))
- 
-  const classesTooltip = useStylesTooltip()
   const [ btnActive, setBtnActive] = useState( false )
   
   /* const onHandleFocusListener = () =>{
