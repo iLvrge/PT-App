@@ -1,3 +1,4 @@
+import useMaintenanceEventsList from '../../../../queries/useMaintenanceEventsList'
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import { pink } from '@mui/material/colors'
@@ -16,15 +17,9 @@ const GoogleCharts = ({ chartBar, visualizerBarSize, standalone }) => {
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected )
     const selectedCompaniesAll = useSelector( state => state.patenTrack2.mainCompaniesList.selectAll)
-    const assetTypesSelectAll = useSelector(state => state.patenTrack2.assetTypes.selectAll)
-    const assetTypesSelected = useSelector( state => state.patenTrack2.assetTypes.selected);
-    const assetTypesCompaniesSelected = useSelector(state => state.patenTrack2.assetTypeCompanies.selected);
-    const assetTypesCompaniesSelectAll = useSelector( state => state.patenTrack2.assetTypeCompanies.selectAll);
-    const selectedAssetAssignments = useSelector( state => state.patenTrack2.assetTypeAssignments.selected )
     const search_string = useSelector(state => state.patenTrack2.search_string)
     const search_rf_id = useSelector(state => state.patenTrack2.search_rf_id)
 
-    const [data, setData] = useState([])
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const menuItems = [
         {
@@ -94,22 +89,10 @@ const GoogleCharts = ({ chartBar, visualizerBarSize, standalone }) => {
     });
     
 
-    useEffect(() => {
-        const getMaintainenceEventsAssets = async() => {
-            try {
-                const   companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-                        tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-                        customers = assetTypesCompaniesSelectAll === true ? [] :  assetTypesCompaniesSelected,
-                        rfIDs = selectedAssetAssignments.length > 0 ? selectedAssetAssignments : [];
-                const { data } = await PatenTrackApi.getMaintainenceAssetsEventsList(companies)
-                setData(data)
-            } catch (err) {
-                console.log(err)
-            }
-        }
-        getMaintainenceEventsAssets()
-        
-    }, [selectedCompanies, selectedCompaniesAll])   
+    // The effect this replaces also derived tabs, customers and rfIDs from four
+    // further selectors and passed none of them; the endpoint takes only the
+    // company list.
+    const { data = [] } = useMaintenanceEventsList({ selectedCompanies, selectedCompaniesAll })
     
     useEffect(() => {    
         if(chartBar === false) {
