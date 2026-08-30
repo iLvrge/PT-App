@@ -1,19 +1,14 @@
+import cn from '../../../../ui/cn'
 import React, { useCallback, useEffect, useState } from 'react'
 import Button from '@mui/material/Button'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
 import _cloneDeep from 'lodash/cloneDeep'
-import useStyles from './styles'
+import { Dialog, DialogContent } from '../../../../ui/Dialog'
 import CircularProgress from '@mui/material/CircularProgress'
 
 
 const EditDialog = ({ setEditedRow, editedRow, onSubmit, fieldsComponent: FieldsComponent, name = 'item', idKey = 'id' }) => {
-  const classes = useStyles()
   const [ edited, setEdited ] = useState({})
   const [ loading, setLoading ] = useState(false)
-  const [ entered, setEntered ] = useState(false)
   const onClose = useCallback(() => setEditedRow(null), [ setEditedRow ])
 
   useEffect(() => {
@@ -88,45 +83,45 @@ const EditDialog = ({ setEditedRow, editedRow, onSubmit, fieldsComponent: Fields
   }, [ onSubmit, edited, onClose ])
 
   const open = !!editedRow
-  const onEnter = useCallback(() => setEntered(true), [])
-  const onExit = useCallback(() => setEntered(false), [])
 
   return (
-    <Dialog
-      classes={{ paper: classes.paper }}
-      open={open}
-      onClose={onClose}
-      TransitionProps={{
-        onEnter,
-        onExit
-      }}>
+    <Dialog open={open} onOpenChange={(next) => { if (!next) onClose() }}>
+      <DialogContent
+        title={edited[idKey] ? `Edit ${name}` : `New ${name}`}
+        className={cn(
+          'min-w-[320px] max-w-[700px] p-0',
+          '[&_.address_form_label]:inline',
+          '[&_.address_form_.MuiSelect-select]:min-w-[100px]',
+          '[&_.address_form_.MuiInputBase-root]:ml-5'
+        )}
+      >
+        {
+          loading && (
+            <div className="absolute inset-0 z-[2] flex h-full w-full items-center justify-center bg-black/50">
+              <CircularProgress />
+            </div>)
+        }
 
-      {
-        loading && (
-          <div className={classes.loaderContainer}>
-            <CircularProgress />
-          </div>)
-      }
+        <form onSubmit={submitHandled}>
+          {/* The 50%-width field layout used to be applied through
+              .MuiFormControl-root from this component's stylesheet; the fields
+              are still MUI, so it stays an arbitrary variant. */}
+          <div className="flex flex-wrap justify-between border-y border-divider px-6 py-2
+                          [&_.MuiFormControl-root]:m-2.5 [&_.MuiFormControl-root]:w-[calc(50%-20px)]">
+            { open && <FieldsComponent onChangeField={onChangeField} onPasteField={onPasteField} edited={edited} idKey={idKey} />}
+          </div>
 
-      <form onSubmit={submitHandled}>
-        <DialogTitle>
-          {edited[idKey] ? `Edit ${name}` : `New ${name}`}
-        </DialogTitle>
+          <div className="m-5 flex justify-end gap-2 shadow-none">
+            <Button onClick={onClose} type={'button'}>
+              Close
+            </Button>
 
-        <DialogContent dividers className={classes.dialogContent}>
-          { entered && <FieldsComponent onChangeField={onChangeField} onPasteField={onPasteField} edited={edited} idKey={idKey} />}
-        </DialogContent>
-
-        <DialogActions className={classes.dialogActions}>
-          <Button onClick={onClose} type={'button'}>
-            Close
-          </Button>
-
-          <Button variant={'contained'} color="primary" type={'submit'}>
-            {edited[idKey] ? 'SAVE' : 'CREATE'}
-          </Button>
-        </DialogActions>
-      </form>
+            <Button variant={'contained'} color="primary" type={'submit'}>
+              {edited[idKey] ? 'SAVE' : 'CREATE'}
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
     </Dialog>
   );
 }
