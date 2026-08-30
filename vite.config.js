@@ -58,7 +58,14 @@ export default defineConfig(({ mode }) => {
     define: processEnv,
     envPrefix: [ 'REACT_APP_', 'VITE_' ],
     resolve: {
-      alias: { '~': '/src' },
+      alias: {
+        '~': '/src',
+        // React 17 ships jsx-runtime.js but has no package exports map, so a
+        // bare 'react/jsx-runtime' - which Radix's ESM builds import - cannot be
+        // resolved by Node. Vite's browser resolver copes; Vitest's does not.
+        'react/jsx-runtime': 'react/jsx-runtime.js',
+        'react/jsx-dev-runtime': 'react/jsx-dev-runtime.js',
+      },
     },
     // JSX lives in .js files throughout src/; esbuild must be told to parse
     // them as JSX, both for source and when prebundling dependencies.
@@ -72,6 +79,14 @@ export default defineConfig(({ mode }) => {
       setupFiles: [ './src/test/setup.js' ],
       include: [ 'src/**/*.{test,spec}.{js,jsx}' ],
       css: false,
+      server: {
+        deps: {
+          // Radix's ESM imports a bare 'react/jsx-runtime'. React 17 has no
+          // package exports map, so Node cannot resolve it; processing Radix
+          // through Vite instead lets the alias above apply.
+          inline: [ /@radix-ui/ ],
+        },
+      },
     },
     server: { port: 3000, open: false },
     preview: { port: 3000 },

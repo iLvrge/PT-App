@@ -15,7 +15,7 @@ const Tooltip = ({ title, children, side = 'top', delayDuration = 200, className
           side={side}
           sideOffset={6}
           className={cn(
-            'z-50 max-w-xs rounded bg-bg-paper px-2 py-1 text-xs text-text-primary',
+            'z-50 max-w-xs rounded bg-bg-paper px-2 py-1 text-[18px] text-text-primary',
             'border border-divider shadow-md',
             className
           )}
