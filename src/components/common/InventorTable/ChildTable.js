@@ -1,3 +1,4 @@
+import usePartyAssets from '../../../queries/usePartyAssets'
 import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {  useHistory, useLocation  } from 'react-router-dom'
@@ -67,8 +68,6 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
     const [ childHeight, setChildHeight ] = useState(500)
     const tableRef = useRef()
     const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
-    const [ assignmentLoading, setAssignmentLoading] = useState( true )
-    const [ assignments, setAssignments] = useState( [] )
     const [ selectedAll, setSelectAll ] = useState( false )
     const [ selectItems, setSelectItems] = useState( [] )
     const [ selectedRow, setSelectedRow] = useState( [] )
@@ -100,42 +99,22 @@ const ChildTable = ({ partiesId, headerRowDisabled }) => {
         }
     ]
        
+    const { data: response, isFetching: assignmentLoading } = usePartyAssets('customerAssets', {
+        partiesId, selectedCategory, selectedCompanies, selectedCompaniesAll,
+        assetTypesSelected, assetTypesSelectAll,
+    })
+    const assignments = response?.list ?? []
+
+    // Publishing totalTransactions back into Redux is a side effect of the data
+    // arriving, not part of fetching it, so it reacts to the result only.
     useEffect(() => {
-        const getAssignments = async () => {            
-            if( partiesId > 0 ) {
-                setAssignmentLoading( true )
-                const companies = selectedCompaniesAll === true ? [] : selectedCompanies,
-                    tabs = assetTypesSelectAll === true ? [] : assetTypesSelected,
-                    customers = [partiesId]
-                
-                /* const { data } = await PatenTrackApi.getAssetTypeAssignments(companies, tabs, customers, selectedCategory != '' ? selectedCategory : '', false) */ 
-                const { data } = await PatenTrackApi.getCustomerAssets(selectedCategory, companies, tabs, customers, [], 0, 3000, 'asset', 'desc', false) 
-                setAssignments(data.list)
-                setAssignmentLoading( false )
-                if( data.list != null && data != '' && data.list.length > 0 ){
-                    let companiesList = [...assetTypeCompanies.list] 
-                    const promise = companiesList.map( (row, index) => {
-                        if( row.id == partiesId){                            
-                            companiesList[index].totalTransactions = data.list.length
-                        }
-                        return row
-                    })
-                    await Promise.all(promise)
-                    dispatch( setAssetTypeAssignmentAllAssets(data, false) )
-                    dispatch(
-                        setAssetTypeCompanies({
-                            ...assetTypeCompanies,
-                            list: companiesList, 
-                            append: false 
-                        })
-                    )
-                }
-            } else {
-                setAssignmentLoading( false )
-            }
-        }
-        getAssignments()
-    }, [ dispatch, selectedCategory, selectedCompanies, selectedCompaniesAll, assetTypesSelected, assetTypesSelectAll, partiesId ])
+        if (assignments.length === 0) return
+        const companiesList = assetTypeCompanies.list.map((row) =>
+            row.id == partiesId ? { ...row, totalTransactions: assignments.length } : row
+        )
+        dispatch(setAssetTypeAssignmentAllAssets(response, false))
+        dispatch(setAssetTypeCompanies({ ...assetTypeCompanies, list: companiesList, append: false }))
+    }, [ assignments, partiesId, dispatch ])
 
     const onHandleSelectAll = useCallback((event, row) => {
         
