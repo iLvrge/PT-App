@@ -1,3 +1,4 @@
+import useTransactionsByGroupIds from '../../../queries/useTransactionsByGroupIds'
 import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {  useHistory, useLocation  } from 'react-router-dom'
@@ -44,8 +45,6 @@ const ChildTable = ({ addressId, headerRowDisabled }) => {
     const [ childHeight, setChildHeight ] = useState(500)
     const tableRef = useRef()
     const [ counter, setCounter] = useState(DEFAULT_CUSTOMERS_LIMIT)
-    const [ assignmentLoading, setAssignmentLoading] = useState( true )
-    const [ assignments, setAssignments] = useState( [] )
     const [ selectedAll, setSelectAll ] = useState( false )
     const [ selectItems, setSelectItems] = useState( [] )
     const [ selectedRow, setSelectedRow] = useState( [] )
@@ -87,34 +86,17 @@ const ChildTable = ({ addressId, headerRowDisabled }) => {
         } */
     ]
        
-    useEffect(() => {
-        const getAssignments = async () => {            
-            if( addressId > 0 ) {
-                setAssignmentLoading( true )
+    // The group ids come from assetTypeAddress, which the previous effect read
+    // but did not list as a dependency, so a changed address list did not
+    // refetch. Deriving them here puts them in the query key instead.
+    const groupIds = useMemo(() => {
+        if (!(addressId > 0)) return []
+        const found = assetTypeAddress.find((address) => address.id == addressId)
+        return found ? found.group_ids.toString().split(',') : []
+    }, [ assetTypeAddress, addressId ])
 
-                const findIndex = assetTypeAddress.findIndex( address => address.id == addressId)
-
-                let rfIDs = []
-
-                if(findIndex !== -1) {
-                    rfIDs = assetTypeAddress[findIndex].group_ids.toString().split(',')
-                }            
-                if(rfIDs.length > 0) {
-                    const form = new FormData()
-                    form.append('group_ids', JSON.stringify(rfIDs))
-                    const { data } = await PatenTrackApi.getTransactionByRfIds(form)
-                    setAssignments(data.list)
-                    setAssignmentLoading( false )   
-                } else {
-                    setAssignmentLoading( false )
-                } 
-                             
-            } else {
-                setAssignmentLoading( false )
-            }
-        }
-        getAssignments()
-    }, [ dispatch, selectedCategory, selectedCompanies, selectedCompaniesAll, addressId ])
+    const { data: assignments = [], isFetching: assignmentLoading } =
+        useTransactionsByGroupIds(groupIds)
 
     const onHandleSelectAll = useCallback((event, row) => {
         
