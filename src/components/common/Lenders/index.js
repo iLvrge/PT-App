@@ -1,3 +1,4 @@
+  import useLendersByCompany from '../../../queries/useLendersByCompany';
 import React, {
     useCallback,
     useEffect,
@@ -6,7 +7,6 @@ import React, {
   import { useSelector, useDispatch } from "react-redux"; 
   import { Paper } from "@mui/material";
     import VirtualizedTable from "../VirtualizedTable";
-  import PatenTrackApi from "../../../api/patenTrack2"; 
   import Loader from "../Loader";
 import { setAllAssignmentCustomers, setAssetTypeAssignmentAllAssets, setAssetTypeAssignments, setAssetTypesPatentsSelected, setCPCData, setLineChartRequest, setLineChartReset, setSelectAssignmentCustomers, setSelectAssignments, setSelectedAssetsPatents, setSelectedAssetsTransactions, setSelectLawFirm } from "../../../actions/patentTrackActions2";
   
@@ -16,12 +16,9 @@ import { setAllAssignmentCustomers, setAssetTypeAssignmentAllAssets, setAssetTyp
     const [rowHeight, setRowHeight] = useState(40);
     const [width, setWidth] = useState(800);
     const [childHeight, setChildHeight] = useState(500); 
-    const [ grandTotal, setGrandTotal ] = useState( 0 ) 
-    const [initialize, setIntialize] = useState(false);
     const [selectedAll, setSelectAll] = useState(false);
     const [selectItems, setSelectItems] = useState([]);
     const [selectedRow, setSelectedRow] = useState([]); 
-    const [rows, setRows] = useState([]);
     const [childSelected, setCheckedSelected] = useState(0);
     const [currentSelection, setCurrentSelection] = useState(null); 
     const selectedCompanies = useSelector(
@@ -53,18 +50,10 @@ import { setAllAssignmentCustomers, setAssetTypeAssignmentAllAssets, setAssetTyp
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)
   
     
-    useEffect(() => {
-        const getLawFirmList = async() => {
-          if(selectedCompanies.length > 0) {
-            setIntialize(true)
-            const {data} = await PatenTrackApi.getLendersByCompany(selectedCompanies)
-            setIntialize(false)
-            setRows(data)
-            setGrandTotal(data.length)
-          }
-        }
-        getLawFirmList()
-    }, [selectedCompanies])
+    // `grandTotal` was state that only ever held rows.length, and `initialize`
+    // was a hand-managed loading flag. Both are derived now.
+    const { data: rows = [], isFetching: initialize } = useLendersByCompany(selectedCompanies)
+    const grandTotal = rows.length
   
     const onHandleSelectAll = useCallback(
       (event, row) => {
