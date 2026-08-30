@@ -1,3 +1,6 @@
+import { splitPaneCorrect, minimized, splitPane2, splitPane3, pane2OverflowUnset,
+         pane1OverflowUnset, mainOverflowUnset, paneHeightZero,
+         notInteractive, isInteractive, companyBar } from '../../styles/splitPane'
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import SplitPane from 'react-split-pane'
@@ -48,7 +51,6 @@ import {
 
 import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpanMode, setMaintainenceFeeFrameMode } from '../../actions/uiActions'
 
-import useStyles from './styles'
 import clsx from 'clsx'
 
 const CorrectLayout = ({
@@ -125,7 +127,6 @@ const CorrectLayout = ({
     driveTemplateFrameMode,
     driveTemplateMode
 }) => {
-    const classes = useStyles() 
     const dispatch = useDispatch()
     const mainContainerRef = useRef()
     const companyRef = useRef()
@@ -298,14 +299,14 @@ const CorrectLayout = ({
 
     return (
         <SplitPane
-            className={classes.splitPane}
+            className={splitPaneCorrect}
             split="vertical"
             size={companyBarSize}
             onDragFinished={(size) => resizePane('split1', size, setCompanyBarSize)}
             ref={companyRef}    
         >
             <div 
-                className={classes.companyBar}
+                className={companyBar}
                 id={`company_container`} >
                 { 
                     openBar === true 
@@ -326,7 +327,7 @@ const CorrectLayout = ({
                 }
             </div>
             <SplitPane
-                className={classes.splitPane}
+                className={splitPaneCorrect}
                 split="vertical"
                 size={typeBarSize}
                 onDragFinished={(size) => resizePane('split9', size > 900 ? 900 : size, setTypeBarSize)}
@@ -350,7 +351,7 @@ const CorrectLayout = ({
                     }
                 </div>
                 <SplitPane
-                    className={classes.splitPane}
+                    className={splitPaneCorrect}
                     split="vertical"
                     size={otherPartyBarSize}
                     onDragFinished={(size) => resizePane('split7', size > 900 ? 900 : size, setOtherPartyBarSize)}
@@ -363,7 +364,7 @@ const CorrectLayout = ({
                                 <>
                                     <ArrowButton arrowId={`arrow_parties`} handleClick={handleOtherPartyBarOpen} buttonType={toggleOtherPartyButtonType} buttonVisible={otherPartyButtonVisible}/>
                                     <SplitPane
-                                        className={classes.splitPane}
+                                        className={splitPaneCorrect}
                                         split={`horizontal`}
                                         size={partyBarSize}
                                         ref={entityRef}
@@ -404,7 +405,7 @@ const CorrectLayout = ({
                         }
                     </div>
                     <SplitPane
-                        className={classes.splitPane}
+                        className={splitPaneCorrect}
                         split="vertical"
                         size={addressBarSize}
                         onDragFinished={(size) => resizePane('split18', size > 900 ? 900 : size, setAddressBarSize)}
@@ -430,7 +431,7 @@ const CorrectLayout = ({
                             }                            
                         </div>
                         <SplitPane
-                            className={classes.splitPane}
+                            className={splitPaneCorrect}
                             split="vertical"
                             size={assignmentBarSize}
                             onDragFinished={(size) => resizePane('split8', size > 900 ? 900 : size, setAssignmentBarSize)}
@@ -449,7 +450,7 @@ const CorrectLayout = ({
                                 }
                             </div>
                             <SplitPane
-                                className={classes.splitPane}
+                                className={splitPaneCorrect}
                                 split="vertical"
                                 size={customerBarSize}
                                 onDragFinished={(size) => resizePane('split2', size > 900 ? 900 : size, setCustomerBarSize)}
@@ -505,7 +506,7 @@ const CorrectLayout = ({
                                     }
                                 </div>
                                 <SplitPane
-                                    className={classes.splitPane}
+                                    className={splitPaneCorrect}
                                     split="vertical"
                                     size={assetFilesBarSize}
                                     ref={assetFileRef}
@@ -522,7 +523,7 @@ const CorrectLayout = ({
                                 >
                                     <div id={`assets_files_container`} style={{ height: '100%'}}>
                                         <SplitPane
-                                            className={classes.splitPane}
+                                            className={splitPaneCorrect}
                                             split={`horizontal`}
                                             size={driveBarSize}
                                             ref={fileBarRef}
@@ -545,7 +546,7 @@ const CorrectLayout = ({
                                         
                                     </div> 
                                     <SplitPane
-                                        className={classes.splitPane}
+                                        className={splitPaneCorrect}
                                         split="vertical"
                                         size={driveTemplateBarSize}
                                         ref={templateFileRef}
@@ -570,7 +571,7 @@ const CorrectLayout = ({
                                             }
                                         </div>
                                         <SplitPane
-                                            className={`${classes.splitPane} ${classes.splitPane2}  ${classes.splitPane3} ${classes.splitPane2OverflowUnset}`}
+                                            className={`${splitPaneCorrect} ${splitPane2}  ${splitPane3} ${pane2OverflowUnset}`}
                                             split="vertical"
                                             minSize={10}
                                             size={visualizerBarSize}
@@ -592,9 +593,9 @@ const CorrectLayout = ({
                                             primary={'second'}
                                             maxSize={-250} 
                                         >
-                                            <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
+                                            <div className={isDragging === true ? notInteractive : isInteractive} style={{ height: '100%'}}>
                                                 <IllustrationCommentContainer 
-                                                    cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPane1OverflowUnset, classes.paneHeightZero, { [classes.minimized]: assetsCommentsTimelineMinimized })}
+                                                    cls={clsx(splitPaneCorrect, pane2OverflowUnset, pane1OverflowUnset, paneHeightZero, { [minimized]: assetsCommentsTimelineMinimized })}
                                                     split={`horizontal`}
                                                     minSize={50}
                                                     defaultSize={commentBarSize}
@@ -621,10 +622,10 @@ const CorrectLayout = ({
                                                     assignmentBarToggle={handleAssignmentBarOpen}
                                                 />
                                             </div>
-                                            <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
+                                            <div className={isDragging === true ? notInteractive : isInteractive} style={{ height: '100%'}}>
                                                 {
                                                     <AssetDetailsContainer 
-                                                        cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPaneMainOverflowUnset, { [classes.minimized]: assetsCommentsTimelineMinimized })}
+                                                        cls={clsx(splitPaneCorrect, pane2OverflowUnset, mainOverflowUnset, { [minimized]: assetsCommentsTimelineMinimized })}
                                                         split={`horizontal`}
                                                         minSize={10}
                                                         defaultSize={illustrationBarSize}

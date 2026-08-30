@@ -1,3 +1,6 @@
+import { splitPaneSecondary, minimized, splitPane2, splitPane3, pane2OverflowUnset,
+         pane1OverflowUnset, mainOverflowUnset, paneHeightZero,
+         notInteractive, isInteractive, companyBar } from '../../styles/splitPane'
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -56,7 +59,6 @@ import {
 
 import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpanMode, setMaintainenceFeeFrameMode, setTimelineScreen, updateViewDashboard, setFirstBarSize } from '../../actions/uiActions'
 
-import useStyles from './styles'
 import clsx from 'clsx'
 import IllustrationContainer from '../common/AssetsVisualizer/IllustrationContainer'
 import LegalEventsContainer from '../common/AssetsVisualizer/LegalEventsContainer'
@@ -150,7 +152,6 @@ const GlobalScreen = ({
     driveTemplateMode,
     securedTransactionAssets
 }) => {
-    const classes = useStyles() 
     let location = useLocation();
     const dispatch = useDispatch()
     const mainContainerRef = useRef()
@@ -502,7 +503,7 @@ const GlobalScreen = ({
     
     return (
         <SplitPane
-            className={classes.splitPane}
+            className={splitPaneSecondary}
             split="vertical"
             size={firstBarSize}
             onChange={(size) => { 
@@ -513,7 +514,7 @@ const GlobalScreen = ({
             ref={companyRef}
         >
             <div 
-                className={clsx(classes.companyBar, 'step-1')}
+                className={clsx(companyBar, 'step-1')}
                 id={`company_container`} >  
                 { 
                     openBar === true 
@@ -540,7 +541,7 @@ const GlobalScreen = ({
                 }
             </div>
             <SplitPane
-                className={classes.splitPane}
+                className={splitPaneSecondary}
                 split="vertical"
                 size={dashboardScreen === false ? typeBarSize : 0}
                 onChange={(size) => { 
@@ -567,7 +568,7 @@ const GlobalScreen = ({
                     }
                 </div>
                 <SplitPane
-                    className={classes.splitPane}
+                    className={splitPaneSecondary}
                     split="vertical"
                     size={dashboardScreen === false ? otherPartyBarSize : 0}
                     onChange={(size) => { 
@@ -583,7 +584,7 @@ const GlobalScreen = ({
                                 <React.Fragment>
                                     {/* <ArrowButton arrowId={`arrow_parties`} handleClick={handleOtherPartyBarOpen} buttonType={toggleOtherPartyButtonType} buttonVisible={otherPartyButtonVisible}/> */}
                                     <SplitPane
-                                        className={classes.splitPane}
+                                        className={splitPaneSecondary}
                                         split={`horizontal`}
                                         size={partyBarSize}
                                         ref={entityRef}
@@ -650,7 +651,7 @@ const GlobalScreen = ({
                         
                     </div>
                     <SplitPane
-                        className={classes.splitPane}
+                        className={splitPaneSecondary}
                         split="vertical"
                         size={dashboardScreen === false ? assignmentBarSize : 0}
                         onChange={(size) => { 
@@ -675,7 +676,7 @@ const GlobalScreen = ({
                             }
                         </div>
                         <SplitPane
-                            className={classes.splitPane}
+                            className={splitPaneSecondary}
                             split="vertical"
                             size={dashboardScreen === false ? customerBarSize : 0}
                             onChange={(size) => { 
@@ -745,7 +746,7 @@ const GlobalScreen = ({
                                 }
                             </div>
                             <SplitPane
-                                className={classes.splitPane}
+                                className={splitPaneSecondary}
                                 split="vertical"
                                 size={dashboardScreen === false ? assetFilesBarSize : 0}
                                 ref={assetFileRef}
@@ -762,7 +763,7 @@ const GlobalScreen = ({
                             >
                                 <div id={`assets_files_container`} style={{ height: '100%'}}>
                                     <SplitPane
-                                        className={classes.splitPane}
+                                        className={splitPaneSecondary}
                                         split={`horizontal`}
                                         size={driveBarSize}
                                         ref={fileBarRef}
@@ -784,7 +785,7 @@ const GlobalScreen = ({
                                     </SplitPane>                                    
                                 </div> 
                                 <SplitPane
-                                    className={classes.splitPane}
+                                    className={splitPaneSecondary}
                                     split="vertical"
                                     size={dashboardScreen === false ? driveTemplateBarSize : 0}
                                     ref={templateFileRef}
@@ -809,7 +810,7 @@ const GlobalScreen = ({
                                         }
                                     </div>
                                     <SplitPane
-                                        className={`${classes.splitPane} ${classes.splitPane2}  ${classes.splitPane3} ${classes.splitPane2OverflowUnset}`}
+                                        className={`${splitPaneSecondary} ${splitPane2}  ${splitPane3} ${pane2OverflowUnset}`}
                                         split="vertical"
                                         minSize={100}
                                         maxSize={-270}  
@@ -835,9 +836,9 @@ const GlobalScreen = ({
                                         ref={mainContainerRef}
                                         primary={'second'}                                
                                     >
-                                        <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}} >
+                                        <div className={isDragging === true ? notInteractive : isInteractive} style={{ height: '100%'}} >
                                             <IllustrationCommentContainer 
-                                                cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPane1OverflowUnset, classes.paneHeightZero, { [classes.minimized]: assetsCommentsTimelineMinimized })}
+                                                cls={clsx(splitPaneSecondary, pane2OverflowUnset, pane1OverflowUnset, paneHeightZero, { [minimized]: assetsCommentsTimelineMinimized })}
                                                 split={`horizontal`} 
                                                 minSize={50}
                                                 maxSize={-200}
@@ -879,7 +880,7 @@ const GlobalScreen = ({
                                                 parentBar={setVisualizeOpenBar}
                                             /> 
                                         </div>
-                                        <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}} id={`information_container`}>
+                                        <div className={isDragging === true ? notInteractive : isInteractive} style={{ height: '100%'}} id={`information_container`}>
                                         {
                                             dashboardScreen === true && dashboardPanel === true && type !== 9  
                                             ? 
@@ -928,7 +929,7 @@ const GlobalScreen = ({
                                                         connectionBoxView === true 
                                                         ?
                                                             <IllustrationPdf 
-                                                                cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPaneMainOverflowUnset, { [classes.minimized]: assetsCommentsTimelineMinimized })}
+                                                                cls={clsx(splitPaneSecondary, pane2OverflowUnset, mainOverflowUnset, { [minimized]: assetsCommentsTimelineMinimized })}
                                                                 split={`horizontal`}
                                                                 primary={'second'}
                                                                 illustrationData={connectionBoxData}
@@ -941,7 +942,7 @@ const GlobalScreen = ({
                                                             ''
                                             :
                                             <AssetDetailsContainer 
-                                                cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPaneMainOverflowUnset, { [classes.minimized]: assetsCommentsTimelineMinimized })}
+                                                cls={clsx(splitPaneSecondary, pane2OverflowUnset, mainOverflowUnset, { [minimized]: assetsCommentsTimelineMinimized })}
                                                 split={`horizontal`}
                                                 minSize={10}
                                                 defaultSize={illustrationBarSize}

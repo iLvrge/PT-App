@@ -1,3 +1,6 @@
+import { splitPanePink, minimized, splitPane2, splitPane3, pane2OverflowUnset,
+         pane1OverflowUnset, mainOverflowUnset, paneHeightZero,
+         notInteractive, isInteractive, companyBar } from '../../styles/splitPane'
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {  useLocation } from "react-router-dom";
@@ -49,7 +52,6 @@ import {
 
 import { toggleUsptoMode, toggleFamilyMode, toggleFamilyItemMode, toggleLifeSpanMode, setMaintainenceFeeFrameMode, setPatentScreen, setDashboardScreen, setTimelineScreen, setFirstBarSize } from '../../actions/uiActions'
 
-import useStyles from './styles'
 import clsx from 'clsx'
 import IllustrationContainer from '../common/AssetsVisualizer/IllustrationContainer'
 import Maintainance from '../common/Maintainence'
@@ -132,7 +134,6 @@ const PatentLayout = ({
     driveTemplateMode
 }) => {
     
-    const classes = useStyles() 
     const dispatch = useDispatch()
     const location = useLocation()
     const mainContainerRef = useRef()
@@ -434,7 +435,7 @@ const PatentLayout = ({
     return (
         <React.Fragment>
         <SplitPane
-            className={classes.splitPane}
+            className={splitPanePink}
             split="vertical"
             size={firstBarSize}
             onChange={(size) => { 
@@ -445,7 +446,7 @@ const PatentLayout = ({
             ref={companyRef}
         >
             <div 
-                className={clsx(classes.companyBar, 'step-1')}
+                className={clsx(companyBar, 'step-1')}
                 id={`company_container`} >
                 { 
                     openBar === true 
@@ -471,7 +472,7 @@ const PatentLayout = ({
                 }
             </div>
             <SplitPane
-                className={classes.splitPane}
+                className={splitPanePink}
                 split="vertical"
                 size={typeBarSize}
                 onChange={(size) => { 
@@ -498,7 +499,7 @@ const PatentLayout = ({
                     }
                 </div>
                 <SplitPane
-                    className={classes.splitPane}
+                    className={splitPanePink}
                     split="vertical"
                     size={otherPartyBarSize}
                     onChange={(size) => { 
@@ -514,7 +515,7 @@ const PatentLayout = ({
                                 <>
                                     {/* <ArrowButton arrowId={`arrow_parties`} handleClick={handleOtherPartyBarOpen} buttonType={toggleOtherPartyButtonType} buttonVisible={otherPartyButtonVisible}/> */}
                                     <SplitPane
-                                        className={classes.splitPane}
+                                        className={splitPanePink}
                                         split={`horizontal`}
                                         size={partyBarSize}
                                         ref={entityRef}
@@ -553,7 +554,7 @@ const PatentLayout = ({
                         }
                     </div>
                     <SplitPane
-                        className={classes.splitPane}
+                        className={splitPanePink}
                         split="vertical"
                         size={assignmentBarSize}
                         onChange={(size) => { 
@@ -581,7 +582,7 @@ const PatentLayout = ({
                             }
                         </div>
                         <SplitPane
-                            className={classes.splitPane}
+                            className={splitPanePink}
                             split="vertical"
                             size={customerBarSize}
                             onChange={(size) => { 
@@ -634,7 +635,7 @@ const PatentLayout = ({
                                 }
                             </div>
                             <SplitPane
-                                className={classes.splitPane}
+                                className={splitPanePink}
                                 split="vertical"
                                 size={assetFilesBarSize}
                                 ref={assetFileRef}
@@ -651,7 +652,7 @@ const PatentLayout = ({
                             >
                                 <div id={`assets_files_container`} style={{ height: '100%'}}>
                                     <SplitPane
-                                        className={classes.splitPane}
+                                        className={splitPanePink}
                                         split={`horizontal`}
                                         size={driveBarSize}
                                         ref={fileBarRef}
@@ -673,7 +674,7 @@ const PatentLayout = ({
                                     </SplitPane>                                    
                                 </div> 
                                 <SplitPane
-                                    className={classes.splitPane}
+                                    className={splitPanePink}
                                     split="vertical"
                                     size={driveTemplateBarSize}
                                     ref={templateFileRef}
@@ -698,7 +699,7 @@ const PatentLayout = ({
                                         }
                                     </div>
                                     <SplitPane
-                                        className={`${classes.splitPane} ${classes.splitPane2}  ${classes.splitPane3} ${classes.splitPane2OverflowUnset}`}
+                                        className={`${splitPanePink} ${splitPane2}  ${splitPane3} ${pane2OverflowUnset}`}
                                         split="vertical"
                                         minSize={100}
                                         maxSize={-270}  
@@ -723,9 +724,9 @@ const PatentLayout = ({
                                         ref={mainContainerRef}
                                         primary={'second'}                                
                                     >
-                                        <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
+                                        <div className={isDragging === true ? notInteractive : isInteractive} style={{ height: '100%'}}>
                                             <IllustrationCommentContainer 
-                                                cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPane1OverflowUnset, classes.paneHeightZero, { [classes.minimized]: assetsCommentsTimelineMinimized })}
+                                                cls={clsx(splitPanePink, pane2OverflowUnset, pane1OverflowUnset, paneHeightZero, { [minimized]: assetsCommentsTimelineMinimized })}
                                                 split={`horizontal`} 
                                                 minSize={50}
                                                 maxSize={-200}
@@ -767,9 +768,9 @@ const PatentLayout = ({
                                                 record={selectedCategory === 'missed_monetization' ? true : false}
                                             /> 
                                         </div>
-                                        <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}}>
+                                        <div className={isDragging === true ? notInteractive : isInteractive} style={{ height: '100%'}}>
                                             <AssetDetailsContainer 
-                                                cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPaneMainOverflowUnset, { [classes.minimized]: assetsCommentsTimelineMinimized })}
+                                                cls={clsx(splitPanePink, pane2OverflowUnset, mainOverflowUnset, { [minimized]: assetsCommentsTimelineMinimized })}
                                                 split={`horizontal`}
                                                 minSize={10}
                                                 defaultSize={illustrationBarSize}

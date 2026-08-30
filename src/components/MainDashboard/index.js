@@ -1,3 +1,6 @@
+import { splitPanePink, minimized, splitPane2, splitPane3, pane2OverflowUnset,
+         pane1OverflowUnset, mainOverflowUnset, paneHeightZero,
+         notInteractive, isInteractive, companyBar } from '../../styles/splitPane'
 import React, {  useRef, useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -19,7 +22,6 @@ import {
 } from '../../actions/patentTrackActions2'
 
 
-import useStyles from './styles'
 import clsx from 'clsx'  
 import { useReloadLayout } from '../../utils/useReloadLayout';  
 import { setFirstBarSize } from '../../actions/uiActions'; 
@@ -59,7 +61,6 @@ const MainDashboard = ({
     setChartBar, 
     checkChartAnalytics,  
 }) => {
-    const classes = useStyles() 
     let location = useLocation();
     const dispatch = useDispatch() 
     const companyRef = useRef() 
@@ -114,7 +115,7 @@ const MainDashboard = ({
  
     return (
         <SplitPane
-            className={classes.splitPane}
+            className={splitPanePink}
             split="vertical"
             size={firstBarSize}
             onChange={(size) => { 
@@ -125,7 +126,7 @@ const MainDashboard = ({
             ref={companyRef}
         >
             <div 
-                className={clsx(classes.companyBar, 'step-1')}
+                className={clsx(companyBar, 'step-1')}
                 id={`company_container`} >
                 { 
                     openBar === true 
@@ -144,9 +145,9 @@ const MainDashboard = ({
                         ''
                 }
             </div> 
-            <div className={isDragging === true ? classes.notInteractive : classes.isInteractive} style={{ height: '100%'}} >
+            <div className={isDragging === true ? notInteractive : isInteractive} style={{ height: '100%'}} >
                 <IllustrationCommentContainer 
-                    cls={clsx(classes.splitPane, classes.splitPane2OverflowHidden, classes.splitPane1OverflowUnset, classes.paneHeightZero, { [classes.minimized]: assetsCommentsTimelineMinimized })}
+                    cls={clsx(splitPanePink, pane2OverflowUnset, pane1OverflowUnset, paneHeightZero, { [minimized]: assetsCommentsTimelineMinimized })}
                     split={`horizontal`} 
                     minSize={50}
                     maxSize={-200}
