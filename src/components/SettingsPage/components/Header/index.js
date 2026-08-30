@@ -5,11 +5,7 @@ import Tooltip from '@mui/material/Tooltip'
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
-import Dialog from '@mui/material/Dialog'
-import DialogTitle from '@mui/material/DialogTitle'
-import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
-import DialogActions from '@mui/material/DialogActions'
+import { Dialog, DialogContent } from '../../../../ui/Dialog'
 import Button from '@mui/material/Button'
 import StyledSearch from '../../../common/StyledSearch'
 import clsx from 'clsx'
@@ -33,38 +29,34 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
   return (
     <Fragment>
 
-      <Dialog open={openDialog} onClose={onCloseDialog} className={"[&_.MuiDialogContent-root]:!px-6 [&_.MuiDialogContent-root]:!py-2 [&_.MuiDialogActions-root]:p-2"}>
-        <DialogTitle id="alert-dialog-title">Remove Items</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+      {/* Radix replaces MUI's Dialog here. The padding that used to be applied
+          through .MuiDialogContent-root and .MuiDialogActions-root now sits on
+          the elements themselves, since those class names no longer exist. */}
+      <Dialog open={openDialog} onOpenChange={(open) => { if (!open) onCloseDialog() }}>
+        <DialogContent title="Remove Items" className="max-w-md">
+          <div className="px-6 py-2 text-sm" id="alert-dialog-description">
             Are you sure you want to remove {numSelected} { typeof selectedType != 'undefined' ? selectedType.toLowerCase() : title.toLowerCase()}?
             {
               typeof selectedType != 'undefined' && selectedType.toLowerCase() != 'companies' && (
                 <React.Fragment>
-                  <Button
-                    onClick={onConfirmDelete}
-                  >Remove the group together with its entities</Button>
-                  <Button
-                    onClick={onConfirmDelete}
-                  >Remove the group but keep its entities</Button>
+                  <Button onClick={onConfirmDelete}>Remove the group together with its entities</Button>
+                  <Button onClick={onConfirmDelete}>Remove the group but keep its entities</Button>
                 </React.Fragment>
-              ) 
+              )
             }
-          </DialogContentText>
-        </DialogContent> 
+          </div>
 
-        <DialogActions>
-          <Button onClick={onCloseDialog}>
-            CANCEL
-          </Button>
-          {
-            (typeof selectedType != 'undefined' && selectedType.toLowerCase() == 'companies' || typeof selectedType == 'undefined') && (
-              <Button onClick={onConfirmDelete} color="primary" variant={'contained'} autoFocus>
-                OK
-              </Button>
-            )
-          }
-        </DialogActions>
+          <div className="flex justify-end gap-2 p-2">
+            <Button onClick={onCloseDialog}>CANCEL</Button>
+            {
+              (typeof selectedType != 'undefined' && selectedType.toLowerCase() == 'companies' || typeof selectedType == 'undefined') && (
+                <Button onClick={onConfirmDelete} color="primary" variant={'contained'} autoFocus>
+                  OK
+                </Button>
+              )
+            }
+          </div>
+        </DialogContent>
       </Dialog>
       <Toolbar variant={dense ? 'dense' : 'regular'} className={clsx("bg-bg-paper", dense && 'h-10 min-h-0')}>
         <Typography className={"flex-[1_1_100%]"} variant="h6" id="tableTitle" component="div">
