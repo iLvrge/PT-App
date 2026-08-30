@@ -1,3 +1,4 @@
+import cn from '../../../ui/cn'
 import React, {
   useCallback,
   useEffect,
@@ -13,7 +14,6 @@ import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
 import MonetizationOn from '@mui/icons-material/MonetizationOn'
 import moment from "moment";
 
-import useStyles from "./styles";
 import _orderBy from "lodash/orderBy";
 import VirtualizedTable from "../VirtualizedTable";
 import PatenTrackApi, { DEFAULT_CUSTOMERS_LIMIT } from "../../../api/patenTrack2";
@@ -77,7 +77,6 @@ const MaintainenceAssetsList = ({
   fileBar,
   driveBar
 }) => {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const [offset, setOffset] = useState(0);
   const [headerRowHeight, setHeaderRowHeight] = useState(47)
@@ -167,8 +166,8 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
       }
     }, [props])
     return (
-      <Box className={classes.rating_container}>
-        <span className={classes.rating_label}><label>{props.label}</label></span>
+      <Box className={"[&_.MuiRating-root]:top-[3px]"}>
+        <span className={"relative inline-block h-[21px] w-[75px] [&_label]:absolute [&_label]:top-px"}><label>{props.label}</label></span>
         <Rating
           name={props.name}
           onChangeActive={(event, newValue) => onHandleRating(event, newValue, props)}
@@ -759,7 +758,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   if (isLoading && assets.list.length == 0) return <Loader />;
 
   return (
-    <Paper className={clsx(classes.root, {[classes.mobile]: isMobile === true && (fileBar === true || driveBar)})} square id={`maintainence_assets`}>
+    <Paper className={cn("flex h-full flex-1 flex-col overflow-x-hidden overflow-y-auto [&_.MuiTableCell-root_.MuiSelect-select.MuiSelect-select]:pr-0 [&_.ReactVirtualized__Table__rowColumn_.MuiSvgIcon-root]:absolute [&_.ReactVirtualized__Table__rowColumn_.MuiSvgIcon-root]:top-[5px] [&_.ReactVirtualized__Table__rowColumn_.MuiSvgIcon-root]:h-[1em] [&_.ReactVirtualized__Table__rowColumn_.MuiSvgIcon-root]:w-[1em] [&_.ReactVirtualized__Table__rowColumn_.MuiSvgIcon-root]:text-xl [&_.ReactVirtualized__Table__rowColumn_.MuiTableCell-root_span]:p-1.5 [&_.MuiSelect-select:focus]:bg-none [&_svg.MuiSelect-icon]:top-[3px] [&_svg.MuiSelect-icon]:text-[1.7rem] [&_svg.MuiSelect-icon]:opacity-0 [&_.MuiInput-underline:before]:border-0 [&_.MuiInput-underline:after]:border-0 [&_.selectedIcon_svg]:absolute [&_.selectedIcon_svg]:left-0.5 [&_.selectedIcon_svg]:!top-[17px] [&_.selectedIcon_svg]:w-[1.3rem] [&_.selectedIcon_svg]:text-[1.3rem]", {["flex-[1_1_50%]"]: isMobile === true && (fileBar === true || driveBar)})} square id={`maintainence_assets`}>
       <VirtualizedTable
         openDropAsset={dropOpenAsset}
         selected={selectItems}

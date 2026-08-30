@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {  useHistory, useLocation  } from 'react-router-dom'
 import { Paper } from '@mui/material'
-import useStyles from './styles' 
 import VirtualizedTable from '../VirtualizedTable'
 import { DEFAULT_CUSTOMERS_LIMIT } from '../../../api/patenTrack2'
 
@@ -146,7 +145,6 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, itemCallback, groups, 
             justifyContent: 'flex-end'
         } */
     ]
-    const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
     const location = useLocation() 
@@ -401,7 +399,7 @@ const ChildTable = ({ parentCompanyId, headerRowDisabled, itemCallback, groups, 
     if (childCompaniesLoading) return <Loader /> 
 
     return (
-        <Paper className={classes.root} square id={`child_companies`}>
+        <Paper className={"flex h-full flex-1 flex-col overflow-hidden [&_.font12Rem]:text-base"} square id={`child_companies`}>
             <VirtualizedTable
             scrollTop={companyTableScrollPosition}
             selected={selectItems}

@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState, useRef} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {  useHistory, useLocation  } from 'react-router-dom'
 import { Paper } from '@mui/material'
-import useStyles from './styles' 
 import _orderBy from 'lodash/orderBy' 
 import VirtualizedTable from '../VirtualizedTable'
 
@@ -85,7 +84,6 @@ import Loader from '../Loader'
 
 const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag, parentBar, isMobile, checkChartAnalytics}) => {
     
-    const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
     const location = useLocation()
@@ -1021,7 +1019,7 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
     if (isLoadingCompanies && companies.list.length == 0) return <Loader />
 
   return (
-    <Paper className={classes.root} square id={`main_companies`}>
+    <Paper className={"flex h-full flex-1 flex-col overflow-hidden [&_.font12Rem]:text-base"} square id={`main_companies`}>
         <VirtualizedTable
         scrollTop={companyTableScrollPosition}
         selected={selectItems}

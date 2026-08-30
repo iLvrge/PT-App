@@ -4,7 +4,6 @@ import {  useHistory, useLocation  } from 'react-router-dom'
 import { Paper } from '@mui/material'
 import moment from  'moment'
 import clsx from 'clsx'
-import useStyles from './styles' 
 import VirtualizedTable from '../VirtualizedTable'
 import { DEFAULT_CUSTOMERS_LIMIT } from '../../../api/patenTrack2'
 import { numberWithCommas } from '../../../utils/numbers'
@@ -59,7 +58,6 @@ import ChildTable from './ChildTable'
 
 const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
 
-    const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
     const location = useLocation()
@@ -453,7 +451,7 @@ const AssignmentsType = ({parentBarDrag, parentBar, isMobile }) => {
     if (assetTypesLoading && typeData.length == 0) return <Loader />
 
     return (
-        <Paper className={classes.root} square id={`assets_type`}>
+        <Paper className={"flex h-full flex-1 flex-col overflow-x-hidden overflow-y-auto [&_.disable_header_.ReactVirtualized__Table__headerRow]:hidden [&_.rowIndex_14]:border-t [&_.rowIndex_14]:border-[#f50057]"} square id={`assets_type`}>
             <VirtualizedTable
             selected={selectItems}
             rowSelected={selectedRow}
