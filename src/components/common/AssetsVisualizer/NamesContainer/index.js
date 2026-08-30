@@ -1,3 +1,4 @@
+import useIncorrectNames from '../../../../queries/useIncorrectNames'
 import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import { Chart, registerables } from 'chart.js';
 import { WordCloudController, WordElement } from 'chartjs-chart-wordcloud';
@@ -17,8 +18,6 @@ const NamesContainer = (props) => {
     const dispatch = useDispatch()
     const [ tabs, setTabs ] = useState(['Incorrect Names'])
     const [ selectedTab, setSelectedTab ] = useState(typeof props.activeTab != 'undefined' ? props.activeTab : 0)
-    const [ namesData, setNamesData ] = useState([])
-    const [ rawData, setRawData ] = useState([])
     const [ width, setWidth ] = useState(0)
     const [ height, setHeight ] = useState(0)
     const [size, setSize] = useState([550, 400])
@@ -31,30 +30,9 @@ const NamesContainer = (props) => {
         return wordCloudOptions
     })
      
-    useEffect(() => {
-        const getIncorrectNamesData = async () => {
-            setNamesData([])
-            setRawData([])
-            const companies = selectedCompaniesAll === true ? [] : selectedCompanies;
-            if(selectedCompaniesAll === true || selectedCompanies.length > 0) { 
-                const {data} = await PatenTrackApi.getIncorrectNames(companies);
-                if(data.length > 0) {
-                    setRawData(data)
-                    const words = []
-                    const promise = data.map(item => {
-                        words.push({
-                            text: item.name,
-                            value: 40 + (item.distance * 2)
-                        })
-                    })
-                    await Promise.all(promise)
-                    setNamesData(words) 
-
-                }
-            }
-        }
-        getIncorrectNamesData()
-    }, [selectedCompanies, selectedCompaniesAll] )
+    const { data: incorrectNames } = useIncorrectNames({ selectedCompanies, selectedCompaniesAll })
+    const rawData = incorrectNames?.rawData ?? []
+    const namesData = incorrectNames?.namesData ?? []
 
      
 
