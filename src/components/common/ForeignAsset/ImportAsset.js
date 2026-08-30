@@ -54,15 +54,16 @@ const ImportAsset = ({items, invalidItems, updateItems, updateInvalidItems, dele
     }
 
     useEffect(() => {
-        if(textAreaRef.current !== null ){
-            const textarea = textAreaRef.current.querySelector('textarea');
-            if(textarea !== null) {
-                textarea.addEventListener("paste", onHandlePaste, false);             
-                return () => {
-                    textarea.removeEventListener("paste", null);
-                }
-            }
-        }
+        if (textAreaRef.current === null) return undefined
+        const textarea = textAreaRef.current.querySelector('textarea')
+        if (textarea === null) return undefined
+
+        // The cleanup used to call removeEventListener('paste', null), which
+        // matches nothing, so every mount left its handler attached. Removing
+        // the same reference that was added actually detaches it.
+        const handler = onHandlePaste
+        textarea.addEventListener('paste', handler, false)
+        return () => textarea.removeEventListener('paste', handler, false)
     }, [textAreaRef])
 
     /**
