@@ -4,11 +4,9 @@ import { NestedMenuItem } from 'mui-nested-menu'
 import { useSelector } from 'react-redux'
 import AddIcon from '@mui/icons-material/Add'
 import LayersIcon from '@mui/icons-material/Layers'
-import useStyles from './styles'
 
 const AddMenu = ({ anchorEl, onClose, createParent, associateToParent }) => {
   const companiesList = useSelector(state => state.patenTrack2.companiesList)
-  const classes = useStyles()
 
   const onAction = useCallback((action) => () => {
     onClose()
@@ -31,14 +29,14 @@ const AddMenu = ({ anchorEl, onClose, createParent, associateToParent }) => {
       }}>
 
       <MenuItem onClick={onAction(createParent)}>
-        <AddIcon className={classes.icon} />
+        <AddIcon className="mr-2.5" />
           Import
       </MenuItem>
 
       <NestedMenuItem
         label={
           <Fragment>
-            <LayersIcon className={classes.icon} />
+            <LayersIcon className="mr-2.5" />
             Import into group
           </Fragment>
         }
