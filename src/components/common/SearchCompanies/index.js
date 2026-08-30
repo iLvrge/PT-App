@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react'
 import { connect } from 'react-redux'
-import useStyles from './styles'
 import Alert from '@mui/material/Alert'
 import Collapse from '@mui/material/Collapse'
 import TextField from '@mui/material/TextField'
@@ -50,7 +49,6 @@ const useRowStyles = makeStyles({
 })
 
 function SearchCompanies(props) {
-  const classes = useStyles()
   const inputEl = useRef(null)
   const [ checked, setChecked ] = useState([])
   const [ timeInterval, setTimeInterval ] = useState(null)
@@ -209,7 +207,7 @@ function SearchCompanies(props) {
     return (
       <React.Fragment>
         <TableRow
-          className={`${classes.mainTable}`}
+          className={`${undefined}`}
           hover
           role="checkbox"
           aria-checked={props.selected(row.id)}
@@ -248,13 +246,13 @@ function SearchCompanies(props) {
           </TableCell>
         </TableRow>
         {row.children.length > 0 ? (
-          <TableRow className={`${classes.mainTable}`}>
+          <TableRow className={`${undefined}`}>
             <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
               <Collapse in={open} timeout="auto" unmountOnExit>
                 <Box style={{ paddingLeft: '30px' }}>
                   <Table
                     aria-label="representatives"
-                    className={classes.childTable}
+                    className={undefined}
                   >
                     <TableBody>
                       {row.children.map((company, idx) => (
@@ -298,15 +296,15 @@ function SearchCompanies(props) {
   }
 
   return (
-    <div className={classes.searchContainer}>
-      <div className={classes.container}>
-        <div className={classes.context}>
+    <div className={"relative z-[1002] flex h-full w-full grow flex-col"}>
+      <div className={"relative mb-2.5 mr-2.5 flex min-h-[60px] grow items-center justify-center border border-[#363636] px-4"}>
+        <div className={"m-auto flex h-full w-full flex-col overflow-hidden"}>
           <Collapse in={open}>
             <Alert severity="warning">
               Please select a parent company first
             </Alert>
           </Collapse>
-          <form noValidate autoComplete="off" className={classes.form}>
+          <form noValidate autoComplete="off" className={"[&_.MuiInputLabel-root]:!text-white [&_.MuiInputLabel-root]:font-[inherit] [&_.MuiFormControl-root]:w-[90%]"}>
             <TextField
               id="search_company"
               name="search_company"
@@ -314,7 +312,7 @@ function SearchCompanies(props) {
               label="Enter a Company Name to Search"
               onChange={handleSearchCompany}
             />
-            <span className={classes.spanAbsolute}>
+            <span className={"absolute right-[100px] top-[22px] text-secondary"}>
               {props.searchCompanies.length > 0
                 ? props.searchCompanies.length.toLocaleString()
                 : ''}
@@ -322,19 +320,19 @@ function SearchCompanies(props) {
             <a
               onClick={selectParentCompany}
               title="Click to associate a parent"
-              className={`${classes.iconAbsolute}`}
+              className={`${"absolute right-2 top-[22px] cursor-pointer"}`}
             >
               <i className={'far fa-layer-plus'}></i>
             </a>
             <a
               onClick={addCompany}
               title="Click to create a parent"
-              className={`${classes.iconAbsolute} ${classes.right}`}
+              className={`${"absolute right-2 top-[22px] cursor-pointer"} ${"right-[45px]"}`}
             >
               <i className={'fas fa-plus'}></i>
             </a>
           </form>
-          <div className={`search-list ${classes.scrollbar}`}>
+          <div className={`search-list ${"relative mt-1 w-full grow overflow-hidden"}`}>
             {props.isLoading ? (
               <Loader />
             ) : (
@@ -350,7 +348,7 @@ function SearchCompanies(props) {
                     <Table
                       stickyHeader
                       aria-label="collapsible table"
-                      className={classes.mainTable}
+                      className={undefined}
                     >
                       <TableHead>
                         <TableRow>
@@ -365,7 +363,7 @@ function SearchCompanies(props) {
                           <TableCell align="left">Name</TableCell>
                           <TableCell
                             align="right"
-                            className={classes.paddingRight20}
+                            className={undefined}
                           >
                             Assignments
                           </TableCell>
