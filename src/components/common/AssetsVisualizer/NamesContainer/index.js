@@ -5,7 +5,6 @@ import ReactWordcloud from 'react-wordcloud';
 import { select } from 'd3-selection';
 import { useDispatch, useSelector } from 'react-redux'
 import PatenTrackApi from '../../../../api/patenTrack2';
-import useStyles from './styles';
 import { Paper, Tab, Tabs } from '@mui/material'; 
 import { wordCloudOptions } from '../../../../utils/options'; 
 import TitleBar from '../../TitleBar';
@@ -15,7 +14,6 @@ import { setAssetTypeAssignmentAllAssets, setAssetTypeAssignments, setSelectAssi
 
 
 const NamesContainer = (props) => {
-    const classes = useStyles() 
     const dispatch = useDispatch()
     const [ tabs, setTabs ] = useState(['Incorrect Names'])
     const [ selectedTab, setSelectedTab ] = useState(typeof props.activeTab != 'undefined' ? props.activeTab : 0)
@@ -143,20 +141,20 @@ const NamesContainer = (props) => {
     const handleChangeTab = (e, newTab) => setSelectedTab(newTab)
   
     return (
-        <Paper className={classes.root} square>  
+        <Paper className={"relative flex h-full w-full flex-col [&_.MuiTabs-root]:!border-b [&_.MuiTabs-root]:!border-divider [&_.MuiTab-root]:min-w-[130px] [&_.MuiTab-root]:max-w-[200px] [&_.MuiTab-wrapper]:whitespace-nowrap [&_.MuiAlert-root]:absolute [&_.MuiAlert-root]:top-[47px]"} square>  
             <Tabs
                 value={selectedTab}
                 variant="scrollable"
                 scrollButtons="auto"
                 onChange={handleChangeTab}
-                className={classes.tabs}
+                className={"min-h-[47px] w-[94%]"}
             >
                 {
                     tabs.map((tab) => (
                         <Tab
                             key={tab}
                             label={tab}
-                            classes={{ root: classes.tab }}
+                            classes={{ root: "min-h-[47px] min-w-[25%] flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-[1.1rem]" }}
                         />
                     )) 
                 }

@@ -4,7 +4,6 @@ import { WordCloudController, WordElement } from 'chartjs-chart-wordcloud';
 import ReactWordcloud from 'react-wordcloud'; 
 import { useDispatch, useSelector } from 'react-redux'
 import PatenTrackApi from '../../../../api/patenTrack2';
-import useStyles from './styles';
 import { Alert, Paper, Tab, Tabs, Typography } from '@mui/material';
 import { wordCloudOptions } from '../../../../utils/options';  
 import AgentsVisualizer from '../AgentsVisualizer';
@@ -14,7 +13,6 @@ import LabelWithIcon from '../../LabelWithIcon';
 
 
 const LawFirmNames = (props) => {
-    const classes = useStyles() 
     const dispatch = useDispatch()
     const [showAlert, setShowAlert] = useState(false)
     const [ tabs, setTabs ] = useState(['Names', 'Filling', 'Assignments', 'Innovations'])
@@ -147,13 +145,13 @@ const LawFirmNames = (props) => {
 
   
     return (
-        <Paper className={classes.root} square id='lawfirm_cloud_names'>  
+        <Paper className={"relative flex h-full w-full flex-col [&_.MuiTabs-root]:!border-b [&_.MuiTabs-root]:!border-divider [&_.MuiTab-root]:min-w-[130px] [&_.MuiTab-root]:max-w-[200px] [&_.MuiTab-wrapper]:whitespace-nowrap [&_.MuiAlert-root]:absolute [&_.MuiAlert-root]:top-[47px]"} square id='lawfirm_cloud_names'>  
             <Tabs
                 value={selectedTab}
                 variant="scrollable"
                 scrollButtons="auto"
                 onChange={handleChangeTab}
-                className={classes.tabs}
+                className={"min-h-[47px] w-[94%]"}
             >
                 {
                     tabs.map((tab) => (
@@ -162,7 +160,7 @@ const LawFirmNames = (props) => {
                             label={tab}
                             icon={<LabelWithIcon label={tab}/>} 
                             iconPosition="start"
-                            classes={{ root: classes.tab }}
+                            classes={{ root: "min-h-[47px] min-w-[25%] flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-[1.1rem]" }}
                         />
                     )) 
                 } 

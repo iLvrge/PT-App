@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useSelector } from 'react-redux'
-import useStyles from './styles'
 import { pink } from '@mui/material/colors'
 
 import FullScreen from '../../FullScreen'
@@ -27,7 +26,6 @@ const GoogleCharts = ({ chartBar, visualizerBarSize, standalone }) => {
 
     const [data, setData] = useState([])
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
-    const classes = useStyles() 
     const menuItems = [
         {
             id: 1,
@@ -196,27 +194,27 @@ const GoogleCharts = ({ chartBar, visualizerBarSize, standalone }) => {
     }
 
     return (
-        <Paper className={classes.root} square>  
+        <Paper className={"relative flex h-full w-full flex-col [&_.MuiTabs-root]:!border-b [&_.MuiTabs-root]:!border-divider [&_.MuiTab-root]:min-w-[inherit] [&_.MuiTab-root]:max-w-[150px] [&_.MuiTab-wrapper]:whitespace-nowrap [&_.vis-timeline]:border-0 [&_.vis-time-axis_.vis-text]:text-text-primary [&_.vis-item]:text-text-primary [&_.vis-y-axis]:text-text-primary [&.vis-panel.vis-center]:border [&.vis-panel.vis-center]:border-divider [&_.vis-panel.vis-center]:border-divider [&_.vis-panel.vis-left]:border-divider [&_.vis-panel.vis-right]:border-divider [&_.vis-panel.vis-top]:border-divider [&_.vis-panel.vis-bottom]:border-divider [&_.vis-panel.vis-background.vis-horizontal_.vis-grid]:border-[#e5e5e51c]"} square>  
             <Tabs
                 value={selectedTab}
                 variant="scrollable"
                 scrollButtons="auto"
                 onChange={handleChangeTab}
-                className={classes.tabs}
+                className={"min-h-[47px]"}
             >
                 {
                     chartTabs.map((tab) => (
                         <Tab
                             key={tab}
                             label={tab}
-                            classes={{ root: classes.tab }}
+                            classes={{ root: "min-h-[47px] min-w-[25%] flex-1 text-[1.1rem]" }}
                         />
                     )) 
                 }
             </Tabs> 
             {
                 typeof standalone === 'undefined' && (
-                    <div className={classes.fullScreenContainer}>
+                    <div className={"absolute right-2.5 top-2.5 z-[999] cursor-pointer"}>
                         <FullScreen componentItems={menuItems}/>
                     </div>
                 )
@@ -224,7 +222,7 @@ const GoogleCharts = ({ chartBar, visualizerBarSize, standalone }) => {
             {
                 selectedTab === 0
                 ?
-                    <div className={classes.graphContainer} ref={containerRef}>  
+                    <div className={"flex flex-1 items-center justify-center text-base"} ref={containerRef}>  
                         <DisplayChart />
                     </div> 
                 :
