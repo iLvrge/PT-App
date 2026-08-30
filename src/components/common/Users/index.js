@@ -1,6 +1,5 @@
 import React, { useState, useEffect, forwardRef } from 'react'
 import { connect } from 'react-redux'
-import useStyles from './styles'
 import MaterialTable from '@material-table/core'
 import Alert from '@mui/material/Alert'
 import Collapse from '@mui/material/Collapse'
@@ -28,7 +27,6 @@ import {
 } from '../../../actions/patenTrackActions'
 
 function Users(props) {
-  const classes = useStyles()
   const [ state, setState ] = useState([])
   const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -138,13 +136,13 @@ function Users(props) {
   }, [ props.userList ])
 
   return (
-    <div className={classes.userItemsContainer}>
-      <div className={classes.container}>
+    <div className={"relative z-[1000] flex h-full w-full grow flex-col"}>
+      <div className={"absolute bottom-0 left-[5px] right-[5px] top-[5px] flex grow flex-col items-center [&_.MuiCollapse-root]:absolute [&_.MuiCollapse-root]:right-0 [&_.MuiCollapse-root]:z-[9] [&_.MuiCollapse-root]:text-black"}>
         <Collapse in={open}>
           <Alert severity="warning">{message}</Alert>
         </Collapse>
         <div
-          className={classes.scrollbar}
+          className={"relative w-full grow overflow-hidden [&_.MuiToolbar-gutters]:p-0"}
           style={{ height: (props.height * 39) / 100 }}
         >
           {
