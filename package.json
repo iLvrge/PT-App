@@ -112,7 +112,8 @@
     "test": "react-scripts  --openssl-legacy-provider test",
     "dev": "vite",
     "preview": "vite preview",
-    "check:styles": "node scripts/check-dangling-classes.cjs && node scripts/check-dynamic-classes.cjs"
+    "check:styles": "node scripts/check-dangling-classes.cjs && node scripts/check-dynamic-classes.cjs",
+    "check:unreachable": "node scripts/check-unreachable.cjs"
   },
   "eslintConfig": {
     "extends": [
