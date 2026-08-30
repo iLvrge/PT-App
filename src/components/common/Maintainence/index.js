@@ -6,13 +6,11 @@ import MonetizationOn from '@mui/icons-material/MonetizationOn'
 import { setMaintainenceFileName } from '../../../actions/patentTrackActions2';
 import FullScreen from '../FullScreen';
 import LoadMaintainenceAssets from '../IllustrationCommentContainer/LoadMaintainenceAssets';
-import useStyles from "./styles";
 
 
 
 const Maintainance = () => {
     const dispatch = useDispatch()
-    const classes = useStyles()
     const [ dashboardFullScreen, setDashboardFullScreen ] = useState( false )
     const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)
 
@@ -36,7 +34,7 @@ const Maintainance = () => {
     if(selectedMaintainencePatents.length === 0) return null
     return (
         <React.Fragment>
-            <Fab size="small" aria-label='Pay Maintainence Due' color='primary' onClick={() => setDashboardFullScreen(!dashboardFullScreen)} className={classes.floatIcon}>
+            <Fab size="small" aria-label='Pay Maintainence Due' color='primary' onClick={() => setDashboardFullScreen(!dashboardFullScreen)}>
                 <MonetizationOn/>
             </Fab>
             {
