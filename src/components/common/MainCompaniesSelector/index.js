@@ -359,13 +359,14 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
                         }
                     })
                     if(findIndex !== -1) {
-                        oldCompanies[findIndex]['channel'] = name
+                        // Replace rather than mutate: oldCompanies is a shallow
+                        // copy, so writing into a row writes into the store's object.
+                        oldCompanies[findIndex] = { ...oldCompanies[findIndex], channel: name }
                         if(findChannel === false) {
                             findChannel = true
                         }
                     }
                 })
-                await Promise.all(promises)
                 if(findChannel === true){
                     setCompaniesList(oldCompanies)
                 } 

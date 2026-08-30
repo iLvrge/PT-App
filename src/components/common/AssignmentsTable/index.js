@@ -278,41 +278,32 @@ const AssignmentsTable = ({ checkChartAnalytics, chartsBar, analyticsBar, defaul
    * Adding channel to transaction list
    */
 
+  // This was an async function awaiting Promise.all over a map that returned
+  // nothing; none of it is asynchronous. It also wrote `channel` directly into
+  // the row objects of a shallow copy of assignmentList, so it mutated objects
+  // owned by the Redux store. Rows are rebuilt immutably instead, and matching
+  // is a Set lookup rather than a findIndex per channel.
   useEffect(() => {
-    const checkAssetChannel = async () => {
-      if(assignmentList.length > 0 && slack_channel_list.length > 0) {
-        let findChannel = false, oldAAssignments = [...assignmentList]
-        const promises = slack_channel_list.map( channelAsset => {
-          const findIndex = oldAAssignments.findIndex(rowTransaction => rowTransaction.rf_id.toString().toLowerCase() == channelAsset.name)
-          if(findIndex !== -1) {
-            oldAAssignments[findIndex]['channel'] = oldAAssignments[findIndex].rf_id
-            if(findChannel === false) {
-              findChannel = true
-            }
-          }
-        })
-        await Promise.all(promises)
-        if(findChannel === true){
-          setRows(oldAAssignments)
-        } 
-        
-        /**
-         * If transaction selected find ChannelID
-         */
-        if(selectedRow.length > 0) {
-          const channelID = findChannelID(selectedRow[0])
-          if( channelID != '') {
-            dispatch(setChannelID({channel_id: channelID}))
-          }
+    if (assignmentList.length > 0 && slack_channel_list.length > 0) {
+      const channelNames = new Set(slack_channel_list.map((c) => c.name))
+      let found = false
+      const merged = assignmentList.map((row) => {
+        if (!channelNames.has(row.rf_id.toString().toLowerCase())) return row
+        found = true
+        return { ...row, channel: row.rf_id }
+      })
+      if (found) setRows(merged)
+
+      if (selectedRow.length > 0) {
+        const channelID = findChannelID(selectedRow[0])
+        if (channelID != '') {
+          dispatch(setChannelID({ channel_id: channelID }))
         }
-      } else {
-        const oldAAssignments = [...assignmentList]
-        const newArray = oldAAssignments.map(({channel, ...keepOtherAttrs}) => keepOtherAttrs)
-        setRows(newArray)
       }
-    }    
-    checkAssetChannel()
-  },[ slack_channel_list, assignmentList, selectedRow])
+    } else {
+      setRows(assignmentList.map(({ channel, ...keepOtherAttrs }) => keepOtherAttrs))
+    }
+  }, [ slack_channel_list, assignmentList, selectedRow, dispatch ])
 
   useEffect(() => {
    

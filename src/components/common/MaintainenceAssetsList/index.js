@@ -458,19 +458,18 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   useEffect(() => {
     const checkAssetChannel = async () => {
       if(assets.list.length > 0 && slack_channel_list.length > 0) {
-        let findChannel = false, oldAssets = [...assets.list]
-        const promises = slack_channel_list.map( channelAsset => {
-          const findIndex = oldAssets.findIndex(rowAsset => `us${rowAsset.asset}`.toString().toLowerCase() == channelAsset.name)
-          if(findIndex !== -1) {
-            oldAssets[findIndex]['channel'] = oldAssets[findIndex].asset
-            if(findChannel === false) {
-              findChannel = true
-            }
-          }
+        // Was an async map awaiting Promise.all over an array of undefined, and
+        // wrote `channel` into row objects of a shallow copy - mutating data
+        // owned by the store. Rebuilt immutably with a Set lookup.
+        const channelNames = new Set(slack_channel_list.map((c) => c.name))
+        let findChannel = false
+        const oldAssets = assets.list.map((rowAsset) => {
+          if (!channelNames.has(`us${rowAsset.asset}`.toString().toLowerCase())) return rowAsset
+          findChannel = true
+          return { ...rowAsset, channel: rowAsset.asset }
         })
-        await Promise.all(promises)
-        if(findChannel === true){
-          setAssetsLists({list: oldAssets, total_records: assets.total_records})
+        if (findChannel) {
+          setAssetsLists({ list: oldAssets, total_records: assets.total_records })
         }  
         /**
          * If asset selected find ChannelID
