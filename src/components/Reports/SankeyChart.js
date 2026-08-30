@@ -100,8 +100,12 @@ const SankeyChart = (props) => {
     }, [selectedCompanies])
 
     const handleSelection = useCallback((items, type) => {
-        console.info(items, type)
-        let oldItems = type == 2 ? [...assigneeRawData] : [...assigneeRawData]
+        // type 2 is the assignor chart and type 1 the assignee chart, but both
+        // branches of this ternary read assigneeRawData - so clicking an assignor
+        // was matched against assignee rows and usually selected nothing.
+        // assignorRawData is populated for exactly this purpose and was never
+        // read anywhere in the file, which is what makes the intent unambiguous.
+        let oldItems = type == 2 ? [...assignorRawData] : [...assigneeRawData]
         const filter = oldItems.filter( row => row.name === items[0].name)
         if(filter.length > 0) {
             dispatch(setSelectAssignmentCustomers([filter[0].id]))
@@ -109,7 +113,7 @@ const SankeyChart = (props) => {
             dispatch(setTimelineScreen(false))
             dispatch(setPatentScreen(true))
         }
-    }, [assigneeRawData, assigneeRawData])
+    }, [ assigneeRawData, assignorRawData, dispatch ])
 
     return (
         <Paper sx={{p: 2, overflow: 'auto'}} className={clsx(classes.container, classes.containerTop)} square>

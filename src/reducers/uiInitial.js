@@ -19,6 +19,11 @@ export default {
   timelineScreen: false,
   dashboardScreen: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' ? false : true,
   dashboardPanel: true,
+  // Both branches of this ternary are false, so controlModal is always false and
+  // the environment check has no effect. The line above it uses `? false : true`,
+  // which suggests a typo - but changing it would switch a modal on in some
+  // environments, so the behaviour is left exactly as it is. Left flagged rather
+  // than guessed at.
   controlModal: process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE-1' ? false : false, 
   driveButtonActive: false,
   loadingDashboardData: false,
