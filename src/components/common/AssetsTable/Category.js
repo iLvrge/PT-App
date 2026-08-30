@@ -1,3 +1,4 @@
+import { useCategories, useProductsByCategory } from '../../../queries/useCategories'
 import React, { useEffect, useState } from 'react' 
 
 import InputLabel from '@mui/material/InputLabel';
@@ -6,7 +7,6 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import useStyles from "./styles";
-import PatenTrackApi from '../../../api/patenTrack2';
 import { Checkbox, Chip, ListItem, ListItemText, Paper } from '@mui/material';
 
 const ITEM_HEIGHT = 48;
@@ -25,31 +25,13 @@ const Category = ({handleSelectedCategoryProduct}) => {
     const [ category, setCategory] = useState('')
     const [ products, setProducts] = useState([])
     const [ selectedProducts, setSelectedProducts] = useState([])
-    const [ categoryList, setCategoryList] = useState([])
-    const [ productList, setProductList] = useState([])
 
 
-    useEffect(() => {
-        const getCategories = async() => {
-            const {data} = await PatenTrackApi.getCategories()
-            setCategoryList(data)
-        }
-        getCategories()
-    }, [])
-
-    useEffect(() => {
-        setProductList([])
-        if(category > 0) {
-            getProductList()
-        }
-    }, [category])
-
-    const getProductList = async() => {
-        if(category > 0) {
-            const {data} = await PatenTrackApi.getProductsByCategory(category)
-            setProductList(data)
-        }
-    }
+    const { data: categoryList = [] } = useCategories()
+    // Was two effects: one fetching categories on mount, one clearing then
+    // refetching products whenever the category changed. Both are queries now,
+    // and the product list is simply empty while no category is selected.
+    const { data: productList = [] } = useProductsByCategory(category)
 
     const handleChange = (event) => {
         setCategory(event.target.value);
