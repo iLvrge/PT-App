@@ -91,7 +91,7 @@
     "test": "vitest run",
     "dev": "vite",
     "preview": "vite preview",
-    "check:styles": "node scripts/check-dangling-classes.cjs && node scripts/check-dynamic-classes.cjs && node scripts/check-class-conflicts.cjs",
+    "check:styles": "node scripts/check-dangling-classes.cjs && node scripts/check-dynamic-classes.cjs && node scripts/check-class-conflicts.cjs && node scripts/check-hook-imports.cjs",
     "check:unreachable": "node scripts/check-unreachable.cjs",
     "check:secrets": "node scripts/check-bundle-secrets.cjs",
     "test:watch": "vitest"
