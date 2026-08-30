@@ -1,22 +1,8 @@
+import { Dialog, DialogContent } from '../../../ui/Dialog'
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Moment from 'moment'
-import { Paper,
-  Drawer,
-  Button,
-  List,
-  ListItem,
-  ListItemText,
-  CircularProgress,
-  Avatar,
-  Modal,
-  Grid,
-  Typography,
-  TextField,
-  Tooltip,
-  Zoom,
-  IconButton
-} from '@mui/material'
+import {Paper, Drawer, Button, List, ListItem, ListItemText, CircularProgress, Avatar, Grid, Typography, TextField, Tooltip, Zoom, IconButton} from '@mui/material'
 import FolderIcon from '@mui/icons-material/Folder'
 import CloseIcon from '@mui/icons-material/Close'
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined'
@@ -1564,12 +1550,8 @@ const handleDriveModalClose = (event) => {
         }
         
       </div>  
-      <Modal
-        open={driveModal}
-        onClose={(e) => handleDriveModalClose(e)}
-        aria-labelledby="Drive-Files-Modal"
-        aria-describedby=""
-      >
+      <Dialog open={driveModal} onOpenChange={(next) => { if (!next) handleDriveModalClose() }}>
+        <DialogContent title="Drive files" className="!p-0">
         <Paper container className={classes.driveModal} square>
           <Grid item className={classes.containerList}>
             <DriveFilesFolders 
@@ -1582,32 +1564,27 @@ const handleDriveModalClose = (event) => {
             />
           </Grid>          
         </Paper>
-      </Modal>
-      <Modal
-        open={correctAddressModal}
-        onClose={(e) => handleCorrectAddressModal(e)}
-        aria-labelledby="Correct-Address-Modal"
-        aria-describedby=""
-      >
-        <div style={{display: 'flex', height: '50vh', width: '600px', margin: '43px auto'}}>
-          <CustomerAddress onHandleSelectAddress={onHandleSelectAddress}/>
-        </div>
-      </Modal>
-      <Modal
-        open={changeNameModal}
-        onClose={(e) => handleChangeNameModal(e)}
-        aria-labelledby="Change-Name-Modal"
-        aria-describedby=""
-      >
-        <div style={{display: 'flex', height: '20vh', width: '300px', margin: '30vh auto', background: '#424242', position:' relative', padding: '0 10px'}}>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={correctAddressModal} onOpenChange={(next) => { if (!next) handleCorrectAddressModal() }}>
+        <DialogContent title="Correct address" className="!w-[600px] !max-w-none">
+          <div style={{display: 'flex', height: '50vh'}}>
+            <CustomerAddress onHandleSelectAddress={onHandleSelectAddress}/>
+          </div>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={changeNameModal} onOpenChange={(next) => { if (!next) handleChangeNameModal() }}>
+        <DialogContent title="Change company name" className="!w-[300px] !max-w-none !bg-[#424242] !px-2.5">
+          <div style={{display: 'flex', height: '20vh', position: 'relative'}}>
           <form className={classes.root} noValidate autoComplete="off">
             <TextField id="change-name" label="Company Name" onChange={handleCompanyNameChange} placeholder="Enter a new company name"/>
           </form>
           <Button variant="outlined" onClick={onHandleSubmitName} className={classes.btn}>
             Submit
           </Button>
-        </div>
-      </Modal>
+          </div>
+        </DialogContent>
+      </Dialog>
     </Paper>
   )
 }

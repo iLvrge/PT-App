@@ -1,7 +1,8 @@
+import { Dialog, DialogContent } from '../../../ui/Dialog'
 import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux' 
 import SplitPane from 'react-split-pane'
-import { IconButton, Paper, Modal } from '@mui/material' 
+import {IconButton, Paper} from '@mui/material' 
 import _debounce from 'lodash/debounce'
 import Close from '@mui/icons-material/Close'
 import Fullscreen from '@mui/icons-material/Fullscreen'
@@ -574,10 +575,15 @@ const IllustrationCommentContainer = ({
                     ''  
                 }
                 
-                <Modal
-                    className={clsx(classes.fullscreenChartsModal, 'fullscreenModal')}
-                    open={isFullscreenOpen}
-                > 
+                {/* No onClose in the MUI original: closed by its own control,
+                    not Esc or backdrop. Both suppressed to match. */}
+                <Dialog open={isFullscreenOpen}>
+                    <DialogContent
+                        title="Fullscreen charts"
+                        className="!inset-0 !left-0 !top-0 flex !max-h-none !w-screen !max-w-none !translate-x-0 !translate-y-0 !rounded-none !border-0 !bg-transparent !p-0 !shadow-none"
+                        onEscapeKeyDown={(e) => e.preventDefault()}
+                        onPointerDownOutside={(e) => e.preventDefault()}
+                    >
                     <Paper 
                         className={classes.fullscreenCharts}  
                         square
@@ -652,7 +658,8 @@ const IllustrationCommentContainer = ({
                                 ''
                         }
                     </Paper>
-                </Modal>
+                    </DialogContent>
+                </Dialog>
                 {
                     dashboardFullScreen === true && (
                     <FullScreen 
