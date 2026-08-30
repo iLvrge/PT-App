@@ -7,7 +7,6 @@ import { DataSet } from 'vis-data/esnext'
 import { Timeline } from 'vis-timeline-73/esnext'
 
 import CircularProgress from '@mui/material/CircularProgress'
-import ClickAwayListener from '@mui/base'
 
 import { 
     setFamilyItemDisplay,
