@@ -1,0 +1,17 @@
+@import "tailwindcss";
+@import "./theme.generated.css";
+
+/* Dark mode follows the .dark class that styledEngine puts on <html>, which is
+   driven by the same Redux flag MUI's ThemeProvider already uses. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-bg-default: var(--pt-bg-default);
+  --color-bg-paper: var(--pt-bg-paper);
+  --color-text-primary: var(--pt-text-primary);
+  --color-text-active: var(--pt-text-active);
+  --color-action-disabled: var(--pt-action-disabled);
+  --color-divider: var(--pt-divider);
+  --color-secondary: var(--pt-secondary-main);
+  --color-secondary-active: var(--pt-secondary-button-active);
+}

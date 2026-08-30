@@ -1,6 +1,35 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import svgr from 'vite-plugin-svgr'
+import tailwindcss from '@tailwindcss/vite'
+import { writeFileSync, readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+
+// Emits src/styles/theme.generated.css from src/themes/tokens.js so MUI and
+// Tailwind read the same palette and cannot drift apart.
+function themeTokens() {
+  const write = () => {
+    const src = readFileSync(resolve('src/themes/tokens.js'), 'utf8')
+    const body = src.slice(src.indexOf('const tokens ='), src.lastIndexOf('export default'))
+    // eslint-disable-next-line no-new-func
+    const tokens = new Function(`${body}; return tokens`)()
+    const block = (sel, vals) =>
+      `${sel} {\n${Object.entries(vals).map(([k, v]) => `  --pt-${k}: ${v};`).join('\n')}\n}`
+    writeFileSync(
+      resolve('src/styles/theme.generated.css'),
+      `/* GENERATED from src/themes/tokens.js - do not edit. */\n${block(':root', tokens.light)}\n${block('.dark', tokens.dark)}\n`
+    )
+  }
+  return {
+    name: 'pt-theme-tokens',
+    buildStart: write,
+    configureServer(server) {
+      write()
+      server.watcher.add(resolve('src/themes/tokens.js'))
+      server.watcher.on('change', (f) => { if (f.endsWith('tokens.js')) write() })
+    },
+  }
+}
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
@@ -23,6 +52,8 @@ export default defineConfig(({ mode }) => {
       // JSX lives in .js files throughout src/, not .jsx.
       react({ include: /\.(js|jsx)$/ }),
       svgr(),
+      tailwindcss(),
+      themeTokens(),
     ],
     define: processEnv,
     envPrefix: [ 'REACT_APP_', 'VITE_' ],
@@ -31,7 +62,7 @@ export default defineConfig(({ mode }) => {
     },
     // JSX lives in .js files throughout src/; esbuild must be told to parse
     // them as JSX, both for source and when prebundling dependencies.
-    esbuild: { loader: 'jsx', include: /src\/.*\.js$/, exclude: [] },
+    esbuild: { loader: 'jsx', include: /src\/.*\.jsx?$/, exclude: [] },
     optimizeDeps: {
       esbuildOptions: { loader: { '.js': 'jsx' } },
     },

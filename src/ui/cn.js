@@ -1,0 +1,6 @@
+import { clsx } from 'clsx'
+import { twMerge } from 'tailwind-merge'
+
+/** Merge conditional classes, with later Tailwind utilities winning conflicts. */
+export const cn = (...inputs) => twMerge(clsx(inputs))
+export default cn
