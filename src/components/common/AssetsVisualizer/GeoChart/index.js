@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import useStyles from './styles' 
 import FullscreenIcon from '@mui/icons-material/Fullscreen'
 import FullScreen from '../../FullScreen'
 import { Chart } from "react-google-charts"; 
@@ -54,7 +53,6 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
     const jurisdiction_request = useSelector(state => state.patenTrack2.jurisdiction_request)
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
 
-    const classes = useStyles() 
     const menuItems = [
         {
             id: 1,
@@ -330,10 +328,10 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
  
 
     return (
-        <Paper className={classes.root} square style={{overflow: 'hidden'}}>  
+        <Paper className={"relative flex h-full w-full flex-col [&_.MuiTabs-root]:!border-b [&_.MuiTabs-root]:!border-divider [&_.MuiTab-root]:min-w-[135px] [&_.MuiTab-root]:max-w-[140px] [&_.MuiTab-wrapper]:whitespace-nowrap [&_.vis-timeline]:border-0 [&_.vis-time-axis_.vis-text]:text-text-primary [&_.vis-item]:text-text-primary [&_.vis-y-axis]:text-text-primary [&.vis-panel.vis-center]:border [&.vis-panel.vis-center]:border-divider [&_.vis-panel.vis-center]:border-divider [&_.vis-panel.vis-left]:border-divider [&_.vis-panel.vis-right]:border-divider [&_.vis-panel.vis-top]:border-divider [&_.vis-panel.vis-bottom]:border-divider [&_.vis-panel.vis-background.vis-horizontal_.vis-grid]:border-[#e5e5e51c]"} square style={{overflow: 'hidden'}}>  
             {
                 ( (['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE) || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)) ) && fullScreen === false && typeof standalone === 'undefined' && (
-                    <IconButton size="small" className={clsx(classes.fullscreenBtn, 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
+                    <IconButton size="small" className={clsx("absolute right-0 top-[9px] z-[999] [&_svg]:fill-[#6d6d6d] [&_svg]:stroke-[#6d6d6d] hover:[&_svg]:fill-secondary hover:[&_svg]:stroke-secondary hover:[&_svg]:text-secondary", 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
                         <FullscreenIcon />
                     </IconButton>
                 )
@@ -346,7 +344,7 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
                         variant="scrollable"
                         scrollButtons="auto"
                         onChange={handleChangeTab}
-                        className={classes.tabs}
+                        className={"min-h-[47px] w-[94%]"}
                     >
                         {
                             chartTabs.map((tab) => (
@@ -355,7 +353,7 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
                                     label={tab}
                                     icon={<LabelWithIcon label={tab} />}
                                     iconPosition="start"
-                                    classes={{ root: classes.tab }}
+                                    classes={{ root: "min-h-[47px] min-w-[25%] flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-[1.1rem]" }}
                                 />
                             )) 
                         }
@@ -363,7 +361,7 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
                 :
                     ''
             }
-            <Box className={classes.graphContainer} ref={containerRef} sx={{p: 2}}>  
+            <Box className={"flex h-[86%] flex-1 flex-col items-start text-base"} ref={containerRef} sx={{p: 2}}>  
                 {
                     typeof titleBar !== 'undefined' && titleBar === true && ((typeof disableOtherTabs !== 'undefined' && disableOtherTabs === true ) || selectedTab === 1) && (
                         <TitleBar title={loading === false && data.length < 2 ? `The company has no non-expired USA patents filed after 1999, and no foreign counterparts.` : `The assets in the Assets list on the left have family members in the following jurisdictions. Hover over the colored countries to see the number of family members.`} enablePadding={false}  underline={false} typography={true}/>   
