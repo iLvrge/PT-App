@@ -108,11 +108,11 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "node scripts/check-dangling-classes.cjs && vite build && node addVersion.cjs $(node -p \"require('./package.json').version\")",
+    "build": "npm run check:styles && vite build && node addVersion.cjs $(node -p \"require('./package.json').version\")",
     "test": "react-scripts  --openssl-legacy-provider test",
     "dev": "vite",
     "preview": "vite preview",
-    "check:styles": "node scripts/check-dangling-classes.cjs"
+    "check:styles": "node scripts/check-dangling-classes.cjs && node scripts/check-dynamic-classes.cjs"
   },
   "eslintConfig": {
     "extends": [
