@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 
 import { connect } from 'react-redux'
-import useStyles from './styles'
 import { Grid } from '@mui/material'
 import Loader from '../Loader'
 import SearchCompanies from '../SearchCompanies'
@@ -16,7 +15,6 @@ import * as authActions from '../../../actions/authActions'
 import * as patentActions from '../../../actions/patenTrackActions'
 
 function UserSettings(props) {
-    const classes = useStyles()
     const isExpanded = props.currentWidget === 'settings'
     const isMountedRef = useRef(null)
     const [ callComp, setCallComp ] = useState(0)
@@ -60,28 +58,28 @@ function UserSettings(props) {
     <div className={'userSettings'}>
         <Grid
         container
-        className={classes.container}
+        className={"flex flex-col flex-nowrap overflow-hidden p-[5px] max-[1199.95px]:h-auto"}
         style={{
             height: props.screenHeight
         }}
         >      
             <Grid
                 container
-                className={classes.settingContainer}
+                className={"relative flex h-auto w-full grow justify-center"}
             >
                 <Grid
                 container
-                className={classes.setting}
+                className={undefined}
                 >
                     <Grid
                         item lg={12} md={12} sm={12} xs={12}
-                        className={classes.flexColumn}
+                        className={"flex flex-col"}
                         style={{ height: '40%' }}
                     >                               
                         <Grid container style={{ flexGrow: 1 }} >
                             <Grid
                                 item lg={5} md={5} sm={5} xs={5}
-                                className={classes.flexColumn}
+                                className={"flex flex-col"}
                             >
                                 <div style={{ height: '100%' }}>
                                     <SearchCompanies />
@@ -89,7 +87,7 @@ function UserSettings(props) {
                             </Grid>
                             <Grid
                                 item lg={7} md={7} sm={7} xs={7}
-                                className={classes.flexColumn}
+                                className={"flex flex-col"}
                             >             
                                 <div style={{ height: '100%' }}>
                                     <Companies />
@@ -99,21 +97,21 @@ function UserSettings(props) {
                     </Grid>                 
                     <Grid
                         item lg={12} md={12} sm={12} xs={12}
-                        className={classes.flexColumn}
+                        className={"flex flex-col"}
                         style={{ height: '60%' }}
                     >
                         <Grid
-                            className={classes.flexColumn}
+                            className={"flex flex-col"}
                             style={{ flexGrow: 1 }}
                         >
                             <Grid
                             item
-                            className={classes.flexColumn}
+                            className={"flex flex-col"}
                             style={{ height: '85%' }}
                             >
                             {
                                 props.settingTab === 0 &&
-                                <div className={classes.context}>
+                                <div className={"m-auto flex h-full w-full flex-col overflow-hidden border border-[#363636] [&_.MuiToolbar-root]:min-h-[auto]"}>
                                     {
                                             !props.isUserLoading
                                             ?
@@ -125,7 +123,7 @@ function UserSettings(props) {
                             }                           
                             {
                                 props.settingTab === 1 &&
-                                <div className={classes.context}>
+                                <div className={"m-auto flex h-full w-full flex-col overflow-hidden border border-[#363636] [&_.MuiToolbar-root]:min-h-[auto]"}>
                                     {
                                             !props.isLawyerLoading
                                             ?
@@ -137,7 +135,7 @@ function UserSettings(props) {
                             }                           
                             {
                                 props.settingTab === 2 &&
-                                <div className={classes.context}>
+                                <div className={"m-auto flex h-full w-full flex-col overflow-hidden border border-[#363636] [&_.MuiToolbar-root]:min-h-[auto]"}>
                                     {
                                             !props.isDocumentLoading
                                             ?
@@ -149,7 +147,7 @@ function UserSettings(props) {
                             }   
                             {
                                 props.settingTab === 3 &&
-                                <div className={classes.context}>
+                                <div className={"m-auto flex h-full w-full flex-col overflow-hidden border border-[#363636] [&_.MuiToolbar-root]:min-h-[auto]"}>
                                     {
                                             !props.isAddressLoading
                                             ?

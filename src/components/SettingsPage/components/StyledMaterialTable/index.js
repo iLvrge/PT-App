@@ -17,7 +17,6 @@ import Search from '@mui/icons-material/Search'
 import ViewColumn from '@mui/icons-material/ViewColumn'
 import HelpOutline from '@mui/icons-material/HelpOutline'
 import Modal from '@mui/material/Modal'
-import useStyles from './styles'
 
 const TABLE_ICONS = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -61,7 +60,6 @@ const OPTIONS = {
 
 
 const StyledMaterialTable = (props) => {
-  const classes = useStyles()
   const tableRef = useRef()
   const [open, setOpen] = useState(false)
   const [help, setHelp] = useState(props.help != undefined ? props.help : false)
@@ -76,7 +74,7 @@ const StyledMaterialTable = (props) => {
 
   
   return (
-    <div className={classes.materialTableContainer}>
+    <div className={"[&_.MuiToolbar-root]:min-h-0 [&_.MuiToolbar-root]:bg-[#303030] [&_.MuiPaper-elevation2]:shadow-none"}>
       <MaterialTable tableRef={tableRef}
         localization={{
           header: {
@@ -88,7 +86,7 @@ const StyledMaterialTable = (props) => {
         components={{
           Toolbar: props => (
               <>
-                { help === true ? <HelpOutline className={classes.helpButton} onClick={onHandleHelpOpen}/> : ''}
+                { help === true ? <HelpOutline className={"absolute right-[45px] top-[13px] z-[1] h-5 w-5 cursor-pointer"} onClick={onHandleHelpOpen}/> : ''}
                 <MTableToolbar {...props} />
               </> 
           ),

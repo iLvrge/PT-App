@@ -5,7 +5,6 @@ import Tooltip from '@mui/material/Tooltip'
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
-import useStyles from './styles'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
@@ -16,7 +15,6 @@ import StyledSearch from '../../../common/StyledSearch'
 import clsx from 'clsx'
 
 const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setSearch, childComponent, selectedType, searchable = true, dense = false }) => {
-  const classes = useStyles()
 
   const [ openDialog, setOpenDialog ] = useState(false)
 
@@ -35,7 +33,7 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
   return (
     <Fragment>
 
-      <Dialog open={openDialog} onClose={onCloseDialog} className={classes.dialog}>
+      <Dialog open={openDialog} onClose={onCloseDialog} className={"[&_.MuiDialogContent-root]:!px-6 [&_.MuiDialogContent-root]:!py-2 [&_.MuiDialogActions-root]:p-2"}>
         <DialogTitle id="alert-dialog-title">Remove Items</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
@@ -68,8 +66,8 @@ const Header = ({ onDelete, onAdd, onCheckable, numSelected, title, search, setS
           }
         </DialogActions>
       </Dialog>
-      <Toolbar variant={dense ? 'dense' : 'regular'} className={clsx(classes.root, dense && 'h-10 min-h-0')}>
-        <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+      <Toolbar variant={dense ? 'dense' : 'regular'} className={clsx("bg-bg-paper", dense && 'h-10 min-h-0')}>
+        <Typography className={"flex-[1_1_100%]"} variant="h6" id="tableTitle" component="div">
           {numSelected > 0 ? `${numSelected} Selected` : title}
           {
           typeof childComponent !== 'undefined' && childComponent.length > 0

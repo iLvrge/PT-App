@@ -1,5 +1,4 @@
 import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
-import useStyles from './styles'
 import Paper from '@mui/material/Paper'
 import Header from '../Header'
 import EditDialog from '../EditDialog'
@@ -39,7 +38,6 @@ export default function Page({
   const addable = !!addItem
   
 
-  const classes = useStyles()
   const dispatch = useDispatch()
   const { enqueueSnackbar } = useSnackbar()
   const [ selected, setSelected ] = React.useState([])
@@ -106,8 +104,8 @@ export default function Page({
         )
       }
 
-      <div className={clsx(classes.tableRoot, className)}>
-        <Paper className={classes.paper} square>
+      <div className={clsx("flex h-full w-full flex-col items-center justify-center", className)}>
+        <Paper className={"flex h-full w-full flex-col bg-transparent [&_.MuiDialogContent-root]:overflow-y-hidden"} square>
           <Header
             searchable={searchable}
             dense={dense}
