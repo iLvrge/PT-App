@@ -11,7 +11,6 @@ import Collapse from '@mui/material/Collapse'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import clsx from 'clsx'
-import useStyles from './styles'
 import Box from '@mui/material/Box' 
 import { ListItemIcon, ListItemText, MenuItem, Select } from '@mui/material'
 import { useSelector } from 'react-redux'
@@ -22,7 +21,6 @@ function Row({ selected, onSelect, isSelected, isChildSelected, row, updateData,
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [ editableRow, setEditableRow ] = useState(null)
   const companiesList = useSelector(state => state.patenTrack.companiesList)
-  const classes = useStyles()
   const toggleOpen = useCallback((e) => {
     e.stopPropagation()
     setOpen(open => !open)
@@ -164,7 +162,7 @@ function Row({ selected, onSelect, isSelected, isChildSelected, row, updateData,
   return (
     <React.Fragment>
       <TableRow
-        className={clsx({ [classes.expand]: open, [classes.disabled] : row.status == 1 ? false : true, [classes.highlightRow]: row.status == 0 && isSelected(row.id)})}
+        className={clsx({ [undefined]: open, ["text-black/30 dark:text-white/30 [&_.MuiTableCell-root]:text-black/30 dark:[&_.MuiTableCell-root]:text-white/30"] : row.status == 1 ? false : true, ["bg-[rgba(144,202,249,0.16)] hover:!bg-[rgba(144,202,249,0.16)]"]: row.status == 0 && isSelected(row.id)})}
         hover
         /* onClick={event => row.status == 1 ? rowOnClick(event, row, 'parent') : ''} */
         onClick={event => rowOnClick(event, row, 'parent')}
@@ -189,7 +187,7 @@ function Row({ selected, onSelect, isSelected, isChildSelected, row, updateData,
           
         </TableCell>
         <TableCell 
-          className={clsx(classes.padLR0, row.type == 1 ? classes.groupHeading : '')}   
+          className={clsx("px-0", row.type == 1 ? "text-[1.1rem] font-medium" : '')}   
         >
           {
             editableRow !== null && row.id == editableRow.id
@@ -225,14 +223,14 @@ function Row({ selected, onSelect, isSelected, isChildSelected, row, updateData,
       {
         row.children.length > 0 && (
           <TableRow>
-            <TableCell className={classes.collapsedCell} colSpan={6}>
+            <TableCell className={"p-0 !pl-9"} colSpan={6}>
               <Collapse in={open} timeout="auto" unmountOnExit>
-                <Box className={classes.box}>
+                <Box className={"mb-[-1px] ml-[19px] max-h-[400px] overflow-auto"}>
                   <Table>
                     <TableBody>
                       {row.children.map((company, idx) => (
                         <TableRow
-                        className={clsx(classes.tableRow, {[classes.disabled]: company.status == 0 ? true : false})}
+                        className={clsx("[&_.MuiOutlinedInput-root]:h-[21px]", {["text-black/30 dark:text-white/30 [&_.MuiTableCell-root]:text-black/30 dark:[&_.MuiTableCell-root]:text-white/30"]: company.status == 0 ? true : false})}
                           hover={company.status == 0 ? false : true} 
                           onClick={event => company.status == 1 ? rowOnClick(event, company, 'child') : ''}
                           aria-checked={isChildSelected(company.id)}
@@ -240,7 +238,7 @@ function Row({ selected, onSelect, isSelected, isChildSelected, row, updateData,
                           key={`${company.id}_child`} 
                           selected={company.status == 0 ? false : isChildSelected(company.id)} 
                         >
-                          {/* <TableCell className={classes.actionCell}>
+                          {/* <TableCell className={"w-5 p-2"}>
                             <Checkbox
                               checked={isChildSelected(company.id)}
                               inputProps={{
@@ -254,7 +252,7 @@ function Row({ selected, onSelect, isSelected, isChildSelected, row, updateData,
                           <TableCell style={{width: 50}}>
                             <ShowDropDown item={company}/>
                           </TableCell>
-                          <TableCell className={classes.padLR0}>
+                          <TableCell className={"px-0"}>
                             {company.original_name}
                           </TableCell> 
                           <TableCell align={'center'} style={{width: 155}}>

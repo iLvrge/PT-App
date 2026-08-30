@@ -2,7 +2,6 @@ import React, {useState, useEffect, useCallback, useRef} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Paper, Tab, Tabs } from '@mui/material';
 import DisplayChart from './DisplayChart';
-import useStyles from './styles'
 import clsx from 'clsx';
 import PatenTrackApi from '../../../../api/patenTrack2'; 
 import Loader from '../../Loader';
@@ -15,7 +14,6 @@ import { Box } from '@mui/system';
 
 const SankeyChart = (props) => {
     const dispatch = useDispatch();
-    const classes = useStyles();
     const containerRef = useRef(null)
     const [loading, setLoading] = useState(false);
     const [loadingAssignor, setLoadingAssingor] = useState(false);
@@ -266,20 +264,20 @@ const SankeyChart = (props) => {
     }, [assignorRawData, assigneeRawData, selectedAssetCompanies])  
 
     return (
-        <Paper square className={classes.mainContainer} style={{overflow: typeof props.container != 'undefined' && props.container === true ? 'auto': 'inherit'}}> 
+        <Paper square className={"relative flex h-full w-full flex-1 flex-col shadow-none [&_.google-visualization-tooltip_p]:text-black"} style={{overflow: typeof props.container != 'undefined' && props.container === true ? 'auto': 'inherit'}}> 
             {
                 typeof props.showTabs != 'undefined' && props.showTabs === true && typeof props.tabText != 'undefined' && (
                     <Tabs
                         value={0}
                         variant={'scrollable'} 
                         scrollButtons="auto"
-                        className={classes.tabs} 
+                        className={"flex min-h-[47px] w-[94%]"} 
                     >
                         {
                             tabs.map((tab) => (
                                 <Tab
                                     key={tab}
-                                    className={classes.tab} 
+                                    className={"min-h-[47px] min-w-[25%] overflow-hidden text-ellipsis whitespace-nowrap text-[1.1rem]"} 
                                     label={tab} 
                                     icon={<LabelWithIcon label={tab}/>}
                                     iconPosition='start'
@@ -296,7 +294,7 @@ const SankeyChart = (props) => {
                         <TitleBar title={`Hover over the bars for details. Select one of the colored bars to the ${props.type == 'divested' ? 'right' : 'left' } of each name to filter the Assets table accordingly. To release the filter - click the selected bar.`} enablePadding={false} underline={false} typography={true}/>
                     )
                 }  
-                <div className={clsx(classes.child, typeof props.standalone != 'undefined' && props.standalone === true ? typeof props.container == 'undefined' ? classes.padding16 : '' : '')} >
+                <div className={clsx("mt-[15px] flex h-full w-full flex-col overflow-auto", typeof props.standalone != 'undefined' && props.standalone === true ? typeof props.container == 'undefined' ? "p-4" : '' : '')} >
                 
                 {    
                     ['acquired', 'collateralization_transactions'].includes(selectedCategory) || ['filled', 'acquired', 'license_out'].includes(props.type)
