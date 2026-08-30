@@ -31,8 +31,39 @@ const ORIGINAL = {
 }
 
 describe('theme tokens', () => {
-  it.each([ 'light', 'dark' ])('%s palette matches the pre-migration values exactly', (mode) => {
-    expect(tokens[mode]).toEqual(ORIGINAL[mode])
+  it.each([ 'light', 'dark' ])('%s: every pre-migration value is unchanged', (mode) => {
+    // Tokens have been added since (see ADDED below); none of the originals may
+    // change, so this asserts a superset rather than equality.
+    expect(tokens[mode]).toMatchObject(ORIGINAL[mode])
+  })
+
+  // Added while extracting makeStyles sheets to CSS. themeMode never defined
+  // these, so MUI's defaults were what the app actually rendered; they are
+  // pinned here at exactly those values so the extraction changed nothing.
+  const ADDED = {
+    light: {
+      'text-disabled': 'rgba(0, 0, 0, 0.38)',
+      'muted': 'rgba(0, 0, 0, 0.3)',
+      'text-secondary': 'rgba(0, 0, 0, 0.6)',
+      'action-hover': 'rgba(0, 0, 0, 0.04)',
+      'action-active': 'rgba(0, 0, 0, 0.54)',
+    },
+    dark: {
+      'text-disabled': 'rgba(255, 255, 255, 0.5)',
+      'muted': 'rgba(255, 255, 255, 0.3)',
+      'text-secondary': 'rgba(255, 255, 255, 0.7)',
+      'action-hover': 'rgba(255, 255, 255, 0.08)',
+      'action-active': '#ffffff',
+    },
+  }
+
+  it.each([ 'light', 'dark' ])('%s: added tokens match MUI defaults exactly', (mode) => {
+    expect(tokens[mode]).toMatchObject(ADDED[mode])
+  })
+
+  it.each([ 'light', 'dark' ])('%s has no tokens beyond the original and added sets', (mode) => {
+    const known = { ...ORIGINAL[mode], ...ADDED[mode] }
+    expect(Object.keys(tokens[mode]).sort()).toEqual(Object.keys(known).sort())
   })
 
   it('defines the same token names in both modes', () => {
