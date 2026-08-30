@@ -97,7 +97,7 @@ import as a hard resolution error, not a warning. So this had to be fixed anyway
 
 ---
 
-## 3. vis-timeline — root cause proven, and the fix verified
+## 3. vis-timeline — DONE (root cause proven, fix applied and verified)
 
 ### What is actually wrong
 
@@ -346,7 +346,7 @@ Someone's manual backup of the vis packages. It should not be there.
 |---|---|---|---|
 | 1 | ~~Delete 2 dead `autoprefixer` imports~~ **done** | 2 lines | **−123.5 KB gzip, measured** |
 | 2 | **Route-level code splitting** (`React.lazy` on 27 routes) | ~1–2 days | **Largest remaining win.** Defers most of the 1,998 KB of app code plus quill, chart.js, d3, gauge-chart, the vis charts — none of which the login screen needs |
-| 3 | Consolidate vis-timeline to one version | ~half a day | −260 KB raw, and the timelines stop breaking on fresh installs |
+| 3 | ~~Consolidate vis-timeline to one version~~ **done** | | **−67.2 KB gz measured**; the node_modules hand-edit is gone, so timelines survive a fresh install |
 | 4 | Fix `@mui/icons-material` barrel imports (44 files) | ~half a day | Barrel imports tree-shake unreliably under webpack 4; deep imports are already used in 75 places, so make it consistent |
 | 5 | CRA → Vite | 2–4 days | Transforms **dev** experience and build time. Modest effect on production bundle — Rollup splits better than webpack 4, but item 2 is where the real win is |
 | 6 | react-virtualized 9.22.5 → 9.22.6 | minutes | None. Housekeeping |

@@ -5,11 +5,11 @@ import {
 } from 'react-redux'
 import moment from 'moment'
 import _debounce from 'lodash/debounce'
-/* import { DataSet } from 'vis-data-71/esnext'
+/* import { DataSet } from 'vis-data/esnext'
 import { Timeline } from 'vis-timeline/esnext' */
 
 import { DataSet } from 'vis-data/esnext'
-import { Timeline } from 'vis-timeline-73/esnext'
+import { Timeline } from 'vis-timeline/esnext'
 import { Typography, CircularProgress, IconButton, Paper, Modal, TableContainer, Table, TableBody, TableRow, TableCell, Button } from '@mui/material';
 import Close from '@mui/icons-material/Close'
 import Fullscreen from '@mui/icons-material/Fullscreen'

@@ -4,7 +4,7 @@ import routes from "../../../../routeList";
 import moment from 'moment'
 import _debounce from 'lodash/debounce'
 import { useDispatch, useSelector } from 'react-redux'
-import { DataSet } from 'vis-data-71/esnext'
+import { DataSet } from 'vis-data/esnext'
 import { Timeline } from 'vis-timeline/esnext'
 import Paper from '@mui/material/Paper'
 import CircularProgress from '@mui/material/CircularProgress'
