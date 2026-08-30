@@ -413,6 +413,49 @@ Dead theme files that can be deleted now: `src/themes/index.js`, `src/themes/def
 
 ---
 
+## 8b. Two constraints that break the "one component at a time" model
+
+Found while actually converting components, not by reading the code.
+
+### Stylesheets are shared between siblings, not owned by one component
+
+23 `styles.js` files have more than one importer. Deleting one after converting
+its `index.js` breaks the siblings — this happened with `Slacks/styles.js`,
+which `AddPeople.js` also imports.
+
+| stylesheet | importers |
+|---|---|
+| `Reports/styles.js` | 10 |
+| `IllustrationCommentContainer/styles.js` | 7 |
+| `AssetsVisualizer/LifeSpanContainer`, `FamilyItemContainer`, `LegalEventsContainer` | 6 each |
+| `NewHeader/styles.js` | 5 |
+| `AssetsVisualizer/InventionVisualizer/styles.js` | 5 |
+| …17 more | 2–3 each |
+
+Those directories have to be converted as a unit. 65 stylesheets have exactly
+one importer and can safely be done individually.
+
+### 38 components forward `classes={classes}` into a shared table
+
+Almost all of them into `VirtualizedTable`. The parent builds a JSS `classes`
+object and hands the whole thing to the child, so the parent's stylesheet cannot
+be removed until the child stops accepting a `classes` prop.
+
+This is not visible from the parent alone: `LayoutTemplates` and `FilesTemplates`
+both looked like clean single-importer conversions, converted without build
+errors, and would have thrown at runtime — the build does not catch a `classes`
+identifier that no longer exists. Both were reverted.
+
+**Consequence:** `VirtualizedTable` has to be converted first and given a real
+styling API. Until then those 38 components are blocked, and any conversion of
+them is a runtime error the build will not report.
+
+**Working rule:** before converting a component, check that it does not forward
+`classes={classes}` and that no sibling imports its stylesheet.
+
+
+---
+
 ## 9. Open questions
 
 1. **No `primary` palette is defined at all** in `themeMode.js`, so every

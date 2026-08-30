@@ -6,7 +6,6 @@ import Fade from '@mui/material/Fade'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import Checkbox from '@mui/material/Checkbox'
 import ListItemText from '@mui/material/ListItemText'
-import useStyles from './styles'
 import MenuItem from '@mui/material/MenuItem'
 import _isEqual from 'lodash/isEqual'
 import _find from 'lodash/find'
@@ -21,7 +20,6 @@ const HeaderCell = ({
   children,
   ...restProps
 }) => {
-  const classes = useStyles()
   const [ anchorEl, setAnchorEl ] = React.useState(null)
   const [ columnFilters, setColumnFilters ] = useState([])
 
@@ -79,7 +77,7 @@ const HeaderCell = ({
             anchorEl={anchorEl}
             open={!!anchorEl}
             onClose={closeMenu}
-            classes={{ paper: classes.paper }}
+            classes={{ paper: "max-h-[300px] overflow-auto" }}
             getContentAnchorEl={null}
             anchorOrigin={{
               vertical: 'bottom',

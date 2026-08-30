@@ -7,10 +7,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { numberWithCommas, applicationFormat, capitalize } from "../../../utils/numbers";
 import { getTokenStorage, setTokenStorage } from "../../../utils/tokenStorage";
 import PatenTrackApi from '../../../api/patenTrack2'
-import useStyles from "./styles";
 
 const AllComponentsMenu = ({onClick}) => {
-    const classes = useStyles();
     //const dispatch = useDispatch();
     const [selectedComponent, setSelectedComponent] = useState('')
     const [selectedComponentLabel, setSelectedComponentLabel] = useState('Select')
@@ -114,8 +112,8 @@ const AllComponentsMenu = ({onClick}) => {
 
 
     return (
-        <div className={classes.menu}>
-            <FormControl className={classes.formControl}>
+        <div className="absolute right-10 z-[9] min-w-[100px] [&_.MuiInput-underline:before]:border-b-0 [&_.MuiInput-underline:after]:border-b-0 [&_.MuiSelect-select]:bg-white/5 [&_.MuiSelect-select.MuiSelect-select]:pl-[5px]">
+            <FormControl >
                 {/* <InputLabel id="component-menu-select-label">{selectedComponentLabel}</InputLabel> */}
                 <Select
                     labelId="component-menu-select-label"

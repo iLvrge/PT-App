@@ -10,7 +10,6 @@ import LawyerChild from './LawyerChild'
 import LawyerForm from './LawyerChild/LawyerForm'
 import Page from '../../../components/Page'
 import Lawfirms from '../../LawFirms'
-import useStyles from './styles'
 
 const COLUMNS = [
   { id: 'companyName', label: 'Company Name' },
@@ -30,7 +29,6 @@ const ACTIONS = {
 }
 
 const CompanyLawFirms = () => {
-  const classes = useStyles()
   const dispatch = useDispatch()
   const companiesList = useSelector(state => state.patenTrack2.companiesList)
   const { list, loading } = useSelector(state => state.settings.companyLawyers)
@@ -65,7 +63,7 @@ const CompanyLawFirms = () => {
 
   return (
     <SplitPane
-        className={classes.splitPane}
+        className={"!relative [&_.Resizer]:opacity-100 [&_.Resizer]:h-full [&_.Resizer]:w-[3px] [&_.Resizer]:z-[1] [&_.Resizer]:box-border [&_.Resizer]:cursor-col-resize [&_.Resizer]:bg-clip-padding [&_.Resizer]:bg-black hover:[&_.Resizer]:bg-[#f50057] [&_.Resizer.horizontal]:h-[3px] [&_.Resizer.horizontal]:w-full [&_.Resizer.horizontal]:cursor-row-resize [&_.Pane]:max-h-full [&_.Pane2]:h-full [&_.Pane2]:overflow-auto [&_.MuiDialogContent-root]:overflow-y-hidden"}
         split="vertical"
         size={500}
     >
