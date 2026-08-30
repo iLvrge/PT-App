@@ -1,3 +1,4 @@
+import useAssetFamily from '../../../queries/useAssetFamily'
 import React, { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {  useHistory, useLocation  } from 'react-router-dom'
@@ -32,8 +33,6 @@ const ChildTable = ({ asset, headerRowDisabled }) => {
     const [ width, setWidth ] = useState( 800 )
     const [ childHeight, setChildHeight ] = useState(500)
     const tableRef = useRef()
-    const [ familyLoading, setFamilyLoading] = useState( true )
-    const [ families, setFamilies] = useState( [] )
     const [ selectedAll, setSelectAll ] = useState( false )
     const [ selectItems, setSelectItems] = useState( [] )
     const [ selectedRow, setSelectedRow] = useState( [] )
@@ -69,44 +68,26 @@ const ChildTable = ({ asset, headerRowDisabled }) => {
         }
     ]
        
+    const { data: families = [], isFetching: familyLoading } = useAssetFamily(asset)
+
+    // The fetch also had to publish a child_count back into Redux. That is a
+    // side effect of the data arriving, not part of fetching it, so it stays an
+    // effect - but one that only reacts to the result.
     useEffect(() => {
-        const getAssignments = async () => {    
-            setFamilyLoading( true)        
-            if( asset != '' ) {
-                const { data } = await PatenTrackApi.assetFamily(asset)
-                
-                if(data.length > 0) {
-                    data.forEach((element, index) => {
-                        data[index].patent_number = element.patent_number !== null ? `${element.publication_country} ${numberWithCommas(element.patent_number)}` : ''
-                        data[index].application_number = element.application_number !== null ? `${element.publication_country} ${applicationFormat(element.application_number)}` : ''
-                    });
-                }                
-                setFamilies(data)                
-                setFamilyLoading( false )
-                if( data != null && data != '' && data.length > 0 ){
-                    let assetsList = [...assetTypeAssignmentAssets] 
-                    const promise = assetsList.map( (row, index) => {
-                        if( row.appno_doc_num == asset || row.grant_doc_num == asset ){
-                            assetsList[index].child_count = data.length
-                        }
-                        return row
-                    })
-                    await Promise.all(promise)
-                    dispatch(
-                        setAssetTypeAssignmentAllAssets({
-                            ...assetTypeAssignmentAssetsObj,
-                            list: assetsList, 
-                            append: false 
-                        })
-                    )
-                }
-            } else {
-                setFamilies([])
-                setFamilyLoading( false )
-            }
-        }
-        getAssignments()
-    }, [ dispatch,  asset ])
+        if (families.length === 0) return
+        const assetsList = assetTypeAssignmentAssets.map((row) =>
+            row.appno_doc_num === asset || row.grant_doc_num === asset
+                ? { ...row, child_count: families.length }
+                : row
+        )
+        dispatch(
+            setAssetTypeAssignmentAllAssets({
+                ...assetTypeAssignmentAssetsObj,
+                list: assetsList,
+                append: false,
+            })
+        )
+    }, [ families, asset, dispatch ])
 
     const onHandleSelectAll = useCallback((event, row) => {
         
