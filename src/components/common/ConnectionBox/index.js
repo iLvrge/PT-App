@@ -11,7 +11,6 @@ import Typography from '@mui/material/Typography'
 import Add from '@mui/icons-material/Add'
 import Remove from '@mui/icons-material/Remove'
 import moment from 'moment'
-import useStyles from './styles' 
 import { connect, useSelector } from 'react-redux'
 import { setConnectionData,  setConnectionBoxView } from '../../../actions/patenTrackActions'
 import PatenTrackApi from '../../../api/patenTrack2';
@@ -20,7 +19,6 @@ import clsx from 'clsx';
 /*let pdfFile = "";*/
 
 function ConnectionBox(props) {
-  const classes = useStyles()
   const [ showSwitcher, setShowSwitcher ] = useState(0)
   const [ boxData, setBoxData ] = useState({})
   const [ assetData, setAssetData ] = useState({popup: []})
@@ -60,13 +58,13 @@ function ConnectionBox(props) {
       })();
     }
     if(props.connectionBoxView == 'true') {
-      setFullView(classes.fullView)
+      setFullView("!w-full")
     }
 
     return (() => {
 
     })
-  },[ classes.fullView, props.assets, props.connectionBoxData, props.connectionBoxView, selectedAssetsPatents ])
+  },[ "!w-full", props.assets, props.connectionBoxData, props.connectionBoxView, selectedAssetsPatents ])
 
   const closeViewer = () => {
     props.setConnectionData({})
@@ -92,42 +90,42 @@ function ConnectionBox(props) {
     }) : assetData != undefined ? assetData.popup[0] : null
     
     return (
-      <Paper className={classes.rootContainer} square>
+      <Paper className={"min-w-[390px] [&_td]:align-top"} square>
       {
         info && info != null && info.length > 0 && Object.keys(info[0]).length > 0 
         ?
         <>
-          <Table className={classes.table}>
+          <Table className={"table-fixed"}>
             <TableBody>
               <TableRow>
-                <TableCell className={classes.cellHeading}><ShowText data={info[0].conveyanceText}/></TableCell>
+                <TableCell className={"px-[19px] py-[13px] [&_.MuiTypography-body2]:overflow-hidden [&_.MuiTypography-body2]:text-base"}><ShowText data={info[0].conveyanceText}/></TableCell>
               </TableRow>
               </TableBody>
           </Table>  
-          <Table className={classes.table}>
+          <Table className={"table-fixed"}>
             <TableBody>
             <TableRow>
                 <TableCell>
-                  <ShowText classes={classes.red} data={`Assignors`}/>
+                  <ShowText classes={"text-secondary"} data={`Assignors`}/>
                   {
                     info[0].patAssignorName.map( (assignor, index) =>(
-                      <ShowText key={`assignor-${index}`} classes={index > 0 && index < info[0].patAssignorName.length ? classes.marginBottom : ''} data={assignor.recorded_name}/>
+                      <ShowText key={`assignor-${index}`} classes={index > 0 && index < info[0].patAssignorName.length ? "mb-[5px]" : ''} data={assignor.recorded_name}/>
                     ))
                   }
                 </TableCell>
                 <TableCell>
-                  <ShowText classes={classes.red} data={`Assignees`}/>
+                  <ShowText classes={"text-secondary"} data={`Assignees`}/>
                   {
                     info[0].patAssigneeName.map( (assignee, index) =>(
-                      <ShowText key={`assignee-${index}`} classes={clsx({[classes.marginBottom]: index > 0 && index < info[0].patAssigneeName.length}, {[classes.highlight]: selectedCategory == 'incorrect_names'})} data={assignee.recorded_name} />
+                      <ShowText key={`assignee-${index}`} classes={clsx({["mb-[5px]"]: index > 0 && index < info[0].patAssigneeName.length}, {["text-[#ffeb3b]"]: selectedCategory == 'incorrect_names'})} data={assignee.recorded_name} />
                     ))
                   }
                 </TableCell>
                 <TableCell colSpan={3}>
-                  <ShowText classes={classes.red} data={`Assignee's Address`}/>
+                  <ShowText classes={"text-secondary"} data={`Assignee's Address`}/>
                   {
                     info[0].patAssigneeName.map( (assignee, index) => (
-                      <div  key={`address-${index}`} className={index > 0 && index < info[0].patAssigneeName.length ? classes.marginBottom : ''}>
+                      <div  key={`address-${index}`} className={index > 0 && index < info[0].patAssigneeName.length ? "mb-[5px]" : ''}>
                         <ShowText data={info[0].patAssigneeAddress1[index]}/>
                         <ShowText data={`${info[0].patAssigneeCity[index]} ${info[0].patAssigneeState[index]} ${info[0].patAssigneePostcode[index]}`}/>
                       </div>
@@ -136,21 +134,21 @@ function ConnectionBox(props) {
                 </TableCell>           
               </TableRow>
               <TableRow>
-                <TableCell className={classes.fixedWidth}>
-                  <ShowText classes={classes.red} data={`Executed`}/>
-                  <ShowText data={moment(new Date(info[0].patAssignorEarliestExDate + ' 00:00:00')).format('MMM. DD YYYY')} classes={classes.marginBottom}/>
-                  <ShowText classes={classes.red} data={`Recorded`}/>
+                <TableCell className={"w-[220px]"}>
+                  <ShowText classes={"text-secondary"} data={`Executed`}/>
+                  <ShowText data={moment(new Date(info[0].patAssignorEarliestExDate + ' 00:00:00')).format('MMM. DD YYYY')} classes={"mb-[5px]"}/>
+                  <ShowText classes={"text-secondary"} data={`Recorded`}/>
                   <ShowText data={moment(new Date(info[0].recordedDate + ' 00:00:00')).format('MMM. DD YYYY')}/>                  
                 </TableCell>
-                <TableCell className={classes.fixedWidth}>    
-                  <ShowText classes={classes.red} data={`Lapsed`}/>
-                  <ShowText classes={`${classes.marginBottom} ${dateDifference(info[0].patAssignorEarliestExDate, info[0].recordedDate) > 90 ? classes.blue : ''} `} data={`${dateDifference(info[0].patAssignorEarliestExDate, info[0].recordedDate)} days`} />              
-                  <ShowText classes={classes.red} data={`Reel/frame`}/>
+                <TableCell className={"w-[220px]"}>    
+                  <ShowText classes={"text-secondary"} data={`Lapsed`}/>
+                  <ShowText classes={`${"mb-[5px]"} ${dateDifference(info[0].patAssignorEarliestExDate, info[0].recordedDate) > 90 ? "font-bold text-[#228DE8]" : ''} `} data={`${dateDifference(info[0].patAssignorEarliestExDate, info[0].recordedDate)} days`} />              
+                  <ShowText classes={"text-secondary"} data={`Reel/frame`}/>
                   <ShowText data={info[0].displayId}/>
                 </TableCell>
                 <TableCell colSpan={3}>
-                  <ShowText classes={classes.red} data={`Correspondent`}/>
-                  <ShowText data={info[0].corrName} classes={classes.marginBottom}/>
+                  <ShowText classes={"text-secondary"} data={`Correspondent`}/>
+                  <ShowText data={info[0].corrName} classes={"mb-[5px]"}/>
                   <ShowText data={info[0].corrAddress1}/>
                   <ShowText data={info[0].corrAddress2}/>
                   <ShowText data={info[0].corrAddress3}/>
@@ -158,18 +156,18 @@ function ConnectionBox(props) {
               </TableRow>              
             </TableBody>
           </Table>
-          <Table className={classes.table}>
+          <Table className={"table-fixed"}>
             <TableBody>
               <TableRow>
                 <TableCell>
                   <Typography variant="body2"> 
-                    <IconButton onClick={() => setVisibility(!visibility)} size="large">{visibility === false ? <Add /> : <Remove />}</IconButton>  <span className={classes.red}>Properties ({info[0].inventionTitle.length})</span>
+                    <IconButton onClick={() => setVisibility(!visibility)} size="large">{visibility === false ? <Add /> : <Remove />}</IconButton>  <span className={"text-secondary"}>Properties ({info[0].inventionTitle.length})</span>
                   </Typography>
                 </TableCell>
               </TableRow>
               </TableBody>
           </Table>
-          <Table className={`${classes.table} ${classes.tablebg}`}>
+          <Table className={`${"table-fixed"} ${undefined}`}>
             <TableHead>
               <TableRow>
                 {
@@ -204,7 +202,7 @@ function ConnectionBox(props) {
     );
   } 
   return (
-    <div className={classes.container}>
+    <div className={"relative h-full grow overflow-auto"}>
       {
         Object.keys(boxData).length > 0 &&
         boxData.popup.map((popup, index) => <RetreieveBoxData key={`${index} - ${popup.id}`} popup={popup}/>)

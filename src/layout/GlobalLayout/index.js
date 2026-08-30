@@ -11,7 +11,6 @@ import {  Grid, Typography} from '@mui/material'
 import { isMobile, isTablet, isIOS, isAndroid } from 'react-device-detect'
 
 import clsx from 'clsx'
-import useStyles from './styles'
 
 import NewHeader from '../../components/NewHeader' 
 
@@ -52,7 +51,6 @@ import PatenTrackApi from '../../api/patenTrack2'
 import { Box } from "@mui/system"
 
 const GlobalLayout = (props) => {
-    const classes = useStyles()
     const dispatch = useDispatch()
     const history = useHistory()
     const location = useLocation()
@@ -1560,7 +1558,7 @@ const GlobalLayout = (props) => {
 
     if(profile == undefined) return null  
     return ( 
-            <div className={classes.root} id='main'>
+            <div className={"flex flex-1 flex-col !flex-nowrap overflow-hidden p-[5px]"} id='main'>
     
             {
                 isMobile || isTablet || showMobileWarning
@@ -1582,12 +1580,12 @@ const GlobalLayout = (props) => {
                         resetScreen={handleResetScreen}
                     />
             }
-            <Grid container className={clsx(classes.dashboardWarapper, {[classes.mobileDashboardWrapper]: isMobile})} id="mainContainer">
-                <Grid container className={clsx(classes.dashboard)}>       
+            <Grid container className={clsx("relative z-[1] flex h-auto w-full grow flex-col items-center justify-center", {["max-h-[-webkit-fill-available] grow-[inherit] [&_.timeline_.vis-panel.vis-top]:hidden"]: isMobile})} id="mainContainer">
+                <Grid container className={clsx("absolute inset-0")}>       
                     {
                         isMobile || isTablet || showMobileWarning || isAndroid || isIOS
                         ?
-                            <Box className={classes.infoMessage}>
+                            <Box className={"flex w-full flex-col items-center justify-center"}>
                                 <Typography
                                     variant="h4" 
                                     align="center" 
@@ -1604,8 +1602,8 @@ const GlobalLayout = (props) => {
                             </Box>
                         :
                             <React.Fragment>
-                                <div className={clsx(classes.filterToolbar)}> 
-                                    <div className={clsx(classes.flex)}>                            
+                                <div className={clsx("w-[57px] border-r-0")}> 
+                                    <div className={clsx("absolute w-[57px]")}>                            
                                         {
                                             topToolBar.map( (item, index) => (
                                                 <NavigationIcon key={index} {...item} />
@@ -1622,7 +1620,7 @@ const GlobalLayout = (props) => {
                                                 ''
                                         } */}
                                     </div>
-                                    <div className={clsx(classes.flex, classes.bottom, 'inner-step-2')}>
+                                    <div className={clsx("absolute w-[57px]", "bottom-2.5", 'inner-step-2')}>
                                         {
                                             bottomToolBar.map( (item, index) => (
                                                 <NavigationIcon key={index} {...item}/>
