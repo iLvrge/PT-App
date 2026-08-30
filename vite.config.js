@@ -81,10 +81,11 @@ export default defineConfig(({ mode }) => {
       css: false,
       server: {
         deps: {
-          // Radix's ESM imports a bare 'react/jsx-runtime'. React 17 has no
-          // package exports map, so Node cannot resolve it; processing Radix
-          // through Vite instead lets the alias above apply.
-          inline: [ /@radix-ui/ ],
+          // These packages' ESM imports a bare 'react/jsx-runtime'. React 17
+          // has no package exports map, so Node cannot resolve it; processing
+          // them through Vite instead lets the alias above apply. Vite's own
+          // browser resolver copes, which is why the production build is fine.
+          inline: [ /@radix-ui/, /@tanstack/ ],
         },
       },
     },

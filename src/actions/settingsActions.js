@@ -1,7 +1,6 @@
 import * as types from './settingsTypes'
 import PatenTrackApi from '../api/patenTrack2'
 import store from '../reducers/store/configureStore'
-import { dispatch } from 'd3'
 
 export const DATA_KEYS = {
   USERS: 'users',

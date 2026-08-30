@@ -7,7 +7,6 @@ import useStyles from './styles'
 
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import Close from '@mui/icons-material/Close';
-import { dispatch } from 'd3';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFamilyLegalItem } from '../../../../actions/patentTrackActions2';
 import { setFamilyLegalItemMode } from '../../../../actions/uiActions';
