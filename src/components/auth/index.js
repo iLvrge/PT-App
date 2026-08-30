@@ -6,7 +6,6 @@ import Loader from '../common/Loader'
 
 import { Grid, Typography } from '@mui/material'
 
-import useStyles from './styles'
 import logo from './logo.svg'
 import Login from './login'
 import Reset from './reset'
@@ -15,7 +14,6 @@ import * as authActions from '../../actions/authActions'
 import getToken from '../../api/token'
 
 function Auth(props) {
-  const classes = useStyles()
 
   const [ showLogin, setShowLogin ] = useState(true)
 
@@ -50,13 +48,13 @@ function Auth(props) {
   return (
     <div>
       {!props.auth.redirect_page ? (
-        <Grid container className={classes.container}>
-          <div className={classes.logotypeContainer}>
-            <img src={logo} alt="logo" className={classes.logotypeImage} />
-            <Typography className={classes.logotypeText}>PatenTrack</Typography>
+        <Grid container className={"absolute left-0 top-0 flex h-screen w-screen items-center justify-center"}>
+          <div className={"flex h-full w-3/5 flex-col items-center justify-center bg-[#1976d2] dark:bg-[#90caf9] max-[1199.95px]:hidden"}>
+            <img src={logo} alt="logo" className={"mb-8 w-[165px]"} />
+            <Typography className={"text-[84px] font-medium text-white max-[1199.95px]:text-5xl"}>PatenTrack</Typography>
           </div>
-          <div className={classes.formContainer}>
-            <div className={classes.form}>
+          <div className={"flex h-full w-2/5 flex-col items-center justify-around max-[1199.95px]:w-1/2"}>
+            <div className={"w-[320px]"}>
               {showLogin ? (
                 <Login
                   login={props.actions.login}

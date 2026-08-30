@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
 import { Button, Fade, TextField, Typography } from '@mui/material'
-import useStyles from './styles'
 import { withRouter } from 'react-router-dom'
 
 function Login(props) {
-  const classes = useStyles()
   const [ username, setUsername ] = useState('')
   const [ heading, setHeading ] = useState('SignIn')
   const [ forgetUsername, setForgetUsername ] = useState('')
@@ -31,17 +29,17 @@ function Login(props) {
   }
 
   return (
-    <div className={classes.loginForm}>
+    <div className={undefined}>
       <Typography
         variant   = "h1"
-        className = {classes.greeting}
+        className = {"mt-8 text-center font-medium"}
       >
         {heading}
       </Typography>
       <Fade in={!!error}>
         <Typography
           color     = "secondary"
-          className = {classes.errorMessage}
+          className = {"text-center"}
         >
           Your username and password are not correct!
         </Typography>
@@ -57,8 +55,8 @@ function Login(props) {
           onChange    = {e => setUsername(e.target.value)}
           InputProps  = {{
             classes: {
-              underline: classes.textFieldUnderline,
-              input: classes.textField,
+              underline: "before:border-b-[#42a5f5] after:border-b-[#1976d2] hover:before:!border-b-[#42a5f5] dark:before:border-b-[#e3f2fd] dark:after:border-b-[#90caf9] dark:hover:before:!border-b-[#e3f2fd]",
+              input: undefined,
             }
           }}
           margin      = "normal"
@@ -73,8 +71,8 @@ function Login(props) {
           onChange    = {e => setPassword(e.target.value)}
           InputProps  = {{
             classes: {
-              underline: classes.textFieldUnderline,
-              input: classes.textField,
+              underline: "before:border-b-[#42a5f5] after:border-b-[#1976d2] hover:before:!border-b-[#42a5f5] dark:before:border-b-[#e3f2fd] dark:after:border-b-[#90caf9] dark:hover:before:!border-b-[#e3f2fd]",
+              input: undefined,
             },
           }}
           margin      = "normal"
@@ -82,7 +80,7 @@ function Login(props) {
           type        = "password"
           fullWidth
         />
-        <div className={classes.formButtons}>
+        <div className={"mt-8 flex w-full items-center justify-between"}>
           <Button
             variant   = "contained"
             color     = "primary"
@@ -97,7 +95,7 @@ function Login(props) {
           <Button
             color     = "primary"
             size      = "large"
-            className = {classes.forgetButton}
+            className = {"font-normal normal-case"}
             onClick = {() => {
               setHeading('Forget Password')
               setLogin(false)
@@ -128,8 +126,8 @@ function Login(props) {
             onChange    = {e => setForgetUsername(e.target.value)}
             InputProps  = {{
               classes: {
-                underline: classes.textFieldUnderline,
-                input: classes.textField,
+                underline: "before:border-b-[#42a5f5] after:border-b-[#1976d2] hover:before:!border-b-[#42a5f5] dark:before:border-b-[#e3f2fd] dark:after:border-b-[#90caf9] dark:hover:before:!border-b-[#e3f2fd]",
+                input: undefined,
               }
             }}
             margin      = "normal"
@@ -151,7 +149,7 @@ function Login(props) {
           <Button
             color     = "primary"
             size      = "large"
-            className = {classes.forgetButton}
+            className = {"font-normal normal-case"}
             onClick = {() => {
               setHeading('SignIn')
               setLogin(true)

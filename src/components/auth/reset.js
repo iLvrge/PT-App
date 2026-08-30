@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Fade, TextField, Typography } from '@mui/material'
-import useStyles from './styles'
 import { withRouter } from 'react-router-dom'
 
 function Reset(props) {
-  const classes = useStyles()
   const [ password, setPassword ] = useState('')
   const [ confirm_password, setConfirmPassword ] = useState('')
   const [ notMatched , setNotMatched ] = useState(false)
@@ -34,10 +32,10 @@ function Reset(props) {
   }
 
   return (
-    <div className={classes.loginForm}>
+    <div className={undefined}>
       <Typography
         variant   = "h1"
-        className = {classes.greeting}
+        className = {"mt-8 text-center font-medium"}
       >
         Reset Password
       </Typography>     
@@ -48,7 +46,7 @@ function Reset(props) {
             <Fade in={true}>
                 <Typography
                 color     = "secondary"
-                className = {classes.errorMessage}
+                className = {"text-center"}
                 >
                 {message}
                 </Typography>
@@ -62,8 +60,8 @@ function Reset(props) {
           onChange    = {e => setPassword(e.target.value)}
           InputProps  = {{
             classes: {
-              underline: classes.textFieldUnderline,
-              input: classes.textField,
+              underline: "before:border-b-[#42a5f5] after:border-b-[#1976d2] hover:before:!border-b-[#42a5f5] dark:before:border-b-[#e3f2fd] dark:after:border-b-[#90caf9] dark:hover:before:!border-b-[#e3f2fd]",
+              input: undefined,
             },
           }}
           margin      = "normal"
@@ -77,8 +75,8 @@ function Reset(props) {
           onChange    = {e => setConfirmPassword(e.target.value)}
           InputProps  = {{
             classes: {
-              underline: classes.textFieldUnderline,
-              input: classes.textField,
+              underline: "before:border-b-[#42a5f5] after:border-b-[#1976d2] hover:before:!border-b-[#42a5f5] dark:before:border-b-[#e3f2fd] dark:after:border-b-[#90caf9] dark:hover:before:!border-b-[#e3f2fd]",
+              input: undefined,
             },
           }}
           margin      = "normal"
@@ -100,7 +98,7 @@ function Reset(props) {
           <Button
             color     = "primary"
             size      = "large"
-            className = {classes.forgetButton}
+            className = {"font-normal normal-case"}
             component={Link} to="/"
           >
             Cancel
