@@ -1,6 +1,5 @@
 import React, { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { Redirect, useHistory, useLocation } from 'react-router-dom'
-import useStyles from './styles'
 import NewHeader from '../NewHeader'
 import _get from 'lodash/get'
 import { useSelector, useDispatch } from 'react-redux'
@@ -56,7 +55,6 @@ const DEFAULT_ROUTE = TABS[0].value
 const findTabViaChild = (currentTab) => _get(TABS.find(({ children }) => Array.isArray(children) && children.some(({ value }) => value === currentTab)), 'value')
 
 function SettingsPage() {
-  const classes = useStyles()
   const history = useHistory()
   const location = useLocation()
   const dispatch = useDispatch()
@@ -366,13 +364,13 @@ function SettingsPage() {
   ]
 
   return !authenticated ? <Redirect to={'/'} /> : (
-    <div className={classes.root}>
+    <div className={"flex flex-1 flex-col !flex-nowrap overflow-hidden p-[5px]"}>
       <NewHeader />
-      <div className={classes.settings}>
-        <Grid container className={classes.dashboardWarapper}>
-          <Grid container className={classes.dashboard}>
-            <div className={classes.filterToolbar}> 
-              <div className={classes.flex}>
+      <div className={"flex flex-1 overflow-hidden"}>
+        <Grid container className={"relative z-[1] flex h-[calc(100vh-47px)] w-full grow flex-col items-center justify-center"}>
+          <Grid container className={"absolute inset-0 overflow-y-auto"}>
+            <div className={"w-[57px] border-r-0"}> 
+              <div className={"absolute w-[57px]"}>
                 { 
                   topToolBar.map( (item, index) => (
                     <NavigationIcon key={index} {...item}/>
@@ -380,7 +378,7 @@ function SettingsPage() {
                 } 
               </div>
             </div>
-            <div className={classes.tabPanel}>
+            <div className={"flex-1 overflow-hidden"}>
               {
                 FLAT_TABS.map(({ value, component: Component }) => (
                   currentTab === value && (<Component key={value} />)

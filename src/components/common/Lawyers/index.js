@@ -1,6 +1,5 @@
 import React, { useState, useEffect, forwardRef } from 'react'
 import { connect } from 'react-redux'
-import useStyles from './styles'
 import MaterialTable from '@material-table/core'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import AddBox from '@mui/icons-material/AddBox'
@@ -27,7 +26,6 @@ import {
 } from '../../../actions/patenTrackActions'
 
 function Lawyers(props) {
-  const classes = useStyles()
   const [ state, setState ] = useState([])
   const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -90,10 +88,10 @@ function Lawyers(props) {
   }
 
   return (
-    <div className={classes.userItemsContainer}>
-      <div className={classes.container}>
+    <div className={"relative z-[1000] flex h-full w-full grow flex-col"}>
+      <div className={"absolute bottom-0 left-[5px] right-[5px] top-[5px] flex grow flex-col items-center"}>
         <div
-          className={classes.scrollbar}
+          className={"relative w-full grow overflow-hidden [&_.MuiToolbar-gutters]:p-0"}
           style={{ height: (props.height * 39) / 100 }}
         >
           {
