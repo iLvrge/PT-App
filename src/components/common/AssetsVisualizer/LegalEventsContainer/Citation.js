@@ -9,7 +9,7 @@ import PatenTrackApi from '../../../../api/patenTrack2'
 import themeMode from '../../../../themes/themeMode'
 import { numberWithCommas, toTitleCase } from '../../../../utils/numbers'
 
-import useStyles from './styles'
+import './styles.css'
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
 const DATE_FORMAT = 'MMM DD, YYYY'
@@ -72,7 +72,6 @@ const convertDataToItem = (item) => {
 
 
 const Citation = ({ number, citationRawData, updateCitationRawData }) => {
-    const classes = useStyles()
     const timelineRef = useRef()
     const timelineContainerRef = useRef()
     const items = useRef(new DataSet())
@@ -242,7 +241,7 @@ const Citation = ({ number, citationRawData, updateCitationRawData }) => {
 
 
     return(
-        <Paper className={classes.timelineRoot} square>    
+        <Paper className={'pt-timeline-root'} square>    
                 <div
                     id={`citationTimeline`}
                     style={{ 
@@ -250,11 +249,11 @@ const Citation = ({ number, citationRawData, updateCitationRawData }) => {
                         filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`,
                     }}
                     ref={timelineContainerRef}
-                    className={classes.timelineCitation}
+                    className={'pt-timeline-citation'}
                 />
-                {/* { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> }  */}
+                {/* { isLoadingTimelineRawData && <CircularProgress className={'pt-loader'} /> }  */}
                 {isLoadingTimelineRawData  && (
-                    <div className={classes.blinkText}>
+                    <div className={'pt-blink-text'}>
                         Live data is being retrieved.
                     </div>
                 )}

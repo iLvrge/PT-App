@@ -39,7 +39,7 @@ import { numberWithCommas, capitalize } from '../../../../utils/numbers'
 
 import FullScreen from '../../FullScreen'
 
-import useStyles from './styles'
+import './styles.css'
 import { setTimelineSelectedItem, setTimelineSelectedAsset } from '../../../../actions/uiActions'
 import clsx from 'clsx';
 
@@ -89,7 +89,6 @@ const TIME_INTERVAL = 1000
 var tootlTip = ''
 const TimelineSecurity = ({ data, assignmentBar, assignmentBarToggle, type, standalone }) => {
   
-  const classes = useStyles()
   const dispatch = useDispatch()
   const location = useLocation()
   const history = useHistory()
@@ -431,10 +430,10 @@ const TimelineSecurity = ({ data, assignmentBar, assignmentBarToggle, type, stan
    */    
 
   return (
-      <Paper className={classes.root}>    
+      <Paper className={'pt-root'}>    
         {
             typeof standalone === 'undefined' && (
-                <div className={classes.fullScreenContainer}>
+                <div className={'pt-full-screen-container'}>
                     <FullScreen componentItems={menuItems}/>
                 </div>
             )
@@ -444,13 +443,13 @@ const TimelineSecurity = ({ data, assignmentBar, assignmentBarToggle, type, stan
             filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
           }}  
           ref={timelineContainerRef}
-          className={clsx(classes.timeline, 'timeline')}
+          className={clsx('pt-timeline', 'timeline')}
         />
         {
           isLoadingTimelineData &&
-          <CircularProgress size={15} color={'secondary'} className={classes.timelineProcessingIndicator} />
+          <CircularProgress size={15} color={'secondary'} className={'pt-timeline-processing-indicator'} />
         }
-        { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> }
+        { isLoadingTimelineRawData && <CircularProgress className={'pt-loader'} /> }
       </Paper>
   ) 
 }

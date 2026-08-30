@@ -11,13 +11,12 @@ import FigureData from './FigureData'
 import FullScreen from '../../FullScreen'
 import { numberWithCommas, applicationFormat, capitalize } from "../../../../utils/numbers";
 
-import useStyles from './styles'
+import './styles.css'
 import { setAssetsUSPTO } from '../../../../actions/patentTrackActions2'
 import clsx from 'clsx'
 
 const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrationBar, visualizerBarSize, type, standalone, activeTab }) => {
 
-    const classes = useStyles()
     const [ fullScreen, setFullScreen ] = useState(false)
     const [ selectedTab, setSelectedTab ] = useState(typeof activeTab !== 'undefined' ? activeTab : 0)
     const [ uspto, setUSPTO ] = useState('')
@@ -150,19 +149,19 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
         return (
             label === 'Family'
             ?
-                <span className={classes.containerRelative}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.family)} showZero={false}></Badge></span>
+                <span className={'pt-container-relative'}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.family)} showZero={false}></Badge></span>
             :
                 label === 'Claims'
                 ?
-                    <span className={classes.containerRelative}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.claims)} showZero={false}></Badge></span>
+                    <span className={'pt-container-relative'}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.claims)} showZero={false}></Badge></span>
                 :
                     label === 'Figures'
                     ?
-                        <span className={classes.containerRelative}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.figures)} showZero={false}></Badge></span>
+                        <span className={'pt-container-relative'}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.figures)} showZero={false}></Badge></span>
                     :
                     label ===  'USPTO'
                     ?
-                        <FormControl sx={{ m: 1, minWidth: 80 }} variant="standard"  size="small" className={classes.dropdown}>
+                        <FormControl sx={{ m: 1, minWidth: 80 }} variant="standard"  size="small" className={'pt-dropdown'}>
                             <InputLabel id="uspto-extra-info-label">USPTO</InputLabel>
                             <Select
                                 labelId="uspto-extra-info-label"
@@ -190,7 +189,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
 
     
     return(
-        <Paper className={classes.root} square>
+        <Paper className={'pt-root'} square>
 
             {
                 selectedCompaniesAll === true || selectedCompanies.length > 0 || type === 9 || ( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)
@@ -198,17 +197,17 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                     <>
                         {
                             fullScreen === false && typeof standalone === 'undefined' && (
-                                <IconButton size="small" className={clsx(classes.fullscreenBtn, 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
+                                <IconButton size="small" className={clsx('pt-fullscreen-btn', 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
                                     <FullscreenIcon />
                                 </IconButton>
                             )
                         }
-                        <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
+                        <Tabs className={'pt-tabs'} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
                             {
                                 [`Family`, `Abstract`, `Specifications`, `Claims`, `Figures`, 'USPTO'].map( (itemTab, index) => (
                                     <Tab
                                         key={index}
-                                        className={classes.tab}
+                                        className={'pt-tab'}
                                         label={<ItemLabel label={itemTab}/>}
                                         disableFocusRipple={true}
                                         disableRipple={true}
@@ -216,22 +215,22 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                                 ))
                             }                            
                         </Tabs>
-                        <div className={classes.graphContainer}>        
-                        {/* <Typography variant='body2' className={classes.heading}>{selectedNumber}</Typography> */}
+                        <div className={'pt-graph-container'}>        
+                        {/* <Typography variant='body2' className={'pt-heading'}>{selectedNumber}</Typography> */}
                         {selectedTab === 0 && <FamilyContainer
                                     family={selectedAssetsFamily}
                                     onClose={onCloseFamilyMode} />}
                         {
                             selectedTab > 0
                             ?
-                            <Grid container className={classes.dashboard}>
+                            <Grid container className={'pt-dashboard'}>
                                 <Grid
                                 item
                                 lg={12}
                                 md={12}
                                 sm={12}
                                 xs={12}
-                                className={classes.flexColumn}
+                                className={'pt-flex-column'}
                                 >   
                                     {selectedTab === 1 && <AbstractData data={abstractData} number={selectedNumber} />}
                                     {selectedTab === 2 && <SpecificationData data={specificationData} number={selectedNumber} />}                                    

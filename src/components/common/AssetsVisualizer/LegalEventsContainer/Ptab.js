@@ -8,7 +8,7 @@ import moment from 'moment'
 import { numberWithCommas, toTitleCase, ptabHeadings } from '../../../../utils/numbers'
 
 import PatenTrackApi from '../../../../api/patenTrack2'
-import useStyles from './styles'
+import './styles.css'
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
 const DATE_FORMAT = 'MMM DD, YYYY'
@@ -32,7 +32,6 @@ var tootlTip = ''
 const TIME_INTERVAL = 1000
 
 const Ptab = ({ number, rawData, updateRawData, standalone }) => {
-    const classes = useStyles()
     const timelineRef = useRef()
     const timelineContainerRef = useRef()
     const items = useRef(new DataSet())
@@ -323,8 +322,8 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
     }, [ /* onSelect, */ onItemover, onItemout ]) 
 
     return(
-        <Paper className={classes.root}>   
-            <div className={classes.root}>
+        <Paper className={'pt-root'}>   
+            <div className={'pt-root'}>
                 <div
                     id={`ptabTimeline`}
                     style={{ 
@@ -332,9 +331,9 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
                         filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`,
                     }}
                     ref={timelineContainerRef}
-                    className={classes.timelinePtab}
+                    className={'pt-timeline-ptab'}
                 />
-                { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> } 
+                { isLoadingTimelineRawData && <CircularProgress className={'pt-loader'} /> } 
             </div>
         </Paper>
     )

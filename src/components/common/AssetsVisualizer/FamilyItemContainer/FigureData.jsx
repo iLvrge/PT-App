@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Viewer from 'react-viewer'
-import useStyles from './styles'
+import './styles.css'
 import Loader from '../../Loader'
 import useFamilyFigures from '../../../../queries/useFamilyFigures'
 import { parseSupplied, isAbsent } from '../../../../queries/parseSupplied'
@@ -16,7 +16,6 @@ import { parseSupplied, isAbsent } from '../../../../queries/parseSupplied'
  * superseded request is simply no longer the active query.
  */
 const FigureData = ({ data, number, standalone }) => {
-  const classes = useStyles()
   const [ visible ] = useState(true)
 
   const supplied = parseSupplied(data)
@@ -27,8 +26,8 @@ const FigureData = ({ data, number, standalone }) => {
 
   if (isFetching) return <Loader />
   return (
-    <div className={classes.container}>
-      <div className={classes.inlineContainer} id={`container`}></div>
+    <div className={'pt-container'}>
+      <div className={'pt-inline-container'} id={`container`}></div>
       {
         Array.isArray(figures) && figures.length > 0 && (
           <Viewer

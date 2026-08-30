@@ -7,13 +7,12 @@ import Status from './Status'
 import Litigation from './Litigation'
 import Ptab from './Ptab'
 import Citation from './Citation'
-import useStyles from './styles'
+import './styles.css'
 import FullScreen from '../../FullScreen'
 import { numberWithCommas, applicationFormat, capitalize } from "../../../../utils/numbers";
 import clsx from 'clsx'
 
 const LegalEventsContainer = ({ events, type, standalone, activeTab }) => {
-  const classes = useStyles()
   const [ fullScreen, setFullScreen ] = useState(false)
   const [ selectedTab, setSelectedTab ] = useState(typeof activeTab !== 'undefined' ? activeTab : 0)
   const [ eventsData, setEventsData ] = useState([])
@@ -53,23 +52,23 @@ const LegalEventsContainer = ({ events, type, standalone, activeTab }) => {
     return (
         label === 'M.Fees'
         ?
-          <span className={clsx(classes.containerRelative, {[classes.redColor]: asset_details.fees > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.fees)} showZero={false}></Badge></span>
+          <span className={clsx('pt-container-relative', {['pt-red-color']: asset_details.fees > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.fees)} showZero={false}></Badge></span>
         :
             label === 'Cited by'
             ?
-              <span className={clsx(classes.containerRelative, {[classes.redColor]: asset_details.citations > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.citations)} showZero={false}></Badge></span>
+              <span className={clsx('pt-container-relative', {['pt-red-color']: asset_details.citations > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.citations)} showZero={false}></Badge></span>
             :
                 label === 'PTAB'
                 ?
-                  <span className={clsx(classes.containerRelative, {[classes.redColor]: asset_details.ptab > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.ptab)} showZero={false}></Badge></span>
+                  <span className={clsx('pt-container-relative', {['pt-red-color']: asset_details.ptab > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.ptab)} showZero={false}></Badge></span>
                 :
                   label == 'Litigation'
                   ?
-                    <span className={clsx(classes.containerRelative, {[classes.redColor]: asset_details.litigation > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.litigation)} showZero={false}></Badge></span>
+                    <span className={clsx('pt-container-relative', {['pt-red-color']: asset_details.litigation > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.litigation)} showZero={false}></Badge></span>
                   :
                   label == 'Status'
                   ?
-                    <span className={clsx(classes.containerRelative, {[classes.redColor]: asset_details.status > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(asset_details.status)} showZero={false}></Badge></span>
+                    <span className={clsx('pt-container-relative', {['pt-red-color']: asset_details.status > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.status)} showZero={false}></Badge></span>
                   :
                   label
     )
@@ -77,30 +76,30 @@ const LegalEventsContainer = ({ events, type, standalone, activeTab }) => {
 
   
   return (
-    <Paper className={classes.root} square >
+    <Paper className={'pt-root'} square >
         {
           selectedCompaniesAll === true || selectedCompanies.length > 0 || type === 9 || ( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)
           ?
           <>
             {
               fullScreen === false && typeof standalone === 'undefined' && (
-                  <IconButton size="small" className={clsx(classes.fullscreenBtn, 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
+                  <IconButton size="small" className={clsx('pt-fullscreen-btn', 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
                     <FullscreenIcon />
                   </IconButton>
               )
             }
-            <Tabs className={classes.tabs} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
+            <Tabs className={'pt-tabs'} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
               {
                 [`M.Fees`, `Cited by`, `Status`, `PTAB`, `Litigation`].map( (item, index) => (
                   <Tab
                     key={index}
-                    className={classes.tab} 
+                    className={'pt-tab'} 
                     label={<ItemLabel label={item}/>}
                   /> 
                 ))
               }                            
             </Tabs>
-            <div className={classes.graphContainer}>  
+            <div className={'pt-graph-container'}>  
               {selectedTab === 0 && <Fees events={events} number={selectedNumber} />}
               {selectedTab === 1 && <Citation updateCitationRawData={setCitationData} number={selectedNumber} />}   
               {selectedTab === 2 && <Status data={eventsData} number={selectedNumber} updateRawData={setEventsStatusData}/>}  

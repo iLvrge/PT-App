@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Paper from '@mui/material/Paper'
 
-import useStyles from './styles'
+import './styles.css'
 
 const Litigation = ({ events }) => {
-    const classes = useStyles()
     return(
-        <Paper className={classes.root}  square >
+        <Paper className={'pt-root'}  square >
         
         </Paper>
     )

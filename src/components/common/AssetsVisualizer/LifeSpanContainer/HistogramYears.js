@@ -4,12 +4,11 @@ import { Chart } from "react-google-charts";
 import { useSelector } from 'react-redux';
 import Loader from '../../Loader'; 
 import themeMode from '../../../../themes/themeMode';
-import useStyles from './styles' 
+import './styles.css'
 import { pink } from '@mui/material/colors'
 import useAbandonedYears from '../../../../queries/useAbandonedYears';
 
 const HistogramYears = () => {
-    const classes = useStyles() 
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const [option, setOption] = useState({
         legend: { position: 'none' },

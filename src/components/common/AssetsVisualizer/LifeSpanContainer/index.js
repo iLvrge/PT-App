@@ -13,7 +13,7 @@ import { setAssetsIllustrationData, setAssetsTransactionsLifeSpan} from '../../.
 import PatenTrackApi from '../../../../api/patenTrack2'
 import { DEFAULT_CUSTOMERS_LIMIT } from "../../../../api/patenTrack2";
 
-import useStyles from './styles'
+import './styles.css'
 import AgentsVisualizer from '../AgentsVisualizer'
 import LabelWithIcon from '../../LabelWithIcon'
 import HistogramYears from './HistogramYears'
@@ -21,7 +21,6 @@ import SteppedAges from './SteppedAges'
 import clsx from 'clsx' 
 
 const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerBarSize, type, standalone, activeTab, setIllustrationRecord, chartsBarToggle, checkChartAnalytics, setAnalyticsBar, setChartBar, gap, activeFullScreen}) => {
-    const classes = useStyles() 
     const dispatch = useDispatch()
     const location = useLocation()
     const [offsetWithLimit, setOffsetWithLimit] = useState([0, DEFAULT_CUSTOMERS_LIMIT])
@@ -260,14 +259,14 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
     } 
     
     return (
-        <Paper className={classes.root} square>  
+        <Paper className={'pt-root'} square>  
             {
                 (selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording') && selectedRow.length > 0
                 ?
                     ''
                 :
                     ((['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE))  || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null))  && fullScreen === false && typeof standalone === 'undefined' && (
-                        <IconButton size="small" className={clsx(classes.fullscreenBtn, 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
+                        <IconButton size="small" className={clsx('pt-fullscreen-btn', 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
                             <FullscreenIcon />
                         </IconButton>
                     )
@@ -281,14 +280,14 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                         value={selectedTab}
                         variant={'scrollable'} 
                         scrollButtons="auto"
-                        className={classes.tabs}
+                        className={'pt-tabs'}
                         onChange={handleChangeTab} 
                     >
                         {
                             lifeSpanTabs.map((tab) => (
                                 <Tab
                                     key={tab}
-                                    className={classes.tab} 
+                                    className={'pt-tab'} 
                                     icon={<LabelWithIcon label={tab}/>}
                                     label={tab} 
                                     iconPosition="start"

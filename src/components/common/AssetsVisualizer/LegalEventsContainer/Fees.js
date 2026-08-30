@@ -11,7 +11,7 @@ import { Timeline } from 'vis-timeline/esnext'
 import CircularProgress from '@mui/material/CircularProgress'
 import Loader from '../../Loader'
 
-import useStyles from './styles'
+import './styles.css'
 import { Badge, Tab, Tabs } from '@mui/material'
 import { numberWithCommas, applicationFormat, removeLeadingZeros } from '../../../../utils/numbers'
 import PatenTrackApi from '../../../../api/patenTrack2'
@@ -108,7 +108,6 @@ const TIME_INTERVAL = 1000
 
 const Fees = ({ events, showTabs, tabText, showAbandoned }) => {
   const dispatch = useDispatch()
-  const classes = useStyles()
   const timelineRef = useRef()
   const timelineContainerRef = useRef()
   const items = useRef(new DataSet())
@@ -400,20 +399,20 @@ const Fees = ({ events, showTabs, tabText, showAbandoned }) => {
 
   const ItemLabel = ({ label }) => {
     return (
-      <span className={classes.containerRelative}>{label}<Badge color='primary' max={99999} className={classes.badge} badgeContent={numberWithCommas(Object.keys(events).length > 0 && events.main != undefined ? events.main.length : 0)} showZero={false}></Badge></span>
+      <span className={'pt-container-relative'}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(Object.keys(events).length > 0 && events.main != undefined ? events.main.length : 0)} showZero={false}></Badge></span>
     )
   }
 
   return (
-    <Paper className={`${classes.timelineRoot} timelineRoot`} square >
+    <Paper className={`${'pt-timeline-root'} timelineRoot`} square >
       {
         showTabs === true && (
-          <Tabs className={classes.tabs} variant={'scrollable'} value={0}>
+          <Tabs className={'pt-tabs'} variant={'scrollable'} value={0}>
             {
               [tabText].map((item, index) => (
                 <Tab
                   key={index}
-                  className={classes.tab}
+                  className={'pt-tab'}
                   label={<ItemLabel label={item} />}
                 />
               ))
@@ -429,9 +428,9 @@ const Fees = ({ events, showTabs, tabText, showAbandoned }) => {
           filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`,
         }}
         ref={timelineContainerRef}
-        className={classes.timeline}
+        className={'pt-timeline'}
       />
-      {isLoadingTimelineRawData && <CircularProgress className={classes.loader} />}
+      {isLoadingTimelineRawData && <CircularProgress className={'pt-loader'} />}
       {isLoadingTimelineData && <Loader />}
     </Paper>
   )

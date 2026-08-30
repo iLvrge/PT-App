@@ -12,7 +12,7 @@ import { Timeline } from 'vis-timeline/esnext'
 import CircularProgress from '@mui/material/CircularProgress'
 import Loader from '../../Loader'
 
-import useStyles from './styles'
+import './styles.css'
 import SettingsInputComponentSharp from '@mui/icons-material/SettingsInputComponentSharp'
 
 const options = { 
@@ -500,7 +500,6 @@ var tootlTip = ''
 const TIME_INTERVAL = 1000
 
 const Status = ({ number, rawData, updateRawData, standalone }) => {
-  const classes = useStyles()
   const timelineRef = useRef()
   const timelineContainerRef = useRef()
   const items = useRef(new DataSet())
@@ -708,7 +707,7 @@ useEffect(() => {
 }, [ timelineRawData, allIcons, isLoadingTimelineRawData, timelineContainerRef ])
 
   return (
-        <Paper className={`${classes.timelineRoot} timelineRoot`} square >
+        <Paper className={`${'pt-timeline-root'} timelineRoot`} square >
             <div
                 id={`statusTimeline`}
                 style={{ 
@@ -716,9 +715,9 @@ useEffect(() => {
                     filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`,
                 }}
                 ref={timelineContainerRef}
-                className={classes.timelineStatus}
+                className={'pt-timeline-status'}
             />
-            { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> }
+            { isLoadingTimelineRawData && <CircularProgress className={'pt-loader'} /> }
             { isLoadingTimelineData && <Loader /> }
         </Paper>
     )

@@ -23,7 +23,7 @@ import { numberWithCommas } from '../../../../utils/numbers'
 
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
-import useStyles from './styles'
+import './styles.css'
 import FullScreen from '../../FullScreen'
 import LegalData from './LegalData'
 import { setFamilyLegalItem } from '../../../../actions/patentTrackActions2'
@@ -74,7 +74,6 @@ const convertDataToItem = (familyItem) => {
 }
 
 const FamilyContainer = ({ family, onClose }) => {
-    const classes = useStyles()
 
     const timelineRef = useRef()
     const timelineContainerRef = useRef()
@@ -219,8 +218,8 @@ const FamilyContainer = ({ family, onClose }) => {
     }
 
     return(
-        <Paper className={classes.root}>   
-            <div className={classes.root}>
+        <Paper className={'pt-root'}>   
+            <div className={'pt-root'}>
                 <div
                     id={`familyTimeline`}
                     style={{ 
@@ -228,18 +227,18 @@ const FamilyContainer = ({ family, onClose }) => {
                         filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`,
                     }}
                     ref={timelineContainerRef}
-                    className={classes.timeline}
+                    className={'pt-timeline'}
                 />
-                {/* {isLoadingTimelineRawData || familyDataRetrieved && <CircularProgress className={classes.loader} /> }  */}
+                {/* {isLoadingTimelineRawData || familyDataRetrieved && <CircularProgress className={'pt-loader'} /> }  */}
                 {(isLoadingTimelineRawData || familyDataRetrieved ) && (
-                    <div className={classes.blinkText}>
+                    <div className={'pt-blink-text'}>
                         Live data is being retrieved.
                     </div>
                 )}
             </div>
             {
                 legalModal === true && (
-                    <div className={classes.fullScreenContainer}>
+                    <div className={'pt-full-screen-container'}>
                         <FullScreen 
                             componentItems={menuItems}
                             setScreen={handleCloseModal}

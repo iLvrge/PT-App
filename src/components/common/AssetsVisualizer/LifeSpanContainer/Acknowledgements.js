@@ -16,7 +16,7 @@ import PatenTrackApi from '../../../../api/patenTrack2'
 import { getCustomerAssets, getCustomerSelectedAssets, setCitationTimelineData } from '../../../../actions/patentTrackActions2'
 import { numberWithCommas, toTitleCase } from '../../../../utils/numbers'
 import themeMode from '../../../../themes/themeMode'
-import useStyles from './styles'
+import './styles.css'
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import TitleBar from '../../TitleBar' 
 
@@ -97,7 +97,6 @@ const convertDataToItem = (item) => {
 
 
 const Acknowledgements = (props) => {
-    const classes = useStyles()
     const timelineRef = useRef()
     const timelineContainerRef = useRef()
     const dispatch = useDispatch()
@@ -484,7 +483,7 @@ const Acknowledgements = (props) => {
       }
 
     return(
-        <Paper className={classes.root}> 
+        <Paper className={'pt-root'}> 
 
             <div id="visualization">
                 <Box sx={{p: 2, position: 'absolute', zIndex: 99999}}>
@@ -514,9 +513,9 @@ const Acknowledgements = (props) => {
                     filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`,
                 }}
                 ref={timelineContainerRef}
-                className={classes.timelineCitation}
+                className={'pt-timeline-citation'}
             />
-            { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> } 
+            { isLoadingTimelineRawData && <CircularProgress className={undefined} /> } 
         </Paper>
     )
 }

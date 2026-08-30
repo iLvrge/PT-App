@@ -3,13 +3,12 @@ import { useSelector } from 'react-redux';
 import { Chart } from "react-google-charts";  
 import Loader from '../../Loader';
 import themeMode from '../../../../themes/themeMode';
-import useStyles from './styles' 
+import './styles.css'
 import { pink } from '@mui/material/colors'
 import useAbandonedAges from '../../../../queries/useAbandonedAges';
 
 
 const SteppedAges = () => {
-    const classes = useStyles() 
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const [option, setOption] = useState({
         legend: { position: 'none' },

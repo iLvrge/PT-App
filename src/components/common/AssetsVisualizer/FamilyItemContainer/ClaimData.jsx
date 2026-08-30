@@ -1,6 +1,6 @@
 import React from 'react'
 import { Typography } from '@mui/material'
-import useStyles from './styles'
+import './styles.css'
 import Loader from '../../Loader'
 import useClaimsData from '../../../../queries/useClaimsData'
 import { parseSupplied, isAbsent } from '../../../../queries/parseSupplied'
@@ -29,7 +29,6 @@ const ClaimTree = ({ items, className }) => (
 
 /** Same guarded/unguarded effect pair as its three siblings; only the guard is kept. */
 const ClaimData = ({ data, number }) => {
-  const classes = useStyles()
 
   const supplied = parseSupplied(data)
   const useSupplied = !isAbsent(supplied)
@@ -38,8 +37,8 @@ const ClaimData = ({ data, number }) => {
   const claims = useSupplied ? supplied : (fetched ?? '')
 
   if (isFetching) return <Loader />
-  if (Array.isArray(claims)) return <ClaimTree items={claims} className={classes.filetree} />
-  return <div dangerouslySetInnerHTML={{ __html: claims }} className={classes.filetree} />
+  if (Array.isArray(claims)) return <ClaimTree items={claims} className={'pt-filetree'} />
+  return <div dangerouslySetInnerHTML={{ __html: claims }} className={'pt-filetree'} />
 }
 
 export default ClaimData

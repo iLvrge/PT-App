@@ -25,7 +25,7 @@ import { numberWithCommas, capitalize, applicationFormat} from '../../../../util
 import { timelineOptions, timelineWithoutClusterOptions } from '../../../../utils/options'
 
 
-import useStyles from './styles'
+import './styles.css'
 import { setTimelineSelectedItem, setTimelineSelectedAsset } from '../../../../actions/uiActions'
 import clsx from 'clsx';
 import { setConnectionBoxView, setConnectionData, setPDFFile, setPDFView } from '../../../../actions/patenTrackActions';
@@ -41,7 +41,6 @@ const TIME_INTERVAL = 1000
 var tootlTip = ''
 const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, timelineData, updateTimelineRawData }) => {
   
-  const classes = useStyles()
   const dispatch = useDispatch()
   const location = useLocation()
   const history = useHistory()
@@ -741,7 +740,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
    */    
 
   return (
-      <Paper className={classes.root}> 
+      <Paper className={'pt-root'}> 
         <div id="visualization">
           <div className="menu">
             <IconButton onClick={zoomIn}>
@@ -763,7 +762,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
           variant="scrollable"
           scrollButtons="auto"
           onChange={handleChangeTab}
-          className={classes.tabs}
+          className={'pt-tabs'}
         >
           {
             timelineTabs.map((tab) => (
@@ -772,7 +771,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
                 label={tab}
                 icon={<LabelWithIcon label={tab}/>}
                 iconPosition="start"
-                classes={{ root: classes.tab }}
+                classes={{ root: 'pt-tab' }}
               />
             )) 
           }
@@ -783,7 +782,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
             filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
           }}  
           ref={timelineContainerRef}
-          className={clsx(classes.timeline, 'timeline')}
+          className={clsx('pt-timeline', 'timeline')}
         />
       </Paper>
   ) 

@@ -1,0 +1,342 @@
+/* Extracted from the makeStyles sheet that used to live beside this file.
+ * Theme lookups became the CSS variables generated from src/themes/tokens.js,
+ * so light and dark still resolve exactly as they did. */
+
+.pt-full-screen-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  z-index: 999;
+}
+
+.pt-loader {
+  position: absolute;
+  z-index: 100;
+  top: 50%;
+  left: 50%;
+}
+
+.pt-root {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.pt-root .vis-time-axis .vis-text, .vis-item, .vis-y-axis {
+  color: var(--pt-text-primary);
+}
+
+.pt-root .vis-timeline {
+  border: 0px;
+}
+
+.pt-root.vis-panel.vis-center {
+  border: 1px solid var(--pt-divider);
+}
+
+.pt-root .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom {
+  border-bottom-color: var(--pt-divider);
+  border-top-color: var(--pt-divider);
+  border-left-color: var(--pt-divider);
+  border-right-color: var(--pt-divider);
+}
+
+.pt-root .vis-time-axis .vis-text {
+  padding: 1px 3px;
+}
+
+.pt-timeline {
+  height: 100%;
+  width: 100%;
+}
+
+.pt-timeline .custom_tooltip {
+  position: absolute;
+  width: 150px;
+  background: var(--pt-bg-paper);
+  border: 1px solid var(--pt-action-disabled);
+  color: var(--pt-text-primary);
+  padding: 5px 10px;
+  overflow: hidden;
+}
+
+.pt-timeline .custom_tooltip h4 {
+  margin: 5px 0 0 0;
+}
+
+.pt-timeline .vis-group.group-others {
+  background-color: #491B1B;
+}
+
+.pt-timeline .vis-group.group-financing {
+  background-color: #1b1200;
+}
+
+.pt-timeline .vis-group.group-ownership {
+  background-color: #100000;
+}
+
+.pt-timeline .vis-group.group-licensing {
+  background-color: #171700;
+}
+
+.pt-timeline .vis-group.group-employees {
+  background-color: #424141;
+}
+
+.pt-timeline .vis-label.group-others {
+  background-color: #491B1B;
+}
+
+.pt-timeline .vis-label.group-financing {
+  background-color: #1b1200;
+}
+
+.pt-timeline .vis-label.group-ownership {
+  background-color: #100000;
+}
+
+.pt-timeline .vis-label.group-licensing {
+  background-color: #171700;
+}
+
+.pt-timeline .vis-label.group-employees {
+  background-color: #424141;
+}
+
+.pt-timeline .vis-left.vis-panel.vis-vertical-scroll, .pt-timeline .vis-right.vis-panel.vis-vertical-scroll {
+  overflow-y: hidden;
+}
+
+.pt-timeline .vis-item {
+  font-size: 12px;
+  background-color: transparent;
+  color: var(--pt-text-primary);
+}
+
+.pt-timeline .vis-item .vis-item-content {
+  width: 95px;
+  white-space: normal;
+  padding: 5px 5px 5px 0px;
+}
+
+.pt-timeline .vis-item .vis-item-content .cluster-header {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  padding: 5px;
+  border: 0px;
+}
+
+.pt-timeline .vis-item .vis-item-content .cluster-header .cluster-image {
+  background-repeat: no-repeat;
+  background-size: 17px;
+  width: 32px;
+  height: 17px;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.pt-timeline .vis-item .vis-item-content .cluster-employees, .cluster-acqusitions, .cluster-sales, .cluster-courtOrders, .cluster-mergersIn, .cluster-mergersOut {
+  border-color: var(--pt-secondary-main);
+}
+
+.pt-timeline .vis-item .vis-item-content .cluster-releaseIn, .cluster-releaseOut {
+  border-color: #70A800;
+}
+
+.pt-timeline .vis-item .vis-item-content .cluster-lending, .cluster-borrowing {
+  border-color: #FFAA00;
+}
+
+.pt-timeline .vis-item .vis-item-content .cluster-licenseIn, .cluster-licenseOut {
+  border-color: #C0C000;
+}
+
+.pt-timeline .vis-item .vis-item-content .cluster-other, .cluster-options {
+  border-color: #CA7C46;
+}
+
+.pt-timeline .vis-item .vis-dot {
+  background-color: inherit;
+  border-color: inherit;
+  width: 17px;
+  height: 17px;
+  top: 7px !important;
+  border: 0px;
+  background-repeat: no-repeat;
+  background-size: 15px;
+}
+
+.pt-timeline .vis-item .vis-dot.asset-type-default {
+  border-color: indigo[500];
+}
+
+.pt-timeline .vis-item .vis-dot.asset-type-acquisitions, .cluster-acquisitions {
+  background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/acquisition.svg);
+}
+
+.pt-timeline .vis-item .vis-dot.asset-type-sales, .cluster-sales {
+  background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/sales.svg);
+}
+
+.pt-timeline .vis-item .vis-dot.asset-type-licenseIn, .cluster-licenseIn {
+  background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licensein.svg);
+}
+
+.pt-timeline .vis-item .vis-dot.asset-type-licenseOut, .cluster-licenseOut {
+  background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licenseout.svg);
+}
+
+.pt-timeline .vis-item .vis-dot.asset-type-lending, .vis-dot.asset-type-borrowing, .asset-type-securitiesOut, .asset-type-securitiesIn, .cluster-lending, .cluster-borrowing, .cluster-securitiesIn, .cluster-securitiesOut {
+  background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/secure.svg);
+}
+
+.pt-timeline .vis-item .vis-dot.asset-type-mergersIn, .cluster-mergersIn {
+  background-image: url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png);
+}
+
+.pt-timeline .vis-item .vis-dot.asset-type-mergersOut, .cluster-mergersOut {
+  background-image: url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png);
+}
+
+.pt-timeline .vis-item .vis-dot.asset-type-correct, .cluster-correct {
+  background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/correction.svg);
+}
+
+.pt-timeline .vis-item .vis-dot.asset-type-options, .cluster-options {
+  background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/options.svg);
+}
+
+.pt-timeline .vis-item .vis-dot.asset-type-courtOrders, .cluster-courtOrders {
+  background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/courtorder.svg);
+}
+
+.pt-timeline .vis-item .vis-dot.asset-type-releaseOut, .vis-dot.asset-type-releaseIn, .cluster-releaseIn, .cluster-releaseOut {
+  background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/release.svg);
+}
+
+.pt-timeline .vis-item .vis-dot.asset-type-employees, .cluster-employees {
+  background-image: url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png);
+}
+
+.pt-timeline .vis-item .vis-dot.asset-type-other, .cluster-other {
+  background-image: url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png);
+}
+
+.pt-timeline .vis-cluster {
+  background: none;
+  border: 0px;
+}
+
+.pt-timeline .vis-cluster .vis-item-content {
+  padding: 0px;
+  width: 112px !important;
+}
+
+.pt-timeline .vis-dot {
+  border-color: indigo[500];
+  background-color: indigo[500];
+}
+
+.pt-timeline .vis-item.vis-box {
+  border-color: indigo[500];
+  background-color: indigo[500];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-default {
+  background-color: indigo[500];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-acquisitions {
+  background-color: indigo[500];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-sales {
+  background-color: purple[500];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-licenseIn {
+  background-color: blue[500];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-licenseOut {
+  background-color: var(--pt-secondary-main);
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-securities {
+  background-color: teal[500];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-mergersIn {
+  background-color: cyan[500];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-mergersOut {
+  background-color: cyan[200];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-options {
+  background-color: lime[500];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-courtOrders {
+  background-color: green[500];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-employees {
+  background-color: orange[500];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-other {
+  background-color: grey[500];
+}
+
+.pt-timeline .vis-item.vis-point.vis-selected {
+  background-color: inherit;
+  color: var(--pt-secondary-main);
+  font-weight: bold;
+}
+
+.pt-timeline .vis-item.vis-range.asset-type-borrowing {
+  background-color: #FFAA00 !important;
+}
+
+.pt-timeline .vis-item.vis-range.asset-type-borrowing .vis-item-overflow {
+  position: unset;
+  min-height: 28px;
+}
+
+.pt-timeline .vis-item.vis-range.asset-type-borrowing .vis-item-overflow .vis-item-content {
+  width: auto;
+  position: absolute;
+}
+
+.pt-timeline .vis-item.vis-range.asset-type-borrowing .vis-item-overflow .vis-item-content span {
+  white-space: nowrap;
+}
+
+.pt-timeline .vis-item.vis-range.asset-type-lending {
+  background-color: #70A800 !important;
+}
+
+.pt-timeline .vis-item.vis-range.asset-type-lending .vis-item-overflow {
+  position: unset;
+  min-height: 28px;
+}
+
+.pt-timeline .vis-item.vis-range.asset-type-lending .vis-item-overflow .vis-item-content {
+  width: auto;
+  position: absolute;
+}
+
+.pt-timeline .vis-item.vis-range.asset-type-lending .vis-item-overflow .vis-item-content span {
+  white-space: nowrap;
+}
+
+.pt-timeline-processing-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Typography } from '@mui/material'
-import useStyles from './styles'
+import './styles.css'
 import Loader from '../../Loader'
 import useSpecificationData from '../../../../queries/useSpecificationData'
 import { parseSupplied, isAbsent } from '../../../../queries/parseSupplied'
@@ -27,7 +27,6 @@ const SpecificationTree = ({ items, className }) => (
 
 /** Same guarded-vs-unguarded effect pair as FigureData; only the guard is kept. */
 const SpecificationData = ({ data, number }) => {
-  const classes = useStyles()
 
   const supplied = parseSupplied(data)
   const useSupplied = !isAbsent(supplied)
@@ -37,7 +36,7 @@ const SpecificationData = ({ data, number }) => {
 
   if (isFetching) return <Loader />
   if (!Array.isArray(items)) return null
-  return <SpecificationTree items={items} className={classes.filetree} />
+  return <SpecificationTree items={items} className={'pt-filetree'} />
 }
 
 export default SpecificationData

@@ -1,0 +1,661 @@
+/* Extracted from the makeStyles sheet that used to live beside this file.
+ * Theme lookups became the CSS variables generated from src/themes/tokens.js,
+ * so light and dark still resolve exactly as they did. */
+
+.pt-loader {
+  position: absolute;
+  z-index: 100;
+  top: 50%;
+  left: 50%;
+}
+
+.pt-root {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.pt-root #visualization {
+  position: relative;
+}
+
+.pt-root #visualization .menu {
+  position: absolute;
+  z-index: 9999;
+  right: 25px;
+  top: 2px;
+}
+
+.pt-root .vis-time-axis .vis-text, .vis-item, .vis-y-axis {
+  color: var(--pt-text-primary);
+}
+
+.pt-root .vis-timeline {
+  border: 0px;
+}
+
+.pt-root.vis-panel.vis-center {
+  border: 1px solid var(--pt-divider);
+}
+
+.pt-root .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom {
+  border-bottom-color: var(--pt-divider);
+  border-top-color: var(--pt-divider);
+  border-left-color: var(--pt-divider);
+  border-right-color: var(--pt-divider);
+}
+
+.pt-root .vis-time-axis .vis-text {
+  padding: 1px 3px;
+}
+
+.pt-root .vis-tooltip {
+  width: 260px;
+  white-space: normal !important;
+}
+
+.pt-timeline {
+  height: 100%;
+  width: 100%;
+}
+
+.pt-timeline .vis-dot {
+  background: none !important;
+  border: none !important;
+}
+
+.pt-timeline .vis-line {
+  border: 0px;
+  background-color: unset;
+}
+
+.pt-timeline .vis-content {
+  color: #000000;
+}
+
+.pt-timeline .vis-content .vis-item.vis-range.asset-type-lending, .vis-item.vis-range.asset-type-borrowing, .vis-item.vis-box.asset-type-lending, .vis-item.vis-box.asset-type-borrowing {
+  border-bottom: 3px solid #FFAA00 !important;
+}
+
+.pt-timeline .vis-content .vis-item.vis-range.asset-type-security-release-partial, .vis-item.vis-box.asset-type-security-release-partial {
+  border-bottom: 3px solid #228DE8 !important;
+}
+
+.pt-timeline .vis-content .vis-item.vis-range.asset-type-security-release, .vis-item.vis-box.asset-type-security-release, .vis-item.vis-box.asset-type-releaseOut, .vis-item.vis-box.asset-type-releaseIn {
+  border-bottom: 3px solid #70A800 !important;
+}
+
+.pt-timeline .vis-content .vis-item {
+  font-size: 12px;
+  background-color: transparent;
+  color: var(--pt-text-primary);
+}
+
+.pt-timeline .vis-content .vis-item .vis-item-content {
+  white-space: normal;
+  padding: 5px 5px 5px 0px;
+}
+
+.pt-timeline .vis-content .vis-item .vis-item-content .cluster-header {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  padding: 5px;
+  border: 0px;
+}
+
+.pt-timeline .vis-content .vis-item .vis-item-content .cluster-header .cluster-image {
+  background-repeat: no-repeat;
+  background-size: 17px;
+  width: 32px;
+  height: 17px;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.pt-timeline .vis-content .vis-item.vis-dot {
+  background-color: inherit;
+  border-color: inherit;
+  width: 24px;
+  height: 24px;
+  top: 1px !important;
+  left: -5px;
+  border: 0px;
+  background-repeat: no-repeat;
+  background-size: 24px;
+}
+
+.pt-timeline .vis-content .vis-item.vis-dot.asset-type-default {
+  border-color: indigo[500];
+}
+
+.pt-timeline .vis-content .vis-item.vis-box {
+  background-color: unset;
+  border: 0px;
+  width: 9.6rem;
+  border-radius: 3px;
+  height: 4.4rem;
+}
+
+.pt-timeline .vis-content .vis-item.vis-box.vis-selected .vis-item-content {
+  border: 1px solid #e60000 !important;
+}
+
+.pt-timeline .vis-content .vis-item.vis-box .vis-item-content {
+  color: #BDBDBD;
+  width: 100%;
+  border: 1px solid #545454;
+  height: 100%;
+  display: flex;
+  padding: 5px;
+  overflow: hidden;
+  flex-wrap: wrap;
+  border-radius: 3px;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.pt-timeline .vis-content .vis-item.vis-box .vis-item-content .maxHeight {
+  max-height: 51px;
+  overflow: hidden;
+  justify-content: flex-start;
+  padding-bottom: 0.15rem;
+}
+
+.pt-timeline .vis-content .vis-item.vis-box .vis-item-content .first {
+  display: flex;
+  font-size: 0.875rem;
+  font-weight: 500;
+  overflow: hidden;
+  height: 100%;
+  width: 55%;
+  margin-right: 3px;
+}
+
+.pt-timeline .vis-content .vis-item.vis-box .vis-item-content .second {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 400;
+  height: 100%;
+  width: 45%;
+  overflow: hidden;
+}
+
+.pt-timeline .vis-content .vis-item.vis-box .vis-item-content .second div {
+  margin-left: 5px;
+}
+
+.pt-timeline .vis-content .vis-item.vis-box .vis-item-content .second .img-holder {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  background-color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pt-timeline .vis-content .vis-item.vis-box .vis-item-content .second img {
+  width: 50px;
+  display: flex;
+}
+
+.pt-timeline .vis-content .vis-item.vis-box .vis-item-content .flexMain {
+  display: flex;
+  overflow: hidden;
+  flex-grow: 1;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+.pt-timeline .vis-content .vis-item.vis-box .vis-item-content .flexMain.alignBaseline {
+  align-items: baseline;
+}
+
+.pt-timeline .vis-content .vis-item.vis-box .vis-item-content .flexMain.alignBaseline .textColumn .absolute {
+  bottom: 7px;
+}
+
+.pt-timeline .vis-content .vis-item.vis-box .vis-item-content .flexMain img {
+  width: 4.3rem;
+}
+
+.pt-timeline .vis-content .vis-item.vis-box .vis-item-content .flexMain .textColumn {
+  display: flex;
+  line-height: 1.1;
+}
+
+.pt-timeline .vis-content .vis-item.vis-box .vis-item-content .flexMain .textColumn .absolute {
+  position: absolute;
+  bottom: 0px;
+}
+
+.pt-timeline .vis-content .vis-item.vis-box .vis-item-content .flexMain .small-font {
+  font-size: 0.65rem;
+  margin-top: 2px;
+  line-height: 0.81;
+}
+
+.pt-timeline .vis-content .vis-item.vis-box .vis-item-content .flexMain .text-height {
+  white-space: initial;
+  text-align: left;
+  margin-top: 1px;
+  line-height: 1.025;
+  overflow: hidden;
+  height: 130px !important;
+}
+
+.pt-timeline .vis-content .vis-item.vis-point.vis-selected {
+  background-color: none !important;
+  color: var(--pt-secondary-main);
+}
+
+.pt-timeline .vis-content .vis-item.vis-point {
+  background-color: unset;
+  border: 0px;
+  width: 9.6rem;
+  border-radius: 3px;
+  height: 4.4rem;
+}
+
+.pt-timeline .vis-content .vis-item.vis-point.vis-selected .vis-item-content {
+  border: 1px solid #e60000 !important;
+}
+
+.pt-timeline .vis-content .vis-item.vis-point .vis-item-content {
+  color: #BDBDBD;
+  width: 100%;
+  border: 1px solid #545454;
+  height: 100%;
+  display: flex;
+  padding: 5px;
+  overflow: hidden;
+  flex-wrap: wrap;
+  border-radius: 3px;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.pt-timeline .vis-content .vis-item.vis-point .vis-item-content .maxHeight {
+  max-height: 51px;
+  overflow: hidden;
+  justify-content: flex-start;
+  padding-bottom: 0.15rem;
+}
+
+.pt-timeline .vis-content .vis-item.vis-point .vis-item-content .first {
+  display: flex;
+  font-size: 0.875rem;
+  font-weight: 500;
+  overflow: hidden;
+  height: 100%;
+  width: 55%;
+  margin-right: 3px;
+}
+
+.pt-timeline .vis-content .vis-item.vis-point .vis-item-content .second {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 400;
+  height: 100%;
+  width: 45%;
+  overflow: hidden;
+}
+
+.pt-timeline .vis-content .vis-item.vis-point .vis-item-content .second div {
+  margin-left: 5px;
+}
+
+.pt-timeline .vis-content .vis-item.vis-point .vis-item-content .second .img-holder {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  background-color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pt-timeline .vis-content .vis-item.vis-point .vis-item-content .second img {
+  width: 50px;
+  display: flex;
+}
+
+.pt-timeline .vis-content .vis-item.vis-point .vis-item-content .flexMain {
+  display: flex;
+  overflow: hidden;
+  flex-grow: 1;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+.pt-timeline .vis-content .vis-item.vis-point .vis-item-content .flexMain.alignBaseline {
+  align-items: baseline;
+}
+
+.pt-timeline .vis-content .vis-item.vis-point .vis-item-content .flexMain.alignBaseline .textColumn .absolute {
+  bottom: 7px;
+}
+
+.pt-timeline .vis-content .vis-item.vis-point .vis-item-content .flexMain img {
+  width: 4.3rem;
+}
+
+.pt-timeline .vis-content .vis-item.vis-point .vis-item-content .flexMain .textColumn {
+  display: flex;
+  line-height: 1.1;
+}
+
+.pt-timeline .vis-content .vis-item.vis-point .vis-item-content .flexMain .textColumn .absolute {
+  position: absolute;
+  bottom: 0px;
+}
+
+.pt-timeline .vis-content .vis-item.vis-point .vis-item-content .flexMain .small-font {
+  font-size: 0.65rem;
+  margin-top: 2px;
+  line-height: 0.81;
+}
+
+.pt-timeline .vis-content .vis-item.vis-point .vis-item-content .flexMain .text-height {
+  white-space: initial;
+  text-align: left;
+  margin-top: 1px;
+  margin-bottom: 1px;
+  line-height: 1.025;
+  overflow: hidden;
+  height: 27px !important;
+}
+
+.pt-timeline .vis-content .vis-item.vis-point.asset-type-employees {
+  width: auto;
+  height: auto;
+}
+
+.pt-timeline .vis-content .vis-item.vis-point.asset-type-employees .vis-item-content {
+  border: 0px;
+  width: auto;
+  height: auto;
+}
+
+.pt-timeline .vis-content .vis-item.vis-range.vis-cluster .vis-item-content {
+  border: 0px !important;
+  height: auto !important;
+}
+
+.pt-timeline .vis-content .vis-item.vis-range {
+  border: 0px;
+  background-color: unset;
+}
+
+.pt-timeline .vis-content .vis-item.vis-range .vis-item-content {
+  color: #BDBDBD;
+  width: 9.6rem;
+  border-radius: 3px;
+  height: 4.4rem;
+  border: 1px solid #545454;
+  border-bottom: 0px;
+  display: flex;
+  padding: 5px;
+  overflow: hidden;
+  flex-wrap: wrap;
+  border-radius: 3px;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.pt-timeline .vis-content .vis-item.vis-range .vis-item-content .maxHeight {
+  max-height: 51px;
+  overflow: hidden;
+  justify-content: flex-start;
+  padding-bottom: 0.15rem;
+}
+
+.pt-timeline .vis-content .vis-item.vis-range .vis-item-content .first {
+  display: flex;
+  font-size: 0.875rem;
+  font-weight: 500;
+  overflow: hidden;
+  height: 100%;
+  width: 55%;
+  margin-right: 3px;
+}
+
+.pt-timeline .vis-content .vis-item.vis-range .vis-item-content .second {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 400;
+  height: 100%;
+  width: 45%;
+  overflow: hidden;
+}
+
+.pt-timeline .vis-content .vis-item.vis-range .vis-item-content .second div {
+  margin-left: 5px;
+}
+
+.pt-timeline .vis-content .vis-item.vis-range .vis-item-content .second .img-holder {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  background-color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pt-timeline .vis-content .vis-item.vis-range .vis-item-content .second img {
+  width: 50px;
+  display: flex;
+}
+
+.pt-timeline .vis-content .vis-item.vis-range .vis-item-content .flexMain {
+  display: flex;
+  overflow: hidden;
+  flex-grow: 1;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+.pt-timeline .vis-content .vis-item.vis-range .vis-item-content .flexMain.alignBaseline {
+  align-items: baseline;
+}
+
+.pt-timeline .vis-content .vis-item.vis-range .vis-item-content .flexMain.alignBaseline .textColumn .absolute {
+  bottom: 7px;
+}
+
+.pt-timeline .vis-content .vis-item.vis-range .vis-item-content .flexMain img {
+  width: 4.3rem;
+}
+
+.pt-timeline .vis-content .vis-item.vis-range .vis-item-content .flexMain .textColumn {
+  display: flex;
+  line-height: 1.1;
+}
+
+.pt-timeline .vis-content .vis-item.vis-range .vis-item-content .flexMain .textColumn .absolute {
+  position: absolute;
+  bottom: 0px;
+}
+
+.pt-timeline .vis-content .vis-item.vis-range .vis-item-content .flexMain .small-font {
+  font-size: 0.65rem;
+  margin-top: 2px;
+  line-height: 0.81;
+}
+
+.pt-timeline .vis-content .vis-item.vis-range .vis-item-content .flexMain .text-height {
+  white-space: initial;
+  text-align: left;
+  margin-top: 1px;
+  margin-bottom: 1px;
+  line-height: 1.025;
+  overflow: hidden;
+  height: 27px !important;
+}
+
+.pt-timeline .custom_tooltip {
+  position: absolute;
+  width: 150px;
+  background: var(--pt-bg-paper);
+  border: 1px solid var(--pt-action-disabled);
+  color: var(--pt-text-primary);
+  padding: 5px 10px;
+  overflow: hidden;
+}
+
+.pt-timeline .custom_tooltip h4 {
+  margin: 5px 0 0 0;
+}
+
+.pt-timeline .vis-group.group-others {
+  background-color: #491B1B;
+}
+
+.pt-timeline .vis-group.group-financing {
+  background-color: #1b1200;
+}
+
+.pt-timeline .vis-group.group-ownership {
+  background-color: #100000;
+}
+
+.pt-timeline .vis-group.group-licensing {
+  background-color: #171700;
+}
+
+.pt-timeline .vis-group.group-employees {
+  background-color: #424141;
+}
+
+.pt-timeline .vis-label.group-others {
+  background-color: #491B1B;
+}
+
+.pt-timeline .vis-label.group-financing {
+  background-color: #1b1200;
+}
+
+.pt-timeline .vis-label.group-ownership {
+  background-color: #100000;
+}
+
+.pt-timeline .vis-label.group-licensing {
+  background-color: #171700;
+}
+
+.pt-timeline .vis-label.group-employees {
+  background-color: #424141;
+}
+
+.pt-timeline .vis-left.vis-panel.vis-vertical-scroll, .pt-timeline .vis-right.vis-panel.vis-vertical-scroll {
+  overflow-y: hidden;
+}
+
+.pt-timeline .vis-cluster {
+  background-color: #222222;
+  border: 1px solid #545454 !important;
+  border-radius: 3px;
+  padding: 5px;
+}
+
+.pt-timeline .vis-cluster .vis-item-content {
+  padding: 0px;
+  width: auto !important;
+  text-align: left;
+  padding: 0 !important;
+}
+
+.pt-timeline .vis-item.vis-box {
+  border-color: indigo[500];
+  background-color: indigo[500];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-default {
+  background-color: indigo[500];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-acquisitions {
+  background-color: indigo[500];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-sales {
+  background-color: purple[500];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-licenseIn {
+  background-color: blue[500];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-licenseOut {
+  background-color: var(--pt-secondary-main);
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-securities {
+  background-color: teal[500];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-mergersIn {
+  background-color: cyan[500];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-mergersOut {
+  background-color: cyan[200];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-options {
+  background-color: lime[500];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-courtOrders {
+  background-color: green[500];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-employees {
+  background-color: orange[500];
+}
+
+.pt-timeline .vis-item.vis-box.asset-type-other {
+  background-color: grey[500];
+}
+
+.pt-timeline .vis-item.vis-point.vis-selected {
+  background-color: inherit;
+  color: var(--pt-secondary-main);
+  font-weight: bold;
+}
+
+.pt-timeline .vis-item .vis-item-overflow {
+  overflow: visible;
+}
+
+.pt-timeline .vis-item.vis-range.recordings {
+  background-color: unset !important;
+  border-bottom: 3px solid #FFAA00 !important;
+}
+
+.pt-timeline .vis-item.vis-range.recordings .vis-item-overflow {
+  min-height: 55px;
+}
+
+.pt-timeline-processing-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}

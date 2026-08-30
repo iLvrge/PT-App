@@ -30,7 +30,7 @@ import { numberWithCommas, applicationFormat, capitalize } from '../../../../uti
 import { timelineOptions, timelineWithoutClusterOptions } from '../../../../utils/options'
  
 
-import useStyles from './styles'
+import './styles.css'
 import { setTimelineSelectedItem, setTimelineSelectedAsset } from '../../../../actions/uiActions'
 import clsx from 'clsx';
 import { IconButton } from '@mui/material';
@@ -53,7 +53,6 @@ const TIME_INTERVAL = 1000
 var tootlTip = ''
 const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, timelineData, updateTimelineRawData }) => {
   
-  const classes = useStyles()
   const dispatch = useDispatch()
   const location = useLocation()
   const history = useHistory()
@@ -753,7 +752,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
    */    
 
   return (
-      <Paper className={classes.root}> 
+      <Paper className={'pt-root'}> 
         <div id="visualization">
           <div className="menu">
             <IconButton onClick={zoomIn}>
@@ -776,13 +775,13 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
             filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
           }}  
           ref={timelineContainerRef}
-          className={clsx(classes.timeline, 'timeline')}
+          className={clsx('pt-timeline', 'timeline')}
         />
         {
           isLoadingTimelineData &&
-          <CircularProgress size={15} color={'secondary'} className={classes.timelineProcessingIndicator} />
+          <CircularProgress size={15} color={'secondary'} className={'pt-timeline-processing-indicator'} />
         }
-        { isLoadingTimelineRawData && <CircularProgress className={classes.loader} /> }
+        { isLoadingTimelineRawData && <CircularProgress className={'pt-loader'} /> }
       </Paper>
   ) 
 }

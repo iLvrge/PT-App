@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { DataSet } from 'vis-data/esnext'
 import { Timeline } from 'vis-timeline/esnext'
 import moment from 'moment'
-import useStyles from './styles'
+import './styles.css'
 
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 import Close from '@mui/icons-material/Close';
@@ -49,7 +49,6 @@ const convertDataToItem = (item) => {
 
 
 const LegalData = ({legalEvents}) => {
-    const classes = useStyles()
     const timelineRef = useRef()   
     const timelineContainerRef = useRef()
     const dispatch = useDispatch()
@@ -118,9 +117,9 @@ const LegalData = ({legalEvents}) => {
     }
 
     return (
-        <Paper className={classes.root}>    
+        <Paper className={'pt-root'}>    
             <IconButton
-                className={classes.btnClose}
+                className={'pt-btn-close'}
                 onClick={handleClearEvent}
             >
                 <Close/>
@@ -132,7 +131,7 @@ const LegalData = ({legalEvents}) => {
                     filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`,
                 }}
                 ref={timelineContainerRef}
-                className={classes.timelineLegal}
+                className={'pt-timeline-legal'}
             /> 
         </Paper>
     )

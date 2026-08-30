@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useSelector } from 'react-redux'
-import useStyles from './styles'
+import './styles.css'
 import { pink } from '@mui/material/colors'
 
 import FullScreen from '../../FullScreen'
@@ -11,7 +11,6 @@ import TitleBar from '../../TitleBar'
 const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
     const containerRef = useRef(null)
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
-    const classes = useStyles() 
     const menuItems = [
         {
             id: 1,
@@ -177,12 +176,12 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
         <>
             {/* {
                 typeof standalone === 'undefined' && (
-                    <div className={classes.fullScreenContainer}>
+                    <div className={'pt-full-screen-container'}>
                         <FullScreen componentItems={menuItems}/>
                     </div>
                 )
             } */} 
-            <div className={classes.graphContainer} ref={containerRef}>  
+            <div className={'pt-graph-container'} ref={containerRef}>  
                 <TitleBar 
                     title={`Hover over the bars to see how many patents will remain active if maintained.`} 
                     enablePadding={false}  
