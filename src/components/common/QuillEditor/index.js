@@ -1,13 +1,8 @@
+import { Dialog, DialogContent } from '../../../ui/Dialog'
 import React, { useRef, useMemo, useEffect, useCallback, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import ReactQuill, {Quill} from 'react-quill'
-import {
-  Menu,
-  MenuItem,
-  Modal,
-  Backdrop,
-  DialogContent
-} from '@mui/material'
+import {Menu, MenuItem} from '@mui/material'
 
 import useStyles from './styles'
 import CustomToolbar from './CustomToolbar'
@@ -575,19 +570,11 @@ const QuillEditor = ({
         />   
         {GetMenuComponent}
       </div>
-      <Modal
-        open={modalOpen}
-        onClose={onHandleModalClose}
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }} 
-        aria-labelledby="slack-users"
-        aria-describedby="">
-        <React.Fragment>
+      <Dialog open={modalOpen} onOpenChange={(next) => { if (!next) onHandleModalClose() }}>
+        <DialogContent title="Slack users">
           <UserInputForm />
-        </React.Fragment>
-      </Modal> 
+        </DialogContent>
+      </Dialog> 
     </div>
   );
 }

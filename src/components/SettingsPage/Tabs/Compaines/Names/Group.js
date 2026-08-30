@@ -1,8 +1,9 @@
+import { Dialog, DialogContent } from '../../../../../ui/Dialog'
 import React, { Fragment, useCallback, useEffect, useState, useRef } from 'react'
 
 import { useDispatch } from 'react-redux'
 
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, CircularProgress } from '@mui/material'
+import {Button, TextField, DialogContentText, CircularProgress} from '@mui/material'
 
 import AddIcon from '@mui/icons-material/Add'
 
@@ -54,27 +55,27 @@ function Groups() {
             >
                 Add a New Group
             </Button>
-            <Dialog open={openDialog} onClose={handleClose} aria-labelledby="form-dialog-title" className={classes.dialog}>
-                <DialogContent>
-                    <TextField
-                        autoFocus
-                        ref={inputGroup}
-                        margin="dense"
-                        id="group_name"
-                        label="Group Name"
-                        color='secondary'
-                        fullWidth
-                    />     
+            <Dialog open={openDialog} onOpenChange={(next) => { if (!next) handleClose() }}>
+                <DialogContent description="Create a new company group">
+                    <div className="px-6 py-2">
+                      <TextField
+                          autoFocus
+                          ref={inputGroup}
+                          margin="dense"
+                          id="group_name"
+                          label="Group Name"
+                          color='secondary'
+                          fullWidth
+                      />
+                    </div>
+                    <div className="flex justify-end gap-2 p-2">
+                      <Button onClick={handleClose} color="inherit">Cancel</Button>
+                      <Button onClick={handleAddGroup} color="inherit">
+                        {loading && <CircularProgress size={14} />}
+                        {!loading && 'Create'}
+                      </Button>
+                    </div>
                 </DialogContent>
-                <DialogActions>
-                <Button onClick={handleClose} color="inherit">
-                    Cancel
-                </Button>
-                <Button onClick={handleAddGroup} color="inherit">
-                    {loading && <CircularProgress size={14} />}
-                    {!loading && 'Create'}
-                </Button>
-                </DialogActions>
             </Dialog>
         </div>
     )

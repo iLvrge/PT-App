@@ -1,3 +1,4 @@
+import { Dialog, DialogContent } from '../../../../ui/Dialog'
 import React, { Fragment, useMemo, useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { addDocument, deleteDocument, fetchDocuments } from '../../../../actions/settingsActions'
@@ -8,7 +9,6 @@ import PdfViewer from '../../../common/PdfViewer'
 import { FaFile } from 'react-icons/fa'
 import Tooltip from '@mui/material/Tooltip'
 import IconButton from '@mui/material/IconButton'
-import Modal from '@mui/material/Modal'
 import Page from '../../components/Page'
 import { setBreadCrumbs } from  '../../../../actions/patentTrackActions2'
 
@@ -63,9 +63,20 @@ const Documents = () => {
       {/* <FileViewerDialog viewerSrc={viewerSrc} setViewerSrc={setViewerSrc} /> */}
       {
         pdfViewModal &&
-        <Modal open={pdfViewModal}>
-          <PdfViewer display={'true'}/>
-        </Modal>
+        <Dialog open={pdfViewModal}>
+          {/* The MUI Modal this replaces had no onClose, so it could not be
+              dismissed by Esc or backdrop - it closes when Redux clears
+              pdfViewModal. Radix dismisses by default, so both routes are
+              suppressed to keep the behaviour identical. */}
+          <DialogContent
+            title="Document preview"
+            className="h-[90vh] w-[90vw] max-w-none"
+            onEscapeKeyDown={(e) => e.preventDefault()}
+            onPointerDownOutside={(e) => e.preventDefault()}
+          >
+            <PdfViewer display={'true'}/>
+          </DialogContent>
+        </Dialog>
       }
       <Page
         loading={loading}
