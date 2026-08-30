@@ -1,6 +1,5 @@
 import React, { Fragment, useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import useStyles from './styles'
 import Loader from '../../../../../common/Loader'
 import { addCompany, setSearchCompanies } from '../../../../../../actions/patenTrackActions'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
@@ -73,7 +72,6 @@ function SearchCompanies({ onClose, selected, setSelected }) {
   }))
   const searchTxtField = useRef(null);
   const dispatch = useDispatch()
-  const classes = useStyles()
   const [headerColumns, setHeaderColumns] = useState(COLUMNS)
   const [ menuAnchorEl, setMenuAnchorEl ] = useState(null)
   const [ loading, setLoading ] = useState(false)
@@ -242,9 +240,9 @@ const onHandleAddCompany = useCallback(async(event) => {
       {/* <Typography variant="body2" sx={{p: 1}}>
         To add to your account the data of any company (including competitors and others) please state the requested company's name below:
       </Typography> */}
-      <Toolbar className={classes.toolbar}>
-        <div className={classes.toolbar}>
-          <div className={classes.searchContainer} ref={searchTxtField}>
+      <Toolbar className={"flex items-center px-1.5"}>
+        <div className={"flex items-center px-1.5"}>
+          <div className={"mr-[15px] w-[230px]"} ref={searchTxtField}>
             {/* <DebounceInput
               element={StyledSearch}
               placeholder={'Search Companies'}
@@ -271,8 +269,7 @@ const onHandleAddCompany = useCallback(async(event) => {
           <IconButton
             color="inherit" 
             onClick={onHandleAddCompany}
-            /* startIcon={<AddIcon className={classes.icon} />} */
-            className={classes.btnGroup}
+            className={"border-0 px-[5px] normal-case"}
           >
             <SendIcon/>
           </IconButton>
@@ -296,7 +293,7 @@ const onHandleAddCompany = useCallback(async(event) => {
                   <Button
                     disabled={!selected.length}
                     onClick={openAddMenu}
-                    className={classes.btnGroup}
+                    className={"border-0 px-[5px] normal-case"}
                     style={{color: '#fff'}}
                   >
                     Import
@@ -313,7 +310,7 @@ const onHandleAddCompany = useCallback(async(event) => {
         </IconButton>
       </Toolbar>
 
-      <Paper square className={classes.root}>
+      <Paper square className={"flex h-full flex-1 flex-col overflow-hidden [&_.font12Rem]:text-base"}>
         {
           loading ? (
             <Loader />

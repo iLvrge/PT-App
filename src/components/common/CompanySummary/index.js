@@ -12,10 +12,8 @@ import VirtualizedTable from '../../common/VirtualizedTable'
 
 
 
-import useStyles from './styles'
 
 const CompanySummary = () => {
-    const classes = useStyles()
     const dispatch = useDispatch()
     const clipboard_assets = useSelector(state => state.patenTrack2.clipboard_assets)
     const COLUMNS = [        

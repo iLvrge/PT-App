@@ -12,11 +12,13 @@ const files = cp
 
 const bad = []
 for (const f of files) {
-  const s = fs.readFileSync(f, 'utf8')
+  const raw = fs.readFileSync(f, 'utf8')
+  // comments are not code; a commented-out classes.* is not a dangling reference
+  const s = raw.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^[ \t]*\/\/.*$/gm, '')
   const usesClasses = /\bclasses\s*\./.test(s)
   const callsUseStyles = /\buseS[yt]?[tl]?yles\s*\(/.test(s)
   const importsStyles =
-    /from\s+['"][^'"]*styles['"]/.test(s) || /from\s+['"]@mui\/styles/.test(s)
+    /from\s+['"][^'"]*styles['"]/.test(raw) || /from\s+['"]@mui\/styles/.test(raw)
   const declaresClasses = /\b(const|let|var)\s+classes\b/.test(s) || /\bclasses\s*[,}]/.test(s)
   if (usesClasses && !importsStyles && !declaresClasses) bad.push(`${f}: uses classes.* with no stylesheet import`)
   if (callsUseStyles && !importsStyles) bad.push(`${f}: calls useStyles() with no stylesheet import`)

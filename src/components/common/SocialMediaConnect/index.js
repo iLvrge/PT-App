@@ -6,7 +6,6 @@ import { Box, Button, Paper, Tooltip, Typography, Zoom } from '@mui/material'
 import { PublicClientApplication } from "@azure/msal-browser";
 import { msalConfig, loginRequest, graphConfig } from "./authConfig";
 
-import useStyles from './styles'
 
 import {
     getSlackProfile,
@@ -45,7 +44,6 @@ function generateCodeVerifier() {
 
 const SocialMediaConnect = () => {
 
-    const classes = useStyles()
     const dispatch = useDispatch();
     const [boxOpened, setBoxOpened] = useState(false)
     const msalInstance = new PublicClientApplication(msalConfig);
@@ -205,8 +203,8 @@ const SocialMediaConnect = () => {
         setBoxOpened(flag)
     }
     return (
-        <Paper className={classes.root} square>
-            <Box className={clsx(classes.boxTitle, {[classes.flexBox]: boxOpened})}> 
+        <Paper className={"flex h-[250px] w-[500px] flex-col items-center justify-start p-5 [&_.MuiTouchRipple-root_.MuiTouchRipple-child]:rounded-lg"} square>
+            <Box className={clsx("w-full", {["flex grow"]: boxOpened})}> 
                 <TitleBar
                     title={`Log in will enable you to create and manage a team conversation channel dedicated to each patent asset, transaction, and company. All your team members' input will be secured within these channels.`}
                     enablePadding={true} 
@@ -215,20 +213,20 @@ const SocialMediaConnect = () => {
                     callback={onClickHandler}
                 />
             </Box>
-            <Box className={classes.box}>
+            <Box className={"my-5 flex w-full justify-around"}>
                 <Button
                     color="inherit" 
                     onClick={() => onHandleSlackLogin(900, 830) }
-                    className={classes.button}
-                    startIcon={<SlackIcon className={classes.icon} />} 
+                    className={"w-[205px] rounded-full border border-white/[0.08] px-7 py-[17px] normal-case hover:border-white/[0.08]"}
+                    startIcon={<SlackIcon className={"mr-[5px]"} />} 
                 >
                     Slack
                 </Button>
                 <Button
                     color="inherit" 
                     onClick={() => onHandleMicrosoftLogin(900, 830) }
-                    className={classes.button}
-                    startIcon={<MicrosoftIcon className={classes.icon} />} 
+                    className={"w-[205px] rounded-full border border-white/[0.08] px-7 py-[17px] normal-case hover:border-white/[0.08]"}
+                    startIcon={<MicrosoftIcon className={"mr-[5px]"} />} 
                 >
                     Microsoft
                 </Button>

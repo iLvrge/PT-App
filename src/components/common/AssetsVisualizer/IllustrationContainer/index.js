@@ -12,7 +12,6 @@ import ErrorBoundary from '../../ErrorBoundary'
 import themeMode from '../../../../themes/themeMode';
 import axios from 'axios' 
 
-import useStyles from './styles'
 import PdfViewer from '../../PdfViewer'
 import FullScreen from '../../FullScreen'
 
@@ -35,7 +34,6 @@ const IllustrationContainer = ({
   usptoButton,
   connectionSelection
  }) => {
-  const classes = useStyles()
   const dispatch = useDispatch()
   const [ illustrationData, setIllustrationData ] = useState()
   const [ click, setClick ] = useState(0) 
@@ -344,8 +342,8 @@ const IllustrationContainer = ({
   },[ dispatch ])
 
   return (
-    <Paper className={classes.root} square>           
-      <div className={classes.forceStrech} ref={targetRef}>
+    <Paper className={"relative h-full w-full flex-1 overflow-hidden [&_#topTitle]:bg-bg-paper [&_#topTitle]:text-text-primary [&_#topTitle]:border-b [&_#topTitle]:border-divider"} square>           
+      <div className={"absolute inset-0 flex items-center justify-center"} ref={targetRef}>
         {
           isLoadingAssetIllustration ?
           <CircularProgress /> :
