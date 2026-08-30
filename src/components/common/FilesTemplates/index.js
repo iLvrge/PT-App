@@ -27,11 +27,9 @@ import {
     setDriveTemplateFrameMode
 } from '../../../actions/uiActions.js'
 
-import useStyles from "./styles"
 import clsx from 'clsx'
 
 const FilesTemplates = ({type, isMobile, assetBar}) => {
-    const classes = useStyles()
     const dispatch = useDispatch()
     const googleLoginRef = useRef(null)
     const [headerRowHeight, setHeaderRowHeight] = useState(47)
@@ -507,7 +505,7 @@ const FilesTemplates = ({type, isMobile, assetBar}) => {
         setDocumentHeaderColumns(previousColumns)
     }, [ documentHeaderColumns ] )
     return (
-        <Paper className={clsx(classes.root, {[classes.mobile]: isMobile === true && assetBar === true})} square id={`layout_templates`}>
+        <Paper className={clsx("flex h-full flex-1 flex-col overflow-x-hidden overflow-y-auto [&_.disable_header_.ReactVirtualized__Table__headerRow]:hidden", {["flex-[1_1_50%]"]: isMobile === true && assetBar === true})} square id={`layout_templates`}>
             {  
               googleAuthLogin && (
                 <span ref={googleLoginRef}>

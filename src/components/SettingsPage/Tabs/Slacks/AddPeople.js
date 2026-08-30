@@ -10,12 +10,10 @@ import { fetchCompaniesList } from '../../../../actions/patentTrackActions2'
 
 import PatenTrackApi from '../../../../api/patenTrack2'
 
-import useStyles from './styles'           
 import { setSettingText } from '../../../../actions/patenTrackActions'
 
 
 function AddPeople(props) {
-    const classes = useStyles()
     const dispatch = useDispatch()
     const [openDialog, setOpenDialog] = useState(false);
     const [inputText, setInputText] = useState('');
@@ -54,13 +52,13 @@ function AddPeople(props) {
     }
     if(props.rows.length == 0) return null
     return (
-        <div className={classes.dialogButton}>
+        <div className={"mx-2.5 flex flex-[1_1_100%] [&_.MuiInputLabel-shrink]:text-base"}>
             <Button 
                 variant="outlined" 
                 color="inherit" 
                 onClick={handleClickOpen}
-                startIcon={<AddIcon className={classes.icon} />}
-                className={classes.btnEmail}
+                startIcon={<AddIcon className={undefined} />}
+                className={"absolute border-0 px-[5px] normal-case"}
             >
                 Invite user to your workspace
             </Button>

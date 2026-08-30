@@ -24,10 +24,8 @@ import { getTokenStorage } from '../../../utils/tokenStorage'
 
 import PatenTrackApi from '../../../api/patenTrack2'
 
-import useStyles from "./styles"
 
 const LayoutTemplates = () => {
-    const classes = useStyles()
     const dispatch = useDispatch()
     const [headerRowHeight, setHeaderRowHeight] = useState(47)
     const [rowHeight, setRowHeight] = useState(40)
@@ -243,7 +241,7 @@ const LayoutTemplates = () => {
   }, [ dispatch, selectedRow ])
 
     return (
-        <Paper className={classes.root} square id={`layout_templates`}>
+        <Paper className={"flex h-full flex-1 flex-col overflow-x-hidden overflow-y-auto [&_.disable_header_.ReactVirtualized__Table__headerRow]:hidden [&_.ReactVirtualized__Table__headerColumn]:pl-2.5 [&_.ReactVirtualized__Table__rowColumn]:pl-2.5"} square id={`layout_templates`}>
             {
                 driveFiles != undefined && driveFiles != null && driveFiles.length > 0  && 
                 <VirtualizedTable
