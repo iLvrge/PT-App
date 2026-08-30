@@ -1,3 +1,4 @@
+import useAbandonedEvents from '../../../../queries/useAbandonedEvents'
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {useLocation} from 'react-router-dom'
@@ -533,14 +534,25 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         //console.log( "getChartData", selectedCategory, selectedCompanies, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments )
     }, [/* openCustomerBar,  */selectedCompanies, selectedMaintainencePatents, assetsSelected, assetTypesSelected, selectedAssetCompanies, selectedAssetAssignments, auth_token, display_clipboard, salable, licensable ]) 
 
-    useEffect(() => {  
+    const { data: abandonedEventsData } = useAbandonedEvents(selectedCompanies, {
+        enabled: selectedTab == 1 && selectedCategory == 'abandoned',
+    })
+    useEffect(() => {
+        if (abandonedEventsData) setAbandonedTimeline(abandonedEventsData)
+    }, [ abandonedEventsData ])
+
+    useEffect(() => {
+        // NOTE: the line below used to read
+        //     if(selectedTab == 1)
+        //     if(selectedTab == 1 && selectedCategory == 'abandoned') { ... } else { ... }
+        // The first `if` has no body, so it guards the whole if/else that follows:
+        // when selectedTab is not 1, neither branch runs. That is preserved
+        // exactly here rather than corrected, because dropping the outer guard
+        // would start running the else branch in a case it never has. Flagged
+        // for the browser pass.
         if(selectedTab == 1)
-        if(selectedTab == 1 && selectedCategory == 'abandoned') { 
-            const getAllAbandonedAssetsEvents = async () => { 
-                const {data} = await PatenTrackApi.getAllAbandonedAssetsEvents(selectedCompanies)
-                setAbandonedTimeline(data)
-            }
-            getAllAbandonedAssetsEvents() 
+        if(selectedTab == 1 && selectedCategory == 'abandoned') {
+            // handled by useAbandonedEvents above
         } else {
             if(selectedCompanies.length > 0 && selectedCategory == 'due_dilligence' && cpc_request === true && cpcData.list.length == 0) { 
                 setFilterList([])
