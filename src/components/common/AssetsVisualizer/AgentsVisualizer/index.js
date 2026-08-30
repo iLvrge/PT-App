@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { Paper, Typography } from '@mui/material';
  
-import useStyles from "./styles";
 import { useDispatch, useSelector } from 'react-redux'; 
 import Loader from '../../Loader'
 import { Chart } from "react-google-charts";
@@ -14,7 +13,6 @@ import { Box } from '@mui/system';
 const AgentsVisualizer = (props) => { 
     const containerRef = useRef(null)
     const dispatch = useDispatch()
-    const classes = useStyles()
     const [data, setData] = useState([]) 
     const [rawData, setRawData] = useState([]) 
     const [loading, setLoading] = useState(false)
@@ -240,7 +238,7 @@ const AgentsVisualizer = (props) => {
 
     const EmptyMessage = () => {
         return(
-            <Box className={classes.boxMessage}>
+            <Box className={"flex h-full w-full flex-col items-center justify-center text-secondary text-[1.1rem]"}>
                 <Typography
                     variant="h6" 
                     component="span"
@@ -305,15 +303,15 @@ const AgentsVisualizer = (props) => {
     }
  
     return (
-        <Paper className={classes.root} square> 
+        <Paper className={"flex h-full w-full flex-1 flex-col shadow-none"} square> 
             {/* {
                 typeof standalone === 'undefined' && (
-                    <div className={classes.fullScreenContainer}>
+                    <div className={"absolute right-2.5 top-2.5 z-[999] cursor-pointer"}>
                         <FullScreen componentItems={menuItems}/>
                     </div>
                 )
             } 
-   */}          <div className={classes.graphContainer} ref={containerRef}> 
+   */}          <div className={"flex h-[86%] flex-1 items-start justify-center p-2.5 text-sm [&_div[id*=googlechart-control-]]:absolute [&_div[id*=googlechart-control-]]:top-[200px] [&_div[id*=googlechart-control-]]:z-[9999]"} ref={containerRef}> 
                 <DisplayChart />
             </div>
         </Paper>

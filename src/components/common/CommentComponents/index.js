@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
 import { connect } from 'react-redux'
-import useStyles from './styles'
 import FullWidthSwitcher from '../FullWidthSwitcher'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import Loader from '../Loader'
@@ -12,7 +11,6 @@ import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 
 function CommentComponents(props) {
-  const classes = useStyles()
   const [ showSwitcher, setShowSwitcher ] = useState(0)
   const [ comment, setComment ] = useState('')
   const isExpanded = props.currentWidget === 'comments'
@@ -54,13 +52,13 @@ function CommentComponents(props) {
   */
   return (
     <div
-      className     = {classes.commentsComponents}
+      className     = {"relative flex h-full w-full grow flex-col"}
       onMouseOver   = {() => {setShowSwitcher(true)}}
       onMouseLeave  = {() => {setShowSwitcher(false)}}
     >
-      <div className={classes.container}>
-        <div className={classes.context} >
-        <div className={classes.scrollbar}>
+      <div className={"absolute inset-0 m-[5px] grow border border-[#363636] bg-[#222222]"}>
+        <div className={"flex h-full grow flex-col items-center overflow-hidden border border-[#363636] p-4"} >
+        <div className={"relative w-full grow overflow-hidden"}>
           {
           props.isLoading
           ?
@@ -102,7 +100,7 @@ function CommentComponents(props) {
                         {new Intl.DateTimeFormat('en-US').format(new Date(props.record_item.created_at))}
                       </TableCell>
                       <TableCell align="left" style={{ verticalAlign: 'top' }}>
-                      {props.record_item.documents.file !== '' ? <a href={props.record_item.documents.file} target={'_blank'} rel="noopener noreferrer" className={classes.open}><i className={props.record_item.documents.file.toString().toLowerCase().indexOf('.pdf') >= 0 ? 'fal fa-file-pdf' : props.record_item.documents.file.toString().toLowerCase().indexOf('.doc') >= 0 ? 'fal fa-file-word' : 'fal fa-file'}></i></a> : ''} {props.record_item.upload_file !== '' && props.record_item.upload_file !== null ? <a href={props.record_item.upload_file} target={'_blank'} rel="noopener noreferrer" className={classes.open}><i className={props.record_item.upload_file.toString().toLowerCase().indexOf('.pdf') >= 0 ? 'fal fa-file-pdf' : props.record_item.upload_file.toString().toLowerCase().indexOf('.doc') >= 0 ? 'fal fa-file-word' : 'fal fa-file'}></i></a> : ''} {props.record_item.comment}
+                      {props.record_item.documents.file !== '' ? <a href={props.record_item.documents.file} target={'_blank'} rel="noopener noreferrer" className={"mr-[5px]"}><i className={props.record_item.documents.file.toString().toLowerCase().indexOf('.pdf') >= 0 ? 'fal fa-file-pdf' : props.record_item.documents.file.toString().toLowerCase().indexOf('.doc') >= 0 ? 'fal fa-file-word' : 'fal fa-file'}></i></a> : ''} {props.record_item.upload_file !== '' && props.record_item.upload_file !== null ? <a href={props.record_item.upload_file} target={'_blank'} rel="noopener noreferrer" className={"mr-[5px]"}><i className={props.record_item.upload_file.toString().toLowerCase().indexOf('.pdf') >= 0 ? 'fal fa-file-pdf' : props.record_item.upload_file.toString().toLowerCase().indexOf('.doc') >= 0 ? 'fal fa-file-word' : 'fal fa-file'}></i></a> : ''} {props.record_item.comment}
                       </TableCell>
                     </TableRow>
                     :

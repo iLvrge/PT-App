@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Paper from '@mui/material/Paper'
-import useStyles from './styles'
 
 import TimelineContainer from './TimelineContainer'
 import IllustrationContainer from './IllustrationContainer'
@@ -15,7 +14,6 @@ import clsx from 'clsx'
 import TimelineWithLogo from './TimelineWithLogo'
 
 const AssetsVisualizer = ({ toggleMinimize, isMinimized, setIllustrationRecord }) => {
-  const classes = useStyles()
 
   const selectedAssetsTypes = useSelector(state => state.patenTrack2.selectedAssetsTypes)
   const selectedAssetsCustomers = useSelector(state => state.patenTrack2.selectedAssetsCustomers)
@@ -51,23 +49,23 @@ const AssetsVisualizer = ({ toggleMinimize, isMinimized, setIllustrationRecord }
         return <TimelineContainer />
       }
     } else if((!wherefrom && !isFullscreenOpen) || (wherefrom && isFullscreenOpen)) {
-      return <div className={classes.singleAssetContainer}>
+      return <div className={"flex flex-1 flex-col"}>
           <IllustrationContainer isFullscreenOpen={isFullscreenOpen} asset={assetIllustration} setIllustrationRecord={setIllustrationRecord} />
         </div>
     }
   }
 
   return (
-    <Paper className={classes.root} square>
+    <Paper className={"relative flex h-full w-full flex-col"} square>
       {renderComponent()}
-      <IconButton size="small" className={clsx(classes.fullscreenBtn, 'full_screen_btn')} onClick={handleClickOpenFullscreen}>
+      <IconButton size="small" className={clsx("absolute right-0 top-0 z-[99999] [&_svg]:fill-[#6d6d6d] [&_svg]:stroke-[#6d6d6d] hover:[&_svg]:fill-secondary hover:[&_svg]:stroke-secondary hover:[&_svg]:text-secondary", 'full_screen_btn')} onClick={handleClickOpenFullscreen}>
         <FullscreenIcon />   
       </IconButton>
  
       {
         isMinimized && (
           <Tooltip title={'Shop Assets Timeline'}>
-            <IconButton className={classes.undoMinimize} onClick={toggleMinimize} size="large">
+            <IconButton className={"absolute bottom-0 self-center rounded-t-full bg-[rgb(18_18_18/0.5)] transition-[.2s] translate-y-5 hover:translate-y-0 hover:bg-[rgb(18_18_18/1)]"} onClick={toggleMinimize} size="large">
               <ExpandLess />
             </IconButton>
           </Tooltip>
@@ -75,11 +73,11 @@ const AssetsVisualizer = ({ toggleMinimize, isMinimized, setIllustrationRecord }
       }
 
       <Modal
-        className={classes.fullscreenChartsModal}
+        className={"flex"}
         open={isFullscreenOpen}
       > 
-        <Paper className={classes.fullscreenCharts} square>
-          <IconButton onClick={handleCloseFullscreen} className={classes.right} size="large">
+        <Paper className={"m-[35px] flex flex-1"} square>
+          <IconButton onClick={handleCloseFullscreen} className={"absolute right-[35px] z-[1] h-5 w-5"} size="large">
             <Close />
           </IconButton>
           {renderComponent('fromModal')}
