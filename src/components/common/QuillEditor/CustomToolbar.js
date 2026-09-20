@@ -198,7 +198,7 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
         category == 'restore_ownership' || category == 'correct_details'
         ?
           <>
-            <Button className={`${'pt-review'} ${driveTemplateMode === true ? 'pt-active' : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
+            <Button className={`${'pt-review'} ${driveTemplateMode === true ? 'pt-quill-active' : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
             <Button className={'pt-review'} onClick={onSubmitUSPTO} disabled={loadingUSPTO}>Submit to USPTO</Button>
           </>
         :
@@ -227,7 +227,7 @@ const CustomToolbar = ({ quillEditor, quill,  onClick, onUserClick, menuItems, o
         ?
           <Button className={'pt-review'} onClick={onSalesAssets}>Select Assets and Click Here</Button>
         :
-        <Button className={`${'pt-review'} ${driveTemplateMode === true ? 'pt-active' : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
+        <Button className={`${'pt-review'} ${driveTemplateMode === true ? 'pt-quill-active' : ''}`} onClick={createTemplate}>{driveTemplateMode === true ? 'Close ' : 'Create a '}Document</Button>
       }      
       </div> */}
                

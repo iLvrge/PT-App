@@ -257,7 +257,7 @@ const UserInputForm = React.forwardRef((props, ref) => {
                         md={4}
                         sm={4}
                         xs={4}
-                        className={'pt-flex-column'} 
+                        className={'pt-quill-flex-column'} 
                     >
                         <AutoCompleteSearch
                             value={selectedAssignee}
@@ -280,7 +280,7 @@ const UserInputForm = React.forwardRef((props, ref) => {
                         md={4}
                         sm={4}
                         xs={4}
-                        className={'pt-flex-column'}
+                        className={'pt-quill-flex-column'}
                     >
                         <AutoCompleteSearch
                             value={selectedAssignor}
@@ -303,7 +303,7 @@ const UserInputForm = React.forwardRef((props, ref) => {
                         md={4}
                         sm={4}
                         xs={4}
-                        className={'pt-flex-column'}
+                        className={'pt-quill-flex-column'}
                     >
                         <AutoCompleteSearch
                             value={selectedCorrespondence}
@@ -321,8 +321,8 @@ const UserInputForm = React.forwardRef((props, ref) => {
                         /> 
                     </Grid> 
                     <div className={'pt-btn-container'}>
-                        <Button variant="contained" className={'pt-btn'} onClick={(event) => {downloadXML(event)}}>Save to hardrive</Button>
-                        <Button variant="contained" className={'pt-btn'} onClick={(event) => {openUSPTO(event)}}>Upload to USPTO</Button>
+                        <Button variant="contained" className={'pt-quill-btn'} onClick={(event) => {downloadXML(event)}}>Save to hardrive</Button>
+                        <Button variant="contained" className={'pt-quill-btn'} onClick={(event) => {openUSPTO(event)}}>Upload to USPTO</Button>
                     </div>                    
                 </Grid>
             </Grid>

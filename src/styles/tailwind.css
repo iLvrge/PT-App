@@ -7,9 +7,19 @@
  * own CSS, not by Tailwind's base layer, so take the theme and the utilities
  * and leave the reset behind. Re-adding preflight means re-testing every page's
  * prose spacing against master. */
-@layer theme, base, components, utilities;
+/* Utilities are imported UNLAYERED, and that is the whole point.
+ *
+ * MUI/emotion injects its component styles with no @layer, and an unlayered
+ * rule beats a layered one outright - specificity never enters into it. So
+ * every Tailwind class written to override a MUI style was silently inert:
+ * `text-[1.1rem]` on a Tab lost to MUI's own 0.875rem, and an explicit
+ * `[&_.MuiTab-root]:min-w-[135px]` - someone matching master's 135px tabs
+ * exactly - lost to MUI's 90px. Unlayered, they compete on specificity and
+ * order like the rest of the app's CSS, and styledEngine's `injectFirst` puts
+ * emotion ahead of us so ours win the ties. */
+@layer theme, base, components;
 @import "tailwindcss/theme.css" layer(theme);
-@import "tailwindcss/utilities.css" layer(utilities);
+@import "tailwindcss/utilities.css";
 @import "./theme.generated.css";
 
 /* Dark mode follows the .dark class that styledEngine puts on <html>, which is

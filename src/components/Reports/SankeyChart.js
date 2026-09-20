@@ -115,7 +115,7 @@ const SankeyChart = (props) => {
     }, [ assigneeRawData, assignorRawData, dispatch ])
 
     return (
-        <Paper sx={{p: 2, overflow: 'auto'}} className={clsx('pt-container', 'pt-container-top')} square>
+        <Paper sx={{p: 2, overflow: 'auto'}} className={clsx('pt-reports-container', 'pt-container-top')} square>
             {
                 !loading && data.length === 0 && (
                     <TitleBar title="The company had no acquistions and divestitures of patent assets filled after 1999:" enablePadding={false} underline={false}/>
@@ -125,7 +125,7 @@ const SankeyChart = (props) => {
                 !loading
                 ?
                     data.length > 0 && (
-                        <div className={clsx('pt-child', {[undefined]: assignorData.length > 0 ? true : false})}>
+                        <div className={clsx('pt-reports-child', {[undefined]: assignorData.length > 0 ? true : false})}>
                             {/* <TitleBar title="Acquistions:" enablePadding={false}/> */}
                             <DisplayChart data={data} tooltip={true} type={1} onSelect={handleSelection}/>
                         </div>   
@@ -139,7 +139,7 @@ const SankeyChart = (props) => {
                 !loadingAssignor
                 ?
                     assignorData.length > 0 && (
-                        <div className={clsx('pt-child' , {[undefined]: data.length > 0 ? true : false})} >
+                        <div className={clsx('pt-reports-child' , {[undefined]: data.length > 0 ? true : false})} >
                             <TitleBar title="Divestitures:" enablePadding={false}/>
                             <DisplayChart data={assignorData} type={2} onSelect={handleSelection}/>
                         </div>  

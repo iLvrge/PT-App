@@ -76,24 +76,24 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, yearRange, yearRangeText, 
     return (
         <div className={'pt-display-flex'}>   
             <div className={'pt-heading-container'}>
-                <div className={`${'pt-flex-column'} ${'pt-flex-column-year'}`}> 
+                <div className={`${'pt-cpc-flex-column'} ${'pt-flex-column-year'}`}> 
                     <div className={'pt-cpc-heading'}>
                         <Typography>Year:</Typography>
                     </div>
                 </div>   
-                <div className={`${'pt-flex-column'} ${'pt-flex-column-depth'}`}>
+                <div className={`${'pt-cpc-flex-column'} ${'pt-flex-column-depth'}`}>
                     <div className={'pt-cpc-heading'}>
                         <Typography>Depth:</Typography>
                     </div>
                 </div>   
-                <div className={`${'pt-flex-column'} ${'pt-flex-column-scope'}`}>
+                <div className={`${'pt-cpc-flex-column'} ${'pt-flex-column-scope'}`}>
                     <div className={'pt-cpc-heading'}>
                         <Typography>Scope:</Typography> 
                     </div>    
                 </div>   
             </div>    
             <div className={'pt-main-container'}>
-                <div className={`${'pt-flex-column'} ${'pt-flex-column-year'}`}>
+                <div className={`${'pt-cpc-flex-column'} ${'pt-flex-column-year'}`}>
                     <div className={'pt-selector-container'}>
                         <div className={`year ${'pt-holder'} ${'pt-top-margin'}`} style={{height: heightYear}}>  
                             {
@@ -116,7 +116,7 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, yearRange, yearRangeText, 
                         </div>             
                     </div>             
                 </div>
-                <div className={`depth ${'pt-flex-column'} ${'pt-flex-column-depth'} ${'pt-top-margin'} ${'pt-custom-height'}`}>
+                <div className={`depth ${'pt-cpc-flex-column'} ${'pt-flex-column-depth'} ${'pt-top-margin'} ${'pt-custom-height'}`}>
                     <Slider
                         defaultValue={valueRange}
                         orientation="vertical"
@@ -130,7 +130,7 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, yearRange, yearRangeText, 
                         track={'inverted'}  
                     />
                 </div>
-                <div className={`${'pt-flex-column'} ${'pt-flex-column-scope'}`}>
+                <div className={`${'pt-cpc-flex-column'} ${'pt-flex-column-scope'}`}>
                     <div className={`selContainer ${'pt-selector-container'}`}>
                         <div className={`scope ${'pt-holder'} ${'pt-top-margin'}`} style={{height}}>  
                             {

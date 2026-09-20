@@ -102,7 +102,7 @@ const ChildTable = ({ asset, headerRowDisabled }) => {
     if (familyLoading) return <Loader />
 
     return (
-        <Paper className={'pt-root'} square id={`assets_family`} elevation={0}>
+        <Paper className={'pt-assets-table-root'} square id={`assets_family`} elevation={0}>
             <VirtualizedTable
             selected={selectItems}
             rowSelected={selectedRow}

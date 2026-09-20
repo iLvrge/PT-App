@@ -514,7 +514,7 @@ const LoadLinkAssets = ({type, asset, size}) => {
     return ( 
         <Paper
             ref={viewerRef}
-            className={'pt-root'}
+            className={'pt-illustration-root'}
             square
             id={`link_assets_to_product_technology_competition`}
         >       
@@ -528,7 +528,7 @@ const LoadLinkAssets = ({type, asset, size}) => {
                     ?
                         <Loader/>  
                     :
-                        <div className={'pt-container'}>
+                        <div className={'pt-illustration-container'}>
                             <VirtualizedTable
                                 selected={selectItems}
                                 rowSelected={selectedRow}

@@ -752,7 +752,7 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
    */    
 
   return (
-      <Paper className={'pt-root'}> 
+      <Paper className={'pt-timeline-container-root'}> 
         <div id="visualization">
           <div className="menu">
             <IconButton onClick={zoomIn}>
@@ -775,13 +775,13 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
             filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
           }}  
           ref={timelineContainerRef}
-          className={clsx('pt-timeline', 'timeline')}
+          className={clsx('pt-timeline-container-timeline', 'timeline')}
         />
         {
           isLoadingTimelineData &&
-          <CircularProgress size={15} color={'secondary'} className={'pt-timeline-processing-indicator'} />
+          <CircularProgress size={15} color={'secondary'} className={'pt-timeline-container-timeline-processing-indicator'} />
         }
-        { isLoadingTimelineRawData && <CircularProgress className={'pt-loader'} /> }
+        { isLoadingTimelineRawData && <CircularProgress className={'pt-timeline-container-loader'} /> }
       </Paper>
   ) 
 }

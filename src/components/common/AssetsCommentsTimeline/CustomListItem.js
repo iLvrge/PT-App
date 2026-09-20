@@ -58,7 +58,7 @@ const CustomListItem = (props) => {
     const CloseSquare = (props) => {
         return (
           <SvgIcon
-            className={clsx('pt-icon', 'pt-close')}
+            className={clsx('pt-icon', 'pt-act-close')}
             fontSize="inherit"
             {...props}
           >
@@ -75,7 +75,7 @@ const CustomListItem = (props) => {
             {
                 props.mimeType == 'application/vnd.google-apps.folder'
                     ?
-                        <div key={props.id} className={'pt-item'} onClick={(event) => openDriveFolder(event, props.id, props.name)}>
+                        <div key={props.id} className={'pt-act-item'} onClick={(event) => openDriveFolder(event, props.id, props.name)}>
                             <Typography variant="body1" component="h2">
                                 {
                                     isSelected(props.id) ? <MinusSquare/> : <PlusSquare />
@@ -83,7 +83,7 @@ const CustomListItem = (props) => {
                             </Typography>
                         </div>
                     :
-                        <div key={props.id} className={'pt-item'} onClick={(event) => props.onSelectFile(event, {...props})}>
+                        <div key={props.id} className={'pt-act-item'} onClick={(event) => props.onSelectFile(event, {...props})}>
                             <Typography variant="body1" component="h2">
                                 <img src={props.iconLink}/><span>{props.name}</span>
                             </Typography>
@@ -92,7 +92,7 @@ const CustomListItem = (props) => {
             {
                 isSelected(props.id) && data?.files && data?.files.length > 0
                     ?
-                        <Grid item className={'pt-child'}>
+                        <Grid item className={'pt-act-child'}>
                             <DriveFilesFolders
                                 data={data} 
                                 parent={props.parent.length === 0 ? [...props.parent, props.id] : [...props.parent]}

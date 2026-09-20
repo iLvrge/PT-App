@@ -218,8 +218,8 @@ const FamilyContainer = ({ family, onClose }) => {
     }
 
     return(
-        <Paper className={'pt-root'}>   
-            <div className={'pt-root'}>
+        <Paper className={'pt-family-root'}>   
+            <div className={'pt-family-root'}>
                 <div
                     id={`familyTimeline`}
                     style={{ 
@@ -227,18 +227,18 @@ const FamilyContainer = ({ family, onClose }) => {
                         filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`,
                     }}
                     ref={timelineContainerRef}
-                    className={'pt-timeline'}
+                    className={'pt-family-timeline'}
                 />
-                {/* {isLoadingTimelineRawData || familyDataRetrieved && <CircularProgress className={'pt-loader'} /> }  */}
+                {/* {isLoadingTimelineRawData || familyDataRetrieved && <CircularProgress className={'pt-family-loader'} /> }  */}
                 {(isLoadingTimelineRawData || familyDataRetrieved ) && (
-                    <div className={'pt-blink-text'}>
+                    <div className={'pt-family-blink-text'}>
                         Live data is being retrieved.
                     </div>
                 )}
             </div>
             {
                 legalModal === true && (
-                    <div className={'pt-full-screen-container'}>
+                    <div className={'pt-family-full-screen-container'}>
                         <FullScreen 
                             componentItems={menuItems}
                             setScreen={handleCloseModal}

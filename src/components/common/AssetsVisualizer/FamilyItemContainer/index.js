@@ -149,15 +149,15 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
         return (
             label === 'Family'
             ?
-                <span className={'pt-container-relative'}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.family)} showZero={false}></Badge></span>
+                <span className={'pt-container-relative'}>{label}<Badge color='primary' max={99999} className={'pt-family-item-badge'} badgeContent={numberWithCommas(asset_details.family)} showZero={false}></Badge></span>
             :
                 label === 'Claims'
                 ?
-                    <span className={'pt-container-relative'}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.claims)} showZero={false}></Badge></span>
+                    <span className={'pt-container-relative'}>{label}<Badge color='primary' max={99999} className={'pt-family-item-badge'} badgeContent={numberWithCommas(asset_details.claims)} showZero={false}></Badge></span>
                 :
                     label === 'Figures'
                     ?
-                        <span className={'pt-container-relative'}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.figures)} showZero={false}></Badge></span>
+                        <span className={'pt-container-relative'}>{label}<Badge color='primary' max={99999} className={'pt-family-item-badge'} badgeContent={numberWithCommas(asset_details.figures)} showZero={false}></Badge></span>
                     :
                     label ===  'USPTO'
                     ?
@@ -189,7 +189,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
 
     
     return(
-        <Paper className={'pt-root'} square>
+        <Paper className={'pt-family-item-root'} square>
 
             {
                 selectedCompaniesAll === true || selectedCompanies.length > 0 || type === 9 || ( process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null)
@@ -197,17 +197,17 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                     <>
                         {
                             fullScreen === false && typeof standalone === 'undefined' && (
-                                <IconButton size="small" className={clsx('pt-fullscreen-btn', 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
+                                <IconButton size="small" className={clsx('pt-family-item-fullscreen-btn', 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
                                     <FullscreenIcon />
                                 </IconButton>
                             )
                         }
-                        <Tabs className={'pt-tabs'} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
+                        <Tabs className={'pt-family-item-tabs'} variant={'scrollable'} value={selectedTab} onChange={handleChangeTab}>
                             {
                                 [`Family`, `Abstract`, `Specifications`, `Claims`, `Figures`, 'USPTO'].map( (itemTab, index) => (
                                     <Tab
                                         key={index}
-                                        className={'pt-tab'}
+                                        className={'pt-family-item-tab'}
                                         label={<ItemLabel label={itemTab}/>}
                                         disableFocusRipple={true}
                                         disableRipple={true}
@@ -215,7 +215,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                                 ))
                             }                            
                         </Tabs>
-                        <div className={'pt-graph-container'}>        
+                        <div className={'pt-family-item-graph-container'}>        
                         {/* <Typography variant='body2' className={'pt-heading'}>{selectedNumber}</Typography> */}
                         {selectedTab === 0 && <FamilyContainer
                                     family={selectedAssetsFamily}
@@ -230,7 +230,7 @@ const FamilyItemContainer = ({ item, onClose, analyticsBar, chartBar, illustrati
                                 md={12}
                                 sm={12}
                                 xs={12}
-                                className={'pt-flex-column'}
+                                className={'pt-family-item-flex-column'}
                                 >   
                                     {selectedTab === 1 && <AbstractData data={abstractData} number={selectedNumber} />}
                                     {selectedTab === 2 && <SpecificationData data={specificationData} number={selectedNumber} />}                                    

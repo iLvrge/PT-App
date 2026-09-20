@@ -732,7 +732,7 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
    */    
 
   return (
-      <Paper className={'pt-root'}> 
+      <Paper className={'pt-timeline-logo-root'}> 
         <div id="visualization">
           <div className="menu">
             <IconButton onClick={zoomIn}>
@@ -755,13 +755,13 @@ const TimelineWithLogo = ({type, timelineData, updateTimelineRawData }) => {
             filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
           }}  
           ref={timelineContainerRef}
-          className={clsx('pt-timeline', 'timeline')}
+          className={clsx('pt-timeline-logo-timeline', 'timeline')}
         />
         {
           isLoadingTimelineData &&
-          <CircularProgress size={15} color={'secondary'} className={'pt-timeline-processing-indicator'} />
+          <CircularProgress size={15} color={'secondary'} className={'pt-timeline-logo-timeline-processing-indicator'} />
         }
-        { isLoadingTimelineRawData && <CircularProgress className={'pt-loader'} /> }
+        { isLoadingTimelineRawData && <CircularProgress className={'pt-timeline-logo-loader'} /> }
       </Paper>
   ) 
 }

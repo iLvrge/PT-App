@@ -355,7 +355,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
   const Slack = () => {
 
     return (
-      <Box className={'pt-slack-container'}>
+      <Box className={'pt-assets-table-slack-container'}>
         {
           getAuthConnectToken() === 2
             ?
@@ -2337,7 +2337,7 @@ s4,1.7944336,4,4v4c0,0.5522461,0.4472656,1,1,1H50.2363281z" ></path><path d="M23
 
   return (
     <Paper
-      className={clsx('pt-root', { ['pt-mobile']: isMobile === true && (fileBar === true || driveBar === true) })}
+      className={clsx('pt-assets-table-root', { ['pt-mobile']: isMobile === true && (fileBar === true || driveBar === true) })}
       square
       id={`assets_type_assignment_all_assets`}
       data_option={optionType}

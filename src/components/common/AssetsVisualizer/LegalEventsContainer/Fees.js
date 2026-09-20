@@ -399,7 +399,7 @@ const Fees = ({ events, showTabs, tabText, showAbandoned }) => {
 
   const ItemLabel = ({ label }) => {
     return (
-      <span className={'pt-legal-container-relative'}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(Object.keys(events).length > 0 && events.main != undefined ? events.main.length : 0)} showZero={false}></Badge></span>
+      <span className={'pt-legal-container-relative'}>{label}<Badge color='primary' max={99999} className={'pt-legal-badge'} badgeContent={numberWithCommas(Object.keys(events).length > 0 && events.main != undefined ? events.main.length : 0)} showZero={false}></Badge></span>
     )
   }
 
@@ -407,12 +407,12 @@ const Fees = ({ events, showTabs, tabText, showAbandoned }) => {
     <Paper className={`${'pt-timeline-root'} timelineRoot`} square >
       {
         showTabs === true && (
-          <Tabs className={'pt-tabs'} variant={'scrollable'} value={0}>
+          <Tabs className={'pt-legal-tabs'} variant={'scrollable'} value={0}>
             {
               [tabText].map((item, index) => (
                 <Tab
                   key={index}
-                  className={'pt-tab'}
+                  className={'pt-legal-tab'}
                   label={<ItemLabel label={item} />}
                 />
               ))
@@ -428,9 +428,9 @@ const Fees = ({ events, showTabs, tabText, showAbandoned }) => {
           filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`,
         }}
         ref={timelineContainerRef}
-        className={'pt-timeline'}
+        className={'pt-legal-timeline'}
       />
-      {isLoadingTimelineRawData && <CircularProgress className={'pt-loader'} />}
+      {isLoadingTimelineRawData && <CircularProgress className={'pt-legal-loader'} />}
       {isLoadingTimelineData && <Loader />}
     </Paper>
   )

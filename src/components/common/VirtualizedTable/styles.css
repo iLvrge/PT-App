@@ -179,10 +179,10 @@
   text-decoration: underline;
 }
 
-.pt-tooltip {
+.pt-virtualized-table-tooltip {
   font-size: 1rem;
 }
 
-.pt-tooltip .MuiTypography-root {
+.pt-virtualized-table-tooltip .MuiTypography-root {
   font-size: 18px;
 }

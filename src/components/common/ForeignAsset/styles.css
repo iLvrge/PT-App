@@ -19,7 +19,7 @@
   padding: 0px;
 }
 
-.pt-button {
+.pt-foreign-button {
   margin-left: 10px;
   text-transform: initial;
   padding: 3px 5px;
@@ -27,19 +27,19 @@
   height: 27px;
 }
 
-.pt-button .MuiButton-label {
+.pt-foreign-button .MuiButton-label {
   white-space: nowrap;
 }
 
-.pt-button:hover {
+.pt-foreign-button:hover {
   color: var(--pt-secondary-main) !important;
 }
 
-.pt-button:first {
+.pt-foreign-button:first {
   margin-left: 5px;
 }
 
-.pt-close {
+.pt-foreign-close {
   position: absolute;
   right: 10px;
   top: 7px;
@@ -71,7 +71,7 @@
   box-shadow: none;
 }
 
-.pt-item {
+.pt-foreign-item {
   position: relative;
   display: flex;
   flex-basis: 100px;
@@ -84,19 +84,19 @@
   margin: 0 10px 5px 0;
 }
 
-.pt-item:hover {
+.pt-foreign-item:hover {
   background: #303030;
 }
 
-.pt-item:hover .closeBtn {
+.pt-foreign-item:hover .closeBtn {
   display: block;
 }
 
-.pt-item.active .input_item {
+.pt-foreign-item.active .input_item {
   display: ;
 }
 
-.pt-item .closeBtn {
+.pt-foreign-item .closeBtn {
   position: absolute;
   min-width: 15px;
   height: auto;
@@ -108,20 +108,20 @@
   line-height: 1;
 }
 
-.pt-item .closeBtn svg {
+.pt-foreign-item .closeBtn svg {
   width: 15px;
   height: 15px;
 }
 
-.pt-item .input_item {
+.pt-foreign-item .input_item {
   display: none;
 }
 
-.pt-item .MuiButton-root:hover {
+.pt-foreign-item .MuiButton-root:hover {
   color: #5c5c5c;
 }
 
-.pt-item input {
+.pt-foreign-item input {
   width: 100px;
 }
 
@@ -139,7 +139,7 @@
   box-shadow: none;
 }
 
-.pt-root {
+.pt-foreign-root {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -147,11 +147,11 @@
   overflow: hidden auto;
 }
 
-.pt-root .disable_header .ReactVirtualized__Table__headerRow {
+.pt-foreign-root .disable_header .ReactVirtualized__Table__headerRow {
   display: none;
 }
 
-.pt-root .MuiInputBase-multiline {
+.pt-foreign-root .MuiInputBase-multiline {
   padding: 0px;
   font-size: 0.875rem;
 }

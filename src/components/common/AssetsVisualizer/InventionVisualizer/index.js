@@ -1363,7 +1363,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 selectedCategory == 'assigned' && selectedRow.length == 0
                 ?
                     <span 
-                        className={'pt-button'}
+                        className={'pt-cpc-button'}
                         onClick={() => {onHandleFilterAssets(label)}}>
                         {label}
                     </span>
@@ -1388,7 +1388,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     return (
         <Paper 
             /* {...(typeof titleBar !== 'undefined' && titleBar === true ? {sx: {p: 2}} : {})} */
-            className={'pt-root'} square>  
+            className={'pt-cpc-root'} square>  
             {
                 (typeof tab == 'undefined' || tab === true ) && inventionTabs.length > 0
                 ?
@@ -1397,7 +1397,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         variant="scrollable"
                         scrollButtons="auto"
                         onChange={handleChangeTab}
-                        className={'pt-tabs'}
+                        className={'pt-cpc-tabs'}
                     >
                         {
                             inventionTabs.map((tab) => (
@@ -1406,7 +1406,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                     label={tab == 'For Sale' || tab == 'To License Out' ? <TabLabel label={tab} /> : tab}
                                     {...(typeof tab != 'For Sale' && tab != 'To License Out'  ? {icon: <LabelWithIcon label={tab} otherName={true}/>} : {})} 
                                     iconPosition='start'
-                                    classes={{ root: 'pt-tab' }}
+                                    classes={{ root: 'pt-cpc-tab' }}
                                 />
                             )) 
                         }
@@ -1441,7 +1441,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                 <FullScreen componentItems={menuItems}/>
                             )
                         } 
-                        <div className={'pt-graph-container'}> 
+                        <div className={'pt-cpc-graph-container'}> 
                             {
                                 selectedTab === 1 && selectedTabName == 'With Products'
                                 ?
@@ -1550,7 +1550,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                 
                             </DialogTitle>
                             <DialogContent className={'pt-filter-content'}>
-                                <CloseIcon onClick={handleCloseFilter} className={'pt-close'}/>
+                                <CloseIcon onClick={handleCloseFilter} className={'pt-cpc-close'}/>
                                 <Button onClick={onHandleResetSettings} className={'pt-reset'}>Reset</Button>
                                 <FilterCPC onClose={handleClose} depthRange={depthRange} scopeRange={scopeRange} yearRange={filterYear} yearRangeText={yearRangeText} depthRangeText={depthRangeText} scopeRangeText={scopeRangeText} valueScope={valueScope} valueRange={valueRange} valueYear={valueYear} onChangeRangeSlider={onChangeRangeSlider} onChangeScopeSlider={onChangeScopeSlider} onChangeYearSlider={onChangeYearSlider}/>
                             </DialogContent>

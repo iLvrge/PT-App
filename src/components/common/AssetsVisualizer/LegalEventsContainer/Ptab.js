@@ -322,8 +322,8 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
     }, [ /* onSelect, */ onItemover, onItemout ]) 
 
     return(
-        <Paper className={'pt-root'}>   
-            <div className={'pt-root'}>
+        <Paper className={'pt-legal-root'}>   
+            <div className={'pt-legal-root'}>
                 <div
                     id={`ptabTimeline`}
                     style={{ 
@@ -333,7 +333,7 @@ const Ptab = ({ number, rawData, updateRawData, standalone }) => {
                     ref={timelineContainerRef}
                     className={'pt-timeline-ptab'}
                 />
-                { isLoadingTimelineRawData && <CircularProgress className={'pt-loader'} /> } 
+                { isLoadingTimelineRawData && <CircularProgress className={'pt-legal-loader'} /> } 
             </div>
         </Paper>
     )

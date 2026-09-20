@@ -430,10 +430,10 @@ const TimelineSecurity = ({ data, assignmentBar, assignmentBarToggle, type, stan
    */    
 
   return (
-      <Paper className={'pt-root'}>    
+      <Paper className={'pt-timeline-security-root'}>    
         {
             typeof standalone === 'undefined' && (
-                <div className={'pt-full-screen-container'}>
+                <div className={'pt-timeline-security-full-screen-container'}>
                     <FullScreen componentItems={menuItems}/>
                 </div>
             )
@@ -443,13 +443,13 @@ const TimelineSecurity = ({ data, assignmentBar, assignmentBarToggle, type, stan
             filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
           }}  
           ref={timelineContainerRef}
-          className={clsx('pt-timeline', 'timeline')}
+          className={clsx('pt-timeline-security-timeline', 'timeline')}
         />
         {
           isLoadingTimelineData &&
-          <CircularProgress size={15} color={'secondary'} className={'pt-timeline-processing-indicator'} />
+          <CircularProgress size={15} color={'secondary'} className={'pt-timeline-security-timeline-processing-indicator'} />
         }
-        { isLoadingTimelineRawData && <CircularProgress className={'pt-loader'} /> }
+        { isLoadingTimelineRawData && <CircularProgress className={'pt-timeline-security-loader'} /> }
       </Paper>
   ) 
 }

@@ -483,7 +483,7 @@ const Acknowledgements = (props) => {
       }
 
     return(
-        <Paper className={'pt-root'}> 
+        <Paper className={'pt-lifespan-root'}> 
 
             <div id="visualization">
                 <Box sx={{p: 2, position: 'absolute', zIndex: 99999}}>
@@ -513,7 +513,7 @@ const Acknowledgements = (props) => {
                     filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`,
                 }}
                 ref={timelineContainerRef}
-                className={'pt-timeline-citation'}
+                className={'pt-lifespan-timeline-citation'}
             />
             { isLoadingTimelineRawData && <CircularProgress className={undefined} /> } 
         </Paper>

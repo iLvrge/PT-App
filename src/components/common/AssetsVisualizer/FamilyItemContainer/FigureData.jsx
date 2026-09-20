@@ -26,7 +26,7 @@ const FigureData = ({ data, number, standalone }) => {
 
   if (isFetching) return <Loader />
   return (
-    <div className={'pt-container'}>
+    <div className={'pt-family-item-container'}>
       <div className={'pt-inline-container'} id={`container`}></div>
       {
         Array.isArray(figures) && figures.length > 0 && (

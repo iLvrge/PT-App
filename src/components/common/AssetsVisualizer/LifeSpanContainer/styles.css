@@ -2,7 +2,7 @@
  * Theme lookups became the CSS variables generated from src/themes/tokens.js,
  * so light and dark still resolve exactly as they did. */
 
-.pt-full-screen-container {
+.pt-lifespan-full-screen-container {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -10,25 +10,25 @@
   z-index: 999;
 }
 
-.pt-fullscreen-btn {
+.pt-lifespan-fullscreen-btn {
   position: absolute;
   top: 9px;
   right: 0px;
   z-index: 999;
 }
 
-.pt-fullscreen-btn  & svg {
+.pt-lifespan-fullscreen-btn  & svg {
   fill: #6d6d6d;
   stroke: #6d6d6d;
 }
 
-.pt-fullscreen-btn  & svg:hover {
+.pt-lifespan-fullscreen-btn  & svg:hover {
   color: var(--pt-secondary-main);
   fill: var(--pt-secondary-main);
   stroke: var(--pt-secondary-main);
 }
 
-.pt-graph-container {
+.pt-lifespan-graph-container {
   flex: 1;
   display: flex;
   justify-content: center;
@@ -37,7 +37,7 @@
   flex-direction: column;
 }
 
-.pt-root {
+.pt-lifespan-root {
   height: 100%;
   width: 100%;
   position: relative;
@@ -46,54 +46,54 @@
   box-shadow: none;
 }
 
-.pt-root #visualization {
+.pt-lifespan-root #visualization {
   position: relative;
 }
 
-.pt-root #visualization .menu {
+.pt-lifespan-root #visualization .menu {
   position: absolute;
   z-index: 9999;
   right: 25px;
   top: 2px;
 }
 
-.pt-root .MuiTabs-root {
+.pt-lifespan-root .MuiTabs-root {
   border-bottom: 1px solid var(--pt-divider) !important;
 }
 
-.pt-root .vis-time-axis .vis-text, .vis-item, .vis-y-axis {
+.pt-lifespan-root .vis-time-axis .vis-text, .vis-item, .vis-y-axis {
   color: var(--pt-text-primary);
 }
 
-.pt-root  .vis-timeline {
+.pt-lifespan-root  .vis-timeline {
   border: 0px;
 }
 
-.pt-root.vis-panel.vis-center {
+.pt-lifespan-root.vis-panel.vis-center {
   border: 1px solid var(--pt-divider);
 }
 
-.pt-root .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom {
+.pt-lifespan-root .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom {
   border-bottom-color: var(--pt-divider);
   border-top-color: var(--pt-divider);
   border-left-color: var(--pt-divider);
   border-right-color: var(--pt-divider);
 }
 
-.pt-root .vis-panel.vis-background.vis-horizontal .vis-grid {
+.pt-lifespan-root .vis-panel.vis-background.vis-horizontal .vis-grid {
   border-color: #e5e5e51c;
 }
 
-.pt-root .MuiTab-root {
+.pt-lifespan-root .MuiTab-root {
   min-width: inherit;
   max-width: 150px;
 }
 
-.pt-root .MuiTab-wrapper {
+.pt-lifespan-root .MuiTab-wrapper {
   white-space: nowrap;
 }
 
-.pt-tab {
+.pt-lifespan-tab {
   min-width: 25%;
   min-height: 47px;
   font-size: 1.1rem;
@@ -102,18 +102,18 @@
   text-overflow: ellipsis;
 }
 
-.pt-tabs {
+.pt-lifespan-tabs {
   min-height: 47px;
   display: flex;
   width: 94%;
 }
 
-.pt-timeline-citation {
+.pt-lifespan-timeline-citation {
   height: 100%;
   width: 100%;
 }
 
-.pt-timeline-citation .custom_tooltip {
+.pt-lifespan-timeline-citation .custom_tooltip {
   position: absolute;
   width: 150px;
   background: var(--pt-bg-paper);
@@ -123,56 +123,56 @@
   overflow: hidden;
 }
 
-.pt-timeline-citation .custom_tooltip h4 {
+.pt-lifespan-timeline-citation .custom_tooltip h4 {
   margin: 0px;
 }
 
-.pt-timeline-citation .vis-timeline {
+.pt-lifespan-timeline-citation .vis-timeline {
   border: 0 !important;
 }
 
-.pt-timeline-citation .vis-left.vis-panel.vis-vertical-scroll, .pt-timeline-citation .vis-right.vis-panel.vis-vertical-scroll {
+.pt-lifespan-timeline-citation .vis-left.vis-panel.vis-vertical-scroll, .pt-lifespan-timeline-citation .vis-right.vis-panel.vis-vertical-scroll {
   overflow-y: hidden;
 }
 
-.pt-timeline-citation .vis-item {
+.pt-lifespan-timeline-citation .vis-item {
   font-size: 12px;
   color: #fff;
   border-radius: 3px;
 }
 
-.pt-timeline-citation .vis-item.vis-point {
+.pt-lifespan-timeline-citation .vis-item.vis-point {
   max-width: 125px;
   overflow: hidden;
   max-height: 160px;
 }
 
-.pt-timeline-citation .vis-item .vis-item-content {
+.pt-lifespan-timeline-citation .vis-item .vis-item-content {
   margin: 0px !important;
 }
 
-.pt-timeline-citation .vis-item.vis-line {
+.pt-lifespan-timeline-citation .vis-item.vis-line {
   border: 0px;
   background-color: unset;
 }
 
-.pt-timeline-citation .vis-cluster {
+.pt-lifespan-timeline-citation .vis-cluster {
   background-color: #3f51b547;
 }
 
-.pt-timeline-citation .vis-dot {
+.pt-lifespan-timeline-citation .vis-dot {
   background: none !important;
   border: none !important;
 }
 
-.pt-timeline-citation .vis-item.vis-cluster {
+.pt-lifespan-timeline-citation .vis-item.vis-cluster {
   background-color: #222222;
   border: 1px solid #545454 !important;
   border-radius: 3px;
   padding: 5px;
 }
 
-.pt-timeline-citation .vis-item.vis-cluster .vis-item-content {
+.pt-lifespan-timeline-citation .vis-item.vis-cluster .vis-item-content {
   padding: 0px;
   width: auto !important;
   text-align: left;
@@ -182,7 +182,7 @@
   flex-wrap: wrap;
 }
 
-.pt-timeline-citation .vis-item.vis-box.asset-type-default {
+.pt-lifespan-timeline-citation .vis-item.vis-box.asset-type-default {
   background-color: #222222;
   border: 0px;
   width: 9.6rem;
@@ -190,11 +190,11 @@
   height: 4.4rem;
 }
 
-.pt-timeline-citation .vis-item.vis-box.asset-type-default.vis-selected .vis-item-content {
+.pt-lifespan-timeline-citation .vis-item.vis-box.asset-type-default.vis-selected .vis-item-content {
   border: 1px solid #e60000 !important;
 }
 
-.pt-timeline-citation .vis-item.vis-box .vis-item-content {
+.pt-lifespan-timeline-citation .vis-item.vis-box .vis-item-content {
   color: #BDBDBD;
   width: 100%;
   border: 1px solid #545454;
@@ -208,14 +208,14 @@
   flex-direction: column;
 }
 
-.pt-timeline-citation .vis-item.vis-box .vis-item-content .maxHeight {
+.pt-lifespan-timeline-citation .vis-item.vis-box .vis-item-content .maxHeight {
   max-height: 51px;
   overflow: hidden;
   justify-content: flex-start;
   padding-bottom: 0.15rem;
 }
 
-.pt-timeline-citation .vis-item.vis-box .vis-item-content .first {
+.pt-lifespan-timeline-citation .vis-item.vis-box .vis-item-content .first {
   display: flex;
   font-size: 0.875rem;
   font-weight: 500;
@@ -225,7 +225,7 @@
   margin-right: 3px;
 }
 
-.pt-timeline-citation .vis-item.vis-box .vis-item-content .second {
+.pt-lifespan-timeline-citation .vis-item.vis-box .vis-item-content .second {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -237,11 +237,11 @@
   overflow: hidden;
 }
 
-.pt-timeline-citation .vis-item.vis-box .vis-item-content .second div {
+.pt-lifespan-timeline-citation .vis-item.vis-box .vis-item-content .second div {
   margin-left: 5px;
 }
 
-.pt-timeline-citation .vis-item.vis-box .vis-item-content .second .img-holder {
+.pt-lifespan-timeline-citation .vis-item.vis-box .vis-item-content .second .img-holder {
   display: inline-block;
   width: 50px;
   height: 50px;
@@ -251,12 +251,12 @@
   justify-content: center;
 }
 
-.pt-timeline-citation .vis-item.vis-box .vis-item-content .second img {
+.pt-lifespan-timeline-citation .vis-item.vis-box .vis-item-content .second img {
   width: 50px;
   display: flex;
 }
 
-.pt-timeline-citation .vis-item.vis-box .vis-item-content .flexMain {
+.pt-lifespan-timeline-citation .vis-item.vis-box .vis-item-content .flexMain {
   display: flex;
   overflow: hidden;
   flex-grow: 1;
@@ -266,35 +266,35 @@
   height: 100%;
 }
 
-.pt-timeline-citation .vis-item.vis-box .vis-item-content .flexMain.alignBaseline {
+.pt-lifespan-timeline-citation .vis-item.vis-box .vis-item-content .flexMain.alignBaseline {
   align-items: baseline;
 }
 
-.pt-timeline-citation .vis-item.vis-box .vis-item-content .flexMain.alignBaseline .textColumn .absolute {
+.pt-lifespan-timeline-citation .vis-item.vis-box .vis-item-content .flexMain.alignBaseline .textColumn .absolute {
   bottom: 7px;
 }
 
-.pt-timeline-citation .vis-item.vis-box .vis-item-content .flexMain img {
+.pt-lifespan-timeline-citation .vis-item.vis-box .vis-item-content .flexMain img {
   width: 4.3rem;
 }
 
-.pt-timeline-citation .vis-item.vis-box .vis-item-content .flexMain .textColumn {
+.pt-lifespan-timeline-citation .vis-item.vis-box .vis-item-content .flexMain .textColumn {
   display: flex;
   line-height: 1.1;
 }
 
-.pt-timeline-citation .vis-item.vis-box .vis-item-content .flexMain .textColumn .absolute {
+.pt-lifespan-timeline-citation .vis-item.vis-box .vis-item-content .flexMain .textColumn .absolute {
   position: absolute;
   bottom: 0px;
 }
 
-.pt-timeline-citation .vis-item.vis-box .vis-item-content .flexMain .small-font {
+.pt-lifespan-timeline-citation .vis-item.vis-box .vis-item-content .flexMain .small-font {
   font-size: 0.65rem;
   margin-top: 2px;
   line-height: 0.81;
 }
 
-.pt-timeline-citation .vis-item.vis-box .vis-item-content .flexMain .text-height {
+.pt-lifespan-timeline-citation .vis-item.vis-box .vis-item-content .flexMain .text-height {
   white-space: initial;
   text-align: left;
   margin-top: 1px;
@@ -303,7 +303,7 @@
   height: 130px !important;
 }
 
-.pt-timeline-citation .vis-item.vis-point.vis-selected {
+.pt-lifespan-timeline-citation .vis-item.vis-point.vis-selected {
   background-color: none !important;
   color: var(--pt-secondary-main);
 }

@@ -117,7 +117,7 @@ const LegalData = ({legalEvents}) => {
     }
 
     return (
-        <Paper className={'pt-root'}>    
+        <Paper className={'pt-family-root'}>    
             <IconButton
                 className={'pt-btn-close'}
                 onClick={handleClearEvent}

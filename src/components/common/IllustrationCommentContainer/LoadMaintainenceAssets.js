@@ -225,7 +225,7 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
     
     return (
         <Paper
-            className={'pt-root'}
+            className={'pt-illustration-root'}
             square
             id={`pay_maintainence_assets_to_uspto`}
             >
@@ -246,7 +246,7 @@ const LoadMaintainenceAssets = ({rows, onChangeFileName}) => {
             >
                 Pay USPTO
             </Button>
-            <div className={'pt-container'}>
+            <div className={'pt-illustration-container'}>
                 <VirtualizedTable
                     selected={selectItems}
                     rowSelected={selectedRow}

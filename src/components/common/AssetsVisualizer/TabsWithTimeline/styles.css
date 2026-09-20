@@ -2,57 +2,57 @@
  * Theme lookups became the CSS variables generated from src/themes/tokens.js,
  * so light and dark still resolve exactly as they did. */
 
-.pt-root {
+.pt-tabs-timeline-root {
   height: 100%;
   width: 100%;
   position: relative;
 }
 
-.pt-root .MuiTab-root {
+.pt-tabs-timeline-root .MuiTab-root {
   min-width: inherit;
   max-width: 150px;
 }
 
-.pt-root #visualization {
+.pt-tabs-timeline-root #visualization {
   position: relative;
 }
 
-.pt-root #visualization .menu {
+.pt-tabs-timeline-root #visualization .menu {
   position: absolute;
   z-index: 9999;
   right: 25px;
   top: 2px;
 }
 
-.pt-root .vis-time-axis .vis-text, .vis-item, .vis-y-axis {
+.pt-tabs-timeline-root .vis-time-axis .vis-text, .vis-item, .vis-y-axis {
   color: var(--pt-text-primary);
 }
 
-.pt-root .vis-timeline {
+.pt-tabs-timeline-root .vis-timeline {
   border: 0px;
 }
 
-.pt-root.vis-panel.vis-center {
+.pt-tabs-timeline-root.vis-panel.vis-center {
   border: 1px solid var(--pt-divider);
 }
 
-.pt-root .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom {
+.pt-tabs-timeline-root .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom {
   border-bottom-color: var(--pt-divider);
   border-top-color: var(--pt-divider);
   border-left-color: var(--pt-divider);
   border-right-color: var(--pt-divider);
 }
 
-.pt-root .vis-time-axis .vis-text {
+.pt-tabs-timeline-root .vis-time-axis .vis-text {
   padding: 1px 3px;
 }
 
-.pt-root .vis-tooltip {
+.pt-tabs-timeline-root .vis-tooltip {
   width: 260px;
   white-space: normal !important;
 }
 
-.pt-tab {
+.pt-tabs-timeline-tab {
   flex: 1;
   min-width: 25%;
   min-height: 47px;
@@ -62,17 +62,17 @@
   text-overflow: ellipsis;
 }
 
-.pt-tabs {
+.pt-tabs-timeline-tabs {
   min-height: 47px;
   width: 94%;
 }
 
-.pt-timeline {
+.pt-tabs-timeline-timeline {
   height: 92%;
   width: 100%;
 }
 
-.pt-timeline .custom_tooltip {
+.pt-tabs-timeline-timeline .custom_tooltip {
   position: absolute;
   width: 150px;
   background: var(--pt-bg-paper);
@@ -82,74 +82,74 @@
   overflow: hidden;
 }
 
-.pt-timeline .custom_tooltip h4 {
+.pt-tabs-timeline-timeline .custom_tooltip h4 {
   margin: 5px 0 0 0;
 }
 
-.pt-timeline .vis-group.group-others {
+.pt-tabs-timeline-timeline .vis-group.group-others {
   background-color: #491B1B;
 }
 
-.pt-timeline .vis-group.group-financing {
+.pt-tabs-timeline-timeline .vis-group.group-financing {
   background-color: #1b1200;
 }
 
-.pt-timeline .vis-group.group-ownership {
+.pt-tabs-timeline-timeline .vis-group.group-ownership {
   background-color: #100000;
 }
 
-.pt-timeline .vis-group.group-licensing {
+.pt-tabs-timeline-timeline .vis-group.group-licensing {
   background-color: #171700;
 }
 
-.pt-timeline .vis-group.group-employees {
+.pt-tabs-timeline-timeline .vis-group.group-employees {
   background-color: #424141;
 }
 
-.pt-timeline .vis-label.group-others {
+.pt-tabs-timeline-timeline .vis-label.group-others {
   background-color: #491B1B;
 }
 
-.pt-timeline .vis-label.group-financing {
+.pt-tabs-timeline-timeline .vis-label.group-financing {
   background-color: #1b1200;
 }
 
-.pt-timeline .vis-label.group-ownership {
+.pt-tabs-timeline-timeline .vis-label.group-ownership {
   background-color: #100000;
 }
 
-.pt-timeline .vis-label.group-licensing {
+.pt-tabs-timeline-timeline .vis-label.group-licensing {
   background-color: #171700;
 }
 
-.pt-timeline .vis-label.group-employees {
+.pt-tabs-timeline-timeline .vis-label.group-employees {
   background-color: #424141;
 }
 
-.pt-timeline .vis-left.vis-panel.vis-vertical-scroll, .pt-timeline .vis-right.vis-panel.vis-vertical-scroll {
+.pt-tabs-timeline-timeline .vis-left.vis-panel.vis-vertical-scroll, .pt-tabs-timeline-timeline .vis-right.vis-panel.vis-vertical-scroll {
   overflow-y: hidden;
 }
 
-.pt-timeline .vis-item {
+.pt-tabs-timeline-timeline .vis-item {
   font-size: 12px;
   background-color: transparent;
   color: var(--pt-text-primary);
 }
 
-.pt-timeline .vis-item .vis-item-content {
+.pt-tabs-timeline-timeline .vis-item .vis-item-content {
   width: auto !important;
   white-space: normal;
   padding: 5px 5px 5px 0px;
 }
 
-.pt-timeline .vis-item .vis-item-content .cluster-header {
+.pt-tabs-timeline-timeline .vis-item .vis-item-content .cluster-header {
   width: 100%;
   text-align: left;
   display: flex;
   padding: 5px;
 }
 
-.pt-timeline .vis-item .vis-item-content .cluster-header .cluster-image {
+.pt-tabs-timeline-timeline .vis-item .vis-item-content .cluster-header .cluster-image {
   background-repeat: no-repeat;
   background-size: 17px;
   width: 32px;
@@ -158,27 +158,27 @@
   margin-right: 5px;
 }
 
-.pt-timeline .vis-item .vis-item-content .cluster-employees, .cluster-acqusitions, .cluster-sales, .cluster-courtOrders, .cluster-mergersIn, .cluster-mergersOut {
+.pt-tabs-timeline-timeline .vis-item .vis-item-content .cluster-employees, .cluster-acqusitions, .cluster-sales, .cluster-courtOrders, .cluster-mergersIn, .cluster-mergersOut {
   border-color: var(--pt-secondary-main);
 }
 
-.pt-timeline .vis-item .vis-item-content .cluster-releaseIn, .cluster-releaseOut {
+.pt-tabs-timeline-timeline .vis-item .vis-item-content .cluster-releaseIn, .cluster-releaseOut {
   border-color: #70A800;
 }
 
-.pt-timeline .vis-item .vis-item-content .cluster-lending, .cluster-borrowing {
+.pt-tabs-timeline-timeline .vis-item .vis-item-content .cluster-lending, .cluster-borrowing {
   border-color: #FFAA00;
 }
 
-.pt-timeline .vis-item .vis-item-content .cluster-licenseIn, .cluster-licenseOut {
+.pt-tabs-timeline-timeline .vis-item .vis-item-content .cluster-licenseIn, .cluster-licenseOut {
   border-color: #C0C000;
 }
 
-.pt-timeline .vis-item .vis-item-content .cluster-other, .cluster-options {
+.pt-tabs-timeline-timeline .vis-item .vis-item-content .cluster-other, .cluster-options {
   border-color: #CA7C46;
 }
 
-.pt-timeline .vis-item .vis-dot {
+.pt-tabs-timeline-timeline .vis-item .vis-dot {
   background-color: inherit;
   border-color: inherit;
   width: 20px;
@@ -190,213 +190,213 @@
   background-size: 20px;
 }
 
-.pt-timeline .vis-item .vis-dot.asset-type-default {
+.pt-tabs-timeline-timeline .vis-item .vis-dot.asset-type-default {
   border-color: indigo[500];
 }
 
-.pt-timeline .vis-item .vis-dot.lawfirm, .cluster-lawfirm {
+.pt-tabs-timeline-timeline .vis-item .vis-dot.lawfirm, .cluster-lawfirm {
   background-image: url(\"data:image/svg+xml;charset=UTF-8,%3csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg' style='&%2310; fill: %23228DE8;&%2310; stroke: %23228DE8;&%2310;' %3e%3cpath d='M52,7H12a6,6,0,0,0-6,6V51a6,6,0,0,0,6,6H52a6,6,0,0,0,6-6V13A6,6,0,0,0,52,7Zm2,44a2,2,0,0,1-2,2H12a2,2,0,0,1-2-2V13a2,2,0,0,1,2-2H52a2,2,0,0,1,2,2Z'/%3e%3cpath d='M45,29a2,2,0,0,0,0-4H22.83l2.58-2.59a2,2,0,0,0-2.82-2.82l-6,6a2,2,0,0,0-.44,2.18A2,2,0,0,0,18,29Z'/%3e%3cpath d='M47,36H20a2,2,0,0,0,0,4H42.17l-2.58,2.59a2,2,0,1,0,2.82,2.82l6-6a2,2,0,0,0,.44-2.18A2,2,0,0,0,47,36Z'/%3e%3c/svg%3e\");
 }
 
-.pt-timeline .vis-item .vis-dot.filled, .cluster-filled {
+.pt-tabs-timeline-timeline .vis-item .vis-dot.filled, .cluster-filled {
   background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' class='MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSvgIcon-root MuiSvgIcon-fontSizeLarge css-1shn170' style='&%2310; fill: %2370A800;&%2310; stroke: %2370A800;&%2310;' focusable='false' aria-hidden='true' viewBox='0 0 24 24' data-testid='NoteAddOutlinedIcon' tabindex='-1' title='NoteAddOutlined'%3E%3Cpath d='M13 11h-2v3H8v2h3v3h2v-3h3v-2h-3zm1-9H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z'%3E%3C/path%3E%3C/svg%3E\");
 }
 
-.pt-timeline .vis-item .vis-dot.asset-type-acquisitions, .cluster-acquisitions {
+.pt-tabs-timeline-timeline .vis-item .vis-dot.asset-type-acquisitions, .cluster-acquisitions {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/acquisition.svg);
 }
 
-.pt-timeline .vis-item .vis-dot.asset-type-sales, .cluster-sales {
+.pt-tabs-timeline-timeline .vis-item .vis-dot.asset-type-sales, .cluster-sales {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/sales.svg);
 }
 
-.pt-timeline .vis-item .vis-dot.asset-type-licenseIn, .cluster-licenseIn {
+.pt-tabs-timeline-timeline .vis-item .vis-dot.asset-type-licenseIn, .cluster-licenseIn {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licensein.svg);
 }
 
-.pt-timeline .vis-item .vis-dot.asset-type-licenseOut, .cluster-licenseOut {
+.pt-tabs-timeline-timeline .vis-item .vis-dot.asset-type-licenseOut, .cluster-licenseOut {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licenseout.svg);
 }
 
-.pt-timeline .vis-item .vis-dot.asset-type-lending, .vis-dot.asset-type-borrowing, .asset-type-securitiesOut, .asset-type-securitiesIn, .cluster-lending, .cluster-borrowing, .cluster-securitiesIn, .cluster-securitiesOut {
+.pt-tabs-timeline-timeline .vis-item .vis-dot.asset-type-lending, .vis-dot.asset-type-borrowing, .asset-type-securitiesOut, .asset-type-securitiesIn, .cluster-lending, .cluster-borrowing, .cluster-securitiesIn, .cluster-securitiesOut {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/secure.svg);
 }
 
-.pt-timeline .vis-item .vis-dot.asset-type-mergersIn, .cluster-mergersIn {
+.pt-tabs-timeline-timeline .vis-item .vis-dot.asset-type-mergersIn, .cluster-mergersIn {
   background-image: url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png);
 }
 
-.pt-timeline .vis-item .vis-dot.asset-type-mergersOut, .cluster-mergersOut {
+.pt-tabs-timeline-timeline .vis-item .vis-dot.asset-type-mergersOut, .cluster-mergersOut {
   background-image: url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png);
 }
 
-.pt-timeline .vis-item .vis-dot.asset-type-correct, .cluster-correct {
+.pt-tabs-timeline-timeline .vis-item .vis-dot.asset-type-correct, .cluster-correct {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/correction.svg);
 }
 
-.pt-timeline .vis-item .vis-dot.asset-type-options, .cluster-options {
+.pt-tabs-timeline-timeline .vis-item .vis-dot.asset-type-options, .cluster-options {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/options.svg);
 }
 
-.pt-timeline .vis-item .vis-dot.asset-type-courtOrders, .cluster-courtOrders {
+.pt-tabs-timeline-timeline .vis-item .vis-dot.asset-type-courtOrders, .cluster-courtOrders {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/courtorder.svg);
 }
 
-.pt-timeline .vis-item .vis-dot.asset-type-releaseOut, .vis-dot.asset-type-releaseIn, .cluster-releaseIn, .cluster-releaseOut {
+.pt-tabs-timeline-timeline .vis-item .vis-dot.asset-type-releaseOut, .vis-dot.asset-type-releaseIn, .cluster-releaseIn, .cluster-releaseOut {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/release.svg);
 }
 
-.pt-timeline .vis-item .vis-dot.asset-type-employees, .cluster-employees {
+.pt-tabs-timeline-timeline .vis-item .vis-dot.asset-type-employees, .cluster-employees {
   background-image: url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png);
 }
 
-.pt-timeline .vis-item .vis-dot.asset-type-other, .cluster-other {
+.pt-tabs-timeline-timeline .vis-item .vis-dot.asset-type-other, .cluster-other {
   background-image: url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png);
 }
 
-.pt-timeline .vis-cluster {
+.pt-tabs-timeline-timeline .vis-cluster {
   background-color: #222222;
   border: 1px solid #545454 !important;
   border-radius: 3px;
   padding: 5px;
 }
 
-.pt-timeline .vis-cluster .vis-item-content {
+.pt-tabs-timeline-timeline .vis-cluster .vis-item-content {
   padding: 0px;
   width: auto !important;
   text-align: left;
   padding: 0 !important;
 }
 
-.pt-timeline .vis-dot {
+.pt-tabs-timeline-timeline .vis-dot {
   border-color: indigo[500];
   background-color: indigo[500];
 }
 
-.pt-timeline .vis-item.vis-box {
+.pt-tabs-timeline-timeline .vis-item.vis-box {
   border-color: indigo[500];
   background-color: indigo[500];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-default {
+.pt-tabs-timeline-timeline .vis-item.vis-box.asset-type-default {
   background-color: indigo[500];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-acquisitions {
+.pt-tabs-timeline-timeline .vis-item.vis-box.asset-type-acquisitions {
   background-color: indigo[500];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-sales {
+.pt-tabs-timeline-timeline .vis-item.vis-box.asset-type-sales {
   background-color: purple[500];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-licenseIn {
+.pt-tabs-timeline-timeline .vis-item.vis-box.asset-type-licenseIn {
   background-color: blue[500];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-licenseOut {
+.pt-tabs-timeline-timeline .vis-item.vis-box.asset-type-licenseOut {
   background-color: var(--pt-secondary-main);
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-securities {
+.pt-tabs-timeline-timeline .vis-item.vis-box.asset-type-securities {
   background-color: teal[500];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-mergersIn {
+.pt-tabs-timeline-timeline .vis-item.vis-box.asset-type-mergersIn {
   background-color: cyan[500];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-mergersOut {
+.pt-tabs-timeline-timeline .vis-item.vis-box.asset-type-mergersOut {
   background-color: cyan[200];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-options {
+.pt-tabs-timeline-timeline .vis-item.vis-box.asset-type-options {
   background-color: lime[500];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-courtOrders {
+.pt-tabs-timeline-timeline .vis-item.vis-box.asset-type-courtOrders {
   background-color: green[500];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-employees {
+.pt-tabs-timeline-timeline .vis-item.vis-box.asset-type-employees {
   background-color: orange[500];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-other {
+.pt-tabs-timeline-timeline .vis-item.vis-box.asset-type-other {
   background-color: grey[500];
 }
 
-.pt-timeline .vis-item.vis-point.vis-selected {
+.pt-tabs-timeline-timeline .vis-item.vis-point.vis-selected {
   background-color: inherit;
   color: var(--pt-secondary-main);
   font-weight: bold;
 }
 
-.pt-timeline .vis-item.vis-range.asset-type-borrowing {
+.pt-tabs-timeline-timeline .vis-item.vis-range.asset-type-borrowing {
   background-color: #FFAA00 !important;
 }
 
-.pt-timeline .vis-item.vis-range.asset-type-lending {
+.pt-tabs-timeline-timeline .vis-item.vis-range.asset-type-lending {
   background-color: #FFAA00 !important;
 }
 
-.pt-timeline .vis-item.asset-type-security-release {
+.pt-tabs-timeline-timeline .vis-item.asset-type-security-release {
   background-color: #70A800 !important;
 }
 
-.pt-timeline .vis-item.asset-type-security-release-partial {
+.pt-tabs-timeline-timeline .vis-item.asset-type-security-release-partial {
   background-color: #228DE8 !important;
 }
 
-.pt-timeline .vis-item.vis-range {
+.pt-tabs-timeline-timeline .vis-item.vis-range {
   border: 0px;
 }
 
-.pt-timeline .vis-item.vis-range .vis-item-overflow {
+.pt-tabs-timeline-timeline .vis-item.vis-range .vis-item-overflow {
   position: unset;
   min-height: 28px;
 }
 
-.pt-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content {
+.pt-tabs-timeline-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content {
   width: 100%;
   position: absolute;
 }
 
-.pt-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content span {
+.pt-tabs-timeline-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content span {
   white-space: nowrap;
   display: block;
   width: 100%;
 }
 
-.pt-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content tt {
+.pt-tabs-timeline-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content tt {
   margin-right: 10px;
   cursor: pointer;
 }
 
-.pt-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content tt img {
+.pt-tabs-timeline-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content tt img {
   width: 16px;
 }
 
-.pt-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content em {
+.pt-tabs-timeline-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content em {
   position: absolute;
   right: 7px;
   cursor: pointer;
 }
 
-.pt-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content em img {
+.pt-tabs-timeline-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content em img {
   width: 16px;
 }
 
-.pt-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content em span {
+.pt-tabs-timeline-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content em span {
   position: absolute;
   right: 35px;
   text-align: right;
 }
 
-.pt-timeline .vis-panel.vis-top {
+.pt-tabs-timeline-timeline .vis-panel.vis-top {
   visibility: hidden;
 }
 
-.pt-timeline .vis-panel.vis-top .vis-time-axis {
+.pt-tabs-timeline-timeline .vis-panel.vis-top .vis-time-axis {
   height: 1px !important;
 }

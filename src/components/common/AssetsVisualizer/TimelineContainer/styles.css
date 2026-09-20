@@ -2,80 +2,80 @@
  * Theme lookups became the CSS variables generated from src/themes/tokens.js,
  * so light and dark still resolve exactly as they did. */
 
-.pt-loader {
+.pt-timeline-container-loader {
   position: absolute;
   z-index: 100;
   top: 50%;
   left: 50%;
 }
 
-.pt-root {
+.pt-timeline-container-root {
   height: 100%;
   width: 100%;
   position: relative;
 }
 
-.pt-root #visualization {
+.pt-timeline-container-root #visualization {
   position: relative;
 }
 
-.pt-root #visualization .menu {
+.pt-timeline-container-root #visualization .menu {
   position: absolute;
   z-index: 9999;
   right: 25px;
   top: 2px;
 }
 
-.pt-root .vis-time-axis .vis-text, .vis-item, .vis-y-axis {
+.pt-timeline-container-root .vis-time-axis .vis-text, .vis-item, .vis-y-axis {
   color: var(--pt-text-primary);
 }
 
-.pt-root .vis-timeline {
+.pt-timeline-container-root .vis-timeline {
   border: 0px;
 }
 
-.pt-root.vis-panel.vis-center {
+.pt-timeline-container-root.vis-panel.vis-center {
   border: 1px solid var(--pt-divider);
 }
 
-.pt-root .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom {
+.pt-timeline-container-root .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom {
   border-bottom-color: var(--pt-divider);
   border-top-color: var(--pt-divider);
   border-left-color: var(--pt-divider);
   border-right-color: var(--pt-divider);
 }
 
-.pt-root .vis-time-axis .vis-text {
+.pt-timeline-container-root .vis-time-axis .vis-text {
   padding: 1px 3px;
 }
 
-.pt-root .vis-tooltip {
+.pt-timeline-container-root .vis-tooltip {
   width: 260px;
   white-space: normal !important;
 }
 
-.pt-timeline {
+.pt-timeline-container-timeline {
   height: 100%;
   width: 100%;
 }
 
-.pt-timeline .vis-content {
+.pt-timeline-container-timeline .vis-content {
   color: #000000;
 }
 
-.pt-timeline .vis-content .vis-item {
+.pt-timeline-container-timeline .vis-content .vis-item {
   font-size: 12px;
   background-color: transparent;
   color: var(--pt-text-primary);
 }
 
-.pt-timeline .vis-content .vis-item .vis-item-content {
+.pt-timeline-container-timeline .vis-content .vis-item .vis-item-content {
   width: auto !important;
   white-space: normal;
   padding: 5px 5px 5px 0px;
 }
 
-.pt-timeline .vis-content .vis-item .vis-item-content .cluster-header {
+.pt-timeline-container-timeline .vis-content .vis-item .vis-item-content .cluster-header {
   width: 100%;
   text-align: left;
   display: flex;
@@ -83,7 +83,7 @@
   border: 0px;
 }
 
-.pt-timeline .vis-content .vis-item .vis-item-content .cluster-header .cluster-image {
+.pt-timeline-container-timeline .vis-content .vis-item .vis-item-content .cluster-header .cluster-image {
   background-repeat: no-repeat;
   background-size: 17px;
   width: 32px;
@@ -92,27 +92,27 @@
   margin-right: 5px;
 }
 
-.pt-timeline .vis-content .vis-item .vis-item-content .cluster-employees, .cluster-acqusitions, .cluster-sales, .cluster-courtOrders, .cluster-mergersIn, .cluster-mergersOut {
+.pt-timeline-container-timeline .vis-content .vis-item .vis-item-content .cluster-employees, .cluster-acqusitions, .cluster-sales, .cluster-courtOrders, .cluster-mergersIn, .cluster-mergersOut {
   border-color: var(--pt-secondary-main);
 }
 
-.pt-timeline .vis-content .vis-item .vis-item-content .cluster-releaseIn, .cluster-releaseOut {
+.pt-timeline-container-timeline .vis-content .vis-item .vis-item-content .cluster-releaseIn, .cluster-releaseOut {
   border-color: #70A800;
 }
 
-.pt-timeline .vis-content .vis-item .vis-item-content .cluster-lending, .cluster-borrowing {
+.pt-timeline-container-timeline .vis-content .vis-item .vis-item-content .cluster-lending, .cluster-borrowing {
   border-color: #FFAA00;
 }
 
-.pt-timeline .vis-content .vis-item .vis-item-content .cluster-licenseIn, .cluster-licenseOut {
+.pt-timeline-container-timeline .vis-content .vis-item .vis-item-content .cluster-licenseIn, .cluster-licenseOut {
   border-color: #C0C000;
 }
 
-.pt-timeline .vis-content .vis-item .vis-item-content .cluster-other, .cluster-options {
+.pt-timeline-container-timeline .vis-content .vis-item .vis-item-content .cluster-other, .cluster-options {
   border-color: #CA7C46;
 }
 
-.pt-timeline .vis-content .vis-item.vis-dot {
+.pt-timeline-container-timeline .vis-content .vis-item.vis-dot {
   background-color: inherit;
   border-color: inherit;
   width: 24px;
@@ -124,63 +124,63 @@
   background-size: 24px;
 }
 
-.pt-timeline .vis-content .vis-item.vis-dot.asset-type-default {
+.pt-timeline-container-timeline .vis-content .vis-item.vis-dot.asset-type-default {
   border-color: indigo[500];
 }
 
-.pt-timeline .vis-content .vis-item.vis-dot.asset-type-acquisitions, .cluster-acquisitions {
+.pt-timeline-container-timeline .vis-content .vis-item.vis-dot.asset-type-acquisitions, .cluster-acquisitions {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/acquisition.svg);
 }
 
-.pt-timeline .vis-content .vis-item.vis-dot.asset-type-sales, .cluster-sales {
+.pt-timeline-container-timeline .vis-content .vis-item.vis-dot.asset-type-sales, .cluster-sales {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/sales.svg);
 }
 
-.pt-timeline .vis-content .vis-item.vis-dot.asset-type-licenseIn, .cluster-licenseIn {
+.pt-timeline-container-timeline .vis-content .vis-item.vis-dot.asset-type-licenseIn, .cluster-licenseIn {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licensein.svg);
 }
 
-.pt-timeline .vis-content .vis-item.vis-dot.asset-type-licenseOut, .cluster-licenseOut {
+.pt-timeline-container-timeline .vis-content .vis-item.vis-dot.asset-type-licenseOut, .cluster-licenseOut {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licenseout.svg);
 }
 
-.pt-timeline .vis-content .vis-item.vis-dot.asset-type-lending, .vis-dot.asset-type-borrowing, .asset-type-securitiesOut, .asset-type-securitiesIn, .cluster-lending, .cluster-borrowing, .cluster-securitiesIn, .cluster-securitiesOut {
+.pt-timeline-container-timeline .vis-content .vis-item.vis-dot.asset-type-lending, .vis-dot.asset-type-borrowing, .asset-type-securitiesOut, .asset-type-securitiesIn, .cluster-lending, .cluster-borrowing, .cluster-securitiesIn, .cluster-securitiesOut {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/secure.svg);
 }
 
-.pt-timeline .vis-content .vis-item.vis-dot.asset-type-mergersIn, .cluster-mergersIn {
+.pt-timeline-container-timeline .vis-content .vis-item.vis-dot.asset-type-mergersIn, .cluster-mergersIn {
   background-image: url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png);
 }
 
-.pt-timeline .vis-content .vis-item.vis-dot.asset-type-mergersOut, .cluster-mergersOut {
+.pt-timeline-container-timeline .vis-content .vis-item.vis-dot.asset-type-mergersOut, .cluster-mergersOut {
   background-image: url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png);
 }
 
-.pt-timeline .vis-content .vis-item.vis-dot.asset-type-correct, .cluster-correct {
+.pt-timeline-container-timeline .vis-content .vis-item.vis-dot.asset-type-correct, .cluster-correct {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/correction.svg);
 }
 
-.pt-timeline .vis-content .vis-item.vis-dot.asset-type-options, .cluster-options {
+.pt-timeline-container-timeline .vis-content .vis-item.vis-dot.asset-type-options, .cluster-options {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/options.svg);
 }
 
-.pt-timeline .vis-content .vis-item.vis-dot.asset-type-courtOrders, .cluster-courtOrders {
+.pt-timeline-container-timeline .vis-content .vis-item.vis-dot.asset-type-courtOrders, .cluster-courtOrders {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/courtorder.svg);
 }
 
-.pt-timeline .vis-content .vis-item.vis-dot.asset-type-releaseOut, .vis-dot.asset-type-releaseIn, .cluster-releaseIn, .cluster-releaseOut {
+.pt-timeline-container-timeline .vis-content .vis-item.vis-dot.asset-type-releaseOut, .vis-dot.asset-type-releaseIn, .cluster-releaseIn, .cluster-releaseOut {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/release.svg);
 }
 
-.pt-timeline .vis-content .vis-item.vis-dot.asset-type-employees, .cluster-employees {
+.pt-timeline-container-timeline .vis-content .vis-item.vis-dot.asset-type-employees, .cluster-employees {
   background-image: url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png);
 }
 
-.pt-timeline .vis-content .vis-item.vis-dot.asset-type-other, .cluster-other {
+.pt-timeline-container-timeline .vis-content .vis-item.vis-dot.asset-type-other, .cluster-other {
   background-image: url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png);
 }
 
-.pt-timeline .custom_tooltip {
+.pt-timeline-container-timeline .custom_tooltip {
   position: absolute;
   width: 150px;
   background: var(--pt-bg-paper);
@@ -190,212 +190,212 @@
   overflow: hidden;
 }
 
-.pt-timeline .custom_tooltip h4 {
+.pt-timeline-container-timeline .custom_tooltip h4 {
   margin: 5px 0 0 0;
 }
 
-.pt-timeline .vis-group.group-others {
+.pt-timeline-container-timeline .vis-group.group-others {
   background-color: #491B1B;
 }
 
-.pt-timeline .vis-group.group-financing {
+.pt-timeline-container-timeline .vis-group.group-financing {
   background-color: #1b1200;
 }
 
-.pt-timeline .vis-group.group-ownership {
+.pt-timeline-container-timeline .vis-group.group-ownership {
   background-color: #100000;
 }
 
-.pt-timeline .vis-group.group-licensing {
+.pt-timeline-container-timeline .vis-group.group-licensing {
   background-color: #171700;
 }
 
-.pt-timeline .vis-group.group-employees {
+.pt-timeline-container-timeline .vis-group.group-employees {
   background-color: #424141;
 }
 
-.pt-timeline .vis-label.group-others {
+.pt-timeline-container-timeline .vis-label.group-others {
   background-color: #491B1B;
 }
 
-.pt-timeline .vis-label.group-financing {
+.pt-timeline-container-timeline .vis-label.group-financing {
   background-color: #1b1200;
 }
 
-.pt-timeline .vis-label.group-ownership {
+.pt-timeline-container-timeline .vis-label.group-ownership {
   background-color: #100000;
 }
 
-.pt-timeline .vis-label.group-licensing {
+.pt-timeline-container-timeline .vis-label.group-licensing {
   background-color: #171700;
 }
 
-.pt-timeline .vis-label.group-employees {
+.pt-timeline-container-timeline .vis-label.group-employees {
   background-color: #424141;
 }
 
-.pt-timeline .vis-left.vis-panel.vis-vertical-scroll, .pt-timeline .vis-right.vis-panel.vis-vertical-scroll {
+.pt-timeline-container-timeline .vis-left.vis-panel.vis-vertical-scroll, .pt-timeline-container-timeline .vis-right.vis-panel.vis-vertical-scroll {
   overflow-y: hidden;
 }
 
-.pt-timeline .vis-cluster {
+.pt-timeline-container-timeline .vis-cluster {
   background-color: #222222;
   border: 1px solid #545454 !important;
   border-radius: 3px;
   padding: 5px;
 }
 
-.pt-timeline .vis-cluster .vis-item-content {
+.pt-timeline-container-timeline .vis-cluster .vis-item-content {
   padding: 0px;
   width: auto !important;
   text-align: left;
   padding: 0 !important;
 }
 
-.pt-timeline .vis-dot {
+.pt-timeline-container-timeline .vis-dot {
   border-color: indigo[500];
   background-color: indigo[500];
 }
 
-.pt-timeline .vis-item.vis-box {
+.pt-timeline-container-timeline .vis-item.vis-box {
   border-color: indigo[500];
   background-color: indigo[500];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-default {
+.pt-timeline-container-timeline .vis-item.vis-box.asset-type-default {
   background-color: indigo[500];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-acquisitions {
+.pt-timeline-container-timeline .vis-item.vis-box.asset-type-acquisitions {
   background-color: indigo[500];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-sales {
+.pt-timeline-container-timeline .vis-item.vis-box.asset-type-sales {
   background-color: purple[500];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-licenseIn {
+.pt-timeline-container-timeline .vis-item.vis-box.asset-type-licenseIn {
   background-color: blue[500];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-licenseOut {
+.pt-timeline-container-timeline .vis-item.vis-box.asset-type-licenseOut {
   background-color: var(--pt-secondary-main);
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-securities {
+.pt-timeline-container-timeline .vis-item.vis-box.asset-type-securities {
   background-color: teal[500];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-mergersIn {
+.pt-timeline-container-timeline .vis-item.vis-box.asset-type-mergersIn {
   background-color: cyan[500];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-mergersOut {
+.pt-timeline-container-timeline .vis-item.vis-box.asset-type-mergersOut {
   background-color: cyan[200];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-options {
+.pt-timeline-container-timeline .vis-item.vis-box.asset-type-options {
   background-color: lime[500];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-courtOrders {
+.pt-timeline-container-timeline .vis-item.vis-box.asset-type-courtOrders {
   background-color: green[500];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-employees {
+.pt-timeline-container-timeline .vis-item.vis-box.asset-type-employees {
   background-color: orange[500];
 }
 
-.pt-timeline .vis-item.vis-box.asset-type-other {
+.pt-timeline-container-timeline .vis-item.vis-box.asset-type-other {
   background-color: grey[500];
 }
 
-.pt-timeline .vis-item.vis-range.asset-type-default, .vis-item.vis-range.asset-type-acquisitions, .vis-item.vis-range.asset-type-sales, .vis-item.vis-range.asset-type-licenseIn, .vis-item.vis-range.asset-type-licenseOut, .vis-item.vis-range.asset-type-mergersIn, .vis-item.vis-range.asset-type-mergersOut, .vis-item.vis-range.asset-type-options, .vis-item.vis-range.asset-type-courtOrders, .vis-item.vis-range.asset-type-employees, .vis-item.vis-range.asset-type-other {
+.pt-timeline-container-timeline .vis-item.vis-range.asset-type-default, .vis-item.vis-range.asset-type-acquisitions, .vis-item.vis-range.asset-type-sales, .vis-item.vis-range.asset-type-licenseIn, .vis-item.vis-range.asset-type-licenseOut, .vis-item.vis-range.asset-type-mergersIn, .vis-item.vis-range.asset-type-mergersOut, .vis-item.vis-range.asset-type-options, .vis-item.vis-range.asset-type-courtOrders, .vis-item.vis-range.asset-type-employees, .vis-item.vis-range.asset-type-other {
   background-color: #FFAA00;
 }
 
-.pt-timeline .vis-item.vis-point.vis-selected {
+.pt-timeline-container-timeline .vis-item.vis-point.vis-selected {
   background-color: inherit;
   color: var(--pt-secondary-main);
   font-weight: bold;
 }
 
-.pt-timeline .vis-item.vis-range.asset-type-borrowing {
+.pt-timeline-container-timeline .vis-item.vis-range.asset-type-borrowing {
   background-color: #FFAA00 !important;
 }
 
-.pt-timeline .vis-item.vis-range.asset-type-lending {
+.pt-timeline-container-timeline .vis-item.vis-range.asset-type-lending {
   background-color: #FFAA00 !important;
 }
 
-.pt-timeline .vis-item.vis-range.asset-type-security-release {
+.pt-timeline-container-timeline .vis-item.vis-range.asset-type-security-release {
   background-color: #70A800 !important;
 }
 
-.pt-timeline .vis-item.vis-range.asset-type-security-release-partial, .vis-item.vis-range.asset-type-default {
+.pt-timeline-container-timeline .vis-item.vis-range.asset-type-security-release-partial, .vis-item.vis-range.asset-type-default {
   background-color: #228DE8 !important;
 }
 
-.pt-timeline .vis-item .vis-item-overflow {
+.pt-timeline-container-timeline .vis-item .vis-item-overflow {
   overflow: visible;
 }
 
-.pt-timeline .vis-item.vis-range.recordings {
+.pt-timeline-container-timeline .vis-item.vis-range.recordings {
   background-color: unset !important;
   border-bottom: 3px solid #FFAA00 !important;
 }
 
-.pt-timeline .vis-item.vis-range.recordings .vis-item-overflow {
+.pt-timeline-container-timeline .vis-item.vis-range.recordings .vis-item-overflow {
   min-height: 55px;
 }
 
-.pt-timeline .vis-item.vis-range {
+.pt-timeline-container-timeline .vis-item.vis-range {
   border: 0px;
 }
 
-.pt-timeline .vis-item.vis-range .vis-item-overflow {
+.pt-timeline-container-timeline .vis-item.vis-range .vis-item-overflow {
   position: unset;
   min-height: 28px;
 }
 
-.pt-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content {
+.pt-timeline-container-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content {
   width: 100%;
   position: absolute;
   padding: 2px 5px 5px;
 }
 
-.pt-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content span {
+.pt-timeline-container-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content span {
   white-space: nowrap;
   display: block;
   width: 100%;
 }
 
-.pt-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content tt {
+.pt-timeline-container-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content tt {
   margin-right: 10px;
   cursor: pointer;
 }
 
-.pt-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content tt img {
+.pt-timeline-container-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content tt img {
   width: 16px;
 }
 
-.pt-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content em {
+.pt-timeline-container-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content em {
   position: absolute;
   right: 7px;
   cursor: pointer;
 }
 
-.pt-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content em img {
+.pt-timeline-container-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content em img {
   width: 16px;
 }
 
-.pt-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content em span {
+.pt-timeline-container-timeline .vis-item.vis-range .vis-item-overflow .vis-item-content em span {
   position: absolute;
   right: 35px;
   text-align: right;
 }
 
-.pt-timeline-processing-indicator {
+.pt-timeline-container-timeline-processing-indicator {
   position: absolute;
   top: 10px;
   right: 10px;

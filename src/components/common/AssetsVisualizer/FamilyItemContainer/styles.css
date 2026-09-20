@@ -2,12 +2,12 @@
  * Theme lookups became the CSS variables generated from src/themes/tokens.js,
  * so light and dark still resolve exactly as they did. */
 
-.pt-badge {
+.pt-family-item-badge {
   position: absolute;
   left: -4px;
 }
 
-.pt-badge .MuiBadge-colorPrimary {
+.pt-family-item-badge .MuiBadge-colorPrimary {
   top: 16px;
   background-color: inherit;
   right: inherit;
@@ -16,7 +16,7 @@
   color: var(--pt-text-secondary);
 }
 
-.pt-container {
+.pt-family-item-container {
   display: flex;
   height: 100%;
   width: 100%;
@@ -84,7 +84,7 @@
   display: none;
 }
 
-.pt-flex-column {
+.pt-family-item-flex-column {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -93,25 +93,25 @@
   overflow: auto;
 }
 
-.pt-fullscreen-btn {
+.pt-family-item-fullscreen-btn {
   position: absolute;
   top: 9px;
   right: 0px;
   z-index: 999;
 }
 
-.pt-fullscreen-btn  & svg {
+.pt-family-item-fullscreen-btn  & svg {
   fill: #6d6d6d;
   stroke: #6d6d6d;
 }
 
-.pt-fullscreen-btn  & svg:hover {
+.pt-family-item-fullscreen-btn  & svg:hover {
   color: var(--pt-secondary-main);
   fill: var(--pt-secondary-main);
   stroke: var(--pt-secondary-main);
 }
 
-.pt-graph-container {
+.pt-family-item-graph-container {
   flex: 1;
   display: flex;
   justify-content: center;
@@ -151,7 +151,7 @@
   background-color: var(--pt-bg-default);
 }
 
-.pt-root {
+.pt-family-item-root {
   flex: 1;
   overflow: auto;
   position: relative;
@@ -161,52 +161,52 @@
   flex-direction: column;
 }
 
-.pt-root .MuiTab-root:last-child {
+.pt-family-item-root .MuiTab-root:last-child {
   width: 85px;
   padding: 0px;
 }
 
-.pt-root .MuiTab-root {
+.pt-family-item-root .MuiTab-root {
   min-width: inherit;
 }
 
-.pt-root .MuiTypography-root {
+.pt-family-item-root .MuiTypography-root {
   line-height: 25px;
 }
 
-.pt-root embed {
+.pt-family-item-root embed {
   height: 100%;
   width: 100%;
 }
 
-.pt-root .MuiFormControl-root {
+.pt-family-item-root .MuiFormControl-root {
   margin: 0px;
 }
 
-.pt-root .MuiFormControl-root:has(> button.MuiTab-root) {
+.pt-family-item-root .MuiFormControl-root:has(> button.MuiTab-root) {
   padding: 0px;
 }
 
-.pt-root .MuiPaper-elevation1 {
+.pt-family-item-root .MuiPaper-elevation1 {
   box-shadow: none;
 }
 
-.pt-root .MuiTableCell-root {
+.pt-family-item-root .MuiTableCell-root {
   padding: 0 10px;
   line-height: 25px;
   vertical-align: top;
   border-bottom: 0px;
 }
 
-.pt-root .MuiTableCell-root:first-child {
+.pt-family-item-root .MuiTableCell-root:first-child {
   padding-left: 0px;
 }
 
-.pt-root .MuiTabScrollButton-root {
+.pt-family-item-root .MuiTabScrollButton-root {
   width: 20px;
 }
 
-.pt-tab {
+.pt-family-item-tab {
   min-width: 25%;
   min-height: 47px;
   font-size: 1.1rem;
@@ -215,12 +215,12 @@
   text-overflow: ellipsis;
 }
 
-.pt-tabs {
+.pt-family-item-tabs {
   min-height: 47px;
   display: flex;
   width: 94%;
 }
 
-.pt-tabs .MuiTab-root {
+.pt-family-item-tabs .MuiTab-root {
   font-size: 1.1rem;
 }

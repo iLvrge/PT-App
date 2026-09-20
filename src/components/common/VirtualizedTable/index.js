@@ -452,7 +452,7 @@ const VirtualizedTable = ({
                                 enterDelay={1500}
                                 TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }}
                                 classes={{
-                                  tooltip: 'pt-tooltip'
+                                  tooltip: 'pt-virtualized-table-tooltip'
                                 }}
                                 title={
                                   typeof c.tooltip != 'undefined' ?

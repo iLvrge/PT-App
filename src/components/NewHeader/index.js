@@ -896,7 +896,7 @@ const handleOpenSettings = useCallback((event) => {
                       }
                       </Typography>
                     } 
-                    className={'pt-tooltip'}  
+                    className={'pt-new-header-tooltip'}  
                     placement='bottom'
                     enterDelay={0}
                     TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
@@ -911,7 +911,7 @@ const handleOpenSettings = useCallback((event) => {
             {
               !slackAuthLogin
               ?
-              <div className={'pt-slack-container'}>
+              <div className={'pt-new-header-slack-container'}>
                 <IconButton
                   className={`${'pt-button-icon'} ${'pt-padding0'} ${'pt-slack-icon'}`}
                   aria-label="Slack Logout"
@@ -931,7 +931,7 @@ const handleOpenSettings = useCallback((event) => {
                       }
                       </Typography>
                     } 
-                    className={'pt-tooltip'}  
+                    className={'pt-new-header-tooltip'}  
                     placement='bottom'
                     enterDelay={0}
                     TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
@@ -981,7 +981,7 @@ const handleOpenSettings = useCallback((event) => {
                         }
                         </Typography>
                       } 
-                      className={'pt-tooltip'}  
+                      className={'pt-new-header-tooltip'}  
                       placement='bottom'
                       enterDelay={0}
                       TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 

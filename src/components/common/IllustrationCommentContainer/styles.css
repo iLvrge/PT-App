@@ -2,7 +2,7 @@
  * Theme lookups became the CSS variables generated from src/themes/tokens.js,
  * so light and dark still resolve exactly as they did. */
 
-.pt-active {
+.pt-illustration-active {
   color: var(--pt-secondary-main);
 }
 
@@ -18,12 +18,12 @@
   width: 100%;
 }
 
-.pt-container {
+.pt-illustration-container {
   width: 100%;
   height: 100%;
 }
 
-.pt-container .ReactVirtualized__Table__row {
+.pt-illustration-container .ReactVirtualized__Table__row {
   cursor: default;
 }
 
@@ -37,7 +37,7 @@
   color: var(--pt-secondary-main);
 }
 
-.pt-fullscreen-btn {
+.pt-illustration-fullscreen-btn {
   position: absolute;
   top: 10px;
   right: 5px;
@@ -45,12 +45,12 @@
   padding: 0px;
 }
 
-.pt-fullscreen-btn  & svg {
+.pt-illustration-fullscreen-btn  & svg {
   fill: #6d6d6d;
   stroke: #6d6d6d;
 }
 
-.pt-fullscreen-btn  & svg:hover {
+.pt-illustration-fullscreen-btn  & svg:hover {
   color: var(--pt-secondary-main);
   fill: var(--pt-secondary-main);
   stroke: var(--pt-secondary-main);
@@ -76,7 +76,7 @@
   margin-top: 47px;
 }
 
-.pt-right {
+.pt-illustration-right {
   position: absolute;
   right: 5px;
   top: 11px;
@@ -86,39 +86,39 @@
   border-radius: 0px;
 }
 
-.pt-root {
+.pt-illustration-root {
   width: 100%;
   height: 100%;
   position: relative;
 }
 
-.pt-root .MuiInputLabel-root {
+.pt-illustration-root .MuiInputLabel-root {
   display: inline-flex;
   padding-left: 6px;
   padding-top: 10px;
 }
 
-.pt-root .MuiFormControl-root {
+.pt-illustration-root .MuiFormControl-root {
   width: 90%;
 }
 
-.pt-root .MuiInput-underline:before {
+.pt-illustration-root .MuiInput-underline:before {
   border-bottom-color: #5c5c5c;
 }
 
-.pt-root .MuiInput-underline:after {
+.pt-illustration-root .MuiInput-underline:after {
   border-bottom-color: #5c5c5c;
 }
 
-.pt-root .MuiInput-underline:hover {
+.pt-illustration-root .MuiInput-underline:hover {
   border-bottom-color: #5c5c5c;
 }
 
-.pt-root .MuiInputBase-input {
+.pt-illustration-root .MuiInputBase-input {
   height: 21px;
 }
 
-.pt-root iframe {
+.pt-illustration-root iframe {
   border: 0px;
 }
 

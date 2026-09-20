@@ -740,7 +740,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
    */    
 
   return (
-      <Paper className={'pt-root'}> 
+      <Paper className={'pt-tabs-timeline-root'}> 
         <div id="visualization">
           <div className="menu">
             <IconButton onClick={zoomIn}>
@@ -762,7 +762,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
           variant="scrollable"
           scrollButtons="auto"
           onChange={handleChangeTab}
-          className={'pt-tabs'}
+          className={'pt-tabs-timeline-tabs'}
         >
           {
             timelineTabs.map((tab) => (
@@ -771,7 +771,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
                 label={tab}
                 icon={<LabelWithIcon label={tab}/>}
                 iconPosition="start"
-                classes={{ root: 'pt-tab' }}
+                classes={{ root: 'pt-tabs-timeline-tab' }}
               />
             )) 
           }
@@ -782,7 +782,7 @@ const TabsWithTimeline = ({ data, assignmentBar, assignmentBarToggle, type, time
             filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
           }}  
           ref={timelineContainerRef}
-          className={clsx('pt-timeline', 'timeline')}
+          className={clsx('pt-tabs-timeline-timeline', 'timeline')}
         />
       </Paper>
   ) 

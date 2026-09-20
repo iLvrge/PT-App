@@ -735,23 +735,23 @@ const ActionMenu = (props) => {
                 {
                     ['Owned', 'Invented', 'Acquired', 'Collaterlized', 'Maintenance Fee Due', 'Challenged (PTAB)', 'Divested', 'Abandoned', 'Members of Owned USA', 'Proliferate Inventors', 'Law Firms', 'Lenders'].includes(layoutName) 
                     ? 
-                        <span className={'pt-breadcrumb-heading-icon'}>
+                        <span className={'pt-new-header-breadcrumb-heading-icon'}>
                             <i className="fa fa-sm fa-angle-double-right"></i> <AppsOutage/>  <span>{props.clipboardActive === true ? 'Clipboard' : layoutName}</span>
                         </span>
                     :
                         ['Chain-of-Title', 'To Assign', 'To Record', 'To Divest', 'To Monetize', 'Names', 'To Collateralize', 'Deflated Collateral', 'Encumbrances', 'Maintainance', 'Recordings', 'Corrections'].includes(layoutName) 
                         ?
-                            <span className={'pt-breadcrumb-heading-icon'}>
+                            <span className={'pt-new-header-breadcrumb-heading-icon'}>
                                 <i className="fa fa-sm fa-angle-double-right"></i> <Speed/>  <span>{props.clipboardActive === true ? 'Clipboard' : layoutName}</span>
                             </span>
                         :
                             ['Acquisitions', 'Divestitures', 'Licensing', 'Collateralization', 'Inventing'].includes(layoutName) 
                             ?
-                                <span className={'pt-breadcrumb-heading-icon'}>
+                                <span className={'pt-new-header-breadcrumb-heading-icon'}>
                                     <i className="fa fa-sm fa-angle-double-right"></i> <ViewTimeline/>  <span>{props.clipboardActive === true ? 'Clipboard' : layoutName}</span>
                                 </span>
                             :
-                            <span className={'pt-breadcrumb-heading-icon'}>
+                            <span className={'pt-new-header-breadcrumb-heading-icon'}>
                                 {
                                     !['Settings > Companies', 'Settings > Users', 'Settings > Category'].includes(layoutName) 
                                     ?
@@ -851,7 +851,7 @@ const ActionMenu = (props) => {
               onClose={handleChangeNameModal}
               onChangeName={handleCompanyNameChange}
               onSubmit={onHandleSubmitName}
-              formClassName={'pt-root'}
+              formClassName={'pt-header-root'}
               buttonClassName={undefined}
             />
         </div>

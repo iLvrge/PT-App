@@ -325,7 +325,7 @@ const ViewIcons = (props) => {
                         <span>
                             <IconButton 
                                 size="small"
-                                className={clsx('pt-action-icon', {['pt-active']: props.dashboardScreen === true && viewDashboard.kpi})}
+                                className={clsx('pt-action-icon', {['pt-new-header-active']: props.dashboardScreen === true && viewDashboard.kpi})}
                                 onClick={() => ['STANDARD', 'SAMPLE-1', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert() :  onHandleKPI()}
                                 disabled={loadingDashboardData}
                             >
@@ -343,7 +343,7 @@ const ViewIcons = (props) => {
                 <span>
                     <IconButton 
                         size="small"
-                        className={clsx('pt-action-icon', {['pt-active']:  props.dashboardScreen === true && !viewDashboard.line && viewDashboard.jurisdictions == false && viewDashboard.invention === false && viewDashboard.sankey === false && viewDashboard.kpi === false && viewDashboard.timeline === false})}
+                        className={clsx('pt-action-icon', {['pt-new-header-active']:  props.dashboardScreen === true && !viewDashboard.line && viewDashboard.jurisdictions == false && viewDashboard.invention === false && viewDashboard.sankey === false && viewDashboard.kpi === false && viewDashboard.timeline === false})}
                         onClick={() => ['STANDARD', 'SAMPLE-1', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert() :  changeGraph(false)}
                         disabled={loadingDashboardData}
                     >
@@ -357,7 +357,7 @@ const ViewIcons = (props) => {
             >
                 <IconButton 
                     size="small"
-                    className={clsx('pt-action-icon', {['pt-active']: props.dashboardScreen === true && viewDashboard.line && viewDashboard.jurisdictions == false && viewDashboard.invention === false && viewDashboard.sankey === false && viewDashboard.kpi === false && viewDashboard.timeline === false})}
+                    className={clsx('pt-action-icon', {['pt-new-header-active']: props.dashboardScreen === true && viewDashboard.line && viewDashboard.jurisdictions == false && viewDashboard.invention === false && viewDashboard.sankey === false && viewDashboard.kpi === false && viewDashboard.timeline === false})}
                     onClick={() => ['STANDARD', 'SAMPLE-1', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert() : changeGraph(true)}
                 >
                     <AutoGraph/>
@@ -369,7 +369,7 @@ const ViewIcons = (props) => {
             >
                 <IconButton 
                     size="small"
-                    className={clsx('pt-action-icon', {['pt-active']: props.dashboardScreen === true && viewDashboard.timeline})}
+                    className={clsx('pt-action-icon', {['pt-new-header-active']: props.dashboardScreen === true && viewDashboard.timeline})}
                     onClick={ ['STANDARD', 'SAMPLE-1', 'DASHBOARD'].includes(process.env.REACT_APP_ENVIROMENT_MODE) ? onHandleAlert : onHandleTimeline}
                 >
                     <ViewTimeline/>
@@ -386,7 +386,7 @@ const ViewIcons = (props) => {
                         >
                             <IconButton 
                                 size="small"
-                                className={clsx('pt-action-icon', {['pt-active']: props.dashboardScreen === true && viewDashboard.invention})}
+                                className={clsx('pt-action-icon', {['pt-new-header-active']: props.dashboardScreen === true && viewDashboard.invention})}
                                 onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE-1' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : onHandleInvention}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><g><path d="M24.844,398.133l114.19,52.7a8.214,8.214,0,0,0,3.4.738,8.105,8.105,0,0,0,3.38-.738l110.17-50.885,110.163,50.885a8,8,0,0,0,6.714,0l114.291-52.7A8.188,8.188,0,0,0,492,390.871v-125.1a8.223,8.223,0,0,0-6.2-7.734L378,229.637V98.558a7.958,7.958,0,0,0-5.912-7.735L258.02,60.692a7.969,7.969,0,0,0-4.074,0L139.906,90.823A7.954,7.954,0,0,0,134,98.558V229.637l-107.8,28.4a8.223,8.223,0,0,0-6.2,7.734v125.1A8.186,8.186,0,0,0,24.844,398.133ZM36,276.112l98,25.407V431.065L36,385.754Zm105.1-31.826,82.461,21.777-81.075,21L60.013,265.7ZM248,134.849V255.967l-98-25.9V108.945ZM451.987,265.7l-82.475,21.362-81.075-21L370.9,244.286ZM150,301.519l98-25.257V386.021l-98,45.044Zm114-25.257,98,25.257V431.065l-98-45.044Zm98-46.2-98,25.9V134.849l98-25.9Zm16,201V301.519l98-25.407V385.754ZM256,76.7l82.76,21.856L256,120.413,173.24,98.558Z" /></g></svg>
@@ -398,7 +398,7 @@ const ViewIcons = (props) => {
                         >
                             <IconButton 
                                 size="small"
-                                className={clsx('pt-action-icon', {['pt-active']: props.dashboardScreen === true && viewDashboard.jurisdictions})}
+                                className={clsx('pt-action-icon', {['pt-new-header-active']: props.dashboardScreen === true && viewDashboard.jurisdictions})}
                                 onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE-1' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : onHandleJurisdiction}
                             >
                                 <Public/>
@@ -410,7 +410,7 @@ const ViewIcons = (props) => {
                         >
                             <IconButton 
                                 size="small"
-                                className={clsx('pt-action-icon', {['pt-active']: props.dashboardScreen === true && viewDashboard.sankey})}
+                                className={clsx('pt-action-icon', {['pt-new-header-active']: props.dashboardScreen === true && viewDashboard.sankey})}
                                 onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE-1' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : onHandleSankey}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" className={clsx('MuiSvgIcon-root MuiSvgIcon-fontSizeMedium')} viewBox="0 0 24 24">
@@ -424,7 +424,7 @@ const ViewIcons = (props) => {
                         >
                             <IconButton 
                                 size="small"
-                                className={clsx('pt-action-icon', {['pt-active']: assetButton})}
+                                className={clsx('pt-action-icon', {['pt-new-header-active']: assetButton})}
                                 onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE-1' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : onHandlePatentAssets}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className={clsx('pt-no-stroke-height-width', `noStroke`)}><path d="M0 0h24v24H0V0z" fill="none"/><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 4h2v5l-1-.75L9 9V4zm9 16H6V4h1v9l3-2.25L13 13V4h5v16z"/></svg>
@@ -436,7 +436,7 @@ const ViewIcons = (props) => {
                         >
                             <IconButton 
                                 size="small"
-                                className={clsx('pt-action-icon', {['pt-active']: transactionButton})}
+                                className={clsx('pt-action-icon', {['pt-new-header-active']: transactionButton})}
                                 onClick={ process.env.REACT_APP_ENVIROMENT_MODE === 'STANDARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE-1' || process.env.REACT_APP_ENVIROMENT_MODE === 'DASHBOARD' || process.env.REACT_APP_ENVIROMENT_MODE === 'KPI' ? onHandleAlert : onHandleTransactions}
                             >
                                <svg id="icons" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" className={clsx('pt-no-stroke-height-width', `noStroke`)}><path d="M52,7H12a6,6,0,0,0-6,6V51a6,6,0,0,0,6,6H52a6,6,0,0,0,6-6V13A6,6,0,0,0,52,7Zm2,44a2,2,0,0,1-2,2H12a2,2,0,0,1-2-2V13a2,2,0,0,1,2-2H52a2,2,0,0,1,2,2Z"/><path d="M45,29a2,2,0,0,0,0-4H22.83l2.58-2.59a2,2,0,0,0-2.82-2.82l-6,6a2,2,0,0,0-.44,2.18A2,2,0,0,0,18,29Z"/><path d="M47,36H20a2,2,0,0,0,0,4H42.17l-2.58,2.59a2,2,0,1,0,2.82,2.82l6-6a2,2,0,0,0,.44-2.18A2,2,0,0,0,47,36Z"/></svg>

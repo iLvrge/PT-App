@@ -59,7 +59,7 @@ const DisplayItems = ({items, invalidItems, updateItems, callbackDeleteItem, han
                 items.length > 0 && items.map( (row, index) => (
                     <div 
                         key={index} 
-                        className={'pt-item'} 
+                        className={'pt-foreign-item'} 
                         onDoubleClick = { (event) => { onDoubleClick(event, index, row)
                       }}>                        
                         <Typography color="inherit" variant='body2' className={invalidItems.includes(row) ? 'pt-item-error' : undefined}>{row}</Typography>

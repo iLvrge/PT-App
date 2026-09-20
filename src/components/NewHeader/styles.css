@@ -20,11 +20,11 @@
   fill: var(--pt-secondary-main);
 }
 
-.pt-active {
+.pt-new-header-active {
   color: var(--pt-secondary-main);
 }
 
-.pt-active svg {
+.pt-new-header-active svg {
   fill: var(--pt-secondary-main);
 }
 
@@ -33,11 +33,11 @@
   margin-top: 20px;
 }
 
-.pt-breadcrumb-heading-icon {
+.pt-new-header-breadcrumb-heading-icon {
   margin-left: 5px;
 }
 
-.pt-breadcrumb-heading-icon svg {
+.pt-new-header-breadcrumb-heading-icon svg {
   margin-right: 5px;
   display: inline-block;
   position: absolute;
@@ -45,7 +45,7 @@
   fill: var(--pt-secondary-main);
 }
 
-.pt-breadcrumb-heading-icon span {
+.pt-new-header-breadcrumb-heading-icon span {
   margin-left: 25px;
   color: var(--pt-secondary-main);
   font-size: 1.1rem;
@@ -277,13 +277,13 @@
   fill: var(--pt-text-primary);
 }
 
-.pt-slack-container {
+.pt-new-header-slack-container {
   width: 40px;
   height: 30px;
   position: relative;
 }
 
-.pt-slack-container .MuiIconButton-root {
+.pt-new-header-slack-container .MuiIconButton-root {
   margin-right: 6px;
   position: absolute;
   height: 40px;
@@ -314,7 +314,7 @@
   position: relative;
 }
 
-.pt-tooltip {
+.pt-new-header-tooltip {
   font-size: 1rem;
 }
 

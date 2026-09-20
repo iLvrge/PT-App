@@ -21,16 +21,10 @@ const cp = require('child_process');
 const path = require('path');
 
 const KNOWN = new Set([
-  'pt-root', 'pt-timeline', 'pt-loader', 'pt-fullscreen-btn', 'pt-graph-container',
-  'pt-tab', 'pt-tabs', 'pt-timeline-processing-indicator', 'pt-active', 'pt-tooltip',
-  'pt-container', 'pt-button', 'pt-close', 'pt-full-screen-container',
-  'pt-breadcrumb-heading-icon', 'pt-slack-container', 'pt-right', 'pt-btn', 'pt-child',
-  'pt-item', 'pt-timeline-citation', 'pt-blink-text', 'pt-badge', 'pt-flex-column',
-  'pt-list', 'pt-heading-container', 'pt-chart-container', 'pt-card', 'pt-header',
-  'pt-title', 'pt-label', 'pt-row', 'pt-icon', 'pt-menu', 'pt-text', 'pt-link',
-  // Quill toolbar state classes. Unlike the rest of this list these were plain
-  // global names in master too (never makeStyles), and both editors style the
-  // same toolbar with the same declarations - shared by design, not a fight.
+  // Quill toolbar state classes, and the vis.js / data-driven names
+  // (`cluster-sales`, `asset-type-*`, `vis-*`). Unlike the `pt-` names these
+  // were literal globals in master too - written as `'& .cluster-sales'` inside
+  // a scoped parent, never as a makeStyles key - so they are shared by design.
   'focus', 'attach',
 ]);
 

@@ -1496,7 +1496,7 @@ const Reports = (props) => {
     
     const ShowDahboardLayout = (props) => {
         return (
-            <span className={'pt-breadcrumb-heading-icon'}>
+            <span className={'pt-reports-breadcrumb-heading-icon'}>
                 <i className="fa fa-sm fa-angle-double-right"></i> {props.icon}  <span>{props.layout_name}</span>
             </span> 
         )
@@ -1505,7 +1505,7 @@ const Reports = (props) => {
     return (
         <Grid
             container
-            className={'pt-container'}
+            className={'pt-reports-container'}
             justifyContent="flex-start"
             alignItems="flex-start"
             ref={ref}
@@ -1586,7 +1586,7 @@ const Reports = (props) => {
                     direction="row"
                     justifyContent="flex-start"
                     alignItems="flex-start"
-                    className={'pt-container'}
+                    className={'pt-reports-container'}
                 >
                     {
                         viewDashboard.jurisdictions === true

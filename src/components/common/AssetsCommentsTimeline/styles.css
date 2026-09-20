@@ -2,13 +2,13 @@
  * Theme lookups became the CSS variables generated from src/themes/tokens.js,
  * so light and dark still resolve exactly as they did. */
 
-.pt-btn {
+.pt-act-btn {
   position: absolute;
   right: 10px;
   bottom: 10px;
 }
 
-.pt-button {
+.pt-act-button {
   display: flex;
   justify-content: flex-end;
   padding-top: 5px;
@@ -18,28 +18,28 @@
   z-index: 1;
 }
 
-.pt-button button {
+.pt-act-button button {
   height: 42px;
   border-radius: 5px !important;
   text-transform: initial;
 }
 
-.pt-button button div {
+.pt-act-button button div {
   padding: 0px !important;
 }
 
-.pt-button button div svg {
+.pt-act-button button div svg {
   padding-left: 7px;
   width: 25px;
 }
 
-.pt-child {
+.pt-act-child {
   display: flex;
   margin-left: 17px;
   border-left: 1px dashed var(--pt-action-disabled);
 }
 
-.pt-close {
+.pt-act-close {
   opacity: 0.3;
 }
 
@@ -130,19 +130,19 @@
   width: 20px;
 }
 
-.pt-fullscreen-btn {
+.pt-act-fullscreen-btn {
   position: absolute;
   top: 5px;
   right: 0px;
   z-index: 999;
 }
 
-.pt-fullscreen-btn  & svg {
+.pt-act-fullscreen-btn  & svg {
   fill: #6d6d6d;
   stroke: #6d6d6d;
 }
 
-.pt-fullscreen-btn  & svg:hover {
+.pt-act-fullscreen-btn  & svg:hover {
   color: var(--pt-secondary-main);
   fill: var(--pt-secondary-main);
   stroke: var(--pt-secondary-main);
@@ -154,7 +154,7 @@
   align-items: center;
 }
 
-.pt-item {
+.pt-act-item {
   display: flex;
   align-items: center;
   flex: 1;
@@ -165,18 +165,18 @@
   cursor: pointer;
 }
 
-.pt-item:hover {
+.pt-act-item:hover {
   background: #2d2d2d;
 }
 
-.pt-item h2.MuiTypography-root {
+.pt-act-item h2.MuiTypography-root {
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: flexStart;
 }
 
-.pt-item h2.MuiTypography-root span {
+.pt-act-item h2.MuiTypography-root span {
   display: flex;
   margin-left: 11px;
 }
@@ -202,7 +202,7 @@
   margin-left: 5px;
 }
 
-.pt-root {
+.pt-act-root {
   height: auto;
   min-height: 100%;
   width: 100%;
@@ -211,7 +211,7 @@
   flex-direction: column;
 }
 
-.pt-root .MuiButton-textSizeSmall {
+.pt-act-root .MuiButton-textSizeSmall {
   padding: 0px;
   min-width: auto;
   margin-right: 10px;
@@ -222,7 +222,7 @@
   height: 36px !important;
 }
 
-.pt-timeline {
+.pt-act-timeline {
   font-size: inherit !important;
   font-weight: inherit !important;
   height: auto;
@@ -234,23 +234,23 @@
   justify-content: flex-end;
 }
 
-.pt-timeline a {
+.pt-act-timeline a {
   color: #fff;
 }
 
-.pt-timeline span {
+.pt-act-timeline span {
   cursor: inherit !important;
 }
 
-.pt-timeline .message_link {
+.pt-act-timeline .message_link {
   color: var(--pt-text-primary);
   display: block;
 }
 
-.pt-timeline .active_link {
+.pt-act-timeline .active_link {
   color: var(--pt-secondary-main);
 }
 
-.pt-tooltip {
+.pt-act-tooltip {
   font-size: 1rem;
 }

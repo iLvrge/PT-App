@@ -249,11 +249,11 @@ const Citation = ({ number, citationRawData, updateCitationRawData }) => {
                         filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`,
                     }}
                     ref={timelineContainerRef}
-                    className={'pt-timeline-citation'}
+                    className={'pt-legal-timeline-citation'}
                 />
-                {/* { isLoadingTimelineRawData && <CircularProgress className={'pt-loader'} /> }  */}
+                {/* { isLoadingTimelineRawData && <CircularProgress className={'pt-legal-loader'} /> }  */}
                 {isLoadingTimelineRawData  && (
-                    <div className={'pt-blink-text'}>
+                    <div className={'pt-legal-blink-text'}>
                         Live data is being retrieved.
                     </div>
                 )}

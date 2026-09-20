@@ -2,15 +2,15 @@
  * Theme lookups became the CSS variables generated from src/themes/tokens.js,
  * so light and dark still resolve exactly as they did. */
 
-.pt-active {
+.pt-quill-active {
   border: 1px solid var(--pt-secondary-main) !important;
 }
 
-.pt-active .MuiButton-label {
+.pt-quill-active .MuiButton-label {
   color: var(--pt-secondary-main);
 }
 
-.pt-btn {
+.pt-quill-btn {
   display: flex;
   height: 30px;
   margin: 10px;
@@ -33,7 +33,7 @@
   color: var(--pt-text-primary);
 }
 
-.pt-flex-column {
+.pt-quill-flex-column {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -79,55 +79,55 @@
   white-space: nowrap;
 }
 
-.pt-root .ql-container, .ql-toolbar, #toolbar {
+.pt-quill-root .ql-container, .ql-toolbar, #toolbar {
   background: none !important;
 }
 
-.pt-root .ql-container.ql-snow, .ql-toolbar.ql-snow, #toolbar {
+.pt-quill-root .ql-container.ql-snow, .ql-toolbar.ql-snow, #toolbar {
   border: 0px !important;
 }
 
-.pt-root.ql-snow .ql-picker, .ql-toolbar, .ql-container, #toolbar, .ql-picker-label, .ql-picker-label svg, .ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button, .ql-snow.ql-toolbar button svg, .ql-snow .ql-toolbar button svg, .ql-snow .ql-stroke, .ql-picker-label, #toolbar button, #toolbar button svg {
+.pt-quill-root.ql-snow .ql-picker, .ql-toolbar, .ql-container, #toolbar, .ql-picker-label, .ql-picker-label svg, .ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button, .ql-snow.ql-toolbar button svg, .ql-snow .ql-toolbar button svg, .ql-snow .ql-stroke, .ql-picker-label, #toolbar button, #toolbar button svg {
   color: var(--pt-action-active);
   stroke: var(--pt-action-active);
   fill: var(--pt-action-disabled)Background;
 }
 
-.pt-root.ql-snow .ql-stroke, .ql-snow button.ql-bold, .ql-snow button.ql-italic, .ql-snow button.ql-atButton, .ql-snow button.ql-atButton svg, .ql-snow button.ql-attachButton, .ql-snow button.ql-attachButton svg, .ql-snow button.ql-saveButton, .ql-snow button.ql-saveButton svg, .ql-snow button.ql-sendattachButton svg, #toolbar button svg {
+.pt-quill-root.ql-snow .ql-stroke, .ql-snow button.ql-bold, .ql-snow button.ql-italic, .ql-snow button.ql-atButton, .ql-snow button.ql-atButton svg, .ql-snow button.ql-attachButton, .ql-snow button.ql-attachButton svg, .ql-snow button.ql-saveButton, .ql-snow button.ql-saveButton svg, .ql-snow button.ql-sendattachButton svg, #toolbar button svg {
   stroke: var(--pt-action-disabled)Background;
   color: var(--pt-action-disabled)Background;
   fill: var(--pt-action-disabled)Background;
   pointer-events: none;
 }
 
-.pt-root .focus .ql-snow .ql-stroke, .focus .ql-snow button.ql-atButton svg, .focus .ql-snow .ql-attachButton svg, .focus .ql-snow .ql-saveButton svg, .attach .ql-snow .ql-sendattachButton svg, .focus #toolbar svg {
+.pt-quill-root .focus .ql-snow .ql-stroke, .focus .ql-snow button.ql-atButton svg, .focus .ql-snow .ql-attachButton svg, .focus .ql-snow .ql-saveButton svg, .attach .ql-snow .ql-sendattachButton svg, .focus #toolbar svg {
   color: var(--pt-action-active);
   fill: var(--pt-action-active);
   pointer-events: all;
 }
 
-.pt-root .focus .ql-snow .ql-stroke, .attach .ql-snow .ql-stroke {
+.pt-quill-root .focus .ql-snow .ql-stroke, .attach .ql-snow .ql-stroke {
   stroke: var(--pt-action-active);
 }
 
-.pt-root .ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow.ql-toolbar button:focus, .ql-snow .ql-toolbar button:focus, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active, #toolbar button:hover, #toolbar button:focus {
+.pt-quill-root .ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow.ql-toolbar button:focus, .ql-snow .ql-toolbar button:focus, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active, #toolbar button:hover, #toolbar button:focus {
   color: var(--pt-action-active);
 }
 
-.pt-root .ql-snow .ql-picker-options .ql-picker-item, .ql-snow.ql-toolbar .ql-picker-item:hover, .ql-snow .ql-toolbar .ql-picker-item:hover, .ql-snow.ql-toolbar .ql-picker-item.ql-selected, .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
+.pt-quill-root .ql-snow .ql-picker-options .ql-picker-item, .ql-snow.ql-toolbar .ql-picker-item:hover, .ql-snow .ql-toolbar .ql-picker-item:hover, .ql-snow.ql-toolbar .ql-picker-item.ql-selected, .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
   color: var(--pt-bg-default);
 }
 
-.pt-root .focus .ql-snow.ql-toolbar button:hover, .focus .ql-snow.ql-toolbar button svg:focus, .focus .ql-snow.ql-toolbar button svg:hover, .focus .ql-snow.ql-toolbar button.ql-bold:hover svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-bold:focus svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-italic:hover svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-italic:focus svg.MuiSvgIcon-root .ql-stroke {
+.pt-quill-root .focus .ql-snow.ql-toolbar button:hover, .focus .ql-snow.ql-toolbar button svg:focus, .focus .ql-snow.ql-toolbar button svg:hover, .focus .ql-snow.ql-toolbar button.ql-bold:hover svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-bold:focus svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-italic:hover svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-italic:focus svg.MuiSvgIcon-root .ql-stroke {
   color: var(--pt-secondary-main);
   stroke: var(--pt-secondary-main);
 }
 
-.pt-root .ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow .ql-toolbar button:focus, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active, .ql-snow.ql-toolbar .ql-picker-item:hover, .ql-snow .ql-toolbar .ql-picker-item:hover, .ql-snow.ql-toolbar .ql-picker-item.ql-selected, .ql-snow .ql-toolbar .ql-picker-item.ql-selected, .ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow .ql-toolbar button:focus, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active {
+.pt-quill-root .ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow .ql-toolbar button:focus, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active, .ql-snow.ql-toolbar .ql-picker-item:hover, .ql-snow .ql-toolbar .ql-picker-item:hover, .ql-snow.ql-toolbar .ql-picker-item.ql-selected, .ql-snow .ql-toolbar .ql-picker-item.ql-selected, .ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow .ql-toolbar button:focus, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active {
   color: var(--pt-secondary-main);
 }
 
-.pt-root .ql-editor.ql-blank::before {
+.pt-quill-root .ql-editor.ql-blank::before {
   font-style: initial;
   color: var(--pt-action-disabled);
 }

@@ -1470,7 +1470,7 @@ const handleDriveModalClose = (event) => {
           :
             commentsData.messages != undefined && commentsData.messages.length > 0 ? (
             <Timeline 
-              className={'pt-timeline'} 
+              className={'pt-act-timeline'} 
               lineColor={'rgb(191 191 191)'}>
               {
                 commentsData.messages.map( (comment, index) => (
@@ -1490,11 +1490,11 @@ const handleDriveModalClose = (event) => {
   if (companyListLoading) return null
 
   return (
-    <Paper className={clsx('pt-root', 'comment_root')} square>
+    <Paper className={clsx('pt-act-root', 'comment_root')} square>
       <div className={'pt-content'}>
         {
           fullScreen === false && typeof standalone === 'undefined' && (
-            <IconButton size="small" className={clsx('pt-fullscreen-btn', 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
+            <IconButton size="small" className={clsx('pt-act-fullscreen-btn', 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
               <FullscreenIcon />
             </IconButton>
           )
@@ -1505,13 +1505,13 @@ const handleDriveModalClose = (event) => {
         {
           displayButton === true
           ?
-          <div className={'pt-button'}>
+          <div className={'pt-act-button'}>
             {/* {
               slackAuthLogin && (<Tooltip 
                 title={
                   <Typography color="inherit" variant='body2'>Sign in  to your Slack account</Typography>
                 } 
-                className={'pt-tooltip'}  
+                className={'pt-act-tooltip'}  
                 placement='left'
                 enterDelay={0}
                 TransitionComponent={Zoom} TransitionProps={{ timeout: 0 }} 
@@ -1588,8 +1588,8 @@ const handleDriveModalClose = (event) => {
         onClose={handleChangeNameModal}
         onChangeName={handleCompanyNameChange}
         onSubmit={onHandleSubmitName}
-        formClassName={'pt-root'}
-        buttonClassName={'pt-btn'}
+        formClassName={'pt-act-root'}
+        buttonClassName={'pt-act-btn'}
       />
     </Paper>
   )

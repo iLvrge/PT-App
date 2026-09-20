@@ -518,7 +518,7 @@ const QuillEditor = ({
   }, [link_assets_selected, link_assets_sheet_type])
 
   return (
-    <div className={'pt-root'}>
+    <div className={'pt-quill-root'}>
       <div className={clsx('pt-text-editor', 'editor')}>
         <ReactQuill
           ref={quillRef}

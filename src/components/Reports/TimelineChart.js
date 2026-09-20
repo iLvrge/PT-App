@@ -553,7 +553,7 @@ const TimelineChart = (props) => {
         timelineRef.current.setItems(items.current)
     }
     return (
-        <Paper className={clsx('pt-container', 'pt-column-direction', {['pt-padding']: typeof props.padding != 'undefined' ? props.padding : false})} square>
+        <Paper className={clsx('pt-reports-container', 'pt-column-direction', {['pt-padding']: typeof props.padding != 'undefined' ? props.padding : false})} square>
             {
                 props.card.title != '' && (
                     <div className={clsx('pt-timeline-heading', 'full_heading')}>
@@ -601,13 +601,13 @@ const TimelineChart = (props) => {
                         filter: `blur(${isLoadingTimelineRawData ? '4px' : 0})`
                     }}
                     ref={timelineContainerRef}
-                    className={clsx('pt-timeline', 'timeline')}
+                    className={clsx('pt-reports-timeline', 'timeline')}
                 />
                 {
                     isLoadingTimelineData &&
-                    <CircularProgress size={15} color={'secondary'} className={'pt-timeline-processing-indicator'} />
+                    <CircularProgress size={15} color={'secondary'} className={'pt-reports-timeline-processing-indicator'} />
                 }
-                {isLoadingTimelineRawData && <CircularProgress className={'pt-loader'} />}
+                {isLoadingTimelineRawData && <CircularProgress className={'pt-reports-loader'} />}
             </div>
             <Dialog open={openModal} onOpenChange={(next) => { if (!next) handleClose() }}>
                 <DialogContent
@@ -617,7 +617,7 @@ const TimelineChart = (props) => {
                 <TableContainer component={Paper} style={{ height: '100%', border: '1px solid #0B0C0E' }}>
                     <IconButton
                         onClick={handleClose}
-                        className={clsx('pt-right')}
+                        className={clsx('pt-reports-right')}
                         size="large">
                         <Close />
                     </IconButton>

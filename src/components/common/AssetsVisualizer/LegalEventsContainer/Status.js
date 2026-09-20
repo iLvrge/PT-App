@@ -717,7 +717,7 @@ useEffect(() => {
                 ref={timelineContainerRef}
                 className={'pt-timeline-status'}
             />
-            { isLoadingTimelineRawData && <CircularProgress className={'pt-loader'} /> }
+            { isLoadingTimelineRawData && <CircularProgress className={'pt-legal-loader'} /> }
             { isLoadingTimelineData && <Loader /> }
         </Paper>
     )

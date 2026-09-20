@@ -5,7 +5,7 @@ import './styles.css'
 
 const Litigation = ({ events }) => {
     return(
-        <Paper className={'pt-root'}  square >
+        <Paper className={'pt-legal-root'}  square >
         
         </Paper>
     )

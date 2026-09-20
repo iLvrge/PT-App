@@ -401,7 +401,7 @@ const AssetsList = ({ assets, loading, remoteAssetFromList, openChartBar, handle
     if (loading || assets.length == 0) return <Loader />
 
     return (
-        <Paper className={'pt-root'} square id={`assets_cpc`}>
+        <Paper className={'pt-cpc-root'} square id={`assets_cpc`}>
             <VirtualizedTable
                 openDropAsset={dropOpenAsset}
                 selected={selectItems}

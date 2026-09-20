@@ -176,12 +176,12 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
         <>
             {/* {
                 typeof standalone === 'undefined' && (
-                    <div className={'pt-full-screen-container'}>
+                    <div className={'pt-lifespan-full-screen-container'}>
                         <FullScreen componentItems={menuItems}/>
                     </div>
                 )
             } */} 
-            <div className={'pt-graph-container'} ref={containerRef}>  
+            <div className={'pt-lifespan-graph-container'} ref={containerRef}>  
                 <TitleBar 
                     title={`Hover over the bars to see how many patents will remain active if maintained.`} 
                     enablePadding={false}  

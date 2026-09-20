@@ -312,7 +312,7 @@ const IllustrationCommentContainer = ({
                     ?
                         <IconButton 
                             size="small" 
-                            className={clsx('pt-fullscreen-btn', 'full_screen_btn', {['pt-frame-button']: (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null) ? true : false})} 
+                            className={clsx('pt-illustration-fullscreen-btn', 'full_screen_btn', {['pt-frame-button']: (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null) ? true : false})} 
                             onClick={handleClickOpenFullscreen}
                         >
                             <Fullscreen />
@@ -589,7 +589,7 @@ const IllustrationCommentContainer = ({
                     >
                         {
                             (illustrationBar === false || shouldShowTimeline === true ) && (
-                                <IconButton onClick={handleCloseFullscreen}  className={clsx('pt-right', {['pt-frame-button']: (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null) ? true : false})} size="large">
+                                <IconButton onClick={handleCloseFullscreen}  className={clsx('pt-illustration-right', {['pt-frame-button']: (typeof driveTemplateFrameMode !== 'undefined' && driveTemplateFrameMode === true && templateURL != 'about:blank' && templateURL != null) ? true : false})} size="large">
                                     <Close /> 
                                 </IconButton> 
                             )

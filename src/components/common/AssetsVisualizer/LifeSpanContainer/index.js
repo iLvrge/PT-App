@@ -259,14 +259,14 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
     } 
     
     return (
-        <Paper className={'pt-root'} square>  
+        <Paper className={'pt-lifespan-root'} square>  
             {
                 (selectedCategory == 'late_recording' || selectedCategory == 'incorrect_recording') && selectedRow.length > 0
                 ?
                     ''
                 :
                     ((['PRO', 'KPI'].includes(process.env.REACT_APP_ENVIROMENT_MODE))  || (process.env.REACT_APP_ENVIROMENT_MODE === 'SAMPLE' && auth_token !== null))  && fullScreen === false && typeof standalone === 'undefined' && (
-                        <IconButton size="small" className={clsx('pt-fullscreen-btn', 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
+                        <IconButton size="small" className={clsx('pt-lifespan-fullscreen-btn', 'full_screen_btn')} onClick={() => setFullScreen(!fullScreen)}>
                             <FullscreenIcon />
                         </IconButton>
                     )
@@ -280,14 +280,14 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                         value={selectedTab}
                         variant={'scrollable'} 
                         scrollButtons="auto"
-                        className={'pt-tabs'}
+                        className={'pt-lifespan-tabs'}
                         onChange={handleChangeTab} 
                     >
                         {
                             lifeSpanTabs.map((tab) => (
                                 <Tab
                                     key={tab}
-                                    className={'pt-tab'} 
+                                    className={'pt-lifespan-tab'} 
                                     icon={<LabelWithIcon label={tab}/>}
                                     label={tab} 
                                     iconPosition="start"

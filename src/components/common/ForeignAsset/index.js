@@ -530,7 +530,7 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
     const LoadingImportButton = () => {
         return(
             <Button 
-                className={'pt-button'}
+                className={'pt-foreign-button'}
                 onClick={handleImport}
                 disabled={isLoading}
             >
@@ -573,7 +573,7 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
 
     if (isLoadingSheets && sheets.length == 0) return <Loader />
     return (
-        <Paper className={'pt-root'} square id={`foreign_assets_tabs`}>
+        <Paper className={'pt-foreign-root'} square id={`foreign_assets_tabs`}>
             <VirtualizedTable
                 selected={selectItems}
                 rowSelected={selectedRow}
@@ -623,7 +623,7 @@ const ForeignAsset = ({sheetName, handleSheetName}) => {
                     setOpen(!open)
                     setSelectedRow([])
                 }}  
-                    className={'pt-close'}/>
+                    className={'pt-foreign-close'}/>
                 <ImportAsset 
                     updateItems={setItems} 
                     updateInvalidItems={setInvalidItems} 
