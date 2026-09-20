@@ -1579,7 +1579,7 @@ const Reports = (props) => {
             </Grid>
             <Grid
                 item lg={12} md={12} sm={12} xs={12} 
-                className={clsx('pt-list', 'listItems')}
+                className={clsx('pt-kpi-list', 'listItems')}
             >
                 <Grid  
                     container
