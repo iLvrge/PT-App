@@ -437,12 +437,15 @@ const PatentLayout = ({
         <SplitPane
             className={splitPanePink}
             split="vertical"
-            size={firstBarSize}
-            onChange={(size) => { 
-                dispatch(setFirstBarSize(size > 900 ? 900 : size))
+            defaultSize={firstBarSize}
+            onChange={(size) => {
                 setCompanyBarSize(size > 900 ? 900 : size)
             }}
-            onDragFinished={(size) => resizePane('split1', size, setCompanyBarSize)}
+            onDragFinished={(size) => {
+                const clamped = size > 900 ? 900 : size
+                dispatch(setFirstBarSize(clamped))
+                resizePane('split1', clamped, setCompanyBarSize)
+            }}
             ref={companyRef}
         >
             <div 
