@@ -78,11 +78,11 @@
   margin-top: 15px;
 }
 
-.pt-heading {
+.pt-cpc-heading {
   padding: 8px 15px;
 }
 
-.pt-heading .MuiTypography-body1 {
+.pt-cpc-heading .MuiTypography-body1 {
   font-weight: 500;
   margin-bottom: 0px;
 }
@@ -102,21 +102,21 @@
   height: 94%;
 }
 
-.pt-modal .react-draggable {
+.pt-cpc-modal .react-draggable {
   width: 800px;
   height: 50vh;
 }
 
-.pt-modal .MuiDialog-paperWidthSm {
+.pt-cpc-modal .MuiDialog-paperWidthSm {
   max-width: inherit;
 }
 
-.pt-modal .MuiDialogContent-root {
+.pt-cpc-modal .MuiDialogContent-root {
   padding: 0px;
   overflow-x: hidden;
 }
 
-.pt-modal .MuiDialogTitle-root {
+.pt-cpc-modal .MuiDialogTitle-root {
   background: transparent;
 }
 
@@ -146,13 +146,13 @@
   color: #fff;
 }
 
-.pt-resizable {
+.pt-cpc-resizable {
   position: relative;
   display: flex;
   flex-direction: column;
 }
 
-.pt-resizable .react-resizable-handle {
+.pt-cpc-resizable .react-resizable-handle {
   position: absolute;
   width: 25px;
   height: 25px;

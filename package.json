@@ -38,6 +38,7 @@
     "copy-to-clipboard": "^4.0.2",
     "d3": "5.16.0",
     "d3-selection": "^3.0.0",
+    "font-awesome": "^4.7.0",
     "history": "^4.10.1",
     "intro.js": "^7.0.1",
     "intro.js-react": "^0.7.1",
@@ -91,7 +92,7 @@
     "test": "vitest run",
     "dev": "vite",
     "preview": "vite preview",
-    "check:styles": "node scripts/check-dangling-classes.cjs && node scripts/check-dynamic-classes.cjs && node scripts/check-class-conflicts.cjs && node scripts/check-hook-imports.cjs",
+    "check:styles": "node scripts/check-dangling-classes.cjs && node scripts/check-dynamic-classes.cjs && node scripts/check-class-conflicts.cjs && node scripts/check-css-collisions.cjs && node scripts/check-hook-imports.cjs",
     "check:unreachable": "node scripts/check-unreachable.cjs",
     "check:secrets": "node scripts/check-bundle-secrets.cjs",
     "test:watch": "vitest"

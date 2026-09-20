@@ -585,7 +585,7 @@ const TimelineChart = (props) => {
                             >
                                 <IconButton size="small"
                                     onClick={() => props.handleFullScreen(props.type)}
-                                    className={clsx('pt-action-icon', typeof props.standalone !== 'undefined' ? 'pt-font-standalone' : '')}
+                                    className={clsx('pt-kpi-action-icon', typeof props.standalone !== 'undefined' ? 'pt-font-standalone' : '')}
                                 >
                                     {typeof props.standalone !== 'undefined' ? <Close /> : <Fullscreen />}
                                 </IconButton>

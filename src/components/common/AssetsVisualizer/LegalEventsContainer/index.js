@@ -52,23 +52,23 @@ const LegalEventsContainer = ({ events, type, standalone, activeTab }) => {
     return (
         label === 'M.Fees'
         ?
-          <span className={clsx('pt-container-relative', {['pt-red-color']: asset_details.fees > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.fees)} showZero={false}></Badge></span>
+          <span className={clsx('pt-legal-container-relative', {['pt-red-color']: asset_details.fees > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.fees)} showZero={false}></Badge></span>
         :
             label === 'Cited by'
             ?
-              <span className={clsx('pt-container-relative', {['pt-red-color']: asset_details.citations > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.citations)} showZero={false}></Badge></span>
+              <span className={clsx('pt-legal-container-relative', {['pt-red-color']: asset_details.citations > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.citations)} showZero={false}></Badge></span>
             :
                 label === 'PTAB'
                 ?
-                  <span className={clsx('pt-container-relative', {['pt-red-color']: asset_details.ptab > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.ptab)} showZero={false}></Badge></span>
+                  <span className={clsx('pt-legal-container-relative', {['pt-red-color']: asset_details.ptab > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.ptab)} showZero={false}></Badge></span>
                 :
                   label == 'Litigation'
                   ?
-                    <span className={clsx('pt-container-relative', {['pt-red-color']: asset_details.litigation > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.litigation)} showZero={false}></Badge></span>
+                    <span className={clsx('pt-legal-container-relative', {['pt-red-color']: asset_details.litigation > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.litigation)} showZero={false}></Badge></span>
                   :
                   label == 'Status'
                   ?
-                    <span className={clsx('pt-container-relative', {['pt-red-color']: asset_details.status > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.status)} showZero={false}></Badge></span>
+                    <span className={clsx('pt-legal-container-relative', {['pt-red-color']: asset_details.status > 20 ? true : false})}>{label}<Badge color='primary' max={99999} className={'pt-badge'} badgeContent={numberWithCommas(asset_details.status)} showZero={false}></Badge></span>
                   :
                   label
     )

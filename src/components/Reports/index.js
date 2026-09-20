@@ -1569,7 +1569,7 @@ const Reports = (props) => {
                         >
                             <IconButton size="small"
                                 onClick={() => {props.handleFullScreen(!props.fullScreen)}}
-                                className={clsx('pt-action-icon', typeof viewDashboard.standalone !== 'undefined' ? 'pt-font-standalone' : '' )}
+                                className={clsx('pt-kpi-action-icon', typeof viewDashboard.standalone !== 'undefined' ? 'pt-font-standalone' : '' )}
                             >
                                 { typeof props.standalone !== 'undefined' ? <Close/> : <Fullscreen /> }                            
                             </IconButton>   

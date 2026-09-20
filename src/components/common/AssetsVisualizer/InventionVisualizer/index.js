@@ -1224,7 +1224,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                     width={resizableWidthHeight[0]}
                     minConstraints={[420, 350]} 
                     maxConstraints={[1500, 800]}
-                    className={'pt-resizable'}
+                    className={'pt-cpc-resizable'}
                     onResizeStop={handleResize}
                 ><Paper square={true} {...props} /></ResizableBox>                
             </Draggable>
@@ -1496,7 +1496,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         <Dialog
                             open={openModal}
                             onClose={handleClose}
-                            className={'pt-modal'}
+                            className={'pt-cpc-modal'}
                             PaperComponent={PaperComponent}
                             aria-labelledby="draggable-dialog-title"
                         >
@@ -1542,7 +1542,7 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                         <Dialog
                             open={openFilter}
                             onClose={handleCloseFilter}
-                            className={`${'pt-modal'} ${'pt-modal-filter'}`}
+                            className={`${'pt-cpc-modal'} ${'pt-modal-filter'}`}
                             PaperComponent={PaperComponentFilter}
                             aria-labelledby="filter-cpc"
                         >                

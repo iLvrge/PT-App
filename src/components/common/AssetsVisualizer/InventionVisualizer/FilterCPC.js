@@ -77,17 +77,17 @@ const FilterCPC = ({ onClose, depthRange, scopeRange, yearRange, yearRangeText, 
         <div className={'pt-display-flex'}>   
             <div className={'pt-heading-container'}>
                 <div className={`${'pt-flex-column'} ${'pt-flex-column-year'}`}> 
-                    <div className={'pt-heading'}>
+                    <div className={'pt-cpc-heading'}>
                         <Typography>Year:</Typography>
                     </div>
                 </div>   
                 <div className={`${'pt-flex-column'} ${'pt-flex-column-depth'}`}>
-                    <div className={'pt-heading'}>
+                    <div className={'pt-cpc-heading'}>
                         <Typography>Depth:</Typography>
                     </div>
                 </div>   
                 <div className={`${'pt-flex-column'} ${'pt-flex-column-scope'}`}>
-                    <div className={'pt-heading'}>
+                    <div className={'pt-cpc-heading'}>
                         <Typography>Scope:</Typography> 
                     </div>    
                 </div>   

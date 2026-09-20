@@ -11,7 +11,7 @@
   margin-top: 5px;
 }
 
-.pt-action-icon svg {
+.pt-kpi-action-icon svg {
   fill: currentcolor;
   width: 1.5rem !important;
   height: 1.5rem !important;
@@ -40,7 +40,7 @@
   position: unset;
 }
 
-.pt-box-container {
+.pt-kpi-box-container {
   display: flex;
   height: 100%;
   flex-direction: column;
@@ -161,7 +161,7 @@
   margin-left: 8px;
 }
 
-.pt-btn-container {
+.pt-kpi-btn-container {
   display: flex;
 }
 

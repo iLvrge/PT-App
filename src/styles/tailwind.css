@@ -1,4 +1,15 @@
-@import "tailwindcss";
+/* Tailwind WITHOUT preflight.
+ *
+ * `@import "tailwindcss"` also pulls in preflight, a global reset that zeroes
+ * the margin on every element. master had no reset at all, so anything relying
+ * on the browser's default margins silently collapsed here - the walkthrough
+ * tooltip's paragraphs ran together, for one. This app is styled by MUI and its
+ * own CSS, not by Tailwind's base layer, so take the theme and the utilities
+ * and leave the reset behind. Re-adding preflight means re-testing every page's
+ * prose spacing against master. */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
 @import "./theme.generated.css";
 
 /* Dark mode follows the .dark class that styledEngine puts on <html>, which is

@@ -93,7 +93,7 @@ const KpiBox = (props) => {
                 :
                     [30, 31, 32, 33, 34, 36, 37, 17, 26].includes(props.card.type)
                     ?
-                        <div className={'pt-box-container'}>
+                        <div className={'pt-kpi-box-container'}>
                             <Typography
                                 variant="h5" 
                                 component="div"
@@ -115,7 +115,7 @@ const KpiBox = (props) => {
                     :
                         props.card.type == 35
                         ?
-                            <div className={'pt-box-container'}>
+                            <div className={'pt-kpi-box-container'}>
                                 <Typography
                                     variant="h5" 
                                     component="div"

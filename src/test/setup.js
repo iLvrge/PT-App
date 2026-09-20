@@ -11,7 +11,9 @@ globalThis.ResizeObserver ||= class {
   disconnect() {}
 }
 
-if (!window.matchMedia) {
+// Files that assert on the repo itself rather than on rendered output opt into
+// `@vitest-environment node`, where there is no window to patch.
+if (typeof window !== 'undefined' && !window.matchMedia) {
   window.matchMedia = (query) => ({
     matches: false,
     media: query,

@@ -30,7 +30,7 @@ const Chart = (props) => {
                     placement={'bottom'}
                     grid={props.grid}
                 >
-                    <span className={'pt-btn-container'}>
+                    <span className={'pt-kpi-btn-container'}>
                         <Button
                             size="small"
                             variant="outlined"
