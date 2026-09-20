@@ -39,10 +39,20 @@ const AuthSlack = lazyWithRetry(() => import('./components/AuthSlack'), 'AuthSla
  * The boundary sits OUTSIDE Suspense so it can catch the rejected import; the
  * loader sits inside the layout so the header and navigation stay on screen
  * while the route chunk is still arriving.
+ *
+ * Each Layout (e.g. GlobalLayout) injects a large bag of props into its
+ * `children` via React.cloneElement, on the assumption that its direct child
+ * IS the page component. Here it is actually this boundary, so without
+ * forwarding `...rest` onto the real page component below, every one of those
+ * props silently vanished — e.g. `checkChartAnalytics` reached MainDashboard
+ * as undefined and threw "checkChartAnalytics is not a function" the moment
+ * it rendered, taking the whole route down.
  */
-const RouteBoundary = ({ children }) => (
+const RouteBoundary = ({ children, ...rest }) => (
   <ErrorBoundary fallback={(state) => <RouteErrorFallback {...state} />}>
-    <Suspense fallback={<RouteFallback />}>{children}</Suspense>
+    <Suspense fallback={<RouteFallback />}>
+      {React.isValidElement(children) ? React.cloneElement(children, rest) : children}
+    </Suspense>
   </ErrorBoundary>
 )
 

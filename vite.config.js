@@ -65,6 +65,22 @@ export default defineConfig(({ mode }) => {
         // resolved by Node. Vite's browser resolver copes; Vitest's does not.
         'react/jsx-runtime': 'react/jsx-runtime.js',
         'react/jsx-dev-runtime': 'react/jsx-dev-runtime.js',
+        // react-virtualized@9.22.5's ES build is broken: several internal
+        // modules import each other with relative paths and one of them,
+        // WindowScroller/utils/onScroll.js, imports a `bpfrpt_proptype_*`
+        // flow-type placeholder that WindowScroller.js never actually exports
+        // (upstream issue #1632). Because the failing import is a relative
+        // path INSIDE the package, aliasing 'react-virtualized/dist/es' does
+        // nothing — that specifier is never written anywhere; only aliasing
+        // the bare 'react-virtualized' specifier itself, to the package's
+        // CommonJS entry, keeps esbuild off the broken ES module entirely.
+        // Bundlers that tolerate a missing named export (webpack, Rollup's
+        // CJS interop) never notice; esbuild's strict ESM resolution does,
+        // and fails the whole dependency pre-bundle the first time any route
+        // that uses VirtualizedTable loads — every such route then hangs
+        // forever on its Suspense fallback, since the crashed pre-bundle
+        // never resolves.
+        'react-virtualized': 'react-virtualized/dist/commonjs/index.js',
       },
     },
     // JSX lives in .js files throughout src/; esbuild must be told to parse

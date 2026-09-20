@@ -1040,7 +1040,7 @@ const handleDriveModalClose = (event) => {
       const slackToken = getTokenStorage( 'slack_auth_token_info' ), googleToken = getTokenStorage( 'google_auth_token_info' )
       let slackTokenFlag = false, googleTokenFlag = false
       if(slackToken && slackToken!= '' && slackToken!= null && slackToken!= 'null' ) {
-        const token = JSON.parse(slackToken)
+        let token = JSON.parse(slackToken)
         if(typeof token === 'string') {
           token = JSON.parse(token)
         }
@@ -1164,7 +1164,7 @@ const handleDriveModalClose = (event) => {
         <input type='file' id='attach_file' ref={inputFile} style={{display: 'none'}} onChange={onHandleFile}/>
       </div> 
     )
-  }, [ selectedAssetsPatents, selectedCommentsEntity, commentHtml, handleSubmitComment, handleCancelComment, classes ])
+  }, [ selectedAssetsPatents, selectedCommentsEntity, commentHtml, handleSubmitComment, handleCancelComment ])
 
   const SlackUser = (props) => {
     const checkUser = props.users.findIndex( user => user.id == props.user)
@@ -1484,7 +1484,7 @@ const handleDriveModalClose = (event) => {
         }
       </div>
     )
-  }, [ isLoadingcomments, commentsData, type, userProfile, classes, onDelete, onEdit ])
+  }, [ isLoadingcomments, commentsData, type, userProfile, onDelete, onEdit ])
 
   
   if (companyListLoading) return null

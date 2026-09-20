@@ -803,7 +803,7 @@ const handleOpenSettings = useCallback((event) => {
 }, [ history, profile ]) 
 
   return (
-    <AppBar className={'pt-root'} color='transparent' position='relative'>
+    <AppBar className={'pt-header-root'} color='transparent' position='relative'>
       <Toolbar className={'pt-toolbar'}>
         <span className={'pt-logo-container'}>
           <img src={isDarkTheme ? siteLogo : siteLogoLightMode} className={isDarkTheme ? 'pt-site-logo': 'pt-site-logo-light'} alt={''} />          

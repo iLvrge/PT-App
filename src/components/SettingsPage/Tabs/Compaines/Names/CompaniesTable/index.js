@@ -200,9 +200,7 @@ function CompaniesTable({
                       align={headCell.align}
                       padding={headCell.disablePadding ? 'none' : 'default'}
                       sortDirection={orderBy === headCell.id ? order : false}
-                      className={
-                        headCell.class !== '' ? classes[headCell.class] : ''
-                      }
+                      className={''}
                       style={headCell.width && {width: headCell.width}}
                     >
                       <TableSortLabel

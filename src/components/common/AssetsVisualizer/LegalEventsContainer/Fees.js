@@ -311,11 +311,11 @@ const Fees = ({ events, showTabs, tabText, showAbandoned }) => {
 
   const onRangeChanged = useCallback(async (properties) => {
     items.current = new DataSet()
-    const mainItems = Object.keys(events).length > 0 && events.main != undefined ? events.main.map((event, index) => convertDataToItem(event, index, 0, classes, events.icons, showAbandoned)) : []
+    const mainItems = Object.keys(events).length > 0 && events.main != undefined ? events.main.map((event, index) => convertDataToItem(event, index, 0, undefined, events.icons, showAbandoned)) : []
     let otherItems = []
 
     if (Object.keys(events).length > 0 && events.other != undefined && events.other.length > 0) {
-      otherItems = events.other.map((event, index) => convertDataToItem(event, mainItems.length + index, 1, classes, events.icons, showAbandoned))
+      otherItems = events.other.map((event, index) => convertDataToItem(event, mainItems.length + index, 1, undefined, events.icons, showAbandoned))
     }
 
     const convertedItems = [...mainItems, ...otherItems]
@@ -346,11 +346,11 @@ const Fees = ({ events, showTabs, tabText, showAbandoned }) => {
   useEffect(() => {
     if (isLoadingTimelineRawData) return
 
-    const mainItems = Object.keys(events).length > 0 && events.main != undefined ? events.main.map((event, index) => convertDataToItem(event, index, 0, classes, events.icons, showAbandoned)) : []
+    const mainItems = Object.keys(events).length > 0 && events.main != undefined ? events.main.map((event, index) => convertDataToItem(event, index, 0, undefined, events.icons, showAbandoned)) : []
     let otherItems = []
 
     if (Object.keys(events).length > 0 && events.other != undefined && events.other.length > 0) {
-      otherItems = events.other.map((event, index) => convertDataToItem(event, mainItems.length + index, 1, classes, events.icons, showAbandoned))
+      otherItems = events.other.map((event, index) => convertDataToItem(event, mainItems.length + index, 1, undefined, events.icons, showAbandoned))
     }
 
     const convertedItems = [...mainItems, ...otherItems]

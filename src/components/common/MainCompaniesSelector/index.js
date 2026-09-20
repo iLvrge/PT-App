@@ -606,7 +606,8 @@ const MainCompaniesSelector = ({selectAll, defaultSelect, addUrl, parentBarDrag,
 
     useEffect(() => {
         if( selectAll != undefined && selectAll === true && companies.list.length > 0 && intialization === false) {
-            const all = [], groups = []
+            let all = []
+            const groups = []
             companies.list.map( company => {
                
                 if(company.type === 1) {

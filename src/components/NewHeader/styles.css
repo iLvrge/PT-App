@@ -230,7 +230,7 @@
   height: 30px;
 }
 
-.pt-root {
+.pt-header-root {
   z-index: 1206;
   position: initial;
   width: initial;
@@ -240,11 +240,11 @@
   box-shadow: none;
 }
 
-.pt-root .iconItem {
+.pt-header-root .iconItem {
   width: 90px;
 }
 
-.pt-root .iconItem .MuiListItemIcon-root svg {
+.pt-header-root .iconItem .MuiListItemIcon-root svg {
   fill: currentColor;
   stroke: currentColor;
 }

@@ -12,8 +12,16 @@ api.interceptors.response.use(
     response => response,
     async (error) => {
         const originalRequest = error.config;
-  
-        if (error.response && error.response.status === 401 && !originalRequest._retry) {
+        // The refresh call itself goes through this same interceptor. The API
+        // answers a missing/invalid/expired token with 401 (never 403), so
+        // without this guard a failed refresh re-entered this branch, tried to
+        // refresh the refresh, and so on — dozens of /refresh-token calls
+        // firing in a tight loop within milliseconds until the rate limiter
+        // cut it off. Excluding the refresh request from retry-on-401 breaks
+        // the loop; its own failure is handled in the catch block below.
+        const isRefreshCall = originalRequest && originalRequest.url === '/refresh-token';
+
+        if (error.response && error.response.status === 401 && !originalRequest._retry && !isRefreshCall) {
             originalRequest._retry = true;
             const errorMessage = error.response.data;
             if(errorMessage == "Refresh microsoft token") {
@@ -50,6 +58,14 @@ api.interceptors.response.use(
                     return api(originalRequest);
                 } catch (refreshError) {
                     console.log('CATCH', refreshError)
+                    // No valid session left to recover — the previous 403-only
+                    // logout below never fired for this API, which only ever
+                    // answers 401 here, so the app was left showing a blank
+                    // screen instead of the sign-in page.
+                    removeTokenStorage('token')
+                    deleteCookie('token')
+                    history.push('/auth')
+                    window.location = window.location.href
                     return Promise.reject(refreshError);
                 }
             }

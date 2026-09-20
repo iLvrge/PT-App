@@ -175,7 +175,7 @@ const VirtualizedTable = ({
 
   const getRowClassName = useCallback(() => {
     return clsx('pt-table-row', 'pt-flex-container', undefined);
-  }, [classes]);
+  }, []);
 
   const onChangeColumnFilters = useCallback((columnKey, columnFilters) => {
     const updatedFilter = {
@@ -553,7 +553,6 @@ const VirtualizedTable = ({
       );
     },
     [
-      classes,
       rowHeight,
       selected,
       selectedIndex,
