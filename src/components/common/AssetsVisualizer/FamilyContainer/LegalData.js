@@ -1,7 +1,7 @@
 import { IconButton, Paper } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react'
 import { DataSet } from 'vis-data/esnext'
-import { Timeline } from 'vis-timeline/esnext'
+import { Timeline } from 'vis-timeline-73/esnext'
 import moment from 'moment'
 import './styles.css'
 

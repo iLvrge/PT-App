@@ -4,7 +4,7 @@ import {useLocation} from 'react-router-dom'
 import _debounce from 'lodash/debounce'
 import Paper from '@mui/material/Paper'
 import { DataSet } from 'vis-data/esnext'
-import { Timeline } from 'vis-timeline/esnext'
+import { Timeline } from 'vis-timeline-73/esnext'
 import CircularProgress from '@mui/material/CircularProgress'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';

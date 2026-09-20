@@ -3,7 +3,7 @@ import { useLocation, useHistory } from "react-router-dom";
 import moment from 'moment'
 import _debounce from 'lodash/debounce'
 import { useDispatch, useSelector } from 'react-redux'
-import { DataSet } from 'vis-data/esnext'
+import { DataSet } from 'vis-data-71/esnext'
 import { Timeline } from 'vis-timeline/esnext'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';

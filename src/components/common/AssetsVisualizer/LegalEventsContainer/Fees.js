@@ -7,7 +7,7 @@ import themeMode from '../../../../themes/themeMode'
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
 import { DataSet } from 'vis-data/esnext'
-import { Timeline } from 'vis-timeline/esnext'
+import { Timeline } from 'vis-timeline-73/esnext'
 import CircularProgress from '@mui/material/CircularProgress'
 import Loader from '../../Loader'
 
