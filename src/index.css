@@ -1,4 +1,11 @@
-
+/* The webfont every `font-family: "Roboto", ...` in this app expects.
+ *
+ * master pulls it in through PatentrackDiagram/css/styles.css, and CRA bundled
+ * every imported stylesheet into one file loaded upfront - so Roboto was always
+ * present. Vite loads a component's CSS with the component, so on any page that
+ * never mounts PatentrackDiagram the webfont was absent and every string fell
+ * back to Arial. Same URL master imports; global here on purpose. */
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap");
 
 html {
   font-size: 14px;
