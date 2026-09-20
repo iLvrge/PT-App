@@ -26,7 +26,7 @@
   top: 2px;
 }
 
-.pt-timeline-logo-root .vis-time-axis .vis-text, .vis-item, .vis-y-axis {
+.pt-timeline-logo-root .vis-time-axis .vis-text, .pt-timeline-logo-root .vis-item, .pt-timeline-logo-root .vis-y-axis {
   color: var(--pt-text-primary);
 }
 
@@ -38,7 +38,7 @@
   border: 1px solid var(--pt-divider);
 }
 
-.pt-timeline-logo-root .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom {
+.pt-timeline-logo-root .vis-panel.vis-center, .pt-timeline-logo-root .vis-panel.vis-left, .pt-timeline-logo-root .vis-panel.vis-right, .pt-timeline-logo-root .vis-panel.vis-top, .pt-timeline-logo-root .vis-panel.vis-bottom {
   border-bottom-color: var(--pt-divider);
   border-top-color: var(--pt-divider);
   border-left-color: var(--pt-divider);
@@ -73,15 +73,15 @@
   color: #000000;
 }
 
-.pt-timeline-logo-timeline .vis-content .vis-item.vis-range.asset-type-lending, .vis-item.vis-range.asset-type-borrowing, .vis-item.vis-box.asset-type-lending, .vis-item.vis-box.asset-type-borrowing {
+.pt-timeline-logo-timeline .vis-content .vis-item.vis-range.asset-type-lending, .pt-timeline-logo-timeline .vis-item.vis-range.asset-type-borrowing, .pt-timeline-logo-timeline .vis-item.vis-box.asset-type-lending, .pt-timeline-logo-timeline .vis-item.vis-box.asset-type-borrowing {
   border-bottom: 3px solid #FFAA00 !important;
 }
 
-.pt-timeline-logo-timeline .vis-content .vis-item.vis-range.asset-type-security-release-partial, .vis-item.vis-box.asset-type-security-release-partial {
+.pt-timeline-logo-timeline .vis-content .vis-item.vis-range.asset-type-security-release-partial, .pt-timeline-logo-timeline .vis-item.vis-box.asset-type-security-release-partial {
   border-bottom: 3px solid #228DE8 !important;
 }
 
-.pt-timeline-logo-timeline .vis-content .vis-item.vis-range.asset-type-security-release, .vis-item.vis-box.asset-type-security-release, .vis-item.vis-box.asset-type-releaseOut, .vis-item.vis-box.asset-type-releaseIn {
+.pt-timeline-logo-timeline .vis-content .vis-item.vis-range.asset-type-security-release, .pt-timeline-logo-timeline .vis-item.vis-box.asset-type-security-release, .pt-timeline-logo-timeline .vis-item.vis-box.asset-type-releaseOut, .pt-timeline-logo-timeline .vis-item.vis-box.asset-type-releaseIn {
   border-bottom: 3px solid #70A800 !important;
 }
 

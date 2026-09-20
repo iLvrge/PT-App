@@ -207,7 +207,7 @@
   text-transform: initial;
 }
 
-.pt-card .MuiCardActions-root, .MuiCardContent-root {
+.pt-card .MuiCardActions-root, .pt-card .MuiCardContent-root {
   background-color: var(--pt-bg-paper);
   background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05));
   padding: 5px 8px;
@@ -530,7 +530,7 @@
   align-items: center;
 }
 
-.pt-timeline-container .vis-time-axis .vis-text, .vis-item, .vis-y-axis {
+.pt-timeline-container .vis-time-axis .vis-text, .pt-timeline-container .vis-item, .pt-timeline-container .vis-y-axis {
   color: var(--pt-text-primary);
 }
 
@@ -542,7 +542,7 @@
   border: 1px solid var(--pt-divider);
 }
 
-.pt-timeline-container .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom {
+.pt-timeline-container .vis-panel.vis-center, .pt-timeline-container .vis-panel.vis-left, .pt-timeline-container .vis-panel.vis-right, .pt-timeline-container .vis-panel.vis-top, .pt-timeline-container .vis-panel.vis-bottom {
   border-bottom-color: var(--pt-divider);
   border-top-color: var(--pt-divider);
   border-left-color: var(--pt-divider);
@@ -587,7 +587,7 @@
   background-size: 15px;
 }
 
-.pt-timeline-container .vis-dot.asset-type-employees, .cluster-employees {
+.pt-timeline-container .vis-dot.asset-type-employees, .pt-timeline-container .cluster-employees {
   background-image: url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png);
 }
 

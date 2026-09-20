@@ -21,11 +21,8 @@ const cp = require('child_process');
 const path = require('path');
 
 const KNOWN = new Set([
-  // Quill toolbar state classes, and the vis.js / data-driven names
-  // (`cluster-sales`, `asset-type-*`, `vis-*`). Unlike the `pt-` names these
-  // were literal globals in master too - written as `'& .cluster-sales'` inside
-  // a scoped parent, never as a makeStyles key - so they are shared by design.
-  'focus', 'attach',
+  // Empty, and it should stay that way. Every component gets its own class
+  // names, as makeStyles used to guarantee.
 ]);
 
 const cssFiles = cp.execSync('find src -name "*.css"', { encoding: 'utf8' }).trim().split('\n').filter(Boolean);

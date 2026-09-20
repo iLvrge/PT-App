@@ -84,15 +84,15 @@
   flex-direction: column;
 }
 
-.pt-legal-root .vis-time-axis .vis-text, .vis-item, .vis-y-axis {
+.pt-legal-root .vis-time-axis .vis-text, .pt-legal-root .vis-item, .pt-legal-root .vis-y-axis {
   color: var(--pt-text-primary) !important;
 }
 
-.pt-legal-root .vis-timeline, .vis-panel.vis-center {
+.pt-legal-root .vis-timeline, .pt-legal-root .vis-panel.vis-center {
   border: 1px solid var(--pt-divider);
 }
 
-.pt-legal-root .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom {
+.pt-legal-root .vis-panel.vis-center, .pt-legal-root .vis-panel.vis-left, .pt-legal-root .vis-panel.vis-right, .pt-legal-root .vis-panel.vis-top, .pt-legal-root .vis-panel.vis-bottom {
   border-bottom-color: var(--pt-divider);
   border-top-color: var(--pt-divider);
   border-left-color: var(--pt-divider);
@@ -173,7 +173,7 @@
   border: 0px;
 }
 
-.pt-legal-timeline .vis-left.vis-panel.vis-vertical-scroll, .vis-right.vis-panel.vis-vertical-scroll {
+.pt-legal-timeline .vis-left.vis-panel.vis-vertical-scroll, .pt-legal-timeline .vis-right.vis-panel.vis-vertical-scroll {
   overflow-y: hidden;
 }
 
@@ -583,7 +583,7 @@
   background-color: var(--pt-bg-paper)!important;
 }
 
-.pt-timeline-ptab .vis-left.vis-panel.vis-vertical-scroll, .vis-right.vis-panel.vis-vertical-scroll {
+.pt-timeline-ptab .vis-left.vis-panel.vis-vertical-scroll, .pt-timeline-ptab .vis-right.vis-panel.vis-vertical-scroll {
   overflow-y: hidden;
 }
 
@@ -652,11 +652,11 @@
   flex-direction: column;
 }
 
-.pt-timeline-root .vis-time-axis .vis-text, .vis-item, .vis-y-axis {
+.pt-timeline-root .vis-time-axis .vis-text, .pt-timeline-root .vis-item, .pt-timeline-root .vis-y-axis {
   color: var(--pt-text-primary) !important;
 }
 
-.pt-timeline-root .vis-timeline, .vis-panel.vis-center {
+.pt-timeline-root .vis-timeline, .pt-timeline-root .vis-panel.vis-center {
   border: 1px solid var(--pt-divider);
 }
 
@@ -676,7 +676,7 @@
   background-color: var(--pt-bg-paper)!important;
 }
 
-.pt-timeline-status .vis-left.vis-panel.vis-vertical-scroll, .vis-right.vis-panel.vis-vertical-scroll {
+.pt-timeline-status .vis-left.vis-panel.vis-vertical-scroll, .pt-timeline-status .vis-right.vis-panel.vis-vertical-scroll {
   overflow-y: hidden;
 }
 

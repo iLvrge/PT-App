@@ -43,15 +43,15 @@
   background: inherit !important;
 }
 
-.pt-family-root .vis-time-axis .vis-text, .vis-item, .vis-y-axis {
+.pt-family-root .vis-time-axis .vis-text, .pt-family-root .vis-item, .pt-family-root .vis-y-axis {
   color: var(--pt-text-primary);
 }
 
-.pt-family-root .vis-timeline, .vis-panel.vis-center {
+.pt-family-root .vis-timeline, .pt-family-root .vis-panel.vis-center {
   border: 1px solid var(--pt-divider);
 }
 
-.pt-family-root .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom {
+.pt-family-root .vis-panel.vis-center, .pt-family-root .vis-panel.vis-left, .pt-family-root .vis-panel.vis-right, .pt-family-root .vis-panel.vis-top, .pt-family-root .vis-panel.vis-bottom {
   border-bottom-color: var(--pt-divider);
   border-top-color: var(--pt-divider);
   border-left-color: var(--pt-divider);
@@ -234,7 +234,7 @@
   background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05));
 }
 
-.pt-timeline-legal .vis-left.vis-panel.vis-vertical-scroll, .vis-right.vis-panel.vis-vertical-scroll {
+.pt-timeline-legal .vis-left.vis-panel.vis-vertical-scroll, .pt-timeline-legal .vis-right.vis-panel.vis-vertical-scroll {
   overflow-y: hidden;
 }
 

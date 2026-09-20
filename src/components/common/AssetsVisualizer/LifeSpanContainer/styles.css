@@ -61,7 +61,7 @@
   border-bottom: 1px solid var(--pt-divider) !important;
 }
 
-.pt-lifespan-root .vis-time-axis .vis-text, .vis-item, .vis-y-axis {
+.pt-lifespan-root .vis-time-axis .vis-text, .pt-lifespan-root .vis-item, .pt-lifespan-root .vis-y-axis {
   color: var(--pt-text-primary);
 }
 
@@ -73,7 +73,7 @@
   border: 1px solid var(--pt-divider);
 }
 
-.pt-lifespan-root .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom {
+.pt-lifespan-root .vis-panel.vis-center, .pt-lifespan-root .vis-panel.vis-left, .pt-lifespan-root .vis-panel.vis-right, .pt-lifespan-root .vis-panel.vis-top, .pt-lifespan-root .vis-panel.vis-bottom {
   border-bottom-color: var(--pt-divider);
   border-top-color: var(--pt-divider);
   border-left-color: var(--pt-divider);

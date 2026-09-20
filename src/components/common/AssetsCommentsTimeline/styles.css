@@ -51,16 +51,16 @@
   pointer-events: none;
 }
 
-.pt-comment-editor .focus .ql-snow .ql-stroke, .focus .ql-snow button.ql-atButton svg, .focus .ql-snow .ql-attachButton svg, .focus .ql-snow .ql-saveButton svg, .attach .ql-snow .ql-sendattachButton svg {
+.pt-comment-editor .focus .ql-snow .ql-stroke, .pt-comment-editor .focus .ql-snow button.ql-atButton svg, .pt-comment-editor .focus .ql-snow .ql-attachButton svg, .pt-comment-editor .focus .ql-snow .ql-saveButton svg, .pt-comment-editor .attach .ql-snow .ql-sendattachButton svg {
   color: var(--pt-action-active);
   pointer-events: all;
 }
 
-.pt-comment-editor .focus .ql-snow .ql-stroke, .attach .ql-snow .ql-stroke {
+.pt-comment-editor .focus .ql-snow .ql-stroke, .pt-comment-editor .attach .ql-snow .ql-stroke {
   stroke: var(--pt-action-active);
 }
 
-.pt-comment-editor .focus .ql-snow.ql-toolbar button:hover, .focus .ql-snow.ql-toolbar button svg:focus, .focus .ql-snow.ql-toolbar button svg:hover, .focus .ql-snow.ql-toolbar button.ql-bold:hover svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-bold:focus svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-italic:hover svg.MuiSvgIcon-root .ql-stroke, .focus .ql-snow.ql-toolbar button.ql-italic:focus svg.MuiSvgIcon-root .ql-stroke {
+.pt-comment-editor .focus .ql-snow.ql-toolbar button:hover, .pt-comment-editor .focus .ql-snow.ql-toolbar button svg:focus, .pt-comment-editor .focus .ql-snow.ql-toolbar button svg:hover, .pt-comment-editor .focus .ql-snow.ql-toolbar button.ql-bold:hover svg.MuiSvgIcon-root .ql-stroke, .pt-comment-editor .focus .ql-snow.ql-toolbar button.ql-bold:focus svg.MuiSvgIcon-root .ql-stroke, .pt-comment-editor .focus .ql-snow.ql-toolbar button.ql-italic:hover svg.MuiSvgIcon-root .ql-stroke, .pt-comment-editor .focus .ql-snow.ql-toolbar button.ql-italic:focus svg.MuiSvgIcon-root .ql-stroke {
   color: var(--pt-secondary-main);
   stroke: var(--pt-secondary-main);
 }

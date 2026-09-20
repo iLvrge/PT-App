@@ -23,7 +23,7 @@
   position: relative;
 }
 
-.pt-timeline-security-root .vis-time-axis .vis-text, .vis-item, .vis-y-axis {
+.pt-timeline-security-root .vis-time-axis .vis-text, .pt-timeline-security-root .vis-item, .pt-timeline-security-root .vis-y-axis {
   color: var(--pt-text-primary);
 }
 
@@ -35,7 +35,7 @@
   border: 1px solid var(--pt-divider);
 }
 
-.pt-timeline-security-root .vis-panel.vis-center, .vis-panel.vis-left, .vis-panel.vis-right, .vis-panel.vis-top, .vis-panel.vis-bottom {
+.pt-timeline-security-root .vis-panel.vis-center, .pt-timeline-security-root .vis-panel.vis-left, .pt-timeline-security-root .vis-panel.vis-right, .pt-timeline-security-root .vis-panel.vis-top, .pt-timeline-security-root .vis-panel.vis-bottom {
   border-bottom-color: var(--pt-divider);
   border-top-color: var(--pt-divider);
   border-left-color: var(--pt-divider);
@@ -138,23 +138,23 @@
   margin-right: 5px;
 }
 
-.pt-timeline-security-timeline .vis-item .vis-item-content .cluster-employees, .cluster-acqusitions, .cluster-sales, .cluster-courtOrders, .cluster-mergersIn, .cluster-mergersOut {
+.pt-timeline-security-timeline .vis-item .vis-item-content .cluster-employees, .pt-timeline-security-timeline .cluster-acqusitions, .pt-timeline-security-timeline .cluster-sales, .pt-timeline-security-timeline .cluster-courtOrders, .pt-timeline-security-timeline .cluster-mergersIn, .pt-timeline-security-timeline .cluster-mergersOut {
   border-color: var(--pt-secondary-main);
 }
 
-.pt-timeline-security-timeline .vis-item .vis-item-content .cluster-releaseIn, .cluster-releaseOut {
+.pt-timeline-security-timeline .vis-item .vis-item-content .cluster-releaseIn, .pt-timeline-security-timeline .cluster-releaseOut {
   border-color: #70A800;
 }
 
-.pt-timeline-security-timeline .vis-item .vis-item-content .cluster-lending, .cluster-borrowing {
+.pt-timeline-security-timeline .vis-item .vis-item-content .cluster-lending, .pt-timeline-security-timeline .cluster-borrowing {
   border-color: #FFAA00;
 }
 
-.pt-timeline-security-timeline .vis-item .vis-item-content .cluster-licenseIn, .cluster-licenseOut {
+.pt-timeline-security-timeline .vis-item .vis-item-content .cluster-licenseIn, .pt-timeline-security-timeline .cluster-licenseOut {
   border-color: #C0C000;
 }
 
-.pt-timeline-security-timeline .vis-item .vis-item-content .cluster-other, .cluster-options {
+.pt-timeline-security-timeline .vis-item .vis-item-content .cluster-other, .pt-timeline-security-timeline .cluster-options {
   border-color: #CA7C46;
 }
 
@@ -173,55 +173,55 @@
   border-color: indigo[500];
 }
 
-.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-acquisitions, .cluster-acquisitions {
+.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-acquisitions, .pt-timeline-security-timeline .cluster-acquisitions {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/acquisition.svg);
 }
 
-.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-sales, .cluster-sales {
+.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-sales, .pt-timeline-security-timeline .cluster-sales {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/sales.svg);
 }
 
-.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-licenseIn, .cluster-licenseIn {
+.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-licenseIn, .pt-timeline-security-timeline .cluster-licenseIn {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licensein.svg);
 }
 
-.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-licenseOut, .cluster-licenseOut {
+.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-licenseOut, .pt-timeline-security-timeline .cluster-licenseOut {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/licenseout.svg);
 }
 
-.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-lending, .vis-dot.asset-type-borrowing, .asset-type-securitiesOut, .asset-type-securitiesIn, .cluster-lending, .cluster-borrowing, .cluster-securitiesIn, .cluster-securitiesOut {
+.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-lending, .pt-timeline-security-timeline .vis-dot.asset-type-borrowing, .pt-timeline-security-timeline .asset-type-securitiesOut, .pt-timeline-security-timeline .asset-type-securitiesIn, .pt-timeline-security-timeline .cluster-lending, .pt-timeline-security-timeline .cluster-borrowing, .pt-timeline-security-timeline .cluster-securitiesIn, .pt-timeline-security-timeline .cluster-securitiesOut {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/secure.svg);
 }
 
-.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-mergersIn, .cluster-mergersIn {
+.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-mergersIn, .pt-timeline-security-timeline .cluster-mergersIn {
   background-image: url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerin.png);
 }
 
-.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-mergersOut, .cluster-mergersOut {
+.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-mergersOut, .pt-timeline-security-timeline .cluster-mergersOut {
   background-image: url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/mergerout.png);
 }
 
-.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-correct, .cluster-correct {
+.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-correct, .pt-timeline-security-timeline .cluster-correct {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/correction.svg);
 }
 
-.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-options, .cluster-options {
+.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-options, .pt-timeline-security-timeline .cluster-options {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/options.svg);
 }
 
-.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-courtOrders, .cluster-courtOrders {
+.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-courtOrders, .pt-timeline-security-timeline .cluster-courtOrders {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/courtorder.svg);
 }
 
-.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-releaseOut, .vis-dot.asset-type-releaseIn, .cluster-releaseIn, .cluster-releaseOut {
+.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-releaseOut, .pt-timeline-security-timeline .vis-dot.asset-type-releaseIn, .pt-timeline-security-timeline .cluster-releaseIn, .pt-timeline-security-timeline .cluster-releaseOut {
   background-image: url(https://s3.us-west-1.amazonaws.com/static.patentrack.com/icons/svg/release.svg);
 }
 
-.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-employees, .cluster-employees {
+.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-employees, .pt-timeline-security-timeline .cluster-employees {
   background-image: url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/employee.png);
 }
 
-.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-other, .cluster-other {
+.pt-timeline-security-timeline .vis-item .vis-dot.asset-type-other, .pt-timeline-security-timeline .cluster-other {
   background-image: url(https://s3-us-west-1.amazonaws.com/static.patentrack.com/icons/other.png);
 }
 

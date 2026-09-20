@@ -42,7 +42,7 @@
   padding-bottom: 10px;
 }
 
-.pt-dropdown .MuiInputLabel-root, .MuiSvgIcon-root {
+.pt-dropdown .MuiInputLabel-root, .pt-dropdown .MuiSvgIcon-root {
   top: -4px;
 }
 
