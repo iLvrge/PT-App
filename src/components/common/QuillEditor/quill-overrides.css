@@ -1,0 +1,97 @@
+/* Restored from master's src/components/common/QuillEditor/styles.css.
+ *
+ * master had TWO stylesheets here: styles.js (makeStyles, component-scoped) and
+ * this one, a plain global sheet overriding Quill's own snow theme. The
+ * migration converted styles.js into styles.css and overwrote this file, so
+ * every rule below was silently lost and Quill's defaults took over - the
+ * toolbar icons fell from 1.5rem to the 18px quill.snow.css sets.
+ *
+ * These selectors are deliberately global, exactly as in master: they target
+ * Quill's own generated DOM, which the editor renders outside our class scope.
+ */
+.ql-container {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+} 
+.ql-toolbar, #toolbar {
+  /* background: rgb(48, 48, 48); */
+  border-top: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button, #toolbar button{
+  /* width: 32px;
+  height: 32px; */
+  width: 'auto';
+  height: 'auto';
+}
+.ql-snow .ql-stroke, .ql-snow button.ql-bold , .ql-snow button.ql-italic , .ql-snow button.ql-atButton,.ql-snow button.ql-attachButton, .ql-snow button.ql-sendattachButton svg, .ql-snow button.ql-saveButton, .ql-snow button.ql-sendattachButton, .ql-snow button.ql-share {
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  flex: 0 0 2rem;
+  width: 32px;
+  height: 32px;
+}
+.ql-snow button.ql-atButton svg, .ql-snow button.ql-attachButton , .ql-snow button.ql-attachButton svg, .ql-snow button.ql-sendattachButton, .ql-snow button.ql-sendattachButton svg, .ql-snow button.ql-saveButton , .ql-snow button.ql-saveButton svg, .ql-snow button.ql-share, .ql-snow button.ql-share svg {
+  width: 20px;
+  height: 20px;
+}
+
+.ql-snow .ql-transparent{ 
+  opacity: 1;
+}
+.ql-snow .ql-picker.ql-expanded .ql-picker-options{
+  bottom: 100%;
+  top: unset
+}
+.ql-editor{
+  padding: 11px 15px
+}
+.ql-toolbar.ql-snow, #toolbar{
+  border-top: 0px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.ql-snow.ql-toolbar button svg, #toolbar button svg{
+  stroke: none;
+}
+
+#toolbar button:focus{
+  outline: 0;
+}
+.ql-snow.ql-toolbar button:focus, .focus .ql-snow.ql-toolbar button:focus, #toolbar button:focus{
+  color: inherit;
+}
+.ql-editor{
+  max-height: calc(30vh - 80px)
+}
+.ql-editor slackusermention{
+  background-color: rgba(29, 155, 209, 0.25);
+  color: #abcdef;
+  padding: 0 2px 1px;
+  border-radius: 3px;
+}
+.ql-editor slackusermention:hover{
+  background-color: rgba(64, 179, 228, 0.25);  
+}
+
+
+/* .ql-snow.ql-toolbar button svg, .ql-snow .ql-toolbar button svg{
+  width: 2rem;
+  height: 2rem;
+}  */
+.ql-snow.ql-toolbar button, .ql-snow .ql-toolbar button, #toolbar button{
+  width: 28px;
+  min-width: auto;
+  height: 28px;
+  padding: 2px;
+  margin: 2px 6px 2px 2px;
+}
+
+.ql-snow.ql-toolbar button svg, #toolbar button svg{
+  width: 1.5rem;
+  height: 1.5rem; 
+}

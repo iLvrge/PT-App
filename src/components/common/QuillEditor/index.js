@@ -5,6 +5,7 @@ import ReactQuill, {Quill} from 'react-quill'
 import {Menu, MenuItem} from '@mui/material'
 
 import './styles.css'
+import './quill-overrides.css'
 import CustomToolbar from './CustomToolbar'
 import UserInputForm from './UserInputForm'
 import copy from 'copy-to-clipboard'
