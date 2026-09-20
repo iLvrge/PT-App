@@ -21,11 +21,15 @@ every code-split route, and a handful of dangling references to a styling
 system the app had already migrated away from. All six are fixed below, with
 real Avaya data now rendering (44 companies, real KPI numbers, a working 3D
 asset chart, a jurisdiction map, real settings screens). A seventh, unrelated
-bug was found and fixed in the API itself. Two more issues remain — a CSS
-class-naming collision affecting an unknown number of components, and one
-specific dashboard panel that renders correct data at zero width — both
-documented below rather than guessed at, since they need decisions or care
-this pass didn't have room for.
+bug was found and fixed in the API itself. **An eighth was found afterward**:
+the dashboard's KPI tile row (Owned/Invented/Acquired/etc.) had correct data
+underneath the whole time but rendered at zero width — traced to a ninth
+instance of the same CSS class-collision problem and fixed; see §4. One class
+of issue remains open — the class-collision problem is systemic (17+ files
+share generic names across `.pt-root`/`.pt-container`/`.pt-list`) and only the
+instances that were actively breaking something have been fixed; others may
+still be lurking on pages this pass didn't reach. See §5 for the decision
+that needs making about the rest.
 
 ---
 
@@ -202,53 +206,52 @@ Avaya's tenant database would clear it; cosmetic only.
 - Settings > Users (Team Members): real Avaya user list, correctly reflected
   the deletion fix in §2 as soon as the API picked it up
 
-## 4. Open issue not fixed this pass: one KPI panel renders correct data at zero width
+## 4. Fixed: the KPI panel rendered correct data at zero width
 
 The KPI tile row (Owned / Invented / Acquired / Collateralized / Maintenance
 Fee Due / Challenged / Divested / Abandoned / Non-U.S. / Inventors / Managers
-/ Lenders) on the dashboard has entirely correct data — confirmed via the
-accessibility tree — but is invisible on screen. Traced precisely:
-`src/components/Reports/index.js` uses the plain `import { Grid } from
-'@mui/material'` (MUI v5's older, non-`Grid2` component). Its `xs={12}` item
-computes to `width: 0px` even though its own parent Grid container is a real
-1280px wide, and there is **no CSS rule anywhere on the page** for
-`.MuiGrid-grid-xs-12` at all — normally MUI generates this via emotion at
-runtime from `theme.breakpoints`, and here it simply doesn't. Only 4-5 files
-in the whole app still use this Grid import
-(`Reports/index.js`, `layout/GlobalLayout/index.js`, `components/auth/index.js`,
-`common/AssetsVisualizer/FamilyItemContainer/index.js`,
-`common/AssetsCommentsTimeline/CustomListItem.js`) — everywhere else renders
-fine, including `GlobalLayout`'s own outer containers on this exact page
-(confirmed at a real 1280px). `StyledEngineProvider injectFirst`
-(`src/styledEngine.js`, part of the Tailwind/MUI coexistence setup) is a
-plausible contributor but not confirmed as the cause. Not fixed here because
-the fix (likely switching these 4-5 files to whichever Grid variant the rest
-of the app already uses successfully) risks moving the problem elsewhere
-without being able to verify that properly in the time this pass had.
+/ Lenders) on the dashboard had entirely correct data — confirmed via the
+accessibility tree — but was invisible on screen.
+
+An earlier version of this report guessed the cause was MUI's legacy `Grid`
+component failing to generate its breakpoint CSS. That guess was wrong, and
+is corrected here: the Grid item's own emotion-generated class
+(`.css-1idn90j-MuiGrid-root`, correctly declaring `flex-basis: 100%`) was
+present and correct all along. The real cause, found by comparing the
+element's *declared* CSS against its *computed* style: the same item also
+carried a plain `className="pt-list"`, and a **completely unrelated**
+`.pt-list { flex: 1; }` rule in
+`src/components/common/AssetsCommentsTimeline/styles.css` was overriding the
+Grid item's `flex-basis: 100%` down to `flex-basis: 0%` — collapsing the
+entire tile row to zero width. This is the identical class-collision problem
+from §1f (generic names hardcoded during the `makeStyles` migration, no
+scoping), just a third instance of it (`.pt-list`, not `.pt-root`/`.pt-container`).
+
+**Fixed**: renamed `Reports/index.js`'s own `pt-list` usage — and every
+selector in `Reports/styles.css` that targeted it — to `pt-kpi-list`, which
+nothing else uses. Verified live: the tile row now renders as visible boxes
+with the correct real numbers (Owned 27/16, Acquired 5/0, Collateralized
+16/0, etc. for Avaya Inc).
 
 ---
 
 ## 5. Decisions needed from you
 
-1. **The `.pt-root` / `.pt-container` class-collision problem (§1f) is bigger
-   than the one instance fixed here.** Real options: (a) do a full audit and
-   rename every one of the ~17 colliding definitions to something
-   component-specific, the "correct" fix but real work across ~17 files; (b)
-   adopt CSS Modules or a similar scoping mechanism going forward so this
-   class of bug can't recur, without necessarily fixing every existing
-   instance immediately; (c) leave it and fix collisions reactively as they
-   surface, the way this pass did for the one that was actively breaking the
-   dashboard. I did not want to make this call unilaterally — it is a
+1. **The `.pt-root` / `.pt-container` / `.pt-list` class-collision problem
+   (§1f, §4) is bigger than the three instances fixed so far.** Real options:
+   (a) do a full audit and rename every one of the ~17+ colliding
+   definitions to something component-specific, the "correct" fix but real
+   work across many files; (b) adopt CSS Modules or a similar scoping
+   mechanism going forward so this class of bug can't recur, without
+   necessarily fixing every existing instance immediately; (c) leave it and
+   fix collisions reactively as they surface, the way this pass did three
+   times over. I did not want to make this call unilaterally — it is a
    meaningful scope/time decision, not a bug fix.
-2. **The KPI panel width bug (§4)** — say whether you want it investigated
-   further (I'd start by trying the Grid2 migration on just `Reports/index.js`
-   in isolation and see whether it renders correctly, reverting immediately
-   if not) or leave it as a known issue for now.
-3. **Confirm whether `react-virtualized`'s broken ES build (§1b) affects the
+2. **Confirm whether `react-virtualized`'s broken ES build (§1b) affects the
    production build too**, not just local dev — if it does, the same alias
    fix (or a different one, since Rollup's resolution differs from esbuild's)
    would need to land in the production bundle as well.
-4. **Clean up the orphaned tenant user row** (§2, `user_id` 348 in Avaya's
+3. **Clean up the orphaned tenant user row** (§2, `user_id` 348 in Avaya's
    tenant database) — cosmetic, low priority, needs a one-off SQL DELETE I
    couldn't run myself.
 
