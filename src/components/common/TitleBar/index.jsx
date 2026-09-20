@@ -43,8 +43,11 @@ const TitleBar = ({ title, callback, enablePadding, underline, relative, button 
               className={cn(button.class)}
               size="large"
             >
+              {/* 24px, not w-6: Tailwind's scale is rem-based and this app's
+                  root font-size is 14px, so w-6 (1.5rem) renders 21px where
+                  master's literal `width: 24px` renders 24. */}
               <svg
-                className="w-6 fill-white"
+                className="w-[24px] fill-white"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 32 32"
               >
