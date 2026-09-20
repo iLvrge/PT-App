@@ -81,7 +81,7 @@ const KpiBox = (props) => {
 
     return (
         <div className={clsx('pt-chart-container', 'pt-width-responsive', 'pt-fix-k-p-i')}>
-            <div className={'pt-heading-container'}>
+            <div className={'pt-kpi-heading-container'}>
                 <ButtonWithTooltip />
             </div>  
             {

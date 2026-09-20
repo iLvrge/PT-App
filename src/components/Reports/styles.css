@@ -283,14 +283,14 @@
   justify-content: flex-start;
 }
 
-.pt-flex-column {
+.pt-kpi-flex-column {
   height: calc((100vh - 105px) / 3);
   align-content: start;
   padding-left: 3px;
   padding-top: 3px;
 }
 
-.pt-flex-column .gauge {
+.pt-kpi-flex-column .gauge {
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -301,19 +301,19 @@
   min-width: 15vw !important;
 }
 
-.pt-flex-column .gauge svg {
+.pt-kpi-flex-column .gauge svg {
   display: flex;
 }
 
-.pt-flex-column .gauge .needle path, .pt-flex-column .gauge .needle circle {
+.pt-kpi-flex-column .gauge .needle path, .pt-kpi-flex-column .gauge .needle circle {
   fill: #90caf9;
 }
 
-.pt-flex-column .MuiCard-root {
+.pt-kpi-flex-column .MuiCard-root {
   height: 100%;
 }
 
-.pt-flex-column-full-height {
+.pt-kpi-flex-column-full-height {
   height: 100% !important;
 }
 
@@ -337,12 +337,12 @@
   overflow: hidden;
 }
 
-.pt-heading-container {
+.pt-kpi-heading-container {
   padding: 2.5vh 0 0;
   z-index: 9;
 }
 
-.pt-heading-container span {
+.pt-kpi-heading-container span {
   display: flex;
 }
 
@@ -909,7 +909,7 @@
   margin-left: 24px;
 }
 
-.pt-toolbar {
+.pt-kpi-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;

@@ -1451,7 +1451,7 @@ const Reports = (props) => {
         } */
         return <Grid
             item  {...grid}
-            className={clsx('pt-flex-column', `box_item`, {['activeItem']: index === activeId})}
+            className={clsx('pt-kpi-flex-column', `box_item`, {['activeItem']: index === activeId})}
             key={`card_${index}`}
         >
             <CardElement 
@@ -1472,7 +1472,7 @@ const Reports = (props) => {
     const showTimelineItems = timelineList.map( (card, index) => {
         return <Grid
             item  {...timelineGrid}
-            className={clsx('pt-flex-column', /* {['pt-flex-column-full-height']: profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? true : false} , */ `box_item`, {['activeItem']: index === activeId})}
+            className={clsx('pt-kpi-flex-column', /* {['pt-kpi-flex-column-full-height']: profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank' ? true : false} , */ `box_item`, {['activeItem']: index === activeId})}
             key={`card_${index}`}
         >
             <CardElement 
@@ -1556,7 +1556,7 @@ const Reports = (props) => {
                             }  
                         </span>
                     </span>
-                    <div className={'pt-toolbar'}> 
+                    <div className={'pt-kpi-toolbar'}> 
                         {
                             loading && (
                                 <span>Loading...</span>

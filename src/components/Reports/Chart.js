@@ -24,7 +24,7 @@ const Chart = (props) => {
     
     return (
         <div className={clsx('pt-chart-container', { ['pt-width-responsive']: props.lineGraph })}>
-            <div className={clsx('pt-heading-container')}>
+            <div className={clsx('pt-kpi-heading-container')}>
                 <AddToolTip
                     tooltip={props.card.tooltip}
                     placement={'bottom'}
