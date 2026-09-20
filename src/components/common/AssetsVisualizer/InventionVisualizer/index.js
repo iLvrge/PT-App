@@ -1455,7 +1455,12 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                                         ?
                                             <div
                                                 style={{
-                                                height: '90%',
+                                                // Fills the panel. This was 90%,
+                                                // which left a tenth of it empty
+                                                // under the chart - worst in
+                                                // fullscreen, where that tenth is
+                                                // the largest gap on screen.
+                                                height: '100%',
                                                 width: '100%',
                                                 filter: `blur(${isLoadingCharts ? '4px' : 0})`,
                                                 }}

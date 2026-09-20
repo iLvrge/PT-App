@@ -160,7 +160,10 @@ const GraphProduct = ({loading, productItems, productGroups, visualizerBarSize})
             <div
                 id='productCategoryAssets'
                 style={{
-                    height: '90%',
+                    // Fills its container. This was 90%, which left a tenth of
+                    // the panel empty below the chart - most visible in
+                    // fullscreen, where the gap is proportionally the largest.
+                    height: '100%',
                     width: '100%',
                     filter: 0,
                 }}
