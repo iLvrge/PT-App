@@ -27,9 +27,9 @@ describe.each(Object.entries(modules))('%s exports', (_name, mod) => {
 
 describe('splitPane resizer colours', () => {
   it('keeps one variant per colour the four layouts used', () => {
-    expect(splitPane.splitPanePink).toContain('hover:[&_.Resizer]:bg-[#e91e63]')
-    expect(splitPane.splitPaneSecondary).toContain('hover:[&_.Resizer]:bg-[#E60000]')
-    expect(splitPane.splitPaneCorrect).toContain('hover:[&_.Resizer]:bg-[#f50057]')
+    expect(splitPane.splitPanePink).toContain('[&_.Resizer:hover]:bg-[#e91e63]')
+    expect(splitPane.splitPaneSecondary).toContain('[&_.Resizer:hover]:bg-[#E60000]')
+    expect(splitPane.splitPaneCorrect).toContain('[&_.Resizer:hover]:bg-[#f50057]')
     expect(splitPane.splitPaneCorrect).toContain('[&_.Resizer]:bg-black')
   })
 
@@ -38,6 +38,17 @@ describe('splitPane resizer colours', () => {
       expect(v).toContain('[&_.Resizer]:w-[3px]')
       expect(v).toContain('[&_.Pane2]:h-full')
       expect(v).toContain('!relative')
+    }
+  })
+
+  // `hover:[&_.Resizer]` compiles to `.splitPane:hover .Resizer` - hover on the
+  // PANE, colouring every resizer inside it. These panes nest several deep, so
+  // that lit up every divider on the page at once instead of the one under the
+  // pointer. The colour has to hang off the resizer: `[&_.Resizer:hover]`.
+  it('puts the hover on the resizer, never on the pane around it', () => {
+    for (const [ key, value ] of Object.entries(splitPane)) {
+      expect(value, `${key} hovers the pane instead of the resizer`)
+        .not.toMatch(/hover:\[&_\.Resizer\]/)
     }
   })
 })

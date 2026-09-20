@@ -63,7 +63,7 @@ const CompanyLawFirms = () => {
 
   return (
     <SplitPane
-        className={"!relative [&_.Resizer]:opacity-100 [&_.Resizer]:h-full [&_.Resizer]:w-[3px] [&_.Resizer]:z-[1] [&_.Resizer]:box-border [&_.Resizer]:cursor-col-resize [&_.Resizer]:bg-clip-padding [&_.Resizer]:bg-black hover:[&_.Resizer]:bg-[#f50057] [&_.Resizer.horizontal]:h-[3px] [&_.Resizer.horizontal]:w-full [&_.Resizer.horizontal]:cursor-row-resize [&_.Pane]:max-h-full [&_.Pane2]:h-full [&_.Pane2]:overflow-auto [&_.MuiDialogContent-root]:overflow-y-hidden"}
+        className={"!relative [&_.Resizer]:opacity-100 [&_.Resizer]:h-full [&_.Resizer]:w-[3px] [&_.Resizer]:z-[1] [&_.Resizer]:box-border [&_.Resizer]:cursor-col-resize [&_.Resizer]:bg-clip-padding [&_.Resizer]:bg-black [&_.Resizer:hover]:bg-[#f50057] [&_.Resizer.horizontal]:h-[3px] [&_.Resizer.horizontal]:w-full [&_.Resizer.horizontal]:cursor-row-resize [&_.Pane]:max-h-full [&_.Pane2]:h-full [&_.Pane2]:overflow-auto [&_.MuiDialogContent-root]:overflow-y-hidden"}
         split="vertical"
         size={500}
     >

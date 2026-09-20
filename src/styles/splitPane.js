@@ -9,6 +9,13 @@
  *
  * .Pane, .Pane1, .Pane2 and .Resizer are react-split-pane's own class names and
  * stay as arbitrary variants until that layer is replaced (MIGRATION_PLAN 4b).
+ *
+ * The hover colour is written `[&_.Resizer:hover]`, never `hover:[&_.Resizer]`.
+ * The second form compiles to `.splitPane:hover .Resizer` - hover on the PANE,
+ * colouring every resizer inside it. These panes nest several deep, so pointing
+ * anywhere in the layout lit up every divider on the page at once. master nests
+ * `&:hover` inside `& .Resizer`, i.e. `.splitPane .Resizer:hover`: only the
+ * divider actually under the pointer.
  */
 
 const BASE =
@@ -19,13 +26,13 @@ const BASE =
   '[&_.Pane]:max-h-full [&_.Pane2]:h-full [&_.Pane2]:overflow-auto'
 
 /** PatentLayout and MainDashboard: pink[500] hover, no resting colour. */
-export const splitPanePink = `${BASE} [&_.Resizer]:bg-none hover:[&_.Resizer]:bg-[#e91e63]`
+export const splitPanePink = `${BASE} [&_.Resizer]:bg-none [&_.Resizer:hover]:bg-[#e91e63]`
 
 /** GlobalScreen: secondary.main hover. */
-export const splitPaneSecondary = `${BASE} [&_.Resizer]:bg-none hover:[&_.Resizer]:bg-[#E60000]`
+export const splitPaneSecondary = `${BASE} [&_.Resizer]:bg-none [&_.Resizer:hover]:bg-[#E60000]`
 
 /** CorrectLayout: black resting, #f50057 hover - its own literals. */
-export const splitPaneCorrect = `${BASE} [&_.Resizer]:bg-black hover:[&_.Resizer]:bg-[#f50057]`
+export const splitPaneCorrect = `${BASE} [&_.Resizer]:bg-black [&_.Resizer:hover]:bg-[#f50057]`
 
 export const minimized =
   '[&_.Pane.Pane1]:!h-full [&_.Pane.Pane1]:!max-h-[unset] [&_.Pane.Pane2]:!hidden'

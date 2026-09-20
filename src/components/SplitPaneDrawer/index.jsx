@@ -14,7 +14,7 @@ import cn from '../../ui/cn'
 const RESIZER =
   '[&_.Resizer]:h-full [&_.Resizer]:w-[3px] [&_.Resizer]:z-[3] [&_.Resizer]:bg-none ' +
   '[&_.Resizer]:opacity-100 [&_.Resizer]:cursor-col-resize [&_.Resizer]:box-border ' +
-  '[&_.Resizer]:bg-clip-padding hover:[&_.Resizer]:bg-[#E91E63]'
+  '[&_.Resizer]:bg-clip-padding [&_.Resizer:hover]:bg-[#E91E63]'
 
 const SplitPaneDrawer = ({ open, drawerChildren, mainChildren, defaultSize }) => {
   const [ isDrag, setIsDrag ] = useState(false)

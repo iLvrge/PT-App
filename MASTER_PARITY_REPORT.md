@@ -56,7 +56,7 @@ Open questions).
 
 ## What was actually wrong
 
-Seven defects, each with a single cause. None of them produced a console error,
+Eight defects, each with a single cause. None of them produced a console error,
 which is why they survived.
 
 ### 1. `font-awesome` was deleted from the project
@@ -144,10 +144,26 @@ differently and builds item content without the template's own classes. On
   rem-based scale lands 12.5% short of the px value it replaced: `w-6` gave 21px
   where master sets 24px, and `StyledSearch` measured 148px against master's 211px.
 
+### 8. Hovering anywhere lit up every split-pane divider
+
+Reported after the first pass, and my first check of it was wrong: I measured a
+resizer on `/dashboard`, which has two and no nesting, found it transparent at
+rest, and concluded the pink was just the hover state. On `/patent_assets` there
+are five, nested, and all of them went pink together.
+
+`hover:[&_.Resizer]:bg-[#e91e63]` compiles to `.splitPane:hover .Resizer` —
+hover on the **pane**, colouring every resizer inside it. Because the panes nest
+several deep, pointing anywhere in the layout hit the outermost pane and lit up
+every divider at once. master nests `&:hover` inside `& .Resizer`, giving
+`.splitPane .Resizer:hover`: only the divider under the pointer.
+
+Fixed in all five places (`splitPane.js` x3, `SplitPaneDrawer`, `LawFirms`) by
+writing `[&_.Resizer:hover]`. The same inversion does **not** apply to the
+`hover:[&_svg]` rules on icon buttons — master really does hover the container
+there, so those are correct as written.
+
 ## Checked and found *not* to be regressions
 
-- The **pink resize bar**: computed styles are byte-identical to master
-  (`background: none` at rest, pink on `:hover`). What was seen was the hover state.
 - **14 `className={undefined}`**: every one converts a `classes.<key>` that
   master's `styles.js` never defined, or defines as an empty rule. Dead in both.
 - **Icon path differences**: `@mui/icons-material` resolved to 5.18.0 in master's
@@ -170,6 +186,14 @@ let the header-icon bug through. Its allow-list is empty and should stay that wa
 
 `src/styles/cssOrder.test.js` pins the vendor-before-app import order, the
 no-preflight Tailwind entry, and the presence of `font-awesome`.
+`src/styles/splitPane.test.js` fails if a resizer colour is ever hung off the
+pane (`hover:[&_.Resizer]`) instead of the resizer (`[&_.Resizer:hover]`).
+
+One caveat on verification: synthetic hover through browser automation did not
+trigger the `:hover` state on a 3px divider on **either** branch, so the
+corrected highlight is confirmed by the generated selector matching master's
+(`.splitPane .Resizer:hover`) and by the all-at-once colouring being gone —
+not by an automated visual check. Worth a manual hover to confirm.
 
 Full suite: **147 tests, 21 files, all passing.**
 
