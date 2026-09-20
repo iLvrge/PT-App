@@ -506,9 +506,6 @@ const GlobalScreen = ({
             className={splitPaneSecondary}
             split="vertical"
             defaultSize={firstBarSize}
-            onChange={(size) => {
-                setCompanyBarSize(size > 900 ? 900 : size)
-            }}
             onDragFinished={(size) => {
                 const clamped = size > 900 ? 900 : size
                 dispatch(setFirstBarSize(clamped))
