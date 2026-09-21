@@ -41,6 +41,7 @@ const FullScreen = ({componentItems, setScreen, showScreen, paper, share, handle
             <Dialog open={isFullscreenOpen}>
                 <DialogContent
                     title="Fullscreen view"
+                    hideTitle
                     className="!inset-0 !left-0 !top-0 flex !max-h-none !w-screen !max-w-none !translate-x-0 !translate-y-0 !rounded-none !border-0 !bg-transparent !p-0 !shadow-none"
                     onEscapeKeyDown={(e) => e.preventDefault()}
                     onPointerDownOutside={(e) => e.preventDefault()}
