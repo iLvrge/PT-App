@@ -184,6 +184,14 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
         }
     ]
 
+    // The height to hand Graph3d: the container's own, in pixels. Graph3d does
+    // not resolve '100%' against a flex parent the way CSS would, so it has to
+    // be measured. Falls back to '100%' before the ref is attached.
+    const chartHeight = () => {
+        const el = graphContainerRef.current
+        return el != null && el.clientHeight > 0 ? `${el.clientHeight}px` : '100%'
+    }
+
     let options = {
         height: '100%',
         width: '100%',
@@ -1102,15 +1110,56 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
                 step = 7
             }
             try {
-                const height = graphContainerRef.current.parentNode !== null ? graphContainerRef.current.parentNode.parentNode !== null ? `${graphContainerRef.current.parentNode.parentNode.clientHeight - 50 }px` : `${graphContainerRef.current.parentNode.clientHeight - 50 }px` : '100%'
-                options = { ...options, axisFontSize: fontSize, height, yStep: step, verticalRatio }
+                options = { ...options, axisFontSize: fontSize, height: chartHeight(), yStep: step, verticalRatio }
                 graphRef.current.setOptions(options)
                 graphRef.current.redraw()
             } catch (e) {
                 console.log(`error container ${e}`)
             }
         }
-    }, [ visualizerBarSize, analyticsBar, defaultSize, commentBar, illustrationBar, customerBarSize, companyBarSize ]) 
+    }, [ visualizerBarSize, analyticsBar, defaultSize, commentBar, illustrationBar, customerBarSize, companyBarSize ])
+
+    /*
+     * Graph3d measures its container once, when it is constructed, and never
+     * again. Every resize therefore has to be pushed into it by hand.
+     *
+     * That used to be this one effect, which read
+     * `parentNode.parentNode.clientHeight - 50` and re-ran only when one of
+     * seven pane flags changed. Fullscreen is not one of them, so going
+     * fullscreen grew the panel and left the chart at its old height with a
+     * band of empty space beneath it - and the -50 kept a gap even when the
+     * size was right.
+     *
+     * Observing the container instead catches every cause: fullscreen, pane
+     * drags, window resizes. Its own clientHeight is the height we want, so no
+     * fudge factor. Redraws are coalesced to one per frame so a drag does not
+     * rebuild the scene on every mousemove.
+     */
+    useEffect(() => {
+        const el = graphContainerRef.current
+        if (el == null || typeof ResizeObserver === 'undefined') return undefined
+
+        let frame = null
+        const observer = new ResizeObserver(() => {
+            if (frame !== null) return
+            frame = requestAnimationFrame(() => {
+                frame = null
+                if (graphRef.current == null || el.clientHeight <= 0) return
+                try {
+                    options = { ...options, height: chartHeight() }
+                    graphRef.current.setOptions(options)
+                    graphRef.current.redraw()
+                } catch (e) {
+                    console.log(`error resizing chart ${e}`)
+                }
+            })
+        })
+        observer.observe(el)
+        return () => {
+            if (frame !== null) cancelAnimationFrame(frame)
+            observer.disconnect()
+        }
+    }, [])
 
 
     useEffect(() => {
