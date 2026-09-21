@@ -20,6 +20,15 @@ const Googlelogin = () => {
         }
     }, [ dispatch ])
 
+    /*
+     * The hidden Google button is parked off-screen on BOTH axes.
+     *
+     * `-top-[9999px]` alone still left its 800px width extending 28px past the
+     * right edge of whichever pane it rendered in, and that is real scrollable
+     * overflow - which is why the comment editor's pane carried a horizontal
+     * scrollbar for a button nobody can see. Content at a negative left offset is
+     * not reachable by scrolling, so this hides it without widening anything.
+     */
     return(
         <GoogleLogin
             clientId={process.env.REACT_APP_GOOGLE_CLIENTID}
@@ -31,8 +40,8 @@ const Googlelogin = () => {
             responseType="code"
             onSuccess={responseGoogle}
             onFailure={responseGoogle}
-            className="absolute -top-[9999px] googleButton"  
-            style={{width: '800px'}}            
+            className="absolute -top-[9999px] -left-[9999px] googleButton"
+            style={{width: '800px'}}
         >
         </GoogleLogin> 
     )
@@ -78,7 +87,7 @@ const Googlelogin = (props) => {
             responseType="code"
             onSuccess={responseGoogle}
             onFailure={responseGoogle}
-            className={clsx({['mx-auto my-[50px] h-[42px] w-[200px]']: props.standalone === 1 ? true :  false}, {['absolute -top-[9999px]']: props.standalone === 1 ? false :  true}, {['googleButton']: props.standalone === 1 ? false :  true})}  
+            className={clsx({['mx-auto my-[50px] h-[42px] w-[200px]']: props.standalone === 1 ? true :  false}, {['absolute -top-[9999px] -left-[9999px]']: props.standalone === 1 ? false :  true}, {['googleButton']: props.standalone === 1 ? false :  true})}
             style={{width: '800px'}}            
         >
         </GoogleLogin> 
