@@ -59,7 +59,8 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const graphRef = useRef()
     const settingRef = useRef()
     const location = useLocation()
-    const graphContainerRef = useRef()  
+    const graphContainerRef = useRef()
+    const resizeWatch = useRef(null)
     const items = useRef(new DataSet())
     const dashboardScope = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
     const [offsetWithLimit, setOffsetWithLimit] = useState([0, DEFAULT_CUSTOMERS_LIMIT])
@@ -190,6 +191,35 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const chartHeight = () => {
         const el = graphContainerRef.current
         return el != null && el.clientHeight > 0 ? `${el.clientHeight}px` : '100%'
+    }
+
+    // Pushes the container's new size into Graph3d, which only measures once.
+    // Redraws are coalesced to one per frame so dragging a pane does not
+    // rebuild the scene on every mousemove.
+    const watchContainerSize = (el) => {
+        if (resizeWatch.current !== null) {
+            resizeWatch.current.disconnect()
+            resizeWatch.current = null
+        }
+        if (el == null || typeof ResizeObserver === 'undefined') return
+
+        let frame = null
+        const observer = new ResizeObserver(() => {
+            if (frame !== null) return
+            frame = requestAnimationFrame(() => {
+                frame = null
+                if (graphRef.current == null || el.clientHeight <= 0) return
+                try {
+                    options = { ...options, height: `${el.clientHeight}px` }
+                    graphRef.current.setOptions(options)
+                    graphRef.current.redraw()
+                } catch (e) {
+                    console.log(`error resizing chart ${e}`)
+                }
+            })
+        })
+        observer.observe(el)
+        resizeWatch.current = observer
     }
 
     let options = {
@@ -1030,8 +1060,9 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
             }     
             /* options.axisColor = isDarkTheme ? themeMode.dark.palette.text.primary : themeMode.light.palette.text.primary */
             graphRef.current = new Graph3d(graphContainerRef.current, items.current, options)
-            graphRef.current.on('click', graphClickHandler)      
+            graphRef.current.on('click', graphClickHandler)
             graphRef.current.on('cameraPositionChange', onCameraPositionChange)
+            watchContainerSize(graphContainerRef.current)
             if(graphContainerRef.current != null ) {
                 graphContainerRef.current.removeEventListener('mouseover', onHandleMouseOver)
                 graphContainerRef.current.removeEventListener('mouseout', onHandleMouseOut)
@@ -1134,30 +1165,17 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
      * drags, window resizes. Its own clientHeight is the height we want, so no
      * fudge factor. Redraws are coalesced to one per frame so a drag does not
      * rebuild the scene on every mousemove.
+     *
+     * It is attached from generateChart, not from an effect. The container only
+     * exists once the data has arrived, so an effect keyed on [] observes
+     * nothing, and one keyed on the data re-runs while the ref is momentarily
+     * null - disconnecting the old observer and then bailing out. Tying it to
+     * the graph's own creation means the two always share a lifetime.
      */
-    useEffect(() => {
-        const el = graphContainerRef.current
-        if (el == null || typeof ResizeObserver === 'undefined') return undefined
-
-        let frame = null
-        const observer = new ResizeObserver(() => {
-            if (frame !== null) return
-            frame = requestAnimationFrame(() => {
-                frame = null
-                if (graphRef.current == null || el.clientHeight <= 0) return
-                try {
-                    options = { ...options, height: chartHeight() }
-                    graphRef.current.setOptions(options)
-                    graphRef.current.redraw()
-                } catch (e) {
-                    console.log(`error resizing chart ${e}`)
-                }
-            })
-        })
-        observer.observe(el)
-        return () => {
-            if (frame !== null) cancelAnimationFrame(frame)
-            observer.disconnect()
+    useEffect(() => () => {
+        if (resizeWatch.current !== null) {
+            resizeWatch.current.disconnect()
+            resizeWatch.current = null
         }
     }, [])
 
